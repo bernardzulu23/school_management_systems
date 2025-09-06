@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { DashboardLayout } from '@/components/dashboard/DashboardLayout'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
 import { timetableAPI, timeSlots, daysOfWeek } from '@/lib/timetableData'

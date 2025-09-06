@@ -1,8 +1,8 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { DashboardLayout } from '@/components/dashboard/DashboardLayout'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { api } from '@/lib/api'
 import { Users, Plus, Calendar, BookOpen } from 'lucide-react'

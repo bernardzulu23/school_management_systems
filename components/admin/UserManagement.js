@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import { Card } from '@/components/ui/Card'
+import { Card } from '@/components/ui/card'
 import EnhancedUserRegistrationForm from '@/components/forms/EnhancedUserRegistrationForm'
 import UserRegistrationForm from '@/components/forms/UserRegistrationForm'
 import { api } from '@/lib/api'

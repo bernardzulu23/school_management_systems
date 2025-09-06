@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { DashboardLayout } from '@/components/dashboard/DashboardLayout'
+import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import GameManagement from '@/components/games/GameManagement'
 
 export default function HODGamesPage() {

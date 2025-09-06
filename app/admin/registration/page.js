@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Card } from '@/components/ui/Card'
+import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { DashboardLayout } from '@/components/dashboard/DashboardLayout'
+import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import EnhancedUserRegistrationForm from '@/components/forms/EnhancedUserRegistrationForm'
 import {
   Users,

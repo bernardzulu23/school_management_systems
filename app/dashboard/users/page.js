@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 import { useAuth } from '@/lib/auth'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { DashboardLayout } from '@/components/dashboard/DashboardLayout'
+import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import {
   Users,
   Search,

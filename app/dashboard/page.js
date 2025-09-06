@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/lib/auth'
 import { api } from '@/lib/api'
-import { Card } from '@/components/ui/Card'
+import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import SmartDashboardIntegration from '@/components/dashboard/SmartDashboardIntegration'
 import { TimetableSummary } from '@/components/dashboard/TimetableSummary'
@@ -27,7 +27,7 @@ import {
   Download,
   RefreshCw
 } from 'lucide-react'
-import { CardContent } from '@/components/ui/Card'
+import { CardContent } from '@/components/ui/card'
 
 export default function DashboardPage() {
   const { user, logout } = useAuth()
