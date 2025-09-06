@@ -63,4 +63,4 @@ const CardFooter = forwardRef(({ className = '', ...props }, ref) => (
 ))
 CardFooter.displayName = 'CardFooter'
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
