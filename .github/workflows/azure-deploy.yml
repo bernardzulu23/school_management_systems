@@ -1,0 +1,145 @@
+name: Deploy to Azure
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME_FRONTEND: school-management-frontend
+  AZURE_WEBAPP_NAME_BACKEND: school-management-api
+  NODE_VERSION: '18.x'
+  PHP_VERSION: '8.1'
+
+jobs:
+  build-and-deploy-frontend:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🔄 Checkout code
+      uses: actions/checkout@v3
+
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: school-management-frontend/package-lock.json
+
+    - name: 📦 Install dependencies
+      working-directory: ./school-management-frontend
+      run: |
+        npm ci
+        npm run build
+
+    - name: 🧪 Run tests
+      working-directory: ./school-management-frontend
+      run: |
+        npm run test --if-present
+
+    - name: 📁 Create deployment package
+      working-directory: ./school-management-frontend
+      run: |
+        # Create deployment package with all necessary files
+        mkdir -p deployment-package
+        cp -r .next deployment-package/
+        cp -r public deployment-package/
+        cp package*.json deployment-package/
+        cp next.config.js deployment-package/
+        
+        # Create startup script for Azure
+        cat > deployment-package/startup.sh << 'EOF'
+        #!/bin/bash
+        npm install --production
+        npm start
+        EOF
+        chmod +x deployment-package/startup.sh
+
+    - name: 🚀 Deploy to Azure Web App (Frontend)
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME_FRONTEND }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND }}
+        package: ./school-management-frontend/deployment-package
+
+  build-and-deploy-backend:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🔄 Checkout code
+      uses: actions/checkout@v3
+
+    - name: 🐘 Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ env.PHP_VERSION }}
+        extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, iconv, json, mbstring, pdo
+
+    - name: 📦 Install Composer dependencies
+      working-directory: ./school-management-api
+      run: |
+        composer install --no-dev --optimize-autoloader
+        
+    - name: 🔧 Prepare Laravel for production
+      working-directory: ./school-management-api
+      run: |
+        # Create production environment file
+        cp .env.example .env
+        
+        # Set production configurations
+        sed -i 's/APP_ENV=local/APP_ENV=production/' .env
+        sed -i 's/APP_DEBUG=true/APP_DEBUG=false/' .env
+        
+        # Generate application key
+        php artisan key:generate --force
+        
+        # Cache configurations for better performance
+        php artisan config:cache
+        php artisan route:cache
+        php artisan view:cache
+
+    - name: 🚀 Deploy to Azure Web App (Backend)
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME_BACKEND }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND }}
+        package: ./school-management-api
+
+  post-deployment:
+    needs: [build-and-deploy-frontend, build-and-deploy-backend]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🔄 Checkout code
+      uses: actions/checkout@v3
+      
+    - name: 🗄️ Run Database Migrations
+      run: |
+        echo "Database migrations would run here"
+        echo "This requires Azure CLI or direct database access"
+        
+    - name: 🧪 Health Check
+      run: |
+        # Wait for deployments to be ready
+        sleep 30
+        
+        # Check frontend health
+        curl -f https://${{ env.AZURE_WEBAPP_NAME_FRONTEND }}.azurewebsites.net || exit 1
+        
+        # Check backend health
+        curl -f https://${{ env.AZURE_WEBAPP_NAME_BACKEND }}.azurewebsites.net || exit 1
+        
+        echo "✅ All services are healthy!"
+
+    - name: 📧 Notify deployment status
+      if: always()
+      run: |
+        if [ "${{ job.status }}" == "success" ]; then
+          echo "🎉 Deployment successful!"
+          echo "Frontend: https://${{ env.AZURE_WEBAPP_NAME_FRONTEND }}.azurewebsites.net"
+          echo "Backend: https://${{ env.AZURE_WEBAPP_NAME_BACKEND }}.azurewebsites.net"
+        else
+          echo "❌ Deployment failed!"
+        fi
