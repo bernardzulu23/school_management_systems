@@ -15,7 +15,7 @@ import {
   FileText, Calendar, BarChart3, Monitor, Clock, Settings,
   GraduationCap, CheckCircle, CalendarDays, FileCheck, Group,
   DollarSign, Package, Briefcase, School, User, Award, Target,
-  AlertTriangle, Library, Zap, Rocket
+  AlertTriangle, Library, Zap, Rocket, Globe
 } from 'lucide-react'
 import Link from 'next/link'
 import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeachingHub'
@@ -873,7 +873,7 @@ export default function HodDashboard() {
             <CardTitle>Department Management</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Link href="/dashboard/teachers">
                 <Button variant="outline" className="w-full h-20 flex flex-col">
                   <Users className="h-6 w-6 mb-2" />
@@ -890,6 +890,13 @@ export default function HodDashboard() {
                 <Button variant="outline" className="w-full h-20 flex flex-col">
                   <TrendingUp className="h-6 w-6 mb-2" />
                   Department Reports
+                </Button>
+              </Link>
+              <Link href="/dashboard/sdg">
+                <Button variant="outline" className="w-full h-20 flex flex-col bg-gradient-to-r from-blue-50 to-green-50 hover:from-blue-100 hover:to-green-100 border-blue-200">
+                  <Globe className="h-6 w-6 mb-2 text-blue-600" />
+                  <span className="text-blue-800 font-semibold">🇺🇳 UN SDGs</span>
+                  <span className="text-xs text-blue-600">Global Impact</span>
                 </Button>
               </Link>
             </div>

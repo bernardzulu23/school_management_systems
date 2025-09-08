@@ -1172,7 +1172,7 @@ export default function HeadteacherDashboard() {
         </CardHeader>
         <CardContent>
           <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
               <div className="group p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl hover:bg-slate-700/80 transition-all duration-300 hover:scale-105 cursor-pointer">
                 <div className="backdrop-blur-md bg-blue-600/60 border border-blue-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                   <GraduationCap className="h-8 w-8 text-white" />
@@ -1239,6 +1239,23 @@ export default function HeadteacherDashboard() {
                   onClick={() => setActiveTab('strategic-planning')}
                 >
                   Manage Goals
+                </Button>
+              </div>
+              <div className="group p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl hover:bg-slate-700/80 transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/60 to-green-600/60 border border-blue-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Globe className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-white font-semibold text-center">🇺🇳 UN SDGs</h3>
+                <p className="text-slate-300 text-sm text-center mt-2 mb-4">Track global development goals and school impact</p>
+                <div className="text-center mb-4">
+                  <div className="text-2xl font-bold text-blue-400">17</div>
+                  <div className="text-slate-300 text-sm">Global Goals</div>
+                </div>
+                <Button
+                  className="w-full bg-gradient-to-r from-blue-600/60 to-green-600/60 hover:from-blue-600/80 hover:to-green-600/80 text-white border border-blue-400/50"
+                  onClick={() => router.push('/dashboard/sdg')}
+                >
+                  View SDGs
                 </Button>
               </div>
             </div>

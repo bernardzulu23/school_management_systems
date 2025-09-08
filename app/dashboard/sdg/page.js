@@ -2,11 +2,15 @@
 
 import { useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import { useAuth } from '@/lib/auth'
 import SDGDashboard from '@/components/sdg/SDGDashboard'
 import SDG1PovertyModule from '@/components/sdg/SDG1PovertyModule'
 import SDG2HungerModule from '@/components/sdg/SDG2HungerModule'
 import SDG3HealthModule from '@/components/sdg/SDG3HealthModule'
 import SDG5GenderModule from '@/components/sdg/SDG5GenderModule'
+import TeacherSDGView from '@/components/sdg/TeacherSDGView'
+import HodSDGView from '@/components/sdg/HodSDGView'
+import HeadteacherSDGView from '@/components/sdg/HeadteacherSDGView'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { 
@@ -15,8 +19,12 @@ import {
 } from 'lucide-react'
 
 export default function SDGPage() {
+  const { user } = useAuth()
   const [activeView, setActiveView] = useState('dashboard')
   const [selectedSDG, setSelectedSDG] = useState(null)
+
+  // Determine user role for role-specific views
+  const userRole = user?.role || 'student' // Default to student if no role
 
   // Mock school data - replace with actual data from your API
   const schoolData = {
@@ -64,7 +72,16 @@ export default function SDGPage() {
   const renderActiveView = () => {
     switch (activeView) {
       case 'dashboard':
-        return <SDGDashboard schoolData={schoolData} />
+        // Show role-specific dashboard or general dashboard
+        if (userRole === 'teacher') {
+          return <TeacherSDGView teacherId={user?.id} classData={[]} studentData={mockStudentData} />
+        } else if (userRole === 'hod') {
+          return <HodSDGView hodId={user?.id} departmentData={{}} />
+        } else if (userRole === 'headteacher') {
+          return <HeadteacherSDGView schoolId="school-1" schoolData={schoolData} />
+        } else {
+          return <SDGDashboard schoolData={schoolData} />
+        }
       case 'sdg1':
         return <SDG1PovertyModule schoolId="school-1" studentData={mockStudentData} />
       case 'sdg2':
@@ -81,7 +98,15 @@ export default function SDGPage() {
   const getPageTitle = () => {
     switch (activeView) {
       case 'dashboard':
-        return 'UN Sustainable Development Goals Dashboard'
+        if (userRole === 'teacher') {
+          return 'Teacher SDG Impact Dashboard'
+        } else if (userRole === 'hod') {
+          return 'HOD SDG Management Dashboard'
+        } else if (userRole === 'headteacher') {
+          return 'Headteacher SDG Leadership Dashboard'
+        } else {
+          return 'Student SDG Learning Dashboard'
+        }
       case 'sdg1':
         return 'SDG 1: No Poverty'
       case 'sdg2':
