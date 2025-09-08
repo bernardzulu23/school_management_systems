@@ -6,6 +6,7 @@ import SDGDashboard from '@/components/sdg/SDGDashboard'
 import SDG1PovertyModule from '@/components/sdg/SDG1PovertyModule'
 import SDG2HungerModule from '@/components/sdg/SDG2HungerModule'
 import SDG3HealthModule from '@/components/sdg/SDG3HealthModule'
+import SDG5GenderModule from '@/components/sdg/SDG5GenderModule'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { 
@@ -71,10 +72,7 @@ export default function SDGPage() {
       case 'sdg3':
         return <SDG3HealthModule schoolId="school-1" studentData={mockStudentData} />
       case 'sdg5':
-        return <div className="text-center py-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">👩‍🎓 SDG 5: Gender Equality Module</h2>
-          <p className="text-gray-600">Gender equality module coming soon...</p>
-        </div>
+        return <SDG5GenderModule schoolId="school-1" studentData={mockStudentData} teacherData={[]} />
       default:
         return <SDGDashboard schoolData={schoolData} />
     }
