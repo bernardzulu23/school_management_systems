@@ -59,7 +59,26 @@ export default function TeacherClassesPage() {
   ]
 
   // Student data for selected class - will be loaded from API
-  const [studentsData, setStudentsData] = useState([])
+  const [studentsData, setStudentsData] = useState([
+    {
+      id: 1,
+      name: 'Alice Johnson',
+      studentId: 'STU001',
+      currentGrade: 'A',
+      attendance: 98,
+      lastAssessment: 92,
+      trend: 'improving',
+      parentContact: 'alice.parent@email.com',
+      notes: 'Excellent performance consistently'
+    },
+    {
+      id: 2,
+      name: 'Bob Smith',
+      studentId: 'STU002',
+      currentGrade: 'B+',
+      attendance: 85,
+      lastAssessment: 78,
+      trend: 'stable',
       parentContact: 'bob.parent@email.com',
       notes: 'Good understanding, needs practice'
     },
@@ -85,7 +104,7 @@ export default function TeacherClassesPage() {
       parentContact: 'david.parent@email.com',
       notes: 'Needs additional support'
     }
-  ]
+  ])
 
   const getTrendIcon = (trend) => {
     switch (trend) {

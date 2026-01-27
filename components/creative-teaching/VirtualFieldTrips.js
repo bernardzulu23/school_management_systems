@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/Button'
 import {
   MapPin, Globe, Camera, Compass, Clock, Users, Star, Play,
   Pause, Volume2, VolumeX, RotateCcw, ZoomIn, ZoomOut, Share2,
-  Download, Bookmark, Eye, Heart, MessageCircle, Award, Map
+  Download, Bookmark, Eye, Heart, MessageCircle, Award, Map,
+  SkipBack, SkipForward
 } from 'lucide-react'
 
 export default function VirtualFieldTrips() {

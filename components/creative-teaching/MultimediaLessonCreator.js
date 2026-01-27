@@ -401,7 +401,12 @@ export default function MultimediaLessonCreator() {
                         {currentSlideData.media.map((media) => (
                           <div key={media.id} className="flex items-center justify-between p-2 bg-slate-600/40 rounded">
                             <div className="flex items-center">
-                              {media.type === 'image' && <Image className="h-4 w-4 mr-2 text-blue-400" />}
+                              {media.type === 'image' && (
+                                <>
+                                  <Image className="h-4 w-4 mr-2 text-blue-400" />
+                                  <img src={media.url} alt={media.name || 'Slide image'} className="h-8 w-8 mr-2 rounded object-cover" />
+                                </>
+                              )}
                               {media.type === 'video' && <Video className="h-4 w-4 mr-2 text-red-400" />}
                               {media.type === 'audio' && <Music className="h-4 w-4 mr-2 text-green-400" />}
                               {media.type === 'document' && <FileText className="h-4 w-4 mr-2 text-yellow-400" />}

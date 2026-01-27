@@ -7,7 +7,7 @@ import { SDG_GOALS, calculateSDGProgress } from '@/lib/sdg-framework'
 import { 
   School, Globe, TrendingUp, Users, 
   DollarSign, Target, Award, BarChart3, 
-  Building, Handshake, FileText, Settings 
+  Building, HeartHandshake, FileText, Settings 
 } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts'
 
@@ -224,7 +224,7 @@ export default function HeadteacherSDGView({ schoolId, schoolData = {} }) {
         <Card className="border-l-4 border-l-green-500">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
-              <Handshake className="h-4 w-4 mr-2" />
+              <HeartHandshake className="h-4 w-4 mr-2" />
               Active Partnerships
             </CardTitle>
           </CardHeader>
@@ -304,7 +304,7 @@ export default function HeadteacherSDGView({ schoolId, schoolData = {} }) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Handshake className="h-5 w-5" />
+              <HeartHandshake className="h-5 w-5" />
               <span>Partnership Distribution</span>
             </CardTitle>
           </CardHeader>
@@ -403,7 +403,7 @@ export default function HeadteacherSDGView({ schoolId, schoolData = {} }) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <Handshake className="h-5 w-5" />
+            <HeartHandshake className="h-5 w-5" />
             <span>Strategic Partnerships</span>
           </CardTitle>
         </CardHeader>
@@ -464,7 +464,7 @@ export default function HeadteacherSDGView({ schoolId, schoolData = {} }) {
               <span>Generate Report</span>
             </Button>
             <Button variant="outline" className="h-auto p-4 flex-col space-y-2">
-              <Handshake className="h-6 w-6" />
+              <HeartHandshake className="h-6 w-6" />
               <span>Manage Partnerships</span>
             </Button>
             <Button variant="outline" className="h-auto p-4 flex-col space-y-2">

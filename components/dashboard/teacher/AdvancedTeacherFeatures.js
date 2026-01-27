@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 
 // Curriculum Mapping System
-export const renderCurriculumMapping = () => {
+export const CurriculumMapping = () => {
   const [curriculumMaps, setCurriculumMaps] = useState([])
 
   return (
@@ -111,7 +111,7 @@ export const renderCurriculumMapping = () => {
 }
 
 // Differentiated Instruction Tools
-export const renderDifferentiatedInstruction = () => {
+export const DifferentiatedInstruction = () => {
   const [instructionStrategies, setInstructionStrategies] = useState([])
 
   return (
@@ -225,7 +225,7 @@ export const renderDifferentiatedInstruction = () => {
 }
 
 // Student Portfolio Management
-export const renderStudentPortfolios = () => {
+export const StudentPortfolios = () => {
   const [portfolios, setPortfolios] = useState([])
 
   return (

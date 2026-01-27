@@ -23,8 +23,9 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
   const getGradeInfo = (score, gradeLevel) => {
     if (score === null || score === undefined) return { grade: 'X', status: 'ABSENT', color: 'gray' }
     
-    // For Forms 1, 2 and Grade 9
-    if (['form1', 'form2', 'grade9'].includes(gradeLevel)) {
+    // For Forms 1, 2 and Grades 8, 9
+    const normalizedGrade = gradeLevel?.toLowerCase() || ''
+    if (['form1', 'form2', 'grade9', 'grade 8', 'grade 9'].includes(normalizedGrade)) {
       if (score >= 75) return { grade: 'ONE', status: 'DISTINCTION', color: 'green' }
       if (score >= 60) return { grade: 'TWO', status: 'MERIT', color: 'blue' }
       if (score >= 50) return { grade: 'THREE', status: 'CREDIT', color: 'purple' }
@@ -32,8 +33,8 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
       return { grade: 'F', status: 'FAIL', color: 'red' }
     }
     
-    // For Forms 3, 4 and Grades 10, 11, 12
-    if (['form3', 'form4', 'grade10', 'grade11', 'grade12'].includes(gradeLevel)) {
+    // For Forms 3, 4, 5, 6 and Grades 10, 11, 12
+    if (['form3', 'form4', 'form5', 'form6', 'grade10', 'grade11', 'grade12', 'grade 10', 'grade 11', 'grade 12'].includes(normalizedGrade)) {
       if (score >= 75) return { grade: '1', status: 'DISTINCTION', color: 'green' }
       if (score >= 70) return { grade: '2', status: 'DISTINCTION', color: 'green' }
       if (score >= 65) return { grade: '3', status: 'MERIT', color: 'blue' }
