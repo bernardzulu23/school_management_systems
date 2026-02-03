@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import SubjectSelection from '@/components/registration/SubjectSelection'
+import { SCHOOL_SUBJECTS } from '@/data/subjects'
 import toast from 'react-hot-toast'
 import { 
   User, 
@@ -82,6 +84,9 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
     if (!formData.employee_id.trim()) newErrors.employee_id = 'Employee ID is required'
     if (!formData.department_name.trim()) newErrors.department_name = 'Department is required'
     if (!formData.qualification.trim()) newErrors.qualification = 'Qualification is required'
+    if (!formData.subjects_managed || formData.subjects_managed.length === 0) {
+      newErrors.subjects_managed = 'At least one subject must be selected'
+    }
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -125,12 +130,6 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
     'Physical Education',
     'Technology',
     'Special Education'
-  ]
-
-  const subjects = [
-    'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'History',
-    'Geography', 'Economics', 'Business Studies', 'Computer Science',
-    'Art', 'Music', 'Physical Education', 'French', 'Spanish'
   ]
 
   const managementAreas = [
@@ -418,18 +417,19 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Subjects Managed
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Subjects Managed *
                 </label>
-                <input
-                  type="text"
-                  value={formData.subjects_managed.join(', ')}
-                  onChange={(e) => handleArrayInputChange('subjects_managed', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter subjects separated by commas"
-                />
-                <p className="text-sm text-gray-500 mt-1">Separate multiple subjects with commas</p>
+                <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                  <SubjectSelection
+                    selectedSubjects={formData.subjects_managed || []}
+                    onSubjectsChange={(subjects) => setFormData(prev => ({ ...prev, subjects_managed: subjects }))}
+                    userRole="hod"
+                    maxSelections={10}
+                  />
+                </div>
+                {errors.subjects_managed && <p className="text-red-500 text-sm mt-1">{errors.subjects_managed}</p>}
               </div>
 
               <div>

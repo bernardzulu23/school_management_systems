@@ -16,12 +16,27 @@ model User {
   password  String
   name      String
   role      String   // 'headteacher', 'hod', 'teacher', 'student'
+  
+  // Basic Info (Common)
+  contact_number String?
+  address        String?
+  date_of_birth  DateTime?
+  gender         String?
+  profile_picture_url String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
   // Relations
   studentProfile Student?
   teacherProfile Teacher?
+  hodProfile     HeadOfDepartment?
+  
+  // New Relations
+  notes                   Note[]
+  bookLoans               BookLoan[]
+  organizedActivities     Activity[]
+  activityParticipations  ActivityParticipant[]
 }
 
 model Student {
@@ -30,9 +45,44 @@ model Student {
   user      User?    @relation(fields: [userId], references: [id])
   
   name      String
-  class     String   // 'Form 1A'
   
-  results   Result[]
+  // Academic Info
+  class     String   // 'Form 1A' - combination of year_group and section
+  exam_number String?
+  previous_school String?
+  grade_average Float?
+  selected_subjects String[] // Array of subject names selected
+
+  // Parent/Guardian Info
+  parent_father_name    String?
+  parent_father_contact String?
+  parent_father_email   String?
+  parent_mother_name    String?
+  parent_mother_contact String?
+  parent_mother_email   String?
+  
+  guardian_name         String?
+  guardian_contact      String?
+  guardian_email        String?
+  guardian_relationship String?
+  guardian_address      String?
+  
+  emergency_contact_name         String?
+  emergency_contact_phone        String?
+  emergency_contact_relationship String?
+  emergency_contact_address      String?
+
+  // Medical Info
+  blood_type            String?
+  medical_aid_scheme    String?
+  medical_aid_number    String?
+  family_doctor_name    String?
+  family_doctor_contact String?
+  medical_conditions    String?
+  allergies             String?
+  
+  results             Result[]
+  gamificationProfile GamificationProfile?
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -43,8 +93,45 @@ model Teacher {
   userId    String   @unique
   user      User     @relation(fields: [userId], references: [id])
   
-  subjects  String[] // Array of subject names taught
+  // Professional Info
+  ts_number        String?
+  employee_id      String?
+  department       String?
+  qualifications   String?
+  experience_years Int?
   
+  subjects         String[] // Array of subject names taught
+  assigned_classes String[] // Array of classes assigned
+  
+  lessonPlans      LessonPlan[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HeadOfDepartment {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  
+  // Professional Info
+  employee_id         String?
+  department_name     String?
+  qualification       String?
+  specialization      String?
+  hire_date           DateTime?
+  appointment_date    DateTime?
+  salary              Float?
+  bio                 String?
+  
+  years_experience    Int?
+  years_as_hod        Int?
+  
+  subjects_managed    String[]
+  teachers_supervised Int?
+  management_areas    String[]
+  performance_rating  Float?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -64,4 +151,149 @@ model Result {
   updatedAt DateTime @updatedAt
   
   @@unique([studentId, subject, term]) // Prevent duplicate results for same subject/term
+}
+
+// --- Academic Management ---
+
+model LessonPlan {
+  id          String   @id @default(uuid())
+  teacherId   String
+  teacher     Teacher  @relation(fields: [teacherId], references: [id])
+  
+  subject     String
+  class       String
+  topic       String
+  content     String   @db.Text
+  date        DateTime
+  duration    Int?     // in minutes
+  resources   String[] // URLs or file paths
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Note {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  title       String
+  content     String   @db.Text
+  subject     String?
+  category    String?  // 'Personal', 'Class', 'Revision'
+  isPublic    Boolean  @default(false)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// --- Library / Resources ---
+
+model Book {
+  id          String   @id @default(uuid())
+  title       String
+  author      String
+  isbn        String?  @unique
+  category    String
+  
+  quantity    Int      @default(1)
+  available   Int      @default(1)
+  location    String?  // Shelf number etc.
+  
+  coverUrl    String?
+  digitalUrl  String?  // If e-book
+  
+  borrowedBy  BookLoan[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model BookLoan {
+  id          String   @id @default(uuid())
+  bookId      String
+  book        Book     @relation(fields: [bookId], references: [id])
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  borrowedAt  DateTime @default(now())
+  dueDate     DateTime
+  returnedAt  DateTime?
+  status      String   // 'Borrowed', 'Returned', 'Overdue'
+}
+
+// --- Gamification ---
+
+model GamificationProfile {
+  id          String   @id @default(uuid())
+  studentId   String   @unique
+  student     Student  @relation(fields: [studentId], references: [id])
+  
+  points      Int      @default(0)
+  level       Int      @default(1)
+  streak      Int      @default(0)
+  lastActive  DateTime @default(now())
+  
+  badges      StudentBadge[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Badge {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  iconUrl     String
+  criteria    String   // JSON or text describing how to earn
+  points      Int
+  
+  students    StudentBadge[]
+}
+
+model StudentBadge {
+  id          String   @id @default(uuid())
+  studentId   String
+  student     GamificationProfile @relation(fields: [studentId], references: [studentId]) // Link to profile
+  
+  badgeId     String
+  badge       Badge    @relation(fields: [badgeId], references: [id])
+  
+  earnedAt    DateTime @default(now())
+}
+
+// --- Activities & Events ---
+
+model Activity {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  type        String   // 'Sport', 'Club', 'Event', 'Meeting'
+  
+  startDate   DateTime
+  endDate     DateTime?
+  location    String?
+  
+  organizerId String?
+  organizer   User?    @relation(fields: [organizerId], references: [id])
+  
+  participants ActivityParticipant[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ActivityParticipant {
+  id          String   @id @default(uuid())
+  activityId  String
+  activity    Activity @relation(fields: [activityId], references: [id])
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  role        String?  // 'Member', 'Leader', 'Captain'
+  
+  joinedAt    DateTime @default(now())
+  
+  @@unique([activityId, userId])
 }

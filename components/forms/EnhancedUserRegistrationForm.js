@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/Button'
 import SubjectSelection from '@/components/registration/SubjectSelection'
+import { SCHOOL_SUBJECTS } from '@/data/subjects'
 // import ProfilePictureUpload from '@/components/ui/ProfilePictureUpload'
 // import { uploadProfilePicture } from '@/lib/cloudinary-client'
 import toast from 'react-hot-toast'
@@ -267,15 +268,15 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
       if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters'
       if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match'
     } else if (currentStep === 3) {
-      // Professional/Academic validation - make assignments optional for now
+      // Professional/Academic validation
       if (role === 'teacher' || role === 'hod') {
         if (!formData.ts_number.trim()) newErrors.ts_number = 'TS Number is required'
         if (!formData.department) newErrors.department = 'Department is required'
         if (!formData.qualifications.trim()) newErrors.qualifications = 'Qualifications are required'
-        // Make assignments optional for testing
-        // if (!formData.assigned_subjects || formData.assigned_subjects.length === 0) {
-        //   newErrors.assigned_subjects = 'At least one subject must be assigned'
-        // }
+        
+        if (!formData.assigned_subjects || formData.assigned_subjects.length === 0) {
+          newErrors.assigned_subjects = 'At least one subject must be assigned'
+        }
         // if (!formData.assigned_classes || formData.assigned_classes.length === 0) {
         //   newErrors.assigned_classes = 'At least one class must be assigned'
         // }
@@ -284,10 +285,10 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
       if (role === 'student') {
         if (!formData.year_group) newErrors.year_group = 'Year group is required'
         if (!formData.section) newErrors.section = 'Section is required'
-        // Make subject selection optional for testing
-        // if (!formData.selected_subjects || formData.selected_subjects.length === 0) {
-        //   newErrors.selected_subjects = 'At least one subject must be selected'
-        // }
+        
+        if (!formData.selected_subjects || formData.selected_subjects.length === 0) {
+          newErrors.selected_subjects = 'At least one subject must be selected'
+        }
       }
     }
 
@@ -308,15 +309,15 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
     if (!formData.date_of_birth) newErrors.date_of_birth = 'Date of birth is required'
     if (!formData.gender) newErrors.gender = 'Gender is required'
 
-    // Role-specific validation - simplified for testing
+    // Role-specific validation
     if (role === 'teacher' || role === 'hod') {
       if (!formData.ts_number.trim()) newErrors.ts_number = 'TS Number is required'
       if (!formData.department) newErrors.department = 'Department is required'
       if (!formData.qualifications.trim()) newErrors.qualifications = 'Qualifications are required'
-      // Make assignments optional for now
-      // if (!formData.assigned_subjects || formData.assigned_subjects.length === 0) {
-      //   newErrors.assigned_subjects = 'At least one subject must be assigned'
-      // }
+      
+      if (!formData.assigned_subjects || formData.assigned_subjects.length === 0) {
+        newErrors.assigned_subjects = 'At least one subject must be assigned'
+      }
       // if (!formData.assigned_classes || formData.assigned_classes.length === 0) {
       //   newErrors.assigned_classes = 'At least one class must be assigned'
       // }
@@ -330,10 +331,10 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
     if (role === 'student') {
       if (!formData.year_group) newErrors.year_group = 'Year group is required'
       if (!formData.section) newErrors.section = 'Section is required'
-      // Make subject selection optional for now
-      // if (!formData.selected_subjects || formData.selected_subjects.length === 0) {
-      //   newErrors.selected_subjects = 'At least one subject must be selected'
-      // }
+      
+      if (!formData.selected_subjects || formData.selected_subjects.length === 0) {
+        newErrors.selected_subjects = 'At least one subject must be selected'
+      }
       // Only require parent info for students
       if (!formData.parent_father_name.trim()) newErrors.parent_father_name = 'Father\'s name is required'
       if (!formData.parent_father_contact.trim()) newErrors.parent_father_contact = 'Father\'s contact is required'
@@ -403,7 +404,15 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
 
         // Convert arrays to comma-separated strings for backend compatibility
         if (formData.assigned_subjects && formData.assigned_subjects.length > 0) {
-          submitData.assigned_subjects = formData.assigned_subjects.join(',')
+          // Map IDs to names if they are IDs (numbers)
+          const subjectNames = formData.assigned_subjects.map(id => {
+            if (typeof id === 'number') {
+              const subject = SCHOOL_SUBJECTS.find(s => s.id === id)
+              return subject ? subject.name : id
+            }
+            return id
+          })
+          submitData.assigned_subjects = subjectNames.join(',')
         }
         if (formData.assigned_classes && formData.assigned_classes.length > 0) {
           submitData.assigned_classes = formData.assigned_classes.join(',')
@@ -420,7 +429,15 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
 
         // Convert selected subjects array to comma-separated string
         if (formData.selected_subjects && formData.selected_subjects.length > 0) {
-          submitData.selected_subjects = formData.selected_subjects.join(',')
+          // Map IDs to names if they are IDs (numbers)
+          const subjectNames = formData.selected_subjects.map(id => {
+            if (typeof id === 'number') {
+              const subject = SCHOOL_SUBJECTS.find(s => s.id === id)
+              return subject ? subject.name : id
+            }
+            return id
+          })
+          submitData.selected_subjects = subjectNames.join(',')
         }
 
         // Parent/Guardian information
@@ -978,6 +995,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
                 userRole="student"
                 maxSelections={8}
               />
+              {errors.selected_subjects && <p className="text-red-500 text-sm mt-1">{errors.selected_subjects}</p>}
             </div>
 
             {/* Subject Summary */}
@@ -989,11 +1007,14 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
                   {formData.selected_subjects?.length || 0} subjects
                   {formData.selected_subjects?.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {formData.selected_subjects.map(subject => (
-                        <span key={subject} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                          {subject}
-                        </span>
-                      ))}
+                      {formData.selected_subjects.map(subjectId => {
+                        const subject = SCHOOL_SUBJECTS.find(s => s.id === subjectId)
+                        return (
+                          <span key={subjectId} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            {subject ? subject.name : subjectId}
+                          </span>
+                        )
+                      })}
                     </div>
                   )}
                 </span>
@@ -1744,9 +1765,10 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
                 <SubjectSelection
                   selectedSubjects={formData.assigned_subjects || []}
                   onSubjectsChange={(subjects) => setFormData(prev => ({ ...prev, assigned_subjects: subjects }))}
-                  userRole="teacher"
-                  maxSelections={6}
+                  userRole={role === 'hod' ? 'hod' : 'teacher'}
+                  maxSelections={role === 'hod' ? 10 : 6}
                 />
+                {errors.assigned_subjects && <p className="text-red-500 text-sm mt-1">{errors.assigned_subjects}</p>}
               </div>
 
               <div>
