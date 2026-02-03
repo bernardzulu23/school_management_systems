@@ -865,14 +865,7 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
           background: #e0e7ff;
           color: #3730a3;
         }
-      `}</style>
-    </div>
-  )
-}
 
-export default AdvancedInnovationDashboard
-
-      <style jsx>{`
         .assessment-section {
           padding: 20px;
         }
@@ -1036,3 +1029,6 @@ export default AdvancedInnovationDashboard
       `}</style>
     </div>
   )
+}
+
+export default AdvancedInnovationDashboard

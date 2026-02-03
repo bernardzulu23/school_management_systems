@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 
 // Collaborative Lesson Planning
-export const renderLessonPlanning = () => {
+export const LessonPlanning = () => {
   const [lessonPlans, setLessonPlans] = useState([])
 
   return (
@@ -148,7 +148,7 @@ export const renderLessonPlanning = () => {
 }
 
 // Parent-Teacher Conference Scheduler
-export const renderParentConferences = () => {
+export const ParentConferences = () => {
   const [conferences, setConferences] = useState([])
 
   return (

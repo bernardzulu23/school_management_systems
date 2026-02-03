@@ -122,9 +122,9 @@ INSERT INTO subjects (name, code, description) VALUES
 
 -- Insert sample class
 INSERT INTO school_classes (name, grade_level) VALUES
-('Grade 7A', 7),
-('Grade 8A', 8),
-('Grade 9A', 9);
+('Grade 8A', 'Grade 8'),
+('Grade 9A', 'Grade 9'),
+('Form 3A', 'Form 3');
 ```
 
 ## 🔍 Step 6: Testing

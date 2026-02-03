@@ -21,6 +21,7 @@ import {
   UserCheck, Library, FileBarChart, TrendingDown, AlertTriangle, Zap, Rocket, X
 } from 'lucide-react'
 import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeachingHub'
+import JuniorPerformanceAnalysis from '@/components/dashboard/JuniorPerformanceAnalysis'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts'
 
 export default function HeadteacherDashboard() {
@@ -42,6 +43,9 @@ export default function HeadteacherDashboard() {
     totalGoals: 0,
     attendanceRate: 0,
     passRate: 0,
+    teacherEffectiveness: 0,
+    complianceRate: 0,
+    teacherDevelopment: 0,
   })
 
   // Performance data for charts
@@ -91,6 +95,9 @@ export default function HeadteacherDashboard() {
         totalSubjects: stats.stats.total_subjects || 0,
         attendanceRate: stats.stats.attendance_rate || 0,
         passRate: stats.stats.pass_rate || 0,
+        teacherEffectiveness: stats.stats.teacher_effectiveness || 0,
+        complianceRate: stats.stats.compliance_rate || 0,
+        teacherDevelopment: stats.stats.teacher_development || 0,
       }))
       setHasResults(true)
     }
@@ -129,6 +136,12 @@ export default function HeadteacherDashboard() {
       name: 'Comprehensive Analytics',
       icon: FileBarChart,
       description: 'Detailed performance analytics and insights'
+    },
+    {
+      id: 'junior-analysis',
+      name: 'Junior Performance',
+      icon: Award,
+      description: 'Analysis of Form 1 and Form 2 results'
     },
     {
       id: 'user-management',
@@ -181,6 +194,8 @@ export default function HeadteacherDashboard() {
         />
       case 'comprehensive-analytics':
         return renderComprehensiveAnalyticsContent()
+      case 'junior-analysis':
+        return <JuniorPerformanceAnalysis results={dashboardData?.junior_results || []} />
       case 'user-management':
         return <UserManagement />
       case 'academic-management':
@@ -303,16 +318,16 @@ export default function HeadteacherDashboard() {
                     <TrendingUp className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="font-bold text-white text-lg">Student Achievement</h3>
-                  <p className="text-3xl font-bold text-green-400 mt-2">85%</p>
-                  <p className="text-slate-300 text-sm mt-1">+5% from last term</p>
+                  <p className="text-3xl font-bold text-green-400 mt-2">{schoolStats.passRate}%</p>
+                  <p className="text-slate-300 text-sm mt-1">Based on recent results</p>
                 </div>
                 <div className="text-center p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl">
                   <div className="backdrop-blur-md bg-blue-600/60 border border-blue-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
                     <Users className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="font-bold text-white text-lg">Teacher Effectiveness</h3>
-                  <p className="text-3xl font-bold text-blue-400 mt-2">0%</p>
-                  <p className="text-slate-300 text-sm mt-1">No data available</p>
+                  <p className="text-3xl font-bold text-blue-400 mt-2">{schoolStats.teacherEffectiveness}%</p>
+                  <p className="text-slate-300 text-sm mt-1">Based on student performance</p>
                 </div>
                 <div className="text-center p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl">
                   <div className="backdrop-blur-md bg-purple-600/60 border border-purple-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
@@ -320,7 +335,7 @@ export default function HeadteacherDashboard() {
                   </div>
                   <h3 className="font-bold text-white text-lg">Attendance Rate</h3>
                   <p className="text-3xl font-bold text-purple-400 mt-2">{schoolStats.attendanceRate}%</p>
-                  <p className="text-slate-300 text-sm mt-1">+2% from last term</p>
+                  <p className="text-slate-300 text-sm mt-1">Current term</p>
                 </div>
                 <div className="text-center p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl">
                   <div className="backdrop-blur-md bg-orange-600/60 border border-orange-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
@@ -328,7 +343,7 @@ export default function HeadteacherDashboard() {
                   </div>
                   <h3 className="font-bold text-white text-lg">Pass Rate</h3>
                   <p className="text-3xl font-bold text-orange-400 mt-2">{schoolStats.passRate}%</p>
-                  <p className="text-slate-300 text-sm mt-1">+4% from last term</p>
+                  <p className="text-slate-300 text-sm mt-1">Current term</p>
                 </div>
               </div>
             </div>
@@ -597,7 +612,7 @@ export default function HeadteacherDashboard() {
                 </div>
                 <div className="mt-6 p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl text-center">
                   <h4 className="font-semibold text-white mb-2">Overall Compliance</h4>
-                  <p className="text-3xl font-bold text-green-400">81%</p>
+                  <p className="text-3xl font-bold text-green-400">{schoolStats.complianceRate}%</p>
                   <p className="text-slate-300 text-sm">School average</p>
                 </div>
               </div>
@@ -808,15 +823,15 @@ export default function HeadteacherDashboard() {
                     <div className="text-slate-300 text-sm">Total Teachers</div>
                   </div>
                   <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-blue-400">0%</div>
+                    <div className="text-2xl font-bold text-blue-400">{schoolStats.teacherEffectiveness}%</div>
                     <div className="text-slate-300 text-sm">Effectiveness</div>
                   </div>
                   <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-purple-400">0%</div>
+                    <div className="text-2xl font-bold text-purple-400">{schoolStats.complianceRate}%</div>
                     <div className="text-slate-300 text-sm">Compliance</div>
                   </div>
                   <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-orange-400">88%</div>
+                    <div className="text-2xl font-bold text-orange-400">{schoolStats.teacherDevelopment}%</div>
                     <div className="text-slate-300 text-sm">Development</div>
                   </div>
                 </div>

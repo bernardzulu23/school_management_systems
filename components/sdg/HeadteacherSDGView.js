@@ -7,7 +7,7 @@ import { SDG_GOALS, calculateSDGProgress } from '@/lib/sdg-framework'
 import { 
   School, Globe, TrendingUp, Users, 
   DollarSign, Target, Award, BarChart3, 
-  Building, Handshake, FileText, Settings 
+  Building, HeartHandshake, FileText, Settings 
 } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts'
 
@@ -32,128 +32,43 @@ export default function HeadteacherSDGView({ schoolId, schoolData = {} }) {
   }, [schoolData])
 
   const calculateSchoolSDGProgress = (sdgId, data) => {
-    // Headteacher-level comprehensive SDG calculation
-    const baseProgress = Math.round(Math.random() * 25 + 60) // 60-85% base
-    
-    // Adjust based on school-wide factors
-    switch (sdgId) {
-      case 1: // No Poverty
-        return Math.min(100, baseProgress + (data.povertyPrograms || 0) * 2)
-      case 4: // Quality Education
-        return Math.min(100, baseProgress + (data.educationQuality || 0) * 1.5)
-      case 5: // Gender Equality
-        return Math.min(100, baseProgress + (data.genderInitiatives || 0) * 3)
-      case 17: // Partnerships
-        return Math.min(100, baseProgress + (data.partnerships || 0) * 4)
-      default:
-        return baseProgress
-    }
+    // TODO: Implement actual calculation logic based on schoolData
+    return 0
   }
 
   const loadPartnerships = () => {
-    setPartnerships([
-      {
-        id: 1,
-        name: "UNICEF Zambia",
-        type: "International NGO",
-        sdgFocus: [1, 2, 3, 4, 5],
-        contribution: "ZMW 150,000",
-        status: "active",
-        impact: "Improved access to education for 200+ students"
-      },
-      {
-        id: 2,
-        name: "World Vision",
-        type: "International NGO",
-        sdgFocus: [1, 2, 6],
-        contribution: "ZMW 80,000",
-        status: "active",
-        impact: "Clean water access and nutrition programs"
-      },
-      {
-        id: 3,
-        name: "Ministry of Education",
-        type: "Government",
-        sdgFocus: [4, 5, 10],
-        contribution: "ZMW 300,000",
-        status: "active",
-        impact: "Teacher training and curriculum development"
-      },
-      {
-        id: 4,
-        name: "Local Community Council",
-        type: "Community",
-        sdgFocus: [11, 16, 17],
-        contribution: "ZMW 25,000",
-        status: "active",
-        impact: "Community engagement and governance"
-      }
-    ])
+    // TODO: Fetch partnerships from API
+    setPartnerships([])
   }
 
   const loadStrategicPlan = () => {
-    setStrategicPlan([
-      {
-        sdg: 1,
-        target: "Reduce student poverty by 30%",
-        timeline: "2024-2026",
-        budget: 200000,
-        progress: 45,
-        keyActions: ["Expand scholarship program", "Partner with local businesses", "Implement feeding program"]
-      },
-      {
-        sdg: 4,
-        target: "Achieve 95% completion rate",
-        timeline: "2024-2025",
-        budget: 500000,
-        progress: 78,
-        keyActions: ["Teacher professional development", "Learning resource enhancement", "Technology integration"]
-      },
-      {
-        sdg: 5,
-        target: "Achieve gender parity in all subjects",
-        timeline: "2024-2027",
-        budget: 100000,
-        progress: 62,
-        keyActions: ["Girls' STEM program", "Female teacher recruitment", "Gender-sensitive curriculum"]
-      },
-      {
-        sdg: 6,
-        target: "Ensure clean water access for all",
-        timeline: "2024",
-        budget: 150000,
-        progress: 85,
-        keyActions: ["Water infrastructure upgrade", "Hygiene education", "Maintenance program"]
-      }
-    ])
+    // TODO: Fetch strategic plan from API
+    setStrategicPlan([])
   }
 
   const loadImpactMetrics = () => {
+    // TODO: Fetch impact metrics from API
     setSchoolImpactMetrics({
-      totalStudentsImpacted: 450,
-      teachersEngaged: 25,
-      communityMembersReached: 1200,
-      partnershipsActive: 4,
-      totalBudget: 950000,
-      budgetUtilized: 720000,
-      sdgTargetsAchieved: 12,
-      internationalRecognition: 2
+      totalStudentsImpacted: 0,
+      teachersEngaged: 0,
+      communityMembersReached: 0,
+      partnershipsActive: 0,
+      totalBudget: 0,
+      budgetUtilized: 0,
+      sdgTargetsAchieved: 0,
+      internationalRecognition: 0
     })
   }
 
   const getSchoolOverallProgress = () => {
+    if (Object.keys(schoolSDGProgress).length === 0) return 0
     const totalProgress = Object.values(schoolSDGProgress).reduce((sum, progress) => sum + progress, 0)
     return Math.round(totalProgress / Object.keys(schoolSDGProgress).length)
   }
 
   const getSDGTrendData = () => {
-    return [
-      { year: '2020', progress: 45 },
-      { year: '2021', progress: 52 },
-      { year: '2022', progress: 61 },
-      { year: '2023', progress: 68 },
-      { year: '2024', progress: getSchoolOverallProgress() }
-    ]
+    // TODO: Fetch trend data from API
+    return []
   }
 
   const getPartnershipByType = () => {
@@ -224,7 +139,7 @@ export default function HeadteacherSDGView({ schoolId, schoolData = {} }) {
         <Card className="border-l-4 border-l-green-500">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
-              <Handshake className="h-4 w-4 mr-2" />
+              <HeartHandshake className="h-4 w-4 mr-2" />
               Active Partnerships
             </CardTitle>
           </CardHeader>
@@ -304,7 +219,7 @@ export default function HeadteacherSDGView({ schoolId, schoolData = {} }) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Handshake className="h-5 w-5" />
+              <HeartHandshake className="h-5 w-5" />
               <span>Partnership Distribution</span>
             </CardTitle>
           </CardHeader>
@@ -403,7 +318,7 @@ export default function HeadteacherSDGView({ schoolId, schoolData = {} }) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <Handshake className="h-5 w-5" />
+            <HeartHandshake className="h-5 w-5" />
             <span>Strategic Partnerships</span>
           </CardTitle>
         </CardHeader>
@@ -464,7 +379,7 @@ export default function HeadteacherSDGView({ schoolId, schoolData = {} }) {
               <span>Generate Report</span>
             </Button>
             <Button variant="outline" className="h-auto p-4 flex-col space-y-2">
-              <Handshake className="h-6 w-6" />
+              <HeartHandshake className="h-6 w-6" />
               <span>Manage Partnerships</span>
             </Button>
             <Button variant="outline" className="h-auto p-4 flex-col space-y-2">

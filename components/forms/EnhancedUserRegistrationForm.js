@@ -61,6 +61,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
     student_id: '',
     exam_number: '',
     year_group: '',
+    section: '',
     custom_class: '',
     department: '',
     qualifications: '',
@@ -282,6 +283,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
 
       if (role === 'student') {
         if (!formData.year_group) newErrors.year_group = 'Year group is required'
+        if (!formData.section) newErrors.section = 'Section is required'
         // Make subject selection optional for testing
         // if (!formData.selected_subjects || formData.selected_subjects.length === 0) {
         //   newErrors.selected_subjects = 'At least one subject must be selected'
@@ -327,6 +329,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
 
     if (role === 'student') {
       if (!formData.year_group) newErrors.year_group = 'Year group is required'
+      if (!formData.section) newErrors.section = 'Section is required'
       // Make subject selection optional for now
       // if (!formData.selected_subjects || formData.selected_subjects.length === 0) {
       //   newErrors.selected_subjects = 'At least one subject must be selected'
@@ -856,8 +859,19 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
       { value: 'Form 2', label: 'Form 2' },
       { value: 'Form 3', label: 'Form 3' },
       { value: 'Form 4', label: 'Form 4' },
-      { value: 'Lower 6', label: 'Lower 6 (A-Level)' },
-      { value: 'Upper 6', label: 'Upper 6 (A-Level)' }
+      { value: 'Form 5', label: 'Form 5' },
+      { value: 'Form 6', label: 'Form 6' }
+    ]
+
+    const sections = [
+      { value: 'A', label: 'A' },
+      { value: 'B', label: 'B' },
+      { value: 'C', label: 'C' },
+      { value: 'D', label: 'D' },
+      { value: 'E', label: 'E' },
+      { value: 'F', label: 'F' },
+      { value: 'G', label: 'G' },
+      { value: 'H', label: 'H' }
     ]
 
     const subjectsByLevel = {
@@ -865,8 +879,13 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
       'Form 2': ['English Language', 'Mathematics', 'Science', 'Shona/Ndebele', 'History', 'Geography', 'Religious Education', 'Physical Education'],
       'Form 3': ['English Language', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Shona/Ndebele', 'History', 'Geography', 'Accounting', 'Business Studies'],
       'Form 4': ['English Language', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Shona/Ndebele', 'History', 'Geography', 'Accounting', 'Business Studies'],
-      'Lower 6': ['English Literature', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'Accounting', 'Business Studies', 'Economics'],
-      'Upper 6': ['English Literature', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'Accounting', 'Business Studies', 'Economics']
+      'Form 5': ['English Literature', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'Accounting', 'Business Studies', 'Economics'],
+      'Form 6': ['English Literature', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'Accounting', 'Business Studies', 'Economics'],
+      'Grade 8': ['English Language', 'Mathematics', 'Science', 'Social Studies', 'Creative & Technology Studies', 'Home Economics', 'Zambian Languages'],
+      'Grade 9': ['English Language', 'Mathematics', 'Science', 'Social Studies', 'Creative & Technology Studies', 'Home Economics', 'Zambian Languages'],
+      'Grade 10': ['English Language', 'Mathematics', 'Biology', 'Chemistry', 'Physics', 'Civic Education', 'History', 'Geography', 'Commerce', 'Accounts'],
+      'Grade 11': ['English Language', 'Mathematics', 'Biology', 'Chemistry', 'Physics', 'Civic Education', 'History', 'Geography', 'Commerce', 'Accounts'],
+      'Grade 12': ['English Language', 'Mathematics', 'Biology', 'Chemistry', 'Physics', 'Civic Education', 'History', 'Geography', 'Commerce', 'Accounts']
     }
 
     const availableSubjects = formData.year_group ? subjectsByLevel[formData.year_group] || [] : []
@@ -911,10 +930,13 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
             })}
 
             {renderInputField({
-              name: 'custom_class',
-              label: 'Class',
-              placeholder: 'e.g., Form 1A, Form 2B',
-              icon: Users
+              name: 'section',
+              label: 'Section',
+              type: 'select',
+              placeholder: 'Select section',
+              required: true,
+              icon: Users,
+              options: sections
             })}
 
             {renderInputField({

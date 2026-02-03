@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { HodRegistrationForm } from '@/components/forms/HodRegistrationForm'
-import { supabase, db } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 import toast from 'react-hot-toast'
 import { 
@@ -42,7 +41,9 @@ export default function HodManagement() {
   const fetchHods = async () => {
     try {
       setLoading(true)
-      const hodsData = await db.getHods()
+      const response = await fetch('/api/hods')
+      if (!response.ok) throw new Error('Failed to fetch')
+      const hodsData = await response.json()
       setHods(hodsData)
       
       // Calculate stats
@@ -69,58 +70,26 @@ export default function HodManagement() {
     try {
       setLoading(true)
       
-      // Create user account in Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password
+      const method = editingHod ? 'PUT' : 'POST'
+      const body = editingHod ? { ...formData, id: editingHod.id } : formData
+
+      const response = await fetch('/api/hods', {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
       })
       
-      if (authError) throw authError
+      const data = await response.json()
       
-      // Create profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: authData.user.id,
-          name: formData.name,
-          role: 'hod',
-          contact_number: formData.contact_number,
-          address: formData.address,
-          date_of_birth: formData.date_of_birth,
-          gender: formData.gender,
-          status: 'active'
-        })
+      if (!response.ok) throw new Error(data.error || 'Operation failed')
       
-      if (profileError) throw profileError
-      
-      // Create HOD record
-      const hodData = {
-        user_id: authData.user.id,
-        employee_id: formData.employee_id,
-        department_name: formData.department_name,
-        qualification: formData.qualification,
-        specialization: formData.specialization,
-        hire_date: formData.hire_date,
-        appointment_date: formData.appointment_date,
-        salary: formData.salary,
-        bio: formData.bio,
-        years_experience: formData.years_experience,
-        years_as_hod: formData.years_as_hod,
-        subjects_managed: formData.subjects_managed,
-        teachers_supervised: formData.teachers_supervised,
-        management_areas: formData.management_areas,
-        performance_rating: formData.performance_rating,
-        created_by: user.id
-      }
-      
-      await db.createHod(hodData)
-      
-      toast.success('HOD registered successfully!')
+      toast.success(editingHod ? 'HOD updated successfully' : 'HOD registered successfully')
       setShowRegistrationForm(false)
+      setEditingHod(null)
       fetchHods()
     } catch (error) {
-      console.error('Registration error:', error)
-      toast.error(error.message || 'Registration failed')
+      console.error('Error saving HOD:', error)
+      toast.error(error.message || 'Failed to save HOD')
     } finally {
       setLoading(false)
     }
@@ -138,7 +107,9 @@ export default function HodManagement() {
     
     try {
       setLoading(true)
-      await db.deleteHod(hodId)
+      const response = await fetch(`/api/hods?id=${hodId}`, { method: 'DELETE' })
+      if (!response.ok) throw new Error('Failed to delete')
+      
       toast.success('HOD deleted successfully')
       fetchHods()
     } catch (error) {
@@ -303,10 +274,9 @@ export default function HodManagement() {
                 <Card key={hod.id} className="hover:shadow-lg transition-shadow">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
-                      <div className="flex-1">
+                      <div clasx-1">
                         <h3 className="text-lg font-semibold text-gray-900">
                           {hod.profiles?.name}
-                        </h3>
                         <p className="text-sm text-gray-600">{hod.department_name}</p>
                         <p className="text-xs text-gray-500">ID: {hod.employee_id}</p>
                       </div>
@@ -331,7 +301,7 @@ export default function HodManagement() {
                     
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center text-gray-600">
-                        <Mail className="h-4 w-4 mr-2" />
+                        <Mail="h-4 w-4 mr-2" />
                         {hod.profiles?.email}
                       </div>
                       <div className="flex items-center text-gray-600">

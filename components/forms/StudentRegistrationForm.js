@@ -31,6 +31,7 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
     // Academic Information
     studentId: '',
     gradeLevel: '',
+    section: '',
     class: '',
     subjects: [],
     previousSchool: '',
@@ -106,6 +107,11 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
         return
       }
 
+      if (!formData.section) {
+        toast.error('Please select a section')
+        return
+      }
+
       if (formData.subjects.length === 0) {
         toast.error('Please select at least one subject')
         return
@@ -114,6 +120,7 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
       // Prepare submission data
       const submissionData = {
         ...formData,
+        class: `${formData.gradeLevel} ${formData.section}`,
         name: `${formData.firstName} ${formData.lastName}`,
         role: 'student',
         status: 'active'
@@ -140,20 +147,20 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
   }
 
   const gradeLevels = [
+    'Form 1',
+    'Form 2', 
+    'Form 3',
+    'Form 4',
+    'Form 5',
+    'Form 6',
     'Grade 8',
-    'Grade 9', 
+    'Grade 9',
     'Grade 10',
     'Grade 11',
     'Grade 12'
   ]
 
-  const classes = [
-    '8A', '8B', '8C',
-    '9A', '9B', '9C',
-    '10A', '10B', '10C',
-    '11A', '11B', '11C',
-    '12A', '12B', '12C'
-  ]
+  const sections = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 
   return (
     <div className="max-w-4xl mx-auto">

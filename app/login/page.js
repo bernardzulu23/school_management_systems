@@ -37,30 +37,30 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-100 dark:from-slate-900 dark:to-slate-800 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="flex justify-center">
-            <GraduationCap className="h-12 w-12 text-primary-600" />
+            <GraduationCap className="h-12 w-12 text-primary-600 dark:text-primary-400" />
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
             Enter your credentials to access the school management system
           </p>
           <div className="mt-4 text-center">
             <button
               type="button"
               onClick={handleClearCache}
-              className="text-xs text-gray-500 hover:text-gray-700 underline"
+              className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 underline"
             >
               Clear Cache & Reset
             </button>
           </div>
-          <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-            <p className="text-xs text-blue-800 font-medium mb-2">Demo Credentials:</p>
-            <div className="text-xs text-blue-700 space-y-1">
+          <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <p className="text-xs text-blue-800 dark:text-blue-300 font-medium mb-2">Demo Credentials:</p>
+            <div className="text-xs text-blue-700 dark:text-blue-400 space-y-1">
               <div><strong>Headteacher:</strong> headteacher@school.com / password123</div>
               <div><strong>HOD:</strong> hod@school.com / password123</div>
               <div><strong>Teacher:</strong> teacher@school.com / password123</div>
@@ -80,7 +80,7 @@ export default function LoginPage() {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-slate-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-slate-700 rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -96,7 +96,7 @@ export default function LoginPage() {
                 type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 pr-10 border border-gray-300 dark:border-slate-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-slate-700 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -107,9 +107,9 @@ export default function LoginPage() {
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-400" />
+                  <EyeOff className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                 ) : (
-                  <Eye className="h-4 w-4 text-gray-400" />
+                  <Eye className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                 )}
               </button>
             </div>
@@ -121,15 +121,15 @@ export default function LoginPage() {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded bg-white dark:bg-slate-700 dark:border-slate-600"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
                 Remember me
               </label>
             </div>
 
             <div className="text-sm">
-              <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
+              <a href="#" className="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300">
                 Forgot your password?
               </a>
             </div>

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import prisma from '@/lib/prisma'
+import bcrypt from 'bcryptjs'
 
 export async function POST(request) {
   try {
@@ -12,43 +13,47 @@ export async function POST(request) {
       )
     }
 
-    // Authenticate with Supabase
-    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password
+    // Find user in Prisma DB
+    const user = await prisma.user.findUnique({
+      where: { email },
     })
 
-    if (authError) {
+    if (!user) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
       )
     }
 
-    // Get user profile
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', authData.user.id)
-      .single()
+    // Verify password
+    const isValid = await bcrypt.compare(password, user.password)
 
-    if (profileError) {
+    if (!isValid) {
       return NextResponse.json(
-        { error: 'Profile not found' },
-        { status: 404 }
+        { error: 'Invalid credentials' },
+        { status: 401 }
       )
     }
+
+    // Create session token (simplified for custom auth)
+    // In a real app with NextAuth, this endpoint might not be used, 
+    // or we would issue a JWT here.
+    const token = `token-${user.id}-${Date.now()}`
 
     return NextResponse.json({
       success: true,
       user: {
-        id: authData.user.id,
-        email: authData.user.email,
-        name: profile.name,
-        role: profile.role,
-        profile_picture_url: profile.profile_picture_url
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        profile_picture_url: null // Add to schema if needed
       },
-      session: authData.session
+      token: token,
+      session: {
+        access_token: token,
+        refresh_token: token
+      }
     })
 
   } catch (error) {
@@ -58,15 +63,4 @@ export async function POST(request) {
       { status: 500 }
     )
   }
-}
-
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    },
-  })
 }

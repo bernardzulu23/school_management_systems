@@ -34,35 +34,31 @@ export default function StudentTimetablePage() {
   const [todaySchedule, setTodaySchedule] = useState([])
   const [upcomingClasses, setUpcomingClasses] = useState([])
 
-  // Sample student data - would come from API based on logged-in student
+  // Student data - derived from authenticated user
   const studentInfo = {
-    id: 1,
-    name: 'John Doe',
-    studentId: 'STU001',
-    class: 'Grade 10A',
-    classId: 5
+    id: user?.id || null,
+    name: user?.name || 'Student',
+    studentId: user?.studentId || '',
+    class: user?.class || '',
+    classId: user?.classId || null
   }
 
-  // Timetable data - will be loaded from API
-  const [sampleTimetableData, setSampleTimetableData] = useState({})
-
   const loadTimetableData = () => {
-    const studentTimetableData = timetableAPI.getStudentTimetable(studentInfo.classId)
-    console.log('Student timetable data loaded:', studentTimetableData)
-
-    // If no centralized data exists, use sample data for demonstration
-    if (Object.keys(studentTimetableData).length === 0) {
-      console.log('No centralized data found, using sample data')
-      setStudentTimetable(sampleTimetableData)
-    } else {
+    // TODO: Fetch real timetable data from API
+    if (studentInfo.classId) {
+      const studentTimetableData = timetableAPI.getStudentTimetable(studentInfo.classId)
+      console.log('Student timetable data loaded:', studentTimetableData)
       setStudentTimetable(studentTimetableData)
+    } else {
+      console.log('No class assigned to student, cannot load timetable')
+      setStudentTimetable({})
     }
   }
 
-  // Load student timetable from centralized data
+  // Load student timetable
   useEffect(() => {
     loadTimetableData()
-  }, [])
+  }, [user])
 
   // Update today's schedule and upcoming classes when timetable data changes
   useEffect(() => {

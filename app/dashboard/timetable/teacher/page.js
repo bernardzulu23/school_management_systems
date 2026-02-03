@@ -13,10 +13,10 @@ import {
   MapPin,
   Users,
   Download,
-  Print,
+  Printer,
   ChevronLeft,
   ChevronRight,
-  Today,
+  CalendarCheck,
   Target,
   BarChart3
 } from 'lucide-react'
@@ -62,7 +62,7 @@ export default function TeacherTimetablePage() {
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long' })
     if (daysOfWeek.includes(today)) {
       const todayClasses = []
-      const daySchedule = sampleTimetableData[today] || {}
+      const daySchedule = teacherTimetable[today] || {}
       
       timeSlots.forEach(slot => {
         if (!slot.isBreak && daySchedule[slot.id]) {
@@ -86,7 +86,7 @@ export default function TeacherTimetablePage() {
     
     if (!daysOfWeek.includes(today)) return []
     
-    const daySchedule = sampleTimetableData[today] || {}
+    const daySchedule = teacherTimetable[today] || {}
     const upcoming = []
     
     timeSlots.forEach(slot => {
@@ -118,8 +118,8 @@ export default function TeacherTimetablePage() {
 
     daysOfWeek.forEach(day => {
       timeSlots.forEach(slot => {
-        if (!slot.isBreak && sampleTimetableData[day]?.[slot.id]) {
-          const cls = sampleTimetableData[day][slot.id]
+        if (!slot.isBreak && teacherTimetable[day]?.[slot.id]) {
+          const cls = teacherTimetable[day][slot.id]
           totalPeriods++
           totalStudents += cls.students
           classesSet.add(cls.class)
@@ -136,15 +136,12 @@ export default function TeacherTimetablePage() {
       physicsPeriods,
       totalStudents,
       uniqueClasses: classesSet.size,
-      utilization: Math.round((totalPeriods / teacherInfo.maxPeriods) * 100)
+      utilization: teacherInfo.maxPeriods ? Math.round((totalPeriods / teacherInfo.maxPeriods) * 100) : 0
     }
   }
 
   useEffect(() => {
-    setTeacherTimetable(sampleTimetableData)
-    setTodaySchedule(getTodaySchedule())
-    setUpcomingClasses(getUpcomingClasses())
-    setWeeklyStats(calculateWeeklyStats())
+    // Initial calculation is now handled by the effect on teacherTimetable
   }, [])
 
   const navigateWeek = (direction) => {
@@ -179,7 +176,7 @@ export default function TeacherTimetablePage() {
           </div>
           <div className="flex space-x-3">
             <Button variant="outline" onClick={printTimetable}>
-              <Print className="h-4 w-4 mr-2" />
+              <Printer className="h-4 w-4 mr-2" />
               Print
             </Button>
             <Button variant="outline" onClick={downloadTimetable}>
@@ -234,7 +231,7 @@ export default function TeacherTimetablePage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                <Today className="h-5 w-5 mr-2 text-blue-600" />
+                <CalendarCheck className="h-5 w-5 mr-2 text-blue-600" />
                 Today's Classes
               </CardTitle>
             </CardHeader>
@@ -320,7 +317,7 @@ export default function TeacherTimetablePage() {
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
                 <Button variant="outline" size="sm" onClick={goToCurrentWeek}>
-                  <Today className="h-4 w-4 mr-1" />
+                  <CalendarCheck className="h-4 w-4 mr-1" />
                   This Week
                 </Button>
                 <Button variant="outline" size="sm" onClick={() => navigateWeek(1)}>

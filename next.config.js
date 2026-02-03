@@ -1,21 +1,40 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Vercel deployment configuration
+  // Deployment configuration
+  output: 'standalone',
+
   images: {
-    domains: [
-      'localhost',
-      '*.vercel.app',
-      '*.supabase.co',
-      'res.cloudinary.com'
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.vercel.app',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.railway.app',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
   },
 
   // Environment variables
   env: {
-    NEXT_PUBLIC_APP_URL: process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : 'http://localhost:3000',
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || 
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 
+      (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : 
+      'http://localhost:3000')),
   },
 
   // Performance optimizations
@@ -47,11 +66,10 @@ const nextConfig = {
         source: '/dashboard',
         destination: '/login',
         permanent: false,
-        has: [
+        missing: [
           {
             type: 'cookie',
-            key: 'supabase-auth-token',
-            value: undefined,
+            key: 'session-token',
           },
         ],
       },
