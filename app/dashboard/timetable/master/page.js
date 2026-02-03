@@ -399,10 +399,6 @@ export default function MasterTimetablePage() {
               <RefreshCw className="h-4 w-4 mr-2" />
               Reset
             </Button>
-            <Button variant="outline" onClick={addSampleData}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Sample Data
-            </Button>
             <Button variant="outline" onClick={saveTimetable}>
               <Save className="h-4 w-4 mr-2" />
               Save Draft

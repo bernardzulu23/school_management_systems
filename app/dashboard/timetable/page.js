@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
+import { timetableAPI, timeSlots, daysOfWeek } from '@/lib/timetableData'
 import { 
   Calendar, Clock, BookOpen, Users, MapPin, 
   ChevronLeft, ChevronRight, Download, Filter, 
@@ -15,92 +16,25 @@ export default function TimetablePage() {
   const { user } = useAuth()
   const [selectedWeek, setSelectedWeek] = useState(0) // 0 = current week
   const [selectedDay, setSelectedDay] = useState(new Date().getDay())
+  const [studentTimetable, setStudentTimetable] = useState({})
+  const [teacherTimetable, setTeacherTimetable] = useState({})
 
   const isStudent = user?.role === 'student'
   const isTeacher = user?.role === 'teacher'
 
-  // Mock timetable data
-  const mockTimetable = {
-    student: {
-      class: 'Grade 10A',
-      schedule: {
-        Monday: [
-          { time: '08:00-08:45', subject: 'Mathematics', teacher: 'Ms. Emily Davis', room: 'Room 101', type: 'lesson' },
-          { time: '08:45-09:30', subject: 'Physics', teacher: 'Mr. John Smith', room: 'Lab 1', type: 'lesson' },
-          { time: '09:30-09:45', subject: 'Break', teacher: '', room: '', type: 'break' },
-          { time: '09:45-10:30', subject: 'Chemistry', teacher: 'Dr. Sarah Wilson', room: 'Lab 2', type: 'lesson' },
-          { time: '10:30-11:15', subject: 'English', teacher: 'Ms. Jane Brown', room: 'Room 203', type: 'lesson' },
-          { time: '11:15-12:00', subject: 'History', teacher: 'Mr. David Lee', room: 'Room 105', type: 'lesson' },
-          { time: '12:00-13:00', subject: 'Lunch Break', teacher: '', room: '', type: 'break' },
-          { time: '13:00-13:45', subject: 'Biology', teacher: 'Dr. Lisa Chen', room: 'Lab 3', type: 'lesson' },
-          { time: '13:45-14:30', subject: 'Physical Education', teacher: 'Coach Mike', room: 'Gymnasium', type: 'lesson' }
-        ],
-        Tuesday: [
-          { time: '08:00-08:45', subject: 'English', teacher: 'Ms. Jane Brown', room: 'Room 203', type: 'lesson' },
-          { time: '08:45-09:30', subject: 'Mathematics', teacher: 'Ms. Emily Davis', room: 'Room 101', type: 'lesson' },
-          { time: '09:30-09:45', subject: 'Break', teacher: '', room: '', type: 'break' },
-          { time: '09:45-10:30', subject: 'Physics', teacher: 'Mr. John Smith', room: 'Lab 1', type: 'lesson' },
-          { time: '10:30-11:15', subject: 'Chemistry', teacher: 'Dr. Sarah Wilson', room: 'Lab 2', type: 'lesson' },
-          { time: '11:15-12:00', subject: 'Computer Science', teacher: 'Mr. Alex Tech', room: 'Computer Lab', type: 'lesson' },
-          { time: '12:00-13:00', subject: 'Lunch Break', teacher: '', room: '', type: 'break' },
-          { time: '13:00-13:45', subject: 'Art', teacher: 'Ms. Creative', room: 'Art Studio', type: 'lesson' },
-          { time: '13:45-14:30', subject: 'Study Hall', teacher: 'Various', room: 'Library', type: 'study' }
-        ],
-        Wednesday: [
-          { time: '08:00-08:45', subject: 'Biology', teacher: 'Dr. Lisa Chen', room: 'Lab 3', type: 'lesson' },
-          { time: '08:45-09:30', subject: 'Mathematics', teacher: 'Ms. Emily Davis', room: 'Room 101', type: 'lesson' },
-          { time: '09:30-09:45', subject: 'Break', teacher: '', room: '', type: 'break' },
-          { time: '09:45-10:30', subject: 'English', teacher: 'Ms. Jane Brown', room: 'Room 203', type: 'lesson' },
-          { time: '10:30-11:15', subject: 'History', teacher: 'Mr. David Lee', room: 'Room 105', type: 'lesson' },
-          { time: '11:15-12:00', subject: 'Physics', teacher: 'Mr. John Smith', room: 'Lab 1', type: 'lesson' },
-          { time: '12:00-13:00', subject: 'Lunch Break', teacher: '', room: '', type: 'break' },
-          { time: '13:00-13:45', subject: 'Chemistry', teacher: 'Dr. Sarah Wilson', room: 'Lab 2', type: 'lesson' },
-          { time: '13:45-14:30', subject: 'Music', teacher: 'Mr. Melody', room: 'Music Room', type: 'lesson' }
-        ],
-        Thursday: [
-          { time: '08:00-08:45', subject: 'Computer Science', teacher: 'Mr. Alex Tech', room: 'Computer Lab', type: 'lesson' },
-          { time: '08:45-09:30', subject: 'Mathematics', teacher: 'Ms. Emily Davis', room: 'Room 101', type: 'lesson' },
-          { time: '09:30-09:45', subject: 'Break', teacher: '', room: '', type: 'break' },
-          { time: '09:45-10:30', subject: 'Physics', teacher: 'Mr. John Smith', room: 'Lab 1', type: 'lesson' },
-          { time: '10:30-11:15', subject: 'English', teacher: 'Ms. Jane Brown', room: 'Room 203', type: 'lesson' },
-          { time: '11:15-12:00', subject: 'Biology', teacher: 'Dr. Lisa Chen', room: 'Lab 3', type: 'lesson' },
-          { time: '12:00-13:00', subject: 'Lunch Break', teacher: '', room: '', type: 'break' },
-          { time: '13:00-13:45', subject: 'History', teacher: 'Mr. David Lee', room: 'Room 105', type: 'lesson' },
-          { time: '13:45-14:30', subject: 'Physical Education', teacher: 'Coach Mike', room: 'Gymnasium', type: 'lesson' }
-        ],
-        Friday: [
-          { time: '08:00-08:45', subject: 'Mathematics', teacher: 'Ms. Emily Davis', room: 'Room 101', type: 'lesson' },
-          { time: '08:45-09:30', subject: 'Chemistry', teacher: 'Dr. Sarah Wilson', room: 'Lab 2', type: 'lesson' },
-          { time: '09:30-09:45', subject: 'Break', teacher: '', room: '', type: 'break' },
-          { time: '09:45-10:30', subject: 'English', teacher: 'Ms. Jane Brown', room: 'Room 203', type: 'lesson' },
-          { time: '10:30-11:15', subject: 'Biology', teacher: 'Dr. Lisa Chen', room: 'Lab 3', type: 'lesson' },
-          { time: '11:15-12:00', subject: 'Art', teacher: 'Ms. Creative', room: 'Art Studio', type: 'lesson' },
-          { time: '12:00-13:00', subject: 'Lunch Break', teacher: '', room: '', type: 'break' },
-          { time: '13:00-13:45', subject: 'Assembly', teacher: 'All Staff', room: 'Main Hall', type: 'assembly' },
-          { time: '13:45-14:30', subject: 'Free Period', teacher: '', room: 'Various', type: 'free' }
-        ]
-      }
-    },
-    teacher: {
-      schedule: {
-        Monday: [
-          { time: '08:00-08:45', subject: 'Mathematics', class: 'Grade 10A', room: 'Room 101', type: 'lesson' },
-          { time: '08:45-09:30', subject: 'Mathematics', class: 'Grade 9B', room: 'Room 101', type: 'lesson' },
-          { time: '09:30-09:45', subject: 'Break', class: '', room: '', type: 'break' },
-          { time: '09:45-10:30', subject: 'Mathematics', class: 'Grade 11A', room: 'Room 101', type: 'lesson' },
-          { time: '10:30-11:15', subject: 'Free Period', class: '', room: 'Staff Room', type: 'free' },
-          { time: '11:15-12:00', subject: 'Mathematics', class: 'Grade 12A', room: 'Room 101', type: 'lesson' },
-          { time: '12:00-13:00', subject: 'Lunch Break', class: '', room: '', type: 'break' },
-          { time: '13:00-13:45', subject: 'Mathematics', class: 'Grade 10B', room: 'Room 101', type: 'lesson' },
-          { time: '13:45-14:30', subject: 'Preparation', class: '', room: 'Staff Room', type: 'prep' }
-        ]
-        // Add other days similar to Monday
-      }
+  useEffect(() => {
+    // TODO: Fetch real timetable data from API based on user role
+    if (isStudent && user?.classId) {
+       const data = timetableAPI.getStudentTimetable(user.classId)
+       setStudentTimetable(data)
+    } else if (isTeacher && user?.id) {
+       const data = timetableAPI.getTeacherTimetable(user.id)
+       setTeacherTimetable(data)
     }
-  }
+  }, [user, isStudent, isTeacher])
 
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-  const weekDays = days.slice(1, 6) // Monday to Friday
+  const weekDays = daysOfWeek // Use centralized daysOfWeek
 
   const getCurrentWeekDates = () => {
     const today = new Date()
@@ -121,7 +55,7 @@ export default function TimetablePage() {
   }
 
   const weekDates = getCurrentWeekDates()
-  const currentSchedule = isStudent ? mockTimetable.student.schedule : mockTimetable.teacher.schedule
+  const currentSchedule = isStudent ? studentTimetable : teacherTimetable
 
   const getSubjectColor = (type) => {
     switch (type) {
@@ -146,7 +80,7 @@ export default function TimetablePage() {
             </h1>
             <p className="text-gray-600">
               {isStudent 
-                ? `Class schedule for ${mockTimetable.student.class}` 
+                ? `Class schedule for ${user?.class || 'your class'}` 
                 : "Your teaching schedule and class assignments"
               }
             </p>
@@ -239,9 +173,9 @@ export default function TimetablePage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* Generate time slots based on Monday's schedule */}
-                  {currentSchedule.Monday?.map((timeSlot, timeIndex) => (
-                    <tr key={timeIndex}>
+                  {/* Generate time slots */}
+                  {timeSlots.map((timeSlot) => (
+                    <tr key={timeSlot.id}>
                       <td className="border border-gray-300 p-3 bg-gray-50 font-medium text-sm">
                         <div className="flex items-center">
                           <Clock className="h-4 w-4 mr-2 text-gray-500" />
@@ -250,16 +184,16 @@ export default function TimetablePage() {
                       </td>
                       {weekDays.map((day) => {
                         const daySchedule = currentSchedule[day]
-                        const classInfo = daySchedule?.[timeIndex]
+                        const classInfo = daySchedule?.[timeSlot.id]
                         
                         return (
                           <td key={day} className="border border-gray-300 p-2">
                             {classInfo && (
-                              <div className={`p-3 rounded-lg border-2 ${getSubjectColor(classInfo.type)}`}>
+                              <div className={`p-3 rounded-lg border-2 ${getSubjectColor(classInfo.type || 'lesson')}`}>
                                 <div className="font-medium text-sm mb-1">
                                   {classInfo.subject}
                                 </div>
-                                {classInfo.type === 'lesson' && (
+                                {classInfo.type !== 'break' && (
                                   <>
                                     <div className="text-xs flex items-center mb-1">
                                       {isStudent ? (
@@ -276,7 +210,7 @@ export default function TimetablePage() {
                                     </div>
                                     <div className="text-xs flex items-center">
                                       <MapPin className="h-3 w-3 mr-1" />
-                                      {classInfo.room}
+                                      {classInfo.classroom || classInfo.room}
                                     </div>
                                   </>
                                 )}
@@ -303,32 +237,34 @@ export default function TimetablePage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {currentSchedule[days[new Date().getDay()]]?.map((classInfo, index) => (
-                <div key={index} className={`p-4 rounded-lg border-l-4 ${
-                  classInfo.type === 'lesson' ? 'border-blue-500 bg-blue-50' :
-                  classInfo.type === 'break' ? 'border-gray-500 bg-gray-50' :
-                  'border-green-500 bg-green-50'
-                }`}>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium text-gray-900">{classInfo.subject}</div>
-                      <div className="text-sm text-gray-600">
-                        {classInfo.time}
-                        {classInfo.room && ` • ${classInfo.room}`}
-                        {isStudent && classInfo.teacher && ` • ${classInfo.teacher}`}
-                        {isTeacher && classInfo.class && ` • ${classInfo.class}`}
+              {(currentSchedule[days[new Date().getDay()]] && Object.values(currentSchedule[days[new Date().getDay()]]).length > 0) ? (
+                Object.values(currentSchedule[days[new Date().getDay()]]).map((classInfo, index) => (
+                  <div key={index} className={`p-4 rounded-lg border-l-4 ${
+                    classInfo.type === 'lesson' ? 'border-blue-500 bg-blue-50' :
+                    classInfo.type === 'break' ? 'border-gray-500 bg-gray-50' :
+                    'border-green-500 bg-green-50'
+                  }`}>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium text-gray-900">{classInfo.subject}</div>
+                        <div className="text-sm text-gray-600">
+                          {classInfo.time}
+                          {classInfo.room && ` • ${classInfo.room}`}
+                          {isStudent && classInfo.teacher && ` • ${classInfo.teacher}`}
+                          {isTeacher && classInfo.class && ` • ${classInfo.class}`}
+                        </div>
+                      </div>
+                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        classInfo.type === 'lesson' ? 'bg-blue-100 text-blue-800' :
+                        classInfo.type === 'break' ? 'bg-gray-100 text-gray-800' :
+                        'bg-green-100 text-green-800'
+                      }`}>
+                        {classInfo.type || 'lesson'}
                       </div>
                     </div>
-                    <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      classInfo.type === 'lesson' ? 'bg-blue-100 text-blue-800' :
-                      classInfo.type === 'break' ? 'bg-gray-100 text-gray-800' :
-                      'bg-green-100 text-green-800'
-                    }`}>
-                      {classInfo.type}
-                    </div>
                   </div>
-                </div>
-              )) || (
+                ))
+              ) : (
                 <div className="text-center py-8 text-gray-500">
                   <Calendar className="h-12 w-12 mx-auto mb-2 text-gray-400" />
                   <p>No classes scheduled for today</p>

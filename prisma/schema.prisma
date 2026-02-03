@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   // 'headteacher', 'hod', 'teacher', 'student'
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  studentProfile Student?
+  teacherProfile Teacher?
+}
+
+model Student {
+  id        String   @id @default(uuid()) // Can be custom ID like STU2025001
+  userId    String?  @unique // Optional if student exists without user account initially
+  user      User?    @relation(fields: [userId], references: [id])
+  
+  name      String
+  class     String   // 'Form 1A'
+  
+  results   Result[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Teacher {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  
+  subjects  String[] // Array of subject names taught
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Result {
+  id        String   @id @default(uuid())
+  
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+  
+  subject   String
+  class     String
+  term      String
+  score     Float?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([studentId, subject, term]) // Prevent duplicate results for same subject/term
+}

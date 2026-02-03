@@ -23,93 +23,14 @@ export function TimetableSummary({ userRole, userId, className = "" }) {
   // Get timetable data based on user role
   const getTimetableData = () => {
     if (userRole === 'student') {
-      // In a real app, get student's class ID from user profile
-      const studentClassId = 5 // Grade 10A
+      // TODO: Get student's class ID from user profile context
+      const studentClassId = 5 // Placeholder for now until context is available
       return timetableAPI.getStudentTimetable(studentClassId)
     } else if (userRole === 'teacher') {
-      // In a real app, get teacher ID from user profile
-      const teacherId = 1 // Mr. John Smith
+      // TODO: Get teacher ID from user profile context
+      const teacherId = 1 // Placeholder for now until context is available
       return timetableAPI.getTeacherTimetable(teacherId)
     }
-    return {}
-  }
-
-  // Fallback sample data for demonstration
-  const getSampleData = () => {
-    const today = new Date().toLocaleDateString('en-US', { weekday: 'long' })
-    
-    if (userRole === 'student') {
-      return {
-        Monday: {
-          1: { subject: 'Mathematics', teacher: 'Mr. John Smith', classroom: 'Room 101', color: '#3B82F6' },
-          2: { subject: 'English', teacher: 'Mrs. Sarah Johnson', classroom: 'Room 102', color: '#10B981' },
-          3: { subject: 'Physics', teacher: 'Mr. John Smith', classroom: 'Lab 201', color: '#8B5CF6' },
-          5: { subject: 'Chemistry', teacher: 'Dr. Michael Brown', classroom: 'Lab 201', color: '#F59E0B' },
-          6: { subject: 'History', teacher: 'Ms. Emily Davis', classroom: 'Room 301', color: '#6B7280' },
-          9: { subject: 'Art', teacher: 'Mrs. Lisa Anderson', classroom: 'Art Studio', color: '#EC4899' }
-        },
-        Tuesday: {
-          1: { subject: 'Biology', teacher: 'Dr. Michael Brown', classroom: 'Lab 201', color: '#EF4444' },
-          2: { subject: 'Mathematics', teacher: 'Mr. John Smith', classroom: 'Room 101', color: '#3B82F6' },
-          5: { subject: 'English', teacher: 'Mrs. Sarah Johnson', classroom: 'Room 102', color: '#10B981' },
-          6: { subject: 'Physics', teacher: 'Mr. John Smith', classroom: 'Lab 201', color: '#8B5CF6' },
-          9: { subject: 'Chemistry', teacher: 'Dr. Michael Brown', classroom: 'Lab 201', color: '#F59E0B' }
-        },
-        Wednesday: {
-          1: { subject: 'English', teacher: 'Mrs. Sarah Johnson', classroom: 'Room 102', color: '#10B981' },
-          2: { subject: 'Physics', teacher: 'Mr. John Smith', classroom: 'Lab 201', color: '#8B5CF6' },
-          3: { subject: 'Mathematics', teacher: 'Mr. John Smith', classroom: 'Room 101', color: '#3B82F6' },
-          5: { subject: 'Biology', teacher: 'Dr. Michael Brown', classroom: 'Lab 201', color: '#EF4444' },
-          9: { subject: 'Art', teacher: 'Mrs. Lisa Anderson', classroom: 'Art Studio', color: '#EC4899' }
-        },
-        Thursday: {
-          1: { subject: 'Chemistry', teacher: 'Dr. Michael Brown', classroom: 'Lab 201', color: '#F59E0B' },
-          2: { subject: 'History', teacher: 'Ms. Emily Davis', classroom: 'Room 301', color: '#6B7280' },
-          5: { subject: 'Mathematics', teacher: 'Mr. John Smith', classroom: 'Room 101', color: '#3B82F6' },
-          6: { subject: 'English', teacher: 'Mrs. Sarah Johnson', classroom: 'Room 102', color: '#10B981' },
-          9: { subject: 'Physics', teacher: 'Mr. John Smith', classroom: 'Lab 201', color: '#8B5CF6' }
-        },
-        Friday: {
-          1: { subject: 'Geography', teacher: 'Ms. Emily Davis', classroom: 'Room 301', color: '#14B8A6' },
-          2: { subject: 'Biology', teacher: 'Dr. Michael Brown', classroom: 'Lab 201', color: '#EF4444' },
-          5: { subject: 'Physics', teacher: 'Mr. John Smith', classroom: 'Lab 201', color: '#8B5CF6' },
-          6: { subject: 'Mathematics', teacher: 'Mr. John Smith', classroom: 'Room 101', color: '#3B82F6' },
-          9: { subject: 'Computer Science', teacher: 'Mr. David Wilson', classroom: 'Lab 202', color: '#F97316' }
-        }
-      }
-    } else if (userRole === 'teacher') {
-      return {
-        Monday: {
-          1: { subject: 'Mathematics', class: 'Grade 10A', classroom: 'Room 101', students: 30, color: '#3B82F6' },
-          3: { subject: 'Physics', class: 'Grade 10A', classroom: 'Lab 201', students: 30, color: '#8B5CF6' },
-          6: { subject: 'Mathematics', class: 'Grade 9A', classroom: 'Room 101', students: 35, color: '#3B82F6' },
-          9: { subject: 'Physics', class: 'Grade 11A', classroom: 'Lab 201', students: 25, color: '#8B5CF6' }
-        },
-        Tuesday: {
-          2: { subject: 'Mathematics', class: 'Grade 10A', classroom: 'Room 101', students: 30, color: '#3B82F6' },
-          5: { subject: 'Physics', class: 'Grade 9A', classroom: 'Lab 201', students: 35, color: '#8B5CF6' },
-          6: { subject: 'Physics', class: 'Grade 10A', classroom: 'Lab 201', students: 30, color: '#8B5CF6' },
-          9: { subject: 'Mathematics', class: 'Grade 11A', classroom: 'Room 101', students: 25, color: '#3B82F6' }
-        },
-        Wednesday: {
-          2: { subject: 'Physics', class: 'Grade 10A', classroom: 'Lab 201', students: 30, color: '#8B5CF6' },
-          3: { subject: 'Mathematics', class: 'Grade 10A', classroom: 'Room 101', students: 30, color: '#3B82F6' },
-          5: { subject: 'Mathematics', class: 'Grade 8A', classroom: 'Room 101', students: 35, color: '#3B82F6' },
-          9: { subject: 'Mathematics', class: 'Grade 9A', classroom: 'Room 101', students: 35, color: '#3B82F6' }
-        },
-        Thursday: {
-          5: { subject: 'Mathematics', class: 'Grade 10A', classroom: 'Room 101', students: 30, color: '#3B82F6' },
-          7: { subject: 'Mathematics', class: 'Grade 11A', classroom: 'Room 101', students: 25, color: '#3B82F6' },
-          9: { subject: 'Physics', class: 'Grade 10A', classroom: 'Lab 201', students: 30, color: '#8B5CF6' }
-        },
-        Friday: {
-          5: { subject: 'Physics', class: 'Grade 10A', classroom: 'Lab 201', students: 30, color: '#8B5CF6' },
-          6: { subject: 'Mathematics', class: 'Grade 10A', classroom: 'Room 101', students: 30, color: '#3B82F6' },
-          9: { subject: 'Mathematics', class: 'Grade 8A', classroom: 'Room 101', students: 35, color: '#3B82F6' }
-        }
-      }
-    }
-    
     return {}
   }
 
@@ -117,13 +38,10 @@ export function TimetableSummary({ userRole, userId, className = "" }) {
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long' })
     const timetableData = getTimetableData()
 
-    // Use centralized data if available, otherwise fall back to sample data
-    const dataToUse = Object.keys(timetableData).length > 0 ? timetableData : getSampleData()
-
-    if (!dataToUse[today]) return []
+    if (!timetableData[today]) return []
     
     const todayClasses = []
-    const daySchedule = dataToUse[today]
+    const daySchedule = timetableData[today]
     
     timeSlots.forEach(slot => {
       if (!slot.isBreak && daySchedule[slot.id]) {
@@ -143,11 +61,11 @@ export function TimetableSummary({ userRole, userId, className = "" }) {
     const now = new Date()
     const currentTime = now.getHours() * 60 + now.getMinutes()
     const today = now.toLocaleDateString('en-US', { weekday: 'long' })
-    const sampleData = getSampleData()
+    const timetableData = getTimetableData()
     
-    if (!sampleData[today]) return null
+    if (!timetableData[today]) return null
     
-    const daySchedule = sampleData[today]
+    const daySchedule = timetableData[today]
     
     for (const slot of timeSlots) {
       if (!slot.isBreak && daySchedule[slot.id]) {

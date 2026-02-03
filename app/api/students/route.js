@@ -1,12 +1,18 @@
 import { NextResponse } from 'next/server'
-import { db, supabase } from '@/lib/supabase'
+import prisma from '@/lib/prisma'
+import bcrypt from 'bcryptjs'
 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url)
     const classId = searchParams.get('classId')
 
-    const students = await db.getStudents(classId)
+    const students = await prisma.student.findMany({
+      where: classId ? { class: classId } : {}, // Assuming classId is class name or ID
+      include: {
+        user: true
+      }
+    })
 
     return NextResponse.json({
       success: true,
@@ -27,7 +33,7 @@ export async function POST(request) {
     const studentData = await request.json()
 
     // Validate required fields
-    const requiredFields = ['name', 'email', 'class_id']
+    const requiredFields = ['name', 'email', 'class_id'] // class_id maps to 'class' string
     for (const field of requiredFields) {
       if (!studentData[field]) {
         return NextResponse.json(
@@ -37,50 +43,37 @@ export async function POST(request) {
       }
     }
 
-    // Create student profile
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .insert({
-        name: studentData.name,
-        email: studentData.email,
-        role: 'student',
-        contact_number: studentData.contact_number || null,
-        address: studentData.address || null
+    // Hash default password
+    const hashedPassword = await bcrypt.hash('password123', 10)
+
+    // Transaction to create User and Student
+    const result = await prisma.$transaction(async (tx) => {
+      // Create User
+      const user = await tx.user.create({
+        data: {
+          name: studentData.name,
+          email: studentData.email,
+          role: 'student',
+          password: hashedPassword,
+        }
       })
-      .select()
-      .single()
 
-    if (profileError) {
-      return NextResponse.json(
-        { error: 'Failed to create student profile' },
-        { status: 500 }
-      )
-    }
-
-    // Create student record
-    const { data: student, error: studentError } = await supabase
-      .from('students')
-      .insert({
-        user_id: profile.id,
-        class_id: studentData.class_id,
-        student_id: studentData.student_id || null,
-        date_of_birth: studentData.date_of_birth || null,
-        guardian_name: studentData.guardian_name || null,
-        guardian_contact: studentData.guardian_contact || null
+      // Create Student
+      const student = await tx.student.create({
+        data: {
+          userId: user.id,
+          name: studentData.name,
+          class: studentData.class_id, // Mapping class_id to class string
+          id: studentData.student_id || undefined, // Allow custom ID
+        }
       })
-      .select()
-      .single()
-
-    if (studentError) {
-      return NextResponse.json(
-        { error: 'Failed to create student record' },
-        { status: 500 }
-      )
-    }
+      
+      return { ...student, user }
+    })
 
     return NextResponse.json({
       success: true,
-      data: { ...student, profile }
+      data: result
     })
 
   } catch (error) {

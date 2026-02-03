@@ -15,96 +15,16 @@ export default function TeacherClassesPage() {
   const [activeTab, setActiveTab] = useState('overview')
   const [searchTerm, setSearchTerm] = useState('')
 
-  // Sample teacher's classes data
-  const teacherClasses = [
-    {
-      id: 1,
-      name: 'Class 9A - Mathematics',
-      subject: 'Mathematics',
-      yearGroup: 'Year 9',
-      totalStudents: 28,
-      presentToday: 26,
-      averagePerformance: 85,
-      attendanceRate: 94,
-      nextLesson: '2024-01-25 10:00',
-      recentAssessment: 'Algebra Test - 88% average',
-      classTeacher: 'Ms. Sarah Johnson'
-    },
-    {
-      id: 2,
-      name: 'Class 10B - Mathematics',
-      subject: 'Mathematics',
-      yearGroup: 'Year 10',
-      totalStudents: 25,
-      presentToday: 24,
-      averagePerformance: 78,
-      attendanceRate: 91,
-      nextLesson: '2024-01-25 14:00',
-      recentAssessment: 'Trigonometry Quiz - 82% average',
-      classTeacher: 'Mr. David Wilson'
-    },
-    {
-      id: 3,
-      name: 'Class 8C - Mathematics',
-      subject: 'Mathematics',
-      yearGroup: 'Year 8',
-      totalStudents: 30,
-      presentToday: 28,
-      averagePerformance: 92,
-      attendanceRate: 96,
-      nextLesson: '2024-01-26 09:00',
-      recentAssessment: 'Geometry Test - 91% average',
-      classTeacher: 'Dr. Emily Brown'
-    }
-  ]
+  // Sample teacher's classes data - TODO: Fetch from API
+  const [teacherClasses, setTeacherClasses] = useState([])
 
   // Student data for selected class - will be loaded from API
-  const [studentsData, setStudentsData] = useState([
-    {
-      id: 1,
-      name: 'Alice Johnson',
-      studentId: 'STU001',
-      currentGrade: 'A',
-      attendance: 98,
-      lastAssessment: 92,
-      trend: 'improving',
-      parentContact: 'alice.parent@email.com',
-      notes: 'Excellent performance consistently'
-    },
-    {
-      id: 2,
-      name: 'Bob Smith',
-      studentId: 'STU002',
-      currentGrade: 'B+',
-      attendance: 85,
-      lastAssessment: 78,
-      trend: 'stable',
-      parentContact: 'bob.parent@email.com',
-      notes: 'Good understanding, needs practice'
-    },
-    {
-      id: 3,
-      name: 'Carol Davis',
-      studentId: 'STU003',
-      currentGrade: 'A-',
-      attendance: 94,
-      lastAssessment: 88,
-      trend: 'improving',
-      parentContact: 'carol.parent@email.com',
-      notes: 'Strong analytical skills'
-    },
-    {
-      id: 4,
-      name: 'David Wilson',
-      studentId: 'STU004',
-      currentGrade: 'C+',
-      attendance: 78,
-      lastAssessment: 72,
-      trend: 'declining',
-      parentContact: 'david.parent@email.com',
-      notes: 'Needs additional support'
-    }
-  ])
+  const [studentsData, setStudentsData] = useState([])
+
+  // Load initial data
+  // useEffect(() => {
+  //   // fetchClasses()
+  // }, [])
 
   const getTrendIcon = (trend) => {
     switch (trend) {
@@ -131,8 +51,8 @@ export default function TeacherClassesPage() {
 
   const classStats = {
     totalStudents: teacherClasses.reduce((sum, cls) => sum + cls.totalStudents, 0),
-    averageAttendance: Math.round(teacherClasses.reduce((sum, cls) => sum + cls.attendanceRate, 0) / teacherClasses.length),
-    averagePerformance: Math.round(teacherClasses.reduce((sum, cls) => sum + cls.averagePerformance, 0) / teacherClasses.length),
+    averageAttendance: teacherClasses.length ? Math.round(teacherClasses.reduce((sum, cls) => sum + cls.attendanceRate, 0) / teacherClasses.length) : 0,
+    averagePerformance: teacherClasses.length ? Math.round(teacherClasses.reduce((sum, cls) => sum + cls.averagePerformance, 0) / teacherClasses.length) : 0,
     totalClasses: teacherClasses.length
   }
 

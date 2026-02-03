@@ -1,13 +1,39 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/supabase'
+import prisma from '@/lib/prisma'
 
 export async function GET(request) {
   try {
-    const stats = await db.getDashboardStats()
+    // Parallel fetch of counts
+    const [
+      totalStudents,
+      totalTeachers,
+      totalHods,
+      totalResults
+    ] = await Promise.all([
+      prisma.user.count({ where: { role: 'student' } }),
+      prisma.user.count({ where: { role: 'teacher' } }),
+      prisma.user.count({ where: { role: 'hod' } }),
+      prisma.result.count()
+    ])
+
+    // Approximate counts for things not yet fully modeled in Prisma
+    // In a full migration, we would query the Class and Subject tables
+    const totalClasses = 4 
+    const totalSubjects = 5
+    const totalAssessments = totalResults // Using results count as proxy
+
+    const stats = {
+      totalStudents,
+      totalTeachers,
+      totalHods,
+      totalClasses,
+      totalSubjects,
+      totalAssessments
+    }
 
     // Calculate additional metrics
-    const attendanceRate = Math.floor(Math.random() * 15) + 85 // 85-100%
-    const averageGrade = Math.floor(Math.random() * 20) + 75 // 75-95%
+    const attendanceRate = 95 // Mock for now
+    const averageGrade = 0 // TODO: Calculate from result records
 
     return NextResponse.json({
       success: true,
@@ -15,26 +41,7 @@ export async function GET(request) {
         ...stats,
         attendanceRate,
         averageGrade,
-        recentActivities: [
-          {
-            id: 1,
-            type: 'assignment',
-            message: 'New assignment posted in Mathematics',
-            timestamp: new Date().toISOString()
-          },
-          {
-            id: 2,
-            type: 'grade',
-            message: 'Grades updated for Science Quiz',
-            timestamp: new Date(Date.now() - 3600000).toISOString()
-          },
-          {
-            id: 3,
-            type: 'announcement',
-            message: 'School meeting scheduled for Friday',
-            timestamp: new Date(Date.now() - 7200000).toISOString()
-          }
-        ]
+        recentActivities: [] 
       }
     })
 

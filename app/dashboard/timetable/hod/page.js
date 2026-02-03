@@ -40,9 +40,17 @@ export default function HODTimetablePage() {
   })
 
   const loadTimetableData = () => {
+    // TODO: Fetch real timetable data from API
     const departmentTimetableData = timetableAPI.getDepartmentTimetable(hodInfo.department)
     console.log('HOD timetable data loaded:', departmentTimetableData)
+    
+    // Set the department overview to the fetched data
+    setDepartmentOverview(departmentTimetableData)
     setDepartmentTimetable(departmentTimetableData)
+    
+    // TODO: Fetch department teachers from API
+    const fetchedTeachers = [] // Placeholder
+    setDepartmentTeachers(fetchedTeachers)
   }
 
   // Load department timetable from centralized data
@@ -64,10 +72,7 @@ export default function HODTimetablePage() {
 
   function calculateDepartmentStats() {
     let totalPeriods = 0
-    let mathPeriods = 0
-    let physicsPeriods = 0
-    let chemPeriods = 0
-    let bioPeriods = 0
+    const subjectStats = {}
     const teacherUtilization = {}
 
     // Initialize teacher utilization
@@ -81,12 +86,12 @@ export default function HODTimetablePage() {
           departmentOverview[day][slot.id].forEach(assignment => {
             totalPeriods++
             
-            if (assignment.subject === 'Mathematics') mathPeriods++
-            if (assignment.subject === 'Physics') physicsPeriods++
-            if (assignment.subject === 'Chemistry') chemPeriods++
-            if (assignment.subject === 'Biology') bioPeriods++
+            // Count subject stats dynamically
+            if (assignment.subject) {
+              subjectStats[assignment.subject] = (subjectStats[assignment.subject] || 0) + 1
+            }
             
-            if (teacherUtilization[assignment.teacher]) {
+            if (assignment.teacher && teacherUtilization[assignment.teacher]) {
               teacherUtilization[assignment.teacher].assigned++
             }
           })
@@ -96,10 +101,7 @@ export default function HODTimetablePage() {
 
     return {
       totalPeriods,
-      mathPeriods,
-      physicsPeriods,
-      chemPeriods,
-      bioPeriods,
+      subjectStats,
       teacherUtilization,
       averageUtilization: departmentTeachers.length > 0 ? Math.round(
         Object.values(teacherUtilization).reduce((sum, teacher) =>
@@ -109,10 +111,10 @@ export default function HODTimetablePage() {
     }
   }
 
+  // Update stats when overview or teachers change
   useEffect(() => {
-    setDepartmentTimetable(departmentOverview)
     setDepartmentStats(calculateDepartmentStats())
-  }, [])
+  }, [departmentOverview, departmentTeachers])
 
   const navigateWeek = (direction) => {
     const currentDate = new Date(selectedWeek)
@@ -157,46 +159,32 @@ export default function HODTimetablePage() {
         </div>
 
         {/* Department Statistics */}
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardContent className="p-4 text-center">
               <Clock className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{departmentStats.totalPeriods}</p>
+              <p className="text-2xl font-bold text-gray-900">{departmentStats.totalPeriods || 0}</p>
               <p className="text-sm text-gray-600">Total Periods</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <BookOpen className="h-8 w-8 text-green-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{departmentStats.mathPeriods}</p>
-              <p className="text-sm text-gray-600">Math</p>
+              <Users className="h-8 w-8 text-green-600 mx-auto mb-2" />
+              <p className="text-2xl font-bold text-gray-900">{departmentTeachers.length}</p>
+              <p className="text-sm text-gray-600">Total Teachers</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <Target className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{departmentStats.physicsPeriods}</p>
-              <p className="text-sm text-gray-600">Physics</p>
+              <BookOpen className="h-8 w-8 text-purple-600 mx-auto mb-2" />
+              <p className="text-2xl font-bold text-gray-900">{Object.keys(departmentStats.subjectStats || {}).length}</p>
+              <p className="text-sm text-gray-600">Active Subjects</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <TrendingUp className="h-8 w-8 text-orange-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{departmentStats.chemPeriods}</p>
-              <p className="text-sm text-gray-600">Chemistry</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <BarChart3 className="h-8 w-8 text-red-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{departmentStats.bioPeriods}</p>
-              <p className="text-sm text-gray-600">Biology</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <Users className="h-8 w-8 text-indigo-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{departmentStats.averageUtilization}%</p>
+              <BarChart3 className="h-8 w-8 text-indigo-600 mx-auto mb-2" />
+              <p className="text-2xl font-bold text-gray-900">{departmentStats.averageUtilization || 0}%</p>
               <p className="text-sm text-gray-600">Avg Utilization</p>
             </CardContent>
           </Card>
@@ -361,22 +349,18 @@ export default function HODTimetablePage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                    <span className="font-medium text-blue-900">Mathematics</span>
-                    <span className="text-blue-700 font-bold">{departmentStats.mathPeriods} periods</span>
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                    <span className="font-medium text-purple-900">Physics</span>
-                    <span className="text-purple-700 font-bold">{departmentStats.physicsPeriods} periods</span>
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
-                    <span className="font-medium text-orange-900">Chemistry</span>
-                    <span className="text-orange-700 font-bold">{departmentStats.chemPeriods} periods</span>
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-                    <span className="font-medium text-red-900">Biology</span>
-                    <span className="text-red-700 font-bold">{departmentStats.bioPeriods} periods</span>
-                  </div>
+                  {Object.entries(departmentStats.subjectStats || {}).length > 0 ? (
+                    Object.entries(departmentStats.subjectStats).map(([subject, count]) => (
+                      <div key={subject} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <span className="font-medium text-gray-900">{subject}</span>
+                        <span className="text-blue-700 font-bold">{count} periods</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center text-gray-500 py-4">
+                      No subjects active in current schedule
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

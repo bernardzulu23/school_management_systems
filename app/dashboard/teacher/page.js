@@ -18,6 +18,7 @@ import {
   PenTool, Eye, Brain, Heart, Users as HandshakeIcon, Rocket, Globe
 } from 'lucide-react'
 import Link from 'next/link'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { SCHOOL_SUBJECTS, getSubjectsByIds } from '@/data/subjects'
 // Temporarily commented out to isolate error
 // import {
@@ -223,7 +224,7 @@ export default function TeacherDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-800 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-purple-100 to-indigo-100 dark:from-slate-900 dark:via-purple-900 dark:to-indigo-800 relative overflow-hidden transition-colors duration-300">
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob"></div>
@@ -234,14 +235,14 @@ export default function TeacherDashboard() {
       <div className="p-6">
         <div className="space-y-8 relative z-10">
           {/* Enhanced Header */}
-          <div className="backdrop-blur-lg bg-slate-800/60 border border-purple-500/40 rounded-3xl p-8 shadow-2xl">
+          <div className="backdrop-blur-lg bg-white/60 dark:bg-slate-800/60 border border-purple-200 dark:border-purple-500/40 rounded-3xl p-8 shadow-2xl transition-colors duration-300">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-4">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent mb-4">
                   Teacher Dashboard
                 </h1>
-                <p className="text-slate-300 text-lg">Manage your classes and track student progress</p>
-                <p className="text-slate-400 text-sm mt-2">Welcome back, {currentUser?.name || 'Teacher'}!</p>
+                <p className="text-slate-600 dark:text-slate-300 text-lg">Manage your classes and track student progress</p>
+                <p className="text-slate-500 dark:text-slate-400 text-sm mt-2">Welcome back, {currentUser?.name || 'Teacher'}!</p>
               </div>
               <div className="flex items-center space-x-4">
                 <div className="backdrop-blur-md bg-purple-600/60 border border-purple-400/50 rounded-2xl p-4 text-center">
@@ -258,43 +259,86 @@ export default function TeacherDashboard() {
           {/* Teacher Information Card */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent flex items-center">
-                <User className="h-6 w-6 mr-3 text-purple-400" />
+              <CardTitle className="bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent flex items-center">
+                <User className="h-6 w-6 mr-3 text-purple-600 dark:text-purple-400" />
                 Teacher Information
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
+              <div className="backdrop-blur-sm bg-white/60 dark:bg-slate-800/60 border border-gray-200 dark:border-slate-600/40 rounded-2xl p-6 transition-colors duration-300">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl">
+                  <div className="p-4 bg-gray-50/60 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600/40 rounded-xl transition-colors duration-300">
                     <div className="flex items-center mb-2">
-                      <User className="h-4 w-4 text-purple-400 mr-2" />
-                      <span className="text-slate-300 text-sm font-medium">Full Name</span>
+                      <User className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
+                      <span className="text-gray-600 dark:text-slate-300 text-sm font-medium">Full Name</span>
                     </div>
-                    <p className="text-white font-semibold">{currentUser?.name}</p>
+                    <p className="text-gray-900 dark:text-white font-semibold">{currentUser?.name}</p>
                   </div>
-                  <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl">
+                  <div className="p-4 bg-gray-50/60 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600/40 rounded-xl transition-colors duration-300">
                     <div className="flex items-center mb-2">
-                      <BookOpen className="h-4 w-4 text-blue-400 mr-2" />
-                      <span className="text-slate-300 text-sm font-medium">Teaching Subjects</span>
+                      <BookOpen className="h-4 w-4 text-blue-600 dark:text-blue-400 mr-2" />
+                      <span className="text-gray-600 dark:text-slate-300 text-sm font-medium">Teaching Subjects</span>
                     </div>
-                    <p className="text-white font-semibold">{currentUser?.subjects?.length || 0} Subjects</p>
+                    <p className="text-gray-900 dark:text-white font-semibold">{currentUser?.subjects?.length || 0} Subjects</p>
                   </div>
-                  <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl">
+                  <div className="p-4 bg-gray-50/60 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600/40 rounded-xl transition-colors duration-300">
                     <div className="flex items-center mb-2">
-                      <Users className="h-4 w-4 text-green-400 mr-2" />
-                      <span className="text-slate-300 text-sm font-medium">Assigned Classes</span>
+                      <Users className="h-4 w-4 text-green-600 dark:text-green-400 mr-2" />
+                      <span className="text-gray-600 dark:text-slate-300 text-sm font-medium">Assigned Classes</span>
                     </div>
-                    <p className="text-white font-semibold">{dashboardStats.totalClasses} Classes</p>
+                    <p className="text-gray-900 dark:text-white font-semibold">{dashboardStats.totalClasses} Classes</p>
                   </div>
-                  <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl">
+                  <div className="p-4 bg-gray-50/60 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600/40 rounded-xl transition-colors duration-300">
                     <div className="flex items-center mb-2">
-                      <School className="h-4 w-4 text-orange-400 mr-2" />
-                      <span className="text-slate-300 text-sm font-medium">Total Students</span>
+                      <School className="h-4 w-4 text-orange-600 dark:text-orange-400 mr-2" />
+                      <span className="text-gray-600 dark:text-slate-300 text-sm font-medium">Total Students</span>
                     </div>
-                    <p className="text-white font-semibold">{dashboardStats.totalStudents} Students</p>
+                    <p className="text-gray-900 dark:text-white font-semibold">{dashboardStats.totalStudents} Students</p>
                   </div>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <Card variant="glass">
+            <CardHeader>
+              <CardTitle className="bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent flex items-center">
+                <Zap className="h-6 w-6 mr-3 text-purple-600 dark:text-purple-400" />
+                Quick Actions
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <Link href="/dashboard/teacher/results" className="block">
+                  <div className="p-6 bg-white/60 dark:bg-slate-800/60 border border-purple-200 dark:border-purple-500/40 hover:border-purple-400 hover:bg-gray-50 dark:hover:bg-slate-700/80 rounded-2xl transition-all duration-300 group cursor-pointer h-full shadow-sm hover:shadow-md">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <Edit className="h-6 w-6 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Enter Results</h3>
+                    <p className="text-gray-500 dark:text-slate-400 text-sm">Input student grades for subjects and assessments.</p>
+                  </div>
+                </Link>
+                
+                <Link href="/dashboard/teacher/classes" className="block">
+                  <div className="p-6 bg-white/60 dark:bg-slate-800/60 border border-blue-200 dark:border-blue-500/40 hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-slate-700/80 rounded-2xl transition-all duration-300 group cursor-pointer h-full shadow-sm hover:shadow-md">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <Users className="h-6 w-6 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">My Classes</h3>
+                    <p className="text-gray-500 dark:text-slate-400 text-sm">View student lists and class performance.</p>
+                  </div>
+                </Link>
+
+                <Link href="/dashboard/teacher/assessments" className="block">
+                  <div className="p-6 bg-white/60 dark:bg-slate-800/60 border border-green-200 dark:border-green-500/40 hover:border-green-400 hover:bg-gray-50 dark:hover:bg-slate-700/80 rounded-2xl transition-all duration-300 group cursor-pointer h-full shadow-sm hover:shadow-md">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <ClipboardList className="h-6 w-6 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Assessments</h3>
+                    <p className="text-gray-500 dark:text-slate-400 text-sm">Create and manage tests and assignments.</p>
+                  </div>
+                </Link>
               </div>
             </CardContent>
           </Card>
@@ -784,66 +828,75 @@ export default function TeacherDashboard() {
           </Card>
 
         {/* Recent Assessments */}
-        <Card>
+        <Card variant="glass">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Recent Assessments</CardTitle>
+            <CardTitle className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent flex items-center">
+              <ClipboardList className="h-6 w-6 mr-3 text-blue-400" />
+              Recent Assessments
+            </CardTitle>
             <Link href="/dashboard/assessments/create">
-              <Button size="sm">
+              <Button size="sm" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white">
                 <Plus className="h-4 w-4 mr-2" />
                 Create Assessment
               </Button>
             </Link>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-2">Title</th>
-                    <th className="text-left py-2">Type</th>
-                    <th className="text-left py-2">Subject</th>
-                    <th className="text-left py-2">Class</th>
-                    <th className="text-left py-2">Status</th>
-                    <th className="text-left py-2">Start Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dashboardData?.recent_assessments?.map((assessment) => (
-                    <tr key={assessment.id} className="border-b">
-                      <td className="py-2 font-medium">{assessment.title}</td>
-                      <td className="py-2">
-                        <span className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 capitalize">
-                          {assessment.type}
-                        </span>
-                      </td>
-                      <td className="py-2">{assessment.subject}</td>
-                      <td className="py-2">{assessment.class}</td>
-                      <td className="py-2">
-                        <span className={`px-2 py-1 text-xs rounded-full capitalize ${
-                          assessment.status === 'published' 
-                            ? 'bg-green-100 text-green-800'
-                            : assessment.status === 'draft'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-gray-100 text-gray-800'
-                        }`}>
-                          {assessment.status}
-                        </span>
-                      </td>
-                      <td className="py-2 text-sm text-gray-500">
-                        {new Date(assessment.start_date).toLocaleDateString()}
-                      </td>
+            <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-slate-600/40">
+                      <th className="text-left py-2 text-slate-300">Title</th>
+                      <th className="text-left py-2 text-slate-300">Type</th>
+                      <th className="text-left py-2 text-slate-300">Subject</th>
+                      <th className="text-left py-2 text-slate-300">Class</th>
+                      <th className="text-left py-2 text-slate-300">Status</th>
+                      <th className="text-left py-2 text-slate-300">Start Date</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              {(!dashboardData?.recent_assessments || dashboardData.recent_assessments.length === 0) && (
-                <div className="text-center py-8">
-                  <p className="text-gray-500">No assessments created yet</p>
-                  <Link href="/dashboard/assessments/create">
-                    <Button className="mt-2">Create Your First Assessment</Button>
-                  </Link>
-                </div>
-              )}
+                  </thead>
+                  <tbody>
+                    {dashboardData?.recent_assessments?.map((assessment) => (
+                      <tr key={assessment.id} className="border-b border-slate-600/40 hover:bg-slate-700/40 transition-colors">
+                        <td className="py-2 font-medium text-white">{assessment.title}</td>
+                        <td className="py-2">
+                          <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-200 capitalize border border-blue-400/30">
+                            {assessment.type}
+                          </span>
+                        </td>
+                        <td className="py-2 text-slate-300">{assessment.subject}</td>
+                        <td className="py-2 text-slate-300">{assessment.class}</td>
+                        <td className="py-2">
+                          <span className={`px-2 py-1 text-xs rounded-full capitalize border ${
+                            assessment.status === 'published' 
+                              ? 'bg-green-500/20 text-green-200 border-green-400/30'
+                              : assessment.status === 'draft'
+                              ? 'bg-yellow-500/20 text-yellow-200 border-yellow-400/30'
+                              : 'bg-gray-500/20 text-gray-200 border-gray-400/30'
+                          }`}>
+                            {assessment.status}
+                          </span>
+                        </td>
+                        <td className="py-2 text-sm text-slate-400">
+                          {new Date(assessment.start_date).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {(!dashboardData?.recent_assessments || dashboardData.recent_assessments.length === 0) && (
+                  <div className="text-center py-8">
+                    <div className="backdrop-blur-md bg-blue-600/60 border border-blue-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                      <ClipboardList className="h-8 w-8 text-white" />
+                    </div>
+                    <p className="text-slate-300">No Assessments Created</p>
+                    <p className="text-slate-400 text-sm mt-2">You haven't created any assessments yet. Start by creating your first assessment.</p>
+                    <Link href="/dashboard/assessments/create">
+                      <Button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white">Create Your First Assessment</Button>
+                    </Link>
+                  </div>
+                )}
+              </div>
             </div>
           </CardContent>
         </Card>

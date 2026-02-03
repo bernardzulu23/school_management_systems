@@ -62,7 +62,7 @@ export default function TeacherTimetablePage() {
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long' })
     if (daysOfWeek.includes(today)) {
       const todayClasses = []
-      const daySchedule = sampleTimetableData[today] || {}
+      const daySchedule = teacherTimetable[today] || {}
       
       timeSlots.forEach(slot => {
         if (!slot.isBreak && daySchedule[slot.id]) {
@@ -86,7 +86,7 @@ export default function TeacherTimetablePage() {
     
     if (!daysOfWeek.includes(today)) return []
     
-    const daySchedule = sampleTimetableData[today] || {}
+    const daySchedule = teacherTimetable[today] || {}
     const upcoming = []
     
     timeSlots.forEach(slot => {
@@ -118,8 +118,8 @@ export default function TeacherTimetablePage() {
 
     daysOfWeek.forEach(day => {
       timeSlots.forEach(slot => {
-        if (!slot.isBreak && sampleTimetableData[day]?.[slot.id]) {
-          const cls = sampleTimetableData[day][slot.id]
+        if (!slot.isBreak && teacherTimetable[day]?.[slot.id]) {
+          const cls = teacherTimetable[day][slot.id]
           totalPeriods++
           totalStudents += cls.students
           classesSet.add(cls.class)
@@ -136,15 +136,12 @@ export default function TeacherTimetablePage() {
       physicsPeriods,
       totalStudents,
       uniqueClasses: classesSet.size,
-      utilization: Math.round((totalPeriods / teacherInfo.maxPeriods) * 100)
+      utilization: teacherInfo.maxPeriods ? Math.round((totalPeriods / teacherInfo.maxPeriods) * 100) : 0
     }
   }
 
   useEffect(() => {
-    setTeacherTimetable(sampleTimetableData)
-    setTodaySchedule(getTodaySchedule())
-    setUpcomingClasses(getUpcomingClasses())
-    setWeeklyStats(calculateWeeklyStats())
+    // Initial calculation is now handled by the effect on teacherTimetable
   }, [])
 
   const navigateWeek = (direction) => {

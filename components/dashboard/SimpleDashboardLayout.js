@@ -1,20 +1,22 @@
 import React from 'react';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export function DashboardLayout({ children, title }) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       {/* Simple header */}
-      <header className="bg-white border-b">
+      <header className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-xl font-semibold">🇿🇲 Zambian School Management System</h1>
+              <h1 className="text-xl font-semibold dark:text-white">🇿🇲 Zambian School Management System</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-600">Student Dashboard</span>
+              <span className="text-gray-600 dark:text-gray-300">Student Dashboard</span>
               {title && (
-                <span className="text-sm text-gray-500">| {title}</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">| {title}</span>
               )}
+              <ThemeToggle />
             </div>
           </div>
         </div>
@@ -28,9 +30,9 @@ export function DashboardLayout({ children, title }) {
       </main>
 
       {/* Simple footer */}
-      <footer className="bg-white border-t mt-auto">
+      <footer className="bg-white dark:bg-gray-800 border-t dark:border-gray-700 mt-auto transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-4 text-center text-sm text-gray-500">
+          <div className="py-4 text-center text-sm text-gray-500 dark:text-gray-400">
             © 2025 Zambian School Management System - Empowering Rural Education
           </div>
         </div>
