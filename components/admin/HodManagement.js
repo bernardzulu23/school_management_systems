@@ -274,9 +274,10 @@ export default function HodManagement() {
                 <Card key={hod.id} className="hover:shadow-lg transition-shadow">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
-                      <div clasx-1">
+                      <div className="flex-1">
                         <h3 className="text-lg font-semibold text-gray-900">
                           {hod.profiles?.name}
+                        </h3>
                         <p className="text-sm text-gray-600">{hod.department_name}</p>
                         <p className="text-xs text-gray-500">ID: {hod.employee_id}</p>
                       </div>
@@ -301,7 +302,7 @@ export default function HodManagement() {
                     
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center text-gray-600">
-                        <Mail="h-4 w-4 mr-2" />
+                        <Mail className="h-4 w-4 mr-2" />
                         {hod.profiles?.email}
                       </div>
                       <div className="flex items-center text-gray-600">
