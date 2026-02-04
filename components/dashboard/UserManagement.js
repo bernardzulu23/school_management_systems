@@ -1,24 +1,116 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
   UserPlus, Users, GraduationCap, User, Settings,
   Plus, Edit, Trash2, Search, Filter, Eye
 } from 'lucide-react'
-// Registration modals removed - using centralized registration system
+import { api } from '@/lib/api'
 
 export default function UserManagement() {
   const [activeUserType, setActiveUserType] = useState('all')
+  const [users, setUsers] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
 
   const userTypes = [
-    { id: 'all', name: 'All Users', icon: Users, count: 0 },
-    { id: 'students', name: 'Students', icon: User, count: 0 },
-    { id: 'teachers', name: 'Teachers', icon: GraduationCap, count: 0 },
-    { id: 'hods', name: 'HODs', icon: Settings, count: 0 },
-    { id: 'headteachers', name: 'Headteachers', icon: UserPlus, count: 0 }
+    { id: 'all', name: 'All Users', icon: Users, count: users.length },
+    { id: 'students', name: 'Students', icon: User, count: users.filter(u => u.role === 'student').length },
+    { id: 'teachers', name: 'Teachers', icon: GraduationCap, count: users.filter(u => u.role === 'teacher').length },
+    { id: 'hods', name: 'HODs', icon: Settings, count: users.filter(u => u.role === 'hod').length },
+    { id: 'headteachers', name: 'Headteachers', icon: UserPlus, count: users.filter(u => u.role === 'headteacher').length }
   ]
+
+  useEffect(() => {
+    fetchUsers()
+  }, [activeUserType])
+
+  const fetchUsers = async () => {
+    setIsLoading(true)
+    try {
+      let data = []
+      // We fetch all data if 'all' is selected, or specific data otherwise
+      // However, to keep counts accurate, we might want to fetch all initially or fetch separately
+      // For simplicity, let's fetch based on selection, but 'all' fetches multiple
+      
+      if (activeUserType === 'all') {
+        const [studentsRes, teachersRes, hodsRes] = await Promise.allSettled([
+           api.get('/students'),
+           api.get('/teachers'),
+           api.get('/hods')
+        ])
+        
+        const students = studentsRes.status === 'fulfilled' ? (studentsRes.value.data.data || []) : []
+        const teachers = teachersRes.status === 'fulfilled' ? (teachersRes.value.data.data || []) : []
+        const hods = hodsRes.status === 'fulfilled' ? (hodsRes.value.data.data || []) : []
+
+        data = [
+           ...students.map(u => ({ 
+             id: u.id, 
+             name: u.name, 
+             email: u.user?.email || 'N/A', 
+             role: 'student',
+             status: 'Active', // Default
+             original: u
+           })),
+           ...teachers.map(u => ({ 
+             id: u.id, 
+             name: u.user?.name || 'Unknown', 
+             email: u.user?.email || 'N/A', 
+             role: 'teacher',
+             status: 'Active',
+             original: u
+           })),
+           ...hods.map(u => ({ 
+             id: u.id, 
+             name: u.user?.name || 'Unknown', 
+             email: u.user?.email || 'N/A', 
+             role: 'hod',
+             status: 'Active',
+             original: u
+           }))
+        ]
+      } else if (activeUserType === 'students') {
+         const res = await api.get('/students')
+         data = (res.data.data || []).map(u => ({ 
+             id: u.id, 
+             name: u.name, 
+             email: u.user?.email || 'N/A', 
+             role: 'student',
+             status: 'Active',
+             original: u
+         }))
+      } else if (activeUserType === 'teachers') {
+         const res = await api.get('/teachers')
+         data = (res.data.data || []).map(u => ({ 
+             id: u.id, 
+             name: u.user?.name || 'Unknown', 
+             email: u.user?.email || 'N/A', 
+             role: 'teacher',
+             status: 'Active',
+             original: u
+         }))
+      } else if (activeUserType === 'hods') {
+         const res = await api.get('/hods')
+         data = (res.data.data || []).map(u => ({ 
+             id: u.id, 
+             name: u.user?.name || 'Unknown', 
+             email: u.user?.email || 'N/A', 
+             role: 'hod',
+             status: 'Active',
+             original: u
+         }))
+      }
+      
+      setUsers(data)
+    } catch (error) {
+      console.error('Error fetching users:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleCreateUser = (type) => {
     // Redirect to centralized registration system
@@ -27,16 +119,45 @@ export default function UserManagement() {
 
   const handleSaveUser = (userData, userType) => {
     console.log(`Saving ${userType}:`, userData)
-    // Here you would typically send the data to your API
-    // For now, we'll just log it and show a success message
   }
 
-  const handleEditUser = (userId) => {
-    alert(`Edit user ${userId} functionality would be implemented here`)
+  const handleEditUser = (user) => {
+    // For now, we use a simple prompt for name update as a proof of concept
+    // In a real app, this would be a modal
+    const newName = prompt(`Edit name for ${user.role}:`, user.name)
+    if (newName && newName !== user.name) {
+      updateUser(user, { name: newName })
+    }
   }
 
-  const handleDeleteUser = (userId) => {
-    alert(`Delete user ${userId} functionality would be implemented here`)
+  const updateUser = async (user, updates) => {
+    try {
+      const endpoint = user.role === 'student' ? `/students/${user.id}` : 
+                       user.role === 'teacher' ? `/teachers/${user.id}` : 
+                       `/hods/${user.id}` // HODs not fully implemented for update in this snippet context but generic logic applies
+      
+      await api.put(endpoint, updates)
+      fetchUsers() // Refresh
+      alert('User updated successfully')
+    } catch (error) {
+      alert('Failed to update user: ' + error.message)
+    }
+  }
+
+  const handleDeleteUser = async (user) => {
+    if (confirm(`Are you sure you want to delete this ${user.role}? This action cannot be undone.`)) {
+      try {
+        const endpoint = user.role === 'student' ? `/students/${user.id}` : 
+                         user.role === 'teacher' ? `/teachers/${user.id}` : 
+                         `/hods/${user.id}`
+        
+        await api.delete(endpoint)
+        fetchUsers() // Refresh
+        alert('User deleted successfully')
+      } catch (error) {
+        alert('Failed to delete user: ' + error.message)
+      }
+    }
   }
 
   const handleViewUser = (userId) => {
@@ -252,8 +373,22 @@ export default function UserManagement() {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* TODO: Load users from database */}
-                  {[].map((user) => (
+                  {isLoading ? (
+                    <tr>
+                      <td colSpan="5" className="text-center py-8 text-slate-400">Loading users...</td>
+                    </tr>
+                  ) : users.length === 0 ? (
+                    <tr>
+                      <td colSpan="5" className="text-center py-8 text-slate-400">No users found.</td>
+                    </tr>
+                  ) : (
+                    users
+                      .filter(user => 
+                        searchTerm === '' || 
+                        user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+                      )
+                      .map((user) => (
                     <tr key={user.id} className="border-b border-slate-700/50 hover:bg-slate-700/40 transition-colors duration-200">
                       <td className="py-4 text-white font-medium">{user.name}</td>
                       <td className="py-4 text-slate-300">{user.email}</td>
@@ -281,7 +416,7 @@ export default function UserManagement() {
                             size="sm" 
                             variant="outline" 
                             className="border-yellow-400 text-yellow-300 hover:bg-yellow-600/20"
-                            onClick={() => handleEditUser(user.id)}
+                            onClick={() => handleEditUser(user)}
                           >
                             <Edit className="h-3 w-3" />
                           </Button>
@@ -289,14 +424,14 @@ export default function UserManagement() {
                             size="sm" 
                             variant="outline" 
                             className="border-red-400 text-red-300 hover:bg-red-600/20"
-                            onClick={() => handleDeleteUser(user.id)}
+                            onClick={() => handleDeleteUser(user)}
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  )))}
                 </tbody>
               </table>
 

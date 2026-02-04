@@ -30,29 +30,100 @@ async function main() {
 
     // Create profile based on role
     if (u.role === 'teacher') {
-      await prisma.teacher.create({
-        data: {
-          userId: user.id,
-          subjects: ['Mathematics', 'English'],
-        }
-      }).catch(() => {}) // Ignore if exists (upsert logic for relations is complex in loop)
+      const profile = await prisma.teacher.findUnique({ where: { userId: user.id } })
+      if (!profile) {
+        await prisma.teacher.create({
+          data: {
+            userId: user.id,
+            subjects: ['Mathematics', 'English'],
+          }
+        })
+      }
     } else if (u.role === 'student') {
-      await prisma.student.create({
-        data: {
-          id: 'STU2025000', // Matches demo student ID
-          userId: user.id,
-          name: u.name,
-          class: 'Form 1A',
-        }
-      }).catch(() => {})
+      const profile = await prisma.student.findUnique({ where: { userId: user.id } })
+      if (!profile) {
+        await prisma.student.create({
+          data: {
+            id: 'STU2025000', // Matches demo student ID
+            userId: user.id,
+            name: u.name,
+            class: 'Form 1A',
+          }
+        })
+      }
     }
   }
+
+  // Seed Subjects
+  console.log('Seeding subjects...')
+  const subjects = [
+    { name: 'Mathematics', code: 'MATH', topics: ['Algebra', 'Geometry', 'Calculus', 'Statistics'] },
+    { name: 'English Language', code: 'ENG', topics: ['Grammar', 'Composition', 'Comprehension', 'Literature'] },
+    { name: 'Science', code: 'SCI', topics: ['Biology', 'Physics', 'Chemistry', 'Environment'] },
+    { name: 'Social Studies', code: 'SST', topics: ['History', 'Civics', 'Geography', 'Economics'] },
+    { name: 'ICT', code: 'ICT', topics: ['Computer Basics', 'Programming', 'Networking', 'Digital Literacy'] },
+    { name: 'History', code: 'HIST' },
+    { name: 'Geography', code: 'GEO' },
+    { name: 'Religious Education', code: 'RE' },
+    { name: 'Physical Education', code: 'PE' },
+    { name: 'Physics', code: 'PHY', topics: ['Mechanics', 'Thermodynamics', 'Optics', 'Electricity'] },
+    { name: 'Chemistry', code: 'CHEM', topics: ['Organic Chemistry', 'Inorganic Chemistry', 'Physical Chemistry'] },
+    { name: 'Biology', code: 'BIO', topics: ['Cell Biology', 'Genetics', 'Ecology', 'Human Physiology'] },
+    { name: 'Accounting', code: 'ACC' },
+    { name: 'Business Studies', code: 'BUS' },
+    { name: 'Economics', code: 'ECO' },
+    { name: 'English Literature', code: 'LIT', topics: ['Shakespeare', 'Modern Drama', 'Poetry', 'Novels'] },
+    { name: 'Shona', code: 'SHO' },
+    { name: 'Ndebele', code: 'NDE' },
+    { name: 'French', code: 'FRE' },
+    { name: 'Art and Design', code: 'ART' },
+    { name: 'Music', code: 'MUS' },
+    { name: 'Drama/Theatre Arts', code: 'DRA' },
+    { name: 'Information Technology', code: 'IT' },
+    { name: 'Design and Technology', code: 'DT' },
+    { name: 'Computer Studies', code: 'CS' },
+    { name: 'Commerce', code: 'COM' },
+    { name: 'Food and Nutrition', code: 'FN' },
+    { name: 'Fashion and Fabrics', code: 'FF' },
+    { name: 'Woodwork', code: 'WW' },
+    { name: 'Metalwork', code: 'MW' },
+    { name: 'Civic Education', code: 'CIV' },
+    { name: 'Zambian Languages', code: 'ZAM' },
+    { name: 'Creative & Technology Studies', code: 'CTS' },
+    { name: 'Home Economics', code: 'HE' },
+    { name: 'Additional Mathematics', code: 'ADDM' },
+    { name: 'Statistics', code: 'STAT' },
+    { name: 'Psychology', code: 'PSY' },
+    { name: 'Sociology', code: 'SOC' },
+    { name: 'General Science', code: 'GENS' },
+    { name: 'Agricultural Science', code: 'AGR' }
+  ]
+
+  for (const subject of subjects) {
+    const existingSubject = await prisma.subject.findFirst({
+      where: { name: subject.name }
+    })
+    
+    if (!existingSubject) {
+      await prisma.subject.create({
+        data: subject
+      })
+    } else {
+      // Update topics if subject exists
+      await prisma.subject.update({
+        where: { id: existingSubject.id },
+        data: {
+          topics: subject.topics || []
+        }
+      })
+    }
+  }
+  console.log(`Seeded ${subjects.length} subjects`)
 
   // Seed mock students for 'Form 1A'
   console.log('Seeding mock students for Form 1A...')
   for (let i = 1; i <= 15; i++) {
     const studentId = `STU${2025000 + i}`
-    // check if exists
     const exists = await prisma.student.findUnique({ where: { id: studentId } })
     if (!exists) {
       await prisma.student.create({
@@ -65,7 +136,379 @@ async function main() {
     }
   }
 
-  console.log('Seeding finished.')
+  // Get demo student
+  const studentEmail = 'student@school.com'
+  const studentUser = await prisma.user.findUnique({ where: { email: studentEmail } })
+  
+  if (studentUser) {
+    const studentProfile = await prisma.student.findUnique({ where: { userId: studentUser.id } })
+    if (studentProfile) {
+      console.log('Seeding data for demo student...')
+      
+      // Seed Goals
+      const goalsData = [
+        {
+          title: 'Achieve A Grade in Mathematics',
+          category: 'academic',
+          description: 'Improve mathematics performance to achieve an A grade by end of term',
+          status: 'in_progress',
+          progress: 75,
+        },
+        {
+          title: 'Read 20 Books This Year',
+          category: 'personal',
+          description: 'Expand knowledge and improve reading comprehension',
+          status: 'in_progress',
+          progress: 40,
+        }
+      ]
+
+      for (const goal of goalsData) {
+        const existingGoal = await prisma.goal.findFirst({
+          where: {
+            studentId: studentProfile.id,
+            title: goal.title
+          }
+        })
+        
+        if (!existingGoal) {
+          await prisma.goal.create({
+            data: {
+              ...goal,
+              studentId: studentProfile.id
+            }
+          })
+        }
+      }
+
+      // Seed Attendance
+      console.log('Seeding attendance...')
+      const attendanceStatuses = ['present', 'present', 'present', 'present', 'late', 'present', 'absent']
+      const today = new Date()
+      
+      for (let i = 0; i < 30; i++) {
+        const date = new Date()
+        date.setDate(today.getDate() - i)
+        // Skip weekends
+        if (date.getDay() === 0 || date.getDay() === 6) continue
+        
+        const status = attendanceStatuses[Math.floor(Math.random() * attendanceStatuses.length)]
+        
+        const existingAttendance = await prisma.attendance.findFirst({
+          where: {
+            studentId: studentProfile.id,
+            date: {
+              gte: new Date(date.setHours(0,0,0,0)),
+              lt: new Date(date.setHours(23,59,59,999))
+            }
+          }
+        })
+
+        if (!existingAttendance) {
+          await prisma.attendance.create({
+            data: {
+              studentId: studentProfile.id,
+              date: date,
+              status: status,
+              remarks: status === 'absent' ? 'Sick leave' : status === 'late' ? 'Bus delay' : null
+            }
+          })
+        }
+      }
+
+      // Seed Assignments
+      console.log('Seeding assignments...')
+      const assignmentsData = [
+        {
+          title: 'Algebra Problem Set 1',
+          subject: 'Mathematics',
+          class: 'Form 1A',
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Due in 7 days
+          description: 'Complete problems 1-20 from Chapter 3'
+        },
+        {
+          title: 'Essay: The Great Gatsby',
+          subject: 'English Literature',
+          class: 'Form 1A',
+          dueDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // Overdue
+          description: 'Write a 500-word essay on the themes of the novel'
+        },
+        {
+          title: 'Physics Lab Report',
+          subject: 'Physics',
+          class: 'Form 1A',
+          dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+          description: 'Submit report for the pendulum experiment'
+        }
+      ]
+
+      for (const assign of assignmentsData) {
+        let assignment = await prisma.assignment.findFirst({
+          where: { title: assign.title }
+        })
+
+        if (!assignment) {
+          assignment = await prisma.assignment.create({
+            data: assign
+          })
+        }
+
+        // Create submission for some
+        if (assign.subject === 'Physics') {
+          const submission = await prisma.assignmentSubmission.findFirst({
+             where: { assignmentId: assignment.id, studentId: studentProfile.id }
+          })
+          
+          if (!submission) {
+            await prisma.assignmentSubmission.create({
+              data: {
+                assignmentId: assignment.id,
+                studentId: studentProfile.id,
+                status: 'submitted',
+                content: 'Here is my lab report...',
+                submittedAt: new Date()
+              }
+            })
+          }
+        }
+      }
+
+      // Seed Student Works
+      console.log('Seeding student works...')
+      const worksData = [
+        {
+          title: 'Solar System Model',
+          description: '3D model of the solar system using recycled materials',
+          type: 'science',
+          likes: 24,
+          views: 156,
+          isPublic: true
+        },
+        {
+          title: 'Abstract Painting',
+          description: 'Exploration of colors and emotions',
+          type: 'art',
+          likes: 45,
+          views: 230,
+          isPublic: true
+        },
+        {
+          title: 'Python Calculator',
+          description: 'Simple calculator app built with Python',
+          type: 'coding',
+          likes: 12,
+          views: 89,
+          isPublic: true
+        }
+      ]
+
+      for (const work of worksData) {
+        const existingWork = await prisma.studentWork.findFirst({
+          where: { studentId: studentProfile.id, title: work.title }
+        })
+
+        if (!existingWork) {
+          await prisma.studentWork.create({
+            data: {
+              ...work,
+              studentId: studentProfile.id
+            }
+          })
+        }
+      }
+
+      // Seed Gamification Profile
+      console.log('Seeding gamification profile...')
+      const gamification = await prisma.gamificationProfile.upsert({
+        where: { studentId: studentProfile.id },
+        update: {},
+        create: {
+          studentId: studentProfile.id,
+          points: 1250,
+          level: 8,
+          xp: 1250,
+          nextLevelXp: 1600
+        }
+      })
+      
+      // Ensure badges exist
+      const badgesData = [
+        { name: 'First Steps', description: 'Complete your first game', icon: '🎯', category: 'academic', rarity: 'common', xpValue: 10 },
+        { name: 'Perfect Score', description: 'Get 100% on any game', icon: '⭐', category: 'academic', rarity: 'rare', xpValue: 50 },
+        { name: 'Speed Demon', description: 'Complete a game in under 5 minutes', icon: '⚡', category: 'academic', rarity: 'epic', xpValue: 30 }
+      ]
+
+      for (const badge of badgesData) {
+         const exists = await prisma.badge.findFirst({ where: { name: badge.name } })
+         if (!exists) {
+           await prisma.badge.create({ data: badge })
+         }
+      }
+
+      // Assign badges
+      const allBadges = await prisma.badge.findMany()
+      for (const badge of allBadges) {
+        const assigned = await prisma.studentBadge.findUnique({
+          where: {
+            profileId_badgeId: {
+              profileId: gamification.id,
+              badgeId: badge.id
+            }
+          }
+        })
+        
+        if (!assigned) {
+          await prisma.studentBadge.create({
+            data: {
+              profileId: gamification.id,
+              badgeId: badge.id,
+              awardedAt: new Date()
+            }
+          })
+        }
+      }
+
+      // Seed Games and Game Plays
+      const gamesData = [
+        { title: 'Math Quiz', description: 'Algebra basics', type: 'quiz', difficulty: 'medium', content: {}, subject: 'Mathematics' },
+        { title: 'Vocab Blast', description: 'English vocabulary', type: 'quiz', difficulty: 'easy', content: {}, subject: 'English Language' }
+      ]
+
+      for (const game of gamesData) {
+        let gameRec = await prisma.game.findFirst({ where: { title: game.title } })
+        if (!gameRec) {
+          gameRec = await prisma.game.create({ data: game })
+        }
+
+        // Create play record
+        await prisma.studentGame.create({
+          data: {
+            studentId: studentProfile.id,
+            gameId: gameRec.id,
+            score: Math.floor(Math.random() * 100),
+            completed: true,
+            playedAt: new Date()
+          }
+        })
+      }
+    }
+  }
+
+  // Seed Field Trips
+  console.log('Seeding field trips...')
+  const fieldTripsData = [
+    {
+      title: 'Virtual Museum Tour',
+      description: 'Explore the National Museum of History',
+      location: 'New York, USA',
+      date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+      type: 'virtual',
+      subject: 'History',
+      grade: 'Form 1',
+      imageUrl: 'https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?auto=format&fit=crop&q=80&w=1000',
+      status: 'upcoming'
+    },
+    {
+      title: 'Space Station Visit',
+      description: 'Tour the International Space Station',
+      location: 'Low Earth Orbit',
+      date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      type: 'virtual',
+      subject: 'Science',
+      grade: 'Form 1',
+      imageUrl: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=1000',
+      status: 'upcoming'
+    }
+  ]
+
+  for (const trip of fieldTripsData) {
+    const existingTrip = await prisma.fieldTrip.findFirst({
+      where: { title: trip.title }
+    })
+    
+    if (!existingTrip) {
+      await prisma.fieldTrip.create({
+        data: trip
+      })
+    }
+  }
+
+  // Seed Creative Features
+  console.log('Seeding creative features...')
+  const creativeFeaturesData = [
+    {
+      featureId: 'interactive_whiteboard',
+      name: 'Interactive Whiteboard',
+      description: 'Digital canvas for real-time collaboration',
+      category: 'creative',
+      roles: ['teacher', 'student'],
+      difficulty: 'Beginner',
+      estimatedTime: 'Instant',
+      iconName: 'PenTool'
+    },
+    {
+      featureId: 'ai_story_generator',
+      name: 'AI Story Weaver',
+      description: 'Collaborative storytelling with AI assistance',
+      category: 'creative',
+      roles: ['student'],
+      difficulty: 'Intermediate',
+      estimatedTime: '15-30 mins',
+      iconName: 'BookOpen'
+    },
+    {
+      featureId: 'virtual_lab',
+      name: 'Virtual Science Lab',
+      description: 'Simulated experiments in a safe environment',
+      category: 'stem',
+      roles: ['student', 'teacher'],
+      difficulty: 'Advanced',
+      estimatedTime: '45 mins',
+      iconName: 'FlaskConical'
+    },
+    {
+      featureId: 'code_playground',
+      name: 'Code Playground',
+      description: 'Interactive coding environment with instant feedback',
+      category: 'stem',
+      roles: ['student'],
+      difficulty: 'Intermediate',
+      estimatedTime: 'Flexible',
+      iconName: 'Code'
+    },
+    {
+      featureId: 'music_composer',
+      name: 'Digital Music Composer',
+      description: 'Create and mix music tracks',
+      category: 'creative',
+      roles: ['student'],
+      difficulty: 'Beginner',
+      estimatedTime: '20 mins',
+      iconName: 'Music'
+    },
+    {
+      featureId: '3d_modeler',
+      name: '3D Shape Builder',
+      description: 'Build and visualize 3D geometric shapes',
+      category: 'stem',
+      roles: ['student'],
+      difficulty: 'Advanced',
+      estimatedTime: '30 mins',
+      iconName: 'Box'
+    }
+  ]
+
+  for (const feature of creativeFeaturesData) {
+    const existingFeature = await prisma.creativeFeature.findUnique({
+      where: { featureId: feature.featureId }
+    })
+    
+    if (!existingFeature) {
+      await prisma.creativeFeature.create({
+        data: feature
+      })
+    }
+  }
 }
 
 main()

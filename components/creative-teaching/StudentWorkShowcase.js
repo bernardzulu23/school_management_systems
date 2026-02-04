@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/lib/api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
@@ -18,123 +20,15 @@ export default function StudentWorkShowcase() {
   const [selectedWork, setSelectedWork] = useState(null)
   const [showUploadModal, setShowUploadModal] = useState(false)
 
-  // Sample student work data (in production, this would come from API)
-  const studentWorks = [
-    {
-      id: 1,
-      title: 'Traditional Zambian Pottery',
-      student: 'Mwila Banda',
-      grade: 'Grade 7',
-      subject: 'Art',
-      category: 'visual-art',
-      type: 'image',
-      thumbnail: '/api/placeholder/300/200',
-      description: 'A beautiful clay pot inspired by traditional Lozi pottery techniques',
-      uploadDate: '2024-01-15',
-      likes: 24,
-      comments: 8,
-      views: 156,
-      featured: true,
-      tags: ['pottery', 'traditional', 'lozi', 'clay'],
-      teacher: 'Mrs. Mulenga',
-      awards: ['Best Traditional Art', 'Student Choice Award']
-    },
-    {
-      id: 2,
-      title: 'The Water Cycle in Zambia',
-      student: 'Chipo Mwanza',
-      grade: 'Grade 5',
-      subject: 'Science',
-      category: 'presentation',
-      type: 'video',
-      thumbnail: '/api/placeholder/300/200',
-      description: 'An animated explanation of how the water cycle affects Zambias climate',
-      uploadDate: '2024-01-12',
-      likes: 31,
-      comments: 12,
-      views: 203,
-      featured: false,
-      tags: ['water-cycle', 'climate', 'animation', 'science'],
-      teacher: 'Mr. Phiri',
-      awards: []
-    },
-    {
-      id: 3,
-      title: 'My Village Story',
-      student: 'Temba Sakala',
-      grade: 'Grade 4',
-      subject: 'English',
-      category: 'writing',
-      type: 'document',
-      thumbnail: '/api/placeholder/300/200',
-      description: 'A creative story about life in a rural Zambian village',
-      uploadDate: '2024-01-10',
-      likes: 18,
-      comments: 6,
-      views: 89,
-      featured: false,
-      tags: ['creative-writing', 'village', 'story', 'culture'],
-      teacher: 'Ms. Zulu',
-      awards: ['Creative Writing Excellence']
-    },
-    {
-      id: 4,
-      title: 'Bemba Language Poem',
-      student: 'Natasha Mulenga',
-      grade: 'Form 2',
-      subject: 'Local Languages',
-      category: 'audio',
-      type: 'audio',
-      thumbnail: '/api/placeholder/300/200',
-      description: 'An original poem in Bemba about the beauty of Zambian nature',
-      uploadDate: '2024-01-08',
-      likes: 27,
-      comments: 9,
-      views: 134,
-      featured: true,
-      tags: ['bemba', 'poetry', 'nature', 'language'],
-      teacher: 'Mr. Banda',
-      awards: ['Best Local Language Work']
-    },
-    {
-      id: 5,
-      title: 'Solar System Model',
-      student: 'David Chilufya',
-      grade: 'Grade 6',
-      subject: 'Science',
-      category: 'project',
-      type: 'image',
-      thumbnail: '/api/placeholder/300/200',
-      description: 'A 3D model of the solar system made from recycled materials',
-      uploadDate: '2024-01-05',
-      likes: 42,
-      comments: 15,
-      views: 278,
-      featured: true,
-      tags: ['solar-system', 'recycled', '3d-model', 'space'],
-      teacher: 'Mrs. Tembo',
-      awards: ['Innovation Award', 'Environmental Consciousness']
-    },
-    {
-      id: 6,
-      title: 'Traditional Dance Performance',
-      student: 'Grace Mwape',
-      grade: 'Form 1',
-      subject: 'Cultural Studies',
-      category: 'performance',
-      type: 'video',
-      thumbnail: '/api/placeholder/300/200',
-      description: 'A performance of the traditional Tonga dance with cultural explanation',
-      uploadDate: '2024-01-03',
-      likes: 56,
-      comments: 22,
-      views: 445,
-      featured: true,
-      tags: ['dance', 'tonga', 'culture', 'performance'],
-      teacher: 'Mr. Siame',
-      awards: ['Cultural Heritage Award']
-    }
-  ]
+  // Fetch dynamic data
+  const { data: studentWorks = [], isLoading } = useQuery({
+    queryKey: ['student-works', selectedCategory, selectedGrade, searchTerm],
+    queryFn: () => api.getStudentWorks({
+      category: selectedCategory,
+      grade: selectedGrade,
+      search: searchTerm
+    }).then(res => res.data.data || [])
+  })
 
   const categories = [
     { id: 'all', name: 'All Categories', icon: Grid },
@@ -151,15 +45,8 @@ export default function StudentWorkShowcase() {
     'Grade 6', 'Grade 7', 'Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5', 'Form 6'
   ]
 
-  const filteredWorks = studentWorks.filter(work => {
-    const matchesCategory = selectedCategory === 'all' || work.category === selectedCategory
-    const matchesGrade = selectedGrade === 'all' || work.grade === selectedGrade
-    const matchesSearch = work.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         work.student.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         work.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-    
-    return matchesCategory && matchesGrade && matchesSearch
-  })
+  // API handles filtering
+  const filteredWorks = studentWorks
 
   const featuredWorks = studentWorks.filter(work => work.featured)
 

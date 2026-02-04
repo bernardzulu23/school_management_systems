@@ -4,130 +4,169 @@ import { useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
+import Modal from '@/components/ui/Modal'
 import { 
   Target, Plus, TrendingUp, Award, Calendar, CheckCircle, Clock,
-  ArrowLeft, Search, Filter, Edit, Trash2, Star
+  ArrowLeft, Search, Filter, Edit, Trash2, Star, Save, X, AlertTriangle
 } from 'lucide-react'
 import Link from 'next/link'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { api } from '@/lib/api'
+import { toast, Toaster } from 'react-hot-toast'
 
 export default function StudentGoalsPage() {
   const [activeTab, setActiveTab] = useState('academic')
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
+  
+  // Modal states
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [selectedGoal, setSelectedGoal] = useState(null)
+  
+  // Form state
+  const [formData, setFormData] = useState({
+    title: '',
+    type: 'academic',
+    category: 'Academic Excellence',
+    description: '',
+    targetDate: '',
+    status: 'in_progress',
+    priority: 'medium',
+    targetValue: '',
+    currentValue: '',
+    milestones: [] // { name: '', completed: false }
+  })
 
-  // Sample student goals data
-  const studentGoals = {
-    academic: [
-      {
-        id: 1,
-        title: 'Achieve A Grade in Mathematics',
-        category: 'Academic Excellence',
-        description: 'Improve mathematics performance to achieve an A grade by end of term',
-        targetDate: '2024-03-31',
-        progress: 75,
-        status: 'in_progress',
-        priority: 'high',
-        currentGrade: 'B+',
-        targetGrade: 'A',
-        milestones: [
-          { name: 'Complete algebra practice', completed: true },
-          { name: 'Score 90% on next test', completed: true },
-          { name: 'Master trigonometry', completed: false },
-          { name: 'Final exam preparation', completed: false }
-        ]
-      },
-      {
-        id: 2,
-        title: 'Improve Science Lab Skills',
-        category: 'Practical Skills',
-        description: 'Enhance laboratory techniques and experimental procedures',
-        targetDate: '2024-04-15',
-        progress: 60,
-        status: 'in_progress',
-        priority: 'medium',
-        currentLevel: 'Intermediate',
-        targetLevel: 'Advanced',
-        milestones: [
-          { name: 'Complete safety training', completed: true },
-          { name: 'Master basic procedures', completed: true },
-          { name: 'Advanced experiment techniques', completed: false },
-          { name: 'Independent project', completed: false }
-        ]
-      },
-      {
-        id: 3,
-        title: 'Perfect Attendance Record',
-        category: 'Attendance',
-        description: 'Maintain 100% attendance for the entire semester',
-        targetDate: '2024-05-31',
-        progress: 95,
-        status: 'in_progress',
-        priority: 'medium',
-        currentAttendance: 98,
-        targetAttendance: 100,
-        milestones: [
-          { name: 'First month perfect attendance', completed: true },
-          { name: 'Second month perfect attendance', completed: true },
-          { name: 'Third month perfect attendance', completed: true },
-          { name: 'Complete semester', completed: false }
-        ]
+  const queryClient = useQueryClient()
+
+  const { data: goalsData, isLoading } = useQuery({
+    queryKey: ['student-goals'],
+    queryFn: async () => {
+      try {
+        const res = await api.getStudentGoals()
+        return res.data.data
+      } catch (error) {
+        toast.error('Failed to load goals')
+        return null
       }
-    ],
-    personal: [
-      {
-        id: 4,
-        title: 'Read 20 Books This Year',
-        category: 'Personal Development',
-        description: 'Expand knowledge and improve reading comprehension',
-        targetDate: '2024-12-31',
-        progress: 40,
-        status: 'in_progress',
-        priority: 'medium',
-        currentCount: 8,
-        targetCount: 20,
-        milestones: [
-          { name: 'Read 5 books', completed: true },
-          { name: 'Read 10 books', completed: false },
-          { name: 'Read 15 books', completed: false },
-          { name: 'Read 20 books', completed: false }
-        ]
-      },
-      {
-        id: 5,
-        title: 'Learn Spanish Basics',
-        category: 'Language Learning',
-        description: 'Master basic Spanish conversation and vocabulary',
-        targetDate: '2024-06-30',
-        progress: 30,
-        status: 'in_progress',
-        priority: 'low',
-        currentLevel: 'Beginner',
-        targetLevel: 'Intermediate',
-        milestones: [
-          { name: 'Learn basic vocabulary', completed: true },
-          { name: 'Master present tense', completed: false },
-          { name: 'Hold basic conversation', completed: false },
-          { name: 'Pass proficiency test', completed: false }
-        ]
-      },
-      {
-        id: 6,
-        title: 'Join Student Council',
-        category: 'Leadership',
-        description: 'Develop leadership skills through student government participation',
-        targetDate: '2024-02-15',
-        progress: 90,
-        status: 'in_progress',
-        priority: 'high',
-        milestones: [
-          { name: 'Submit application', completed: true },
-          { name: 'Prepare campaign speech', completed: true },
-          { name: 'Campaign for votes', completed: true },
-          { name: 'Election results', completed: false }
-        ]
-      }
-    ]
+    }
+  })
+
+  // Mutations
+  const createMutation = useMutation({
+    mutationFn: (data) => api.createStudentGoal(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['student-goals'])
+      setIsAddModalOpen(false)
+      resetForm()
+      toast.success('Goal created successfully')
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || 'Failed to create goal')
+    }
+  })
+
+  const updateMutation = useMutation({
+    mutationFn: (data) => api.updateStudentGoal(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['student-goals'])
+      setIsEditModalOpen(false)
+      resetForm()
+      toast.success('Goal updated successfully')
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || 'Failed to update goal')
+    }
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: (id) => api.deleteStudentGoal(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['student-goals'])
+      setIsDeleteModalOpen(false)
+      setSelectedGoal(null)
+      toast.success('Goal deleted successfully')
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || 'Failed to delete goal')
+    }
+  })
+
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      type: 'academic',
+      category: 'Academic Excellence',
+      description: '',
+      targetDate: '',
+      status: 'in_progress',
+      priority: 'medium',
+      targetValue: '',
+      currentValue: '',
+      milestones: []
+    })
+    setSelectedGoal(null)
   }
+
+  const handleEditClick = (goal) => {
+    setSelectedGoal(goal)
+    setFormData({
+      title: goal.title,
+      type: goal.type,
+      category: goal.category,
+      description: goal.description || '',
+      targetDate: new Date(goal.targetDate).toISOString().split('T')[0],
+      status: goal.status,
+      priority: goal.priority,
+      targetValue: goal.targetValue || '',
+      currentValue: goal.currentValue || '',
+      milestones: goal.milestones || []
+    })
+    setIsEditModalOpen(true)
+  }
+
+  const handleDeleteClick = (goal) => {
+    setSelectedGoal(goal)
+    setIsDeleteModalOpen(true)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (isEditModalOpen && selectedGoal) {
+      updateMutation.mutate({ ...formData, id: selectedGoal.id })
+    } else {
+      createMutation.mutate(formData)
+    }
+  }
+
+  const handleAddMilestone = () => {
+    setFormData({
+      ...formData,
+      milestones: [...formData.milestones, { name: '', completed: false }]
+    })
+  }
+
+  const handleRemoveMilestone = (index) => {
+    const newMilestones = [...formData.milestones]
+    newMilestones.splice(index, 1)
+    setFormData({ ...formData, milestones: newMilestones })
+  }
+
+  const handleMilestoneChange = (index, field, value) => {
+    const newMilestones = [...formData.milestones]
+    newMilestones[index][field] = value
+    setFormData({ ...formData, milestones: newMilestones })
+  }
+
+  // Sample student goals data - fallback if loading or error
+  const defaultGoals = {
+    academic: [],
+    personal: []
+  }
+
+  const studentGoals = goalsData || defaultGoals
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -355,10 +394,10 @@ export default function StudentGoalsPage() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Button size="sm" variant="outline">
+                      <Button size="sm" variant="outline" onClick={() => handleEditClick(goal)}>
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button size="sm" variant="outline">
+                      <Button size="sm" variant="outline" onClick={() => handleDeleteClick(goal)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -379,35 +418,17 @@ export default function StudentGoalsPage() {
                   </div>
 
                   {/* Goal-specific metrics */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    {goal.currentGrade && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    {goal.currentValue && (
                       <div className="text-center p-3 bg-blue-50 rounded-lg">
-                        <p className="text-sm text-blue-600">Current Grade</p>
-                        <p className="text-lg font-bold text-blue-800">{goal.currentGrade}</p>
+                        <p className="text-sm text-blue-600">Current Status</p>
+                        <p className="text-lg font-bold text-blue-800">{goal.currentValue}</p>
                       </div>
                     )}
-                    {goal.targetGrade && (
+                    {goal.targetValue && (
                       <div className="text-center p-3 bg-green-50 rounded-lg">
-                        <p className="text-sm text-green-600">Target Grade</p>
-                        <p className="text-lg font-bold text-green-800">{goal.targetGrade}</p>
-                      </div>
-                    )}
-                    {goal.currentCount !== undefined && (
-                      <div className="text-center p-3 bg-purple-50 rounded-lg">
-                        <p className="text-sm text-purple-600">Progress</p>
-                        <p className="text-lg font-bold text-purple-800">{goal.currentCount}/{goal.targetCount}</p>
-                      </div>
-                    )}
-                    {goal.currentAttendance && (
-                      <div className="text-center p-3 bg-orange-50 rounded-lg">
-                        <p className="text-sm text-orange-600">Current Attendance</p>
-                        <p className="text-lg font-bold text-orange-800">{goal.currentAttendance}%</p>
-                      </div>
-                    )}
-                    {goal.currentLevel && (
-                      <div className="text-center p-3 bg-indigo-50 rounded-lg">
-                        <p className="text-sm text-indigo-600">Current Level</p>
-                        <p className="text-lg font-bold text-indigo-800">{goal.currentLevel}</p>
+                        <p className="text-sm text-green-600">Target Goal</p>
+                        <p className="text-lg font-bold text-green-800">{goal.targetValue}</p>
                       </div>
                     )}
                   </div>
@@ -492,6 +513,184 @@ export default function StudentGoalsPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Add/Edit Goal Modal */}
+        <Modal
+          isOpen={isAddModalOpen || isEditModalOpen}
+          onClose={() => {
+            setIsAddModalOpen(false)
+            setIsEditModalOpen(false)
+            resetForm()
+          }}
+          title={isEditModalOpen ? 'Edit Goal' : 'Set New Goal'}
+        >
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Title</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-3 py-2 border rounded-md"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Type</label>
+                <select
+                  className="w-full px-3 py-2 border rounded-md"
+                  value={formData.type}
+                  onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                >
+                  <option value="academic">Academic</option>
+                  <option value="personal">Personal</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Category</label>
+                <select
+                  className="w-full px-3 py-2 border rounded-md"
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                >
+                  <option value="Academic Excellence">Academic Excellence</option>
+                  <option value="Practical Skills">Practical Skills</option>
+                  <option value="Attendance">Attendance</option>
+                  <option value="Personal Development">Personal Development</option>
+                  <option value="Language Learning">Language Learning</option>
+                  <option value="Leadership">Leadership</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Target Date</label>
+                <input
+                  type="date"
+                  required
+                  className="w-full px-3 py-2 border rounded-md"
+                  value={formData.targetDate}
+                  onChange={(e) => setFormData({ ...formData, targetDate: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Description</label>
+              <textarea
+                className="w-full px-3 py-2 border rounded-md"
+                rows={3}
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+               <div className="space-y-2">
+                <label className="text-sm font-medium">Priority</label>
+                <select
+                  className="w-full px-3 py-2 border rounded-md"
+                  value={formData.priority}
+                  onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
+                >
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Status</label>
+                <select
+                  className="w-full px-3 py-2 border rounded-md"
+                  value={formData.status}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                >
+                  <option value="pending">Pending</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="border-t pt-4">
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-sm font-medium">Milestones</label>
+                <Button type="button" size="sm" variant="outline" onClick={handleAddMilestone}>
+                  <Plus className="h-3 w-3 mr-1" /> Add
+                </Button>
+              </div>
+              <div className="space-y-2 max-h-40 overflow-y-auto">
+                {formData.milestones.map((milestone, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={milestone.completed}
+                      onChange={(e) => handleMilestoneChange(index, 'completed', e.target.checked)}
+                      className="rounded border-gray-300"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Milestone name"
+                      className="flex-1 px-2 py-1 border rounded-md text-sm"
+                      value={milestone.name}
+                      onChange={(e) => handleMilestoneChange(index, 'name', e.target.value)}
+                    />
+                    <button type="button" onClick={() => handleRemoveMilestone(index)} className="text-red-500">
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-2 pt-4">
+              <Button type="button" variant="outline" onClick={() => {
+                setIsAddModalOpen(false)
+                setIsEditModalOpen(false)
+                resetForm()
+              }}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
+                {(createMutation.isPending || updateMutation.isPending) ? 'Saving...' : 'Save Goal'}
+              </Button>
+            </div>
+          </form>
+        </Modal>
+
+        {/* Delete Confirmation Modal */}
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          title="Delete Goal"
+          size="sm"
+        >
+          <div className="space-y-4">
+            <div className="flex items-center space-x-3 text-red-600 bg-red-50 p-4 rounded-lg">
+              <AlertTriangle className="h-6 w-6" />
+              <p className="font-medium">Are you sure you want to delete this goal?</p>
+            </div>
+            <p className="text-sm text-gray-600">
+              This action cannot be undone. This will permanently delete the goal "{selectedGoal?.title}" and all its milestones.
+            </p>
+            <div className="flex justify-end space-x-2 pt-4">
+              <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
+                Cancel
+              </Button>
+              <Button 
+                className="bg-red-600 hover:bg-red-700 text-white"
+                onClick={() => deleteMutation.mutate(selectedGoal.id)}
+                disabled={deleteMutation.isPending}
+              >
+                {deleteMutation.isPending ? 'Deleting...' : 'Delete Goal'}
+              </Button>
+            </div>
+          </div>
+        </Modal>
+
+        <Toaster position="top-right" />
       </div>
     </DashboardLayout>
   )

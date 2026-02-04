@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -10,32 +10,46 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/lib/api'
 
 export default function StudentAssessmentsPage() {
   const [activeTab, setActiveTab] = useState('upcoming')
   const [searchTerm, setSearchTerm] = useState('')
   const [filterSubject, setFilterSubject] = useState('all')
 
-  // Clean assessments data - no sample data
-  const assessmentsData = {
-    upcoming: [],
-    completed: []
-  }
+  const { data: assessmentsData = { upcoming: [], completed: [] }, isLoading } = useQuery({
+    queryKey: ['student-assessments'],
+    queryFn: async () => {
+      const res = await api.getStudentAssessments()
+      return res.data.data
+    }
+  })
+
+  const { data: subjects = [] } = useQuery({
+    queryKey: ['student-subjects-list'],
+    queryFn: async () => {
+      const res = await api.getStudentSubjects()
+      return res.data.data.map(s => s.name)
+    }
+  })
 
   // Performance data for charts
   const performanceData = assessmentsData.completed.map(assessment => ({
     assessment: assessment.title.split(' - ')[0],
     myScore: assessment.percentage,
-    classAverage: (assessment.classAverage / assessment.totalMarks) * 100
+    classAverage: assessment.classAverage || 75
   }))
 
-  const gradeProgressData = [
-    { month: 'Sep', grade: 82 },
-    { month: 'Oct', grade: 85 },
-    { month: 'Nov', grade: 87 },
-    { month: 'Dec', grade: 86 },
-    { month: 'Jan', grade: 88 }
-  ]
+  const gradeProgressData = assessmentsData.completed.length > 0 
+    ? assessmentsData.completed
+        .slice(0, 6)
+        .reverse()
+        .map(a => ({
+          month: new Date(a.date).toLocaleDateString('en-US', { month: 'short' }),
+          grade: a.percentage
+        }))
+    : []
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -244,10 +258,18 @@ export default function StudentAssessmentsPage() {
                   onChange={(e) => setFilterSubject(e.target.value)}
                 >
                   <option value="all">All Subjects</option>
-                  <option value="Mathematics">Mathematics</option>
-                  <option value="Science">Science</option>
-                  <option value="English">English</option>
-                  <option value="History">History</option>
+                  {subjects.length > 0 ? (
+                    subjects.map(subject => (
+                      <option key={subject} value={subject}>{subject}</option>
+                    ))
+                  ) : (
+                    <>
+                      <option value="Mathematics">Mathematics</option>
+                      <option value="Science">Science</option>
+                      <option value="English">English</option>
+                      <option value="History">History</option>
+                    </>
+                  )}
                 </select>
               </div>
             </div>

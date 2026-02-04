@@ -1,6 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/lib/api'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { 
@@ -38,140 +40,20 @@ const achievementRarityColors = {
 }
 
 export default function StudentGameDashboard({ currentUser, onPlayGame }) {
-  const [availableGames, setAvailableGames] = useState([])
-  const [recentSessions, setRecentSessions] = useState([])
-  const [achievements, setAchievements] = useState([])
-  const [leaderboard, setLeaderboard] = useState([])
-  const [studentProgress, setStudentProgress] = useState(null)
-  const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('games')
 
-  // Mock data - replace with actual API calls
-  useEffect(() => {
-    setTimeout(() => {
-      // Mock available games
-      setAvailableGames([
-        {
-          id: 1,
-          title: 'Mathematics Quiz - Algebra Basics',
-          description: 'Test your knowledge of basic algebraic concepts',
-          subject: { name: 'Mathematics' },
-          gameType: 'quiz',
-          difficulty: 'medium',
-          pointsReward: 15,
-          timeLimit: 20,
-          playCount: 45,
-          averageScore: 78
-        },
-        {
-          id: 2,
-          title: 'English Vocabulary Flashcards',
-          description: 'Learn new vocabulary words',
-          subject: { name: 'English' },
-          gameType: 'flashcards',
-          difficulty: 'easy',
-          pointsReward: 10,
-          timeLimit: 15,
-          playCount: 32,
-          averageScore: 85
-        },
-        {
-          id: 3,
-          title: 'Science Elements Matching',
-          description: 'Match chemical elements with their symbols',
-          subject: { name: 'Science' },
-          gameType: 'matching',
-          difficulty: 'hard',
-          pointsReward: 20,
-          timeLimit: 25,
-          playCount: 28,
-          averageScore: 72
-        }
-      ])
+  const { data: dashboardData, isLoading: loading } = useQuery({
+    queryKey: ['student-game-dashboard'],
+    queryFn: () => api.getStudentGameDashboard().then(res => res.data.data)
+  })
 
-      // Mock student progress
-      setStudentProgress({
-        totalPoints: 1250,
-        level: 8,
-        experiencePoints: 1250,
-        nextLevelXP: 1600,
-        currentStreak: 5,
-        longestStreak: 12,
-        gamesPlayed: 23,
-        averageScore: 82,
-        rank: { class: 3, school: 15 }
-      })
-
-      // Mock achievements
-      setAchievements([
-        {
-          id: 1,
-          name: 'First Steps',
-          description: 'Complete your first game',
-          icon: '🎯',
-          rarity: 'common',
-          earnedAt: '2024-01-15',
-          pointsReward: 10
-        },
-        {
-          id: 2,
-          name: 'Perfect Score',
-          description: 'Get 100% on any game',
-          icon: '⭐',
-          rarity: 'rare',
-          earnedAt: '2024-01-18',
-          pointsReward: 50
-        },
-        {
-          id: 3,
-          name: 'Speed Demon',
-          description: 'Complete a game in under 5 minutes',
-          icon: '⚡',
-          rarity: 'epic',
-          earnedAt: '2024-01-20',
-          pointsReward: 30
-        }
-      ])
-
-      // Mock recent sessions
-      setRecentSessions([
-        {
-          id: 1,
-          game: { title: 'Math Quiz', gameType: 'quiz' },
-          score: 85,
-          percentage: 85,
-          pointsEarned: 15,
-          completedAt: '2024-01-22'
-        },
-        {
-          id: 2,
-          game: { title: 'English Flashcards', gameType: 'flashcards' },
-          score: 92,
-          percentage: 92,
-          pointsEarned: 12,
-          completedAt: '2024-01-21'
-        }
-      ])
-
-      // Mock leaderboard
-      setLeaderboard([
-        { rank: 1, studentName: 'Alice Johnson', totalPoints: 1850, gamesPlayed: 35 },
-        { rank: 2, studentName: 'Bob Smith', totalPoints: 1720, gamesPlayed: 32 },
-        { rank: 3, studentName: currentUser?.name || 'You', totalPoints: 1250, gamesPlayed: 23 },
-        { rank: 4, studentName: 'Carol Davis', totalPoints: 1180, gamesPlayed: 28 },
-        { rank: 5, studentName: 'David Wilson', totalPoints: 1050, gamesPlayed: 25 }
-      ])
-
-      setLoading(false)
-    }, 1000)
-  }, [currentUser])
-
-  const getProgressPercentage = () => {
-    if (!studentProgress) return 0
-    const currentLevelXP = studentProgress.experiencePoints - (studentProgress.level - 1) * 200
-    const levelXPRange = studentProgress.nextLevelXP - (studentProgress.level - 1) * 200
-    return Math.round((currentLevelXP / levelXPRange) * 100)
-  }
+  const {
+    availableGames = [],
+    studentProgress = null,
+    achievements = [],
+    recentSessions = [],
+    leaderboard = []
+  } = dashboardData || {}
 
   const handlePlayGame = (gameId) => {
     // Find the game and pass it to the parent component
@@ -229,12 +111,12 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
               <div className="bg-white/20 rounded-xl p-4 min-w-[200px]">
                 <div className="flex justify-between text-sm mb-2">
                   <span>Progress to Level {(studentProgress?.level || 0) + 1}</span>
-                  <span>{getProgressPercentage()}%</span>
+                  <span>{studentProgress?.progressPercentage || 0}%</span>
                 </div>
                 <div className="w-full bg-white/20 rounded-full h-3">
                   <div 
                     className="bg-yellow-300 h-3 rounded-full transition-all duration-500"
-                    style={{ width: `${getProgressPercentage()}%` }}
+                    style={{ width: `${studentProgress?.progressPercentage || 0}%` }}
                   ></div>
                 </div>
                 <p className="text-xs text-blue-100 mt-2">

@@ -8,19 +8,19 @@ export async function GET(request) {
       totalStudents,
       totalTeachers,
       totalHods,
-      totalResults
+      totalResults,
+      totalClasses,
+      totalSubjects,
+      totalAssessments
     ] = await Promise.all([
       prisma.user.count({ where: { role: 'student' } }),
       prisma.user.count({ where: { role: 'teacher' } }),
       prisma.user.count({ where: { role: 'hod' } }),
-      prisma.result.count()
+      prisma.result.count(),
+      prisma.class.count(),
+      prisma.subject.count(),
+      prisma.assessment.count()
     ])
-
-    // Approximate counts for things not yet fully modeled in Prisma
-    // In a full migration, we would query the Class and Subject tables
-    const totalClasses = 4 
-    const totalSubjects = 5
-    const totalAssessments = totalResults // Using results count as proxy
 
     const stats = {
       totalStudents,
@@ -32,8 +32,15 @@ export async function GET(request) {
     }
 
     // Calculate additional metrics
-    const attendanceRate = 95 // Mock for now
-    const averageGrade = 0 // TODO: Calculate from result records
+    const attendanceRate = 0 // Placeholder: Requires Attendance model
+    
+    // Calculate average grade
+    const results = await prisma.result.aggregate({
+      _avg: {
+        score: true
+      }
+    })
+    const averageGrade = results._avg.score ? Math.round(results._avg.score) : 0
 
     return NextResponse.json({
       success: true,

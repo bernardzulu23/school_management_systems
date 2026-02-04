@@ -26,11 +26,30 @@ export default function ResultEntryPage() {
   // Data state
   const [students, setStudents] = useState([])
   const [scores, setScores] = useState({}) // Map of studentId -> score
+  const [subjects, setSubjects] = useState([])
 
   // Mock data for dropdowns (replace with API calls later)
   const terms = ['Term 1 2025', 'Term 2 2025', 'Term 3 2025']
   const classes = ['Form 1A', 'Form 1B', 'Form 2A', 'Form 2B']
-  const subjects = ['Mathematics', 'English', 'Science', 'Social Studies', 'ICT']
+
+  // Fetch subjects on mount
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const response = await fetch('/api/subjects')
+        if (response.ok) {
+          const data = await response.json()
+          if (data.success) {
+            setSubjects(data.data.map(s => s.name))
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch subjects', error)
+        toast.error('Failed to load subjects')
+      }
+    }
+    fetchSubjects()
+  }, [])
 
   // Mock fetch students when class is selected
   useEffect(() => {

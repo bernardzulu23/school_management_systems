@@ -36,7 +36,8 @@ export default function SmartDashboardIntegration({
   userRole = 'teacher', 
   userData = {}, 
   studentData = [], 
-  classData = {} 
+  classData = {},
+  onNavigate
 }) {
   // PWA and Offline Management
   const [pwaManager] = useState(() => new PWAManager())
@@ -190,14 +191,27 @@ export default function SmartDashboardIntegration({
             Your Progress
           </h3>
           <div className="flex items-center space-x-2">
-            <Crown className="w-4 h-4 text-purple-500" />
-            <span className="text-sm font-medium">
-              Level {gamificationData.level?.level || 1} - {gamificationData.level?.name || 'Beginner'}
-            </span>
+              <Crown className="w-4 h-4 text-purple-500" />
+              <span className="text-sm font-medium">
+                Level {gamificationData.level?.level || 1} - {gamificationData.level?.name || 'Beginner'}
+              </span>
+            </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div className="mb-4">
+            <div className="flex justify-between text-sm mb-1">
+              <span className="text-slate-600">Progress to Level {(gamificationData.level?.level || 1) + 1}</span>
+              <span className="font-medium text-purple-600">{gamificationData.nextLevelPoints || 100} XP to go</span>
+            </div>
+            <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-500"
+                style={{ width: `${Math.min(100, Math.max(0, ((gamificationData.level?.requirement || 100) - (gamificationData.nextLevelPoints || 0)) / (gamificationData.level?.requirement || 100) * 100))}%` }} 
+              />
+            </div>
+          </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div className="text-center p-3 bg-white rounded-lg">
             <div className="text-2xl font-bold text-blue-600">{gamificationData.totalPoints || 0}</div>
             <div className="text-sm text-gray-600">Total Points</div>
@@ -207,10 +221,6 @@ export default function SmartDashboardIntegration({
               {gamificationData.achievements?.earnedAchievements?.length || 0}
             </div>
             <div className="text-sm text-gray-600">Achievements</div>
-          </div>
-          <div className="text-center p-3 bg-white rounded-lg">
-            <div className="text-2xl font-bold text-purple-600">{gamificationData.nextLevelPoints || 0}</div>
-            <div className="text-sm text-gray-600">To Next Level</div>
           </div>
         </div>
 
@@ -404,8 +414,11 @@ export default function SmartDashboardIntegration({
           </Button>
           
           {userRole === 'student' && (
-            <Button className="btn-secondary btn-sm">
-              <Gamepad2 className="w-4 h-4" />
+            <Button 
+              className="btn-secondary btn-sm"
+              onClick={() => onNavigate && onNavigate('games')}
+            >
+              <Gamepad2 className="w-4 h-4 mr-2" />
               Games
             </Button>
           )}

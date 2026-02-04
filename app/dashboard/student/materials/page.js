@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -9,112 +9,61 @@ import {
   ArrowLeft, FileText, Video, Image, File, Bookmark
 } from 'lucide-react'
 import Link from 'next/link'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { api } from '@/lib/api'
+import toast from 'react-hot-toast'
 
 export default function StudyMaterialsPage() {
   const [activeTab, setActiveTab] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [filterSubject, setFilterSubject] = useState('all')
   const [filterType, setFilterType] = useState('all')
-
-  // Sample study materials data
-  const studyMaterials = [
-    {
-      id: 1,
-      title: 'Algebra Fundamentals - Complete Guide',
-      subject: 'Mathematics',
-      teacher: 'Ms. Sarah Johnson',
-      type: 'PDF',
-      size: '2.5 MB',
-      uploadDate: '2024-01-20',
-      downloads: 45,
-      views: 128,
-      rating: 4.8,
-      description: 'Comprehensive guide covering all fundamental algebraic concepts and problem-solving techniques',
-      tags: ['algebra', 'fundamentals', 'equations', 'problem-solving'],
-      isBookmarked: true,
-      isDownloaded: true
-    },
-    {
-      id: 2,
-      title: 'Geometry Interactive Tutorial',
-      subject: 'Mathematics',
-      teacher: 'Ms. Sarah Johnson',
-      type: 'Video',
-      size: '125 MB',
-      uploadDate: '2024-01-18',
-      downloads: 32,
-      views: 89,
-      rating: 4.6,
-      description: 'Interactive video tutorial explaining geometric shapes, properties, and practical applications',
-      tags: ['geometry', 'shapes', 'tutorial', 'interactive'],
-      isBookmarked: false,
-      isDownloaded: false
-    },
-    {
-      id: 3,
-      title: 'English Literature Analysis Guide',
-      subject: 'English',
-      teacher: 'Mr. David Wilson',
-      type: 'PDF',
-      size: '3.2 MB',
-      uploadDate: '2024-01-15',
-      downloads: 67,
-      views: 156,
-      rating: 4.9,
-      description: 'Detailed analysis techniques for literature study and essay writing',
-      tags: ['literature', 'analysis', 'essay', 'writing'],
-      isBookmarked: true,
-      isDownloaded: true
-    },
-    {
-      id: 4,
-      title: 'Science Lab Experiments Collection',
-      subject: 'Science',
-      teacher: 'Dr. Michael Brown',
-      type: 'ZIP',
-      size: '15.8 MB',
-      uploadDate: '2024-01-22',
-      downloads: 23,
-      views: 67,
-      rating: 4.7,
-      description: 'Complete collection of lab experiments with procedures and safety guidelines',
-      tags: ['science', 'experiments', 'lab', 'procedures'],
-      isBookmarked: false,
-      isDownloaded: false
-    },
-    {
-      id: 5,
-      title: 'History Timeline Presentation',
-      subject: 'History',
-      teacher: 'Ms. Emily Davis',
-      type: 'PowerPoint',
-      size: '8.3 MB',
-      uploadDate: '2024-01-19',
-      downloads: 38,
-      views: 94,
-      rating: 4.5,
-      description: 'Visual timeline of major historical events and their significance',
-      tags: ['history', 'timeline', 'events', 'presentation'],
-      isBookmarked: true,
-      isDownloaded: false
-    },
-    {
-      id: 6,
-      title: 'Physics Formula Reference Sheet',
-      subject: 'Science',
-      teacher: 'Dr. Michael Brown',
-      type: 'PDF',
-      size: '1.2 MB',
-      uploadDate: '2024-01-17',
-      downloads: 89,
-      views: 203,
-      rating: 4.9,
-      description: 'Quick reference sheet with all essential physics formulas and constants',
-      tags: ['physics', 'formulas', 'reference', 'constants'],
-      isBookmarked: true,
-      isDownloaded: true
+  const queryClient = useQueryClient()
+  
+  const { data: studyMaterials = [], isLoading } = useQuery({
+    queryKey: ['student-materials'],
+    queryFn: async () => {
+      const res = await api.getStudentMaterials()
+      return res.data.data
     }
-  ]
+  })
+
+  const bookmarkMutation = useMutation({
+    mutationFn: (id) => api.toggleMaterialBookmark(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['student-materials'])
+      toast.success('Bookmark updated')
+    },
+    onError: () => {
+      toast.error('Failed to update bookmark')
+    }
+  })
+
+  const downloadMutation = useMutation({
+    mutationFn: (id) => api.trackMaterialDownload(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['student-materials'])
+    }
+  })
+
+  const handleDownload = (material) => {
+    downloadMutation.mutate(material.id)
+    // Create fake download link
+    const link = document.createElement('a')
+    link.href = material.fileUrl || '#'
+    link.download = material.title
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    toast.success('Download started')
+  }
+
+  const handleBookmark = (id) => {
+    bookmarkMutation.mutate(id)
+  }
+
+  // Extract unique subjects from materials
+  const subjects = [...new Set(studyMaterials.map(m => m.subject))]
 
   const getFileIcon = (type) => {
     switch (type.toLowerCase()) {
@@ -167,6 +116,10 @@ export default function StudyMaterialsPage() {
     downloadedMaterials: studyMaterials.filter(material => material.isDownloaded).length,
     totalDownloads: studyMaterials.reduce((sum, material) => sum + material.downloads, 0)
   }
+
+  const popularMaterials = [...studyMaterials]
+    .sort((a, b) => b.downloads - a.downloads)
+    .slice(0, 3)
 
   const renderStars = (rating) => {
     const stars = []
@@ -315,10 +268,18 @@ export default function StudyMaterialsPage() {
                   onChange={(e) => setFilterSubject(e.target.value)}
                 >
                   <option value="all">All Subjects</option>
-                  <option value="Mathematics">Mathematics</option>
-                  <option value="Science">Science</option>
-                  <option value="English">English</option>
-                  <option value="History">History</option>
+                  {subjects.length > 0 ? (
+                    subjects.map(subject => (
+                      <option key={subject} value={subject}>{subject}</option>
+                    ))
+                  ) : (
+                    <>
+                      <option value="Mathematics">Mathematics</option>
+                      <option value="Science">Science</option>
+                      <option value="English">English</option>
+                      <option value="History">History</option>
+                    </>
+                  )}
                 </select>
                 <select
                   className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -347,13 +308,18 @@ export default function StudyMaterialsPage() {
                       </div>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <Button size="sm" variant="outline">
-                        <Bookmark className={`h-4 w-4 ${material.isBookmarked ? 'fill-yellow-400 text-yellow-400' : ''}`} />
-                      </Button>
-                    </div>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => handleBookmark(material.id)}
+                      disabled={bookmarkMutation.isPending}
+                    >
+                      <Bookmark className={`h-4 w-4 ${material.isBookmarked ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+                    </Button>
                   </div>
+                </div>
 
-                  <div className="flex items-center space-x-2 mb-3">
+                <div className="flex items-center space-x-2 mb-3">
                     <span className={`px-2 py-1 text-xs rounded-full ${getSubjectColor(material.subject)}`}>
                       {material.subject}
                     </span>
@@ -407,7 +373,12 @@ export default function StudyMaterialsPage() {
                   </div>
 
                   <div className="flex items-center space-x-2">
-                    <Button size="sm" className="flex-1">
+                    <Button 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => handleDownload(material)}
+                      disabled={downloadMutation.isPending}
+                    >
                       <Download className="h-4 w-4 mr-1" />
                       Download
                     </Button>
@@ -459,21 +430,20 @@ export default function StudyMaterialsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="p-3 bg-blue-50 rounded-lg">
-                  <h4 className="font-medium text-blue-800 mb-1">Physics Formula Reference</h4>
-                  <p className="text-sm text-blue-700">89 downloads • 4.9 rating</p>
-                  <p className="text-xs text-blue-600">Science • PDF</p>
-                </div>
-                <div className="p-3 bg-green-50 rounded-lg">
-                  <h4 className="font-medium text-green-800 mb-1">Literature Analysis Guide</h4>
-                  <p className="text-sm text-green-700">67 downloads • 4.9 rating</p>
-                  <p className="text-xs text-green-600">English • PDF</p>
-                </div>
-                <div className="p-3 bg-purple-50 rounded-lg">
-                  <h4 className="font-medium text-purple-800 mb-1">Algebra Fundamentals</h4>
-                  <p className="text-sm text-purple-700">45 downloads • 4.8 rating</p>
-                  <p className="text-xs text-purple-600">Mathematics • PDF</p>
-                </div>
+                {popularMaterials.length > 0 ? (
+                  popularMaterials.map(material => (
+                    <div key={material.id} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                      <h4 className="font-medium text-gray-900 mb-1 line-clamp-1">{material.title}</h4>
+                      <div className="flex justify-between text-xs text-gray-600">
+                        <span>{material.downloads} downloads</span>
+                        <span className="flex items-center"><Star className="h-3 w-3 fill-yellow-400 text-yellow-400 mr-1"/> {material.rating}</span>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">{material.subject} • {material.type}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500">No materials available yet.</p>
+                )}
               </div>
             </CardContent>
           </Card>

@@ -23,6 +23,9 @@ import Link from 'next/link'
 import LearningPathPage from './learning-path/page'
 import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeachingHub'
 import { SCHOOL_SUBJECTS, getSubjectsByIds } from '@/data/subjects'
+import toast from 'react-hot-toast'
+
+// Games data is now fetched dynamically via API
 
 export default function StudentDashboard() {
   const [activeTab, setActiveTab] = useState('overview')
@@ -61,10 +64,27 @@ export default function StudentDashboard() {
     queryFn: () => api.getDashboardStats().then(res => res.data),
   })
 
-  const { data: dashboardData } = useQuery({
+  const { data: dashboardData, isLoading } = useQuery({
     queryKey: ['student-dashboard'],
-    queryFn: () => api.getStudentDashboard().then(res => res.data),
+    queryFn: async () => {
+      const response = await api.getStudentDashboard()
+      return response.data.data
+    },
   })
+
+  // Update stats when data is loaded
+  useEffect(() => {
+    if (dashboardData?.stats) {
+      setDashboardStats({
+        totalSubjects: dashboardData.stats.totalSubjects || 0,
+        totalResults: dashboardData.stats.totalResults || 0,
+        averageGrade: dashboardData.stats.averageGrade || 0,
+        completedGoals: dashboardData.stats.completedGoals || 0,
+        totalGoals: dashboardData.stats.totalGoals || 0,
+        recentMaterials: dashboardData.stats.recentMaterials || 0
+      })
+    }
+  }, [dashboardData])
 
   // Helper function to get achievement icon based on grade
   const getAchievementIcon = (grade) => {
@@ -72,6 +92,17 @@ export default function StudentDashboard() {
       return <Trophy className="h-4 w-4 text-yellow-500" />
     }
     return null
+  }
+
+  // Helper function to get grade from score
+  const getGrade = (score) => {
+    if (!score) return 'N/A'
+    if (score >= 75) return 'A+'
+    if (score >= 70) return 'A'
+    if (score >= 60) return 'B'
+    if (score >= 50) return 'C'
+    if (score >= 40) return 'D'
+    return 'F'
   }
 
   // Game handlers
@@ -163,23 +194,23 @@ export default function StudentDashboard() {
           {/* Tab Content */}
           {activeTab === 'overview' && (
             <div className="space-y-8">
-              {/* Simplified Overview for Testing */}
+              {/* Overview Stats */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="stats-card p-6">
                   <h3 className="text-lg font-semibold text-gray-900">Games</h3>
-                  <p className="text-3xl font-bold text-blue-600">12</p>
+                  <p className="text-3xl font-bold text-blue-600">{dashboardData?.stats?.gamesPlayed || 0}</p>
                 </div>
                 <div className="stats-card p-6">
                   <h3 className="text-lg font-semibold text-gray-900">Achievements</h3>
-                  <p className="text-3xl font-bold text-green-600">8</p>
+                  <p className="text-3xl font-bold text-green-600">{dashboardData?.stats?.achievements || 0}</p>
                 </div>
                 <div className="stats-card p-6">
                   <h3 className="text-lg font-semibold text-gray-900">Level</h3>
-                  <p className="text-3xl font-bold text-purple-600">5</p>
+                  <p className="text-3xl font-bold text-purple-600">{dashboardData?.stats?.level || 1}</p>
                 </div>
                 <div className="stats-card p-6">
                   <h3 className="text-lg font-semibold text-gray-900">Points</h3>
-                  <p className="text-3xl font-bold text-yellow-600">1250</p>
+                  <p className="text-3xl font-bold text-yellow-600">{dashboardData?.stats?.points || 0}</p>
                 </div>
               </div>
 
@@ -281,7 +312,7 @@ export default function StudentDashboard() {
                       <Award className="h-10 w-10 text-white" />
                     </div>
                     <h3 className="font-bold text-white text-lg">Overall Grade</h3>
-                    <p className="text-3xl font-bold text-green-400 mt-2">B+</p>
+                    <p className="text-3xl font-bold text-green-400 mt-2">{getGrade(dashboardStats.averageGrade)}</p>
                     <p className="text-slate-300 text-sm mt-1">Above Average</p>
                   </div>
                   <div className="text-center">
@@ -297,7 +328,7 @@ export default function StudentDashboard() {
                       <Calendar className="h-10 w-10 text-white" />
                     </div>
                     <h3 className="font-bold text-white text-lg">Attendance</h3>
-                    <p className="text-3xl font-bold text-purple-400 mt-2">95%</p>
+                    <p className="text-3xl font-bold text-purple-400 mt-2">{dashboardData?.stats?.attendanceRate || 'N/A'}</p>
                     <p className="text-slate-300 text-sm mt-1">This semester</p>
                   </div>
                 </div>
@@ -362,12 +393,8 @@ export default function StudentDashboard() {
               <CardContent>
                 <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
                   <div className="space-y-4">
-                    {/* Mock upcoming assessments data */}
-                    {[
-                      { id: 1, title: 'Mathematics Mid-term', subject: 'Mathematics', type: 'exam', start_date: '2024-03-15', duration_minutes: 120 },
-                      { id: 2, title: 'English Essay', subject: 'English', type: 'assignment', start_date: '2024-03-18', duration_minutes: 90 },
-                      { id: 3, title: 'Science Lab Test', subject: 'Science', type: 'practical', start_date: '2024-03-20', duration_minutes: 60 }
-                    ].map((assessment) => (
+                    {/* Upcoming assessments data */}
+                    {dashboardData?.upcoming_assessments?.map((assessment) => (
                       <div key={assessment.id} className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl hover:bg-slate-700/80 transition-colors duration-200">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -425,31 +452,36 @@ export default function StudentDashboard() {
                   {/* Goals Overview */}
                   <div className="space-y-4">
                     <h3 className="text-lg font-bold text-white mb-4">Academic Goals</h3>
-                    {[
-                      { id: 1, title: 'Improve Math Grade to A', progress: 75, status: 'in-progress' },
-                      { id: 2, title: 'Complete Science Project', progress: 90, status: 'near-completion' },
-                      { id: 3, title: 'Read 5 Books This Term', progress: 60, status: 'in-progress' },
-                      { id: 4, title: 'Perfect Attendance', progress: 100, status: 'completed' }
-                    ].map((goal) => (
-                      <div key={goal.id} className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-semibold text-white text-sm">{goal.title}</h4>
-                          {goal.status === 'completed' && (
-                            <CheckCircle className="h-5 w-5 text-green-400" />
-                          )}
+                    {(dashboardData?.goals && dashboardData.goals.length > 0) ? (
+                      dashboardData.goals.map((goal) => (
+                        <div key={goal.id} className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="font-semibold text-white text-sm">{goal.title}</h4>
+                            {goal.status === 'completed' && (
+                              <CheckCircle className="h-5 w-5 text-green-400" />
+                            )}
+                          </div>
+                          <div className="w-full bg-slate-600/60 rounded-full h-2 mb-2">
+                            <div
+                              className={`h-2 rounded-full ${
+                                goal.progress === 100 ? 'bg-green-500' :
+                                goal.progress >= 75 ? 'bg-yellow-500' : 'bg-blue-500'
+                              }`}
+                              style={{ width: `${goal.progress}%` }}
+                            ></div>
+                          </div>
+                          <p className="text-slate-300 text-xs">{goal.progress}% Complete</p>
                         </div>
-                        <div className="w-full bg-slate-600/60 rounded-full h-2 mb-2">
-                          <div
-                            className={`h-2 rounded-full ${
-                              goal.progress === 100 ? 'bg-green-500' :
-                              goal.progress >= 75 ? 'bg-yellow-500' : 'bg-blue-500'
-                            }`}
-                            style={{ width: `${goal.progress}%` }}
-                          ></div>
-                        </div>
-                        <p className="text-slate-300 text-xs">{goal.progress}% Complete</p>
+                      ))
+                    ) : (
+                      <div className="text-center py-6 bg-slate-700/60 border border-slate-600/40 rounded-xl">
+                        <Target className="h-8 w-8 text-slate-400 mx-auto mb-2" />
+                        <p className="text-slate-300 text-sm">No active goals</p>
+                        <Button variant="link" className="text-blue-400 text-xs mt-1">
+                          Create your first goal
+                        </Button>
                       </div>
-                    ))}
+                    )}
                   </div>
 
                   {/* Goals Stats */}
@@ -487,21 +519,9 @@ export default function StudentDashboard() {
             </CardHeader>
             <CardContent>
               <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
-                {(currentUser?.subjects || ['Mathematics', 'English', 'Science', 'History', 'Geography', 'Computer Science']).length > 0 ? (
+                {(dashboardData?.subject_performance || []).length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {(currentUser?.subjects || ['Mathematics', 'English', 'Science', 'History', 'Geography', 'Computer Science']).map((subject, index) => {
-                      // Mock subject performance data
-                      const subjectPerformance = {
-                        'Mathematics': { avgScore: 85, assessments: 8, latestGrade: 'A', teacher: 'Mr. Johnson' },
-                        'English': { avgScore: 78, assessments: 6, latestGrade: 'B+', teacher: 'Ms. Smith' },
-                        'Science': { avgScore: 92, assessments: 7, latestGrade: 'A+', teacher: 'Dr. Brown' },
-                        'History': { avgScore: 76, assessments: 5, latestGrade: 'B', teacher: 'Mr. Davis' },
-                        'Geography': { avgScore: 88, assessments: 6, latestGrade: 'A', teacher: 'Ms. Wilson' },
-                        'Computer Science': { avgScore: 94, assessments: 9, latestGrade: 'A+', teacher: 'Mr. Tech' }
-                      }
-
-                      const performance = subjectPerformance[subject] || { avgScore: 75, assessments: 5, latestGrade: 'B', teacher: 'Teacher' }
-
+                    {dashboardData.subject_performance.map((performance, index) => {
                       return (
                         <div key={index} className="p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl hover:bg-slate-700/80 transition-all duration-300 hover:scale-105 cursor-pointer">
                           <div className="flex items-center justify-between mb-4">
@@ -517,7 +537,7 @@ export default function StudentDashboard() {
                               Grade {performance.latestGrade}
                             </div>
                           </div>
-                          <h3 className="text-white font-bold text-lg mb-2">{subject}</h3>
+                          <h3 className="text-white font-bold text-lg mb-2">{performance.subject}</h3>
                           <p className="text-slate-300 text-sm mb-4">{performance.teacher}</p>
 
                           <div className="space-y-3">
@@ -579,27 +599,21 @@ export default function StudentDashboard() {
             <CardContent>
               <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
                 <div className="space-y-4">
-                  {/* Mock recent results data */}
-                  {[
-                    { id: 1, subject: 'Mathematics', assessment: 'Mid-term Exam', marks_obtained: 85, total_marks: 100, percentage: 85, grade: 'A' },
-                    { id: 2, subject: 'English', assessment: 'Essay Assignment', marks_obtained: 78, total_marks: 100, percentage: 78, grade: 'B+' },
-                    { id: 3, subject: 'Science', assessment: 'Lab Report', marks_obtained: 92, total_marks: 100, percentage: 92, grade: 'A+' },
-                    { id: 4, subject: 'History', assessment: 'Research Project', marks_obtained: 76, total_marks: 100, percentage: 76, grade: 'B' },
-                    { id: 5, subject: 'Geography', assessment: 'Map Analysis', marks_obtained: 88, total_marks: 100, percentage: 88, grade: 'A' }
-                  ].map((result) => (
+                  {/* Recent Results Data */}
+                  {(dashboardData?.recent_results || []).map((result) => (
                     <div key={result.id} className="flex items-center justify-between p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl hover:bg-slate-700/80 transition-colors duration-200">
                       <div className="flex items-center space-x-4">
                         <div className="backdrop-blur-md bg-blue-600/60 border border-blue-400/50 rounded-xl p-3">
                           <BookOpen className="h-6 w-6 text-white" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-white">{result.subject}</h4>
-                          <p className="text-slate-300 text-sm">{result.assessment}</p>
+                          <h4 className="font-semibold text-white">{result.subject?.name || 'Subject'}</h4>
+                          <p className="text-slate-300 text-sm">{result.comments || 'Assessment'}</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-xl font-bold text-white">{result.marks_obtained}/{result.total_marks}</div>
-                        <div className="text-lg font-semibold text-blue-400">{result.percentage}%</div>
+                        <div className="text-xl font-bold text-white">{result.score}/100</div>
+                        <div className="text-lg font-semibold text-blue-400">{result.score}%</div>
                         <div className={`text-xs px-3 py-1 rounded-full font-medium flex items-center ${
                           result.grade === 'A+' || result.grade === 'A'
                             ? 'bg-green-600/60 text-green-100 border border-green-400/50'
@@ -708,13 +722,8 @@ export default function StudentDashboard() {
               <CardContent>
                 <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
                   <div className="space-y-4">
-                    {/* Mock study materials */}
-                    {[
-                      { id: 1, title: 'Algebra Fundamentals', subject: 'Mathematics', type: 'PDF', size: '2.5 MB' },
-                      { id: 2, title: 'Shakespeare Analysis', subject: 'English', type: 'Document', size: '1.8 MB' },
-                      { id: 3, title: 'Chemistry Lab Manual', subject: 'Science', type: 'PDF', size: '4.2 MB' },
-                      { id: 4, title: 'World War II Timeline', subject: 'History', type: 'Presentation', size: '3.1 MB' }
-                    ].map((material) => (
+                    {/* Study Materials List */}
+                    {(dashboardData?.study_materials || []).map((material) => (
                       <div key={material.id} className="flex items-center p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl hover:bg-slate-700/80 transition-colors duration-200 cursor-pointer">
                         <div className="backdrop-blur-md bg-green-600/60 border border-green-400/50 rounded-xl p-3 mr-4">
                           <Download className="h-6 w-6 text-white" />
@@ -722,10 +731,12 @@ export default function StudentDashboard() {
                         <div className="flex-1">
                           <h4 className="font-semibold text-white">{material.title}</h4>
                           <p className="text-slate-300 text-sm">{material.subject} • {material.type}</p>
-                          <p className="text-slate-400 text-xs">{material.size}</p>
+                          <p className="text-slate-400 text-xs">{material.fileSize || 'N/A'}</p>
                         </div>
-                        <Button size="sm" className="bg-green-600/60 hover:bg-green-600/80 text-white border border-green-400/50">
-                          Download
+                        <Button size="sm" className="bg-green-600/60 hover:bg-green-600/80 text-white border border-green-400/50" asChild>
+                          <a href={material.fileUrl} target="_blank" rel="noopener noreferrer">
+                            Download
+                          </a>
                         </Button>
                       </div>
                     ))}
@@ -748,36 +759,31 @@ export default function StudentDashboard() {
               <CardContent>
                 <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
                   <div className="space-y-4">
-                    {/* Mock upcoming assessments */}
-                    {[
-                      { id: 1, title: 'Mathematics Final Exam', subject: 'Mathematics', dueDate: '2024-03-25', type: 'Exam', duration: '2 hours' },
-                      { id: 2, title: 'English Essay Submission', subject: 'English', dueDate: '2024-03-22', type: 'Assignment', duration: '1 week' },
-                      { id: 3, title: 'Science Lab Practical', subject: 'Science', dueDate: '2024-03-28', type: 'Practical', duration: '1.5 hours' },
-                      { id: 4, title: 'History Research Project', subject: 'History', dueDate: '2024-03-30', type: 'Project', duration: '2 weeks' }
-                    ].map((assessment) => (
-                      <div key={assessment.id} className="p-4 bg-gradient-to-r from-orange-600/20 to-red-600/20 border border-orange-400/30 rounded-xl">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center space-x-3">
-                            <div className="backdrop-blur-md bg-orange-600/60 border border-orange-400/50 rounded-xl p-2">
-                              <ClipboardList className="h-5 w-5 text-white" />
-                            </div>
-                            <div>
-                              <h4 className="font-semibold text-white text-sm">{assessment.title}</h4>
-                              <p className="text-orange-200 text-xs">{assessment.subject}</p>
-                            </div>
+                    {/* Upcoming Assessments List */}
+                  {(dashboardData?.upcoming_assessments || []).map((assessment) => (
+                    <div key={assessment.id} className="p-4 bg-gradient-to-r from-orange-600/20 to-red-600/20 border border-orange-400/30 rounded-xl">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          <div className="backdrop-blur-md bg-orange-600/60 border border-orange-400/50 rounded-xl p-2">
+                            <ClipboardList className="h-5 w-5 text-white" />
                           </div>
-                          <div className="text-right">
-                            <div className="px-2 py-1 bg-orange-600/60 text-orange-100 border border-orange-400/50 rounded-full text-xs font-medium">
-                              {assessment.type}
-                            </div>
+                          <div>
+                            <h4 className="font-semibold text-white text-sm">{assessment.title}</h4>
+                            <p className="text-orange-200 text-xs">{assessment.subject}</p>
                           </div>
                         </div>
-                        <div className="flex justify-between items-center text-sm">
-                          <span className="text-orange-200">Due: {new Date(assessment.dueDate).toLocaleDateString()}</span>
-                          <span className="text-orange-200">Duration: {assessment.duration}</span>
+                        <div className="text-right">
+                          <div className="px-2 py-1 bg-orange-600/60 text-orange-100 border border-orange-400/50 rounded-full text-xs font-medium">
+                            {assessment.type}
+                          </div>
                         </div>
                       </div>
-                    ))}
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-orange-200">Due: {new Date(assessment.start_date).toLocaleDateString()}</span>
+                        <span className="text-orange-200">Duration: {assessment.duration_minutes} mins</span>
+                      </div>
+                    </div>
+                  ))}
                   </div>
                 </div>
               </CardContent>
@@ -795,34 +801,34 @@ export default function StudentDashboard() {
             <CardContent>
               <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {/* Mock emergency contact data */}
+                  {/* Emergency contact data from API */}
                   <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl">
                     <div className="flex items-center mb-2">
                       <User className="h-4 w-4 text-red-400 mr-2" />
                       <span className="text-slate-300 text-sm font-medium">Full Name</span>
                     </div>
-                    <p className="text-white font-semibold">Mrs. Jane Smith</p>
+                    <p className="text-white font-semibold">{dashboardData?.student?.emergency_contact?.name || 'Not provided'}</p>
                   </div>
                   <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl">
                     <div className="flex items-center mb-2">
                       <User className="h-4 w-4 text-green-400 mr-2" />
                       <span className="text-slate-300 text-sm font-medium">Relationship</span>
                     </div>
-                    <p className="text-white font-semibold">Mother</p>
+                    <p className="text-white font-semibold">{dashboardData?.student?.emergency_contact?.relationship || 'Not provided'}</p>
                   </div>
                   <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl">
                     <div className="flex items-center mb-2">
                       <Phone className="h-4 w-4 text-blue-400 mr-2" />
                       <span className="text-slate-300 text-sm font-medium">Phone Number</span>
                     </div>
-                    <p className="text-white font-semibold">+1 (555) 123-4567</p>
+                    <p className="text-white font-semibold">{dashboardData?.student?.emergency_contact?.phone || 'Not provided'}</p>
                   </div>
                   <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl">
                     <div className="flex items-center mb-2">
                       <Home className="h-4 w-4 text-purple-400 mr-2" />
                       <span className="text-slate-300 text-sm font-medium">Location</span>
                     </div>
-                    <p className="text-white font-semibold">Downtown, City Center</p>
+                    <p className="text-white font-semibold">{dashboardData?.student?.emergency_contact?.address || 'Not provided'}</p>
                   </div>
                 </div>
               </div>
@@ -861,44 +867,62 @@ export default function StudentDashboard() {
                   <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                     <h4 className="font-semibold text-blue-900 mb-2">📚 Digital Library</h4>
                     <p className="text-blue-700 text-sm">Access thousands of books offline</p>
-                    <button className="mt-2 bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                    <Link 
+                      href="/dashboard/student/materials"
+                      className="mt-2 inline-block text-center bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 w-full transition-colors"
+                    >
                       Open Library
-                    </button>
+                    </Link>
                   </div>
                   <div className="bg-green-50 p-4 rounded-lg border border-green-200">
                     <h4 className="font-semibold text-green-900 mb-2">👥 Study Groups</h4>
                     <p className="text-green-700 text-sm">Join peer learning groups</p>
-                    <button className="mt-2 bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
+                    <Link 
+                      href="/dashboard/student/study-groups"
+                      className="mt-2 inline-block text-center bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 w-full transition-colors"
+                    >
                       Find Groups
-                    </button>
+                    </Link>
                   </div>
                   <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
                     <h4 className="font-semibold text-purple-900 mb-2">🧠 Learning Paths</h4>
                     <p className="text-purple-700 text-sm">Adaptive learning routes</p>
-                    <button className="mt-2 bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700">
+                    <button 
+                      onClick={() => setActiveTab('learning-path')}
+                      className="mt-2 bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700 w-full transition-colors"
+                    >
                       Start Learning
                     </button>
                   </div>
                   <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
                     <h4 className="font-semibold text-yellow-900 mb-2">🎯 Goal Setting</h4>
                     <p className="text-yellow-700 text-sm">Track academic goals</p>
-                    <button className="mt-2 bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700">
+                    <Link 
+                      href="/dashboard/student/goals"
+                      className="mt-2 inline-block text-center bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700 w-full transition-colors"
+                    >
                       Set Goals
-                    </button>
+                    </Link>
                   </div>
                   <div className="bg-red-50 p-4 rounded-lg border border-red-200">
                     <h4 className="font-semibold text-red-900 mb-2">📝 Study Tools</h4>
                     <p className="text-red-700 text-sm">Flashcards, notes, calculators</p>
-                    <button className="mt-2 bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">
+                    <Link 
+                      href="/dashboard/student/study-tools"
+                      className="mt-2 inline-block text-center bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 w-full transition-colors"
+                    >
                       Open Tools
-                    </button>
+                    </Link>
                   </div>
                   <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
                     <h4 className="font-semibold text-indigo-900 mb-2">🌍 Cultural Learning</h4>
                     <p className="text-indigo-700 text-sm">Zambian history & languages</p>
-                    <button className="mt-2 bg-indigo-600 text-white px-3 py-1 rounded text-sm hover:bg-indigo-700">
+                    <Link 
+                      href="/dashboard/student/cultural"
+                      className="mt-2 inline-block text-center bg-indigo-600 text-white px-3 py-1 rounded text-sm hover:bg-indigo-700 w-full transition-colors"
+                    >
                       Explore Culture
-                    </button>
+                    </Link>
                   </div>
                 </div>
 
@@ -968,14 +992,7 @@ export default function StudentDashboard() {
 
                   <div className="flex space-x-2">
                     <Button
-                      onClick={() => window.open('/test-pwa.html', '_blank')}
-                      className="btn-secondary btn-sm"
-                    >
-                      <Crown className="w-4 h-4 mr-1" />
-                      Test PWA
-                    </Button>
-                    <Button
-                      onClick={() => window.open('/test-reports.html', '_blank')}
+                      onClick={() => toast.success('Generating performance report...')}
                       className="btn-secondary btn-sm"
                     >
                       <Download className="w-4 h-4 mr-1" />
@@ -1005,6 +1022,7 @@ export default function StudentDashboard() {
                   studentCount: 0,
                   subjects: []
                 }}
+                onNavigate={(tab) => setActiveTab(tab)}
               />
             </div>
           )}
@@ -1017,26 +1035,30 @@ export default function StudentDashboard() {
                 <p className="text-gray-600 mb-6">Play interactive games to learn and earn points!</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="stats-card p-6 text-center">
-                    <div className="text-4xl mb-4">❓</div>
-                    <h3 className="font-bold text-lg text-gray-900">Math Quiz</h3>
-                    <p className="text-gray-600 text-sm mb-4">Test your algebra skills</p>
-                    <button className="btn-primary w-full">Play Now</button>
-                  </div>
-
-                  <div className="stats-card p-6 text-center">
-                    <div className="text-4xl mb-4">📚</div>
-                    <h3 className="font-bold text-lg text-gray-900">English Flashcards</h3>
-                    <p className="text-gray-600 text-sm mb-4">Learn new vocabulary</p>
-                    <button className="btn-primary w-full">Play Now</button>
-                  </div>
-
-                  <div className="stats-card p-6 text-center">
-                    <div className="text-4xl mb-4">🔗</div>
-                    <h3 className="font-bold text-lg text-gray-900">Science Matching</h3>
-                    <p className="text-gray-600 text-sm mb-4">Match elements and symbols</p>
-                    <button className="btn-primary w-full">Play Now</button>
-                  </div>
+                  {dashboardData?.games?.length > 0 ? (
+                    dashboardData.games.map((game) => (
+                      <div key={game.id} className="stats-card p-6 text-center">
+                        <div className="text-4xl mb-4">
+                          {game.type === 'quiz' ? '❓' : 
+                           game.type === 'puzzle' ? '🧩' : 
+                           game.subject?.toLowerCase().includes('science') ? '🔬' : 
+                           game.subject?.toLowerCase().includes('math') ? '📐' : '🎮'}
+                        </div>
+                        <h3 className="font-bold text-lg text-gray-900">{game.title}</h3>
+                        <p className="text-gray-600 text-sm mb-4">{game.description || 'Educational Game'}</p>
+                        <button 
+                          onClick={() => setCurrentGame(game)}
+                          className="btn-primary w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                          Play Now
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="col-span-3 text-center py-12 text-gray-500">
+                      No games available at the moment. Check back later!
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1050,33 +1072,24 @@ export default function StudentDashboard() {
                 <p className="text-gray-600 mb-6">Badges and rewards you've earned</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                  <div className="stats-card p-6 text-center">
-                    <div className="text-4xl mb-4">🎯</div>
-                    <h3 className="font-bold text-lg text-gray-900">First Steps</h3>
-                    <p className="text-gray-600 text-sm">Complete your first game</p>
-                    <span className="inline-block mt-2 px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs">Earned</span>
-                  </div>
-
-                  <div className="stats-card p-6 text-center">
-                    <div className="text-4xl mb-4">⭐</div>
-                    <h3 className="font-bold text-lg text-gray-900">Perfect Score</h3>
-                    <p className="text-gray-600 text-sm">Get 100% on any game</p>
-                    <span className="inline-block mt-2 px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs">Earned</span>
-                  </div>
-
-                  <div className="stats-card p-6 text-center opacity-50">
-                    <div className="text-4xl mb-4">👑</div>
-                    <h3 className="font-bold text-lg text-gray-900">Game Master</h3>
-                    <p className="text-gray-600 text-sm">Play 50 games</p>
-                    <span className="inline-block mt-2 px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs">23/50</span>
-                  </div>
-
-                  <div className="stats-card p-6 text-center opacity-50">
-                    <div className="text-4xl mb-4">🔥</div>
-                    <h3 className="font-bold text-lg text-gray-900">Streak Master</h3>
-                    <p className="text-gray-600 text-sm">10-day streak</p>
-                    <span className="inline-block mt-2 px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs">5/10</span>
-                  </div>
+                  {dashboardData?.achievements_list?.length > 0 ? (
+                    dashboardData.achievements_list.map((achievement) => (
+                      <div key={achievement.id} className="stats-card p-6 text-center">
+                        <div className="text-4xl mb-4">{achievement.icon || '🏆'}</div>
+                        <h3 className="font-bold text-lg text-gray-900">{achievement.name}</h3>
+                        <p className="text-gray-600 text-sm">{achievement.description}</p>
+                        <span className="inline-block mt-2 px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs">
+                          Earned {new Date(achievement.awardedAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="col-span-4 text-center py-12">
+                      <div className="text-6xl mb-4">🏆</div>
+                      <h3 className="text-xl font-bold text-gray-900">No Achievements Yet</h3>
+                      <p className="text-gray-600 mt-2">Play games and complete lessons to earn badges!</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1095,21 +1108,9 @@ export default function StudentDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
-                    {currentUser.subjects && currentUser.subjects.length > 0 ? (
+                    {(dashboardData?.subject_performance || []).length > 0 ? (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {currentUser.subjects.map((subject, index) => {
-                          // Mock subject performance data
-                          const subjectPerformance = {
-                            'Mathematics': { avgScore: 85, assessments: 8, latestGrade: 'A', teacher: 'Mr. Johnson' },
-                            'English': { avgScore: 78, assessments: 6, latestGrade: 'B+', teacher: 'Ms. Smith' },
-                            'Science': { avgScore: 92, assessments: 7, latestGrade: 'A+', teacher: 'Dr. Brown' },
-                            'History': { avgScore: 76, assessments: 5, latestGrade: 'B', teacher: 'Mr. Davis' },
-                            'Geography': { avgScore: 88, assessments: 6, latestGrade: 'A', teacher: 'Ms. Wilson' },
-                            'Computer Science': { avgScore: 94, assessments: 9, latestGrade: 'A+', teacher: 'Mr. Tech' }
-                          }
-
-                          const performance = subjectPerformance[subject] || { avgScore: 75, assessments: 5, latestGrade: 'B', teacher: 'Teacher' }
-
+                        {dashboardData.subject_performance.map((performance, index) => {
                           return (
                             <div key={index} className="p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl hover:bg-slate-700/80 transition-all duration-300 hover:scale-105 cursor-pointer">
                               <div className="flex items-center justify-between mb-4">
@@ -1125,7 +1126,7 @@ export default function StudentDashboard() {
                                   Grade {performance.latestGrade}
                                 </div>
                               </div>
-                              <h3 className="text-white font-bold text-lg mb-2">{subject}</h3>
+                              <h3 className="text-white font-bold text-lg mb-2">{performance.subject}</h3>
                               <p className="text-slate-300 text-sm mb-4">{performance.teacher}</p>
 
                               <div className="space-y-3">

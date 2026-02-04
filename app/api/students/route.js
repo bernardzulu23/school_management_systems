@@ -85,6 +85,122 @@ export async function POST(request) {
   }
 }
 
+export async function PUT(request) {
+  try {
+    const data = await request.json()
+    const { id, ...updateData } = data
+
+    if (!id) {
+      return NextResponse.json({ error: 'Student ID is required' }, { status: 400 })
+    }
+
+    // Separate User and Student data
+    const {
+      name,
+      email,
+      class_id, // Maps to 'class'
+      selected_subjects,
+      ...studentData
+    } = updateData
+
+    // Transaction to update both
+    const result = await prisma.$transaction(async (tx) => {
+      // 1. Get Student to find User ID
+      const student = await tx.student.findUnique({
+        where: { id },
+        select: { userId: true }
+      })
+
+      if (!student) throw new Error('Student not found')
+
+      // 2. Update User (if userId exists)
+      if (student.userId && (name || email)) {
+        await tx.user.update({
+          where: { id: student.userId },
+          data: {
+            name,
+            email
+          }
+        })
+      }
+
+      // 3. Update Student Profile
+      const updatedStudent = await tx.student.update({
+        where: { id },
+        data: {
+          ...studentData,
+          name: name, // Student also has name
+          class: class_id, // Map class_id to class
+          selected_subjects: selected_subjects
+        },
+        include: {
+          user: true
+        }
+      })
+
+      return updatedStudent
+    })
+
+    return NextResponse.json({
+      success: true,
+      data: result
+    })
+
+  } catch (error) {
+    console.error('Student update error:', error)
+    return NextResponse.json(
+      { error: error.message || 'Failed to update student' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+
+    if (!id) {
+      return NextResponse.json({ error: 'Student ID is required' }, { status: 400 })
+    }
+
+    // Transaction to delete Student and User
+    await prisma.$transaction(async (tx) => {
+      // 1. Get User ID
+      const student = await tx.student.findUnique({
+        where: { id },
+        select: { userId: true }
+      })
+
+      if (!student) throw new Error('Student not found')
+
+      // 2. Delete Student Profile first
+      await tx.student.delete({
+        where: { id }
+      })
+
+      // 3. Delete User (if linked)
+      if (student.userId) {
+        await tx.user.delete({
+          where: { id: student.userId }
+        })
+      }
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: 'Student deleted successfully'
+    })
+
+  } catch (error) {
+    console.error('Student delete error:', error)
+    return NextResponse.json(
+      { error: error.message || 'Failed to delete student' },
+      { status: 500 }
+    )
+  }
+}
+
 export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,

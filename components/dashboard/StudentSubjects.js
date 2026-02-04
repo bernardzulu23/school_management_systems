@@ -24,99 +24,20 @@ import {
 export default function StudentSubjects({ studentData }) {
   const [selectedSubject, setSelectedSubject] = useState(null)
 
-  // Mock data - replace with actual API calls
-  const studentInfo = {
-    name: 'John Smith',
-    studentId: 'STU2024001',
-    yearGroup: 'Form 3',
-    class: 'Form 3A',
-    overallGrade: 82,
-    ranking: 5,
-    totalSubjects: 8
-  }
+  const student = studentData?.student || {}
+  const stats = studentData?.stats || {}
+  
+  const enrolledSubjects = studentData?.enrolled_subjects || []
 
-  const enrolledSubjects = [
-    {
-      id: 1,
-      name: 'Mathematics',
-      code: 'MATH101',
-      teacher: 'Ms. Sarah Johnson',
-      currentGrade: 88,
-      percentage: 88,
-      trend: 'improving',
-      assignments: 12,
-      completedAssignments: 11,
-      nextAssessment: '2024-02-15',
-      recentGrades: [85, 87, 90, 88, 92],
-      topics: ['Algebra', 'Geometry', 'Statistics', 'Trigonometry'],
-      attendance: 96,
-      status: 'excellent'
-    },
-    {
-      id: 2,
-      name: 'Physics',
-      code: 'PHYS201',
-      teacher: 'Dr. Michael Brown',
-      currentGrade: 82,
-      percentage: 82,
-      trend: 'stable',
-      assignments: 10,
-      completedAssignments: 9,
-      nextAssessment: '2024-02-20',
-      recentGrades: [80, 82, 85, 81, 84],
-      topics: ['Mechanics', 'Electricity', 'Waves', 'Thermodynamics'],
-      attendance: 94,
-      status: 'good'
-    },
-    {
-      id: 3,
-      name: 'Chemistry',
-      code: 'CHEM201',
-      teacher: 'Ms. Emily Davis',
-      currentGrade: 85,
-      percentage: 85,
-      trend: 'improving',
-      assignments: 8,
-      completedAssignments: 8,
-      nextAssessment: '2024-02-18',
-      recentGrades: [78, 80, 83, 85, 87],
-      topics: ['Organic Chemistry', 'Inorganic Chemistry', 'Physical Chemistry'],
-      attendance: 98,
-      status: 'excellent'
-    },
-    {
-      id: 4,
-      name: 'English Language',
-      code: 'ENG101',
-      teacher: 'Mr. David Wilson',
-      currentGrade: 78,
-      percentage: 78,
-      trend: 'declining',
-      assignments: 9,
-      completedAssignments: 8,
-      nextAssessment: '2024-02-22',
-      recentGrades: [82, 80, 78, 76, 75],
-      topics: ['Grammar', 'Composition', 'Literature', 'Comprehension'],
-      attendance: 91,
-      status: 'needs-improvement'
-    },
-    {
-      id: 5,
-      name: 'History',
-      code: 'HIST101',
-      teacher: 'Prof. James Wilson',
-      currentGrade: 80,
-      percentage: 80,
-      trend: 'stable',
-      assignments: 7,
-      completedAssignments: 7,
-      nextAssessment: '2024-02-25',
-      recentGrades: [78, 79, 81, 80, 82],
-      topics: ['World History', 'African History', 'Modern History'],
-      attendance: 93,
-      status: 'good'
-    }
-  ]
+  const studentInfo = {
+    name: student.name || 'Student',
+    studentId: student.examNumber || 'N/A',
+    yearGroup: student.class ? student.class.replace(/[A-Z]$/, '') : 'N/A', // "Form 3A" -> "Form 3" (approx)
+    class: student.class || 'N/A',
+    overallGrade: Math.round(stats.average_grade || 0),
+    ranking: 'N/A', 
+    totalSubjects: enrolledSubjects.length
+  }
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -330,6 +251,7 @@ export default function StudentSubjects({ studentData }) {
         <CardContent>
           <div className="space-y-3">
             {enrolledSubjects
+              .filter(s => s.nextAssessment)
               .sort((a, b) => new Date(a.nextAssessment) - new Date(b.nextAssessment))
               .slice(0, 3)
               .map((subject) => (
@@ -353,6 +275,9 @@ export default function StudentSubjects({ studentData }) {
                   </div>
                 </div>
               ))}
+            {enrolledSubjects.filter(s => s.nextAssessment).length === 0 && (
+               <div className="text-center py-4 text-gray-500 text-sm">No upcoming assessments</div>
+            )}
           </div>
         </CardContent>
       </Card>

@@ -86,30 +86,100 @@ export default function HeadteacherDashboard() {
     setHasResults(false)
 
     // Update school stats with real data from API
-    if (stats?.stats) {
+    const data = dashboardData?.stats || stats?.stats;
+
+    if (data) {
       setSchoolStats(prev => ({
         ...prev,
-        totalStudents: stats.stats.total_students || 0,
-        totalTeachers: stats.stats.total_teachers || 0,
-        totalClasses: stats.stats.total_classes || 0,
-        totalSubjects: stats.stats.total_subjects || 0,
-        attendanceRate: stats.stats.attendance_rate || 0,
-        passRate: stats.stats.pass_rate || 0,
-        teacherEffectiveness: stats.stats.teacher_effectiveness || 0,
-        complianceRate: stats.stats.compliance_rate || 0,
-        teacherDevelopment: stats.stats.teacher_development || 0,
+        totalStudents: data.total_students || 0,
+        totalTeachers: data.total_teachers || 0,
+        totalClasses: data.total_classes || 0,
+        totalSubjects: data.total_subjects || 0,
+        attendanceRate: data.attendance_rate || 0,
+        passRate: data.pass_rate || 0,
+        teacherEffectiveness: data.teacher_effectiveness || 0,
+        complianceRate: data.compliance_rate || 0,
+        teacherDevelopment: data.teacher_development || 0,
       }))
       setHasResults(true)
     }
-  }, [stats])
+
+    if (dashboardData) {
+      if (dashboardData.students_requiring_attention) {
+        setAtRiskStudentsData(dashboardData.students_requiring_attention)
+      }
+      
+      if (dashboardData.teacher_compliance) {
+        setTeacherComplianceData(dashboardData.teacher_compliance)
+      }
+
+      if (dashboardData.subject_performance) {
+        setSubjectPerformanceData(dashboardData.subject_performance)
+      }
+      
+      // Populate school performance data if available
+      if (dashboardData.performance_trends && dashboardData.performance_trends.length > 0) {
+        setSchoolPerformanceData({
+          labels: dashboardData.performance_trends.map(p => p.term),
+          datasets: [{
+            label: 'Average Score',
+            data: dashboardData.performance_trends.map(p => Math.round(p._avg.score || 0)),
+            backgroundColor: 'rgba(59, 130, 246, 0.5)',
+          }]
+        })
+      }
+    }
+  }, [stats, dashboardData])
+
+  const handleCreateClass = async () => {
+    const name = prompt('Enter class name (e.g. Form 1A):')
+    if (name) {
+      try {
+        await api.post('/classes', { name })
+        alert('Class created successfully')
+        window.location.reload()
+      } catch (error) {
+        alert('Failed to create class: ' + (error.response?.data?.error || error.message))
+      }
+    }
+  }
+
+  const handleAddSubject = async () => {
+    const name = prompt('Enter subject name:')
+    if (name) {
+      try {
+        await api.post('/subjects', { name })
+        alert('Subject added successfully')
+        window.location.reload()
+      } catch (error) {
+        alert('Failed to add subject: ' + (error.response?.data?.error || error.message))
+      }
+    }
+  }
+
+  const handleScheduleAssessment = async () => {
+    const title = prompt('Enter assessment title (e.g. Mid-Term Math):')
+    if (title) {
+      const date = prompt('Enter date (YYYY-MM-DD):', new Date().toISOString().split('T')[0])
+      if (date) {
+        try {
+          await api.post('/assessments', { title, date })
+          alert('Assessment scheduled successfully')
+          window.location.reload()
+        } catch (error) {
+          alert('Failed to schedule assessment: ' + (error.response?.data?.error || error.message))
+        }
+      }
+    }
+  }
 
   const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
 
   const roleDistribution = [
-    { name: 'Students', value: stats?.stats?.total_students || 0, color: '#3b82f6' },
-    { name: 'Teachers', value: stats?.stats?.total_teachers || 0, color: '#10b981' },
-    { name: 'Classes', value: stats?.stats?.total_classes || 0, color: '#f59e0b' },
-    { name: 'Subjects', value: stats?.stats?.total_subjects || 0, color: '#ef4444' },
+    { name: 'Students', value: schoolStats.totalStudents, color: '#3b82f6' },
+    { name: 'Teachers', value: schoolStats.totalTeachers, color: '#10b981' },
+    { name: 'Classes', value: schoolStats.totalClasses, color: '#f59e0b' },
+    { name: 'Subjects', value: schoolStats.totalSubjects, color: '#ef4444' },
   ]
 
   const tabs = [
@@ -872,7 +942,7 @@ export default function HeadteacherDashboard() {
               <div className="space-y-3">
                 <Button
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3"
-                  onClick={() => alert('Create New Class functionality would be implemented here')}
+                  onClick={handleCreateClass}
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Create New Class
@@ -958,7 +1028,7 @@ export default function HeadteacherDashboard() {
               <div className="space-y-3">
                 <Button
                   className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3"
-                  onClick={() => alert('Schedule Assessment functionality would be implemented here')}
+                  onClick={handleScheduleAssessment}
                 >
                   <Calendar className="h-4 w-4 mr-2" />
                   Schedule Assessment
@@ -1029,21 +1099,21 @@ export default function HeadteacherDashboard() {
                   <Award className="h-5 w-5 text-green-600 mr-2" />
                   <span className="font-medium">Assessment Completion</span>
                 </div>
-                <span className="text-green-600 font-bold">0%</span>
+                <span className="text-green-600 font-bold">{schoolStats.complianceRate}%</span>
               </div>
               <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
                 <div className="flex items-center">
                   <FileText className="h-5 w-5 text-blue-600 mr-2" />
                   <span className="font-medium">Documentation</span>
                 </div>
-                <span className="text-blue-600 font-bold">0%</span>
+                <span className="text-blue-600 font-bold">{schoolStats.teacherEffectiveness}%</span>
               </div>
               <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
                 <div className="flex items-center">
                   <GraduationCap className="h-5 w-5 text-purple-600 mr-2" />
                   <span className="font-medium">Professional Development</span>
                 </div>
-                <span className="text-purple-600 font-bold">0%</span>
+                <span className="text-purple-600 font-bold">{schoolStats.teacherDevelopment}%</span>
               </div>
             </div>
           </CardContent>

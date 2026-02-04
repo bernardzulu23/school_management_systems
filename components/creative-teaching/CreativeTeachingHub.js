@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/lib/api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
@@ -16,156 +18,40 @@ import MultimediaLessonCreator from './MultimediaLessonCreator'
 import VirtualFieldTrips from './VirtualFieldTrips'
 import StudentWorkShowcase from './StudentWorkShowcase'
 
+const iconMap = {
+  Palette, Video, Globe, Trophy, BookOpen, Lightbulb, Beaker,
+  Calculator, Wrench, Code, BarChart3, Microscope, Atom,
+  Rocket, Brain, Music, Camera, Mic, FileText, Users, Star,
+  Play, Pause, Settings, Download, Share2, Plus, Eye, Award
+}
+
+const componentMap = {
+  'whiteboard': InteractiveWhiteboard,
+  'virtual-trips': VirtualFieldTrips,
+  'work-showcase': StudentWorkShowcase,
+  'multimedia-lesson': MultimediaLessonCreator
+}
+
 export default function CreativeTeachingHub() {
   const [activeFeature, setActiveFeature] = useState('overview')
-  const [userRole, setUserRole] = useState('teacher') // teacher, student, hod, headteacher
+  const userRole = 'student' // Enforce student role for this view
 
-  // Creative Teaching & STEM Features
-  const features = [
-    {
-      id: 'whiteboard',
-      name: 'Interactive Whiteboard',
-      icon: Palette,
-      description: 'Digital drawing, annotation, and collaboration tools',
-      category: 'creative',
-      component: InteractiveWhiteboard,
-      roles: ['teacher', 'student'],
-      difficulty: 'Beginner',
-      estimatedTime: '5-30 minutes'
-    },
-    {
-      id: 'lesson-creator',
-      name: 'Multimedia Lesson Creator',
-      icon: Video,
-      description: 'Create engaging lessons with video, audio, and interactive content',
-      category: 'creative',
-      component: MultimediaLessonCreator,
-      roles: ['teacher', 'hod'],
-      difficulty: 'Intermediate',
-      estimatedTime: '30-60 minutes'
-    },
-    {
-      id: 'virtual-trips',
-      name: 'Virtual Field Trips',
-      icon: Globe,
-      description: 'Explore Zambian landmarks and global destinations virtually',
-      category: 'creative',
-      component: VirtualFieldTrips,
-      roles: ['teacher', 'student', 'hod'],
-      difficulty: 'Beginner',
-      estimatedTime: '20-45 minutes'
-    },
-    {
-      id: 'work-showcase',
-      name: 'Student Work Showcase',
-      icon: Trophy,
-      description: 'Display and celebrate student achievements and creativity',
-      category: 'creative',
-      component: StudentWorkShowcase,
-      roles: ['teacher', 'student', 'hod', 'headteacher'],
-      difficulty: 'Beginner',
-      estimatedTime: '10-20 minutes'
-    },
-    {
-      id: 'project-templates',
-      name: 'Creative Project Templates',
-      icon: BookOpen,
-      description: 'Pre-built templates for various creative projects',
-      category: 'creative',
-      component: null,
-      roles: ['teacher', 'student'],
-      difficulty: 'Beginner',
-      estimatedTime: '15-45 minutes'
-    },
-    {
-      id: 'storytelling',
-      name: 'Digital Storytelling Platform',
-      icon: Lightbulb,
-      description: 'Create and share digital stories with multimedia elements',
-      category: 'creative',
-      component: null,
-      roles: ['teacher', 'student'],
-      difficulty: 'Intermediate',
-      estimatedTime: '30-60 minutes'
-    },
-    {
-      id: 'art-music',
-      name: 'Art & Music Integration',
-      icon: Music,
-      description: 'Creative arts tools and music education features',
-      category: 'creative',
-      component: null,
-      roles: ['teacher', 'student'],
-      difficulty: 'Intermediate',
-      estimatedTime: '20-40 minutes'
-    },
-    {
-      id: 'science-experiments',
-      name: 'Science Experiment Database',
-      icon: Beaker,
-      description: 'Comprehensive library of science experiments and procedures',
-      category: 'stem',
-      component: null,
-      roles: ['teacher', 'student', 'hod'],
-      difficulty: 'Intermediate',
-      estimatedTime: '30-90 minutes'
-    },
-    {
-      id: 'math-problems',
-      name: 'Mathematics Problem Bank',
-      icon: Calculator,
-      description: 'Extensive collection of math problems with step-by-step solutions',
-      category: 'stem',
-      component: null,
-      roles: ['teacher', 'student'],
-      difficulty: 'Beginner',
-      estimatedTime: '15-45 minutes'
-    },
-    {
-      id: 'engineering-challenges',
-      name: 'Engineering Design Challenges',
-      icon: Wrench,
-      description: 'STEM project challenges and design thinking exercises',
-      category: 'stem',
-      component: null,
-      roles: ['teacher', 'student', 'hod'],
-      difficulty: 'Advanced',
-      estimatedTime: '60-120 minutes'
-    },
-    {
-      id: 'tech-integration',
-      name: 'Technology Integration Tools',
-      icon: Code,
-      description: 'Digital tools and coding education features',
-      category: 'stem',
-      component: null,
-      roles: ['teacher', 'student'],
-      difficulty: 'Intermediate',
-      estimatedTime: '30-90 minutes'
-    },
-    {
-      id: 'data-collection',
-      name: 'Scientific Data Collection',
-      icon: BarChart3,
-      description: 'Tools for gathering and analyzing scientific data',
-      category: 'stem',
-      component: null,
-      roles: ['teacher', 'student'],
-      difficulty: 'Intermediate',
-      estimatedTime: '20-60 minutes'
-    },
-    {
-      id: 'scientific-method',
-      name: 'Scientific Method Tracker',
-      icon: Microscope,
-      description: 'Step-by-step guidance through the scientific process',
-      category: 'stem',
-      component: null,
-      roles: ['teacher', 'student'],
-      difficulty: 'Beginner',
-      estimatedTime: '30-60 minutes'
+  const { data: dbFeatures = [], isLoading } = useQuery({
+    queryKey: ['creative-features'],
+    queryFn: async () => {
+      const res = await api.getCreativeFeatures()
+      return res.data.data
     }
-  ]
+  })
+
+  // Map DB features to frontend components and icons
+  const features = dbFeatures.map(f => ({
+    ...f,
+    id: f.featureId, // Map featureId to id for frontend compatibility
+    icon: iconMap[f.iconName] || Star,
+    component: componentMap[f.featureId] || null
+  }))
+
 
   // Filter features based on user role
   const availableFeatures = features.filter(feature => 
@@ -231,27 +117,12 @@ export default function CreativeTeachingHub() {
               <Rocket className="h-5 w-5 mr-2 text-purple-400" />
               Creative Teaching & STEM Features Hub
             </div>
-            <div className="flex items-center space-x-2">
-              <select
-                value={userRole}
-                onChange={(e) => setUserRole(e.target.value)}
-                className="bg-slate-700 text-white px-3 py-2 rounded border border-slate-600"
-              >
-                <option value="teacher">Teacher View</option>
-                <option value="student">Student View</option>
-                <option value="hod">HOD View</option>
-                <option value="headteacher">Headteacher View</option>
-              </select>
-              <Button className="bg-blue-600 text-white">
-                <Settings className="h-4 w-4 mr-2" />
-                Customize Hub
-              </Button>
-            </div>
+            {/* User role selector removed for Student Dashboard */}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Hub Overview Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card className="bg-slate-700/60 border-slate-600/40">
               <CardContent className="p-4 text-center">
                 <Palette className="h-8 w-8 mx-auto mb-2 text-purple-400" />
@@ -271,13 +142,6 @@ export default function CreativeTeachingHub() {
                 <Users className="h-8 w-8 mx-auto mb-2 text-green-400" />
                 <div className="text-2xl font-bold text-white">{availableFeatures.length}</div>
                 <div className="text-slate-400 text-sm">Available Features</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-slate-700/60 border-slate-600/40">
-              <CardContent className="p-4 text-center">
-                <Star className="h-8 w-8 mx-auto mb-2 text-yellow-400" />
-                <div className="text-2xl font-bold text-white">4.8</div>
-                <div className="text-slate-400 text-sm">Average Rating</div>
               </CardContent>
             </Card>
           </div>

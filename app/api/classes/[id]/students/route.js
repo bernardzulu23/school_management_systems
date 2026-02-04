@@ -3,7 +3,10 @@ import prisma from '@/lib/prisma'
 
 export async function GET(request, { params }) {
   try {
-    const { className } = params
+    const { id } = params
+    // In this route structure, the 'id' parameter corresponds to the class name 
+    // when accessing /api/classes/[className]/students
+    const className = id
     
     // Decode URI component just in case (e.g. "Form%201A")
     const decodedClass = decodeURIComponent(className)
