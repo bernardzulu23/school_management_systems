@@ -40,6 +40,12 @@ const nextConfig = {
   // PWA and offline support
   swcMinify: true,
 
+  // Fix ES Module and webpack issues
+  webpack: (config) => {
+    config.externals = [...(config.externals || []), 'jsdom', 'canvas', 'bufferutil', 'utf-8-validate']
+    return config
+  },
+
   // API routes configuration
   async headers() {
     return [
