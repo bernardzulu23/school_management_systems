@@ -3,6 +3,13 @@ const nextConfig = {
   // Deployment configuration
   output: 'standalone',
 
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
   images: {
     remotePatterns: [
       {

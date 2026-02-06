@@ -95,7 +95,7 @@ export default function StudyMaterialsPage() {
       case 'video': return <Video className="h-5 w-5 text-blue-500" />
       case 'powerpoint': return <FileText className="h-5 w-5 text-orange-500" />
       case 'zip': return <File className="h-5 w-5 text-purple-500" />
-      case 'image': return <Image className="h-5 w-5 text-green-500" />
+      case 'image': return <ImageIcon className="h-5 w-5 text-green-500" />
       default: return <File className="h-5 w-5 text-gray-500" />
     }
   }
