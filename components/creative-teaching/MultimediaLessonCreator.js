@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
-  Video, Image, Music, FileText, Mic, Camera, Upload, Play,
+  Video, Image as ImageIcon, Music, FileText, Mic, Camera, Upload, Play,
   Pause, SkipForward, SkipBack, Volume2, Edit3, Trash2, Plus,
   Save, Share2, Download, Eye, Clock, Users, BookOpen, Target
 } from 'lucide-react'
