@@ -403,7 +403,7 @@ export default function MultimediaLessonCreator() {
                             <div className="flex items-center">
                               {media.type === 'image' && (
                                 <>
-                                  <Image className="h-4 w-4 mr-2 text-blue-400" />
+                                  <ImageIcon className="h-4 w-4 mr-2 text-blue-400" />
                                   <img src={media.url} alt={media.name || 'Slide image'} className="h-8 w-8 mr-2 rounded object-cover" />
                                 </>
                               )}
