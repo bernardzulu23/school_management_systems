@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request) {
   try {
     // 1. Basic Stats
@@ -30,7 +32,10 @@ export async function GET(request) {
     // 4. Students Requiring Attention (Score < 40)
     const lowPerformingResults = await prisma.result.findMany({
       where: { score: { lt: 40 } },
-      include: { student: true },
+      include: { 
+        student: true,
+        subject: true
+      },
       orderBy: { createdAt: 'desc' },
       take: 20
     })
@@ -51,7 +56,9 @@ export async function GET(request) {
       const student = atRiskMap.get(r.studentId)
       student.failedAssessments += 1
       student.lowGrades += 1
-      student.subjects.add(r.subject)
+      if (r.subject?.name) {
+        student.subjects.add(r.subject.name)
+      }
     })
     
     const studentsRequiringAttention = Array.from(atRiskMap.values()).map(s => ({
@@ -60,30 +67,85 @@ export async function GET(request) {
     }))
 
     // 5. Performance Trends
-    const performanceTrends = await prisma.result.groupBy({
-      by: ['term'],
-      _avg: {
+    // Use manual aggregation instead of groupBy to avoid enum/string validation issues
+    const allResultsForTrends = await prisma.result.findMany({
+      select: {
+        term: true,
         score: true
       }
     })
+
+    const trendsMap = {}
+    const trendsCount = {}
+
+    allResultsForTrends.forEach(r => {
+      const term = r.term || 'Unknown'
+      if (!trendsMap[term]) {
+        trendsMap[term] = 0
+        trendsCount[term] = 0
+      }
+      trendsMap[term] += r.score
+      trendsCount[term] += 1
+    })
+
+    const performanceTrends = Object.keys(trendsMap).map(term => ({
+      term,
+      _avg: {
+        score: trendsMap[term] / trendsCount[term]
+      }
+    }))
 
     // 5a. Performance Summary (for Attention System)
     const criticalRiskCount = studentsRequiringAttention.filter(s => s.averageScore < 30).length
     const highRiskCount = studentsRequiringAttention.filter(s => s.averageScore >= 30 && s.averageScore < 40).length
 
-    const challengingSubjects = await prisma.result.groupBy({
-        by: ['subject'],
-        _avg: { score: true },
-        having: { score: { _avg: { lt: 50 } } },
-        take: 3
+    // Helper for manual aggregation since Result doesn't have direct relations for groupBy
+    const allResults = await prisma.result.findMany({
+      include: {
+        subject: true,
+        student: true
+      }
     })
-    
-    const strugglingClasses = await prisma.result.groupBy({
-        by: ['class'],
-        _avg: { score: true },
-        having: { score: { _avg: { lt: 50 } } },
-        take: 3
+
+    // Aggregating Challenging Subjects
+    const subjectStats = {}
+    allResults.forEach(r => {
+      const subjectName = r.subject?.name || 'Unknown'
+      if (!subjectStats[subjectName]) {
+        subjectStats[subjectName] = { total: 0, count: 0 }
+      }
+      subjectStats[subjectName].total += r.score
+      subjectStats[subjectName].count += 1
     })
+
+    const challengingSubjects = Object.entries(subjectStats)
+      .map(([subject, stats]) => ({
+        subject,
+        avg: stats.total / stats.count
+      }))
+      .filter(s => s.avg < 50)
+      .sort((a, b) => a.avg - b.avg)
+      .slice(0, 3)
+
+    // Aggregating Struggling Classes
+    const classStats = {}
+    allResults.forEach(r => {
+      const className = r.student?.class || 'Unknown'
+      if (!classStats[className]) {
+        classStats[className] = { total: 0, count: 0 }
+      }
+      classStats[className].total += r.score
+      classStats[className].count += 1
+    })
+
+    const strugglingClasses = Object.entries(classStats)
+      .map(([className, stats]) => ({
+        class: className,
+        avg: stats.total / stats.count
+      }))
+      .filter(c => c.avg < 50)
+      .sort((a, b) => a.avg - b.avg)
+      .slice(0, 3)
 
     const performanceSummary = {
         students_requiring_attention: studentsRequiringAttention.length,
@@ -97,110 +159,34 @@ export async function GET(request) {
     // 5b. Junior Results
     const juniorResults = await prisma.result.findMany({
       where: {
-        OR: [
-          { class: { startsWith: 'Form 1' } },
-          { class: { startsWith: 'Form 2' } }
-        ]
+        student: {
+          class: {
+            contains: '8' // Assuming Grade 8 is Junior
+          }
+        }
       },
-      include: { student: true },
       orderBy: { score: 'desc' },
-      take: 20
+      take: 5
     })
 
-    // 6. Recent Users
-    const recentUsers = await prisma.user.findMany({
-      take: 5,
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true
-      }
-    })
+    const data = {
+      totalStudents,
+      totalTeachers,
+      totalClasses,
+      totalSubjects,
+      attendanceRate,
+      passRate,
+      studentsRequiringAttention,
+      performanceTrends,
+      performanceSummary,
+      juniorResults
+    }
 
-    // 7. Class Stats
-    const classes = await prisma.class.findMany()
-    const classStats = await Promise.all(classes.map(async (c) => {
-      const count = await prisma.student.count({
-        where: { class: c.name }
-      })
-      return {
-        name: c.name,
-        student_count: count,
-        capacity: c.capacity
-      }
-    }))
-
-    // 8. Monthly Registrations
-    const users = await prisma.user.findMany({
-      select: { createdAt: true }
-    })
-    const registrationsMap = {}
-    users.forEach(u => {
-      const month = u.createdAt.toLocaleString('default', { month: 'short' })
-      registrationsMap[month] = (registrationsMap[month] || 0) + 1
-    })
-    const monthlyRegistrations = Object.entries(registrationsMap).map(([month, count]) => ({
-      month,
-      count
-    }))
-
-    // 9. Teacher Compliance
-    const departments = await prisma.teacher.groupBy({
-      by: ['department'],
-    })
-    
-    const teacherCompliance = departments.length > 0 ? departments.map(d => ({
-        department: d.department || 'Unassigned',
-        completion: 85, // Placeholder
-        status: 'On Track'
-    })) : []
-
-    // 10. Subject Performance
-    const subjectPerf = await prisma.result.groupBy({
-        by: ['subject'],
-        _avg: { score: true },
-        take: 5,
-        orderBy: { _avg: { score: 'desc' } }
-    })
-
-    return NextResponse.json({
-      stats: {
-        total_students: totalStudents,
-        total_teachers: totalTeachers,
-        total_classes: totalClasses,
-        total_subjects: totalSubjects,
-        attendance_rate: attendanceRate,
-        pass_rate: passRate,
-        teacher_effectiveness: 85, // Placeholder
-        compliance_rate: 90, // Placeholder
-        teacher_development: 75 // Placeholder
-      },
-      students_requiring_attention: studentsRequiringAttention,
-      performance_trends: performanceTrends,
-      performance_summary: performanceSummary, 
-      junior_results: juniorResults,
-      recent_users: recentUsers.map(u => ({
-        ...u,
-        status: 'active' 
-      })),
-      class_stats: classStats,
-      monthly_registrations: monthlyRegistrations,
-      teacher_compliance: teacherCompliance,
-      subject_performance: {
-          labels: subjectPerf.map(s => s.subject),
-          datasets: [{
-              data: subjectPerf.map(s => Math.round(s._avg.score || 0))
-          }]
-      }
-    })
-
+    return NextResponse.json(data)
   } catch (error) {
-    console.error('Headteacher dashboard error:', error)
+    console.error('Headteacher Dashboard Error:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch dashboard data' },
+      { error: 'Failed to fetch dashboard stats' },
       { status: 500 }
     )
   }

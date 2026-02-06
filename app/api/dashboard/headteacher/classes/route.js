@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import prisma from '@/lib/prisma'
 
 export async function GET() {
   try {
@@ -7,20 +7,21 @@ export async function GET() {
       orderBy: { name: 'asc' }
     })
 
-    // Fetch related data in parallel for performance
-    const [studentsByClass, resultsByClass, teachers, subjectsByClass] = await Promise.all([
-      // Group students by class to get enrollment counts
-      prisma.student.groupBy({
-        by: ['class'],
-        _count: {
-          _all: true
-        }
+    // Fetch related data
+    const [allStudents, allResults, teachers] = await Promise.all([
+      // Fetch all students to group manually
+      prisma.student.findMany({
+        select: { class: true }
       }),
-      // Group results by class to get average performance
-      prisma.result.groupBy({
-        by: ['class'],
-        _avg: {
-          score: true
+      // Fetch all results to aggregate manually
+      prisma.result.findMany({
+        include: {
+          student: {
+            select: { class: true }
+          },
+          subject: {
+            select: { name: true }
+          }
         }
       }),
       // Fetch all teachers to map names
@@ -30,12 +31,24 @@ export async function GET() {
             select: { name: true }
           }
         }
-      }),
-      // Group results by class and subject to get subjects list
-      prisma.result.groupBy({
-        by: ['class', 'subject'],
       })
     ])
+
+    // Group students by class manually
+    const studentsByClass = []
+    const classCountMap = {}
+    
+    allStudents.forEach(s => {
+      const className = s.class || 'Unknown'
+      classCountMap[className] = (classCountMap[className] || 0) + 1
+    })
+
+    Object.keys(classCountMap).forEach(className => {
+      studentsByClass.push({
+        class: className,
+        _count: { _all: classCountMap[className] }
+      })
+    })
 
     // Create lookup maps
     const enrollmentMap = studentsByClass.reduce((acc, curr) => {
@@ -43,22 +56,43 @@ export async function GET() {
       return acc
     }, {})
 
-    const performanceMap = resultsByClass.reduce((acc, curr) => {
-      acc[curr.class] = curr._avg.score || 0
-      return acc
-    }, {})
+    // Manually aggregate results by class
+    const performanceMap = {}
+    const subjectsMap = {}
+    const classScoreCounts = {}
+
+    allResults.forEach(result => {
+      const className = result.student?.class
+      const subjectName = result.subject?.name
+      
+      if (!className) return
+
+      // Performance Aggregation
+      if (!performanceMap[className]) {
+        performanceMap[className] = 0
+        classScoreCounts[className] = 0
+      }
+      performanceMap[className] += result.score
+      classScoreCounts[className] += 1
+
+      // Subjects Aggregation
+      if (!subjectsMap[className]) {
+        subjectsMap[className] = new Set()
+      }
+      if (subjectName) {
+        subjectsMap[className].add(subjectName)
+      }
+    })
+
+    // Finalize averages
+    Object.keys(performanceMap).forEach(className => {
+      if (classScoreCounts[className] > 0) {
+        performanceMap[className] = performanceMap[className] / classScoreCounts[className]
+      }
+    })
 
     const teacherMap = teachers.reduce((acc, curr) => {
       acc[curr.id] = curr.user.name
-      return acc
-    }, {})
-
-    const subjectsMap = subjectsByClass.reduce((acc, curr) => {
-      if (!acc[curr.class]) acc[curr.class] = []
-      // Limit to 5 subjects for display to match previous UI feel if too many
-      if (acc[curr.class].length < 5) {
-        acc[curr.class].push(curr.subject)
-      }
       return acc
     }, {})
 
@@ -70,7 +104,7 @@ export async function GET() {
       classTeacher: teacherMap[cls.classTeacherId] || 'Unassigned',
       currentEnrollment: enrollmentMap[cls.name] || 0,
       maxCapacity: cls.capacity,
-      subjects: subjectsMap[cls.name] || [], // Empty if no subjects found in results
+      subjects: subjectsMap[cls.name] ? Array.from(subjectsMap[cls.name]).slice(0, 5) : [], 
       averagePerformance: Math.round(performanceMap[cls.name] || 0),
       attendanceRate: 0 // TODO: Implement Attendance model
     }))

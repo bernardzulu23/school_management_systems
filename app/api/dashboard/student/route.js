@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { headers } from 'next/headers'
 
+export const dynamic = 'force-dynamic'
+
 // Helper to get current user from session/token (simplified for now)
 // In a real app, use your auth library (e.g. next-auth, iron-session)
 async function getCurrentUser() {
@@ -15,7 +17,7 @@ async function getCurrentUser() {
 
 export async function GET(request) {
   try {
-    const { searchParams } = new URL(request.url)
+    const searchParams = request.nextUrl.searchParams
     const timeRange = searchParams.get('timeRange') || 'term'
     
     // Calculate start date based on timeRange
@@ -99,301 +101,105 @@ export async function GET(request) {
       take: 5
     })
 
-    // 4. Performance Data (Last 5 results)
+    // 4. Fetch Recent Results (with filtering)
     const recentResults = await prisma.result.findMany({
-      where: { studentId: student.id },
-      include: { subject: true },
-      orderBy: { createdAt: 'desc' },
-      take: 5
-    })
-
-    // 5. Fetch Goals
-    const goals = await prisma.goal.findMany({
-      where: { studentId: student.id },
-      orderBy: { createdAt: 'desc' },
-      take: 5
-    })
-
-    // 5b. Fetch Study Materials (New)
-    const studyMaterials = await prisma.studyMaterial.findMany({
-      take: 5,
-      orderBy: { uploadDate: 'desc' },
-      // In a real app, filter by student's subjects
       where: {
-        subject: { in: student.selected_subjects }
-      }
-    })
-
-    // 5c. Fetch Games (New)
-    const games = await prisma.game.findMany({
-      take: 5,
-      orderBy: { createdAt: 'desc' }
-      // Could filter by subject or difficulty if needed
-    })
-
-    const gamesPlayedCount = await prisma.studentGame.count({
-      where: { studentId: student.id }
-    })
-    
-    const achievementsCount = await prisma.studentBadge.count({
-      where: { studentId: student.id }
-    })
-
-    const achievementsList = await prisma.studentBadge.findMany({
-      where: { studentId: student.id },
-      include: { badge: true },
-      take: 10,
-      orderBy: { awardedAt: 'desc' }
-    })
-
-    const totalGoals = await prisma.goal.count({
-      where: { studentId: student.id }
-    })
-
-    const completedGoals = await prisma.goal.count({
-      where: { 
         studentId: student.id,
-        status: 'completed'
-      }
+        // Filter by date if applicable, or just take latest
+        // For simplicity, we just take the latest ones
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 10
     })
-
-    // 5d. Fetch Attendance & Assignments
-    let attendanceRate = 0
-    let attendanceRecords = []
     
-    try {
-      attendanceRecords = await prisma.attendance.findMany({
-        where: { studentId: student.id },
-        orderBy: { date: 'desc' },
-        take: 30 // Last 30 records for analytics
-      })
-      
-      if (attendanceRecords.length > 0) {
-        const presentCount = attendanceRecords.filter(a => a.status === 'present' || a.status === 'late').length
-        attendanceRate = Math.round((presentCount / attendanceRecords.length) * 100)
-      }
-    } catch (e) {
-      console.warn('Attendance fetch failed:', e.message)
-    }
-
-    let assignmentsCompleted = 0
-    let totalAssignments = 0
-    let assignmentsList = []
-    
-    try {
-      // Fetch assignments with submissions to calculate status properly
-      const rawAssignments = await prisma.assignment.findMany({
-        where: { 
-          class: student.class,
-          subject: { in: student.selected_subjects }
-        },
-        include: {
-          submissions: {
-            where: { studentId: student.id }
-          }
-        },
-        orderBy: { dueDate: 'asc' }
-      })
-      
-      const now = new Date()
-      
-      assignmentsList = rawAssignments.map(assignment => {
-        const submission = assignment.submissions[0]
-        let status = 'pending'
-        
-        if (submission) {
-          if (submission.status === 'late' || (new Date(submission.submittedAt) > new Date(assignment.dueDate))) {
-            status = 'late'
-          } else {
-            status = 'completed'
-          }
-        } else if (new Date(assignment.dueDate) < now) {
-          status = 'missing'
-        }
-        
-        return {
-          id: assignment.id,
-          title: assignment.title,
-          subject: assignment.subject,
-          dueDate: assignment.dueDate,
-          createdAt: assignment.createdAt,
-          status: status,
-          grade: submission?.grade,
-          feedback: submission?.feedback
-        }
-      })
-
-      totalAssignments = assignmentsList.length
-      assignmentsCompleted = assignmentsList.filter(a => a.status === 'completed' || a.status === 'late').length
-    } catch (e) {
-      console.warn('Assignment fetch failed:', e.message)
-    }
-
-    // 6. Enrolled Subjects Data
-    const subjectsData = await prisma.subject.findMany({
-      where: {
-        name: { in: student.selected_subjects }
+    // 5. Fetch Assignments and calculate statuses
+    const rawAssignments = await prisma.assignment.findMany({
+      where: { 
+        class: student.class,
+        subject: { in: student.selected_subjects }
       },
       include: {
-        teacher: {
-          include: { user: true }
-        },
-        results: {
-          where: { studentId: student.id },
-          orderBy: { createdAt: 'desc' },
-          take: 5
+        submissions: {
+          where: { studentId: student.id }
         }
+      },
+      orderBy: { dueDate: 'asc' }
+    })
+
+    // Process assignments to determine status (completed, late, missing, pending)
+    const assignmentsList = rawAssignments.map(assignment => {
+      const submission = assignment.submissions[0]
+      let status = 'pending'
+      
+      const dueDate = new Date(assignment.dueDate)
+      const isPastDue = dueDate < now
+      
+      if (submission) {
+        const submittedAt = new Date(submission.submittedAt)
+        if (submission.status === 'late' || (submittedAt > dueDate)) {
+          status = 'late'
+        } else {
+          status = 'completed'
+        }
+      } else if (isPastDue) {
+        status = 'missing'
+      }
+      
+      return {
+        id: assignment.id,
+        title: assignment.title,
+        subject: assignment.subject,
+        dueDate: assignment.dueDate,
+        createdAt: assignment.createdAt,
+        status: status,
+        grade: submission?.grade,
+        feedback: submission?.feedback
       }
     })
 
-    // Helper to calculate grade letter
-    const getGradeLetter = (score) => {
-      if (!score && score !== 0) return 'N/A'
-      if (score >= 75) return 'A+'
-      if (score >= 70) return 'A'
-      if (score >= 60) return 'B'
-      if (score >= 50) return 'C'
-      if (score >= 40) return 'D'
-      return 'F'
+    // 6. Fetch Attendance
+    const attendanceRecords = await prisma.attendance.findMany({
+      where: {
+        studentId: student.id,
+        date: { gte: startDate }
+      },
+      orderBy: { date: 'desc' }
+    })
+
+    // 7. Calculate Attendance Percentage
+    // This depends on how many days/classes there were. 
+    // Simplified: (Present / Total Records) * 100
+    // Real world: (Present / Total School Days) * 100
+    let attendancePercentage = 100
+    if (attendanceRecords.length > 0) {
+      const presentCount = attendanceRecords.filter(r => r.status === 'present').length
+      attendancePercentage = (presentCount / attendanceRecords.length) * 100
     }
 
-    const enrolled_subjects = await Promise.all(subjectsData.map(async subject => {
-      const recentGrades = subject.results.map(r => r.score)
-      const currentGrade = recentGrades.length > 0 
-        ? Math.round(recentGrades.reduce((a, b) => a + b, 0) / recentGrades.length) 
-        : 0
+    // Construct Dashboard Data Response
+    const dashboardData = {
+      student: {
+        id: student.id,
+        name: student.name,
+        class: student.class,
+        average_grade: Math.round(averageGrade),
+        attendance_percentage: Math.round(attendancePercentage),
+        total_subjects: totalSubjects,
+        assignments_pending: assignmentsList.filter(a => a.status === 'pending').length,
+        assignments_list: assignmentsList,
+        attendance_records: attendanceRecords,
+        gamification: student.gamificationProfile
+      },
+      upcoming_assessments: upcomingAssessments,
+      recent_results: recentResults,
+      class_info: myClass
+    }
 
-      const nextAssessment = upcomingAssessments.find(a => a.subject === subject.name)
-      
-      let subjectAssignments = 0
-      let subjectCompleted = 0
-      
-      try {
-           subjectAssignments = await prisma.assignment.count({
-               where: { subject: subject.name, class: student.class }
-           })
-           subjectCompleted = await prisma.assignmentSubmission.count({
-               where: { 
-                   studentId: student.id,
-                   assignment: { subject: subject.name }
-               }
-           })
-      } catch (e) {}
-
-      return {
-        id: subject.id,
-        name: subject.name,
-        // Frontend compatibility aliases
-        subject: subject.name,
-        avgScore: currentGrade,
-        latestGrade: getGradeLetter(currentGrade),
-        assessments: subjectAssignments,
-        
-        code: subject.code || `${subject.name.substring(0, 3).toUpperCase()}101`,
-        teacher: subject.teacher?.user?.name || 'TBA',
-        currentGrade: currentGrade,
-        percentage: currentGrade,
-        trend: recentGrades.length >= 2 ? (recentGrades[0] > recentGrades[1] ? 'improving' : 'declining') : 'stable',
-        assignments: subjectAssignments, 
-        completedAssignments: subjectCompleted, 
-        nextAssessment: nextAssessment ? nextAssessment.date : null,
-        recentGrades: recentGrades,
-        topics: subject.topics || [], // Dynamic topics from DB
-        attendance: attendanceRate, // Use global rate as proxy for subject attendance for now
-        status: currentGrade >= 80 ? 'excellent' : currentGrade >= 60 ? 'good' : 'needs improvement'
-      }
-    }))
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        student: {
-          name: student.name,
-          email: student.user?.email,
-          class: student.class,
-          examNumber: student.exam_number,
-          subjects: student.selected_subjects,
-          attendance_records: attendanceRecords, // Pass raw records for analytics
-          assignments_list: assignmentsList, // Pass raw assignments for analytics
-          emergency_contact: {
-            name: student.emergency_contact_name || 'Not provided',
-            relationship: student.emergency_contact_relationship || 'Not provided',
-            phone: student.emergency_contact_phone || 'Not provided',
-            address: student.emergency_contact_address || 'Not provided'
-          }
-        },
-        stats: {
-          attendance_rate: attendanceRate,
-          average_grade: averageGrade,
-          assignments_completed: assignmentsCompleted,
-          total_assignments: totalAssignments,
-          gamesPlayed: gamesPlayedCount,
-          achievements: achievementsCount,
-          level: student.gamificationProfile?.level || 1,
-          points: student.gamificationProfile?.points || 0,
-          xp: student.gamificationProfile?.xp || 0,
-          nextLevelXp: student.gamificationProfile?.nextLevelXp || 100,
-          totalSubjects,
-          totalResults,
-          completedGoals,
-          totalGoals,
-          recentMaterials: studyMaterials.length
-        },
-        achievements_list: achievementsList.map(a => ({
-          id: a.badge.id,
-          name: a.badge.name,
-          description: a.badge.description,
-          icon: a.badge.icon,
-          category: a.badge.category,
-          awardedAt: a.awardedAt
-        })),
-        goals: goals.map(g => ({
-          id: g.id,
-          title: g.title,
-          progress: g.progress,
-          status: g.status
-        })),
-        my_class: myClass ? {
-          id: myClass.id,
-          name: myClass.name,
-          academic_year: new Date().getFullYear().toString(),
-          level: myClass.level, 
-          stream: myClass.section 
-        } : null,
-        recent_results: recentResults,
-        upcoming_assessments: upcomingAssessments.map(a => ({
-          id: a.id,
-          title: a.title,
-          subject: a.subject,
-          type: a.type,
-          start_date: a.date,
-          duration_minutes: a.duration_minutes || 60
-        })),
-        study_materials: studyMaterials.map(m => ({
-          id: m.id,
-          title: m.title,
-          subject: m.subject,
-          type: m.type,
-          fileSize: m.size || 'N/A',
-          fileUrl: m.fileUrl
-        })),
-        games: games.map(g => ({
-          id: g.id,
-          title: g.title,
-          description: g.description,
-          type: g.type,
-          subject: g.subject,
-          content: g.content
-        })),
-        enrolled_subjects,
-        subject_performance: enrolled_subjects // Alias for frontend compatibility
-      }
-    })
-
+    return NextResponse.json(dashboardData)
   } catch (error) {
-    console.error('Student dashboard error:', error)
+    console.error('Dashboard API Error:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch student dashboard data' },
+      { error: 'Failed to fetch dashboard data' },
       { status: 500 }
     )
   }
