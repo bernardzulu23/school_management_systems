@@ -455,6 +455,14 @@ model FieldTrip {
   subject     String
   grade       String
   imageUrl    String?
+  thumbnail   String?
+  duration    String?
+  difficulty  String?  // 'Beginner', 'Intermediate', 'Advanced'
+  rating      Float    @default(0)
+  participants Int     @default(0)
+  stops       Json?    // Array of stop objects
+  learningObjectives String[]
+  resources   String[]
   status      String   // 'upcoming', 'completed', 'cancelled'
   
   createdAt   DateTime @default(now())

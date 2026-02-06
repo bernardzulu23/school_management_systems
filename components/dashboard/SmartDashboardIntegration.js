@@ -200,13 +200,17 @@ export default function SmartDashboardIntegration({
 
           <div className="mb-4">
             <div className="flex justify-between text-sm mb-1">
-              <span className="text-slate-600">Progress to Level {(gamificationData.level?.level || 1) + 1}</span>
-              <span className="font-medium text-purple-600">{gamificationData.nextLevelPoints || 100} XP to go</span>
+              <span className="text-slate-600">
+                {gamificationData.nextLevelPoints === 0 ? 'Max Level Reached' : `Progress to Level ${(gamificationData.level?.level || 1) + 1}`}
+              </span>
+              <span className="font-medium text-purple-600">
+                {gamificationData.nextLevelPoints === 0 ? 'Legendary Status' : (gamificationData.nextLevelPoints !== undefined ? `${gamificationData.nextLevelPoints} XP to go` : 'Calculating...')}
+              </span>
             </div>
             <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
               <div 
                 className="h-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-500"
-                style={{ width: `${Math.min(100, Math.max(0, ((gamificationData.level?.requirement || 100) - (gamificationData.nextLevelPoints || 0)) / (gamificationData.level?.requirement || 100) * 100))}%` }} 
+                style={{ width: `${gamificationData.nextLevelPoints === 0 ? 100 : Math.min(100, Math.max(0, ((gamificationData.level?.requirement || 100) - (gamificationData.nextLevelPoints || 0)) / (gamificationData.level?.requirement || 100) * 100))}%` }} 
               />
             </div>
           </div>

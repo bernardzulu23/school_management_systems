@@ -95,10 +95,126 @@ async function main() {
     { name: 'Statistics', code: 'STAT' },
     { name: 'Psychology', code: 'PSY' },
     { name: 'Sociology', code: 'SOC' },
-    { name: 'General Science', code: 'GENS' },
-    { name: 'Agricultural Science', code: 'AGR' }
+    { name: 'General Science', code: 'GENS' }
+  ]
+   // Seed Games
+  console.log('Seeding games...')
+  const games = [
+    {
+      title: 'Math Quest: Algebra',
+      description: 'Solve algebraic equations to unlock the treasure.',
+      type: 'puzzle',
+      subject: 'Mathematics',
+      difficulty: 'medium',
+      content: { levels: 10, timeLimit: 300 }
+    },
+    {
+      title: 'Science Explorer: Cells',
+      description: 'Explore the inner workings of a cell.',
+      type: 'challenge',
+      subject: 'Science',
+      difficulty: 'easy',
+      content: { mode: 'exploration' }
+    },
+    {
+      title: 'History Time Travel',
+      description: 'Travel back in time to ancient civilizations.',
+      type: 'quiz',
+      subject: 'History',
+      difficulty: 'hard',
+      content: { questions: 20 }
+    }
   ]
 
+  for (const game of games) {
+    await prisma.game.create({
+      data: game
+    })
+  }
+
+  // Seed Field Trips
+  console.log('Seeding field trips...')
+  const fieldTrips = [
+    {
+      title: 'Virtual Museum Tour',
+      description: 'Explore the Louvre Museum from your classroom.',
+      location: 'Paris, France (Virtual)',
+      date: new Date('2025-05-15'),
+      type: 'virtual',
+      subject: 'Art and Design',
+      grade: 'All',
+      imageUrl: 'https://images.unsplash.com/photo-1499856871940-a09e32842449?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      status: 'upcoming'
+    },
+    {
+      title: 'Mars Rover Expedition',
+      description: 'A virtual journey across the surface of Mars.',
+      location: 'Mars (Virtual)',
+      date: new Date('2025-06-10'),
+      type: 'virtual',
+      subject: 'Science',
+      grade: 'Form 1',
+      imageUrl: 'https://images.unsplash.com/photo-1614728853980-40bc488f1d48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      status: 'upcoming'
+    },
+    {
+      title: 'Ancient Egypt Walkthrough',
+      description: 'Walk through the pyramids of Giza.',
+      location: 'Cairo, Egypt (Virtual)',
+      date: new Date('2025-07-20'),
+      type: 'virtual',
+      subject: 'History',
+      grade: 'Form 2',
+      imageUrl: 'https://images.unsplash.com/photo-1539650116455-251d9a0d63f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      status: 'upcoming'
+    }
+  ]
+
+  for (const trip of fieldTrips) {
+    await prisma.fieldTrip.create({
+      data: trip
+    })
+  }
+
+  // Seed Assessments
+  console.log('Seeding assessments...')
+  const assessments = [
+    {
+      title: 'Mid-Term Math Exam',
+      subject: 'Mathematics',
+      class: 'Form 1A',
+      date: new Date('2025-06-01'),
+      duration_minutes: 90,
+      type: 'exam',
+      description: 'Covers Algebra and Geometry.'
+    },
+    {
+      title: 'Science Quiz: Biology',
+      subject: 'Science',
+      class: 'Form 1A',
+      date: new Date('2025-05-20'),
+      duration_minutes: 30,
+      type: 'quiz',
+      description: 'Focus on Cell Biology.'
+    },
+    {
+      title: 'English Essay',
+      subject: 'English Language',
+      class: 'Form 1A',
+      date: new Date('2025-05-25'),
+      duration_minutes: 60,
+      type: 'assignment',
+      description: 'Write an essay about your favorite book.'
+    }
+  ]
+
+  for (const assessment of assessments) {
+    await prisma.assessment.create({
+      data: assessment
+    })
+  }
+
+  // Gamification profile seeding is handled later in the file
   for (const subject of subjects) {
     const existingSubject = await prisma.subject.findFirst({
       where: { name: subject.name }
@@ -406,7 +522,11 @@ async function main() {
       subject: 'History',
       grade: 'Form 1',
       imageUrl: 'https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?auto=format&fit=crop&q=80&w=1000',
-      status: 'upcoming'
+      status: 'upcoming',
+      stops: [
+        { id: 1, title: 'Main Hall', description: 'The grand entrance', image: 'https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?auto=format&fit=crop&q=80&w=1000', audioUrl: '' },
+        { id: 2, title: 'Ancient Egypt', description: 'Mummies and artifacts', image: 'https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?auto=format&fit=crop&q=80&w=1000', audioUrl: '' }
+      ]
     },
     {
       title: 'Space Station Visit',
@@ -417,7 +537,11 @@ async function main() {
       subject: 'Science',
       grade: 'Form 1',
       imageUrl: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=1000',
-      status: 'upcoming'
+      status: 'upcoming',
+      stops: [
+        { id: 1, title: 'Control Room', description: 'Where operations happen', image: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=1000', audioUrl: '' },
+        { id: 2, title: 'Observation Deck', description: 'View of Earth', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000', audioUrl: '' }
+      ]
     }
   ]
 

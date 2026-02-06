@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
+import { subDays, subMonths, subYears, isAfter, parseISO, isValid } from 'date-fns'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { 
@@ -36,34 +37,72 @@ export default function SmartAnalyticsDashboard({ studentData = [], classData = 
   const analyticsData = useMemo(() => {
     if (!studentData.length) return null
 
+    // Helper to filter by date
+    const filterByDate = (dateString) => {
+      if (!dateString) return true // Keep if no date (fallback)
+      const date = new Date(dateString)
+      if (!isValid(date)) return true
+      
+      const now = new Date()
+      let cutoffDate
+
+      switch (timeRange) {
+        case 'week':
+          cutoffDate = subDays(now, 7)
+          break
+        case 'month':
+          cutoffDate = subMonths(now, 1)
+          break
+        case 'term':
+          cutoffDate = subMonths(now, 4) // Approximate term as 4 months
+          break
+        case 'year':
+          cutoffDate = subYears(now, 1)
+          break
+        default:
+          return true
+      }
+      return isAfter(date, cutoffDate)
+    }
+
+    // Clone and filter student data based on time range
+    const filteredStudentData = studentData.map(student => ({
+      ...student,
+      grades: (student.grades || []).filter(g => filterByDate(g.date || g.createdAt)),
+      attendance: (student.attendance || []).filter(a => filterByDate(a.date || a.createdAt || a.timestamp)),
+      // Also filter assignments if they have completion dates or due dates relevant to the period
+      assignments: (student.assignments || []).filter(a => filterByDate(a.dueDate || a.createdAt))
+    }))
+
+    // Use filtered data for analytics
     // Generate alerts for all students
     const allAlerts = []
-    studentData.forEach(student => {
+    filteredStudentData.forEach(student => {
       const alerts = AlertSystem.generateAlerts(student)
       allAlerts.push(...alerts)
     })
 
     // Calculate class statistics
     const classStats = ClassStatistics.calculateClassMetrics(
-      studentData.flatMap(s => s.grades || [])
+      filteredStudentData.flatMap(s => s.grades || [])
     )
 
     // Analyze attendance patterns
-    const attendanceData = studentData.map(student => ({
+    const attendanceData = filteredStudentData.map(student => ({
       id: student.id,
       name: student.name,
       analysis: AttendanceAnalyzer.analyzeAttendance(student.attendance || [])
     }))
 
     // Grade trend analysis
-    const gradeTrends = studentData.map(student => ({
+    const gradeTrends = filteredStudentData.map(student => ({
       id: student.id,
       name: student.name,
       analysis: GradeTrendAnalyzer.analyzeGradeTrends(student.grades || [])
     }))
 
     // Correlation analysis
-    const correlationData = CorrelationAnalysis.analyzeAttendancePerformanceCorrelation(studentData)
+    const correlationData = CorrelationAnalysis.analyzeAttendancePerformanceCorrelation(filteredStudentData)
 
     return {
       alerts: allAlerts,
@@ -71,7 +110,7 @@ export default function SmartAnalyticsDashboard({ studentData = [], classData = 
       attendanceData,
       gradeTrends,
       correlationData,
-      riskStudents: studentData.filter(s => {
+      riskStudents: filteredStudentData.filter(s => {
         const attendanceAnalysis = AttendanceAnalyzer.analyzeAttendance(s.attendance || [])
         const gradeAnalysis = GradeTrendAnalyzer.analyzeGradeTrends(s.grades || [])
         return attendanceAnalysis.riskLevel === 'high' || attendanceAnalysis.riskLevel === 'critical' ||

@@ -11,19 +11,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**.vercel.app',
-      },
-      {
-        protocol: 'https',
         hostname: '**.railway.app',
-      },
-      {
-        protocol: 'https',
-        hostname: '**.supabase.co',
-      },
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
       },
     ],
     formats: ['image/webp', 'image/avif'],

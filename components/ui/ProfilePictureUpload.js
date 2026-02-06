@@ -2,7 +2,6 @@
 
 import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/Button'
-import { validateImageFile } from '@/lib/cloudinary'
 import { 
   Upload, 
   User, 
@@ -26,6 +25,22 @@ export default function ProfilePictureUpload({
   const [isDragging, setIsDragging] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef(null)
+
+  // Simple image validation
+  const validateImageFile = (file) => {
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+    const maxSize = 5 * 1024 * 1024 // 5MB
+
+    if (!validTypes.includes(file.type)) {
+      return { isValid: false, errors: ['Invalid file type. Please upload an image (JPEG, PNG, WebP, GIF).'] }
+    }
+
+    if (file.size > maxSize) {
+      return { isValid: false, errors: ['File size too large. Maximum size is 5MB.'] }
+    }
+
+    return { isValid: true, errors: [] }
+  }
 
   // Size configurations
   const sizeConfig = {

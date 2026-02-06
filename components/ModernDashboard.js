@@ -374,35 +374,42 @@ const WellbeingWidget = ({ status, userId }) => (
   </div>
 )
 
-const GamificationWidget = ({ data }) => (
-  <div>
-    <h3 className="text-lg font-semibold text-gray-900 mb-4">🎮 Your Progress</h3>
-    <div className="space-y-3">
-      <div>
-        <div className="flex justify-between text-sm text-gray-600 mb-1">
-          <span>Level {data?.level || 1}</span>
-          <span>{data?.nextLevelPoints || 0} XP to next level</span>
-        </div>
-        <div className="bg-gray-200 rounded-full h-2">
-          <div 
-            className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500"
-            style={{ width: '65%' }}
-          ></div>
-        </div>
-      </div>
-      <div className="grid grid-cols-2 gap-4 text-center">
+const GamificationWidget = ({ data }) => {
+  const currentXp = data?.currentXp || 0
+  const nextLevelThreshold = data?.nextLevelPoints || 100
+  const remainingXp = Math.max(0, nextLevelThreshold - currentXp)
+  const progressPercent = Math.min(100, Math.max(0, (currentXp / nextLevelThreshold) * 100))
+
+  return (
+    <div>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">🎮 Your Progress</h3>
+      <div className="space-y-3">
         <div>
-          <p className="text-2xl font-bold text-blue-600">{data?.totalPoints || 0}</p>
-          <p className="text-xs text-gray-500">Total Points</p>
+          <div className="flex justify-between text-sm text-gray-600 mb-1">
+            <span>Level {data?.level || 1}</span>
+            <span>{remainingXp} XP to next level</span>
+          </div>
+          <div className="bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500"
+              style={{ width: `${progressPercent}%` }}
+            ></div>
+          </div>
         </div>
-        <div>
-          <p className="text-2xl font-bold text-purple-600">{data?.achievements?.length || 0}</p>
-          <p className="text-xs text-gray-500">Achievements</p>
+        <div className="grid grid-cols-2 gap-4 text-center">
+          <div>
+            <p className="text-2xl font-bold text-blue-600">{data?.totalPoints || 0}</p>
+            <p className="text-xs text-gray-500">Total Points</p>
+          </div>
+          <div>
+            <p className="text-2xl font-bold text-purple-600">{data?.achievements?.length || 0}</p>
+            <p className="text-xs text-gray-500">Achievements</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-)
+  )
+}
 
 const VoiceAssistantWidget = ({ isListening, onVoiceCommand, assistant }) => (
   <div>

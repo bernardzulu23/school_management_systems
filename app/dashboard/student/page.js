@@ -1009,18 +1009,30 @@ export default function StudentDashboard() {
                   name: currentUser?.name || 'Student',
                   studentId: currentUser?.studentId || '',
                   class: currentUser?.yearGroup || '',
-                  totalPoints: 0,
-                  attendance: [],
-                  grades: [],
+                  totalPoints: dashboardData?.stats?.points || 0,
+                  level: dashboardData?.stats?.level || 1,
+                  nextLevelPoints: dashboardData?.stats?.nextLevelXp,
+                  attendance: [], // We could populate this if available
+                  grades: dashboardData?.subject_performance || [],
                   assignments: [],
                   recentActivities: []
                 }}
-                studentData={[]} // Will be populated from API
+                studentData={dashboardData ? [{
+                  ...dashboardData.student,
+                  grades: dashboardData.subject_performance?.map(s => ({
+                    subject: s.subject,
+                    score: s.avgScore,
+                    grade: s.latestGrade,
+                    date: new Date().toISOString() // Current status
+                  })) || [],
+                  attendance: dashboardData.student?.attendance_records || [],
+                  assignments: dashboardData.student?.assignments_list || []
+                }] : []}
                 classData={{
                   name: currentUser?.yearGroup || '',
                   teacher: '',
                   studentCount: 0,
-                  subjects: []
+                  subjects: dashboardData?.student?.subjects || []
                 }}
                 onNavigate={(tab) => setActiveTab(tab)}
               />
@@ -1030,37 +1042,10 @@ export default function StudentDashboard() {
           {/* Games Tab */}
           {activeTab === 'games' && (
             <div className="space-y-6">
-              <div className="content-section">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">🎮 Educational Games</h2>
-                <p className="text-gray-600 mb-6">Play interactive games to learn and earn points!</p>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {dashboardData?.games?.length > 0 ? (
-                    dashboardData.games.map((game) => (
-                      <div key={game.id} className="stats-card p-6 text-center">
-                        <div className="text-4xl mb-4">
-                          {game.type === 'quiz' ? '❓' : 
-                           game.type === 'puzzle' ? '🧩' : 
-                           game.subject?.toLowerCase().includes('science') ? '🔬' : 
-                           game.subject?.toLowerCase().includes('math') ? '📐' : '🎮'}
-                        </div>
-                        <h3 className="font-bold text-lg text-gray-900">{game.title}</h3>
-                        <p className="text-gray-600 text-sm mb-4">{game.description || 'Educational Game'}</p>
-                        <button 
-                          onClick={() => setCurrentGame(game)}
-                          className="btn-primary w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                        >
-                          Play Now
-                        </button>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="col-span-3 text-center py-12 text-gray-500">
-                      No games available at the moment. Check back later!
-                    </div>
-                  )}
-                </div>
-              </div>
+              <StudentGameDashboard 
+                currentUser={currentUser} 
+                onPlayGame={setCurrentGame} 
+              />
             </div>
           )}
 

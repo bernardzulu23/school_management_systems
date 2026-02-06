@@ -50,7 +50,6 @@ school-management-frontend/
 │   ├── 🌐 api.js                     # API client
 │   ├── 🔑 auth.js                    # Authentication
 │   ├── 🔐 security.js                # Security utilities
-│   ├── 🗄️ supabase.js                # Supabase client
 │   └── 🛠️ utils.js                   # General utilities
 │
 ├── 📱 public/                        # Static assets and PWA files

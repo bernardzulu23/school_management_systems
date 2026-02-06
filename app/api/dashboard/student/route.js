@@ -15,6 +15,30 @@ async function getCurrentUser() {
 
 export async function GET(request) {
   try {
+    const { searchParams } = new URL(request.url)
+    const timeRange = searchParams.get('timeRange') || 'term'
+    
+    // Calculate start date based on timeRange
+    const now = new Date()
+    let startDate = new Date()
+    
+    switch (timeRange) {
+      case 'week':
+        startDate.setDate(now.getDate() - 7)
+        break
+      case 'month':
+        startDate.setMonth(now.getMonth() - 1)
+        break
+      case 'term':
+        startDate.setMonth(now.getMonth() - 3) // Approx 3 months per term
+        break
+      case 'year':
+        startDate.setFullYear(now.getFullYear() - 1)
+        break
+      default:
+        startDate.setMonth(now.getMonth() - 3) // Default to term
+    }
+
     const headersList = headers()
     const userId = headersList.get('x-user-id') // Assuming middleware sets this or we parse token
     
@@ -133,17 +157,20 @@ export async function GET(request) {
       }
     })
 
-    // 5d. Fetch Attendance & Assignments (Graceful)
+    // 5d. Fetch Attendance & Assignments
     let attendanceRate = 0
+    let attendanceRecords = []
+    
     try {
-      if (prisma.attendance) {
-        const attendanceRecords = await prisma.attendance.findMany({
-          where: { studentId: student.id }
-        })
-        if (attendanceRecords.length > 0) {
-          const presentCount = attendanceRecords.filter(a => a.status === 'present' || a.status === 'late').length
-          attendanceRate = Math.round((presentCount / attendanceRecords.length) * 100)
-        }
+      attendanceRecords = await prisma.attendance.findMany({
+        where: { studentId: student.id },
+        orderBy: { date: 'desc' },
+        take: 30 // Last 30 records for analytics
+      })
+      
+      if (attendanceRecords.length > 0) {
+        const presentCount = attendanceRecords.filter(a => a.status === 'present' || a.status === 'late').length
+        attendanceRate = Math.round((presentCount / attendanceRecords.length) * 100)
       }
     } catch (e) {
       console.warn('Attendance fetch failed:', e.message)
@@ -151,21 +178,53 @@ export async function GET(request) {
 
     let assignmentsCompleted = 0
     let totalAssignments = 0
+    let assignmentsList = []
+    
     try {
-      if (prisma.assignment && prisma.assignmentSubmission) {
-        const assignments = await prisma.assignment.findMany({
-          where: { 
-            class: student.class,
-            subject: { in: student.selected_subjects }
+      // Fetch assignments with submissions to calculate status properly
+      const rawAssignments = await prisma.assignment.findMany({
+        where: { 
+          class: student.class,
+          subject: { in: student.selected_subjects }
+        },
+        include: {
+          submissions: {
+            where: { studentId: student.id }
           }
-        })
-        totalAssignments = assignments.length
+        },
+        orderBy: { dueDate: 'asc' }
+      })
+      
+      const now = new Date()
+      
+      assignmentsList = rawAssignments.map(assignment => {
+        const submission = assignment.submissions[0]
+        let status = 'pending'
+        
+        if (submission) {
+          if (submission.status === 'late' || (new Date(submission.submittedAt) > new Date(assignment.dueDate))) {
+            status = 'late'
+          } else {
+            status = 'completed'
+          }
+        } else if (new Date(assignment.dueDate) < now) {
+          status = 'missing'
+        }
+        
+        return {
+          id: assignment.id,
+          title: assignment.title,
+          subject: assignment.subject,
+          dueDate: assignment.dueDate,
+          createdAt: assignment.createdAt,
+          status: status,
+          grade: submission?.grade,
+          feedback: submission?.feedback
+        }
+      })
 
-        const submissions = await prisma.assignmentSubmission.findMany({
-          where: { studentId: student.id }
-        })
-        assignmentsCompleted = submissions.length
-      }
+      totalAssignments = assignmentsList.length
+      assignmentsCompleted = assignmentsList.filter(a => a.status === 'completed' || a.status === 'late').length
     } catch (e) {
       console.warn('Assignment fetch failed:', e.message)
     }
@@ -210,7 +269,6 @@ export async function GET(request) {
       let subjectCompleted = 0
       
       try {
-        if (prisma.assignment && prisma.assignmentSubmission) {
            subjectAssignments = await prisma.assignment.count({
                where: { subject: subject.name, class: student.class }
            })
@@ -220,7 +278,6 @@ export async function GET(request) {
                    assignment: { subject: subject.name }
                }
            })
-        }
       } catch (e) {}
 
       return {
@@ -256,6 +313,8 @@ export async function GET(request) {
           class: student.class,
           examNumber: student.exam_number,
           subjects: student.selected_subjects,
+          attendance_records: attendanceRecords, // Pass raw records for analytics
+          assignments_list: assignmentsList, // Pass raw assignments for analytics
           emergency_contact: {
             name: student.emergency_contact_name || 'Not provided',
             relationship: student.emergency_contact_relationship || 'Not provided',
@@ -272,6 +331,8 @@ export async function GET(request) {
           achievements: achievementsCount,
           level: student.gamificationProfile?.level || 1,
           points: student.gamificationProfile?.points || 0,
+          xp: student.gamificationProfile?.xp || 0,
+          nextLevelXp: student.gamificationProfile?.nextLevelXp || 100,
           totalSubjects,
           totalResults,
           completedGoals,

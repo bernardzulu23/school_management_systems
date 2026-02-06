@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/Button'
 import SubjectSelection from '@/components/registration/SubjectSelection'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
 // import ProfilePictureUpload from '@/components/ui/ProfilePictureUpload'
-// import { uploadProfilePicture } from '@/lib/cloudinary-client'
 import toast from 'react-hot-toast'
 import {
   User,
@@ -353,28 +352,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
     try {
       // Upload profile picture first if provided - Temporarily disabled
       let profilePictureUrl = ''
-      /*
-      if (profilePictureFile) {
-        setProfilePictureUploading(true)
-        toast.loading('Uploading profile picture...')
-
-        // Generate a temporary user ID for upload (you might want to get this from your backend)
-        const tempUserId = `temp_${Date.now()}`
-        const uploadResult = await uploadProfilePicture(profilePictureFile, tempUserId, role)
-
-        if (uploadResult.success) {
-          profilePictureUrl = uploadResult.url
-          toast.dismiss()
-          toast.success('Profile picture uploaded successfully!')
-        } else {
-          toast.dismiss()
-          toast.error(`Profile picture upload failed: ${uploadResult.error}`)
-          // Continue with registration even if profile picture upload fails
-        }
-        setProfilePictureUploading(false)
-      }
-      */
-
+      
       // Create a clean data object with only the fields the backend expects
       const submitData = {
         // Basic required fields
