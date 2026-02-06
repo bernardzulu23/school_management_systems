@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
-  Video, Image as ImageIcon, Music, FileText, Mic, Camera, Upload, Play,
+  Video, Image, Music, FileText, Mic, Camera, Upload, Play,
   Pause, SkipForward, SkipBack, Volume2, Edit3, Trash2, Plus,
   Save, Share2, Download, Eye, Clock, Users, BookOpen, Target
 } from 'lucide-react'
@@ -403,7 +403,7 @@ export default function MultimediaLessonCreator() {
                             <div className="flex items-center">
                               {media.type === 'image' && (
                                 <>
-                                  <ImageIcon className="h-4 w-4 mr-2 text-blue-400" />
+                                  <Image className="h-4 w-4 mr-2 text-blue-400" />
                                   <img src={media.url} alt={media.name || 'Slide image'} className="h-8 w-8 mr-2 rounded object-cover" />
                                 </>
                               )}
