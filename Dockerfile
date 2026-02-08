@@ -1,62 +1,56 @@
-# Use Debian-based image for better compatibility
-FROM node:18-bookworm-slim AS base
+# syntax=docker/dockerfile:1
 
-# Install OpenSSL (needed for Prisma)
-RUN apt-get update -y && apt-get install -y openssl ca-certificates
+ARG NODE_VERSION=20.11.0
+FROM node:${NODE_VERSION}-slim as base
 
-# Install dependencies only when needed
-FROM base AS deps
+LABEL fly_launch_runtime="Next.js/Prisma"
+
+# Install OpenSSL and other dependencies
+RUN apt-get update -qq && \
+    apt-get install -y --no-install-recommends \
+    openssl \
+    ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# Next.js app lives here
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+# Set production environment
+ENV NODE_ENV="production"
 
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Throw-away build stage to reduce size of final image
+FROM base as build
+
+# Install packages needed to build node modules
+RUN apt-get update -qq && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    pkg-config \
+    python3 && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install node modules
+COPY package-lock.json package.json ./
+RUN npm ci --include=dev
+
+# Copy application code
 COPY . .
 
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Build the application
+# Build application
 RUN npm run build
 
-# Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
+# Remove development dependencies
+RUN npm prune --omit=dev
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+# Final stage for app image
+FROM base
 
-# Don't run as root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# Copy built application
+COPY --from=build /app /app
 
-# Copy public folder
-COPY --from=builder /app/public ./public
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Automatically leverage output traces to reduce image size
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/prisma ./prisma
-
-USER nextjs
-
+# Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-
-CMD ["node", "server.js"]
+CMD [ "npm", "run", "start" ]
