@@ -1,0 +1,236 @@
+import React, { memo } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/Button'
+import {
+  AlertCircle, BarChart3, TrendingUp, Users, CheckCircle, Award, FileBarChart, BookOpen,
+  UserPlus, GraduationCap, FileText, Plus
+} from 'lucide-react'
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
+import { HeadteacherStats } from './HeadteacherStats'
+import { useHeadteacher } from '@/lib/context/HeadteacherContext'
+
+export const HeadteacherOverview = memo(function HeadteacherOverview() {
+  const { 
+    dashboardData, 
+    schoolStats, 
+    setActiveTab,
+    subjectPerformanceData 
+  } = useHeadteacher()
+
+  const hasResults = !!dashboardData
+
+  return (
+    <div className="space-y-8">
+      {/* Critical Alert Banner */}
+      {dashboardData?.students_requiring_attention?.length > 0 && (
+        <div className="backdrop-blur-lg bg-slate-800/60 border border-red-500/40 rounded-3xl p-6 shadow-2xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <div className="backdrop-blur-md bg-red-600/60 border border-red-400/50 rounded-2xl p-3 mr-4">
+                <AlertCircle className="h-8 w-8 text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-white text-xl">
+                  {dashboardData.students_requiring_attention.length} Students Require Immediate Attention
+                </h3>
+                <p className="text-red-300 mt-1">
+                  Students scoring below 40% need urgent academic intervention
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setActiveTab('student-attention')}
+              className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-300"
+            >
+              View Details
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Enhanced Stats Cards */}
+      <HeadteacherStats schoolStats={schoolStats} />
+
+      {/* School Performance Overview */}
+      <Card variant="glass">
+        <CardHeader>
+          <CardTitle className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent flex items-center">
+            <BarChart3 className="h-6 w-6 mr-3 text-green-400" />
+            School Performance Overview
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="text-center p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl">
+                <div className="backdrop-blur-md bg-green-600/60 border border-green-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="font-bold text-white text-lg">Student Achievement</h3>
+                <p className="text-3xl font-bold text-green-400 mt-2">{schoolStats.passRate}%</p>
+                <p className="text-slate-300 text-sm mt-1">Based on recent results</p>
+              </div>
+              <div className="text-center p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl">
+                <div className="backdrop-blur-md bg-blue-600/60 border border-blue-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="font-bold text-white text-lg">Teacher Effectiveness</h3>
+                <p className="text-3xl font-bold text-blue-400 mt-2">{schoolStats.teacherEffectiveness}%</p>
+                <p className="text-slate-300 text-sm mt-1">Based on student performance</p>
+              </div>
+              <div className="text-center p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl">
+                <div className="backdrop-blur-md bg-purple-600/60 border border-purple-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="font-bold text-white text-lg">Attendance Rate</h3>
+                <p className="text-3xl font-bold text-purple-400 mt-2">{schoolStats.attendanceRate}%</p>
+                <p className="text-slate-300 text-sm mt-1">Current term</p>
+              </div>
+              <div className="text-center p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl">
+                <div className="backdrop-blur-md bg-orange-600/60 border border-orange-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <Award className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="font-bold text-white text-lg">Pass Rate</h3>
+                <p className="text-3xl font-bold text-orange-400 mt-2">{schoolStats.passRate}%</p>
+                <p className="text-slate-300 text-sm mt-1">Current term</p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Performance Analytics */}
+      {hasResults && (
+        <Card variant="glass">
+          <CardHeader>
+            <CardTitle className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent flex items-center">
+              <FileBarChart className="h-6 w-6 mr-3 text-purple-400" />
+              School Performance Analytics
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* School Performance Trends */}
+                <div className="p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl">
+                  <h3 className="text-white font-bold text-lg mb-4 flex items-center">
+                    <TrendingUp className="h-5 w-5 mr-2 text-blue-400" />
+                    Performance Trends by Term
+                  </h3>
+                  <div className="h-64 flex items-center justify-center bg-slate-800/60 border border-slate-600/40 rounded-lg">
+                    <div className="text-center">
+                      <BarChart3 className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                      <p className="text-slate-300">School Performance Chart</p>
+                      <p className="text-slate-400 text-sm">Term comparison visualization</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Subject Performance */}
+                <div className="p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl">
+                  <h3 className="text-white font-bold text-lg mb-4 flex items-center">
+                    <BookOpen className="h-5 w-5 mr-2 text-green-400" />
+                    Subject Performance
+                  </h3>
+                  <div className="space-y-4">
+                    {subjectPerformanceData?.slice(0, 5).map((subject, index) => {
+                      const performance = subject.score
+                      return (
+                        <div key={index} className="p-3 bg-slate-800/60 border border-slate-600/40 rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-white font-semibold text-sm">{subject.name}</span>
+                            <span className="text-blue-400 font-bold">{performance}%</span>
+                          </div>
+                          <div className="w-full bg-slate-600/60 rounded-full h-2">
+                            <div
+                              className={`h-2 rounded-full ${
+                                performance >= 85 ? 'bg-green-500' :
+                                performance >= 75 ? 'bg-blue-500' : 'bg-yellow-500'
+                              }`}
+                              style={{ width: `${performance}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Monthly Registrations Chart */}
+        <Card variant="glass">
+          <CardHeader>
+            <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              Monthly Registrations
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={dashboardData?.monthly_registrations || []}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.3)" />
+                  <XAxis dataKey="month" stroke="rgba(203,213,225,0.8)" />
+                  <YAxis stroke="rgba(203,213,225,0.8)" />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', borderColor: 'rgba(148, 163, 184, 0.2)', color: '#fff' }}
+                  />
+                  <Bar dataKey="students" fill="#3b82f6" name="Students" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="teachers" fill="#10b981" name="Teachers" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Quick Actions Card */}
+        <Card variant="glass">
+          <CardHeader>
+            <CardTitle className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent flex items-center">
+              <Plus className="h-6 w-6 mr-3 text-yellow-400" />
+              Quick Actions
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
+              <div className="grid grid-cols-2 gap-4">
+                <Button
+                  onClick={() => setActiveTab('user-management')}
+                  className="bg-slate-700/60 hover:bg-slate-600/60 text-white border border-slate-600/40 h-24 flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-300"
+                >
+                  <UserPlus className="h-6 w-6 text-blue-400" />
+                  <span>Register User</span>
+                </Button>
+                <Button
+                  onClick={() => setActiveTab('academic-management')}
+                  className="bg-slate-700/60 hover:bg-slate-600/60 text-white border border-slate-600/40 h-24 flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-300"
+                >
+                  <GraduationCap className="h-6 w-6 text-green-400" />
+                  <span>Create Class</span>
+                </Button>
+                <Button
+                  onClick={() => setActiveTab('academic-management')}
+                  className="bg-slate-700/60 hover:bg-slate-600/60 text-white border border-slate-600/40 h-24 flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-300"
+                >
+                  <BookOpen className="h-6 w-6 text-purple-400" />
+                  <span>Add Subject</span>
+                </Button>
+                <Button
+                  onClick={() => setActiveTab('performance-analytics')}
+                  className="bg-slate-700/60 hover:bg-slate-600/60 text-white border border-slate-600/40 h-24 flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-300"
+                >
+                  <FileText className="h-6 w-6 text-orange-400" />
+                  <span>Generate Report</span>
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+})

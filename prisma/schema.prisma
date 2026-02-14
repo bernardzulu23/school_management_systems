@@ -1,0 +1,721 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// MULTI-TENANCY: School Model
+// ============================================
+model School {
+  id          String   @id @default(uuid())
+  name        String
+  subdomain   String   @unique  // e.g., "zambian-school" for zambian-school.bluepeacktechnologies.com
+  domain      String?  @unique  // Optional custom domain
+  active      Boolean  @default(true)
+  
+  // School Settings
+  timezone    String   @default("Africa/Lusaka")
+  currency    String   @default("ZMW")
+  academicYear String? // e.g., "2024/2025"
+  
+  // Contact Info
+  email       String?
+  phone       String?
+  address     String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations - All school-specific data
+  users                User[]
+  students             Student[]
+  teachers             Teacher[]
+  hods                 HeadOfDepartment[]
+  classes              Class[]
+  subjects             Subject[]
+  results              Result[]
+  studentWorks         StudentWork[]
+  goals                Goal[]
+  notes                Note[]
+  bookLoans            BookLoan[]
+  activities           Activity[]
+  studyMaterials       StudyMaterial[]
+  gamificationProfiles GamificationProfile[]
+  badges               Badge[]
+  creativeFeatures     CreativeFeature[]
+  assessments          Assessment[]
+  games                Game[]
+  attendances          Attendance[]
+  assignments          Assignment[]
+  assignmentSubmissions AssignmentSubmission[]
+  fieldTrips           FieldTrip[]
+  
+  // Join Table Relations
+  activityParticipants ActivityParticipant[]
+  studentBadges        StudentBadge[]
+  studentMaterials     StudentMaterial[]
+  studentGames         StudentGame[]
+
+  @@index([subdomain])
+  @@index([active])
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String
+  password  String
+  name      String
+  role      String   // 'headteacher', 'hod', 'teacher', 'student'
+  
+  // Multi-tenancy
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  
+  // Basic Info (Common)
+  contact_number String?
+  address        String?
+  date_of_birth  DateTime?
+  gender         String?
+  profile_picture_url String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  studentProfile Student?
+  teacherProfile Teacher?
+  hodProfile     HeadOfDepartment?
+  
+  // New Relations
+  notes                   Note[]
+  bookLoans               BookLoan[]
+  organizedActivities     Activity[]
+  activityParticipations  ActivityParticipant[]
+  
+  @@unique([schoolId, email]) // Email must be unique per school
+  @@index([schoolId])
+  @@index([role])
+}
+
+model Student {
+  id        String   @id @default(uuid()) // Can be custom ID like STU2025001
+  userId    String?  @unique // Optional if student exists without user account initially
+  user      User?    @relation(fields: [userId], references: [id])
+  
+  name      String
+  
+  // Multi-tenancy
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  
+  // Academic Info
+  class     String   // 'Form 1A' - combination of year_group and section
+  exam_number String?
+  previous_school String?
+  grade_average Float?
+  selected_subjects String[] // Array of subject names selected
+
+  // Parent/Guardian Info
+  parent_father_name    String?
+  parent_father_contact String?
+  parent_father_email   String?
+  parent_mother_name    String?
+  parent_mother_contact String?
+  parent_mother_email   String?
+  
+  guardian_name         String?
+  guardian_contact      String?
+  guardian_email        String?
+  guardian_relationship String?
+  guardian_address      String?
+  
+  emergency_contact_name         String?
+  emergency_contact_phone        String?
+  emergency_contact_relationship String?
+  emergency_contact_address      String?
+
+  // Medical Info
+  blood_type            String?
+  medical_aid_scheme    String?
+  medical_aid_number    String?
+  family_doctor_name    String?
+  family_doctor_contact String?
+  medical_conditions    String?
+  allergies             String?
+  
+  results             Result[]
+  goals               Goal[]
+  works               StudentWork[]
+  materialInteractions StudentMaterial[]
+  gamificationProfile GamificationProfile?
+  playedGames         StudentGame[]
+  attendance          Attendance[]
+  assignmentSubmissions AssignmentSubmission[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([schoolId])
+  @@index([class])
+  @@index([name])
+  @@index([grade_average])
+  @@unique([schoolId, exam_number])
+}
+
+model StudentMaterial {
+  id              String        @id @default(uuid())
+  studentId       String
+  student         Student       @relation(fields: [studentId], references: [id])
+  studyMaterialId String
+  studyMaterial   StudyMaterial @relation(fields: [studyMaterialId], references: [id])
+  
+  // Multi-tenancy
+  schoolId        String
+  school          School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  isBookmarked    Boolean       @default(false)
+  isDownloaded    Boolean       @default(false)
+  downloads       Int           @default(0)
+  lastAccessed    DateTime      @default(now())
+  
+  @@index([schoolId])
+  @@unique([studentId, studyMaterialId])
+}
+
+model StudyMaterial {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  type        String   // 'pdf', 'video', 'powerpoint', 'zip', 'image'
+  subject     String
+  fileUrl     String
+  uploadDate  DateTime @default(now())
+  size        String?
+  tags        String[]
+  
+  // Multi-tenancy
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  
+  studentInteractions StudentMaterial[]
+  
+  @@index([schoolId])
+  @@index([subject])
+}
+
+model Teacher {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  
+  // Multi-tenancy
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  
+  department String?
+  specialization String?
+  
+  classes   Class[] 
+  subjects  Subject[] 
+  
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@index([department])
+} 
+
+model HeadOfDepartment { 
+  id        String   @id @default(uuid()) 
+  userId    String   @unique 
+  user      User     @relation(fields: [userId], references: [id]) 
+  
+  // Multi-tenancy 
+  schoolId  String 
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  department String 
+  
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@index([department])
+} 
+
+model Class { 
+  id          String   @id @default(uuid()) 
+  name        String   // e.g. "Form 1A" 
+  year_group  String   // e.g. "Form 1" 
+  section     String   // e.g. "A" 
+  
+  // Multi-tenancy 
+  schoolId    String 
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  teacherId   String? 
+  teacher     Teacher? @relation(fields: [teacherId], references: [id]) 
+  
+  subjects    Subject[] 
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([schoolId])
+  @@index([year_group])
+  @@unique([schoolId, name])
+} 
+
+model Subject { 
+  id          String   @id @default(uuid()) 
+  name        String   // e.g. "Mathematics" 
+  code        String?  // e.g. "MATH101" 
+  topics      String[] // e.g. ["Algebra", "Geometry"] 
+  
+  // Multi-tenancy 
+  schoolId    String 
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  teacherId   String? 
+  teacher     Teacher? @relation(fields: [teacherId], references: [id]) 
+  
+  classId     String? 
+  class       Class?   @relation(fields: [classId], references: [id]) 
+  
+  results     Result[] 
+  
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@index([name])
+  @@unique([schoolId, code]) 
+} 
+
+model Result { 
+  id          String   @id @default(uuid()) 
+  studentId   String 
+  student     Student  @relation(fields: [studentId], references: [id]) 
+  
+  subjectId   String 
+  subject     Subject  @relation(fields: [subjectId], references: [id]) 
+  
+  // Multi-tenancy 
+  schoolId    String 
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  score       Float 
+  grade       String 
+  term        String 
+  year        Int 
+  
+  comments    String? 
+  
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@index([studentId]) 
+  @@index([subjectId])
+  @@index([score])
+  @@index([term, year]) 
+} 
+
+model StudentWork { 
+  id          String   @id @default(uuid()) 
+  studentId   String 
+  student     Student  @relation(fields: [studentId], references: [id]) 
+  
+  // Multi-tenancy 
+  schoolId    String 
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  title       String 
+  description String 
+  type        String   // 'art', 'science', 'writing', 'coding', 'music' 
+  fileUrl     String? 
+  thumbnailUrl String? 
+  
+  likes       Int      @default(0) 
+  views       Int      @default(0) 
+  
+  isPublic    Boolean  @default(true) 
+  
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@index([studentId]) 
+  @@index([type])
+  @@index([createdAt])
+} 
+
+model Goal { 
+  id          String   @id @default(uuid()) 
+  studentId   String 
+  student     Student  @relation(fields: [studentId], references: [id]) 
+  
+  // Multi-tenancy 
+  schoolId    String 
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  title       String 
+  description String? 
+  deadline    DateTime? 
+  status      String   @default("pending") // 'pending', 'in_progress', 'completed' 
+  progress    Int      @default(0) // 0-100 
+  category    String   // 'academic', 'personal', 'skill' 
+  
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@index([studentId]) 
+  @@index([status])
+} 
+
+model Note { 
+  id          String   @id @default(uuid()) 
+  userId      String 
+  user        User     @relation(fields: [userId], references: [id]) 
+  
+  // Multi-tenancy 
+  schoolId    String 
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  title       String 
+  content     String 
+  tags        String[] 
+  color       String   @default("#ffffff") 
+  
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@index([userId]) 
+} 
+
+model BookLoan { 
+  id          String   @id @default(uuid()) 
+  userId      String 
+  user        User     @relation(fields: [userId], references: [id]) 
+  
+  // Multi-tenancy 
+  schoolId    String 
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  bookTitle   String 
+  author      String 
+  isbn        String? 
+  
+  borrowDate  DateTime @default(now()) 
+  dueDate     DateTime 
+  returnDate  DateTime? 
+  status      String   @default("active") // 'active', 'returned', 'overdue' 
+  
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@index([userId]) 
+  @@index([status]) 
+} 
+
+model Activity { 
+  id          String   @id @default(uuid()) 
+  organizerId String 
+  organizer   User     @relation(fields: [organizerId], references: [id]) 
+  
+  // Multi-tenancy 
+  schoolId    String 
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  title       String 
+  description String 
+  date        DateTime 
+  location    String 
+  type        String   // 'sport', 'club', 'event' 
+  
+  participants ActivityParticipant[] 
+  
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@index([type])
+  @@index([date])
+} 
+
+model ActivityParticipant { 
+  id          String   @id @default(uuid()) 
+  activityId  String 
+  activity    Activity @relation(fields: [activityId], references: [id]) 
+  
+  userId      String 
+  user        User     @relation(fields: [userId], references: [id]) 
+  
+  role        String   @default("member") // 'member', 'leader' 
+  joinedAt    DateTime @default(now()) 
+  
+  // Multi-tenancy 
+  schoolId    String 
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  @@unique([activityId, userId]) 
+  @@index([schoolId]) 
+} 
+
+model GamificationProfile { 
+  id          String   @id @default(uuid()) 
+  studentId   String   @unique 
+  student     Student  @relation(fields: [studentId], references: [id]) 
+  
+  // Multi-tenancy 
+  schoolId    String 
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  points      Int      @default(0) 
+  level       Int      @default(1) 
+  xp          Int      @default(0) 
+  nextLevelXp Int      @default(100) 
+  
+  badges      StudentBadge[] 
+  
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@index([points])
+} 
+
+model Badge { 
+  id          String   @id @default(uuid()) 
+  name        String 
+  description String 
+  icon        String 
+  category    String   // 'academic', 'sport', 'social', 'creative' 
+  rarity      String   // 'common', 'rare', 'epic', 'legendary' 
+  xpValue     Int      @default(10) 
+  
+  // Multi-tenancy 
+  schoolId    String 
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  studentBadges StudentBadge[] 
+  
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@unique([schoolId, name]) 
+} 
+
+model StudentBadge { 
+  id          String   @id @default(uuid()) 
+  studentId   String?  // Optional to allow linking to gamification profile directly or student 
+  profileId   String 
+  profile     GamificationProfile @relation(fields: [profileId], references: [id]) 
+  
+  badgeId     String 
+  badge       Badge    @relation(fields: [badgeId], references: [id]) 
+  
+  // Multi-tenancy 
+  schoolId    String 
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  awardedAt   DateTime @default(now()) 
+  
+  @@index([schoolId]) 
+  @@unique([profileId, badgeId]) 
+} 
+
+model CreativeFeature { 
+  id            String   @id @default(uuid()) 
+  featureId     String   // The internal ID used for component mapping 
+  name          String 
+  description   String 
+  category      String   // 'creative' or 'stem' 
+  roles         String[] // Array of roles: 'teacher', 'student', etc. 
+  difficulty    String   // 'Beginner', 'Intermediate', 'Advanced' 
+  estimatedTime String 
+  iconName      String   // Name of the icon to use 
+  
+  // Multi-tenancy 
+  schoolId      String 
+  school        School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  createdAt     DateTime @default(now()) 
+  updatedAt     DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@unique([schoolId, featureId]) 
+} 
+
+model Assessment { 
+  id               String   @id @default(uuid()) 
+  title            String 
+  subject          String 
+  class            String   // e.g. "Form 1A" 
+  
+  // Multi-tenancy 
+  schoolId         String 
+  school           School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  date             DateTime 
+  duration_minutes Int      @default(60) 
+  type             String   // 'exam', 'quiz', 'assignment' 
+  description      String? 
+  
+  createdAt        DateTime @default(now()) 
+  updatedAt        DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@index([subject])
+  @@index([class])
+  @@index([date])
+} 
+
+model Game { 
+  id          String   @id @default(uuid()) 
+  title       String 
+  description String? 
+  type        String   // 'quiz', 'puzzle', 'challenge' 
+  subject     String? 
+  difficulty  String   // 'easy', 'medium', 'hard' 
+  content     Json     // Stores questions, config, etc. 
+  
+  // Multi-tenancy 
+  schoolId    String 
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
+  
+  playedBy    StudentGame[] 
+  
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
+  
+  @@index([schoolId]) 
+  @@index([subject])
+  @@index([type])
+}
+
+model StudentGame {
+  id        String   @id @default(uuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+  gameId    String
+  game      Game     @relation(fields: [gameId], references: [id])
+  
+  // Multi-tenancy
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  
+  score     Int
+  completed Boolean  @default(false)
+  playedAt  DateTime @default(now())
+}
+
+model Attendance {
+  id        String   @id @default(uuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+  
+  // Multi-tenancy
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  
+  date      DateTime
+  status    String   // 'present', 'absent', 'late', 'excused'
+  remarks   String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([schoolId])
+  @@index([studentId])
+  @@index([date])
+  @@unique([studentId, date])
+}
+
+model Assignment {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  subject     String
+  class       String
+  
+  // Multi-tenancy
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  
+  dueDate     DateTime
+  teacherId   String? // Optional for now
+  
+  submissions AssignmentSubmission[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([schoolId])
+  @@index([dueDate])
+}
+
+model AssignmentSubmission {
+  id           String     @id @default(uuid())
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  studentId    String
+  student      Student    @relation(fields: [studentId], references: [id])
+  
+  fileUrl      String?
+  content      String?
+  grade        Float?
+  feedback     String?
+  submittedAt  DateTime   @default(now())
+  status       String     @default("submitted") // 'submitted', 'graded', 'late'
+  
+  // Multi-tenancy
+  schoolId     String
+  school       School     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([assignmentId, studentId])
+  @@index([schoolId])
+}
+
+model FieldTrip {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  location    String
+  date        DateTime
+  type        String   // 'virtual', 'physical'
+  subject     String
+  grade       String
+  imageUrl    String?
+  thumbnail   String?
+  duration    String?
+  difficulty  String?  // 'Beginner', 'Intermediate', 'Advanced'
+  rating      Float    @default(0)
+  participants Int     @default(0)
+  stops       Json?    // Array of stop objects
+  learningObjectives String[]
+  resources   String[]
+  status      String   // 'upcoming', 'completed', 'cancelled'
+  
+  // Multi-tenancy
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([schoolId])
+  @@index([date])
+}
