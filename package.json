@@ -17,7 +17,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && next build --webpack",
     "start": "node .next/standalone/server.js",
     "lint": "next lint",
     "test": "jest",
@@ -54,7 +54,6 @@
     "next": "^16.1.6",
     "next-themes": "^0.4.6",
     "postcss": "8.4.47",
-    "prisma": "^5.10.2",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.47.0",
@@ -64,15 +63,14 @@
     "tailwindcss": "^3.3.0",
     "workbox-webpack-plugin": "^7.3.0",
     "workbox-window": "^7.3.0",
-    "xlsx": "^0.18.5",
     "zod": "^4.3.6",
     "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^13.4.0",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "14.2.15",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^16.1.6",
     "html-encoding-sniffer": "^3.0.0",
     "husky": "^9.1.7",
     "jest": "^30.2.0",
@@ -80,6 +78,7 @@
     "jsdom": "^22.1.0",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
+    "prisma": "^6.19.2",
     "typescript": "^5"
   },
   "engines": {
