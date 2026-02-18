@@ -46,7 +46,7 @@ RUN npx prisma generate
 COPY . .
 
 # Build Next.js
-RUN npm run build
+RUN npm run build -- --webpack
 
 # Remove dev dependencies
 RUN npm prune --omit=dev
