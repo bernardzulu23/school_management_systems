@@ -8,7 +8,7 @@
   "deploy": {
     "runtime": "V2",
     "numReplicas": 1,
-    "startCommand": "node node_modules/prisma/build/index.js migrate deploy && node server.js",
+    "startCommand": "./scripts/start.sh",
     "healthcheckPath": "/api/ping",
     "healthcheckTimeout": 300,
     "sleepApplication": false,

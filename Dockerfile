@@ -67,6 +67,10 @@ COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=build /app/node_modules/prisma ./node_modules/prisma
 
+# Copy start script (server first, then migrations)
+COPY --from=build /app/scripts ./scripts/
+RUN chmod +x scripts/start.sh
+
 # Set correct permissions
 RUN chown -R node:node /app
 
