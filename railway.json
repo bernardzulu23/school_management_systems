@@ -8,8 +8,8 @@
   "deploy": {
     "runtime": "V2",
     "numReplicas": 1,
-    "startCommand": "npm start",
-    "healthcheckPath": "/",
+    "startCommand": "npx prisma migrate deploy && npm start",
+    "healthcheckPath": "/api/health",
     "sleepApplication": false,
     "useLegacyStacker": false,
     "multiRegionConfig": {
