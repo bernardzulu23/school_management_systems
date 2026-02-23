@@ -41,6 +41,9 @@ RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" npx prisma gene
 # Copy application code
 COPY . .
 
+# Placeholder for build only - Railway injects real DATABASE_URL at runtime
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
+
 # Build Next.js
 RUN npm run build
 
