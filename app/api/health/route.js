@@ -20,3 +20,8 @@ export async function GET() {
     { status: 200, headers: { 'Cache-Control': 'no-store' } }
   )
 }
+
+export async function HEAD() {
+  const res = await GET()
+  return new Response(null, { status: res.status, headers: res.headers })
+}
