@@ -35,12 +35,8 @@ RUN npm ci --include=dev
 # Copy prisma schema
 COPY prisma ./prisma/
 
-# Set a dummy DATABASE_URL for build time only - Prisma needs it to validate schema
-# The real DATABASE_URL will be provided at runtime by Railway
-ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
-
-# Generate Prisma Client
-RUN npx prisma generate
+# Generate Prisma Client (dummy URL for build only, not persisted as ENV)
+RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" npx prisma generate
 
 # Copy application code
 COPY . .
