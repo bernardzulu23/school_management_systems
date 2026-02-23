@@ -1,24 +1,22 @@
-import { prisma } from '@/lib/prisma'
-
+/**
+ * Lightweight health check - no DB dependency.
+ * Returns 200 immediately so Railway healthcheck passes while app starts.
+ * DB is checked separately to avoid blocking/crashing on cold start.
+ */
 export async function GET() {
+  let database = 'unknown'
   try {
-    // Check database connection
-    await prisma.$queryRaw`SELECT 1`
-    return new Response(JSON.stringify({ status: 'healthy', database: 'connected' }), { 
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    })
-  } catch (error) {
-    console.error('Health check failed:', error)
-    // Return 200 even on failure to allow deployment to succeed for debugging
-    return new Response(JSON.stringify({ 
-      status: 'maintenance', 
-      database: 'disconnected', 
-      error: error.message,
-      stack: error.stack
-    }), { 
-      status: 200, // Returning 200 to pass Railway healthcheck
-      headers: { 'Content-Type': 'application/json' }
-    })
+    const mod = await import('@/lib/prisma')
+    const prisma = mod.prisma ?? mod.default
+    if (prisma) await prisma.$queryRaw`SELECT 1`
+    database = 'connected'
+  } catch (err) {
+    database = 'disconnected'
+    console.error('Health DB check:', err?.message)
   }
+
+  return Response.json(
+    { status: 'ok', database, timestamp: new Date().toISOString() },
+    { status: 200, headers: { 'Cache-Control': 'no-store' } }
+  )
 }

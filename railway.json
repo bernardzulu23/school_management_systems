@@ -9,7 +9,8 @@
     "runtime": "V2",
     "numReplicas": 1,
     "startCommand": "npx prisma migrate deploy && node server.js",
-    "healthcheckPath": "/api/health",
+    "healthcheckPath": "/api/ping",
+    "healthcheckTimeout": 300,
     "sleepApplication": false,
     "useLegacyStacker": false,
     "multiRegionConfig": {
@@ -18,7 +19,6 @@
       }
     },
     "restartPolicyType": "ON_FAILURE",
-    "healthcheckTimeout": 100,
     "restartPolicyMaxRetries": 10
   }
 }
