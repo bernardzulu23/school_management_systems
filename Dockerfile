@@ -62,6 +62,12 @@ COPY --from=build /app/public ./public
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
 
+# Copy Prisma for migrations (npx prisma migrate deploy at runtime)
+COPY --from=build /app/prisma ./prisma/
+COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=build /app/node_modules/prisma ./node_modules/prisma
+
 # Set correct permissions
 RUN chown -R node:node /app
 
