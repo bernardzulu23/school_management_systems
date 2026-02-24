@@ -13,6 +13,7 @@ async function main() {
     create: {
       name: 'Demo High School',
       subdomain: 'demo-school',
+      domain: 'demo-school.bluepeacktechnologies.com',
       email: 'admin@demo-school.edu',
       phone: '+260 xxx xxx xxx',
       address: 'Lusaka, Zambia',
@@ -55,6 +56,7 @@ async function main() {
     create: {
       name: 'Zambian School Management System',
       subdomain: 'zambian-school',
+      domain: 'zambian-school.bluepeacktechnologies.com',
       email: 'admin@zambian-school.edu',
       phone: '+260 xxx xxx xxx',
       address: 'Lusaka, Zambia',
@@ -94,6 +96,7 @@ async function main() {
     create: {
       name: 'Ndake Day Secondary School',
       subdomain: 'ndakedaysecondaryschool',
+      domain: 'ndakedaysecondaryschool.bluepeacktechnologies.com',
       email: 'info@ndakedaysecondaryschool.bluepeacktechnologies.com',
       phone: '0977994626',
       address: 'P.O. Box 570070 Nyimba District Eastern Province',
@@ -133,6 +136,7 @@ async function main() {
     create: {
       name: 'Kalambakuwa Day Secondary School',
       subdomain: 'kalambakuwadaysecondaryschool',
+      domain: 'kalambakuwadaysecondaryschool.bluepeacktechnologies.com',
       email: 'info@kalambakuwadaysecondaryschool.bluepeacktechnologies.com',
       phone: '0976984221',
       address: 'P.O. Box 570003 Nyimba District Eastern Province',
