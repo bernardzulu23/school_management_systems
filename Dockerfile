@@ -67,9 +67,13 @@ COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=build /app/node_modules/prisma ./node_modules/prisma
 
-# Copy start script (server first, then migrations)
-COPY --from=build /app/scripts ./scripts/
-RUN chmod +x scripts/start.sh
+# Create startup script (migrations first, then server)
+RUN printf '%s\n' \
+    '#!/bin/sh' \
+    'set -e' \
+    'node node_modules/prisma/build/index.js migrate deploy' \
+    'exec node server.js' \
+    > /app/start.sh && chmod +x /app/start.sh
 
 # Set correct permissions
 RUN chown -R node:node /app
@@ -82,5 +86,5 @@ EXPOSE 3000
 # Set Hostname to 0.0.0.0 to allow external access
 ENV HOSTNAME="0.0.0.0"
 
-# Start command - Railway handles this via railway.toml
-CMD ["node", "server.js"]
+# Use startup script - avoids "failed to exec pid1" shell issues
+CMD ["/app/start.sh"]
