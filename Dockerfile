@@ -67,12 +67,13 @@ COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=build /app/node_modules/prisma ./node_modules/prisma
 
-# Create startup script (migrations first, then server)
+# Create startup script: start server first (healthcheck passes), run migrations in parallel
 RUN printf '%s\n' \
     '#!/bin/sh' \
     'set -e' \
+    'node server.js &' \
     'node node_modules/prisma/build/index.js migrate deploy' \
-    'exec node server.js' \
+    'wait' \
     > /app/start.sh && chmod +x /app/start.sh
 
 # Set correct permissions
