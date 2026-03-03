@@ -68,11 +68,12 @@ COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=build /app/node_modules/prisma ./node_modules/prisma
 
 # Create startup script: start server first (healthcheck passes), run migrations in parallel
+# Migrations are non-fatal so server stays up even if DB migrate fails
 RUN printf '%s\n' \
     '#!/bin/sh' \
     'set -e' \
     'node server.js &' \
-    'node node_modules/prisma/build/index.js migrate deploy' \
+    'node node_modules/prisma/build/index.js migrate deploy || true' \
     'wait' \
     > /app/start.sh && chmod +x /app/start.sh
 
@@ -84,7 +85,8 @@ USER node
 # Expose port (Railway will set PORT env var)
 EXPOSE 3000
 
-# Set Hostname to 0.0.0.0 to allow external access
+# Railway requires PORT - set default; Railway overrides at runtime
+ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
 # Use startup script - avoids "failed to exec pid1" shell issues
