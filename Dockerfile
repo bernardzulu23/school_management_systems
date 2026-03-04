@@ -67,13 +67,13 @@ COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=build /app/node_modules/prisma ./node_modules/prisma
 
-# Create startup script: start server first (healthcheck passes), run migrations in parallel
-# Migrations are non-fatal so server stays up even if DB migrate fails
+# Create startup script: start server first, run migrations in parallel
+# Migrations non-fatal so server stays up even if DB migrate fails
 RUN printf '%s\n' \
     '#!/bin/sh' \
     'set -e' \
-    'node server.js &' \
-    'node node_modules/prisma/build/index.js migrate deploy || true' \
+    'cd /app && node server.js &' \
+    'cd /app && node node_modules/prisma/build/index.js migrate deploy || true' \
     'wait' \
     > /app/start.sh && chmod +x /app/start.sh
 
@@ -89,5 +89,5 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Use startup script - avoids "failed to exec pid1" shell issues
-CMD ["/app/start.sh"]
+# Run via sh explicitly (slim image may not have exec bit respected)
+CMD ["/bin/sh", "/app/start.sh"]
