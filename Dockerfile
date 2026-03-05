@@ -27,6 +27,8 @@ RUN apt-get update -qq && \
     pkg-config \
     python3 && \
     rm -rf /var/lib/apt/lists/*
+COPY package.json package-lock.json ./
+RUN npm ci --include=dev
 
 COPY package-lock.json package.json ./
 RUN npm ci --include=dev
