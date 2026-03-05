@@ -7,6 +7,10 @@ WORKDIR /app
 
 ENV NODE_ENV="production"
 
+# ADD THESE TWO LINES:
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/package-lock.json ./package-lock.json
+
 # Install runtime dependencies
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
