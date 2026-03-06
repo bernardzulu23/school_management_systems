@@ -7,10 +7,6 @@ WORKDIR /app
 
 ENV NODE_ENV="production"
 
-# ADD THESE TWO LINES:
-COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/package-lock.json ./package-lock.json
-
 # Install runtime dependencies
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
@@ -27,9 +23,6 @@ RUN apt-get update -qq && \
     pkg-config \
     python3 && \
     rm -rf /var/lib/apt/lists/*
-COPY package.json package-lock.json ./
-RUN npm ci --include=dev
-
 COPY package-lock.json package.json ./
 RUN npm ci --include=dev
 
