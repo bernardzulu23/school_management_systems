@@ -31,8 +31,10 @@ export default async function proxy(request) {
   // 3. Subdomain / Multi-tenancy
   const hostname = request.headers.get('host') || ''
   const subdomain = getSubdomain(hostname)
+
+  const requestHeaders = new Headers(request.headers)
   if (subdomain && subdomain !== 'www') {
-    response.headers.set('x-school-subdomain', subdomain)
+    requestHeaders.set('x-school-subdomain', subdomain)
   }
 
   // 4. Authentication & Authorization
@@ -75,7 +77,12 @@ export default async function proxy(request) {
     }
   }
 
-  return response
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+    headers: response.headers,
+  })
 }
 
 function getSubdomain(hostname) {
