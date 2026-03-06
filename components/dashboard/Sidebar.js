@@ -25,6 +25,7 @@ import {
   Rocket,
   Upload,
   Shield,
+  MessageSquare,
 } from 'lucide-react'
 
 export function Sidebar({ className, mobileOpen, setMobileOpen }) {
@@ -43,6 +44,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
 
     const roleSpecificItems = {
       headteacher: [
+        { name: 'User Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'User Management', href: '/dashboard/users', icon: Users },
         { name: 'Registration', href: '/admin/registration', icon: UserPlus },
         { name: 'Subjects', href: '/admin/subjects', icon: BookOpen },
@@ -57,6 +59,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Reports', href: '/dashboard/reports', icon: FileText },
       ],
       hod: [
+        { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'My Classes', href: '/dashboard/classes', icon: GraduationCap },
         { name: 'Subjects', href: '/admin/subjects', icon: BookOpen },
         { name: 'Department Timetable', href: '/dashboard/timetable/hod', icon: Calendar },
@@ -69,6 +72,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
       ],
       teacher: [
+        { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'My Classes', href: '/dashboard/classes', icon: GraduationCap },
         { name: 'My Subjects', href: '/dashboard/subjects', icon: BookOpen },
         { name: 'Materials', href: '/dashboard/materials', icon: Upload },
@@ -81,6 +85,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
       ],
       student: [
+        { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'My Class', href: '/dashboard/classes', icon: GraduationCap },
         { name: 'Subjects', href: '/dashboard/subjects', icon: BookOpen },
         { name: 'Materials', href: '/dashboard/materials', icon: Upload },
@@ -92,10 +97,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       ],
     }
 
-    return [
-      ...baseItems,
-      ...(roleSpecificItems[user?.role] || []),
-    ]
+    return [...baseItems, ...(roleSpecificItems[user?.role] || [])]
   }
 
   const navContent = (
@@ -110,11 +112,17 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           </div>
         )}
         <button
-          onClick={() => mobileOpen ? setMobileOpen(false) : setIsCollapsed(!isCollapsed)}
+          onClick={() => (mobileOpen ? setMobileOpen(false) : setIsCollapsed(!isCollapsed))}
           className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          {mobileOpen ? <X className="h-5 w-5" /> : (isCollapsed ? <Menu className="h-5 w-5" /> : <X className="h-5 w-5" />)}
+          {mobileOpen ? (
+            <X className="h-5 w-5" />
+          ) : isCollapsed ? (
+            <Menu className="h-5 w-5" />
+          ) : (
+            <X className="h-5 w-5" />
+          )}
         </button>
       </div>
 
@@ -127,16 +135,18 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
               href={item.href}
               onClick={() => mobileOpen && setMobileOpen(false)}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative",
-                isActive 
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20" 
-                  : "text-gray-400 hover:text-white hover:bg-white/5"
+                'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative',
+                isActive
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
               )}
             >
-              <item.icon className={cn(
-                "h-5 w-5 shrink-0",
-                isActive ? "text-white" : "text-gray-400 group-hover:text-white"
-              )} />
+              <item.icon
+                className={cn(
+                  'h-5 w-5 shrink-0',
+                  isActive ? 'text-white' : 'text-gray-400 group-hover:text-white'
+                )}
+              />
               {(!isCollapsed || mobileOpen) && <span className="font-medium">{item.name}</span>}
               {isCollapsed && !mobileOpen && (
                 <div className="absolute left-14 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
@@ -164,18 +174,18 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     <>
       {/* Mobile Backdrop */}
       {mobileOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm transition-opacity"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
       {/* Sidebar for Desktop & Mobile */}
-      <nav 
+      <nav
         className={cn(
-          "fixed lg:static inset-y-0 left-0 bg-gray-900 text-white transition-all duration-300 border-r border-white/10 z-50",
-          isCollapsed ? "w-20" : "w-64",
-          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+          'fixed lg:static inset-y-0 left-0 bg-gray-900 text-white transition-all duration-300 border-r border-white/10 z-50',
+          isCollapsed ? 'w-20' : 'w-64',
+          mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
           className
         )}
         aria-label="Main Navigation"

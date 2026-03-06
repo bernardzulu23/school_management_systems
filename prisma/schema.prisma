@@ -57,6 +57,7 @@ model School {
   assignments          Assignment[]
   assignmentSubmissions AssignmentSubmission[]
   fieldTrips           FieldTrip[]
+  feedbacks            Feedback[]
   
   // Join Table Relations
   activityParticipants ActivityParticipant[]
@@ -99,6 +100,7 @@ model User {
   bookLoans               BookLoan[]
   organizedActivities     Activity[]
   activityParticipations  ActivityParticipant[]
+  feedbacks               Feedback[]
   
   @@unique([schoolId, email]) // Email must be unique per school
   @@index([schoolId])
@@ -718,4 +720,24 @@ model FieldTrip {
   
   @@index([schoolId])
   @@index([date])
+}
+
+model Feedback {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Multi-tenancy
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  
+  message   String
+  category  String?  // 'general', 'usability', 'feature', 'bug', 'other'
+  rating    Int?    // 1-5 optional
+  
+  createdAt DateTime @default(now())
+  
+  @@index([schoolId])
+  @@index([userId])
+  @@index([createdAt])
 }
