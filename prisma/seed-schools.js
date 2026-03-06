@@ -1,6 +1,10 @@
 const { PrismaClient } = require('@prisma/client')
 const { hash } = require('bcryptjs')
 
+// Override DATABASE_URL to use the public proxy for local seeding
+process.env.DATABASE_URL =
+  'postgresql://postgres:TBGUIpaIMczwHWzrupsNdkgwiFLRDTTr@ballast.proxy.rlwy.net:17921/railway'
+
 const prisma = new PrismaClient()
 
 async function main() {
@@ -9,7 +13,11 @@ async function main() {
   // Create first school
   const school1 = await prisma.school.upsert({
     where: { subdomain: 'demo-school' },
-    update: {},
+    update: {
+      domain: 'demo-school.bluepeacktechnologies.com',
+      email: 'admin@demo-school.edu',
+      active: true,
+    },
     create: {
       name: 'Demo High School',
       subdomain: 'demo-school',
@@ -52,7 +60,11 @@ async function main() {
   // Create second school (optional - for testing multi-tenancy)
   const school2 = await prisma.school.upsert({
     where: { subdomain: 'zambian-school' },
-    update: {},
+    update: {
+      domain: 'zambian-school.bluepeacktechnologies.com',
+      email: 'admin@zambian-school.edu',
+      active: true,
+    },
     create: {
       name: 'Zambian School Management System',
       subdomain: 'zambian-school',
@@ -92,7 +104,11 @@ async function main() {
   // Create third school: Ndake Day Secondary School
   const school3 = await prisma.school.upsert({
     where: { subdomain: 'ndakedaysecondaryschool' },
-    update: {},
+    update: {
+      domain: 'ndakedaysecondaryschool.bluepeacktechnologies.com',
+      email: 'admin@ndakedaysecondaryschool.edu',
+      active: true,
+    },
     create: {
       name: 'Ndake Day Secondary School',
       subdomain: 'ndakedaysecondaryschool',
@@ -132,7 +148,11 @@ async function main() {
   // Create fourth school: Kalambakuwa Day Secondary School
   const school4 = await prisma.school.upsert({
     where: { subdomain: 'kalambakuwadaysecondaryschool' },
-    update: {},
+    update: {
+      domain: 'kalambakuwadaysecondaryschool.bluepeacktechnologies.com',
+      email: 'admin@kalambakuwadaysecondaryschool.edu',
+      active: true,
+    },
     create: {
       name: 'Kalambakuwa Day Secondary School',
       subdomain: 'kalambakuwadaysecondaryschool',
