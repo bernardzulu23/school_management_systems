@@ -135,7 +135,14 @@ export default async function proxy(request) {
 }
 
 function getSubdomain(hostname) {
-  if (!hostname || hostname === 'localhost:3000' || hostname === 'localhost') return null
+  if (
+    !hostname ||
+    hostname === 'localhost:3000' ||
+    hostname === 'localhost' ||
+    hostname.includes('healthcheck.railway.app') ||
+    hostname.includes('railway.app')
+  )
+    return null
   const parts = hostname.split('.')
   if (parts.length > 2) return parts[0]
   return null
