@@ -32,10 +32,11 @@ export async function POST(request) {
       )
     }
 
-    const { email, password } = validation.data
+    const { email, password, subdomain } = validation.data
+    // Note: 'subdomain' is optional in schema, but passed from frontend if available
 
     // 2. Resolve school for multi-tenant lookup
-    let schoolId = await getSchoolIdFromRequest(request)
+    let schoolId = await getSchoolIdFromRequest(request, subdomain)
     console.log('[Login Debug] Resolved School ID:', schoolId)
 
     // If no school ID found from subdomain, try to find user across all schools (optional fallback)
