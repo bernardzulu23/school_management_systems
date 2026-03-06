@@ -13,8 +13,22 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [detectedSubdomain, setDetectedSubdomain] = useState('')
   const { login, logout } = useAuth()
   const router = useRouter()
+
+  // Detect subdomain on mount
+  useState(() => {
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname
+      const parts = hostname.split('.')
+      if (parts.length >= 3) {
+        const sub = parts[0] === 'www' && parts.length >= 4 ? parts[1] : parts[0]
+        setDetectedSubdomain(sub)
+        console.log('Detected Subdomain:', sub)
+      }
+    }
+  }, [])
 
   const validateEmail = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -48,7 +62,10 @@ export default function LoginPage() {
       toast.success('Login successful!')
       router.push('/')
     } catch (error) {
-      toast.error(error.message || 'Login failed')
+      console.error('Login failed:', error)
+      // Extract specific message if available
+      const msg = error.message || 'Login failed'
+      toast.error(msg)
     } finally {
       setIsLoading(false)
     }
@@ -86,6 +103,11 @@ export default function LoginPage() {
           <p className="mt-3 text-center text-gray-300 text-sm">
             Enter your credentials to access the portal
           </p>
+          {detectedSubdomain && (
+            <div className="mt-2 px-3 py-1 bg-blue-500/20 rounded-full border border-blue-500/30 text-xs text-blue-200">
+              School: {detectedSubdomain}
+            </div>
+          )}
         </header>
 
         <form className="space-y-5" onSubmit={handleSubmit}>
