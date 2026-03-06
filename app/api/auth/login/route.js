@@ -20,10 +20,12 @@ if (
 export async function POST(request) {
   try {
     const body = await request.json()
+    console.log('[Login Debug] Request Body:', { email: body.email }) // Log email only for safety
 
     // 1. Input Validation
     const validation = await validateRequest(loginSchema, body)
     if (!validation.success) {
+      console.log('[Login Debug] Validation Failed:', validation.errors)
       return NextResponse.json(
         { error: 'Validation failed', details: validation.errors },
         { status: 400 }
@@ -33,7 +35,11 @@ export async function POST(request) {
     const { email, password } = validation.data
 
     // 2. Resolve school for multi-tenant lookup
-    const schoolId = await getSchoolIdFromRequest(request)
+    let schoolId = await getSchoolIdFromRequest(request)
+    console.log('[Login Debug] Resolved School ID:', schoolId)
+
+    // If no school ID found from subdomain, try to find user across all schools (optional fallback)
+    // For now, we strictly require school context for security in multi-tenant setup
     if (!schoolId) {
       console.error(
         'Login error: School context could not be determined. Host:',
