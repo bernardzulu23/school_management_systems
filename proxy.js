@@ -16,6 +16,34 @@ export default async function proxy(request) {
     return rateLimitResult.response
   }
 
+  // 1.5 CORS Handling
+  const origin = request.headers.get('origin')
+  const allowedOrigins = [
+    'https://schoolmanagementsystems-production.up.railway.app',
+    'http://localhost:3000',
+  ]
+
+  let allowOrigin = allowedOrigins.includes(origin) ? origin : ''
+  if (
+    !allowOrigin &&
+    origin &&
+    (origin.endsWith('.bluepeacktechnologies.com') || origin.endsWith('.railway.app'))
+  ) {
+    allowOrigin = origin
+  }
+
+  // Handle preflight requests
+  if (request.method === 'OPTIONS') {
+    const headers = new Headers()
+    if (allowOrigin) {
+      headers.set('Access-Control-Allow-Origin', allowOrigin)
+      headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+      headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-School-Subdomain')
+      headers.set('Access-Control-Allow-Credentials', 'true')
+    }
+    return new NextResponse(null, { status: 200, headers })
+  }
+
   // 2. Security Headers (Helmet-like)
   const securityHeaders = {
     'X-Frame-Options': 'DENY',
@@ -25,6 +53,14 @@ export default async function proxy(request) {
       "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://images.unsplash.com; font-src 'self' https://fonts.gstatic.com;",
     'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+  }
+
+  if (allowOrigin) {
+    securityHeaders['Access-Control-Allow-Origin'] = allowOrigin
+    securityHeaders['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+    securityHeaders['Access-Control-Allow-Headers'] =
+      'Content-Type, Authorization, X-School-Subdomain'
+    securityHeaders['Access-Control-Allow-Credentials'] = 'true'
   }
 
   // 3. Subdomain / Multi-tenancy
