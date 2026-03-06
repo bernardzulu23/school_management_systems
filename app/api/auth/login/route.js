@@ -9,7 +9,11 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
-if (process.env.NODE_ENV === 'production' && (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) && !process.env.NEXT_PHASE) {
+if (
+  process.env.NODE_ENV === 'production' &&
+  (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) &&
+  !process.env.NEXT_PHASE
+) {
   console.warn('Warning: JWT secrets are not set in production environment.')
 }
 
@@ -31,6 +35,10 @@ export async function POST(request) {
     // 2. Resolve school for multi-tenant lookup
     const schoolId = await getSchoolIdFromRequest(request)
     if (!schoolId) {
+      console.error(
+        'Login error: School context could not be determined. Host:',
+        request.headers.get('host')
+      )
       return NextResponse.json(
         { error: 'School context could not be determined. Please access via your school URL.' },
         { status: 400 }
@@ -41,20 +49,14 @@ export async function POST(request) {
     const user = await findUserByEmail(schoolId, email)
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'Invalid credentials' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
 
     // 3. Password Verification
     const isValid = await bcrypt.compare(password, user.password)
 
     if (!isValid) {
-      return NextResponse.json(
-        { error: 'Invalid credentials' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
 
     // 4. Token Generation & Cookie Setting (include schoolId for multi-tenant isolation)
@@ -64,20 +66,16 @@ export async function POST(request) {
       { expiresIn: '15m' }
     )
 
-    const refreshToken = jwt.sign(
-      { id: user.id },
-      JWT_REFRESH_SECRET,
-      { expiresIn: '7d' }
-    )
+    const refreshToken = jwt.sign({ id: user.id }, JWT_REFRESH_SECRET, { expiresIn: '7d' })
 
     const cookieStore = cookies()
-    
+
     cookieStore.set('access_token', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 15 * 60,
-      path: '/'
+      path: '/',
     })
 
     cookieStore.set('refresh_token', refreshToken, {
@@ -85,7 +83,7 @@ export async function POST(request) {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60,
-      path: '/'
+      path: '/',
     })
 
     // 5. Sanitize Output
@@ -95,21 +93,21 @@ export async function POST(request) {
       name: user.name,
       role: user.role,
       schoolId: user.schoolId,
-      profile_picture_url: user.profile_picture_url
+      profile_picture_url: user.profile_picture_url,
     })
 
     return NextResponse.json({
       success: true,
-      user: sanitizedUser
+      user: sanitizedUser,
     })
-
   } catch (error) {
     // 6. Secure Error Handling
     console.error('Login error:', error)
     return NextResponse.json(
-      { 
-        error: 'Internal server error', 
-        message: process.env.NODE_ENV === 'development' ? error.message : 'An unexpected error occurred'
+      {
+        error: 'Internal server error',
+        message:
+          process.env.NODE_ENV === 'development' ? error.message : 'An unexpected error occurred',
       },
       { status: 500 }
     )
