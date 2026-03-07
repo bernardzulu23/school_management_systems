@@ -1,7 +1,13 @@
-import React from 'react';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import React from 'react'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { useAuth } from '@/lib/auth'
 
 export function DashboardLayout({ children, title }) {
+  const { user } = useAuth()
+  const roleLabel = user?.role
+    ? `${user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase()} Dashboard`
+    : 'Dashboard'
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       {/* Simple header */}
@@ -9,13 +15,13 @@ export function DashboardLayout({ children, title }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-xl font-semibold dark:text-white">🇿🇲 Zambian School Management System</h1>
+              <h1 className="text-xl font-semibold dark:text-white">
+                🇿🇲 Zambian School Management System
+              </h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-600 dark:text-gray-300">Student Dashboard</span>
-              {title && (
-                <span className="text-sm text-gray-500 dark:text-gray-400">| {title}</span>
-              )}
+              <span className="text-gray-600 dark:text-gray-300 font-medium">{roleLabel}</span>
+              {title && <span className="text-sm text-gray-500 dark:text-gray-400">| {title}</span>}
               <ThemeToggle />
             </div>
           </div>
@@ -24,9 +30,7 @@ export function DashboardLayout({ children, title }) {
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          {children}
-        </div>
+        <div className="px-4 py-6 sm:px-0">{children}</div>
       </main>
 
       {/* Simple footer */}
@@ -38,5 +42,5 @@ export function DashboardLayout({ children, title }) {
         </div>
       </footer>
     </div>
-  );
+  )
 }

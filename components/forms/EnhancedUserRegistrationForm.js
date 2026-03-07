@@ -13,7 +13,7 @@ import {
   Heart,
   ArrowRight,
   ArrowLeft,
-  CheckCircle
+  CheckCircle,
 } from 'lucide-react'
 
 // Shared Utilities & Constants
@@ -48,7 +48,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
     next_of_kin_name: '',
     next_of_kin_relationship: '',
     next_of_kin_contact: '',
-    
+
     // Role-specific fields
     employee_id: '',
     ts_number: '',
@@ -65,7 +65,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
     assigned_subjects: [],
     assigned_classes: [],
     selected_subjects: [],
-    
+
     // Student-specific - Parent/Guardian Information
     parent_father_name: '',
     parent_father_contact: '',
@@ -117,7 +117,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
 
     // Academic Information
     previous_school: '',
-    grade_average: ''
+    grade_average: '',
   })
 
   const [errors, setErrors] = useState({})
@@ -126,85 +126,85 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
 
   // Form Handlers
   const onInputChange = (e) => {
-    handleInputChange(setFormData)(e);
-    const { name } = e.target;
+    handleInputChange(setFormData)(e)
+    const { name } = e.target
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: '' }))
     }
-  };
+  }
 
   const onSubjectsChange = (subjects) => {
-    setFormData(prev => ({ ...prev, selected_subjects: subjects }));
+    setFormData((prev) => ({ ...prev, selected_subjects: subjects }))
     if (errors.selected_subjects) {
-      setErrors(prev => ({ ...prev, selected_subjects: '' }));
+      setErrors((prev) => ({ ...prev, selected_subjects: '' }))
     }
-  };
+  }
 
   const onAssignedSubjectsChange = (subjects) => {
-    setFormData(prev => ({ ...prev, assigned_subjects: subjects }));
+    setFormData((prev) => ({ ...prev, assigned_subjects: subjects }))
     if (errors.assigned_subjects) {
-      setErrors(prev => ({ ...prev, assigned_subjects: '' }));
+      setErrors((prev) => ({ ...prev, assigned_subjects: '' }))
     }
-  };
+  }
 
   // Define steps based on role
   const getSteps = () => {
     const baseSteps = [
-      { 
-        id: 1, 
-        title: 'Basic Information', 
-        icon: User, 
-        description: 'Personal details and contact information'
+      {
+        id: 1,
+        title: 'Basic Information',
+        icon: User,
+        description: 'Personal details and contact information',
       },
-      { 
-        id: 2, 
-        title: 'Account Setup', 
-        icon: Shield, 
-        description: 'Login credentials and security'
-      }
+      {
+        id: 2,
+        title: 'Account Setup',
+        icon: Shield,
+        description: 'Login credentials and security',
+      },
     ]
 
     if (role === 'student') {
       return [
         ...baseSteps,
-        { 
-          id: 3, 
-          title: 'Academic Info', 
-          icon: GraduationCap, 
-          description: 'School and academic details'
+        {
+          id: 3,
+          title: 'Academic Info',
+          icon: GraduationCap,
+          description: 'School and academic details',
         },
-        { 
-          id: 4, 
-          title: 'Parent/Guardian', 
-          icon: Users, 
-          description: 'Family contact information'
+        {
+          id: 4,
+          title: 'Parent/Guardian',
+          icon: Users,
+          description: 'Family contact information',
         },
-        { 
-          id: 5, 
-          title: 'Medical Info', 
-          icon: Heart, 
-          description: 'Health and medical details'
-        }
+        {
+          id: 5,
+          title: 'Medical Info',
+          icon: Heart,
+          description: 'Health and medical details',
+        },
       ]
     } else if (role === 'teacher' || role === 'hod') {
       return [
         ...baseSteps,
-        { 
-          id: 3, 
-          title: 'Professional', 
-          icon: Briefcase, 
-          description: 'Employment and qualifications'
-        }
+        {
+          id: 3,
+          title: 'Professional',
+          icon: Briefcase,
+          description: 'Employment and qualifications',
+        },
       ]
     } else {
       return [
         ...baseSteps,
-        { 
-          id: 3, 
-          title: 'Administrative', 
-          icon: Building, 
-          description: 'Administrative details'
-        }
+        {
+          id: 3,
+          title: 'Administrative',
+          icon: Building,
+          description: 'Administrative details',
+        },
       ]
     }
   }
@@ -218,20 +218,24 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
 
     if (currentStep === 1) {
       if (!formData.name.trim()) newErrors.name = 'Full name is required'
-      if (!formData.contact_number.trim()) newErrors.contact_number = 'Contact number is required'
+      if (role !== 'student' && !formData.contact_number.trim())
+        newErrors.contact_number = 'Contact number is required'
       if (!formData.date_of_birth) newErrors.date_of_birth = 'Date of birth is required'
       if (!formData.gender) newErrors.gender = 'Gender is required'
     } else if (currentStep === 2) {
       if (!formData.email.trim()) newErrors.email = 'Email is required'
       if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid'
       if (!formData.password) newErrors.password = 'Password is required'
-      if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters'
-      if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match'
+      if (formData.password.length < 6)
+        newErrors.password = 'Password must be at least 6 characters'
+      if (formData.password !== formData.confirmPassword)
+        newErrors.confirmPassword = 'Passwords do not match'
     } else if (currentStep === 3) {
       if (role === 'teacher' || role === 'hod') {
         if (!formData.ts_number.trim()) newErrors.ts_number = 'TS Number is required'
         if (!formData.department) newErrors.department = 'Department is required'
-        if (!formData.qualifications.trim()) newErrors.qualifications = 'Qualifications are required'
+        if (!formData.qualifications.trim())
+          newErrors.qualifications = 'Qualifications are required'
         if (!formData.assigned_subjects || formData.assigned_subjects.length === 0) {
           newErrors.assigned_subjects = 'At least one subject must be assigned'
         }
@@ -243,11 +247,14 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         }
       } else if (role === 'headteacher') {
         if (!formData.employee_id.trim()) newErrors.employee_id = 'Employee ID is required'
-        if (!formData.qualifications.trim()) newErrors.qualifications = 'Qualifications are required'
+        if (!formData.qualifications.trim())
+          newErrors.qualifications = 'Qualifications are required'
       }
     } else if (currentStep === 4 && role === 'student') {
-      if (!formData.parent_father_name.trim()) newErrors.parent_father_name = 'Father\'s name is required'
-      if (!formData.parent_father_contact.trim()) newErrors.parent_father_contact = 'Father\'s contact is required'
+      if (!formData.parent_father_name.trim())
+        newErrors.parent_father_name = "Father's name is required"
+      if (!formData.parent_father_contact.trim())
+        newErrors.parent_father_contact = "Father's contact is required"
     }
 
     setErrors(newErrors)
@@ -256,13 +263,13 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
 
   const nextStep = () => {
     if (validateCurrentStep()) {
-      setCompletedSteps(prev => new Set([...prev, currentStep]))
-      setCurrentStep(prev => Math.min(prev + 1, totalSteps))
+      setCompletedSteps((prev) => new Set([...prev, currentStep]))
+      setCurrentStep((prev) => Math.min(prev + 1, totalSteps))
     }
   }
 
   const prevStep = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1))
+    setCurrentStep((prev) => Math.max(prev - 1, 1))
   }
 
   const goToStep = (step) => {
@@ -291,19 +298,50 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 1:
-        return <BasicInfoStep formData={formData} errors={errors} onInputChange={onInputChange} />
+        return (
+          <BasicInfoStep
+            formData={formData}
+            errors={errors}
+            onInputChange={onInputChange}
+            role={role}
+          />
+        )
       case 2:
-        return <AccountSetupStep formData={formData} errors={errors} onInputChange={onInputChange} />
+        return (
+          <AccountSetupStep formData={formData} errors={errors} onInputChange={onInputChange} />
+        )
       case 3:
         if (role === 'student') {
-          return <AcademicInfoStep formData={formData} errors={errors} onInputChange={onInputChange} onSubjectsChange={onSubjectsChange} />
+          return (
+            <AcademicInfoStep
+              formData={formData}
+              errors={errors}
+              onInputChange={onInputChange}
+              onSubjectsChange={onSubjectsChange}
+            />
+          )
         } else if (role === 'teacher' || role === 'hod') {
-          return <ProfessionalInfoStep formData={formData} errors={errors} onInputChange={onInputChange} onSubjectsChange={onAssignedSubjectsChange} />
+          return (
+            <ProfessionalInfoStep
+              formData={formData}
+              errors={errors}
+              onInputChange={onInputChange}
+              onSubjectsChange={onAssignedSubjectsChange}
+            />
+          )
         } else {
-          return <AdministrativeInfoStep formData={formData} errors={errors} onInputChange={onInputChange} />
+          return (
+            <AdministrativeInfoStep
+              formData={formData}
+              errors={errors}
+              onInputChange={onInputChange}
+            />
+          )
         }
       case 4:
-        return <ParentGuardianStep formData={formData} errors={errors} onInputChange={onInputChange} />
+        return (
+          <ParentGuardianStep formData={formData} errors={errors} onInputChange={onInputChange} />
+        )
       case 5:
         return <MedicalInfoStep formData={formData} errors={errors} onInputChange={onInputChange} />
       default:
@@ -320,23 +358,25 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
       </div>
 
       <div className="p-8">
-        <StepIndicator 
-          steps={steps} 
-          currentStep={currentStep} 
-          completedSteps={completedSteps} 
-          onStepClick={goToStep} 
+        <StepIndicator
+          steps={steps}
+          currentStep={currentStep}
+          completedSteps={completedSteps}
+          onStepClick={goToStep}
         />
 
         {/* Progress Bar */}
         <div className="mb-8">
           <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-blue-600 transition-all duration-500" 
+            <div
+              className="h-full bg-blue-600 transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
           <div className="flex justify-between text-sm text-gray-500 mt-2">
-            <span>Step {currentStep} of {totalSteps}</span>
+            <span>
+              Step {currentStep} of {totalSteps}
+            </span>
             <span>{Math.round(progress)}% Complete</span>
           </div>
         </div>

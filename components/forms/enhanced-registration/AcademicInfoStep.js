@@ -1,28 +1,17 @@
-import React from 'react';
-import { GraduationCap, FileText, Building, Target, BookOpen } from 'lucide-react';
-import { FormGroup, FormSection } from '@/components/ui/FormGroup';
-import { GRADE_LEVELS, SECTIONS } from '@/lib/constants';
-import SubjectSelection from '@/components/registration/SubjectSelection';
-import { useSubjects } from '@/lib/hooks/useSubjects';
+import React from 'react'
+import { GraduationCap, FileText, Building, Target, BookOpen } from 'lucide-react'
+import { FormGroup, FormSection } from '@/components/ui/FormGroup'
+import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
+import SubjectSelection from '@/components/registration/SubjectSelection'
+import { useSubjects } from '@/lib/hooks/useSubjects'
 
 export default function AcademicInfoStep({ formData, errors, onInputChange, onSubjectsChange }) {
-  const { subjects } = useSubjects();
+  const { subjects } = useSubjects()
 
   return (
     <FormSection title="Academic Information" icon={GraduationCap}>
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormGroup
-            label="Student ID"
-            name="student_id"
-            value={formData.student_id}
-            onChange={onInputChange}
-            placeholder="Auto-generated if left empty"
-            icon={FileText}
-            error={errors.student_id}
-            aria-describedby="student_id-error"
-          />
-
           <FormGroup
             label="Exam Number"
             name="exam_number"
@@ -105,7 +94,8 @@ export default function AcademicInfoStep({ formData, errors, onInputChange, onSu
 
           <div className="mb-4 p-4 bg-white rounded-lg border border-green-200">
             <p className="text-sm text-green-700 mb-2">
-              <strong>Instructions:</strong> Select the subjects you will be studying this academic year.
+              <strong>Instructions:</strong> Select the subjects you will be studying this academic
+              year.
             </p>
           </div>
 
@@ -131,7 +121,7 @@ export default function AcademicInfoStep({ formData, errors, onInputChange, onSu
                 {formData.selected_subjects?.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-2">
                     {formData.selected_subjects.map((subjectId) => {
-                      const subject = subjects.find((s) => s.id === subjectId);
+                      const subject = subjects.find((s) => s.id === subjectId)
                       return (
                         <span
                           key={subjectId}
@@ -139,7 +129,7 @@ export default function AcademicInfoStep({ formData, errors, onInputChange, onSu
                         >
                           {subject ? subject.name : subjectId}
                         </span>
-                      );
+                      )
                     })}
                   </div>
                 )}
@@ -149,5 +139,5 @@ export default function AcademicInfoStep({ formData, errors, onInputChange, onSu
         </div>
       </div>
     </FormSection>
-  );
+  )
 }

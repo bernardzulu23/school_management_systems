@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/Button'
 import { SCHOOL_SUBJECTS, SUBJECT_CATEGORIES, getSubjectsByCategory } from '@/data/subjects'
 import { Search, Check, X, BookOpen, Filter } from 'lucide-react'
 
-export default function SubjectSelection({ 
-  selectedSubjects = [], 
-  onSubjectsChange, 
+export default function SubjectSelection({
+  selectedSubjects = [],
+  onSubjectsChange,
   userRole = 'student',
-  maxSelections = null 
+  maxSelections = null,
 }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
@@ -29,9 +29,9 @@ export default function SubjectSelection({
     // Filter by search query
     if (searchQuery) {
       const query = searchQuery.toLowerCase()
-      subjects = subjects.filter(subject => 
-        subject.name.toLowerCase().includes(query) ||
-        subject.code.toLowerCase().includes(query)
+      subjects = subjects.filter(
+        (subject) =>
+          subject.name.toLowerCase().includes(query) || subject.code.toLowerCase().includes(query)
       )
     }
 
@@ -44,7 +44,7 @@ export default function SubjectSelection({
 
     if (isSelected) {
       // Remove subject
-      newSelection = selectedSubjects.filter(id => id !== subjectId)
+      newSelection = selectedSubjects.filter((id) => id !== subjectId)
     } else {
       // Add subject (check max limit)
       if (maxSelections && selectedSubjects.length >= maxSelections) {
@@ -58,13 +58,13 @@ export default function SubjectSelection({
   }
 
   const getSelectedSubjectNames = () => {
-    return SCHOOL_SUBJECTS
-      .filter(subject => selectedSubjects.includes(subject.id))
-      .map(subject => subject.name)
+    return SCHOOL_SUBJECTS.filter((subject) => selectedSubjects.includes(subject.id)).map(
+      (subject) => subject.name
+    )
   }
 
   const getCategoryColor = (category) => {
-    const categoryData = SUBJECT_CATEGORIES.find(cat => cat.id === category)
+    const categoryData = SUBJECT_CATEGORIES.find((cat) => cat.id === category)
     return categoryData ? categoryData.color : 'gray'
   }
 
@@ -79,10 +79,9 @@ export default function SubjectSelection({
           {userRole === 'hod' && ' to Manage'}
         </h3>
         <p className="text-gray-600">
-          {maxSelections 
-            ? `Choose up to ${maxSelections} subjects` 
-            : 'Choose the subjects you want to work with'
-          }
+          {maxSelections
+            ? `Choose up to ${maxSelections} subjects`
+            : 'Choose the subjects you want to work with'}
         </p>
         {selectedSubjects.length > 0 && (
           <p className="text-sm text-blue-600 mt-2">
@@ -111,7 +110,7 @@ export default function SubjectSelection({
             className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
           >
             <option value="All">All Categories</option>
-            {SUBJECT_CATEGORIES.map(category => (
+            {SUBJECT_CATEGORIES.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}
               </option>
@@ -120,86 +119,91 @@ export default function SubjectSelection({
         </div>
       </div>
 
-      {/* Selected Subjects Summary */}
-      {selectedSubjects.length > 0 && (
-        <Card className="bg-blue-50 border-blue-200">
-          <CardHeader>
-            <CardTitle className="text-blue-900 flex items-center">
-              <Check className="h-5 w-5 mr-2" />
-              Selected Subjects ({selectedSubjects.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {getSelectedSubjectNames().map(name => (
-                <span 
-                  key={name}
-                  className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
-                >
-                  {name}
-                </span>
+      {/* Subject Dropdown Selection */}
+      <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <label className="block text-sm font-medium text-gray-900 mb-2">Add Subject to List</label>
+        <div className="relative">
+          <select
+            className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 appearance-none"
+            onChange={(e) => {
+              if (e.target.value) {
+                handleSubjectToggle(e.target.value)
+                e.target.value = ''
+              }
+            }}
+            defaultValue=""
+          >
+            <option value="" disabled>
+              Select a subject to add...
+            </option>
+            {filteredSubjects
+              .filter((s) => !selectedSubjects.includes(s.id))
+              .map((subject) => (
+                <option key={subject.id} value={subject.id}>
+                  {subject.name} ({subject.category})
+                </option>
               ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Subjects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredSubjects.map(subject => {
-          const isSelected = selectedSubjects.includes(subject.id)
-          const colorClass = getCategoryColor(subject.category)
-          
-          return (
-            <Card 
-              key={subject.id}
-              className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
-                isSelected 
-                  ? 'ring-2 ring-blue-500 bg-blue-50 border-blue-200' 
-                  : 'hover:border-gray-400'
-              }`}
-              onClick={() => handleSubjectToggle(subject.id)}
+          </select>
+          <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+            <svg
+              className="w-5 h-5 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              <CardContent className="p-4">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center">
-                    <BookOpen className={`h-5 w-5 mr-2 text-${colorClass}-600`} />
-                    <span className={`text-xs font-medium px-2 py-1 rounded-full bg-${colorClass}-100 text-${colorClass}-800`}>
-                      {subject.category}
-                    </span>
-                  </div>
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                    isSelected 
-                      ? 'bg-blue-500 border-blue-500' 
-                      : 'border-gray-300'
-                  }`}>
-                    {isSelected && <Check className="h-4 w-4 text-white" />}
-                  </div>
-                </div>
-                
-                <h4 className="font-semibold text-gray-900 mb-1">{subject.name}</h4>
-                <p className="text-xs text-gray-600 mb-2">Code: {subject.code}</p>
-                <p className="text-sm text-gray-600">{subject.description}</p>
-              </CardContent>
-            </Card>
-          )
-        })}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+        </div>
+        <p className="text-xs text-gray-500 mt-2">
+          Select a subject from the dropdown to add it to your list.
+        </p>
       </div>
 
-      {filteredSubjects.length === 0 && (
-        <div className="text-center py-8">
-          <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600">No subjects found matching your criteria</p>
-          <Button 
-            onClick={() => {
-              setSearchQuery('')
-              setSelectedCategory('All')
-            }}
-            variant="outline"
-            className="mt-4"
-          >
-            Clear Filters
-          </Button>
+      {/* Selected Subjects List */}
+      {selectedSubjects.length > 0 ? (
+        <div className="space-y-3">
+          <h4 className="text-sm font-medium text-gray-700">Selected Subjects:</h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {selectedSubjects.map((subjectId) => {
+              const subject = SCHOOL_SUBJECTS.find((s) => s.id === subjectId)
+              if (!subject) return null
+
+              const colorClass = getCategoryColor(subject.category)
+
+              return (
+                <div
+                  key={subject.id}
+                  className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 shadow-sm group hover:border-red-200 transition-colors"
+                >
+                  <div className="flex items-center">
+                    <div className={`w-2 h-8 rounded-full bg-${colorClass}-500 mr-3`}></div>
+                    <div>
+                      <p className="font-medium text-gray-900">{subject.name}</p>
+                      <p className="text-xs text-gray-500">{subject.category}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleSubjectToggle(subject.id)}
+                    className="p-1.5 rounded-full text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors"
+                    title="Remove subject"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      ) : (
+        <div className="text-center py-8 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+          <BookOpen className="h-10 w-10 text-gray-300 mx-auto mb-3" />
+          <p className="text-gray-500">No subjects selected yet</p>
         </div>
       )}
 
@@ -213,7 +217,7 @@ export default function SubjectSelection({
           )}
         </div>
         <div className="flex gap-2">
-          <Button 
+          <Button
             onClick={() => onSubjectsChange([])}
             variant="outline"
             disabled={selectedSubjects.length === 0}
