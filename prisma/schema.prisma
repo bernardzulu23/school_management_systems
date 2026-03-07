@@ -19,6 +19,7 @@ model School {
   name        String
   subdomain   String   @unique  // e.g., "zambian-school" for zambian-school.bluepeacktechnologies.com
   domain      String?  @unique  // Optional custom domain
+  logo_url    String?  // URL to the school's logo
   active      Boolean  @default(true)
   
   // School Settings

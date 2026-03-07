@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 import { cn } from '@/lib/utils'
+import { useSchool } from '@/lib/context/SchoolContext'
 import {
   Home,
   Users,
@@ -31,6 +32,7 @@ import {
 export function Sidebar({ className, mobileOpen, setMobileOpen }) {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const { user, logout } = useAuth()
+  const { school } = useSchool()
   const pathname = usePathname()
 
   const getNavigationItems = () => {
@@ -104,16 +106,37 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     <div className="flex flex-col h-full">
       <div className="p-6 flex items-center justify-between">
         {(!isCollapsed || mobileOpen) && (
-          <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
-              <GraduationCap className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-bold text-lg tracking-tight">EduZambia</span>
+          <div className="flex items-center gap-3 w-full overflow-hidden">
+            {school ? (
+              <>
+                {school.logo_url ? (
+                  <img
+                    src={school.logo_url}
+                    alt={school.name}
+                    className="h-8 w-8 rounded-lg object-contain bg-white/10 shrink-0"
+                  />
+                ) : (
+                  <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center shrink-0">
+                    <GraduationCap className="h-5 w-5 text-white" />
+                  </div>
+                )}
+                <span className="font-bold text-lg tracking-tight truncate" title={school.name}>
+                  {school.name}
+                </span>
+              </>
+            ) : (
+              <>
+                <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center shrink-0">
+                  <GraduationCap className="h-5 w-5 text-white" />
+                </div>
+                <span className="font-bold text-lg tracking-tight">EduZambia</span>
+              </>
+            )}
           </div>
         )}
         <button
           onClick={() => (mobileOpen ? setMobileOpen(false) : setIsCollapsed(!isCollapsed))}
-          className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+          className="p-2 rounded-lg hover:bg-white/10 transition-colors shrink-0 ml-2"
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {mobileOpen ? (

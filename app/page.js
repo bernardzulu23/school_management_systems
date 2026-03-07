@@ -1,13 +1,15 @@
 'use client'
- 
- import { useEffect, useState } from 'react'
- import { useRouter } from 'next/navigation'
- import { useAuth } from '@/lib/auth'
- import { Users, GraduationCap, BarChart3, Activity, Globe } from 'lucide-react'
- import Image from 'next/image'
 
- export default function HomePage() {
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/lib/auth'
+import { useSchool } from '@/lib/context/SchoolContext'
+import { Users, GraduationCap, BarChart3, Activity, Globe } from 'lucide-react'
+import Image from 'next/image'
+
+export default function HomePage() {
   const { isAuthenticated, user } = useAuth()
+  const { school, isLoading: isSchoolLoading } = useSchool()
   const router = useRouter()
   const [isHydrated, setIsHydrated] = useState(false)
 
@@ -36,7 +38,7 @@
     }
   }, [isHydrated, isAuthenticated, user, router])
 
-  if (!isHydrated) {
+  if (!isHydrated || isSchoolLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
@@ -74,9 +76,17 @@
         <header className="relative z-10 w-full pt-6 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex items-center space-x-2">
-              <GraduationCap className="h-8 w-8 text-white" />
+              {school && school.logo_url ? (
+                <img
+                  src={school.logo_url}
+                  alt={school.name}
+                  className="h-10 w-auto object-contain bg-white/10 rounded-lg"
+                />
+              ) : (
+                <GraduationCap className="h-8 w-8 text-white" />
+              )}
               <h1 className="text-2xl font-bold text-white tracking-tight">
-                SchoolSys
+                {school ? school.name : 'SchoolSys'}
               </h1>
             </div>
             <div className="flex space-x-4">
@@ -98,16 +108,26 @@
 
         {/* Hero Content */}
         <div className="relative z-10 pt-20 pb-16 sm:pt-32 sm:pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-lg">
-            School Management <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-white">
-              System
-            </span>
-          </h2>
+          {school ? (
+            <h2 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6 drop-shadow-lg leading-tight">
+              Welcome to <br />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-white">
+                {school.name}
+              </span>
+            </h2>
+          ) : (
+            <h2 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-lg">
+              School Management <br />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-white">
+                System
+              </span>
+            </h2>
+          )}
           <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-100 font-light leading-relaxed drop-shadow-md">
-            Monitor, manage, and optimize your educational institution with powerful analytics and real-time insights.
+            Monitor, manage, and optimize your educational institution with powerful analytics and
+            real-time insights.
           </p>
-          
+
           <div className="mt-10 flex justify-center gap-4">
             <button
               onClick={() => router.push('/register')}
@@ -129,7 +149,7 @@
           <div className="text-center mb-12">
             <h3 className="text-3xl font-bold text-white drop-shadow-md">Powerful Features</h3>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Feature 1 */}
             <div className="group relative overflow-hidden rounded-2xl bg-gray-900/40 backdrop-blur-md border border-white/10 p-8 hover:bg-gray-900/50 transition-all duration-300 shadow-2xl">
@@ -187,27 +207,30 @@
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto text-lg">
             Join hundreds of organizations managing their educational services efficiently.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-             <button 
-               onClick={() => router.push('/register')}
-               className="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors shadow-lg"
-             >
-               Sign Up Free &rarr;
-             </button>
-             <button 
-               onClick={() => router.push('/login')}
-               className="px-8 py-4 border-2 border-gray-200 text-gray-700 rounded-xl font-bold hover:border-blue-600 hover:text-blue-600 transition-colors"
-             >
-               Sign In
-             </button>
+            <button
+              onClick={() => router.push('/register')}
+              className="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors shadow-lg"
+            >
+              Sign Up Free &rarr;
+            </button>
+            <button
+              onClick={() => router.push('/login')}
+              className="px-8 py-4 border-2 border-gray-200 text-gray-700 rounded-xl font-bold hover:border-blue-600 hover:text-blue-600 transition-colors"
+            >
+              Sign In
+            </button>
           </div>
-          
+
           <div className="pt-8 border-t border-gray-100">
             <p className="text-sm text-gray-500 uppercase tracking-wide font-semibold mb-2">
               Contact Support
             </p>
-            <a href="tel:+260977934996" className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors">
+            <a
+              href="tel:+260977934996"
+              className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
+            >
               +260 977 934 996
             </a>
           </div>

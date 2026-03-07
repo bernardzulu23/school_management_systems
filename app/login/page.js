@@ -4,11 +4,13 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 import { GraduationCap, Eye, EyeOff, ArrowLeft } from 'lucide-react'
+import { useSchool } from '@/lib/context/SchoolContext'
 import toast from 'react-hot-toast'
 import FormField from '@/components/forms/FormField'
 import { Button } from '@/components/ui/Button'
 
 export default function LoginPage() {
+  const { school, isLoading: isSchoolLoading } = useSchool()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -17,8 +19,8 @@ export default function LoginPage() {
   const { login, logout } = useAuth()
   const router = useRouter()
 
-  // Detect subdomain on mount
-  useState(() => {
+  // Detect subdomain on mount (client-side only)
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       const hostname = window.location.hostname
       const parts = hostname.split('.')
@@ -96,10 +98,21 @@ export default function LoginPage() {
 
       <section className="w-full max-w-md p-8 m-4 rounded-3xl bg-gray-900/60 backdrop-blur-xl border border-white/10 shadow-2xl animate-in fade-in zoom-in duration-300">
         <header className="flex flex-col items-center mb-8">
-          <div className="h-16 w-16 rounded-2xl bg-blue-600 flex items-center justify-center mb-6 shadow-lg shadow-blue-600/30 transform hover:scale-110 transition-transform duration-300">
-            <GraduationCap className="h-8 w-8 text-white" />
-          </div>
-          <h1 className="text-3xl font-bold text-white tracking-tight text-center">Welcome Back</h1>
+          {school ? (
+            <>
+              {school.logo_url && (
+                <img src={school.logo_url} alt={school.name} className="h-16 w-auto mx-auto mb-4" />
+              )}
+              <h2 className="text-2xl font-bold text-center text-white">{school.name}</h2>
+            </>
+          ) : (
+            <>
+              <div className="bg-blue-600 rounded-xl p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                <GraduationCap className="h-6 w-6 text-white" />
+              </div>
+              <h1 className="text-2xl font-bold text-white mb-2">Welcome Back</h1>
+            </>
+          )}
           <p className="mt-3 text-center text-gray-300 text-sm">
             Enter your credentials to access the portal
           </p>

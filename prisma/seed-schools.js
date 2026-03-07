@@ -107,12 +107,14 @@ async function main() {
     update: {
       domain: 'ndakedaysecondaryschool.bluepeacktechnologies.com',
       email: 'admin@ndakedaysecondaryschool.edu',
+      logo_url: '/Assets/logo.jpg', // User provided logo
       active: true,
     },
     create: {
       name: 'Ndake Day Secondary School',
       subdomain: 'ndakedaysecondaryschool',
       domain: 'ndakedaysecondaryschool.bluepeacktechnologies.com',
+      logo_url: '/Assets/logo.jpg', // User provided logo
       email: 'info@ndakedaysecondaryschool.bluepeacktechnologies.com',
       phone: '0977994626',
       address: 'P.O. Box 570070 Nyimba District Eastern Province',

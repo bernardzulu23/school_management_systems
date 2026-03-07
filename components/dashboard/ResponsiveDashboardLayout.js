@@ -5,18 +5,17 @@ import { Sidebar } from './Sidebar'
 import { Menu, Bell, Search, User } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
+import { useSchool } from '@/lib/context/SchoolContext'
 
 export default function ResponsiveDashboardLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { user } = useAuth()
+  const { school } = useSchool()
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
       {/* Sidebar */}
-      <Sidebar 
-        mobileOpen={mobileOpen} 
-        setMobileOpen={setMobileOpen} 
-      />
+      <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
@@ -29,7 +28,13 @@ export default function ResponsiveDashboardLayout({ children }) {
             >
               <Menu className="h-6 w-6" />
             </button>
-            <span className="ml-4 font-bold text-lg text-gray-900">EduZambia</span>
+            {school ? (
+              <span className="ml-4 font-bold text-lg text-gray-900 truncate max-w-[200px]">
+                {school.name}
+              </span>
+            ) : (
+              <span className="ml-4 font-bold text-lg text-gray-900">EduZambia</span>
+            )}
           </div>
 
           <div className="hidden lg:flex flex-1 max-w-md">
@@ -50,9 +55,9 @@ export default function ResponsiveDashboardLayout({ children }) {
               <Bell className="h-5 w-5" />
               <span className="absolute top-1.5 right-1.5 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white" />
             </button>
-            
+
             <div className="h-8 w-px bg-gray-200 mx-2 hidden sm:block" />
-            
+
             <div className="flex items-center gap-3">
               <div className="text-right hidden sm:block">
                 <p className="text-sm font-medium text-gray-900">{user?.name}</p>
@@ -67,9 +72,7 @@ export default function ResponsiveDashboardLayout({ children }) {
 
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto bg-gray-50/50 p-4 sm:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">
-            {children}
-          </div>
+          <div className="max-w-7xl mx-auto">{children}</div>
         </main>
       </div>
     </div>
