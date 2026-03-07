@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useAuth } from '@/lib/auth'
-import { GraduationCap, Eye, EyeOff, ArrowLeft } from 'lucide-react'
+import { Eye, EyeOff, GraduationCap, Loader2, ArrowLeft } from 'lucide-react'
 import { useSchool } from '@/lib/context/SchoolContext'
 import toast from 'react-hot-toast'
 import FormField from '@/components/forms/FormField'
@@ -101,6 +102,7 @@ export default function LoginPage() {
           {school ? (
             <>
               {school.logo_url && (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={school.logo_url} alt={school.name} className="h-16 w-auto mx-auto mb-4" />
               )}
               <h2 className="text-2xl font-bold text-center text-white">{school.name}</h2>
@@ -175,9 +177,12 @@ export default function LoginPage() {
               </label>
             </div>
 
-            <a href="#" className="font-medium text-blue-400 hover:text-blue-300 transition-colors">
+            <Link
+              href="/forgot-password"
+              className="font-medium text-blue-400 hover:text-blue-300 transition-colors"
+            >
               Forgot password?
-            </a>
+            </Link>
           </div>
 
           <Button

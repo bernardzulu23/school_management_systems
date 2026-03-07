@@ -88,6 +88,10 @@ model User {
   gender         String?
   profile_picture_url String?
 
+  // Password Reset
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
