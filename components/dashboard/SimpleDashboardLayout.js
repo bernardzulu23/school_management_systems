@@ -1,9 +1,11 @@
 import React from 'react'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useAuth } from '@/lib/auth'
+import { Button } from '@/components/ui/Button'
+import { LogOut } from 'lucide-react'
 
 export function DashboardLayout({ children, title }) {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const roleLabel = user?.role
     ? `${user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase()} Dashboard`
     : 'Dashboard'
@@ -23,6 +25,15 @@ export function DashboardLayout({ children, title }) {
               <span className="text-gray-600 dark:text-gray-300 font-medium">{roleLabel}</span>
               {title && <span className="text-sm text-gray-500 dark:text-gray-400">| {title}</span>}
               <ThemeToggle />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={logout}
+                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
             </div>
           </div>
         </div>
