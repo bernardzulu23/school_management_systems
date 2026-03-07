@@ -88,7 +88,7 @@ const FormField = ({
             onBlur={() => setIsFocused(false)}
             rows={props.rows || 3}
             className={cn(
-              'w-full px-4 py-2.5 rounded-lg border-2 bg-white transition-all duration-200 outline-none resize-none',
+              'w-full px-4 py-2.5 rounded-lg border-2 bg-white text-gray-900 placeholder-gray-500 transition-all duration-200 outline-none resize-none',
               Icon && 'pl-10',
               'disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed',
               displayError
@@ -112,7 +112,7 @@ const FormField = ({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             className={cn(
-              'w-full px-4 py-2.5 rounded-lg border-2 bg-white transition-all duration-200 outline-none appearance-none',
+              'w-full px-4 py-2.5 rounded-lg border-2 bg-white text-gray-900 placeholder-gray-500 transition-all duration-200 outline-none appearance-none',
               Icon && 'pl-10',
               'disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed',
               displayError
@@ -140,7 +140,7 @@ const FormField = ({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             className={cn(
-              'w-full px-4 py-2.5 rounded-lg border-2 bg-white transition-all duration-200 outline-none',
+              'w-full px-4 py-2.5 rounded-lg border-2 bg-white text-gray-900 placeholder-gray-500 transition-all duration-200 outline-none',
               Icon && 'pl-10',
               'disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed',
               displayError
