@@ -75,7 +75,7 @@ export async function POST(request) {
 
     const refreshToken = jwt.sign({ id: user.id }, JWT_REFRESH_SECRET, { expiresIn: '7d' })
 
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
 
     cookieStore.set('access_token', accessToken, {
       httpOnly: true,

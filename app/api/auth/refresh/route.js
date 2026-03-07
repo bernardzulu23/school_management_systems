@@ -7,7 +7,7 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'your-fallback-refr
 
 export async function POST() {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const refreshToken = cookieStore.get('refresh_token')?.value
 
     if (!refreshToken) {
@@ -35,7 +35,7 @@ export async function POST() {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 15 * 60,
-      path: '/'
+      path: '/',
     })
 
     return NextResponse.json({ success: true })
