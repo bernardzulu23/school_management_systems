@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { GraduationCap, ArrowLeft, Loader2, Lock } from 'lucide-react'
@@ -9,7 +9,7 @@ import FormField from '@/components/forms/FormField'
 import { useSchool } from '@/lib/context/SchoolContext'
 import toast from 'react-hot-toast'
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
@@ -132,5 +132,19 @@ export default function ResetPasswordPage() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+          <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
+        </div>
+      }
+    >
+      <ResetPasswordContent />
+    </Suspense>
   )
 }
