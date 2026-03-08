@@ -19,6 +19,7 @@ export default function AcademicInfoStep({ formData, errors, onInputChange, onSu
             onChange={onInputChange}
             placeholder="Enter exam number"
             icon={FileText}
+            required
             error={errors.exam_number}
             aria-describedby="exam_number-error"
           />
@@ -70,18 +71,6 @@ export default function AcademicInfoStep({ formData, errors, onInputChange, onSu
             icon={Building}
             error={errors.previous_school}
             aria-describedby="previous_school-error"
-          />
-
-          <FormGroup
-            label="Previous Grade Average (%)"
-            name="grade_average"
-            type="number"
-            value={formData.grade_average}
-            onChange={onInputChange}
-            placeholder="Enter previous grade average"
-            icon={Target}
-            error={errors.grade_average}
-            aria-describedby="grade_average-error"
           />
         </div>
 

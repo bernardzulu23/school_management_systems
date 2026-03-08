@@ -242,8 +242,9 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
       } else if (role === 'student') {
         if (!formData.year_group) newErrors.year_group = 'Year group is required'
         if (!formData.section) newErrors.section = 'Section is required'
-        if (!formData.selected_subjects || formData.selected_subjects.length === 0) {
-          newErrors.selected_subjects = 'At least one subject must be selected'
+        if (!formData.exam_number?.trim()) newErrors.exam_number = 'Exam number is required'
+        if (!formData.selected_subjects || formData.selected_subjects.length < 8) {
+          newErrors.selected_subjects = 'At least 8 subjects must be selected'
         }
       } else if (role === 'headteacher') {
         if (!formData.employee_id.trim()) newErrors.employee_id = 'Employee ID is required'

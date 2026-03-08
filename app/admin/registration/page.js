@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -15,13 +16,22 @@ import {
   UserPlus,
   ArrowLeft,
   Home,
+  Loader2,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { api } from '@/lib/api'
 
-export default function RegistrationPage() {
+function RegistrationContent() {
   const [activeForm, setActiveForm] = useState(null)
   const [loading, setLoading] = useState(false)
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const role = searchParams.get('role')
+    if (role && ['student', 'teacher', 'hod', 'headteacher'].includes(role)) {
+      setActiveForm(role)
+    }
+  }, [searchParams])
 
   const handleSubmit = async (formData, userType) => {
     setLoading(true)
@@ -284,5 +294,19 @@ export default function RegistrationPage() {
         </Card>
       </div>
     </DashboardLayout>
+  )
+}
+
+export default function RegistrationPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
+        </div>
+      }
+    >
+      <RegistrationContent />
+    </Suspense>
   )
 }
