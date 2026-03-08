@@ -127,7 +127,7 @@ export default function SubjectSelection({
             className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 appearance-none"
             onChange={(e) => {
               if (e.target.value) {
-                handleSubjectToggle(e.target.value)
+                handleSubjectToggle(Number(e.target.value))
                 e.target.value = ''
               }
             }}
@@ -171,7 +171,7 @@ export default function SubjectSelection({
           <h4 className="text-sm font-medium text-gray-700">Selected Subjects:</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {selectedSubjects.map((subjectId) => {
-              const subject = SCHOOL_SUBJECTS.find((s) => s.id === subjectId)
+              const subject = SCHOOL_SUBJECTS.find((s) => s.id === Number(subjectId))
               if (!subject) return null
 
               const colorClass = getCategoryColor(subject.category)
