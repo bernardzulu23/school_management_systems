@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -25,6 +25,7 @@ function RegistrationContent() {
   const [activeForm, setActiveForm] = useState(null)
   const [loading, setLoading] = useState(false)
   const searchParams = useSearchParams()
+  const router = useRouter()
 
   useEffect(() => {
     const role = searchParams.get('role')
@@ -115,7 +116,10 @@ function RegistrationContent() {
           <div className="max-w-4xl mx-auto mb-6 flex justify-between items-center">
             <Button
               variant="ghost"
-              onClick={() => setActiveForm(null)}
+              onClick={() => {
+                setActiveForm(null)
+                router.push('/admin/registration')
+              }}
               className="flex items-center text-gray-600 hover:text-gray-900"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
@@ -136,7 +140,10 @@ function RegistrationContent() {
             <EnhancedUserRegistrationForm
               role={activeForm}
               onSubmit={(data) => handleSubmit(data, activeForm)}
-              onCancel={() => setActiveForm(null)}
+              onCancel={() => {
+                setActiveForm(null)
+                router.push('/admin/registration')
+              }}
             />
           </div>
         </div>

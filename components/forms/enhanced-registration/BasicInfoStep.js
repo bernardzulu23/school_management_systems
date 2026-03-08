@@ -4,7 +4,10 @@ import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 import { GENDERS } from '@/lib/constants'
 
 export default function BasicInfoStep({ formData, errors, onInputChange, role }) {
-  const maxDate = new Date().toISOString().split('T')[0]
+  const today = new Date()
+  const maxDate = new Date(today.getFullYear() - 12, today.getMonth(), today.getDate())
+    .toISOString()
+    .split('T')[0]
 
   return (
     <FormSection title="Basic Information" icon={User}>
