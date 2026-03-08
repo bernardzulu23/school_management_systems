@@ -87,6 +87,7 @@ model User {
   date_of_birth  DateTime?
   gender         String?
   profile_picture_url String?
+  employeeId     String? // For staff
 
   // Password Reset
   resetToken        String?
@@ -229,6 +230,8 @@ model Teacher {
   
   department String?
   specialization String?
+  ts_number String?
+  qualifications String?
   
   classes   Class[] 
   subjects  Subject[] 
