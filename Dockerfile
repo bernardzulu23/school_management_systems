@@ -45,6 +45,7 @@ COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=build /app/node_modules/prisma ./node_modules/prisma
 COPY scripts/start.sh ./start.sh
+RUN chmod +x ./start.sh
 
 RUN chown -R node:node /app
 USER node

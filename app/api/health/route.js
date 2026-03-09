@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 /**
  * Lightweight health check - no DB dependency.
  * Returns 200 immediately so Railway healthcheck passes while app starts.
