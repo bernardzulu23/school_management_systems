@@ -106,43 +106,6 @@ export default function ProfessionalInfoStep({
           />
         </div>
 
-        {/* Class Assignment */}
-        <div className="bg-blue-50 p-6 rounded-xl border border-blue-200">
-          <h4 className="text-lg font-semibold text-blue-800 mb-4 flex items-center">
-            <Users className="h-5 w-5 mr-2" />
-            Class Assignment
-          </h4>
-
-          {loadingClasses ? (
-            <p className="text-sm text-gray-500">Loading classes...</p>
-          ) : classes.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {classes.map((cls) => (
-                <label
-                  key={cls.id}
-                  className={`flex items-center space-x-2 p-3 rounded-lg border cursor-pointer transition-colors ${
-                    formData.assigned_classes?.includes(cls.id)
-                      ? 'bg-blue-100 border-blue-300'
-                      : 'bg-white border-gray-200 hover:border-blue-200'
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={formData.assigned_classes?.includes(cls.id) || false}
-                    onChange={() => handleClassToggle(cls.id)}
-                    className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                  />
-                  <span className="text-sm font-medium text-gray-700">{cls.name}</span>
-                </label>
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm text-gray-500 italic">
-              No classes found. Please create classes first.
-            </p>
-          )}
-        </div>
-
         {/* Subject Assignment */}
         <div className="bg-indigo-50 p-6 rounded-xl border border-indigo-200">
           <h4 className="text-lg font-semibold text-indigo-800 mb-4 flex items-center">

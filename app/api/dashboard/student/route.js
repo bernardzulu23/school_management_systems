@@ -41,8 +41,8 @@ export async function GET(request) {
       include: {
         user: true,
         results: true,
-        gamificationProfile: true
-      }
+        gamificationProfile: true,
+      },
     })
 
     if (!student) {
@@ -52,7 +52,7 @@ export async function GET(request) {
     // 1. Calculate Stats
     const totalSubjects = student.selected_subjects.length
     const totalResults = student.results.length
-    
+
     // Calculate Average Grade
     let averageGrade = 0
     if (totalResults > 0) {
@@ -64,7 +64,7 @@ export async function GET(request) {
     let myClass = null
     if (student.class) {
       myClass = await prisma.class.findFirst({
-        where: { name: student.class }
+        where: { name: student.class },
       })
     }
 
@@ -74,10 +74,10 @@ export async function GET(request) {
         schoolId: student.schoolId,
         class: student.class,
         subject: { in: student.selected_subjects || [] },
-        date: { gte: new Date() }
+        date: { gte: new Date() },
       },
       orderBy: { date: 'asc' },
-      take: 5
+      take: 5,
     })
 
     // 4. Fetch Recent Results (with filtering)
@@ -88,35 +88,35 @@ export async function GET(request) {
         // For simplicity, we just take the latest ones
       },
       orderBy: { createdAt: 'desc' },
-      take: 10
+      take: 10,
     })
-    
+
     // 5. Fetch Assignments and calculate statuses (scoped by schoolId)
     const rawAssignments = await prisma.assignment.findMany({
-      where: { 
+      where: {
         schoolId: student.schoolId,
         class: student.class,
-        subject: { in: student.selected_subjects || [] }
+        subject: { in: student.selected_subjects || [] },
       },
       include: {
         submissions: {
-          where: { studentId: student.id }
-        }
+          where: { studentId: student.id },
+        },
       },
-      orderBy: { dueDate: 'asc' }
+      orderBy: { dueDate: 'asc' },
     })
 
-    // Process assignments to determine status (completed, late, missing, pending)
-    const assignmentsList = rawAssignments.map(assignment => {
+    // Process assignments to determine status
+    const assignmentsList = rawAssignments.map((assignment) => {
       const submission = assignment.submissions[0]
       let status = 'pending'
-      
+
       const dueDate = new Date(assignment.dueDate)
       const isPastDue = dueDate < now
-      
+
       if (submission) {
         const submittedAt = new Date(submission.submittedAt)
-        if (submission.status === 'late' || (submittedAt > dueDate)) {
+        if (submission.status === 'late' || submittedAt > dueDate) {
           status = 'late'
         } else {
           status = 'completed'
@@ -124,7 +124,7 @@ export async function GET(request) {
       } else if (isPastDue) {
         status = 'missing'
       }
-      
+
       return {
         id: assignment.id,
         title: assignment.title,
@@ -133,7 +133,7 @@ export async function GET(request) {
         createdAt: assignment.createdAt,
         status: status,
         grade: submission?.grade,
-        feedback: submission?.feedback
+        feedback: submission?.feedback,
       }
     })
 
@@ -141,23 +141,92 @@ export async function GET(request) {
     const attendanceRecords = await prisma.attendance.findMany({
       where: {
         studentId: student.id,
-        date: { gte: startDate }
+        date: { gte: startDate },
       },
-      orderBy: { date: 'desc' }
+      orderBy: { date: 'desc' },
     })
 
     // 7. Calculate Attendance Percentage
-    // This depends on how many days/classes there were. 
-    // Simplified: (Present / Total Records) * 100
-    // Real world: (Present / Total School Days) * 100
     let attendancePercentage = 100
     if (attendanceRecords.length > 0) {
-      const presentCount = attendanceRecords.filter(r => r.status === 'present').length
+      const presentCount = attendanceRecords.filter((r) => r.status === 'present').length
       attendancePercentage = (presentCount / attendanceRecords.length) * 100
     }
 
+    // 8. Construct Enrolled Subjects & Performance Data
+    // We need to map student.selected_subjects to rich objects
+    // Since we store subjects as strings in selected_subjects, we try to find Subject records if they exist, or mock defaults
+
+    const subjectRecords = await prisma.subject.findMany({
+      where: {
+        schoolId: student.schoolId,
+        name: { in: student.selected_subjects },
+      },
+      include: {
+        teacher: {
+          include: { user: true },
+        },
+      },
+    })
+
+    const enrolledSubjects = student.selected_subjects.map((subjectName) => {
+      // Find matching record
+      const record = subjectRecords.find((s) => s.name === subjectName)
+
+      // Calculate grade for this subject
+      const subjectResults = student.results.filter((r) => r.subject === subjectName)
+      let currentGrade = 0
+      if (subjectResults.length > 0) {
+        currentGrade =
+          subjectResults.reduce((acc, curr) => acc + (curr.score || 0), 0) / subjectResults.length
+      }
+
+      // Determine status based on grade
+      let status = 'good'
+      if (currentGrade >= 80) status = 'excellent'
+      else if (currentGrade < 50) status = 'needs-improvement'
+
+      return {
+        id: record?.id || subjectName, // Use name as ID if record not found
+        name: subjectName,
+        teacher: record?.teacher?.user?.name || 'Not Assigned',
+        status: status,
+        trend: 'stable', // Placeholder
+        currentGrade: Math.round(currentGrade),
+      }
+    })
+
+    // Subject Performance (for the "My Subjects" card)
+    const subjectPerformance = enrolledSubjects.map((sub) => ({
+      subject: sub.name,
+      teacher: sub.teacher,
+      avgScore: sub.currentGrade,
+      assessments: rawAssignments.filter((a) => a.subject === sub.name).length,
+      latestGrade:
+        sub.currentGrade >= 75
+          ? 'A'
+          : sub.currentGrade >= 60
+            ? 'B'
+            : sub.currentGrade >= 50
+              ? 'C'
+              : 'F',
+    }))
+
     // Construct Dashboard Data Response
     const dashboardData = {
+      stats: {
+        totalSubjects: totalSubjects,
+        totalResults: totalResults,
+        averageGrade: Math.round(averageGrade),
+        completedGoals: 0, // Placeholder
+        totalGoals: 0, // Placeholder
+        recentMaterials: 0, // Placeholder
+        gamesPlayed: 0,
+        achievements: 0,
+        level: 1,
+        points: 0,
+        attendanceRate: `${Math.round(attendancePercentage)}%`,
+      },
       student: {
         id: student.id,
         name: student.name,
@@ -165,22 +234,21 @@ export async function GET(request) {
         average_grade: Math.round(averageGrade),
         attendance_percentage: Math.round(attendancePercentage),
         total_subjects: totalSubjects,
-        assignments_pending: assignmentsList.filter(a => a.status === 'pending').length,
+        assignments_pending: assignmentsList.filter((a) => a.status === 'pending').length,
         assignments_list: assignmentsList,
         attendance_records: attendanceRecords,
-        gamification: student.gamificationProfile
+        gamification: student.gamificationProfile,
       },
+      enrolled_subjects: enrolledSubjects,
+      subject_performance: subjectPerformance,
       upcoming_assessments: upcomingAssessments,
       recent_results: recentResults,
-      class_info: myClass
+      class_info: myClass,
     }
 
-    return NextResponse.json(dashboardData)
+    return NextResponse.json({ data: dashboardData })
   } catch (error) {
     console.error('Dashboard API Error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch dashboard data' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to fetch dashboard data' }, { status: 500 })
   }
 }
