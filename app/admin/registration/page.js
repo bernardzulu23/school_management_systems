@@ -154,6 +154,19 @@ function RegistrationContent() {
   return (
     <DashboardLayout>
       <div className="container mx-auto px-4 py-6">
+        {/* Back Navigation */}
+        <div className="mb-6">
+          <Link href="/dashboard">
+            <Button
+              variant="ghost"
+              className="flex items-center text-gray-600 hover:text-gray-900 pl-0"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Dashboard
+            </Button>
+          </Link>
+        </div>
+
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">

@@ -16,10 +16,12 @@ import {
   Filter,
   Eye,
   RefreshCcw,
+  X,
 } from 'lucide-react'
 import { api } from '@/lib/api'
 import toast from 'react-hot-toast'
 import LoadingSpinner from '@/components/LoadingSpinner'
+import { SCHOOL_SUBJECTS } from '@/data/subjects'
 
 export default function UserManagement() {
   const [activeUserType, setActiveUserType] = useState('all')
@@ -27,6 +29,7 @@ export default function UserManagement() {
   const [isLoading, setIsLoading] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
+  const [viewingUser, setViewingUser] = useState(null)
 
   const userTypes = [
     { id: 'all', name: 'All Users', icon: Users, count: users.length },
@@ -201,7 +204,10 @@ export default function UserManagement() {
   }
 
   const handleViewUser = (userId) => {
-    toast(`View user ${userId} details functionality - Coming soon`)
+    const user = users.find((u) => u.id === userId)
+    if (user) {
+      setViewingUser(user)
+    }
   }
 
   return (
@@ -555,6 +561,172 @@ export default function UserManagement() {
           </Card>
         </section>
       </main>
+
+      {viewingUser && <UserDetailsModal user={viewingUser} onClose={() => setViewingUser(null)} />}
+    </div>
+  )
+}
+
+function UserDetailsModal({ user, onClose }) {
+  const data = user.original || user
+
+  const getSubjectName = (id) => {
+    const numId = Number(id)
+    const sub = SCHOOL_SUBJECTS.find((s) => s.id === numId)
+    return sub ? sub.name : id
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
+        <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white">User Details</h3>
+          <button
+            onClick={onClose}
+            className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white"
+          >
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-6">
+          {/* Header Info */}
+          <div className="flex items-center space-x-4">
+            <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl font-bold">
+              {data.name?.charAt(0) || data.user?.name?.charAt(0) || 'U'}
+            </div>
+            <div>
+              <h4 className="text-xl font-bold text-slate-900 dark:text-white">
+                {data.name || data.user?.name}
+              </h4>
+              <span className="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200 border border-blue-200 dark:border-blue-500/30 capitalize font-medium">
+                {data.role}
+              </span>
+            </div>
+          </div>
+
+          {/* Basic Info */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Email</p>
+              <p className="text-slate-900 dark:text-white font-medium break-all">
+                {data.email || data.user?.email}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Contact</p>
+              <p className="text-slate-900 dark:text-white font-medium">
+                {data.contact_number || data.user?.contact_number || 'N/A'}
+              </p>
+            </div>
+          </div>
+
+          {/* Teacher Specific */}
+          {data.role === 'teacher' && (
+            <>
+              <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
+                <h4 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-3">
+                  Professional Info
+                </h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Department</p>
+                    <p className="text-slate-900 dark:text-white">{data.department || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">TS Number</p>
+                    <p className="text-slate-900 dark:text-white">{data.ts_number || 'N/A'}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Assigned Classes</p>
+                <div className="flex flex-wrap gap-2">
+                  {data.classes && data.classes.length > 0 ? (
+                    data.classes.map((cls) => (
+                      <span
+                        key={cls.id}
+                        className="px-2 py-1 bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-200 rounded text-xs border border-blue-100 dark:border-blue-500/20"
+                      >
+                        {cls.name}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-slate-500 italic">No classes assigned</p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Assigned Subjects</p>
+                <div className="flex flex-wrap gap-2">
+                  {data.assignedSubjects && data.assignedSubjects.length > 0 ? (
+                    data.assignedSubjects.map((sub, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-1 bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-200 rounded text-xs border border-purple-100 dark:border-purple-500/20"
+                      >
+                        {getSubjectName(sub)}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-slate-500 italic">No subjects assigned</p>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Student Specific */}
+          {data.role === 'student' && (
+            <>
+              <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
+                <h4 className="text-lg font-semibold text-green-600 dark:text-green-400 mb-3">
+                  Academic Info
+                </h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Class</p>
+                    <p className="text-slate-900 dark:text-white">{data.class || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Exam Number</p>
+                    <p className="text-slate-900 dark:text-white">{data.exam_number || 'N/A'}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Enrolled Subjects</p>
+                <div className="flex flex-wrap gap-2">
+                  {data.selected_subjects && data.selected_subjects.length > 0 ? (
+                    data.selected_subjects.map((sub, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-1 bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-200 rounded text-xs border border-green-100 dark:border-green-500/20"
+                      >
+                        {getSubjectName(sub)}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-slate-500 italic">No subjects enrolled</p>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="p-6 border-t border-slate-200 dark:border-slate-700 flex justify-end">
+          <Button
+            onClick={onClose}
+            className="bg-slate-200 text-slate-800 hover:bg-slate-300 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600"
+          >
+            Close
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }
