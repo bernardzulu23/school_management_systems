@@ -44,6 +44,7 @@ COPY --from=build /app/prisma ./prisma
 COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=build /app/node_modules/prisma ./node_modules/prisma
+COPY scripts/start.sh ./start.sh
 
 RUN chown -R node:node /app
 USER node
@@ -51,4 +52,4 @@ USER node
 EXPOSE 3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node server.js"]
+CMD ["sh", "./start.sh"]
