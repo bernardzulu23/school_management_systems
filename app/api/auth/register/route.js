@@ -12,7 +12,10 @@ export const POST = withErrorHandler(async (request) => {
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
     return NextResponse.json(
-      { success: false, message: 'Only administrators can register new users' },
+      {
+        success: false,
+        message: `Only administrators can register new users. Your role: ${auth.user?.role}`,
+      },
       { status: 403 }
     )
   }

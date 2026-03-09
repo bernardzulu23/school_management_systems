@@ -47,6 +47,7 @@ export default function BasicInfoStep({ formData, errors, onInputChange, role })
           onChange={onInputChange}
           required
           icon={Calendar}
+          min="1950-01-01"
           max={maxDate}
           error={errors.date_of_birth}
           aria-describedby="date_of_birth-error"

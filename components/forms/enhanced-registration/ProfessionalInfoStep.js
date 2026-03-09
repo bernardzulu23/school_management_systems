@@ -1,12 +1,17 @@
-import React from 'react';
-import { Briefcase, FileText, GraduationCap, BookOpen } from 'lucide-react';
-import { FormGroup, FormSection } from '@/components/ui/FormGroup';
-import { DEPARTMENTS } from '@/lib/constants';
-import SubjectSelection from '@/components/registration/SubjectSelection';
-import { useSubjects } from '@/lib/hooks/useSubjects';
+import React from 'react'
+import { Briefcase, FileText, GraduationCap, BookOpen } from 'lucide-react'
+import { FormGroup, FormSection } from '@/components/ui/FormGroup'
+import { DEPARTMENTS } from '@/lib/constants'
+import SubjectSelection from '@/components/registration/SubjectSelection'
+import { useSubjects } from '@/lib/hooks/useSubjects'
 
-export default function ProfessionalInfoStep({ formData, errors, onInputChange, onSubjectsChange }) {
-  const { subjects } = useSubjects();
+export default function ProfessionalInfoStep({
+  formData,
+  errors,
+  onInputChange,
+  onSubjectsChange,
+}) {
+  const { subjects } = useSubjects()
 
   return (
     <FormSection title="Professional Information" icon={Briefcase}>
@@ -22,17 +27,6 @@ export default function ProfessionalInfoStep({ formData, errors, onInputChange, 
             icon={FileText}
             error={errors.ts_number}
             aria-describedby="ts_number-error"
-          />
-
-          <FormGroup
-            label="Employee ID"
-            name="employee_id"
-            value={formData.employee_id}
-            onChange={onInputChange}
-            placeholder="Enter employee ID"
-            icon={FileText}
-            error={errors.employee_id}
-            aria-describedby="employee_id-error"
           />
 
           <FormGroup
@@ -102,5 +96,5 @@ export default function ProfessionalInfoStep({ formData, errors, onInputChange, 
         </div>
       </div>
     </FormSection>
-  );
+  )
 }
