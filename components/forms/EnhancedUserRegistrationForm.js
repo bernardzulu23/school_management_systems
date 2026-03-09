@@ -147,6 +147,13 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
     }
   }
 
+  const onAssignedClassesChange = (classes) => {
+    setFormData((prev) => ({ ...prev, assigned_classes: classes }))
+    if (errors.assigned_classes) {
+      setErrors((prev) => ({ ...prev, assigned_classes: '' }))
+    }
+  }
+
   // Define steps based on role
   const getSteps = () => {
     const baseSteps = [
@@ -346,6 +353,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
               errors={errors}
               onInputChange={onInputChange}
               onSubjectsChange={onAssignedSubjectsChange}
+              onClassesChange={onAssignedClassesChange}
             />
           )
         } else {

@@ -9,10 +9,7 @@ export async function GET(request) {
 
     const schoolId = auth.user?.schoolId
     if (!schoolId) {
-      return NextResponse.json(
-        { error: 'School context required' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: 'School context required' }, { status: 403 })
     }
 
     // Parallel fetch of counts - scoped by schoolId for multi-tenant isolation
@@ -23,15 +20,17 @@ export async function GET(request) {
       totalResults,
       totalClasses,
       totalSubjects,
-      totalAssessments
+      totalAssessments,
     ] = await Promise.all([
-      prisma.user.count({ where: { role: 'student', schoolId } }),
-      prisma.user.count({ where: { role: 'teacher', schoolId } }),
-      prisma.user.count({ where: { role: 'hod', schoolId } }),
+      prisma.user.count({ where: { role: { in: ['student', 'STUDENT'] }, schoolId } }),
+      prisma.user.count({ where: { role: { in: ['teacher', 'TEACHER'] }, schoolId } }),
+      prisma.user.count({
+        where: { role: { in: ['hod', 'HOD', 'head of department'] }, schoolId },
+      }),
       prisma.result.count({ where: { schoolId } }),
       prisma.class.count({ where: { schoolId } }),
       prisma.subject.count({ where: { schoolId } }),
-      prisma.assessment.count({ where: { schoolId } })
+      prisma.assessment.count({ where: { schoolId } }),
     ])
 
     const stats = {
@@ -40,18 +39,18 @@ export async function GET(request) {
       totalHods,
       totalClasses,
       totalSubjects,
-      totalAssessments
+      totalAssessments,
     }
 
     // Calculate additional metrics
     const attendanceRate = 0 // Placeholder: Requires Attendance model
-    
+
     // Calculate average grade (scoped by schoolId)
     const results = await prisma.result.aggregate({
       where: { schoolId },
       _avg: {
-        score: true
-      }
+        score: true,
+      },
     })
     const averageGrade = results._avg.score ? Math.round(results._avg.score) : 0
 
@@ -62,16 +61,12 @@ export async function GET(request) {
         totalUsers: totalStudents + totalTeachers + totalHods,
         averageAttendance: attendanceRate,
         averageGrade,
-        recentActivities: [] 
-      }
+        recentActivities: [],
+      },
     })
-
   } catch (error) {
     console.error('Dashboard stats error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch dashboard stats' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to fetch dashboard stats' }, { status: 500 })
   }
 }
 

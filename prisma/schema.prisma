@@ -232,6 +232,7 @@ model Teacher {
   specialization String?
   ts_number String?
   qualifications String?
+  assignedSubjects String[] // Stores list of subject names/IDs
   
   classes   Class[] 
   subjects  Subject[] 

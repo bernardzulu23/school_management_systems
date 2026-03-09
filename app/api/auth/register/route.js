@@ -109,6 +109,14 @@ export const POST = withErrorHandler(async (request) => {
         },
       })
     } else if (role === 'teacher') {
+      const assignedSubjects = Array.isArray(body.assigned_subjects)
+        ? body.assigned_subjects.map(String)
+        : []
+
+      const assignedClasses = Array.isArray(body.assigned_classes)
+        ? body.assigned_classes.map((id) => ({ id }))
+        : []
+
       await tx.teacher.create({
         data: {
           userId: user.id,
@@ -117,6 +125,10 @@ export const POST = withErrorHandler(async (request) => {
           ts_number: body.ts_number,
           qualifications: body.qualifications,
           specialization: body.specialization,
+          assignedSubjects: assignedSubjects,
+          classes: {
+            connect: assignedClasses,
+          },
         },
       })
     } else if (role === 'hod') {
