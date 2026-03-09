@@ -84,43 +84,19 @@ const nextConfig = {
 
   // API routes configuration
   async headers() {
-    const csp = [
-      "default-src 'self'",
-      "base-uri 'self'",
-      "form-action 'self'",
-      "frame-ancestors 'none'",
-      // Next inline scripts + Turbopack chunks
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-      // Allow Google Fonts stylesheet
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      // Allow images from Unsplash + data urls
-      "img-src 'self' data: https://images.unsplash.com https:",
-      // Allow Google Fonts font files
-      "font-src 'self' data: https://fonts.gstatic.com",
-      // Allow API + same-origin fetches
-      "connect-src 'self' https:",
-    ].join('; ')
-
     return [
       {
         source: '/:path*',
         headers: [
-          { key: 'Content-Security-Policy', value: csp },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
         ],
       },
       {
         source: '/api/:path*',
         headers: [
-          {
-            key: 'Access-Control-Allow-Origin',
-            value:
-              process.env.NEXT_PUBLIC_APP_ORIGIN ||
-              process.env.NEXT_PUBLIC_APP_URL ||
-              'http://localhost:3000',
-          },
+          { key: 'Access-Control-Allow-Origin', value: '*' },
           { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
           { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
         ],
