@@ -80,12 +80,14 @@ export const POST = withErrorHandler(async (request) => {
         ? body.selected_subjects.map(String)
         : []
 
-      await tx.student.create({
+      const className = `${body.year_group || ''} ${body.section || ''}`.trim()
+
+      const student = await tx.student.create({
         data: {
           userId: user.id,
           name: user.name,
           schoolId,
-          class: `${body.year_group || ''} ${body.section || ''}`.trim(),
+          class: className,
           exam_number: body.exam_number,
           previous_school: body.previous_school,
           selected_subjects: selectedSubjects,
@@ -108,6 +110,50 @@ export const POST = withErrorHandler(async (request) => {
           medical_conditions: body.medical_conditions,
         },
       })
+
+      if (className) {
+        const classRecord = await tx.class.upsert({
+          where: { schoolId_name: { schoolId, name: className } },
+          create: {
+            schoolId,
+            name: className,
+            year_group: String(body.year_group || '').trim() || className,
+            section: String(body.section || '').trim() || '',
+          },
+          update: {},
+        })
+
+        if (selectedSubjects.length > 0) {
+          const subjectRecords = await Promise.all(
+            selectedSubjects.map((subjectName) =>
+              tx.subject.upsert({
+                where: {
+                  schoolId_name: {
+                    schoolId,
+                    name: subjectName,
+                  },
+                },
+                create: {
+                  schoolId,
+                  name: subjectName,
+                  topics: [],
+                },
+                update: {},
+              })
+            )
+          )
+
+          await tx.pupilSubjectEnrollment.createMany({
+            data: subjectRecords.map((sub) => ({
+              schoolId,
+              pupilId: student.id,
+              subjectId: sub.id,
+              classId: classRecord.id,
+            })),
+            skipDuplicates: true,
+          })
+        }
+      }
     } else if (role === 'teacher') {
       const assignedSubjects = Array.isArray(body.assigned_subjects)
         ? body.assigned_subjects.map(String)
@@ -117,7 +163,7 @@ export const POST = withErrorHandler(async (request) => {
         ? body.assigned_classes.map((id) => ({ id }))
         : []
 
-      await tx.teacher.create({
+      const teacher = await tx.teacher.create({
         data: {
           userId: user.id,
           schoolId,
@@ -131,12 +177,62 @@ export const POST = withErrorHandler(async (request) => {
           },
         },
       })
+
+      const departmentName = String(body.department || '').trim()
+      if (departmentName) {
+        const dept = await tx.department.upsert({
+          where: {
+            schoolId_name: {
+              schoolId,
+              name: departmentName,
+            },
+          },
+          create: {
+            schoolId,
+            name: departmentName,
+          },
+          update: {},
+        })
+
+        await tx.teacherDepartment.upsert({
+          where: {
+            teacherId_departmentId: {
+              teacherId: teacher.id,
+              departmentId: dept.id,
+            },
+          },
+          create: {
+            teacherId: teacher.id,
+            departmentId: dept.id,
+          },
+          update: {},
+        })
+      }
     } else if (role === 'hod') {
+      const departmentName = String(body.department || '').trim()
+      const dept =
+        departmentName.length > 0
+          ? await tx.department.upsert({
+              where: {
+                schoolId_name: {
+                  schoolId,
+                  name: departmentName,
+                },
+              },
+              create: {
+                schoolId,
+                name: departmentName,
+              },
+              update: {},
+            })
+          : null
+
       await tx.headOfDepartment.create({
         data: {
           userId: user.id,
           schoolId,
-          department: body.department,
+          department: departmentName,
+          departmentId: dept?.id ?? undefined,
         },
       })
     }

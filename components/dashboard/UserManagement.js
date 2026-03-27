@@ -569,6 +569,7 @@ export default function UserManagement() {
 
 function UserDetailsModal({ user, onClose }) {
   const data = user.original || user
+  const role = user.role || data.role || data.user?.role
 
   const getSubjectName = (id) => {
     const numId = Number(id)
@@ -593,14 +594,14 @@ function UserDetailsModal({ user, onClose }) {
           {/* Header Info */}
           <div className="flex items-center space-x-4">
             <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl font-bold">
-              {data.name?.charAt(0) || data.user?.name?.charAt(0) || 'U'}
+              {(data.name || data.user?.name || 'U').charAt(0)}
             </div>
             <div>
               <h4 className="text-xl font-bold text-slate-900 dark:text-white">
                 {data.name || data.user?.name}
               </h4>
               <span className="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200 border border-blue-200 dark:border-blue-500/30 capitalize font-medium">
-                {data.role}
+                {role || 'user'}
               </span>
             </div>
           </div>
@@ -622,7 +623,7 @@ function UserDetailsModal({ user, onClose }) {
           </div>
 
           {/* Teacher Specific */}
-          {data.role === 'teacher' && (
+          {role === 'teacher' && (
             <>
               <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
                 <h4 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-3">
@@ -679,7 +680,7 @@ function UserDetailsModal({ user, onClose }) {
           )}
 
           {/* Student Specific */}
-          {data.role === 'student' && (
+          {role === 'student' && (
             <>
               <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
                 <h4 className="text-lg font-semibold text-green-600 dark:text-green-400 mb-3">

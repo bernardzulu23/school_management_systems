@@ -1,18 +1,18 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import prisma from '@/lib/prisma'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
-
-// Use a global prisma instance if available, otherwise create new (avoiding connection limits in dev)
-const globalForPrisma = global
-const prisma = globalForPrisma.prisma || new PrismaClient()
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url)
     const explicitSubdomain = searchParams.get('subdomain')
 
-    const schoolId = await getSchoolIdFromRequest(request, explicitSubdomain)
+    let schoolId = null
+    try {
+      schoolId = await getSchoolIdFromRequest(request, explicitSubdomain)
+    } catch {
+      return NextResponse.json({ school: null })
+    }
 
     if (!schoolId) {
       // Return a default/fallback object or null
@@ -34,6 +34,6 @@ export async function GET(request) {
     return NextResponse.json({ school })
   } catch (error) {
     console.error('Error fetching current school:', error)
-    return NextResponse.json({ error: 'Failed to fetch school data' }, { status: 500 })
+    return NextResponse.json({ school: null })
   }
 }

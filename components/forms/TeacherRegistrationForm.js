@@ -3,17 +3,17 @@
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  GraduationCap, 
+import {
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  GraduationCap,
   BookOpen,
   Calendar,
   Building,
   Save,
-  X
+  X,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { DEPARTMENTS, USER_ROLES, SYSTEM_STATUS, GENDERS, RELATIONSHIPS } from '@/lib/constants'
@@ -22,6 +22,7 @@ import { useSubjects } from '@/lib/hooks/useSubjects'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 import FormField from '@/components/forms/FormField'
 import LoadingSpinner from '@/components/LoadingSpinner'
+import SkeletonLoader from '@/components/SkeletonLoader'
 
 export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
   const [formData, setFormData] = useState({
@@ -30,10 +31,9 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
     lastName: '',
     email: '',
     phone: '',
-    dateOfBirth: '',
     gender: '',
     address: '',
-    
+
     // Professional Information
     employeeId: '',
     department: '',
@@ -41,30 +41,30 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
     qualifications: '',
     experienceYears: '',
     tsNumber: '',
-    
+
     // Emergency Contact
     emergencyContactName: '',
     emergencyContactPhone: '',
-    emergencyContactRelation: ''
+    emergencyContactRelation: '',
   })
 
   const { subjectsByCategory, loading: subjectsLoading } = useSubjects()
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
 
-  const validateRequired = (value) => value ? true : 'This field is required';
+  const validateRequired = (value) => (value ? true : 'This field is required')
   const validateEmail = (value) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!value) return 'Email is required';
-    if (!emailRegex.test(value)) return 'Please enter a valid email address';
-    return true;
-  };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!value) return 'Email is required'
+    if (!emailRegex.test(value)) return 'Please enter a valid email address'
+    return true
+  }
   const validatePhone = (value) => {
-    const phoneRegex = /^\+?[\d\s-]{10,}$/;
-    if (!value) return true; // Optional field
-    if (!phoneRegex.test(value)) return 'Invalid phone number';
-    return true;
-  };
+    const phoneRegex = /^\+?[\d\s-]{10,}$/
+    if (!value) return true // Optional field
+    if (!phoneRegex.test(value)) return 'Invalid phone number'
+    return true
+  }
 
   const onInputChange = handleInputChange(setFormData)
   const onSubjectChange = handleMultiSelectChange(setFormData)
@@ -83,7 +83,7 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
       if (!formData.department) newErrors.department = 'Department is required'
       if (!formData.employeeId) newErrors.employeeId = 'Employee ID is required'
       if (!formData.tsNumber) newErrors.tsNumber = 'TS Number is required'
-      
+
       if (formData.subjects.length === 0) {
         newErrors.subjects = 'Please select at least one subject'
       }
@@ -99,20 +99,30 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
         ...formData,
         name: formatFullName(formData.firstName, formData.lastName),
         role: USER_ROLES.TEACHER,
-        status: SYSTEM_STATUS.ACTIVE
+        status: SYSTEM_STATUS.ACTIVE,
       }
 
       await onSubmit(submissionData)
       toast.success('Teacher registered successfully!')
-      
+
       // Reset form
       setFormData({
-        firstName: '', lastName: '', email: '', phone: '', dateOfBirth: '',
-        gender: '', address: '', employeeId: '', department: '', subjects: [],
-        qualifications: '', experienceYears: '', tsNumber: '',
-        emergencyContactName: '', emergencyContactPhone: '', emergencyContactRelation: ''
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        gender: '',
+        address: '',
+        employeeId: '',
+        department: '',
+        subjects: [],
+        qualifications: '',
+        experienceYears: '',
+        tsNumber: '',
+        emergencyContactName: '',
+        emergencyContactPhone: '',
+        emergencyContactRelation: '',
       })
-
     } catch (error) {
       console.error('Error registering teacher:', error)
       toast.error(error.message || 'Error registering teacher. Please try again.')
@@ -190,18 +200,6 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
               aria-describedby="phone-error"
             />
             <FormGroup
-              label="Date of Birth"
-              name="dateOfBirth"
-              type="date"
-              value={formData.dateOfBirth}
-              onChange={onInputChange}
-              required
-              error={errors.dateOfBirth}
-              validate={validateRequired}
-              icon={Calendar}
-              aria-describedby="dateOfBirth-error"
-            />
-            <FormGroup
               label="Gender"
               name="gender"
               type="select"
@@ -214,8 +212,10 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
               aria-describedby="gender-error"
             >
               <option value="">Select Gender</option>
-              {GENDERS.map(g => (
-                <option key={g.value} value={g.value}>{g.label}</option>
+              {GENDERS.map((g) => (
+                <option key={g.value} value={g.value}>
+                  {g.label}
+                </option>
               ))}
             </FormGroup>
             <FormGroup
@@ -258,8 +258,10 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
               aria-describedby="department-error"
             >
               <option value="">Select Department</option>
-              {DEPARTMENTS.map(dept => (
-                <option key={dept} value={dept}>{dept}</option>
+              {DEPARTMENTS.map((dept) => (
+                <option key={dept} value={dept}>
+                  {dept}
+                </option>
               ))}
             </FormGroup>
             <FormGroup
@@ -302,13 +304,20 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
 
           {/* Subject Assignments */}
           <section className="space-y-4" aria-labelledby="subject-assignments-title">
-            <h3 id="subject-assignments-title" className="text-lg font-semibold text-gray-900 flex items-center gap-2 border-b pb-2">
+            <h3
+              id="subject-assignments-title"
+              className="text-lg font-semibold text-gray-900 flex items-center gap-2 border-b pb-2"
+            >
               <BookOpen className="w-5 h-5" aria-hidden="true" />
               Subject Assignments *
             </h3>
             {subjectsLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" role="status" aria-label="Loading subjects">
-                {[1, 2, 3].map(n => (
+              <div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                role="status"
+                aria-label="Loading subjects"
+              >
+                {[1, 2, 3].map((n) => (
                   <div key={n} className="border border-gray-200 rounded-lg p-4">
                     <SkeletonLoader className="h-6 w-3/4 mb-4" />
                     <div className="space-y-2">
@@ -324,17 +333,32 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
                 {Object.entries(subjectsByCategory).map(([category, categorySubjects]) => (
                   <div key={category} className="border border-gray-200 rounded-lg p-4">
                     <h4 className="font-medium text-gray-900 mb-3 capitalize">
-                      {category === 'arts' ? 'Arts & Humanities' : 
-                       category === 'elective' ? 'Elective Subjects' :
-                       category === 'commercial' ? 'Commercial Studies' :
-                       category === 'practical' ? 'Practical Subjects' :
-                       category === 'language' ? 'Languages' :
-                       category === 'science' ? 'Sciences' :
-                       category === 'core' ? 'Core Subjects' : category}
+                      {category === 'arts'
+                        ? 'Arts & Humanities'
+                        : category === 'elective'
+                          ? 'Elective Subjects'
+                          : category === 'commercial'
+                            ? 'Commercial Studies'
+                            : category === 'practical'
+                              ? 'Practical Subjects'
+                              : category === 'language'
+                                ? 'Languages'
+                                : category === 'science'
+                                  ? 'Sciences'
+                                  : category === 'core'
+                                    ? 'Core Subjects'
+                                    : category}
                     </h4>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" role="list">
+                    <div
+                      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
+                      role="list"
+                    >
                       {categorySubjects.map((subject) => (
-                        <label key={subject.id} className="flex items-center space-x-2 text-sm cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors group" role="listitem">
+                        <label
+                          key={subject.id}
+                          className="flex items-center space-x-2 text-sm cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors group"
+                          role="listitem"
+                        >
                           <input
                             type="checkbox"
                             checked={formData.subjects.includes(subject.id)}
@@ -342,7 +366,9 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
                             className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500 transition-all duration-200"
                             aria-label={`Select ${subject.name}`}
                           />
-                          <span className="text-gray-700 group-hover:text-blue-600 transition-colors">{subject.name}</span>
+                          <span className="text-gray-700 group-hover:text-blue-600 transition-colors">
+                            {subject.name}
+                          </span>
                         </label>
                       ))}
                     </div>
@@ -392,8 +418,10 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
               aria-describedby="emergencyContactRelation-error"
             >
               <option value="">Select Relationship</option>
-              {RELATIONSHIPS.map(r => (
-                <option key={r.value} value={r.value}>{r.label}</option>
+              {RELATIONSHIPS.map((r) => (
+                <option key={r.value} value={r.value}>
+                  {r.label}
+                </option>
               ))}
             </FormGroup>
           </FormSection>
@@ -401,13 +429,18 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
           {/* Submit Button */}
           <footer className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
             {onCancel && (
-              <Button type="button" variant="outline" onClick={onCancel} aria-label="Cancel registration">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onCancel}
+                aria-label="Cancel registration"
+              >
                 Cancel
               </Button>
             )}
-            <Button 
-              type="submit" 
-              disabled={loading} 
+            <Button
+              type="submit"
+              disabled={loading}
               className="flex items-center gap-2"
               aria-busy={loading}
               aria-label={loading ? 'Registering teacher...' : 'Register Teacher'}

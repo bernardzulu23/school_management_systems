@@ -30,6 +30,7 @@ const nextConfig = {
       },
     ],
     formats: ['image/webp', 'image/avif'],
+    qualities: [75, 85],
   },
 
   // Environment variables

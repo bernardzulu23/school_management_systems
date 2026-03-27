@@ -39,8 +39,20 @@ export async function POST(request) {
     let schoolId = await getSchoolIdFromRequest(request, subdomain)
     console.log('[Login Debug] Resolved School ID:', schoolId)
 
-    // If no school ID found from subdomain, try to find user across all schools (optional fallback)
-    // For now, we strictly require school context for security in multi-tenant setup
+    // Dev-friendly fallback: on localhost there's no subdomain, so infer school from email.
+    if (!schoolId && process.env.NODE_ENV !== 'production') {
+      const userSchool = await prisma.user.findFirst({
+        where: {
+          email,
+          school: { active: true },
+        },
+        select: { schoolId: true },
+      })
+      schoolId = userSchool?.schoolId || schoolId
+      console.log('[Login Debug] Inferred School ID (dev fallback):', schoolId)
+    }
+
+    // For production, strictly require school context for security in multi-tenant setup
     if (!schoolId) {
       console.error(
         'Login error: School context could not be determined. Host:',
@@ -112,9 +124,7 @@ export async function POST(request) {
     console.error('Login error:', error)
     return NextResponse.json(
       {
-        error: 'Internal server error',
-        message:
-          process.env.NODE_ENV === 'development' ? error.message : 'An unexpected error occurred',
+        error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
       },
       { status: 500 }
     )

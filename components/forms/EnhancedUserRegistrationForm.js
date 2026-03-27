@@ -228,21 +228,23 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
       if (role !== 'student' && !formData.contact_number.trim())
         newErrors.contact_number = 'Contact number is required'
 
-      if (!formData.date_of_birth) {
-        newErrors.date_of_birth = 'Date of birth is required'
-      } else {
-        const dob = new Date(formData.date_of_birth)
-        const today = new Date()
-        let age = today.getFullYear() - dob.getFullYear()
-        const m = today.getMonth() - dob.getMonth()
-        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
-          age--
-        }
+      if (role !== 'teacher' && role !== 'hod') {
+        if (!formData.date_of_birth) {
+          newErrors.date_of_birth = 'Date of birth is required'
+        } else {
+          const dob = new Date(formData.date_of_birth)
+          const today = new Date()
+          let age = today.getFullYear() - dob.getFullYear()
+          const m = today.getMonth() - dob.getMonth()
+          if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+            age--
+          }
 
-        if (dob > today) {
-          newErrors.date_of_birth = 'Date cannot be in the future'
-        } else if (age < 12) {
-          newErrors.date_of_birth = 'Must be at least 12 years old'
+          if (dob > today) {
+            newErrors.date_of_birth = 'Date cannot be in the future'
+          } else if (age < 12) {
+            newErrors.date_of_birth = 'Must be at least 12 years old'
+          }
         }
       }
 

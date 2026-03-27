@@ -39,19 +39,21 @@ export default function BasicInfoStep({ formData, errors, onInputChange, role })
           />
         )}
 
-        <FormGroup
-          label="Date of Birth"
-          name="date_of_birth"
-          type="date"
-          value={formData.date_of_birth}
-          onChange={onInputChange}
-          required
-          icon={Calendar}
-          min="1950-01-01"
-          max={maxDate}
-          error={errors.date_of_birth}
-          aria-describedby="date_of_birth-error"
-        />
+        {role !== 'teacher' && role !== 'hod' && (
+          <FormGroup
+            label="Date of Birth"
+            name="date_of_birth"
+            type="date"
+            value={formData.date_of_birth}
+            onChange={onInputChange}
+            required
+            icon={Calendar}
+            min="1950-01-01"
+            max={maxDate}
+            error={errors.date_of_birth}
+            aria-describedby="date_of_birth-error"
+          />
+        )}
 
         <FormGroup
           label="Gender"

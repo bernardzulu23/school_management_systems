@@ -6,9 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { useAuth } from '@/lib/auth'
-import { calculateGrade, JUNIOR_GRADING_SYSTEM } from '@/lib/gradingSystem'
+import { calculateGrade } from '@/lib/gradingSystem'
 import { toast } from 'react-hot-toast'
 import { Save, ArrowLeft, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
@@ -17,117 +23,288 @@ export default function ResultEntryPage() {
   const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
-  
-  // Selection state
-  const [selectedTerm, setSelectedTerm] = useState('Term 1 2025')
-  const [selectedClass, setSelectedClass] = useState('')
-  const [selectedSubject, setSelectedSubject] = useState('')
-  
-  // Data state
-  const [students, setStudents] = useState([])
-  const [scores, setScores] = useState({}) // Map of studentId -> score
-  const [subjects, setSubjects] = useState([])
+  const [syncing, setSyncing] = useState(false)
 
-  // Mock data for dropdowns (replace with API calls later)
-  const terms = ['Term 1 2025', 'Term 2 2025', 'Term 3 2025']
-  const classes = ['Form 1A', 'Form 1B', 'Form 2A', 'Form 2B']
+  const [assignments, setAssignments] = useState([])
+  const [selectedAssignmentId, setSelectedAssignmentId] = useState('')
+  const [selectedTerm, setSelectedTerm] = useState('')
 
-  // Fetch subjects on mount
+  const [pupils, setPupils] = useState([])
+  const [scores, setScores] = useState({})
+  const [baseUpdatedAtByPupil, setBaseUpdatedAtByPupil] = useState({})
+
+  const [conflicts, setConflicts] = useState([])
+  const [showConflicts, setShowConflicts] = useState(false)
+  const [isOnline, setIsOnline] = useState(true)
+
+  const terms = (() => {
+    const year = new Date().getFullYear()
+    return [`Term 1 ${year}`, `Term 2 ${year}`, `Term 3 ${year}`]
+  })()
+
+  const selectedAssignment = assignments.find((a) => a.id === selectedAssignmentId) || null
+
+  const queueKey = user?.id ? `gradebook_queue_v1:${user.id}` : 'gradebook_queue_v1'
+  const draftKey = user?.id ? `gradebook_drafts_v1:${user.id}` : 'gradebook_drafts_v1'
+
+  const parseTermYear = (termRaw) => {
+    const t = String(termRaw || '').trim()
+    const match = t.match(/(Term\\s*\\d+)\\s*(\\d{4})/i)
+    if (match) return { term: match[1].trim(), year: Number(match[2]) }
+    return { term: t || 'Term 1', year: new Date().getFullYear() }
+  }
+
+  const getQueue = () => {
+    try {
+      const raw = localStorage.getItem(queueKey)
+      const parsed = raw ? JSON.parse(raw) : []
+      const now = Date.now()
+      const keepMs = 8 * 24 * 60 * 60 * 1000
+      const filtered = Array.isArray(parsed)
+        ? parsed.filter((x) => x?.createdAt && now - new Date(x.createdAt).getTime() <= keepMs)
+        : []
+      if (filtered.length !== parsed.length)
+        localStorage.setItem(queueKey, JSON.stringify(filtered))
+      return filtered
+    } catch {
+      return []
+    }
+  }
+
+  const setQueue = (items) => {
+    localStorage.setItem(queueKey, JSON.stringify(items))
+  }
+
+  const saveDraft = (draft) => {
+    try {
+      const raw = localStorage.getItem(draftKey)
+      const parsed = raw ? JSON.parse(raw) : {}
+      const next = { ...(parsed || {}), ...draft }
+      localStorage.setItem(draftKey, JSON.stringify(next))
+    } catch {}
+  }
+
+  const loadDraft = () => {
+    try {
+      const raw = localStorage.getItem(draftKey)
+      return raw ? JSON.parse(raw) : {}
+    } catch {
+      return {}
+    }
+  }
+
   useEffect(() => {
-    const fetchSubjects = async () => {
+    setIsOnline(typeof navigator !== 'undefined' ? navigator.onLine : true)
+    if (!selectedTerm) setSelectedTerm(terms[0])
+  }, [selectedTerm, terms])
+
+  useEffect(() => {
+    const loadAssignments = async () => {
       try {
-        const response = await fetch('/api/subjects')
-        if (response.ok) {
-          const data = await response.json()
-          if (data.success) {
-            setSubjects(data.data.map(s => s.name))
-          }
+        const res = await fetch('/api/teaching-assignments')
+        if (!res.ok) throw new Error('Failed to load assignments')
+        const json = await res.json()
+        const data = Array.isArray(json?.data) ? json.data : []
+        setAssignments(data)
+        const draft = loadDraft()
+        const preferred = draft?.selectedAssignmentId
+        if (preferred && data.some((a) => a.id === preferred)) {
+          setSelectedAssignmentId(preferred)
+        } else if (!selectedAssignmentId && data.length > 0) {
+          setSelectedAssignmentId(data[0].id)
         }
-      } catch (error) {
-        console.error('Failed to fetch subjects', error)
-        toast.error('Failed to load subjects')
+      } catch (e) {
+        toast.error('Failed to load teaching assignments')
       }
     }
-    fetchSubjects()
+    loadAssignments()
   }, [])
 
-  // Mock fetch students when class is selected
   useEffect(() => {
-    if (selectedClass && selectedSubject) {
-      fetchStudents(selectedClass)
-    }
-  }, [selectedClass, selectedSubject])
+    saveDraft({ selectedAssignmentId, selectedTerm })
+  }, [selectedAssignmentId, selectedTerm])
 
-  const fetchStudents = async (className) => {
+  const fetchPupilsAndResults = async () => {
+    if (!selectedAssignment || !selectedTerm) return
     setLoading(true)
     try {
-      const queryParams = new URLSearchParams()
-      if (selectedSubject) queryParams.append('subject', selectedSubject)
-      if (selectedTerm) queryParams.append('term', selectedTerm)
-        
-      const response = await fetch(`/api/classes/${encodeURIComponent(className)}/students?${queryParams}`)
-      if (!response.ok) throw new Error('Failed to fetch')
-      const data = await response.json()
-      
-      setStudents(data)
-      
-      // Initialize scores
+      const { term, year } = parseTermYear(selectedTerm)
+
+      const pupilsRes = await fetch(
+        `/api/teacher/pupils?classId=${encodeURIComponent(selectedAssignment.classId)}&subjectId=${encodeURIComponent(selectedAssignment.subjectId)}`
+      )
+      if (!pupilsRes.ok) throw new Error('Failed to load pupils')
+      const pupilsJson = await pupilsRes.json()
+      const pupilsData = Array.isArray(pupilsJson?.data) ? pupilsJson.data : []
+      setPupils(pupilsData)
+
+      const resultsRes = await fetch(
+        `/api/teacher/results?subjectId=${encodeURIComponent(selectedAssignment.subjectId)}&term=${encodeURIComponent(term)}&year=${encodeURIComponent(year)}`
+      )
+      const resultsJson = resultsRes.ok ? await resultsRes.json() : { data: [] }
+      const results = Array.isArray(resultsJson?.data) ? resultsJson.data : []
+      const byStudent = new Map(results.map((r) => [r.studentId, r]))
+
       const initialScores = {}
-      data.forEach(s => {
-        if (s.currentScore !== null && s.currentScore !== undefined) {
-          initialScores[s.id] = s.currentScore
+      const baseMap = {}
+      pupilsData.forEach((p) => {
+        const existing = byStudent.get(p.id)
+        if (existing) {
+          initialScores[p.id] = existing.score
+          baseMap[p.id] = existing.updatedAt
         }
       })
+
       setScores(initialScores)
-      setLoading(false)
-    } catch (error) {
-      console.error('Error fetching students:', error)
-      toast.error('Failed to load students')
+      setBaseUpdatedAtByPupil(baseMap)
+    } catch (e) {
+      toast.error('Failed to load gradebook data')
+      setPupils([])
+      setScores({})
+      setBaseUpdatedAtByPupil({})
+    } finally {
       setLoading(false)
     }
   }
 
+  useEffect(() => {
+    fetchPupilsAndResults()
+  }, [selectedAssignmentId, selectedTerm])
+
   const handleScoreChange = (studentId, value) => {
     // Allow empty string for clearing
     if (value === '') {
-      setScores(prev => ({ ...prev, [studentId]: '' }))
+      setScores((prev) => ({ ...prev, [studentId]: '' }))
       return
     }
 
     const numValue = Number(value)
     if (!isNaN(numValue) && numValue >= 0 && numValue <= 100) {
-      setScores(prev => ({ ...prev, [studentId]: numValue }))
+      setScores((prev) => ({ ...prev, [studentId]: numValue }))
     }
   }
 
+  const buildPayload = () => {
+    if (!selectedAssignment || !selectedTerm) return null
+    const { term, year } = parseTermYear(selectedTerm)
+    const results = pupils
+      .map((p) => ({
+        studentId: p.id,
+        subjectId: selectedAssignment.subjectId,
+        classId: selectedAssignment.classId,
+        term,
+        year,
+        score: scores[p.id] === '' ? null : scores[p.id],
+        baseUpdatedAt: baseUpdatedAtByPupil[p.id] || null,
+      }))
+      .filter((r) => r.score !== undefined)
+    return { results }
+  }
+
+  const enqueueOffline = (payload) => {
+    const queue = getQueue()
+    queue.push({
+      id:
+        typeof crypto !== 'undefined' && crypto.randomUUID
+          ? crypto.randomUUID()
+          : String(Date.now()),
+      createdAt: new Date().toISOString(),
+      selectedAssignment,
+      selectedTerm,
+      payload,
+    })
+    setQueue(queue)
+  }
+
+  const syncOnce = async (payload) => {
+    const headers = { 'Content-Type': 'application/json' }
+    let body = JSON.stringify(payload)
+
+    if (typeof CompressionStream !== 'undefined' && typeof TextEncoder !== 'undefined') {
+      try {
+        const cs = new CompressionStream('gzip')
+        const writer = cs.writable.getWriter()
+        await writer.write(new TextEncoder().encode(body))
+        await writer.close()
+        const compressed = await new Response(cs.readable).arrayBuffer()
+        headers['Content-Encoding'] = 'gzip'
+        body = new Uint8Array(compressed)
+      } catch {}
+    }
+
+    const res = await fetch('/api/teacher/results', {
+      method: 'POST',
+      headers,
+      body,
+    })
+
+    if (res.status === 409) {
+      const json = await res.json()
+      setConflicts(Array.isArray(json?.conflicts) ? json.conflicts : [])
+      setShowConflicts(true)
+      throw new Error('conflicts')
+    }
+
+    if (!res.ok) throw new Error('Failed to save results')
+    return res.json()
+  }
+
+  const syncQueue = async () => {
+    if (!isOnline) return
+    const queue = getQueue()
+    if (queue.length === 0) return
+    setSyncing(true)
+    try {
+      for (const item of queue) {
+        await syncOnce(item.payload)
+      }
+      setQueue([])
+      toast.success('Offline changes synced')
+      await fetchPupilsAndResults()
+    } catch (e) {
+      if (String(e?.message || '') !== 'conflicts') toast.error('Sync failed')
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    const onlineHandler = () => setIsOnline(true)
+    const offlineHandler = () => setIsOnline(false)
+    window.addEventListener('online', onlineHandler)
+    window.addEventListener('offline', offlineHandler)
+    return () => {
+      window.removeEventListener('online', onlineHandler)
+      window.removeEventListener('offline', offlineHandler)
+    }
+  }, [])
+
+  useEffect(() => {
+    const handler = () => syncQueue()
+    window.addEventListener('online', handler)
+    return () => window.removeEventListener('online', handler)
+  }, [isOnline])
+
   const handleSave = async () => {
-    if (!selectedClass || !selectedSubject) {
-      toast.error('Please select class and subject')
+    const payload = buildPayload()
+    if (!payload || !selectedAssignment) {
+      toast.error('Select a class and subject')
       return
     }
 
     setSaving(true)
     try {
-      const resultsToSave = students.map(student => ({
-        studentId: student.id,
-        score: scores[student.id] === '' ? null : scores[student.id],
-        class: selectedClass,
-        subject: selectedSubject,
-        term: selectedTerm
-      })).filter(r => r.score !== undefined && r.score !== null)
+      if (!isOnline) {
+        enqueueOffline(payload)
+        toast.success('Saved offline. Will sync when online.')
+        return
+      }
 
-      const response = await fetch('/api/teacher/results', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ results: resultsToSave })
-      })
-
-      if (!response.ok) throw new Error('Failed to save')
-
+      await syncOnce(payload)
       toast.success('Results saved successfully')
-    } catch (error) {
-      console.error('Error saving results:', error)
-      toast.error('Failed to save results')
+      await fetchPupilsAndResults()
+    } catch (e) {
+      if (String(e?.message || '') !== 'conflicts') toast.error('Failed to save results')
     } finally {
       setSaving(false)
     }
@@ -135,7 +312,8 @@ export default function ResultEntryPage() {
 
   const getGradeInfo = (score) => {
     if (score === '' || score === undefined || score === null) return null
-    return calculateGrade(score, 'form1') // Using Form 1/2 grading system as requested
+    const level = selectedAssignment?.classYearGroup || selectedAssignment?.className || 'form1'
+    return calculateGrade(score, level)
   }
 
   return (
@@ -154,10 +332,24 @@ export default function ResultEntryPage() {
               <p className="text-gray-600">Enter subject results for your classes</p>
             </div>
           </div>
-          <Button onClick={handleSave} disabled={saving || students.length === 0}>
-            {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
-            Save Results
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={syncQueue} disabled={syncing || !isOnline}>
+              {syncing ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <CheckCircle className="h-4 w-4 mr-2" />
+              )}
+              Sync
+            </Button>
+            <Button onClick={handleSave} disabled={saving || pupils.length === 0}>
+              {saving ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Save className="h-4 w-4 mr-2" />
+              )}
+              Save
+            </Button>
+          </div>
         </div>
 
         {/* Filters */}
@@ -171,49 +363,48 @@ export default function ResultEntryPage() {
                     <SelectValue placeholder="Select Term" />
                   </SelectTrigger>
                   <SelectContent>
-                    {terms.map(term => (
-                      <SelectItem key={term} value={term}>{term}</SelectItem>
+                    {terms.map((term) => (
+                      <SelectItem key={term} value={term}>
+                        {term}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Class</Label>
-                <Select value={selectedClass} onValueChange={setSelectedClass}>
+                <Label>Rapid Subject Switcher</Label>
+                <Select value={selectedAssignmentId} onValueChange={setSelectedAssignmentId}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select Class" />
+                    <SelectValue placeholder="Select Class + Subject" />
                   </SelectTrigger>
                   <SelectContent>
-                    {classes.map(cls => (
-                      <SelectItem key={cls} value={cls}>{cls}</SelectItem>
+                    {assignments.map((a) => (
+                      <SelectItem key={a.id} value={a.id}>
+                        {a.className} · {a.subjectName}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Subject</Label>
-                <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Subject" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {subjects.map(sub => (
-                      <SelectItem key={sub} value={sub}>{sub}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Label>Status</Label>
+                <div className="text-sm text-gray-600">
+                  {isOnline ? 'Online' : 'Offline (7+ days supported)'}
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Student List */}
-        {selectedClass && selectedSubject ? (
+        {selectedAssignment ? (
           <Card>
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
-                <span>{selectedClass} - {selectedSubject}</span>
-                <span className="text-sm font-normal text-gray-500">{students.length} Students</span>
+                <span>
+                  {selectedAssignment.className} - {selectedAssignment.subjectName}
+                </span>
+                <span className="text-sm font-normal text-gray-500">{pupils.length} Pupils</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -234,10 +425,10 @@ export default function ResultEntryPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {students.map((student) => {
+                      {pupils.map((student) => {
                         const score = scores[student.id]
                         const gradeInfo = getGradeInfo(score)
-                        
+
                         return (
                           <tr key={student.id} className="border-b hover:bg-gray-50">
                             <td className="px-4 py-3 font-medium">{student.id}</td>
@@ -254,12 +445,20 @@ export default function ResultEntryPage() {
                             </td>
                             <td className="px-4 py-3">
                               {gradeInfo ? (
-                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                  ${gradeInfo.color === 'green' ? 'bg-green-100 text-green-800' : 
-                                    gradeInfo.color === 'blue' ? 'bg-blue-100 text-blue-800' :
-                                    gradeInfo.color === 'purple' ? 'bg-purple-100 text-purple-800' :
-                                    gradeInfo.color === 'yellow' ? 'bg-yellow-100 text-yellow-800' :
-                                    'bg-red-100 text-red-800'}`}>
+                                <span
+                                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                  ${
+                                    gradeInfo.color === 'green'
+                                      ? 'bg-green-100 text-green-800'
+                                      : gradeInfo.color === 'blue'
+                                        ? 'bg-blue-100 text-blue-800'
+                                        : gradeInfo.color === 'purple'
+                                          ? 'bg-purple-100 text-purple-800'
+                                          : gradeInfo.color === 'yellow'
+                                            ? 'bg-yellow-100 text-yellow-800'
+                                            : 'bg-red-100 text-red-800'
+                                  }`}
+                                >
                                   {gradeInfo.grade} - {gradeInfo.status}
                                 </span>
                               ) : (
@@ -281,10 +480,98 @@ export default function ResultEntryPage() {
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-gray-500">
             <AlertCircle className="h-12 w-12 mb-4 text-gray-400" />
-            <p className="text-lg font-medium">Please select a Class and Subject to enter results</p>
+            <p className="text-lg font-medium">No teaching assignments found</p>
           </div>
         )}
       </div>
+
+      {showConflicts && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="p-4 border-b flex items-center justify-between">
+              <h3 className="font-semibold text-gray-900">Sync Conflicts</h3>
+              <Button variant="outline" onClick={() => setShowConflicts(false)}>
+                Close
+              </Button>
+            </div>
+            <div className="p-4 space-y-3">
+              {conflicts.length === 0 ? (
+                <p className="text-sm text-gray-600">No conflicts.</p>
+              ) : (
+                conflicts.map((c, idx) => (
+                  <div key={idx} className="border rounded-lg p-3">
+                    <div className="text-sm font-medium text-gray-900">{c.key?.studentId}</div>
+                    <div className="text-sm text-gray-700">
+                      Server: {c.server?.score} (updated{' '}
+                      {new Date(c.server?.updatedAt).toLocaleString()})
+                    </div>
+                    <div className="text-sm text-gray-700">Yours: {c.client?.score}</div>
+                    <div className="flex gap-2 mt-3">
+                      <Button
+                        onClick={async () => {
+                          try {
+                            const payload = buildPayload()
+                            if (!payload) return
+                            payload.results = payload.results.map((r) => {
+                              if (
+                                r.studentId === c.key.studentId &&
+                                r.subjectId === c.key.subjectId &&
+                                r.term === c.key.term &&
+                                r.year === c.key.year
+                              ) {
+                                return { ...r, resolution: 'keep_latest' }
+                              }
+                              return r
+                            })
+                            await syncOnce(payload)
+                            setShowConflicts(false)
+                            setConflicts([])
+                            toast.success('Applied your changes')
+                            await fetchPupilsAndResults()
+                          } catch {
+                            toast.error('Failed to resolve conflict')
+                          }
+                        }}
+                      >
+                        Keep Latest
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={async () => {
+                          try {
+                            const payload = buildPayload()
+                            if (!payload) return
+                            payload.results = payload.results.map((r) => {
+                              if (
+                                r.studentId === c.key.studentId &&
+                                r.subjectId === c.key.subjectId &&
+                                r.term === c.key.term &&
+                                r.year === c.key.year
+                              ) {
+                                return { ...r, resolution: 'keep_server' }
+                              }
+                              return r
+                            })
+                            await syncOnce(payload)
+                            setShowConflicts(false)
+                            setConflicts([])
+                            toast.success('Kept server version')
+                            await fetchPupilsAndResults()
+                          } catch {
+                            toast.error('Failed to resolve conflict')
+                          }
+                        }}
+                      >
+                        Keep Server
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </DashboardLayout>
   )
 }

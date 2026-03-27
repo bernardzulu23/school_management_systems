@@ -40,9 +40,12 @@ model School {
   students             Student[]
   teachers             Teacher[]
   hods                 HeadOfDepartment[]
+  departments          Department[]
   classes              Class[]
   subjects             Subject[]
   results              Result[]
+  teachingAssignments  TeachingAssignment[]
+  pupilSubjectEnrollments PupilSubjectEnrollment[]
   studentWorks         StudentWork[]
   goals                Goal[]
   notes                Note[]
@@ -167,6 +170,7 @@ model Student {
   playedGames         StudentGame[]
   attendance          Attendance[]
   assignmentSubmissions AssignmentSubmission[]
+  subjectEnrollments  PupilSubjectEnrollment[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -236,6 +240,8 @@ model Teacher {
   
   classes   Class[] 
   subjects  Subject[] 
+  departments TeacherDepartment[]
+  teachingAssignments TeachingAssignment[]
   
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt 
@@ -254,12 +260,15 @@ model HeadOfDepartment {
   school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
   
   department String 
+  departmentId String?
+  departmentRef Department? @relation(fields: [departmentId], references: [id])
   
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt 
   
   @@index([schoolId]) 
   @@index([department])
+  @@index([departmentId])
 } 
 
 model Class { 
@@ -276,6 +285,8 @@ model Class {
   teacher     Teacher? @relation(fields: [teacherId], references: [id]) 
   
   subjects    Subject[] 
+  teachingAssignments TeachingAssignment[]
+  subjectEnrollments PupilSubjectEnrollment[]
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -302,14 +313,91 @@ model Subject {
   class       Class?   @relation(fields: [classId], references: [id]) 
   
   results     Result[] 
+  teachingAssignments TeachingAssignment[]
+  pupilEnrollments PupilSubjectEnrollment[]
   
   createdAt   DateTime @default(now()) 
   updatedAt   DateTime @updatedAt 
   
   @@index([schoolId]) 
   @@index([name])
+  @@unique([schoolId, name])
   @@unique([schoolId, code]) 
 } 
+
+model Department {
+  id        String   @id @default(uuid())
+  name      String
+
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  teachers  TeacherDepartment[]
+  hods      HeadOfDepartment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([schoolId, name])
+  @@index([schoolId])
+  @@index([name])
+}
+
+model TeacherDepartment {
+  teacherId    String
+  teacher      Teacher    @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  @@id([teacherId, departmentId])
+  @@index([departmentId])
+}
+
+model TeachingAssignment {
+  id        String   @id @default(uuid())
+
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  teacherId String
+  teacher   Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([schoolId, teacherId, subjectId, classId])
+  @@index([schoolId])
+  @@index([teacherId, classId, subjectId])
+}
+
+model PupilSubjectEnrollment {
+  id        String   @id @default(uuid())
+
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  pupilId   String
+  pupil     Student  @relation(fields: [pupilId], references: [id], onDelete: Cascade)
+
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([schoolId, pupilId, subjectId, classId])
+  @@index([schoolId])
+  @@index([classId, subjectId, pupilId])
+}
 
 model Result { 
   id          String   @id @default(uuid()) 

@@ -1,20 +1,28 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function GET(request) {
   try {
+    const auth = authMiddleware(request)
+    if (!auth.isAuthenticated) return auth.response
+
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page')) || 1
     const limit = parseInt(searchParams.get('limit')) || 20
     const skip = (page - 1) * limit
-    const schoolId = searchParams.get('schoolId')
+    const schoolId =
+      auth.user?.schoolId || (await getSchoolIdFromRequest(request)) || searchParams.get('schoolId')
     const className = searchParams.get('class')
     const subject = searchParams.get('subject')
 
+    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
     const where = {
-      ...(schoolId ? { schoolId } : {}),
+      schoolId,
       ...(className ? { class: className } : {}),
-      ...(subject ? { subject } : {})
+      ...(subject ? { subject } : {}),
     }
 
     const [assessments, total] = await Promise.all([
@@ -22,20 +30,20 @@ export async function GET(request) {
         where,
         orderBy: { date: 'desc' },
         skip,
-        take: limit
+        take: limit,
       }),
-      prisma.assessment.count({ where })
+      prisma.assessment.count({ where }),
     ])
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       data: assessments,
       pagination: {
         total,
         page,
         limit,
-        totalPages: Math.ceil(total / limit)
-      }
+        totalPages: Math.ceil(total / limit),
+      },
     })
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
@@ -44,8 +52,18 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
+    const auth = authMiddleware(request)
+    if (!auth.isAuthenticated) return auth.response
+
+    if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
     const data = await request.json()
-    
+
     if (!data.title || !data.date) {
       return NextResponse.json({ error: 'Title and date are required' }, { status: 400 })
     }
@@ -53,12 +71,14 @@ export async function POST(request) {
     const newAssessment = await prisma.assessment.create({
       data: {
         title: data.title,
-        type: data.type || 'Test',
+        type: data.type || 'quiz',
         subject: data.subject,
         class: data.class,
         date: new Date(data.date),
-        totalMarks: parseInt(data.totalMarks) || 100
-      }
+        duration_minutes: parseInt(data.duration_minutes) || 60,
+        description: data.description ? String(data.description) : null,
+        schoolId,
+      },
     })
 
     return NextResponse.json({ success: true, data: newAssessment }, { status: 201 })
