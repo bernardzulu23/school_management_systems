@@ -3,8 +3,8 @@ set -e
 echo "Starting server..."
 
 # Using hostname 0.0.0.0 is critical for Docker networking
-export HOSTNAME="0.0.0.0"
-export PORT=3000
+export HOSTNAME="${HOSTNAME:-0.0.0.0}"
+export PORT="${PORT:-3000}"
 
 node server.js &
 SERVER_PID=$!

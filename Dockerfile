@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG NODE_VERSION=20.11.0
-FROM node:${NODE_VERSION}-slim as base
+FROM node:${NODE_VERSION}-slim AS base
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists/*
 
 # Build stage
-FROM base as build
+FROM base AS build
 
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
