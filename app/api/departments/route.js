@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
-import { SCHOOL_SUBJECTS } from '@/data/subjects'
+import { DEPARTMENTS } from '@/lib/constants'
 
 export async function GET(request) {
   const auth = authMiddleware(request)
@@ -16,30 +16,19 @@ export async function GET(request) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   await prisma.$transaction(async (tx) => {
-    for (const s of SCHOOL_SUBJECTS) {
-      const name = String(s.name || '').trim()
-      if (!name) continue
-
-      await tx.subject.upsert({
+    for (const name of DEPARTMENTS) {
+      await tx.department.upsert({
         where: { schoolId_name: { schoolId, name } },
-        create: {
-          schoolId,
-          name,
-          code: s.code ? String(s.code) : null,
-          topics: [],
-        },
-        update: {
-          code: s.code ? String(s.code) : undefined,
-        },
+        create: { schoolId, name },
+        update: {},
       })
     }
   })
 
-  const subjects = await prisma.subject.findMany({
+  const departments = await prisma.department.findMany({
     where: { schoolId },
     orderBy: { name: 'asc' },
-    select: { id: true, name: true, code: true },
   })
 
-  return NextResponse.json({ success: true, data: subjects })
+  return NextResponse.json({ success: true, data: departments })
 }

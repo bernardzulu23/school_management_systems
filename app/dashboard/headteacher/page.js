@@ -7,134 +7,226 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
 import {
-  Settings, BarChart3, Target, Award, AlertCircle, Zap, Rocket, X,
-  FileBarChart, UserPlus, BookOpen, TrendingUp
+  Settings,
+  BarChart3,
+  Target,
+  Award,
+  AlertCircle,
+  Zap,
+  Rocket,
+  X,
+  FileBarChart,
+  UserPlus,
+  BookOpen,
+  TrendingUp,
 } from 'lucide-react'
 import { HeadteacherProvider, useHeadteacher } from '@/lib/context/HeadteacherContext'
 import { ErrorBoundary } from '@/components/dashboard/ErrorBoundary'
 import { logger } from '@/lib/utils/logger'
 import { ERROR_MESSAGES } from '@/lib/utils/errorMessages'
 import SkeletonLoader from '@/components/SkeletonLoader'
+import Link from 'next/link'
 
 // Lazy load heavy dashboard components
 const HeadteacherOverview = dynamic(
-  () => import('@/components/dashboard/headteacher/HeadteacherOverview').then(m => ({ default: m.HeadteacherOverview })),
+  () =>
+    import('@/components/dashboard/headteacher/HeadteacherOverview').then((m) => ({
+      default: m.HeadteacherOverview,
+    })),
   { loading: () => <SkeletonLoader /> }
 )
-const CreativeTeachingHub = dynamic(() => import('@/components/creative-teaching/CreativeTeachingHub'), { loading: () => <SkeletonLoader /> })
-const StudentAttentionSystem = dynamic(() => import('@/components/dashboard/StudentAttentionSystem'), { loading: () => <SkeletonLoader /> })
+const CreativeTeachingHub = dynamic(
+  () => import('@/components/creative-teaching/CreativeTeachingHub'),
+  { loading: () => <SkeletonLoader /> }
+)
+const StudentAttentionSystem = dynamic(
+  () => import('@/components/dashboard/StudentAttentionSystem'),
+  { loading: () => <SkeletonLoader /> }
+)
 const HeadteacherAnalytics = dynamic(
-  () => import('@/components/dashboard/headteacher/HeadteacherAnalytics').then(m => ({ default: m.HeadteacherAnalytics })),
+  () =>
+    import('@/components/dashboard/headteacher/HeadteacherAnalytics').then((m) => ({
+      default: m.HeadteacherAnalytics,
+    })),
   { loading: () => <SkeletonLoader /> }
 )
-const JuniorPerformanceAnalysis = dynamic(() => import('@/components/dashboard/JuniorPerformanceAnalysis'), { loading: () => <SkeletonLoader /> })
-const UserManagement = dynamic(() => import('@/components/dashboard/UserManagement'), { loading: () => <SkeletonLoader /> })
+const JuniorPerformanceAnalysis = dynamic(
+  () => import('@/components/dashboard/JuniorPerformanceAnalysis'),
+  { loading: () => <SkeletonLoader /> }
+)
+const UserManagement = dynamic(() => import('@/components/dashboard/UserManagement'), {
+  loading: () => <SkeletonLoader />,
+})
 const HeadteacherAcademicManagement = dynamic(
-  () => import('@/components/dashboard/headteacher/HeadteacherAcademicManagement').then(m => ({ default: m.HeadteacherAcademicManagement })),
+  () =>
+    import('@/components/dashboard/headteacher/HeadteacherAcademicManagement').then((m) => ({
+      default: m.HeadteacherAcademicManagement,
+    })),
   { loading: () => <SkeletonLoader /> }
 )
 const HeadteacherStrategicPlanning = dynamic(
-  () => import('@/components/dashboard/headteacher/HeadteacherStrategicPlanning').then(m => ({ default: m.HeadteacherStrategicPlanning })),
+  () =>
+    import('@/components/dashboard/headteacher/HeadteacherStrategicPlanning').then((m) => ({
+      default: m.HeadteacherStrategicPlanning,
+    })),
   { loading: () => <SkeletonLoader /> }
 )
 const HeadteacherSettings = dynamic(
-  () => import('@/components/dashboard/headteacher/HeadteacherSettings').then(m => ({ default: m.HeadteacherSettings })),
+  () =>
+    import('@/components/dashboard/headteacher/HeadteacherSettings').then((m) => ({
+      default: m.HeadteacherSettings,
+    })),
   { loading: () => <SkeletonLoader /> }
 )
 const HeadteacherAdvancedFeatures = dynamic(
-  () => import('@/components/dashboard/headteacher/HeadteacherAdvancedFeatures').then(m => ({ default: m.HeadteacherAdvancedFeatures })),
+  () =>
+    import('@/components/dashboard/headteacher/HeadteacherAdvancedFeatures').then((m) => ({
+      default: m.HeadteacherAdvancedFeatures,
+    })),
   { loading: () => <SkeletonLoader /> }
 )
-const TeacherRegistrationForm = dynamic(() => import('@/components/forms/TeacherRegistrationForm'), { loading: () => <SkeletonLoader /> })
-const StudentRegistrationForm = dynamic(() => import('@/components/forms/StudentRegistrationForm'), { loading: () => <SkeletonLoader /> })
-const HodRegistrationForm = dynamic(() => import('@/components/forms/HodRegistrationForm'), { loading: () => <SkeletonLoader /> })
+const TeacherRegistrationForm = dynamic(
+  () => import('@/components/forms/TeacherRegistrationForm'),
+  { loading: () => <SkeletonLoader /> }
+)
+const StudentRegistrationForm = dynamic(
+  () => import('@/components/forms/StudentRegistrationForm'),
+  { loading: () => <SkeletonLoader /> }
+)
+const HodRegistrationForm = dynamic(() => import('@/components/forms/HodRegistrationForm'), {
+  loading: () => <SkeletonLoader />,
+})
 const HeadteacherStats = dynamic(
-  () => import('@/components/dashboard/headteacher/HeadteacherStats').then(m => ({ default: m.HeadteacherStats })),
+  () =>
+    import('@/components/dashboard/headteacher/HeadteacherStats').then((m) => ({
+      default: m.HeadteacherStats,
+    })),
   { loading: () => <SkeletonLoader /> }
 )
 
 function HeadteacherDashboardContent() {
   const { user } = useAuth()
-  const { 
-    activeTab, 
-    setActiveTab, 
-    schoolStats, 
-    dashboardData, 
-    stats,
-    isLoading,
-    error 
-  } = useHeadteacher()
+  const { activeTab, setActiveTab, schoolStats, dashboardData, stats, isLoading, error } =
+    useHeadteacher()
+
+  const role = String(user?.role || '').toLowerCase()
+  const isHeadteacher = role === 'headteacher' || role === 'admin' || role === 'administrator'
 
   const [showRegistrationForm, setShowRegistrationForm] = useState(null) // 'teacher', 'student', 'hod', or null
 
-  const tabs = useMemo(() => [
-    {
-      id: 'overview',
-      name: 'Dashboard Overview',
-      icon: BarChart3,
-      description: 'School statistics and performance'
-    },
-    {
-      id: 'creative-teaching',
-      name: 'Creative Teaching & STEM',
-      icon: Rocket,
-      description: 'Creative teaching tools and STEM learning features'
-    },
-    {
-      id: 'student-attention',
-      name: 'Students Requiring Attention',
-      icon: AlertCircle,
-      description: 'Students scoring below 40% - immediate intervention needed'
-    },
-    {
-      id: 'comprehensive-analytics',
-      name: 'Comprehensive Analytics',
-      icon: FileBarChart,
-      description: 'Detailed performance analytics and insights'
-    },
-    {
-      id: 'junior-analysis',
-      name: 'Junior Performance',
-      icon: Award,
-      description: 'Analysis of Form 1 and Form 2 results'
-    },
-    {
-      id: 'user-management',
-      name: 'User Management',
-      icon: UserPlus,
-      description: 'Register and manage users'
-    },
-    {
-      id: 'academic-management',
-      name: 'Academic Management',
-      icon: BookOpen,
-      description: 'Classes, subjects, and assessments'
-    },
-    {
-      id: 'performance-analytics',
-      name: 'Performance Analytics',
-      icon: TrendingUp,
-      description: 'School-wide monitoring and analytics'
-    },
-    {
-      id: 'strategic-planning',
-      name: 'Strategic Planning',
-      icon: Target,
-      description: 'Goals and strategic management'
-    },
-    {
-      id: 'settings',
-      name: 'School Settings',
-      icon: Settings,
-      description: 'System configuration'
-    },
-    {
-      id: 'advanced-features',
-      name: 'Advanced Features',
-      icon: Zap,
-      description: 'Advanced educational and management features'
-    }
-  ], [])
+  if (!user) {
+    return (
+      <DashboardLayout title="Headteacher Dashboard">
+        <main className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Sign In Required</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-gray-600">Please sign in to access this page.</p>
+              <Link href="/login">
+                <Button>Go to Login</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </main>
+      </DashboardLayout>
+    )
+  }
+
+  if (!isHeadteacher) {
+    return (
+      <DashboardLayout title="Headteacher Dashboard">
+        <main className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Access Denied</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-gray-600">
+                Only Headteachers can register teachers, HODs, and students.
+              </p>
+              <Link href="/dashboard">
+                <Button variant="outline">Back to Dashboard</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </main>
+      </DashboardLayout>
+    )
+  }
+
+  const tabs = useMemo(
+    () => [
+      {
+        id: 'overview',
+        name: 'Dashboard Overview',
+        icon: BarChart3,
+        description: 'School statistics and performance',
+      },
+      {
+        id: 'creative-teaching',
+        name: 'Creative Teaching & STEM',
+        icon: Rocket,
+        description: 'Creative teaching tools and STEM learning features',
+      },
+      {
+        id: 'student-attention',
+        name: 'Students Requiring Attention',
+        icon: AlertCircle,
+        description: 'Students scoring below 40% - immediate intervention needed',
+      },
+      {
+        id: 'comprehensive-analytics',
+        name: 'Comprehensive Analytics',
+        icon: FileBarChart,
+        description: 'Detailed performance analytics and insights',
+      },
+      {
+        id: 'junior-analysis',
+        name: 'Junior Performance',
+        icon: Award,
+        description: 'Analysis of Form 1 and Form 2 results',
+      },
+      {
+        id: 'user-management',
+        name: 'User Management',
+        icon: UserPlus,
+        description: 'Register and manage users',
+      },
+      {
+        id: 'academic-management',
+        name: 'Academic Management',
+        icon: BookOpen,
+        description: 'Classes, subjects, and assessments',
+      },
+      {
+        id: 'performance-analytics',
+        name: 'Performance Analytics',
+        icon: TrendingUp,
+        description: 'School-wide monitoring and analytics',
+      },
+      {
+        id: 'strategic-planning',
+        name: 'Strategic Planning',
+        icon: Target,
+        description: 'Goals and strategic management',
+      },
+      {
+        id: 'settings',
+        name: 'School Settings',
+        icon: Settings,
+        description: 'System configuration',
+      },
+      {
+        id: 'advanced-features',
+        name: 'Advanced Features',
+        icon: Zap,
+        description: 'Advanced educational and management features',
+      },
+    ],
+    []
+  )
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -143,10 +235,12 @@ function HeadteacherDashboardContent() {
       case 'creative-teaching':
         return <CreativeTeachingHub />
       case 'student-attention':
-        return <StudentAttentionSystem
-          studentsData={dashboardData?.students_requiring_attention}
-          performanceSummary={dashboardData?.performance_summary}
-        />
+        return (
+          <StudentAttentionSystem
+            studentsData={dashboardData?.students_requiring_attention}
+            performanceSummary={dashboardData?.performance_summary}
+          />
+        )
       case 'comprehensive-analytics':
       case 'performance-analytics':
         return <HeadteacherAnalytics />
@@ -182,8 +276,8 @@ function HeadteacherDashboardContent() {
                 Add a new {showRegistrationForm} to the school management system
               </p>
             </div>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => setShowRegistrationForm(null)}
               aria-label="Cancel and return to dashboard"
               className="focus-visible:ring-2 focus-visible:ring-gray-500"
@@ -244,18 +338,27 @@ function HeadteacherDashboardContent() {
           <header className="content-section">
             <div className="flex justify-between items-center">
               <div>
-                <h1 id="dashboard-heading" className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                <h1
+                  id="dashboard-heading"
+                  className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent"
+                >
                   Headteacher Dashboard
                 </h1>
-                <p className="text-gray-600 text-sm mt-1">Welcome back, {user?.name || 'Headteacher'}</p>
+                <p className="text-gray-600 text-sm mt-1">
+                  Welcome back, {user?.name || 'Headteacher'}
+                </p>
               </div>
               <div className="flex space-x-4" aria-label="Current date and time">
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl p-3 text-center shadow-lg">
                   <div className="text-lg font-bold">{new Date().getDate()}</div>
-                  <div className="text-xs opacity-90">{new Date().toLocaleDateString('en-US', { month: 'short' })}</div>
+                  <div className="text-xs opacity-90">
+                    {new Date().toLocaleDateString('en-US', { month: 'short' })}
+                  </div>
                 </div>
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl p-3 text-center shadow-lg">
-                  <div className="text-sm font-bold">{new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
+                  <div className="text-sm font-bold">
+                    {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                  </div>
                   <div className="text-xs opacity-90">Time</div>
                 </div>
               </div>
@@ -267,7 +370,10 @@ function HeadteacherDashboardContent() {
             {isLoading ? (
               <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 sm:gap-6 min-w-max sm:min-w-0">
                 {[...Array(7)].map((_, i) => (
-                  <SkeletonLoader key={i} className="h-32 w-32 sm:w-full rounded-2xl flex-shrink-0" />
+                  <SkeletonLoader
+                    key={i}
+                    className="h-32 w-32 sm:w-full rounded-2xl flex-shrink-0"
+                  />
                 ))}
               </div>
             ) : (
@@ -277,7 +383,10 @@ function HeadteacherDashboardContent() {
 
           {/* All Features Grid - Visible on One Screen */}
           <section aria-label="Dashboard Features">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" role="tablist">
+            <div
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3"
+              role="tablist"
+            >
               {tabs.map((tab) => {
                 const Icon = tab.icon
                 const isActive = activeTab === tab.id
@@ -286,7 +395,7 @@ function HeadteacherDashboardContent() {
                     key={tab.id}
                     role="tab"
                     aria-selected={isActive}
-                    aria-controls={isActive ? "active-feature-content" : undefined}
+                    aria-controls={isActive ? 'active-feature-content' : undefined}
                     tabIndex={0}
                     className={`hover:shadow-lg transition-all duration-300 cursor-pointer border-l-4 focus-within:ring-2 focus-within:ring-blue-500 ${
                       isActive
@@ -312,7 +421,7 @@ function HeadteacherDashboardContent() {
                       <Button
                         size="sm"
                         className="w-full text-xs h-6 focus-visible:ring-2 focus-visible:ring-blue-500"
-                        variant={isActive ? "default" : "outline"}
+                        variant={isActive ? 'default' : 'outline'}
                         aria-label={`${isActive ? 'Current' : 'Open'} ${tab.name}`}
                       >
                         {isActive ? 'Active' : 'Open'}
@@ -326,18 +435,22 @@ function HeadteacherDashboardContent() {
 
           {/* Active Feature Content - Collapsible */}
           {activeTab && (
-            <section id="active-feature-content" role="tabpanel" aria-labelledby={`tab-${activeTab}`} className="content-section">
+            <section
+              id="active-feature-content"
+              role="tabpanel"
+              aria-labelledby={`tab-${activeTab}`}
+              className="content-section"
+            >
               <Card className="border-2 border-blue-200">
                 <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 py-3">
                   <CardTitle className="flex items-center justify-between text-lg">
                     <div className="flex items-center" id={`tab-${activeTab}`}>
-                      {tabs.find(t => t.id === activeTab)?.icon && (
-                        React.createElement(tabs.find(t => t.id === activeTab).icon, {
-                          className: "h-5 w-5 mr-2 text-blue-600",
-                          "aria-hidden": "true"
-                        })
-                      )}
-                      {tabs.find(t => t.id === activeTab)?.name}
+                      {tabs.find((t) => t.id === activeTab)?.icon &&
+                        React.createElement(tabs.find((t) => t.id === activeTab).icon, {
+                          className: 'h-5 w-5 mr-2 text-blue-600',
+                          'aria-hidden': 'true',
+                        })}
+                      {tabs.find((t) => t.id === activeTab)?.name}
                     </div>
                     <Button
                       variant="ghost"

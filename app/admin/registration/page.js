@@ -20,12 +20,17 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { api } from '@/lib/api'
+import { useAuth } from '@/lib/auth'
 
 function RegistrationContent() {
   const [activeForm, setActiveForm] = useState(null)
   const [loading, setLoading] = useState(false)
   const searchParams = useSearchParams()
   const router = useRouter()
+  const { user, isAuthenticated } = useAuth()
+
+  const role = String(user?.role || '').toLowerCase()
+  const isHeadteacher = role === 'headteacher' || role === 'admin' || role === 'administrator'
 
   useEffect(() => {
     const role = searchParams.get('role')
@@ -108,6 +113,38 @@ function RegistrationContent() {
       ],
     },
   ]
+
+  if (!isAuthenticated || !user) {
+    return (
+      <DashboardLayout>
+        <div className="container mx-auto px-4 py-6">
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Sign In Required</h2>
+            <p className="text-gray-600 mb-4">Please sign in as Headteacher to register users.</p>
+            <Link href="/login">
+              <Button>Go to Login</Button>
+            </Link>
+          </Card>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
+  if (!isHeadteacher) {
+    return (
+      <DashboardLayout>
+        <div className="container mx-auto px-4 py-6">
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Access Denied</h2>
+            <p className="text-gray-600 mb-4">Only Headteachers can register new users.</p>
+            <Link href="/dashboard">
+              <Button variant="outline">Back to Dashboard</Button>
+            </Link>
+          </Card>
+        </div>
+      </DashboardLayout>
+    )
+  }
 
   if (activeForm) {
     return (

@@ -155,59 +155,168 @@ export const POST = withErrorHandler(async (request) => {
         }
       }
     } else if (role === 'teacher') {
+      const teachingAssignmentsRaw = Array.isArray(body.teaching_assignments)
+        ? body.teaching_assignments
+        : []
+
       const assignedSubjects = Array.isArray(body.assigned_subjects)
         ? body.assigned_subjects.map(String)
         : []
 
-      const assignedClasses = Array.isArray(body.assigned_classes)
-        ? body.assigned_classes.map((id) => ({ id }))
+      const resolvedDepartmentIds = []
+      const rawDepartmentIds = Array.isArray(body.department_ids)
+        ? body.department_ids.map(String)
         : []
+
+      if (rawDepartmentIds.length > 0) {
+        for (const rawId of rawDepartmentIds) {
+          const existing = await tx.department.findFirst({
+            where: { id: rawId, schoolId },
+            select: { id: true },
+          })
+          if (existing) {
+            resolvedDepartmentIds.push(existing.id)
+            continue
+          }
+
+          const name = String(rawId).trim()
+          if (!name) continue
+          const created = await tx.department.upsert({
+            where: { schoolId_name: { schoolId, name } },
+            create: { schoolId, name },
+            update: {},
+            select: { id: true },
+          })
+          resolvedDepartmentIds.push(created.id)
+        }
+      } else {
+        const departmentName = String(body.department || '').trim()
+        if (departmentName) {
+          const dept = await tx.department.upsert({
+            where: { schoolId_name: { schoolId, name: departmentName } },
+            create: { schoolId, name: departmentName },
+            update: {},
+            select: { id: true },
+          })
+          resolvedDepartmentIds.push(dept.id)
+        }
+      }
+
+      const teachingAssignments = []
+      const classIdsToConnect = new Set()
+      const subjectIdsToFetch = new Set()
+
+      for (const ta of teachingAssignmentsRaw) {
+        const classId = ta?.classId ? String(ta.classId).trim() : ''
+        const className = ta?.className ? String(ta.className).trim() : ''
+        const subjectId = ta?.subjectId ? String(ta.subjectId).trim() : ''
+        const subjectName = ta?.subjectName ? String(ta.subjectName).trim() : ''
+
+        const resolvedClass = classId
+          ? await tx.class.findFirst({
+              where: { id: classId, schoolId },
+              select: { id: true },
+            })
+          : className
+            ? await tx.class.upsert({
+                where: { schoolId_name: { schoolId, name: className } },
+                create: {
+                  schoolId,
+                  name: className,
+                  year_group: className.match(/^(\d{1,2})[A-Za-z]$/)
+                    ? `Grade ${className.match(/^(\d{1,2})[A-Za-z]$/)[1]}`
+                    : className,
+                  section: className.match(/^[0-9]{1,2}([A-Za-z])$/)
+                    ? className.match(/^[0-9]{1,2}([A-Za-z])$/)[1].toUpperCase()
+                    : '',
+                },
+                update: {},
+                select: { id: true },
+              })
+            : null
+
+        const resolvedSubject = subjectId
+          ? await tx.subject.findFirst({
+              where: { id: subjectId, schoolId },
+              select: { id: true },
+            })
+          : subjectName
+            ? await tx.subject.upsert({
+                where: { schoolId_name: { schoolId, name: subjectName } },
+                create: {
+                  schoolId,
+                  name: subjectName,
+                  topics: [],
+                },
+                update: {},
+                select: { id: true },
+              })
+            : null
+
+        if (!resolvedClass || !resolvedSubject) continue
+
+        teachingAssignments.push({
+          schoolId,
+          classId: resolvedClass.id,
+          subjectId: resolvedSubject.id,
+        })
+        classIdsToConnect.add(resolvedClass.id)
+        subjectIdsToFetch.add(resolvedSubject.id)
+      }
+
+      const subjectNamesFromAssignments =
+        subjectIdsToFetch.size > 0
+          ? (
+              await tx.subject.findMany({
+                where: { schoolId, id: { in: Array.from(subjectIdsToFetch) } },
+                select: { name: true },
+              })
+            ).map((s) => s.name)
+          : []
+
+      const assignedSubjectsMerged = Array.from(
+        new Set([...assignedSubjects, ...subjectNamesFromAssignments].map(String))
+      )
 
       const teacher = await tx.teacher.create({
         data: {
           userId: user.id,
           schoolId,
-          department: body.department,
+          department: String(body.department || '').trim() || null,
           ts_number: body.ts_number,
           qualifications: body.qualifications,
           specialization: body.specialization,
-          assignedSubjects: assignedSubjects,
-          classes: {
-            connect: assignedClasses,
-          },
+          assignedSubjects: assignedSubjectsMerged,
+          classes:
+            classIdsToConnect.size > 0
+              ? {
+                  connect: Array.from(classIdsToConnect).map((id) => ({ id })),
+                }
+              : undefined,
+          departments:
+            resolvedDepartmentIds.length > 0
+              ? {
+                  createMany: {
+                    data: Array.from(new Set(resolvedDepartmentIds)).map((departmentId) => ({
+                      departmentId,
+                    })),
+                    skipDuplicates: true,
+                  },
+                }
+              : undefined,
+          teachingAssignments:
+            teachingAssignments.length > 0
+              ? {
+                  createMany: {
+                    data: teachingAssignments,
+                    skipDuplicates: true,
+                  },
+                }
+              : undefined,
         },
       })
 
-      const departmentName = String(body.department || '').trim()
-      if (departmentName) {
-        const dept = await tx.department.upsert({
-          where: {
-            schoolId_name: {
-              schoolId,
-              name: departmentName,
-            },
-          },
-          create: {
-            schoolId,
-            name: departmentName,
-          },
-          update: {},
-        })
-
-        await tx.teacherDepartment.upsert({
-          where: {
-            teacherId_departmentId: {
-              teacherId: teacher.id,
-              departmentId: dept.id,
-            },
-          },
-          create: {
-            teacherId: teacher.id,
-            departmentId: dept.id,
-          },
-          update: {},
-        })
-      }
+      if (!teacher) throw new Error('Failed to create teacher profile')
     } else if (role === 'hod') {
       const departmentName = String(body.department || '').trim()
       const dept =

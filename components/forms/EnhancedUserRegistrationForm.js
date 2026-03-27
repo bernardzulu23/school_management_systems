@@ -58,6 +58,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
     section: '',
     custom_class: '',
     department: '',
+    department_ids: [],
     qualifications: '',
     experience_years: '',
 
@@ -65,6 +66,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
     assigned_subjects: [],
     assigned_classes: [],
     selected_subjects: [],
+    teaching_assignments: [],
 
     // Student-specific - Parent/Guardian Information
     parent_father_name: '',
@@ -147,10 +149,17 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
     }
   }
 
-  const onAssignedClassesChange = (classes) => {
-    setFormData((prev) => ({ ...prev, assigned_classes: classes }))
-    if (errors.assigned_classes) {
-      setErrors((prev) => ({ ...prev, assigned_classes: '' }))
+  const onDepartmentsChange = (departmentIds) => {
+    setFormData((prev) => ({ ...prev, department_ids: departmentIds }))
+    if (errors.department_ids) {
+      setErrors((prev) => ({ ...prev, department_ids: '' }))
+    }
+  }
+
+  const onTeachingAssignmentsChange = (teachingAssignments) => {
+    setFormData((prev) => ({ ...prev, teaching_assignments: teachingAssignments }))
+    if (errors.teaching_assignments) {
+      setErrors((prev) => ({ ...prev, teaching_assignments: '' }))
     }
   }
 
@@ -260,7 +269,23 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
     } else if (currentStep === 3) {
       if (role === 'teacher' || role === 'hod') {
         if (!formData.ts_number.trim()) newErrors.ts_number = 'TS Number is required'
-        if (!formData.department) newErrors.department = 'Department is required'
+        if (role === 'teacher') {
+          if (!formData.department_ids || formData.department_ids.length === 0) {
+            newErrors.department_ids = 'At least one department is required'
+          }
+          const assignments = Array.isArray(formData.teaching_assignments)
+            ? formData.teaching_assignments
+            : []
+          const hasAtLeastOneCompleteAssignment = assignments.some(
+            (a) => (a?.classId || a?.className) && (a?.subjectId || a?.subjectName)
+          )
+          if (!hasAtLeastOneCompleteAssignment) {
+            newErrors.teaching_assignments =
+              'Add at least one teaching assignment (class + subject)'
+          }
+        } else {
+          if (!formData.department) newErrors.department = 'Department is required'
+        }
         if (!formData.qualifications.trim())
           newErrors.qualifications = 'Qualifications are required'
         if (!formData.assigned_subjects || formData.assigned_subjects.length === 0) {
@@ -355,7 +380,9 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
               errors={errors}
               onInputChange={onInputChange}
               onSubjectsChange={onAssignedSubjectsChange}
-              onClassesChange={onAssignedClassesChange}
+              onDepartmentsChange={onDepartmentsChange}
+              onTeachingAssignmentsChange={onTeachingAssignmentsChange}
+              role={role}
             />
           )
         } else {
