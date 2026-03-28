@@ -26,9 +26,13 @@ export async function GET(request) {
   })
 
   const departments = await prisma.department.findMany({
-    where: { schoolId },
-    orderBy: { name: 'asc' },
+    where: { schoolId, name: { in: DEPARTMENTS } },
   })
 
-  return NextResponse.json({ success: true, data: departments })
+  const order = new Map(DEPARTMENTS.map((name, idx) => [name, idx]))
+  const sorted = departments
+    .slice()
+    .sort((a, b) => (order.get(a.name) ?? 999) - (order.get(b.name) ?? 999))
+
+  return NextResponse.json({ success: true, data: sorted })
 }

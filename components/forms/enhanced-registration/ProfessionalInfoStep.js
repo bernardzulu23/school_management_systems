@@ -96,26 +96,26 @@ export default function ProfessionalInfoStep({
             aria-describedby="ts_number-error"
           />
 
-          <FormGroup
-            label="Department"
-            name="department"
-            type="select"
-            value={formData.department}
-            onChange={onInputChange}
-            required={role !== 'teacher'}
-            error={errors.department}
-            icon={Briefcase}
-            aria-describedby="department-error"
-          >
-            <option value="">Select Department</option>
-            {(departments.length > 0 ? departments.map((d) => d.name) : FALLBACK_DEPARTMENTS).map(
-              (dept) => (
-                <option key={dept} value={dept}>
-                  {dept}
+          {role === 'hod' && (
+            <FormGroup
+              label="Department"
+              name="department"
+              type="select"
+              value={formData.department}
+              onChange={onInputChange}
+              required
+              error={errors.department}
+              icon={Briefcase}
+              aria-describedby="department-error"
+            >
+              <option value="">Select Department</option>
+              {departmentOptions.map((dept) => (
+                <option key={dept.id} value={dept.name}>
+                  {dept.name}
                 </option>
-              )
-            )}
-          </FormGroup>
+              ))}
+            </FormGroup>
+          )}
 
           <FormGroup
             label="Years of Experience"
