@@ -40,6 +40,7 @@ function RegistrationContent() {
   }, [searchParams])
 
   const handleSubmit = async (formData, userType) => {
+    if (loading) return
     setLoading(true)
     try {
       console.log(`Registering ${userType}:`, formData)
@@ -62,6 +63,13 @@ function RegistrationContent() {
       }
     } catch (error) {
       console.error(`Error registering ${userType}:`, error)
+      if (error.response?.status === 429) {
+        const retryAfter = Number(error.response.headers?.['retry-after'])
+        const suffix =
+          Number.isFinite(retryAfter) && retryAfter > 0 ? ` Try again in ${retryAfter}s.` : ''
+        toast.error(`Too many requests.${suffix}`)
+        throw error
+      }
       toast.error(error.response?.data?.message || error.message || `Error registering ${userType}`)
       throw error
     } finally {

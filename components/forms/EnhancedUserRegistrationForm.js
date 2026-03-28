@@ -29,6 +29,9 @@ import ProfessionalInfoStep from './enhanced-registration/ProfessionalInfoStep'
 import AdministrativeInfoStep from './enhanced-registration/AdministrativeInfoStep'
 import ParentGuardianStep from './enhanced-registration/ParentGuardianStep'
 
+let lookupsCache = null
+let lookupsCacheAt = 0
+
 export default function EnhancedUserRegistrationForm({ role = 'student', onSubmit, onCancel }) {
   const [currentStep, setCurrentStep] = useState(1)
   const currentUser = useAuth((s) => s.user)
@@ -132,6 +135,13 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
   useEffect(() => {
     let active = true
     const load = async () => {
+      const now = Date.now()
+      const maxAgeMs = 5 * 60 * 1000
+      if (lookupsCache && now - lookupsCacheAt < maxAgeMs) {
+        setLookups(lookupsCache)
+        return
+      }
+
       setLookupsLoading(true)
       try {
         const [classesRes, subjectsRes, departmentsRes] = await Promise.all([
@@ -140,11 +150,14 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
           api.get('/departments'),
         ])
         if (!active) return
-        setLookups({
+        const nextLookups = {
           classes: Array.isArray(classesRes.data?.data) ? classesRes.data.data : [],
           subjects: Array.isArray(subjectsRes.data?.data) ? subjectsRes.data.data : [],
           departments: Array.isArray(departmentsRes.data?.data) ? departmentsRes.data.data : [],
-        })
+        }
+        lookupsCache = nextLookups
+        lookupsCacheAt = Date.now()
+        setLookups(nextLookups)
       } catch {
         if (!active) return
         setLookups({ classes: [], subjects: [], departments: [] })

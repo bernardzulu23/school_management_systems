@@ -32,6 +32,7 @@ export default function UserManagement() {
   const [hasError, setHasError] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [viewingUser, setViewingUser] = useState(null)
+  const [viewingLoading, setViewingLoading] = useState(false)
   const [editingUser, setEditingUser] = useState(null)
   const [editLookups, setEditLookups] = useState({ subjects: [], departments: [] })
   const [editLoading, setEditLoading] = useState(false)
@@ -259,10 +260,29 @@ export default function UserManagement() {
     }
   }
 
-  const handleViewUser = (userId) => {
+  const handleViewUser = async (userId) => {
     const user = users.find((u) => u.id === userId)
-    if (user) {
+    if (!user) return
+
+    setViewingUser(user)
+    setViewingLoading(true)
+    try {
+      const endpoint =
+        user.role === 'student'
+          ? `/students/${user.id}`
+          : user.role === 'teacher'
+            ? `/teachers/${user.id}`
+            : user.role === 'hod'
+              ? `/hods/${user.id}`
+              : `/users/${user.id}`
+
+      const res = await api.get(endpoint)
+      const detailed = res.data?.data || res.data
+      setViewingUser({ ...user, original: detailed })
+    } catch {
       setViewingUser(user)
+    } finally {
+      setViewingLoading(false)
     }
   }
 
@@ -618,7 +638,13 @@ export default function UserManagement() {
         </section>
       </main>
 
-      {viewingUser && <UserDetailsModal user={viewingUser} onClose={() => setViewingUser(null)} />}
+      {viewingUser && (
+        <UserDetailsModal
+          user={viewingUser}
+          onClose={() => setViewingUser(null)}
+          loading={viewingLoading}
+        />
+      )}
       {editingUser && (
         <UserEditModal
           user={editingUser}
@@ -635,7 +661,7 @@ export default function UserManagement() {
   )
 }
 
-function UserDetailsModal({ user, onClose }) {
+function UserDetailsModal({ user, onClose, loading }) {
   const data = user.original || user
   const role = user.role || data.role || data.user?.role
 
@@ -659,6 +685,7 @@ function UserDetailsModal({ user, onClose }) {
         </div>
 
         <div className="p-6 space-y-6">
+          {loading && <div className="text-sm text-slate-500 dark:text-slate-300">Loading…</div>}
           {/* Header Info */}
           <div className="flex items-center space-x-4">
             <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl font-bold">
@@ -700,7 +727,20 @@ function UserDetailsModal({ user, onClose }) {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-slate-500 dark:text-slate-400">Department</p>
-                    <p className="text-slate-900 dark:text-white">{data.department || 'N/A'}</p>
+                    {Array.isArray(data.departments) && data.departments.length > 0 ? (
+                      <div className="flex flex-wrap gap-2">
+                        {data.departments.map((d) => (
+                          <span
+                            key={d.departmentId || d.id}
+                            className="px-2 py-1 bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-200 rounded text-xs border border-blue-100 dark:border-blue-500/20"
+                          >
+                            {d.department?.name || d.name || d.department_name || d.departmentId}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-slate-900 dark:text-white">{data.department || 'N/A'}</p>
+                    )}
                   </div>
                   <div>
                     <p className="text-sm text-slate-500 dark:text-slate-400">TS Number</p>
@@ -708,6 +748,24 @@ function UserDetailsModal({ user, onClose }) {
                   </div>
                 </div>
               </div>
+
+              {Array.isArray(data.teachingAssignments) && data.teachingAssignments.length > 0 && (
+                <div>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
+                    Teaching Assignments
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {data.teachingAssignments.map((a) => (
+                      <span
+                        key={a.id}
+                        className="px-2 py-1 bg-slate-50 text-slate-700 dark:bg-slate-900/20 dark:text-slate-200 rounded text-xs border border-slate-200 dark:border-slate-600/30"
+                      >
+                        {(a.class?.name || a.classId) + ' - ' + (a.subject?.name || a.subjectId)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div>
                 <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Assigned Classes</p>

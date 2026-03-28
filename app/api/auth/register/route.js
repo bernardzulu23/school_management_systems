@@ -6,6 +6,23 @@ import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
+const parseYearGroupSectionFromClassName = (className) => {
+  const raw = String(className || '').trim()
+  if (!raw) return { year_group: '', section: '' }
+
+  const numeric = raw.match(/^(\d{1,2})([A-Za-z])$/)
+  if (numeric) {
+    return { year_group: `Grade ${numeric[1]}`, section: numeric[2].toUpperCase() }
+  }
+
+  const last = raw.slice(-1)
+  if (/[A-Za-z]/.test(last) && raw.length > 1) {
+    return { year_group: raw.slice(0, -1).trim(), section: last.toUpperCase() }
+  }
+
+  return { year_group: raw, section: '' }
+}
+
 export const POST = withErrorHandler(async (request) => {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
@@ -231,6 +248,8 @@ export const POST = withErrorHandler(async (request) => {
           const subjectId = ta?.subjectId ? String(ta.subjectId).trim() : ''
           const subjectName = ta?.subjectName ? String(ta.subjectName).trim() : ''
 
+          const parsedClass = className ? parseYearGroupSectionFromClassName(className) : null
+
           const resolvedClass = classId
             ? await tx.class.findFirst({
                 where: { id: classId, schoolId },
@@ -242,12 +261,8 @@ export const POST = withErrorHandler(async (request) => {
                   create: {
                     schoolId,
                     name: className,
-                    year_group: className.match(/^(\d{1,2})[A-Za-z]$/)
-                      ? `Grade ${className.match(/^(\d{1,2})[A-Za-z]$/)[1]}`
-                      : className,
-                    section: className.match(/^[0-9]{1,2}([A-Za-z])$/)
-                      ? className.match(/^[0-9]{1,2}([A-Za-z])$/)[1].toUpperCase()
-                      : '',
+                    year_group: parsedClass?.year_group || className,
+                    section: parsedClass?.section || '',
                   },
                   update: {},
                   select: { id: true },
