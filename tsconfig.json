@@ -12,6 +12,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "types": ["node", "react", "react-dom"],
+    "typeRoots": ["./node_modules/@types"],
     "plugins": [
       {
         "name": "next"
@@ -21,6 +23,9 @@
       "@/*": ["./*"]
     },
     "target": "ES2017"
+  },
+  "typeAcquisition": {
+    "enable": false
   },
   "include": [
     "next-env.d.ts",

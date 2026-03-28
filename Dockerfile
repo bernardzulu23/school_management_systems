@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG NODE_VERSION=20.11.0
+ARG NODE_VERSION=20.19.0
 FROM node:${NODE_VERSION}-slim AS base
 
 WORKDIR /app
@@ -23,6 +23,7 @@ RUN apt-get update -qq && \
     pkg-config \
     python3 && \
     rm -rf /var/lib/apt/lists/*
+ENV HUSKY=0
 COPY package-lock.json package.json ./
 RUN npm ci --include=dev
 
