@@ -22,6 +22,8 @@ import { api } from '@/lib/api'
 import toast from 'react-hot-toast'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
+import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
+import SubjectSelection from '@/components/registration/SubjectSelection'
 
 export default function UserManagement() {
   const [activeUserType, setActiveUserType] = useState('all')
@@ -30,6 +32,9 @@ export default function UserManagement() {
   const [hasError, setHasError] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [viewingUser, setViewingUser] = useState(null)
+  const [editingUser, setEditingUser] = useState(null)
+  const [editLookups, setEditLookups] = useState({ subjects: [], departments: [] })
+  const [editLoading, setEditLoading] = useState(false)
 
   const userTypes = [
     { id: 'all', name: 'All Users', icon: Users, count: users.length },
@@ -62,6 +67,37 @@ export default function UserManagement() {
   useEffect(() => {
     fetchUsers()
   }, [activeUserType])
+
+  useEffect(() => {
+    if (!editingUser) return
+    let active = true
+    const load = async () => {
+      setEditLoading(true)
+      try {
+        const [subjectsRes, departmentsRes] = await Promise.allSettled([
+          api.get('/subjects'),
+          api.get('/departments'),
+        ])
+        if (!active) return
+        const subjects =
+          subjectsRes.status === 'fulfilled' && Array.isArray(subjectsRes.value.data?.data)
+            ? subjectsRes.value.data.data
+            : []
+        const departments =
+          departmentsRes.status === 'fulfilled' && Array.isArray(departmentsRes.value.data?.data)
+            ? departmentsRes.value.data.data
+            : []
+        setEditLookups({ subjects, departments })
+      } finally {
+        if (!active) return
+        setEditLoading(false)
+      }
+    }
+    load()
+    return () => {
+      active = false
+    }
+  }, [editingUser])
 
   const fetchUsers = async () => {
     setIsLoading(true)
@@ -178,12 +214,7 @@ export default function UserManagement() {
   }
 
   const handleEditUser = (user) => {
-    // For now, we use a simple prompt for name update as a proof of concept
-    // In a real app, this would be a modal
-    const newName = prompt(`Edit name for ${user.role}:`, user.name)
-    if (newName && newName !== user.name) {
-      updateUser(user, { name: newName })
-    }
+    setEditingUser(user)
   }
 
   const updateUser = async (user, updates) => {
@@ -193,7 +224,9 @@ export default function UserManagement() {
           ? `/students/${user.id}`
           : user.role === 'teacher'
             ? `/teachers/${user.id}`
-            : `/hods/${user.id}`
+            : user.role === 'hod'
+              ? `/hods/${user.id}`
+              : `/users/${user.id}`
 
       await api.put(endpoint, updates)
       fetchUsers()
@@ -213,7 +246,9 @@ export default function UserManagement() {
             ? `/students/${user.id}`
             : user.role === 'teacher'
               ? `/teachers/${user.id}`
-              : `/hods/${user.id}`
+              : user.role === 'hod'
+                ? `/hods/${user.id}`
+                : `/users/${user.id}`
 
         await api.delete(endpoint)
         fetchUsers()
@@ -584,6 +619,18 @@ export default function UserManagement() {
       </main>
 
       {viewingUser && <UserDetailsModal user={viewingUser} onClose={() => setViewingUser(null)} />}
+      {editingUser && (
+        <UserEditModal
+          user={editingUser}
+          onClose={() => setEditingUser(null)}
+          onSaved={() => {
+            setEditingUser(null)
+            fetchUsers()
+          }}
+          lookups={editLookups}
+          loadingLookups={editLoading}
+        />
+      )}
     </div>
   )
 }
@@ -747,6 +794,551 @@ function UserDetailsModal({ user, onClose }) {
           >
             Close
           </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
+  const data = user.original || user
+  const role = String(user.role || data.role || data.user?.role || '').toLowerCase()
+  const profileId = user.id
+  const userId =
+    role === 'headteacher' ? String(data.id || user.id) : String(data.userId || data.user?.id || '')
+
+  const initialClass = String(data.class || '').trim()
+  const initialYearGroup = initialClass.length > 1 ? initialClass.slice(0, -1).trim() : ''
+  const initialSection = initialClass.length > 0 ? initialClass.slice(-1).trim() : ''
+
+  const [saving, setSaving] = useState(false)
+  const [passwordSaving, setPasswordSaving] = useState(false)
+  const [newPassword, setNewPassword] = useState('')
+
+  const [form, setForm] = useState(() => ({
+    user: {
+      name: String(data.user?.name || data.name || ''),
+      email: String(data.user?.email || data.email || ''),
+      contact_number: String(data.user?.contact_number || data.contact_number || ''),
+    },
+    student: {
+      year_group: initialYearGroup,
+      section: initialSection,
+      exam_number: String(data.exam_number || ''),
+      selected_subjects: Array.isArray(data.selected_subjects)
+        ? data.selected_subjects.map(String)
+        : [],
+    },
+    teacher: {
+      ts_number: String(data.ts_number || ''),
+      qualifications: String(data.qualifications || ''),
+      specialization: String(data.specialization || ''),
+      departmentIds: Array.isArray(data.departments)
+        ? data.departments.map((d) => String(d.departmentId)).filter(Boolean)
+        : [],
+      assignments: Array.isArray(data.teachingAssignments)
+        ? data.teachingAssignments.map((a) => ({
+            year_group: String(a.class?.year_group || '').trim(),
+            section: String(a.class?.section || '').trim(),
+            classId: String(a.classId || ''),
+            subjectId: String(a.subjectId || ''),
+          }))
+        : [],
+    },
+    hod: {
+      department: String(data.department || ''),
+      departmentId: data.departmentId ? String(data.departmentId) : '',
+    },
+  }))
+
+  const setUserField = (key, value) => {
+    setForm((prev) => ({ ...prev, user: { ...prev.user, [key]: value } }))
+  }
+
+  const save = async () => {
+    setSaving(true)
+    try {
+      if (role === 'student') {
+        await api.put(`/students/${profileId}`, {
+          user: form.user,
+          year_group: form.student.year_group,
+          section: form.student.section,
+          exam_number: form.student.exam_number,
+          selected_subjects: form.student.selected_subjects,
+        })
+      } else if (role === 'teacher') {
+        const assignments = Array.isArray(form.teacher.assignments)
+          ? form.teacher.assignments
+              .filter((a) => a.subjectId && a.year_group && a.section)
+              .map((a) => ({
+                classId: a.classId || undefined,
+                className: `${String(a.year_group).trim()}${String(a.section).trim()}`,
+                subjectId: a.subjectId,
+              }))
+          : []
+
+        await api.put(`/teachers/${profileId}`, {
+          user: form.user,
+          ts_number: form.teacher.ts_number,
+          qualifications: form.teacher.qualifications,
+          specialization: form.teacher.specialization,
+          assignments,
+          departmentIds: form.teacher.departmentIds,
+        })
+      } else if (role === 'hod') {
+        await api.put(`/hods/${profileId}`, {
+          user: form.user,
+          department: form.hod.department,
+          departmentId: form.hod.departmentId || null,
+        })
+      } else if (role === 'headteacher') {
+        await api.put(`/users/${userId}`, {
+          name: form.user.name,
+          email: form.user.email,
+          contact_number: form.user.contact_number,
+        })
+      }
+
+      toast.success('User updated')
+      onSaved?.()
+    } catch (e) {
+      toast.error(e.response?.data?.error || e.message || 'Failed to update user')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const resetPassword = async () => {
+    if (!userId) {
+      toast.error('User account not linked')
+      return
+    }
+    setPasswordSaving(true)
+    try {
+      await api.post(`/users/${userId}/password`, { newPassword })
+      toast.success('Password updated')
+      setNewPassword('')
+    } catch (e) {
+      toast.error(e.response?.data?.error || e.message || 'Failed to update password')
+    } finally {
+      setPasswordSaving(false)
+    }
+  }
+
+  const addTeacherAssignment = () => {
+    setForm((prev) => ({
+      ...prev,
+      teacher: {
+        ...prev.teacher,
+        assignments: [
+          ...prev.teacher.assignments,
+          { year_group: '', section: '', classId: '', subjectId: '' },
+        ],
+      },
+    }))
+  }
+
+  const removeTeacherAssignment = (idx) => {
+    setForm((prev) => ({
+      ...prev,
+      teacher: {
+        ...prev.teacher,
+        assignments: prev.teacher.assignments.filter((_, i) => i !== idx),
+      },
+    }))
+  }
+
+  const updateTeacherAssignment = (idx, patch) => {
+    setForm((prev) => ({
+      ...prev,
+      teacher: {
+        ...prev.teacher,
+        assignments: prev.teacher.assignments.map((a, i) => (i === idx ? { ...a, ...patch } : a)),
+      },
+    }))
+  }
+
+  const departmentOptions = Array.isArray(lookups?.departments) ? lookups.departments : []
+  const subjectOptions = Array.isArray(lookups?.subjects) ? lookups.subjects : []
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
+        <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white">Edit User</h3>
+          <button
+            onClick={onClose}
+            className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white"
+          >
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                Full Name
+              </label>
+              <input
+                value={form.user.name}
+                onChange={(e) => setUserField('name', e.target.value)}
+                className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                Contact
+              </label>
+              <input
+                value={form.user.contact_number}
+                onChange={(e) => setUserField('contact_number', e.target.value)}
+                className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+              />
+            </div>
+            <div className="md:col-span-3">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                Email
+              </label>
+              <input
+                value={form.user.email}
+                onChange={(e) => setUserField('email', e.target.value)}
+                className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+              />
+            </div>
+          </div>
+
+          <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
+            <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+              Admin Password Reset
+            </h4>
+            <div className="flex flex-col md:flex-row gap-3">
+              <input
+                type="password"
+                placeholder="New password (min 6 chars)"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="flex-1 border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+              />
+              <Button
+                onClick={resetPassword}
+                disabled={passwordSaving || !newPassword || newPassword.length < 6}
+              >
+                Update Password
+              </Button>
+            </div>
+          </div>
+
+          {role === 'student' && (
+            <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-4">
+              <h4 className="text-lg font-semibold text-slate-900 dark:text-white">Student</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                    Year Group
+                  </label>
+                  <select
+                    value={form.student.year_group}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        student: { ...prev.student, year_group: e.target.value },
+                      }))
+                    }
+                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                  >
+                    <option value="">Select</option>
+                    {GRADE_LEVELS.map((g) => (
+                      <option key={g} value={g}>
+                        {g}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                    Section
+                  </label>
+                  <select
+                    value={form.student.section}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        student: { ...prev.student, section: e.target.value },
+                      }))
+                    }
+                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                  >
+                    <option value="">Select</option>
+                    {SECTIONS.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="md:col-span-3">
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                    Exam Number
+                  </label>
+                  <input
+                    value={form.student.exam_number}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        student: { ...prev.student, exam_number: e.target.value },
+                      }))
+                    }
+                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="bg-green-50 dark:bg-slate-900/40 p-4 rounded-xl border border-green-200 dark:border-slate-700">
+                <SubjectSelection
+                  selectedSubjects={form.student.selected_subjects}
+                  onSubjectsChange={(subjects) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      student: { ...prev.student, selected_subjects: subjects },
+                    }))
+                  }
+                  userRole="student"
+                  valueType="name"
+                  maxSelections={12}
+                />
+              </div>
+            </div>
+          )}
+
+          {role === 'teacher' && (
+            <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-4">
+              <h4 className="text-lg font-semibold text-slate-900 dark:text-white">Teacher</h4>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                    TS Number
+                  </label>
+                  <input
+                    value={form.teacher.ts_number}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        teacher: { ...prev.teacher, ts_number: e.target.value },
+                      }))
+                    }
+                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                    Specialization
+                  </label>
+                  <input
+                    value={form.teacher.specialization}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        teacher: { ...prev.teacher, specialization: e.target.value },
+                      }))
+                    }
+                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                  />
+                </div>
+                <div className="md:col-span-3">
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                    Qualifications
+                  </label>
+                  <textarea
+                    value={form.teacher.qualifications}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        teacher: { ...prev.teacher, qualifications: e.target.value },
+                      }))
+                    }
+                    rows={3}
+                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="bg-indigo-50 dark:bg-slate-900/40 p-4 rounded-xl border border-indigo-200 dark:border-slate-700">
+                <div className="font-semibold text-slate-900 dark:text-white mb-2">Departments</div>
+                {loadingLookups ? (
+                  <div className="text-sm text-slate-600 dark:text-slate-300">Loading…</div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {departmentOptions.map((d) => (
+                      <label
+                        key={d.id}
+                        className="flex items-center gap-2 text-sm text-slate-900 dark:text-slate-100"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={form.teacher.departmentIds.includes(String(d.id))}
+                          onChange={(e) => {
+                            const id = String(d.id)
+                            const next = e.target.checked
+                              ? [...form.teacher.departmentIds, id]
+                              : form.teacher.departmentIds.filter((x) => x !== id)
+                            setForm((prev) => ({
+                              ...prev,
+                              teacher: { ...prev.teacher, departmentIds: next },
+                            }))
+                          }}
+                        />
+                        <span>{d.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="bg-white dark:bg-slate-900/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="font-semibold text-slate-900 dark:text-white">
+                    Teaching Assignments
+                  </div>
+                  <Button size="sm" onClick={addTeacherAssignment}>
+                    Add
+                  </Button>
+                </div>
+
+                {form.teacher.assignments.length === 0 ? (
+                  <div className="text-sm text-slate-600 dark:text-slate-300">No assignments</div>
+                ) : (
+                  <div className="space-y-3">
+                    {form.teacher.assignments.map((a, idx) => (
+                      <div key={idx} className="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
+                        <div className="md:col-span-2">
+                          <label className="block text-xs text-slate-600 dark:text-slate-300 mb-1">
+                            Year Group
+                          </label>
+                          <select
+                            value={a.year_group}
+                            onChange={(e) =>
+                              updateTeacherAssignment(idx, { year_group: e.target.value })
+                            }
+                            className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                          >
+                            <option value="">Select</option>
+                            {GRADE_LEVELS.map((g) => (
+                              <option key={g} value={g}>
+                                {g}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs text-slate-600 dark:text-slate-300 mb-1">
+                            Section
+                          </label>
+                          <select
+                            value={a.section}
+                            onChange={(e) =>
+                              updateTeacherAssignment(idx, { section: e.target.value })
+                            }
+                            className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                          >
+                            <option value="">Select</option>
+                            {SECTIONS.map((s) => (
+                              <option key={s} value={s}>
+                                {s}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-xs text-slate-600 dark:text-slate-300 mb-1">
+                            Subject
+                          </label>
+                          <select
+                            value={a.subjectId}
+                            onChange={(e) =>
+                              updateTeacherAssignment(idx, { subjectId: e.target.value })
+                            }
+                            className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                          >
+                            <option value="">Select</option>
+                            {subjectOptions.map((s) => (
+                              <option key={s.id} value={s.id}>
+                                {s.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="flex justify-end">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => removeTeacherAssignment(idx)}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {role === 'hod' && (
+            <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-4">
+              <h4 className="text-lg font-semibold text-slate-900 dark:text-white">HOD</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                    Department
+                  </label>
+                  <input
+                    value={form.hod.department}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        hod: { ...prev.hod, department: e.target.value },
+                      }))
+                    }
+                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                    Department (DB)
+                  </label>
+                  <select
+                    value={form.hod.departmentId}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        hod: { ...prev.hod, departmentId: e.target.value },
+                      }))
+                    }
+                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                  >
+                    <option value="">None</option>
+                    {departmentOptions.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="flex justify-end gap-3 pt-2">
+            <Button variant="outline" onClick={onClose} disabled={saving}>
+              Cancel
+            </Button>
+            <Button onClick={save} disabled={saving}>
+              Save Changes
+            </Button>
+          </div>
         </div>
       </div>
     </div>

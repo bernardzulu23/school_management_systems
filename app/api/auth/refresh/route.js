@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken'
 import { cookies } from 'next/headers'
 import prisma from '@/lib/prisma'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-fallback-secret-for-dev'
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'your-fallback-refresh-secret-for-dev'
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
 
 export async function POST() {
   try {
