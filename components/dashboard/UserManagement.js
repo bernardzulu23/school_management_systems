@@ -69,15 +69,18 @@ export default function UserManagement() {
     try {
       let data = []
       if (activeUserType === 'all') {
-        const [studentsRes, teachersRes, hodsRes] = await Promise.allSettled([
+        const [studentsRes, teachersRes, hodsRes, headteachersRes] = await Promise.allSettled([
           api.get('/students'),
           api.get('/teachers'),
           api.get('/hods'),
+          api.get('/users?role=headteacher'),
         ])
 
         const students = studentsRes.status === 'fulfilled' ? studentsRes.value.data.data || [] : []
         const teachers = teachersRes.status === 'fulfilled' ? teachersRes.value.data.data || [] : []
         const hods = hodsRes.status === 'fulfilled' ? hodsRes.value.data.data || [] : []
+        const headteachers =
+          headteachersRes.status === 'fulfilled' ? headteachersRes.value.data.data || [] : []
 
         data = [
           ...students.map((u) => ({
@@ -101,6 +104,14 @@ export default function UserManagement() {
             name: u.user?.name || 'Unknown',
             email: u.user?.email || 'N/A',
             role: 'hod',
+            status: 'Active',
+            original: u,
+          })),
+          ...headteachers.map((u) => ({
+            id: u.id,
+            name: u.name || 'Unknown',
+            email: u.email || 'N/A',
+            role: 'headteacher',
             status: 'Active',
             original: u,
           })),
@@ -132,6 +143,16 @@ export default function UserManagement() {
           name: u.user?.name || 'Unknown',
           email: u.user?.email || 'N/A',
           role: 'hod',
+          status: 'Active',
+          original: u,
+        }))
+      } else if (activeUserType === 'headteachers') {
+        const res = await api.get('/users?role=headteacher')
+        data = (res.data.data || []).map((u) => ({
+          id: u.id,
+          name: u.name || 'Unknown',
+          email: u.email || 'N/A',
+          role: 'headteacher',
           status: 'Active',
           original: u,
         }))

@@ -17,6 +17,7 @@ export async function GET(request) {
       totalStudents,
       totalTeachers,
       totalHods,
+      totalHeadteachers,
       totalResults,
       totalClasses,
       totalSubjects,
@@ -26,6 +27,9 @@ export async function GET(request) {
       prisma.user.count({ where: { role: { in: ['teacher', 'TEACHER'] }, schoolId } }),
       prisma.user.count({
         where: { role: { in: ['hod', 'HOD', 'head of department'] }, schoolId },
+      }),
+      prisma.user.count({
+        where: { role: { in: ['headteacher', 'HEADTEACHER', 'admin', 'administrator'] }, schoolId },
       }),
       prisma.result.count({ where: { schoolId } }),
       prisma.class.count({ where: { schoolId } }),
@@ -37,6 +41,7 @@ export async function GET(request) {
       totalStudents,
       totalTeachers,
       totalHods,
+      totalHeadteachers,
       totalClasses,
       totalSubjects,
       totalAssessments,
@@ -58,7 +63,7 @@ export async function GET(request) {
       success: true,
       data: {
         ...stats,
-        totalUsers: totalStudents + totalTeachers + totalHods,
+        totalUsers: totalStudents + totalTeachers + totalHods + totalHeadteachers,
         averageAttendance: attendanceRate,
         averageGrade,
         recentActivities: [],

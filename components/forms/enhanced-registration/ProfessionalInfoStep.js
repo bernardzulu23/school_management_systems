@@ -4,13 +4,11 @@ import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 import { api } from '@/lib/api'
 import { DEPARTMENTS as FALLBACK_DEPARTMENTS, GRADE_LEVELS, SECTIONS } from '@/lib/constants'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
-import SubjectSelection from '@/components/registration/SubjectSelection'
 
 export default function ProfessionalInfoStep({
   formData,
   errors,
   onInputChange,
-  onSubjectsChange,
   onDepartmentsChange,
   onTeachingAssignmentsChange,
   role,
@@ -50,6 +48,18 @@ export default function ProfessionalInfoStep({
     const found = SCHOOL_SUBJECTS.find((s) => s.name === name)
     return found ? `${found.name} (${found.category})` : name
   }
+
+  const teacherYearGroups = [
+    'Form 1',
+    'Form 2',
+    'Form 3',
+    'Form 4',
+    'Form 5',
+    'Form 6',
+    'Grade 10',
+    'Grade 11',
+    'Grade 12',
+  ]
 
   const addTeachingAssignmentRow = () => {
     const next = [
@@ -219,7 +229,7 @@ export default function ProfessionalInfoStep({
                       className="w-full border rounded-md p-2 text-sm"
                     >
                       <option value="">Select Year Group</option>
-                      {GRADE_LEVELS.map((g) => (
+                      {(role === 'teacher' ? teacherYearGroups : GRADE_LEVELS).map((g) => (
                         <option key={g} value={g}>
                           {g}
                         </option>
@@ -285,24 +295,8 @@ export default function ProfessionalInfoStep({
           </div>
         )}
 
-        {/* Subject Assignment */}
-        <div className="bg-indigo-50 p-6 rounded-xl border border-indigo-200">
-          <h4 className="text-lg font-semibold text-indigo-800 mb-4 flex items-center">
-            <BookOpen className="h-5 w-5 mr-2" />
-            Subject Assignment
-          </h4>
-
-          <div>
-            <SubjectSelection
-              selectedSubjects={formData.assigned_subjects || []}
-              onSubjectsChange={onSubjectsChange}
-              userRole="teacher"
-              valueType="name"
-            />
-            {errors.assigned_subjects && (
-              <p className="text-red-500 text-sm mt-1">{errors.assigned_subjects}</p>
-            )}
-          </div>
+        <div className="text-sm text-gray-600">
+          Subjects are assigned through Teaching Assignments (Grade + Section + Subject).
         </div>
       </div>
     </FormSection>

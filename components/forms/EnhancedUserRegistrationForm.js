@@ -140,13 +140,6 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
     }
   }
 
-  const onAssignedSubjectsChange = (subjects) => {
-    setFormData((prev) => ({ ...prev, assigned_subjects: subjects }))
-    if (errors.assigned_subjects) {
-      setErrors((prev) => ({ ...prev, assigned_subjects: '' }))
-    }
-  }
-
   const onDepartmentsChange = (departmentIds) => {
     setFormData((prev) => ({ ...prev, department_ids: departmentIds }))
     if (errors.department_ids) {
@@ -280,9 +273,6 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         }
         if (!formData.qualifications.trim())
           newErrors.qualifications = 'Qualifications are required'
-        if (!formData.assigned_subjects || formData.assigned_subjects.length === 0) {
-          newErrors.assigned_subjects = 'At least one subject must be assigned'
-        }
       } else if (role === 'student') {
         if (!formData.year_group) newErrors.year_group = 'Year group is required'
         if (!formData.section) newErrors.section = 'Section is required'
@@ -371,7 +361,6 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
               formData={formData}
               errors={errors}
               onInputChange={onInputChange}
-              onSubjectsChange={onAssignedSubjectsChange}
               onDepartmentsChange={onDepartmentsChange}
               onTeachingAssignmentsChange={onTeachingAssignmentsChange}
               role={role}
