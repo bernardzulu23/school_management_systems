@@ -15,25 +15,40 @@ export async function GET(request) {
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  await prisma.$transaction(async (tx) => {
+  // Check if subjects already exist for this school
+  const existingCount = await prisma.subject.count({ where: { schoolId } })
+
+  // Only seed subjects if none exist for this school
+  if (existingCount === 0) {
+    // Track used codes to avoid conflicts (some subjects have duplicate codes like CHI)
+    const usedCodes = new Set()
+
     for (const s of SCHOOL_SUBJECTS) {
       const name = String(s.name || '').trim()
       if (!name) continue
 
-      await tx.subject.upsert({
-        where: { schoolId_name: { schoolId, name } },
-        create: {
-          schoolId,
-          name,
-          code: s.code ? String(s.code) : null,
-          topics: [],
-        },
-        update: {
-          code: s.code ? String(s.code) : undefined,
-        },
-      })
+      // Generate unique code - if duplicate, append first 3 letters of name
+      let code = s.code ? String(s.code) : null
+      if (code && usedCodes.has(code)) {
+        code = `${code}_${name.substring(0, 3).toUpperCase()}`
+      }
+      if (code) usedCodes.add(code)
+
+      try {
+        await prisma.subject.create({
+          data: {
+            schoolId,
+            name,
+            code,
+            topics: [],
+          },
+        })
+      } catch (e) {
+        // Skip if subject already exists (race condition)
+        if (e.code !== 'P2002') throw e
+      }
     }
-  })
+  }
 
   const subjects = await prisma.subject.findMany({
     where: { schoolId },
