@@ -297,7 +297,9 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
             ? formData.teaching_assignments
             : []
           const hasAtLeastOneCompleteAssignment = assignments.some(
-            (a) => (a?.classId || a?.className) && (a?.subjectId || a?.subjectName)
+            (a) =>
+              (a?.classId || (a?.year_group && a?.section) || a?.className) &&
+              (a?.subjectId || a?.subjectName)
           )
           if (!hasAtLeastOneCompleteAssignment) {
             newErrors.teaching_assignments =
@@ -309,7 +311,8 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         if (!formData.qualifications.trim())
           newErrors.qualifications = 'Qualifications are required'
       } else if (role === 'student') {
-        if (!formData.classId) newErrors.classId = 'Class is required'
+        if (!formData.year_group) newErrors.year_group = 'Year group is required'
+        if (!formData.section) newErrors.section = 'Section is required'
         if (!formData.exam_number?.trim()) newErrors.exam_number = 'Exam number is required'
         if (!formData.selected_subjects || formData.selected_subjects.length < 8) {
           newErrors.selected_subjects = 'At least 8 subjects must be selected'
@@ -362,11 +365,27 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
       if (role === 'teacher') {
         const assignments = Array.isArray(formData.teaching_assignments)
           ? formData.teaching_assignments
-              .filter((a) => a?.classId && a?.subjectId)
-              .map((a) => ({
-                classId: String(a.classId),
-                subjectId: String(a.subjectId),
-              }))
+              .filter(
+                (a) => a?.subjectId && (a?.classId || (a?.year_group && a?.section) || a?.className)
+              )
+              .map((a) => {
+                const yearGroup = String(a?.year_group || '').trim()
+                const section = String(a?.section || '').trim()
+                const className =
+                  a?.className || (yearGroup && section ? `${yearGroup}${section}` : '')
+
+                if (a?.classId) {
+                  return {
+                    classId: String(a.classId),
+                    subjectId: String(a.subjectId),
+                  }
+                }
+
+                return {
+                  className,
+                  subjectId: String(a.subjectId),
+                }
+              })
           : []
 
         submitData = {

@@ -1,6 +1,7 @@
 import React from 'react'
 import { GraduationCap, FileText, Building, BookOpen } from 'lucide-react'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
+import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
 import { useSubjects } from '@/lib/hooks/useSubjects'
 import SubjectSelection from '@/components/registration/SubjectSelection'
 
@@ -12,38 +13,44 @@ export default function AcademicInfoStep({
   classes = [],
 }) {
   const { subjects } = useSubjects()
-  const allowedYearGroups = new Set([
-    'Form 1',
-    'Form 2',
-    'Form 3',
-    'Form 4',
-    'Form 5',
-    'Form 6',
-    'Grade 10',
-    'Grade 11',
-    'Grade 12',
-  ])
+  const classNamePreview =
+    formData.year_group && formData.section
+      ? `${String(formData.year_group).trim()}${String(formData.section).trim()}`
+      : ''
 
-  const classGroups = classes
-    .filter((c) => allowedYearGroups.has(String(c.year_group || '').trim()))
-    .reduce((acc, c) => {
-      const yg = String(c.year_group || '').trim()
-      if (!acc[yg]) acc[yg] = []
-      acc[yg].push(c)
-      return acc
-    }, {})
+  const findClassId = (yearGroup, section) => {
+    const yg = String(yearGroup || '').trim()
+    const sec = String(section || '').trim()
+    if (!yg || !sec) return ''
+    const found = classes.find(
+      (c) =>
+        String(c.year_group || '')
+          .trim()
+          .toLowerCase() === yg.toLowerCase() &&
+        String(c.section || '')
+          .trim()
+          .toLowerCase() === sec.toLowerCase()
+    )
+    return found?.id || ''
+  }
 
-  const yearOrder = [
-    'Form 1',
-    'Form 2',
-    'Form 3',
-    'Form 4',
-    'Form 5',
-    'Form 6',
-    'Grade 10',
-    'Grade 11',
-    'Grade 12',
-  ]
+  const setField = (name, value) => {
+    onInputChange?.({ target: { name, value } })
+  }
+
+  const handleYearGroupChange = (e) => {
+    const nextYearGroup = e.target.value
+    setField('year_group', nextYearGroup)
+    const nextId = findClassId(nextYearGroup, formData.section)
+    setField('classId', nextId)
+  }
+
+  const handleSectionChange = (e) => {
+    const nextSection = e.target.value
+    setField('section', nextSection)
+    const nextId = findClassId(formData.year_group, nextSection)
+    setField('classId', nextId)
+  }
 
   return (
     <FormSection title="Academic Information" icon={GraduationCap}>
@@ -62,31 +69,41 @@ export default function AcademicInfoStep({
           />
 
           <FormGroup
-            label="Class"
-            name="classId"
+            label="Year Group"
+            name="year_group"
             type="select"
-            value={formData.classId || ''}
-            onChange={onInputChange}
+            value={formData.year_group || ''}
+            onChange={handleYearGroupChange}
             required
-            error={errors.classId}
+            error={errors.year_group}
             icon={GraduationCap}
-            aria-describedby="classId-error"
+            aria-describedby="year_group-error"
           >
-            <option value="">Select Class</option>
-            {yearOrder
-              .filter((yg) => Array.isArray(classGroups[yg]) && classGroups[yg].length > 0)
-              .map((yg) => (
-                <optgroup key={yg} label={yg}>
-                  {classGroups[yg]
-                    .slice()
-                    .sort((a, b) => String(a.section || '').localeCompare(String(b.section || '')))
-                    .map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))}
-                </optgroup>
-              ))}
+            <option value="">Select Year Group</option>
+            {GRADE_LEVELS.map((level) => (
+              <option key={level} value={level}>
+                {level}
+              </option>
+            ))}
+          </FormGroup>
+
+          <FormGroup
+            label="Section"
+            name="section"
+            type="select"
+            value={formData.section || ''}
+            onChange={handleSectionChange}
+            required
+            error={errors.section}
+            icon={GraduationCap}
+            aria-describedby="section-error"
+          >
+            <option value="">Select Section</option>
+            {SECTIONS.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
           </FormGroup>
 
           <FormGroup
@@ -132,6 +149,10 @@ export default function AcademicInfoStep({
           <div className="mt-4 p-4 bg-white rounded-lg border border-green-200">
             <h5 className="font-medium text-green-800 mb-2">Subject Summary:</h5>
             <div className="text-sm">
+              <div className="mb-2">
+                <span className="text-green-700 font-medium">Class: </span>
+                <span className="text-gray-700">{classNamePreview || 'Not selected'}</span>
+              </div>
               <span className="text-green-700 font-medium">Selected Subjects: </span>
               <span className="text-gray-700">
                 {formData.selected_subjects?.length || 0} subjects

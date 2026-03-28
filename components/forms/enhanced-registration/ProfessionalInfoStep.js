@@ -1,7 +1,7 @@
 import React from 'react'
 import { Briefcase, FileText, GraduationCap, BookOpen, Plus, Trash2 } from 'lucide-react'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
-import { DEPARTMENTS as FALLBACK_DEPARTMENTS } from '@/lib/constants'
+import { DEPARTMENTS as FALLBACK_DEPARTMENTS, GRADE_LEVELS, SECTIONS } from '@/lib/constants'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
 
 export default function ProfessionalInfoStep({
@@ -31,31 +31,14 @@ export default function ProfessionalInfoStep({
     'Form 4',
     'Form 5',
     'Form 6',
+    'Grade 8',
+    'Grade 9',
     'Grade 10',
     'Grade 11',
     'Grade 12',
   ])
 
-  const classGroups = classes
-    .filter((c) => allowedYearGroups.has(String(c.year_group || '').trim()))
-    .reduce((acc, c) => {
-      const yg = String(c.year_group || '').trim()
-      if (!acc[yg]) acc[yg] = []
-      acc[yg].push(c)
-      return acc
-    }, {})
-
-  const yearOrder = [
-    'Form 1',
-    'Form 2',
-    'Form 3',
-    'Form 4',
-    'Form 5',
-    'Form 6',
-    'Grade 10',
-    'Grade 11',
-    'Grade 12',
-  ]
+  const yearOrder = GRADE_LEVELS.filter((g) => allowedYearGroups.has(String(g).trim()))
 
   const departmentOptions =
     departments.length > 0 ? departments : FALLBACK_DEPARTMENTS.map((name) => ({ id: name, name }))
@@ -65,8 +48,34 @@ export default function ProfessionalInfoStep({
     return found ? found.name : String(id)
   }
 
+  const computeClassName = (yearGroup, section) => {
+    const yg = String(yearGroup || '').trim()
+    const sec = String(section || '').trim()
+    if (!yg || !sec) return ''
+    return `${yg}${sec}`
+  }
+
+  const findClassId = (yearGroup, section) => {
+    const yg = String(yearGroup || '').trim()
+    const sec = String(section || '').trim()
+    if (!yg || !sec) return ''
+    const found = classes.find(
+      (c) =>
+        String(c.year_group || '')
+          .trim()
+          .toLowerCase() === yg.toLowerCase() &&
+        String(c.section || '')
+          .trim()
+          .toLowerCase() === sec.toLowerCase()
+    )
+    return found?.id || ''
+  }
+
   const addTeachingAssignmentRow = () => {
-    const next = [...teachingAssignments, { classId: '', subjectId: '' }]
+    const next = [
+      ...teachingAssignments,
+      { year_group: '', section: '', classId: '', subjectId: '' },
+    ]
     onTeachingAssignmentsChange?.(next)
   }
 
@@ -212,33 +221,51 @@ export default function ProfessionalInfoStep({
               {teachingAssignments.map((row, idx) => (
                 <div key={idx} className="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
                   <div className="md:col-span-2">
-                    <label className="block text-sm text-gray-700 mb-1">Class</label>
+                    <label className="block text-sm text-gray-700 mb-1">Year Group</label>
                     <select
-                      value={row.classId || ''}
-                      onChange={(e) =>
-                        updateTeachingAssignmentRow(idx, { classId: String(e.target.value) })
-                      }
+                      value={row.year_group || ''}
+                      onChange={(e) => {
+                        const nextYearGroup = e.target.value
+                        const nextSection = row.section || ''
+                        const nextId = findClassId(nextYearGroup, nextSection)
+                        updateTeachingAssignmentRow(idx, {
+                          year_group: nextYearGroup,
+                          classId: nextId,
+                          className: computeClassName(nextYearGroup, nextSection),
+                        })
+                      }}
                       className="w-full border rounded-md p-2 text-sm"
                     >
-                      <option value="">Select Class</option>
-                      {yearOrder
-                        .filter(
-                          (yg) => Array.isArray(classGroups[yg]) && classGroups[yg].length > 0
-                        )
-                        .map((yg) => (
-                          <optgroup key={yg} label={yg}>
-                            {classGroups[yg]
-                              .slice()
-                              .sort((a, b) =>
-                                String(a.section || '').localeCompare(String(b.section || ''))
-                              )
-                              .map((c) => (
-                                <option key={c.id} value={c.id}>
-                                  {c.name}
-                                </option>
-                              ))}
-                          </optgroup>
-                        ))}
+                      <option value="">Select Year Group</option>
+                      {yearOrder.map((g) => (
+                        <option key={g} value={g}>
+                          {g}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-700 mb-1">Section</label>
+                    <select
+                      value={row.section || ''}
+                      onChange={(e) => {
+                        const nextSection = e.target.value
+                        const nextYearGroup = row.year_group || ''
+                        const nextId = findClassId(nextYearGroup, nextSection)
+                        updateTeachingAssignmentRow(idx, {
+                          section: nextSection,
+                          classId: nextId,
+                          className: computeClassName(nextYearGroup, nextSection),
+                        })
+                      }}
+                      className="w-full border rounded-md p-2 text-sm"
+                    >
+                      <option value="">Select Section</option>
+                      {SECTIONS.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div className="md:col-span-2">

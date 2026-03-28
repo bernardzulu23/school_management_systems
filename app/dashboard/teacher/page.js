@@ -43,6 +43,7 @@ import {
   Users as HandshakeIcon,
   Rocket,
   Globe,
+  LogOut,
 } from 'lucide-react'
 import Link from 'next/link'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
@@ -61,7 +62,7 @@ import { SCHOOL_SUBJECTS, getSubjectsByIds } from '@/data/subjects'
 
 export default function TeacherDashboard() {
   // Get current user data from auth context
-  const { user: currentUser, isAuthenticated } = useAuth()
+  const { user: currentUser, isAuthenticated, logout } = useAuth()
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -312,6 +313,14 @@ export default function TeacherDashboard() {
                 </p>
               </div>
               <div className="flex items-center space-x-4">
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/70 dark:bg-slate-700/70 border border-gray-200 dark:border-slate-600/40 text-red-600 hover:text-red-700 hover:bg-red-50/60 dark:hover:bg-red-900/20 transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </button>
                 <div className="backdrop-blur-md bg-purple-600/60 border border-purple-400/50 rounded-2xl p-4 text-center">
                   <div className="text-2xl font-bold text-white">{new Date().getDate()}</div>
                   <div className="text-sm text-purple-200">
