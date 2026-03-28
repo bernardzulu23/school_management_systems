@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import toast from 'react-hot-toast'
 import {
   User,
   Shield,
@@ -379,10 +378,9 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         }
       }
       await onSubmit(submitData)
-      toast.success('Registration completed successfully!')
     } catch (error) {
       console.error('Registration error:', error)
-      toast.error('Failed to complete registration')
+      throw error
     } finally {
       setLoading(false)
     }

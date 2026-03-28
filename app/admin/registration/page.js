@@ -56,12 +56,14 @@ function RegistrationContent() {
           `${userType} registered successfully! They can now login with their credentials.`
         )
         setActiveForm(null)
+        return
       } else {
-        toast.error(response.data.message || 'Registration failed')
+        throw new Error(response.data.message || 'Registration failed')
       }
     } catch (error) {
       console.error(`Error registering ${userType}:`, error)
-      toast.error(error.response?.data?.message || `Error registering ${userType}`)
+      toast.error(error.response?.data?.message || error.message || `Error registering ${userType}`)
+      throw error
     } finally {
       setLoading(false)
     }

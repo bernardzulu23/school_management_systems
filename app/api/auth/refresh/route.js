@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 import { cookies } from 'next/headers'
+import prisma from '@/lib/prisma'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-fallback-secret-for-dev'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'your-fallback-refresh-secret-for-dev'
@@ -22,9 +23,18 @@ export async function POST() {
       return NextResponse.json({ error: 'Invalid refresh token' }, { status: 401 })
     }
 
+    const user = await prisma.user.findFirst({
+      where: { id: decoded.id },
+      select: { id: true, email: true, role: true, schoolId: true },
+    })
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 401 })
+    }
+
     // Generate new access token
     const newAccessToken = jwt.sign(
-      { id: decoded.id, email: decoded.email, role: decoded.role },
+      { id: user.id, email: user.email, role: user.role, schoolId: user.schoolId },
       JWT_SECRET,
       { expiresIn: '15m' }
     )
