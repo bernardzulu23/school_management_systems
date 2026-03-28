@@ -48,6 +48,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (isLoading) return
     setIsLoading(true)
 
     try {

@@ -10,8 +10,8 @@ function AuthSessionSync({ children }) {
   const syncSession = useAuth((s) => s.syncSession)
 
   useEffect(() => {
-    syncSession()
-  }, [syncSession])
+    syncSession({ force: true })
+  }, [])
 
   return children
 }
