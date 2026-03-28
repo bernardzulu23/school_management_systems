@@ -4,8 +4,15 @@ import { findTeachersByDepartment } from '@/lib/db/queries'
 import bcrypt from 'bcryptjs'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 
 export const GET = withErrorHandler(async function GET(request) {
+  const auth = authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+  if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod'])) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   const { searchParams } = new URL(request.url)
   const department = searchParams.get('department')
   const page = parseInt(searchParams.get('page')) || 1
@@ -27,6 +34,12 @@ export const GET = withErrorHandler(async function GET(request) {
 })
 
 export const PUT = withErrorHandler(async function PUT(request) {
+  const auth = authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+  if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   const data = await request.json()
   const { id, ...updateData } = data
 
@@ -89,6 +102,12 @@ export const PUT = withErrorHandler(async function PUT(request) {
 
 export async function DELETE(request) {
   try {
+    const auth = authMiddleware(request)
+    if (!auth.isAuthenticated) return auth.response
+    if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')
 

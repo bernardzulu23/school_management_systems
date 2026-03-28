@@ -10,7 +10,6 @@ import {
   Briefcase,
   Building,
   Users,
-  Heart,
   ArrowRight,
   ArrowLeft,
   CheckCircle,
@@ -28,7 +27,6 @@ import AcademicInfoStep from './enhanced-registration/AcademicInfoStep'
 import ProfessionalInfoStep from './enhanced-registration/ProfessionalInfoStep'
 import AdministrativeInfoStep from './enhanced-registration/AdministrativeInfoStep'
 import ParentGuardianStep from './enhanced-registration/ParentGuardianStep'
-import MedicalInfoStep from './enhanced-registration/MedicalInfoStep'
 
 export default function EnhancedUserRegistrationForm({ role = 'student', onSubmit, onCancel }) {
   const [currentStep, setCurrentStep] = useState(1)
@@ -194,12 +192,6 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
           title: 'Parent/Guardian',
           icon: Users,
           description: 'Family contact information',
-        },
-        {
-          id: 5,
-          title: 'Medical Info',
-          icon: Heart,
-          description: 'Health and medical details',
         },
       ]
     } else if (role === 'teacher' || role === 'hod') {
@@ -395,11 +387,12 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
           )
         }
       case 4:
-        return (
-          <ParentGuardianStep formData={formData} errors={errors} onInputChange={onInputChange} />
-        )
-      case 5:
-        return <MedicalInfoStep formData={formData} errors={errors} onInputChange={onInputChange} />
+        if (role === 'student') {
+          return (
+            <ParentGuardianStep formData={formData} errors={errors} onInputChange={onInputChange} />
+          )
+        }
+        return null
       default:
         return null
     }

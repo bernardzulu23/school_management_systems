@@ -10,12 +10,39 @@ import { Button } from '@/components/ui/Button'
 // import TeacherAssignments from '@/components/dashboard/TeacherAssignments'
 import { api } from '@/lib/api'
 import {
-  Users, BookOpen, ClipboardList, Calendar, Plus,
-  TrendingUp, Target, Award, CheckCircle, AlertTriangle,
-  BarChart3, User, School, Flag, Edit, Delete,
-  FileText, GraduationCap, Menu, Library, Zap,
-  Map, Layers, UserCheck, MessageSquare, Clock,
-  PenTool, Eye, Brain, Heart, Users as HandshakeIcon, Rocket, Globe
+  Users,
+  BookOpen,
+  ClipboardList,
+  Calendar,
+  Plus,
+  TrendingUp,
+  Target,
+  Award,
+  CheckCircle,
+  AlertTriangle,
+  BarChart3,
+  User,
+  School,
+  Flag,
+  Edit,
+  Delete,
+  FileText,
+  GraduationCap,
+  Menu,
+  Library,
+  Zap,
+  Map,
+  Layers,
+  UserCheck,
+  MessageSquare,
+  Clock,
+  PenTool,
+  Eye,
+  Brain,
+  Heart,
+  Users as HandshakeIcon,
+  Rocket,
+  Globe,
 } from 'lucide-react'
 import Link from 'next/link'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
@@ -72,20 +99,19 @@ export default function TeacherDashboard() {
   const [dashboardStats, setDashboardStats] = useState({
     totalClasses: 0,
     totalStudents: 0,
+    totalSubjects: 0,
     totalAssessments: 0,
     totalResults: 0,
     totalGoals: 0,
     completedGoals: 0,
     averagePerformance: 0,
-    attendanceRate: 0
+    attendanceRate: 0,
   })
-
-
 
   // Performance data for charts - will be populated from API
   const [termPerformanceData, setTermPerformanceData] = useState({
     labels: [],
-    datasets: []
+    datasets: [],
   })
 
   const [subjectPerformanceData, setSubjectPerformanceData] = useState({
@@ -110,7 +136,7 @@ export default function TeacherDashboard() {
     if (currentUser && currentUser.assigned_subjects) {
       // Get subject names from IDs
       const subjectObjects = getSubjectsByIds(currentUser.assigned_subjects)
-      setTeachingSubjects(subjectObjects.map(subject => subject.name))
+      setTeachingSubjects(subjectObjects.map((subject) => subject.name))
     } else {
       setTeachingSubjects([])
     }
@@ -124,13 +150,40 @@ export default function TeacherDashboard() {
 
   const { data: stats } = useQuery({
     queryKey: ['dashboard-stats'],
-    queryFn: () => api.getDashboardStats().then(res => res.data),
+    queryFn: () => api.getDashboardStats().then((res) => res.data),
   })
 
   const { data: dashboardData } = useQuery({
     queryKey: ['teacher-dashboard'],
-    queryFn: () => api.getTeacherDashboard().then(res => res.data),
+    queryFn: () => api.getTeacherDashboard().then((res) => res.data),
   })
+
+  useEffect(() => {
+    if (!dashboardData) return
+
+    if (dashboardData.stats) {
+      setDashboardStats((prev) => ({
+        ...prev,
+        totalClasses: dashboardData.stats.totalClasses || 0,
+        totalStudents: dashboardData.stats.totalStudents || 0,
+        totalSubjects: dashboardData.stats.totalSubjects || 0,
+        totalAssessments: dashboardData.stats.totalAssessments || 0,
+        totalResults: dashboardData.stats.totalResults || 0,
+        totalGoals: dashboardData.stats.totalGoals || 0,
+        completedGoals: dashboardData.stats.completedGoals || 0,
+        averagePerformance: dashboardData.stats.averagePerformance || 0,
+        attendanceRate: dashboardData.stats.attendanceRate || 0,
+      }))
+    }
+
+    if (Array.isArray(dashboardData.my_subjects)) {
+      setTeachingSubjects(dashboardData.my_subjects.map((s) => s.name))
+    }
+
+    if (Array.isArray(dashboardData.my_classes)) {
+      setTeacherClasses(dashboardData.my_classes)
+    }
+  }, [dashboardData])
 
   // Helper function to calculate grade color
   const getGradeColor = (grade) => {
@@ -145,7 +198,9 @@ export default function TeacherDashboard() {
     <div className="text-center py-12">
       <PenTool className="h-12 w-12 mx-auto text-purple-400 mb-4" />
       <h3 className="text-xl font-bold text-white mb-2">Assessment Builder</h3>
-      <p className="text-slate-300">Create comprehensive assessments with multiple question types and automated grading.</p>
+      <p className="text-slate-300">
+        Create comprehensive assessments with multiple question types and automated grading.
+      </p>
     </div>
   )
 
@@ -153,7 +208,9 @@ export default function TeacherDashboard() {
     <div className="text-center py-12">
       <Target className="h-12 w-12 mx-auto text-purple-400 mb-4" />
       <h3 className="text-xl font-bold text-white mb-2">Learning Objectives Tracker</h3>
-      <p className="text-slate-300">Track curriculum objectives and standards alignment across all lessons.</p>
+      <p className="text-slate-300">
+        Track curriculum objectives and standards alignment across all lessons.
+      </p>
     </div>
   )
 
@@ -161,7 +218,9 @@ export default function TeacherDashboard() {
     <div className="text-center py-12">
       <Eye className="h-12 w-12 mx-auto text-purple-400 mb-4" />
       <h3 className="text-xl font-bold text-white mb-2">Behavior Management</h3>
-      <p className="text-slate-300">Monitor student behavior patterns and implement intervention strategies.</p>
+      <p className="text-slate-300">
+        Monitor student behavior patterns and implement intervention strategies.
+      </p>
     </div>
   )
 
@@ -169,7 +228,9 @@ export default function TeacherDashboard() {
     <div className="text-center py-12">
       <Heart className="h-12 w-12 mx-auto text-purple-400 mb-4" />
       <h3 className="text-xl font-bold text-white mb-2">Professional Learning Community</h3>
-      <p className="text-slate-300">Connect with colleagues, share resources, and participate in professional development.</p>
+      <p className="text-slate-300">
+        Connect with colleagues, share resources, and participate in professional development.
+      </p>
     </div>
   )
 
@@ -177,7 +238,9 @@ export default function TeacherDashboard() {
     <div className="text-center py-12">
       <HandshakeIcon className="h-12 w-12 mx-auto text-purple-400 mb-4" />
       <h3 className="text-xl font-bold text-white mb-2">Mentorship Program</h3>
-      <p className="text-slate-300">Manage mentoring relationships and track professional growth initiatives.</p>
+      <p className="text-slate-300">
+        Manage mentoring relationships and track professional growth initiatives.
+      </p>
     </div>
   )
 
@@ -241,13 +304,19 @@ export default function TeacherDashboard() {
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent mb-4">
                   Teacher Dashboard
                 </h1>
-                <p className="text-slate-600 dark:text-slate-300 text-lg">Manage your classes and track student progress</p>
-                <p className="text-slate-500 dark:text-slate-400 text-sm mt-2">Welcome back, {currentUser?.name || 'Teacher'}!</p>
+                <p className="text-slate-600 dark:text-slate-300 text-lg">
+                  Manage your classes and track student progress
+                </p>
+                <p className="text-slate-500 dark:text-slate-400 text-sm mt-2">
+                  Welcome back, {currentUser?.name || 'Teacher'}!
+                </p>
               </div>
               <div className="flex items-center space-x-4">
                 <div className="backdrop-blur-md bg-purple-600/60 border border-purple-400/50 rounded-2xl p-4 text-center">
                   <div className="text-2xl font-bold text-white">{new Date().getDate()}</div>
-                  <div className="text-sm text-purple-200">{new Date().toLocaleDateString('en-US', { month: 'short' })}</div>
+                  <div className="text-sm text-purple-200">
+                    {new Date().toLocaleDateString('en-US', { month: 'short' })}
+                  </div>
                 </div>
                 <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-blue-600 flex items-center justify-center text-white font-bold text-xl">
                   {currentUser?.name?.charAt(0) || 'T'}
@@ -270,30 +339,46 @@ export default function TeacherDashboard() {
                   <div className="p-4 bg-gray-50/60 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600/40 rounded-xl transition-colors duration-300">
                     <div className="flex items-center mb-2">
                       <User className="h-4 w-4 text-purple-600 dark:text-purple-400 mr-2" />
-                      <span className="text-gray-600 dark:text-slate-300 text-sm font-medium">Full Name</span>
+                      <span className="text-gray-600 dark:text-slate-300 text-sm font-medium">
+                        Full Name
+                      </span>
                     </div>
-                    <p className="text-gray-900 dark:text-white font-semibold">{currentUser?.name}</p>
+                    <p className="text-gray-900 dark:text-white font-semibold">
+                      {currentUser?.name}
+                    </p>
                   </div>
                   <div className="p-4 bg-gray-50/60 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600/40 rounded-xl transition-colors duration-300">
                     <div className="flex items-center mb-2">
                       <BookOpen className="h-4 w-4 text-blue-600 dark:text-blue-400 mr-2" />
-                      <span className="text-gray-600 dark:text-slate-300 text-sm font-medium">Teaching Subjects</span>
+                      <span className="text-gray-600 dark:text-slate-300 text-sm font-medium">
+                        Teaching Subjects
+                      </span>
                     </div>
-                    <p className="text-gray-900 dark:text-white font-semibold">{currentUser?.subjects?.length || 0} Subjects</p>
+                    <p className="text-gray-900 dark:text-white font-semibold">
+                      {dashboardStats.totalSubjects || 0} Subjects
+                    </p>
                   </div>
                   <div className="p-4 bg-gray-50/60 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600/40 rounded-xl transition-colors duration-300">
                     <div className="flex items-center mb-2">
                       <Users className="h-4 w-4 text-green-600 dark:text-green-400 mr-2" />
-                      <span className="text-gray-600 dark:text-slate-300 text-sm font-medium">Assigned Classes</span>
+                      <span className="text-gray-600 dark:text-slate-300 text-sm font-medium">
+                        Assigned Classes
+                      </span>
                     </div>
-                    <p className="text-gray-900 dark:text-white font-semibold">{dashboardStats.totalClasses} Classes</p>
+                    <p className="text-gray-900 dark:text-white font-semibold">
+                      {dashboardStats.totalClasses} Classes
+                    </p>
                   </div>
                   <div className="p-4 bg-gray-50/60 dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600/40 rounded-xl transition-colors duration-300">
                     <div className="flex items-center mb-2">
                       <School className="h-4 w-4 text-orange-600 dark:text-orange-400 mr-2" />
-                      <span className="text-gray-600 dark:text-slate-300 text-sm font-medium">Total Students</span>
+                      <span className="text-gray-600 dark:text-slate-300 text-sm font-medium">
+                        Total Students
+                      </span>
                     </div>
-                    <p className="text-gray-900 dark:text-white font-semibold">{dashboardStats.totalStudents} Students</p>
+                    <p className="text-gray-900 dark:text-white font-semibold">
+                      {dashboardStats.totalStudents} Students
+                    </p>
                   </div>
                 </div>
               </div>
@@ -315,18 +400,26 @@ export default function TeacherDashboard() {
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                       <Edit className="h-6 w-6 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Enter Results</h3>
-                    <p className="text-gray-500 dark:text-slate-400 text-sm">Input student grades for subjects and assessments.</p>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                      Enter Results
+                    </h3>
+                    <p className="text-gray-500 dark:text-slate-400 text-sm">
+                      Input student grades for subjects and assessments.
+                    </p>
                   </div>
                 </Link>
-                
+
                 <Link href="/dashboard/teacher/classes" className="block">
                   <div className="p-6 bg-white/60 dark:bg-slate-800/60 border border-blue-200 dark:border-blue-500/40 hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-slate-700/80 rounded-2xl transition-all duration-300 group cursor-pointer h-full shadow-sm hover:shadow-md">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                       <Users className="h-6 w-6 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">My Classes</h3>
-                    <p className="text-gray-500 dark:text-slate-400 text-sm">View student lists and class performance.</p>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                      My Classes
+                    </h3>
+                    <p className="text-gray-500 dark:text-slate-400 text-sm">
+                      View student lists and class performance.
+                    </p>
                   </div>
                 </Link>
 
@@ -335,8 +428,12 @@ export default function TeacherDashboard() {
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                       <ClipboardList className="h-6 w-6 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Assessments</h3>
-                    <p className="text-gray-500 dark:text-slate-400 text-sm">Create and manage tests and assignments.</p>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                      Assessments
+                    </h3>
+                    <p className="text-gray-500 dark:text-slate-400 text-sm">
+                      Create and manage tests and assignments.
+                    </p>
                   </div>
                 </Link>
               </div>
@@ -464,7 +561,10 @@ export default function TeacherDashboard() {
                         <span className="font-semibold text-orange-300">In Progress</span>
                       </div>
                       <div className="w-full bg-slate-700 rounded-full h-2">
-                        <div className="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full" style={{width: '60%'}}></div>
+                        <div
+                          className="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full"
+                          style={{ width: '60%' }}
+                        ></div>
                       </div>
                     </div>
                     <div className="text-xs text-slate-400 space-y-1">
@@ -495,7 +595,9 @@ export default function TeacherDashboard() {
                       <Award className="h-10 w-10 text-white" />
                     </div>
                     <h3 className="font-bold text-white text-lg">Class Average</h3>
-                    <p className="text-3xl font-bold text-blue-400 mt-2">{dashboardStats.averagePerformance}%</p>
+                    <p className="text-3xl font-bold text-blue-400 mt-2">
+                      {dashboardStats.averagePerformance}%
+                    </p>
                     <p className="text-slate-300 text-sm mt-1">Above school average</p>
                   </div>
                   <div className="text-center">
@@ -503,7 +605,9 @@ export default function TeacherDashboard() {
                       <CheckCircle className="h-10 w-10 text-white" />
                     </div>
                     <h3 className="font-bold text-white text-lg">Attendance Rate</h3>
-                    <p className="text-3xl font-bold text-green-400 mt-2">{dashboardStats.attendanceRate}%</p>
+                    <p className="text-3xl font-bold text-green-400 mt-2">
+                      {dashboardStats.attendanceRate}%
+                    </p>
                     <p className="text-slate-300 text-sm mt-1">Excellent attendance</p>
                   </div>
                   <div className="text-center">
@@ -511,7 +615,9 @@ export default function TeacherDashboard() {
                       <Target className="h-10 w-10 text-white" />
                     </div>
                     <h3 className="font-bold text-white text-lg">Goals Progress</h3>
-                    <p className="text-3xl font-bold text-purple-400 mt-2">{dashboardStats.completedGoals}/{dashboardStats.totalGoals}</p>
+                    <p className="text-3xl font-bold text-purple-400 mt-2">
+                      {dashboardStats.completedGoals}/{dashboardStats.totalGoals}
+                    </p>
                     <p className="text-slate-300 text-sm mt-1">Goals completed</p>
                   </div>
                   <div className="text-center">
@@ -519,7 +625,9 @@ export default function TeacherDashboard() {
                       <BarChart3 className="h-10 w-10 text-white" />
                     </div>
                     <h3 className="font-bold text-white text-lg">Total Results</h3>
-                    <p className="text-3xl font-bold text-orange-400 mt-2">{dashboardStats.totalResults}</p>
+                    <p className="text-3xl font-bold text-orange-400 mt-2">
+                      {dashboardStats.totalResults}
+                    </p>
                     <p className="text-slate-300 text-sm mt-1">Results recorded</p>
                   </div>
                 </div>
@@ -544,16 +652,23 @@ export default function TeacherDashboard() {
                       const data = { students: 0, avgScore: 0, assessments: 0, trend: '0%' }
 
                       return (
-                        <div key={index} className="p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl hover:bg-slate-700/80 transition-all duration-300 hover:scale-105 cursor-pointer">
+                        <div
+                          key={index}
+                          className="p-6 bg-slate-700/60 border border-slate-600/40 rounded-xl hover:bg-slate-700/80 transition-all duration-300 hover:scale-105 cursor-pointer"
+                        >
                           <div className="flex items-center justify-between mb-4">
                             <div className="backdrop-blur-md bg-blue-600/60 border border-blue-400/50 rounded-2xl p-3">
                               <BookOpen className="h-8 w-8 text-white" />
                             </div>
-                            <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              data.avgScore >= 85 ? 'bg-green-600/60 text-green-100 border border-green-400/50' :
-                              data.avgScore >= 75 ? 'bg-blue-600/60 text-blue-100 border border-blue-400/50' :
-                              'bg-yellow-600/60 text-yellow-100 border border-yellow-400/50'
-                            }`}>
+                            <div
+                              className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                data.avgScore >= 85
+                                  ? 'bg-green-600/60 text-green-100 border border-green-400/50'
+                                  : data.avgScore >= 75
+                                    ? 'bg-blue-600/60 text-blue-100 border border-blue-400/50'
+                                    : 'bg-yellow-600/60 text-yellow-100 border border-yellow-400/50'
+                              }`}
+                            >
                               {data.avgScore}% Avg
                             </div>
                           </div>
@@ -575,8 +690,11 @@ export default function TeacherDashboard() {
                             <div className="w-full bg-slate-600/60 rounded-full h-2 mt-3">
                               <div
                                 className={`h-2 rounded-full ${
-                                  data.avgScore >= 85 ? 'bg-green-500' :
-                                  data.avgScore >= 75 ? 'bg-blue-500' : 'bg-yellow-500'
+                                  data.avgScore >= 85
+                                    ? 'bg-green-500'
+                                    : data.avgScore >= 75
+                                      ? 'bg-blue-500'
+                                      : 'bg-yellow-500'
                                 }`}
                                 style={{ width: `${Math.min(data.avgScore, 100)}%` }}
                               ></div>
@@ -592,7 +710,9 @@ export default function TeacherDashboard() {
                       <BookOpen className="h-10 w-10 text-white" />
                     </div>
                     <h3 className="text-white font-bold text-xl mb-2">No Subjects Assigned</h3>
-                    <p className="text-slate-300 mb-4">Contact administrator to get teaching assignments</p>
+                    <p className="text-slate-300 mb-4">
+                      Contact administrator to get teaching assignments
+                    </p>
                   </div>
                 )}
               </div>
@@ -617,15 +737,22 @@ export default function TeacherDashboard() {
                 <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
                   <div className="space-y-4">
                     {teacherClasses.map((classItem) => (
-                      <div key={classItem.id} className="flex items-center justify-between p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl hover:bg-slate-700/80 transition-colors duration-200">
+                      <div
+                        key={classItem.id}
+                        className="flex items-center justify-between p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl hover:bg-slate-700/80 transition-colors duration-200"
+                      >
                         <div className="flex items-center space-x-4">
                           <div className="backdrop-blur-md bg-blue-600/60 border border-blue-400/50 rounded-xl p-3">
                             <Users className="h-6 w-6 text-white" />
                           </div>
                           <div>
                             <h4 className="font-semibold text-white">{classItem.name}</h4>
-                            <p className="text-slate-300 text-sm">{classItem.students} students • {classItem.subject}</p>
-                            <p className="text-slate-400 text-xs">Attendance: {classItem.attendance}%</p>
+                            <p className="text-slate-300 text-sm">
+                              {classItem.students} students • {classItem.subject}
+                            </p>
+                            <p className="text-slate-400 text-xs">
+                              Attendance: {classItem.attendance}%
+                            </p>
                           </div>
                         </div>
                         <div className="text-right">
@@ -646,7 +773,9 @@ export default function TeacherDashboard() {
                           <Users className="h-8 w-8 text-white" />
                         </div>
                         <p className="text-slate-300">No classes assigned yet</p>
-                        <p className="text-slate-400 text-sm mt-2">Contact administrator for class assignments</p>
+                        <p className="text-slate-400 text-sm mt-2">
+                          Contact administrator for class assignments
+                        </p>
                       </div>
                     )}
                   </div>
@@ -671,20 +800,31 @@ export default function TeacherDashboard() {
                 <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
                   <div className="space-y-4">
                     {results.slice(0, 5).map((result) => (
-                      <div key={result.id} className="flex items-center justify-between p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl hover:bg-slate-700/80 transition-colors duration-200">
+                      <div
+                        key={result.id}
+                        className="flex items-center justify-between p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl hover:bg-slate-700/80 transition-colors duration-200"
+                      >
                         <div className="flex items-center space-x-4">
                           <div className="backdrop-blur-md bg-green-600/60 border border-green-400/50 rounded-xl p-3">
                             <BarChart3 className="h-6 w-6 text-white" />
                           </div>
                           <div>
                             <h4 className="font-semibold text-white">{result.student}</h4>
-                            <p className="text-slate-300 text-sm">{result.subject} - {result.assessment}</p>
+                            <p className="text-slate-300 text-sm">
+                              {result.subject} - {result.assessment}
+                            </p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-xl font-bold text-white">{result.marks}/{result.totalMarks}</div>
-                          <div className="text-lg font-semibold text-green-400">{Math.round((result.marks / result.totalMarks) * 100)}%</div>
-                          <div className={`text-xs px-3 py-1 rounded-full font-medium ${getGradeColor(result.grade)}`}>
+                          <div className="text-xl font-bold text-white">
+                            {result.marks}/{result.totalMarks}
+                          </div>
+                          <div className="text-lg font-semibold text-green-400">
+                            {Math.round((result.marks / result.totalMarks) * 100)}%
+                          </div>
+                          <div
+                            className={`text-xs px-3 py-1 rounded-full font-medium ${getGradeColor(result.grade)}`}
+                          >
                             Grade {result.grade}
                           </div>
                         </div>
@@ -696,7 +836,9 @@ export default function TeacherDashboard() {
                           <BarChart3 className="h-8 w-8 text-white" />
                         </div>
                         <p className="text-slate-300">No recent results</p>
-                        <p className="text-slate-400 text-sm mt-2">Results will appear here after grading</p>
+                        <p className="text-slate-400 text-sm mt-2">
+                          Results will appear here after grading
+                        </p>
                       </div>
                     )}
                   </div>
@@ -720,7 +862,10 @@ export default function TeacherDashboard() {
                   <div className="space-y-4">
                     <h3 className="text-lg font-bold text-white mb-4">Current Goals</h3>
                     {teacherGoals.map((goal) => (
-                      <div key={goal.id} className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl">
+                      <div
+                        key={goal.id}
+                        className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl"
+                      >
                         <div className="flex items-center justify-between mb-2">
                           <h4 className="font-semibold text-white text-sm">{goal.title}</h4>
                           {goal.status === 'completed' && (
@@ -730,8 +875,11 @@ export default function TeacherDashboard() {
                         <div className="w-full bg-slate-600/60 rounded-full h-2 mb-2">
                           <div
                             className={`h-2 rounded-full ${
-                              goal.progress === 100 ? 'bg-green-500' :
-                              goal.progress >= 75 ? 'bg-yellow-500' : 'bg-blue-500'
+                              goal.progress === 100
+                                ? 'bg-green-500'
+                                : goal.progress >= 75
+                                  ? 'bg-yellow-500'
+                                  : 'bg-blue-500'
                             }`}
                             style={{ width: `${goal.progress}%` }}
                           ></div>
@@ -746,17 +894,24 @@ export default function TeacherDashboard() {
                     <h3 className="text-lg font-bold text-white mb-4">Progress Summary</h3>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="p-4 bg-gradient-to-r from-green-600/20 to-blue-600/20 border border-green-400/30 rounded-xl text-center">
-                        <div className="text-2xl font-bold text-green-400">{dashboardStats.completedGoals}</div>
+                        <div className="text-2xl font-bold text-green-400">
+                          {dashboardStats.completedGoals}
+                        </div>
                         <div className="text-slate-300 text-sm">Completed</div>
                       </div>
                       <div className="p-4 bg-gradient-to-r from-yellow-600/20 to-orange-600/20 border border-yellow-400/30 rounded-xl text-center">
-                        <div className="text-2xl font-bold text-yellow-400">{dashboardStats.totalGoals - dashboardStats.completedGoals}</div>
+                        <div className="text-2xl font-bold text-yellow-400">
+                          {dashboardStats.totalGoals - dashboardStats.completedGoals}
+                        </div>
                         <div className="text-slate-300 text-sm">In Progress</div>
                       </div>
                     </div>
                     <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl text-center">
                       <div className="text-3xl font-bold text-white mb-2">
-                        {Math.round((dashboardStats.completedGoals / dashboardStats.totalGoals) * 100)}%
+                        {Math.round(
+                          (dashboardStats.completedGoals / dashboardStats.totalGoals) * 100
+                        )}
+                        %
                       </div>
                       <div className="text-slate-300">Overall Progress</div>
                     </div>
@@ -783,7 +938,9 @@ export default function TeacherDashboard() {
                         <Plus className="h-8 w-8 text-white" />
                       </div>
                       <h3 className="text-white font-semibold text-center">Create Assessment</h3>
-                      <p className="text-slate-300 text-sm text-center mt-2">Add new test or assignment</p>
+                      <p className="text-slate-300 text-sm text-center mt-2">
+                        Add new test or assignment
+                      </p>
                     </div>
                   </Link>
                   <Link href="/dashboard/teacher/results">
@@ -801,7 +958,9 @@ export default function TeacherDashboard() {
                         <CheckCircle className="h-8 w-8 text-white" />
                       </div>
                       <h3 className="text-white font-semibold text-center">Take Attendance</h3>
-                      <p className="text-slate-300 text-sm text-center mt-2">Mark student presence</p>
+                      <p className="text-slate-300 text-sm text-center mt-2">
+                        Mark student presence
+                      </p>
                     </div>
                   </Link>
                   <Link href="/dashboard/teacher/reports">
@@ -810,7 +969,9 @@ export default function TeacherDashboard() {
                         <FileText className="h-8 w-8 text-white" />
                       </div>
                       <h3 className="text-white font-semibold text-center">View Reports</h3>
-                      <p className="text-slate-300 text-sm text-center mt-2">Performance analytics</p>
+                      <p className="text-slate-300 text-sm text-center mt-2">
+                        Performance analytics
+                      </p>
                     </div>
                   </Link>
                   <Link href="/dashboard/sdg">
@@ -827,79 +988,93 @@ export default function TeacherDashboard() {
             </CardContent>
           </Card>
 
-        {/* Recent Assessments */}
-        <Card variant="glass">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent flex items-center">
-              <ClipboardList className="h-6 w-6 mr-3 text-blue-400" />
-              Recent Assessments
-            </CardTitle>
-            <Link href="/dashboard/assessments/create">
-              <Button size="sm" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white">
-                <Plus className="h-4 w-4 mr-2" />
-                Create Assessment
-              </Button>
-            </Link>
-          </CardHeader>
-          <CardContent>
-            <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-slate-600/40">
-                      <th className="text-left py-2 text-slate-300">Title</th>
-                      <th className="text-left py-2 text-slate-300">Type</th>
-                      <th className="text-left py-2 text-slate-300">Subject</th>
-                      <th className="text-left py-2 text-slate-300">Class</th>
-                      <th className="text-left py-2 text-slate-300">Status</th>
-                      <th className="text-left py-2 text-slate-300">Start Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {dashboardData?.recent_assessments?.map((assessment) => (
-                      <tr key={assessment.id} className="border-b border-slate-600/40 hover:bg-slate-700/40 transition-colors">
-                        <td className="py-2 font-medium text-white">{assessment.title}</td>
-                        <td className="py-2">
-                          <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-200 capitalize border border-blue-400/30">
-                            {assessment.type}
-                          </span>
-                        </td>
-                        <td className="py-2 text-slate-300">{assessment.subject}</td>
-                        <td className="py-2 text-slate-300">{assessment.class}</td>
-                        <td className="py-2">
-                          <span className={`px-2 py-1 text-xs rounded-full capitalize border ${
-                            assessment.status === 'published' 
-                              ? 'bg-green-500/20 text-green-200 border-green-400/30'
-                              : assessment.status === 'draft'
-                              ? 'bg-yellow-500/20 text-yellow-200 border-yellow-400/30'
-                              : 'bg-gray-500/20 text-gray-200 border-gray-400/30'
-                          }`}>
-                            {assessment.status}
-                          </span>
-                        </td>
-                        <td className="py-2 text-sm text-slate-400">
-                          {new Date(assessment.start_date).toLocaleDateString()}
-                        </td>
+          {/* Recent Assessments */}
+          <Card variant="glass">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent flex items-center">
+                <ClipboardList className="h-6 w-6 mr-3 text-blue-400" />
+                Recent Assessments
+              </CardTitle>
+              <Link href="/dashboard/assessments/create">
+                <Button
+                  size="sm"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Assessment
+                </Button>
+              </Link>
+            </CardHeader>
+            <CardContent>
+              <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-slate-600/40">
+                        <th className="text-left py-2 text-slate-300">Title</th>
+                        <th className="text-left py-2 text-slate-300">Type</th>
+                        <th className="text-left py-2 text-slate-300">Subject</th>
+                        <th className="text-left py-2 text-slate-300">Class</th>
+                        <th className="text-left py-2 text-slate-300">Status</th>
+                        <th className="text-left py-2 text-slate-300">Start Date</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {(!dashboardData?.recent_assessments || dashboardData.recent_assessments.length === 0) && (
-                  <div className="text-center py-8">
-                    <div className="backdrop-blur-md bg-blue-600/60 border border-blue-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <ClipboardList className="h-8 w-8 text-white" />
+                    </thead>
+                    <tbody>
+                      {dashboardData?.recent_assessments?.map((assessment) => (
+                        <tr
+                          key={assessment.id}
+                          className="border-b border-slate-600/40 hover:bg-slate-700/40 transition-colors"
+                        >
+                          <td className="py-2 font-medium text-white">{assessment.title}</td>
+                          <td className="py-2">
+                            <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-200 capitalize border border-blue-400/30">
+                              {assessment.type}
+                            </span>
+                          </td>
+                          <td className="py-2 text-slate-300">{assessment.subject}</td>
+                          <td className="py-2 text-slate-300">{assessment.class}</td>
+                          <td className="py-2">
+                            <span
+                              className={`px-2 py-1 text-xs rounded-full capitalize border ${
+                                assessment.status === 'published'
+                                  ? 'bg-green-500/20 text-green-200 border-green-400/30'
+                                  : assessment.status === 'draft'
+                                    ? 'bg-yellow-500/20 text-yellow-200 border-yellow-400/30'
+                                    : 'bg-gray-500/20 text-gray-200 border-gray-400/30'
+                              }`}
+                            >
+                              {assessment.status}
+                            </span>
+                          </td>
+                          <td className="py-2 text-sm text-slate-400">
+                            {new Date(assessment.start_date).toLocaleDateString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {(!dashboardData?.recent_assessments ||
+                    dashboardData.recent_assessments.length === 0) && (
+                    <div className="text-center py-8">
+                      <div className="backdrop-blur-md bg-blue-600/60 border border-blue-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <ClipboardList className="h-8 w-8 text-white" />
+                      </div>
+                      <p className="text-slate-300">No Assessments Created</p>
+                      <p className="text-slate-400 text-sm mt-2">
+                        You haven&apos;t created any assessments yet. Start by creating your first
+                        assessment.
+                      </p>
+                      <Link href="/dashboard/assessments/create">
+                        <Button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white">
+                          Create Your First Assessment
+                        </Button>
+                      </Link>
                     </div>
-                    <p className="text-slate-300">No Assessments Created</p>
-                    <p className="text-slate-400 text-sm mt-2">You haven't created any assessments yet. Start by creating your first assessment.</p>
-                    <Link href="/dashboard/assessments/create">
-                      <Button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white">Create Your First Assessment</Button>
-                    </Link>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
           {/* Enhanced Teacher Information */}
           <Card variant="glass">
@@ -924,21 +1099,27 @@ export default function TeacherDashboard() {
                       <School className="h-4 w-4 text-green-400 mr-2" />
                       <span className="text-slate-300 text-sm font-medium">Department</span>
                     </div>
-                    <p className="text-white font-semibold">{currentUser?.department || 'Not assigned'}</p>
+                    <p className="text-white font-semibold">
+                      {dashboardData?.teacher?.department || 'Not assigned'}
+                    </p>
                   </div>
                   <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl">
                     <div className="flex items-center mb-2">
                       <Flag className="h-4 w-4 text-purple-400 mr-2" />
                       <span className="text-slate-300 text-sm font-medium">TS Number</span>
                     </div>
-                    <p className="text-white font-semibold">{currentUser?.tsNumber || 'Not assigned'}</p>
+                    <p className="text-white font-semibold">
+                      {dashboardData?.teacher?.ts_number || 'Not assigned'}
+                    </p>
                   </div>
                   <div className="p-4 bg-slate-700/60 border border-slate-600/40 rounded-xl">
                     <div className="flex items-center mb-2">
                       <User className="h-4 w-4 text-orange-400 mr-2" />
                       <span className="text-slate-300 text-sm font-medium">Contact</span>
                     </div>
-                    <p className="text-white font-semibold">{currentUser?.contactNumber || 'Not provided'}</p>
+                    <p className="text-white font-semibold">
+                      {currentUser?.contactNumber || 'Not provided'}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -960,19 +1141,27 @@ export default function TeacherDashboard() {
                   {[
                     { id: 'creative-teaching', label: 'Creative Teaching & STEM', icon: Rocket },
                     { id: 'curriculum-mapping', label: 'Curriculum Mapping', icon: Map },
-                    { id: 'differentiated-instruction', label: 'Differentiated Instruction', icon: Layers },
+                    {
+                      id: 'differentiated-instruction',
+                      label: 'Differentiated Instruction',
+                      icon: Layers,
+                    },
                     { id: 'student-portfolios', label: 'Student Portfolios', icon: UserCheck },
                     { id: 'lesson-planning', label: 'Collaborative Lesson Planning', icon: Users },
-                    { id: 'parent-conferences', label: 'Parent-Teacher Conferences', icon: MessageSquare },
+                    {
+                      id: 'parent-conferences',
+                      label: 'Parent-Teacher Conferences',
+                      icon: MessageSquare,
+                    },
                     { id: 'assessment-builder', label: 'Assessment Builder', icon: PenTool },
                     { id: 'learning-objectives', label: 'Learning Objectives', icon: Target },
                     { id: 'behavior-management', label: 'Behavior Management', icon: Eye },
                     { id: 'professional-community', label: 'Professional Community', icon: Heart },
-                    { id: 'mentorship', label: 'Mentorship Program', icon: HandshakeIcon }
+                    { id: 'mentorship', label: 'Mentorship Program', icon: HandshakeIcon },
                   ].map((tab) => (
                     <Button
                       key={tab.id}
-                      variant={activeAdvancedTab === tab.id ? "default" : "outline"}
+                      variant={activeAdvancedTab === tab.id ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => setActiveAdvancedTab(tab.id)}
                       className={`${
@@ -1011,11 +1200,16 @@ export default function TeacherDashboard() {
                         <Users className="h-5 w-5 mr-2 text-blue-400" />
                         My Classes
                       </h3>
-                      <span className="text-slate-300 text-sm">{teacherClasses.length} classes</span>
+                      <span className="text-slate-300 text-sm">
+                        {teacherClasses.length} classes
+                      </span>
                     </div>
                     <div className="space-y-3">
                       {teacherClasses.slice(0, 3).map((cls, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-slate-800/60 border border-slate-600/40 rounded-lg">
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 bg-slate-800/60 border border-slate-600/40 rounded-lg"
+                        >
                           <div className="flex items-center space-x-3">
                             <div className="backdrop-blur-md bg-blue-600/60 border border-blue-400/50 rounded-lg p-2">
                               <Users className="h-4 w-4 text-white" />
@@ -1026,13 +1220,17 @@ export default function TeacherDashboard() {
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="text-green-400 text-sm font-semibold">{cls.attendance}%</p>
+                            <p className="text-green-400 text-sm font-semibold">
+                              {cls.attendance}%
+                            </p>
                             <p className="text-slate-400 text-xs">attendance</p>
                           </div>
                         </div>
                       ))}
                       {teacherClasses.length > 3 && (
-                        <p className="text-slate-300 text-sm text-center">+{teacherClasses.length - 3} more classes</p>
+                        <p className="text-slate-300 text-sm text-center">
+                          +{teacherClasses.length - 3} more classes
+                        </p>
                       )}
                     </div>
                     <Button className="w-full mt-4 bg-blue-600/60 hover:bg-blue-600/80 text-white border border-blue-400/50">
@@ -1047,25 +1245,36 @@ export default function TeacherDashboard() {
                         <BookOpen className="h-5 w-5 mr-2 text-green-400" />
                         Subject Management
                       </h3>
-                      <span className="text-slate-300 text-sm">{(currentUser?.subjects || ['Mathematics', 'Physics', 'Computer Science']).length} subjects</span>
+                      <span className="text-slate-300 text-sm">
+                        {
+                          (currentUser?.subjects || ['Mathematics', 'Physics', 'Computer Science'])
+                            .length
+                        }{' '}
+                        subjects
+                      </span>
                     </div>
                     <div className="space-y-3">
-                      {(currentUser?.subjects || ['Mathematics', 'Physics', 'Computer Science']).slice(0, 3).map((subject, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-slate-800/60 border border-slate-600/40 rounded-lg">
-                          <div className="flex items-center space-x-3">
-                            <div className="backdrop-blur-md bg-green-600/60 border border-green-400/50 rounded-lg p-2">
-                              <BookOpen className="h-4 w-4 text-white" />
+                      {(currentUser?.subjects || ['Mathematics', 'Physics', 'Computer Science'])
+                        .slice(0, 3)
+                        .map((subject, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-3 bg-slate-800/60 border border-slate-600/40 rounded-lg"
+                          >
+                            <div className="flex items-center space-x-3">
+                              <div className="backdrop-blur-md bg-green-600/60 border border-green-400/50 rounded-lg p-2">
+                                <BookOpen className="h-4 w-4 text-white" />
+                              </div>
+                              <div>
+                                <p className="text-white font-semibold text-sm">{subject}</p>
+                                <p className="text-slate-300 text-xs">Active subject</p>
+                              </div>
                             </div>
-                            <div>
-                              <p className="text-white font-semibold text-sm">{subject}</p>
-                              <p className="text-slate-300 text-xs">Active subject</p>
+                            <div className="text-right">
+                              <p className="text-green-400 text-sm font-semibold">Active</p>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <p className="text-green-400 text-sm font-semibold">Active</p>
-                          </div>
-                        </div>
-                      ))}
+                        ))}
                     </div>
                     <Button className="w-full mt-4 bg-green-600/60 hover:bg-green-600/80 text-white border border-green-400/50">
                       Manage Subjects
@@ -1079,17 +1288,24 @@ export default function TeacherDashboard() {
                         <Target className="h-5 w-5 mr-2 text-yellow-400" />
                         Academic Goals
                       </h3>
-                      <span className="text-slate-300 text-sm">{dashboardStats.completedGoals}/{dashboardStats.totalGoals}</span>
+                      <span className="text-slate-300 text-sm">
+                        {dashboardStats.completedGoals}/{dashboardStats.totalGoals}
+                      </span>
                     </div>
                     <div className="space-y-3">
                       {teacherGoals.slice(0, 3).map((goal, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-slate-800/60 border border-slate-600/40 rounded-lg">
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 bg-slate-800/60 border border-slate-600/40 rounded-lg"
+                        >
                           <div className="flex items-center space-x-3">
-                            <div className={`backdrop-blur-md border rounded-lg p-2 ${
-                              goal.status === 'completed'
-                                ? 'bg-green-600/60 border-green-400/50'
-                                : 'bg-yellow-600/60 border-yellow-400/50'
-                            }`}>
+                            <div
+                              className={`backdrop-blur-md border rounded-lg p-2 ${
+                                goal.status === 'completed'
+                                  ? 'bg-green-600/60 border-green-400/50'
+                                  : 'bg-yellow-600/60 border-yellow-400/50'
+                              }`}
+                            >
                               {goal.status === 'completed' ? (
                                 <CheckCircle className="h-4 w-4 text-white" />
                               ) : (
@@ -1102,11 +1318,13 @@ export default function TeacherDashboard() {
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              goal.status === 'completed'
-                                ? 'bg-green-600/60 text-green-100 border border-green-400/50'
-                                : 'bg-yellow-600/60 text-yellow-100 border border-yellow-400/50'
-                            }`}>
+                            <div
+                              className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                goal.status === 'completed'
+                                  ? 'bg-green-600/60 text-green-100 border border-green-400/50'
+                                  : 'bg-yellow-600/60 text-yellow-100 border border-yellow-400/50'
+                              }`}
+                            >
                               {goal.status === 'completed' ? 'Done' : 'In Progress'}
                             </div>
                           </div>
@@ -1138,7 +1356,9 @@ export default function TeacherDashboard() {
                     {/* No upcoming assessments */}
                     <div className="text-center py-8">
                       <ClipboardList className="h-12 w-12 mx-auto text-slate-400 mb-4" />
-                      <h3 className="text-lg font-medium text-white mb-2">No Upcoming Assessments</h3>
+                      <h3 className="text-lg font-medium text-white mb-2">
+                        No Upcoming Assessments
+                      </h3>
                       <p className="text-slate-300">Create your first assessment to get started</p>
                     </div>
                   </div>
@@ -1163,8 +1383,12 @@ export default function TeacherDashboard() {
                     {/* No marking progress */}
                     <div className="text-center py-8">
                       <BarChart3 className="h-12 w-12 mx-auto text-slate-400 mb-4" />
-                      <h3 className="text-lg font-medium text-white mb-2">No Marking in Progress</h3>
-                      <p className="text-slate-300">Create assessments to start marking student work</p>
+                      <h3 className="text-lg font-medium text-white mb-2">
+                        No Marking in Progress
+                      </h3>
+                      <p className="text-slate-300">
+                        Create assessments to start marking student work
+                      </p>
                     </div>
                   </div>
                   <Button className="w-full mt-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
@@ -1209,10 +1433,15 @@ export default function TeacherDashboard() {
                         Subject Performance
                       </h3>
                       <div className="space-y-4">
-                        {(currentUser?.subjects || ['Mathematics', 'Physics', 'Computer Science']).map((subject, index) => {
+                        {(
+                          currentUser?.subjects || ['Mathematics', 'Physics', 'Computer Science']
+                        ).map((subject, index) => {
                           const performance = [82, 76, 88][index] || 75
                           return (
-                            <div key={index} className="p-3 bg-slate-800/60 border border-slate-600/40 rounded-lg">
+                            <div
+                              key={index}
+                              className="p-3 bg-slate-800/60 border border-slate-600/40 rounded-lg"
+                            >
                               <div className="flex items-center justify-between mb-2">
                                 <span className="text-white font-semibold text-sm">{subject}</span>
                                 <span className="text-blue-400 font-bold">{performance}%</span>
@@ -1220,8 +1449,11 @@ export default function TeacherDashboard() {
                               <div className="w-full bg-slate-600/60 rounded-full h-2">
                                 <div
                                   className={`h-2 rounded-full ${
-                                    performance >= 85 ? 'bg-green-500' :
-                                    performance >= 75 ? 'bg-blue-500' : 'bg-yellow-500'
+                                    performance >= 85
+                                      ? 'bg-green-500'
+                                      : performance >= 75
+                                        ? 'bg-blue-500'
+                                        : 'bg-yellow-500'
                                   }`}
                                   style={{ width: `${performance}%` }}
                                 ></div>
@@ -1254,7 +1486,9 @@ export default function TeacherDashboard() {
                         <ClipboardList className="h-8 w-8 text-white" />
                       </div>
                       <h3 className="text-white font-semibold text-center">Manage Assessments</h3>
-                      <p className="text-slate-300 text-sm text-center mt-2">Create and schedule assessments</p>
+                      <p className="text-slate-300 text-sm text-center mt-2">
+                        Create and schedule assessments
+                      </p>
                     </div>
                   </Link>
                   <Link href="/dashboard/teacher/lesson-plans">
@@ -1272,7 +1506,9 @@ export default function TeacherDashboard() {
                         <BarChart3 className="h-8 w-8 text-white" />
                       </div>
                       <h3 className="text-white font-semibold text-center">Record Results</h3>
-                      <p className="text-slate-300 text-sm text-center mt-2">Enter assessment results</p>
+                      <p className="text-slate-300 text-sm text-center mt-2">
+                        Enter assessment results
+                      </p>
                     </div>
                   </Link>
                   <Link href="/dashboard/teacher/schemes">
@@ -1294,7 +1530,6 @@ export default function TeacherDashboard() {
           <div className="p-4 bg-slate-800/60 rounded-lg text-white">
             Teacher Assignments - Coming Soon
           </div>
-
         </div>
       </div>
     </div>

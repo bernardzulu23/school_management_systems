@@ -80,7 +80,7 @@ export const POST = withErrorHandler(async (request) => {
         ? body.selected_subjects.map(String)
         : []
 
-      const className = `${body.year_group || ''} ${body.section || ''}`.trim()
+      const className = `${body.year_group || ''}${body.section || ''}`.trim()
 
       const student = await tx.student.create({
         data: {

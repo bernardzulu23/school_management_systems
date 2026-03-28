@@ -61,9 +61,23 @@ export default function LoginPage() {
         }
       }
 
-      await login({ email, password, subdomain })
+      const result = await login({ email, password, subdomain })
       toast.success('Login successful!')
-      router.push('/')
+      const role = String(result?.user?.role || '')
+        .trim()
+        .toLowerCase()
+
+      if (['headteacher', 'admin', 'administrator', 'superadmin'].includes(role)) {
+        router.push('/dashboard/admin')
+      } else if (['hod', 'head of department'].includes(role)) {
+        router.push('/dashboard/hod')
+      } else if (role === 'teacher') {
+        router.push('/dashboard/teacher')
+      } else if (role === 'student') {
+        router.push('/dashboard/student')
+      } else {
+        router.push('/dashboard')
+      }
     } catch (error) {
       console.error('Login failed:', error)
       // Extract specific message if available

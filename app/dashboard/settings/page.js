@@ -5,323 +5,166 @@ import toast from 'react-hot-toast'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  Settings, School, Users, Bell, Shield, Database, 
-  Globe, Mail, Calendar, Clock, Save, RefreshCw 
-} from 'lucide-react'
+import { Settings, Shield, Save, Camera } from 'lucide-react'
+import { useAuth } from '@/lib/auth'
+import ProfilePictureUpload from '@/components/ui/ProfilePictureUpload'
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState('school')
-  const [settings, setSettings] = useState({
-    school_name: 'Springfield High School',
-    school_address: '123 Education Street, Springfield',
-    school_phone: '+1-555-0123',
-    school_email: 'admin@springfield.edu',
-    academic_year: '2024-2025',
-    term_start: '2024-09-01',
-    term_end: '2024-12-15',
-    timezone: 'America/New_York',
-    language: 'English',
-    currency: 'USD',
-    notifications_email: true,
-    notifications_sms: false,
-    auto_backup: true,
-    backup_frequency: 'daily',
-    max_class_size: 30,
-    attendance_required: true,
-  })
+  const { user, updateUser } = useAuth()
+  const [activeTab, setActiveTab] = useState('account')
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [savingPassword, setSavingPassword] = useState(false)
+  const [savingPicture, setSavingPicture] = useState(false)
 
-  const tabs = [
-    { id: 'school', name: 'School Information', icon: School },
-    { id: 'academic', name: 'Academic Settings', icon: Calendar },
-    { id: 'users', name: 'User Management', icon: Users },
-    { id: 'notifications', name: 'Notifications', icon: Bell },
-    { id: 'security', name: 'Security', icon: Shield },
-    { id: 'system', name: 'System', icon: Database },
-  ]
+  const role = String(user?.role || '').toLowerCase()
 
-  const handleSettingChange = (key, value) => {
-    setSettings(prev => ({ ...prev, [key]: value }))
-  }
-
-  const handleSave = () => {
-    // Here you would save the settings
-    console.log('Saving settings:', settings)
-    toast.success('Settings saved successfully!')
-  }
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'school':
-        return (
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Basic Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">School Name</label>
-                    <input
-                      type="text"
-                      value={settings.school_name}
-                      onChange={(e) => handleSettingChange('school_name', e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                    <input
-                      type="text"
-                      value={settings.school_phone}
-                      onChange={(e) => handleSettingChange('school_phone', e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                  <textarea
-                    value={settings.school_address}
-                    onChange={(e) => handleSettingChange('school_address', e.target.value)}
-                    rows={3}
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                  <input
-                    type="email"
-                    value={settings.school_email}
-                    onChange={(e) => handleSettingChange('school_email', e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )
-
-      case 'academic':
-        return (
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Academic Year Settings</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Academic Year</label>
-                    <input
-                      type="text"
-                      value={settings.academic_year}
-                      onChange={(e) => handleSettingChange('academic_year', e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Term Start Date</label>
-                    <input
-                      type="date"
-                      value={settings.term_start}
-                      onChange={(e) => handleSettingChange('term_start', e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Term End Date</label>
-                    <input
-                      type="date"
-                      value={settings.term_end}
-                      onChange={(e) => handleSettingChange('term_end', e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Maximum Class Size</label>
-                    <input
-                      type="number"
-                      value={settings.max_class_size}
-                      onChange={(e) => handleSettingChange('max_class_size', parseInt(e.target.value))}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Attendance Required</label>
-                    <select
-                      value={settings.attendance_required ? 'true' : 'false'}
-                      onChange={(e) => handleSettingChange('attendance_required', e.target.value === 'true')}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="true">Yes</option>
-                      <option value="false">No</option>
-                    </select>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )
-
-      case 'notifications':
-        return (
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Notification Preferences</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium">Email Notifications</h4>
-                    <p className="text-sm text-gray-500">Receive notifications via email</p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={settings.notifications_email}
-                      onChange={(e) => handleSettingChange('notifications_email', e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                  </label>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium">SMS Notifications</h4>
-                    <p className="text-sm text-gray-500">Receive notifications via SMS</p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={settings.notifications_sms}
-                      onChange={(e) => handleSettingChange('notifications_sms', e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                  </label>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )
-
-      case 'system':
-        return (
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>System Configuration</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Timezone</label>
-                    <select
-                      value={settings.timezone}
-                      onChange={(e) => handleSettingChange('timezone', e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="America/New_York">Eastern Time</option>
-                      <option value="America/Chicago">Central Time</option>
-                      <option value="America/Denver">Mountain Time</option>
-                      <option value="America/Los_Angeles">Pacific Time</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Language</label>
-                    <select
-                      value={settings.language}
-                      onChange={(e) => handleSettingChange('language', e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="English">English</option>
-                      <option value="Spanish">Spanish</option>
-                      <option value="French">French</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium">Automatic Backup</h4>
-                    <p className="text-sm text-gray-500">Enable automatic system backups</p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={settings.auto_backup}
-                      onChange={(e) => handleSettingChange('auto_backup', e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                  </label>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )
-
-      default:
-        return <div>Select a tab to view settings</div>
+  const handleChangePassword = async () => {
+    setSavingPassword(true)
+    try {
+      const res = await fetch('/api/account/password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || 'Failed to update password')
+      toast.success('Password updated')
+      setCurrentPassword('')
+      setNewPassword('')
+      setConfirmPassword('')
+    } catch (e) {
+      toast.error(e.message || 'Failed to update password')
+    } finally {
+      setSavingPassword(false)
     }
   }
+
+  const handleUploadPicture = async (file) => {
+    setSavingPicture(true)
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await fetch('/api/account/profile-picture', { method: 'POST', body: fd })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || 'Failed to upload profile picture')
+      if (json?.user) updateUser(json.user)
+      toast.success('Profile picture updated')
+    } catch (e) {
+      toast.error(e.message || 'Failed to upload profile picture')
+    } finally {
+      setSavingPicture(false)
+    }
+  }
+
+  const tabs = [{ id: 'account', name: 'Account', icon: Shield }]
 
   return (
     <DashboardLayout title="Settings">
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">System Settings</h1>
-            <p className="text-gray-600">Configure your school management system</p>
-          </div>
-          <div className="flex space-x-2">
-            <Button variant="outline">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Reset
-            </Button>
-            <Button onClick={handleSave}>
-              <Save className="h-4 w-4 mr-2" />
-              Save Changes
-            </Button>
-          </div>
+        <div className="flex items-center gap-3">
+          <Settings className="h-6 w-6 text-gray-700" />
+          <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Settings Navigation */}
-          <Card className="lg:col-span-1">
-            <CardHeader>
-              <CardTitle>Settings</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <nav className="space-y-2">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center px-3 py-2 text-left rounded-md transition-colors ${
-                      activeTab === tab.id
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'text-gray-600 hover:bg-gray-100'
-                    }`}
+        <div className="flex gap-2">
+          {tabs.map((t) => (
+            <Button
+              key={t.id}
+              variant={activeTab === t.id ? 'default' : 'outline'}
+              onClick={() => setActiveTab(t.id)}
+            >
+              <t.icon className="h-4 w-4 mr-2" />
+              {t.name}
+            </Button>
+          ))}
+        </div>
+
+        {activeTab === 'account' && (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Camera className="h-5 w-5" />
+                  Profile Picture
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ProfilePictureUpload
+                  currentImage={user?.profile_picture_url || null}
+                  role={role || 'teacher'}
+                  disabled={savingPicture}
+                  onImageSelect={handleUploadPicture}
+                  onImageRemove={async () => {
+                    toast.error('Remove not supported yet')
+                  }}
+                />
+                <div className="text-sm text-gray-600">
+                  Assigned classes and subjects are managed by Admin and cannot be changed here.
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-5 w-5" />
+                  Change Password
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Current Password
+                    </label>
+                    <input
+                      type="password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      New Password
+                    </label>
+                    <input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Confirm Password
+                    </label>
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <Button
+                    onClick={handleChangePassword}
+                    disabled={
+                      savingPassword || !currentPassword || !newPassword || !confirmPassword
+                    }
+                    className="flex items-center gap-2"
                   >
-                    <tab.icon className="h-4 w-4 mr-3" />
-                    {tab.name}
-                  </button>
-                ))}
-              </nav>
-            </CardContent>
-          </Card>
-
-          {/* Settings Content */}
-          <div className="lg:col-span-3">
-            {renderTabContent()}
+                    <Save className="h-4 w-4" />
+                    Save Password
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
-        </div>
+        )}
       </div>
     </DashboardLayout>
   )

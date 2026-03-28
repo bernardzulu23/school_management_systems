@@ -2,8 +2,19 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'next-themes'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SchoolProvider } from '@/lib/context/SchoolContext'
+import { useAuth } from '@/lib/auth'
+
+function AuthSessionSync({ children }) {
+  const syncSession = useAuth((s) => s.syncSession)
+
+  useEffect(() => {
+    syncSession()
+  }, [syncSession])
+
+  return children
+}
 
 export function Providers({ children }) {
   const [queryClient] = useState(
@@ -21,9 +32,11 @@ export function Providers({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
       <SchoolProvider>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
+        <AuthSessionSync>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+          </ThemeProvider>
+        </AuthSessionSync>
       </SchoolProvider>
     </QueryClientProvider>
   )

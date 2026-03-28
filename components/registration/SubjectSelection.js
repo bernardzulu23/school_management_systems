@@ -12,6 +12,7 @@ export default function SubjectSelection({
   onSubjectsChange,
   userRole = 'student',
   maxSelections = null,
+  valueType = 'id',
 }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
@@ -38,26 +39,37 @@ export default function SubjectSelection({
     setFilteredSubjects(subjects)
   }, [searchQuery, selectedCategory])
 
-  const handleSubjectToggle = (subjectId) => {
-    const isSelected = selectedSubjects.includes(subjectId)
+  const getValue = (subject) => {
+    return valueType === 'name' ? subject.name : subject.id
+  }
+
+  const isSelectedValue = (value) => {
+    return selectedSubjects.includes(value)
+  }
+
+  const handleSubjectToggle = (value) => {
+    const isSelected = isSelectedValue(value)
     let newSelection
 
     if (isSelected) {
       // Remove subject
-      newSelection = selectedSubjects.filter((id) => id !== subjectId)
+      newSelection = selectedSubjects.filter((v) => v !== value)
     } else {
       // Add subject (check max limit)
       if (maxSelections && selectedSubjects.length >= maxSelections) {
         toast.error(`You can only select up to ${maxSelections} subjects`)
         return
       }
-      newSelection = [...selectedSubjects, subjectId]
+      newSelection = [...selectedSubjects, value]
     }
 
     onSubjectsChange(newSelection)
   }
 
   const getSelectedSubjectNames = () => {
+    if (valueType === 'name') {
+      return selectedSubjects.map((v) => String(v))
+    }
     return SCHOOL_SUBJECTS.filter((subject) => selectedSubjects.includes(subject.id)).map(
       (subject) => subject.name
     )
@@ -127,7 +139,8 @@ export default function SubjectSelection({
             className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 appearance-none"
             onChange={(e) => {
               if (e.target.value) {
-                handleSubjectToggle(Number(e.target.value))
+                const value = valueType === 'name' ? String(e.target.value) : Number(e.target.value)
+                handleSubjectToggle(value)
                 e.target.value = ''
               }
             }}
@@ -137,9 +150,9 @@ export default function SubjectSelection({
               Select a subject to add...
             </option>
             {filteredSubjects
-              .filter((s) => !selectedSubjects.includes(s.id))
+              .filter((s) => !isSelectedValue(getValue(s)))
               .map((subject) => (
-                <option key={subject.id} value={subject.id}>
+                <option key={subject.id} value={getValue(subject)}>
                   {subject.name} ({subject.category})
                 </option>
               ))}
@@ -171,7 +184,10 @@ export default function SubjectSelection({
           <h4 className="text-sm font-medium text-gray-700">Selected Subjects:</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {selectedSubjects.map((subjectId) => {
-              const subject = SCHOOL_SUBJECTS.find((s) => s.id === Number(subjectId))
+              const subject =
+                valueType === 'name'
+                  ? SCHOOL_SUBJECTS.find((s) => s.name === String(subjectId))
+                  : SCHOOL_SUBJECTS.find((s) => s.id === Number(subjectId))
               if (!subject) return null
 
               const colorClass = getCategoryColor(subject.category)
@@ -189,7 +205,7 @@ export default function SubjectSelection({
                     </div>
                   </div>
                   <button
-                    onClick={() => handleSubjectToggle(subject.id)}
+                    onClick={() => handleSubjectToggle(getValue(subject))}
                     className="p-1.5 rounded-full text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors"
                     title="Remove subject"
                   >

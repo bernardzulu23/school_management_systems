@@ -2,8 +2,8 @@ import React from 'react'
 import { GraduationCap, FileText, Building, Target, BookOpen } from 'lucide-react'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
-import SubjectSelection from '@/components/registration/SubjectSelection'
 import { useSubjects } from '@/lib/hooks/useSubjects'
+import SubjectSelection from '@/components/registration/SubjectSelection'
 
 export default function AcademicInfoStep({ formData, errors, onInputChange, onSubjectsChange }) {
   const { subjects } = useSubjects()
@@ -94,6 +94,7 @@ export default function AcademicInfoStep({ formData, errors, onInputChange, onSu
               onSubjectsChange={onSubjectsChange}
               userRole="student"
               maxSelections={8}
+              valueType="name"
             />
             {errors.selected_subjects && (
               <p className="text-red-500 text-sm mt-1">{errors.selected_subjects}</p>
@@ -109,14 +110,16 @@ export default function AcademicInfoStep({ formData, errors, onInputChange, onSu
                 {formData.selected_subjects?.length || 0} subjects
                 {formData.selected_subjects?.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-2">
-                    {formData.selected_subjects.map((subjectId) => {
-                      const subject = subjects.find((s) => s.id === subjectId)
+                    {formData.selected_subjects.map((subjectName) => {
+                      const subject = subjects.find((s) => s.name === subjectName)
                       return (
                         <span
-                          key={subjectId}
+                          key={subjectName}
                           className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
                         >
-                          {subject ? subject.name : subjectId}
+                          {subject
+                            ? `${subject.name}${subject.category ? ` (${subject.category})` : ''}`
+                            : subjectName}
                         </span>
                       )
                     })}

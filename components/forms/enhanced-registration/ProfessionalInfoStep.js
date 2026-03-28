@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Briefcase, FileText, GraduationCap, BookOpen, Plus, Trash2 } from 'lucide-react'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 import { api } from '@/lib/api'
-import { DEPARTMENTS as FALLBACK_DEPARTMENTS } from '@/lib/constants'
+import { DEPARTMENTS as FALLBACK_DEPARTMENTS, GRADE_LEVELS, SECTIONS } from '@/lib/constants'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
+import SubjectSelection from '@/components/registration/SubjectSelection'
 
 export default function ProfessionalInfoStep({
   formData,
@@ -45,17 +46,10 @@ export default function ProfessionalInfoStep({
   const teachingAssignments = Array.isArray(formData.teaching_assignments)
     ? formData.teaching_assignments
     : []
-
-  const zambianClassOptions = (() => {
-    const sections = ['A', 'B', 'C', 'D']
-    const grades = [8, 9, 10, 11, 12]
-    return grades.flatMap((g) => sections.map((s) => ({ value: `${g}${s}`, label: `${g}${s}` })))
-  })()
-
-  const zambianSubjectOptions = SCHOOL_SUBJECTS.map((s) => ({
-    value: s.name,
-    label: s.name,
-  }))
+  const subjectLabel = (name) => {
+    const found = SCHOOL_SUBJECTS.find((s) => s.name === name)
+    return found ? `${found.name} (${found.category})` : name
+  }
 
   const addTeachingAssignmentRow = () => {
     const next = [
@@ -75,18 +69,24 @@ export default function ProfessionalInfoStep({
     onTeachingAssignmentsChange?.(next)
   }
 
-  const resolveClassName = (value) => {
-    if (!value) return { classId: '', className: '' }
-    const found = classes.find((c) => c.id === value)
-    if (found) return { classId: found.id, className: found.name }
-    return { classId: '', className: value }
-  }
-
   const resolveSubjectName = (value) => {
     if (!value) return { subjectId: '', subjectName: '' }
     const found = subjects.find((s) => s.id === value)
     if (found) return { subjectId: found.id, subjectName: found.name }
     return { subjectId: '', subjectName: value }
+  }
+
+  const updateClassFromParts = (index, nextYearGroup, nextSection) => {
+    const year_group = String(nextYearGroup || '').trim()
+    const section = String(nextSection || '').trim()
+    const className = year_group && section ? `${year_group}${section}` : ''
+    const match = className ? classes.find((c) => c.name === className) : null
+    updateTeachingAssignmentRow(index, {
+      year_group,
+      section,
+      classId: match?.id || '',
+      className: match?.name || className,
+    })
   }
 
   return (
@@ -212,23 +212,31 @@ export default function ProfessionalInfoStep({
               {teachingAssignments.map((row, idx) => (
                 <div key={idx} className="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
                   <div className="md:col-span-2">
-                    <label className="block text-sm text-gray-700 mb-1">Class</label>
+                    <label className="block text-sm text-gray-700 mb-1">Grade</label>
                     <select
-                      value={row.classId || row.className || ''}
-                      onChange={(e) =>
-                        updateTeachingAssignmentRow(idx, resolveClassName(e.target.value))
-                      }
+                      value={row.year_group || ''}
+                      onChange={(e) => updateClassFromParts(idx, e.target.value, row.section)}
                       className="w-full border rounded-md p-2 text-sm"
                     >
-                      <option value="">Select Class</option>
-                      {classes.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.name}
+                      <option value="">Select Year Group</option>
+                      {GRADE_LEVELS.map((g) => (
+                        <option key={g} value={g}>
+                          {g}
                         </option>
                       ))}
-                      {zambianClassOptions.map((c) => (
-                        <option key={c.value} value={c.value}>
-                          {c.label}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-700 mb-1">Section</label>
+                    <select
+                      value={row.section || ''}
+                      onChange={(e) => updateClassFromParts(idx, row.year_group, e.target.value)}
+                      className="w-full border rounded-md p-2 text-sm"
+                    >
+                      <option value="">Select Section</option>
+                      {SECTIONS.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
                         </option>
                       ))}
                     </select>
@@ -245,12 +253,14 @@ export default function ProfessionalInfoStep({
                       <option value="">Select Subject</option>
                       {subjects.map((s) => (
                         <option key={s.id} value={s.id}>
-                          {s.name}
+                          {subjectLabel(s.name)}
                         </option>
                       ))}
-                      {zambianSubjectOptions.map((s) => (
-                        <option key={s.value} value={s.value}>
-                          {s.label}
+                      {SCHOOL_SUBJECTS.filter(
+                        (s) => !subjects.some((db) => db.name === s.name)
+                      ).map((s) => (
+                        <option key={s.id} value={s.name}>
+                          {subjectLabel(s.name)}
                         </option>
                       ))}
                     </select>
@@ -283,26 +293,12 @@ export default function ProfessionalInfoStep({
           </h4>
 
           <div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {SCHOOL_SUBJECTS.slice(0, 28).map((subject) => (
-                <label key={subject.id} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={(formData.assigned_subjects || []).includes(subject.name)}
-                    onChange={(e) => {
-                      const current = Array.isArray(formData.assigned_subjects)
-                        ? formData.assigned_subjects
-                        : []
-                      const next = e.target.checked
-                        ? [...current, subject.name]
-                        : current.filter((n) => n !== subject.name)
-                      onSubjectsChange?.(next)
-                    }}
-                  />
-                  <span>{subject.name}</span>
-                </label>
-              ))}
-            </div>
+            <SubjectSelection
+              selectedSubjects={formData.assigned_subjects || []}
+              onSubjectsChange={onSubjectsChange}
+              userRole="teacher"
+              valueType="name"
+            />
             {errors.assigned_subjects && (
               <p className="text-red-500 text-sm mt-1">{errors.assigned_subjects}</p>
             )}
