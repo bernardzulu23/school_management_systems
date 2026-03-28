@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Briefcase, FileText, GraduationCap, BookOpen, Plus, Trash2 } from 'lucide-react'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
-import { api } from '@/lib/api'
-import { DEPARTMENTS as FALLBACK_DEPARTMENTS, GRADE_LEVELS, SECTIONS } from '@/lib/constants'
+import { DEPARTMENTS as FALLBACK_DEPARTMENTS } from '@/lib/constants'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
 
 export default function ProfessionalInfoStep({
@@ -12,34 +11,10 @@ export default function ProfessionalInfoStep({
   onDepartmentsChange,
   onTeachingAssignmentsChange,
   role,
+  classes = [],
+  subjects = [],
+  departments = [],
 }) {
-  const [classes, setClasses] = useState([])
-  const [subjects, setSubjects] = useState([])
-  const [departments, setDepartments] = useState([])
-
-  useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        const [classesRes, subjectsRes, departmentsRes] = await Promise.all([
-          api.get('/classes'),
-          api.get('/subjects'),
-          api.get('/departments'),
-        ])
-
-        const classList = Array.isArray(classesRes.data?.data) ? classesRes.data.data : []
-        const subjectList = Array.isArray(subjectsRes.data?.data) ? subjectsRes.data.data : []
-        const deptList = Array.isArray(departmentsRes.data?.data) ? departmentsRes.data.data : []
-
-        setClasses(classList)
-        setSubjects(subjectList)
-        setDepartments(deptList)
-      } catch (error) {
-        console.error('Failed to fetch classes:', error)
-      }
-    }
-    fetchClasses()
-  }, [])
-
   const departmentIds = Array.isArray(formData.department_ids) ? formData.department_ids : []
   const teachingAssignments = Array.isArray(formData.teaching_assignments)
     ? formData.teaching_assignments
@@ -49,7 +24,28 @@ export default function ProfessionalInfoStep({
     return found ? `${found.name} (${found.category})` : name
   }
 
-  const teacherYearGroups = [
+  const allowedYearGroups = new Set([
+    'Form 1',
+    'Form 2',
+    'Form 3',
+    'Form 4',
+    'Form 5',
+    'Form 6',
+    'Grade 10',
+    'Grade 11',
+    'Grade 12',
+  ])
+
+  const classGroups = classes
+    .filter((c) => allowedYearGroups.has(String(c.year_group || '').trim()))
+    .reduce((acc, c) => {
+      const yg = String(c.year_group || '').trim()
+      if (!acc[yg]) acc[yg] = []
+      acc[yg].push(c)
+      return acc
+    }, {})
+
+  const yearOrder = [
     'Form 1',
     'Form 2',
     'Form 3',
@@ -61,11 +57,16 @@ export default function ProfessionalInfoStep({
     'Grade 12',
   ]
 
+  const departmentOptions =
+    departments.length > 0 ? departments : FALLBACK_DEPARTMENTS.map((name) => ({ id: name, name }))
+
+  const departmentNameById = (id) => {
+    const found = departmentOptions.find((d) => d.id === id)
+    return found ? found.name : String(id)
+  }
+
   const addTeachingAssignmentRow = () => {
-    const next = [
-      ...teachingAssignments,
-      { classId: '', subjectId: '', className: '', subjectName: '' },
-    ]
+    const next = [...teachingAssignments, { classId: '', subjectId: '' }]
     onTeachingAssignmentsChange?.(next)
   }
 
@@ -77,26 +78,6 @@ export default function ProfessionalInfoStep({
   const updateTeachingAssignmentRow = (index, patch) => {
     const next = teachingAssignments.map((row, i) => (i === index ? { ...row, ...patch } : row))
     onTeachingAssignmentsChange?.(next)
-  }
-
-  const resolveSubjectName = (value) => {
-    if (!value) return { subjectId: '', subjectName: '' }
-    const found = subjects.find((s) => s.id === value)
-    if (found) return { subjectId: found.id, subjectName: found.name }
-    return { subjectId: '', subjectName: value }
-  }
-
-  const updateClassFromParts = (index, nextYearGroup, nextSection) => {
-    const year_group = String(nextYearGroup || '').trim()
-    const section = String(nextSection || '').trim()
-    const className = year_group && section ? `${year_group}${section}` : ''
-    const match = className ? classes.find((c) => c.name === className) : null
-    updateTeachingAssignmentRow(index, {
-      year_group,
-      section,
-      classId: match?.id || '',
-      className: match?.name || className,
-    })
   }
 
   return (
@@ -171,12 +152,9 @@ export default function ProfessionalInfoStep({
               Departments (Multi-select)
             </h4>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {(departments.length > 0
-                ? departments
-                : FALLBACK_DEPARTMENTS.map((name) => ({ id: name, name }))
-              ).map((dept) => (
-                <label key={dept.id} className="flex items-center gap-2 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-900">
+              {departmentOptions.map((dept) => (
+                <label key={dept.id} className="flex items-center gap-2 text-sm text-gray-900">
                   <input
                     type="checkbox"
                     checked={departmentIds.includes(dept.id)}
@@ -187,10 +165,22 @@ export default function ProfessionalInfoStep({
                       onDepartmentsChange?.(next)
                     }}
                   />
-                  <span>{dept.name}</span>
+                  <span className="text-gray-900">{dept.name}</span>
                 </label>
               ))}
             </div>
+            {departmentIds.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {departmentIds.map((id) => (
+                  <span
+                    key={id}
+                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-white border border-indigo-200 text-indigo-900"
+                  >
+                    {departmentNameById(id)}
+                  </span>
+                ))}
+              </div>
+            )}
             {errors.department_ids && (
               <p className="text-red-500 text-sm mt-2">{errors.department_ids}</p>
             )}
@@ -222,54 +212,47 @@ export default function ProfessionalInfoStep({
               {teachingAssignments.map((row, idx) => (
                 <div key={idx} className="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
                   <div className="md:col-span-2">
-                    <label className="block text-sm text-gray-700 mb-1">Grade</label>
+                    <label className="block text-sm text-gray-700 mb-1">Class</label>
                     <select
-                      value={row.year_group || ''}
-                      onChange={(e) => updateClassFromParts(idx, e.target.value, row.section)}
+                      value={row.classId || ''}
+                      onChange={(e) =>
+                        updateTeachingAssignmentRow(idx, { classId: String(e.target.value) })
+                      }
                       className="w-full border rounded-md p-2 text-sm"
                     >
-                      <option value="">Select Year Group</option>
-                      {(role === 'teacher' ? teacherYearGroups : GRADE_LEVELS).map((g) => (
-                        <option key={g} value={g}>
-                          {g}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm text-gray-700 mb-1">Section</label>
-                    <select
-                      value={row.section || ''}
-                      onChange={(e) => updateClassFromParts(idx, row.year_group, e.target.value)}
-                      className="w-full border rounded-md p-2 text-sm"
-                    >
-                      <option value="">Select Section</option>
-                      {SECTIONS.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
-                      ))}
+                      <option value="">Select Class</option>
+                      {yearOrder
+                        .filter(
+                          (yg) => Array.isArray(classGroups[yg]) && classGroups[yg].length > 0
+                        )
+                        .map((yg) => (
+                          <optgroup key={yg} label={yg}>
+                            {classGroups[yg]
+                              .slice()
+                              .sort((a, b) =>
+                                String(a.section || '').localeCompare(String(b.section || ''))
+                              )
+                              .map((c) => (
+                                <option key={c.id} value={c.id}>
+                                  {c.name}
+                                </option>
+                              ))}
+                          </optgroup>
+                        ))}
                     </select>
                   </div>
                   <div className="md:col-span-2">
                     <label className="block text-sm text-gray-700 mb-1">Subject</label>
                     <select
-                      value={row.subjectId || row.subjectName || ''}
+                      value={row.subjectId || ''}
                       onChange={(e) =>
-                        updateTeachingAssignmentRow(idx, resolveSubjectName(e.target.value))
+                        updateTeachingAssignmentRow(idx, { subjectId: String(e.target.value) })
                       }
                       className="w-full border rounded-md p-2 text-sm"
                     >
                       <option value="">Select Subject</option>
                       {subjects.map((s) => (
                         <option key={s.id} value={s.id}>
-                          {subjectLabel(s.name)}
-                        </option>
-                      ))}
-                      {SCHOOL_SUBJECTS.filter(
-                        (s) => !subjects.some((db) => db.name === s.name)
-                      ).map((s) => (
-                        <option key={s.id} value={s.name}>
                           {subjectLabel(s.name)}
                         </option>
                       ))}

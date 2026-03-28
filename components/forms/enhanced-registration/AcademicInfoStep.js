@@ -1,12 +1,49 @@
 import React from 'react'
-import { GraduationCap, FileText, Building, Target, BookOpen } from 'lucide-react'
+import { GraduationCap, FileText, Building, BookOpen } from 'lucide-react'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
-import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
 import { useSubjects } from '@/lib/hooks/useSubjects'
 import SubjectSelection from '@/components/registration/SubjectSelection'
 
-export default function AcademicInfoStep({ formData, errors, onInputChange, onSubjectsChange }) {
+export default function AcademicInfoStep({
+  formData,
+  errors,
+  onInputChange,
+  onSubjectsChange,
+  classes = [],
+}) {
   const { subjects } = useSubjects()
+  const allowedYearGroups = new Set([
+    'Form 1',
+    'Form 2',
+    'Form 3',
+    'Form 4',
+    'Form 5',
+    'Form 6',
+    'Grade 10',
+    'Grade 11',
+    'Grade 12',
+  ])
+
+  const classGroups = classes
+    .filter((c) => allowedYearGroups.has(String(c.year_group || '').trim()))
+    .reduce((acc, c) => {
+      const yg = String(c.year_group || '').trim()
+      if (!acc[yg]) acc[yg] = []
+      acc[yg].push(c)
+      return acc
+    }, {})
+
+  const yearOrder = [
+    'Form 1',
+    'Form 2',
+    'Form 3',
+    'Form 4',
+    'Form 5',
+    'Form 6',
+    'Grade 10',
+    'Grade 11',
+    'Grade 12',
+  ]
 
   return (
     <FormSection title="Academic Information" icon={GraduationCap}>
@@ -25,41 +62,31 @@ export default function AcademicInfoStep({ formData, errors, onInputChange, onSu
           />
 
           <FormGroup
-            label="Year Group"
-            name="year_group"
+            label="Class"
+            name="classId"
             type="select"
-            value={formData.year_group}
+            value={formData.classId || ''}
             onChange={onInputChange}
             required
-            error={errors.year_group}
+            error={errors.classId}
             icon={GraduationCap}
-            aria-describedby="year_group-error"
+            aria-describedby="classId-error"
           >
-            <option value="">Select Year Group</option>
-            {GRADE_LEVELS.map((level) => (
-              <option key={level} value={level}>
-                {level}
-              </option>
-            ))}
-          </FormGroup>
-
-          <FormGroup
-            label="Section"
-            name="section"
-            type="select"
-            value={formData.section}
-            onChange={onInputChange}
-            required
-            error={errors.section}
-            icon={Target}
-            aria-describedby="section-error"
-          >
-            <option value="">Select Section</option>
-            {SECTIONS.map((section) => (
-              <option key={section} value={section}>
-                {section}
-              </option>
-            ))}
+            <option value="">Select Class</option>
+            {yearOrder
+              .filter((yg) => Array.isArray(classGroups[yg]) && classGroups[yg].length > 0)
+              .map((yg) => (
+                <optgroup key={yg} label={yg}>
+                  {classGroups[yg]
+                    .slice()
+                    .sort((a, b) => String(a.section || '').localeCompare(String(b.section || '')))
+                    .map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                      </option>
+                    ))}
+                </optgroup>
+              ))}
           </FormGroup>
 
           <FormGroup

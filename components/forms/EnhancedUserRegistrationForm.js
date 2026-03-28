@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
 import {
@@ -18,6 +18,8 @@ import {
 // Shared Utilities & Constants
 import { USER_ROLES } from '@/lib/constants'
 import { handleInputChange, handleMultiSelectChange } from '@/lib/utils/formHelpers'
+import { api } from '@/lib/api'
+import { useAuth } from '@/lib/auth'
 
 // Sub-components
 import StepIndicator from './enhanced-registration/StepIndicator'
@@ -30,6 +32,9 @@ import ParentGuardianStep from './enhanced-registration/ParentGuardianStep'
 
 export default function EnhancedUserRegistrationForm({ role = 'student', onSubmit, onCancel }) {
   const [currentStep, setCurrentStep] = useState(1)
+  const currentUser = useAuth((s) => s.user)
+  const [lookupsLoading, setLookupsLoading] = useState(false)
+  const [lookups, setLookups] = useState({ classes: [], subjects: [], departments: [] })
   const [formData, setFormData] = useState({
     // Basic user info
     name: '',
@@ -54,6 +59,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
     exam_number: '',
     year_group: '',
     section: '',
+    classId: '',
     custom_class: '',
     department: '',
     department_ids: [],
@@ -123,6 +129,36 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
   const [completedSteps, setCompletedSteps] = useState(new Set())
+
+  useEffect(() => {
+    let active = true
+    const load = async () => {
+      setLookupsLoading(true)
+      try {
+        const [classesRes, subjectsRes, departmentsRes] = await Promise.all([
+          api.get('/classes'),
+          api.get('/subjects'),
+          api.get('/departments'),
+        ])
+        if (!active) return
+        setLookups({
+          classes: Array.isArray(classesRes.data?.data) ? classesRes.data.data : [],
+          subjects: Array.isArray(subjectsRes.data?.data) ? subjectsRes.data.data : [],
+          departments: Array.isArray(departmentsRes.data?.data) ? departmentsRes.data.data : [],
+        })
+      } catch {
+        if (!active) return
+        setLookups({ classes: [], subjects: [], departments: [] })
+      } finally {
+        if (!active) return
+        setLookupsLoading(false)
+      }
+    }
+    load()
+    return () => {
+      active = false
+    }
+  }, [])
 
   // Form Handlers
   const onInputChange = (e) => {
@@ -274,8 +310,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         if (!formData.qualifications.trim())
           newErrors.qualifications = 'Qualifications are required'
       } else if (role === 'student') {
-        if (!formData.year_group) newErrors.year_group = 'Year group is required'
-        if (!formData.section) newErrors.section = 'Section is required'
+        if (!formData.classId) newErrors.classId = 'Class is required'
         if (!formData.exam_number?.trim()) newErrors.exam_number = 'Exam number is required'
         if (!formData.selected_subjects || formData.selected_subjects.length < 8) {
           newErrors.selected_subjects = 'At least 8 subjects must be selected'
@@ -319,7 +354,30 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
 
     setLoading(true)
     try {
-      const submitData = { ...formData, role }
+      let submitData = {
+        ...formData,
+        role: String(role || '').toUpperCase(),
+        schoolId: currentUser?.schoolId,
+      }
+
+      if (role === 'teacher') {
+        const assignments = Array.isArray(formData.teaching_assignments)
+          ? formData.teaching_assignments
+              .filter((a) => a?.classId && a?.subjectId)
+              .map((a) => ({
+                classId: String(a.classId),
+                subjectId: String(a.subjectId),
+              }))
+          : []
+
+        submitData = {
+          ...submitData,
+          assignments,
+          departmentIds: Array.isArray(formData.department_ids)
+            ? formData.department_ids.map(String)
+            : [],
+        }
+      }
       await onSubmit(submitData)
       toast.success('Registration completed successfully!')
     } catch (error) {
@@ -347,15 +405,26 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         )
       case 3:
         if (role === 'student') {
+          if (lookupsLoading) {
+            return <div className="text-sm text-gray-600">Loading classes and subjects…</div>
+          }
           return (
             <AcademicInfoStep
               formData={formData}
               errors={errors}
               onInputChange={onInputChange}
               onSubjectsChange={onSubjectsChange}
+              classes={lookups.classes}
             />
           )
         } else if (role === 'teacher' || role === 'hod') {
+          if (lookupsLoading) {
+            return (
+              <div className="text-sm text-gray-600">
+                Loading classes, subjects, and departments…
+              </div>
+            )
+          }
           return (
             <ProfessionalInfoStep
               formData={formData}
@@ -364,6 +433,9 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
               onDepartmentsChange={onDepartmentsChange}
               onTeachingAssignmentsChange={onTeachingAssignmentsChange}
               role={role}
+              classes={lookups.classes}
+              subjects={lookups.subjects}
+              departments={lookups.departments}
             />
           )
         } else {

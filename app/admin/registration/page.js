@@ -47,7 +47,8 @@ function RegistrationContent() {
       // Send registration data to API
       const response = await api.post('/auth/register', {
         ...formData,
-        role: userType,
+        role: String(userType || '').toUpperCase(),
+        schoolId: user?.schoolId,
       })
 
       if (response.data.success) {

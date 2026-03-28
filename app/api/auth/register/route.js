@@ -42,6 +42,10 @@ export const POST = withErrorHandler(async (request) => {
     )
   }
 
+  if (body.schoolId && String(body.schoolId) !== String(schoolId)) {
+    return NextResponse.json({ success: false, message: 'Invalid school context' }, { status: 400 })
+  }
+
   // 3. Check duplicate
   const existingUser = await prisma.user.findUnique({
     where: { schoolId_email: { schoolId, email } },
@@ -82,9 +86,28 @@ export const POST = withErrorHandler(async (request) => {
           ? body.selected_subjects.map(String)
           : []
 
-        const className = `${body.year_group || ''}${body.section || ''}`.trim()
-        if (!className) {
-          throw new Error('Year group and section are required to form a class name')
+        const incomingClassId = body.classId ? String(body.classId).trim() : ''
+        const fallbackClassName = `${body.year_group || ''}${body.section || ''}`.trim()
+
+        const classRecord = incomingClassId
+          ? await tx.class.findFirst({
+              where: { id: incomingClassId, schoolId },
+            })
+          : fallbackClassName
+            ? await tx.class.upsert({
+                where: { schoolId_name: { schoolId, name: fallbackClassName } },
+                create: {
+                  schoolId,
+                  name: fallbackClassName,
+                  year_group: String(body.year_group || '').trim() || fallbackClassName,
+                  section: String(body.section || '').trim() || '',
+                },
+                update: {},
+              })
+            : null
+
+        if (!classRecord) {
+          throw new Error('Class is required')
         }
 
         const student = await tx.student.create({
@@ -92,7 +115,7 @@ export const POST = withErrorHandler(async (request) => {
             userId: user.id,
             name: user.name,
             schoolId,
-            class: className,
+            class: classRecord.name,
             exam_number: body.exam_number,
             previous_school: body.previous_school,
             selected_subjects: selectedSubjects,
@@ -116,62 +139,53 @@ export const POST = withErrorHandler(async (request) => {
           },
         })
 
-        if (className) {
-          const classRecord = await tx.class.upsert({
-            where: { schoolId_name: { schoolId, name: className } },
-            create: {
-              schoolId,
-              name: className,
-              year_group: String(body.year_group || '').trim() || className,
-              section: String(body.section || '').trim() || '',
-            },
-            update: {},
-          })
-
-          if (selectedSubjects.length > 0) {
-            const subjectRecords = await Promise.all(
-              selectedSubjects.map((subjectName) =>
-                tx.subject.upsert({
-                  where: {
-                    schoolId_name: {
-                      schoolId,
-                      name: subjectName,
-                    },
-                  },
-                  create: {
+        if (selectedSubjects.length > 0) {
+          const subjectRecords = await Promise.all(
+            selectedSubjects.map((subjectName) =>
+              tx.subject.upsert({
+                where: {
+                  schoolId_name: {
                     schoolId,
                     name: subjectName,
-                    topics: [],
                   },
-                  update: {},
-                })
-              )
+                },
+                create: {
+                  schoolId,
+                  name: subjectName,
+                  topics: [],
+                },
+                update: {},
+              })
             )
+          )
 
-            await tx.pupilSubjectEnrollment.createMany({
-              data: subjectRecords.map((sub) => ({
-                schoolId,
-                pupilId: student.id,
-                subjectId: sub.id,
-                classId: classRecord.id,
-              })),
-              skipDuplicates: true,
-            })
-          }
+          await tx.pupilSubjectEnrollment.createMany({
+            data: subjectRecords.map((sub) => ({
+              schoolId,
+              pupilId: student.id,
+              subjectId: sub.id,
+              classId: classRecord.id,
+            })),
+            skipDuplicates: true,
+          })
         }
       } else if (role === 'teacher') {
-        const teachingAssignmentsRaw = Array.isArray(body.teaching_assignments)
-          ? body.teaching_assignments
-          : []
+        const teachingAssignmentsRaw = Array.isArray(body.assignments)
+          ? body.assignments
+          : Array.isArray(body.teaching_assignments)
+            ? body.teaching_assignments
+            : []
 
         const assignedSubjects = Array.isArray(body.assigned_subjects)
           ? body.assigned_subjects.map(String)
           : []
 
         const resolvedDepartmentIds = []
-        const rawDepartmentIds = Array.isArray(body.department_ids)
-          ? body.department_ids.map(String)
-          : []
+        const rawDepartmentIds = Array.isArray(body.departmentIds)
+          ? body.departmentIds.map(String)
+          : Array.isArray(body.department_ids)
+            ? body.department_ids.map(String)
+            : []
 
         if (rawDepartmentIds.length > 0) {
           for (const rawId of rawDepartmentIds) {
@@ -257,6 +271,9 @@ export const POST = withErrorHandler(async (request) => {
                   select: { id: true },
                 })
               : null
+
+          if (classId && !resolvedClass) throw new Error('Invalid classId')
+          if (subjectId && !resolvedSubject) throw new Error('Invalid subjectId')
 
           if (!resolvedClass || !resolvedSubject) continue
 
