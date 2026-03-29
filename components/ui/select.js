@@ -92,7 +92,7 @@ export const SelectItem = ({ children, value, className = '' }) => {
         onValueChange(value)
         setOpen(false)
       }}
-      className={`relative flex w-full cursor-default select-none items-center rounded-lg py-2 pl-8 pr-2 text-sm outline-none cursor-pointer text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 ${isSelected ? 'font-semibold bg-royalPurple-accentBg text-royalPurple-accentTx' : ''} ${className}`}
+      className={`relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-2 text-sm outline-none text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 ${isSelected ? 'font-semibold bg-royalPurple-accentBg text-royalPurple-accentTx' : ''} ${className}`}
     >
       {isSelected && (
         <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">

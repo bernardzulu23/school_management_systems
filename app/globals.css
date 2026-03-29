@@ -132,6 +132,13 @@ body {
   .select {
     @apply w-full bg-royalPurple-card2 border border-royalPurple-border text-royalPurple-text1 rounded-lg focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2 appearance-none;
     padding: 0.75rem 0.875rem;
+    color-scheme: dark;
+  }
+
+  .select option,
+  .select optgroup {
+    background-color: var(--rp-card2);
+    color: var(--rp-text1);
   }
 
   .loading-skeleton {

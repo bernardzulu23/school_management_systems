@@ -21,7 +21,41 @@ export async function GET(request, { params }) {
 
   if (!hod) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  return NextResponse.json({ success: true, data: hod })
+  let assignedClasses = []
+  let assignedSubjects = []
+
+  if (hod.departmentId) {
+    const teacherDepartments = await prisma.teacherDepartment.findMany({
+      where: { departmentId: hod.departmentId },
+      select: { teacherId: true },
+    })
+
+    const teacherIds = Array.from(
+      new Set(teacherDepartments.map((t) => t.teacherId).filter(Boolean))
+    )
+
+    if (teacherIds.length > 0) {
+      const assignments = await prisma.teachingAssignment.findMany({
+        where: { schoolId, teacherId: { in: teacherIds } },
+        include: { class: true, subject: true },
+      })
+
+      assignedClasses = Array.from(new Set(assignments.map((a) => a.class?.name).filter(Boolean)))
+
+      assignedSubjects = Array.from(
+        new Set(assignments.map((a) => a.subject?.name).filter(Boolean))
+      )
+    }
+  }
+
+  return NextResponse.json({
+    success: true,
+    data: {
+      ...hod,
+      assignedClasses,
+      assignedSubjects,
+    },
+  })
 }
 
 export async function PUT(request, { params }) {

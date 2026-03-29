@@ -678,6 +678,37 @@ function UserDetailsModal({ user, onClose, loading }) {
     return sub ? sub.name : id
   }
 
+  const derivedTeacherClasses =
+    Array.isArray(data.classes) && data.classes.length > 0
+      ? data.classes
+      : Array.isArray(data.teachingAssignments)
+        ? Array.from(
+            new Map(
+              data.teachingAssignments
+                .map((a) => a?.class)
+                .filter(Boolean)
+                .map((cls) => [cls.id || cls.name, cls])
+            ).values()
+          )
+        : []
+
+  const derivedTeacherSubjects =
+    Array.isArray(data.assignedSubjects) && data.assignedSubjects.length > 0
+      ? data.assignedSubjects
+      : Array.isArray(data.teachingAssignments)
+        ? Array.from(
+            new Set(
+              data.teachingAssignments
+                .map((a) => a?.subject?.name || a?.subjectId)
+                .filter(Boolean)
+                .map(String)
+            )
+          )
+        : []
+
+  const hodAssignedClasses = Array.isArray(data.assignedClasses) ? data.assignedClasses : []
+  const hodAssignedSubjects = Array.isArray(data.assignedSubjects) ? data.assignedSubjects : []
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-royalPurple-deep/80">
       <div className="bg-royalPurple-card dark:bg-royalPurple-card rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-royalPurple-border dark:border-royalPurple-border">
@@ -793,13 +824,13 @@ function UserDetailsModal({ user, onClose, loading }) {
                   Assigned Classes
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {data.classes && data.classes.length > 0 ? (
-                    data.classes.map((cls) => (
+                  {derivedTeacherClasses.length > 0 ? (
+                    derivedTeacherClasses.map((cls) => (
                       <span
-                        key={cls.id}
+                        key={cls.id || cls.name}
                         className="px-2 py-1 bg-royalPurple-accent text-royalPurple-accentTx dark:bg-royalPurple-accent/20 dark:text-royalPurple-accentTx rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
                       >
-                        {cls.name}
+                        {cls.name || String(cls)}
                       </span>
                     ))
                   ) : (
@@ -813,10 +844,79 @@ function UserDetailsModal({ user, onClose, loading }) {
                   Assigned Subjects
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {data.assignedSubjects && data.assignedSubjects.length > 0 ? (
-                    data.assignedSubjects.map((sub, idx) => (
+                  {derivedTeacherSubjects.length > 0 ? (
+                    derivedTeacherSubjects.map((sub, idx) => (
                       <span
-                        key={idx}
+                        key={`${sub}-${idx}`}
+                        className="px-2 py-1 bg-royalPurple-pill text-royalPurple-pillTx dark:bg-royalPurple-pill/20 dark:text-royalPurple-pillTx rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
+                      >
+                        {getSubjectName(sub)}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-royalPurple-text2 italic">No subjects assigned</p>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* HOD Specific */}
+          {role === 'hod' && (
+            <>
+              <div className="border-t border-royalPurple-border dark:border-royalPurple-border pt-4">
+                <h4 className="text-lg font-semibold text-royalPurple-accentTx dark:text-royalPurple-accentTx mb-3">
+                  Department Info
+                </h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3">
+                      Department
+                    </p>
+                    <p className="text-royalPurple-text1 dark:text-royalPurple-text1 font-medium">
+                      {data.departmentRef?.name || data.department || 'N/A'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3">
+                      Department ID
+                    </p>
+                    <p className="text-royalPurple-text1 dark:text-royalPurple-text1 font-medium">
+                      {data.departmentId || data.departmentRef?.id || 'N/A'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3 mb-2">
+                  Assigned Classes
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {hodAssignedClasses.length > 0 ? (
+                    hodAssignedClasses.map((cls, idx) => (
+                      <span
+                        key={`${cls}-${idx}`}
+                        className="px-2 py-1 bg-royalPurple-accent text-royalPurple-accentTx dark:bg-royalPurple-accent/20 dark:text-royalPurple-accentTx rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
+                      >
+                        {String(cls)}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-royalPurple-text2 italic">No classes assigned</p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3 mb-2">
+                  Assigned Subjects
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {hodAssignedSubjects.length > 0 ? (
+                    hodAssignedSubjects.map((sub, idx) => (
+                      <span
+                        key={`${sub}-${idx}`}
                         className="px-2 py-1 bg-royalPurple-pill text-royalPurple-pillTx dark:bg-royalPurple-pill/20 dark:text-royalPurple-pillTx rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
                       >
                         {getSubjectName(sub)}
