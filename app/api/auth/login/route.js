@@ -6,6 +6,7 @@ import { cookies } from 'next/headers'
 import { loginSchema, validateRequest, sanitizeOutput } from '@/lib/middleware/inputValidation'
 import { findUserByEmail } from '@/lib/db/queries'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { rateLimiter } from '@/lib/middleware/rateLimiter'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
@@ -34,6 +35,14 @@ export async function POST(request) {
 
     const { email, password, subdomain } = validation.data
     // Note: 'subdomain' is optional in schema, but passed from frontend if available
+
+    const rateLimitResult = rateLimiter(request, {
+      limit: 20,
+      windowMs: 15 * 60 * 1000,
+      keyPrefix: 'auth_login_',
+      keyGenerator: ({ ip }) => `${ip}-${String(email || '').toLowerCase()}`,
+    })
+    if (rateLimitResult.isLimited) return rateLimitResult.response
 
     // 2. Resolve school for multi-tenant lookup
     let schoolId = await getSchoolIdFromRequest(request, subdomain)
@@ -90,24 +99,6 @@ export async function POST(request) {
 
     const refreshToken = jwt.sign({ id: user.id }, JWT_REFRESH_SECRET, { expiresIn: '7d' })
 
-    const cookieStore = await cookies()
-
-    cookieStore.set('access_token', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 15 * 60,
-      path: '/',
-    })
-
-    cookieStore.set('refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60,
-      path: '/',
-    })
-
     // 5. Sanitize Output
     const sanitizedUser = sanitizeOutput({
       id: user.id,
@@ -118,10 +109,28 @@ export async function POST(request) {
       profile_picture_url: user.profile_picture_url,
     })
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       user: sanitizedUser,
     })
+
+    response.cookies.set('access_token', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60,
+      path: '/',
+    })
+
+    response.cookies.set('refresh_token', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60,
+      path: '/',
+    })
+
+    return response
   } catch (error) {
     // 6. Secure Error Handling
     console.error('Login error:', error)

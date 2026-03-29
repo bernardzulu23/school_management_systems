@@ -4,9 +4,20 @@ import { useState, useEffect } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  BookOpen, Download, Eye, Search, Filter, Star, Clock,
-  ArrowLeft, FileText, Video, Image, File, Bookmark
+import {
+  BookOpen,
+  Download,
+  Eye,
+  Search,
+  Filter,
+  Star,
+  Clock,
+  ArrowLeft,
+  FileText,
+  Video,
+  Image,
+  File,
+  Bookmark,
 } from 'lucide-react'
 import Link from 'next/link'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -19,13 +30,13 @@ export default function StudyMaterialsPage() {
   const [filterSubject, setFilterSubject] = useState('all')
   const [filterType, setFilterType] = useState('all')
   const queryClient = useQueryClient()
-  
+
   const { data: studyMaterials = [], isLoading } = useQuery({
     queryKey: ['student-materials'],
     queryFn: async () => {
       const res = await api.getStudentMaterials()
       return res.data.data
-    }
+    },
   })
 
   const bookmarkMutation = useMutation({
@@ -36,14 +47,14 @@ export default function StudyMaterialsPage() {
     },
     onError: () => {
       toast.error('Failed to update bookmark')
-    }
+    },
   })
 
   const downloadMutation = useMutation({
     mutationFn: (id) => api.trackMaterialDownload(id),
     onSuccess: () => {
       queryClient.invalidateQueries(['student-materials'])
-    }
+    },
   })
 
   const handleDownload = (material) => {
@@ -63,63 +74,81 @@ export default function StudyMaterialsPage() {
   }
 
   // Extract unique subjects from materials
-  const subjects = [...new Set(studyMaterials.map(m => m.subject))]
+  const subjects = [...new Set(studyMaterials.map((m) => m.subject))]
 
   const getFileIcon = (type) => {
     switch (type.toLowerCase()) {
-      case 'pdf': return <FileText className="h-5 w-5 text-red-500" />
-      case 'video': return <Video className="h-5 w-5 text-blue-500" />
-      case 'powerpoint': return <FileText className="h-5 w-5 text-orange-500" />
-      case 'zip': return <File className="h-5 w-5 text-purple-500" />
-      case 'image': return <ImageIcon className="h-5 w-5 text-green-500" />
-      default: return <File className="h-5 w-5 text-gray-500" />
+      case 'pdf':
+        return <FileText className="h-5 w-5 text-red-500" />
+      case 'video':
+        return <Video className="h-5 w-5 text-blue-500" />
+      case 'powerpoint':
+        return <FileText className="h-5 w-5 text-orange-500" />
+      case 'zip':
+        return <File className="h-5 w-5 text-purple-500" />
+      case 'image':
+        return <Image className="h-5 w-5 text-g-700" />
+      default:
+        return <File className="h-5 w-5 text-gray-500" />
     }
   }
 
   const getTypeColor = (type) => {
     switch (type.toLowerCase()) {
-      case 'pdf': return 'bg-red-100 text-red-800'
-      case 'video': return 'bg-blue-100 text-blue-800'
-      case 'powerpoint': return 'bg-orange-100 text-orange-800'
-      case 'zip': return 'bg-purple-100 text-purple-800'
-      case 'image': return 'bg-green-100 text-green-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'pdf':
+        return 'bg-red-100 text-red-800'
+      case 'video':
+        return 'bg-blue-100 text-blue-800'
+      case 'powerpoint':
+        return 'bg-orange-100 text-orange-800'
+      case 'zip':
+        return 'bg-purple-100 text-purple-800'
+      case 'image':
+        return 'bg-green-100 text-green-800'
+      default:
+        return 'bg-gray-100 text-gray-800'
     }
   }
 
   const getSubjectColor = (subject) => {
     switch (subject) {
-      case 'Mathematics': return 'bg-blue-100 text-blue-800'
-      case 'Science': return 'bg-green-100 text-green-800'
-      case 'English': return 'bg-purple-100 text-purple-800'
-      case 'History': return 'bg-orange-100 text-orange-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'Mathematics':
+        return 'bg-blue-100 text-blue-800'
+      case 'Science':
+        return 'bg-green-100 text-green-800'
+      case 'English':
+        return 'bg-purple-100 text-purple-800'
+      case 'History':
+        return 'bg-orange-100 text-orange-800'
+      default:
+        return 'bg-gray-100 text-gray-800'
     }
   }
 
-  const filteredMaterials = studyMaterials.filter(material => {
-    const matchesSearch = material.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         material.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         material.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredMaterials = studyMaterials.filter((material) => {
+    const matchesSearch =
+      material.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      material.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      material.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
     const matchesSubject = filterSubject === 'all' || material.subject === filterSubject
-    const matchesType = filterType === 'all' || material.type.toLowerCase() === filterType.toLowerCase()
-    const matchesTab = activeTab === 'all' || 
-                      (activeTab === 'bookmarked' && material.isBookmarked) ||
-                      (activeTab === 'downloaded' && material.isDownloaded) ||
-                      (activeTab === 'recent' && new Date(material.uploadDate) > new Date('2024-01-18'))
+    const matchesType =
+      filterType === 'all' || material.type.toLowerCase() === filterType.toLowerCase()
+    const matchesTab =
+      activeTab === 'all' ||
+      (activeTab === 'bookmarked' && material.isBookmarked) ||
+      (activeTab === 'downloaded' && material.isDownloaded) ||
+      (activeTab === 'recent' && new Date(material.uploadDate) > new Date('2024-01-18'))
     return matchesSearch && matchesSubject && matchesType && matchesTab
   })
 
   const materialStats = {
     totalMaterials: studyMaterials.length,
-    bookmarkedMaterials: studyMaterials.filter(material => material.isBookmarked).length,
-    downloadedMaterials: studyMaterials.filter(material => material.isDownloaded).length,
-    totalDownloads: studyMaterials.reduce((sum, material) => sum + material.downloads, 0)
+    bookmarkedMaterials: studyMaterials.filter((material) => material.isBookmarked).length,
+    downloadedMaterials: studyMaterials.filter((material) => material.isDownloaded).length,
+    totalDownloads: studyMaterials.reduce((sum, material) => sum + material.downloads, 0),
   }
 
-  const popularMaterials = [...studyMaterials]
-    .sort((a, b) => b.downloads - a.downloads)
-    .slice(0, 3)
+  const popularMaterials = [...studyMaterials].sort((a, b) => b.downloads - a.downloads).slice(0, 3)
 
   const renderStars = (rating) => {
     const stars = []
@@ -155,7 +184,9 @@ export default function StudyMaterialsPage() {
                 <BookOpen className="h-6 w-6 mr-2" />
                 Study Materials & Resource Library
               </h1>
-              <p className="text-gray-600">Access and download educational resources for all your subjects</p>
+              <p className="text-gray-600">
+                Access and download educational resources for all your subjects
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -189,7 +220,9 @@ export default function StudyMaterialsPage() {
                 <Bookmark className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Bookmarked</p>
-                  <p className="text-2xl font-bold text-gray-900">{materialStats.bookmarkedMaterials}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {materialStats.bookmarkedMaterials}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -200,7 +233,9 @@ export default function StudyMaterialsPage() {
                 <Download className="h-8 w-8 text-purple-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Downloaded</p>
-                  <p className="text-2xl font-bold text-gray-900">{materialStats.downloadedMaterials}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {materialStats.downloadedMaterials}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -269,8 +304,10 @@ export default function StudyMaterialsPage() {
                 >
                   <option value="all">All Subjects</option>
                   {subjects.length > 0 ? (
-                    subjects.map(subject => (
-                      <option key={subject} value={subject}>{subject}</option>
+                    subjects.map((subject) => (
+                      <option key={subject} value={subject}>
+                        {subject}
+                      </option>
                     ))
                   ) : (
                     <>
@@ -298,32 +335,43 @@ export default function StudyMaterialsPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredMaterials.map((material) => (
-                <div key={material.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div
+                  key={material.id}
+                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center">
                       {getFileIcon(material.type)}
                       <div className="ml-3 flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{material.title}</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
+                          {material.title}
+                        </h3>
                         <p className="text-sm text-gray-600">by {material.teacher}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-1">
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => handleBookmark(material.id)}
-                      disabled={bookmarkMutation.isPending}
-                    >
-                      <Bookmark className={`h-4 w-4 ${material.isBookmarked ? 'fill-yellow-400 text-yellow-400' : ''}`} />
-                    </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleBookmark(material.id)}
+                        disabled={bookmarkMutation.isPending}
+                      >
+                        <Bookmark
+                          className={`h-4 w-4 ${material.isBookmarked ? 'fill-yellow-400 text-yellow-400' : ''}`}
+                        />
+                      </Button>
+                    </div>
                   </div>
-                </div>
 
-                <div className="flex items-center space-x-2 mb-3">
-                    <span className={`px-2 py-1 text-xs rounded-full ${getSubjectColor(material.subject)}`}>
+                  <div className="flex items-center space-x-2 mb-3">
+                    <span
+                      className={`px-2 py-1 text-xs rounded-full ${getSubjectColor(material.subject)}`}
+                    >
                       {material.subject}
                     </span>
-                    <span className={`px-2 py-1 text-xs rounded-full ${getTypeColor(material.type)}`}>
+                    <span
+                      className={`px-2 py-1 text-xs rounded-full ${getTypeColor(material.type)}`}
+                    >
                       {material.type}
                     </span>
                     {material.isDownloaded && (
@@ -365,7 +413,10 @@ export default function StudyMaterialsPage() {
                     <p className="text-xs text-gray-500 mb-1">Tags:</p>
                     <div className="flex flex-wrap gap-1">
                       {material.tags.map((tag, index) => (
-                        <span key={index} className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded">
+                        <span
+                          key={index}
+                          className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded"
+                        >
                           #{tag}
                         </span>
                       ))}
@@ -373,8 +424,8 @@ export default function StudyMaterialsPage() {
                   </div>
 
                   <div className="flex items-center space-x-2">
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       className="flex-1"
                       onClick={() => handleDownload(material)}
                       disabled={downloadMutation.isPending}
@@ -431,14 +482,24 @@ export default function StudyMaterialsPage() {
             <CardContent>
               <div className="space-y-3">
                 {popularMaterials.length > 0 ? (
-                  popularMaterials.map(material => (
-                    <div key={material.id} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-                      <h4 className="font-medium text-gray-900 mb-1 line-clamp-1">{material.title}</h4>
+                  popularMaterials.map((material) => (
+                    <div
+                      key={material.id}
+                      className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                    >
+                      <h4 className="font-medium text-gray-900 mb-1 line-clamp-1">
+                        {material.title}
+                      </h4>
                       <div className="flex justify-between text-xs text-gray-600">
                         <span>{material.downloads} downloads</span>
-                        <span className="flex items-center"><Star className="h-3 w-3 fill-yellow-400 text-yellow-400 mr-1"/> {material.rating}</span>
+                        <span className="flex items-center">
+                          <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 mr-1" />{' '}
+                          {material.rating}
+                        </span>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">{material.subject} • {material.type}</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {material.subject} • {material.type}
+                      </p>
                     </div>
                   ))
                 ) : (

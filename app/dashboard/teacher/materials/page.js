@@ -4,9 +4,21 @@ import { useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  BookOpen, Upload, Download, Eye, Edit, Trash2, Share2,
-  ArrowLeft, Search, Filter, FileText, Video, Image, File
+import {
+  BookOpen,
+  Upload,
+  Download,
+  Eye,
+  Edit,
+  Trash2,
+  Share2,
+  ArrowLeft,
+  Search,
+  Filter,
+  FileText,
+  Video,
+  Image,
+  File,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -29,7 +41,7 @@ export default function StudyMaterialsPage() {
       classes: ['Class 9A', 'Class 9B'],
       description: 'Comprehensive guide to algebraic expressions and equations',
       tags: ['algebra', 'fundamentals', 'equations'],
-      status: 'published'
+      status: 'published',
     },
     {
       id: 2,
@@ -43,7 +55,7 @@ export default function StudyMaterialsPage() {
       classes: ['Class 8C'],
       description: 'Interactive video explaining geometric shapes and properties',
       tags: ['geometry', 'shapes', 'tutorial'],
-      status: 'published'
+      status: 'published',
     },
     {
       id: 3,
@@ -57,7 +69,7 @@ export default function StudyMaterialsPage() {
       classes: ['Class 10B'],
       description: 'Practice worksheets for statistical analysis and data interpretation',
       tags: ['statistics', 'worksheets', 'practice'],
-      status: 'published'
+      status: 'published',
     },
     {
       id: 4,
@@ -71,7 +83,7 @@ export default function StudyMaterialsPage() {
       classes: ['Class 10B'],
       description: 'Quick reference for trigonometric functions and identities',
       tags: ['trigonometry', 'reference', 'functions'],
-      status: 'draft'
+      status: 'draft',
     },
     {
       id: 5,
@@ -85,49 +97,67 @@ export default function StudyMaterialsPage() {
       classes: ['Class 11A'],
       description: 'Introduction to differential and integral calculus concepts',
       tags: ['calculus', 'derivatives', 'integrals'],
-      status: 'published'
-    }
+      status: 'published',
+    },
   ]
 
   const getFileIcon = (type) => {
     switch (type.toLowerCase()) {
-      case 'pdf': return <FileText className="h-5 w-5 text-red-500" />
-      case 'video': return <Video className="h-5 w-5 text-blue-500" />
-      case 'powerpoint': return <FileText className="h-5 w-5 text-orange-500" />
-      case 'zip': return <File className="h-5 w-5 text-purple-500" />
-      case 'image': return <ImageIcon className="h-5 w-5 text-green-500" />
-      default: return <File className="h-5 w-5 text-gray-500" />
+      case 'pdf':
+        return <FileText className="h-5 w-5 text-g-700" />
+      case 'video':
+        return <Video className="h-5 w-5 text-g-700" />
+      case 'powerpoint':
+        return <FileText className="h-5 w-5 text-g-700" />
+      case 'zip':
+        return <File className="h-5 w-5 text-g-700" />
+      case 'image':
+        return <Image className="h-5 w-5 text-g-700" />
+      default:
+        return <File className="h-5 w-5 text-g-700" />
     }
   }
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'published': return 'bg-green-100 text-green-800'
-      case 'draft': return 'bg-yellow-100 text-yellow-800'
-      case 'archived': return 'bg-gray-100 text-gray-800'
-      default: return 'bg-blue-100 text-blue-800'
+      case 'published':
+        return 'bg-green-100 text-green-800'
+      case 'draft':
+        return 'bg-yellow-100 text-yellow-800'
+      case 'archived':
+        return 'bg-gray-100 text-gray-800'
+      default:
+        return 'bg-blue-100 text-blue-800'
     }
   }
 
   const getTypeColor = (type) => {
     switch (type.toLowerCase()) {
-      case 'pdf': return 'bg-red-100 text-red-800'
-      case 'video': return 'bg-blue-100 text-blue-800'
-      case 'powerpoint': return 'bg-orange-100 text-orange-800'
-      case 'zip': return 'bg-purple-100 text-purple-800'
-      case 'image': return 'bg-green-100 text-green-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'pdf':
+        return 'bg-red-100 text-red-800'
+      case 'video':
+        return 'bg-blue-100 text-blue-800'
+      case 'powerpoint':
+        return 'bg-orange-100 text-orange-800'
+      case 'zip':
+        return 'bg-purple-100 text-purple-800'
+      case 'image':
+        return 'bg-green-100 text-green-800'
+      default:
+        return 'bg-gray-100 text-gray-800'
     }
   }
 
-  const filteredMaterials = materialsData.filter(material => {
-    const matchesSearch = material.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         material.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         material.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredMaterials = materialsData.filter((material) => {
+    const matchesSearch =
+      material.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      material.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      material.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
     const matchesSubject = filterSubject === 'all' || material.subject === filterSubject
-    const matchesTab = activeTab === 'all' || 
-                      (activeTab === 'published' && material.status === 'published') ||
-                      (activeTab === 'draft' && material.status === 'draft')
+    const matchesTab =
+      activeTab === 'all' ||
+      (activeTab === 'published' && material.status === 'published') ||
+      (activeTab === 'draft' && material.status === 'draft')
     return matchesSearch && matchesSubject && matchesTab
   })
 
@@ -135,7 +165,7 @@ export default function StudyMaterialsPage() {
     totalMaterials: materialsData.length,
     totalDownloads: materialsData.reduce((sum, material) => sum + material.downloads, 0),
     totalViews: materialsData.reduce((sum, material) => sum + material.views, 0),
-    publishedMaterials: materialsData.filter(material => material.status === 'published').length
+    publishedMaterials: materialsData.filter((material) => material.status === 'published').length,
   }
 
   return (
@@ -211,7 +241,9 @@ export default function StudyMaterialsPage() {
                 <Share2 className="h-8 w-8 text-orange-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Published</p>
-                  <p className="text-2xl font-bold text-gray-900">{materialStats.publishedMaterials}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {materialStats.publishedMaterials}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -233,13 +265,13 @@ export default function StudyMaterialsPage() {
                   variant={activeTab === 'published' ? 'default' : 'outline'}
                   onClick={() => setActiveTab('published')}
                 >
-                  Published ({materialsData.filter(m => m.status === 'published').length})
+                  Published ({materialsData.filter((m) => m.status === 'published').length})
                 </Button>
                 <Button
                   variant={activeTab === 'draft' ? 'default' : 'outline'}
                   onClick={() => setActiveTab('draft')}
                 >
-                  Drafts ({materialsData.filter(m => m.status === 'draft').length})
+                  Drafts ({materialsData.filter((m) => m.status === 'draft').length})
                 </Button>
               </div>
               <div className="flex items-center space-x-2">
@@ -270,17 +302,24 @@ export default function StudyMaterialsPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredMaterials.map((material) => (
-                <div key={material.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div
+                  key={material.id}
+                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center">
                       {getFileIcon(material.type)}
                       <div className="ml-3">
-                        <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{material.title}</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
+                          {material.title}
+                        </h3>
                         <p className="text-sm text-gray-600">{material.subject}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <span className={`px-2 py-1 text-xs rounded-full ${getTypeColor(material.type)}`}>
+                      <span
+                        className={`px-2 py-1 text-xs rounded-full ${getTypeColor(material.type)}`}
+                      >
                         {material.type}
                       </span>
                     </div>
@@ -311,7 +350,10 @@ export default function StudyMaterialsPage() {
                     <p className="text-xs text-gray-500 mb-1">Classes:</p>
                     <div className="flex flex-wrap gap-1">
                       {material.classes.map((className, index) => (
-                        <span key={index} className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">
+                        <span
+                          key={index}
+                          className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded"
+                        >
                           {className}
                         </span>
                       ))}
@@ -322,7 +364,10 @@ export default function StudyMaterialsPage() {
                     <p className="text-xs text-gray-500 mb-1">Tags:</p>
                     <div className="flex flex-wrap gap-1">
                       {material.tags.map((tag, index) => (
-                        <span key={index} className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded">
+                        <span
+                          key={index}
+                          className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded"
+                        >
                           #{tag}
                         </span>
                       ))}
@@ -330,7 +375,9 @@ export default function StudyMaterialsPage() {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(material.status)}`}>
+                    <span
+                      className={`px-2 py-1 text-xs rounded-full ${getStatusColor(material.status)}`}
+                    >
                       {material.status}
                     </span>
                     <div className="flex items-center space-x-1">

@@ -2,33 +2,18 @@ import React from 'react'
 
 const DashboardHeader = ({ currentLanguage, handleLanguageChange, handleEmergencyButton }) => {
   return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'space-between', 
-      alignItems: 'center',
-      marginBottom: '30px',
-      padding: '20px',
-      background: 'white',
-      borderRadius: '10px',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-    }}>
+    <div className="bg-header rounded-[20px] p-6 mb-5 flex justify-between items-center gap-4">
       <div>
-        <h1 style={{ margin: 0, color: '#1f2937' }}>🇿🇲 Zambian School Management</h1>
-        <p style={{ margin: '5px 0 0 0', color: '#6b7280' }}>
-          Ultra-Low Infrastructure School System
-        </p>
+        <h1 className="m-0 text-white font-bold text-[22px]">🇿🇲 Zambian School Management</h1>
+        <p className="mt-1 text-white/60 text-sm">Ultra-Low Infrastructure School System</p>
       </div>
-      
-      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-        {/* Language Selector */}
-        <select 
-          value={currentLanguage} 
+
+      <div className="flex gap-2 items-center">
+        <select
+          value={currentLanguage}
           onChange={(e) => handleLanguageChange(e.target.value)}
-          style={{ 
-            padding: '8px 12px', 
-            border: '1px solid #d1d5db', 
-            borderRadius: '5px' 
-          }}
+          className="px-3 py-2 rounded-[10px] bg-white/[0.12] border border-white/[0.2] text-white text-sm font-semibold"
+          aria-label="Language selector"
         >
           <option value="en">English</option>
           <option value="bem">Ichibemba</option>
@@ -36,19 +21,11 @@ const DashboardHeader = ({ currentLanguage, handleLanguageChange, handleEmergenc
           <option value="nya">Chinyanja</option>
           <option value="loz">Silozi</option>
         </select>
-        
-        {/* Emergency Button */}
+
         <button
           onClick={handleEmergencyButton}
-          style={{
-            padding: '10px 15px',
-            background: '#dc2626',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            fontWeight: 'bold'
-          }}
+          className="px-3 py-2 rounded-[10px] bg-[#b91c1c] text-white text-sm font-semibold hover:bg-[#991b1b] active:scale-[0.97] transition-all"
+          aria-label="Emergency"
         >
           🚨 EMERGENCY
         </button>

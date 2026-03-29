@@ -1,15 +1,21 @@
 import React, { memo } from 'react'
 import { StatsCard } from '@/components/dashboard/StatsCard'
 import {
-  Users, UserPlus, UserCheck, GraduationCap, BookOpen, CheckCircle, Award
+  Users,
+  UserPlus,
+  UserCheck,
+  GraduationCap,
+  BookOpen,
+  CheckCircle,
+  Award,
 } from 'lucide-react'
 import { useHeadteacher } from '@/lib/context/HeadteacherContext'
 
 export const HeadteacherStats = memo(function HeadteacherStats() {
   const { schoolStats } = useHeadteacher()
-  
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
       <StatsCard
         title="Students"
         value={schoolStats.totalStudents}

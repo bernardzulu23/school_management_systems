@@ -8,7 +8,11 @@ export default async function proxy(request) {
   // 1. Rate Limiting
   const isAuthRoute = pathname.startsWith('/api/auth')
   const rateLimitOptions = isAuthRoute
-    ? { limit: 5, windowMs: 15 * 60 * 1000, keyPrefix: 'auth_' }
+    ? pathname === '/api/auth/login'
+      ? { limit: 20, windowMs: 15 * 60 * 1000, keyPrefix: 'auth_login_ip_' }
+      : pathname === '/api/auth/register'
+        ? { limit: 20, windowMs: 15 * 60 * 1000, keyPrefix: 'auth_register_' }
+        : { limit: 100, windowMs: 15 * 60 * 1000, keyPrefix: 'auth_' }
     : { limit: 100, windowMs: 15 * 60 * 1000 }
   const rateLimitResult = rateLimiter(request, rateLimitOptions)
 

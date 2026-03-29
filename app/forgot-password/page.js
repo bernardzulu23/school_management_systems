@@ -57,14 +57,8 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[100px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-600/20 blur-[100px]" />
-      </div>
-
-      <div className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-8 z-10">
+    <div className="min-h-screen bg-[#F4F3F1] dark:bg-g-900 flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white dark:bg-g-800 border border-black/[0.09] dark:border-white/[0.09] rounded-[20px] p-8">
         <header className="flex flex-col items-center mb-8">
           {school ? (
             <>
@@ -72,15 +66,17 @@ export default function ForgotPasswordPage() {
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={school.logo_url} alt={school.name} className="h-16 w-auto mx-auto mb-4" />
               )}
-              <h2 className="text-xl font-bold text-center text-white">{school.name}</h2>
+              <h2 className="text-xl font-bold text-center text-g-900 dark:text-g-50">
+                {school.name}
+              </h2>
             </>
           ) : (
-            <div className="bg-blue-600 rounded-xl p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
-              <GraduationCap className="h-6 w-6 text-white" />
+            <div className="bg-g-100 dark:bg-g-900 rounded-[10px] border border-black/[0.09] dark:border-white/[0.09] p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
+              <GraduationCap className="h-6 w-6 text-g-800 dark:text-g-50" />
             </div>
           )}
-          <h1 className="text-2xl font-bold text-white mt-4">Reset Password</h1>
-          <p className="text-gray-300 text-sm mt-2 text-center">
+          <h1 className="text-2xl font-bold text-g-900 dark:text-g-50 mt-4">Reset Password</h1>
+          <p className="text-g-700 dark:text-g-200 text-sm mt-2 text-center">
             Enter your email to receive a reset link
           </p>
         </header>
@@ -96,14 +92,9 @@ export default function ForgotPasswordPage() {
               placeholder="Enter your email"
               required
               icon={Mail}
-              className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400"
             />
 
-            <Button
-              type="submit"
-              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all"
-              disabled={isLoading}
-            >
+            <Button type="submit" className="w-full py-3" disabled={isLoading}>
               {isLoading ? (
                 <span className="flex items-center justify-center">
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...
@@ -115,10 +106,10 @@ export default function ForgotPasswordPage() {
           </form>
         ) : (
           <div className="text-center space-y-6">
-            <div className="bg-green-500/20 text-green-400 p-4 rounded-xl border border-green-500/30">
+            <div className="bg-[#e6faf0] text-[#0d7a4c] p-4 rounded-[14px] border border-black/[0.09]">
               <p>Check your email for the reset link.</p>
             </div>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-g-600 dark:text-g-300">
               (In development mode, check the server console logs for the link)
             </p>
           </div>
@@ -127,7 +118,7 @@ export default function ForgotPasswordPage() {
         <div className="mt-6 text-center">
           <Link
             href="/login"
-            className="text-sm text-blue-400 hover:text-blue-300 flex items-center justify-center transition-colors"
+            className="text-sm text-g-700 dark:text-g-200 hover:text-g-900 dark:hover:text-g-50 flex items-center justify-center transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-1" /> Back to Login
           </Link>

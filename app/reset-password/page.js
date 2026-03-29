@@ -54,10 +54,10 @@ function ResetPasswordContent() {
 
   if (!token || !email) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
-        <div className="bg-white/10 backdrop-blur-xl p-8 rounded-2xl text-white text-center">
+      <div className="min-h-screen bg-[#F4F3F1] dark:bg-g-900 flex items-center justify-center p-4">
+        <div className="bg-white dark:bg-g-800 p-8 rounded-[20px] border border-black/[0.09] dark:border-white/[0.09] text-center">
           <p>Invalid reset link.</p>
-          <Link href="/login" className="text-blue-400 mt-4 inline-block">
+          <Link href="/login" className="text-g-800 dark:text-g-100 mt-4 inline-block">
             Return to Login
           </Link>
         </div>
@@ -66,14 +66,8 @@ function ResetPasswordContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[100px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-600/20 blur-[100px]" />
-      </div>
-
-      <div className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-8 z-10">
+    <div className="min-h-screen bg-[#F4F3F1] dark:bg-g-900 flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white dark:bg-g-800 border border-black/[0.09] dark:border-white/[0.09] rounded-[20px] p-8">
         <header className="flex flex-col items-center mb-8">
           {school ? (
             <>
@@ -81,14 +75,16 @@ function ResetPasswordContent() {
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={school.logo_url} alt={school.name} className="h-16 w-auto mx-auto mb-4" />
               )}
-              <h2 className="text-xl font-bold text-center text-white">{school.name}</h2>
+              <h2 className="text-xl font-bold text-center text-g-900 dark:text-g-50">
+                {school.name}
+              </h2>
             </>
           ) : (
-            <div className="bg-blue-600 rounded-xl p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
-              <GraduationCap className="h-6 w-6 text-white" />
+            <div className="bg-g-100 dark:bg-g-900 rounded-[10px] border border-black/[0.09] dark:border-white/[0.09] p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
+              <GraduationCap className="h-6 w-6 text-g-800 dark:text-g-50" />
             </div>
           )}
-          <h1 className="text-2xl font-bold text-white mt-4">Set New Password</h1>
+          <h1 className="text-2xl font-bold text-g-900 dark:text-g-50 mt-4">Set New Password</h1>
         </header>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -101,7 +97,6 @@ function ResetPasswordContent() {
             placeholder="••••••••"
             required
             icon={Lock}
-            className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400"
           />
 
           <FormField
@@ -113,14 +108,9 @@ function ResetPasswordContent() {
             placeholder="••••••••"
             required
             icon={Lock}
-            className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400"
           />
 
-          <Button
-            type="submit"
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all"
-            disabled={isLoading}
-          >
+          <Button type="submit" className="w-full py-3" disabled={isLoading}>
             {isLoading ? (
               <span className="flex items-center justify-center">
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Resetting...
@@ -139,8 +129,8 @@ export default function ResetPasswordPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-          <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
+        <div className="min-h-screen bg-[#F4F3F1] dark:bg-g-900 flex items-center justify-center">
+          <Loader2 className="h-8 w-8 text-g-700 dark:text-g-200 animate-spin" />
         </div>
       }
     >

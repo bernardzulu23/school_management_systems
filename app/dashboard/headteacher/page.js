@@ -114,48 +114,6 @@ function HeadteacherDashboardContent() {
 
   const [showRegistrationForm, setShowRegistrationForm] = useState(null) // 'teacher', 'student', 'hod', or null
 
-  if (!user) {
-    return (
-      <DashboardLayout title="Headteacher Dashboard">
-        <main className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Sign In Required</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <p className="text-gray-600">Please sign in to access this page.</p>
-              <Link href="/login">
-                <Button>Go to Login</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </main>
-      </DashboardLayout>
-    )
-  }
-
-  if (!isHeadteacher) {
-    return (
-      <DashboardLayout title="Headteacher Dashboard">
-        <main className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Access Denied</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <p className="text-gray-600">
-                Only Headteachers can register teachers, HODs, and students.
-              </p>
-              <Link href="/dashboard">
-                <Button variant="outline">Back to Dashboard</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </main>
-      </DashboardLayout>
-    )
-  }
-
   const tabs = useMemo(
     () => [
       {
@@ -227,6 +185,48 @@ function HeadteacherDashboardContent() {
     ],
     []
   )
+
+  if (!user) {
+    return (
+      <DashboardLayout title="Headteacher Dashboard">
+        <main className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Sign In Required</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-gray-600">Please sign in to access this page.</p>
+              <Link href="/login">
+                <Button>Go to Login</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </main>
+      </DashboardLayout>
+    )
+  }
+
+  if (!isHeadteacher) {
+    return (
+      <DashboardLayout title="Headteacher Dashboard">
+        <main className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Access Denied</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-gray-600">
+                Only Headteachers can register teachers, HODs, and students.
+              </p>
+              <Link href="/dashboard">
+                <Button variant="outline">Back to Dashboard</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </main>
+      </DashboardLayout>
+    )
+  }
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -323,39 +323,28 @@ function HeadteacherDashboardContent() {
   }
 
   return (
-    <div className="dashboard-layout">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-500/10 to-blue-600/10 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-blue-400/10 to-blue-500/10 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-40 left-40 w-80 h-80 bg-gradient-to-r from-blue-600/10 to-blue-700/10 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-blob animation-delay-4000"></div>
-        <div className="absolute top-1/2 right-1/3 w-60 h-60 bg-gradient-to-r from-blue-300/10 to-blue-400/10 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob animation-delay-6000"></div>
-      </div>
-
+    <div className="min-h-screen bg-[#F4F3F1] dark:bg-g-900">
       <DashboardLayout title="Headteacher Dashboard">
         <main className="space-y-4 relative z-10" aria-labelledby="dashboard-heading">
           {/* Header */}
-          <header className="content-section">
+          <header className="bg-header rounded-[20px] p-6 mb-5">
             <div className="flex justify-between items-center">
               <div>
-                <h1
-                  id="dashboard-heading"
-                  className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent"
-                >
+                <h1 id="dashboard-heading" className="text-[22px] font-bold text-white">
                   Headteacher Dashboard
                 </h1>
-                <p className="text-gray-600 text-sm mt-1">
+                <p className="text-white/60 text-sm mt-1">
                   Welcome back, {user?.name || 'Headteacher'}
                 </p>
               </div>
               <div className="flex space-x-4" aria-label="Current date and time">
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl p-3 text-center shadow-lg">
+                <div className="bg-white/[0.12] border border-white/[0.2] text-white rounded-[10px] px-3 py-2 text-center">
                   <div className="text-lg font-bold">{new Date().getDate()}</div>
                   <div className="text-xs opacity-90">
                     {new Date().toLocaleDateString('en-US', { month: 'short' })}
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl p-3 text-center shadow-lg">
+                <div className="bg-white/[0.12] border border-white/[0.2] text-white rounded-[10px] px-3 py-2 text-center">
                   <div className="text-sm font-bold">
                     {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                   </div>
@@ -397,10 +386,10 @@ function HeadteacherDashboardContent() {
                     aria-selected={isActive}
                     aria-controls={isActive ? 'active-feature-content' : undefined}
                     tabIndex={0}
-                    className={`hover:shadow-lg transition-all duration-300 cursor-pointer border-l-4 focus-within:ring-2 focus-within:ring-blue-500 ${
+                    className={`transition-all duration-200 cursor-pointer border border-black/[0.09] dark:border-white/[0.09] hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] ${
                       isActive
-                        ? 'border-l-blue-600 bg-blue-50'
-                        : 'border-l-gray-300 hover:border-l-blue-400'
+                        ? 'bg-g-100 dark:bg-g-800 border-l-[3px] border-l-g-800 text-g-900 font-semibold'
+                        : 'bg-white dark:bg-g-800'
                     }`}
                     onClick={() => setActiveTab(tab.id)}
                     onKeyDown={(e) => {
@@ -412,7 +401,10 @@ function HeadteacherDashboardContent() {
                   >
                     <CardHeader className="pb-2 pt-3">
                       <CardTitle className="flex items-center text-xs font-semibold">
-                        <Icon className="h-4 w-4 mr-2 text-blue-600" aria-hidden="true" />
+                        <Icon
+                          className="h-4 w-4 mr-2 text-g-700 dark:text-g-200"
+                          aria-hidden="true"
+                        />
                         <span className="truncate">{tab.name}</span>
                       </CardTitle>
                     </CardHeader>
@@ -420,8 +412,8 @@ function HeadteacherDashboardContent() {
                       <p className="text-xs text-gray-600 mb-2 line-clamp-2">{tab.description}</p>
                       <Button
                         size="sm"
-                        className="w-full text-xs h-6 focus-visible:ring-2 focus-visible:ring-blue-500"
-                        variant={isActive ? 'default' : 'outline'}
+                        className="w-full text-xs h-8"
+                        variant={isActive ? 'primary' : 'outline'}
                         aria-label={`${isActive ? 'Current' : 'Open'} ${tab.name}`}
                       >
                         {isActive ? 'Active' : 'Open'}
@@ -439,15 +431,15 @@ function HeadteacherDashboardContent() {
               id="active-feature-content"
               role="tabpanel"
               aria-labelledby={`tab-${activeTab}`}
-              className="content-section"
+              className="bg-white dark:bg-g-800 rounded-[14px] border border-black/[0.09] dark:border-white/[0.09] p-4"
             >
-              <Card className="border-2 border-blue-200">
-                <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 py-3">
+              <Card>
+                <CardHeader className="bg-g-50 dark:bg-g-900 py-3 rounded-t-[14px] border-b border-black/[0.09] dark:border-white/[0.09]">
                   <CardTitle className="flex items-center justify-between text-lg">
                     <div className="flex items-center" id={`tab-${activeTab}`}>
                       {tabs.find((t) => t.id === activeTab)?.icon &&
                         React.createElement(tabs.find((t) => t.id === activeTab).icon, {
-                          className: 'h-5 w-5 mr-2 text-blue-600',
+                          className: 'h-5 w-5 mr-2 text-g-700',
                           'aria-hidden': 'true',
                         })}
                       {tabs.find((t) => t.id === activeTab)?.name}
@@ -456,7 +448,7 @@ function HeadteacherDashboardContent() {
                       variant="ghost"
                       size="sm"
                       onClick={() => setActiveTab('')}
-                      className="h-8 w-8 p-0 focus-visible:ring-2 focus-visible:ring-gray-500"
+                      className="h-8 w-8 p-0"
                       aria-label="Close feature content"
                     >
                       <X className="h-4 w-4" />

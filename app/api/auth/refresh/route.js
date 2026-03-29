@@ -8,11 +8,11 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-f
 
 export async function POST() {
   try {
-    const cookieStore = await cookies()
+    const cookieStore = cookies()
     const refreshToken = cookieStore.get('refresh_token')?.value
 
     if (!refreshToken) {
-      return NextResponse.json({ error: 'Refresh token missing' }, { status: 401 })
+      return NextResponse.json({ error: 'No refresh token', stopRetry: true }, { status: 401 })
     }
 
     // Verify refresh token
@@ -20,7 +20,7 @@ export async function POST() {
     try {
       decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET)
     } catch (error) {
-      return NextResponse.json({ error: 'Invalid refresh token' }, { status: 401 })
+      return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
     }
 
     const user = await prisma.user.findFirst({
@@ -29,7 +29,7 @@ export async function POST() {
     })
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 401 })
+      return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
     }
 
     // Generate new access token
@@ -39,8 +39,9 @@ export async function POST() {
       { expiresIn: '15m' }
     )
 
-    // Set new access token in cookie
-    cookieStore.set('access_token', newAccessToken, {
+    const response = NextResponse.json({ success: true, accessToken: newAccessToken })
+
+    response.cookies.set('access_token', newAccessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
@@ -48,9 +49,8 @@ export async function POST() {
       path: '/',
     })
 
-    return NextResponse.json({ success: true })
+    return response
   } catch (error) {
-    console.error('Refresh token error:', error)
-    return NextResponse.json({ error: 'Refresh failed' }, { status: 500 })
+    return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
   }
 }

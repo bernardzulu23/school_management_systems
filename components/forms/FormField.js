@@ -56,7 +56,7 @@ const FormField = ({
           htmlFor={name}
           className={cn(
             'text-sm font-medium transition-colors duration-200',
-            displayError ? 'text-red-500' : isFocused ? 'text-blue-600' : 'text-gray-700'
+            displayError ? 'text-[#b91c1c]' : isFocused ? 'text-g-800' : 'text-g-700'
           )}
         >
           {label}
@@ -70,7 +70,7 @@ const FormField = ({
             <Icon
               className={cn(
                 'h-5 w-5 transition-colors duration-200',
-                displayError ? 'text-red-400' : isFocused ? 'text-blue-500' : 'text-gray-400'
+                displayError ? 'text-[#b91c1c]' : isFocused ? 'text-g-700' : 'text-g-400'
               )}
             />
           </div>
@@ -88,14 +88,14 @@ const FormField = ({
             onBlur={() => setIsFocused(false)}
             rows={props.rows || 3}
             className={cn(
-              'w-full px-4 py-2.5 rounded-lg border-2 bg-white text-gray-900 placeholder-gray-500 transition-all duration-200 outline-none resize-none',
+              'w-full px-4 py-2.5 rounded-[10px] border bg-white dark:bg-g-800 text-g-900 dark:text-g-50 placeholder:text-g-400 transition-all duration-200 outline-none resize-none',
               Icon && 'pl-10',
-              'disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed',
+              'disabled:bg-g-50 disabled:text-g-600 disabled:cursor-not-allowed',
               displayError
-                ? 'border-red-500 focus:ring-4 focus:ring-red-100'
+                ? 'border-[#b91c1c] focus:ring-1 focus:ring-[#b91c1c]'
                 : showSuccess
-                  ? 'border-green-500 focus:ring-4 focus:ring-green-100'
-                  : 'border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10',
+                  ? 'border-[#0d7a4c] focus:ring-1 focus:ring-[#0d7a4c]'
+                  : 'border-g-200 focus:border-g-600 focus:ring-1 focus:ring-g-600',
               className
             )}
             aria-invalid={!!displayError}
@@ -112,14 +112,14 @@ const FormField = ({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             className={cn(
-              'w-full px-4 py-2.5 rounded-lg border-2 bg-white text-gray-900 placeholder-gray-500 transition-all duration-200 outline-none appearance-none',
+              'w-full px-4 py-2.5 rounded-[10px] border bg-white dark:bg-g-800 text-g-900 dark:text-g-50 placeholder:text-g-400 transition-all duration-200 outline-none appearance-none',
               Icon && 'pl-10',
-              'disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed',
+              'disabled:bg-g-50 disabled:text-g-600 disabled:cursor-not-allowed',
               displayError
-                ? 'border-red-500 focus:ring-4 focus:ring-red-100'
+                ? 'border-[#b91c1c] focus:ring-1 focus:ring-[#b91c1c]'
                 : showSuccess
-                  ? 'border-green-500 focus:ring-4 focus:ring-green-100'
-                  : 'border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10',
+                  ? 'border-[#0d7a4c] focus:ring-1 focus:ring-[#0d7a4c]'
+                  : 'border-g-200 focus:border-g-600 focus:ring-1 focus:ring-g-600',
               className
             )}
             aria-invalid={!!displayError}
@@ -140,14 +140,14 @@ const FormField = ({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             className={cn(
-              'w-full px-4 py-2.5 rounded-lg border-2 bg-white text-gray-900 placeholder-gray-500 transition-all duration-200 outline-none',
+              'w-full px-4 py-2.5 rounded-[10px] border bg-white dark:bg-g-800 text-g-900 dark:text-g-50 placeholder:text-g-400 transition-all duration-200 outline-none',
               Icon && 'pl-10',
-              'disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed',
+              'disabled:bg-g-50 disabled:text-g-600 disabled:cursor-not-allowed',
               displayError
-                ? 'border-red-500 focus:ring-4 focus:ring-red-100'
+                ? 'border-[#b91c1c] focus:ring-1 focus:ring-[#b91c1c]'
                 : showSuccess
-                  ? 'border-green-500 focus:ring-4 focus:ring-green-100'
-                  : 'border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10',
+                  ? 'border-[#0d7a4c] focus:ring-1 focus:ring-[#0d7a4c]'
+                  : 'border-g-200 focus:border-g-600 focus:ring-1 focus:ring-g-600',
               className
             )}
             aria-invalid={!!displayError}
@@ -158,13 +158,13 @@ const FormField = ({
 
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-1 pointer-events-none">
           {isDebouncing && (
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-g-700 border-t-transparent" />
           )}
           {showSuccess && <Check className="h-5 w-5 text-green-500" />}
           {displayError && <AlertCircle className="h-5 w-5 text-red-500" />}
           {type === 'select' && (
             <svg
-              className="h-5 w-5 text-gray-400"
+              className="h-5 w-5 text-g-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -181,13 +181,13 @@ const FormField = ({
       </div>
 
       {description && !displayError && (
-        <p id={`${name}-description`} className="text-xs text-gray-500">
+        <p id={`${name}-description`} className="text-xs text-g-600 dark:text-g-300">
           {description}
         </p>
       )}
 
       {displayError && (
-        <p className="text-xs font-medium text-red-500 animate-in fade-in slide-in-from-top-1">
+        <p className="text-xs font-medium text-[#b91c1c] animate-in fade-in slide-in-from-top-1">
           {displayError}
         </p>
       )}

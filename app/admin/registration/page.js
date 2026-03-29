@@ -84,7 +84,7 @@ function RegistrationContent() {
       description:
         'Register new teaching staff with subject assignments from our comprehensive catalog of 29 subjects including local languages',
       icon: GraduationCap,
-      color: 'bg-blue-100 text-blue-600 border-blue-200',
+      color: 'bg-g-100 text-g-800 border border-black/[0.09]',
       features: [
         'Subject assignment from 29 available subjects',
         'Local language specializations (Chichewa, Chitonga, Bemba, etc.)',
@@ -99,7 +99,7 @@ function RegistrationContent() {
       description:
         'Register new students with subject selections based on grade level and career interests',
       icon: User,
-      color: 'bg-green-100 text-green-600 border-green-200',
+      color: 'bg-g-100 text-g-800 border border-black/[0.09]',
       features: [
         'Grade-appropriate subject selection',
         'Core subjects (Mathematics & English) mandatory',
@@ -114,7 +114,7 @@ function RegistrationContent() {
       description:
         'Register department heads with management responsibilities and subject oversight',
       icon: Crown,
-      color: 'bg-purple-100 text-purple-600 border-purple-200',
+      color: 'bg-g-100 text-g-800 border border-black/[0.09]',
       features: [
         'Department leadership assignment',
         'Subject oversight responsibilities',
@@ -184,7 +184,7 @@ function RegistrationContent() {
             </Link>
           </div>
 
-          <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+          <div className="bg-white dark:bg-g-800 rounded-[20px] border border-black/[0.09] dark:border-white/[0.09] overflow-hidden">
             <EnhancedUserRegistrationForm
               role={activeForm}
               onSubmit={(data) => handleSubmit(data, activeForm)}
@@ -227,9 +227,9 @@ function RegistrationContent() {
         </div>
 
         {/* System Information */}
-        <Card className="p-6 mb-8 bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+        <Card className="p-6 mb-8">
           <div className="flex items-start gap-4">
-            <BookOpen className="w-8 h-8 text-blue-600 mt-1" />
+            <BookOpen className="w-8 h-8 text-g-800 mt-1" />
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-2">
                 Comprehensive Subject Integration
@@ -240,19 +240,19 @@ function RegistrationContent() {
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <div className="font-semibold text-blue-600">Core Subjects</div>
+                  <div className="font-semibold text-g-800">Core Subjects</div>
                   <div className="text-gray-600">Mathematics, English, Additional Math</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-green-600">Sciences</div>
+                  <div className="font-semibold text-g-800">Sciences</div>
                   <div className="text-gray-600">Physics, Chemistry, Biology, Agriculture</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-purple-600">Local Languages</div>
+                  <div className="font-semibold text-g-800">Local Languages</div>
                   <div className="text-gray-600">8 indigenous languages supported</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-orange-600">Practical Subjects</div>
+                  <div className="font-semibold text-g-800">Practical Subjects</div>
                   <div className="text-gray-600">Technical, Home Economics, Arts</div>
                 </div>
               </div>
@@ -263,7 +263,10 @@ function RegistrationContent() {
         {/* Registration Options */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {registrationTypes.map((type) => (
-            <Card key={type.id} className="p-6 hover:shadow-lg transition-shadow">
+            <Card
+              key={type.id}
+              className="p-6 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all"
+            >
               <div className="text-center mb-6">
                 <div
                   className={`w-16 h-16 rounded-full ${type.color} flex items-center justify-center mx-auto mb-4`}
@@ -279,7 +282,7 @@ function RegistrationContent() {
                 <ul className="space-y-2">
                   {type.features.map((feature, index) => (
                     <li key={index} className="flex items-start gap-2 text-sm text-gray-600">
-                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
+                      <div className="w-1.5 h-1.5 bg-g-800 rounded-full mt-2 flex-shrink-0" />
                       {feature}
                     </li>
                   ))}

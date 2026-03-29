@@ -2,37 +2,40 @@ import { forwardRef } from 'react'
 import { cn } from '@/lib/utils'
 
 const Button = forwardRef(
-  ({ className, variant = 'primary', size = 'md', isLoading, children, disabled, ...props }, ref) => {
-    const baseClasses = 'btn'
+  (
+    { className, variant = 'primary', size = 'md', isLoading, children, disabled, ...props },
+    ref
+  ) => {
+    const baseClasses =
+      'inline-flex items-center justify-center font-semibold transition-all duration-200 focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none active:scale-[0.97] rounded-[10px]'
 
     const variants = {
-      primary: 'btn-primary min-h-[44px]',
-      secondary: 'btn-secondary min-h-[44px]',
-      outline: 'btn-outline min-h-[44px]',
-      ghost: 'btn-ghost min-h-[44px]',
-      destructive: 'bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 shadow-lg hover:shadow-xl min-h-[44px] py-3 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105',
+      default: 'bg-g-800 text-white hover:bg-g-900 min-h-[44px]',
+      primary: 'bg-g-800 text-white hover:bg-g-900 min-h-[44px]',
+      secondary:
+        'bg-white dark:bg-g-800 border border-g-300 text-g-700 dark:text-g-100 hover:bg-g-100 dark:hover:bg-g-700 min-h-[44px]',
+      outline:
+        'bg-transparent border border-g-300 text-g-700 dark:text-g-100 hover:bg-g-100 dark:hover:bg-g-800 min-h-[44px]',
+      ghost:
+        'bg-transparent text-g-700 dark:text-g-100 hover:bg-g-100 dark:hover:bg-g-800 min-h-[44px]',
+      destructive: 'bg-[#b91c1c] text-white hover:bg-[#991b1b] min-h-[44px]',
     }
 
     const sizes = {
-      sm: 'h-10 px-4 text-xs', // Increased from h-9 to h-10 for better touch target (40px)
-      md: 'h-11 px-6',
-      lg: 'h-14 px-8 text-base',
+      sm: 'h-10 px-4 text-xs',
+      md: 'h-11 px-6 text-sm',
+      lg: 'h-12 px-8 text-base',
     }
 
     return (
       <button
-        className={cn(
-          baseClasses,
-          variants[variant],
-          sizes[size],
-          className
-        )}
+        className={cn(baseClasses, variants[variant], sizes[size], className)}
         ref={ref}
         disabled={disabled || isLoading}
         {...props}
       >
         {isLoading && (
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2" />
+          <div className="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent mr-2" />
         )}
         {children}
       </button>

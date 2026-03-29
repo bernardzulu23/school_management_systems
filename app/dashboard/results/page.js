@@ -7,7 +7,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { api } from '@/lib/api'
 import { useAuth } from '@/lib/auth'
-import { BookOpen, TrendingUp, Users, Award, Download, Filter, GraduationCap, RefreshCw, Plus } from 'lucide-react'
+import {
+  BookOpen,
+  TrendingUp,
+  Users,
+  Award,
+  Download,
+  Filter,
+  GraduationCap,
+  RefreshCw,
+  Plus,
+  Edit,
+} from 'lucide-react'
 
 export default function ResultsPage() {
   const [selectedClass, setSelectedClass] = useState('')
@@ -16,7 +27,7 @@ export default function ResultsPage() {
 
   const { data: dashboardData } = useQuery({
     queryKey: ['teacher-dashboard'],
-    queryFn: () => api.getTeacherDashboard().then(res => res.data),
+    queryFn: () => api.getTeacherDashboard().then((res) => res.data),
   })
 
   // TODO: Replace with actual API calls to load results data
@@ -30,11 +41,20 @@ export default function ResultsPage() {
 
   const getGradeColor = (grade) => {
     switch (grade) {
-      case 'A': case 'A+': return 'text-green-600 bg-green-100'
-      case 'A-': case 'B+': return 'text-blue-600 bg-blue-100'
-      case 'B': case 'B-': return 'text-yellow-600 bg-yellow-100'
-      case 'C+': case 'C': return 'text-orange-600 bg-orange-100'
-      default: return 'text-red-600 bg-red-100'
+      case 'A':
+      case 'A+':
+        return 'text-green-600 bg-green-100'
+      case 'A-':
+      case 'B+':
+        return 'text-blue-600 bg-blue-100'
+      case 'B':
+      case 'B-':
+        return 'text-yellow-600 bg-yellow-100'
+      case 'C+':
+      case 'C':
+        return 'text-orange-600 bg-orange-100'
+      default:
+        return 'text-red-600 bg-red-100'
     }
   }
 
@@ -44,20 +64,20 @@ export default function ResultsPage() {
         average: 0,
         highest: 0,
         lowest: 0,
-        totalStudents: 0
+        totalStudents: 0,
       }
     }
 
     const totalMarks = resultsToShow.reduce((sum, result) => sum + result.marks, 0)
     const averagePercentage = totalMarks / resultsToShow.length
-    const highestScore = Math.max(...resultsToShow.map(r => r.marks))
-    const lowestScore = Math.min(...resultsToShow.map(r => r.marks))
+    const highestScore = Math.max(...resultsToShow.map((r) => r.marks))
+    const lowestScore = Math.min(...resultsToShow.map((r) => r.marks))
 
     return {
       average: averagePercentage.toFixed(1),
       highest: highestScore,
       lowest: lowestScore,
-      totalStudents: resultsToShow.length
+      totalStudents: resultsToShow.length,
     }
   }
 
@@ -66,23 +86,22 @@ export default function ResultsPage() {
   // Show empty state if no results
   if (resultsToShow.length === 0) {
     return (
-      <DashboardLayout title={isStudent ? "My Results" : "Results & Grading"}>
+      <DashboardLayout title={isStudent ? 'My Results' : 'Results & Grading'}>
         <main className="space-y-6">
           <Card className="focus-within:ring-2 focus-within:ring-blue-500 transition-shadow">
             <CardContent className="text-center py-12">
               <GraduationCap className="h-16 w-16 text-gray-400 mx-auto mb-4" aria-hidden="true" />
               <h3 className="text-xl font-medium text-gray-900 mb-2">
-                {isStudent ? "No Results Available" : "No Student Results Found"}
+                {isStudent ? 'No Results Available' : 'No Student Results Found'}
               </h3>
               <p className="text-gray-600 mb-6">
                 {isStudent
-                  ? "Your results will appear here once they are published by your teachers."
-                  : "Student results will appear here once assessments are graded and published."
-                }
+                  ? 'Your results will appear here once they are published by your teachers.'
+                  : 'Student results will appear here once assessments are graded and published.'}
               </p>
               <div className="flex justify-center space-x-4">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => window.location.reload()}
                   className="focus:ring-2 focus:ring-blue-500 outline-none"
                   aria-label="Refresh results"
@@ -91,7 +110,7 @@ export default function ResultsPage() {
                   Refresh
                 </Button>
                 {!isStudent && (
-                  <Button 
+                  <Button
                     className="focus:ring-2 focus:ring-blue-500 outline-none"
                     aria-label="Add new results"
                   >
@@ -108,25 +127,24 @@ export default function ResultsPage() {
   }
 
   return (
-    <DashboardLayout title={isStudent ? "My Results" : "Results & Grading"}>
+    <DashboardLayout title={isStudent ? 'My Results' : 'Results & Grading'}>
       <main className="space-y-6">
         {/* Header */}
         <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
-              {isStudent ? "My Results" : "Results & Grading"}
+              {isStudent ? 'My Results' : 'Results & Grading'}
             </h1>
             <p className="text-gray-600">
               {isStudent
-                ? "View your assessment results and academic progress"
-                : "View and manage student assessment results"
-              }
+                ? 'View your assessment results and academic progress'
+                : 'View and manage student assessment results'}
             </p>
           </div>
           {!isStudent && (
             <div className="flex flex-wrap gap-2">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 className="focus:ring-2 focus:ring-blue-500 outline-none flex-1 sm:flex-none"
                 aria-label="Export results to CSV"
@@ -134,7 +152,7 @@ export default function ResultsPage() {
                 <Download className="h-4 w-4 mr-2" aria-hidden="true" />
                 Export
               </Button>
-              <Button 
+              <Button
                 variant="outline"
                 size="sm"
                 className="focus:ring-2 focus:ring-blue-500 outline-none flex-1 sm:flex-none"
@@ -148,18 +166,27 @@ export default function ResultsPage() {
         </header>
 
         {/* Results Statistics */}
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4" aria-label="Results Statistics">
+        <section
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
+          aria-label="Results Statistics"
+        >
           <Card className="focus-within:ring-2 focus-within:ring-blue-500 transition-shadow">
             <CardContent className="p-3 sm:p-6">
               <div className="flex flex-col sm:flex-row items-center text-center sm:text-left">
                 {isStudent ? (
-                  <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 mb-2 sm:mb-0" aria-hidden="true" />
+                  <BookOpen
+                    className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 mb-2 sm:mb-0"
+                    aria-hidden="true"
+                  />
                 ) : (
-                  <Users className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 mb-2 sm:mb-0" aria-hidden="true" />
+                  <Users
+                    className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 mb-2 sm:mb-0"
+                    aria-hidden="true"
+                  />
                 )}
                 <div className="sm:ml-4">
                   <p className="text-[10px] sm:text-sm font-medium text-gray-600 uppercase tracking-tight">
-                    {isStudent ? "Assessments" : "Students"}
+                    {isStudent ? 'Assessments' : 'Students'}
                   </p>
                   <p className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">
                     {isStudent ? resultsToShow.length : stats.totalStudents}
@@ -172,12 +199,17 @@ export default function ResultsPage() {
           <Card className="focus-within:ring-2 focus-within:ring-green-500 transition-shadow">
             <CardContent className="p-3 sm:p-6">
               <div className="flex flex-col sm:flex-row items-center text-center sm:text-left">
-                <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-green-600 mb-2 sm:mb-0" aria-hidden="true" />
+                <TrendingUp
+                  className="h-6 w-6 sm:h-8 sm:w-8 text-green-600 mb-2 sm:mb-0"
+                  aria-hidden="true"
+                />
                 <div className="sm:ml-4">
                   <p className="text-[10px] sm:text-sm font-medium text-gray-600 uppercase tracking-tight">
                     Average
                   </p>
-                  <p className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">{stats.average}%</p>
+                  <p className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">
+                    {stats.average}%
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -186,12 +218,17 @@ export default function ResultsPage() {
           <Card className="focus-within:ring-2 focus-within:ring-purple-500 transition-shadow">
             <CardContent className="p-3 sm:p-6">
               <div className="flex flex-col sm:flex-row items-center text-center sm:text-left">
-                <Award className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600 mb-2 sm:mb-0" aria-hidden="true" />
+                <Award
+                  className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600 mb-2 sm:mb-0"
+                  aria-hidden="true"
+                />
                 <div className="sm:ml-4">
                   <p className="text-[10px] sm:text-sm font-medium text-gray-600 uppercase tracking-tight">
                     Highest
                   </p>
-                  <p className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">{stats.highest}%</p>
+                  <p className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">
+                    {stats.highest}%
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -200,12 +237,17 @@ export default function ResultsPage() {
           <Card className="focus-within:ring-2 focus-within:ring-orange-500 transition-shadow">
             <CardContent className="p-3 sm:p-6">
               <div className="flex flex-col sm:flex-row items-center text-center sm:text-left">
-                <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 text-orange-600 mb-2 sm:mb-0" aria-hidden="true" />
+                <BookOpen
+                  className="h-6 w-6 sm:h-8 sm:w-8 text-orange-600 mb-2 sm:mb-0"
+                  aria-hidden="true"
+                />
                 <div className="sm:ml-4">
                   <p className="text-[10px] sm:text-sm font-medium text-gray-600 uppercase tracking-tight">
                     Lowest
                   </p>
-                  <p className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">{stats.lowest}%</p>
+                  <p className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">
+                    {stats.lowest}%
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -222,7 +264,10 @@ export default function ResultsPage() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label htmlFor="class-filter" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="class-filter"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Class
                     </label>
                     <select
@@ -242,7 +287,10 @@ export default function ResultsPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="subject-filter" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="subject-filter"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Subject
                     </label>
                     <select
@@ -262,10 +310,13 @@ export default function ResultsPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="assessment-filter" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="assessment-filter"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Assessment
                     </label>
-                    <select 
+                    <select
                       id="assessment-filter"
                       className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white"
                       aria-label="Filter results by assessment type"
@@ -286,7 +337,7 @@ export default function ResultsPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle id="results-table-title">
-                {isStudent ? "My Assessment Results" : "Student Results"}
+                {isStudent ? 'My Assessment Results' : 'Student Results'}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -295,21 +346,67 @@ export default function ResultsPage() {
                 <table className="w-full" role="table">
                   <thead>
                     <tr className="border-b" role="row">
-                      {!isStudent && <th className="text-left py-3 px-4 font-semibold text-sm text-gray-700" role="columnheader">Student</th>}
-                      <th className="text-left py-3 px-4 font-semibold text-sm text-gray-700" role="columnheader">Assessment</th>
-                      <th className="text-left py-3 px-4 font-semibold text-sm text-gray-700" role="columnheader">Subject</th>
-                      {isStudent && <th className="text-left py-3 px-4 font-semibold text-sm text-gray-700" role="columnheader">Date</th>}
-                      <th className="text-left py-3 px-4 font-semibold text-sm text-gray-700" role="columnheader">Marks</th>
-                      <th className="text-left py-3 px-4 font-semibold text-sm text-gray-700" role="columnheader">Percentage</th>
-                      <th className="text-left py-3 px-4 font-semibold text-sm text-gray-700" role="columnheader">Grade</th>
-                      {!isStudent && <th className="text-right py-3 px-4 font-semibold text-sm text-gray-700" role="columnheader">Actions</th>}
+                      {!isStudent && (
+                        <th
+                          className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                          role="columnheader"
+                        >
+                          Student
+                        </th>
+                      )}
+                      <th
+                        className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                        role="columnheader"
+                      >
+                        Assessment
+                      </th>
+                      <th
+                        className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                        role="columnheader"
+                      >
+                        Subject
+                      </th>
+                      {isStudent && (
+                        <th
+                          className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                          role="columnheader"
+                        >
+                          Date
+                        </th>
+                      )}
+                      <th
+                        className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                        role="columnheader"
+                      >
+                        Marks
+                      </th>
+                      <th
+                        className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                        role="columnheader"
+                      >
+                        Percentage
+                      </th>
+                      <th
+                        className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                        role="columnheader"
+                      >
+                        Grade
+                      </th>
+                      {!isStudent && (
+                        <th
+                          className="text-right py-3 px-4 font-semibold text-sm text-gray-700"
+                          role="columnheader"
+                        >
+                          Actions
+                        </th>
+                      )}
                     </tr>
                   </thead>
                   <tbody role="rowgroup">
                     {resultsToShow.map((result) => (
-                      <tr 
-                        key={result.id} 
-                        className="border-b hover:bg-gray-50 transition-colors" 
+                      <tr
+                        key={result.id}
+                        className="border-b hover:bg-gray-50 transition-colors"
                         role="row"
                       >
                         {!isStudent && (
@@ -318,14 +415,32 @@ export default function ResultsPage() {
                             <div className="text-xs text-gray-500">ID: {result.student_id}</div>
                           </td>
                         )}
-                        <td className="py-3 px-4 text-sm text-gray-700" role="cell">{result.assessment}</td>
-                        <td className="py-3 px-4 text-sm text-gray-700" role="cell">{result.subject}</td>
-                        {isStudent && <td className="py-3 px-4 text-sm text-gray-500" role="cell">{result.date}</td>}
-                        <td className="py-3 px-4 text-sm font-medium" role="cell">{result.marks}/{result.total}</td>
+                        <td className="py-3 px-4 text-sm text-gray-700" role="cell">
+                          {result.assessment}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-gray-700" role="cell">
+                          {result.subject}
+                        </td>
+                        {isStudent && (
+                          <td className="py-3 px-4 text-sm text-gray-500" role="cell">
+                            {result.date}
+                          </td>
+                        )}
+                        <td className="py-3 px-4 text-sm font-medium" role="cell">
+                          {result.marks}/{result.total}
+                        </td>
                         <td className="py-3 px-4" role="cell">
-                          <div className="flex items-center gap-3" aria-label={`${result.percentage} percent`}>
-                            <span className="text-sm font-semibold min-w-[3rem]">{result.percentage}%</span>
-                            <div className="w-24 bg-gray-100 rounded-full h-2 overflow-hidden" aria-hidden="true">
+                          <div
+                            className="flex items-center gap-3"
+                            aria-label={`${result.percentage} percent`}
+                          >
+                            <span className="text-sm font-semibold min-w-[3rem]">
+                              {result.percentage}%
+                            </span>
+                            <div
+                              className="w-24 bg-gray-100 rounded-full h-2 overflow-hidden"
+                              aria-hidden="true"
+                            >
                               <div
                                 className="bg-blue-600 h-full rounded-full transition-all duration-500"
                                 style={{ width: `${result.percentage}%` }}
@@ -334,14 +449,16 @@ export default function ResultsPage() {
                           </div>
                         </td>
                         <td className="py-3 px-4" role="cell">
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getGradeColor(result.grade)}`}>
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getGradeColor(result.grade)}`}
+                          >
                             {result.grade}
                           </span>
                         </td>
                         {!isStudent && (
                           <td className="py-3 px-4 text-right" role="cell">
-                            <Button 
-                              variant="ghost" 
+                            <Button
+                              variant="ghost"
                               size="sm"
                               className="h-8 w-8 p-0"
                               aria-label={`Edit result for ${result.student_name}`}
@@ -359,16 +476,20 @@ export default function ResultsPage() {
               {/* Mobile View: Cards */}
               <div className="md:hidden space-y-4">
                 {resultsToShow.map((result) => (
-                  <article 
-                    key={result.id} 
+                  <article
+                    key={result.id}
                     className="p-4 rounded-xl border border-gray-200 bg-white shadow-sm space-y-3"
                   >
                     <div className="flex justify-between items-start">
                       <div>
                         <h4 className="font-bold text-gray-900">{result.assessment}</h4>
-                        <p className="text-xs text-gray-500">{result.subject} • {result.date}</p>
+                        <p className="text-xs text-gray-500">
+                          {result.subject} • {result.date}
+                        </p>
                       </div>
-                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${getGradeColor(result.grade)}`}>
+                      <span
+                        className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${getGradeColor(result.grade)}`}
+                      >
                         {result.grade}
                       </span>
                     </div>
@@ -388,10 +509,14 @@ export default function ResultsPage() {
                     <div className="flex items-center justify-between pt-1">
                       <div className="text-sm">
                         <span className="text-gray-500">Score: </span>
-                        <span className="font-bold">{result.marks}/{result.total}</span>
+                        <span className="font-bold">
+                          {result.marks}/{result.total}
+                        </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-blue-600">{result.percentage}%</span>
+                        <span className="text-sm font-bold text-blue-600">
+                          {result.percentage}%
+                        </span>
                         <div className="w-16 bg-gray-100 rounded-full h-1.5 overflow-hidden">
                           <div
                             className="bg-blue-600 h-full rounded-full"
@@ -420,22 +545,23 @@ export default function ResultsPage() {
           <Card>
             <CardHeader>
               <CardTitle id="distribution-title">
-                {isStudent ? "My Grade Distribution" : "Grade Distribution"}
+                {isStudent ? 'My Grade Distribution' : 'Grade Distribution'}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4" role="list">
                 {['A', 'B+', 'B', 'C+', 'C'].map((grade) => {
-                  const count = resultsToShow.filter(r => r.grade.startsWith(grade)).length
-                  const percentage = resultsToShow.length > 0 ? ((count / resultsToShow.length) * 100).toFixed(1) : 0
+                  const count = resultsToShow.filter((r) => r.grade.startsWith(grade)).length
+                  const percentage =
+                    resultsToShow.length > 0 ? ((count / resultsToShow.length) * 100).toFixed(1) : 0
                   return (
-                    <div 
-                      key={grade} 
-                      className="text-center p-4 rounded-lg focus-within:bg-gray-50 outline-none" 
+                    <div
+                      key={grade}
+                      className="text-center p-4 rounded-lg focus-within:bg-gray-50 outline-none"
                       role="listitem"
                       tabIndex="0"
                     >
-                      <div 
+                      <div
                         className={`text-2xl font-bold ${getGradeColor(grade).split(' ')[0]}`}
                         aria-label={`${count} items with grade ${grade}`}
                       >

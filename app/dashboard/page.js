@@ -29,7 +29,7 @@ import {
   Sparkles,
   Download,
   RefreshCw,
-  LayoutDashboard
+  LayoutDashboard,
 } from 'lucide-react'
 import { CardContent } from '@/components/ui/card'
 import ResponsiveDashboardLayout from '@/components/dashboard/ResponsiveDashboardLayout'
@@ -43,7 +43,7 @@ export default function DashboardPage() {
     averageAttendance: 0,
     totalUsers: 0,
     totalSubjects: 0,
-    totalAssessments: 0
+    totalAssessments: 0,
   })
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -82,7 +82,7 @@ export default function DashboardPage() {
       <ResponsiveDashboardLayout>
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map(n => (
+            {[1, 2, 3, 4].map((n) => (
               <SkeletonLoader key={n} className="h-32 w-full rounded-xl" />
             ))}
           </div>
@@ -112,9 +112,7 @@ export default function DashboardPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Please log in to access the dashboard</h2>
-          <Button onClick={() => window.location.href = '/login'}>
-            Go to Login
-          </Button>
+          <Button onClick={() => (window.location.href = '/login')}>Go to Login</Button>
         </div>
       </div>
     )
@@ -125,57 +123,59 @@ export default function DashboardPage() {
       <div className="space-y-8">
         {/* Welcome Section */}
         <section>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-1">Welcome back, {user?.name}. Here's what's happening today.</p>
+          <h1 className="text-2xl font-bold text-g-900 dark:text-g-50">Dashboard</h1>
+          <p className="text-g-600 dark:text-g-300 mt-1">
+            Welcome back, {user?.name}. Here's what's happening today.
+          </p>
         </section>
 
         {/* Quick Stats */}
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="p-6 border-none shadow-sm bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-blue-100 text-sm font-medium">Total Students</p>
-                <p className="text-3xl font-bold mt-1">{stats.totalStudents}</p>
-              </div>
-              <div className="bg-white/20 p-3 rounded-xl">
-                <Users className="h-6 w-6 text-white" />
-              </div>
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+          <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
+            <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
+              <Users className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-g-600 dark:text-g-300">Total Students</p>
+              <p className="text-[22px] font-bold text-g-900 dark:text-g-50 leading-tight">
+                {stats.totalStudents}
+              </p>
             </div>
           </Card>
 
-          <Card className="p-6 border-none shadow-sm bg-gradient-to-br from-green-500 to-green-600 text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-green-100 text-sm font-medium">Total Teachers</p>
-                <p className="text-3xl font-bold mt-1">{stats.totalTeachers}</p>
-              </div>
-              <div className="bg-white/20 p-3 rounded-xl">
-                <BookOpen className="h-6 w-6 text-white" />
-              </div>
+          <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
+            <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
+              <BookOpen className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-g-600 dark:text-g-300">Total Teachers</p>
+              <p className="text-[22px] font-bold text-g-900 dark:text-g-50 leading-tight">
+                {stats.totalTeachers}
+              </p>
             </div>
           </Card>
 
-          <Card className="p-6 border-none shadow-sm bg-gradient-to-br from-purple-500 to-purple-600 text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-purple-100 text-sm font-medium">Total Classes</p>
-                <p className="text-3xl font-bold mt-1">{stats.totalClasses}</p>
-              </div>
-              <div className="bg-white/20 p-3 rounded-xl">
-                <Calendar className="h-6 w-6 text-white" />
-              </div>
+          <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
+            <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
+              <Calendar className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-g-600 dark:text-g-300">Total Classes</p>
+              <p className="text-[22px] font-bold text-g-900 dark:text-g-50 leading-tight">
+                {stats.totalClasses}
+              </p>
             </div>
           </Card>
 
-          <Card className="p-6 border-none shadow-sm bg-gradient-to-br from-orange-500 to-orange-600 text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-orange-100 text-sm font-medium">Avg Attendance</p>
-                <p className="text-3xl font-bold mt-1">{stats.averageAttendance}%</p>
-              </div>
-              <div className="bg-white/20 p-3 rounded-xl">
-                <TrendingUp className="h-6 w-6 text-white" />
-              </div>
+          <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
+            <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
+              <TrendingUp className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-g-600 dark:text-g-300">Avg Attendance</p>
+              <p className="text-[22px] font-bold text-g-900 dark:text-g-50 leading-tight">
+                {stats.averageAttendance}%
+              </p>
             </div>
           </Card>
         </section>
@@ -183,30 +183,36 @@ export default function DashboardPage() {
         {/* Smart Analytics Integration */}
         {showSmartAnalytics && (
           <section className="mb-8" aria-labelledby="analytics-title">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 mb-6">
-              <div className="flex items-center justify-between">
+            <div className="bg-white dark:bg-g-800 rounded-[14px] border border-black/[0.09] dark:border-white/[0.09] p-6 mb-6">
+              <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 id="analytics-title" className="text-xl font-bold text-gray-900 flex items-center">
-                    <Zap className="w-6 h-6 text-yellow-500 mr-2" />
+                  <h2
+                    id="analytics-title"
+                    className="text-xl font-bold text-g-900 dark:text-g-50 flex items-center"
+                  >
+                    <Zap className="w-6 h-6 text-g-700 dark:text-g-200 mr-2" />
                     Smart Analytics Dashboard
                   </h2>
-                  <p className="text-gray-600 mt-1">
-                    AI-powered insights without external APIs • Real-time analytics • Predictive patterns
+                  <p className="text-g-600 dark:text-g-300 mt-1">
+                    AI-powered insights without external APIs • Real-time analytics • Predictive
+                    patterns
                   </p>
                 </div>
-                
-                <div className="flex space-x-2">
-                  <Button 
+
+                <div className="flex gap-2">
+                  <Button
                     onClick={() => window.open('/test-pwa.html', '_blank')}
-                    className="btn-secondary btn-sm"
+                    variant="secondary"
+                    size="sm"
                     aria-label="Test PWA in new tab"
                   >
                     <Settings className="w-4 h-4 mr-1" />
                     Test PWA
                   </Button>
-                  <Button 
+                  <Button
                     onClick={() => window.open('/test-reports.html', '_blank')}
-                    className="btn-secondary btn-sm"
+                    variant="secondary"
+                    size="sm"
                     aria-label="Test Reports in new tab"
                   >
                     <Download className="w-4 h-4 mr-1" />
@@ -220,9 +226,12 @@ export default function DashboardPage() {
               <Card>
                 <CardContent className="text-center py-12">
                   <BarChart3 className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-medium text-gray-900 mb-2">No Analytics Data Available</h3>
+                  <h3 className="text-xl font-medium text-gray-900 mb-2">
+                    No Analytics Data Available
+                  </h3>
                   <p className="text-gray-600 mb-6">
-                    Analytics data will appear here once students start using the system and generating activity.
+                    Analytics data will appear here once students start using the system and
+                    generating activity.
                   </p>
                   <Button variant="outline" onClick={fetchDashboardData}>
                     <RefreshCw className="h-4 w-4 mr-2" />
@@ -241,13 +250,16 @@ export default function DashboardPage() {
         )}
 
         {/* Main Navigation Cards */}
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" aria-label="Quick navigation">
+        <section
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+          aria-label="Quick navigation"
+        >
           <ul className="contents" role="list">
             {/* User Management */}
             <li role="listitem">
-              <button 
+              <button
                 className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-xl transition-shadow"
-                onClick={() => window.location.href = '/dashboard/users'}
+                onClick={() => (window.location.href = '/dashboard/users')}
                 aria-label="Go to User Management"
               >
                 <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-blue-200">
@@ -266,9 +278,9 @@ export default function DashboardPage() {
 
             {/* Registration */}
             <li role="listitem">
-              <button 
+              <button
                 className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 rounded-xl transition-shadow"
-                onClick={() => window.location.href = '/admin/registration'}
+                onClick={() => (window.location.href = '/admin/registration')}
                 aria-label="Go to Registration"
               >
                 <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-green-200">
@@ -287,16 +299,18 @@ export default function DashboardPage() {
 
             {/* Subjects */}
             <li role="listitem">
-              <button 
+              <button
                 className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 rounded-xl transition-shadow"
-                onClick={() => window.location.href = '/admin/subjects'}
+                onClick={() => (window.location.href = '/admin/subjects')}
                 aria-label="Go to Subjects Management"
               >
                 <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-purple-200">
                   <div className="flex items-center justify-between mb-4">
                     <BookOpen className="h-8 w-8 text-purple-600" aria-hidden="true" />
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-gray-900">{stats.totalSubjects || '0'}</p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {stats.totalSubjects || '0'}
+                      </p>
                       <p className="text-sm text-gray-500">Subjects</p>
                     </div>
                   </div>
@@ -308,9 +322,9 @@ export default function DashboardPage() {
 
             {/* Teacher Performance */}
             <li role="listitem">
-              <button 
+              <button
                 className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-xl transition-shadow"
-                onClick={() => window.location.href = '/dashboard/teacher-performance'}
+                onClick={() => (window.location.href = '/dashboard/teacher-performance')}
                 aria-label="Go to Teacher Performance"
               >
                 <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-orange-200">
@@ -322,16 +336,18 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Performance</h3>
-                  <p className="text-sm text-gray-600">Monitor teacher attendance and performance</p>
+                  <p className="text-sm text-gray-600">
+                    Monitor teacher attendance and performance
+                  </p>
                 </Card>
               </button>
             </li>
 
             {/* Timetable Management */}
             <li role="listitem">
-              <button 
+              <button
                 className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-xl transition-shadow"
-                onClick={() => window.location.href = '/dashboard/timetable/master'}
+                onClick={() => (window.location.href = '/dashboard/timetable/master')}
                 aria-label="Go to Master Timetable"
               >
                 <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-indigo-200">
@@ -350,9 +366,9 @@ export default function DashboardPage() {
 
             {/* Gamification */}
             <li role="listitem">
-              <button 
+              <button
                 className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 rounded-xl transition-shadow"
-                onClick={() => window.location.href = '/dashboard/gamification'}
+                onClick={() => (window.location.href = '/dashboard/gamification')}
                 aria-label="Go to Gamification Dashboard"
               >
                 <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-yellow-200">
@@ -371,9 +387,9 @@ export default function DashboardPage() {
 
             {/* Smart Reports */}
             <li role="listitem">
-              <button 
+              <button
                 className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded-xl transition-shadow"
-                onClick={() => window.location.href = '/dashboard/reports/smart'}
+                onClick={() => (window.location.href = '/dashboard/reports/smart')}
                 aria-label="Go to Smart Reports"
               >
                 <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-cyan-200">
@@ -393,9 +409,9 @@ export default function DashboardPage() {
             {/* Department Timetable - Only for HOD */}
             {user?.role === 'hod' && (
               <li role="listitem">
-                <button 
+                <button
                   className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 rounded-xl transition-shadow"
-                  onClick={() => window.location.href = '/dashboard/timetable/hod'}
+                  onClick={() => (window.location.href = '/dashboard/timetable/hod')}
                   aria-label="Go to Department Timetable"
                 >
                   <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-purple-200">
@@ -406,7 +422,9 @@ export default function DashboardPage() {
                         <p className="text-sm text-gray-500">Teachers</p>
                       </div>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Department Timetable</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Department Timetable
+                    </h3>
                     <p className="text-sm text-gray-600">View department schedule overview</p>
                   </Card>
                 </button>
@@ -416,21 +434,34 @@ export default function DashboardPage() {
             {/* My Timetable - For Teachers and Students */}
             {(user?.role === 'teacher' || user?.role === 'student') && (
               <li role="listitem">
-                <button 
+                <button
                   className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 rounded-xl transition-shadow"
-                  onClick={() => window.location.href = user?.role === 'teacher' ? '/dashboard/timetable/teacher' : '/dashboard/timetable/student'}
+                  onClick={() =>
+                    (window.location.href =
+                      user?.role === 'teacher'
+                        ? '/dashboard/timetable/teacher'
+                        : '/dashboard/timetable/student')
+                  }
                   aria-label="Go to My Timetable"
                 >
                   <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-green-200">
                     <div className="flex items-center justify-between mb-4">
                       <Calendar className="h-8 w-8 text-green-600" aria-hidden="true" />
                       <div className="text-right">
-                        <p className="text-2xl font-bold text-gray-900">{user?.role === 'teacher' ? '0' : '0'}</p>
-                        <p className="text-sm text-gray-500">{user?.role === 'teacher' ? 'Periods' : 'Subjects'}</p>
+                        <p className="text-2xl font-bold text-gray-900">
+                          {user?.role === 'teacher' ? '0' : '0'}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {user?.role === 'teacher' ? 'Periods' : 'Subjects'}
+                        </p>
                       </div>
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">My Timetable</h3>
-                    <p className="text-sm text-gray-600">{user?.role === 'teacher' ? 'View your teaching schedule' : 'View your class schedule'}</p>
+                    <p className="text-sm text-gray-600">
+                      {user?.role === 'teacher'
+                        ? 'View your teaching schedule'
+                        : 'View your class schedule'}
+                    </p>
                   </Card>
                 </button>
               </li>
@@ -438,16 +469,19 @@ export default function DashboardPage() {
 
             {/* Innovation Hub - Special Feature */}
             <li role="listitem">
-              <button 
+              <button
                 className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 rounded-xl transition-shadow"
-                onClick={() => window.location.href = '/dashboard/innovation'}
+                onClick={() => (window.location.href = '/dashboard/innovation')}
                 aria-label="Go to Innovation Hub"
               >
                 <Card className="p-6 h-full bg-gradient-to-br from-purple-600 to-blue-600 text-white transform group-hover:scale-[1.02] transition-all duration-300 group-hover:shadow-2xl">
                   <div className="flex items-center justify-between mb-4">
                     <div className="relative">
                       <Rocket className="h-8 w-8 text-white" aria-hidden="true" />
-                      <Sparkles className="h-4 w-4 text-yellow-300 absolute -top-1 -right-1 animate-pulse" aria-hidden="true" />
+                      <Sparkles
+                        className="h-4 w-4 text-yellow-300 absolute -top-1 -right-1 animate-pulse"
+                        aria-hidden="true"
+                      />
                     </div>
                     <div className="text-right">
                       <p className="text-2xl font-bold text-white">NEW</p>
@@ -455,10 +489,10 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   <h3 className="text-lg font-semibold text-white mb-2">🚀 Innovation Hub</h3>
-                  <p className="text-sm text-purple-100 mb-3">AI, AR/VR, Mental Health & Blockchain</p>
-                  <div className="text-xs text-purple-200">
-                    ✨ Explore Innovation →
-                  </div>
+                  <p className="text-sm text-purple-100 mb-3">
+                    AI, AR/VR, Mental Health & Blockchain
+                  </p>
+                  <div className="text-xs text-purple-200">✨ Explore Innovation →</div>
                 </Card>
               </button>
             </li>
@@ -473,11 +507,7 @@ export default function DashboardPage() {
               Your Schedule Today
             </h2>
           </div>
-          <TimetableSummary
-            userRole={user?.role}
-            userId={user?.id}
-            className="max-w-none"
-          />
+          <TimetableSummary userRole={user?.role} userId={user?.id} className="max-w-none" />
         </section>
       </div>
 
