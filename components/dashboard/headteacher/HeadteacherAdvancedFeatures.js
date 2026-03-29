@@ -6,10 +6,6 @@ import { BarChart3, Users, Zap, Target, CheckCircle, Activity } from 'lucide-rea
 export function HeadteacherAdvancedFeatures() {
   return (
     <div className="space-y-6">
-      {/* Test Banner */}
-      <div className="bg-royalPurple-success p-4 text-royalPurple-text1 font-bold text-center mb-4 rounded-lg shadow-lg">
-        🚨 HEADTEACHER ADVANCED FEATURES TEST - IF YOU SEE THIS, THE TAB IS WORKING 🚨
-      </div>
       {/* Advanced Features Header */}
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">

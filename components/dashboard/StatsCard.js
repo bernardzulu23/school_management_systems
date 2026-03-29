@@ -15,19 +15,18 @@ export function StatsCard({ title, value, icon: Icon, description, trend }) {
         >
           {title}
         </p>
-        <div className="flex items-baseline gap-2">
-          <p className="text-royalPurple-text1 text-2xl font-bold">{value}</p>
+        <div className="flex items-baseline gap-2 mt-1 flex-wrap">
+          <span className="text-royalPurple-text1 text-2xl font-bold leading-none">{value}</span>
           {trend && (
             <span
-              className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+              className={`text-[10px] font-semibold px-1.5 py-0.5 rounded shrink-0 ${
                 trend.isPositive
                   ? 'bg-royalPurple-success text-royalPurple-successTx'
                   : 'bg-royalPurple-danger text-royalPurple-dangerTx'
               }`}
               aria-label={`${trend.isPositive ? 'Increase' : 'Decrease'} of ${Math.abs(trend.value)}%`}
             >
-              <span aria-hidden="true">{trend.isPositive ? '↗' : '↘'}</span> {Math.abs(trend.value)}
-              %
+              {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
             </span>
           )}
         </div>

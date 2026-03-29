@@ -68,42 +68,44 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
         <CardContent>
           <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="text-center p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                <div className="backdrop-blur-md bg-royalPurple-success/60 border border-royalPurple-border/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="h-8 w-8 text-royalPurple-text1" />
+              <div className="bg-royalPurple-card border border-royalPurple-border rounded-xl p-4 text-center">
+                <div className="bg-royalPurple-card2 rounded-lg p-3 w-fit mx-auto mb-4">
+                  <TrendingUp className="h-8 w-8 text-royalPurple-accent" />
                 </div>
-                <h3 className="font-bold text-royalPurple-text1 text-lg">Student Achievement</h3>
-                <p className="text-3xl font-bold text-royalPurple-successTx mt-2">
+                <h3 className="text-royalPurple-text1 font-semibold">Student Achievement</h3>
+                <p className="text-2xl font-bold text-royalPurple-text2 mt-2">
                   {schoolStats.passRate}%
                 </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">Based on recent results</p>
               </div>
-              <div className="text-center p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <Users className="h-8 w-8 text-royalPurple-text1" />
+              <div className="bg-royalPurple-card border border-royalPurple-border rounded-xl p-4 text-center">
+                <div className="bg-royalPurple-card2 rounded-lg p-3 w-fit mx-auto mb-4">
+                  <Users className="h-8 w-8 text-royalPurple-accent" />
                 </div>
-                <h3 className="font-bold text-royalPurple-text1 text-lg">Teacher Effectiveness</h3>
-                <p className="text-3xl font-bold text-royalPurple-accentTx mt-2">
+                <h3 className="text-royalPurple-text1 font-semibold">Teacher Effectiveness</h3>
+                <p className="text-2xl font-bold text-royalPurple-text2 mt-2">
                   {schoolStats.teacherEffectiveness}%
                 </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">Based on student performance</p>
               </div>
-              <div className="text-center p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="h-8 w-8 text-royalPurple-text1" />
+              <div className="bg-royalPurple-card border border-royalPurple-border rounded-xl p-4 text-center">
+                <div className="bg-royalPurple-card2 rounded-lg p-3 w-fit mx-auto mb-4">
+                  <CheckCircle className="h-8 w-8 text-royalPurple-accent" />
                 </div>
-                <h3 className="font-bold text-royalPurple-text1 text-lg">Attendance Rate</h3>
-                <p className="text-3xl font-bold text-royalPurple-pillTx mt-2">
+                <h3 className="text-royalPurple-text1 font-semibold">Attendance Rate</h3>
+                <p className="text-2xl font-bold text-royalPurple-text2 mt-2">
                   {schoolStats.attendanceRate}%
                 </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">Current term</p>
               </div>
-              <div className="text-center p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                <div className="backdrop-blur-md bg-orange-600/60 border border-orange-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <Award className="h-8 w-8 text-royalPurple-text1" />
+              <div className="bg-royalPurple-card border border-royalPurple-border rounded-xl p-4 text-center">
+                <div className="bg-royalPurple-card2 rounded-lg p-3 w-fit mx-auto mb-4">
+                  <Award className="h-8 w-8 text-royalPurple-accent" />
                 </div>
-                <h3 className="font-bold text-royalPurple-text1 text-lg">Pass Rate</h3>
-                <p className="text-3xl font-bold text-orange-400 mt-2">{schoolStats.passRate}%</p>
+                <h3 className="text-royalPurple-text1 font-semibold">Pass Rate</h3>
+                <p className="text-2xl font-bold text-royalPurple-text2 mt-2">
+                  {schoolStats.passRate}%
+                </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">Current term</p>
               </div>
             </div>

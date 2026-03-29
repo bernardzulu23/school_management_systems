@@ -386,10 +386,10 @@ function HeadteacherDashboardContent() {
                     aria-selected={isActive}
                     aria-controls={isActive ? 'active-feature-content' : undefined}
                     tabIndex={0}
-                    className={`transition-all duration-200 cursor-pointer border border-black/[0.09] dark:border-white/[0.09] hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] ${
+                    className={`transition-all duration-200 cursor-pointer bg-royalPurple-card border border-royalPurple-border hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-royalPurple-border2/60 ${
                       isActive
-                        ? 'bg-g-100 dark:bg-g-800 border-l-[3px] border-l-g-800 text-g-900 font-semibold'
-                        : 'bg-royalPurple-card dark:bg-g-800'
+                        ? 'bg-royalPurple-card2 border-royalPurple-border2/60 font-semibold'
+                        : ''
                     }`}
                     onClick={() => setActiveTab(tab.id)}
                     onKeyDown={(e) => {
@@ -401,10 +401,7 @@ function HeadteacherDashboardContent() {
                   >
                     <CardHeader className="pb-2 pt-3">
                       <CardTitle className="flex items-center text-xs font-semibold">
-                        <Icon
-                          className="h-4 w-4 mr-2 text-g-700 dark:text-g-200"
-                          aria-hidden="true"
-                        />
+                        <Icon className="h-4 w-4 mr-2 text-royalPurple-text2" aria-hidden="true" />
                         <span className="truncate">{tab.name}</span>
                       </CardTitle>
                     </CardHeader>
@@ -442,15 +439,15 @@ function HeadteacherDashboardContent() {
               id="active-feature-content"
               role="tabpanel"
               aria-labelledby={`tab-${activeTab}`}
-              className="bg-royalPurple-card dark:bg-g-800 rounded-[14px] border border-black/[0.09] dark:border-white/[0.09] p-4"
+              className="bg-royalPurple-card rounded-[14px] border border-royalPurple-border p-4"
             >
               <Card>
-                <CardHeader className="bg-g-50 dark:bg-g-900 py-3 rounded-t-[14px] border-b border-black/[0.09] dark:border-white/[0.09]">
+                <CardHeader className="bg-royalPurple-card2 py-3 rounded-t-[14px] border-b border-royalPurple-border">
                   <CardTitle className="flex items-center justify-between text-lg">
                     <div className="flex items-center" id={`tab-${activeTab}`}>
                       {tabs.find((t) => t.id === activeTab)?.icon &&
                         React.createElement(tabs.find((t) => t.id === activeTab).icon, {
-                          className: 'h-5 w-5 mr-2 text-g-700',
+                          className: 'h-5 w-5 mr-2 text-royalPurple-text2',
                           'aria-hidden': 'true',
                         })}
                       {tabs.find((t) => t.id === activeTab)?.name}
@@ -459,14 +456,14 @@ function HeadteacherDashboardContent() {
                       variant="ghost"
                       size="sm"
                       onClick={() => setActiveTab('')}
-                      className="h-8 w-8 p-0"
+                      className="h-8 w-8 p-0 text-royalPurple-text2 hover:text-royalPurple-text1"
                       aria-label="Close feature content"
                     >
                       <X className="h-4 w-4" />
                     </Button>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-4 max-h-96 overflow-y-auto">
+                <CardContent className="bg-royalPurple-card p-4 max-h-96 overflow-y-auto">
                   {renderTabContent()}
                 </CardContent>
               </Card>

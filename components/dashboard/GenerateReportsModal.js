@@ -111,8 +111,8 @@ export default function GenerateReportsModal({ students, onClose }) {
     const colors = {
       blue: 'bg-royalPurple-accent text-royalPurple-accentTx border-royalPurple-border2',
       green: 'bg-royalPurple-success text-royalPurple-successTx border-royalPurple-border',
-      orange: 'bg-orange-100 text-orange-800 border-orange-200',
-      purple: 'bg-royalPurple-pill text-royalPurple-pillTx border-royalPurple-border2',
+      orange: 'bg-royalPurple-card2 text-royalPurple-text2 border-royalPurple-border',
+      purple: 'bg-royalPurple-card2 text-royalPurple-text2 border-royalPurple-border',
     }
     return colors[color] || colors.blue
   }
@@ -124,16 +124,16 @@ export default function GenerateReportsModal({ students, onClose }) {
       aria-modal="true"
       aria-labelledby="reports-modal-title"
     >
-      <div className="bg-royalPurple-card rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-        <header className="p-6 border-b bg-orange-600 text-royalPurple-text1 sticky top-0 z-10">
+      <div className="bg-royalPurple-card border border-royalPurple-border rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+        <header className="bg-royalPurple-card2 border-b border-royalPurple-border px-6 py-4 rounded-t-2xl sticky top-0 z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <FileText className="h-6 w-6 mr-3" aria-hidden="true" />
+              <FileText className="h-6 w-6 mr-3 text-royalPurple-text2" aria-hidden="true" />
               <div>
                 <h2 id="reports-modal-title" className="text-xl font-bold">
                   Generate Academic Performance Reports
                 </h2>
-                <p className="text-orange-100">
+                <p className="text-royalPurple-text2">
                   Create detailed reports for students requiring attention
                 </p>
               </div>
@@ -141,7 +141,7 @@ export default function GenerateReportsModal({ students, onClose }) {
             <Button
               variant="outline"
               onClick={onClose}
-              className="text-royalPurple-text1 border-white hover:bg-royalPurple-card hover:text-orange-600"
+              className="text-royalPurple-text2 hover:text-royalPurple-text1"
               aria-label="Close report generator"
             >
               Close
@@ -149,7 +149,7 @@ export default function GenerateReportsModal({ students, onClose }) {
           </div>
         </header>
 
-        <main className="p-6 space-y-6">
+        <main className="bg-royalPurple-card px-6 py-4 space-y-6">
           {/* Report Type Selection */}
           <section aria-labelledby="report-type-title">
             <h3 id="report-type-title" className="font-semibold mb-4">
@@ -220,7 +220,7 @@ export default function GenerateReportsModal({ students, onClose }) {
                     key={student.id}
                     className={`p-3 border rounded-lg transition-colors ${
                       selectedStudents.includes(student.id)
-                        ? 'border-orange-500 bg-orange-50'
+                        ? 'border-royalPurple-border2 bg-royalPurple-accentBg'
                         : 'border-royalPurple-border'
                     }`}
                   >
@@ -231,7 +231,7 @@ export default function GenerateReportsModal({ students, onClose }) {
                         checked={selectedStudents.includes(student.id)}
                         onChange={() => toggleStudent(student.id)}
                         disabled={isGenerating}
-                        className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-royalPurple-border rounded"
+                        className="h-4 w-4 text-royalPurple-accent focus:ring-royalPurple-border2 border-royalPurple-border rounded"
                       />
                       <label htmlFor={`student-${student.id}`} className="flex-1 cursor-pointer">
                         <div className="flex items-center justify-between">
@@ -249,7 +249,7 @@ export default function GenerateReportsModal({ students, onClose }) {
                               className={`px-2 py-1 text-xs rounded-full ${
                                 student.risk_level === 'critical'
                                   ? 'bg-royalPurple-danger text-royalPurple-dangerTx'
-                                  : 'bg-orange-100 text-orange-800'
+                                  : 'bg-royalPurple-card2 text-royalPurple-text2 border border-royalPurple-border'
                               }`}
                             >
                               {student.risk_level.toUpperCase()}
@@ -328,7 +328,7 @@ export default function GenerateReportsModal({ students, onClose }) {
                         disabled={isGenerating}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-royalPurple-card2 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-royalPurple-card after:border-royalPurple-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-600"></div>
+                      <div className="w-11 h-6 bg-royalPurple-card2 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-royalPurple-border2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-royalPurple-card after:border-royalPurple-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-royalPurple-accent"></div>
                     </label>
                   </div>
 
@@ -347,7 +347,7 @@ export default function GenerateReportsModal({ students, onClose }) {
                         disabled={isGenerating}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-royalPurple-card2 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-royalPurple-card after:border-royalPurple-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-600"></div>
+                      <div className="w-11 h-6 bg-royalPurple-card2 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-royalPurple-border2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-royalPurple-card after:border-royalPurple-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-royalPurple-accent"></div>
                     </label>
                   </div>
                 </div>
@@ -380,11 +380,11 @@ export default function GenerateReportsModal({ students, onClose }) {
                   </div>
                   <div className="text-sm text-royalPurple-dangerTx">Critical Risk</div>
                 </div>
-                <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg text-center">
-                  <div className="text-lg font-bold text-orange-600">
+                <div className="p-3 bg-royalPurple-card2 border border-royalPurple-border rounded-lg text-center">
+                  <div className="text-lg font-bold text-royalPurple-text2">
                     {students.filter((s) => s.risk_level === 'high').length}
                   </div>
-                  <div className="text-sm text-orange-600">High Risk</div>
+                  <div className="text-sm text-royalPurple-text2">High Risk</div>
                 </div>
               </div>
             </div>
@@ -396,7 +396,7 @@ export default function GenerateReportsModal({ students, onClose }) {
           <Button
             onClick={handleGenerateReport}
             disabled={selectedStudents.length === 0 || isGenerating}
-            className="flex-1 bg-orange-600 hover:bg-orange-700 transition-all duration-200"
+            className="flex-1 bg-royalPurple-accent hover:opacity-90 text-royalPurple-deep font-semibold transition-opacity duration-200"
             aria-busy={isGenerating}
             aria-label={
               isGenerating

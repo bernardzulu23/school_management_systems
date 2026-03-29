@@ -444,9 +444,6 @@ export default function HodDashboard() {
             </div>
 
             {/* Advanced HOD Features */}
-            <div className="bg-royalPurple-accent p-4 text-royalPurple-text1 font-bold text-center mb-4">
-              🚨 HOD ADVANCED FEATURES TEST - IF YOU SEE THIS, THE SECTION IS RENDERING 🚨
-            </div>
             <Card variant="glass">
               <CardHeader>
                 <CardTitle className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent flex items-center">

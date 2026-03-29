@@ -168,16 +168,16 @@ export default function CreateSupportPlansModal({ students, onClose }) {
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div className="bg-royalPurple-card rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-        <header className="p-6 border-b bg-royalPurple-accent text-royalPurple-text1 sticky top-0 z-10">
+      <div className="bg-royalPurple-card border border-royalPurple-border rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+        <header className="bg-royalPurple-card2 border-b border-royalPurple-border px-6 py-4 rounded-t-2xl sticky top-0 z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <Target className="h-6 w-6 mr-3" aria-hidden="true" />
+              <Target className="h-6 w-6 mr-3 text-royalPurple-text2" aria-hidden="true" />
               <div>
                 <h2 id="modal-title" className="text-xl font-bold">
                   Create Academic Support Plan
                 </h2>
-                <p className="text-royalPurple-accentTx">
+                <p className="text-royalPurple-text2">
                   Develop individualized intervention strategies
                 </p>
               </div>
@@ -185,7 +185,7 @@ export default function CreateSupportPlansModal({ students, onClose }) {
             <Button
               variant="outline"
               onClick={onClose}
-              className="text-royalPurple-text1 border-white hover:bg-royalPurple-card hover:text-royalPurple-accentTx"
+              className="text-royalPurple-text2 hover:text-royalPurple-text1"
               aria-label="Close modal"
             >
               Close
@@ -193,7 +193,7 @@ export default function CreateSupportPlansModal({ students, onClose }) {
           </div>
         </header>
 
-        <main className="p-6 space-y-6">
+        <main className="bg-royalPurple-card px-6 py-4 space-y-6">
           {/* Student Selection */}
           <section aria-labelledby="student-selection-title">
             <h3 id="student-selection-title" className="font-semibold mb-3">

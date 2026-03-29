@@ -34,17 +34,17 @@ export default function StudentPerformanceReport({ student, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-royalPurple-deep bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-royalPurple-card rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-royalPurple-card border border-royalPurple-border rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="p-6 border-b bg-gradient-to-r from-blue-600 to-purple-600 text-royalPurple-text1">
+        <div className="bg-royalPurple-card2 border-b border-royalPurple-border px-6 py-4 rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-royalPurple-card bg-opacity-20 rounded-full flex items-center justify-center">
-                <User className="h-8 w-8" />
+              <div className="w-16 h-16 bg-royalPurple-card border border-royalPurple-border rounded-full flex items-center justify-center">
+                <User className="h-8 w-8 text-royalPurple-text2" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold">{student.name}</h2>
-                <p className="text-royalPurple-accentTx">
+                <p className="text-royalPurple-text2">
                   {student.student_id} • {student.class} • {student.grade_level.toUpperCase()}
                 </p>
               </div>
@@ -52,14 +52,14 @@ export default function StudentPerformanceReport({ student, onClose }) {
             <Button
               variant="outline"
               onClick={onClose}
-              className="text-royalPurple-text1 border-white hover:bg-royalPurple-card hover:text-royalPurple-accentTx"
+              className="text-royalPurple-text2 hover:text-royalPurple-text1"
             >
               Close
             </Button>
           </div>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="bg-royalPurple-card px-6 py-4 space-y-6">
           {/* Critical Alert */}
           <Card className="border-l-4 border-l-red-500 bg-royalPurple-danger">
             <CardContent className="p-4">

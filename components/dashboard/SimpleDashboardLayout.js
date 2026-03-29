@@ -23,7 +23,9 @@ export function DashboardLayout({ children, title }) {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-royalPurple-text2 font-medium">{roleLabel}</span>
-              {title && <span className="text-sm text-royalPurple-text3">| {title}</span>}
+              {title && String(title).trim() !== String(roleLabel).trim() && (
+                <span className="text-sm text-royalPurple-text3">| {title}</span>
+              )}
               <ThemeToggle />
               <Button
                 variant="ghost"

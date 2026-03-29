@@ -345,134 +345,156 @@ export default function UserManagement() {
           aria-label="Registration actions"
           className="grid grid-cols-1 md:grid-cols-4 gap-6"
         >
-          <Card variant="glass" className="hover:scale-105 transition-all duration-300">
-            <CardHeader className="backdrop-blur-md bg-royalPurple-success/60 border-b border-royalPurple-border/50 text-royalPurple-text1 rounded-t-3xl">
-              <CardTitle className="flex items-center text-royalPurple-text1">
-                <UserPlus className="h-6 w-6 mr-3" aria-hidden="true" />
-                Register Students
-              </CardTitle>
+          <Card className="bg-royalPurple-card border border-royalPurple-border rounded-xl overflow-hidden hover:scale-105 transition-all duration-300">
+            <CardHeader className="bg-royalPurple-card2 p-4 border-b border-royalPurple-border">
+              <div className="flex items-center gap-3">
+                <div className="bg-royalPurple-card border border-royalPurple-border rounded-lg p-2">
+                  <UserPlus className="h-5 w-5 text-royalPurple-text2" aria-hidden="true" />
+                </div>
+                <div>
+                  <CardTitle className="text-royalPurple-text1 font-semibold text-base">
+                    Register Students
+                  </CardTitle>
+                  <p className="text-royalPurple-text2 text-sm mt-1">
+                    Add new students to the system
+                  </p>
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="space-y-4">
-                <p className="text-royalPurple-text2 text-sm">Add new students to the system</p>
-                <div className="space-y-3">
-                  <Button
-                    className="w-full bg-royalPurple-success hover:bg-royalPurple-success text-royalPurple-text1 font-semibold py-3"
-                    onClick={() => handleCreateUser('student')}
-                    aria-label="Add a new student"
-                  >
-                    <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
-                    Add Student
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full border-royalPurple-border text-royalPurple-successTx hover:bg-royalPurple-success/20 font-semibold py-3"
-                    onClick={() => toast('Bulk import functionality - Coming soon')}
-                    aria-label="Import multiple students via CSV"
-                  >
-                    <Users className="h-4 w-4 mr-2" aria-hidden="true" />
-                    Bulk Import
-                  </Button>
-                </div>
+              <div className="space-y-3">
+                <Button
+                  className="bg-royalPurple-accent text-royalPurple-deep font-semibold rounded-lg w-full py-2"
+                  onClick={() => handleCreateUser('student')}
+                  aria-label="Add a new student"
+                >
+                  <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Add Student
+                </Button>
+                <Button
+                  variant="outline"
+                  className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                  onClick={() => toast('Bulk import functionality - Coming soon')}
+                  aria-label="Import multiple students via CSV"
+                >
+                  <Users className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Bulk Import
+                </Button>
               </div>
             </CardContent>
           </Card>
 
-          <Card variant="glass" className="hover:scale-105 transition-all duration-300">
-            <CardHeader className="backdrop-blur-md bg-royalPurple-accent/60 border-b border-royalPurple-border2/50 text-royalPurple-text1 rounded-t-3xl">
-              <CardTitle className="flex items-center text-royalPurple-text1">
-                <GraduationCap className="h-6 w-6 mr-3" aria-hidden="true" />
-                Register Teachers
-              </CardTitle>
+          <Card className="bg-royalPurple-card border border-royalPurple-border rounded-xl overflow-hidden hover:scale-105 transition-all duration-300">
+            <CardHeader className="bg-royalPurple-card2 p-4 border-b border-royalPurple-border">
+              <div className="flex items-center gap-3">
+                <div className="bg-royalPurple-card border border-royalPurple-border rounded-lg p-2">
+                  <GraduationCap className="h-5 w-5 text-royalPurple-text2" aria-hidden="true" />
+                </div>
+                <div>
+                  <CardTitle className="text-royalPurple-text1 font-semibold text-base">
+                    Register Teachers
+                  </CardTitle>
+                  <p className="text-royalPurple-text2 text-sm mt-1">
+                    Add new teachers to the system
+                  </p>
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="space-y-4">
-                <p className="text-royalPurple-text2 text-sm">Add new teachers to the system</p>
-                <div className="space-y-3">
-                  <Button
-                    className="w-full bg-royalPurple-accent hover:bg-royalPurple-accent text-royalPurple-text1 font-semibold py-3"
-                    onClick={() => handleCreateUser('teacher')}
-                    aria-label="Add a new teacher"
-                  >
-                    <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
-                    Add Teacher
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full border-royalPurple-border2 text-royalPurple-accentTx hover:bg-royalPurple-accent/20 font-semibold py-3"
-                    onClick={() => toast('Assign subjects functionality - Coming soon')}
-                    aria-label="Assign subjects to teachers"
-                  >
-                    <Settings className="h-4 w-4 mr-2" aria-hidden="true" />
-                    Assign Subjects
-                  </Button>
-                </div>
+              <div className="space-y-3">
+                <Button
+                  className="bg-royalPurple-accent text-royalPurple-deep font-semibold rounded-lg w-full py-2"
+                  onClick={() => handleCreateUser('teacher')}
+                  aria-label="Add a new teacher"
+                >
+                  <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Add Teacher
+                </Button>
+                <Button
+                  variant="outline"
+                  className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                  onClick={() => toast('Assign subjects functionality - Coming soon')}
+                  aria-label="Assign subjects to teachers"
+                >
+                  <Settings className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Assign Subjects
+                </Button>
               </div>
             </CardContent>
           </Card>
 
-          <Card variant="glass" className="hover:scale-105 transition-all duration-300">
-            <CardHeader className="backdrop-blur-md bg-royalPurple-pill/60 border-b border-royalPurple-border2/50 text-royalPurple-text1 rounded-t-3xl">
-              <CardTitle className="flex items-center text-royalPurple-text1">
-                <Settings className="h-6 w-6 mr-3" aria-hidden="true" />
-                Register HODs
-              </CardTitle>
+          <Card className="bg-royalPurple-card border border-royalPurple-border rounded-xl overflow-hidden hover:scale-105 transition-all duration-300">
+            <CardHeader className="bg-royalPurple-card2 p-4 border-b border-royalPurple-border">
+              <div className="flex items-center gap-3">
+                <div className="bg-royalPurple-card border border-royalPurple-border rounded-lg p-2">
+                  <Settings className="h-5 w-5 text-royalPurple-text2" aria-hidden="true" />
+                </div>
+                <div>
+                  <CardTitle className="text-royalPurple-text1 font-semibold text-base">
+                    Register HODs
+                  </CardTitle>
+                  <p className="text-royalPurple-text2 text-sm mt-1">Add new HODs to the system</p>
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="space-y-4">
-                <p className="text-royalPurple-text2 text-sm">Add new HODs to the system</p>
-                <div className="space-y-3">
-                  <Button
-                    className="w-full bg-royalPurple-pill hover:bg-royalPurple-pill text-royalPurple-text1 font-semibold py-3"
-                    onClick={() => handleCreateUser('hod')}
-                    aria-label="Add a new Head of Department"
-                  >
-                    <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
-                    Add HOD
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full border-royalPurple-border2 text-royalPurple-pillTx hover:bg-royalPurple-pill/20 font-semibold py-3"
-                    onClick={() => toast('Assign departments functionality - Coming soon')}
-                    aria-label="Assign departments to HODs"
-                  >
-                    <Users className="h-4 w-4 mr-2" aria-hidden="true" />
-                    Assign Departments
-                  </Button>
-                </div>
+              <div className="space-y-3">
+                <Button
+                  className="bg-royalPurple-accent text-royalPurple-deep font-semibold rounded-lg w-full py-2"
+                  onClick={() => handleCreateUser('hod')}
+                  aria-label="Add a new Head of Department"
+                >
+                  <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Add HOD
+                </Button>
+                <Button
+                  variant="outline"
+                  className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                  onClick={() => toast('Assign departments functionality - Coming soon')}
+                  aria-label="Assign departments to HODs"
+                >
+                  <Users className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Assign Departments
+                </Button>
               </div>
             </CardContent>
           </Card>
 
-          <Card variant="glass" className="hover:scale-105 transition-all duration-300">
-            <CardHeader className="backdrop-blur-md bg-orange-600/60 border-b border-orange-400/50 text-royalPurple-text1 rounded-t-3xl">
-              <CardTitle className="flex items-center text-royalPurple-text1">
-                <UserPlus className="h-6 w-6 mr-3" aria-hidden="true" />
-                Register Headteachers
-              </CardTitle>
+          <Card className="bg-royalPurple-card border border-royalPurple-border rounded-xl overflow-hidden hover:scale-105 transition-all duration-300">
+            <CardHeader className="bg-royalPurple-card2 p-4 border-b border-royalPurple-border">
+              <div className="flex items-center gap-3">
+                <div className="bg-royalPurple-card border border-royalPurple-border rounded-lg p-2">
+                  <UserPlus className="h-5 w-5 text-royalPurple-text2" aria-hidden="true" />
+                </div>
+                <div>
+                  <CardTitle className="text-royalPurple-text1 font-semibold text-base">
+                    Register Headteachers
+                  </CardTitle>
+                  <p className="text-royalPurple-text2 text-sm mt-1">
+                    Add new headteachers to the system
+                  </p>
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="space-y-4">
-                <p className="text-royalPurple-text2 text-sm">Add new headteachers to the system</p>
-                <div className="space-y-3">
-                  <Button
-                    className="w-full bg-orange-600 hover:bg-orange-700 text-royalPurple-text1 font-semibold py-3"
-                    onClick={() => handleCreateUser('headteacher')}
-                    aria-label="Add a new headteacher"
-                  >
-                    <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
-                    Add Headteacher
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full border-orange-400 text-orange-300 hover:bg-orange-600/20 font-semibold py-3"
-                    onClick={() => toast('Assign permissions functionality - Coming soon')}
-                    aria-label="Assign permissions to headteachers"
-                  >
-                    <Settings className="h-4 w-4 mr-2" aria-hidden="true" />
-                    Assign Permissions
-                  </Button>
-                </div>
+              <div className="space-y-3">
+                <Button
+                  className="bg-royalPurple-accent text-royalPurple-deep font-semibold rounded-lg w-full py-2"
+                  onClick={() => handleCreateUser('headteacher')}
+                  aria-label="Add a new headteacher"
+                >
+                  <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Add Headteacher
+                </Button>
+                <Button
+                  variant="outline"
+                  className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                  onClick={() => toast('Assign permissions functionality - Coming soon')}
+                  aria-label="Assign permissions to headteachers"
+                >
+                  <Settings className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Assign Permissions
+                </Button>
               </div>
             </CardContent>
           </Card>

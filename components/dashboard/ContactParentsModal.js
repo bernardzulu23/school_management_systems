@@ -104,27 +104,27 @@ Email: admin@springfield.edu`)
 
   return (
     <div className="fixed inset-0 bg-royalPurple-deep bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-royalPurple-card rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b bg-royalPurple-danger text-royalPurple-text1">
+      <div className="bg-royalPurple-card border border-royalPurple-border rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="bg-royalPurple-card2 border-b border-royalPurple-border px-6 py-4 rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <Phone className="h-6 w-6 mr-3" />
+              <Phone className="h-6 w-6 mr-3 text-royalPurple-text2" />
               <div>
                 <h2 className="text-xl font-bold">Contact Parents/Guardians</h2>
-                <p className="text-royalPurple-dangerTx">Urgent Academic Intervention Required</p>
+                <p className="text-royalPurple-text2">Urgent Academic Intervention Required</p>
               </div>
             </div>
             <Button
               variant="outline"
               onClick={onClose}
-              className="text-royalPurple-text1 border-white hover:bg-royalPurple-card hover:text-royalPurple-dangerTx"
+              className="text-royalPurple-text2 hover:text-royalPurple-text1"
             >
               Close
             </Button>
           </div>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="bg-royalPurple-card px-6 py-4 space-y-6">
           {/* Alert Banner */}
           <div className="bg-royalPurple-danger border border-royalPurple-border rounded-lg p-4">
             <div className="flex items-center">
@@ -173,7 +173,7 @@ Email: admin@springfield.edu`)
                           type="checkbox"
                           checked={selectedStudents.includes(student.id)}
                           onChange={() => toggleStudent(student.id)}
-                          className="h-4 w-4 text-royalPurple-dangerTx focus:ring-red-500 border-royalPurple-border rounded mt-1"
+                          className="h-4 w-4 text-royalPurple-dangerTx focus:ring-royalPurple-border2 border-royalPurple-border rounded mt-1"
                         />
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
@@ -190,7 +190,7 @@ Email: admin@springfield.edu`)
                               className={`px-2 py-1 text-xs rounded-full ${
                                 student.risk_level === 'critical'
                                   ? 'bg-royalPurple-danger text-royalPurple-dangerTx'
-                                  : 'bg-orange-100 text-orange-800'
+                                  : 'bg-royalPurple-card2 text-royalPurple-text2 border border-royalPurple-border'
                               }`}
                             >
                               {student.risk_level.toUpperCase()} RISK
@@ -291,7 +291,7 @@ Email: admin@springfield.edu`)
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     rows={12}
-                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-red-500 focus:border-royalPurple-border text-sm"
+                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-royalPurple-border2 focus:border-royalPurple-border text-sm"
                     placeholder="Enter your message template..."
                   />
                   <p className="text-xs text-royalPurple-text3 mt-2">
@@ -302,7 +302,7 @@ Email: admin@springfield.edu`)
 
                 {/* Selected Students Summary */}
                 {selectedStudents.length > 0 && (
-                  <div className="p-3 bg-royalPurple-accent border border-royalPurple-border2 rounded-lg">
+                  <div className="p-3 bg-royalPurple-accentBg border border-royalPurple-border2 rounded-lg">
                     <h4 className="font-medium text-royalPurple-accentTx mb-2">
                       Ready to Contact ({selectedStudents.length} students):
                     </h4>
@@ -323,7 +323,7 @@ Email: admin@springfield.edu`)
             <Button
               onClick={handleSendMessages}
               disabled={selectedStudents.length === 0}
-              className="flex-1 bg-royalPurple-danger hover:bg-royalPurple-danger"
+              className="flex-1 bg-royalPurple-danger hover:opacity-90 transition-opacity"
             >
               <Send className="h-4 w-4 mr-2" />
               Send {contactMethod.toUpperCase()} to {selectedStudents.length} Parent(s)

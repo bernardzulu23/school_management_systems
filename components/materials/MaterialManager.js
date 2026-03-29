@@ -331,80 +331,89 @@ export default function MaterialManager() {
       {/* Upload Modal */}
       {showUploadModal && (
         <div className="fixed inset-0 bg-royalPurple-deep bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-royalPurple-card rounded-lg max-w-md w-full p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Upload Material</h3>
-              <Button variant="outline" size="sm" onClick={() => setShowUploadModal(false)}>
+          <div className="bg-royalPurple-card border border-royalPurple-border rounded-2xl max-w-md w-full overflow-hidden">
+            <div className="bg-royalPurple-card2 border-b border-royalPurple-border px-6 py-4 rounded-t-2xl flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-royalPurple-text1">Upload Material</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowUploadModal(false)}
+                className="text-royalPurple-text2 hover:text-royalPurple-text1"
+              >
                 <X className="h-4 w-4" />
               </Button>
             </div>
 
-            <form onSubmit={handleFileUpload} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-royalPurple-text2 mb-1">
-                  Title <span className="text-royalPurple-dangerTx">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={uploadData.title}
-                  onChange={(e) => setUploadData((prev) => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-3 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                />
+            <form onSubmit={handleFileUpload} className="bg-royalPurple-card">
+              <div className="px-6 py-4 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-royalPurple-text2 mb-1">
+                    Title <span className="text-royalPurple-dangerTx">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={uploadData.title}
+                    onChange={(e) => setUploadData((prev) => ({ ...prev, title: e.target.value }))}
+                    className="input"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-royalPurple-text2 mb-1">
+                    Subject <span className="text-royalPurple-dangerTx">*</span>
+                  </label>
+                  <select
+                    value={uploadData.subject_id}
+                    onChange={(e) =>
+                      setUploadData((prev) => ({ ...prev, subject_id: e.target.value }))
+                    }
+                    className="select"
+                    required
+                  >
+                    <option value="">Select Subject</option>
+                    {userSubjectObjects.map((subject) => (
+                      <option key={subject.id} value={subject.id}>
+                        {subject.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-royalPurple-text2 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    value={uploadData.description}
+                    onChange={(e) =>
+                      setUploadData((prev) => ({ ...prev, description: e.target.value }))
+                    }
+                    className="textarea"
+                    rows={3}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-royalPurple-text2 mb-1">
+                    File <span className="text-royalPurple-dangerTx">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    onChange={(e) =>
+                      setUploadData((prev) => ({ ...prev, file: e.target.files[0] }))
+                    }
+                    className="input"
+                    accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.mp4,.zip"
+                    required
+                  />
+                  <p className="text-xs text-royalPurple-text3 mt-1">
+                    Supported formats: PDF, DOC, PPT, Images, Videos, ZIP (Max 10MB)
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-royalPurple-text2 mb-1">
-                  Subject <span className="text-royalPurple-dangerTx">*</span>
-                </label>
-                <select
-                  value={uploadData.subject_id}
-                  onChange={(e) =>
-                    setUploadData((prev) => ({ ...prev, subject_id: e.target.value }))
-                  }
-                  className="w-full px-3 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                >
-                  <option value="">Select Subject</option>
-                  {userSubjectObjects.map((subject) => (
-                    <option key={subject.id} value={subject.id}>
-                      {subject.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-royalPurple-text2 mb-1">
-                  Description
-                </label>
-                <textarea
-                  value={uploadData.description}
-                  onChange={(e) =>
-                    setUploadData((prev) => ({ ...prev, description: e.target.value }))
-                  }
-                  className="w-full px-3 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  rows={3}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-royalPurple-text2 mb-1">
-                  File <span className="text-royalPurple-dangerTx">*</span>
-                </label>
-                <input
-                  type="file"
-                  onChange={(e) => setUploadData((prev) => ({ ...prev, file: e.target.files[0] }))}
-                  className="w-full px-3 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.mp4,.zip"
-                  required
-                />
-                <p className="text-xs text-royalPurple-text3 mt-1">
-                  Supported formats: PDF, DOC, PPT, Images, Videos, ZIP (Max 10MB)
-                </p>
-              </div>
-
-              <div className="flex gap-2 pt-4">
+              <div className="bg-royalPurple-card2 border-t border-royalPurple-border px-6 py-4 rounded-b-2xl flex gap-2">
                 <Button
                   type="button"
                   variant="outline"
@@ -415,7 +424,7 @@ export default function MaterialManager() {
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 bg-royalPurple-accent hover:bg-royalPurple-accent"
+                  className="flex-1 bg-royalPurple-accent text-royalPurple-deep font-semibold"
                 >
                   <Upload className="h-4 w-4 mr-2" />
                   Upload

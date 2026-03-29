@@ -492,9 +492,6 @@ export default function TeacherDashboard() {
           </div>
 
           {/* Advanced Teacher Features */}
-          <div className="bg-royalPurple-danger p-4 text-royalPurple-text1 font-bold text-center mb-4">
-            🚨 ADVANCED FEATURES TEST - IF YOU SEE THIS, THE SECTION IS RENDERING 🚨
-          </div>
           <Card variant="glass">
             <CardHeader>
               <CardTitle className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent flex items-center">

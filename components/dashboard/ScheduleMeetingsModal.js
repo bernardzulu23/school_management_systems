@@ -202,14 +202,14 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
 
   return (
     <div className="fixed inset-0 bg-royalPurple-deep bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-royalPurple-card rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b bg-royalPurple-pill text-royalPurple-text1">
+      <div className="bg-royalPurple-card border border-royalPurple-border rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="bg-royalPurple-card2 border-b border-royalPurple-border px-6 py-4 rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <Calendar className="h-6 w-6 mr-3" />
+              <Calendar className="h-6 w-6 mr-3 text-royalPurple-text2" />
               <div>
                 <h2 className="text-xl font-bold">Schedule Parent/Guardian Meetings</h2>
-                <p className="text-royalPurple-pillTx">
+                <p className="text-royalPurple-text2">
                   Arrange urgent academic intervention meetings
                 </p>
               </div>
@@ -217,14 +217,14 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
             <Button
               variant="outline"
               onClick={onClose}
-              className="text-royalPurple-text1 border-white hover:bg-royalPurple-card hover:text-royalPurple-pillTx"
+              className="text-royalPurple-text2 hover:text-royalPurple-text1"
             >
               Close
             </Button>
           </div>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="bg-royalPurple-card px-6 py-4 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Meeting Scheduler */}
             <div className="space-y-6">
@@ -234,8 +234,8 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Meeting Type */}
-                  <div className="bg-royalPurple-pill p-4 rounded-lg border border-royalPurple-border2">
-                    <label className="block text-sm font-bold text-royalPurple-pillTx mb-3">
+                  <div className="bg-royalPurple-card2 p-4 rounded-lg border border-royalPurple-border">
+                    <label className="block text-sm font-bold text-royalPurple-text1 mb-3">
                       Meeting Type
                     </label>
                     <select
@@ -249,15 +249,15 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                         </option>
                       ))}
                     </select>
-                    <p className="text-xs text-royalPurple-pillTx mt-2">
+                    <p className="text-xs text-royalPurple-text2 mt-2">
                       {meetingTypes.find((t) => t.id === meetingType)?.description}
                     </p>
                   </div>
 
                   {/* Date and Time */}
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-royalPurple-accent p-4 rounded-lg border border-royalPurple-border2">
-                      <label className="block text-sm font-bold text-royalPurple-accentTx mb-3">
+                    <div className="bg-royalPurple-card2 p-4 rounded-lg border border-royalPurple-border">
+                      <label className="block text-sm font-bold text-royalPurple-text1 mb-3">
                         Meeting Date
                       </label>
                       <input
@@ -268,8 +268,8 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                         className="w-full p-3 border-2 border-royalPurple-border2 rounded-lg focus:ring-blue-500 focus:border-royalPurple-border2 bg-royalPurple-card font-medium text-royalPurple-text1"
                       />
                     </div>
-                    <div className="bg-royalPurple-success p-4 rounded-lg border border-royalPurple-border">
-                      <label className="block text-sm font-bold text-royalPurple-successTx mb-3">
+                    <div className="bg-royalPurple-card2 p-4 rounded-lg border border-royalPurple-border">
+                      <label className="block text-sm font-bold text-royalPurple-text1 mb-3">
                         Meeting Time
                       </label>
                       <select
@@ -289,14 +289,14 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
 
                   {/* Duration and Location */}
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-                      <label className="block text-sm font-bold text-orange-900 mb-3">
+                    <div className="bg-royalPurple-card2 p-4 rounded-lg border border-royalPurple-border">
+                      <label className="block text-sm font-bold text-royalPurple-text1 mb-3">
                         Duration
                       </label>
                       <select
                         value={duration}
                         onChange={(e) => setDuration(e.target.value)}
-                        className="w-full p-3 border-2 border-orange-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 bg-royalPurple-card font-medium text-royalPurple-text1"
+                        className="w-full p-3 border-2 border-royalPurple-border rounded-lg focus:ring-royalPurple-border2 focus:border-royalPurple-border2 bg-royalPurple-card font-medium text-royalPurple-text1"
                       >
                         <option value="30">30 minutes</option>
                         <option value="45">45 minutes</option>
@@ -304,14 +304,14 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                         <option value="90">1.5 hours</option>
                       </select>
                     </div>
-                    <div className="bg-royalPurple-pill p-4 rounded-lg border border-royalPurple-border2">
-                      <label className="block text-sm font-bold text-royalPurple-pillTx mb-3">
+                    <div className="bg-royalPurple-card2 p-4 rounded-lg border border-royalPurple-border">
+                      <label className="block text-sm font-bold text-royalPurple-text1 mb-3">
                         Meeting Location
                       </label>
                       <select
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
-                        className="w-full p-3 border-2 border-royalPurple-border2 rounded-lg focus:ring-indigo-500 focus:border-royalPurple-border2 bg-royalPurple-card font-medium text-royalPurple-text1"
+                        className="w-full p-3 border-2 border-royalPurple-border2 rounded-lg focus:ring-royalPurple-border2 focus:border-royalPurple-border2 bg-royalPurple-card font-medium text-royalPurple-text1"
                       >
                         {locations.map((loc) => (
                           <option key={loc.id} value={loc.id}>
@@ -337,7 +337,7 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                             className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
                               isSelected
                                 ? 'border-royalPurple-border2 bg-royalPurple-pill shadow-md'
-                                : 'border-royalPurple-border bg-royalPurple-card hover:border-royalPurple-border2 hover:bg-purple-25'
+                                : 'border-royalPurple-border bg-royalPurple-card hover:border-royalPurple-border2 hover:bg-royalPurple-card2'
                             }`}
                             onClick={() => toggleStudent(student.id)}
                           >
@@ -357,7 +357,7 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                                     className={`px-3 py-1 text-xs font-medium rounded-full ${
                                       student.risk_level === 'critical'
                                         ? 'bg-royalPurple-danger text-royalPurple-dangerTx border border-royalPurple-border'
-                                        : 'bg-orange-100 text-orange-800 border border-orange-200'
+                                        : 'bg-royalPurple-card2 text-royalPurple-text2 border border-royalPurple-border'
                                     }`}
                                   >
                                     {student.risk_level.toUpperCase()} RISK
@@ -439,14 +439,14 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
 
                     {/* Selection Summary */}
                     {selectedStudents.length > 0 && (
-                      <div className="mt-3 p-3 bg-royalPurple-pill border border-royalPurple-border2 rounded-lg">
+                      <div className="mt-3 p-3 bg-royalPurple-card2 border border-royalPurple-border2 rounded-lg">
                         <div className="flex items-center">
-                          <CheckCircle className="h-5 w-5 text-royalPurple-pillTx mr-2" />
-                          <span className="font-semibold text-royalPurple-pillTx">
+                          <CheckCircle className="h-5 w-5 text-royalPurple-text2 mr-2" />
+                          <span className="font-semibold text-royalPurple-text2">
                             {selectedStudents.length} student(s) selected for meeting
                           </span>
                         </div>
-                        <div className="text-sm text-royalPurple-pillTx mt-1">
+                        <div className="text-sm text-royalPurple-text2 mt-1">
                           {students
                             .filter((s) => selectedStudents.includes(s.id))
                             .map((s) => s.name)
@@ -457,16 +457,16 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                   </div>
 
                   {/* Generate Agenda Button */}
-                  <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                  <div className="bg-royalPurple-card2 p-4 rounded-lg border border-royalPurple-border">
                     <Button
                       onClick={generateAgenda}
                       disabled={selectedStudents.length === 0}
-                      className="w-full bg-yellow-600 hover:bg-yellow-700 text-royalPurple-text1 font-semibold py-3"
+                      className="w-full bg-royalPurple-card border border-royalPurple-border2 text-royalPurple-text2 hover:bg-royalPurple-border hover:text-royalPurple-text1 font-semibold py-3 rounded-lg transition-colors"
                     >
                       <FileText className="h-5 w-5 mr-2" />
                       Generate Professional Meeting Agenda
                     </Button>
-                    <p className="text-xs text-yellow-700 mt-2 text-center">
+                    <p className="text-xs text-royalPurple-text3 mt-2 text-center">
                       Auto-generates agenda based on selected students' performance data
                     </p>
                   </div>
@@ -498,15 +498,15 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-lg border-2 border-royalPurple-border2">
+                  <div className="bg-royalPurple-card2 p-4 rounded-lg border border-royalPurple-border2">
                     <Button
                       onClick={addMeeting}
-                      className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-royalPurple-text1 font-bold py-4 text-lg shadow-lg"
+                      className="w-full bg-royalPurple-accent hover:opacity-90 text-royalPurple-deep font-bold py-4 text-lg transition-opacity"
                     >
                       <Plus className="h-5 w-5 mr-2" />
                       Add Meeting to Schedule
                     </Button>
-                    <p className="text-xs text-royalPurple-pillTx mt-2 text-center">
+                    <p className="text-xs text-royalPurple-text3 mt-2 text-center">
                       Meeting will be added to the schedule and parent contacts will be notified
                     </p>
                   </div>
@@ -539,11 +539,11 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                           className="border-2 border-royalPurple-border rounded-lg bg-royalPurple-card shadow-sm hover:shadow-md transition-shadow"
                         >
                           {/* Meeting Header */}
-                          <div className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 border-b border-royalPurple-border">
+                          <div className="p-4 bg-royalPurple-card2 border-b border-royalPurple-border">
                             <div className="flex items-start justify-between">
                               <div className="flex-1">
                                 <div className="flex items-center space-x-3 mb-2">
-                                  <Calendar className="h-5 w-5 text-royalPurple-pillTx" />
+                                  <Calendar className="h-5 w-5 text-royalPurple-text2" />
                                   <span className="font-bold text-lg text-royalPurple-text1">
                                     {meeting.date}
                                   </span>
@@ -676,11 +676,11 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <div className="font-medium">Total Meetings:</div>
-                        <div className="text-royalPurple-pillTx">{meetings.length}</div>
+                        <div className="text-royalPurple-text2">{meetings.length}</div>
                       </div>
                       <div>
                         <div className="font-medium">Students Involved:</div>
-                        <div className="text-royalPurple-pillTx">
+                        <div className="text-royalPurple-text2">
                           {new Set(meetings.flatMap((m) => m.students.map((s) => s.id))).size}
                         </div>
                       </div>
@@ -704,12 +704,12 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
           </div>
 
           {/* Action Buttons */}
-          <div className="bg-gradient-to-r from-gray-50 to-purple-50 p-6 border-t-2 border-royalPurple-border2">
+          <div className="bg-royalPurple-card2 p-6 border-t border-royalPurple-border2">
             <div className="flex space-x-4">
               <Button
                 onClick={handleSaveMeetings}
                 disabled={meetings.length === 0}
-                className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-royalPurple-text1 font-bold py-4 text-lg shadow-lg"
+                className="flex-1 bg-royalPurple-accent hover:opacity-90 text-royalPurple-deep font-bold py-4 text-lg transition-opacity"
               >
                 <Save className="h-5 w-5 mr-2" />
                 Save All Meetings ({meetings.length})
