@@ -218,25 +218,46 @@ export default function ResultEntryPage() {
 
   const syncOnce = async (payload) => {
     const headers = { 'Content-Type': 'application/json' }
-    let body = JSON.stringify(payload)
+    const jsonBody = JSON.stringify(payload)
+    let body = jsonBody
 
-    if (typeof CompressionStream !== 'undefined' && typeof TextEncoder !== 'undefined') {
-      try {
-        const cs = new CompressionStream('gzip')
-        const writer = cs.writable.getWriter()
-        await writer.write(new TextEncoder().encode(body))
-        await writer.close()
-        const compressed = await new Response(cs.readable).arrayBuffer()
-        headers['Content-Encoding'] = 'gzip'
-        body = new Uint8Array(compressed)
-      } catch {}
+    const compressIfPossible = async () => {
+      if (jsonBody.length < 2000) return
+      if (typeof CompressionStream === 'undefined' || typeof TextEncoder === 'undefined') return
+
+      const cs = new CompressionStream('gzip')
+      const writer = cs.writable.getWriter()
+      await writer.write(new TextEncoder().encode(jsonBody))
+      await writer.close()
+      const compressed = await new Response(cs.readable).arrayBuffer()
+      headers['Content-Encoding'] = 'gzip'
+      body = new Uint8Array(compressed)
     }
 
-    const res = await fetch('/api/teacher/results', {
-      method: 'POST',
-      headers,
-      body,
-    })
+    try {
+      await Promise.race([
+        compressIfPossible(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('compress_timeout')), 1500)),
+      ])
+    } catch {}
+
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 20000)
+    let res
+    try {
+      res = await fetch('/api/teacher/results', {
+        method: 'POST',
+        headers,
+        body,
+        credentials: 'include',
+        signal: controller.signal,
+      })
+    } catch (e) {
+      if (e?.name === 'AbortError') throw new Error('Request timed out')
+      throw e
+    } finally {
+      clearTimeout(timeoutId)
+    }
 
     if (res.status === 409) {
       const json = await res.json()
@@ -300,11 +321,18 @@ export default function ResultEntryPage() {
         return
       }
 
-      await syncOnce(payload)
-      toast.success('Results saved successfully')
+      const result = await syncOnce(payload)
+      const applied = Number(result?.applied ?? NaN)
+      if (Number.isFinite(applied) && applied === 0) {
+        toast.error('No results were saved. Check class/subject assignment and try again.')
+      } else {
+        toast.success('Results saved successfully')
+      }
       await fetchPupilsAndResults()
     } catch (e) {
-      if (String(e?.message || '') !== 'conflicts') toast.error('Failed to save results')
+      const msg = String(e?.message || '')
+      if (msg !== 'conflicts')
+        toast.error(msg === 'Request timed out' ? msg : 'Failed to save results')
     } finally {
       setSaving(false)
     }
