@@ -37,7 +37,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
         role="dialog"
         aria-modal="true"
       >
-        <div className="flex items-center justify-between p-6 border-b border-royalPurple-border">
+        <div className="flex items-center justify-between p-6 bg-royalPurple-card2 border-b border-royalPurple-border rounded-t-2xl">
           <h2 className="text-xl font-semibold text-royalPurple-text1">{title}</h2>
           <button
             onClick={onClose}
@@ -47,7 +47,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
             <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="p-6 overflow-y-auto">{children}</div>
+        <div className="p-6 bg-royalPurple-card overflow-y-auto">{children}</div>
       </div>
     </div>
   )

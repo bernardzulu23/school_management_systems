@@ -84,6 +84,16 @@ body {
     background: var(--rp-page);
   }
 
+  select {
+    color-scheme: dark;
+  }
+
+  select option,
+  select optgroup {
+    background-color: var(--rp-card2);
+    color: var(--rp-text1);
+  }
+
   html {
     scroll-behavior: smooth;
   }

@@ -412,14 +412,23 @@ function HeadteacherDashboardContent() {
                       <p className="text-xs text-royalPurple-text2 mb-2 line-clamp-2">
                         {tab.description}
                       </p>
-                      <Button
-                        size="sm"
-                        className="w-full text-xs h-8"
-                        variant={isActive ? 'primary' : 'outline'}
-                        aria-label={`${isActive ? 'Current' : 'Open'} ${tab.name}`}
-                      >
-                        {isActive ? 'Active' : 'Open'}
-                      </Button>
+                      {isActive ? (
+                        <div
+                          className="inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-royalPurple-accentBg text-royalPurple-accentTx text-xs font-semibold border border-royalPurple-accent"
+                          aria-label={`Current ${tab.name}`}
+                        >
+                          Active
+                        </div>
+                      ) : (
+                        <Button
+                          size="sm"
+                          className="w-full text-xs h-8"
+                          variant="outline"
+                          aria-label={`Open ${tab.name}`}
+                        >
+                          Open
+                        </Button>
+                      )}
                     </CardContent>
                   </Card>
                 )

@@ -489,7 +489,7 @@ export default function UserManagement() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+              <div className="bg-royalPurple-card p-6 rounded-b-2xl">
                 {/* Search and Filter */}
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
                   <div className="flex-1">
@@ -648,6 +648,7 @@ export default function UserManagement() {
       {viewingUser && (
         <UserDetailsModal
           user={viewingUser}
+          allUsers={users}
           onClose={() => setViewingUser(null)}
           loading={viewingLoading}
         />
@@ -668,7 +669,7 @@ export default function UserManagement() {
   )
 }
 
-function UserDetailsModal({ user, onClose, loading }) {
+function UserDetailsModal({ user, allUsers, onClose, loading }) {
   const data = user.original || user
   const role = user.role || data.role || data.user?.role
 
@@ -709,10 +710,70 @@ function UserDetailsModal({ user, onClose, loading }) {
   const hodAssignedClasses = Array.isArray(data.assignedClasses) ? data.assignedClasses : []
   const hodAssignedSubjects = Array.isArray(data.assignedSubjects) ? data.assignedSubjects : []
 
+  const hodDeptId = data.departmentId || data.departmentRef?.id
+  const hodDeptName = String(data.departmentRef?.name || data.department || '')
+    .trim()
+    .toLowerCase()
+
+  const derivedHodFromTeachers =
+    role === 'hod' && (hodAssignedClasses.length === 0 || hodAssignedSubjects.length === 0)
+      ? (() => {
+          const teacherUsers = Array.isArray(allUsers)
+            ? allUsers.filter((u) => u.role === 'teacher' && u.original)
+            : []
+
+          const relevantTeachers = teacherUsers.filter((u) => {
+            const t = u.original
+            const deptLinks = Array.isArray(t.departments) ? t.departments : []
+            if (hodDeptId) {
+              return deptLinks.some(
+                (d) => String(d.departmentId || d.department?.id || '') === String(hodDeptId)
+              )
+            }
+            if (!hodDeptName) return false
+            return deptLinks.some((d) => {
+              const n = String(d.department?.name || d.name || d.department_name || '')
+                .trim()
+                .toLowerCase()
+              return n && n === hodDeptName
+            })
+          })
+
+          const allAssignments = relevantTeachers.flatMap((u) =>
+            Array.isArray(u.original.teachingAssignments) ? u.original.teachingAssignments : []
+          )
+
+          const classes = Array.from(
+            new Set(
+              allAssignments
+                .map((a) => a?.class?.name)
+                .filter(Boolean)
+                .map(String)
+            )
+          )
+
+          const subjects = Array.from(
+            new Set(
+              allAssignments
+                .map((a) => a?.subject?.name || a?.subjectId)
+                .filter(Boolean)
+                .map(String)
+            )
+          )
+
+          return { classes, subjects }
+        })()
+      : null
+
+  const resolvedHodClasses =
+    hodAssignedClasses.length > 0 ? hodAssignedClasses : derivedHodFromTeachers?.classes || []
+  const resolvedHodSubjects =
+    hodAssignedSubjects.length > 0 ? hodAssignedSubjects : derivedHodFromTeachers?.subjects || []
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-royalPurple-deep/80">
-      <div className="bg-royalPurple-card dark:bg-royalPurple-card rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-royalPurple-border dark:border-royalPurple-border">
-        <div className="p-6 border-b border-royalPurple-border dark:border-royalPurple-border flex justify-between items-center">
+      <div className="bg-royalPurple-card border border-royalPurple-border rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 bg-royalPurple-card2 border-b border-royalPurple-border rounded-t-2xl flex justify-between items-center">
           <h3 className="text-xl font-bold text-royalPurple-text1 dark:text-royalPurple-text1">
             User Details
           </h3>
@@ -724,7 +785,7 @@ function UserDetailsModal({ user, onClose, loading }) {
           </button>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-6 bg-royalPurple-card space-y-6">
           {loading && (
             <div className="text-sm text-royalPurple-text2 dark:text-royalPurple-text2">
               Loading…
@@ -893,8 +954,8 @@ function UserDetailsModal({ user, onClose, loading }) {
                   Assigned Classes
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {hodAssignedClasses.length > 0 ? (
-                    hodAssignedClasses.map((cls, idx) => (
+                  {resolvedHodClasses.length > 0 ? (
+                    resolvedHodClasses.map((cls, idx) => (
                       <span
                         key={`${cls}-${idx}`}
                         className="px-2 py-1 bg-royalPurple-accent text-royalPurple-accentTx dark:bg-royalPurple-accent/20 dark:text-royalPurple-accentTx rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
@@ -913,8 +974,8 @@ function UserDetailsModal({ user, onClose, loading }) {
                   Assigned Subjects
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {hodAssignedSubjects.length > 0 ? (
-                    hodAssignedSubjects.map((sub, idx) => (
+                  {resolvedHodSubjects.length > 0 ? (
+                    resolvedHodSubjects.map((sub, idx) => (
                       <span
                         key={`${sub}-${idx}`}
                         className="px-2 py-1 bg-royalPurple-pill text-royalPurple-pillTx dark:bg-royalPurple-pill/20 dark:text-royalPurple-pillTx rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
@@ -980,7 +1041,7 @@ function UserDetailsModal({ user, onClose, loading }) {
           )}
         </div>
 
-        <div className="p-6 border-t border-royalPurple-border dark:border-royalPurple-border flex justify-end">
+        <div className="p-6 bg-royalPurple-card2 border-t border-royalPurple-border rounded-b-2xl flex justify-end">
           <Button
             onClick={onClose}
             className="bg-royalPurple-card2 text-royalPurple-text1 hover:bg-royalPurple-card2 dark:bg-royalPurple-muted dark:text-royalPurple-text1 dark:hover:bg-royalPurple-muted"
@@ -1156,8 +1217,8 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-royalPurple-deep/80">
-      <div className="bg-royalPurple-card dark:bg-royalPurple-card rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-royalPurple-border dark:border-royalPurple-border">
-        <div className="p-6 border-b border-royalPurple-border dark:border-royalPurple-border flex justify-between items-center">
+      <div className="bg-royalPurple-card border border-royalPurple-border rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 bg-royalPurple-card2 border-b border-royalPurple-border rounded-t-2xl flex justify-between items-center">
           <h3 className="text-xl font-bold text-royalPurple-text1 dark:text-royalPurple-text1">
             Edit User
           </h3>
@@ -1169,7 +1230,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
           </button>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-6 bg-royalPurple-card space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-royalPurple-text1 dark:text-royalPurple-text2 mb-1">
@@ -1242,7 +1303,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         student: { ...prev.student, year_group: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                    className="select"
                   >
                     <option value="">Select</option>
                     {GRADE_LEVELS.map((g) => (
@@ -1264,7 +1325,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         student: { ...prev.student, section: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                    className="select"
                   >
                     <option value="">Select</option>
                     {SECTIONS.map((s) => (
@@ -1426,7 +1487,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                             onChange={(e) =>
                               updateTeacherAssignment(idx, { year_group: e.target.value })
                             }
-                            className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                            className="select"
                           >
                             <option value="">Select</option>
                             {GRADE_LEVELS.map((g) => (
@@ -1445,7 +1506,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                             onChange={(e) =>
                               updateTeacherAssignment(idx, { section: e.target.value })
                             }
-                            className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                            className="select"
                           >
                             <option value="">Select</option>
                             {SECTIONS.map((s) => (
@@ -1464,7 +1525,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                             onChange={(e) =>
                               updateTeacherAssignment(idx, { subjectId: e.target.value })
                             }
-                            className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                            className="select"
                           >
                             <option value="">Select</option>
                             {subjectOptions.map((s) => (
@@ -1524,7 +1585,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         hod: { ...prev.hod, departmentId: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                    className="select"
                   >
                     <option value="">None</option>
                     {departmentOptions.map((d) => (
@@ -1537,15 +1598,15 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
               </div>
             </div>
           )}
+        </div>
 
-          <div className="flex justify-end gap-3 pt-2">
-            <Button variant="outline" onClick={onClose} disabled={saving}>
-              Cancel
-            </Button>
-            <Button onClick={save} disabled={saving}>
-              Save Changes
-            </Button>
-          </div>
+        <div className="p-6 bg-royalPurple-card2 border-t border-royalPurple-border rounded-b-2xl flex justify-end gap-3">
+          <Button variant="outline" onClick={onClose} disabled={saving}>
+            Cancel
+          </Button>
+          <Button onClick={save} disabled={saving}>
+            Save Changes
+          </Button>
         </div>
       </div>
     </div>

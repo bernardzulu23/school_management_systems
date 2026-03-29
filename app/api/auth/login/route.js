@@ -34,13 +34,16 @@ export async function POST(request) {
     }
 
     const { email, password, subdomain } = validation.data
+    const normalizedEmail = String(email || '')
+      .trim()
+      .toLowerCase()
     // Note: 'subdomain' is optional in schema, but passed from frontend if available
 
     const rateLimitResult = rateLimiter(request, {
       limit: 20,
       windowMs: 15 * 60 * 1000,
       keyPrefix: 'auth_login_',
-      keyGenerator: ({ ip }) => `${ip}-${String(email || '').toLowerCase()}`,
+      keyGenerator: ({ ip }) => `${ip}-${normalizedEmail}`,
     })
     if (rateLimitResult.isLimited) return rateLimitResult.response
 
@@ -53,7 +56,7 @@ export async function POST(request) {
     if (process.env.NODE_ENV !== 'production') {
       const userSchool = await prisma.user.findFirst({
         where: {
-          email,
+          email: { equals: normalizedEmail, mode: 'insensitive' },
           school: { active: true },
         },
         select: { schoolId: true },
@@ -77,7 +80,7 @@ export async function POST(request) {
     }
 
     // 3. Database Lookup (Parameterized via Prisma, scoped by schoolId)
-    const user = await findUserByEmail(schoolId, email)
+    const user = await findUserByEmail(schoolId, normalizedEmail)
 
     if (!user) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })

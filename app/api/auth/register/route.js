@@ -49,6 +49,9 @@ export const POST = withErrorHandler(async (request) => {
   }
 
   const { name, email, password, role } = validation.data
+  const normalizedEmail = String(email || '')
+    .trim()
+    .toLowerCase()
 
   // 2. Resolve schoolId
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
@@ -64,8 +67,11 @@ export const POST = withErrorHandler(async (request) => {
   }
 
   // 3. Check duplicate
-  const existingUser = await prisma.user.findUnique({
-    where: { schoolId_email: { schoolId, email } },
+  const existingUser = await prisma.user.findFirst({
+    where: {
+      schoolId,
+      email: { equals: normalizedEmail, mode: 'insensitive' },
+    },
   })
 
   if (existingUser) {
@@ -86,7 +92,7 @@ export const POST = withErrorHandler(async (request) => {
       const user = await tx.user.create({
         data: {
           name,
-          email,
+          email: normalizedEmail,
           password: hashedPassword,
           role,
           schoolId,
