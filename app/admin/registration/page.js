@@ -231,7 +231,7 @@ function RegistrationContent() {
         {/* System Information */}
         <Card className="p-6 mb-8">
           <div className="flex items-start gap-4">
-            <BookOpen className="w-8 h-8 text-g-800 mt-1" />
+            <BookOpen className="w-8 h-8 text-white mt-1" />
             <div>
               <h2 className="text-xl font-semibold text-royalPurple-text1 mb-2">
                 Comprehensive Subject Integration
@@ -242,24 +242,20 @@ function RegistrationContent() {
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <div className="font-semibold text-g-800">Core Subjects</div>
-                  <div className="text-royalPurple-text2">
-                    Mathematics, English, Additional Math
-                  </div>
+                  <div className="font-semibold text-white">Core Subjects</div>
+                  <div className="text-white/80">Mathematics, English, Additional Math</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-g-800">Sciences</div>
-                  <div className="text-royalPurple-text2">
-                    Physics, Chemistry, Biology, Agriculture
-                  </div>
+                  <div className="font-semibold text-white">Sciences</div>
+                  <div className="text-white/80">Physics, Chemistry, Biology, Agriculture</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-g-800">Local Languages</div>
-                  <div className="text-royalPurple-text2">8 indigenous languages supported</div>
+                  <div className="font-semibold text-white">Local Languages</div>
+                  <div className="text-white/80">8 indigenous languages supported</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-g-800">Practical Subjects</div>
-                  <div className="text-royalPurple-text2">Technical, Home Economics, Arts</div>
+                  <div className="font-semibold text-white">Practical Subjects</div>
+                  <div className="text-white/80">Technical, Home Economics, Arts</div>
                 </div>
               </div>
             </div>
@@ -291,7 +287,7 @@ function RegistrationContent() {
                       key={index}
                       className="flex items-start gap-2 text-sm text-royalPurple-text2"
                     >
-                      <div className="w-1.5 h-1.5 bg-g-800 rounded-full mt-2 flex-shrink-0" />
+                      <div className="w-1.5 h-1.5 bg-royalPurple-accent rounded-full mt-2 flex-shrink-0" />
                       {feature}
                     </li>
                   ))}
