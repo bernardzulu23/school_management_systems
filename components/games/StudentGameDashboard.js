@@ -5,12 +5,12 @@ import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { 
-  Play, 
-  Trophy, 
-  Star, 
-  Target, 
-  Clock, 
+import {
+  Play,
+  Trophy,
+  Star,
+  Target,
+  Clock,
   Zap,
   Award,
   TrendingUp,
@@ -20,7 +20,7 @@ import {
   Crown,
   Medal,
   Flame,
-  ChevronRight
+  ChevronRight,
 } from 'lucide-react'
 
 const gameTypeIcons = {
@@ -29,14 +29,14 @@ const gameTypeIcons = {
   matching: '🔗',
   'word-search': '🔍',
   'fill-blanks': '✏️',
-  'drag-drop': '🎯'
+  'drag-drop': '🎯',
 }
 
 const achievementRarityColors = {
-  common: 'bg-gray-100 text-gray-800 border-gray-300',
-  rare: 'bg-blue-100 text-blue-800 border-blue-300',
-  epic: 'bg-purple-100 text-purple-800 border-purple-300',
-  legendary: 'bg-yellow-100 text-yellow-800 border-yellow-300'
+  common: 'bg-royalPurple-card2 text-royalPurple-text1 border-royalPurple-border',
+  rare: 'bg-royalPurple-accent text-royalPurple-accentTx border-royalPurple-border2',
+  epic: 'bg-royalPurple-pill text-royalPurple-pillTx border-royalPurple-border2',
+  legendary: 'bg-yellow-100 text-yellow-800 border-yellow-300',
 }
 
 export default function StudentGameDashboard({ currentUser, onPlayGame }) {
@@ -44,7 +44,7 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
 
   const { data: dashboardData, isLoading: loading } = useQuery({
     queryKey: ['student-game-dashboard'],
-    queryFn: () => api.getStudentGameDashboard().then(res => res.data.data)
+    queryFn: () => api.getStudentGameDashboard().then((res) => res.data.data),
   })
 
   const {
@@ -52,12 +52,12 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
     studentProgress = null,
     achievements = [],
     recentSessions = [],
-    leaderboard = []
+    leaderboard = [],
   } = dashboardData || {}
 
   const handlePlayGame = (gameId) => {
     // Find the game and pass it to the parent component
-    const game = availableGames.find(g => g.id === gameId)
+    const game = availableGames.find((g) => g.id === gameId)
     if (game && onPlayGame) {
       onPlayGame(game)
     }
@@ -67,11 +67,11 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {[1, 2, 3, 4].map(i => (
+          {[1, 2, 3, 4].map((i) => (
             <Card key={i} className="animate-pulse">
               <CardContent className="p-6">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                <div className="h-8 bg-gray-200 rounded w-1/2"></div>
+                <div className="h-4 bg-royalPurple-card2 rounded w-3/4 mb-4"></div>
+                <div className="h-8 bg-royalPurple-card2 rounded w-1/2"></div>
               </CardContent>
             </Card>
           ))}
@@ -83,16 +83,16 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
   return (
     <div className="space-y-8">
       {/* Student Progress Header */}
-      <Card className="dashboard-card bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+      <Card className="dashboard-card bg-gradient-to-r from-blue-600 to-purple-600 text-royalPurple-text1">
         <CardContent className="p-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
-              <div className="bg-white/20 rounded-full p-4">
+              <div className="bg-royalPurple-card/20 rounded-full p-4">
                 <Crown className="h-12 w-12 text-yellow-300" />
               </div>
               <div>
                 <h2 className="text-3xl font-bold">Level {studentProgress?.level}</h2>
-                <p className="text-blue-100 text-lg">
+                <p className="text-royalPurple-accentTx text-lg">
                   {studentProgress?.totalPoints} Total Points
                 </p>
                 <div className="flex items-center space-x-4 mt-2">
@@ -108,19 +108,20 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
               </div>
             </div>
             <div className="text-right">
-              <div className="bg-white/20 rounded-xl p-4 min-w-[200px]">
+              <div className="bg-royalPurple-card/20 rounded-xl p-4 min-w-[200px]">
                 <div className="flex justify-between text-sm mb-2">
                   <span>Progress to Level {(studentProgress?.level || 0) + 1}</span>
                   <span>{studentProgress?.progressPercentage || 0}%</span>
                 </div>
-                <div className="w-full bg-white/20 rounded-full h-3">
-                  <div 
+                <div className="w-full bg-royalPurple-card/20 rounded-full h-3">
+                  <div
                     className="bg-yellow-300 h-3 rounded-full transition-all duration-500"
                     style={{ width: `${studentProgress?.progressPercentage || 0}%` }}
                   ></div>
                 </div>
-                <p className="text-xs text-blue-100 mt-2">
-                  {(studentProgress?.nextLevelXP || 0) - (studentProgress?.experiencePoints || 0)} XP to next level
+                <p className="text-xs text-royalPurple-accentTx mt-2">
+                  {(studentProgress?.nextLevelXP || 0) - (studentProgress?.experiencePoints || 0)}{' '}
+                  XP to next level
                 </p>
               </div>
             </div>
@@ -134,10 +135,12 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Games Played</p>
-                <p className="text-3xl font-bold text-gray-900">{studentProgress?.gamesPlayed}</p>
+                <p className="text-sm font-medium text-royalPurple-text2">Games Played</p>
+                <p className="text-3xl font-bold text-royalPurple-text1">
+                  {studentProgress?.gamesPlayed}
+                </p>
               </div>
-              <GamepadIcon className="h-8 w-8 text-blue-600" />
+              <GamepadIcon className="h-8 w-8 text-royalPurple-accentTx" />
             </div>
           </CardContent>
         </Card>
@@ -146,10 +149,12 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Average Score</p>
-                <p className="text-3xl font-bold text-gray-900">{studentProgress?.averageScore}%</p>
+                <p className="text-sm font-medium text-royalPurple-text2">Average Score</p>
+                <p className="text-3xl font-bold text-royalPurple-text1">
+                  {studentProgress?.averageScore}%
+                </p>
               </div>
-              <Target className="h-8 w-8 text-green-600" />
+              <Target className="h-8 w-8 text-royalPurple-successTx" />
             </div>
           </CardContent>
         </Card>
@@ -158,10 +163,10 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Achievements</p>
-                <p className="text-3xl font-bold text-gray-900">{achievements.length}</p>
+                <p className="text-sm font-medium text-royalPurple-text2">Achievements</p>
+                <p className="text-3xl font-bold text-royalPurple-text1">{achievements.length}</p>
               </div>
-              <Award className="h-8 w-8 text-purple-600" />
+              <Award className="h-8 w-8 text-royalPurple-pillTx" />
             </div>
           </CardContent>
         </Card>
@@ -170,8 +175,10 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Current Streak</p>
-                <p className="text-3xl font-bold text-gray-900">{studentProgress?.currentStreak}</p>
+                <p className="text-sm font-medium text-royalPurple-text2">Current Streak</p>
+                <p className="text-3xl font-bold text-royalPurple-text1">
+                  {studentProgress?.currentStreak}
+                </p>
               </div>
               <Flame className="h-8 w-8 text-orange-600" />
             </div>
@@ -185,8 +192,8 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
           { id: 'games', name: 'Available Games', icon: GamepadIcon },
           { id: 'achievements', name: 'Achievements', icon: Award },
           { id: 'leaderboard', name: 'Leaderboard', icon: Trophy },
-          { id: 'progress', name: 'My Progress', icon: TrendingUp }
-        ].map(tab => {
+          { id: 'progress', name: 'My Progress', icon: TrendingUp },
+        ].map((tab) => {
           const Icon = tab.icon
           return (
             <button
@@ -205,26 +212,29 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
       <div className="content-section">
         {activeTab === 'games' && (
           <div>
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Available Games</h3>
+            <h3 className="text-xl font-bold text-royalPurple-text1 mb-6">Available Games</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {availableGames.map(game => (
-                <Card key={game.id} className="dashboard-card hover:shadow-xl transition-all duration-300">
+              {availableGames.map((game) => (
+                <Card
+                  key={game.id}
+                  className="dashboard-card hover:shadow-xl transition-all duration-300"
+                >
                   <CardHeader className="pb-4">
                     <div className="flex items-center space-x-3">
                       <div className="text-3xl">{gameTypeIcons[game.gameType]}</div>
                       <div>
                         <CardTitle className="text-lg">{game.title}</CardTitle>
-                        <p className="text-sm text-gray-600">{game.subject.name}</p>
+                        <p className="text-sm text-royalPurple-text2">{game.subject.name}</p>
                       </div>
                     </div>
                   </CardHeader>
-                  
+
                   <CardContent className="space-y-4">
-                    <p className="text-gray-600 text-sm">{game.description}</p>
-                    
+                    <p className="text-royalPurple-text2 text-sm">{game.description}</p>
+
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div className="flex items-center space-x-2">
-                        <Clock className="h-4 w-4 text-blue-600" />
+                        <Clock className="h-4 w-4 text-royalPurple-accentTx" />
                         <span>{game.timeLimit} min</span>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -232,24 +242,28 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
                         <span>{game.pointsReward} pts</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Users className="h-4 w-4 text-purple-600" />
+                        <Users className="h-4 w-4 text-royalPurple-pillTx" />
                         <span>{game.playCount} plays</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Target className="h-4 w-4 text-green-600" />
+                        <Target className="h-4 w-4 text-royalPurple-successTx" />
                         <span>{game.averageScore}% avg</span>
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between pt-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${
-                        game.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
-                        game.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${
+                          game.difficulty === 'easy'
+                            ? 'bg-royalPurple-success text-royalPurple-successTx'
+                            : game.difficulty === 'medium'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-royalPurple-danger text-royalPurple-dangerTx'
+                        }`}
+                      >
                         {game.difficulty}
                       </span>
-                      <Button 
+                      <Button
                         onClick={() => handlePlayGame(game.id)}
                         className="btn-primary"
                         size="sm"
@@ -267,23 +281,27 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
 
         {activeTab === 'achievements' && (
           <div>
-            <h3 className="text-xl font-bold text-gray-900 mb-6">My Achievements</h3>
+            <h3 className="text-xl font-bold text-royalPurple-text1 mb-6">My Achievements</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {achievements.map(achievement => (
+              {achievements.map((achievement) => (
                 <Card key={achievement.id} className="dashboard-card">
                   <CardContent className="p-6 text-center">
                     <div className="text-4xl mb-4">{achievement.icon}</div>
-                    <h4 className="font-bold text-lg text-gray-900 mb-2">{achievement.name}</h4>
-                    <p className="text-gray-600 text-sm mb-4">{achievement.description}</p>
+                    <h4 className="font-bold text-lg text-royalPurple-text1 mb-2">
+                      {achievement.name}
+                    </h4>
+                    <p className="text-royalPurple-text2 text-sm mb-4">{achievement.description}</p>
                     <div className="flex items-center justify-between">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${achievementRarityColors[achievement.rarity]}`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium border ${achievementRarityColors[achievement.rarity]}`}
+                      >
                         {achievement.rarity}
                       </span>
-                      <span className="text-sm font-semibold text-blue-600">
+                      <span className="text-sm font-semibold text-royalPurple-accentTx">
                         +{achievement.pointsReward} pts
                       </span>
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">
+                    <p className="text-xs text-royalPurple-text3 mt-2">
                       Earned on {new Date(achievement.earnedAt).toLocaleDateString()}
                     </p>
                   </CardContent>
@@ -295,31 +313,53 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
 
         {activeTab === 'leaderboard' && (
           <div>
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Class Leaderboard</h3>
+            <h3 className="text-xl font-bold text-royalPurple-text1 mb-6">Class Leaderboard</h3>
             <div className="space-y-4">
               {leaderboard.map((entry, index) => (
-                <Card key={index} className={`dashboard-card ${
-                  entry.studentName === currentUser?.name ? 'ring-2 ring-blue-500 bg-blue-50' : ''
-                }`}>
+                <Card
+                  key={index}
+                  className={`dashboard-card ${
+                    entry.studentName === currentUser?.name
+                      ? 'ring-2 ring-blue-500 bg-royalPurple-accent'
+                      : ''
+                  }`}
+                >
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
-                          entry.rank === 1 ? 'bg-yellow-100 text-yellow-800' :
-                          entry.rank === 2 ? 'bg-gray-100 text-gray-800' :
-                          entry.rank === 3 ? 'bg-orange-100 text-orange-800' :
-                          'bg-blue-100 text-blue-800'
-                        }`}>
-                          {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : entry.rank}
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
+                            entry.rank === 1
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : entry.rank === 2
+                                ? 'bg-royalPurple-card2 text-royalPurple-text1'
+                                : entry.rank === 3
+                                  ? 'bg-orange-100 text-orange-800'
+                                  : 'bg-royalPurple-accent text-royalPurple-accentTx'
+                          }`}
+                        >
+                          {entry.rank === 1
+                            ? '🥇'
+                            : entry.rank === 2
+                              ? '🥈'
+                              : entry.rank === 3
+                                ? '🥉'
+                                : entry.rank}
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-900">{entry.studentName}</h4>
-                          <p className="text-sm text-gray-600">{entry.gamesPlayed} games played</p>
+                          <h4 className="font-semibold text-royalPurple-text1">
+                            {entry.studentName}
+                          </h4>
+                          <p className="text-sm text-royalPurple-text2">
+                            {entry.gamesPlayed} games played
+                          </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-lg text-gray-900">{entry.totalPoints}</p>
-                        <p className="text-sm text-gray-600">points</p>
+                        <p className="font-bold text-lg text-royalPurple-text1">
+                          {entry.totalPoints}
+                        </p>
+                        <p className="text-sm text-royalPurple-text2">points</p>
                       </div>
                     </div>
                   </CardContent>
@@ -331,27 +371,32 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
 
         {activeTab === 'progress' && (
           <div>
-            <h3 className="text-xl font-bold text-gray-900 mb-6">My Progress</h3>
+            <h3 className="text-xl font-bold text-royalPurple-text1 mb-6">My Progress</h3>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card className="dashboard-card">
                 <CardHeader>
                   <CardTitle>Recent Game Sessions</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {recentSessions.map(session => (
-                    <div key={session.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  {recentSessions.map((session) => (
+                    <div
+                      key={session.id}
+                      className="flex items-center justify-between p-4 bg-royalPurple-page rounded-lg"
+                    >
                       <div className="flex items-center space-x-3">
                         <div className="text-2xl">{gameTypeIcons[session.game.gameType]}</div>
                         <div>
                           <h4 className="font-semibold">{session.game.title}</h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-royalPurple-text2">
                             {new Date(session.completedAt).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-lg">{session.percentage}%</p>
-                        <p className="text-sm text-blue-600">+{session.pointsEarned} pts</p>
+                        <p className="text-sm text-royalPurple-accentTx">
+                          +{session.pointsEarned} pts
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -368,22 +413,26 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
                       <span>Overall Performance</span>
                       <span>{studentProgress?.averageScore}%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-3">
-                      <div 
-                        className="bg-green-500 h-3 rounded-full"
+                    <div className="w-full bg-royalPurple-card2 rounded-full h-3">
+                      <div
+                        className="bg-royalPurple-success h-3 rounded-full"
                         style={{ width: `${studentProgress?.averageScore}%` }}
                       ></div>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-4 bg-blue-50 rounded-lg">
-                      <p className="text-2xl font-bold text-blue-600">{studentProgress?.longestStreak}</p>
-                      <p className="text-sm text-gray-600">Longest Streak</p>
+                    <div className="text-center p-4 bg-royalPurple-accent rounded-lg">
+                      <p className="text-2xl font-bold text-royalPurple-accentTx">
+                        {studentProgress?.longestStreak}
+                      </p>
+                      <p className="text-sm text-royalPurple-text2">Longest Streak</p>
                     </div>
-                    <div className="text-center p-4 bg-green-50 rounded-lg">
-                      <p className="text-2xl font-bold text-green-600">#{studentProgress?.rank?.school}</p>
-                      <p className="text-sm text-gray-600">School Rank</p>
+                    <div className="text-center p-4 bg-royalPurple-success rounded-lg">
+                      <p className="text-2xl font-bold text-royalPurple-successTx">
+                        #{studentProgress?.rank?.school}
+                      </p>
+                      <p className="text-sm text-royalPurple-text2">School Rank</p>
                     </div>
                   </div>
                 </CardContent>

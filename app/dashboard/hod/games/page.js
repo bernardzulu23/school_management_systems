@@ -21,7 +21,7 @@ export default function HODGamesPage() {
         { id: 7, name: 'Physics' },
         { id: 8, name: 'Chemistry' },
         { id: 9, name: 'Biology' },
-        { id: 10, name: 'Art' }
+        { id: 10, name: 'Art' },
       ])
       setLoading(false)
     }, 1000)
@@ -33,7 +33,7 @@ export default function HODGamesPage() {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <div className="loading-skeleton w-16 h-16 rounded-full mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading game management...</p>
+            <p className="text-royalPurple-text2">Loading game management...</p>
           </div>
         </div>
       </DashboardLayout>
@@ -42,10 +42,7 @@ export default function HODGamesPage() {
 
   return (
     <DashboardLayout title="Game Management">
-      <GameManagement 
-        userRole="hod"
-        subjects={subjects}
-      />
+      <GameManagement userRole="hod" subjects={subjects} />
     </DashboardLayout>
   )
 }

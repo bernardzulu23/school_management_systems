@@ -1,7 +1,7 @@
-import React from 'react';
-import { Heart, Activity, AlertCircle, ClipboardList } from 'lucide-react';
-import { FormGroup, FormSection } from '@/components/ui/FormGroup';
-import { BLOOD_TYPES } from '@/lib/constants';
+import React from 'react'
+import { Heart, Activity, AlertCircle, ClipboardList } from 'lucide-react'
+import { FormGroup, FormSection } from '@/components/ui/FormGroup'
+import { BLOOD_TYPES } from '@/lib/constants'
 
 export default function MedicalInfoStep({ formData, errors, onInputChange }) {
   return (
@@ -38,8 +38,8 @@ export default function MedicalInfoStep({ formData, errors, onInputChange }) {
           />
         </div>
 
-        <div className="bg-red-50 p-6 rounded-xl border border-red-200">
-          <h4 className="text-lg font-semibold text-red-800 mb-4 flex items-center">
+        <div className="bg-royalPurple-danger p-6 rounded-xl border border-royalPurple-border">
+          <h4 className="text-lg font-semibold text-royalPurple-dangerTx mb-4 flex items-center">
             <AlertCircle className="h-5 w-5 mr-2" />
             Allergies & Conditions
           </h4>
@@ -79,5 +79,5 @@ export default function MedicalInfoStep({ formData, errors, onInputChange }) {
         </div>
       </div>
     </FormSection>
-  );
+  )
 }

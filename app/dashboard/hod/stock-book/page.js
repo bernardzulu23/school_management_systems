@@ -4,9 +4,19 @@ import { useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  Package, Plus, Search, Filter, Download, Edit, Trash2,
-  ArrowLeft, AlertTriangle, CheckCircle, TrendingDown, TrendingUp
+import {
+  Package,
+  Plus,
+  Search,
+  Filter,
+  Download,
+  Edit,
+  Trash2,
+  ArrowLeft,
+  AlertTriangle,
+  CheckCircle,
+  TrendingDown,
+  TrendingUp,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -20,31 +30,46 @@ export default function StockBookPage() {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'in_stock': return <CheckCircle className="h-4 w-4 text-green-500" />
-      case 'low_stock': return <AlertTriangle className="h-4 w-4 text-yellow-500" />
-      case 'critical': return <AlertTriangle className="h-4 w-4 text-red-500" />
-      case 'out_of_stock': return <TrendingDown className="h-4 w-4 text-red-500" />
-      default: return <Package className="h-4 w-4 text-gray-500" />
+      case 'in_stock':
+        return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
+      case 'low_stock':
+        return <AlertTriangle className="h-4 w-4 text-yellow-500" />
+      case 'critical':
+        return <AlertTriangle className="h-4 w-4 text-royalPurple-dangerTx" />
+      case 'out_of_stock':
+        return <TrendingDown className="h-4 w-4 text-royalPurple-dangerTx" />
+      default:
+        return <Package className="h-4 w-4 text-royalPurple-text3" />
     }
   }
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'in_stock': return 'bg-green-100 text-green-800'
-      case 'low_stock': return 'bg-yellow-100 text-yellow-800'
-      case 'critical': return 'bg-red-100 text-red-800'
-      case 'out_of_stock': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'in_stock':
+        return 'bg-royalPurple-success text-royalPurple-successTx'
+      case 'low_stock':
+        return 'bg-yellow-100 text-yellow-800'
+      case 'critical':
+        return 'bg-royalPurple-danger text-royalPurple-dangerTx'
+      case 'out_of_stock':
+        return 'bg-royalPurple-danger text-royalPurple-dangerTx'
+      default:
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
   }
 
   const getCategoryColor = (category) => {
     switch (category) {
-      case 'Books': return 'bg-blue-100 text-blue-800'
-      case 'Equipment': return 'bg-purple-100 text-purple-800'
-      case 'Stationery': return 'bg-green-100 text-green-800'
-      case 'Technology': return 'bg-orange-100 text-orange-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'Books':
+        return 'bg-royalPurple-accent text-royalPurple-accentTx'
+      case 'Equipment':
+        return 'bg-royalPurple-pill text-royalPurple-pillTx'
+      case 'Stationery':
+        return 'bg-royalPurple-success text-royalPurple-successTx'
+      case 'Technology':
+        return 'bg-orange-100 text-orange-800'
+      default:
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
   }
 
@@ -55,9 +80,10 @@ export default function StockBookPage() {
     return 'overstocked'
   }
 
-  const filteredStock = stockData.filter(item => {
-    const matchesSearch = item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.category.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredStock = stockData.filter((item) => {
+    const matchesSearch =
+      item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = filterCategory === 'all' || item.category === filterCategory
     const matchesStatus = filterStatus === 'all' || item.status === filterStatus
     return matchesSearch && matchesCategory && matchesStatus
@@ -66,8 +92,10 @@ export default function StockBookPage() {
   const stockStats = {
     totalItems: stockData.length,
     totalValue: stockData.reduce((sum, item) => sum + item.totalValue, 0),
-    lowStockItems: stockData.filter(item => item.status === 'low_stock' || item.status === 'critical').length,
-    inStockItems: stockData.filter(item => item.status === 'in_stock').length
+    lowStockItems: stockData.filter(
+      (item) => item.status === 'low_stock' || item.status === 'critical'
+    ).length,
+    inStockItems: stockData.filter((item) => item.status === 'in_stock').length,
   }
 
   return (
@@ -83,11 +111,13 @@ export default function StockBookPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+              <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center">
                 <Package className="h-6 w-6 mr-2" />
                 Stock Book Management
               </h1>
-              <p className="text-gray-600">Inventory and stock management for department resources</p>
+              <p className="text-royalPurple-text2">
+                Inventory and stock management for department resources
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -107,10 +137,12 @@ export default function StockBookPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Package className="h-8 w-8 text-blue-600" />
+                <Package className="h-8 w-8 text-royalPurple-accentTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Items</p>
-                  <p className="text-2xl font-bold text-gray-900">{stockStats.totalItems}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Items</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {stockStats.totalItems}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -118,10 +150,12 @@ export default function StockBookPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <TrendingUp className="h-8 w-8 text-green-600" />
+                <TrendingUp className="h-8 w-8 text-royalPurple-successTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Value</p>
-                  <p className="text-2xl font-bold text-gray-900">${stockStats.totalValue.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Value</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    ${stockStats.totalValue.toLocaleString()}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -129,10 +163,12 @@ export default function StockBookPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <CheckCircle className="h-8 w-8 text-purple-600" />
+                <CheckCircle className="h-8 w-8 text-royalPurple-pillTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">In Stock</p>
-                  <p className="text-2xl font-bold text-gray-900">{stockStats.inStockItems}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">In Stock</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {stockStats.inStockItems}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -140,10 +176,12 @@ export default function StockBookPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <AlertTriangle className="h-8 w-8 text-red-600" />
+                <AlertTriangle className="h-8 w-8 text-royalPurple-dangerTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Low Stock</p>
-                  <p className="text-2xl font-bold text-gray-900">{stockStats.lowStockItems}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Low Stock</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {stockStats.lowStockItems}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -157,17 +195,17 @@ export default function StockBookPage() {
               <CardTitle>Inventory Management</CardTitle>
               <div className="flex items-center space-x-2">
                 <div className="relative">
-                  <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-royalPurple-text3" />
                   <input
                     type="text"
                     placeholder="Search items..."
-                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <select
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
                 >
@@ -178,7 +216,7 @@ export default function StockBookPage() {
                   <option value="Technology">Technology</option>
                 </select>
                 <select
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                 >
@@ -209,37 +247,46 @@ export default function StockBookPage() {
                 </thead>
                 <tbody>
                   {filteredStock.map((item) => (
-                    <tr key={item.id} className="border-b hover:bg-gray-50">
+                    <tr key={item.id} className="border-b hover:bg-royalPurple-page">
                       <td className="py-3 px-4">
                         <div>
-                          <div className="font-medium text-gray-900">{item.itemName}</div>
-                          <div className="text-sm text-gray-500">Supplier: {item.supplier}</div>
+                          <div className="font-medium text-royalPurple-text1">{item.itemName}</div>
+                          <div className="text-sm text-royalPurple-text3">
+                            Supplier: {item.supplier}
+                          </div>
                         </div>
                       </td>
                       <td className="py-3 px-4">
-                        <span className={`px-2 py-1 text-xs rounded-full ${getCategoryColor(item.category)}`}>
+                        <span
+                          className={`px-2 py-1 text-xs rounded-full ${getCategoryColor(item.category)}`}
+                        >
                           {item.category}
                         </span>
                       </td>
                       <td className="py-3 px-4">
                         <div className="text-center">
                           <div className="font-medium">{item.currentStock}</div>
-                          <div className="text-xs text-gray-500">Min: {item.minimumStock}</div>
+                          <div className="text-xs text-royalPurple-text3">
+                            Min: {item.minimumStock}
+                          </div>
                         </div>
                       </td>
                       <td className="py-3 px-4">
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
+                        <div className="w-full bg-royalPurple-card2 rounded-full h-2">
+                          <div
                             className={`h-2 rounded-full ${
-                              item.currentStock <= item.minimumStock * 0.5 ? 'bg-red-500' :
-                              item.currentStock <= item.minimumStock ? 'bg-yellow-500' : 'bg-green-500'
+                              item.currentStock <= item.minimumStock * 0.5
+                                ? 'bg-royalPurple-danger'
+                                : item.currentStock <= item.minimumStock
+                                  ? 'bg-yellow-500'
+                                  : 'bg-royalPurple-success'
                             }`}
-                            style={{ 
-                              width: `${Math.min((item.currentStock / item.maximumStock) * 100, 100)}%` 
+                            style={{
+                              width: `${Math.min((item.currentStock / item.maximumStock) * 100, 100)}%`,
                             }}
                           ></div>
                         </div>
-                        <div className="text-xs text-gray-500 mt-1">
+                        <div className="text-xs text-royalPurple-text3 mt-1">
                           {Math.round((item.currentStock / item.maximumStock) * 100)}%
                         </div>
                       </td>
@@ -248,12 +295,14 @@ export default function StockBookPage() {
                       <td className="py-3 px-4">
                         <div className="flex items-center">
                           {getStatusIcon(item.status)}
-                          <span className={`ml-2 px-2 py-1 text-xs rounded-full ${getStatusColor(item.status)}`}>
+                          <span
+                            className={`ml-2 px-2 py-1 text-xs rounded-full ${getStatusColor(item.status)}`}
+                          >
                             {item.status.replace('_', ' ')}
                           </span>
                         </div>
                       </td>
-                      <td className="py-3 px-4 text-sm text-gray-600">{item.location}</td>
+                      <td className="py-3 px-4 text-sm text-royalPurple-text2">{item.location}</td>
                       <td className="py-3 px-4">
                         <div className="flex items-center space-x-2">
                           <Button size="sm" variant="outline">
@@ -283,29 +332,42 @@ export default function StockBookPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {stockData.filter(item => item.status === 'critical' || item.status === 'low_stock').map((item) => (
-                  <div key={item.id} className={`p-3 border rounded-lg ${
-                    item.status === 'critical' ? 'bg-red-50 border-red-200' : 'bg-yellow-50 border-yellow-200'
-                  }`}>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className={`font-medium ${
-                          item.status === 'critical' ? 'text-red-800' : 'text-yellow-800'
-                        }`}>
-                          {item.itemName}
-                        </h4>
-                        <p className={`text-sm ${
-                          item.status === 'critical' ? 'text-red-700' : 'text-yellow-700'
-                        }`}>
-                          Current: {item.currentStock} | Minimum: {item.minimumStock}
-                        </p>
+                {stockData
+                  .filter((item) => item.status === 'critical' || item.status === 'low_stock')
+                  .map((item) => (
+                    <div
+                      key={item.id}
+                      className={`p-3 border rounded-lg ${
+                        item.status === 'critical'
+                          ? 'bg-royalPurple-danger border-royalPurple-border'
+                          : 'bg-yellow-50 border-yellow-200'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4
+                            className={`font-medium ${
+                              item.status === 'critical'
+                                ? 'text-royalPurple-dangerTx'
+                                : 'text-yellow-800'
+                            }`}
+                          >
+                            {item.itemName}
+                          </h4>
+                          <p
+                            className={`text-sm ${
+                              item.status === 'critical'
+                                ? 'text-royalPurple-dangerTx'
+                                : 'text-yellow-700'
+                            }`}
+                          >
+                            Current: {item.currentStock} | Minimum: {item.minimumStock}
+                          </p>
+                        </div>
+                        <Button size="sm">Reorder</Button>
                       </div>
-                      <Button size="sm">
-                        Reorder
-                      </Button>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </CardContent>
           </Card>
@@ -348,31 +410,43 @@ export default function StockBookPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+              <div className="p-3 bg-royalPurple-success border border-royalPurple-border rounded-lg">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-medium text-green-800">Stock In: Scientific Calculators</h4>
-                    <p className="text-sm text-green-700">Added 25 units • Total: 75 units</p>
+                    <h4 className="font-medium text-royalPurple-successTx">
+                      Stock In: Scientific Calculators
+                    </h4>
+                    <p className="text-sm text-royalPurple-successTx">
+                      Added 25 units • Total: 75 units
+                    </p>
                   </div>
-                  <span className="text-xs text-green-600">2 hours ago</span>
+                  <span className="text-xs text-royalPurple-successTx">2 hours ago</span>
                 </div>
               </div>
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+              <div className="p-3 bg-royalPurple-danger border border-royalPurple-border rounded-lg">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-medium text-red-800">Stock Out: Whiteboard Markers</h4>
-                    <p className="text-sm text-red-700">Issued 8 units • Remaining: 12 units</p>
+                    <h4 className="font-medium text-royalPurple-dangerTx">
+                      Stock Out: Whiteboard Markers
+                    </h4>
+                    <p className="text-sm text-royalPurple-dangerTx">
+                      Issued 8 units • Remaining: 12 units
+                    </p>
                   </div>
-                  <span className="text-xs text-red-600">1 day ago</span>
+                  <span className="text-xs text-royalPurple-dangerTx">1 day ago</span>
                 </div>
               </div>
-              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="p-3 bg-royalPurple-accent border border-royalPurple-border2 rounded-lg">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-medium text-blue-800">New Item Added: Laboratory Equipment Set</h4>
-                    <p className="text-sm text-blue-700">Initial stock: 8 units • Value: $1,200</p>
+                    <h4 className="font-medium text-royalPurple-accentTx">
+                      New Item Added: Laboratory Equipment Set
+                    </h4>
+                    <p className="text-sm text-royalPurple-accentTx">
+                      Initial stock: 8 units • Value: $1,200
+                    </p>
                   </div>
-                  <span className="text-xs text-blue-600">3 days ago</span>
+                  <span className="text-xs text-royalPurple-accentTx">3 days ago</span>
                 </div>
               </div>
             </div>

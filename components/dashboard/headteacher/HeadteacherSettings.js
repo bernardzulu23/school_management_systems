@@ -2,7 +2,17 @@ import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
-  Settings, Database, Shield, Globe, Monitor, School, FileText, Calendar, Users, BarChart3, CheckCircle
+  Settings,
+  Database,
+  Shield,
+  Globe,
+  Monitor,
+  School,
+  FileText,
+  Calendar,
+  Users,
+  BarChart3,
+  CheckCircle,
 } from 'lucide-react'
 
 export function HeadteacherSettings() {
@@ -10,14 +20,14 @@ export function HeadteacherSettings() {
     <div className="space-y-6">
       {/* Settings Header */}
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">School Settings</h2>
-        <p className="text-gray-600">System configuration and administrative settings</p>
+        <h2 className="text-3xl font-bold text-royalPurple-text1 mb-2">School Settings</h2>
+        <p className="text-royalPurple-text2">System configuration and administrative settings</p>
       </div>
 
       {/* Settings Categories */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
-          <CardHeader className="bg-blue-600 text-white">
+          <CardHeader className="bg-royalPurple-accent text-royalPurple-text1">
             <CardTitle className="flex items-center">
               <Settings className="h-5 w-5 mr-2" />
               System Configuration
@@ -46,7 +56,7 @@ export function HeadteacherSettings() {
         </Card>
 
         <Card>
-          <CardHeader className="bg-green-600 text-white">
+          <CardHeader className="bg-royalPurple-success text-royalPurple-text1">
             <CardTitle className="flex items-center">
               <School className="h-5 w-5 mr-2" />
               School Configuration
@@ -82,25 +92,25 @@ export function HeadteacherSettings() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-green-50 rounded-lg">
-              <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-              <h4 className="font-medium text-green-800">Database</h4>
-              <p className="text-sm text-green-600">Operational</p>
+            <div className="text-center p-4 bg-royalPurple-success rounded-lg">
+              <CheckCircle className="h-8 w-8 text-royalPurple-successTx mx-auto mb-2" />
+              <h4 className="font-medium text-royalPurple-successTx">Database</h4>
+              <p className="text-sm text-royalPurple-successTx">Operational</p>
             </div>
-            <div className="text-center p-4 bg-green-50 rounded-lg">
-              <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-              <h4 className="font-medium text-green-800">API Services</h4>
-              <p className="text-sm text-green-600">Running</p>
+            <div className="text-center p-4 bg-royalPurple-success rounded-lg">
+              <CheckCircle className="h-8 w-8 text-royalPurple-successTx mx-auto mb-2" />
+              <h4 className="font-medium text-royalPurple-successTx">API Services</h4>
+              <p className="text-sm text-royalPurple-successTx">Running</p>
             </div>
-            <div className="text-center p-4 bg-green-50 rounded-lg">
-              <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-              <h4 className="font-medium text-green-800">Security</h4>
-              <p className="text-sm text-green-600">Protected</p>
+            <div className="text-center p-4 bg-royalPurple-success rounded-lg">
+              <CheckCircle className="h-8 w-8 text-royalPurple-successTx mx-auto mb-2" />
+              <h4 className="font-medium text-royalPurple-successTx">Security</h4>
+              <p className="text-sm text-royalPurple-successTx">Protected</p>
             </div>
-            <div className="text-center p-4 bg-green-50 rounded-lg">
-              <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-              <h4 className="font-medium text-green-800">Backups</h4>
-              <p className="text-sm text-green-600">Up to Date</p>
+            <div className="text-center p-4 bg-royalPurple-success rounded-lg">
+              <CheckCircle className="h-8 w-8 text-royalPurple-successTx mx-auto mb-2" />
+              <h4 className="font-medium text-royalPurple-successTx">Backups</h4>
+              <p className="text-sm text-royalPurple-successTx">Up to Date</p>
             </div>
           </div>
         </CardContent>

@@ -4,16 +4,16 @@ import { useState, useEffect } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  BarChart3, 
-  Search, 
-  Filter, 
-  Download,
-  TrendingUp,
-  Award,
-  AlertCircle
-} from 'lucide-react'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { BarChart3, Search, Filter, Download, TrendingUp, Award, AlertCircle } from 'lucide-react'
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts'
 
 export default function StudentResultsPage() {
   const [results, setResults] = useState([])
@@ -41,23 +41,22 @@ export default function StudentResultsPage() {
   }
 
   // Filter results
-  const filteredResults = results.filter(result => {
+  const filteredResults = results.filter((result) => {
     const matchesSearch = result.subject.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesTerm = selectedTerm === 'All' || result.term === selectedTerm
     return matchesSearch && matchesTerm
   })
 
   // Get unique terms for filter
-  const terms = ['All', ...new Set(results.map(r => r.term))]
+  const terms = ['All', ...new Set(results.map((r) => r.term))]
 
   // Calculate stats
-  const averageScore = results.length > 0
-    ? (results.reduce((acc, curr) => acc + curr.score, 0) / results.length).toFixed(1)
-    : 0
+  const averageScore =
+    results.length > 0
+      ? (results.reduce((acc, curr) => acc + curr.score, 0) / results.length).toFixed(1)
+      : 0
 
-  const highestScore = results.length > 0
-    ? Math.max(...results.map(r => r.score))
-    : 0
+  const highestScore = results.length > 0 ? Math.max(...results.map((r) => r.score)) : 0
 
   return (
     <DashboardLayout title="My Results">
@@ -66,45 +65,45 @@ export default function StudentResultsPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card>
             <CardContent className="p-6 flex items-center space-x-4">
-              <div className="p-3 bg-blue-100 text-blue-600 rounded-lg">
+              <div className="p-3 bg-royalPurple-accent text-royalPurple-accentTx rounded-lg">
                 <BarChart3 className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500">Total Assessments</p>
-                <h3 className="text-2xl font-bold text-gray-900">{results.length}</h3>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-6 flex items-center space-x-4">
-              <div className="p-3 bg-green-100 text-green-600 rounded-lg">
-                <TrendingUp className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-500">Average Score</p>
-                <h3 className="text-2xl font-bold text-gray-900">{averageScore}%</h3>
+                <p className="text-sm font-medium text-royalPurple-text3">Total Assessments</p>
+                <h3 className="text-2xl font-bold text-royalPurple-text1">{results.length}</h3>
               </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardContent className="p-6 flex items-center space-x-4">
-              <div className="p-3 bg-purple-100 text-purple-600 rounded-lg">
+              <div className="p-3 bg-royalPurple-success text-royalPurple-successTx rounded-lg">
+                <TrendingUp className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-royalPurple-text3">Average Score</p>
+                <h3 className="text-2xl font-bold text-royalPurple-text1">{averageScore}%</h3>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6 flex items-center space-x-4">
+              <div className="p-3 bg-royalPurple-pill text-royalPurple-pillTx rounded-lg">
                 <Award className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500">Highest Score</p>
-                <h3 className="text-2xl font-bold text-gray-900">{highestScore}%</h3>
+                <p className="text-sm font-medium text-royalPurple-text3">Highest Score</p>
+                <h3 className="text-2xl font-bold text-royalPurple-text1">{highestScore}%</h3>
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Filters and Search */}
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-4 rounded-lg shadow-sm">
+        <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-royalPurple-card p-4 rounded-lg shadow-sm">
           <div className="relative w-full md:w-64">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-royalPurple-text3 w-4 h-4" />
             <input
               type="text"
               placeholder="Search subjects..."
@@ -113,18 +112,20 @@ export default function StudentResultsPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          
+
           <div className="flex gap-4 w-full md:w-auto">
             <select
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-royalPurple-card"
               value={selectedTerm}
               onChange={(e) => setSelectedTerm(e.target.value)}
             >
-              {terms.map(term => (
-                <option key={term} value={term}>{term === 'All' ? 'All Terms' : term}</option>
+              {terms.map((term) => (
+                <option key={term} value={term}>
+                  {term === 'All' ? 'All Terms' : term}
+                </option>
               ))}
             </select>
-            
+
             <Button variant="outline" className="flex items-center gap-2">
               <Download className="w-4 h-4" />
               Export
@@ -141,16 +142,18 @@ export default function StudentResultsPage() {
             {loading ? (
               <div className="text-center py-8">Loading results...</div>
             ) : error ? (
-              <div className="text-center py-8 text-red-500 flex flex-col items-center">
+              <div className="text-center py-8 text-royalPurple-dangerTx flex flex-col items-center">
                 <AlertCircle className="w-8 h-8 mb-2" />
                 {error}
               </div>
             ) : filteredResults.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">No results found matching your criteria.</div>
+              <div className="text-center py-8 text-royalPurple-text3">
+                No results found matching your criteria.
+              </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                  <thead className="text-xs text-royalPurple-text2 uppercase bg-royalPurple-page">
                     <tr>
                       <th className="px-6 py-3">Subject</th>
                       <th className="px-6 py-3">Term</th>
@@ -162,26 +165,37 @@ export default function StudentResultsPage() {
                   </thead>
                   <tbody>
                     {filteredResults.map((result) => (
-                      <tr key={result.id} className="bg-white border-b hover:bg-gray-50">
-                        <td className="px-6 py-4 font-medium text-gray-900">
+                      <tr
+                        key={result.id}
+                        className="bg-royalPurple-card border-b hover:bg-royalPurple-page"
+                      >
+                        <td className="px-6 py-4 font-medium text-royalPurple-text1">
                           {result.subject}
-                          <span className="block text-xs text-gray-500">{result.subjectCode}</span>
+                          <span className="block text-xs text-royalPurple-text3">
+                            {result.subjectCode}
+                          </span>
                         </td>
-                        <td className="px-6 py-4">{result.term} {result.year}</td>
                         <td className="px-6 py-4">
-                          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                            result.score >= 70 ? 'bg-green-100 text-green-800' :
-                            result.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
+                          {result.term} {result.year}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              result.score >= 70
+                                ? 'bg-royalPurple-success text-royalPurple-successTx'
+                                : result.score >= 50
+                                  ? 'bg-yellow-100 text-yellow-800'
+                                  : 'bg-royalPurple-danger text-royalPurple-dangerTx'
+                            }`}
+                          >
                             {result.score}%
                           </span>
                         </td>
                         <td className="px-6 py-4 font-bold">{result.grade}</td>
-                        <td className="px-6 py-4 text-gray-500">
+                        <td className="px-6 py-4 text-royalPurple-text3">
                           {new Date(result.date).toLocaleDateString()}
                         </td>
-                        <td className="px-6 py-4 text-gray-500 max-w-xs truncate">
+                        <td className="px-6 py-4 text-royalPurple-text3 max-w-xs truncate">
                           {result.comments || '-'}
                         </td>
                       </tr>

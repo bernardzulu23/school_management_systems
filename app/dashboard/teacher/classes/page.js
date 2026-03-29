@@ -120,11 +120,11 @@ export default function TeacherClassesPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+              <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center">
                 <Users className="h-6 w-6 mr-2" />
                 Classroom Management
               </h1>
-              <p className="text-gray-600">
+              <p className="text-royalPurple-text2">
                 Switch class + subject instantly and see only enrolled pupils
               </p>
             </div>
@@ -171,7 +171,7 @@ export default function TeacherClassesPage() {
                 <span>
                   {selectedAssignment.className} - {selectedAssignment.subjectName}
                 </span>
-                <span className="text-sm font-normal text-gray-500">
+                <span className="text-sm font-normal text-royalPurple-text3">
                   {filteredPupils.length} Pupils
                 </span>
               </CardTitle>
@@ -203,12 +203,12 @@ export default function TeacherClassesPage() {
             <CardContent>
               {loading ? (
                 <div className="flex justify-center py-8">
-                  <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+                  <Loader2 className="h-8 w-8 animate-spin text-royalPurple-accentTx" />
                 </div>
               ) : activeTab === 'pupils' ? (
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm text-left">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                    <thead className="text-xs text-royalPurple-text2 uppercase bg-royalPurple-page">
                       <tr>
                         <th className="px-4 py-3">Student ID</th>
                         <th className="px-4 py-3">Name</th>
@@ -218,7 +218,7 @@ export default function TeacherClassesPage() {
                     </thead>
                     <tbody>
                       {filteredPupils.map((p) => (
-                        <tr key={p.id} className="border-b hover:bg-gray-50">
+                        <tr key={p.id} className="border-b hover:bg-royalPurple-page">
                           <td className="px-4 py-3 font-medium">{p.id}</td>
                           <td className="px-4 py-3">{p.name}</td>
                           <td className="px-4 py-3">{p.exam_number || '-'}</td>
@@ -241,7 +241,7 @@ export default function TeacherClassesPage() {
                     </div>
                     <div className="space-y-2">
                       <Label>Agricultural Calendar</Label>
-                      <div className="text-sm text-gray-600 flex items-center gap-2">
+                      <div className="text-sm text-royalPurple-text2 flex items-center gap-2">
                         <Calendar className="h-4 w-4" />
                         {seasonLabel}
                       </div>

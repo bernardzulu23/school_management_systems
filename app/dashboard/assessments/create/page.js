@@ -6,9 +6,19 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
-import { 
-  ClipboardList, Plus, Calendar, Clock, Users, BookOpen, 
-  ArrowLeft, Save, Eye, Settings, FileText, Target
+import {
+  ClipboardList,
+  Plus,
+  Calendar,
+  Clock,
+  Users,
+  BookOpen,
+  ArrowLeft,
+  Save,
+  Eye,
+  Settings,
+  FileText,
+  Target,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -25,7 +35,7 @@ export default function CreateAssessmentPage() {
     startDate: '',
     endDate: '',
     instructions: '',
-    questions: []
+    questions: [],
   })
 
   const [currentStep, setCurrentStep] = useState(1)
@@ -35,7 +45,7 @@ export default function CreateAssessmentPage() {
     { value: 'test', label: 'Test', icon: ClipboardList },
     { value: 'quiz', label: 'Quiz', icon: Target },
     { value: 'assignment', label: 'Assignment', icon: FileText },
-    { value: 'exam', label: 'Exam', icon: BookOpen }
+    { value: 'exam', label: 'Exam', icon: BookOpen },
   ]
 
   const mockSubjects = [
@@ -44,7 +54,7 @@ export default function CreateAssessmentPage() {
     { id: '3', name: 'Chemistry' },
     { id: '4', name: 'Biology' },
     { id: '5', name: 'English' },
-    { id: '6', name: 'History' }
+    { id: '6', name: 'History' },
   ]
 
   const mockClasses = [
@@ -53,13 +63,13 @@ export default function CreateAssessmentPage() {
     { id: '3', name: 'Grade 10A' },
     { id: '4', name: 'Grade 10B' },
     { id: '5', name: 'Grade 11A' },
-    { id: '6', name: 'Grade 12A' }
+    { id: '6', name: 'Grade 12A' },
   ]
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }))
   }
 
@@ -78,7 +88,7 @@ export default function CreateAssessmentPage() {
   const steps = [
     { id: 1, title: 'Basic Information', description: 'Assessment details and settings' },
     { id: 2, title: 'Questions', description: 'Add and configure questions' },
-    { id: 3, title: 'Review & Publish', description: 'Review and publish assessment' }
+    { id: 3, title: 'Review & Publish', description: 'Review and publish assessment' },
   ]
 
   return (
@@ -94,8 +104,8 @@ export default function CreateAssessmentPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Create New Assessment</h1>
-              <p className="text-gray-600">Design and configure your assessment</p>
+              <h1 className="text-2xl font-bold text-royalPurple-text1">Create New Assessment</h1>
+              <p className="text-royalPurple-text2">Design and configure your assessment</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -120,25 +130,33 @@ export default function CreateAssessmentPage() {
             <div className="flex items-center justify-between">
               {steps.map((step, index) => (
                 <div key={step.id} className="flex items-center">
-                  <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
-                    currentStep >= step.id 
-                      ? 'bg-blue-600 border-blue-600 text-white' 
-                      : 'border-gray-300 text-gray-500'
-                  }`}>
+                  <div
+                    className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
+                      currentStep >= step.id
+                        ? 'bg-royalPurple-accent border-royalPurple-border2 text-royalPurple-text1'
+                        : 'border-royalPurple-border text-royalPurple-text3'
+                    }`}
+                  >
                     {step.id}
                   </div>
                   <div className="ml-3">
-                    <p className={`text-sm font-medium ${
-                      currentStep >= step.id ? 'text-blue-600' : 'text-gray-500'
-                    }`}>
+                    <p
+                      className={`text-sm font-medium ${
+                        currentStep >= step.id
+                          ? 'text-royalPurple-accentTx'
+                          : 'text-royalPurple-text3'
+                      }`}
+                    >
                       {step.title}
                     </p>
-                    <p className="text-xs text-gray-500">{step.description}</p>
+                    <p className="text-xs text-royalPurple-text3">{step.description}</p>
                   </div>
                   {index < steps.length - 1 && (
-                    <div className={`w-16 h-0.5 mx-4 ${
-                      currentStep > step.id ? 'bg-blue-600' : 'bg-gray-300'
-                    }`} />
+                    <div
+                      className={`w-16 h-0.5 mx-4 ${
+                        currentStep > step.id ? 'bg-royalPurple-accent' : 'bg-royalPurple-card2'
+                      }`}
+                    />
                   )}
                 </div>
               ))}
@@ -155,33 +173,33 @@ export default function CreateAssessmentPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                     Assessment Title *
                   </label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
                     placeholder="Enter assessment title"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                     Description
                   </label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
                     rows={3}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
                     placeholder="Brief description of the assessment"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                     Assessment Type *
                   </label>
                   <div className="grid grid-cols-2 gap-2">
@@ -191,8 +209,8 @@ export default function CreateAssessmentPage() {
                         onClick={() => handleInputChange('type', type.value)}
                         className={`p-3 border rounded-md flex items-center justify-center space-x-2 transition-colors ${
                           formData.type === type.value
-                            ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-300 hover:border-gray-400'
+                            ? 'border-royalPurple-border2 bg-royalPurple-accent text-royalPurple-accentTx'
+                            : 'border-royalPurple-border hover:border-royalPurple-border'
                         }`}
                       >
                         <type.icon className="h-4 w-4" />
@@ -203,13 +221,13 @@ export default function CreateAssessmentPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                     Subject *
                   </label>
                   <select
                     value={formData.subject}
                     onChange={(e) => handleInputChange('subject', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
                   >
                     <option value="">Select Subject</option>
                     {mockSubjects.map((subject) => (
@@ -221,13 +239,13 @@ export default function CreateAssessmentPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                     Class *
                   </label>
                   <select
                     value={formData.class}
                     onChange={(e) => handleInputChange('class', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
                   >
                     <option value="">Select Class</option>
                     {mockClasses.map((classItem) => (
@@ -247,27 +265,27 @@ export default function CreateAssessmentPage() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                       Total Marks *
                     </label>
                     <input
                       type="number"
                       value={formData.totalMarks}
                       onChange={(e) => handleInputChange('totalMarks', parseInt(e.target.value))}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
                       min="1"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                       Duration (minutes) *
                     </label>
                     <input
                       type="number"
                       value={formData.duration}
                       onChange={(e) => handleInputChange('duration', parseInt(e.target.value))}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
                       min="1"
                     />
                   </div>
@@ -275,39 +293,39 @@ export default function CreateAssessmentPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                       Start Date & Time *
                     </label>
                     <input
                       type="datetime-local"
                       value={formData.startDate}
                       onChange={(e) => handleInputChange('startDate', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                       End Date & Time *
                     </label>
                     <input
                       type="datetime-local"
                       value={formData.endDate}
                       onChange={(e) => handleInputChange('endDate', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                     Instructions for Students
                   </label>
                   <textarea
                     value={formData.instructions}
                     onChange={(e) => handleInputChange('instructions', e.target.value)}
                     rows={4}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
                     placeholder="Enter instructions for students taking this assessment..."
                   />
                 </div>
@@ -331,10 +349,13 @@ export default function CreateAssessmentPage() {
             </CardHeader>
             <CardContent>
               <div className="text-center py-12">
-                <ClipboardList className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Question Builder</h3>
-                <p className="text-gray-600 mb-4">
-                  This feature is coming soon. You'll be able to add multiple choice, short answer, and essay questions.
+                <ClipboardList className="h-12 w-12 text-royalPurple-text3 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-royalPurple-text1 mb-2">
+                  Question Builder
+                </h3>
+                <p className="text-royalPurple-text2 mb-4">
+                  This feature is coming soon. You'll be able to add multiple choice, short answer,
+                  and essay questions.
                 </p>
                 <div className="flex justify-center space-x-2">
                   <Button variant="outline" onClick={() => setCurrentStep(1)}>
@@ -358,9 +379,11 @@ export default function CreateAssessmentPage() {
             </CardHeader>
             <CardContent>
               <div className="text-center py-12">
-                <Eye className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Assessment Review</h3>
-                <p className="text-gray-600 mb-4">
+                <Eye className="h-12 w-12 text-royalPurple-text3 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-royalPurple-text1 mb-2">
+                  Assessment Review
+                </h3>
+                <p className="text-royalPurple-text2 mb-4">
                   Review your assessment details and publish when ready.
                 </p>
                 <div className="flex justify-center space-x-2">

@@ -5,14 +5,10 @@ const cn = (...classes) => classes.filter(Boolean).join(' ')
 
 const Card = forwardRef(({ className = '', variant = 'default', ...props }, ref) => {
   const variants = {
-    default:
-      'bg-white dark:bg-g-800 rounded-[14px] border border-black/[0.09] dark:border-white/[0.09] shadow-[0_1px_2px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)]',
-    dashboard:
-      'bg-white dark:bg-g-800 rounded-[14px] border border-black/[0.09] dark:border-white/[0.09] shadow-[0_1px_2px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] p-6',
-    stats:
-      'bg-white dark:bg-g-800 rounded-[14px] border border-black/[0.09] dark:border-white/[0.09] shadow-[0_1px_2px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] p-4',
-    solid:
-      'bg-white dark:bg-g-800 rounded-[14px] border border-black/[0.09] dark:border-white/[0.09] shadow-[0_1px_2px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)]',
+    default: 'bg-royalPurple-card border border-royalPurple-border rounded-xl',
+    dashboard: 'bg-royalPurple-card border border-royalPurple-border rounded-xl p-6',
+    stats: 'bg-royalPurple-card border border-royalPurple-border rounded-xl p-4',
+    solid: 'bg-royalPurple-card border border-royalPurple-border rounded-xl',
   }
 
   return (
@@ -30,7 +26,7 @@ const CardTitle = forwardRef(({ className = '', ...props }, ref) => (
   <h3
     ref={ref}
     className={cn(
-      'text-lg font-semibold leading-none tracking-tight text-g-900 dark:text-g-50',
+      'text-lg font-semibold leading-none tracking-tight text-royalPurple-text1',
       className
     )}
     {...props}
@@ -39,7 +35,7 @@ const CardTitle = forwardRef(({ className = '', ...props }, ref) => (
 CardTitle.displayName = 'CardTitle'
 
 const CardDescription = forwardRef(({ className = '', ...props }, ref) => (
-  <p ref={ref} className={cn('text-sm text-g-700 dark:text-g-300', className)} {...props} />
+  <p ref={ref} className={cn('text-sm text-royalPurple-text2', className)} {...props} />
 ))
 CardDescription.displayName = 'CardDescription'
 

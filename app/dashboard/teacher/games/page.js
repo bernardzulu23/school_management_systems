@@ -17,7 +17,7 @@ export default function TeacherGamesPage() {
         { id: 3, name: 'Science' },
         { id: 4, name: 'History' },
         { id: 5, name: 'Geography' },
-        { id: 6, name: 'Computer Science' }
+        { id: 6, name: 'Computer Science' },
       ])
       setLoading(false)
     }, 1000)
@@ -29,7 +29,7 @@ export default function TeacherGamesPage() {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <div className="loading-skeleton w-16 h-16 rounded-full mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading game management...</p>
+            <p className="text-royalPurple-text2">Loading game management...</p>
           </div>
         </div>
       </DashboardLayout>
@@ -38,10 +38,7 @@ export default function TeacherGamesPage() {
 
   return (
     <DashboardLayout title="Game Management">
-      <GameManagement 
-        userRole="teacher"
-        subjects={subjects}
-      />
+      <GameManagement userRole="teacher" subjects={subjects} />
     </DashboardLayout>
   )
 }

@@ -3,18 +3,18 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { 
-  Clock, 
-  Star, 
-  CheckCircle, 
-  XCircle, 
+import {
+  Clock,
+  Star,
+  CheckCircle,
+  XCircle,
   ArrowRight,
   ArrowLeft,
   Trophy,
   Target,
   Zap,
   RotateCcw,
-  Home
+  Home,
 } from 'lucide-react'
 
 export default function GamePlayer({ game, onComplete, onExit }) {
@@ -30,7 +30,7 @@ export default function GamePlayer({ game, onComplete, onExit }) {
   useEffect(() => {
     if (gameStarted && !gameCompleted && timeLeft > 0) {
       const timer = setInterval(() => {
-        setTimeLeft(prev => {
+        setTimeLeft((prev) => {
           if (prev <= 1) {
             handleGameComplete()
             return 0
@@ -50,15 +50,15 @@ export default function GamePlayer({ game, onComplete, onExit }) {
   }
 
   const handleAnswerSelect = (questionIndex, answer) => {
-    setAnswers(prev => ({
+    setAnswers((prev) => ({
       ...prev,
-      [questionIndex]: answer
+      [questionIndex]: answer,
     }))
   }
 
   const handleNextQuestion = () => {
     if (currentQuestion < game.content.questions.length - 1) {
-      setCurrentQuestion(prev => prev + 1)
+      setCurrentQuestion((prev) => prev + 1)
     } else {
       handleGameComplete()
     }
@@ -66,7 +66,7 @@ export default function GamePlayer({ game, onComplete, onExit }) {
 
   const handlePreviousQuestion = () => {
     if (currentQuestion > 0) {
-      setCurrentQuestion(prev => prev - 1)
+      setCurrentQuestion((prev) => prev - 1)
     }
   }
 
@@ -93,7 +93,7 @@ export default function GamePlayer({ game, onComplete, onExit }) {
     // Calculate results
     const maxScore = game.content.questions.reduce((sum, q) => sum + (q.points || 1), 0)
     const percentage = Math.round((totalScore / maxScore) * 100)
-    const timeSpent = (game.timeLimit * 60) - timeLeft
+    const timeSpent = game.timeLimit * 60 - timeLeft
 
     const results = {
       score: totalScore,
@@ -102,7 +102,7 @@ export default function GamePlayer({ game, onComplete, onExit }) {
       correctAnswers,
       totalQuestions: game.content.questions.length,
       timeSpent,
-      answers
+      answers,
     }
 
     onComplete(results)
@@ -130,30 +130,32 @@ export default function GamePlayer({ game, onComplete, onExit }) {
           <CardHeader className="text-center">
             <div className="text-6xl mb-4">{game.gameType === 'quiz' ? '❓' : '🎮'}</div>
             <CardTitle className="text-3xl">{game.title}</CardTitle>
-            <p className="text-gray-600 text-lg mt-2">{game.description}</p>
+            <p className="text-royalPurple-text2 text-lg mt-2">{game.description}</p>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center p-6 bg-blue-50 rounded-xl">
-                <Clock className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                <h3 className="font-semibold text-gray-900">Time Limit</h3>
-                <p className="text-2xl font-bold text-blue-600">{game.timeLimit} min</p>
+              <div className="text-center p-6 bg-royalPurple-accent rounded-xl">
+                <Clock className="h-8 w-8 text-royalPurple-accentTx mx-auto mb-2" />
+                <h3 className="font-semibold text-royalPurple-text1">Time Limit</h3>
+                <p className="text-2xl font-bold text-royalPurple-accentTx">{game.timeLimit} min</p>
               </div>
-              <div className="text-center p-6 bg-green-50 rounded-xl">
-                <Target className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                <h3 className="font-semibold text-gray-900">Questions</h3>
-                <p className="text-2xl font-bold text-green-600">{game.content.questions.length}</p>
+              <div className="text-center p-6 bg-royalPurple-success rounded-xl">
+                <Target className="h-8 w-8 text-royalPurple-successTx mx-auto mb-2" />
+                <h3 className="font-semibold text-royalPurple-text1">Questions</h3>
+                <p className="text-2xl font-bold text-royalPurple-successTx">
+                  {game.content.questions.length}
+                </p>
               </div>
               <div className="text-center p-6 bg-yellow-50 rounded-xl">
                 <Star className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
-                <h3 className="font-semibold text-gray-900">Max Points</h3>
+                <h3 className="font-semibold text-royalPurple-text1">Max Points</h3>
                 <p className="text-2xl font-bold text-yellow-600">{game.pointsReward}</p>
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-xl p-6">
-              <h3 className="font-semibold text-gray-900 mb-3">Instructions:</h3>
-              <ul className="space-y-2 text-gray-600">
+            <div className="bg-royalPurple-page rounded-xl p-6">
+              <h3 className="font-semibold text-royalPurple-text1 mb-3">Instructions:</h3>
+              <ul className="space-y-2 text-royalPurple-text2">
                 <li>• Read each question carefully before selecting your answer</li>
                 <li>• You can navigate between questions using the Previous/Next buttons</li>
                 <li>• Your progress is automatically saved</li>
@@ -182,7 +184,7 @@ export default function GamePlayer({ game, onComplete, onExit }) {
     const { totalScore, correctAnswers } = calculateScore()
     const maxScore = game.content.questions.reduce((sum, q) => sum + (q.points || 1), 0)
     const percentage = Math.round((totalScore / maxScore) * 100)
-    const timeSpent = (game.timeLimit * 60) - timeLeft
+    const timeSpent = game.timeLimit * 60 - timeLeft
 
     return (
       <div className="max-w-4xl mx-auto">
@@ -192,70 +194,93 @@ export default function GamePlayer({ game, onComplete, onExit }) {
               {percentage >= 90 ? '🏆' : percentage >= 70 ? '🎉' : percentage >= 50 ? '👍' : '💪'}
             </div>
             <CardTitle className="text-3xl">
-              {percentage >= 90 ? 'Excellent!' : percentage >= 70 ? 'Great Job!' : percentage >= 50 ? 'Good Effort!' : 'Keep Practicing!'}
+              {percentage >= 90
+                ? 'Excellent!'
+                : percentage >= 70
+                  ? 'Great Job!'
+                  : percentage >= 50
+                    ? 'Good Effort!'
+                    : 'Keep Practicing!'}
             </CardTitle>
-            <p className="text-gray-600 text-lg mt-2">You scored {percentage}% on {game.title}</p>
+            <p className="text-royalPurple-text2 text-lg mt-2">
+              You scored {percentage}% on {game.title}
+            </p>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="text-center p-6 bg-blue-50 rounded-xl">
-                <Trophy className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                <h3 className="font-semibold text-gray-900">Score</h3>
-                <p className="text-2xl font-bold text-blue-600">{totalScore}/{maxScore}</p>
+              <div className="text-center p-6 bg-royalPurple-accent rounded-xl">
+                <Trophy className="h-8 w-8 text-royalPurple-accentTx mx-auto mb-2" />
+                <h3 className="font-semibold text-royalPurple-text1">Score</h3>
+                <p className="text-2xl font-bold text-royalPurple-accentTx">
+                  {totalScore}/{maxScore}
+                </p>
               </div>
-              <div className="text-center p-6 bg-green-50 rounded-xl">
-                <Target className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                <h3 className="font-semibold text-gray-900">Correct</h3>
-                <p className="text-2xl font-bold text-green-600">{correctAnswers}/{game.content.questions.length}</p>
+              <div className="text-center p-6 bg-royalPurple-success rounded-xl">
+                <Target className="h-8 w-8 text-royalPurple-successTx mx-auto mb-2" />
+                <h3 className="font-semibold text-royalPurple-text1">Correct</h3>
+                <p className="text-2xl font-bold text-royalPurple-successTx">
+                  {correctAnswers}/{game.content.questions.length}
+                </p>
               </div>
-              <div className="text-center p-6 bg-purple-50 rounded-xl">
-                <Clock className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                <h3 className="font-semibold text-gray-900">Time</h3>
-                <p className="text-2xl font-bold text-purple-600">{formatTime(timeSpent)}</p>
+              <div className="text-center p-6 bg-royalPurple-pill rounded-xl">
+                <Clock className="h-8 w-8 text-royalPurple-pillTx mx-auto mb-2" />
+                <h3 className="font-semibold text-royalPurple-text1">Time</h3>
+                <p className="text-2xl font-bold text-royalPurple-pillTx">
+                  {formatTime(timeSpent)}
+                </p>
               </div>
               <div className="text-center p-6 bg-yellow-50 rounded-xl">
                 <Star className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
-                <h3 className="font-semibold text-gray-900">Points Earned</h3>
-                <p className="text-2xl font-bold text-yellow-600">{Math.round((percentage / 100) * game.pointsReward)}</p>
+                <h3 className="font-semibold text-royalPurple-text1">Points Earned</h3>
+                <p className="text-2xl font-bold text-yellow-600">
+                  {Math.round((percentage / 100) * game.pointsReward)}
+                </p>
               </div>
             </div>
 
             {/* Progress Bar */}
-            <div className="bg-gray-200 rounded-full h-4">
-              <div 
+            <div className="bg-royalPurple-card2 rounded-full h-4">
+              <div
                 className={`h-4 rounded-full transition-all duration-1000 ${
-                  percentage >= 90 ? 'bg-green-500' :
-                  percentage >= 70 ? 'bg-blue-500' :
-                  percentage >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+                  percentage >= 90
+                    ? 'bg-royalPurple-success'
+                    : percentage >= 70
+                      ? 'bg-royalPurple-accent'
+                      : percentage >= 50
+                        ? 'bg-yellow-500'
+                        : 'bg-royalPurple-danger'
                 }`}
                 style={{ width: `${percentage}%` }}
               ></div>
             </div>
 
             {/* Question Review */}
-            <div className="bg-gray-50 rounded-xl p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Question Review</h3>
+            <div className="bg-royalPurple-page rounded-xl p-6">
+              <h3 className="font-semibold text-royalPurple-text1 mb-4">Question Review</h3>
               <div className="space-y-3 max-h-60 overflow-y-auto">
                 {game.content.questions.map((question, index) => {
                   const userAnswer = answers[index]
                   const isCorrect = userAnswer === question.correctAnswer
-                  
+
                   return (
-                    <div key={index} className="flex items-center justify-between p-3 bg-white rounded-lg">
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 bg-royalPurple-card rounded-lg"
+                    >
                       <div className="flex items-center space-x-3">
                         {isCorrect ? (
-                          <CheckCircle className="h-5 w-5 text-green-600" />
+                          <CheckCircle className="h-5 w-5 text-royalPurple-successTx" />
                         ) : (
-                          <XCircle className="h-5 w-5 text-red-600" />
+                          <XCircle className="h-5 w-5 text-royalPurple-dangerTx" />
                         )}
                         <span className="text-sm font-medium">Question {index + 1}</span>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-royalPurple-text2">
                           Your answer: {userAnswer || 'Not answered'}
                         </p>
                         {!isCorrect && (
-                          <p className="text-sm text-green-600">
+                          <p className="text-sm text-royalPurple-successTx">
                             Correct: {question.correctAnswer}
                           </p>
                         )}
@@ -293,20 +318,20 @@ export default function GamePlayer({ game, onComplete, onExit }) {
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="text-2xl font-bold text-blue-600">
+              <div className="text-2xl font-bold text-royalPurple-accentTx">
                 {currentQuestion + 1}/{game.content.questions.length}
               </div>
               <div className="flex-1">
-                <div className="bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                <div className="bg-royalPurple-card2 rounded-full h-2">
+                  <div
+                    className="bg-royalPurple-accent h-2 rounded-full transition-all duration-300"
                     style={{ width: `${progress}%` }}
                   ></div>
                 </div>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-red-600">
+              <div className="flex items-center space-x-2 text-royalPurple-dangerTx">
                 <Clock className="h-5 w-5" />
                 <span className="font-bold text-lg">{formatTime(timeLeft)}</span>
               </div>
@@ -323,15 +348,13 @@ export default function GamePlayer({ game, onComplete, onExit }) {
         <CardHeader>
           <CardTitle className="text-xl">
             Question {currentQuestion + 1}
-            <span className="text-sm font-normal text-gray-600 ml-2">
+            <span className="text-sm font-normal text-royalPurple-text2 ml-2">
               ({question.points || 1} point{(question.points || 1) !== 1 ? 's' : ''})
             </span>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="text-lg text-gray-900 leading-relaxed">
-            {question.question}
-          </div>
+          <div className="text-lg text-royalPurple-text1 leading-relaxed">{question.question}</div>
 
           <div className="space-y-3">
             {question.options.map((option, index) => (
@@ -340,18 +363,20 @@ export default function GamePlayer({ game, onComplete, onExit }) {
                 onClick={() => handleAnswerSelect(currentQuestion, option)}
                 className={`w-full p-4 text-left rounded-xl border-2 transition-all duration-300 ${
                   answers[currentQuestion] === option
-                    ? 'border-blue-500 bg-blue-50 text-blue-900'
-                    : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+                    ? 'border-royalPurple-border2 bg-royalPurple-accent text-royalPurple-accentTx'
+                    : 'border-royalPurple-border hover:border-royalPurple-border2 hover:bg-royalPurple-accent'
                 }`}
               >
                 <div className="flex items-center space-x-3">
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                    answers[currentQuestion] === option
-                      ? 'border-blue-500 bg-blue-500'
-                      : 'border-gray-300'
-                  }`}>
+                  <div
+                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                      answers[currentQuestion] === option
+                        ? 'border-royalPurple-border2 bg-royalPurple-accent'
+                        : 'border-royalPurple-border'
+                    }`}
+                  >
                     {answers[currentQuestion] === option && (
-                      <CheckCircle className="h-4 w-4 text-white" />
+                      <CheckCircle className="h-4 w-4 text-royalPurple-text1" />
                     )}
                   </div>
                   <span className="font-medium">{String.fromCharCode(65 + index)}.</span>

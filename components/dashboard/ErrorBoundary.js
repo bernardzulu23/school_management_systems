@@ -27,19 +27,19 @@ export class ErrorBoundary extends React.Component {
       }
 
       return (
-        <Card className="border-red-200 bg-red-50 m-4">
+        <Card className="border-royalPurple-border bg-royalPurple-danger m-4">
           <CardHeader>
-            <CardTitle className="flex items-center text-red-800">
+            <CardTitle className="flex items-center text-royalPurple-dangerTx">
               <AlertTriangle className="h-5 w-5 mr-2" />
               Something went wrong
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-red-700 mb-4">
+            <p className="text-royalPurple-dangerTx mb-4">
               We encountered an error while loading this component.
             </p>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => this.setState({ hasError: false, error: null })}
               className="flex items-center"
             >

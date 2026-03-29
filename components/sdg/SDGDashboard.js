@@ -3,7 +3,18 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { SDG_GOALS, calculateSDGProgress, getSDGsByCategory } from '@/lib/sdg-framework'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts'
 import { Target, TrendingUp, Globe, Users, Leaf, Building } from 'lucide-react'
 
 export default function SDGDashboard({ schoolData = {} }) {
@@ -13,7 +24,7 @@ export default function SDGDashboard({ schoolData = {} }) {
   useEffect(() => {
     // Calculate progress for each SDG based on school data
     const progress = {}
-    Object.keys(SDG_GOALS).forEach(key => {
+    Object.keys(SDG_GOALS).forEach((key) => {
       const sdgId = SDG_GOALS[key].id
       progress[sdgId] = calculateSDGProgress(sdgId, schoolData.metrics || {})
     })
@@ -25,7 +36,7 @@ export default function SDGDashboard({ schoolData = {} }) {
 
   const getFilteredSDGs = () => {
     if (selectedCategory === 'all') return allSDGs
-    return allSDGs.filter(sdg => categories[selectedCategory]?.includes(sdg.id))
+    return allSDGs.filter((sdg) => categories[selectedCategory]?.includes(sdg.id))
   }
 
   const getOverallProgress = () => {
@@ -34,23 +45,27 @@ export default function SDGDashboard({ schoolData = {} }) {
   }
 
   const getCategoryProgress = () => {
-    return Object.keys(categories).map(category => {
+    return Object.keys(categories).map((category) => {
       const categorySDGs = categories[category]
-      const categoryProgress = categorySDGs.reduce((sum, sdgId) => sum + (sdgProgress[sdgId] || 0), 0)
+      const categoryProgress = categorySDGs.reduce(
+        (sum, sdgId) => sum + (sdgProgress[sdgId] || 0),
+        0
+      )
       return {
         name: category.charAt(0).toUpperCase() + category.slice(1),
         progress: Math.round(categoryProgress / categorySDGs.length),
-        color: category === 'social' ? '#E5243B' : category === 'environmental' ? '#56C02B' : '#FD6925'
+        color:
+          category === 'social' ? '#E5243B' : category === 'environmental' ? '#56C02B' : '#FD6925',
       }
     })
   }
 
   const getChartData = () => {
-    return getFilteredSDGs().map(sdg => ({
+    return getFilteredSDGs().map((sdg) => ({
       name: `SDG ${sdg.id}`,
       progress: sdgProgress[sdg.id] || 0,
       color: sdg.color,
-      title: sdg.title
+      title: sdg.title,
     }))
   }
 
@@ -58,41 +73,47 @@ export default function SDGDashboard({ schoolData = {} }) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold text-gray-900">
+        <h1 className="text-4xl font-bold text-royalPurple-text1">
           🇺🇳 UN Sustainable Development Goals
         </h1>
-        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+        <p className="text-lg text-royalPurple-text2 max-w-3xl mx-auto">
           Tracking our school's contribution to the 2030 Agenda for Sustainable Development
         </p>
         <div className="flex items-center justify-center space-x-2">
-          <Globe className="h-6 w-6 text-blue-600" />
-          <span className="text-2xl font-bold text-blue-600">{getOverallProgress()}%</span>
-          <span className="text-gray-600">Overall Progress</span>
+          <Globe className="h-6 w-6 text-royalPurple-accentTx" />
+          <span className="text-2xl font-bold text-royalPurple-accentTx">
+            {getOverallProgress()}%
+          </span>
+          <span className="text-royalPurple-text2">Overall Progress</span>
         </div>
       </div>
 
       {/* Category Filter */}
       <div className="flex justify-center space-x-4">
-        {['all', 'social', 'environmental', 'economic'].map(category => (
+        {['all', 'social', 'environmental', 'economic'].map((category) => (
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               selectedCategory === category
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-royalPurple-accent text-royalPurple-text1'
+                : 'bg-royalPurple-card2 text-royalPurple-text2 hover:bg-royalPurple-card2'
             }`}
           >
-            {category === 'all' ? '🌍 All SDGs' : 
-             category === 'social' ? '👥 Social' :
-             category === 'environmental' ? '🌱 Environmental' : '💼 Economic'}
+            {category === 'all'
+              ? '🌍 All SDGs'
+              : category === 'social'
+                ? '👥 Social'
+                : category === 'environmental'
+                  ? '🌱 Environmental'
+                  : '💼 Economic'}
           </button>
         ))}
       </div>
 
       {/* Category Progress Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {getCategoryProgress().map(category => (
+        {getCategoryProgress().map((category) => (
           <Card key={category.name}>
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center space-x-2">
@@ -105,12 +126,12 @@ export default function SDGDashboard({ schoolData = {} }) {
             <CardContent>
               <div className="flex items-center space-x-4">
                 <div className="flex-1">
-                  <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div className="w-full bg-royalPurple-card2 rounded-full h-3">
                     <div
                       className="h-3 rounded-full transition-all duration-500"
                       style={{
                         width: `${category.progress}%`,
-                        backgroundColor: category.color
+                        backgroundColor: category.color,
                       }}
                     />
                   </div>
@@ -138,17 +159,8 @@ export default function SDGDashboard({ schoolData = {} }) {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis domain={[0, 100]} />
-              <Tooltip 
-                formatter={(value, name, props) => [
-                  `${value}%`, 
-                  props.payload.title
-                ]}
-              />
-              <Bar 
-                dataKey="progress" 
-                fill={(entry) => entry.color}
-                radius={[4, 4, 0, 0]}
-              />
+              <Tooltip formatter={(value, name, props) => [`${value}%`, props.payload.title]} />
+              <Bar dataKey="progress" fill={(entry) => entry.color} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -156,7 +168,7 @@ export default function SDGDashboard({ schoolData = {} }) {
 
       {/* SDG Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {getFilteredSDGs().map(sdg => (
+        {getFilteredSDGs().map((sdg) => (
           <Card key={sdg.id} className="hover:shadow-lg transition-shadow cursor-pointer">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
@@ -175,19 +187,17 @@ export default function SDGDashboard({ schoolData = {} }) {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
-              <p className="text-xs text-gray-600 mb-3 line-clamp-2">
-                {sdg.description}
-              </p>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <p className="text-xs text-royalPurple-text2 mb-3 line-clamp-2">{sdg.description}</p>
+              <div className="w-full bg-royalPurple-card2 rounded-full h-2">
                 <div
                   className="h-2 rounded-full transition-all duration-500"
                   style={{
                     width: `${sdgProgress[sdg.id] || 0}%`,
-                    backgroundColor: sdg.color
+                    backgroundColor: sdg.color,
                   }}
                 />
               </div>
-              <div className="mt-2 text-xs text-gray-500">
+              <div className="mt-2 text-xs text-royalPurple-text3">
                 {sdg.targets.length} targets • {sdg.metrics.length} metrics
               </div>
             </CardContent>
@@ -205,21 +215,21 @@ export default function SDGDashboard({ schoolData = {} }) {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <button className="p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors text-left">
-              <div className="text-blue-600 font-semibold">📊 Update Metrics</div>
-              <div className="text-sm text-gray-600">Update SDG progress data</div>
+            <button className="p-4 bg-royalPurple-accent rounded-lg hover:bg-royalPurple-accent transition-colors text-left">
+              <div className="text-royalPurple-accentTx font-semibold">📊 Update Metrics</div>
+              <div className="text-sm text-royalPurple-text2">Update SDG progress data</div>
             </button>
-            <button className="p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors text-left">
-              <div className="text-green-600 font-semibold">📈 View Reports</div>
-              <div className="text-sm text-gray-600">Generate SDG reports</div>
+            <button className="p-4 bg-royalPurple-success rounded-lg hover:bg-royalPurple-success transition-colors text-left">
+              <div className="text-royalPurple-successTx font-semibold">📈 View Reports</div>
+              <div className="text-sm text-royalPurple-text2">Generate SDG reports</div>
             </button>
-            <button className="p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors text-left">
-              <div className="text-purple-600 font-semibold">🎯 Set Targets</div>
-              <div className="text-sm text-gray-600">Define SDG targets</div>
+            <button className="p-4 bg-royalPurple-pill rounded-lg hover:bg-royalPurple-pill transition-colors text-left">
+              <div className="text-royalPurple-pillTx font-semibold">🎯 Set Targets</div>
+              <div className="text-sm text-royalPurple-text2">Define SDG targets</div>
             </button>
             <button className="p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors text-left">
               <div className="text-orange-600 font-semibold">🤝 Partnerships</div>
-              <div className="text-sm text-gray-600">Manage partnerships</div>
+              <div className="text-sm text-royalPurple-text2">Manage partnerships</div>
             </button>
           </div>
         </CardContent>

@@ -57,8 +57,8 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F4F3F1] dark:bg-g-900 flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white dark:bg-g-800 border border-black/[0.09] dark:border-white/[0.09] rounded-[20px] p-8">
+    <div className="min-h-screen bg-royalPurple-page flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md bg-royalPurple-card border border-royalPurple-border rounded-2xl p-8">
         <header className="flex flex-col items-center mb-8">
           {school ? (
             <>
@@ -66,17 +66,17 @@ export default function ForgotPasswordPage() {
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={school.logo_url} alt={school.name} className="h-16 w-auto mx-auto mb-4" />
               )}
-              <h2 className="text-xl font-bold text-center text-g-900 dark:text-g-50">
+              <h2 className="text-xl font-bold text-center text-royalPurple-text1">
                 {school.name}
               </h2>
             </>
           ) : (
-            <div className="bg-g-100 dark:bg-g-900 rounded-[10px] border border-black/[0.09] dark:border-white/[0.09] p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
-              <GraduationCap className="h-6 w-6 text-g-800 dark:text-g-50" />
+            <div className="bg-royalPurple-card2 border border-royalPurple-border rounded-lg p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
+              <GraduationCap className="h-6 w-6 text-royalPurple-text2" />
             </div>
           )}
-          <h1 className="text-2xl font-bold text-g-900 dark:text-g-50 mt-4">Reset Password</h1>
-          <p className="text-g-700 dark:text-g-200 text-sm mt-2 text-center">
+          <h1 className="text-2xl font-bold text-royalPurple-text1 mt-4">Reset Password</h1>
+          <p className="text-royalPurple-text2 text-sm mt-2 text-center">
             Enter your email to receive a reset link
           </p>
         </header>
@@ -106,10 +106,10 @@ export default function ForgotPasswordPage() {
           </form>
         ) : (
           <div className="text-center space-y-6">
-            <div className="bg-[#e6faf0] text-[#0d7a4c] p-4 rounded-[14px] border border-black/[0.09]">
+            <div className="bg-royalPurple-success text-royalPurple-successTx p-4 rounded-xl border border-royalPurple-border">
               <p>Check your email for the reset link.</p>
             </div>
-            <p className="text-sm text-g-600 dark:text-g-300">
+            <p className="text-sm text-royalPurple-text2">
               (In development mode, check the server console logs for the link)
             </p>
           </div>
@@ -118,7 +118,7 @@ export default function ForgotPasswordPage() {
         <div className="mt-6 text-center">
           <Link
             href="/login"
-            className="text-sm text-g-700 dark:text-g-200 hover:text-g-900 dark:hover:text-g-50 flex items-center justify-center transition-colors"
+            className="text-sm text-royalPurple-text2 hover:text-royalPurple-text1 flex items-center justify-center transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-1" /> Back to Login
           </Link>

@@ -136,11 +136,13 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
       <Card className="p-6">
         <header className="flex justify-between items-center mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-royalPurple-text1 flex items-center gap-2">
               <User className="w-6 h-6" aria-hidden="true" />
               Teacher Registration
             </h2>
-            <p className="text-gray-600 mt-1">Register a new teacher with subject assignments</p>
+            <p className="text-royalPurple-text2 mt-1">
+              Register a new teacher with subject assignments
+            </p>
           </div>
           {onCancel && (
             <Button variant="outline" onClick={onCancel} aria-label="Cancel and go back">
@@ -306,7 +308,7 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
           <section className="space-y-4" aria-labelledby="subject-assignments-title">
             <h3
               id="subject-assignments-title"
-              className="text-lg font-semibold text-gray-900 flex items-center gap-2 border-b pb-2"
+              className="text-lg font-semibold text-royalPurple-text1 flex items-center gap-2 border-b pb-2"
             >
               <BookOpen className="w-5 h-5" aria-hidden="true" />
               Subject Assignments *
@@ -318,7 +320,7 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
                 aria-label="Loading subjects"
               >
                 {[1, 2, 3].map((n) => (
-                  <div key={n} className="border border-gray-200 rounded-lg p-4">
+                  <div key={n} className="border border-royalPurple-border rounded-lg p-4">
                     <SkeletonLoader className="h-6 w-3/4 mb-4" />
                     <div className="space-y-2">
                       <SkeletonLoader className="h-4 w-full" />
@@ -331,8 +333,8 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
             ) : (
               <div className="space-y-4" role="group" aria-labelledby="subject-assignments-title">
                 {Object.entries(subjectsByCategory).map(([category, categorySubjects]) => (
-                  <div key={category} className="border border-gray-200 rounded-lg p-4">
-                    <h4 className="font-medium text-gray-900 mb-3 capitalize">
+                  <div key={category} className="border border-royalPurple-border rounded-lg p-4">
+                    <h4 className="font-medium text-royalPurple-text1 mb-3 capitalize">
                       {category === 'arts'
                         ? 'Arts & Humanities'
                         : category === 'elective'
@@ -356,17 +358,17 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
                       {categorySubjects.map((subject) => (
                         <label
                           key={subject.id}
-                          className="flex items-center space-x-2 text-sm cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors group"
+                          className="flex items-center space-x-2 text-sm cursor-pointer hover:bg-royalPurple-page p-1 rounded transition-colors group"
                           role="listitem"
                         >
                           <input
                             type="checkbox"
                             checked={formData.subjects.includes(subject.id)}
                             onChange={(e) => onSubjectChange(subject.id, e.target.checked)}
-                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500 transition-all duration-200"
+                            className="rounded border-royalPurple-border text-royalPurple-accentTx focus:ring-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500 transition-all duration-200"
                             aria-label={`Select ${subject.name}`}
                           />
-                          <span className="text-gray-700 group-hover:text-blue-600 transition-colors">
+                          <span className="text-royalPurple-text2 group-hover:text-royalPurple-accentTx transition-colors">
                             {subject.name}
                           </span>
                         </label>
@@ -377,7 +379,11 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
               </div>
             )}
             {errors.subjects && (
-              <p className="text-red-500 text-sm mt-1" id="subjects-error" role="alert">
+              <p
+                className="text-royalPurple-dangerTx text-sm mt-1"
+                id="subjects-error"
+                role="alert"
+              >
                 {errors.subjects}
               </p>
             )}
@@ -427,7 +433,7 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
           </FormSection>
 
           {/* Submit Button */}
-          <footer className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+          <footer className="flex justify-end space-x-4 pt-6 border-t border-royalPurple-border">
             {onCancel && (
               <Button
                 type="button"

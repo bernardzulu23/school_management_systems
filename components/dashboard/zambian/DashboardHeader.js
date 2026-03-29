@@ -2,17 +2,21 @@ import React from 'react'
 
 const DashboardHeader = ({ currentLanguage, handleLanguageChange, handleEmergencyButton }) => {
   return (
-    <div className="bg-header rounded-[20px] p-6 mb-5 flex justify-between items-center gap-4">
+    <div className="bg-royalPurple-deep border border-royalPurple-border rounded-2xl p-6 mb-5 flex justify-between items-center gap-4">
       <div>
-        <h1 className="m-0 text-white font-bold text-[22px]">🇿🇲 Zambian School Management</h1>
-        <p className="mt-1 text-white/60 text-sm">Ultra-Low Infrastructure School System</p>
+        <h1 className="m-0 text-royalPurple-text1 font-bold text-[22px]">
+          🇿🇲 Zambian School Management
+        </h1>
+        <p className="mt-1 text-royalPurple-text2 text-sm">
+          Ultra-Low Infrastructure School System
+        </p>
       </div>
 
       <div className="flex gap-2 items-center">
         <select
           value={currentLanguage}
           onChange={(e) => handleLanguageChange(e.target.value)}
-          className="px-3 py-2 rounded-[10px] bg-white/[0.12] border border-white/[0.2] text-white text-sm font-semibold"
+          className="px-3 py-2 rounded-lg bg-royalPurple-card2 border border-royalPurple-border text-royalPurple-text1 text-sm font-semibold"
           aria-label="Language selector"
         >
           <option value="en">English</option>
@@ -24,7 +28,7 @@ const DashboardHeader = ({ currentLanguage, handleLanguageChange, handleEmergenc
 
         <button
           onClick={handleEmergencyButton}
-          className="px-3 py-2 rounded-[10px] bg-[#b91c1c] text-white text-sm font-semibold hover:bg-[#991b1b] active:scale-[0.97] transition-all"
+          className="px-3 py-2 rounded-lg bg-royalPurple-danger text-royalPurple-dangerTx text-sm font-semibold hover:bg-royalPurple-danger/80 active:scale-[0.97] transition-colors"
           aria-label="Emergency"
         >
           🚨 EMERGENCY

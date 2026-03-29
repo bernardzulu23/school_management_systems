@@ -289,11 +289,13 @@ export default function UserManagement() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <header className="backdrop-blur-lg bg-slate-800/60 border border-blue-500/40 rounded-3xl p-8 text-center shadow-2xl">
+      <header className="backdrop-blur-lg bg-royalPurple-card/60 border border-royalPurple-border2/40 rounded-3xl p-8 text-center shadow-2xl">
         <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
           User Management
         </h2>
-        <p className="text-slate-300 text-lg">Register, manage, and oversee all system users</p>
+        <p className="text-royalPurple-text2 text-lg">
+          Register, manage, and oversee all system users
+        </p>
       </header>
 
       <main className="space-y-8">
@@ -311,8 +313,8 @@ export default function UserManagement() {
                 variant="glass"
                 className={`cursor-pointer transition-all duration-300 ${
                   isActive
-                    ? 'scale-105 border-blue-500/60'
-                    : 'hover:scale-105 hover:border-blue-400/40'
+                    ? 'scale-105 border-royalPurple-border2/60'
+                    : 'hover:scale-105 hover:border-royalPurple-border2/40'
                 }`}
                 onClick={() => setActiveUserType(type.id)}
                 role="button"
@@ -324,14 +326,14 @@ export default function UserManagement() {
                   <div
                     className={`backdrop-blur-md rounded-2xl p-4 mb-4 ${
                       isActive
-                        ? 'bg-blue-600/60 border border-blue-400/50'
-                        : 'bg-slate-700/60 border border-slate-500/40'
+                        ? 'bg-royalPurple-accent/60 border border-royalPurple-border2/50'
+                        : 'bg-royalPurple-muted/60 border border-royalPurple-border/40'
                     }`}
                   >
-                    <Icon className="h-8 w-8 text-white mx-auto" aria-hidden="true" />
+                    <Icon className="h-8 w-8 text-royalPurple-text1 mx-auto" aria-hidden="true" />
                   </div>
-                  <h3 className="font-bold text-white text-lg mb-2">{type.name}</h3>
-                  <p className="text-3xl font-bold text-blue-400">{type.count}</p>
+                  <h3 className="font-bold text-royalPurple-text1 text-lg mb-2">{type.name}</h3>
+                  <p className="text-3xl font-bold text-royalPurple-accentTx">{type.count}</p>
                 </CardContent>
               </Card>
             )
@@ -344,18 +346,18 @@ export default function UserManagement() {
           className="grid grid-cols-1 md:grid-cols-4 gap-6"
         >
           <Card variant="glass" className="hover:scale-105 transition-all duration-300">
-            <CardHeader className="backdrop-blur-md bg-green-600/60 border-b border-green-400/50 text-white rounded-t-3xl">
-              <CardTitle className="flex items-center text-white">
+            <CardHeader className="backdrop-blur-md bg-royalPurple-success/60 border-b border-royalPurple-border/50 text-royalPurple-text1 rounded-t-3xl">
+              <CardTitle className="flex items-center text-royalPurple-text1">
                 <UserPlus className="h-6 w-6 mr-3" aria-hidden="true" />
                 Register Students
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <p className="text-slate-300 text-sm">Add new students to the system</p>
+                <p className="text-royalPurple-text2 text-sm">Add new students to the system</p>
                 <div className="space-y-3">
                   <Button
-                    className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3"
+                    className="w-full bg-royalPurple-success hover:bg-royalPurple-success text-royalPurple-text1 font-semibold py-3"
                     onClick={() => handleCreateUser('student')}
                     aria-label="Add a new student"
                   >
@@ -364,7 +366,7 @@ export default function UserManagement() {
                   </Button>
                   <Button
                     variant="outline"
-                    className="w-full border-green-400 text-green-300 hover:bg-green-600/20 font-semibold py-3"
+                    className="w-full border-royalPurple-border text-royalPurple-successTx hover:bg-royalPurple-success/20 font-semibold py-3"
                     onClick={() => toast('Bulk import functionality - Coming soon')}
                     aria-label="Import multiple students via CSV"
                   >
@@ -377,18 +379,18 @@ export default function UserManagement() {
           </Card>
 
           <Card variant="glass" className="hover:scale-105 transition-all duration-300">
-            <CardHeader className="backdrop-blur-md bg-blue-600/60 border-b border-blue-400/50 text-white rounded-t-3xl">
-              <CardTitle className="flex items-center text-white">
+            <CardHeader className="backdrop-blur-md bg-royalPurple-accent/60 border-b border-royalPurple-border2/50 text-royalPurple-text1 rounded-t-3xl">
+              <CardTitle className="flex items-center text-royalPurple-text1">
                 <GraduationCap className="h-6 w-6 mr-3" aria-hidden="true" />
                 Register Teachers
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <p className="text-slate-300 text-sm">Add new teachers to the system</p>
+                <p className="text-royalPurple-text2 text-sm">Add new teachers to the system</p>
                 <div className="space-y-3">
                   <Button
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3"
+                    className="w-full bg-royalPurple-accent hover:bg-royalPurple-accent text-royalPurple-text1 font-semibold py-3"
                     onClick={() => handleCreateUser('teacher')}
                     aria-label="Add a new teacher"
                   >
@@ -397,7 +399,7 @@ export default function UserManagement() {
                   </Button>
                   <Button
                     variant="outline"
-                    className="w-full border-blue-400 text-blue-300 hover:bg-blue-600/20 font-semibold py-3"
+                    className="w-full border-royalPurple-border2 text-royalPurple-accentTx hover:bg-royalPurple-accent/20 font-semibold py-3"
                     onClick={() => toast('Assign subjects functionality - Coming soon')}
                     aria-label="Assign subjects to teachers"
                   >
@@ -410,18 +412,18 @@ export default function UserManagement() {
           </Card>
 
           <Card variant="glass" className="hover:scale-105 transition-all duration-300">
-            <CardHeader className="backdrop-blur-md bg-purple-600/60 border-b border-purple-400/50 text-white rounded-t-3xl">
-              <CardTitle className="flex items-center text-white">
+            <CardHeader className="backdrop-blur-md bg-royalPurple-pill/60 border-b border-royalPurple-border2/50 text-royalPurple-text1 rounded-t-3xl">
+              <CardTitle className="flex items-center text-royalPurple-text1">
                 <Settings className="h-6 w-6 mr-3" aria-hidden="true" />
                 Register HODs
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <p className="text-slate-300 text-sm">Add new HODs to the system</p>
+                <p className="text-royalPurple-text2 text-sm">Add new HODs to the system</p>
                 <div className="space-y-3">
                   <Button
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3"
+                    className="w-full bg-royalPurple-pill hover:bg-royalPurple-pill text-royalPurple-text1 font-semibold py-3"
                     onClick={() => handleCreateUser('hod')}
                     aria-label="Add a new Head of Department"
                   >
@@ -430,7 +432,7 @@ export default function UserManagement() {
                   </Button>
                   <Button
                     variant="outline"
-                    className="w-full border-purple-400 text-purple-300 hover:bg-purple-600/20 font-semibold py-3"
+                    className="w-full border-royalPurple-border2 text-royalPurple-pillTx hover:bg-royalPurple-pill/20 font-semibold py-3"
                     onClick={() => toast('Assign departments functionality - Coming soon')}
                     aria-label="Assign departments to HODs"
                   >
@@ -443,18 +445,18 @@ export default function UserManagement() {
           </Card>
 
           <Card variant="glass" className="hover:scale-105 transition-all duration-300">
-            <CardHeader className="backdrop-blur-md bg-orange-600/60 border-b border-orange-400/50 text-white rounded-t-3xl">
-              <CardTitle className="flex items-center text-white">
+            <CardHeader className="backdrop-blur-md bg-orange-600/60 border-b border-orange-400/50 text-royalPurple-text1 rounded-t-3xl">
+              <CardTitle className="flex items-center text-royalPurple-text1">
                 <UserPlus className="h-6 w-6 mr-3" aria-hidden="true" />
                 Register Headteachers
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <p className="text-slate-300 text-sm">Add new headteachers to the system</p>
+                <p className="text-royalPurple-text2 text-sm">Add new headteachers to the system</p>
                 <div className="space-y-3">
                   <Button
-                    className="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3"
+                    className="w-full bg-orange-600 hover:bg-orange-700 text-royalPurple-text1 font-semibold py-3"
                     onClick={() => handleCreateUser('headteacher')}
                     aria-label="Add a new headteacher"
                   >
@@ -487,13 +489,13 @@ export default function UserManagement() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="backdrop-blur-sm bg-slate-800/60 border border-slate-600/40 rounded-2xl p-6">
+              <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
                 {/* Search and Filter */}
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
                   <div className="flex-1">
                     <div className="relative">
                       <Search
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4"
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-royalPurple-text3 h-4 w-4"
                         aria-hidden="true"
                       />
                       <input
@@ -501,14 +503,14 @@ export default function UserManagement() {
                         placeholder="Search users..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 bg-slate-700/60 border border-slate-500/40 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50"
+                        className="w-full pl-10 pr-4 py-3 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-lg text-royalPurple-text1 placeholder-slate-400 focus:outline-none focus:border-royalPurple-border2 focus:ring-2 focus:ring-blue-500/50"
                         aria-label="Search users by name or email"
                       />
                     </div>
                   </div>
                   <Button
                     variant="outline"
-                    className="border-slate-400 text-slate-300 hover:bg-slate-600/20"
+                    className="border-royalPurple-border text-royalPurple-text2 hover:bg-royalPurple-muted/20"
                     aria-label="Open filters"
                   >
                     <Filter className="h-4 w-4 mr-2" aria-hidden="true" />
@@ -520,12 +522,12 @@ export default function UserManagement() {
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="border-b border-slate-600/50">
-                        <th className="text-left py-4 text-slate-200 font-bold">Name</th>
-                        <th className="text-left py-4 text-slate-200 font-bold">Email</th>
-                        <th className="text-left py-4 text-slate-200 font-bold">Role</th>
-                        <th className="text-left py-4 text-slate-200 font-bold">Status</th>
-                        <th className="text-left py-4 text-slate-200 font-bold">Actions</th>
+                      <tr className="border-b border-royalPurple-border/50">
+                        <th className="text-left py-4 text-royalPurple-text2 font-bold">Name</th>
+                        <th className="text-left py-4 text-royalPurple-text2 font-bold">Email</th>
+                        <th className="text-left py-4 text-royalPurple-text2 font-bold">Role</th>
+                        <th className="text-left py-4 text-royalPurple-text2 font-bold">Status</th>
+                        <th className="text-left py-4 text-royalPurple-text2 font-bold">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -537,7 +539,7 @@ export default function UserManagement() {
                               aria-live="polite"
                             >
                               <LoadingSpinner size="lg" />
-                              <p className="text-slate-400">Fetching users...</p>
+                              <p className="text-royalPurple-text3">Fetching users...</p>
                             </div>
                           </td>
                         </tr>
@@ -548,11 +550,11 @@ export default function UserManagement() {
                               className="flex flex-col items-center justify-center space-y-4"
                               aria-live="assertive"
                             >
-                              <p className="text-red-400">Failed to load users.</p>
+                              <p className="text-royalPurple-dangerTx">Failed to load users.</p>
                               <Button
                                 onClick={fetchUsers}
                                 variant="outline"
-                                className="border-red-400 text-red-300 hover:bg-red-600/20"
+                                className="border-royalPurple-border text-royalPurple-dangerTx hover:bg-royalPurple-danger/20"
                                 aria-label="Retry fetching users"
                               >
                                 <RefreshCcw className="h-4 w-4 mr-2" aria-hidden="true" />
@@ -565,8 +567,11 @@ export default function UserManagement() {
                         <tr>
                           <td colSpan="5" className="py-12">
                             <div className="flex flex-col items-center justify-center space-y-4 text-center">
-                              <Users className="h-12 w-12 text-slate-500 mb-2" aria-hidden="true" />
-                              <p className="text-slate-400">No users found.</p>
+                              <Users
+                                className="h-12 w-12 text-royalPurple-text2 mb-2"
+                                aria-hidden="true"
+                              />
+                              <p className="text-royalPurple-text3">No users found.</p>
                             </div>
                           </td>
                         </tr>
@@ -581,17 +586,19 @@ export default function UserManagement() {
                           .map((user) => (
                             <tr
                               key={user.id}
-                              className="border-b border-slate-700/50 hover:bg-slate-700/40 transition-colors duration-200"
+                              className="border-b border-royalPurple-border/50 hover:bg-royalPurple-muted/40 transition-colors duration-200"
                             >
-                              <td className="py-4 text-white font-medium">{user.name}</td>
-                              <td className="py-4 text-slate-300">{user.email}</td>
+                              <td className="py-4 text-royalPurple-text1 font-medium">
+                                {user.name}
+                              </td>
+                              <td className="py-4 text-royalPurple-text2">{user.email}</td>
                               <td className="py-4">
-                                <span className="px-3 py-1 text-xs rounded-full backdrop-blur-md bg-blue-600/60 text-blue-100 border border-blue-400/50 capitalize font-medium">
+                                <span className="px-3 py-1 text-xs rounded-full backdrop-blur-md bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50 capitalize font-medium">
                                   {user.role}
                                 </span>
                               </td>
                               <td className="py-4">
-                                <span className="px-3 py-1 text-xs rounded-full backdrop-blur-md bg-green-600/60 text-green-100 border border-green-400/50 font-medium">
+                                <span className="px-3 py-1 text-xs rounded-full backdrop-blur-md bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50 font-medium">
                                   {user.status}
                                 </span>
                               </td>
@@ -600,7 +607,7 @@ export default function UserManagement() {
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    className="border-blue-400 text-blue-300 hover:bg-blue-600/20"
+                                    className="border-royalPurple-border2 text-royalPurple-accentTx hover:bg-royalPurple-accent/20"
                                     onClick={() => handleViewUser(user.id)}
                                     aria-label={`View details for ${user.name}`}
                                   >
@@ -618,7 +625,7 @@ export default function UserManagement() {
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    className="border-red-400 text-red-300 hover:bg-red-600/20"
+                                    className="border-royalPurple-border text-royalPurple-dangerTx hover:bg-royalPurple-danger/20"
                                     onClick={() => handleDeleteUser(user)}
                                     aria-label={`Delete ${user.name}`}
                                   >
@@ -672,30 +679,36 @@ function UserDetailsModal({ user, onClose, loading }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
-        <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
-          <h3 className="text-xl font-bold text-slate-900 dark:text-white">User Details</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-royalPurple-deep/80">
+      <div className="bg-royalPurple-card dark:bg-royalPurple-card rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-royalPurple-border dark:border-royalPurple-border">
+        <div className="p-6 border-b border-royalPurple-border dark:border-royalPurple-border flex justify-between items-center">
+          <h3 className="text-xl font-bold text-royalPurple-text1 dark:text-royalPurple-text1">
+            User Details
+          </h3>
           <button
             onClick={onClose}
-            className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white"
+            className="text-royalPurple-text2 hover:text-royalPurple-text1 dark:text-royalPurple-text3 dark:hover:text-royalPurple-text1"
           >
             <X className="h-6 w-6" />
           </button>
         </div>
 
         <div className="p-6 space-y-6">
-          {loading && <div className="text-sm text-slate-500 dark:text-slate-300">Loading…</div>}
+          {loading && (
+            <div className="text-sm text-royalPurple-text2 dark:text-royalPurple-text2">
+              Loading…
+            </div>
+          )}
           {/* Header Info */}
           <div className="flex items-center space-x-4">
-            <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl font-bold">
+            <div className="h-16 w-16 rounded-full bg-royalPurple-accent flex items-center justify-center text-royalPurple-accentTx text-2xl font-bold">
               {(data.name || data.user?.name || 'U').charAt(0)}
             </div>
             <div>
-              <h4 className="text-xl font-bold text-slate-900 dark:text-white">
+              <h4 className="text-xl font-bold text-royalPurple-text1 dark:text-royalPurple-text1">
                 {data.name || data.user?.name}
               </h4>
-              <span className="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200 border border-blue-200 dark:border-blue-500/30 capitalize font-medium">
+              <span className="px-3 py-1 text-xs rounded-full bg-royalPurple-accent text-royalPurple-accentTx dark:bg-royalPurple-accent/30 dark:text-royalPurple-accentTx border border-royalPurple-border2 dark:border-royalPurple-border2/30 capitalize font-medium">
                 {role || 'user'}
               </span>
             </div>
@@ -704,14 +717,14 @@ function UserDetailsModal({ user, onClose, loading }) {
           {/* Basic Info */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Email</p>
-              <p className="text-slate-900 dark:text-white font-medium break-all">
+              <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3">Email</p>
+              <p className="text-royalPurple-text1 dark:text-royalPurple-text1 font-medium break-all">
                 {data.email || data.user?.email}
               </p>
             </div>
             <div>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Contact</p>
-              <p className="text-slate-900 dark:text-white font-medium">
+              <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3">Contact</p>
+              <p className="text-royalPurple-text1 dark:text-royalPurple-text1 font-medium">
                 {data.contact_number || data.user?.contact_number || 'N/A'}
               </p>
             </div>
@@ -720,45 +733,53 @@ function UserDetailsModal({ user, onClose, loading }) {
           {/* Teacher Specific */}
           {role === 'teacher' && (
             <>
-              <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
-                <h4 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-3">
+              <div className="border-t border-royalPurple-border dark:border-royalPurple-border pt-4">
+                <h4 className="text-lg font-semibold text-royalPurple-accentTx dark:text-royalPurple-accentTx mb-3">
                   Professional Info
                 </h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">Department</p>
+                    <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3">
+                      Department
+                    </p>
                     {Array.isArray(data.departments) && data.departments.length > 0 ? (
                       <div className="flex flex-wrap gap-2">
                         {data.departments.map((d) => (
                           <span
                             key={d.departmentId || d.id}
-                            className="px-2 py-1 bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-200 rounded text-xs border border-blue-100 dark:border-blue-500/20"
+                            className="px-2 py-1 bg-royalPurple-accent text-royalPurple-accentTx dark:bg-royalPurple-accent/20 dark:text-royalPurple-accentTx rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
                           >
                             {d.department?.name || d.name || d.department_name || d.departmentId}
                           </span>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-slate-900 dark:text-white">{data.department || 'N/A'}</p>
+                      <p className="text-royalPurple-text1 dark:text-royalPurple-text1">
+                        {data.department || 'N/A'}
+                      </p>
                     )}
                   </div>
                   <div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">TS Number</p>
-                    <p className="text-slate-900 dark:text-white">{data.ts_number || 'N/A'}</p>
+                    <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3">
+                      TS Number
+                    </p>
+                    <p className="text-royalPurple-text1 dark:text-royalPurple-text1">
+                      {data.ts_number || 'N/A'}
+                    </p>
                   </div>
                 </div>
               </div>
 
               {Array.isArray(data.teachingAssignments) && data.teachingAssignments.length > 0 && (
                 <div>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
+                  <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3 mb-2">
                     Teaching Assignments
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {data.teachingAssignments.map((a) => (
                       <span
                         key={a.id}
-                        className="px-2 py-1 bg-slate-50 text-slate-700 dark:bg-slate-900/20 dark:text-slate-200 rounded text-xs border border-slate-200 dark:border-slate-600/30"
+                        className="px-2 py-1 bg-royalPurple-card2 text-royalPurple-text1 dark:bg-royalPurple-deep/20 dark:text-royalPurple-text2 rounded text-xs border border-royalPurple-border dark:border-royalPurple-border/30"
                       >
                         {(a.class?.name || a.classId) + ' - ' + (a.subject?.name || a.subjectId)}
                       </span>
@@ -768,37 +789,41 @@ function UserDetailsModal({ user, onClose, loading }) {
               )}
 
               <div>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Assigned Classes</p>
+                <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3 mb-2">
+                  Assigned Classes
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {data.classes && data.classes.length > 0 ? (
                     data.classes.map((cls) => (
                       <span
                         key={cls.id}
-                        className="px-2 py-1 bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-200 rounded text-xs border border-blue-100 dark:border-blue-500/20"
+                        className="px-2 py-1 bg-royalPurple-accent text-royalPurple-accentTx dark:bg-royalPurple-accent/20 dark:text-royalPurple-accentTx rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
                       >
                         {cls.name}
                       </span>
                     ))
                   ) : (
-                    <p className="text-slate-500 italic">No classes assigned</p>
+                    <p className="text-royalPurple-text2 italic">No classes assigned</p>
                   )}
                 </div>
               </div>
 
               <div>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Assigned Subjects</p>
+                <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3 mb-2">
+                  Assigned Subjects
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {data.assignedSubjects && data.assignedSubjects.length > 0 ? (
                     data.assignedSubjects.map((sub, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-1 bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-200 rounded text-xs border border-purple-100 dark:border-purple-500/20"
+                        className="px-2 py-1 bg-royalPurple-pill text-royalPurple-pillTx dark:bg-royalPurple-pill/20 dark:text-royalPurple-pillTx rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
                       >
                         {getSubjectName(sub)}
                       </span>
                     ))
                   ) : (
-                    <p className="text-slate-500 italic">No subjects assigned</p>
+                    <p className="text-royalPurple-text2 italic">No subjects assigned</p>
                   )}
                 </div>
               </div>
@@ -808,36 +833,46 @@ function UserDetailsModal({ user, onClose, loading }) {
           {/* Student Specific */}
           {role === 'student' && (
             <>
-              <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
-                <h4 className="text-lg font-semibold text-green-600 dark:text-green-400 mb-3">
+              <div className="border-t border-royalPurple-border dark:border-royalPurple-border pt-4">
+                <h4 className="text-lg font-semibold text-royalPurple-successTx dark:text-royalPurple-successTx mb-3">
                   Academic Info
                 </h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">Class</p>
-                    <p className="text-slate-900 dark:text-white">{data.class || 'N/A'}</p>
+                    <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3">
+                      Class
+                    </p>
+                    <p className="text-royalPurple-text1 dark:text-royalPurple-text1">
+                      {data.class || 'N/A'}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">Exam Number</p>
-                    <p className="text-slate-900 dark:text-white">{data.exam_number || 'N/A'}</p>
+                    <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3">
+                      Exam Number
+                    </p>
+                    <p className="text-royalPurple-text1 dark:text-royalPurple-text1">
+                      {data.exam_number || 'N/A'}
+                    </p>
                   </div>
                 </div>
               </div>
 
               <div>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Enrolled Subjects</p>
+                <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3 mb-2">
+                  Enrolled Subjects
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {data.selected_subjects && data.selected_subjects.length > 0 ? (
                     data.selected_subjects.map((sub, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-1 bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-200 rounded text-xs border border-green-100 dark:border-green-500/20"
+                        className="px-2 py-1 bg-royalPurple-success text-royalPurple-successTx dark:bg-royalPurple-success/20 dark:text-royalPurple-successTx rounded text-xs border border-royalPurple-border dark:border-royalPurple-border/20"
                       >
                         {getSubjectName(sub)}
                       </span>
                     ))
                   ) : (
-                    <p className="text-slate-500 italic">No subjects enrolled</p>
+                    <p className="text-royalPurple-text2 italic">No subjects enrolled</p>
                   )}
                 </div>
               </div>
@@ -845,10 +880,10 @@ function UserDetailsModal({ user, onClose, loading }) {
           )}
         </div>
 
-        <div className="p-6 border-t border-slate-200 dark:border-slate-700 flex justify-end">
+        <div className="p-6 border-t border-royalPurple-border dark:border-royalPurple-border flex justify-end">
           <Button
             onClick={onClose}
-            className="bg-slate-200 text-slate-800 hover:bg-slate-300 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600"
+            className="bg-royalPurple-card2 text-royalPurple-text1 hover:bg-royalPurple-card2 dark:bg-royalPurple-muted dark:text-royalPurple-text1 dark:hover:bg-royalPurple-muted"
           >
             Close
           </Button>
@@ -1020,13 +1055,15 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
   const subjectOptions = Array.isArray(lookups?.subjects) ? lookups.subjects : []
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
-        <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
-          <h3 className="text-xl font-bold text-slate-900 dark:text-white">Edit User</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-royalPurple-deep/80">
+      <div className="bg-royalPurple-card dark:bg-royalPurple-card rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-royalPurple-border dark:border-royalPurple-border">
+        <div className="p-6 border-b border-royalPurple-border dark:border-royalPurple-border flex justify-between items-center">
+          <h3 className="text-xl font-bold text-royalPurple-text1 dark:text-royalPurple-text1">
+            Edit User
+          </h3>
           <button
             onClick={onClose}
-            className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white"
+            className="text-royalPurple-text2 hover:text-royalPurple-text1 dark:text-royalPurple-text3 dark:hover:text-royalPurple-text1"
           >
             <X className="h-6 w-6" />
           </button>
@@ -1035,39 +1072,39 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
         <div className="p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+              <label className="block text-sm font-medium text-royalPurple-text1 dark:text-royalPurple-text2 mb-1">
                 Full Name
               </label>
               <input
                 value={form.user.name}
                 onChange={(e) => setUserField('name', e.target.value)}
-                className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+              <label className="block text-sm font-medium text-royalPurple-text1 dark:text-royalPurple-text2 mb-1">
                 Contact
               </label>
               <input
                 value={form.user.contact_number}
                 onChange={(e) => setUserField('contact_number', e.target.value)}
-                className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+              <label className="block text-sm font-medium text-royalPurple-text1 dark:text-royalPurple-text2 mb-1">
                 Email
               </label>
               <input
                 value={form.user.email}
                 onChange={(e) => setUserField('email', e.target.value)}
-                className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
               />
             </div>
           </div>
 
-          <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
-            <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+          <div className="border-t border-royalPurple-border dark:border-royalPurple-border pt-4">
+            <h4 className="text-lg font-semibold text-royalPurple-text1 dark:text-royalPurple-text1 mb-3">
               Admin Password Reset
             </h4>
             <div className="flex flex-col md:flex-row gap-3">
@@ -1076,7 +1113,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                 placeholder="New password (min 6 chars)"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="flex-1 border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                className="flex-1 border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
               />
               <Button
                 onClick={resetPassword}
@@ -1088,11 +1125,13 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
           </div>
 
           {role === 'student' && (
-            <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-4">
-              <h4 className="text-lg font-semibold text-slate-900 dark:text-white">Student</h4>
+            <div className="border-t border-royalPurple-border dark:border-royalPurple-border pt-4 space-y-4">
+              <h4 className="text-lg font-semibold text-royalPurple-text1 dark:text-royalPurple-text1">
+                Student
+              </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                  <label className="block text-sm font-medium text-royalPurple-text1 dark:text-royalPurple-text2 mb-1">
                     Year Group
                   </label>
                   <select
@@ -1103,7 +1142,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         student: { ...prev.student, year_group: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
                   >
                     <option value="">Select</option>
                     {GRADE_LEVELS.map((g) => (
@@ -1114,7 +1153,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                  <label className="block text-sm font-medium text-royalPurple-text1 dark:text-royalPurple-text2 mb-1">
                     Section
                   </label>
                   <select
@@ -1125,7 +1164,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         student: { ...prev.student, section: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
                   >
                     <option value="">Select</option>
                     {SECTIONS.map((s) => (
@@ -1136,7 +1175,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                   </select>
                 </div>
                 <div className="md:col-span-3">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                  <label className="block text-sm font-medium text-royalPurple-text1 dark:text-royalPurple-text2 mb-1">
                     Exam Number
                   </label>
                   <input
@@ -1147,12 +1186,12 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         student: { ...prev.student, exam_number: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
                   />
                 </div>
               </div>
 
-              <div className="bg-green-50 dark:bg-slate-900/40 p-4 rounded-xl border border-green-200 dark:border-slate-700">
+              <div className="bg-royalPurple-success dark:bg-royalPurple-deep/40 p-4 rounded-xl border border-royalPurple-border dark:border-royalPurple-border">
                 <SubjectSelection
                   selectedSubjects={form.student.selected_subjects}
                   onSubjectsChange={(subjects) =>
@@ -1170,12 +1209,14 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
           )}
 
           {role === 'teacher' && (
-            <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-4">
-              <h4 className="text-lg font-semibold text-slate-900 dark:text-white">Teacher</h4>
+            <div className="border-t border-royalPurple-border dark:border-royalPurple-border pt-4 space-y-4">
+              <h4 className="text-lg font-semibold text-royalPurple-text1 dark:text-royalPurple-text1">
+                Teacher
+              </h4>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                  <label className="block text-sm font-medium text-royalPurple-text1 dark:text-royalPurple-text2 mb-1">
                     TS Number
                   </label>
                   <input
@@ -1186,11 +1227,11 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         teacher: { ...prev.teacher, ts_number: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                  <label className="block text-sm font-medium text-royalPurple-text1 dark:text-royalPurple-text2 mb-1">
                     Specialization
                   </label>
                   <input
@@ -1201,11 +1242,11 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         teacher: { ...prev.teacher, specialization: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
                   />
                 </div>
                 <div className="md:col-span-3">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                  <label className="block text-sm font-medium text-royalPurple-text1 dark:text-royalPurple-text2 mb-1">
                     Qualifications
                   </label>
                   <textarea
@@ -1217,21 +1258,25 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                       }))
                     }
                     rows={3}
-                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
                   />
                 </div>
               </div>
 
-              <div className="bg-indigo-50 dark:bg-slate-900/40 p-4 rounded-xl border border-indigo-200 dark:border-slate-700">
-                <div className="font-semibold text-slate-900 dark:text-white mb-2">Departments</div>
+              <div className="bg-royalPurple-pill dark:bg-royalPurple-deep/40 p-4 rounded-xl border border-royalPurple-border2 dark:border-royalPurple-border">
+                <div className="font-semibold text-royalPurple-text1 dark:text-royalPurple-text1 mb-2">
+                  Departments
+                </div>
                 {loadingLookups ? (
-                  <div className="text-sm text-slate-600 dark:text-slate-300">Loading…</div>
+                  <div className="text-sm text-royalPurple-text2 dark:text-royalPurple-text2">
+                    Loading…
+                  </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {departmentOptions.map((d) => (
                       <label
                         key={d.id}
-                        className="flex items-center gap-2 text-sm text-slate-900 dark:text-slate-100"
+                        className="flex items-center gap-2 text-sm text-royalPurple-text1 dark:text-royalPurple-text1"
                       >
                         <input
                           type="checkbox"
@@ -1254,9 +1299,9 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                 )}
               </div>
 
-              <div className="bg-white dark:bg-slate-900/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+              <div className="bg-royalPurple-card dark:bg-royalPurple-deep/40 p-4 rounded-xl border border-royalPurple-border dark:border-royalPurple-border">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="font-semibold text-slate-900 dark:text-white">
+                  <div className="font-semibold text-royalPurple-text1 dark:text-royalPurple-text1">
                     Teaching Assignments
                   </div>
                   <Button size="sm" onClick={addTeacherAssignment}>
@@ -1265,13 +1310,15 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                 </div>
 
                 {form.teacher.assignments.length === 0 ? (
-                  <div className="text-sm text-slate-600 dark:text-slate-300">No assignments</div>
+                  <div className="text-sm text-royalPurple-text2 dark:text-royalPurple-text2">
+                    No assignments
+                  </div>
                 ) : (
                   <div className="space-y-3">
                     {form.teacher.assignments.map((a, idx) => (
                       <div key={idx} className="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
                         <div className="md:col-span-2">
-                          <label className="block text-xs text-slate-600 dark:text-slate-300 mb-1">
+                          <label className="block text-xs text-royalPurple-text2 dark:text-royalPurple-text2 mb-1">
                             Year Group
                           </label>
                           <select
@@ -1279,7 +1326,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                             onChange={(e) =>
                               updateTeacherAssignment(idx, { year_group: e.target.value })
                             }
-                            className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                            className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
                           >
                             <option value="">Select</option>
                             {GRADE_LEVELS.map((g) => (
@@ -1290,7 +1337,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                           </select>
                         </div>
                         <div>
-                          <label className="block text-xs text-slate-600 dark:text-slate-300 mb-1">
+                          <label className="block text-xs text-royalPurple-text2 dark:text-royalPurple-text2 mb-1">
                             Section
                           </label>
                           <select
@@ -1298,7 +1345,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                             onChange={(e) =>
                               updateTeacherAssignment(idx, { section: e.target.value })
                             }
-                            className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                            className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
                           >
                             <option value="">Select</option>
                             {SECTIONS.map((s) => (
@@ -1309,7 +1356,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                           </select>
                         </div>
                         <div className="md:col-span-2">
-                          <label className="block text-xs text-slate-600 dark:text-slate-300 mb-1">
+                          <label className="block text-xs text-royalPurple-text2 dark:text-royalPurple-text2 mb-1">
                             Subject
                           </label>
                           <select
@@ -1317,7 +1364,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                             onChange={(e) =>
                               updateTeacherAssignment(idx, { subjectId: e.target.value })
                             }
-                            className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                            className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
                           >
                             <option value="">Select</option>
                             {subjectOptions.map((s) => (
@@ -1345,11 +1392,13 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
           )}
 
           {role === 'hod' && (
-            <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-4">
-              <h4 className="text-lg font-semibold text-slate-900 dark:text-white">HOD</h4>
+            <div className="border-t border-royalPurple-border dark:border-royalPurple-border pt-4 space-y-4">
+              <h4 className="text-lg font-semibold text-royalPurple-text1 dark:text-royalPurple-text1">
+                HOD
+              </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                  <label className="block text-sm font-medium text-royalPurple-text1 dark:text-royalPurple-text2 mb-1">
                     Department
                   </label>
                   <input
@@ -1360,11 +1409,11 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         hod: { ...prev.hod, department: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
+                  <label className="block text-sm font-medium text-royalPurple-text1 dark:text-royalPurple-text2 mb-1">
                     Department (DB)
                   </label>
                   <select
@@ -1375,7 +1424,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         hod: { ...prev.hod, departmentId: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-white dark:bg-slate-900 dark:text-white"
+                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
                   >
                     <option value="">None</option>
                     {departmentOptions.map((d) => (

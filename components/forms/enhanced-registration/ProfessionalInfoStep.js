@@ -155,15 +155,18 @@ export default function ProfessionalInfoStep({
         </div>
 
         {role === 'teacher' && (
-          <div className="bg-indigo-50 p-6 rounded-xl border border-indigo-200">
-            <h4 className="text-lg font-semibold text-indigo-800 mb-4 flex items-center">
+          <div className="bg-royalPurple-pill p-6 rounded-xl border border-royalPurple-border2">
+            <h4 className="text-lg font-semibold text-royalPurple-pillTx mb-4 flex items-center">
               <Briefcase className="h-5 w-5 mr-2" />
               Departments (Multi-select)
             </h4>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-900">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-royalPurple-text1">
               {departmentOptions.map((dept) => (
-                <label key={dept.id} className="flex items-center gap-2 text-sm text-gray-900">
+                <label
+                  key={dept.id}
+                  className="flex items-center gap-2 text-sm text-royalPurple-text1"
+                >
                   <input
                     type="checkbox"
                     checked={departmentIds.includes(dept.id)}
@@ -174,7 +177,7 @@ export default function ProfessionalInfoStep({
                       onDepartmentsChange?.(next)
                     }}
                   />
-                  <span className="text-gray-900">{dept.name}</span>
+                  <span className="text-royalPurple-text1">{dept.name}</span>
                 </label>
               ))}
             </div>
@@ -183,7 +186,7 @@ export default function ProfessionalInfoStep({
                 {departmentIds.map((id) => (
                   <span
                     key={id}
-                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-white border border-indigo-200 text-indigo-900"
+                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-royalPurple-card border border-royalPurple-border2 text-royalPurple-pillTx"
                   >
                     {departmentNameById(id)}
                   </span>
@@ -191,22 +194,22 @@ export default function ProfessionalInfoStep({
               </div>
             )}
             {errors.department_ids && (
-              <p className="text-red-500 text-sm mt-2">{errors.department_ids}</p>
+              <p className="text-royalPurple-dangerTx text-sm mt-2">{errors.department_ids}</p>
             )}
           </div>
         )}
 
         {role === 'teacher' && (
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-royalPurple-card p-6 rounded-xl border border-royalPurple-border">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-lg font-semibold text-gray-900 flex items-center">
+              <h4 className="text-lg font-semibold text-royalPurple-text1 flex items-center">
                 <BookOpen className="h-5 w-5 mr-2" />
                 Teaching Assignments
               </h4>
               <button
                 type="button"
                 onClick={addTeachingAssignmentRow}
-                className="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-blue-600 text-white text-sm"
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-royalPurple-accent text-royalPurple-text1 text-sm"
               >
                 <Plus className="h-4 w-4" />
                 Add
@@ -214,14 +217,16 @@ export default function ProfessionalInfoStep({
             </div>
 
             {teachingAssignments.length === 0 && (
-              <p className="text-sm text-gray-600">Add at least one class + subject pair.</p>
+              <p className="text-sm text-royalPurple-text2">
+                Add at least one class + subject pair.
+              </p>
             )}
 
             <div className="space-y-3">
               {teachingAssignments.map((row, idx) => (
                 <div key={idx} className="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
                   <div className="md:col-span-2">
-                    <label className="block text-sm text-gray-700 mb-1">Year Group</label>
+                    <label className="block text-sm text-royalPurple-text2 mb-1">Year Group</label>
                     <select
                       value={row.year_group || ''}
                       onChange={(e) => {
@@ -245,7 +250,7 @@ export default function ProfessionalInfoStep({
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-700 mb-1">Section</label>
+                    <label className="block text-sm text-royalPurple-text2 mb-1">Section</label>
                     <select
                       value={row.section || ''}
                       onChange={(e) => {
@@ -269,7 +274,7 @@ export default function ProfessionalInfoStep({
                     </select>
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-sm text-gray-700 mb-1">Subject</label>
+                    <label className="block text-sm text-royalPurple-text2 mb-1">Subject</label>
                     <select
                       value={row.subjectId || ''}
                       onChange={(e) =>
@@ -300,12 +305,14 @@ export default function ProfessionalInfoStep({
             </div>
 
             {errors.teaching_assignments && (
-              <p className="text-red-500 text-sm mt-2">{errors.teaching_assignments}</p>
+              <p className="text-royalPurple-dangerTx text-sm mt-2">
+                {errors.teaching_assignments}
+              </p>
             )}
           </div>
         )}
 
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-royalPurple-text2">
           Subjects are assigned through Teaching Assignments (Grade + Section + Subject).
         </div>
       </div>

@@ -17,8 +17,22 @@ export default function SmsLogPage() {
       // const response = await api.get('/sms/logs');
       // setLogs(response.data);
       setLogs([
-        { id: 1, from: '+1234567890', to: '+0987654321', text: 'GRADES 12345', direction: 'in', created_at: '2024-01-01 10:00:00' },
-        { id: 2, from: '+0987654321', to: '+1234567890', text: 'Latest grades for John Doe: Math: 85/100, Science: 92/100', direction: 'out', created_at: '2024-01-01 10:00:05' },
+        {
+          id: 1,
+          from: '+1234567890',
+          to: '+0987654321',
+          text: 'GRADES 12345',
+          direction: 'in',
+          created_at: '2024-01-01 10:00:00',
+        },
+        {
+          id: 2,
+          from: '+0987654321',
+          to: '+1234567890',
+          text: 'Latest grades for John Doe: Math: 85/100, Science: 92/100',
+          direction: 'out',
+          created_at: '2024-01-01 10:00:05',
+        },
       ])
     } catch (error) {
       console.error('Error fetching SMS logs:', error)
@@ -32,17 +46,13 @@ export default function SmsLogPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white shadow-sm border-b">
+    <div className="min-h-screen bg-royalPurple-page">
+      <div className="bg-royalPurple-card shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                📱 SMS Interaction Logs
-              </h1>
-              <p className="text-gray-600">
-                View incoming and outgoing SMS messages
-              </p>
+              <h1 className="text-2xl font-bold text-royalPurple-text1">📱 SMS Interaction Logs</h1>
+              <p className="text-royalPurple-text2">View incoming and outgoing SMS messages</p>
             </div>
             <Button onClick={fetchSmsLogs} className="btn-secondary btn-sm">
               <RefreshCw className="w-4 h-4 mr-2" />
@@ -58,31 +68,48 @@ export default function SmsLogPage() {
             {loading ? (
               <p>Loading...</p>
             ) : (
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-royalPurple-border">
+                <thead className="bg-royalPurple-page">
                   <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-royalPurple-text3 uppercase tracking-wider"
+                    >
                       Direction
                     </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-royalPurple-text3 uppercase tracking-wider"
+                    >
                       From
                     </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-royalPurple-text3 uppercase tracking-wider"
+                    >
                       To
                     </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-royalPurple-text3 uppercase tracking-wider"
+                    >
                       Message
                     </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-royalPurple-text3 uppercase tracking-wider"
+                    >
                       Timestamp
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-royalPurple-card divide-y divide-royalPurple-border">
                   {logs.map((log) => (
                     <tr key={log.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${log.direction === 'in' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${log.direction === 'in' ? 'bg-royalPurple-accent text-royalPurple-accentTx' : 'bg-royalPurple-success text-royalPurple-successTx'}`}
+                        >
                           {log.direction}
                         </span>
                       </td>

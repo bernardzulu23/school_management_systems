@@ -9,85 +9,111 @@ export default function StudyToolsPage() {
   return (
     <DashboardLayout>
       <div className="p-6 space-y-6">
-        <h1 className="text-3xl font-bold text-white mb-8">Study Tools</h1>
-        <p className="text-slate-300">Essential tools to boost your productivity and learning.</p>
-        
+        <h1 className="text-3xl font-bold text-royalPurple-text1 mb-8">Study Tools</h1>
+        <p className="text-royalPurple-text2">
+          Essential tools to boost your productivity and learning.
+        </p>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="flex items-center text-white">
-                <Calculator className="mr-2 text-blue-400" />
+              <CardTitle className="flex items-center text-royalPurple-text1">
+                <Calculator className="mr-2 text-royalPurple-accentTx" />
                 Scientific Calculator
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-300 mb-4 text-sm">Advanced calculator for math and science problems.</p>
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">Open Calculator</Button>
+              <p className="text-royalPurple-text2 mb-4 text-sm">
+                Advanced calculator for math and science problems.
+              </p>
+              <Button className="w-full bg-royalPurple-accent hover:bg-royalPurple-accent text-royalPurple-text1">
+                Open Calculator
+              </Button>
             </CardContent>
           </Card>
 
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="flex items-center text-white">
-                <Timer className="mr-2 text-red-400" />
+              <CardTitle className="flex items-center text-royalPurple-text1">
+                <Timer className="mr-2 text-royalPurple-dangerTx" />
                 Pomodoro Timer
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-300 mb-4 text-sm">Focus timer to manage your study sessions effectively.</p>
-              <Button className="w-full bg-red-600 hover:bg-red-700 text-white">Start Timer</Button>
+              <p className="text-royalPurple-text2 mb-4 text-sm">
+                Focus timer to manage your study sessions effectively.
+              </p>
+              <Button className="w-full bg-royalPurple-danger hover:bg-royalPurple-danger text-royalPurple-text1">
+                Start Timer
+              </Button>
             </CardContent>
           </Card>
 
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="flex items-center text-white">
+              <CardTitle className="flex items-center text-royalPurple-text1">
                 <FileText className="mr-2 text-yellow-400" />
                 Flashcard Maker
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-300 mb-4 text-sm">Create and review flashcards for memorization.</p>
-              <Button className="w-full bg-yellow-600 hover:bg-yellow-700 text-white">Create Flashcards</Button>
+              <p className="text-royalPurple-text2 mb-4 text-sm">
+                Create and review flashcards for memorization.
+              </p>
+              <Button className="w-full bg-yellow-600 hover:bg-yellow-700 text-royalPurple-text1">
+                Create Flashcards
+              </Button>
             </CardContent>
           </Card>
 
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="flex items-center text-white">
-                <Calendar className="mr-2 text-green-400" />
+              <CardTitle className="flex items-center text-royalPurple-text1">
+                <Calendar className="mr-2 text-royalPurple-successTx" />
                 Study Planner
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-300 mb-4 text-sm">Organize your study schedule and deadlines.</p>
-              <Button className="w-full bg-green-600 hover:bg-green-700 text-white">Open Planner</Button>
+              <p className="text-royalPurple-text2 mb-4 text-sm">
+                Organize your study schedule and deadlines.
+              </p>
+              <Button className="w-full bg-royalPurple-success hover:bg-royalPurple-success text-royalPurple-text1">
+                Open Planner
+              </Button>
             </CardContent>
           </Card>
 
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="flex items-center text-white">
-                <PenTool className="mr-2 text-purple-400" />
+              <CardTitle className="flex items-center text-royalPurple-text1">
+                <PenTool className="mr-2 text-royalPurple-pillTx" />
                 Digital Notes
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-300 mb-4 text-sm">Take and organize your class notes digitally.</p>
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">Take Notes</Button>
+              <p className="text-royalPurple-text2 mb-4 text-sm">
+                Take and organize your class notes digitally.
+              </p>
+              <Button className="w-full bg-royalPurple-pill hover:bg-royalPurple-pill text-royalPurple-text1">
+                Take Notes
+              </Button>
             </CardContent>
           </Card>
-          
-           <Card variant="glass">
+
+          <Card variant="glass">
             <CardHeader>
-              <CardTitle className="flex items-center text-white">
-                <Search className="mr-2 text-indigo-400" />
+              <CardTitle className="flex items-center text-royalPurple-text1">
+                <Search className="mr-2 text-royalPurple-pillTx" />
                 Research Assistant
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-300 mb-4 text-sm">Find academic resources and citations.</p>
-              <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">Start Research</Button>
+              <p className="text-royalPurple-text2 mb-4 text-sm">
+                Find academic resources and citations.
+              </p>
+              <Button className="w-full bg-royalPurple-pill hover:bg-royalPurple-pill text-royalPurple-text1">
+                Start Research
+              </Button>
             </CardContent>
           </Card>
         </div>

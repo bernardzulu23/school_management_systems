@@ -195,7 +195,7 @@ function HeadteacherDashboardContent() {
               <CardTitle>Sign In Required</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-gray-600">Please sign in to access this page.</p>
+              <p className="text-royalPurple-text2">Please sign in to access this page.</p>
               <Link href="/login">
                 <Button>Go to Login</Button>
               </Link>
@@ -215,7 +215,7 @@ function HeadteacherDashboardContent() {
               <CardTitle>Access Denied</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-gray-600">
+              <p className="text-royalPurple-text2">
                 Only Headteachers can register teachers, HODs, and students.
               </p>
               <Link href="/dashboard">
@@ -269,10 +269,10 @@ function HeadteacherDashboardContent() {
         <main className="space-y-6" aria-labelledby="form-heading">
           <header className="flex items-center justify-between">
             <div>
-              <h2 id="form-heading" className="text-2xl font-bold text-gray-900">
+              <h2 id="form-heading" className="text-2xl font-bold text-royalPurple-text1">
                 {formTitle}
               </h2>
-              <p className="text-gray-600">
+              <p className="text-royalPurple-text2">
                 Add a new {showRegistrationForm} to the school management system
               </p>
             </div>
@@ -323,45 +323,45 @@ function HeadteacherDashboardContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F4F3F1] dark:bg-g-900">
+    <div className="min-h-screen bg-royalPurple-page">
       <DashboardLayout title="Headteacher Dashboard">
         <main className="space-y-4 relative z-10" aria-labelledby="dashboard-heading">
           {/* Header */}
-          <header className="bg-header rounded-[20px] p-6 mb-5">
-            <div className="flex justify-between items-center">
+          <header className="bg-royalPurple-deep border border-royalPurple-border rounded-2xl p-6 mb-5">
+            <div className="flex justify-between items-center gap-4">
               <div>
-                <h1 id="dashboard-heading" className="text-[22px] font-bold text-white">
+                <h1 id="dashboard-heading" className="text-[22px] font-bold text-royalPurple-text1">
                   Headteacher Dashboard
                 </h1>
-                <p className="text-white/60 text-sm mt-1">
+                <p className="text-royalPurple-text2 text-sm mt-1">
                   Welcome back, {user?.name || 'Headteacher'}
                 </p>
               </div>
-              <div className="flex space-x-4" aria-label="Current date and time">
-                <div className="bg-white/[0.12] border border-white/[0.2] text-white rounded-[10px] px-3 py-2 text-center">
+              <div className="flex space-x-3" aria-label="Current date and time">
+                <div className="bg-royalPurple-card2 border border-royalPurple-border text-royalPurple-text1 rounded-lg px-3 py-2 text-center">
                   <div className="text-lg font-bold">{new Date().getDate()}</div>
-                  <div className="text-xs opacity-90">
+                  <div className="text-xs text-royalPurple-text2">
                     {new Date().toLocaleDateString('en-US', { month: 'short' })}
                   </div>
                 </div>
-                <div className="bg-white/[0.12] border border-white/[0.2] text-white rounded-[10px] px-3 py-2 text-center">
+                <div className="bg-royalPurple-card2 border border-royalPurple-border text-royalPurple-text1 rounded-lg px-3 py-2 text-center">
                   <div className="text-sm font-bold">
                     {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                   </div>
-                  <div className="text-xs opacity-90">Time</div>
+                  <div className="text-xs text-royalPurple-text2">Time</div>
                 </div>
               </div>
             </div>
           </header>
 
           {/* Quick Stats Overview */}
-          <section aria-label="School Statistics" className="scrollbar-hide overflow-x-auto pb-2">
+          <section aria-label="School Statistics" className="overflow-x-auto pb-2">
             {isLoading ? (
-              <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 sm:gap-6 min-w-max sm:min-w-0">
+              <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3 sm:gap-4 min-w-max sm:min-w-0">
                 {[...Array(7)].map((_, i) => (
                   <SkeletonLoader
                     key={i}
-                    className="h-32 w-32 sm:w-full rounded-2xl flex-shrink-0"
+                    className="h-32 w-32 sm:w-full rounded-xl flex-shrink-0"
                   />
                 ))}
               </div>
@@ -389,7 +389,7 @@ function HeadteacherDashboardContent() {
                     className={`transition-all duration-200 cursor-pointer border border-black/[0.09] dark:border-white/[0.09] hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] ${
                       isActive
                         ? 'bg-g-100 dark:bg-g-800 border-l-[3px] border-l-g-800 text-g-900 font-semibold'
-                        : 'bg-white dark:bg-g-800'
+                        : 'bg-royalPurple-card dark:bg-g-800'
                     }`}
                     onClick={() => setActiveTab(tab.id)}
                     onKeyDown={(e) => {
@@ -409,7 +409,9 @@ function HeadteacherDashboardContent() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-0 pb-3">
-                      <p className="text-xs text-gray-600 mb-2 line-clamp-2">{tab.description}</p>
+                      <p className="text-xs text-royalPurple-text2 mb-2 line-clamp-2">
+                        {tab.description}
+                      </p>
                       <Button
                         size="sm"
                         className="w-full text-xs h-8"
@@ -431,7 +433,7 @@ function HeadteacherDashboardContent() {
               id="active-feature-content"
               role="tabpanel"
               aria-labelledby={`tab-${activeTab}`}
-              className="bg-white dark:bg-g-800 rounded-[14px] border border-black/[0.09] dark:border-white/[0.09] p-4"
+              className="bg-royalPurple-card dark:bg-g-800 rounded-[14px] border border-black/[0.09] dark:border-white/[0.09] p-4"
             >
               <Card>
                 <CardHeader className="bg-g-50 dark:bg-g-900 py-3 rounded-t-[14px] border-b border-black/[0.09] dark:border-white/[0.09]">

@@ -4,9 +4,20 @@ import { useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  Group, Plus, Calendar, Clock, Users, FileText, 
-  ArrowLeft, Search, Filter, Download, Eye, Edit, CheckCircle
+import {
+  Group,
+  Plus,
+  Calendar,
+  Clock,
+  Users,
+  FileText,
+  ArrowLeft,
+  Search,
+  Filter,
+  Download,
+  Eye,
+  Edit,
+  CheckCircle,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -28,7 +39,7 @@ export default function MeetingFilesPage() {
         attendees: ['All Department Staff'],
         agenda: ['Curriculum Review', 'Resource Planning', 'Performance Analysis'],
         location: 'Conference Room A',
-        status: 'scheduled'
+        status: 'scheduled',
       },
       {
         id: 2,
@@ -40,8 +51,8 @@ export default function MeetingFilesPage() {
         attendees: ['Mathematics Teachers', 'Science Teachers'],
         agenda: ['Teaching Methodologies', 'Assessment Strategies'],
         location: 'Training Hall',
-        status: 'scheduled'
-      }
+        status: 'scheduled',
+      },
     ],
     completed: [
       {
@@ -56,7 +67,7 @@ export default function MeetingFilesPage() {
         location: 'Conference Room B',
         status: 'completed',
         minutes: 'Available',
-        actionItems: 3
+        actionItems: 3,
       },
       {
         id: 4,
@@ -70,36 +81,49 @@ export default function MeetingFilesPage() {
         location: 'Department Office',
         status: 'completed',
         minutes: 'Available',
-        actionItems: 5
-      }
-    ]
+        actionItems: 5,
+      },
+    ],
   }
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'scheduled': return <Calendar className="h-4 w-4 text-blue-500" />
-      case 'completed': return <CheckCircle className="h-4 w-4 text-green-500" />
-      case 'cancelled': return <Clock className="h-4 w-4 text-red-500" />
-      default: return <Calendar className="h-4 w-4 text-gray-500" />
+      case 'scheduled':
+        return <Calendar className="h-4 w-4 text-royalPurple-accentTx" />
+      case 'completed':
+        return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
+      case 'cancelled':
+        return <Clock className="h-4 w-4 text-royalPurple-dangerTx" />
+      default:
+        return <Calendar className="h-4 w-4 text-royalPurple-text3" />
     }
   }
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'scheduled': return 'bg-blue-100 text-blue-800'
-      case 'completed': return 'bg-green-100 text-green-800'
-      case 'cancelled': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'scheduled':
+        return 'bg-royalPurple-accent text-royalPurple-accentTx'
+      case 'completed':
+        return 'bg-royalPurple-success text-royalPurple-successTx'
+      case 'cancelled':
+        return 'bg-royalPurple-danger text-royalPurple-dangerTx'
+      default:
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
   }
 
   const getTypeColor = (type) => {
     switch (type) {
-      case 'Department': return 'bg-purple-100 text-purple-800'
-      case 'Academic': return 'bg-blue-100 text-blue-800'
-      case 'Professional Development': return 'bg-green-100 text-green-800'
-      case 'Administrative': return 'bg-orange-100 text-orange-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'Department':
+        return 'bg-royalPurple-pill text-royalPurple-pillTx'
+      case 'Academic':
+        return 'bg-royalPurple-accent text-royalPurple-accentTx'
+      case 'Professional Development':
+        return 'bg-royalPurple-success text-royalPurple-successTx'
+      case 'Administrative':
+        return 'bg-orange-100 text-orange-800'
+      default:
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
   }
 
@@ -107,7 +131,10 @@ export default function MeetingFilesPage() {
     totalMeetings: meetingsData.upcoming.length + meetingsData.completed.length,
     upcomingMeetings: meetingsData.upcoming.length,
     completedMeetings: meetingsData.completed.length,
-    pendingActionItems: meetingsData.completed.reduce((sum, meeting) => sum + (meeting.actionItems || 0), 0)
+    pendingActionItems: meetingsData.completed.reduce(
+      (sum, meeting) => sum + (meeting.actionItems || 0),
+      0
+    ),
   }
 
   return (
@@ -123,11 +150,13 @@ export default function MeetingFilesPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+              <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center">
                 <Group className="h-6 w-6 mr-2" />
                 Meeting Files
               </h1>
-              <p className="text-gray-600">Department and staff meeting organization and documentation</p>
+              <p className="text-royalPurple-text2">
+                Department and staff meeting organization and documentation
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -147,10 +176,12 @@ export default function MeetingFilesPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Group className="h-8 w-8 text-blue-600" />
+                <Group className="h-8 w-8 text-royalPurple-accentTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Meetings</p>
-                  <p className="text-2xl font-bold text-gray-900">{meetingStats.totalMeetings}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Meetings</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {meetingStats.totalMeetings}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -158,10 +189,12 @@ export default function MeetingFilesPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Calendar className="h-8 w-8 text-green-600" />
+                <Calendar className="h-8 w-8 text-royalPurple-successTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Upcoming</p>
-                  <p className="text-2xl font-bold text-gray-900">{meetingStats.upcomingMeetings}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Upcoming</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {meetingStats.upcomingMeetings}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -169,10 +202,12 @@ export default function MeetingFilesPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <CheckCircle className="h-8 w-8 text-purple-600" />
+                <CheckCircle className="h-8 w-8 text-royalPurple-pillTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Completed</p>
-                  <p className="text-2xl font-bold text-gray-900">{meetingStats.completedMeetings}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Completed</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {meetingStats.completedMeetings}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -182,8 +217,10 @@ export default function MeetingFilesPage() {
               <div className="flex items-center">
                 <FileText className="h-8 w-8 text-orange-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Action Items</p>
-                  <p className="text-2xl font-bold text-gray-900">{meetingStats.pendingActionItems}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Action Items</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {meetingStats.pendingActionItems}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -212,17 +249,17 @@ export default function MeetingFilesPage() {
               </div>
               <div className="flex items-center space-x-2">
                 <div className="relative">
-                  <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-royalPurple-text3" />
                   <input
                     type="text"
                     placeholder="Search meetings..."
-                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <select
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
                 >
@@ -238,22 +275,31 @@ export default function MeetingFilesPage() {
           <CardContent>
             <div className="space-y-4">
               {meetingsData[activeTab].map((meeting) => (
-                <div key={meeting.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div
+                  key={meeting.id}
+                  className="border border-royalPurple-border rounded-lg p-4 hover:shadow-md transition-shadow"
+                >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
                       <div className="flex items-center mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900 mr-3">{meeting.title}</h3>
-                        <span className={`px-2 py-1 text-xs rounded-full ${getTypeColor(meeting.type)}`}>
+                        <h3 className="text-lg font-semibold text-royalPurple-text1 mr-3">
+                          {meeting.title}
+                        </h3>
+                        <span
+                          className={`px-2 py-1 text-xs rounded-full ${getTypeColor(meeting.type)}`}
+                        >
                           {meeting.type}
                         </span>
                         <div className="flex items-center ml-3">
                           {getStatusIcon(meeting.status)}
-                          <span className={`ml-2 px-2 py-1 text-xs rounded-full ${getStatusColor(meeting.status)}`}>
+                          <span
+                            className={`ml-2 px-2 py-1 text-xs rounded-full ${getStatusColor(meeting.status)}`}
+                          >
                             {meeting.status}
                           </span>
                         </div>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-royalPurple-text2">
                         <div className="flex items-center">
                           <Calendar className="h-4 w-4 mr-2" />
                           {new Date(meeting.date).toLocaleDateString()} at {meeting.time}
@@ -282,12 +328,15 @@ export default function MeetingFilesPage() {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="border-t pt-3">
-                    <h4 className="font-medium text-gray-900 mb-2">Agenda:</h4>
+                    <h4 className="font-medium text-royalPurple-text1 mb-2">Agenda:</h4>
                     <div className="flex flex-wrap gap-2">
                       {meeting.agenda.map((item, index) => (
-                        <span key={index} className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded">
+                        <span
+                          key={index}
+                          className="px-2 py-1 text-xs bg-royalPurple-card2 text-royalPurple-text2 rounded"
+                        >
                           {item}
                         </span>
                       ))}
@@ -295,10 +344,10 @@ export default function MeetingFilesPage() {
                     {meeting.status === 'completed' && (
                       <div className="mt-3 flex items-center justify-between">
                         <div className="flex items-center space-x-4">
-                          <span className="text-sm text-green-600">
+                          <span className="text-sm text-royalPurple-successTx">
                             ✓ Minutes: {meeting.minutes}
                           </span>
-                          <span className="text-sm text-blue-600">
+                          <span className="text-sm text-royalPurple-accentTx">
                             Action Items: {meeting.actionItems}
                           </span>
                         </div>
@@ -350,19 +399,25 @@ export default function MeetingFilesPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <h4 className="font-medium text-green-800 mb-1">Meeting Completed</h4>
-                  <p className="text-sm text-green-700">Monthly Department Review - Minutes uploaded</p>
-                  <p className="text-xs text-green-600 mt-1">2 hours ago</p>
+                <div className="p-3 bg-royalPurple-success border border-royalPurple-border rounded-lg">
+                  <h4 className="font-medium text-royalPurple-successTx mb-1">Meeting Completed</h4>
+                  <p className="text-sm text-royalPurple-successTx">
+                    Monthly Department Review - Minutes uploaded
+                  </p>
+                  <p className="text-xs text-royalPurple-successTx mt-1">2 hours ago</p>
                 </div>
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <h4 className="font-medium text-blue-800 mb-1">Meeting Scheduled</h4>
-                  <p className="text-sm text-blue-700">Department Planning Meeting - Jan 25, 10:00 AM</p>
-                  <p className="text-xs text-blue-600 mt-1">1 day ago</p>
+                <div className="p-3 bg-royalPurple-accent border border-royalPurple-border2 rounded-lg">
+                  <h4 className="font-medium text-royalPurple-accentTx mb-1">Meeting Scheduled</h4>
+                  <p className="text-sm text-royalPurple-accentTx">
+                    Department Planning Meeting - Jan 25, 10:00 AM
+                  </p>
+                  <p className="text-xs text-royalPurple-accentTx mt-1">1 day ago</p>
                 </div>
                 <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                   <h4 className="font-medium text-yellow-800 mb-1">Action Items Due</h4>
-                  <p className="text-sm text-yellow-700">3 action items from last meeting need attention</p>
+                  <p className="text-sm text-yellow-700">
+                    3 action items from last meeting need attention
+                  </p>
                   <p className="text-xs text-yellow-600 mt-1">Due in 2 days</p>
                 </div>
               </div>

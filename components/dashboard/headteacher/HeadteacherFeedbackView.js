@@ -45,9 +45,9 @@ export function HeadteacherFeedbackView() {
       <Card>
         <CardContent className="py-12 text-center">
           <div className="animate-pulse space-y-4">
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mx-auto" />
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mx-auto" />
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mx-auto" />
+            <div className="h-4 bg-royalPurple-card2 dark:bg-royalPurple-muted rounded w-3/4 mx-auto" />
+            <div className="h-4 bg-royalPurple-card2 dark:bg-royalPurple-muted rounded w-1/2 mx-auto" />
+            <div className="h-4 bg-royalPurple-card2 dark:bg-royalPurple-muted rounded w-2/3 mx-auto" />
           </div>
         </CardContent>
       </Card>
@@ -58,7 +58,7 @@ export function HeadteacherFeedbackView() {
     return (
       <Card>
         <CardContent className="py-12 text-center">
-          <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
+          <p className="text-royalPurple-dangerTx dark:text-royalPurple-dangerTx mb-4">{error}</p>
           <Button onClick={fetchFeedbacks}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Retry
@@ -82,13 +82,13 @@ export function HeadteacherFeedbackView() {
           </Button>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+          <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3 mb-6">
             Feedback submitted by teachers, students, and HODs. Administrators cannot submit
             feedback.
           </p>
 
           {feedbacks.length === 0 ? (
-            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+            <div className="text-center py-12 text-royalPurple-text3 dark:text-royalPurple-text3">
               <MessageSquare className="h-12 w-12 mx-auto mb-3 opacity-50" />
               <p>No feedback yet.</p>
             </div>
@@ -97,10 +97,10 @@ export function HeadteacherFeedbackView() {
               {feedbacks.map((fb) => (
                 <li
                   key={fb.id}
-                  className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50/50 dark:bg-gray-800/50"
+                  className="border border-royalPurple-border dark:border-royalPurple-border rounded-lg p-4 bg-royalPurple-page/50 dark:bg-royalPurple-card/50"
                 >
-                  <p className="text-gray-900 dark:text-gray-100 mb-3">{fb.message}</p>
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-royalPurple-text1 mb-3">{fb.message}</p>
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-royalPurple-text3 dark:text-royalPurple-text3">
                     <span className="flex items-center gap-1">
                       <User className="h-4 w-4" />
                       {fb.user?.name} ({fb.user?.role})
@@ -110,13 +110,13 @@ export function HeadteacherFeedbackView() {
                       {new Date(fb.createdAt).toLocaleDateString()}
                     </span>
                     {fb.category && (
-                      <span className="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200">
+                      <span className="px-2 py-0.5 rounded bg-royalPurple-accent dark:bg-royalPurple-accent/30 text-royalPurple-accentTx dark:text-royalPurple-accentTx">
                         {CATEGORY_LABELS[fb.category] || fb.category}
                       </span>
                     )}
                     {fb.rating && (
                       <span className="flex items-center gap-1">
-                        <Star className="h-4 w-4 fill-amber-400 text-amber-500" />
+                        <Star className="h-4 w-4 fill-amber-400 text-royalPurple-accentTx" />
                         {fb.rating}/5
                       </span>
                     )}

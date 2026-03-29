@@ -3,18 +3,14 @@ import PhaseCard, { StatusBadge } from './PhaseCard'
 
 const PhaseOverview = ({ realTimeData }) => {
   return (
-    <div 
+    <div
       className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       role="list"
       aria-label="System phases overview"
     >
       {/* Phase 1: Essential Survival Features */}
       <div role="listitem">
-        <PhaseCard 
-          title="Phase 1: Essential Survival" 
-          icon="📱" 
-          color="border-blue-500"
-        >
+        <PhaseCard title="Phase 1: Essential Survival" icon="📱" color="border-royalPurple-border2">
           <div className="flex justify-between items-center py-1">
             <span>Offline System:</span>
             <StatusBadge status={realTimeData.phase1_stats?.offline_system} />
@@ -40,11 +36,7 @@ const PhaseOverview = ({ realTimeData }) => {
 
       {/* Phase 2: Rural Education */}
       <div role="listitem">
-        <PhaseCard 
-          title="Phase 2: Rural Education" 
-          icon="🌾" 
-          color="border-green-500"
-        >
+        <PhaseCard title="Phase 2: Rural Education" icon="🌾" color="border-royalPurple-border">
           <div className="flex justify-between items-center py-1">
             <span>Agricultural Calendar:</span>
             <StatusBadge status="Active" />
@@ -66,11 +58,7 @@ const PhaseOverview = ({ realTimeData }) => {
 
       {/* Phase 3: Health & Nutrition */}
       <div role="listitem">
-        <PhaseCard 
-          title="Phase 3: Health & Nutrition" 
-          icon="🏥" 
-          color="border-red-500"
-        >
+        <PhaseCard title="Phase 3: Health & Nutrition" icon="🏥" color="border-royalPurple-border">
           <div className="flex justify-between items-center py-1">
             <span>Health Monitoring:</span>
             <StatusBadge status="Active" />
@@ -92,11 +80,7 @@ const PhaseOverview = ({ realTimeData }) => {
 
       {/* Phase 4: Economic & Transport */}
       <div role="listitem">
-        <PhaseCard 
-          title="Phase 4: Economic & Transport" 
-          icon="🚌" 
-          color="border-yellow-500"
-        >
+        <PhaseCard title="Phase 4: Economic & Transport" icon="🚌" color="border-yellow-500">
           <div className="flex justify-between items-center py-1">
             <span>Transport Routes:</span>
             <StatusBadge status="Mapped" />
@@ -118,11 +102,7 @@ const PhaseOverview = ({ realTimeData }) => {
 
       {/* Phase 5: Technical Sustainability */}
       <div role="listitem">
-        <PhaseCard 
-          title="Phase 5: Sustainability" 
-          icon="♻️" 
-          color="border-purple-500"
-        >
+        <PhaseCard title="Phase 5: Sustainability" icon="♻️" color="border-royalPurple-border2">
           <div className="flex justify-between items-center py-1">
             <span>Data Optimization:</span>
             <StatusBadge status="Optimized" />

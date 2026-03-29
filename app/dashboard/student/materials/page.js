@@ -79,49 +79,49 @@ export default function StudyMaterialsPage() {
   const getFileIcon = (type) => {
     switch (type.toLowerCase()) {
       case 'pdf':
-        return <FileText className="h-5 w-5 text-red-500" />
+        return <FileText className="h-5 w-5 text-royalPurple-dangerTx" />
       case 'video':
-        return <Video className="h-5 w-5 text-blue-500" />
+        return <Video className="h-5 w-5 text-royalPurple-accentTx" />
       case 'powerpoint':
         return <FileText className="h-5 w-5 text-orange-500" />
       case 'zip':
-        return <File className="h-5 w-5 text-purple-500" />
+        return <File className="h-5 w-5 text-royalPurple-pillTx" />
       case 'image':
         return <Image className="h-5 w-5 text-g-700" />
       default:
-        return <File className="h-5 w-5 text-gray-500" />
+        return <File className="h-5 w-5 text-royalPurple-text3" />
     }
   }
 
   const getTypeColor = (type) => {
     switch (type.toLowerCase()) {
       case 'pdf':
-        return 'bg-red-100 text-red-800'
+        return 'bg-royalPurple-danger text-royalPurple-dangerTx'
       case 'video':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-royalPurple-accent text-royalPurple-accentTx'
       case 'powerpoint':
         return 'bg-orange-100 text-orange-800'
       case 'zip':
-        return 'bg-purple-100 text-purple-800'
+        return 'bg-royalPurple-pill text-royalPurple-pillTx'
       case 'image':
-        return 'bg-green-100 text-green-800'
+        return 'bg-royalPurple-success text-royalPurple-successTx'
       default:
-        return 'bg-gray-100 text-gray-800'
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
   }
 
   const getSubjectColor = (subject) => {
     switch (subject) {
       case 'Mathematics':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-royalPurple-accent text-royalPurple-accentTx'
       case 'Science':
-        return 'bg-green-100 text-green-800'
+        return 'bg-royalPurple-success text-royalPurple-successTx'
       case 'English':
-        return 'bg-purple-100 text-purple-800'
+        return 'bg-royalPurple-pill text-royalPurple-pillTx'
       case 'History':
         return 'bg-orange-100 text-orange-800'
       default:
-        return 'bg-gray-100 text-gray-800'
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
   }
 
@@ -162,7 +162,7 @@ export default function StudyMaterialsPage() {
       stars.push(<Star key="half" className="h-4 w-4 fill-yellow-200 text-yellow-400" />)
     }
     for (let i = stars.length; i < 5; i++) {
-      stars.push(<Star key={i} className="h-4 w-4 text-gray-300" />)
+      stars.push(<Star key={i} className="h-4 w-4 text-royalPurple-text3" />)
     }
     return stars
   }
@@ -180,11 +180,11 @@ export default function StudyMaterialsPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+              <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center">
                 <BookOpen className="h-6 w-6 mr-2" />
                 Study Materials & Resource Library
               </h1>
-              <p className="text-gray-600">
+              <p className="text-royalPurple-text2">
                 Access and download educational resources for all your subjects
               </p>
             </div>
@@ -206,10 +206,12 @@ export default function StudyMaterialsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <BookOpen className="h-8 w-8 text-blue-600" />
+                <BookOpen className="h-8 w-8 text-royalPurple-accentTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Materials</p>
-                  <p className="text-2xl font-bold text-gray-900">{materialStats.totalMaterials}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Materials</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {materialStats.totalMaterials}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -217,10 +219,10 @@ export default function StudyMaterialsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Bookmark className="h-8 w-8 text-green-600" />
+                <Bookmark className="h-8 w-8 text-royalPurple-successTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Bookmarked</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-royalPurple-text2">Bookmarked</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
                     {materialStats.bookmarkedMaterials}
                   </p>
                 </div>
@@ -230,10 +232,10 @@ export default function StudyMaterialsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Download className="h-8 w-8 text-purple-600" />
+                <Download className="h-8 w-8 text-royalPurple-pillTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Downloaded</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-royalPurple-text2">Downloaded</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
                     {materialStats.downloadedMaterials}
                   </p>
                 </div>
@@ -245,8 +247,10 @@ export default function StudyMaterialsPage() {
               <div className="flex items-center">
                 <Eye className="h-8 w-8 text-orange-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Views</p>
-                  <p className="text-2xl font-bold text-gray-900">{materialStats.totalDownloads}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Views</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {materialStats.totalDownloads}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -288,17 +292,17 @@ export default function StudyMaterialsPage() {
               </div>
               <div className="flex items-center space-x-2">
                 <div className="relative">
-                  <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-royalPurple-text3" />
                   <input
                     type="text"
                     placeholder="Search materials..."
-                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <select
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={filterSubject}
                   onChange={(e) => setFilterSubject(e.target.value)}
                 >
@@ -319,7 +323,7 @@ export default function StudyMaterialsPage() {
                   )}
                 </select>
                 <select
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
                 >
@@ -337,16 +341,16 @@ export default function StudyMaterialsPage() {
               {filteredMaterials.map((material) => (
                 <div
                   key={material.id}
-                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                  className="border border-royalPurple-border rounded-lg p-4 hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center">
                       {getFileIcon(material.type)}
                       <div className="ml-3 flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
+                        <h3 className="text-lg font-semibold text-royalPurple-text1 line-clamp-2">
                           {material.title}
                         </h3>
-                        <p className="text-sm text-gray-600">by {material.teacher}</p>
+                        <p className="text-sm text-royalPurple-text2">by {material.teacher}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-1">
@@ -375,22 +379,26 @@ export default function StudyMaterialsPage() {
                       {material.type}
                     </span>
                     {material.isDownloaded && (
-                      <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                      <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-success text-royalPurple-successTx">
                         Downloaded
                       </span>
                     )}
                   </div>
 
-                  <p className="text-gray-600 text-sm mb-3 line-clamp-2">{material.description}</p>
+                  <p className="text-royalPurple-text2 text-sm mb-3 line-clamp-2">
+                    {material.description}
+                  </p>
 
                   <div className="flex items-center mb-3">
                     <div className="flex items-center mr-3">
                       {renderStars(material.rating)}
-                      <span className="ml-1 text-sm text-gray-600">({material.rating})</span>
+                      <span className="ml-1 text-sm text-royalPurple-text2">
+                        ({material.rating})
+                      </span>
                     </div>
                   </div>
 
-                  <div className="space-y-1 text-xs text-gray-500 mb-3">
+                  <div className="space-y-1 text-xs text-royalPurple-text3 mb-3">
                     <div className="flex justify-between">
                       <span>Size:</span>
                       <span>{material.size}</span>
@@ -410,12 +418,12 @@ export default function StudyMaterialsPage() {
                   </div>
 
                   <div className="mb-3">
-                    <p className="text-xs text-gray-500 mb-1">Tags:</p>
+                    <p className="text-xs text-royalPurple-text3 mb-1">Tags:</p>
                     <div className="flex flex-wrap gap-1">
                       {material.tags.map((tag, index) => (
                         <span
                           key={index}
-                          className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded"
+                          className="px-2 py-1 text-xs bg-royalPurple-card2 text-royalPurple-text2 rounded"
                         >
                           #{tag}
                         </span>
@@ -485,25 +493,25 @@ export default function StudyMaterialsPage() {
                   popularMaterials.map((material) => (
                     <div
                       key={material.id}
-                      className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                      className="p-3 bg-royalPurple-page rounded-lg hover:bg-royalPurple-card2 transition-colors cursor-pointer"
                     >
-                      <h4 className="font-medium text-gray-900 mb-1 line-clamp-1">
+                      <h4 className="font-medium text-royalPurple-text1 mb-1 line-clamp-1">
                         {material.title}
                       </h4>
-                      <div className="flex justify-between text-xs text-gray-600">
+                      <div className="flex justify-between text-xs text-royalPurple-text2">
                         <span>{material.downloads} downloads</span>
                         <span className="flex items-center">
                           <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 mr-1" />{' '}
                           {material.rating}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-royalPurple-text3 mt-1">
                         {material.subject} • {material.type}
                       </p>
                     </div>
                   ))
                 ) : (
-                  <p className="text-sm text-gray-500">No materials available yet.</p>
+                  <p className="text-sm text-royalPurple-text3">No materials available yet.</p>
                 )}
               </div>
             </CardContent>

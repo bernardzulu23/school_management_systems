@@ -3,11 +3,19 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  Utensils, Apple, Wheat, TrendingUp, 
-  Calendar, Users, Scale, Droplets 
-} from 'lucide-react'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import { Utensils, Apple, Wheat, TrendingUp, Calendar, Users, Scale, Droplets } from 'lucide-react'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts'
 
 export default function SDG2HungerModule({ schoolId, studentData = [] }) {
   const [nutritionData, setNutritionData] = useState({
@@ -16,10 +24,10 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
     nutritionStatus: {
       wellNourished: 0,
       mildlyMalnourished: 0,
-      severelyMalnourished: 0
+      severelyMalnourished: 0,
     },
     foodSecurityIndex: 0,
-    agriculturalParticipation: 0
+    agriculturalParticipation: 0,
   })
 
   const [feedingPrograms, setFeedingPrograms] = useState([])
@@ -29,8 +37,8 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
   useEffect(() => {
     // Calculate nutrition metrics
     const totalStudents = studentData.length
-    const studentsReceivingMeals = studentData.filter(student => 
-      student.receivesSchoolMeals
+    const studentsReceivingMeals = studentData.filter(
+      (student) => student.receivesSchoolMeals
     ).length
 
     // Mock nutrition status calculation
@@ -44,10 +52,10 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
       nutritionStatus: {
         wellNourished,
         mildlyMalnourished,
-        severelyMalnourished
+        severelyMalnourished,
       },
       foodSecurityIndex: calculateFoodSecurityIndex(studentData),
-      agriculturalParticipation: calculateAgriculturalParticipation(studentData)
+      agriculturalParticipation: calculateAgriculturalParticipation(studentData),
     })
 
     loadFeedingPrograms()
@@ -57,7 +65,7 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
 
   const calculateFoodSecurityIndex = (students) => {
     // Mock calculation based on various factors
-    const mealsProvided = students.filter(s => s.receivesSchoolMeals).length
+    const mealsProvided = students.filter((s) => s.receivesSchoolMeals).length
     const totalStudents = students.length
     return totalStudents > 0 ? Math.round((mealsProvided / totalStudents) * 100) : 0
   }
@@ -71,31 +79,31 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
     setFeedingPrograms([
       {
         id: 1,
-        name: "Daily School Meals",
-        type: "breakfast_lunch",
+        name: 'Daily School Meals',
+        type: 'breakfast_lunch',
         beneficiaries: 234,
         dailyCost: 15,
         nutritionScore: 85,
-        status: "active"
+        status: 'active',
       },
       {
         id: 2,
-        name: "Weekend Food Packs",
-        type: "take_home",
+        name: 'Weekend Food Packs',
+        type: 'take_home',
         beneficiaries: 89,
         dailyCost: 8,
         nutritionScore: 78,
-        status: "active"
+        status: 'active',
       },
       {
         id: 3,
-        name: "Emergency Food Relief",
-        type: "emergency",
+        name: 'Emergency Food Relief',
+        type: 'emergency',
         beneficiaries: 45,
         dailyCost: 12,
         nutritionScore: 70,
-        status: "seasonal"
-      }
+        status: 'seasonal',
+      },
     ])
   }
 
@@ -103,31 +111,31 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
     setAgriculturalProjects([
       {
         id: 1,
-        name: "School Vegetable Garden",
-        type: "vegetables",
-        area: "2 hectares",
+        name: 'School Vegetable Garden',
+        type: 'vegetables',
+        area: '2 hectares',
         participants: 120,
-        yield: "500kg/month",
-        crops: ["Tomatoes", "Cabbage", "Onions", "Carrots"]
+        yield: '500kg/month',
+        crops: ['Tomatoes', 'Cabbage', 'Onions', 'Carrots'],
       },
       {
         id: 2,
-        name: "Maize Cultivation Project",
-        type: "grains",
-        area: "5 hectares",
+        name: 'Maize Cultivation Project',
+        type: 'grains',
+        area: '5 hectares',
         participants: 80,
-        yield: "2 tons/season",
-        crops: ["Maize", "Beans", "Groundnuts"]
+        yield: '2 tons/season',
+        crops: ['Maize', 'Beans', 'Groundnuts'],
       },
       {
         id: 3,
-        name: "Fruit Tree Orchard",
-        type: "fruits",
-        area: "1.5 hectares",
+        name: 'Fruit Tree Orchard',
+        type: 'fruits',
+        area: '1.5 hectares',
         participants: 60,
-        yield: "300kg/season",
-        crops: ["Mangoes", "Oranges", "Avocados", "Bananas"]
-      }
+        yield: '300kg/season',
+        crops: ['Mangoes', 'Oranges', 'Avocados', 'Bananas'],
+      },
     ])
   }
 
@@ -135,33 +143,45 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
     setNutritionEducation([
       {
         id: 1,
-        topic: "Balanced Diet Basics",
+        topic: 'Balanced Diet Basics',
         participants: 180,
         sessions: 12,
-        completion: 85
+        completion: 85,
       },
       {
         id: 2,
-        topic: "Food Safety & Hygiene",
+        topic: 'Food Safety & Hygiene',
         participants: 165,
         sessions: 8,
-        completion: 92
+        completion: 92,
       },
       {
         id: 3,
-        topic: "Local Nutrition Sources",
+        topic: 'Local Nutrition Sources',
         participants: 145,
         sessions: 10,
-        completion: 78
-      }
+        completion: 78,
+      },
     ])
   }
 
   const getNutritionStatusData = () => {
     return [
-      { name: 'Well Nourished', value: nutritionData.nutritionStatus.wellNourished, color: '#22c55e' },
-      { name: 'Mildly Malnourished', value: nutritionData.nutritionStatus.mildlyMalnourished, color: '#f59e0b' },
-      { name: 'Severely Malnourished', value: nutritionData.nutritionStatus.severelyMalnourished, color: '#ef4444' }
+      {
+        name: 'Well Nourished',
+        value: nutritionData.nutritionStatus.wellNourished,
+        color: '#22c55e',
+      },
+      {
+        name: 'Mildly Malnourished',
+        value: nutritionData.nutritionStatus.mildlyMalnourished,
+        color: '#f59e0b',
+      },
+      {
+        name: 'Severely Malnourished',
+        value: nutritionData.nutritionStatus.severelyMalnourished,
+        color: '#ef4444',
+      },
     ]
   }
 
@@ -172,13 +192,14 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
       { month: 'Mar', meals: 245, nutrition: 82 },
       { month: 'Apr', meals: 250, nutrition: 85 },
       { month: 'May', meals: 260, nutrition: 87 },
-      { month: 'Jun', meals: 270, nutrition: 90 }
+      { month: 'Jun', meals: 270, nutrition: 90 },
     ]
   }
 
-  const mealCoverageRate = nutritionData.totalStudents > 0 
-    ? Math.round((nutritionData.studentsReceivingMeals / nutritionData.totalStudents) * 100)
-    : 0
+  const mealCoverageRate =
+    nutritionData.totalStudents > 0
+      ? Math.round((nutritionData.studentsReceivingMeals / nutritionData.totalStudents) * 100)
+      : 0
 
   return (
     <div className="space-y-6">
@@ -188,7 +209,7 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
           <span className="text-4xl">🍽️</span>
           <span>SDG 2: Zero Hunger</span>
         </h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
+        <p className="text-royalPurple-text2 max-w-2xl mx-auto">
           End hunger, achieve food security and improved nutrition, promote sustainable agriculture
         </p>
       </div>
@@ -197,7 +218,7 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="border-l-4 border-l-yellow-500">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+            <CardTitle className="text-sm font-medium text-royalPurple-text2 flex items-center">
               <Utensils className="h-4 w-4 mr-2" />
               Students Fed Daily
             </CardTitle>
@@ -206,60 +227,57 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
             <div className="text-2xl font-bold text-yellow-600">
               {nutritionData.studentsReceivingMeals}
             </div>
-            <p className="text-xs text-gray-500">
-              {mealCoverageRate}% meal coverage
-            </p>
+            <p className="text-xs text-royalPurple-text3">{mealCoverageRate}% meal coverage</p>
           </CardContent>
         </Card>
 
         <Card className="border-l-4 border-l-green-500">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+            <CardTitle className="text-sm font-medium text-royalPurple-text2 flex items-center">
               <Apple className="h-4 w-4 mr-2" />
               Well Nourished
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-royalPurple-successTx">
               {nutritionData.nutritionStatus.wellNourished}
             </div>
-            <p className="text-xs text-gray-500">
-              {Math.round((nutritionData.nutritionStatus.wellNourished / nutritionData.totalStudents) * 100)}% of students
+            <p className="text-xs text-royalPurple-text3">
+              {Math.round(
+                (nutritionData.nutritionStatus.wellNourished / nutritionData.totalStudents) * 100
+              )}
+              % of students
             </p>
           </CardContent>
         </Card>
 
         <Card className="border-l-4 border-l-blue-500">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+            <CardTitle className="text-sm font-medium text-royalPurple-text2 flex items-center">
               <Scale className="h-4 w-4 mr-2" />
               Food Security Index
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-2xl font-bold text-royalPurple-accentTx">
               {nutritionData.foodSecurityIndex}%
             </div>
-            <p className="text-xs text-gray-500">
-              School food security level
-            </p>
+            <p className="text-xs text-royalPurple-text3">School food security level</p>
           </CardContent>
         </Card>
 
         <Card className="border-l-4 border-l-purple-500">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+            <CardTitle className="text-sm font-medium text-royalPurple-text2 flex items-center">
               <Wheat className="h-4 w-4 mr-2" />
               Agricultural Education
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-600">
+            <div className="text-2xl font-bold text-royalPurple-pillTx">
               {nutritionData.agriculturalParticipation}%
             </div>
-            <p className="text-xs text-gray-500">
-              Student participation rate
-            </p>
+            <p className="text-xs text-royalPurple-text3">Student participation rate</p>
           </CardContent>
         </Card>
       </div>
@@ -326,30 +344,34 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {feedingPrograms.map(program => (
+            {feedingPrograms.map((program) => (
               <div key={program.id} className="p-4 border rounded-lg">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-semibold text-gray-900">{program.name}</h3>
-                  <span className={`px-2 py-1 rounded text-xs ${
-                    program.status === 'active' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-yellow-100 text-yellow-800'
-                  }`}>
+                  <h3 className="font-semibold text-royalPurple-text1">{program.name}</h3>
+                  <span
+                    className={`px-2 py-1 rounded text-xs ${
+                      program.status === 'active'
+                        ? 'bg-royalPurple-success text-royalPurple-successTx'
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}
+                  >
                     {program.status}
                   </span>
                 </div>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Beneficiaries:</span>
+                    <span className="text-royalPurple-text2">Beneficiaries:</span>
                     <span className="font-medium">{program.beneficiaries} students</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Daily Cost:</span>
+                    <span className="text-royalPurple-text2">Daily Cost:</span>
                     <span className="font-medium">ZMW {program.dailyCost}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Nutrition Score:</span>
-                    <span className="font-medium text-green-600">{program.nutritionScore}%</span>
+                    <span className="text-royalPurple-text2">Nutrition Score:</span>
+                    <span className="font-medium text-royalPurple-successTx">
+                      {program.nutritionScore}%
+                    </span>
                   </div>
                 </div>
               </div>
@@ -368,27 +390,30 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {agriculturalProjects.map(project => (
+            {agriculturalProjects.map((project) => (
               <div key={project.id} className="p-4 border rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-2">{project.name}</h3>
+                <h3 className="font-semibold text-royalPurple-text1 mb-2">{project.name}</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Area:</span>
+                    <span className="text-royalPurple-text2">Area:</span>
                     <span className="font-medium">{project.area}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Participants:</span>
+                    <span className="text-royalPurple-text2">Participants:</span>
                     <span className="font-medium">{project.participants} students</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Yield:</span>
-                    <span className="font-medium text-green-600">{project.yield}</span>
+                    <span className="text-royalPurple-text2">Yield:</span>
+                    <span className="font-medium text-royalPurple-successTx">{project.yield}</span>
                   </div>
                   <div className="mt-2">
-                    <span className="text-gray-600 text-xs">Crops:</span>
+                    <span className="text-royalPurple-text2 text-xs">Crops:</span>
                     <div className="flex flex-wrap gap-1 mt-1">
-                      {project.crops.map(crop => (
-                        <span key={crop} className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
+                      {project.crops.map((crop) => (
+                        <span
+                          key={crop}
+                          className="px-2 py-1 bg-royalPurple-success text-royalPurple-successTx text-xs rounded"
+                        >
                           {crop}
                         </span>
                       ))}

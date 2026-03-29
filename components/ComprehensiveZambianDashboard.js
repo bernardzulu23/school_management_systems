@@ -29,17 +29,17 @@ const ComprehensiveZambianDashboard = () => {
   const initializeDashboard = async () => {
     try {
       setIsLoading(true)
-      
+
       // Initialize master system
       await zambianSchoolMasterSystem.initializeIntegration()
-      
+
       // Get initial system status
       const status = zambianSchoolMasterSystem.getComprehensiveSystemStatus()
       setSystemStatus(status)
-      
+
       // Get initial real-time data
       await updateRealTimeData()
-      
+
       setIsLoading(false)
     } catch (error) {
       console.error('Failed to initialize dashboard:', error)
@@ -51,11 +51,11 @@ const ComprehensiveZambianDashboard = () => {
     try {
       const stats = zambianSchoolMasterSystem.generateComprehensiveStats()
       setRealTimeData(stats)
-      
+
       // Update system status
       const status = zambianSchoolMasterSystem.getComprehensiveSystemStatus()
       setSystemStatus(status)
-      
+
       // Check for new alerts
       checkForAlerts(stats)
     } catch (error) {
@@ -65,17 +65,17 @@ const ComprehensiveZambianDashboard = () => {
 
   const checkForAlerts = (stats) => {
     const newAlerts = []
-    
+
     // Check system health
     if (stats.system_overview.overall_performance < 70) {
       newAlerts.push({
         id: Date.now(),
         type: 'warning',
         message: `System performance at ${stats.system_overview.overall_performance}%`,
-        timestamp: new Date()
+        timestamp: new Date(),
       })
     }
-    
+
     // Check power status
     if (stats.phase1_stats.power_system === 'operational') {
       // Simulate power alert
@@ -84,28 +84,30 @@ const ComprehensiveZambianDashboard = () => {
           id: Date.now() + 1,
           type: 'info',
           message: 'Solar power generation optimal',
-          timestamp: new Date()
+          timestamp: new Date(),
         })
       }
     }
-    
-    setAlerts(prev => [...newAlerts, ...prev.slice(0, 4)]) // Keep last 5 alerts
+
+    setAlerts((prev) => [...newAlerts, ...prev.slice(0, 4)]) // Keep last 5 alerts
   }
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-royalPurple-card2 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Initializing Zambian School Management System...</p>
-          <p className="text-sm text-gray-500">Loading all 5 phases...</p>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-royalPurple-border2 mx-auto"></div>
+          <p className="mt-4 text-royalPurple-text2">
+            Initializing Zambian School Management System...
+          </p>
+          <p className="text-sm text-royalPurple-text3">Loading all 5 phases...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-royalPurple-card2">
       <DashboardHeader systemStatus={systemStatus} />
       <DashboardNavigation activePhase={activePhase} setActivePhase={setActivePhase} />
 
@@ -114,7 +116,7 @@ const ComprehensiveZambianDashboard = () => {
         {activePhase === 'overview' ? (
           <div className="space-y-8">
             <PhaseOverview realTimeData={realTimeData} systemStatus={systemStatus} />
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <SystemAlerts alerts={alerts} />
               <QuickActions />
@@ -126,15 +128,11 @@ const ComprehensiveZambianDashboard = () => {
       </div>
 
       {/* Footer */}
-      <div className="bg-white border-t mt-12">
+      <div className="bg-royalPurple-card border-t mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center text-sm text-gray-600">
-            <p>
-              🌍 Designed for Zambian Rural Schools - Ultra-Low Infrastructure Compatible
-            </p>
-            <p>
-              Last Updated: {new Date().toLocaleString()}
-            </p>
+          <div className="flex justify-between items-center text-sm text-royalPurple-text2">
+            <p>🌍 Designed for Zambian Rural Schools - Ultra-Low Infrastructure Compatible</p>
+            <p>Last Updated: {new Date().toLocaleString()}</p>
           </div>
         </div>
       </div>

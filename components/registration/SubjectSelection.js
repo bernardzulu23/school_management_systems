@@ -84,19 +84,19 @@ export default function SubjectSelection({
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h3 className="text-xl font-bold text-gray-900 mb-2">
+        <h3 className="text-xl font-bold text-royalPurple-text1 mb-2">
           Select Subjects
           {userRole === 'teacher' && ' to Teach'}
           {userRole === 'student' && ' to Study'}
           {userRole === 'hod' && ' to Manage'}
         </h3>
-        <p className="text-gray-600">
+        <p className="text-royalPurple-text2">
           {maxSelections
             ? `Choose up to ${maxSelections} subjects`
             : 'Choose the subjects you want to work with'}
         </p>
         {selectedSubjects.length > 0 && (
-          <p className="text-sm text-blue-600 mt-2">
+          <p className="text-sm text-royalPurple-accentTx mt-2">
             Selected: {selectedSubjects.length} subject{selectedSubjects.length !== 1 ? 's' : ''}
           </p>
         )}
@@ -105,21 +105,21 @@ export default function SubjectSelection({
       {/* Search and Filter */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-royalPurple-text3 h-4 w-4" />
           <input
             type="text"
             placeholder="Search subjects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
         <div className="relative">
-          <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-royalPurple-text3 h-4 w-4" />
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+            className="pl-10 pr-8 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-royalPurple-card"
           >
             <option value="All">All Categories</option>
             {SUBJECT_CATEGORIES.map((category) => (
@@ -132,11 +132,13 @@ export default function SubjectSelection({
       </div>
 
       {/* Subject Dropdown Selection */}
-      <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-        <label className="block text-sm font-medium text-gray-900 mb-2">Add Subject to List</label>
+      <div className="bg-royalPurple-card p-6 rounded-xl border border-royalPurple-border shadow-sm">
+        <label className="block text-sm font-medium text-royalPurple-text1 mb-2">
+          Add Subject to List
+        </label>
         <div className="relative">
           <select
-            className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 appearance-none"
+            className="w-full p-3 pr-10 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1 appearance-none"
             onChange={(e) => {
               if (e.target.value) {
                 const value = valueType === 'name' ? String(e.target.value) : Number(e.target.value)
@@ -159,7 +161,7 @@ export default function SubjectSelection({
           </select>
           <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
             <svg
-              className="w-5 h-5 text-gray-400"
+              className="w-5 h-5 text-royalPurple-text3"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -173,7 +175,7 @@ export default function SubjectSelection({
             </svg>
           </div>
         </div>
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-royalPurple-text3 mt-2">
           Select a subject from the dropdown to add it to your list.
         </p>
       </div>
@@ -181,7 +183,7 @@ export default function SubjectSelection({
       {/* Selected Subjects List */}
       {selectedSubjects.length > 0 ? (
         <div className="space-y-3">
-          <h4 className="text-sm font-medium text-gray-700">Selected Subjects:</h4>
+          <h4 className="text-sm font-medium text-royalPurple-text2">Selected Subjects:</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {selectedSubjects.map((subjectId) => {
               const subject =
@@ -195,18 +197,18 @@ export default function SubjectSelection({
               return (
                 <div
                   key={subject.id}
-                  className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 shadow-sm group hover:border-red-200 transition-colors"
+                  className="flex items-center justify-between p-3 bg-royalPurple-card rounded-lg border border-royalPurple-border shadow-sm group hover:border-royalPurple-border transition-colors"
                 >
                   <div className="flex items-center">
                     <div className={`w-2 h-8 rounded-full bg-${colorClass}-500 mr-3`}></div>
                     <div>
-                      <p className="font-medium text-gray-900">{subject.name}</p>
-                      <p className="text-xs text-gray-500">{subject.category}</p>
+                      <p className="font-medium text-royalPurple-text1">{subject.name}</p>
+                      <p className="text-xs text-royalPurple-text3">{subject.category}</p>
                     </div>
                   </div>
                   <button
                     onClick={() => handleSubjectToggle(getValue(subject))}
-                    className="p-1.5 rounded-full text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors"
+                    className="p-1.5 rounded-full text-royalPurple-text3 hover:bg-royalPurple-danger hover:text-royalPurple-dangerTx transition-colors"
                     title="Remove subject"
                   >
                     <X className="h-4 w-4" />
@@ -217,15 +219,15 @@ export default function SubjectSelection({
           </div>
         </div>
       ) : (
-        <div className="text-center py-8 bg-gray-50 rounded-xl border border-dashed border-gray-300">
-          <BookOpen className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500">No subjects selected yet</p>
+        <div className="text-center py-8 bg-royalPurple-page rounded-xl border border-dashed border-royalPurple-border">
+          <BookOpen className="h-10 w-10 text-royalPurple-text3 mx-auto mb-3" />
+          <p className="text-royalPurple-text3">No subjects selected yet</p>
         </div>
       )}
 
       {/* Action Buttons */}
       <div className="flex justify-between items-center pt-4 border-t">
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-royalPurple-text2">
           {maxSelections && (
             <span>
               {selectedSubjects.length} of {maxSelections} subjects selected

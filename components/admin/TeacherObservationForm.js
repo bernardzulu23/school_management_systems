@@ -4,30 +4,30 @@ import { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import SecureForm from '@/components/ui/SecureForm'
-import { 
-  User, 
-  Calendar, 
-  BookOpen, 
-  Star, 
-  FileText, 
+import {
+  User,
+  Calendar,
+  BookOpen,
+  Star,
+  FileText,
   Target,
   Clock,
   Users,
   CheckCircle,
   AlertTriangle,
-  Loader2
+  Loader2,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import FormField from '@/components/forms/FormField'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { FormGroup } from '@/components/forms/FormField'
 
-export default function TeacherObservationForm({ 
-  teachers = [], 
-  observationTools = [], 
-  onSubmit, 
+export default function TeacherObservationForm({
+  teachers = [],
+  observationTools = [],
+  onSubmit,
   onCancel,
-  initialData = null 
+  initialData = null,
 }) {
   const [formData, setFormData] = useState({
     teacher_id: '',
@@ -51,7 +51,7 @@ export default function TeacherObservationForm({
     student_engagement_notes: '',
     resource_utilization_notes: '',
     follow_up_required: false,
-    follow_up_date: ''
+    follow_up_date: '',
   })
 
   const [selectedTool, setSelectedTool] = useState(null)
@@ -66,37 +66,37 @@ export default function TeacherObservationForm({
 
   useEffect(() => {
     if (formData.observation_tool_id) {
-      const tool = observationTools.find(t => t.id === parseInt(formData.observation_tool_id))
+      const tool = observationTools.find((t) => t.id === parseInt(formData.observation_tool_id))
       setSelectedTool(tool)
-      
+
       // Initialize scores object
       if (tool && tool.criteria) {
         const initialScores = {}
-        tool.criteria.forEach(criterion => {
+        tool.criteria.forEach((criterion) => {
           initialScores[criterion.name] = 0
         })
-        setFormData(prev => ({ ...prev, scores: initialScores }))
+        setFormData((prev) => ({ ...prev, scores: initialScores }))
       }
     }
   }, [formData.observation_tool_id, observationTools])
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     }))
 
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }))
+      setErrors((prev) => ({ ...prev, [name]: '' }))
     }
   }
 
   const handleScoreChange = (criterionName, score) => {
     const newScores = { ...formData.scores, [criterionName]: parseFloat(score) }
-    setFormData(prev => ({ ...prev, scores: newScores }))
-    
+    setFormData((prev) => ({ ...prev, scores: newScores }))
+
     // Calculate overall score
     calculateOverallScore(newScores)
   }
@@ -107,7 +107,7 @@ export default function TeacherObservationForm({
     let totalWeightedScore = 0
     let totalWeight = 0
 
-    selectedTool.criteria.forEach(criterion => {
+    selectedTool.criteria.forEach((criterion) => {
       const score = scores[criterion.name] || 0
       const weight = criterion.weight || 1
       totalWeightedScore += score * (weight / 100)
@@ -117,10 +117,10 @@ export default function TeacherObservationForm({
     const overallScore = totalWeight > 0 ? totalWeightedScore / totalWeight : 0
     const grade = getGradeFromScore(overallScore)
 
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       overall_score: Math.round(overallScore * 100) / 100,
-      grade
+      grade,
     }))
   }
 
@@ -136,16 +136,18 @@ export default function TeacherObservationForm({
     const newErrors = {}
 
     if (!formData.teacher_id) newErrors.teacher_id = 'Teacher is required'
-    if (!formData.observation_tool_id) newErrors.observation_tool_id = 'Observation tool is required'
+    if (!formData.observation_tool_id)
+      newErrors.observation_tool_id = 'Observation tool is required'
     if (!formData.observation_date) newErrors.observation_date = 'Observation date is required'
     if (!formData.lesson_subject) newErrors.lesson_subject = 'Lesson subject is required'
     if (!formData.lesson_topic) newErrors.lesson_topic = 'Lesson topic is required'
     if (!formData.class_observed) newErrors.class_observed = 'Class observed is required'
-    if (!formData.observation_period) newErrors.observation_period = 'Observation period is required'
+    if (!formData.observation_period)
+      newErrors.observation_period = 'Observation period is required'
 
     // Validate scores
     if (selectedTool && selectedTool.criteria) {
-      selectedTool.criteria.forEach(criterion => {
+      selectedTool.criteria.forEach((criterion) => {
         const score = formData.scores[criterion.name]
         if (score === undefined || score === null || score === '') {
           newErrors[`score_${criterion.name}`] = `Score for ${criterion.name} is required`
@@ -182,32 +184,45 @@ export default function TeacherObservationForm({
   }
 
   const getScoreColor = (score) => {
-    if (score >= 90) return 'text-green-600'
-    if (score >= 80) return 'text-blue-600'
+    if (score >= 90) return 'text-royalPurple-successTx'
+    if (score >= 80) return 'text-royalPurple-accentTx'
     if (score >= 70) return 'text-yellow-600'
     if (score >= 60) return 'text-orange-600'
-    return 'text-red-600'
+    return 'text-royalPurple-dangerTx'
   }
 
   const getGradeColor = (grade) => {
     switch (grade) {
-      case 'Outstanding': return 'bg-green-100 text-green-800'
-      case 'Good': return 'bg-blue-100 text-blue-800'
-      case 'Satisfactory': return 'bg-yellow-100 text-yellow-800'
-      case 'Needs Improvement': return 'bg-orange-100 text-orange-800'
-      case 'Unsatisfactory': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'Outstanding':
+        return 'bg-royalPurple-success text-royalPurple-successTx'
+      case 'Good':
+        return 'bg-royalPurple-accent text-royalPurple-accentTx'
+      case 'Satisfactory':
+        return 'bg-yellow-100 text-yellow-800'
+      case 'Needs Improvement':
+        return 'bg-orange-100 text-orange-800'
+      case 'Unsatisfactory':
+        return 'bg-royalPurple-danger text-royalPurple-dangerTx'
+      default:
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
   }
 
   return (
-    <article className="max-w-6xl mx-auto p-6" role="article" aria-labelledby="observation-form-title">
+    <article
+      className="max-w-6xl mx-auto p-6"
+      role="article"
+      aria-labelledby="observation-form-title"
+    >
       <header className="mb-6">
-        <h2 id="observation-form-title" className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <h2
+          id="observation-form-title"
+          className="text-2xl font-bold text-royalPurple-text1 flex items-center gap-2"
+        >
           <FileText className="w-6 h-6" aria-hidden="true" />
           Teacher Observation Form
         </h2>
-        <p className="text-gray-600 mt-2">
+        <p className="text-royalPurple-text2 mt-2">
           Complete this form to record teacher observation details and performance assessment
         </p>
       </header>
@@ -215,12 +230,18 @@ export default function TeacherObservationForm({
       <SecureForm onSubmit={handleSubmit} className="space-y-8">
         {/* Basic Information */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <section className="p-4 border rounded-lg bg-white shadow-sm" aria-labelledby="basic-info-title">
-            <h3 id="basic-info-title" className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <section
+            className="p-4 border rounded-lg bg-royalPurple-card shadow-sm"
+            aria-labelledby="basic-info-title"
+          >
+            <h3
+              id="basic-info-title"
+              className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center gap-2"
+            >
               <User className="w-5 h-5" aria-hidden="true" />
               Basic Information
             </h3>
-            
+
             <FormGroup className="space-y-4">
               <FormField
                 label="Teacher *"
@@ -231,10 +252,10 @@ export default function TeacherObservationForm({
                 error={errors.teacher_id}
                 options={[
                   { value: '', label: 'Select Teacher' },
-                  ...teachers.map(teacher => ({
+                  ...teachers.map((teacher) => ({
                     value: teacher.id,
-                    label: `${teacher.name} - ${teacher.department}`
-                  }))
+                    label: `${teacher.name} - ${teacher.department}`,
+                  })),
                 ]}
                 required
               />
@@ -248,10 +269,10 @@ export default function TeacherObservationForm({
                 error={errors.observation_tool_id}
                 options={[
                   { value: '', label: 'Select Observation Tool' },
-                  ...observationTools.map(tool => ({
+                  ...observationTools.map((tool) => ({
                     value: tool.id,
-                    label: tool.name
-                  }))
+                    label: tool.name,
+                  })),
                 ]}
                 required
               />
@@ -291,7 +312,7 @@ export default function TeacherObservationForm({
                     { value: '', label: 'Select Term' },
                     { value: 'term1', label: 'Term 1' },
                     { value: 'term2', label: 'Term 2' },
-                    { value: 'term3', label: 'Term 3' }
+                    { value: 'term3', label: 'Term 3' },
                   ]}
                   required
                 />
@@ -308,12 +329,18 @@ export default function TeacherObservationForm({
             </FormGroup>
           </section>
 
-          <section className="p-4 border rounded-lg bg-white shadow-sm" aria-labelledby="lesson-details-title">
-            <h3 id="lesson-details-title" className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <section
+            className="p-4 border rounded-lg bg-royalPurple-card shadow-sm"
+            aria-labelledby="lesson-details-title"
+          >
+            <h3
+              id="lesson-details-title"
+              className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center gap-2"
+            >
               <BookOpen className="w-5 h-5" aria-hidden="true" />
               Lesson Details
             </h3>
-            
+
             <FormGroup className="space-y-4">
               <FormField
                 label="Subject *"
@@ -362,21 +389,33 @@ export default function TeacherObservationForm({
 
         {/* Observation Scores */}
         {selectedTool && selectedTool.criteria && (
-          <section className="p-6 border rounded-lg bg-white shadow-sm" aria-labelledby="observation-scores-title">
-            <h3 id="observation-scores-title" className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <section
+            className="p-6 border rounded-lg bg-royalPurple-card shadow-sm"
+            aria-labelledby="observation-scores-title"
+          >
+            <h3
+              id="observation-scores-title"
+              className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center gap-2"
+            >
               <Star className="w-5 h-5" aria-hidden="true" />
               Observation Scores
             </h3>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" role="list">
               {selectedTool.criteria.map((criterion, index) => (
-                <article key={index} className="border border-gray-200 rounded-lg p-4" role="listitem">
+                <article
+                  key={index}
+                  className="border border-royalPurple-border rounded-lg p-4"
+                  role="listitem"
+                >
                   <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-medium text-gray-900">{criterion.name}</h4>
-                    <span className="text-sm text-gray-500">Weight: {criterion.weight}%</span>
+                    <h4 className="font-medium text-royalPurple-text1">{criterion.name}</h4>
+                    <span className="text-sm text-royalPurple-text3">
+                      Weight: {criterion.weight}%
+                    </span>
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">{criterion.description}</p>
-                  
+                  <p className="text-sm text-royalPurple-text2 mb-3">{criterion.description}</p>
+
                   <div className="flex items-center gap-4">
                     <FormField
                       label={`Score for ${criterion.name}`}
@@ -392,13 +431,21 @@ export default function TeacherObservationForm({
                       placeholder="0-100"
                       className="w-20"
                     />
-                    <div className="flex-1 bg-gray-200 rounded-full h-2" aria-hidden="true">
-                      <div 
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${Math.min(100, Math.max(0, formData.scores[criterion.name] || 0))}%` }}
+                    <div
+                      className="flex-1 bg-royalPurple-card2 rounded-full h-2"
+                      aria-hidden="true"
+                    >
+                      <div
+                        className="bg-royalPurple-accent h-2 rounded-full transition-all duration-300"
+                        style={{
+                          width: `${Math.min(100, Math.max(0, formData.scores[criterion.name] || 0))}%`,
+                        }}
                       ></div>
                     </div>
-                    <span className={`text-sm font-medium ${getScoreColor(formData.scores[criterion.name] || 0)}`} aria-live="polite">
+                    <span
+                      className={`text-sm font-medium ${getScoreColor(formData.scores[criterion.name] || 0)}`}
+                      aria-live="polite"
+                    >
                       {formData.scores[criterion.name] || 0}%
                     </span>
                   </div>
@@ -407,18 +454,26 @@ export default function TeacherObservationForm({
             </div>
 
             {/* Overall Score Display */}
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg" role="status" aria-live="polite">
+            <div
+              className="mt-6 p-4 bg-royalPurple-page rounded-lg"
+              role="status"
+              aria-live="polite"
+            >
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900">Overall Score</h4>
-                  <p className="text-sm text-gray-600">Calculated based on weighted criteria</p>
+                  <h4 className="text-lg font-semibold text-royalPurple-text1">Overall Score</h4>
+                  <p className="text-sm text-royalPurple-text2">
+                    Calculated based on weighted criteria
+                  </p>
                 </div>
                 <div className="text-right">
                   <div className={`text-3xl font-bold ${getScoreColor(formData.overall_score)}`}>
                     {formData.overall_score}%
                   </div>
                   {formData.grade && (
-                    <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getGradeColor(formData.grade)}`}>
+                    <span
+                      className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getGradeColor(formData.grade)}`}
+                    >
                       {formData.grade}
                     </span>
                   )}
@@ -429,12 +484,18 @@ export default function TeacherObservationForm({
         )}
 
         {/* Written Observations */}
-        <section className="p-6 border rounded-lg bg-white shadow-sm" aria-labelledby="written-observations-title">
-          <h3 id="written-observations-title" className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <section
+          className="p-6 border rounded-lg bg-royalPurple-card shadow-sm"
+          aria-labelledby="written-observations-title"
+        >
+          <h3
+            id="written-observations-title"
+            className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center gap-2"
+          >
             <FileText className="w-5 h-5" aria-hidden="true" />
             Written Observations
           </h3>
-          
+
           <FormGroup className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-4">
               <FormField
@@ -467,7 +528,7 @@ export default function TeacherObservationForm({
                 placeholder="Notes on classroom management and behavior control..."
               />
             </div>
-            
+
             <div className="space-y-4">
               <FormField
                 label="Recommendations"
@@ -515,12 +576,18 @@ export default function TeacherObservationForm({
         </section>
 
         {/* Follow-up Section */}
-        <section className="p-6 border rounded-lg bg-white shadow-sm" aria-labelledby="follow-up-title">
-          <h3 id="follow-up-title" className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <section
+          className="p-6 border rounded-lg bg-royalPurple-card shadow-sm"
+          aria-labelledby="follow-up-title"
+        >
+          <h3
+            id="follow-up-title"
+            className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center gap-2"
+          >
             <Target className="w-5 h-5" aria-hidden="true" />
             Follow-up
           </h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex items-center space-x-2">
               <input
@@ -529,9 +596,12 @@ export default function TeacherObservationForm({
                 name="follow_up_required"
                 checked={formData.follow_up_required}
                 onChange={handleChange}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                className="h-4 w-4 text-royalPurple-accentTx focus:ring-blue-500 border-royalPurple-border rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
               />
-              <label htmlFor="follow_up_required" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="follow_up_required"
+                className="text-sm font-medium text-royalPurple-text2"
+              >
                 Follow-up Observation Required
               </label>
             </div>
@@ -566,7 +636,7 @@ export default function TeacherObservationForm({
             type="submit"
             disabled={loading}
             className="min-w-[120px] flex items-center justify-center gap-2 focus-visible:ring-2 focus-visible:ring-blue-500"
-            aria-label={loading ? "Saving observation..." : "Save observation"}
+            aria-label={loading ? 'Saving observation...' : 'Save observation'}
           >
             {loading ? (
               <>

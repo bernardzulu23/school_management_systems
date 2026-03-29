@@ -11,7 +11,7 @@ import Link from 'next/link'
 export default function ClassesPage() {
   const { data: dashboardData } = useQuery({
     queryKey: ['teacher-dashboard'],
-    queryFn: () => api.getTeacherDashboard().then(res => res.data),
+    queryFn: () => api.getTeacherDashboard().then((res) => res.data),
   })
 
   return (
@@ -20,8 +20,8 @@ export default function ClassesPage() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">My Classes</h1>
-            <p className="text-gray-600">Manage your assigned classes and students</p>
+            <h1 className="text-2xl font-bold text-royalPurple-text1">My Classes</h1>
+            <p className="text-royalPurple-text2">Manage your assigned classes and students</p>
           </div>
           <Link href="/dashboard/classes/create">
             <Button>
@@ -38,30 +38,32 @@ export default function ClassesPage() {
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <span>{classItem.name}</span>
-                  <Users className="h-5 w-5 text-gray-500" />
+                  <Users className="h-5 w-5 text-royalPurple-text3" />
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {/* Student Count */}
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Students</span>
-                    <span className="font-medium">{classItem.student_count}/{classItem.capacity}</span>
+                    <span className="text-sm text-royalPurple-text2">Students</span>
+                    <span className="font-medium">
+                      {classItem.student_count}/{classItem.capacity}
+                    </span>
                   </div>
-                  
+
                   {/* Progress Bar */}
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-royalPurple-card2 rounded-full h-2">
                     <div
-                      className="bg-blue-600 h-2 rounded-full"
+                      className="bg-royalPurple-accent h-2 rounded-full"
                       style={{
-                        width: `${(classItem.student_count / classItem.capacity) * 100}%`
+                        width: `${(classItem.student_count / classItem.capacity) * 100}%`,
                       }}
                     ></div>
                   </div>
 
                   {/* Next Class */}
                   {classItem.next_class && (
-                    <div className="flex items-center text-sm text-gray-600">
+                    <div className="flex items-center text-sm text-royalPurple-text2">
                       <Calendar className="h-4 w-4 mr-2" />
                       Next: {classItem.next_class}
                     </div>
@@ -90,10 +92,13 @@ export default function ClassesPage() {
         {(!dashboardData?.my_classes || dashboardData.my_classes.length === 0) && (
           <Card>
             <CardContent className="text-center py-12">
-              <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No Classes Assigned</h3>
-              <p className="text-gray-600 mb-4">
-                You don't have any classes assigned yet. Contact your administrator to get classes assigned.
+              <Users className="h-12 w-12 text-royalPurple-text3 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-royalPurple-text1 mb-2">
+                No Classes Assigned
+              </h3>
+              <p className="text-royalPurple-text2 mb-4">
+                You don't have any classes assigned yet. Contact your administrator to get classes
+                assigned.
               </p>
               <Link href="/dashboard">
                 <Button variant="outline">Back to Dashboard</Button>

@@ -37,28 +37,26 @@ Email: admin@springfield.edu`)
         relationship: 'Parent/Guardian',
         phone: `+1 (555) 0${student.id}23-456${student.id}`,
         email: `parent${student.id}@email.com`,
-        is_primary: true
+        is_primary: true,
       },
       emergency_contact: {
         name: `Emergency Contact ${student.id}`,
         relationship: 'Emergency Contact',
         phone: `+1 (555) 0${student.id}87-654${student.id}`,
         email: `emergency${student.id}@email.com`,
-        is_primary: false
-      }
+        is_primary: false,
+      },
     }
   }
 
   const toggleStudent = (studentId) => {
-    setSelectedStudents(prev => 
-      prev.includes(studentId) 
-        ? prev.filter(id => id !== studentId)
-        : [...prev, studentId]
+    setSelectedStudents((prev) =>
+      prev.includes(studentId) ? prev.filter((id) => id !== studentId) : [...prev, studentId]
     )
   }
 
   const selectAllStudents = () => {
-    setSelectedStudents(students.map(s => s.id))
+    setSelectedStudents(students.map((s) => s.id))
   }
 
   const clearSelection = () => {
@@ -67,10 +65,10 @@ Email: admin@springfield.edu`)
 
   const personalizeMessage = (baseMessage, student) => {
     const failingSubjects = student.subjects
-      .filter(s => s.score < 40)
-      .map(s => s.name)
+      .filter((s) => s.score < 40)
+      .map((s) => s.name)
       .join(', ')
-    
+
     return baseMessage
       .replace('[STUDENT_AVERAGE]', student.overall_average)
       .replace('[FAILING_SUBJECTS]', failingSubjects || 'None')
@@ -78,19 +76,24 @@ Email: admin@springfield.edu`)
   }
 
   const handleSendMessages = () => {
-    const selectedStudentData = students.filter(s => selectedStudents.includes(s.id))
-    
+    const selectedStudentData = students.filter((s) => selectedStudents.includes(s.id))
+
     // Here you would implement the actual messaging functionality
     console.log('Sending messages via:', contactMethod)
-    console.log('To students:', selectedStudentData.map(s => s.name))
-    
-    selectedStudentData.forEach(student => {
+    console.log(
+      'To students:',
+      selectedStudentData.map((s) => s.name)
+    )
+
+    selectedStudentData.forEach((student) => {
       const personalizedMessage = personalizeMessage(message, student)
       const contact = getParentContact(student)
       console.log(`Message to ${contact.primary_contact.name}:`, personalizedMessage)
     })
-    
-    toast.success(`${contactMethod.toUpperCase()} messages sent to ${selectedStudents.length} parent(s)!`)
+
+    toast.success(
+      `${contactMethod.toUpperCase()} messages sent to ${selectedStudents.length} parent(s)!`
+    )
     onClose()
   }
 
@@ -100,32 +103,39 @@ Email: admin@springfield.edu`)
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b bg-red-600 text-white">
+    <div className="fixed inset-0 bg-royalPurple-deep bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-royalPurple-card rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b bg-royalPurple-danger text-royalPurple-text1">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Phone className="h-6 w-6 mr-3" />
               <div>
                 <h2 className="text-xl font-bold">Contact Parents/Guardians</h2>
-                <p className="text-red-100">Urgent Academic Intervention Required</p>
+                <p className="text-royalPurple-dangerTx">Urgent Academic Intervention Required</p>
               </div>
             </div>
-            <Button variant="outline" onClick={onClose} className="text-white border-white hover:bg-white hover:text-red-600">
+            <Button
+              variant="outline"
+              onClick={onClose}
+              className="text-royalPurple-text1 border-white hover:bg-royalPurple-card hover:text-royalPurple-dangerTx"
+            >
               Close
             </Button>
           </div>
         </div>
-        
+
         <div className="p-6 space-y-6">
           {/* Alert Banner */}
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="bg-royalPurple-danger border border-royalPurple-border rounded-lg p-4">
             <div className="flex items-center">
-              <AlertTriangle className="h-5 w-5 text-red-600 mr-3" />
+              <AlertTriangle className="h-5 w-5 text-royalPurple-dangerTx mr-3" />
               <div>
-                <h3 className="font-semibold text-red-800">Critical Academic Performance Alert</h3>
-                <p className="text-sm text-red-600">
-                  {students.length} students are performing below the 40% minimum standard and require immediate parent/guardian contact.
+                <h3 className="font-semibold text-royalPurple-dangerTx">
+                  Critical Academic Performance Alert
+                </h3>
+                <p className="text-sm text-royalPurple-dangerTx">
+                  {students.length} students are performing below the 40% minimum standard and
+                  require immediate parent/guardian contact.
                 </p>
               </div>
             </div>
@@ -145,61 +155,85 @@ Email: admin@springfield.edu`)
                   </Button>
                 </div>
               </div>
-              
+
               <div className="space-y-3 max-h-96 overflow-y-auto">
                 {students.map((student) => {
                   const contact = getParentContact(student)
                   return (
-                    <div key={student.id} className={`p-4 border rounded-lg ${
-                      selectedStudents.includes(student.id) ? 'border-red-500 bg-red-50' : 'border-gray-200'
-                    }`}>
+                    <div
+                      key={student.id}
+                      className={`p-4 border rounded-lg ${
+                        selectedStudents.includes(student.id)
+                          ? 'border-royalPurple-border bg-royalPurple-danger'
+                          : 'border-royalPurple-border'
+                      }`}
+                    >
                       <div className="flex items-start space-x-3">
                         <input
                           type="checkbox"
                           checked={selectedStudents.includes(student.id)}
                           onChange={() => toggleStudent(student.id)}
-                          className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded mt-1"
+                          className="h-4 w-4 text-royalPurple-dangerTx focus:ring-red-500 border-royalPurple-border rounded mt-1"
                         />
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
                             <div>
                               <h4 className="font-medium">{student.name}</h4>
-                              <p className="text-sm text-gray-600">{student.student_id} • {student.class}</p>
-                              <p className="text-sm text-red-600 font-medium">
+                              <p className="text-sm text-royalPurple-text2">
+                                {student.student_id} • {student.class}
+                              </p>
+                              <p className="text-sm text-royalPurple-dangerTx font-medium">
                                 Overall: {student.overall_average}% ({student.overall_status})
                               </p>
                             </div>
-                            <div className={`px-2 py-1 text-xs rounded-full ${
-                              student.risk_level === 'critical' ? 'bg-red-100 text-red-800' : 'bg-orange-100 text-orange-800'
-                            }`}>
+                            <div
+                              className={`px-2 py-1 text-xs rounded-full ${
+                                student.risk_level === 'critical'
+                                  ? 'bg-royalPurple-danger text-royalPurple-dangerTx'
+                                  : 'bg-orange-100 text-orange-800'
+                              }`}
+                            >
                               {student.risk_level.toUpperCase()} RISK
                             </div>
                           </div>
-                          
+
                           {/* Parent Contact Info */}
-                          <div className="mt-3 p-3 bg-gray-50 rounded border">
+                          <div className="mt-3 p-3 bg-royalPurple-page rounded border">
                             <div className="flex items-center mb-2">
-                              <User className="h-4 w-4 text-gray-600 mr-2" />
-                              <span className="font-medium text-sm">{contact.primary_contact.name}</span>
-                              <span className="text-xs text-gray-500 ml-2">({contact.primary_contact.relationship})</span>
+                              <User className="h-4 w-4 text-royalPurple-text2 mr-2" />
+                              <span className="font-medium text-sm">
+                                {contact.primary_contact.name}
+                              </span>
+                              <span className="text-xs text-royalPurple-text3 ml-2">
+                                ({contact.primary_contact.relationship})
+                              </span>
                             </div>
                             <div className="grid grid-cols-1 gap-1 text-sm">
                               <div className="flex items-center">
-                                <Phone className="h-3 w-3 text-gray-400 mr-2" />
-                                <span className="font-medium text-blue-600">{contact.primary_contact.phone}</span>
+                                <Phone className="h-3 w-3 text-royalPurple-text3 mr-2" />
+                                <span className="font-medium text-royalPurple-accentTx">
+                                  {contact.primary_contact.phone}
+                                </span>
                               </div>
                               <div className="flex items-center">
-                                <Mail className="h-3 w-3 text-gray-400 mr-2" />
-                                <span className="text-gray-600">{contact.primary_contact.email}</span>
+                                <Mail className="h-3 w-3 text-royalPurple-text3 mr-2" />
+                                <span className="text-royalPurple-text2">
+                                  {contact.primary_contact.email}
+                                </span>
                               </div>
                             </div>
                           </div>
 
                           {/* Failing Subjects */}
                           <div className="mt-2">
-                            <span className="text-xs text-gray-600">Failing Subjects: </span>
-                            <span className="text-xs text-red-600 font-medium">
-                              {student.subjects.filter(s => s.score < 40).map(s => s.name).join(', ') || 'None'}
+                            <span className="text-xs text-royalPurple-text2">
+                              Failing Subjects:{' '}
+                            </span>
+                            <span className="text-xs text-royalPurple-dangerTx font-medium">
+                              {student.subjects
+                                .filter((s) => s.score < 40)
+                                .map((s) => s.name)
+                                .join(', ') || 'None'}
                             </span>
                           </div>
                         </div>
@@ -257,24 +291,25 @@ Email: admin@springfield.edu`)
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     rows={12}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500 text-sm"
+                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-red-500 focus:border-royalPurple-border text-sm"
                     placeholder="Enter your message template..."
                   />
-                  <p className="text-xs text-gray-500 mt-2">
-                    Variables: [STUDENT_AVERAGE], [FAILING_SUBJECTS], [ATTENDANCE_RATE] will be automatically replaced for each student.
+                  <p className="text-xs text-royalPurple-text3 mt-2">
+                    Variables: [STUDENT_AVERAGE], [FAILING_SUBJECTS], [ATTENDANCE_RATE] will be
+                    automatically replaced for each student.
                   </p>
                 </div>
 
                 {/* Selected Students Summary */}
                 {selectedStudents.length > 0 && (
-                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <h4 className="font-medium text-blue-800 mb-2">
+                  <div className="p-3 bg-royalPurple-accent border border-royalPurple-border2 rounded-lg">
+                    <h4 className="font-medium text-royalPurple-accentTx mb-2">
                       Ready to Contact ({selectedStudents.length} students):
                     </h4>
-                    <div className="text-sm text-blue-600">
+                    <div className="text-sm text-royalPurple-accentTx">
                       {students
-                        .filter(s => selectedStudents.includes(s.id))
-                        .map(s => s.name)
+                        .filter((s) => selectedStudents.includes(s.id))
+                        .map((s) => s.name)
                         .join(', ')}
                     </div>
                   </div>
@@ -285,10 +320,10 @@ Email: admin@springfield.edu`)
 
           {/* Action Buttons */}
           <div className="flex space-x-4 pt-4 border-t">
-            <Button 
+            <Button
               onClick={handleSendMessages}
               disabled={selectedStudents.length === 0}
-              className="flex-1 bg-red-600 hover:bg-red-700"
+              className="flex-1 bg-royalPurple-danger hover:bg-royalPurple-danger"
             >
               <Send className="h-4 w-4 mr-2" />
               Send {contactMethod.toUpperCase()} to {selectedStudents.length} Parent(s)

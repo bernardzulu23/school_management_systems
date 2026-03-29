@@ -119,14 +119,14 @@ export default function AcademicInfoStep({
         </div>
 
         {/* Subject Selection */}
-        <div className="bg-green-50 p-6 rounded-xl border border-green-200">
-          <h4 className="text-lg font-semibold text-green-800 mb-4 flex items-center">
+        <div className="bg-royalPurple-success p-6 rounded-xl border border-royalPurple-border">
+          <h4 className="text-lg font-semibold text-royalPurple-successTx mb-4 flex items-center">
             <BookOpen className="h-5 w-5 mr-2" />
             Subject Selection
           </h4>
 
-          <div className="mb-4 p-4 bg-white rounded-lg border border-green-200">
-            <p className="text-sm text-green-700 mb-2">
+          <div className="mb-4 p-4 bg-royalPurple-card rounded-lg border border-royalPurple-border">
+            <p className="text-sm text-royalPurple-successTx mb-2">
               <strong>Instructions:</strong> Select the subjects you will be studying this academic
               year.
             </p>
@@ -141,20 +141,20 @@ export default function AcademicInfoStep({
               valueType="name"
             />
             {errors.selected_subjects && (
-              <p className="text-red-500 text-sm mt-1">{errors.selected_subjects}</p>
+              <p className="text-royalPurple-dangerTx text-sm mt-1">{errors.selected_subjects}</p>
             )}
           </div>
 
           {/* Subject Summary */}
-          <div className="mt-4 p-4 bg-white rounded-lg border border-green-200">
-            <h5 className="font-medium text-green-800 mb-2">Subject Summary:</h5>
+          <div className="mt-4 p-4 bg-royalPurple-card rounded-lg border border-royalPurple-border">
+            <h5 className="font-medium text-royalPurple-successTx mb-2">Subject Summary:</h5>
             <div className="text-sm">
               <div className="mb-2">
-                <span className="text-green-700 font-medium">Class: </span>
-                <span className="text-gray-700">{classNamePreview || 'Not selected'}</span>
+                <span className="text-royalPurple-successTx font-medium">Class: </span>
+                <span className="text-royalPurple-text2">{classNamePreview || 'Not selected'}</span>
               </div>
-              <span className="text-green-700 font-medium">Selected Subjects: </span>
-              <span className="text-gray-700">
+              <span className="text-royalPurple-successTx font-medium">Selected Subjects: </span>
+              <span className="text-royalPurple-text2">
                 {formData.selected_subjects?.length || 0} subjects
                 {formData.selected_subjects?.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-2">
@@ -163,7 +163,7 @@ export default function AcademicInfoStep({
                       return (
                         <span
                           key={subjectName}
-                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
+                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-royalPurple-success text-royalPurple-successTx"
                         >
                           {subject
                             ? `${subject.name}${subject.category ? ` (${subject.category})` : ''}`

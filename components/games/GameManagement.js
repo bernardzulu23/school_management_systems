@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import GameCreationForm from './GameCreationForm'
-import { 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Eye, 
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
   Play,
   Users,
   Clock,
@@ -18,7 +18,7 @@ import {
   Filter,
   GamepadIcon,
   Trophy,
-  Target
+  Target,
 } from 'lucide-react'
 
 const gameTypeIcons = {
@@ -27,13 +27,13 @@ const gameTypeIcons = {
   matching: '🔗',
   'word-search': '🔍',
   'fill-blanks': '✏️',
-  'drag-drop': '🎯'
+  'drag-drop': '🎯',
 }
 
 const difficultyColors = {
   easy: 'green',
   medium: 'yellow',
-  hard: 'red'
+  hard: 'red',
 }
 
 export default function GameManagement({ userRole, subjects }) {
@@ -66,7 +66,7 @@ export default function GameManagement({ userRole, subjects }) {
           playCount: 45,
           averageScore: 78,
           createdAt: '2024-01-15',
-          content: { questions: Array(10).fill({}) }
+          content: { questions: Array(10).fill({}) },
         },
         {
           id: 2,
@@ -82,7 +82,7 @@ export default function GameManagement({ userRole, subjects }) {
           playCount: 32,
           averageScore: 85,
           createdAt: '2024-01-10',
-          content: { flashcards: Array(20).fill({}) }
+          content: { flashcards: Array(20).fill({}) },
         },
         {
           id: 3,
@@ -98,8 +98,8 @@ export default function GameManagement({ userRole, subjects }) {
           playCount: 28,
           averageScore: 72,
           createdAt: '2024-01-08',
-          content: { matchingPairs: Array(15).fill({}) }
-        }
+          content: { matchingPairs: Array(15).fill({}) },
+        },
       ]
       setGames(mockGames)
       setFilteredGames(mockGames)
@@ -109,13 +109,14 @@ export default function GameManagement({ userRole, subjects }) {
 
   // Filter games based on search and filters
   useEffect(() => {
-    let filtered = games.filter(game => {
-      const matchesSearch = game.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           game.description.toLowerCase().includes(searchTerm.toLowerCase())
+    let filtered = games.filter((game) => {
+      const matchesSearch =
+        game.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        game.description.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesSubject = !filterSubject || game.subject.id.toString() === filterSubject
       const matchesGameType = !filterGameType || game.gameType === filterGameType
       const matchesDifficulty = !filterDifficulty || game.difficulty === filterDifficulty
-      
+
       return matchesSearch && matchesSubject && matchesGameType && matchesDifficulty
     })
     setFilteredGames(filtered)
@@ -129,29 +130,29 @@ export default function GameManagement({ userRole, subjects }) {
       playCount: 0,
       averageScore: 0,
       createdAt: new Date().toISOString().split('T')[0],
-      isActive: true
+      isActive: true,
     }
-    setGames(prev => [newGame, ...prev])
+    setGames((prev) => [newGame, ...prev])
     setShowCreateForm(false)
   }
 
   const handleEditGame = (gameData) => {
-    setGames(prev => prev.map(game => 
-      game.id === editingGame.id ? { ...game, ...gameData } : game
-    ))
+    setGames((prev) =>
+      prev.map((game) => (game.id === editingGame.id ? { ...game, ...gameData } : game))
+    )
     setEditingGame(null)
   }
 
   const handleDeleteGame = (gameId) => {
     if (window.confirm('Are you sure you want to delete this game?')) {
-      setGames(prev => prev.filter(game => game.id !== gameId))
+      setGames((prev) => prev.filter((game) => game.id !== gameId))
     }
   }
 
   const toggleGameStatus = (gameId) => {
-    setGames(prev => prev.map(game => 
-      game.id === gameId ? { ...game, isActive: !game.isActive } : game
-    ))
+    setGames((prev) =>
+      prev.map((game) => (game.id === gameId ? { ...game, isActive: !game.isActive } : game))
+    )
   }
 
   if (showCreateForm) {
@@ -180,8 +181,10 @@ export default function GameManagement({ userRole, subjects }) {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Game Management</h1>
-          <p className="text-gray-600 mt-1">Create and manage educational games for your subjects</p>
+          <h1 className="text-3xl font-bold text-royalPurple-text1">Game Management</h1>
+          <p className="text-royalPurple-text2 mt-1">
+            Create and manage educational games for your subjects
+          </p>
         </div>
         <Button onClick={() => setShowCreateForm(true)} className="btn-primary">
           <Plus className="h-5 w-5 mr-2" />
@@ -195,10 +198,10 @@ export default function GameManagement({ userRole, subjects }) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Games</p>
-                <p className="text-3xl font-bold text-gray-900">{games.length}</p>
+                <p className="text-sm font-medium text-royalPurple-text2">Total Games</p>
+                <p className="text-3xl font-bold text-royalPurple-text1">{games.length}</p>
               </div>
-              <GamepadIcon className="h-8 w-8 text-blue-600" />
+              <GamepadIcon className="h-8 w-8 text-royalPurple-accentTx" />
             </div>
           </CardContent>
         </Card>
@@ -207,12 +210,12 @@ export default function GameManagement({ userRole, subjects }) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Active Games</p>
-                <p className="text-3xl font-bold text-gray-900">
-                  {games.filter(g => g.isActive).length}
+                <p className="text-sm font-medium text-royalPurple-text2">Active Games</p>
+                <p className="text-3xl font-bold text-royalPurple-text1">
+                  {games.filter((g) => g.isActive).length}
                 </p>
               </div>
-              <Play className="h-8 w-8 text-green-600" />
+              <Play className="h-8 w-8 text-royalPurple-successTx" />
             </div>
           </CardContent>
         </Card>
@@ -221,12 +224,12 @@ export default function GameManagement({ userRole, subjects }) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Plays</p>
-                <p className="text-3xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-royalPurple-text2">Total Plays</p>
+                <p className="text-3xl font-bold text-royalPurple-text1">
                   {games.reduce((sum, g) => sum + g.playCount, 0)}
                 </p>
               </div>
-              <Users className="h-8 w-8 text-purple-600" />
+              <Users className="h-8 w-8 text-royalPurple-pillTx" />
             </div>
           </CardContent>
         </Card>
@@ -235,9 +238,12 @@ export default function GameManagement({ userRole, subjects }) {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Avg Score</p>
-                <p className="text-3xl font-bold text-gray-900">
-                  {Math.round(games.reduce((sum, g) => sum + g.averageScore, 0) / games.length || 0)}%
+                <p className="text-sm font-medium text-royalPurple-text2">Avg Score</p>
+                <p className="text-3xl font-bold text-royalPurple-text1">
+                  {Math.round(
+                    games.reduce((sum, g) => sum + g.averageScore, 0) / games.length || 0
+                  )}
+                  %
                 </p>
               </div>
               <Trophy className="h-8 w-8 text-yellow-600" />
@@ -253,7 +259,7 @@ export default function GameManagement({ userRole, subjects }) {
             <div>
               <label className="form-label">Search Games</label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-royalPurple-text3" />
                 <input
                   type="text"
                   className="input pl-10"
@@ -272,8 +278,10 @@ export default function GameManagement({ userRole, subjects }) {
                 onChange={(e) => setFilterSubject(e.target.value)}
               >
                 <option value="">All Subjects</option>
-                {subjects?.map(subject => (
-                  <option key={subject.id} value={subject.id}>{subject.name}</option>
+                {subjects?.map((subject) => (
+                  <option key={subject.id} value={subject.id}>
+                    {subject.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -315,58 +323,67 @@ export default function GameManagement({ userRole, subjects }) {
       {/* Games List */}
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map(i => (
+          {[1, 2, 3, 4, 5, 6].map((i) => (
             <Card key={i} className="animate-pulse">
               <CardContent className="p-6">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                <div className="h-3 bg-gray-200 rounded w-full mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                <div className="h-4 bg-royalPurple-card2 rounded w-3/4 mb-4"></div>
+                <div className="h-3 bg-royalPurple-card2 rounded w-full mb-2"></div>
+                <div className="h-3 bg-royalPurple-card2 rounded w-2/3"></div>
               </CardContent>
             </Card>
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredGames.map(game => (
-            <Card key={game.id} className="dashboard-card hover:shadow-xl transition-all duration-300">
+          {filteredGames.map((game) => (
+            <Card
+              key={game.id}
+              className="dashboard-card hover:shadow-xl transition-all duration-300"
+            >
               <CardHeader className="pb-4">
                 <div className="flex justify-between items-start">
                   <div className="flex items-center space-x-3">
                     <div className="text-2xl">{gameTypeIcons[game.gameType]}</div>
                     <div>
                       <CardTitle className="text-lg">{game.title}</CardTitle>
-                      <p className="text-sm text-gray-600">{game.subject.name}</p>
+                      <p className="text-sm text-royalPurple-text2">{game.subject.name}</p>
                     </div>
                   </div>
                   <div className="flex space-x-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      game.isActive 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-gray-100 text-gray-800'
-                    }`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        game.isActive
+                          ? 'bg-royalPurple-success text-royalPurple-successTx'
+                          : 'bg-royalPurple-card2 text-royalPurple-text1'
+                      }`}
+                    >
                       {game.isActive ? 'Active' : 'Inactive'}
                     </span>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
-                      difficultyColors[game.difficulty] === 'green' ? 'bg-green-100 text-green-800' :
-                      difficultyColors[game.difficulty] === 'yellow' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
-                    }`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
+                        difficultyColors[game.difficulty] === 'green'
+                          ? 'bg-royalPurple-success text-royalPurple-successTx'
+                          : difficultyColors[game.difficulty] === 'yellow'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-royalPurple-danger text-royalPurple-dangerTx'
+                      }`}
+                    >
                       {game.difficulty}
                     </span>
                   </div>
                 </div>
               </CardHeader>
-              
+
               <CardContent className="space-y-4">
-                <p className="text-gray-600 text-sm">{game.description}</p>
-                
+                <p className="text-royalPurple-text2 text-sm">{game.description}</p>
+
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center space-x-2">
-                    <Target className="h-4 w-4 text-blue-600" />
+                    <Target className="h-4 w-4 text-royalPurple-accentTx" />
                     <span>{game.targetClass}</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Clock className="h-4 w-4 text-green-600" />
+                    <Clock className="h-4 w-4 text-royalPurple-successTx" />
                     <span>{game.timeLimit} min</span>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -374,20 +391,20 @@ export default function GameManagement({ userRole, subjects }) {
                     <span>{game.pointsReward} pts</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Users className="h-4 w-4 text-purple-600" />
+                    <Users className="h-4 w-4 text-royalPurple-pillTx" />
                     <span>{game.playCount} plays</span>
                   </div>
                 </div>
 
                 {game.playCount > 0 && (
-                  <div className="bg-gray-50 rounded-lg p-3">
+                  <div className="bg-royalPurple-page rounded-lg p-3">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Average Score</span>
+                      <span className="text-royalPurple-text2">Average Score</span>
                       <span className="font-semibold">{game.averageScore}%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                      <div 
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                    <div className="w-full bg-royalPurple-card2 rounded-full h-2 mt-2">
+                      <div
+                        className="bg-royalPurple-accent h-2 rounded-full transition-all duration-300"
                         style={{ width: `${game.averageScore}%` }}
                       ></div>
                     </div>
@@ -416,7 +433,7 @@ export default function GameManagement({ userRole, subjects }) {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleDeleteGame(game.id)}
-                    className="text-red-600 hover:text-red-700"
+                    className="text-royalPurple-dangerTx hover:text-royalPurple-dangerTx"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -430,9 +447,9 @@ export default function GameManagement({ userRole, subjects }) {
       {filteredGames.length === 0 && !loading && (
         <Card className="text-center py-12">
           <CardContent>
-            <GamepadIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No games found</h3>
-            <p className="text-gray-600 mb-4">
+            <GamepadIcon className="h-16 w-16 text-royalPurple-text3 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">No games found</h3>
+            <p className="text-royalPurple-text2 mb-4">
               {searchTerm || filterSubject || filterGameType || filterDifficulty
                 ? 'Try adjusting your filters to see more games.'
                 : 'Create your first educational game to get started.'}

@@ -11,8 +11,8 @@ export default function InnovationPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-800">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-500 mx-auto mb-4"></div>
-          <p className="text-white text-lg">Loading Innovation Hub...</p>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-royalPurple-border2 mx-auto mb-4"></div>
+          <p className="text-royalPurple-text1 text-lg">Loading Innovation Hub...</p>
         </div>
       </div>
     )

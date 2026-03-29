@@ -11,7 +11,7 @@ import Link from 'next/link'
 export default function SubjectsPage() {
   const { data: dashboardData } = useQuery({
     queryKey: ['teacher-dashboard'],
-    queryFn: () => api.getTeacherDashboard().then(res => res.data),
+    queryFn: () => api.getTeacherDashboard().then((res) => res.data),
   })
 
   return (
@@ -20,8 +20,8 @@ export default function SubjectsPage() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">My Subjects</h1>
-            <p className="text-gray-600">Manage your assigned subjects and curriculum</p>
+            <h1 className="text-2xl font-bold text-royalPurple-text1">My Subjects</h1>
+            <p className="text-royalPurple-text2">Manage your assigned subjects and curriculum</p>
           </div>
           <Link href="/dashboard/subjects/create">
             <Button>
@@ -39,9 +39,11 @@ export default function SubjectsPage() {
                 <CardTitle className="flex items-center justify-between">
                   <div>
                     <span>{subject.name}</span>
-                    <p className="text-sm text-gray-500 font-normal">Code: {subject.code}</p>
+                    <p className="text-sm text-royalPurple-text3 font-normal">
+                      Code: {subject.code}
+                    </p>
                   </div>
-                  <BookOpen className="h-5 w-5 text-gray-500" />
+                  <BookOpen className="h-5 w-5 text-royalPurple-text3" />
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -50,11 +52,11 @@ export default function SubjectsPage() {
                   {subject.classes && (
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="text-gray-600">Classes:</span>
+                        <span className="text-royalPurple-text2">Classes:</span>
                         <p className="font-medium">{subject.classes.join(', ')}</p>
                       </div>
                       <div>
-                        <span className="text-gray-600">Students:</span>
+                        <span className="text-royalPurple-text2">Students:</span>
                         <p className="font-medium">{subject.students}</p>
                       </div>
                     </div>
@@ -64,11 +66,11 @@ export default function SubjectsPage() {
                   {subject.average_grade && (
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Average Grade:</span>
+                        <span className="text-royalPurple-text2">Average Grade:</span>
                         <span className="font-medium">{subject.average_grade}</span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Progress:</span>
+                        <span className="text-royalPurple-text2">Progress:</span>
                         <span className="font-medium">{subject.progress}</span>
                       </div>
                     </div>
@@ -76,7 +78,7 @@ export default function SubjectsPage() {
 
                   {/* Next Assessment */}
                   {subject.next_assessment && (
-                    <div className="flex items-center text-sm text-gray-600 bg-blue-50 p-2 rounded">
+                    <div className="flex items-center text-sm text-royalPurple-text2 bg-royalPurple-accent p-2 rounded">
                       <Calendar className="h-4 w-4 mr-2" />
                       Next Assessment: {subject.next_assessment}
                     </div>
@@ -105,10 +107,13 @@ export default function SubjectsPage() {
         {(!dashboardData?.my_subjects || dashboardData.my_subjects.length === 0) && (
           <Card>
             <CardContent className="text-center py-12">
-              <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No Subjects Assigned</h3>
-              <p className="text-gray-600 mb-4">
-                You don't have any subjects assigned yet. Contact your administrator to get subjects assigned.
+              <BookOpen className="h-12 w-12 text-royalPurple-text3 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-royalPurple-text1 mb-2">
+                No Subjects Assigned
+              </h3>
+              <p className="text-royalPurple-text2 mb-4">
+                You don't have any subjects assigned yet. Contact your administrator to get subjects
+                assigned.
               </p>
               <Link href="/dashboard">
                 <Button variant="outline">Back to Dashboard</Button>
@@ -126,28 +131,28 @@ export default function SubjectsPage() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">
+                  <div className="text-2xl font-bold text-royalPurple-accentTx">
                     {dashboardData.stats?.total_subjects || dashboardData.my_subjects.length}
                   </div>
-                  <div className="text-sm text-gray-600">Total Subjects</div>
+                  <div className="text-sm text-royalPurple-text2">Total Subjects</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">
+                  <div className="text-2xl font-bold text-royalPurple-successTx">
                     {dashboardData.stats?.total_classes || 3}
                   </div>
-                  <div className="text-sm text-gray-600">Total Classes</div>
+                  <div className="text-sm text-royalPurple-text2">Total Classes</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600">
+                  <div className="text-2xl font-bold text-royalPurple-pillTx">
                     {dashboardData.stats?.total_students || 130}
                   </div>
-                  <div className="text-sm text-gray-600">Total Students</div>
+                  <div className="text-sm text-royalPurple-text2">Total Students</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-orange-600">
                     {dashboardData.stats?.avg_performance || '80%'}
                   </div>
-                  <div className="text-sm text-gray-600">Avg. Performance</div>
+                  <div className="text-sm text-royalPurple-text2">Avg. Performance</div>
                 </div>
               </div>
             </CardContent>

@@ -97,22 +97,17 @@ export default function LoginPage() {
   }
 
   return (
-    <main
-      className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat bg-fixed font-sans"
-      style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=2187&auto=format&fit=crop')`,
-      }}
-    >
+    <main className="min-h-screen flex items-center justify-center bg-royalPurple-page font-sans p-4">
       <button
         onClick={() => router.push('/')}
-        className="absolute top-6 left-6 text-white/80 hover:text-white transition-colors flex items-center gap-2 group"
+        className="absolute top-6 left-6 text-royalPurple-text2 hover:text-royalPurple-text1 transition-colors flex items-center gap-2 group"
         aria-label="Back to Home"
       >
         <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
         <span>Back to Home</span>
       </button>
 
-      <section className="w-full max-w-md p-8 m-4 rounded-3xl bg-gray-900/60 backdrop-blur-xl border border-white/10 shadow-2xl animate-in fade-in zoom-in duration-300">
+      <section className="w-full max-w-md p-8 rounded-2xl bg-royalPurple-card border border-royalPurple-border">
         <header className="flex flex-col items-center mb-8">
           {school ? (
             <>
@@ -120,21 +115,23 @@ export default function LoginPage() {
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={school.logo_url} alt={school.name} className="h-16 w-auto mx-auto mb-4" />
               )}
-              <h2 className="text-2xl font-bold text-center text-white">{school.name}</h2>
+              <h2 className="text-2xl font-bold text-center text-royalPurple-text1">
+                {school.name}
+              </h2>
             </>
           ) : (
             <>
-              <div className="bg-blue-600 rounded-xl p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
-                <GraduationCap className="h-6 w-6 text-white" />
+              <div className="bg-royalPurple-card2 border border-royalPurple-border rounded-lg p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                <GraduationCap className="h-6 w-6 text-royalPurple-text2" />
               </div>
-              <h1 className="text-2xl font-bold text-white mb-2">Welcome Back</h1>
+              <h1 className="text-2xl font-bold text-royalPurple-text1 mb-2">Welcome Back</h1>
             </>
           )}
-          <p className="mt-3 text-center text-gray-300 text-sm">
+          <p className="mt-3 text-center text-royalPurple-text2 text-sm">
             Enter your credentials to access the portal
           </p>
           {detectedSubdomain && (
-            <div className="mt-2 px-3 py-1 bg-blue-500/20 rounded-full border border-blue-500/30 text-xs text-blue-200">
+            <div className="mt-2 px-3 py-1 bg-royalPurple-accentBg rounded-full border border-royalPurple-accent text-xs text-royalPurple-accentTx">
               School: {detectedSubdomain}
             </div>
           )}
@@ -152,7 +149,6 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               validate={validateEmail}
-              className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400"
             />
 
             <div className="relative">
@@ -166,11 +162,10 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 validate={validatePassword}
-                className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400"
               />
               <button
                 type="button"
-                className="absolute right-3 top-[38px] text-gray-400 hover:text-white transition-colors"
+                className="absolute right-3 top-[38px] text-royalPurple-text3 hover:text-royalPurple-text1 transition-colors"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
@@ -185,26 +180,22 @@ export default function LoginPage() {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500/50 focus:ring-offset-0"
+                className="h-4 w-4 rounded border-royalPurple-border bg-royalPurple-card2 text-royalPurple-accent focus:ring-1 focus:ring-royalPurple-border2 focus:ring-offset-0"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-gray-300">
+              <label htmlFor="remember-me" className="ml-2 block text-royalPurple-text2">
                 Remember me
               </label>
             </div>
 
             <Link
               href="/forgot-password"
-              className="font-medium text-blue-400 hover:text-blue-300 transition-colors"
+              className="font-medium text-royalPurple-text2 hover:text-royalPurple-text1 transition-colors"
             >
               Forgot password?
             </Link>
           </div>
 
-          <Button
-            type="submit"
-            className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-600/30 transform transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-            isLoading={isLoading}
-          >
+          <Button type="submit" className="w-full py-3.5" isLoading={isLoading}>
             {isLoading ? 'Signing in...' : 'Sign In'}
           </Button>
         </form>
@@ -213,7 +204,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={handleClearCache}
-            className="text-xs text-gray-500 hover:text-gray-300 transition-colors underline"
+            className="text-xs text-royalPurple-text3 hover:text-royalPurple-text1 transition-colors underline"
           >
             Clear Cache & Reset
           </button>

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Shield, Mail, Eye, EyeOff } from 'lucide-react';
-import { FormGroup, FormSection } from '@/components/ui/FormGroup';
+import React, { useState } from 'react'
+import { Shield, Mail, Eye, EyeOff } from 'lucide-react'
+import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 
 export default function AccountSetupStep({ formData, errors, onInputChange }) {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   return (
     <FormSection title="Account Setup" icon={Shield}>
@@ -39,9 +39,9 @@ export default function AccountSetupStep({ formData, errors, onInputChange }) {
           />
           <button
             type="button"
-            className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600 focus:outline-none focus:text-blue-600"
+            className="absolute right-3 top-[38px] text-royalPurple-text3 hover:text-royalPurple-text2 focus:outline-none focus:text-royalPurple-accentTx"
             onClick={() => setShowPassword(!showPassword)}
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
             {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
           </button>
@@ -62,23 +62,23 @@ export default function AccountSetupStep({ formData, errors, onInputChange }) {
           />
           <button
             type="button"
-            className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600 focus:outline-none focus:text-blue-600"
+            className="absolute right-3 top-[38px] text-royalPurple-text3 hover:text-royalPurple-text2 focus:outline-none focus:text-royalPurple-accentTx"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+            aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
           >
             {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-        <h4 className="font-medium text-blue-800 mb-2">Password Requirements:</h4>
-        <ul className="text-sm text-blue-700 space-y-1">
+      <div className="mt-6 p-4 bg-royalPurple-accent rounded-lg border border-royalPurple-border2">
+        <h4 className="font-medium text-royalPurple-accentTx mb-2">Password Requirements:</h4>
+        <ul className="text-sm text-royalPurple-accentTx space-y-1">
           <li>• At least 6 characters long</li>
           <li>• Include both letters and numbers</li>
           <li>• Use a unique password you haven't used elsewhere</li>
         </ul>
       </div>
     </FormSection>
-  );
+  )
 }

@@ -6,7 +6,8 @@ import { Toaster } from 'react-hot-toast'
 
 export const metadata = {
   title: 'School Management System - Zambia',
-  description: 'Complete school management solution built with Next.js for Zambian schools, supporting rural education, health, and nutrition.',
+  description:
+    'Complete school management solution built with Next.js for Zambian schools, supporting rural education, health, and nutrition.',
   openGraph: {
     title: 'School Management System - Zambia',
     description: 'Complete school management solution built with Next.js for Zambian schools.',
@@ -36,26 +37,27 @@ export default function RootLayout({ children }) {
       <body className="font-sans antialiased">
         <Providers>
           {children}
-          <Toaster 
+          <Toaster
             position="top-right"
             toastOptions={{
               duration: 4000,
               style: {
-                background: '#363636',
-                color: '#fff',
+                background: 'var(--rp-deep)',
+                color: 'var(--rp-text1)',
+                border: '1px solid var(--rp-border)',
               },
               success: {
                 duration: 3000,
                 iconTheme: {
-                  primary: '#4ade80',
-                  secondary: '#fff',
+                  primary: 'var(--rp-accent)',
+                  secondary: 'var(--rp-text1)',
                 },
               },
               error: {
                 duration: 5000,
                 iconTheme: {
-                  primary: '#ef4444',
-                  secondary: '#fff',
+                  primary: 'var(--rp-accent)',
+                  secondary: 'var(--rp-text1)',
                 },
               },
             }}

@@ -60,7 +60,7 @@ export default function FeedbackForm() {
           <MessageSquare className="h-5 w-5" />
           Share Your Feedback
         </CardTitle>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3">
           Help us improve the system. Your feedback is valuable.
         </p>
       </CardHeader>
@@ -69,7 +69,7 @@ export default function FeedbackForm() {
           <div>
             <label
               htmlFor="feedback-category"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              className="block text-sm font-medium text-royalPurple-text2 dark:text-royalPurple-text3 mb-1"
             >
               Category
             </label>
@@ -77,7 +77,7 @@ export default function FeedbackForm() {
               id="feedback-category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-royalPurple-border bg-royalPurple-card px-3 py-2 text-royalPurple-text1 focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2"
             >
               {CATEGORIES.map((c) => (
                 <option key={c.value} value={c.value}>
@@ -90,7 +90,7 @@ export default function FeedbackForm() {
           <div>
             <label
               htmlFor="feedback-rating"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              className="block text-sm font-medium text-royalPurple-text2 dark:text-royalPurple-text3 mb-1"
             >
               Rating (optional)
             </label>
@@ -100,11 +100,11 @@ export default function FeedbackForm() {
                   key={n}
                   type="button"
                   onClick={() => setRating(rating === n ? null : n)}
-                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  className="p-2 rounded-lg hover:bg-royalPurple-card2 dark:hover:bg-royalPurple-muted transition-colors"
                   aria-label={`Rate ${n} out of 5`}
                 >
                   <Star
-                    className={`h-6 w-6 ${rating && n <= rating ? 'fill-amber-400 text-amber-500' : 'text-gray-300 dark:text-gray-500'}`}
+                    className={`h-6 w-6 ${rating && n <= rating ? 'fill-amber-400 text-royalPurple-accentTx' : 'text-royalPurple-text3 dark:text-royalPurple-text3'}`}
                   />
                 </button>
               ))}
@@ -114,9 +114,9 @@ export default function FeedbackForm() {
           <div>
             <label
               htmlFor="feedback-message"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              className="block text-sm font-medium text-royalPurple-text2 dark:text-royalPurple-text3 mb-1"
             >
-              Your feedback <span className="text-red-500">*</span>
+              Your feedback <span className="text-royalPurple-dangerTx">*</span>
             </label>
             <textarea
               id="feedback-message"
@@ -126,7 +126,7 @@ export default function FeedbackForm() {
               rows={4}
               minLength={3}
               required
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-royalPurple-border bg-royalPurple-card px-3 py-2 text-royalPurple-text1 placeholder:text-royalPurple-muted focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2"
             />
           </div>
 

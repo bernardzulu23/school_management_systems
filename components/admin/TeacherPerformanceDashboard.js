@@ -3,14 +3,14 @@
 import { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  User, 
-  TrendingUp, 
-  TrendingDown, 
+import {
+  User,
+  TrendingUp,
+  TrendingDown,
   Minus,
-  Star, 
-  Users, 
-  BookOpen, 
+  Star,
+  Users,
+  BookOpen,
   Calendar,
   FileText,
   Target,
@@ -18,7 +18,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Eye,
-  Plus
+  Plus,
 } from 'lucide-react'
 import {
   LineChart,
@@ -38,28 +38,33 @@ import {
   PolarGrid,
   PolarAngleAxis,
   PolarRadiusAxis,
-  Radar
+  Radar,
 } from 'recharts'
 
-export default function TeacherPerformanceDashboard({ 
-  teacherId, 
-  teacherData, 
-  performanceData, 
+export default function TeacherPerformanceDashboard({
+  teacherId,
+  teacherData,
+  performanceData,
   onNewObservation,
-  onViewDetails 
+  onViewDetails,
 }) {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
   const [selectedTerm, setSelectedTerm] = useState('all')
   const [activeTab, setActiveTab] = useState('overview')
 
-  const { summaries = [], observations = [], student_performance = [], overall_metrics = {} } = performanceData || {}
+  const {
+    summaries = [],
+    observations = [],
+    student_performance = [],
+    overall_metrics = {},
+  } = performanceData || {}
 
   // Calculate performance trends
-  const performanceTrend = summaries.map(summary => ({
+  const performanceTrend = summaries.map((summary) => ({
     term: summary.term.replace('term', 'Term '),
     observation_score: summary.average_observation_score || 0,
     student_performance: summary.average_student_performance || 0,
-    overall_rating: summary.overall_rating
+    overall_rating: summary.overall_rating,
   }))
 
   // Grade distribution data
@@ -71,7 +76,7 @@ export default function TeacherPerformanceDashboard({
   const gradeData = Object.entries(gradeDistribution).map(([grade, count]) => ({
     grade,
     count,
-    percentage: ((count / observations.length) * 100).toFixed(1)
+    percentage: ((count / observations.length) * 100).toFixed(1),
   }))
 
   // Subject performance data
@@ -84,50 +89,61 @@ export default function TeacherPerformanceDashboard({
         term3: 0,
         count1: 0,
         count2: 0,
-        count3: 0
+        count3: 0,
       }
     }
-    
+
     const termKey = `term${perf.term.replace('term', '')}`
     const countKey = `count${perf.term.replace('term', '')}`
-    
+
     acc[perf.subject_name][termKey] += perf.overall_score || 0
     acc[perf.subject_name][countKey] += 1
-    
+
     return acc
   }, {})
 
-  const subjectData = Object.values(subjectPerformance).map(subject => ({
+  const subjectData = Object.values(subjectPerformance).map((subject) => ({
     ...subject,
     term1: subject.count1 > 0 ? (subject.term1 / subject.count1).toFixed(1) : 0,
     term2: subject.count2 > 0 ? (subject.term2 / subject.count2).toFixed(1) : 0,
-    term3: subject.count3 > 0 ? (subject.term3 / subject.count3).toFixed(1) : 0
+    term3: subject.count3 > 0 ? (subject.term3 / subject.count3).toFixed(1) : 0,
   }))
 
   // Observation criteria radar data
   const latestObservation = observations[0]
-  const radarData = latestObservation?.scores ? Object.entries(latestObservation.scores).map(([criterion, score]) => ({
-    criterion: criterion.replace(/([A-Z])/g, ' $1').trim(),
-    score: score || 0,
-    fullMark: 100
-  })) : []
+  const radarData = latestObservation?.scores
+    ? Object.entries(latestObservation.scores).map(([criterion, score]) => ({
+        criterion: criterion.replace(/([A-Z])/g, ' $1').trim(),
+        score: score || 0,
+        fullMark: 100,
+      }))
+    : []
 
   const getGradeColor = (grade) => {
     switch (grade) {
-      case 'Outstanding': return 'text-green-600 bg-green-100'
-      case 'Good': return 'text-blue-600 bg-blue-100'
-      case 'Satisfactory': return 'text-yellow-600 bg-yellow-100'
-      case 'Needs Improvement': return 'text-orange-600 bg-orange-100'
-      case 'Unsatisfactory': return 'text-red-600 bg-red-100'
-      default: return 'text-gray-600 bg-gray-100'
+      case 'Outstanding':
+        return 'text-royalPurple-successTx bg-royalPurple-success'
+      case 'Good':
+        return 'text-royalPurple-accentTx bg-royalPurple-accent'
+      case 'Satisfactory':
+        return 'text-yellow-600 bg-yellow-100'
+      case 'Needs Improvement':
+        return 'text-orange-600 bg-orange-100'
+      case 'Unsatisfactory':
+        return 'text-royalPurple-dangerTx bg-royalPurple-danger'
+      default:
+        return 'text-royalPurple-text2 bg-royalPurple-card2'
     }
   }
 
   const getTrendIcon = (trend) => {
     switch (trend) {
-      case 'improving': return <TrendingUp className="w-4 h-4 text-green-600" />
-      case 'declining': return <TrendingDown className="w-4 h-4 text-red-600" />
-      default: return <Minus className="w-4 h-4 text-gray-600" />
+      case 'improving':
+        return <TrendingUp className="w-4 h-4 text-royalPurple-successTx" />
+      case 'declining':
+        return <TrendingDown className="w-4 h-4 text-royalPurple-dangerTx" />
+      default:
+        return <Minus className="w-4 h-4 text-royalPurple-text2" />
     }
   }
 
@@ -138,25 +154,25 @@ export default function TeacherPerformanceDashboard({
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center gap-2">
             <User className="w-6 h-6" />
             {teacherData?.name} - Performance Dashboard
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-royalPurple-text2 mt-1">
             {teacherData?.department} • Employee ID: {teacherData?.employee_id}
           </p>
         </div>
-        
+
         <div className="flex gap-3">
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="px-3 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-royalPurple-border2"
           >
             <option value="2024">2024</option>
             <option value="2023">2023</option>
           </select>
-          
+
           <Button onClick={onNewObservation} className="flex items-center gap-2">
             <Plus className="w-4 h-4" />
             New Observation
@@ -169,33 +185,35 @@ export default function TeacherPerformanceDashboard({
         <Card className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Total Observations</p>
-              <p className="text-2xl font-bold text-gray-900">{overall_metrics.total_observations || 0}</p>
+              <p className="text-sm font-medium text-royalPurple-text2">Total Observations</p>
+              <p className="text-2xl font-bold text-royalPurple-text1">
+                {overall_metrics.total_observations || 0}
+              </p>
             </div>
-            <div className="p-3 bg-blue-100 rounded-full">
-              <Eye className="w-6 h-6 text-blue-600" />
+            <div className="p-3 bg-royalPurple-accent rounded-full">
+              <Eye className="w-6 h-6 text-royalPurple-accentTx" />
             </div>
           </div>
           <div className="mt-4 flex items-center gap-2">
-            <span className="text-sm text-gray-600">This academic year</span>
+            <span className="text-sm text-royalPurple-text2">This academic year</span>
           </div>
         </Card>
 
         <Card className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Average Score</p>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-sm font-medium text-royalPurple-text2">Average Score</p>
+              <p className="text-2xl font-bold text-royalPurple-text1">
                 {overall_metrics.average_observation_score?.toFixed(1) || '0.0'}%
               </p>
             </div>
-            <div className="p-3 bg-green-100 rounded-full">
-              <Star className="w-6 h-6 text-green-600" />
+            <div className="p-3 bg-royalPurple-success rounded-full">
+              <Star className="w-6 h-6 text-royalPurple-successTx" />
             </div>
           </div>
           <div className="mt-4 flex items-center gap-2">
             {getTrendIcon(overall_metrics.performance_trend)}
-            <span className="text-sm text-gray-600 capitalize">
+            <span className="text-sm text-royalPurple-text2 capitalize">
               {overall_metrics.performance_trend || 'stable'} trend
             </span>
           </div>
@@ -204,23 +222,25 @@ export default function TeacherPerformanceDashboard({
         <Card className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Students Taught</p>
-              <p className="text-2xl font-bold text-gray-900">{overall_metrics.total_students_taught || 0}</p>
+              <p className="text-sm font-medium text-royalPurple-text2">Students Taught</p>
+              <p className="text-2xl font-bold text-royalPurple-text1">
+                {overall_metrics.total_students_taught || 0}
+              </p>
             </div>
-            <div className="p-3 bg-purple-100 rounded-full">
-              <Users className="w-6 h-6 text-purple-600" />
+            <div className="p-3 bg-royalPurple-pill rounded-full">
+              <Users className="w-6 h-6 text-royalPurple-pillTx" />
             </div>
           </div>
           <div className="mt-4 flex items-center gap-2">
-            <span className="text-sm text-gray-600">Across all subjects</span>
+            <span className="text-sm text-royalPurple-text2">Across all subjects</span>
           </div>
         </Card>
 
         <Card className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Student Performance</p>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-sm font-medium text-royalPurple-text2">Student Performance</p>
+              <p className="text-2xl font-bold text-royalPurple-text1">
                 {overall_metrics.average_student_performance?.toFixed(1) || '0.0'}%
               </p>
             </div>
@@ -229,27 +249,27 @@ export default function TeacherPerformanceDashboard({
             </div>
           </div>
           <div className="mt-4 flex items-center gap-2">
-            <span className="text-sm text-gray-600">Average class performance</span>
+            <span className="text-sm text-royalPurple-text2">Average class performance</span>
           </div>
         </Card>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-royalPurple-border">
         <nav className="-mb-px flex space-x-8">
           {[
             { id: 'overview', name: 'Overview', icon: TrendingUp },
             { id: 'observations', name: 'Observations', icon: Eye },
             { id: 'student-performance', name: 'Student Performance', icon: Users },
-            { id: 'development', name: 'Development', icon: Target }
+            { id: 'development', name: 'Development', icon: Target },
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-royalPurple-border2 text-royalPurple-accentTx'
+                  : 'border-transparent text-royalPurple-text3 hover:text-royalPurple-text2 hover:border-royalPurple-border'
               }`}
             >
               <tab.icon className="w-4 h-4" />
@@ -264,7 +284,7 @@ export default function TeacherPerformanceDashboard({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Performance Trend Chart */}
           <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Trend</h3>
+            <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">Performance Trend</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={performanceTrend}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -272,17 +292,17 @@ export default function TeacherPerformanceDashboard({
                 <YAxis domain={[0, 100]} />
                 <Tooltip />
                 <Legend />
-                <Line 
-                  type="monotone" 
-                  dataKey="observation_score" 
-                  stroke="#3B82F6" 
+                <Line
+                  type="monotone"
+                  dataKey="observation_score"
+                  stroke="#3B82F6"
                   strokeWidth={2}
                   name="Observation Score"
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="student_performance" 
-                  stroke="#10B981" 
+                <Line
+                  type="monotone"
+                  dataKey="student_performance"
+                  stroke="#10B981"
                   strokeWidth={2}
                   name="Student Performance"
                 />
@@ -292,7 +312,9 @@ export default function TeacherPerformanceDashboard({
 
           {/* Grade Distribution */}
           <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Grade Distribution</h3>
+            <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">
+              Grade Distribution
+            </h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -316,7 +338,9 @@ export default function TeacherPerformanceDashboard({
 
           {/* Subject Performance */}
           <Card className="p-6 lg:col-span-2">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Subject Performance by Term</h3>
+            <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">
+              Subject Performance by Term
+            </h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={subjectData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -338,7 +362,7 @@ export default function TeacherPerformanceDashboard({
           {/* Latest Observation Radar */}
           {radarData.length > 0 && (
             <Card className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">
                 Latest Observation Breakdown
               </h3>
               <ResponsiveContainer width="100%" height={400}>
@@ -361,51 +385,65 @@ export default function TeacherPerformanceDashboard({
 
           {/* Observations List */}
           <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Observations</h3>
+            <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">
+              Recent Observations
+            </h3>
             <div className="space-y-4">
               {observations.map((observation) => (
-                <div key={observation.id} className="border border-gray-200 rounded-lg p-4">
+                <div
+                  key={observation.id}
+                  className="border border-royalPurple-border rounded-lg p-4"
+                >
                   <div className="flex justify-between items-start mb-3">
                     <div>
-                      <h4 className="font-medium text-gray-900">
+                      <h4 className="font-medium text-royalPurple-text1">
                         {observation.lesson_subject} - {observation.lesson_topic}
                       </h4>
-                      <p className="text-sm text-gray-600">
-                        {observation.class_observed} • {new Date(observation.observation_date).toLocaleDateString()}
+                      <p className="text-sm text-royalPurple-text2">
+                        {observation.class_observed} •{' '}
+                        {new Date(observation.observation_date).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="text-right">
-                      <div className="text-lg font-bold text-gray-900">
+                      <div className="text-lg font-bold text-royalPurple-text1">
                         {observation.overall_score}%
                       </div>
-                      <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getGradeColor(observation.grade)}`}>
+                      <span
+                        className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getGradeColor(observation.grade)}`}
+                      >
                         {observation.grade}
                       </span>
                     </div>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
-                      <p className="font-medium text-gray-700">Observer:</p>
-                      <p className="text-gray-600">{observation.observer_name} ({observation.observer_role})</p>
+                      <p className="font-medium text-royalPurple-text2">Observer:</p>
+                      <p className="text-royalPurple-text2">
+                        {observation.observer_name} ({observation.observer_role})
+                      </p>
                     </div>
                     <div>
-                      <p className="font-medium text-gray-700">Tool:</p>
-                      <p className="text-gray-600">{observation.tool_name}</p>
+                      <p className="font-medium text-royalPurple-text2">Tool:</p>
+                      <p className="text-royalPurple-text2">{observation.tool_name}</p>
                     </div>
                   </div>
 
                   {observation.strengths && (
                     <div className="mt-3">
-                      <p className="font-medium text-gray-700 text-sm">Strengths:</p>
-                      <p className="text-gray-600 text-sm">{observation.strengths}</p>
+                      <p className="font-medium text-royalPurple-text2 text-sm">Strengths:</p>
+                      <p className="text-royalPurple-text2 text-sm">{observation.strengths}</p>
                     </div>
                   )}
 
                   {observation.areas_for_improvement && (
                     <div className="mt-2">
-                      <p className="font-medium text-gray-700 text-sm">Areas for Improvement:</p>
-                      <p className="text-gray-600 text-sm">{observation.areas_for_improvement}</p>
+                      <p className="font-medium text-royalPurple-text2 text-sm">
+                        Areas for Improvement:
+                      </p>
+                      <p className="text-royalPurple-text2 text-sm">
+                        {observation.areas_for_improvement}
+                      </p>
                     </div>
                   )}
 
@@ -430,68 +468,76 @@ export default function TeacherPerformanceDashboard({
       {activeTab === 'student-performance' && (
         <div className="space-y-6">
           <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Student Performance Analysis</h3>
+            <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">
+              Student Performance Analysis
+            </h3>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-royalPurple-border">
+                <thead className="bg-royalPurple-page">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-royalPurple-text3 uppercase tracking-wider">
                       Student
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-royalPurple-text3 uppercase tracking-wider">
                       Subject
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-royalPurple-text3 uppercase tracking-wider">
                       Term
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-royalPurple-text3 uppercase tracking-wider">
                       Midterm
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-royalPurple-text3 uppercase tracking-wider">
                       End Term
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-royalPurple-text3 uppercase tracking-wider">
                       Overall
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-royalPurple-text3 uppercase tracking-wider">
                       Grade
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-royalPurple-text3 uppercase tracking-wider">
                       Improvement
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-royalPurple-card divide-y divide-royalPurple-border">
                   {student_performance.map((perf, index) => (
                     <tr key={index}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-royalPurple-text1">
                         {perf.student_name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-royalPurple-text3">
                         {perf.subject_name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-royalPurple-text3">
                         {perf.term.replace('term', 'Term ')}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-royalPurple-text3">
                         {perf.midterm_score || '-'}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-royalPurple-text3">
                         {perf.endterm_score || '-'}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-royalPurple-text1">
                         {perf.overall_score}%
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getGradeColor(perf.grade)}`}>
+                        <span
+                          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getGradeColor(perf.grade)}`}
+                        >
                           {perf.grade}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-royalPurple-text3">
                         {perf.improvement_from_previous_term ? (
-                          <span className={`flex items-center gap-1 ${
-                            perf.improvement_from_previous_term > 0 ? 'text-green-600' : 'text-red-600'
-                          }`}>
+                          <span
+                            className={`flex items-center gap-1 ${
+                              perf.improvement_from_previous_term > 0
+                                ? 'text-royalPurple-successTx'
+                                : 'text-royalPurple-dangerTx'
+                            }`}
+                          >
                             {perf.improvement_from_previous_term > 0 ? (
                               <TrendingUp className="w-3 h-3" />
                             ) : (
@@ -499,7 +545,9 @@ export default function TeacherPerformanceDashboard({
                             )}
                             {Math.abs(perf.improvement_from_previous_term)}%
                           </span>
-                        ) : '-'}
+                        ) : (
+                          '-'
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -513,10 +561,14 @@ export default function TeacherPerformanceDashboard({
       {activeTab === 'development' && (
         <div className="space-y-6">
           <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Professional Development</h3>
+            <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">
+              Professional Development
+            </h3>
             <div className="text-center py-8">
-              <Target className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">Development plans and goals will be displayed here</p>
+              <Target className="w-12 h-12 text-royalPurple-text3 mx-auto mb-4" />
+              <p className="text-royalPurple-text3">
+                Development plans and goals will be displayed here
+              </p>
               <Button className="mt-4">Create Development Plan</Button>
             </div>
           </Card>

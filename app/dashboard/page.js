@@ -96,11 +96,11 @@ export default function DashboardPage() {
     return (
       <ResponsiveDashboardLayout>
         <div className="flex flex-col items-center justify-center py-12 text-center">
-          <div className="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
-            <RefreshCw className="h-8 w-8 text-red-600" />
+          <div className="bg-royalPurple-danger w-16 h-16 rounded-full flex items-center justify-center mb-4">
+            <RefreshCw className="h-8 w-8 text-royalPurple-dangerTx" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Something went wrong</h2>
-          <p className="text-gray-600 mb-6 max-w-md mx-auto">{error}</p>
+          <h2 className="text-2xl font-bold text-royalPurple-text1 mb-2">Something went wrong</h2>
+          <p className="text-royalPurple-text2 mb-6 max-w-md mx-auto">{error}</p>
           <Button onClick={fetchDashboardData}>Try Again</Button>
         </div>
       </ResponsiveDashboardLayout>
@@ -183,7 +183,7 @@ export default function DashboardPage() {
         {/* Smart Analytics Integration */}
         {showSmartAnalytics && (
           <section className="mb-8" aria-labelledby="analytics-title">
-            <div className="bg-white dark:bg-g-800 rounded-[14px] border border-black/[0.09] dark:border-white/[0.09] p-6 mb-6">
+            <div className="bg-royalPurple-card dark:bg-g-800 rounded-[14px] border border-black/[0.09] dark:border-white/[0.09] p-6 mb-6">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h2
@@ -225,11 +225,11 @@ export default function DashboardPage() {
             {analyticsData.length === 0 ? (
               <Card>
                 <CardContent className="text-center py-12">
-                  <BarChart3 className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-medium text-gray-900 mb-2">
+                  <BarChart3 className="h-16 w-16 text-royalPurple-text3 mx-auto mb-4" />
+                  <h3 className="text-xl font-medium text-royalPurple-text1 mb-2">
                     No Analytics Data Available
                   </h3>
-                  <p className="text-gray-600 mb-6">
+                  <p className="text-royalPurple-text2 mb-6">
                     Analytics data will appear here once students start using the system and
                     generating activity.
                   </p>
@@ -262,16 +262,22 @@ export default function DashboardPage() {
                 onClick={() => (window.location.href = '/dashboard/users')}
                 aria-label="Go to User Management"
               >
-                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-blue-200">
+                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-royalPurple-border2">
                   <div className="flex items-center justify-between mb-4">
-                    <Users className="h-8 w-8 text-blue-600" aria-hidden="true" />
+                    <Users className="h-8 w-8 text-royalPurple-accentTx" aria-hidden="true" />
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-gray-900">{stats.totalUsers || '0'}</p>
-                      <p className="text-sm text-gray-500">Total Users</p>
+                      <p className="text-2xl font-bold text-royalPurple-text1">
+                        {stats.totalUsers || '0'}
+                      </p>
+                      <p className="text-sm text-royalPurple-text3">Total Users</p>
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">User Management</h3>
-                  <p className="text-sm text-gray-600">Manage all system users and permissions</p>
+                  <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">
+                    User Management
+                  </h3>
+                  <p className="text-sm text-royalPurple-text2">
+                    Manage all system users and permissions
+                  </p>
                 </Card>
               </button>
             </li>
@@ -283,16 +289,18 @@ export default function DashboardPage() {
                 onClick={() => (window.location.href = '/admin/registration')}
                 aria-label="Go to Registration"
               >
-                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-green-200">
+                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-royalPurple-border">
                   <div className="flex items-center justify-between mb-4">
-                    <Users className="h-8 w-8 text-green-600" aria-hidden="true" />
+                    <Users className="h-8 w-8 text-royalPurple-successTx" aria-hidden="true" />
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-gray-900">New</p>
-                      <p className="text-sm text-gray-500">Registration</p>
+                      <p className="text-2xl font-bold text-royalPurple-text1">New</p>
+                      <p className="text-sm text-royalPurple-text3">Registration</p>
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Registration</h3>
-                  <p className="text-sm text-gray-600">Register new users to the system</p>
+                  <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">
+                    Registration
+                  </h3>
+                  <p className="text-sm text-royalPurple-text2">Register new users to the system</p>
                 </Card>
               </button>
             </li>
@@ -304,18 +312,18 @@ export default function DashboardPage() {
                 onClick={() => (window.location.href = '/admin/subjects')}
                 aria-label="Go to Subjects Management"
               >
-                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-purple-200">
+                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-royalPurple-border2">
                   <div className="flex items-center justify-between mb-4">
-                    <BookOpen className="h-8 w-8 text-purple-600" aria-hidden="true" />
+                    <BookOpen className="h-8 w-8 text-royalPurple-pillTx" aria-hidden="true" />
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-gray-900">
+                      <p className="text-2xl font-bold text-royalPurple-text1">
                         {stats.totalSubjects || '0'}
                       </p>
-                      <p className="text-sm text-gray-500">Subjects</p>
+                      <p className="text-sm text-royalPurple-text3">Subjects</p>
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Subjects</h3>
-                  <p className="text-sm text-gray-600">Manage curriculum subjects</p>
+                  <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">Subjects</h3>
+                  <p className="text-sm text-royalPurple-text2">Manage curriculum subjects</p>
                 </Card>
               </button>
             </li>
@@ -331,12 +339,12 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between mb-4">
                     <TrendingUp className="h-8 w-8 text-orange-600" aria-hidden="true" />
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-gray-900">Live</p>
-                      <p className="text-sm text-gray-500">Tracking</p>
+                      <p className="text-2xl font-bold text-royalPurple-text1">Live</p>
+                      <p className="text-sm text-royalPurple-text3">Tracking</p>
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Performance</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">Performance</h3>
+                  <p className="text-sm text-royalPurple-text2">
                     Monitor teacher attendance and performance
                   </p>
                 </Card>
@@ -350,16 +358,20 @@ export default function DashboardPage() {
                 onClick={() => (window.location.href = '/dashboard/timetable/master')}
                 aria-label="Go to Master Timetable"
               >
-                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-indigo-200">
+                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-royalPurple-border2">
                   <div className="flex items-center justify-between mb-4">
-                    <Calendar className="h-8 w-8 text-indigo-600" aria-hidden="true" />
+                    <Calendar className="h-8 w-8 text-royalPurple-pillTx" aria-hidden="true" />
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-gray-900">Master</p>
-                      <p className="text-sm text-gray-500">Timetable</p>
+                      <p className="text-2xl font-bold text-royalPurple-text1">Master</p>
+                      <p className="text-sm text-royalPurple-text3">Timetable</p>
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Master Timetable</h3>
-                  <p className="text-sm text-gray-600">View and manage the school-wide timetable</p>
+                  <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">
+                    Master Timetable
+                  </h3>
+                  <p className="text-sm text-royalPurple-text2">
+                    View and manage the school-wide timetable
+                  </p>
                 </Card>
               </button>
             </li>
@@ -375,12 +387,16 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between mb-4">
                     <Award className="h-8 w-8 text-yellow-600" aria-hidden="true" />
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-gray-900">Play</p>
-                      <p className="text-sm text-gray-500">Learning</p>
+                      <p className="text-2xl font-bold text-royalPurple-text1">Play</p>
+                      <p className="text-sm text-royalPurple-text3">Learning</p>
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Gamification</h3>
-                  <p className="text-sm text-gray-600">Educational games and student rewards</p>
+                  <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">
+                    Gamification
+                  </h3>
+                  <p className="text-sm text-royalPurple-text2">
+                    Educational games and student rewards
+                  </p>
                 </Card>
               </button>
             </li>
@@ -396,12 +412,16 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between mb-4">
                     <BarChart3 className="h-8 w-8 text-cyan-600" aria-hidden="true" />
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-gray-900">AI</p>
-                      <p className="text-sm text-gray-500">Reports</p>
+                      <p className="text-2xl font-bold text-royalPurple-text1">AI</p>
+                      <p className="text-sm text-royalPurple-text3">Reports</p>
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Smart Reports</h3>
-                  <p className="text-sm text-gray-600">Generate AI-driven academic reports</p>
+                  <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">
+                    Smart Reports
+                  </h3>
+                  <p className="text-sm text-royalPurple-text2">
+                    Generate AI-driven academic reports
+                  </p>
                 </Card>
               </button>
             </li>
@@ -414,18 +434,20 @@ export default function DashboardPage() {
                   onClick={() => (window.location.href = '/dashboard/timetable/hod')}
                   aria-label="Go to Department Timetable"
                 >
-                  <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-purple-200">
+                  <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-royalPurple-border2">
                     <div className="flex items-center justify-between mb-4">
-                      <Calendar className="h-8 w-8 text-purple-600" aria-hidden="true" />
+                      <Calendar className="h-8 w-8 text-royalPurple-pillTx" aria-hidden="true" />
                       <div className="text-right">
-                        <p className="text-2xl font-bold text-gray-900">0</p>
-                        <p className="text-sm text-gray-500">Teachers</p>
+                        <p className="text-2xl font-bold text-royalPurple-text1">0</p>
+                        <p className="text-sm text-royalPurple-text3">Teachers</p>
                       </div>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">
                       Department Timetable
                     </h3>
-                    <p className="text-sm text-gray-600">View department schedule overview</p>
+                    <p className="text-sm text-royalPurple-text2">
+                      View department schedule overview
+                    </p>
                   </Card>
                 </button>
               </li>
@@ -444,20 +466,22 @@ export default function DashboardPage() {
                   }
                   aria-label="Go to My Timetable"
                 >
-                  <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-green-200">
+                  <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-royalPurple-border">
                     <div className="flex items-center justify-between mb-4">
-                      <Calendar className="h-8 w-8 text-green-600" aria-hidden="true" />
+                      <Calendar className="h-8 w-8 text-royalPurple-successTx" aria-hidden="true" />
                       <div className="text-right">
-                        <p className="text-2xl font-bold text-gray-900">
+                        <p className="text-2xl font-bold text-royalPurple-text1">
                           {user?.role === 'teacher' ? '0' : '0'}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-royalPurple-text3">
                           {user?.role === 'teacher' ? 'Periods' : 'Subjects'}
                         </p>
                       </div>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">My Timetable</h3>
-                    <p className="text-sm text-gray-600">
+                    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">
+                      My Timetable
+                    </h3>
+                    <p className="text-sm text-royalPurple-text2">
                       {user?.role === 'teacher'
                         ? 'View your teaching schedule'
                         : 'View your class schedule'}
@@ -474,25 +498,27 @@ export default function DashboardPage() {
                 onClick={() => (window.location.href = '/dashboard/innovation')}
                 aria-label="Go to Innovation Hub"
               >
-                <Card className="p-6 h-full bg-gradient-to-br from-purple-600 to-blue-600 text-white transform group-hover:scale-[1.02] transition-all duration-300 group-hover:shadow-2xl">
+                <Card className="p-6 h-full bg-gradient-to-br from-purple-600 to-blue-600 text-royalPurple-text1 transform group-hover:scale-[1.02] transition-all duration-300 group-hover:shadow-2xl">
                   <div className="flex items-center justify-between mb-4">
                     <div className="relative">
-                      <Rocket className="h-8 w-8 text-white" aria-hidden="true" />
+                      <Rocket className="h-8 w-8 text-royalPurple-text1" aria-hidden="true" />
                       <Sparkles
                         className="h-4 w-4 text-yellow-300 absolute -top-1 -right-1 animate-pulse"
                         aria-hidden="true"
                       />
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-white">NEW</p>
-                      <p className="text-sm text-purple-200">Innovation</p>
+                      <p className="text-2xl font-bold text-royalPurple-text1">NEW</p>
+                      <p className="text-sm text-royalPurple-pillTx">Innovation</p>
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">🚀 Innovation Hub</h3>
-                  <p className="text-sm text-purple-100 mb-3">
+                  <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">
+                    🚀 Innovation Hub
+                  </h3>
+                  <p className="text-sm text-royalPurple-pillTx mb-3">
                     AI, AR/VR, Mental Health & Blockchain
                   </p>
-                  <div className="text-xs text-purple-200">✨ Explore Innovation →</div>
+                  <div className="text-xs text-royalPurple-pillTx">✨ Explore Innovation →</div>
                 </Card>
               </button>
             </li>
@@ -502,8 +528,11 @@ export default function DashboardPage() {
         {/* Today's Schedule Section */}
         <section className="mt-8" aria-labelledby="schedule-title">
           <div className="flex items-center justify-between mb-4">
-            <h2 id="schedule-title" className="text-xl font-bold text-gray-900 flex items-center">
-              <Clock className="w-6 h-6 text-blue-600 mr-2" />
+            <h2
+              id="schedule-title"
+              className="text-xl font-bold text-royalPurple-text1 flex items-center"
+            >
+              <Clock className="w-6 h-6 text-royalPurple-accentTx mr-2" />
               Your Schedule Today
             </h2>
           </div>
@@ -511,9 +540,9 @@ export default function DashboardPage() {
         </section>
       </div>
 
-      <footer className="bg-white border-t mt-12 py-8" aria-label="Dashboard footer">
+      <footer className="bg-royalPurple-card border-t mt-12 py-8" aria-label="Dashboard footer">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-500 text-sm">
+          <p className="text-royalPurple-text3 text-sm">
             © 2025 Zambian School Management System - Empowering Rural Education Through Innovation
           </p>
         </div>

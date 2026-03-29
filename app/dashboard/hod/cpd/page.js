@@ -4,10 +4,22 @@ import { useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  GraduationCap, Plus, Calendar, Clock, Users, BookOpen,
-  ArrowLeft, Download, Filter, CheckCircle, AlertCircle,
-  Star, Award, Target, TrendingUp
+import {
+  GraduationCap,
+  Plus,
+  Calendar,
+  Clock,
+  Users,
+  BookOpen,
+  ArrowLeft,
+  Download,
+  Filter,
+  CheckCircle,
+  AlertCircle,
+  Star,
+  Award,
+  Target,
+  TrendingUp,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -27,7 +39,7 @@ export default function CPDPage() {
       status: 'completed',
       provider: 'Education Institute',
       credits: 6,
-      rating: 4.5
+      rating: 4.5,
     },
     {
       id: 2,
@@ -39,7 +51,7 @@ export default function CPDPage() {
       status: 'in-progress',
       provider: 'Teaching Excellence Hub',
       credits: 12,
-      rating: null
+      rating: null,
     },
     {
       id: 3,
@@ -51,7 +63,7 @@ export default function CPDPage() {
       status: 'completed',
       provider: 'Professional Development Center',
       credits: 4,
-      rating: 4.8
+      rating: 4.8,
     },
     {
       id: 4,
@@ -63,8 +75,8 @@ export default function CPDPage() {
       status: 'scheduled',
       provider: 'Subject Association',
       credits: 8,
-      rating: null
-    }
+      rating: null,
+    },
   ]
 
   const teacherProgress = [
@@ -74,7 +86,7 @@ export default function CPDPage() {
       completedHours: 24,
       requiredHours: 30,
       activities: 4,
-      lastActivity: '2024-01-20'
+      lastActivity: '2024-01-20',
     },
     {
       name: 'Mike Brown',
@@ -82,7 +94,7 @@ export default function CPDPage() {
       completedHours: 18,
       requiredHours: 30,
       activities: 3,
-      lastActivity: '2024-01-15'
+      lastActivity: '2024-01-15',
     },
     {
       name: 'Emma Wilson',
@@ -90,7 +102,7 @@ export default function CPDPage() {
       completedHours: 28,
       requiredHours: 30,
       activities: 5,
-      lastActivity: '2024-01-10'
+      lastActivity: '2024-01-10',
     },
     {
       name: 'David Lee',
@@ -98,33 +110,41 @@ export default function CPDPage() {
       completedHours: 12,
       requiredHours: 30,
       activities: 2,
-      lastActivity: '2024-01-05'
-    }
+      lastActivity: '2024-01-05',
+    },
   ]
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'completed': return <CheckCircle className="h-4 w-4 text-green-500" />
-      case 'in-progress': return <Clock className="h-4 w-4 text-yellow-500" />
-      case 'scheduled': return <Calendar className="h-4 w-4 text-blue-500" />
-      default: return <AlertCircle className="h-4 w-4 text-gray-500" />
+      case 'completed':
+        return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
+      case 'in-progress':
+        return <Clock className="h-4 w-4 text-yellow-500" />
+      case 'scheduled':
+        return <Calendar className="h-4 w-4 text-royalPurple-accentTx" />
+      default:
+        return <AlertCircle className="h-4 w-4 text-royalPurple-text3" />
     }
   }
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800'
-      case 'in-progress': return 'bg-yellow-100 text-yellow-800'
-      case 'scheduled': return 'bg-blue-100 text-blue-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'completed':
+        return 'bg-royalPurple-success text-royalPurple-successTx'
+      case 'in-progress':
+        return 'bg-yellow-100 text-yellow-800'
+      case 'scheduled':
+        return 'bg-royalPurple-accent text-royalPurple-accentTx'
+      default:
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
   }
 
   const getProgressColor = (completed, required) => {
     const percentage = (completed / required) * 100
-    if (percentage >= 90) return 'bg-green-500'
+    if (percentage >= 90) return 'bg-royalPurple-success'
     if (percentage >= 70) return 'bg-yellow-500'
-    return 'bg-red-500'
+    return 'bg-royalPurple-danger'
   }
 
   const departmentStats = {
@@ -132,7 +152,7 @@ export default function CPDPage() {
     totalActivities: 24,
     completedActivities: 18,
     averageRating: 4.6,
-    totalHours: 156
+    totalHours: 156,
   }
 
   return (
@@ -148,11 +168,13 @@ export default function CPDPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+              <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center">
                 <GraduationCap className="h-6 w-6 mr-2" />
                 CPD File
               </h1>
-              <p className="text-gray-600">Continuous Professional Development tracking and management</p>
+              <p className="text-royalPurple-text2">
+                Continuous Professional Development tracking and management
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -172,10 +194,12 @@ export default function CPDPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Users className="h-8 w-8 text-blue-600" />
+                <Users className="h-8 w-8 text-royalPurple-accentTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Teachers</p>
-                  <p className="text-2xl font-bold text-gray-900">{departmentStats.totalTeachers}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Teachers</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {departmentStats.totalTeachers}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -183,10 +207,12 @@ export default function CPDPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <BookOpen className="h-8 w-8 text-green-600" />
+                <BookOpen className="h-8 w-8 text-royalPurple-successTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Activities</p>
-                  <p className="text-2xl font-bold text-gray-900">{departmentStats.totalActivities}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Activities</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {departmentStats.totalActivities}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -194,10 +220,12 @@ export default function CPDPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <CheckCircle className="h-8 w-8 text-purple-600" />
+                <CheckCircle className="h-8 w-8 text-royalPurple-pillTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Completed</p>
-                  <p className="text-2xl font-bold text-gray-900">{departmentStats.completedActivities}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Completed</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {departmentStats.completedActivities}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -207,8 +235,10 @@ export default function CPDPage() {
               <div className="flex items-center">
                 <Star className="h-8 w-8 text-yellow-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Avg Rating</p>
-                  <p className="text-2xl font-bold text-gray-900">{departmentStats.averageRating}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Avg Rating</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {departmentStats.averageRating}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -218,8 +248,10 @@ export default function CPDPage() {
               <div className="flex items-center">
                 <Clock className="h-8 w-8 text-orange-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Hours</p>
-                  <p className="text-2xl font-bold text-gray-900">{departmentStats.totalHours}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Hours</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {departmentStats.totalHours}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -227,14 +259,14 @@ export default function CPDPage() {
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-gray-200">
+        <div className="border-b border-royalPurple-border">
           <nav className="-mb-px flex space-x-8">
             <button
               onClick={() => setActiveTab('overview')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'overview'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-royalPurple-border2 text-royalPurple-accentTx'
+                  : 'border-transparent text-royalPurple-text3 hover:text-royalPurple-text2 hover:border-royalPurple-border'
               }`}
             >
               Overview
@@ -243,8 +275,8 @@ export default function CPDPage() {
               onClick={() => setActiveTab('activities')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'activities'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-royalPurple-border2 text-royalPurple-accentTx'
+                  : 'border-transparent text-royalPurple-text3 hover:text-royalPurple-text2 hover:border-royalPurple-border'
               }`}
             >
               Activities
@@ -253,8 +285,8 @@ export default function CPDPage() {
               onClick={() => setActiveTab('progress')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'progress'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-royalPurple-border2 text-royalPurple-accentTx'
+                  : 'border-transparent text-royalPurple-text3 hover:text-royalPurple-text2 hover:border-royalPurple-border'
               }`}
             >
               Teacher Progress
@@ -269,7 +301,7 @@ export default function CPDPage() {
               <div className="flex items-center justify-between">
                 <CardTitle>CPD Activities</CardTitle>
                 <select
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                 >
@@ -297,27 +329,31 @@ export default function CPDPage() {
                   </thead>
                   <tbody>
                     {cpdActivities.map((activity) => (
-                      <tr key={activity.id} className="border-b hover:bg-gray-50">
+                      <tr key={activity.id} className="border-b hover:bg-royalPurple-page">
                         <td className="py-3 px-4">
                           <div>
                             <div className="font-medium">{activity.title}</div>
-                            <div className="text-sm text-gray-500">{activity.provider}</div>
+                            <div className="text-sm text-royalPurple-text3">
+                              {activity.provider}
+                            </div>
                           </div>
                         </td>
                         <td className="py-3 px-4">{activity.teacher}</td>
                         <td className="py-3 px-4">
-                          <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">
+                          <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-card2 text-royalPurple-text1">
                             {activity.type}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-sm text-gray-500">
+                        <td className="py-3 px-4 text-sm text-royalPurple-text3">
                           {new Date(activity.date).toLocaleDateString()}
                         </td>
                         <td className="py-3 px-4">{activity.duration}</td>
                         <td className="py-3 px-4">
                           <div className="flex items-center">
                             {getStatusIcon(activity.status)}
-                            <span className={`ml-2 px-2 py-1 text-xs rounded-full ${getStatusColor(activity.status)}`}>
+                            <span
+                              className={`ml-2 px-2 py-1 text-xs rounded-full ${getStatusColor(activity.status)}`}
+                            >
                               {activity.status}
                             </span>
                           </div>
@@ -330,7 +366,7 @@ export default function CPDPage() {
                               <span>{activity.rating}</span>
                             </div>
                           ) : (
-                            <span className="text-gray-400">-</span>
+                            <span className="text-royalPurple-text3">-</span>
                           )}
                         </td>
                       </tr>
@@ -350,30 +386,37 @@ export default function CPDPage() {
             <CardContent>
               <div className="space-y-4">
                 {teacherProgress.map((teacher, index) => (
-                  <div key={index} className="p-4 border border-gray-200 rounded-lg">
+                  <div key={index} className="p-4 border border-royalPurple-border rounded-lg">
                     <div className="flex items-center justify-between mb-3">
                       <div>
-                        <h4 className="font-medium text-gray-900">{teacher.name}</h4>
-                        <p className="text-sm text-gray-500">{teacher.department} Department</p>
+                        <h4 className="font-medium text-royalPurple-text1">{teacher.name}</h4>
+                        <p className="text-sm text-royalPurple-text3">
+                          {teacher.department} Department
+                        </p>
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium">
                           {teacher.completedHours}/{teacher.requiredHours} hours
                         </p>
-                        <p className="text-xs text-gray-500">
-                          {Math.round((teacher.completedHours / teacher.requiredHours) * 100)}% complete
+                        <p className="text-xs text-royalPurple-text3">
+                          {Math.round((teacher.completedHours / teacher.requiredHours) * 100)}%
+                          complete
                         </p>
                       </div>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
+                    <div className="w-full bg-royalPurple-card2 rounded-full h-2 mb-3">
                       <div
                         className={`h-2 rounded-full ${getProgressColor(teacher.completedHours, teacher.requiredHours)}`}
-                        style={{ width: `${Math.min((teacher.completedHours / teacher.requiredHours) * 100, 100)}%` }}
+                        style={{
+                          width: `${Math.min((teacher.completedHours / teacher.requiredHours) * 100, 100)}%`,
+                        }}
                       ></div>
                     </div>
-                    <div className="flex items-center justify-between text-sm text-gray-600">
+                    <div className="flex items-center justify-between text-sm text-royalPurple-text2">
                       <span>{teacher.activities} activities completed</span>
-                      <span>Last activity: {new Date(teacher.lastActivity).toLocaleDateString()}</span>
+                      <span>
+                        Last activity: {new Date(teacher.lastActivity).toLocaleDateString()}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -390,12 +433,12 @@ export default function CPDPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-royalPurple-success rounded-lg">
                     <div className="flex items-center">
-                      <Award className="h-5 w-5 text-green-600 mr-2" />
+                      <Award className="h-5 w-5 text-royalPurple-successTx mr-2" />
                       <span className="font-medium">On Track Teachers</span>
                     </div>
-                    <span className="text-green-600 font-bold">6/8</span>
+                    <span className="text-royalPurple-successTx font-bold">6/8</span>
                   </div>
                   <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
                     <div className="flex items-center">
@@ -404,12 +447,12 @@ export default function CPDPage() {
                     </div>
                     <span className="text-yellow-600 font-bold">2/8</span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-royalPurple-accent rounded-lg">
                     <div className="flex items-center">
-                      <Target className="h-5 w-5 text-blue-600 mr-2" />
+                      <Target className="h-5 w-5 text-royalPurple-accentTx mr-2" />
                       <span className="font-medium">Department Target</span>
                     </div>
-                    <span className="text-blue-600 font-bold">240 hours</span>
+                    <span className="text-royalPurple-accentTx font-bold">240 hours</span>
                   </div>
                 </div>
               </CardContent>
@@ -421,20 +464,20 @@ export default function CPDPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="p-3 border border-gray-200 rounded-lg">
+                  <div className="p-3 border border-royalPurple-border rounded-lg">
                     <h4 className="font-medium">Technology Integration Workshop</h4>
-                    <p className="text-sm text-gray-600">March 15, 2024 • 6 hours</p>
-                    <p className="text-xs text-blue-600">Registration open</p>
+                    <p className="text-sm text-royalPurple-text2">March 15, 2024 • 6 hours</p>
+                    <p className="text-xs text-royalPurple-accentTx">Registration open</p>
                   </div>
-                  <div className="p-3 border border-gray-200 rounded-lg">
+                  <div className="p-3 border border-royalPurple-border rounded-lg">
                     <h4 className="font-medium">Assessment Best Practices</h4>
-                    <p className="text-sm text-gray-600">March 22, 2024 • 4 hours</p>
-                    <p className="text-xs text-blue-600">Registration open</p>
+                    <p className="text-sm text-royalPurple-text2">March 22, 2024 • 4 hours</p>
+                    <p className="text-xs text-royalPurple-accentTx">Registration open</p>
                   </div>
-                  <div className="p-3 border border-gray-200 rounded-lg">
+                  <div className="p-3 border border-royalPurple-border rounded-lg">
                     <h4 className="font-medium">Inclusive Education Seminar</h4>
-                    <p className="text-sm text-gray-600">April 5, 2024 • 8 hours</p>
-                    <p className="text-xs text-green-600">Recommended</p>
+                    <p className="text-sm text-royalPurple-text2">April 5, 2024 • 8 hours</p>
+                    <p className="text-xs text-royalPurple-successTx">Recommended</p>
                   </div>
                 </div>
               </CardContent>

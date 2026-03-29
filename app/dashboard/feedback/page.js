@@ -16,7 +16,7 @@ export default function FeedbackPage() {
           <h2 className="text-2xl font-bold mb-4">Please log in to access this page</h2>
           <button
             onClick={() => (window.location.href = '/login')}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="px-4 py-2 bg-royalPurple-accent text-royalPurple-text1 rounded-lg hover:bg-royalPurple-accent"
           >
             Go to Login
           </button>
@@ -28,7 +28,7 @@ export default function FeedbackPage() {
   return (
     <ResponsiveDashboardLayout>
       <div className="max-w-4xl mx-auto space-y-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-2xl font-bold text-royalPurple-text1 dark:text-royalPurple-text1">
           {isHeadteacher ? 'User Feedback' : 'Share Your Feedback'}
         </h1>
 

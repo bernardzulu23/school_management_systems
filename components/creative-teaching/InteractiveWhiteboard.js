@@ -4,9 +4,29 @@ import { useState, useRef, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
-  Palette, Eraser, Square, Circle, Type, Image, Save, Download,
-  Undo, Redo, Trash2, Layers, MousePointer, Pen, Highlighter,
-  Shapes, Grid, ZoomIn, ZoomOut, RotateCcw, Share2, Play, Pause
+  Palette,
+  Eraser,
+  Square,
+  Circle,
+  Type,
+  Image,
+  Save,
+  Download,
+  Undo,
+  Redo,
+  Trash2,
+  Layers,
+  MousePointer,
+  Pen,
+  Highlighter,
+  Shapes,
+  Grid,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+  Share2,
+  Play,
+  Pause,
 } from 'lucide-react'
 
 export default function InteractiveWhiteboard() {
@@ -31,13 +51,24 @@ export default function InteractiveWhiteboard() {
     { id: 'text', icon: Type, label: 'Text' },
     { id: 'rectangle', icon: Square, label: 'Rectangle' },
     { id: 'circle', icon: Circle, label: 'Circle' },
-    { id: 'line', icon: Shapes, label: 'Line' }
+    { id: 'line', icon: Shapes, label: 'Line' },
   ]
 
   const colors = [
-    '#000000', '#FF0000', '#00FF00', '#0000FF', '#FFFF00',
-    '#FF00FF', '#00FFFF', '#FFA500', '#800080', '#008000',
-    '#FFC0CB', '#A52A2A', '#808080', '#FFFFFF'
+    '#000000',
+    '#FF0000',
+    '#00FF00',
+    '#0000FF',
+    '#FFFF00',
+    '#FF00FF',
+    '#00FFFF',
+    '#FFA500',
+    '#800080',
+    '#008000',
+    '#FFC0CB',
+    '#A52A2A',
+    '#808080',
+    '#FFFFFF',
   ]
 
   useEffect(() => {
@@ -46,15 +77,15 @@ export default function InteractiveWhiteboard() {
       const ctx = canvas.getContext('2d')
       ctx.lineCap = 'round'
       ctx.lineJoin = 'round'
-      
+
       // Set canvas size
       canvas.width = 1200
       canvas.height = 800
-      
+
       // Fill with white background
       ctx.fillStyle = '#FFFFFF'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
-      
+
       // Save initial state
       saveToHistory()
     }
@@ -62,13 +93,13 @@ export default function InteractiveWhiteboard() {
 
   const startDrawing = (e) => {
     if (currentTool === 'pointer') return
-    
+
     setIsDrawing(true)
     const canvas = canvasRef.current
     const rect = canvas.getBoundingClientRect()
     const x = (e.clientX - rect.left) / zoom
     const y = (e.clientY - rect.top) / zoom
-    
+
     const ctx = canvas.getContext('2d')
     ctx.beginPath()
     ctx.moveTo(x, y)
@@ -76,14 +107,14 @@ export default function InteractiveWhiteboard() {
 
   const draw = (e) => {
     if (!isDrawing || currentTool === 'pointer') return
-    
+
     const canvas = canvasRef.current
     const rect = canvas.getBoundingClientRect()
     const x = (e.clientX - rect.left) / zoom
     const y = (e.clientY - rect.top) / zoom
-    
+
     const ctx = canvas.getContext('2d')
-    
+
     if (currentTool === 'pen' || currentTool === 'highlighter') {
       ctx.globalCompositeOperation = currentTool === 'highlighter' ? 'multiply' : 'source-over'
       ctx.strokeStyle = currentColor
@@ -169,7 +200,7 @@ export default function InteractiveWhiteboard() {
       id: layers.length + 1,
       name: `Layer ${layers.length + 1}`,
       visible: true,
-      active: false
+      active: false,
     }
     setLayers([...layers, newLayer])
   }
@@ -180,22 +211,26 @@ export default function InteractiveWhiteboard() {
 
   return (
     <div className="space-y-6">
-      <Card className="bg-slate-800/60 border-slate-700/40">
+      <Card className="bg-royalPurple-card/60 border-royalPurple-border/40">
         <CardHeader>
-          <CardTitle className="text-white flex items-center justify-between">
+          <CardTitle className="text-royalPurple-text1 flex items-center justify-between">
             <div className="flex items-center">
-              <Palette className="h-5 w-5 mr-2 text-purple-400" />
+              <Palette className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
               Interactive Whiteboard
             </div>
             <div className="flex items-center space-x-2">
               <Button
                 onClick={togglePresentation}
-                className={`${isPresenting ? 'bg-red-600' : 'bg-green-600'} text-white`}
+                className={`${isPresenting ? 'bg-royalPurple-danger' : 'bg-royalPurple-success'} text-royalPurple-text1`}
               >
-                {isPresenting ? <Pause className="h-4 w-4 mr-2" /> : <Play className="h-4 w-4 mr-2" />}
+                {isPresenting ? (
+                  <Pause className="h-4 w-4 mr-2" />
+                ) : (
+                  <Play className="h-4 w-4 mr-2" />
+                )}
                 {isPresenting ? 'Stop Presenting' : 'Start Presentation'}
               </Button>
-              <Button onClick={saveCanvas} className="bg-blue-600 text-white">
+              <Button onClick={saveCanvas} className="bg-royalPurple-accent text-royalPurple-text1">
                 <Save className="h-4 w-4 mr-2" />
                 Save
               </Button>
@@ -204,14 +239,14 @@ export default function InteractiveWhiteboard() {
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Toolbar */}
-          <div className="flex flex-wrap items-center gap-2 p-4 bg-slate-700/40 rounded-lg">
+          <div className="flex flex-wrap items-center gap-2 p-4 bg-royalPurple-muted/40 rounded-lg">
             {/* Drawing Tools */}
-            <div className="flex items-center space-x-1 border-r border-slate-600 pr-3">
+            <div className="flex items-center space-x-1 border-r border-royalPurple-border pr-3">
               {tools.map((tool) => (
                 <Button
                   key={tool.id}
                   onClick={() => setCurrentTool(tool.id)}
-                  className={`p-2 ${currentTool === tool.id ? 'bg-purple-600' : 'bg-slate-600'} text-white`}
+                  className={`p-2 ${currentTool === tool.id ? 'bg-royalPurple-pill' : 'bg-royalPurple-muted'} text-royalPurple-text1`}
                   title={tool.label}
                 >
                   <tool.icon className="h-4 w-4" />
@@ -220,20 +255,20 @@ export default function InteractiveWhiteboard() {
             </div>
 
             {/* Colors */}
-            <div className="flex items-center space-x-1 border-r border-slate-600 pr-3">
+            <div className="flex items-center space-x-1 border-r border-royalPurple-border pr-3">
               {colors.map((color) => (
                 <button
                   key={color}
                   onClick={() => setCurrentColor(color)}
-                  className={`w-6 h-6 rounded border-2 ${currentColor === color ? 'border-white' : 'border-gray-400'}`}
+                  className={`w-6 h-6 rounded border-2 ${currentColor === color ? 'border-white' : 'border-royalPurple-border'}`}
                   style={{ backgroundColor: color }}
                 />
               ))}
             </div>
 
             {/* Brush Size */}
-            <div className="flex items-center space-x-2 border-r border-slate-600 pr-3">
-              <span className="text-white text-sm">Size:</span>
+            <div className="flex items-center space-x-2 border-r border-royalPurple-border pr-3">
+              <span className="text-royalPurple-text1 text-sm">Size:</span>
               <input
                 type="range"
                 min="1"
@@ -242,79 +277,104 @@ export default function InteractiveWhiteboard() {
                 onChange={(e) => setBrushSize(parseInt(e.target.value))}
                 className="w-20"
               />
-              <span className="text-white text-sm">{brushSize}px</span>
+              <span className="text-royalPurple-text1 text-sm">{brushSize}px</span>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center space-x-1 border-r border-slate-600 pr-3">
-              <Button onClick={undo} className="p-2 bg-slate-600 text-white" disabled={historyIndex <= 0}>
+            <div className="flex items-center space-x-1 border-r border-royalPurple-border pr-3">
+              <Button
+                onClick={undo}
+                className="p-2 bg-royalPurple-muted text-royalPurple-text1"
+                disabled={historyIndex <= 0}
+              >
                 <Undo className="h-4 w-4" />
               </Button>
-              <Button onClick={redo} className="p-2 bg-slate-600 text-white" disabled={historyIndex >= canvasHistory.length - 1}>
+              <Button
+                onClick={redo}
+                className="p-2 bg-royalPurple-muted text-royalPurple-text1"
+                disabled={historyIndex >= canvasHistory.length - 1}
+              >
                 <Redo className="h-4 w-4" />
               </Button>
-              <Button onClick={clearCanvas} className="p-2 bg-red-600 text-white">
+              <Button
+                onClick={clearCanvas}
+                className="p-2 bg-royalPurple-danger text-royalPurple-text1"
+              >
                 <Trash2 className="h-4 w-4" />
               </Button>
             </div>
 
             {/* View Controls */}
             <div className="flex items-center space-x-1">
-              <Button onClick={zoomOut} className="p-2 bg-slate-600 text-white">
+              <Button onClick={zoomOut} className="p-2 bg-royalPurple-muted text-royalPurple-text1">
                 <ZoomOut className="h-4 w-4" />
               </Button>
-              <span className="text-white text-sm">{Math.round(zoom * 100)}%</span>
-              <Button onClick={zoomIn} className="p-2 bg-slate-600 text-white">
+              <span className="text-royalPurple-text1 text-sm">{Math.round(zoom * 100)}%</span>
+              <Button onClick={zoomIn} className="p-2 bg-royalPurple-muted text-royalPurple-text1">
                 <ZoomIn className="h-4 w-4" />
               </Button>
-              <Button onClick={toggleGrid} className={`p-2 ${showGrid ? 'bg-purple-600' : 'bg-slate-600'} text-white`}>
+              <Button
+                onClick={toggleGrid}
+                className={`p-2 ${showGrid ? 'bg-royalPurple-pill' : 'bg-royalPurple-muted'} text-royalPurple-text1`}
+              >
                 <Grid className="h-4 w-4" />
               </Button>
             </div>
           </div>
 
           {/* Canvas Container */}
-          <div className="relative bg-white rounded-lg overflow-hidden" style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}>
+          <div
+            className="relative bg-royalPurple-card rounded-lg overflow-hidden"
+            style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
+          >
             <canvas
               ref={canvasRef}
               onMouseDown={startDrawing}
               onMouseMove={draw}
               onMouseUp={stopDrawing}
               onMouseLeave={stopDrawing}
-              className="border border-gray-300 cursor-crosshair"
+              className="border border-royalPurple-border cursor-crosshair"
               style={{ maxWidth: '100%', height: 'auto' }}
             />
           </div>
 
           {/* Layer Panel */}
-          <div className="bg-slate-700/40 rounded-lg p-4">
+          <div className="bg-royalPurple-muted/40 rounded-lg p-4">
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-white font-medium flex items-center">
+              <h4 className="text-royalPurple-text1 font-medium flex items-center">
                 <Layers className="h-4 w-4 mr-2" />
                 Layers
               </h4>
-              <Button onClick={addLayer} className="bg-purple-600 text-white text-sm px-3 py-1">
+              <Button
+                onClick={addLayer}
+                className="bg-royalPurple-pill text-royalPurple-text1 text-sm px-3 py-1"
+              >
                 Add Layer
               </Button>
             </div>
             <div className="space-y-2">
               {layers.map((layer) => (
-                <div key={layer.id} className={`flex items-center justify-between p-2 rounded ${layer.active ? 'bg-purple-600/40' : 'bg-slate-600/40'}`}>
-                  <span className="text-white text-sm">{layer.name}</span>
+                <div
+                  key={layer.id}
+                  className={`flex items-center justify-between p-2 rounded ${layer.active ? 'bg-royalPurple-pill/40' : 'bg-royalPurple-muted/40'}`}
+                >
+                  <span className="text-royalPurple-text1 text-sm">{layer.name}</span>
                   <div className="flex items-center space-x-2">
                     <input
                       type="checkbox"
                       checked={layer.visible}
                       onChange={() => {
-                        setLayers(layers.map(l => l.id === layer.id ? { ...l, visible: !l.visible } : l))
+                        setLayers(
+                          layers.map((l) => (l.id === layer.id ? { ...l, visible: !l.visible } : l))
+                        )
                       }}
-                      className="text-purple-600"
+                      className="text-royalPurple-pillTx"
                     />
                     <Button
                       onClick={() => {
-                        setLayers(layers.map(l => ({ ...l, active: l.id === layer.id })))
+                        setLayers(layers.map((l) => ({ ...l, active: l.id === layer.id })))
                       }}
-                      className="text-xs px-2 py-1 bg-slate-600 text-white"
+                      className="text-xs px-2 py-1 bg-royalPurple-muted text-royalPurple-text1"
                     >
                       Select
                     </Button>

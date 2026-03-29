@@ -4,12 +4,34 @@ import { useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  DollarSign, Plus, TrendingUp, TrendingDown, AlertCircle,
-  ArrowLeft, Download, Calendar, PieChart, BarChart3,
-  CheckCircle, Clock, Target, Wallet
+import {
+  DollarSign,
+  Plus,
+  TrendingUp,
+  TrendingDown,
+  AlertCircle,
+  ArrowLeft,
+  Download,
+  Calendar,
+  PieChart,
+  BarChart3,
+  CheckCircle,
+  Clock,
+  Target,
+  Wallet,
 } from 'lucide-react'
-import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
+import {
+  PieChart as RechartsPieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from 'recharts'
 import Link from 'next/link'
 
 export default function BudgetPage() {
@@ -22,15 +44,27 @@ export default function BudgetPage() {
     totalSpent: 32500,
     remaining: 17500,
     pendingRequests: 5,
-    approvedRequests: 12
+    approvedRequests: 12,
   }
 
   const budgetCategories = [
-    { name: 'Teaching Materials', allocated: 15000, spent: 12000, remaining: 3000, color: '#3B82F6' },
-    { name: 'Equipment', allocated: 12000, spent: 8500, remaining: 3500, color: '#10B981' },
-    { name: 'Professional Development', allocated: 8000, spent: 6000, remaining: 2000, color: '#F59E0B' },
-    { name: 'Maintenance', allocated: 7000, spent: 4000, remaining: 3000, color: '#EF4444' },
-    { name: 'Miscellaneous', allocated: 8000, spent: 2000, remaining: 6000, color: '#8B5CF6' }
+    {
+      name: 'Teaching Materials',
+      allocated: 15000,
+      spent: 12000,
+      remaining: 3000,
+      color: '#f59e0b',
+    },
+    { name: 'Equipment', allocated: 12000, spent: 8500, remaining: 3500, color: '#7c3aed' },
+    {
+      name: 'Professional Development',
+      allocated: 8000,
+      spent: 6000,
+      remaining: 2000,
+      color: '#a78bfa',
+    },
+    { name: 'Maintenance', allocated: 7000, spent: 4000, remaining: 3000, color: '#3b2a66' },
+    { name: 'Miscellaneous', allocated: 8000, spent: 2000, remaining: 6000, color: '#6d28d9' },
   ]
 
   const monthlySpending = [
@@ -39,7 +73,7 @@ export default function BudgetPage() {
     { month: 'Mar', amount: 5800 },
     { month: 'Apr', amount: 7100 },
     { month: 'May', amount: 4900 },
-    { month: 'Jun', amount: 3900 }
+    { month: 'Jun', amount: 3900 },
   ]
 
   // Recent transactions - will be loaded from API
@@ -47,27 +81,35 @@ export default function BudgetPage() {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'approved': return <CheckCircle className="h-4 w-4 text-green-500" />
-      case 'pending': return <Clock className="h-4 w-4 text-yellow-500" />
-      case 'completed': return <CheckCircle className="h-4 w-4 text-blue-500" />
-      default: return <AlertCircle className="h-4 w-4 text-gray-500" />
+      case 'approved':
+        return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
+      case 'pending':
+        return <Clock className="h-4 w-4 text-yellow-500" />
+      case 'completed':
+        return <CheckCircle className="h-4 w-4 text-royalPurple-accentTx" />
+      default:
+        return <AlertCircle className="h-4 w-4 text-royalPurple-text3" />
     }
   }
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'approved': return 'bg-green-100 text-green-800'
-      case 'pending': return 'bg-yellow-100 text-yellow-800'
-      case 'completed': return 'bg-blue-100 text-blue-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'approved':
+        return 'bg-royalPurple-success text-royalPurple-successTx'
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800'
+      case 'completed':
+        return 'bg-royalPurple-accent text-royalPurple-accentTx'
+      default:
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
   }
 
   const getBudgetHealth = (spent, allocated) => {
     const percentage = (spent / allocated) * 100
-    if (percentage > 90) return { color: 'text-red-600', status: 'Critical' }
+    if (percentage > 90) return { color: 'text-royalPurple-dangerTx', status: 'Critical' }
     if (percentage > 75) return { color: 'text-yellow-600', status: 'Warning' }
-    return { color: 'text-green-600', status: 'Healthy' }
+    return { color: 'text-royalPurple-successTx', status: 'Healthy' }
   }
 
   return (
@@ -83,16 +125,16 @@ export default function BudgetPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+              <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center">
                 <DollarSign className="h-6 w-6 mr-2" />
                 Budget File
               </h1>
-              <p className="text-gray-600">Department budget management and tracking</p>
+              <p className="text-royalPurple-text2">Department budget management and tracking</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
             <select
-              className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500"
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(e.target.value)}
             >
@@ -116,10 +158,12 @@ export default function BudgetPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Wallet className="h-8 w-8 text-blue-600" />
+                <Wallet className="h-8 w-8 text-royalPurple-accentTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Allocated</p>
-                  <p className="text-2xl font-bold text-gray-900">${budgetOverview.totalAllocated.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Allocated</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    ${budgetOverview.totalAllocated.toLocaleString()}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -127,10 +171,12 @@ export default function BudgetPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <TrendingDown className="h-8 w-8 text-red-600" />
+                <TrendingDown className="h-8 w-8 text-royalPurple-dangerTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Spent</p>
-                  <p className="text-2xl font-bold text-gray-900">${budgetOverview.totalSpent.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Spent</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    ${budgetOverview.totalSpent.toLocaleString()}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -138,10 +184,12 @@ export default function BudgetPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <TrendingUp className="h-8 w-8 text-green-600" />
+                <TrendingUp className="h-8 w-8 text-royalPurple-successTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Remaining</p>
-                  <p className="text-2xl font-bold text-gray-900">${budgetOverview.remaining.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Remaining</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    ${budgetOverview.remaining.toLocaleString()}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -151,8 +199,10 @@ export default function BudgetPage() {
               <div className="flex items-center">
                 <Clock className="h-8 w-8 text-yellow-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Pending</p>
-                  <p className="text-2xl font-bold text-gray-900">{budgetOverview.pendingRequests}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Pending</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {budgetOverview.pendingRequests}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -160,10 +210,12 @@ export default function BudgetPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <CheckCircle className="h-8 w-8 text-purple-600" />
+                <CheckCircle className="h-8 w-8 text-royalPurple-pillTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Approved</p>
-                  <p className="text-2xl font-bold text-gray-900">{budgetOverview.approvedRequests}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Approved</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {budgetOverview.approvedRequests}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -176,17 +228,19 @@ export default function BudgetPage() {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Budget Health</h3>
               <div className="flex items-center">
-                <Target className="h-5 w-5 text-green-500 mr-2" />
-                <span className="text-green-600 font-medium">65% Utilized</span>
+                <Target className="h-5 w-5 text-royalPurple-successTx mr-2" />
+                <span className="text-royalPurple-successTx font-medium">65% Utilized</span>
               </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-4">
-              <div 
-                className="bg-green-500 h-4 rounded-full" 
-                style={{ width: `${(budgetOverview.totalSpent / budgetOverview.totalAllocated) * 100}%` }}
+            <div className="w-full bg-royalPurple-card2 rounded-full h-4">
+              <div
+                className="bg-royalPurple-success h-4 rounded-full"
+                style={{
+                  width: `${(budgetOverview.totalSpent / budgetOverview.totalAllocated) * 100}%`,
+                }}
               ></div>
             </div>
-            <div className="flex justify-between text-sm text-gray-600 mt-2">
+            <div className="flex justify-between text-sm text-royalPurple-text2 mt-2">
               <span>$0</span>
               <span>${budgetOverview.totalAllocated.toLocaleString()}</span>
             </div>
@@ -210,7 +264,7 @@ export default function BudgetPage() {
                     labelLine={false}
                     label={({ name, value }) => `${name}: $${value.toLocaleString()}`}
                     outerRadius={80}
-                    fill="#8884d8"
+                    fill="#7c3aed"
                     dataKey="allocated"
                   >
                     {budgetCategories.map((entry, index) => (
@@ -235,7 +289,7 @@ export default function BudgetPage() {
                   <XAxis dataKey="month" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="amount" fill="#3B82F6" />
+                  <Bar dataKey="amount" fill="#f59e0b" />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -265,16 +319,16 @@ export default function BudgetPage() {
                     const utilization = (category.spent / category.allocated) * 100
                     const health = getBudgetHealth(category.spent, category.allocated)
                     return (
-                      <tr key={index} className="border-b hover:bg-gray-50">
+                      <tr key={index} className="border-b hover:bg-royalPurple-page">
                         <td className="py-3 px-4 font-medium">{category.name}</td>
                         <td className="py-3 px-4">${category.allocated.toLocaleString()}</td>
                         <td className="py-3 px-4">${category.spent.toLocaleString()}</td>
                         <td className="py-3 px-4">${category.remaining.toLocaleString()}</td>
                         <td className="py-3 px-4">
                           <div className="flex items-center">
-                            <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                              <div 
-                                className="bg-blue-500 h-2 rounded-full" 
+                            <div className="w-16 bg-royalPurple-card2 rounded-full h-2 mr-2">
+                              <div
+                                className="bg-royalPurple-accent h-2 rounded-full"
                                 style={{ width: `${Math.min(utilization, 100)}%` }}
                               ></div>
                             </div>
@@ -282,7 +336,9 @@ export default function BudgetPage() {
                           </div>
                         </td>
                         <td className="py-3 px-4">
-                          <span className={`px-2 py-1 text-xs rounded-full ${health.color} bg-opacity-10`}>
+                          <span
+                            className={`px-2 py-1 text-xs rounded-full ${health.color} bg-opacity-10`}
+                          >
                             {health.status}
                           </span>
                         </td>
@@ -315,22 +371,26 @@ export default function BudgetPage() {
                 </thead>
                 <tbody>
                   {recentTransactions.map((transaction) => (
-                    <tr key={transaction.id} className="border-b hover:bg-gray-50">
+                    <tr key={transaction.id} className="border-b hover:bg-royalPurple-page">
                       <td className="py-3 px-4 font-medium">{transaction.description}</td>
                       <td className="py-3 px-4">
-                        <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">
+                        <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-card2 text-royalPurple-text1">
                           {transaction.category}
                         </span>
                       </td>
-                      <td className="py-3 px-4 font-medium">${transaction.amount.toLocaleString()}</td>
-                      <td className="py-3 px-4 text-sm text-gray-500">
+                      <td className="py-3 px-4 font-medium">
+                        ${transaction.amount.toLocaleString()}
+                      </td>
+                      <td className="py-3 px-4 text-sm text-royalPurple-text3">
                         {new Date(transaction.date).toLocaleDateString()}
                       </td>
                       <td className="py-3 px-4">{transaction.requestedBy}</td>
                       <td className="py-3 px-4">
                         <div className="flex items-center">
                           {getStatusIcon(transaction.status)}
-                          <span className={`ml-2 px-2 py-1 text-xs rounded-full ${getStatusColor(transaction.status)}`}>
+                          <span
+                            className={`ml-2 px-2 py-1 text-xs rounded-full ${getStatusColor(transaction.status)}`}
+                          >
                             {transaction.status}
                           </span>
                         </div>

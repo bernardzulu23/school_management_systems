@@ -3,11 +3,19 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  Users, Crown, TrendingUp, Award, 
-  BookOpen, Briefcase, Heart, Shield 
-} from 'lucide-react'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import { Users, Crown, TrendingUp, Award, BookOpen, Briefcase, Heart, Shield } from 'lucide-react'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts'
 
 export default function SDG5GenderModule({ schoolId, studentData = [], teacherData = [] }) {
   const [genderData, setGenderData] = useState({
@@ -19,7 +27,7 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
     totalTeachers: 0,
     femaleLeadership: 0,
     girlsCompletionRate: 0,
-    genderBasedViolencePrevention: 0
+    genderBasedViolencePrevention: 0,
   })
 
   const [genderPrograms, setGenderPrograms] = useState([])
@@ -28,12 +36,14 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
 
   useEffect(() => {
     const totalStudents = studentData.length
-    const femaleStudents = studentData.filter(student => student.gender === 'female').length
+    const femaleStudents = studentData.filter((student) => student.gender === 'female').length
     const maleStudents = totalStudents - femaleStudents
-    const genderParityIndex = maleStudents > 0 ? (femaleStudents / maleStudents) : 1
+    const genderParityIndex = maleStudents > 0 ? femaleStudents / maleStudents : 1
 
     const totalTeachers = teacherData.length || 25 // Mock data if not provided
-    const femaleTeachers = teacherData.filter(teacher => teacher.gender === 'female').length || Math.round(totalTeachers * 0.48)
+    const femaleTeachers =
+      teacherData.filter((teacher) => teacher.gender === 'female').length ||
+      Math.round(totalTeachers * 0.48)
 
     setGenderData({
       totalStudents,
@@ -44,7 +54,7 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
       totalTeachers,
       femaleLeadership: Math.round(Math.random() * 20 + 35), // 35-55%
       girlsCompletionRate: Math.round(Math.random() * 15 + 80), // 80-95%
-      genderBasedViolencePrevention: Math.round(Math.random() * 25 + 70) // 70-95%
+      genderBasedViolencePrevention: Math.round(Math.random() * 25 + 70), // 70-95%
     })
 
     loadGenderPrograms()
@@ -58,34 +68,35 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
         id: 1,
         name: "Girls' Education Empowerment",
         participants: 145,
-        type: "education",
+        type: 'education',
         impact: 92,
-        description: "Supporting girls to complete their education and pursue higher learning"
+        description: 'Supporting girls to complete their education and pursue higher learning',
       },
       {
         id: 2,
-        name: "STEM for Girls Initiative",
+        name: 'STEM for Girls Initiative',
         participants: 89,
-        type: "stem",
+        type: 'stem',
         impact: 87,
-        description: "Encouraging girls to pursue science, technology, engineering, and mathematics"
+        description:
+          'Encouraging girls to pursue science, technology, engineering, and mathematics',
       },
       {
         id: 3,
-        name: "Female Teacher Mentorship",
+        name: 'Female Teacher Mentorship',
         participants: 12,
-        type: "professional",
+        type: 'professional',
         impact: 95,
-        description: "Supporting female teachers in career advancement and leadership roles"
+        description: 'Supporting female teachers in career advancement and leadership roles',
       },
       {
         id: 4,
-        name: "Gender Equality Awareness",
+        name: 'Gender Equality Awareness',
         participants: 234,
-        type: "awareness",
+        type: 'awareness',
         impact: 78,
-        description: "Promoting gender equality understanding among all students and staff"
-      }
+        description: 'Promoting gender equality understanding among all students and staff',
+      },
     ])
   }
 
@@ -93,25 +104,25 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
     setLeadershipPrograms([
       {
         id: 1,
-        program: "Student Council Leadership",
+        program: 'Student Council Leadership',
         femaleParticipants: 8,
         totalParticipants: 15,
-        positions: ["President", "Vice President", "Secretary", "Treasurer"]
+        positions: ['President', 'Vice President', 'Secretary', 'Treasurer'],
       },
       {
         id: 2,
-        program: "Peer Mentoring Leaders",
+        program: 'Peer Mentoring Leaders',
         femaleParticipants: 23,
         totalParticipants: 40,
-        positions: ["Senior Mentors", "Subject Leaders", "Activity Coordinators"]
+        positions: ['Senior Mentors', 'Subject Leaders', 'Activity Coordinators'],
       },
       {
         id: 3,
-        program: "Academic Excellence Awards",
+        program: 'Academic Excellence Awards',
         femaleParticipants: 34,
         totalParticipants: 60,
-        positions: ["Top Performers", "Subject Champions", "Innovation Leaders"]
-      }
+        positions: ['Top Performers', 'Subject Champions', 'Innovation Leaders'],
+      },
     ])
   }
 
@@ -119,39 +130,39 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
     setSupportInitiatives([
       {
         id: 1,
-        name: "Menstrual Health Management",
+        name: 'Menstrual Health Management',
         beneficiaries: 156,
         budget: 8000,
-        impact: "Reduced absenteeism by 25%"
+        impact: 'Reduced absenteeism by 25%',
       },
       {
         id: 2,
-        name: "Safe Transportation Program",
+        name: 'Safe Transportation Program',
         beneficiaries: 89,
         budget: 12000,
-        impact: "100% safe school commute"
+        impact: '100% safe school commute',
       },
       {
         id: 3,
-        name: "Anti-Harassment Training",
+        name: 'Anti-Harassment Training',
         beneficiaries: 280,
         budget: 5000,
-        impact: "Zero tolerance environment"
+        impact: 'Zero tolerance environment',
       },
       {
         id: 4,
-        name: "Career Guidance for Girls",
+        name: 'Career Guidance for Girls',
         beneficiaries: 134,
         budget: 6000,
-        impact: "85% pursuing higher education"
-      }
+        impact: '85% pursuing higher education',
+      },
     ])
   }
 
   const getGenderDistributionData = () => {
     return [
       { name: 'Female Students', value: genderData.femaleStudents, color: '#ec4899' },
-      { name: 'Male Students', value: genderData.maleStudents, color: '#3b82f6' }
+      { name: 'Male Students', value: genderData.maleStudents, color: '#3b82f6' },
     ]
   }
 
@@ -161,26 +172,28 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
       { year: '2021', femaleEnrollment: 47, femaleCompletion: 82, femaleLeadership: 38 },
       { year: '2022', femaleEnrollment: 49, femaleCompletion: 85, femaleLeadership: 42 },
       { year: '2023', femaleEnrollment: 51, femaleCompletion: 87, femaleLeadership: 45 },
-      { year: '2024', femaleEnrollment: 52, femaleCompletion: 89, femaleLeadership: 48 }
+      { year: '2024', femaleEnrollment: 52, femaleCompletion: 89, femaleLeadership: 48 },
     ]
   }
 
   const getLeadershipData = () => {
-    return leadershipPrograms.map(program => ({
+    return leadershipPrograms.map((program) => ({
       name: program.program.split(' ')[0],
       female: program.femaleParticipants,
       male: program.totalParticipants - program.femaleParticipants,
-      femalePercentage: Math.round((program.femaleParticipants / program.totalParticipants) * 100)
+      femalePercentage: Math.round((program.femaleParticipants / program.totalParticipants) * 100),
     }))
   }
 
-  const femaleStudentPercentage = genderData.totalStudents > 0 
-    ? Math.round((genderData.femaleStudents / genderData.totalStudents) * 100)
-    : 0
+  const femaleStudentPercentage =
+    genderData.totalStudents > 0
+      ? Math.round((genderData.femaleStudents / genderData.totalStudents) * 100)
+      : 0
 
-  const femaleTeacherPercentage = genderData.totalTeachers > 0
-    ? Math.round((genderData.femaleTeachers / genderData.totalTeachers) * 100)
-    : 0
+  const femaleTeacherPercentage =
+    genderData.totalTeachers > 0
+      ? Math.round((genderData.femaleTeachers / genderData.totalTeachers) * 100)
+      : 0
 
   return (
     <div className="space-y-6">
@@ -190,7 +203,7 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
           <span className="text-4xl">👩‍🎓</span>
           <span>SDG 5: Gender Equality</span>
         </h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
+        <p className="text-royalPurple-text2 max-w-2xl mx-auto">
           Achieve gender equality and empower all women and girls
         </p>
       </div>
@@ -199,16 +212,14 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="border-l-4 border-l-pink-500">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+            <CardTitle className="text-sm font-medium text-royalPurple-text2 flex items-center">
               <Users className="h-4 w-4 mr-2" />
               Gender Parity Index
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-pink-600">
-              {genderData.genderParityIndex}
-            </div>
-            <p className="text-xs text-gray-500">
+            <div className="text-2xl font-bold text-pink-600">{genderData.genderParityIndex}</div>
+            <p className="text-xs text-royalPurple-text3">
               {femaleStudentPercentage}% female students
             </p>
           </CardContent>
@@ -216,16 +227,16 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
 
         <Card className="border-l-4 border-l-purple-500">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+            <CardTitle className="text-sm font-medium text-royalPurple-text2 flex items-center">
               <BookOpen className="h-4 w-4 mr-2" />
               Female Teachers
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-600">
+            <div className="text-2xl font-bold text-royalPurple-pillTx">
               {femaleTeacherPercentage}%
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-royalPurple-text3">
               {genderData.femaleTeachers} of {genderData.totalTeachers} teachers
             </p>
           </CardContent>
@@ -233,35 +244,31 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
 
         <Card className="border-l-4 border-l-blue-500">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+            <CardTitle className="text-sm font-medium text-royalPurple-text2 flex items-center">
               <Crown className="h-4 w-4 mr-2" />
               Female Leadership
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-2xl font-bold text-royalPurple-accentTx">
               {genderData.femaleLeadership}%
             </div>
-            <p className="text-xs text-gray-500">
-              In leadership positions
-            </p>
+            <p className="text-xs text-royalPurple-text3">In leadership positions</p>
           </CardContent>
         </Card>
 
         <Card className="border-l-4 border-l-green-500">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+            <CardTitle className="text-sm font-medium text-royalPurple-text2 flex items-center">
               <Award className="h-4 w-4 mr-2" />
               Girls' Completion Rate
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-royalPurple-successTx">
               {genderData.girlsCompletionRate}%
             </div>
-            <p className="text-xs text-gray-500">
-              Successfully completing education
-            </p>
+            <p className="text-xs text-royalPurple-text3">Successfully completing education</p>
           </CardContent>
         </Card>
       </div>
@@ -329,28 +336,35 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {genderPrograms.map(program => (
+            {genderPrograms.map((program) => (
               <div key={program.id} className="p-4 border rounded-lg">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-semibold text-gray-900">{program.name}</h3>
-                  <span className={`px-2 py-1 rounded text-xs ${
-                    program.type === 'education' ? 'bg-pink-100 text-pink-800' :
-                    program.type === 'stem' ? 'bg-blue-100 text-blue-800' :
-                    program.type === 'professional' ? 'bg-purple-100 text-purple-800' :
-                    'bg-green-100 text-green-800'
-                  }`}>
+                  <h3 className="font-semibold text-royalPurple-text1">{program.name}</h3>
+                  <span
+                    className={`px-2 py-1 rounded text-xs ${
+                      program.type === 'education'
+                        ? 'bg-pink-100 text-pink-800'
+                        : program.type === 'stem'
+                          ? 'bg-royalPurple-accent text-royalPurple-accentTx'
+                          : program.type === 'professional'
+                            ? 'bg-royalPurple-pill text-royalPurple-pillTx'
+                            : 'bg-royalPurple-success text-royalPurple-successTx'
+                    }`}
+                  >
                     {program.type}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 mb-3">{program.description}</p>
+                <p className="text-sm text-royalPurple-text2 mb-3">{program.description}</p>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Participants:</span>
+                    <span className="text-royalPurple-text2">Participants:</span>
                     <span className="font-medium">{program.participants}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Impact Score:</span>
-                    <span className="font-medium text-green-600">{program.impact}%</span>
+                    <span className="text-royalPurple-text2">Impact Score:</span>
+                    <span className="font-medium text-royalPurple-successTx">
+                      {program.impact}%
+                    </span>
                   </div>
                 </div>
               </div>
@@ -369,27 +383,32 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {leadershipPrograms.map(program => (
+            {leadershipPrograms.map((program) => (
               <div key={program.id} className="p-4 border rounded-lg">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="font-semibold text-gray-900">{program.program}</h3>
+                  <h3 className="font-semibold text-royalPurple-text1">{program.program}</h3>
                   <span className="text-lg font-bold text-pink-600">
                     {Math.round((program.femaleParticipants / program.totalParticipants) * 100)}%
                   </span>
                 </div>
-                <div className="flex justify-between text-sm text-gray-600 mb-2">
+                <div className="flex justify-between text-sm text-royalPurple-text2 mb-2">
                   <span>Female: {program.femaleParticipants}</span>
                   <span>Total: {program.totalParticipants}</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                <div className="w-full bg-royalPurple-card2 rounded-full h-2 mb-2">
                   <div
                     className="bg-pink-500 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(program.femaleParticipants / program.totalParticipants) * 100}%` }}
+                    style={{
+                      width: `${(program.femaleParticipants / program.totalParticipants) * 100}%`,
+                    }}
                   />
                 </div>
                 <div className="flex flex-wrap gap-1">
-                  {program.positions.map(position => (
-                    <span key={position} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                  {program.positions.map((position) => (
+                    <span
+                      key={position}
+                      className="px-2 py-1 bg-royalPurple-card2 text-royalPurple-text2 text-xs rounded"
+                    >
                       {position}
                     </span>
                   ))}
@@ -410,20 +429,22 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {supportInitiatives.map(initiative => (
+            {supportInitiatives.map((initiative) => (
               <div key={initiative.id} className="p-4 border rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-2">{initiative.name}</h3>
+                <h3 className="font-semibold text-royalPurple-text1 mb-2">{initiative.name}</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Beneficiaries:</span>
+                    <span className="text-royalPurple-text2">Beneficiaries:</span>
                     <span className="font-medium">{initiative.beneficiaries} students</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Budget:</span>
+                    <span className="text-royalPurple-text2">Budget:</span>
                     <span className="font-medium">ZMW {initiative.budget.toLocaleString()}</span>
                   </div>
-                  <div className="mt-2 p-2 bg-green-50 rounded">
-                    <span className="text-xs text-green-800 font-medium">Impact: {initiative.impact}</span>
+                  <div className="mt-2 p-2 bg-royalPurple-success rounded">
+                    <span className="text-xs text-royalPurple-successTx font-medium">
+                      Impact: {initiative.impact}
+                    </span>
                   </div>
                 </div>
               </div>

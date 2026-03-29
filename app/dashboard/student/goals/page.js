@@ -5,9 +5,23 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import Modal from '@/components/ui/Modal'
-import { 
-  Target, Plus, TrendingUp, Award, Calendar, CheckCircle, Clock,
-  ArrowLeft, Search, Filter, Edit, Trash2, Star, Save, X, AlertTriangle
+import {
+  Target,
+  Plus,
+  TrendingUp,
+  Award,
+  Calendar,
+  CheckCircle,
+  Clock,
+  ArrowLeft,
+  Search,
+  Filter,
+  Edit,
+  Trash2,
+  Star,
+  Save,
+  X,
+  AlertTriangle,
 } from 'lucide-react'
 import Link from 'next/link'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -18,13 +32,13 @@ export default function StudentGoalsPage() {
   const [activeTab, setActiveTab] = useState('academic')
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
-  
+
   // Modal states
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [selectedGoal, setSelectedGoal] = useState(null)
-  
+
   // Form state
   const [formData, setFormData] = useState({
     title: '',
@@ -36,7 +50,7 @@ export default function StudentGoalsPage() {
     priority: 'medium',
     targetValue: '',
     currentValue: '',
-    milestones: [] // { name: '', completed: false }
+    milestones: [], // { name: '', completed: false }
   })
 
   const queryClient = useQueryClient()
@@ -51,7 +65,7 @@ export default function StudentGoalsPage() {
         toast.error('Failed to load goals')
         return null
       }
-    }
+    },
   })
 
   // Mutations
@@ -65,7 +79,7 @@ export default function StudentGoalsPage() {
     },
     onError: (error) => {
       toast.error(error.response?.data?.message || 'Failed to create goal')
-    }
+    },
   })
 
   const updateMutation = useMutation({
@@ -78,7 +92,7 @@ export default function StudentGoalsPage() {
     },
     onError: (error) => {
       toast.error(error.response?.data?.message || 'Failed to update goal')
-    }
+    },
   })
 
   const deleteMutation = useMutation({
@@ -91,7 +105,7 @@ export default function StudentGoalsPage() {
     },
     onError: (error) => {
       toast.error(error.response?.data?.message || 'Failed to delete goal')
-    }
+    },
   })
 
   const resetForm = () => {
@@ -105,7 +119,7 @@ export default function StudentGoalsPage() {
       priority: 'medium',
       targetValue: '',
       currentValue: '',
-      milestones: []
+      milestones: [],
     })
     setSelectedGoal(null)
   }
@@ -122,7 +136,7 @@ export default function StudentGoalsPage() {
       priority: goal.priority,
       targetValue: goal.targetValue || '',
       currentValue: goal.currentValue || '',
-      milestones: goal.milestones || []
+      milestones: goal.milestones || [],
     })
     setIsEditModalOpen(true)
   }
@@ -144,7 +158,7 @@ export default function StudentGoalsPage() {
   const handleAddMilestone = () => {
     setFormData({
       ...formData,
-      milestones: [...formData.milestones, { name: '', completed: false }]
+      milestones: [...formData.milestones, { name: '', completed: false }],
     })
   }
 
@@ -163,49 +177,70 @@ export default function StudentGoalsPage() {
   // Sample student goals data - fallback if loading or error
   const defaultGoals = {
     academic: [],
-    personal: []
+    personal: [],
   }
 
   const studentGoals = goalsData || defaultGoals
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'completed': return <CheckCircle className="h-4 w-4 text-green-500" />
-      case 'in_progress': return <Clock className="h-4 w-4 text-blue-500" />
-      case 'pending': return <Target className="h-4 w-4 text-yellow-500" />
-      case 'overdue': return <Target className="h-4 w-4 text-red-500" />
-      default: return <Target className="h-4 w-4 text-gray-500" />
+      case 'completed':
+        return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
+      case 'in_progress':
+        return <Clock className="h-4 w-4 text-royalPurple-accentTx" />
+      case 'pending':
+        return <Target className="h-4 w-4 text-yellow-500" />
+      case 'overdue':
+        return <Target className="h-4 w-4 text-royalPurple-dangerTx" />
+      default:
+        return <Target className="h-4 w-4 text-royalPurple-text3" />
     }
   }
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800'
-      case 'in_progress': return 'bg-blue-100 text-blue-800'
-      case 'pending': return 'bg-yellow-100 text-yellow-800'
-      case 'overdue': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'completed':
+        return 'bg-royalPurple-success text-royalPurple-successTx'
+      case 'in_progress':
+        return 'bg-royalPurple-accent text-royalPurple-accentTx'
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800'
+      case 'overdue':
+        return 'bg-royalPurple-danger text-royalPurple-dangerTx'
+      default:
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
   }
 
   const getPriorityColor = (priority) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800 border-red-200'
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'low': return 'bg-green-100 text-green-800 border-green-200'
-      default: return 'bg-gray-100 text-gray-800 border-gray-200'
+      case 'high':
+        return 'bg-royalPurple-danger text-royalPurple-dangerTx border-royalPurple-border'
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+      case 'low':
+        return 'bg-royalPurple-success text-royalPurple-successTx border-royalPurple-border'
+      default:
+        return 'bg-royalPurple-card2 text-royalPurple-text1 border-royalPurple-border'
     }
   }
 
   const getCategoryColor = (category) => {
     switch (category) {
-      case 'Academic Excellence': return 'bg-blue-100 text-blue-800'
-      case 'Practical Skills': return 'bg-purple-100 text-purple-800'
-      case 'Attendance': return 'bg-green-100 text-green-800'
-      case 'Personal Development': return 'bg-orange-100 text-orange-800'
-      case 'Language Learning': return 'bg-indigo-100 text-indigo-800'
-      case 'Leadership': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'Academic Excellence':
+        return 'bg-royalPurple-accent text-royalPurple-accentTx'
+      case 'Practical Skills':
+        return 'bg-royalPurple-pill text-royalPurple-pillTx'
+      case 'Attendance':
+        return 'bg-royalPurple-success text-royalPurple-successTx'
+      case 'Personal Development':
+        return 'bg-orange-100 text-orange-800'
+      case 'Language Learning':
+        return 'bg-royalPurple-pill text-royalPurple-pillTx'
+      case 'Leadership':
+        return 'bg-royalPurple-danger text-royalPurple-dangerTx'
+      default:
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
   }
 
@@ -213,9 +248,18 @@ export default function StudentGoalsPage() {
 
   const goalStats = {
     totalGoals: [...studentGoals.academic, ...studentGoals.personal].length,
-    completedGoals: [...studentGoals.academic, ...studentGoals.personal].filter(goal => goal.status === 'completed').length,
-    inProgressGoals: [...studentGoals.academic, ...studentGoals.personal].filter(goal => goal.status === 'in_progress').length,
-    averageProgress: Math.round([...studentGoals.academic, ...studentGoals.personal].reduce((sum, goal) => sum + goal.progress, 0) / [...studentGoals.academic, ...studentGoals.personal].length)
+    completedGoals: [...studentGoals.academic, ...studentGoals.personal].filter(
+      (goal) => goal.status === 'completed'
+    ).length,
+    inProgressGoals: [...studentGoals.academic, ...studentGoals.personal].filter(
+      (goal) => goal.status === 'in_progress'
+    ).length,
+    averageProgress: Math.round(
+      [...studentGoals.academic, ...studentGoals.personal].reduce(
+        (sum, goal) => sum + goal.progress,
+        0
+      ) / [...studentGoals.academic, ...studentGoals.personal].length
+    ),
   }
 
   return (
@@ -231,11 +275,13 @@ export default function StudentGoalsPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+              <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center">
                 <Target className="h-6 w-6 mr-2" />
                 Goal Setting & Achievement Tracking
               </h1>
-              <p className="text-gray-600">Set, track, and achieve your academic and personal goals</p>
+              <p className="text-royalPurple-text2">
+                Set, track, and achieve your academic and personal goals
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -255,10 +301,12 @@ export default function StudentGoalsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Target className="h-8 w-8 text-blue-600" />
+                <Target className="h-8 w-8 text-royalPurple-accentTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Goals</p>
-                  <p className="text-2xl font-bold text-gray-900">{goalStats.totalGoals}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Goals</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {goalStats.totalGoals}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -266,10 +314,12 @@ export default function StudentGoalsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <CheckCircle className="h-8 w-8 text-green-600" />
+                <CheckCircle className="h-8 w-8 text-royalPurple-successTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Completed</p>
-                  <p className="text-2xl font-bold text-gray-900">{goalStats.completedGoals}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Completed</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {goalStats.completedGoals}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -277,10 +327,12 @@ export default function StudentGoalsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Clock className="h-8 w-8 text-purple-600" />
+                <Clock className="h-8 w-8 text-royalPurple-pillTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">In Progress</p>
-                  <p className="text-2xl font-bold text-gray-900">{goalStats.inProgressGoals}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">In Progress</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {goalStats.inProgressGoals}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -290,8 +342,10 @@ export default function StudentGoalsPage() {
               <div className="flex items-center">
                 <TrendingUp className="h-8 w-8 text-orange-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Avg Progress</p>
-                  <p className="text-2xl font-bold text-gray-900">{goalStats.averageProgress}%</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Avg Progress</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {goalStats.averageProgress}%
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -303,17 +357,18 @@ export default function StudentGoalsPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Overall Goal Progress</h3>
-              <span className="text-sm text-gray-600">
-                {goalStats.inProgressGoals} active goals • {goalStats.averageProgress}% average progress
+              <span className="text-sm text-royalPurple-text2">
+                {goalStats.inProgressGoals} active goals • {goalStats.averageProgress}% average
+                progress
               </span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-4">
-              <div 
-                className="bg-blue-500 h-4 rounded-full transition-all duration-300" 
+            <div className="w-full bg-royalPurple-card2 rounded-full h-4">
+              <div
+                className="bg-royalPurple-accent h-4 rounded-full transition-all duration-300"
                 style={{ width: `${goalStats.averageProgress}%` }}
               ></div>
             </div>
-            <div className="flex justify-between text-sm text-gray-600 mt-2">
+            <div className="flex justify-between text-sm text-royalPurple-text2 mt-2">
               <span>{goalStats.completedGoals} completed</span>
               <span>{goalStats.averageProgress}% complete</span>
             </div>
@@ -342,17 +397,17 @@ export default function StudentGoalsPage() {
               </div>
               <div className="flex items-center space-x-2">
                 <div className="relative">
-                  <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-royalPurple-text3" />
                   <input
                     type="text"
                     placeholder="Search goals..."
-                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <select
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                 >
@@ -367,27 +422,38 @@ export default function StudentGoalsPage() {
           <CardContent>
             <div className="space-y-6">
               {currentGoals.map((goal) => (
-                <div key={goal.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                <div
+                  key={goal.id}
+                  className="border border-royalPurple-border rounded-lg p-6 hover:shadow-md transition-shadow"
+                >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900 mr-3">{goal.title}</h3>
-                        <span className={`px-2 py-1 text-xs rounded-full ${getCategoryColor(goal.category)}`}>
+                        <h3 className="text-lg font-semibold text-royalPurple-text1 mr-3">
+                          {goal.title}
+                        </h3>
+                        <span
+                          className={`px-2 py-1 text-xs rounded-full ${getCategoryColor(goal.category)}`}
+                        >
                           {goal.category}
                         </span>
-                        <span className={`ml-2 px-2 py-1 text-xs rounded border ${getPriorityColor(goal.priority)}`}>
+                        <span
+                          className={`ml-2 px-2 py-1 text-xs rounded border ${getPriorityColor(goal.priority)}`}
+                        >
                           {goal.priority} priority
                         </span>
                       </div>
-                      <p className="text-gray-600 mb-3">{goal.description}</p>
-                      <div className="flex items-center space-x-4 text-sm text-gray-500">
+                      <p className="text-royalPurple-text2 mb-3">{goal.description}</p>
+                      <div className="flex items-center space-x-4 text-sm text-royalPurple-text3">
                         <div className="flex items-center">
                           <Calendar className="h-4 w-4 mr-1" />
                           Target: {new Date(goal.targetDate).toLocaleDateString()}
                         </div>
                         <div className="flex items-center">
                           {getStatusIcon(goal.status)}
-                          <span className={`ml-2 px-2 py-1 text-xs rounded ${getStatusColor(goal.status)}`}>
+                          <span
+                            className={`ml-2 px-2 py-1 text-xs rounded ${getStatusColor(goal.status)}`}
+                          >
                             {goal.status.replace('_', ' ')}
                           </span>
                         </div>
@@ -406,12 +472,14 @@ export default function StudentGoalsPage() {
                   {/* Progress Bar */}
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">Progress</span>
-                      <span className="text-sm font-bold text-blue-600">{goal.progress}%</span>
+                      <span className="text-sm font-medium text-royalPurple-text2">Progress</span>
+                      <span className="text-sm font-bold text-royalPurple-accentTx">
+                        {goal.progress}%
+                      </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-3">
-                      <div 
-                        className="bg-blue-500 h-3 rounded-full transition-all duration-300" 
+                    <div className="w-full bg-royalPurple-card2 rounded-full h-3">
+                      <div
+                        className="bg-royalPurple-accent h-3 rounded-full transition-all duration-300"
                         style={{ width: `${goal.progress}%` }}
                       ></div>
                     </div>
@@ -420,31 +488,41 @@ export default function StudentGoalsPage() {
                   {/* Goal-specific metrics */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     {goal.currentValue && (
-                      <div className="text-center p-3 bg-blue-50 rounded-lg">
-                        <p className="text-sm text-blue-600">Current Status</p>
-                        <p className="text-lg font-bold text-blue-800">{goal.currentValue}</p>
+                      <div className="text-center p-3 bg-royalPurple-accent rounded-lg">
+                        <p className="text-sm text-royalPurple-accentTx">Current Status</p>
+                        <p className="text-lg font-bold text-royalPurple-accentTx">
+                          {goal.currentValue}
+                        </p>
                       </div>
                     )}
                     {goal.targetValue && (
-                      <div className="text-center p-3 bg-green-50 rounded-lg">
-                        <p className="text-sm text-green-600">Target Goal</p>
-                        <p className="text-lg font-bold text-green-800">{goal.targetValue}</p>
+                      <div className="text-center p-3 bg-royalPurple-success rounded-lg">
+                        <p className="text-sm text-royalPurple-successTx">Target Goal</p>
+                        <p className="text-lg font-bold text-royalPurple-successTx">
+                          {goal.targetValue}
+                        </p>
                       </div>
                     )}
                   </div>
 
                   {/* Milestones */}
                   <div className="border-t pt-4">
-                    <h4 className="font-medium text-gray-900 mb-3">Milestones:</h4>
+                    <h4 className="font-medium text-royalPurple-text1 mb-3">Milestones:</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {goal.milestones.map((milestone, index) => (
-                        <div key={index} className={`flex items-center p-2 rounded ${
-                          milestone.completed ? 'bg-green-50 text-green-800' : 'bg-gray-50 text-gray-700'
-                        }`}>
-                          {milestone.completed ? 
-                            <CheckCircle className="h-4 w-4 mr-2 text-green-500" /> :
-                            <Clock className="h-4 w-4 mr-2 text-gray-400" />
-                          }
+                        <div
+                          key={index}
+                          className={`flex items-center p-2 rounded ${
+                            milestone.completed
+                              ? 'bg-royalPurple-success text-royalPurple-successTx'
+                              : 'bg-royalPurple-page text-royalPurple-text2'
+                          }`}
+                        >
+                          {milestone.completed ? (
+                            <CheckCircle className="h-4 w-4 mr-2 text-royalPurple-successTx" />
+                          ) : (
+                            <Clock className="h-4 w-4 mr-2 text-royalPurple-text3" />
+                          )}
                           <span className="text-sm">{milestone.name}</span>
                         </div>
                       ))}
@@ -494,20 +572,26 @@ export default function StudentGoalsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <h4 className="font-medium text-green-800 mb-1">Goal Milestone Reached</h4>
-                  <p className="text-sm text-green-700">Scored 90% on Mathematics test</p>
-                  <p className="text-xs text-green-600 mt-1">3 days ago</p>
+                <div className="p-3 bg-royalPurple-success border border-royalPurple-border rounded-lg">
+                  <h4 className="font-medium text-royalPurple-successTx mb-1">
+                    Goal Milestone Reached
+                  </h4>
+                  <p className="text-sm text-royalPurple-successTx">
+                    Scored 90% on Mathematics test
+                  </p>
+                  <p className="text-xs text-royalPurple-successTx mt-1">3 days ago</p>
                 </div>
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <h4 className="font-medium text-blue-800 mb-1">Perfect Attendance</h4>
-                  <p className="text-sm text-blue-700">Third consecutive month achieved</p>
-                  <p className="text-xs text-blue-600 mt-1">1 week ago</p>
+                <div className="p-3 bg-royalPurple-accent border border-royalPurple-border2 rounded-lg">
+                  <h4 className="font-medium text-royalPurple-accentTx mb-1">Perfect Attendance</h4>
+                  <p className="text-sm text-royalPurple-accentTx">
+                    Third consecutive month achieved
+                  </p>
+                  <p className="text-xs text-royalPurple-accentTx mt-1">1 week ago</p>
                 </div>
-                <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
-                  <h4 className="font-medium text-purple-800 mb-1">Reading Progress</h4>
-                  <p className="text-sm text-purple-700">Completed 8th book of the year</p>
-                  <p className="text-xs text-purple-600 mt-1">2 weeks ago</p>
+                <div className="p-3 bg-royalPurple-pill border border-royalPurple-border2 rounded-lg">
+                  <h4 className="font-medium text-royalPurple-pillTx mb-1">Reading Progress</h4>
+                  <p className="text-sm text-royalPurple-pillTx">Completed 8th book of the year</p>
+                  <p className="text-xs text-royalPurple-pillTx mt-1">2 weeks ago</p>
                 </div>
               </div>
             </CardContent>
@@ -588,7 +672,7 @@ export default function StudentGoalsPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-               <div className="space-y-2">
+              <div className="space-y-2">
                 <label className="text-sm font-medium">Priority</label>
                 <select
                   className="w-full px-3 py-2 border rounded-md"
@@ -628,7 +712,7 @@ export default function StudentGoalsPage() {
                       type="checkbox"
                       checked={milestone.completed}
                       onChange={(e) => handleMilestoneChange(index, 'completed', e.target.checked)}
-                      className="rounded border-gray-300"
+                      className="rounded border-royalPurple-border"
                     />
                     <input
                       type="text"
@@ -637,7 +721,11 @@ export default function StudentGoalsPage() {
                       value={milestone.name}
                       onChange={(e) => handleMilestoneChange(index, 'name', e.target.value)}
                     />
-                    <button type="button" onClick={() => handleRemoveMilestone(index)} className="text-red-500">
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveMilestone(index)}
+                      className="text-royalPurple-dangerTx"
+                    >
                       <X className="h-4 w-4" />
                     </button>
                   </div>
@@ -646,15 +734,19 @@ export default function StudentGoalsPage() {
             </div>
 
             <div className="flex justify-end space-x-2 pt-4">
-              <Button type="button" variant="outline" onClick={() => {
-                setIsAddModalOpen(false)
-                setIsEditModalOpen(false)
-                resetForm()
-              }}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setIsAddModalOpen(false)
+                  setIsEditModalOpen(false)
+                  resetForm()
+                }}
+              >
                 Cancel
               </Button>
               <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
-                {(createMutation.isPending || updateMutation.isPending) ? 'Saving...' : 'Save Goal'}
+                {createMutation.isPending || updateMutation.isPending ? 'Saving...' : 'Save Goal'}
               </Button>
             </div>
           </form>
@@ -668,19 +760,20 @@ export default function StudentGoalsPage() {
           size="sm"
         >
           <div className="space-y-4">
-            <div className="flex items-center space-x-3 text-red-600 bg-red-50 p-4 rounded-lg">
+            <div className="flex items-center space-x-3 text-royalPurple-dangerTx bg-royalPurple-danger p-4 rounded-lg">
               <AlertTriangle className="h-6 w-6" />
               <p className="font-medium">Are you sure you want to delete this goal?</p>
             </div>
-            <p className="text-sm text-gray-600">
-              This action cannot be undone. This will permanently delete the goal "{selectedGoal?.title}" and all its milestones.
+            <p className="text-sm text-royalPurple-text2">
+              This action cannot be undone. This will permanently delete the goal "
+              {selectedGoal?.title}" and all its milestones.
             </p>
             <div className="flex justify-end space-x-2 pt-4">
               <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
                 Cancel
               </Button>
-              <Button 
-                className="bg-red-600 hover:bg-red-700 text-white"
+              <Button
+                className="bg-royalPurple-danger hover:bg-royalPurple-danger text-royalPurple-text1"
                 onClick={() => deleteMutation.mutate(selectedGoal.id)}
                 disabled={deleteMutation.isPending}
               >

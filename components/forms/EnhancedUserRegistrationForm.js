@@ -436,7 +436,9 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
       case 3:
         if (role === 'student') {
           if (lookupsLoading) {
-            return <div className="text-sm text-gray-600">Loading classes and subjects…</div>
+            return (
+              <div className="text-sm text-royalPurple-text2">Loading classes and subjects…</div>
+            )
           }
           return (
             <AcademicInfoStep
@@ -450,7 +452,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         } else if (role === 'teacher' || role === 'hod') {
           if (lookupsLoading) {
             return (
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-royalPurple-text2">
                 Loading classes, subjects, and departments…
               </div>
             )
@@ -490,9 +492,9 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
   }
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+    <div className="max-w-4xl mx-auto bg-royalPurple-card rounded-2xl shadow-xl overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-royalPurple-text1">
         <h2 className="text-3xl font-bold mb-2">Registration</h2>
         <p className="opacity-90 capitalize">{role} Account Setup</p>
       </div>
@@ -507,13 +509,13 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
 
         {/* Progress Bar */}
         <div className="mb-8">
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div className="h-2 bg-royalPurple-card2 rounded-full overflow-hidden">
             <div
-              className="h-full bg-blue-600 transition-all duration-500"
+              className="h-full bg-royalPurple-accent transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <div className="flex justify-between text-sm text-gray-500 mt-2">
+          <div className="flex justify-between text-sm text-royalPurple-text3 mt-2">
             <span>
               Step {currentStep} of {totalSteps}
             </span>
@@ -550,7 +552,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+                  className="flex items-center gap-2 bg-royalPurple-success hover:bg-royalPurple-success text-royalPurple-text1"
                 >
                   {loading ? 'Processing...' : 'Complete Registration'}
                   {!loading && <CheckCircle className="w-4 h-4" />}

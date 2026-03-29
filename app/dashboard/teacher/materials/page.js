@@ -121,30 +121,30 @@ export default function StudyMaterialsPage() {
   const getStatusColor = (status) => {
     switch (status) {
       case 'published':
-        return 'bg-green-100 text-green-800'
+        return 'bg-royalPurple-success text-royalPurple-successTx'
       case 'draft':
         return 'bg-yellow-100 text-yellow-800'
       case 'archived':
-        return 'bg-gray-100 text-gray-800'
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
       default:
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-royalPurple-accent text-royalPurple-accentTx'
     }
   }
 
   const getTypeColor = (type) => {
     switch (type.toLowerCase()) {
       case 'pdf':
-        return 'bg-red-100 text-red-800'
+        return 'bg-royalPurple-danger text-royalPurple-dangerTx'
       case 'video':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-royalPurple-accent text-royalPurple-accentTx'
       case 'powerpoint':
         return 'bg-orange-100 text-orange-800'
       case 'zip':
-        return 'bg-purple-100 text-purple-800'
+        return 'bg-royalPurple-pill text-royalPurple-pillTx'
       case 'image':
-        return 'bg-green-100 text-green-800'
+        return 'bg-royalPurple-success text-royalPurple-successTx'
       default:
-        return 'bg-gray-100 text-gray-800'
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
   }
 
@@ -181,11 +181,13 @@ export default function StudyMaterialsPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+              <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center">
                 <BookOpen className="h-6 w-6 mr-2" />
                 Study Materials Management
               </h1>
-              <p className="text-gray-600">Upload, organize, and share educational resources</p>
+              <p className="text-royalPurple-text2">
+                Upload, organize, and share educational resources
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -205,10 +207,12 @@ export default function StudyMaterialsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <BookOpen className="h-8 w-8 text-blue-600" />
+                <BookOpen className="h-8 w-8 text-royalPurple-accentTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Materials</p>
-                  <p className="text-2xl font-bold text-gray-900">{materialStats.totalMaterials}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Materials</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {materialStats.totalMaterials}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -216,10 +220,12 @@ export default function StudyMaterialsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Download className="h-8 w-8 text-green-600" />
+                <Download className="h-8 w-8 text-royalPurple-successTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Downloads</p>
-                  <p className="text-2xl font-bold text-gray-900">{materialStats.totalDownloads}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Downloads</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {materialStats.totalDownloads}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -227,10 +233,12 @@ export default function StudyMaterialsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Eye className="h-8 w-8 text-purple-600" />
+                <Eye className="h-8 w-8 text-royalPurple-pillTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Views</p>
-                  <p className="text-2xl font-bold text-gray-900">{materialStats.totalViews}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Views</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {materialStats.totalViews}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -240,8 +248,8 @@ export default function StudyMaterialsPage() {
               <div className="flex items-center">
                 <Share2 className="h-8 w-8 text-orange-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Published</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-royalPurple-text2">Published</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
                     {materialStats.publishedMaterials}
                   </p>
                 </div>
@@ -276,17 +284,17 @@ export default function StudyMaterialsPage() {
               </div>
               <div className="flex items-center space-x-2">
                 <div className="relative">
-                  <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-royalPurple-text3" />
                   <input
                     type="text"
                     placeholder="Search materials..."
-                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <select
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={filterSubject}
                   onChange={(e) => setFilterSubject(e.target.value)}
                 >
@@ -304,16 +312,16 @@ export default function StudyMaterialsPage() {
               {filteredMaterials.map((material) => (
                 <div
                   key={material.id}
-                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                  className="border border-royalPurple-border rounded-lg p-4 hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center">
                       {getFileIcon(material.type)}
                       <div className="ml-3">
-                        <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
+                        <h3 className="text-lg font-semibold text-royalPurple-text1 line-clamp-2">
                           {material.title}
                         </h3>
-                        <p className="text-sm text-gray-600">{material.subject}</p>
+                        <p className="text-sm text-royalPurple-text2">{material.subject}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-1">
@@ -325,9 +333,11 @@ export default function StudyMaterialsPage() {
                     </div>
                   </div>
 
-                  <p className="text-gray-600 text-sm mb-3 line-clamp-2">{material.description}</p>
+                  <p className="text-royalPurple-text2 text-sm mb-3 line-clamp-2">
+                    {material.description}
+                  </p>
 
-                  <div className="space-y-2 text-xs text-gray-500 mb-3">
+                  <div className="space-y-2 text-xs text-royalPurple-text3 mb-3">
                     <div className="flex justify-between">
                       <span>Size:</span>
                       <span>{material.size}</span>
@@ -347,12 +357,12 @@ export default function StudyMaterialsPage() {
                   </div>
 
                   <div className="mb-3">
-                    <p className="text-xs text-gray-500 mb-1">Classes:</p>
+                    <p className="text-xs text-royalPurple-text3 mb-1">Classes:</p>
                     <div className="flex flex-wrap gap-1">
                       {material.classes.map((className, index) => (
                         <span
                           key={index}
-                          className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded"
+                          className="px-2 py-1 text-xs bg-royalPurple-accent text-royalPurple-accentTx rounded"
                         >
                           {className}
                         </span>
@@ -361,12 +371,12 @@ export default function StudyMaterialsPage() {
                   </div>
 
                   <div className="mb-3">
-                    <p className="text-xs text-gray-500 mb-1">Tags:</p>
+                    <p className="text-xs text-royalPurple-text3 mb-1">Tags:</p>
                     <div className="flex flex-wrap gap-1">
                       {material.tags.map((tag, index) => (
                         <span
                           key={index}
-                          className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded"
+                          className="px-2 py-1 text-xs bg-royalPurple-card2 text-royalPurple-text2 rounded"
                         >
                           #{tag}
                         </span>
@@ -439,20 +449,24 @@ export default function StudyMaterialsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="p-3 bg-blue-50 rounded-lg">
-                  <h4 className="font-medium text-blue-800 mb-2">Most Downloaded</h4>
-                  <p className="text-sm text-blue-700">Statistics Worksheet Collection</p>
-                  <p className="text-xs text-blue-600">67 downloads</p>
+                <div className="p-3 bg-royalPurple-accent rounded-lg">
+                  <h4 className="font-medium text-royalPurple-accentTx mb-2">Most Downloaded</h4>
+                  <p className="text-sm text-royalPurple-accentTx">
+                    Statistics Worksheet Collection
+                  </p>
+                  <p className="text-xs text-royalPurple-accentTx">67 downloads</p>
                 </div>
-                <div className="p-3 bg-green-50 rounded-lg">
-                  <h4 className="font-medium text-green-800 mb-2">Most Viewed</h4>
-                  <p className="text-sm text-green-700">Statistics Worksheet Collection</p>
-                  <p className="text-xs text-green-600">156 views</p>
+                <div className="p-3 bg-royalPurple-success rounded-lg">
+                  <h4 className="font-medium text-royalPurple-successTx mb-2">Most Viewed</h4>
+                  <p className="text-sm text-royalPurple-successTx">
+                    Statistics Worksheet Collection
+                  </p>
+                  <p className="text-xs text-royalPurple-successTx">156 views</p>
                 </div>
-                <div className="p-3 bg-purple-50 rounded-lg">
-                  <h4 className="font-medium text-purple-800 mb-2">Recent Upload</h4>
-                  <p className="text-sm text-purple-700">Trigonometry Reference Guide</p>
-                  <p className="text-xs text-purple-600">2 days ago</p>
+                <div className="p-3 bg-royalPurple-pill rounded-lg">
+                  <h4 className="font-medium text-royalPurple-pillTx mb-2">Recent Upload</h4>
+                  <p className="text-sm text-royalPurple-pillTx">Trigonometry Reference Guide</p>
+                  <p className="text-xs text-royalPurple-pillTx">2 days ago</p>
                 </div>
               </div>
             </CardContent>
@@ -466,17 +480,17 @@ export default function StudyMaterialsPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 bg-red-50 rounded-lg">
-                <FileText className="h-8 w-8 text-red-600 mx-auto mb-2" />
-                <h4 className="font-medium text-red-800">Documents</h4>
-                <p className="text-2xl font-bold text-red-600">3</p>
-                <p className="text-sm text-red-600">PDFs & Docs</p>
+              <div className="text-center p-4 bg-royalPurple-danger rounded-lg">
+                <FileText className="h-8 w-8 text-royalPurple-dangerTx mx-auto mb-2" />
+                <h4 className="font-medium text-royalPurple-dangerTx">Documents</h4>
+                <p className="text-2xl font-bold text-royalPurple-dangerTx">3</p>
+                <p className="text-sm text-royalPurple-dangerTx">PDFs & Docs</p>
               </div>
-              <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <Video className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                <h4 className="font-medium text-blue-800">Videos</h4>
-                <p className="text-2xl font-bold text-blue-600">1</p>
-                <p className="text-sm text-blue-600">Tutorials</p>
+              <div className="text-center p-4 bg-royalPurple-accent rounded-lg">
+                <Video className="h-8 w-8 text-royalPurple-accentTx mx-auto mb-2" />
+                <h4 className="font-medium text-royalPurple-accentTx">Videos</h4>
+                <p className="text-2xl font-bold text-royalPurple-accentTx">1</p>
+                <p className="text-sm text-royalPurple-accentTx">Tutorials</p>
               </div>
               <div className="text-center p-4 bg-orange-50 rounded-lg">
                 <FileText className="h-8 w-8 text-orange-600 mx-auto mb-2" />
@@ -484,11 +498,11 @@ export default function StudyMaterialsPage() {
                 <p className="text-2xl font-bold text-orange-600">1</p>
                 <p className="text-sm text-orange-600">Slides</p>
               </div>
-              <div className="text-center p-4 bg-purple-50 rounded-lg">
-                <File className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                <h4 className="font-medium text-purple-800">Archives</h4>
-                <p className="text-2xl font-bold text-purple-600">1</p>
-                <p className="text-sm text-purple-600">ZIP Files</p>
+              <div className="text-center p-4 bg-royalPurple-pill rounded-lg">
+                <File className="h-8 w-8 text-royalPurple-pillTx mx-auto mb-2" />
+                <h4 className="font-medium text-royalPurple-pillTx">Archives</h4>
+                <p className="text-2xl font-bold text-royalPurple-pillTx">1</p>
+                <p className="text-sm text-royalPurple-pillTx">ZIP Files</p>
               </div>
             </div>
           </CardContent>

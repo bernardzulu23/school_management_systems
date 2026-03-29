@@ -1,14 +1,14 @@
-import React from 'react';
-import { Users, User, Phone, Mail, Briefcase, Building, FileText, MapPin } from 'lucide-react';
-import { FormGroup, FormSection } from '@/components/ui/FormGroup';
+import React from 'react'
+import { Users, User, Phone, Mail, Briefcase, Building, FileText, MapPin } from 'lucide-react'
+import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 
 export default function ParentGuardianStep({ formData, errors, onInputChange }) {
   return (
     <FormSection title="Parent/Guardian Information" icon={Users}>
       <div className="space-y-8">
         {/* Father's Information */}
-        <div className="bg-blue-50 p-6 rounded-xl border border-blue-200">
-          <h4 className="text-lg font-semibold text-blue-800 mb-4 flex items-center">
+        <div className="bg-royalPurple-accent p-6 rounded-xl border border-royalPurple-border2">
+          <h4 className="text-lg font-semibold text-royalPurple-accentTx mb-4 flex items-center">
             <User className="h-5 w-5 mr-2" />
             Father's Information
           </h4>
@@ -123,5 +123,5 @@ export default function ParentGuardianStep({ formData, errors, onInputChange }) 
         </div>
       </div>
     </FormSection>
-  );
+  )
 }

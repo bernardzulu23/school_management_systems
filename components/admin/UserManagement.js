@@ -21,16 +21,18 @@ export default function UserManagement() {
       title: 'Head of Department',
       description: 'Department leadership and coordination',
       icon: <UserCheck className="h-8 w-8" />,
-      color: 'bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-200',
-      count: 0 // Will be populated from API
+      color:
+        'bg-royalPurple-accent text-royalPurple-accentTx border-royalPurple-border2 hover:bg-royalPurple-accent',
+      count: 0, // Will be populated from API
     },
     {
       id: 'teacher',
       title: 'Teacher',
       description: 'Teaching and student guidance',
       icon: <Users className="h-8 w-8" />,
-      color: 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200',
-      count: 0
+      color:
+        'bg-royalPurple-success text-royalPurple-successTx border-royalPurple-border hover:bg-royalPurple-success',
+      count: 0,
     },
     {
       id: 'student',
@@ -38,8 +40,8 @@ export default function UserManagement() {
       description: 'Learning and academic activities',
       icon: <GraduationCap className="h-8 w-8" />,
       color: 'bg-orange-100 text-orange-800 border-orange-200 hover:bg-orange-200',
-      count: 0
-    }
+      count: 0,
+    },
   ]
 
   const handleRoleSelect = (role) => {
@@ -57,7 +59,9 @@ export default function UserManagement() {
       console.log('Registration response:', response.data) // Debug log
 
       if (response.data.success) {
-        toast.success(`${formData.role} registered successfully! They can now login with their credentials.`)
+        toast.success(
+          `${formData.role} registered successfully! They can now login with their credentials.`
+        )
         setShowForm(false)
         setSelectedRole('')
         // Optionally refresh user list here
@@ -70,17 +74,21 @@ export default function UserManagement() {
         message: error.message,
         response: error.response?.data,
         status: error.response?.status,
-        statusText: error.response?.statusText
+        statusText: error.response?.statusText,
       })
 
       if (error.response?.status === 403) {
         toast.error('Access denied. Only headteachers can register new users.')
       } else if (error.response?.status === 422) {
-        toast.error('Validation error: ' + (error.response?.data?.message || 'Please check your input data.'))
+        toast.error(
+          'Validation error: ' + (error.response?.data?.message || 'Please check your input data.')
+        )
       } else if (error.response?.status === 500) {
         toast.error('Server error. Please try again later.')
       } else {
-        toast.error(error.response?.data?.message || error.message || 'Registration failed. Please try again.')
+        toast.error(
+          error.response?.data?.message || error.message || 'Registration failed. Please try again.'
+        )
       }
     } finally {
       setLoading(false)
@@ -97,10 +105,10 @@ export default function UserManagement() {
       <div className="space-y-6">
         <header className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-royalPurple-text1">
               Register New {selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}
             </h2>
-            <p className="text-gray-600">
+            <p className="text-royalPurple-text2">
               Fill in the details to create a new user account
             </p>
           </div>
@@ -108,17 +116,19 @@ export default function UserManagement() {
             variant="outline"
             onClick={handleCancel}
             aria-label="Back to User Management"
-            className="hover:bg-gray-100 transition-colors"
+            className="hover:bg-royalPurple-card2 transition-colors"
           >
             Back to User Management
           </Button>
         </header>
-        
+
         <main>
           {/* Form Toggle */}
           <div className="mb-4 flex items-center justify-end">
             <div className="flex items-center space-x-3">
-              <span id="enhanced-form-label" className="text-sm font-medium text-gray-700">Use Enhanced Form:</span>
+              <span id="enhanced-form-label" className="text-sm font-medium text-royalPurple-text2">
+                Use Enhanced Form:
+              </span>
               <button
                 type="button"
                 role="switch"
@@ -126,11 +136,11 @@ export default function UserManagement() {
                 aria-labelledby="enhanced-form-label"
                 onClick={() => setUseEnhancedForm(!useEnhancedForm)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 outline-none ${
-                  useEnhancedForm ? 'bg-blue-600' : 'bg-gray-200'
+                  useEnhancedForm ? 'bg-royalPurple-accent' : 'bg-royalPurple-card2'
                 }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  className={`inline-block h-4 w-4 transform rounded-full bg-royalPurple-card transition-transform ${
                     useEnhancedForm ? 'translate-x-6' : 'translate-x-1'
                   }`}
                 />
@@ -164,30 +174,28 @@ export default function UserManagement() {
       {/* Header */}
       <header className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center">
+          <h2 className="text-2xl font-bold text-royalPurple-text1 flex items-center">
             <Users className="h-6 w-6 mr-2" aria-hidden="true" />
             User Management
           </h2>
-          <p className="text-gray-600">
-            Register new users and manage school accounts
-          </p>
+          <p className="text-royalPurple-text2">Register new users and manage school accounts</p>
         </div>
       </header>
 
       {/* Security Notice */}
       <aside aria-label="Security notice">
-        <Card className="bg-amber-50 border-amber-200 p-4" role="note">
+        <Card className="bg-royalPurple-accentBg border-royalPurple-accent p-4" role="note">
           <div className="flex items-start">
-            <div className="text-amber-600 mr-3" aria-hidden="true">
+            <div className="text-royalPurple-accentTx mr-3" aria-hidden="true">
               🔒
             </div>
             <div>
-              <h3 className="font-semibold text-amber-800 mb-1">
+              <h3 className="font-semibold text-royalPurple-accentTx mb-1">
                 Administrator Access Only
               </h3>
-              <p className="text-sm text-amber-700">
-                Only headteachers and deputy headteachers can register new users. 
-                All registered users will receive login credentials to access their respective dashboards.
+              <p className="text-sm text-royalPurple-accentTx">
+                Only headteachers and deputy headteachers can register new users. All registered
+                users will receive login credentials to access their respective dashboards.
               </p>
             </div>
           </div>
@@ -196,7 +204,7 @@ export default function UserManagement() {
 
       {/* Registration Options */}
       <main>
-        <div 
+        <div
           className="grid grid-cols-1 md:grid-cols-3 gap-6"
           role="list"
           aria-label="User registration options"
@@ -215,9 +223,11 @@ export default function UserManagement() {
                   <div className="flex justify-center mb-4" aria-hidden="true">
                     {role.icon}
                   </div>
-                  <h3 id={`role-title-${role.id}`} className="text-xl font-semibold mb-2">{role.title}</h3>
-                  <p className="text-gray-600 mb-4 text-sm">{role.description}</p>
-                  
+                  <h3 id={`role-title-${role.id}`} className="text-xl font-semibold mb-2">
+                    {role.title}
+                  </h3>
+                  <p className="text-royalPurple-text2 mb-4 text-sm">{role.description}</p>
+
                   <div className="flex items-center justify-center text-sm font-medium">
                     <Plus className="h-4 w-4 mr-1" />
                     Register New
@@ -232,13 +242,13 @@ export default function UserManagement() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center">
             <BookOpen className="h-5 w-5 mr-2" />
             Registration Guidelines
           </h3>
-          <div className="space-y-3 text-sm text-gray-600">
+          <div className="space-y-3 text-sm text-royalPurple-text2">
             <div>
-              <h4 className="font-medium text-gray-800">For Staff Registration:</h4>
+              <h4 className="font-medium text-royalPurple-text1">For Staff Registration:</h4>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Ensure all professional qualifications are accurate</li>
                 <li>Verify TS (Teaching Service) numbers</li>
@@ -247,7 +257,7 @@ export default function UserManagement() {
               </ul>
             </div>
             <div>
-              <h4 className="font-medium text-gray-800">For Student Registration:</h4>
+              <h4 className="font-medium text-royalPurple-text1">For Student Registration:</h4>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Collect complete parent/guardian details</li>
                 <li>Record medical information if applicable</li>
@@ -259,30 +269,30 @@ export default function UserManagement() {
         </Card>
 
         <Card className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">
             Post-Registration Process
           </h3>
-          <div className="space-y-3 text-sm text-gray-600">
+          <div className="space-y-3 text-sm text-royalPurple-text2">
             <div className="flex items-start">
-              <div className="bg-green-100 text-green-600 rounded-full p-1 mr-3 mt-0.5">
+              <div className="bg-royalPurple-success text-royalPurple-successTx rounded-full p-1 mr-3 mt-0.5">
                 <span className="text-xs">1</span>
               </div>
               <p>User account is created with secure credentials</p>
             </div>
             <div className="flex items-start">
-              <div className="bg-green-100 text-green-600 rounded-full p-1 mr-3 mt-0.5">
+              <div className="bg-royalPurple-success text-royalPurple-successTx rounded-full p-1 mr-3 mt-0.5">
                 <span className="text-xs">2</span>
               </div>
               <p>Login credentials are provided to the user</p>
             </div>
             <div className="flex items-start">
-              <div className="bg-green-100 text-green-600 rounded-full p-1 mr-3 mt-0.5">
+              <div className="bg-royalPurple-success text-royalPurple-successTx rounded-full p-1 mr-3 mt-0.5">
                 <span className="text-xs">3</span>
               </div>
               <p>User can access their role-specific dashboard</p>
             </div>
             <div className="flex items-start">
-              <div className="bg-green-100 text-green-600 rounded-full p-1 mr-3 mt-0.5">
+              <div className="bg-royalPurple-success text-royalPurple-successTx rounded-full p-1 mr-3 mt-0.5">
                 <span className="text-xs">4</span>
               </div>
               <p>All activities are logged for audit purposes</p>
@@ -293,10 +303,8 @@ export default function UserManagement() {
 
       {/* Recent Registrations */}
       <Card className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Recent Registrations
-        </h3>
-        <div className="text-sm text-gray-600">
+        <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">Recent Registrations</h3>
+        <div className="text-sm text-royalPurple-text2">
           <p>Recent user registrations will appear here...</p>
           {/* This would be populated with actual data from the API */}
         </div>

@@ -4,9 +4,19 @@ import { useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  FileText, Download, Calendar, Users, BookOpen, TrendingUp, 
-  BarChart3, PieChart, Filter, Search, Eye, Share2 
+import {
+  FileText,
+  Download,
+  Calendar,
+  Users,
+  BookOpen,
+  TrendingUp,
+  BarChart3,
+  PieChart,
+  Filter,
+  Search,
+  Eye,
+  Share2,
 } from 'lucide-react'
 
 export default function ReportsPage() {
@@ -19,70 +29,145 @@ export default function ReportsPage() {
       icon: BookOpen,
       color: 'blue',
       reports: [
-        { name: 'Student Performance Report', description: 'Comprehensive academic performance analysis', type: 'academic' },
-        { name: 'Class Progress Report', description: 'Class-wise progress tracking', type: 'academic' },
-        { name: 'Subject Analysis Report', description: 'Subject performance breakdown', type: 'academic' },
-        { name: 'Assessment Results Report', description: 'Detailed assessment outcomes', type: 'academic' }
-      ]
+        {
+          name: 'Student Performance Report',
+          description: 'Comprehensive academic performance analysis',
+          type: 'academic',
+        },
+        {
+          name: 'Class Progress Report',
+          description: 'Class-wise progress tracking',
+          type: 'academic',
+        },
+        {
+          name: 'Subject Analysis Report',
+          description: 'Subject performance breakdown',
+          type: 'academic',
+        },
+        {
+          name: 'Assessment Results Report',
+          description: 'Detailed assessment outcomes',
+          type: 'academic',
+        },
+      ],
     },
     {
       title: 'Administrative Reports',
       icon: Users,
       color: 'green',
       reports: [
-        { name: 'Attendance Report', description: 'Student and teacher attendance tracking', type: 'administrative' },
-        { name: 'Enrollment Report', description: 'Student enrollment statistics', type: 'administrative' },
-        { name: 'Staff Report', description: 'Teacher and staff information', type: 'administrative' },
-        { name: 'Resource Utilization Report', description: 'Classroom and resource usage', type: 'administrative' }
-      ]
+        {
+          name: 'Attendance Report',
+          description: 'Student and teacher attendance tracking',
+          type: 'administrative',
+        },
+        {
+          name: 'Enrollment Report',
+          description: 'Student enrollment statistics',
+          type: 'administrative',
+        },
+        {
+          name: 'Staff Report',
+          description: 'Teacher and staff information',
+          type: 'administrative',
+        },
+        {
+          name: 'Resource Utilization Report',
+          description: 'Classroom and resource usage',
+          type: 'administrative',
+        },
+      ],
     },
     {
       title: 'Financial Reports',
       icon: TrendingUp,
       color: 'purple',
       reports: [
-        { name: 'Fee Collection Report', description: 'Student fee payment tracking', type: 'financial' },
-        { name: 'Budget Analysis Report', description: 'School budget breakdown', type: 'financial' },
+        {
+          name: 'Fee Collection Report',
+          description: 'Student fee payment tracking',
+          type: 'financial',
+        },
+        {
+          name: 'Budget Analysis Report',
+          description: 'School budget breakdown',
+          type: 'financial',
+        },
         { name: 'Expense Report', description: 'Operational expenses tracking', type: 'financial' },
-        { name: 'Revenue Report', description: 'Income and revenue analysis', type: 'financial' }
-      ]
+        { name: 'Revenue Report', description: 'Income and revenue analysis', type: 'financial' },
+      ],
     },
     {
       title: 'Analytics Reports',
       icon: BarChart3,
       color: 'orange',
       reports: [
-        { name: 'Performance Trends Report', description: 'Long-term performance analysis', type: 'analytics' },
-        { name: 'Comparative Analysis Report', description: 'Cross-class and subject comparison', type: 'analytics' },
-        { name: 'Predictive Analytics Report', description: 'Future performance predictions', type: 'analytics' },
-        { name: 'Custom Dashboard Report', description: 'Personalized analytics dashboard', type: 'analytics' }
-      ]
-    }
+        {
+          name: 'Performance Trends Report',
+          description: 'Long-term performance analysis',
+          type: 'analytics',
+        },
+        {
+          name: 'Comparative Analysis Report',
+          description: 'Cross-class and subject comparison',
+          type: 'analytics',
+        },
+        {
+          name: 'Predictive Analytics Report',
+          description: 'Future performance predictions',
+          type: 'analytics',
+        },
+        {
+          name: 'Custom Dashboard Report',
+          description: 'Personalized analytics dashboard',
+          type: 'analytics',
+        },
+      ],
+    },
   ]
 
   const recentReports = [
-    { name: 'Monthly Performance Report', generated: '2024-02-15', type: 'Academic', status: 'Ready' },
-    { name: 'Attendance Summary', generated: '2024-02-14', type: 'Administrative', status: 'Ready' },
-    { name: 'Fee Collection Report', generated: '2024-02-13', type: 'Financial', status: 'Processing' },
+    {
+      name: 'Monthly Performance Report',
+      generated: '2024-02-15',
+      type: 'Academic',
+      status: 'Ready',
+    },
+    {
+      name: 'Attendance Summary',
+      generated: '2024-02-14',
+      type: 'Administrative',
+      status: 'Ready',
+    },
+    {
+      name: 'Fee Collection Report',
+      generated: '2024-02-13',
+      type: 'Financial',
+      status: 'Processing',
+    },
     { name: 'Class Progress Analysis', generated: '2024-02-12', type: 'Academic', status: 'Ready' },
   ]
 
   const getColorClasses = (color) => {
     const colors = {
-      blue: 'bg-blue-600 text-white',
-      green: 'bg-green-600 text-white',
-      purple: 'bg-purple-600 text-white',
-      orange: 'bg-orange-600 text-white'
+      blue: 'bg-royalPurple-accent text-royalPurple-text1',
+      green: 'bg-royalPurple-success text-royalPurple-text1',
+      purple: 'bg-royalPurple-pill text-royalPurple-text1',
+      orange: 'bg-orange-600 text-royalPurple-text1',
     }
-    return colors[color] || 'bg-gray-600 text-white'
+    return colors[color] || 'bg-royalPurple-muted text-royalPurple-text1'
   }
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'Ready': return 'bg-green-100 text-green-800'
-      case 'Processing': return 'bg-yellow-100 text-yellow-800'
-      case 'Failed': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'Ready':
+        return 'bg-royalPurple-success text-royalPurple-successTx'
+      case 'Processing':
+        return 'bg-yellow-100 text-yellow-800'
+      case 'Failed':
+        return 'bg-royalPurple-danger text-royalPurple-dangerTx'
+      default:
+        return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
   }
 
@@ -92,8 +177,8 @@ export default function ReportsPage() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Reports & Analytics</h1>
-            <p className="text-gray-600">Generate comprehensive reports and analytics</p>
+            <h1 className="text-2xl font-bold text-royalPurple-text1">Reports & Analytics</h1>
+            <p className="text-royalPurple-text2">Generate comprehensive reports and analytics</p>
           </div>
           <Button>
             <FileText className="h-4 w-4 mr-2" />
@@ -109,11 +194,13 @@ export default function ReportsPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Time Period</label>
+                <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
+                  Time Period
+                </label>
                 <select
                   value={selectedPeriod}
                   onChange={(e) => setSelectedPeriod(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
                 >
                   <option value="current-term">Current Term</option>
                   <option value="last-term">Last Term</option>
@@ -122,13 +209,15 @@ export default function ReportsPage() {
                   <option value="custom">Custom Range</option>
                 </select>
               </div>
-              
+
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Report Type</label>
+                <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
+                  Report Type
+                </label>
                 <select
                   value={selectedType}
                   onChange={(e) => setSelectedType(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
                 >
                   <option value="">All Types</option>
                   <option value="academic">Academic</option>
@@ -137,17 +226,19 @@ export default function ReportsPage() {
                   <option value="analytics">Analytics</option>
                 </select>
               </div>
-              
+
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Format</label>
-                <select className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
+                  Format
+                </label>
+                <select className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2">
                   <option value="pdf">PDF</option>
                   <option value="excel">Excel</option>
                   <option value="csv">CSV</option>
                   <option value="html">HTML</option>
                 </select>
               </div>
-              
+
               <div className="flex items-end">
                 <Button className="w-full">
                   <Filter className="h-4 w-4 mr-2" />
@@ -171,10 +262,13 @@ export default function ReportsPage() {
               <CardContent className="p-6">
                 <div className="space-y-3">
                   {category.reports.map((report) => (
-                    <div key={report.name} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+                    <div
+                      key={report.name}
+                      className="flex items-center justify-between p-3 border rounded-lg hover:bg-royalPurple-page"
+                    >
                       <div>
                         <h4 className="font-medium">{report.name}</h4>
-                        <p className="text-sm text-gray-500">{report.description}</p>
+                        <p className="text-sm text-royalPurple-text3">{report.description}</p>
                       </div>
                       <div className="flex space-x-2">
                         <Button variant="outline" size="sm">
@@ -211,18 +305,20 @@ export default function ReportsPage() {
                 </thead>
                 <tbody>
                   {recentReports.map((report, index) => (
-                    <tr key={index} className="border-b hover:bg-gray-50">
+                    <tr key={index} className="border-b hover:bg-royalPurple-page">
                       <td className="py-3 px-4 font-medium">{report.name}</td>
                       <td className="py-3 px-4">
-                        <span className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+                        <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-accent text-royalPurple-accentTx">
                           {report.type}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-sm text-gray-500">
+                      <td className="py-3 px-4 text-sm text-royalPurple-text3">
                         {new Date(report.generated).toLocaleDateString()}
                       </td>
                       <td className="py-3 px-4">
-                        <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(report.status)}`}>
+                        <span
+                          className={`px-2 py-1 text-xs rounded-full ${getStatusColor(report.status)}`}
+                        >
                           {report.status}
                         </span>
                       </td>

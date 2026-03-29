@@ -13,7 +13,7 @@ export default function ProfilePictureDisplay({
   showFallback = true,
   className = '',
   onClick,
-  loading = false
+  loading = false,
 }) {
   const [imageError, setImageError] = useState(false)
   const [imageLoading, setImageLoading] = useState(true)
@@ -25,7 +25,7 @@ export default function ProfilePictureDisplay({
     medium: { width: 'w-12', height: 'h-12', text: 'text-sm', icon: 'h-6 w-6' },
     large: { width: 'w-20', height: 'h-20', text: 'text-base', icon: 'h-8 w-8' },
     xl: { width: 'w-32', height: 'h-32', text: 'text-lg', icon: 'h-12 w-12' },
-    '2xl': { width: 'w-48', height: 'h-48', text: 'text-xl', icon: 'h-16 w-16' }
+    '2xl': { width: 'w-48', height: 'h-48', text: 'text-xl', icon: 'h-16 w-16' },
   }
 
   const config = sizeConfig[size] || sizeConfig.medium
@@ -37,7 +37,7 @@ export default function ProfilePictureDisplay({
     hod: 'ring-4 ring-blue-200 bg-gradient-to-br from-blue-500 to-blue-600',
     teacher: 'ring-2 ring-green-200 bg-gradient-to-br from-green-500 to-green-600',
     student: 'ring-2 ring-gray-200 bg-gradient-to-br from-gray-400 to-gray-500',
-    admin: 'ring-4 ring-red-200 bg-gradient-to-br from-red-500 to-red-600'
+    admin: 'ring-4 ring-red-200 bg-gradient-to-br from-red-500 to-red-600',
   }
 
   const roleStyle = roleStyles[role] || roleStyles.student
@@ -47,7 +47,7 @@ export default function ProfilePictureDisplay({
     if (!name) return '?'
     return name
       .split(' ')
-      .map(word => word.charAt(0))
+      .map((word) => word.charAt(0))
       .join('')
       .toUpperCase()
       .slice(0, 2)
@@ -72,15 +72,15 @@ export default function ProfilePictureDisplay({
   // Show loading state
   if (loading) {
     return (
-      <div 
+      <div
         className={`
           ${config.width} ${config.height} 
-          rounded-full bg-gray-200 animate-pulse
+          rounded-full bg-royalPurple-card2 animate-pulse
           flex items-center justify-center
           ${className}
         `}
       >
-        <User className={`${config.icon} text-gray-400`} />
+        <User className={`${config.icon} text-royalPurple-text3`} />
       </div>
     )
   }
@@ -88,7 +88,7 @@ export default function ProfilePictureDisplay({
   // Show image if available and no error
   if (src && !imageError) {
     return (
-      <div 
+      <div
         className={`
           relative ${config.width} ${config.height} 
           rounded-full overflow-hidden
@@ -110,11 +110,11 @@ export default function ProfilePictureDisplay({
           onError={handleImageError}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-        
+
         {/* Loading overlay */}
         {imageLoading && (
-          <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
-            <User className={`${config.icon} text-gray-400`} />
+          <div className="absolute inset-0 bg-royalPurple-card2 animate-pulse flex items-center justify-center">
+            <User className={`${config.icon} text-royalPurple-text3`} />
           </div>
         )}
 
@@ -127,12 +127,12 @@ export default function ProfilePictureDisplay({
   // Show fallback
   if (showFallback) {
     return (
-      <div 
+      <div
         className={`
           ${config.width} ${config.height} 
           rounded-full ${roleStyle}
           flex items-center justify-center
-          text-white font-semibold ${config.text}
+          text-royalPurple-text1 font-semibold ${config.text}
           ${onClick ? 'cursor-pointer hover:opacity-90 transition-opacity' : ''}
           ${className}
         `}
@@ -145,25 +145,25 @@ export default function ProfilePictureDisplay({
 
   // Show error state
   return (
-    <div 
+    <div
       className={`
         ${config.width} ${config.height} 
-        rounded-full bg-red-100 border-2 border-red-200
+        rounded-full bg-royalPurple-danger border-2 border-royalPurple-border
         flex items-center justify-center
         ${className}
       `}
     >
-      <AlertCircle className={`${config.icon} text-red-500`} />
+      <AlertCircle className={`${config.icon} text-royalPurple-dangerTx`} />
     </div>
   )
 }
 
 // Avatar Group Component for showing multiple profile pictures
-export function ProfilePictureGroup({ 
-  profiles = [], 
-  maxVisible = 3, 
+export function ProfilePictureGroup({
+  profiles = [],
+  maxVisible = 3,
   size = 'medium',
-  className = '' 
+  className = '',
 }) {
   const visibleProfiles = profiles.slice(0, maxVisible)
   const remainingCount = profiles.length - maxVisible
@@ -172,7 +172,7 @@ export function ProfilePictureGroup({
     xs: { width: 'w-6', height: 'h-6', text: 'text-xs', overlap: '-ml-1' },
     sm: { width: 'w-8', height: 'h-8', text: 'text-xs', overlap: '-ml-2' },
     medium: { width: 'w-12', height: 'h-12', text: 'text-sm', overlap: '-ml-3' },
-    large: { width: 'w-20', height: 'h-20', text: 'text-base', overlap: '-ml-4' }
+    large: { width: 'w-20', height: 'h-20', text: 'text-base', overlap: '-ml-4' },
   }
 
   const config = sizeConfig[size] || sizeConfig.medium
@@ -180,7 +180,7 @@ export function ProfilePictureGroup({
   return (
     <div className={`flex items-center ${className}`}>
       {visibleProfiles.map((profile, index) => (
-        <div 
+        <div
           key={profile.id || index}
           className={`
             ${index > 0 ? config.overlap : ''}
@@ -197,12 +197,12 @@ export function ProfilePictureGroup({
           />
         </div>
       ))}
-      
+
       {remainingCount > 0 && (
-        <div 
+        <div
           className={`
             ${config.overlap} ${config.width} ${config.height}
-            rounded-full bg-gray-500 text-white
+            rounded-full bg-royalPurple-muted text-royalPurple-text1
             flex items-center justify-center
             font-semibold ${config.text}
             border-2 border-white
@@ -224,13 +224,13 @@ export function ProfilePictureWithStatus({
   role,
   size = 'medium',
   status = 'offline', // online, offline, away, busy
-  className = ''
+  className = '',
 }) {
   const statusColors = {
-    online: 'bg-green-500',
-    offline: 'bg-gray-400',
+    online: 'bg-royalPurple-success',
+    offline: 'bg-royalPurple-card2',
     away: 'bg-yellow-500',
-    busy: 'bg-red-500'
+    busy: 'bg-royalPurple-danger',
   }
 
   const statusColor = statusColors[status] || statusColors.offline
@@ -238,23 +238,17 @@ export function ProfilePictureWithStatus({
   const sizeConfig = {
     sm: { indicator: 'w-2 h-2', position: 'bottom-0 right-0' },
     medium: { indicator: 'w-3 h-3', position: 'bottom-0 right-0' },
-    large: { indicator: 'w-4 h-4', position: 'bottom-1 right-1' }
+    large: { indicator: 'w-4 h-4', position: 'bottom-1 right-1' },
   }
 
   const config = sizeConfig[size] || sizeConfig.medium
 
   return (
     <div className={`relative inline-block ${className}`}>
-      <ProfilePictureDisplay
-        src={src}
-        alt={alt}
-        name={name}
-        role={role}
-        size={size}
-      />
-      
+      <ProfilePictureDisplay src={src} alt={alt} name={name} role={role} size={size} />
+
       {/* Status Indicator */}
-      <div 
+      <div
         className={`
           absolute ${config.position}
           ${config.indicator} ${statusColor}

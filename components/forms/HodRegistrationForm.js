@@ -5,17 +5,17 @@ import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import SubjectSelection from '@/components/registration/SubjectSelection'
 import toast from 'react-hot-toast'
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  Calendar, 
-  MapPin, 
-  Building, 
+import {
+  User,
+  Mail,
+  Phone,
+  Calendar,
+  MapPin,
+  Building,
   GraduationCap,
   Award,
   Users,
-  BookOpen
+  BookOpen,
 } from 'lucide-react'
 import { DEPARTMENTS, USER_ROLES } from '@/lib/constants'
 import { handleInputChange } from '@/lib/utils/formHelpers'
@@ -33,7 +33,7 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
     address: initialData?.address || '',
     date_of_birth: initialData?.date_of_birth || '',
     gender: initialData?.gender || '',
-    
+
     // Professional Information
     employee_id: initialData?.employee_id || '',
     department_name: initialData?.department_name || '',
@@ -48,43 +48,46 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
     subjects_managed: initialData?.subjects_managed || [],
     teachers_supervised: initialData?.teachers_supervised || '',
     management_areas: initialData?.management_areas || [],
-    performance_rating: initialData?.performance_rating || ''
+    performance_rating: initialData?.performance_rating || '',
   })
 
   const [errors, setErrors] = useState({})
 
-  const validateRequired = (value) => value ? true : 'This field is required';
+  const validateRequired = (value) => (value ? true : 'This field is required')
   const validateEmail = (value) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!value) return 'Email is required';
-    if (!emailRegex.test(value)) return 'Please enter a valid email address';
-    return true;
-  };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!value) return 'Email is required'
+    if (!emailRegex.test(value)) return 'Please enter a valid email address'
+    return true
+  }
   const validatePhone = (value) => {
-    const phoneRegex = /^\+?[\d\s-]{10,}$/;
-    if (!value) return 'Phone number is required';
-    if (!phoneRegex.test(value)) return 'Invalid phone number';
-    return true;
-  };
+    const phoneRegex = /^\+?[\d\s-]{10,}$/
+    if (!value) return 'Phone number is required'
+    if (!phoneRegex.test(value)) return 'Invalid phone number'
+    return true
+  }
 
   const onInputChange = (e) => {
-    handleInputChange(setFormData)(e);
-    
+    handleInputChange(setFormData)(e)
+
     // Clear error when user starts typing
-    const { name } = e.target;
+    const { name } = e.target
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: '',
       }))
     }
   }
 
   const handleArrayInputChange = (name, value) => {
-    const arrayValue = value.split(',').map(item => item.trim()).filter(item => item)
-    setFormData(prev => ({
+    const arrayValue = value
+      .split(',')
+      .map((item) => item.trim())
+      .filter((item) => item)
+    setFormData((prev) => ({
       ...prev,
-      [name]: arrayValue
+      [name]: arrayValue,
     }))
   }
 
@@ -121,7 +124,7 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     if (!validateForm()) {
       toast.error('Please fix the errors in the form')
       return
@@ -130,7 +133,7 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
     try {
       await onSubmit({
         ...formData,
-        role: USER_ROLES.HOD
+        role: USER_ROLES.HOD,
       })
     } catch (error) {
       console.error('Form submission error:', error)
@@ -146,7 +149,7 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
     'Resource Planning',
     'Quality Assurance',
     'Staff Development',
-    'Academic Planning'
+    'Academic Planning',
   ]
 
   return (
@@ -288,8 +291,10 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
               aria-describedby="department_name-error"
             >
               <option value="">Select Department</option>
-              {DEPARTMENTS.map(dept => (
-                <option key={dept} value={dept}>{dept}</option>
+              {DEPARTMENTS.map((dept) => (
+                <option key={dept} value={dept}>
+                  {dept}
+                </option>
               ))}
             </FormGroup>
 
@@ -368,25 +373,37 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
 
           {/* Additional Information */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900 flex items-center border-b pb-2">
+            <h3 className="text-lg font-semibold text-royalPurple-text1 flex items-center border-b pb-2">
               <Award className="h-5 w-5 mr-2" aria-hidden="true" />
               Additional Information
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2" id="subjects-managed-label">
+                <label
+                  className="block text-sm font-medium text-royalPurple-text2 mb-2"
+                  id="subjects-managed-label"
+                >
                   Subjects Managed *
                 </label>
-                <div className="border border-gray-200 rounded-lg p-4 bg-gray-50" aria-labelledby="subjects-managed-label">
+                <div
+                  className="border border-royalPurple-border rounded-lg p-4 bg-royalPurple-page"
+                  aria-labelledby="subjects-managed-label"
+                >
                   <SubjectSelection
                     selectedSubjects={formData.subjects_managed || []}
-                    onSubjectsChange={(subjects) => setFormData(prev => ({ ...prev, subjects_managed: subjects }))}
+                    onSubjectsChange={(subjects) =>
+                      setFormData((prev) => ({ ...prev, subjects_managed: subjects }))
+                    }
                     userRole="hod"
                     maxSelections={10}
                   />
                 </div>
-                {errors.subjects_managed && <p className="text-red-500 text-sm mt-1" id="subjects_managed-error">{errors.subjects_managed}</p>}
+                {errors.subjects_managed && (
+                  <p className="text-royalPurple-dangerTx text-sm mt-1" id="subjects_managed-error">
+                    {errors.subjects_managed}
+                  </p>
+                )}
               </div>
 
               <FormGroup
@@ -432,27 +449,24 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
           {/* Form Actions */}
           <div className="flex justify-end space-x-4 pt-6 border-t">
             {onCancel && (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onCancel}
-                disabled={isLoading}
-              >
+              <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
                 Cancel
               </Button>
             )}
             <Button
               type="submit"
               disabled={isLoading}
-              className="min-w-[120px] bg-blue-600 hover:bg-blue-700 text-white"
+              className="min-w-[120px] bg-royalPurple-accent hover:bg-royalPurple-accent text-royalPurple-text1"
             >
               {isLoading ? (
                 <div className="flex items-center">
                   <LoadingSpinner size="sm" className="mr-2" />
                   {initialData ? 'Updating...' : 'Registering...'}
                 </div>
+              ) : initialData ? (
+                'Update HOD'
               ) : (
-                initialData ? 'Update HOD' : 'Register HOD'
+                'Register HOD'
               )}
             </Button>
           </div>

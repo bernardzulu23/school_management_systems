@@ -3,11 +3,27 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  DollarSign, Users, TrendingUp, Heart, 
-  PiggyBank, GraduationCap, Home, Utensils 
+import {
+  DollarSign,
+  Users,
+  TrendingUp,
+  Heart,
+  PiggyBank,
+  GraduationCap,
+  Home,
+  Utensils,
 } from 'lucide-react'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+} from 'recharts'
 
 export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
   const [povertyData, setPovertyData] = useState({
@@ -16,7 +32,7 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
     scholarshipRecipients: 0,
     feeAssistanceProvided: 0,
     averageHouseholdIncome: 0,
-    povertyReductionRate: 0
+    povertyReductionRate: 0,
   })
 
   const [scholarships, setScholarships] = useState([])
@@ -25,13 +41,11 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
   useEffect(() => {
     // Calculate poverty metrics from student data
     const totalStudents = studentData.length
-    const studentsInPoverty = studentData.filter(student => 
-      student.householdIncome < 2000 || student.povertyStatus === 'below_poverty_line'
+    const studentsInPoverty = studentData.filter(
+      (student) => student.householdIncome < 2000 || student.povertyStatus === 'below_poverty_line'
     ).length
-    
-    const scholarshipRecipients = studentData.filter(student => 
-      student.hasScholarship
-    ).length
+
+    const scholarshipRecipients = studentData.filter((student) => student.hasScholarship).length
 
     setPovertyData({
       totalStudents,
@@ -39,7 +53,7 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
       scholarshipRecipients,
       feeAssistanceProvided: scholarshipRecipients * 0.8, // Estimate
       averageHouseholdIncome: calculateAverageIncome(studentData),
-      povertyReductionRate: calculatePovertyReduction(studentData)
+      povertyReductionRate: calculatePovertyReduction(studentData),
     })
 
     // Load scholarship and assistance programs
@@ -48,8 +62,10 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
   }, [studentData])
 
   const calculateAverageIncome = (students) => {
-    const incomes = students.map(s => s.householdIncome || 0).filter(income => income > 0)
-    return incomes.length > 0 ? Math.round(incomes.reduce((sum, income) => sum + income, 0) / incomes.length) : 0
+    const incomes = students.map((s) => s.householdIncome || 0).filter((income) => income > 0)
+    return incomes.length > 0
+      ? Math.round(incomes.reduce((sum, income) => sum + income, 0) / incomes.length)
+      : 0
   }
 
   const calculatePovertyReduction = (students) => {
@@ -62,28 +78,28 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
     setScholarships([
       {
         id: 1,
-        name: "Rural Education Scholarship",
+        name: 'Rural Education Scholarship',
         amount: 5000,
         recipients: 45,
-        criteria: "Household income < ZMW 2,000",
-        status: "active"
+        criteria: 'Household income < ZMW 2,000',
+        status: 'active',
       },
       {
         id: 2,
-        name: "Girls Education Support",
+        name: 'Girls Education Support',
         amount: 3000,
         recipients: 32,
-        criteria: "Female students from low-income families",
-        status: "active"
+        criteria: 'Female students from low-income families',
+        status: 'active',
       },
       {
         id: 3,
-        name: "Orphan Support Fund",
+        name: 'Orphan Support Fund',
         amount: 4000,
         recipients: 18,
-        criteria: "Students who have lost one or both parents",
-        status: "active"
-      }
+        criteria: 'Students who have lost one or both parents',
+        status: 'active',
+      },
     ])
   }
 
@@ -92,28 +108,28 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
     setAssistancePrograms([
       {
         id: 1,
-        name: "School Feeding Program",
-        type: "nutrition",
+        name: 'School Feeding Program',
+        type: 'nutrition',
         beneficiaries: 234,
         monthlyBudget: 15000,
-        description: "Daily nutritious meals for students from low-income families"
+        description: 'Daily nutritious meals for students from low-income families',
       },
       {
         id: 2,
-        name: "Uniform Assistance",
-        type: "clothing",
+        name: 'Uniform Assistance',
+        type: 'clothing',
         beneficiaries: 89,
         monthlyBudget: 8000,
-        description: "Free school uniforms for students in need"
+        description: 'Free school uniforms for students in need',
       },
       {
         id: 3,
-        name: "Transport Vouchers",
-        type: "transport",
+        name: 'Transport Vouchers',
+        type: 'transport',
         beneficiaries: 67,
         monthlyBudget: 5000,
-        description: "Transportation support for students from distant villages"
-      }
+        description: 'Transportation support for students from distant villages',
+      },
     ])
   }
 
@@ -125,27 +141,29 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
       { month: 'Mar', poverty: 41, assistance: 40 },
       { month: 'Apr', poverty: 39, assistance: 45 },
       { month: 'May', poverty: 37, assistance: 50 },
-      { month: 'Jun', poverty: 35, assistance: 55 }
+      { month: 'Jun', poverty: 35, assistance: 55 },
     ]
   }
 
-  const povertyRate = povertyData.totalStudents > 0 
-    ? Math.round((povertyData.studentsInPoverty / povertyData.totalStudents) * 100)
-    : 0
+  const povertyRate =
+    povertyData.totalStudents > 0
+      ? Math.round((povertyData.studentsInPoverty / povertyData.totalStudents) * 100)
+      : 0
 
-  const assistanceRate = povertyData.totalStudents > 0
-    ? Math.round((povertyData.scholarshipRecipients / povertyData.totalStudents) * 100)
-    : 0
+  const assistanceRate =
+    povertyData.totalStudents > 0
+      ? Math.round((povertyData.scholarshipRecipients / povertyData.totalStudents) * 100)
+      : 0
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-red-600 flex items-center justify-center space-x-2">
+        <h1 className="text-3xl font-bold text-royalPurple-dangerTx flex items-center justify-center space-x-2">
           <span className="text-4xl">🏚️</span>
           <span>SDG 1: No Poverty</span>
         </h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
+        <p className="text-royalPurple-text2 max-w-2xl mx-auto">
           End poverty in all its forms everywhere - Supporting our students and families
         </p>
       </div>
@@ -154,69 +172,61 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="border-l-4 border-l-red-500">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+            <CardTitle className="text-sm font-medium text-royalPurple-text2 flex items-center">
               <Users className="h-4 w-4 mr-2" />
               Students in Poverty
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">
+            <div className="text-2xl font-bold text-royalPurple-dangerTx">
               {povertyData.studentsInPoverty}
             </div>
-            <p className="text-xs text-gray-500">
-              {povertyRate}% of total students
-            </p>
+            <p className="text-xs text-royalPurple-text3">{povertyRate}% of total students</p>
           </CardContent>
         </Card>
 
         <Card className="border-l-4 border-l-green-500">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+            <CardTitle className="text-sm font-medium text-royalPurple-text2 flex items-center">
               <GraduationCap className="h-4 w-4 mr-2" />
               Scholarship Recipients
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-royalPurple-successTx">
               {povertyData.scholarshipRecipients}
             </div>
-            <p className="text-xs text-gray-500">
-              {assistanceRate}% receiving support
-            </p>
+            <p className="text-xs text-royalPurple-text3">{assistanceRate}% receiving support</p>
           </CardContent>
         </Card>
 
         <Card className="border-l-4 border-l-blue-500">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+            <CardTitle className="text-sm font-medium text-royalPurple-text2 flex items-center">
               <DollarSign className="h-4 w-4 mr-2" />
               Average Income
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-2xl font-bold text-royalPurple-accentTx">
               ZMW {povertyData.averageHouseholdIncome.toLocaleString()}
             </div>
-            <p className="text-xs text-gray-500">
-              Monthly household income
-            </p>
+            <p className="text-xs text-royalPurple-text3">Monthly household income</p>
           </CardContent>
         </Card>
 
         <Card className="border-l-4 border-l-purple-500">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+            <CardTitle className="text-sm font-medium text-royalPurple-text2 flex items-center">
               <TrendingUp className="h-4 w-4 mr-2" />
               Poverty Reduction
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-600">
+            <div className="text-2xl font-bold text-royalPurple-pillTx">
               {povertyData.povertyReductionRate}%
             </div>
-            <p className="text-xs text-gray-500">
-              Improvement this year
-            </p>
+            <p className="text-xs text-royalPurple-text3">Improvement this year</p>
           </CardContent>
         </Card>
       </div>
@@ -236,17 +246,17 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
               <XAxis dataKey="month" />
               <YAxis />
               <Tooltip />
-              <Line 
-                type="monotone" 
-                dataKey="poverty" 
-                stroke="#ef4444" 
+              <Line
+                type="monotone"
+                dataKey="poverty"
+                stroke="#ef4444"
                 strokeWidth={2}
                 name="Students in Poverty (%)"
               />
-              <Line 
-                type="monotone" 
-                dataKey="assistance" 
-                stroke="#22c55e" 
+              <Line
+                type="monotone"
+                dataKey="assistance"
+                stroke="#22c55e"
                 strokeWidth={2}
                 name="Receiving Assistance (%)"
               />
@@ -265,22 +275,26 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {scholarships.map(scholarship => (
+            {scholarships.map((scholarship) => (
               <div key={scholarship.id} className="p-4 border rounded-lg">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-semibold text-gray-900">{scholarship.name}</h3>
-                  <span className="text-lg font-bold text-green-600">
+                  <h3 className="font-semibold text-royalPurple-text1">{scholarship.name}</h3>
+                  <span className="text-lg font-bold text-royalPurple-successTx">
                     ZMW {scholarship.amount.toLocaleString()}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 mb-2">{scholarship.criteria}</p>
+                <p className="text-sm text-royalPurple-text2 mb-2">{scholarship.criteria}</p>
                 <div className="flex justify-between text-sm">
-                  <span className="text-blue-600">{scholarship.recipients} recipients</span>
-                  <span className={`px-2 py-1 rounded text-xs ${
-                    scholarship.status === 'active' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-gray-100 text-gray-800'
-                  }`}>
+                  <span className="text-royalPurple-accentTx">
+                    {scholarship.recipients} recipients
+                  </span>
+                  <span
+                    className={`px-2 py-1 rounded text-xs ${
+                      scholarship.status === 'active'
+                        ? 'bg-royalPurple-success text-royalPurple-successTx'
+                        : 'bg-royalPurple-card2 text-royalPurple-text1'
+                    }`}
+                  >
                     {scholarship.status}
                   </span>
                 </div>
@@ -302,26 +316,30 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {assistancePrograms.map(program => (
+            {assistancePrograms.map((program) => (
               <div key={program.id} className="p-4 border rounded-lg">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-semibold text-gray-900">{program.name}</h3>
+                  <h3 className="font-semibold text-royalPurple-text1">{program.name}</h3>
                   <div className="text-right">
-                    <div className="text-sm font-semibold text-blue-600">
+                    <div className="text-sm font-semibold text-royalPurple-accentTx">
                       {program.beneficiaries} students
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-royalPurple-text3">
                       ZMW {program.monthlyBudget.toLocaleString()}/month
                     </div>
                   </div>
                 </div>
-                <p className="text-sm text-gray-600">{program.description}</p>
+                <p className="text-sm text-royalPurple-text2">{program.description}</p>
                 <div className="mt-2">
-                  <span className={`px-2 py-1 rounded text-xs ${
-                    program.type === 'nutrition' ? 'bg-orange-100 text-orange-800' :
-                    program.type === 'clothing' ? 'bg-blue-100 text-blue-800' :
-                    'bg-purple-100 text-purple-800'
-                  }`}>
+                  <span
+                    className={`px-2 py-1 rounded text-xs ${
+                      program.type === 'nutrition'
+                        ? 'bg-orange-100 text-orange-800'
+                        : program.type === 'clothing'
+                          ? 'bg-royalPurple-accent text-royalPurple-accentTx'
+                          : 'bg-royalPurple-pill text-royalPurple-pillTx'
+                    }`}
+                  >
                     {program.type}
                   </span>
                 </div>

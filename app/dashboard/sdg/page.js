@@ -13,9 +13,15 @@ import HodSDGView from '@/components/sdg/HodSDGView'
 import HeadteacherSDGView from '@/components/sdg/HeadteacherSDGView'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  Globe, Target, TrendingUp, Users, 
-  ArrowLeft, BarChart3, FileText, Settings 
+import {
+  Globe,
+  Target,
+  TrendingUp,
+  Users,
+  ArrowLeft,
+  BarChart3,
+  FileText,
+  Settings,
 } from 'lucide-react'
 
 export default function SDGPage() {
@@ -34,38 +40,50 @@ export default function SDGPage() {
       scholarship_recipients: 78,
       fee_assistance_provided: 65,
       family_income_levels: 2500,
-      
+
       // SDG 2 metrics
       students_receiving_meals: 234,
       nutrition_status: 85,
       food_security_index: 78,
       agricultural_education_participation: 65,
-      
+
       // SDG 3 metrics
       vaccination_coverage: 92,
       health_checkup_completion: 88,
       mental_health_support_access: 45,
       health_education_participation: 76,
-      
+
       // SDG 4 metrics (already strong)
       enrollment_rates: 95,
       completion_rates: 87,
       literacy_rates: 89,
       teacher_student_ratio: 25,
-      
+
       // SDG 5 metrics
       gender_parity_index: 0.92,
       female_teacher_percentage: 48,
       girls_completion_rate: 85,
       leadership_positions_by_gender: 0.45,
-      
+
       // Add more metrics for other SDGs...
-    }
+    },
   }
 
   const mockStudentData = [
-    { id: 1, householdIncome: 1500, povertyStatus: 'below_poverty_line', hasScholarship: true, receivesSchoolMeals: true },
-    { id: 2, householdIncome: 3000, povertyStatus: 'above_poverty_line', hasScholarship: false, receivesSchoolMeals: true },
+    {
+      id: 1,
+      householdIncome: 1500,
+      povertyStatus: 'below_poverty_line',
+      hasScholarship: true,
+      receivesSchoolMeals: true,
+    },
+    {
+      id: 2,
+      householdIncome: 3000,
+      povertyStatus: 'above_poverty_line',
+      hasScholarship: false,
+      receivesSchoolMeals: true,
+    },
     // Add more mock student data...
   ]
 
@@ -74,7 +92,9 @@ export default function SDGPage() {
       case 'dashboard':
         // Show role-specific dashboard or general dashboard
         if (userRole === 'teacher') {
-          return <TeacherSDGView teacherId={user?.id} classData={[]} studentData={mockStudentData} />
+          return (
+            <TeacherSDGView teacherId={user?.id} classData={[]} studentData={mockStudentData} />
+          )
         } else if (userRole === 'hod') {
           return <HodSDGView hodId={user?.id} departmentData={{}} />
         } else if (userRole === 'headteacher') {
@@ -89,7 +109,9 @@ export default function SDGPage() {
       case 'sdg3':
         return <SDG3HealthModule schoolId="school-1" studentData={mockStudentData} />
       case 'sdg5':
-        return <SDG5GenderModule schoolId="school-1" studentData={mockStudentData} teacherData={[]} />
+        return (
+          <SDG5GenderModule schoolId="school-1" studentData={mockStudentData} teacherData={[]} />
+        )
       default:
         return <SDGDashboard schoolData={schoolData} />
     }
@@ -126,15 +148,15 @@ export default function SDGPage() {
         {/* Navigation Header */}
         {activeView !== 'dashboard' && (
           <div className="flex items-center justify-between">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => setActiveView('dashboard')}
               className="flex items-center space-x-2"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>Back to SDG Dashboard</span>
             </Button>
-            
+
             <div className="flex items-center space-x-4">
               <Button variant="outline" size="sm">
                 <FileText className="h-4 w-4 mr-2" />
@@ -159,44 +181,44 @@ export default function SDGPage() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="h-auto p-4 flex-col space-y-2"
                   onClick={() => setActiveView('sdg1')}
                 >
                   <span className="text-2xl">🏚️</span>
                   <span className="font-semibold">No Poverty</span>
-                  <span className="text-xs text-gray-500">Scholarships & Support</span>
+                  <span className="text-xs text-royalPurple-text3">Scholarships & Support</span>
                 </Button>
-                
-                <Button 
-                  variant="outline" 
+
+                <Button
+                  variant="outline"
                   className="h-auto p-4 flex-col space-y-2"
                   onClick={() => setActiveView('sdg2')}
                 >
                   <span className="text-2xl">🍽️</span>
                   <span className="font-semibold">Zero Hunger</span>
-                  <span className="text-xs text-gray-500">Nutrition & Agriculture</span>
+                  <span className="text-xs text-royalPurple-text3">Nutrition & Agriculture</span>
                 </Button>
-                
-                <Button 
-                  variant="outline" 
+
+                <Button
+                  variant="outline"
                   className="h-auto p-4 flex-col space-y-2"
                   onClick={() => setActiveView('sdg3')}
                 >
                   <span className="text-2xl">🏥</span>
                   <span className="font-semibold">Good Health</span>
-                  <span className="text-xs text-gray-500">Health & Well-being</span>
+                  <span className="text-xs text-royalPurple-text3">Health & Well-being</span>
                 </Button>
-                
-                <Button 
-                  variant="outline" 
+
+                <Button
+                  variant="outline"
                   className="h-auto p-4 flex-col space-y-2"
                   onClick={() => setActiveView('sdg5')}
                 >
                   <span className="text-2xl">👩‍🎓</span>
                   <span className="font-semibold">Gender Equality</span>
-                  <span className="text-xs text-gray-500">Equal Opportunities</span>
+                  <span className="text-xs text-royalPurple-text3">Equal Opportunities</span>
                 </Button>
               </div>
             </CardContent>
@@ -210,28 +232,28 @@ export default function SDGPage() {
         <Card className="bg-gradient-to-r from-blue-50 to-purple-50">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Globe className="h-5 w-5 text-blue-600" />
+              <Globe className="h-5 w-5 text-royalPurple-accentTx" />
               <span>Global Impact & Partnerships</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">17</div>
-                <div className="text-sm text-gray-600">SDGs Tracked</div>
+                <div className="text-3xl font-bold text-royalPurple-accentTx mb-2">17</div>
+                <div className="text-sm text-royalPurple-text2">SDGs Tracked</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-green-600 mb-2">2030</div>
-                <div className="text-sm text-gray-600">Target Year</div>
+                <div className="text-3xl font-bold text-royalPurple-successTx mb-2">2030</div>
+                <div className="text-sm text-royalPurple-text2">Target Year</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600 mb-2">🇿🇲</div>
-                <div className="text-sm text-gray-600">Zambia Contribution</div>
+                <div className="text-3xl font-bold text-royalPurple-pillTx mb-2">🇿🇲</div>
+                <div className="text-sm text-royalPurple-text2">Zambia Contribution</div>
               </div>
             </div>
-            
+
             <div className="mt-6 flex justify-center space-x-4">
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button className="bg-royalPurple-accent hover:bg-royalPurple-accent">
                 <TrendingUp className="h-4 w-4 mr-2" />
                 View Global Progress
               </Button>

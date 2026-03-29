@@ -3,17 +3,17 @@
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  GraduationCap, 
+import {
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  GraduationCap,
   BookOpen,
   Calendar,
   Users,
   Save,
-  X
+  X,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
@@ -34,7 +34,7 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
     dateOfBirth: '',
     gender: '',
     address: '',
-    
+
     // Academic Information
     studentId: '',
     gradeLevel: '',
@@ -42,37 +42,37 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
     class: '',
     subjects: [],
     previousSchool: '',
-    
+
     // Parent/Guardian Information
     parentName: '',
     parentEmail: '',
     parentPhone: '',
     parentOccupation: '',
     parentAddress: '',
-    
+
     // Emergency Contact
     emergencyContactName: '',
     emergencyContactPhone: '',
-    emergencyContactRelation: ''
+    emergencyContactRelation: '',
   })
 
   const { subjectsByCategory, loading: subjectsLoading } = useSubjects()
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
 
-  const validateRequired = (value) => value ? true : 'This field is required';
+  const validateRequired = (value) => (value ? true : 'This field is required')
   const validateEmail = (value) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!value) return 'Email is required';
-    if (!emailRegex.test(value)) return 'Please enter a valid email address';
-    return true;
-  };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!value) return 'Email is required'
+    if (!emailRegex.test(value)) return 'Please enter a valid email address'
+    return true
+  }
   const validatePhone = (value) => {
-    const phoneRegex = /^\+?[\d\s-]{10,}$/;
-    if (!value) return true; // Optional field
-    if (!phoneRegex.test(value)) return 'Invalid phone number';
-    return true;
-  };
+    const phoneRegex = /^\+?[\d\s-]{10,}$/
+    if (!value) return true // Optional field
+    if (!phoneRegex.test(value)) return 'Invalid phone number'
+    return true
+  }
 
   const onInputChange = handleInputChange(setFormData)
   const onSubjectChange = handleMultiSelectChange(setFormData)
@@ -109,21 +109,35 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
         class: `${formData.gradeLevel} ${formData.section}`,
         name: formatFullName(formData.firstName, formData.lastName),
         role: 'student',
-        status: 'active'
+        status: 'active',
       }
 
       await onSubmit(submissionData)
       toast.success('Student registered successfully!')
-      
+
       // Reset form
       setFormData({
-        firstName: '', lastName: '', email: '', phone: '', dateOfBirth: '',
-        gender: '', address: '', studentId: '', gradeLevel: '', class: '',
-        subjects: [], previousSchool: '', parentName: '', parentEmail: '',
-        parentPhone: '', parentOccupation: '', parentAddress: '',
-        emergencyContactName: '', emergencyContactPhone: '', emergencyContactRelation: ''
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        dateOfBirth: '',
+        gender: '',
+        address: '',
+        studentId: '',
+        gradeLevel: '',
+        class: '',
+        subjects: [],
+        previousSchool: '',
+        parentName: '',
+        parentEmail: '',
+        parentPhone: '',
+        parentOccupation: '',
+        parentAddress: '',
+        emergencyContactName: '',
+        emergencyContactPhone: '',
+        emergencyContactRelation: '',
       })
-
     } catch (error) {
       console.error('Error registering student:', error)
       toast.error(error.message || 'Error registering student. Please try again.')
@@ -137,11 +151,13 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
       <Card className="p-6">
         <header className="flex justify-between items-center mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-royalPurple-text1 flex items-center gap-2">
               <GraduationCap className="w-6 h-6" aria-hidden="true" />
               Student Registration
             </h2>
-            <p className="text-gray-600 mt-1">Register a new student with subject selections</p>
+            <p className="text-royalPurple-text2 mt-1">
+              Register a new student with subject selections
+            </p>
           </div>
           {onCancel && (
             <Button variant="outline" onClick={onCancel} aria-label="Cancel registration">
@@ -154,41 +170,59 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Personal Information */}
           <FormSection title="Personal Information" icon={User}>
-            <FormGroup 
-              label="First Name" name="firstName" required 
-              value={formData.firstName} onChange={onInputChange} 
+            <FormGroup
+              label="First Name"
+              name="firstName"
+              required
+              value={formData.firstName}
+              onChange={onInputChange}
               error={errors.firstName}
               validate={validateRequired}
               icon={User}
               aria-describedby="firstName-error"
             />
-            <FormGroup 
-              label="Last Name" name="lastName" required 
-              value={formData.lastName} onChange={onInputChange} 
+            <FormGroup
+              label="Last Name"
+              name="lastName"
+              required
+              value={formData.lastName}
+              onChange={onInputChange}
               error={errors.lastName}
               validate={validateRequired}
               icon={User}
               aria-describedby="lastName-error"
             />
-            <FormGroup 
-              label="Email Address" name="email" type="email" required 
-              value={formData.email} onChange={onInputChange} 
+            <FormGroup
+              label="Email Address"
+              name="email"
+              type="email"
+              required
+              value={formData.email}
+              onChange={onInputChange}
               error={errors.email}
               validate={validateEmail}
               icon={Mail}
               aria-describedby="email-error"
             />
-            <FormGroup 
-              label="Phone Number" name="phone" type="tel" placeholder="+260-XX-XXXXXXX"
-              value={formData.phone} onChange={onInputChange} 
+            <FormGroup
+              label="Phone Number"
+              name="phone"
+              type="tel"
+              placeholder="+260-XX-XXXXXXX"
+              value={formData.phone}
+              onChange={onInputChange}
               error={errors.phone}
               validate={validatePhone}
               icon={Phone}
               aria-describedby="phone-error"
             />
-            <FormGroup 
-              label="Date of Birth" name="dateOfBirth" type="date" required 
-              value={formData.dateOfBirth} onChange={onInputChange} 
+            <FormGroup
+              label="Date of Birth"
+              name="dateOfBirth"
+              type="date"
+              required
+              value={formData.dateOfBirth}
+              onChange={onInputChange}
               error={errors.dateOfBirth}
               validate={validateRequired}
               icon={Calendar}
@@ -227,9 +261,12 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
 
           {/* Academic Information */}
           <FormSection title="Academic Information" icon={BookOpen}>
-            <FormGroup 
-              label="Student ID" name="studentId" placeholder="S001"
-              value={formData.studentId} onChange={onInputChange} 
+            <FormGroup
+              label="Student ID"
+              name="studentId"
+              placeholder="S001"
+              value={formData.studentId}
+              onChange={onInputChange}
               error={errors.studentId}
               icon={User}
               aria-describedby="studentId-error"
@@ -247,8 +284,10 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
               aria-describedby="gradeLevel-error"
             >
               <option value="">Select Grade Level</option>
-              {GRADE_LEVELS.map(grade => (
-                <option key={grade} value={grade}>{grade}</option>
+              {GRADE_LEVELS.map((grade) => (
+                <option key={grade} value={grade}>
+                  {grade}
+                </option>
               ))}
             </FormGroup>
 
@@ -265,14 +304,18 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
               aria-describedby="section-error"
             >
               <option value="">Select Section</option>
-              {SECTIONS.map(sec => (
-                <option key={sec} value={sec}>{sec}</option>
+              {SECTIONS.map((sec) => (
+                <option key={sec} value={sec}>
+                  {sec}
+                </option>
               ))}
             </FormGroup>
 
-            <FormGroup 
-              label="Previous School" name="previousSchool"
-              value={formData.previousSchool} onChange={onInputChange} 
+            <FormGroup
+              label="Previous School"
+              name="previousSchool"
+              value={formData.previousSchool}
+              onChange={onInputChange}
               error={errors.previousSchool}
               icon={BookOpen}
               aria-describedby="previousSchool-error"
@@ -281,17 +324,25 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
 
           {/* Subject Selections */}
           <section className="space-y-4" aria-labelledby="subject-selections-title">
-            <h3 id="subject-selections-title" className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2 border-b pb-2">
+            <h3
+              id="subject-selections-title"
+              className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center gap-2 border-b pb-2"
+            >
               <BookOpen className="w-5 h-5" aria-hidden="true" />
               Subject Selections *
             </h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Select subjects based on your grade level and career interests. Core subjects (Mathematics and English) are mandatory.
+            <p className="text-sm text-royalPurple-text2 mb-4">
+              Select subjects based on your grade level and career interests. Core subjects
+              (Mathematics and English) are mandatory.
             </p>
             {subjectsLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" role="status" aria-label="Loading subjects">
-                {[1, 2, 3].map(n => (
-                  <div key={n} className="border border-gray-200 rounded-lg p-4">
+              <div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                role="status"
+                aria-label="Loading subjects"
+              >
+                {[1, 2, 3].map((n) => (
+                  <div key={n} className="border border-royalPurple-border rounded-lg p-4">
                     <SkeletonLoader className="h-6 w-3/4 mb-4" />
                     <div className="space-y-2">
                       <SkeletonLoader className="h-4 w-full" />
@@ -304,22 +355,35 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
             ) : (
               <div className="space-y-4" role="group" aria-labelledby="subject-selections-title">
                 {Object.entries(subjectsByCategory).map(([category, categorySubjects]) => (
-                  <div key={category} className="border border-gray-200 rounded-lg p-4">
-                    <h4 className="font-medium text-gray-900 mb-3 capitalize flex items-center gap-2">
-                      {category === 'core' && <span className="text-red-500 text-xs" aria-hidden="true">(Required)</span>}
+                  <div key={category} className="border border-royalPurple-border rounded-lg p-4">
+                    <h4 className="font-medium text-royalPurple-text1 mb-3 capitalize flex items-center gap-2">
+                      {category === 'core' && (
+                        <span className="text-royalPurple-dangerTx text-xs" aria-hidden="true">
+                          (Required)
+                        </span>
+                      )}
                       {category} Subjects
                     </h4>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" role="list">
+                    <div
+                      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
+                      role="list"
+                    >
                       {categorySubjects.map((subject) => (
-                        <label key={subject.id} className="flex items-center space-x-2 text-sm cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors group" role="listitem">
+                        <label
+                          key={subject.id}
+                          className="flex items-center space-x-2 text-sm cursor-pointer hover:bg-royalPurple-page p-1 rounded transition-colors group"
+                          role="listitem"
+                        >
                           <input
                             type="checkbox"
                             checked={formData.subjects.includes(subject.id)}
                             onChange={(e) => onSubjectChange(subject.id, e.target.checked)}
-                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500 transition-all duration-200"
+                            className="rounded border-royalPurple-border text-royalPurple-accentTx focus:ring-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500 transition-all duration-200"
                             aria-label={`Select ${subject.name}`}
                           />
-                          <span className="text-gray-700 group-hover:text-blue-600 transition-colors">{subject.name}</span>
+                          <span className="text-royalPurple-text2 group-hover:text-royalPurple-accentTx transition-colors">
+                            {subject.name}
+                          </span>
                         </label>
                       ))}
                     </div>
@@ -328,7 +392,11 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
               </div>
             )}
             {errors.subjects && (
-              <p className="text-red-500 text-sm mt-1" id="subjects-error" role="alert">
+              <p
+                className="text-royalPurple-dangerTx text-sm mt-1"
+                id="subjects-error"
+                role="alert"
+              >
                 {errors.subjects}
               </p>
             )}
@@ -336,33 +404,45 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
 
           {/* Parent/Guardian Information */}
           <FormSection title="Parent/Guardian Information" icon={Users}>
-            <FormGroup 
-              label="Parent/Guardian Name" name="parentName" required 
-              value={formData.parentName} onChange={onInputChange} 
+            <FormGroup
+              label="Parent/Guardian Name"
+              name="parentName"
+              required
+              value={formData.parentName}
+              onChange={onInputChange}
               error={errors.parentName}
               validate={validateRequired}
               icon={User}
               aria-describedby="parentName-error"
             />
-            <FormGroup 
-              label="Parent Email" name="parentEmail" type="email"
-              value={formData.parentEmail} onChange={onInputChange} 
+            <FormGroup
+              label="Parent Email"
+              name="parentEmail"
+              type="email"
+              value={formData.parentEmail}
+              onChange={onInputChange}
               error={errors.parentEmail}
               validate={validateEmail}
               icon={Mail}
               aria-describedby="parentEmail-error"
             />
-            <FormGroup 
-              label="Parent Phone" name="parentPhone" type="tel" required 
-              value={formData.parentPhone} onChange={onInputChange} 
+            <FormGroup
+              label="Parent Phone"
+              name="parentPhone"
+              type="tel"
+              required
+              value={formData.parentPhone}
+              onChange={onInputChange}
               error={errors.parentPhone}
               validate={validatePhone}
               icon={Phone}
               aria-describedby="parentPhone-error"
             />
-            <FormGroup 
-              label="Parent Occupation" name="parentOccupation"
-              value={formData.parentOccupation} onChange={onInputChange} 
+            <FormGroup
+              label="Parent Occupation"
+              name="parentOccupation"
+              value={formData.parentOccupation}
+              onChange={onInputChange}
               error={errors.parentOccupation}
               icon={Users}
               aria-describedby="parentOccupation-error"
@@ -383,16 +463,21 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
 
           {/* Emergency Contact */}
           <FormSection title="Emergency Contact" icon={Phone}>
-            <FormGroup 
-              label="Contact Name" name="emergencyContactName"
-              value={formData.emergencyContactName} onChange={onInputChange} 
+            <FormGroup
+              label="Contact Name"
+              name="emergencyContactName"
+              value={formData.emergencyContactName}
+              onChange={onInputChange}
               error={errors.emergencyContactName}
               icon={User}
               aria-describedby="emergencyContactName-error"
             />
-            <FormGroup 
-              label="Contact Phone" name="emergencyContactPhone" type="tel"
-              value={formData.emergencyContactPhone} onChange={onInputChange} 
+            <FormGroup
+              label="Contact Phone"
+              name="emergencyContactPhone"
+              type="tel"
+              value={formData.emergencyContactPhone}
+              onChange={onInputChange}
               error={errors.emergencyContactPhone}
               validate={validatePhone}
               icon={Phone}
@@ -419,15 +504,20 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
           </FormSection>
 
           {/* Submit Button */}
-          <footer className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+          <footer className="flex justify-end space-x-4 pt-6 border-t border-royalPurple-border">
             {onCancel && (
-              <Button type="button" variant="outline" onClick={onCancel} aria-label="Cancel registration">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onCancel}
+                aria-label="Cancel registration"
+              >
                 Cancel
               </Button>
             )}
-            <Button 
-              type="submit" 
-              disabled={loading} 
+            <Button
+              type="submit"
+              disabled={loading}
               className="flex items-center gap-2"
               aria-busy={loading}
               aria-label={loading ? 'Registering student...' : 'Register Student'}

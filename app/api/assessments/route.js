@@ -64,16 +64,19 @@ export async function POST(request) {
 
     const data = await request.json()
 
-    if (!data.title || !data.date) {
-      return NextResponse.json({ error: 'Title and date are required' }, { status: 400 })
+    if (!data.title || !data.date || !data.subject || !data.class) {
+      return NextResponse.json(
+        { error: 'Title, subject, class and date are required' },
+        { status: 400 }
+      )
     }
 
     const newAssessment = await prisma.assessment.create({
       data: {
         title: data.title,
         type: data.type || 'quiz',
-        subject: data.subject,
-        class: data.class,
+        subject: String(data.subject),
+        class: String(data.class),
         date: new Date(data.date),
         duration_minutes: parseInt(data.duration_minutes) || 60,
         description: data.description ? String(data.description) : null,

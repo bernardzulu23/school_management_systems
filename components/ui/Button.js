@@ -7,18 +7,19 @@ const Button = forwardRef(
     ref
   ) => {
     const baseClasses =
-      'inline-flex items-center justify-center font-semibold transition-all duration-200 focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none active:scale-[0.97] rounded-[10px]'
+      'inline-flex items-center justify-center font-semibold transition-colors duration-200 focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none active:scale-[0.97] rounded-lg'
 
     const variants = {
-      default: 'bg-g-800 text-white hover:bg-g-900 min-h-[44px]',
-      primary: 'bg-g-800 text-white hover:bg-g-900 min-h-[44px]',
+      default:
+        'bg-royalPurple-accent text-royalPurple-accentTx font-semibold hover:bg-royalPurple-accentBg min-h-[44px]',
+      primary:
+        'bg-royalPurple-accent text-royalPurple-accentTx font-semibold hover:bg-royalPurple-accentBg min-h-[44px]',
       secondary:
-        'bg-white dark:bg-g-800 border border-g-300 text-g-700 dark:text-g-100 hover:bg-g-100 dark:hover:bg-g-700 min-h-[44px]',
+        'border border-royalPurple-border2 text-royalPurple-text2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx min-h-[44px]',
       outline:
-        'bg-transparent border border-g-300 text-g-700 dark:text-g-100 hover:bg-g-100 dark:hover:bg-g-800 min-h-[44px]',
-      ghost:
-        'bg-transparent text-g-700 dark:text-g-100 hover:bg-g-100 dark:hover:bg-g-800 min-h-[44px]',
-      destructive: 'bg-[#b91c1c] text-white hover:bg-[#991b1b] min-h-[44px]',
+        'border border-royalPurple-border2 text-royalPurple-text2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx min-h-[44px]',
+      ghost: 'text-royalPurple-text2 hover:bg-royalPurple-card2 min-h-[44px]',
+      destructive: 'bg-royalPurple-danger text-royalPurple-dangerTx min-h-[44px]',
     }
 
     const sizes = {

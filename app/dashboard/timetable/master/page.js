@@ -12,7 +12,7 @@ import {
   daysOfWeek,
   classes,
   subjects,
-  classrooms
+  classrooms,
 } from '@/lib/timetableData'
 import { TeachersAPI } from '@/lib/teachersAPI'
 import {
@@ -32,7 +32,7 @@ import {
   Trash2,
   Copy,
   RefreshCw,
-  XCircle
+  XCircle,
 } from 'lucide-react'
 
 export default function MasterTimetablePage() {
@@ -47,7 +47,7 @@ export default function MasterTimetablePage() {
     assignedSlots: 0,
     conflicts: 0,
     teacherUtilization: 0,
-    classroomUtilization: 0
+    classroomUtilization: 0,
   })
   const [showSettingsModal, setShowSettingsModal] = useState(false)
   const [editingTimeSlot, setEditingTimeSlot] = useState(null)
@@ -59,7 +59,7 @@ export default function MasterTimetablePage() {
     termStartDate: '2024-01-15',
     termEndDate: '2024-04-12',
     timeSlots: [...timeSlots],
-    workingDays: [...daysOfWeek]
+    workingDays: [...daysOfWeek],
   })
 
   // Load registered teachers from database
@@ -99,8 +99,6 @@ export default function MasterTimetablePage() {
     }
   }, [])
 
-
-
   function getCurrentWeek() {
     const now = new Date()
     const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1))
@@ -109,12 +107,12 @@ export default function MasterTimetablePage() {
 
   function initializeTimetableData(customDays = daysOfWeek, customTimeSlots = timeSlots) {
     const data = {}
-    customDays.forEach(day => {
+    customDays.forEach((day) => {
       data[day] = {}
-      customTimeSlots.forEach(slot => {
+      customTimeSlots.forEach((slot) => {
         if (!slot.isBreak) {
           data[day][slot.id] = {}
-          classes.forEach(cls => {
+          classes.forEach((cls) => {
             data[day][slot.id][cls.id] = null
           })
         }
@@ -143,8 +141,10 @@ export default function MasterTimetablePage() {
     setShowSettingsModal(false)
 
     // If time slots or working days changed, reinitialize timetable
-    if (JSON.stringify(newSettings.timeSlots) !== JSON.stringify(timetableSettings.timeSlots) ||
-        JSON.stringify(newSettings.workingDays) !== JSON.stringify(timetableSettings.workingDays)) {
+    if (
+      JSON.stringify(newSettings.timeSlots) !== JSON.stringify(timetableSettings.timeSlots) ||
+      JSON.stringify(newSettings.workingDays) !== JSON.stringify(timetableSettings.workingDays)
+    ) {
       const newTimetable = initializeTimetableData(newSettings.workingDays, newSettings.timeSlots)
       setTimetableData(newTimetable)
       timetableAPI.saveMasterTimetable(newTimetable)
@@ -166,11 +166,11 @@ export default function MasterTimetablePage() {
   const calculateTimetableStats = () => {
     let totalSlots = 0
     let assignedSlots = 0
-    
-    daysOfWeek.forEach(day => {
-      timeSlots.forEach(slot => {
+
+    daysOfWeek.forEach((day) => {
+      timeSlots.forEach((slot) => {
         if (!slot.isBreak) {
-          classes.forEach(cls => {
+          classes.forEach((cls) => {
             totalSlots++
             if (timetableData[day]?.[slot.id]?.[cls.id]) {
               assignedSlots++
@@ -185,20 +185,22 @@ export default function MasterTimetablePage() {
       assignedSlots,
       conflicts: conflicts.length,
       teacherUtilization: Math.round((assignedSlots / totalSlots) * 100),
-      classroomUtilization: Math.round((assignedSlots / (classrooms.length * timeSlots.filter(s => !s.isBreak).length * 5)) * 100)
+      classroomUtilization: Math.round(
+        (assignedSlots / (classrooms.length * timeSlots.filter((s) => !s.isBreak).length * 5)) * 100
+      ),
     })
   }
 
   const detectConflicts = () => {
     const foundConflicts = []
-    
+
     // Check for teacher conflicts
-    daysOfWeek.forEach(day => {
-      timeSlots.forEach(slot => {
+    daysOfWeek.forEach((day) => {
+      timeSlots.forEach((slot) => {
         if (!slot.isBreak) {
           const teacherAssignments = {}
-          
-          classes.forEach(cls => {
+
+          classes.forEach((cls) => {
             const assignment = timetableData[day]?.[slot.id]?.[cls.id]
             if (assignment && assignment.teacherId) {
               if (teacherAssignments[assignment.teacherId]) {
@@ -206,8 +208,8 @@ export default function MasterTimetablePage() {
                   type: 'teacher',
                   day,
                   slot: slot.id,
-                  message: `Teacher ${teachers.find(t => t.id === assignment.teacherId)?.name} is assigned to multiple classes`,
-                  classes: [teacherAssignments[assignment.teacherId], cls.id]
+                  message: `Teacher ${teachers.find((t) => t.id === assignment.teacherId)?.name} is assigned to multiple classes`,
+                  classes: [teacherAssignments[assignment.teacherId], cls.id],
                 })
               } else {
                 teacherAssignments[assignment.teacherId] = cls.id
@@ -219,12 +221,12 @@ export default function MasterTimetablePage() {
     })
 
     // Check for classroom conflicts
-    daysOfWeek.forEach(day => {
-      timeSlots.forEach(slot => {
+    daysOfWeek.forEach((day) => {
+      timeSlots.forEach((slot) => {
         if (!slot.isBreak) {
           const classroomAssignments = {}
-          
-          classes.forEach(cls => {
+
+          classes.forEach((cls) => {
             const assignment = timetableData[day]?.[slot.id]?.[cls.id]
             if (assignment && assignment.classroomId) {
               if (classroomAssignments[assignment.classroomId]) {
@@ -232,8 +234,8 @@ export default function MasterTimetablePage() {
                   type: 'classroom',
                   day,
                   slot: slot.id,
-                  message: `Classroom ${classrooms.find(c => c.id === assignment.classroomId)?.name} is assigned to multiple classes`,
-                  classes: [classroomAssignments[assignment.classroomId], cls.id]
+                  message: `Classroom ${classrooms.find((c) => c.id === assignment.classroomId)?.name} is assigned to multiple classes`,
+                  classes: [classroomAssignments[assignment.classroomId], cls.id],
                 })
               } else {
                 classroomAssignments[assignment.classroomId] = cls.id
@@ -260,14 +262,14 @@ export default function MasterTimetablePage() {
     if (!newTimetableData[assignment.day][assignment.slotId]) {
       newTimetableData[assignment.day][assignment.slotId] = {}
     }
-    
+
     newTimetableData[assignment.day][assignment.slotId][assignment.classId] = {
       subjectId: assignment.subjectId,
       teacherId: assignment.teacherId,
       classroomId: assignment.classroomId,
-      notes: assignment.notes || ''
+      notes: assignment.notes || '',
     }
-    
+
     setTimetableData(newTimetableData)
     // Auto-save to centralized data
     const saveSuccess = timetableAPI.saveMasterTimetable(newTimetableData)
@@ -290,23 +292,22 @@ export default function MasterTimetablePage() {
     const assignment = timetableData[day]?.[slotId]?.[classId]
     if (!assignment) return null
 
-    const subject = subjects.find(s => s.id === assignment.subjectId)
-    const teacher = teachers.find(t => t.id === assignment.teacherId)
-    const classroom = classrooms.find(c => c.id === assignment.classroomId)
+    const subject = subjects.find((s) => s.id === assignment.subjectId)
+    const teacher = teachers.find((t) => t.id === assignment.teacherId)
+    const classroom = classrooms.find((c) => c.id === assignment.classroomId)
 
     return {
       subject,
       teacher,
       classroom,
-      assignment
+      assignment,
     }
   }
 
   const hasConflict = (day, slotId, classId) => {
-    return conflicts.some(conflict => 
-      conflict.day === day && 
-      conflict.slot === slotId && 
-      conflict.classes.includes(classId)
+    return conflicts.some(
+      (conflict) =>
+        conflict.day === day && conflict.slot === slotId && conflict.classes.includes(classId)
     )
   }
 
@@ -315,7 +316,9 @@ export default function MasterTimetablePage() {
       // Save to centralized timetable data management
       const success = timetableAPI.saveMasterTimetable(timetableData)
       if (success) {
-        toast.success('Timetable saved successfully! All user dashboards will now show the updated schedule.')
+        toast.success(
+          'Timetable saved successfully! All user dashboards will now show the updated schedule.'
+        )
       } else {
         throw new Error('Failed to save timetable')
       }
@@ -327,11 +330,11 @@ export default function MasterTimetablePage() {
 
   // Inline time slot editing functions
   const updateTimeSlotInline = (slotId, field, value) => {
-    setTimetableSettings(prev => ({
+    setTimetableSettings((prev) => ({
       ...prev,
-      timeSlots: prev.timeSlots.map(slot =>
+      timeSlots: prev.timeSlots.map((slot) =>
         slot.id === slotId ? { ...slot, [field]: value } : slot
-      )
+      ),
     }))
   }
 
@@ -356,7 +359,7 @@ export default function MasterTimetablePage() {
       toast.error('Please resolve all conflicts before publishing the timetable.')
       return
     }
-    
+
     try {
       // Here you would publish to all user dashboards
       console.log('Publishing timetable to all dashboards')
@@ -374,9 +377,13 @@ export default function MasterTimetablePage() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Master Timetable</h1>
-            <p className="text-gray-600 mt-1">Create and manage the school's master timetable</p>
-            <p className="text-sm text-blue-600 mt-1">💡 Hover over time slots in the "Time / Day" column and click "Edit" to modify periods</p>
+            <h1 className="text-3xl font-bold text-royalPurple-text1">Master Timetable</h1>
+            <p className="text-royalPurple-text2 mt-1">
+              Create and manage the school's master timetable
+            </p>
+            <p className="text-sm text-royalPurple-accentTx mt-1">
+              💡 Hover over time slots in the "Time / Day" column and click "Edit" to modify periods
+            </p>
             <div className="flex items-center mt-2">
               {loadingTeachers ? (
                 <div className="flex items-center text-sm text-orange-600">
@@ -384,7 +391,7 @@ export default function MasterTimetablePage() {
                   Loading registered teachers...
                 </div>
               ) : (
-                <div className="flex items-center text-sm text-green-600">
+                <div className="flex items-center text-sm text-royalPurple-successTx">
                   <CheckCircle className="h-4 w-4 mr-2" />
                   {registeredTeachers.length} registered teachers loaded
                 </div>
@@ -404,8 +411,8 @@ export default function MasterTimetablePage() {
               <Save className="h-4 w-4 mr-2" />
               Save Draft
             </Button>
-            <Button 
-              className="bg-green-600 hover:bg-green-700" 
+            <Button
+              className="bg-royalPurple-success hover:bg-royalPurple-success"
               onClick={publishTimetable}
               disabled={conflicts.length > 0}
             >
@@ -419,63 +426,81 @@ export default function MasterTimetablePage() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <Card>
             <CardContent className="p-4 text-center">
-              <Calendar className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{timetableStats.assignedSlots}</p>
-              <p className="text-sm text-gray-600">Assigned Slots</p>
+              <Calendar className="h-8 w-8 text-royalPurple-accentTx mx-auto mb-2" />
+              <p className="text-2xl font-bold text-royalPurple-text1">
+                {timetableStats.assignedSlots}
+              </p>
+              <p className="text-sm text-royalPurple-text2">Assigned Slots</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <Clock className="h-8 w-8 text-green-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{timetableStats.totalSlots}</p>
-              <p className="text-sm text-gray-600">Total Slots</p>
+              <Clock className="h-8 w-8 text-royalPurple-successTx mx-auto mb-2" />
+              <p className="text-2xl font-bold text-royalPurple-text1">
+                {timetableStats.totalSlots}
+              </p>
+              <p className="text-sm text-royalPurple-text2">Total Slots</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <AlertTriangle className={`h-8 w-8 mx-auto mb-2 ${conflicts.length > 0 ? 'text-red-600' : 'text-gray-400'}`} />
-              <p className={`text-2xl font-bold ${conflicts.length > 0 ? 'text-red-900' : 'text-gray-900'}`}>
+              <AlertTriangle
+                className={`h-8 w-8 mx-auto mb-2 ${conflicts.length > 0 ? 'text-royalPurple-dangerTx' : 'text-royalPurple-text3'}`}
+              />
+              <p
+                className={`text-2xl font-bold ${conflicts.length > 0 ? 'text-royalPurple-dangerTx' : 'text-royalPurple-text1'}`}
+              >
                 {timetableStats.conflicts}
               </p>
-              <p className="text-sm text-gray-600">Conflicts</p>
+              <p className="text-sm text-royalPurple-text2">Conflicts</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <Users className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{timetableStats.teacherUtilization}%</p>
-              <p className="text-sm text-gray-600">Teacher Utilization</p>
+              <Users className="h-8 w-8 text-royalPurple-pillTx mx-auto mb-2" />
+              <p className="text-2xl font-bold text-royalPurple-text1">
+                {timetableStats.teacherUtilization}%
+              </p>
+              <p className="text-sm text-royalPurple-text2">Teacher Utilization</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
               <BookOpen className="h-8 w-8 text-orange-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{timetableStats.classroomUtilization}%</p>
-              <p className="text-sm text-gray-600">Classroom Utilization</p>
+              <p className="text-2xl font-bold text-royalPurple-text1">
+                {timetableStats.classroomUtilization}%
+              </p>
+              <p className="text-sm text-royalPurple-text2">Classroom Utilization</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Teacher Data Status */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-          <h3 className="text-lg font-semibold text-blue-800 mb-2">👥 Teacher Data Status</h3>
+        <div className="bg-royalPurple-accent border border-royalPurple-border2 rounded-lg p-4 mb-6">
+          <h3 className="text-lg font-semibold text-royalPurple-accentTx mb-2">
+            👥 Teacher Data Status
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="font-medium text-blue-700">Status:</span>
-              <span className="ml-2 text-blue-600">
-                {loadingTeachers ? '🔄 Loading teachers...' : `✅ ${registeredTeachers.length} registered teachers loaded`}
+              <span className="font-medium text-royalPurple-accentTx">Status:</span>
+              <span className="ml-2 text-royalPurple-accentTx">
+                {loadingTeachers
+                  ? '🔄 Loading teachers...'
+                  : `✅ ${registeredTeachers.length} registered teachers loaded`}
               </span>
             </div>
             <div>
-              <span className="font-medium text-blue-700">Source:</span>
-              <span className="ml-2 text-blue-600">Database API (/api/teachers)</span>
+              <span className="font-medium text-royalPurple-accentTx">Source:</span>
+              <span className="ml-2 text-royalPurple-accentTx">Database API (/api/teachers)</span>
             </div>
           </div>
           {registeredTeachers.length > 0 && (
-            <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded">
-              <span className="text-green-700 font-medium">✅ Using registered teachers from database</span>
-              <div className="text-xs text-green-600 mt-1">
-                Teachers: {registeredTeachers.map(t => `${t.name} (${t.department})`).join(', ')}
+            <div className="mt-3 p-2 bg-royalPurple-success border border-royalPurple-border rounded">
+              <span className="text-royalPurple-successTx font-medium">
+                ✅ Using registered teachers from database
+              </span>
+              <div className="text-xs text-royalPurple-successTx mt-1">
+                Teachers: {registeredTeachers.map((t) => `${t.name} (${t.department})`).join(', ')}
               </div>
             </div>
           )}
@@ -483,9 +508,9 @@ export default function MasterTimetablePage() {
 
         {/* Conflicts Alert */}
         {conflicts.length > 0 && (
-          <Card className="border-red-200 bg-red-50">
+          <Card className="border-royalPurple-border bg-royalPurple-danger">
             <CardHeader>
-              <CardTitle className="text-red-800 flex items-center">
+              <CardTitle className="text-royalPurple-dangerTx flex items-center">
                 <AlertTriangle className="h-5 w-5 mr-2" />
                 Timetable Conflicts Detected
               </CardTitle>
@@ -493,8 +518,14 @@ export default function MasterTimetablePage() {
             <CardContent>
               <div className="space-y-2">
                 {conflicts.map((conflict, index) => (
-                  <div key={index} className="text-sm text-red-700 bg-red-100 p-2 rounded">
-                    <strong>{conflict.day} - {timeSlots.find(s => s.id === conflict.slot)?.label}:</strong> {conflict.message}
+                  <div
+                    key={index}
+                    className="text-sm text-royalPurple-dangerTx bg-royalPurple-danger p-2 rounded"
+                  >
+                    <strong>
+                      {conflict.day} - {timeSlots.find((s) => s.id === conflict.slot)?.label}:
+                    </strong>{' '}
+                    {conflict.message}
                   </div>
                 ))}
               </div>
@@ -512,21 +543,25 @@ export default function MasterTimetablePage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-              <div className="bg-blue-50 p-3 rounded-md">
-                <div className="font-medium text-blue-900">Current Term</div>
-                <div className="text-blue-700">{timetableSettings.currentTerm}</div>
+              <div className="bg-royalPurple-accent p-3 rounded-md">
+                <div className="font-medium text-royalPurple-accentTx">Current Term</div>
+                <div className="text-royalPurple-accentTx">{timetableSettings.currentTerm}</div>
               </div>
-              <div className="bg-green-50 p-3 rounded-md">
-                <div className="font-medium text-green-900">Academic Year</div>
-                <div className="text-green-700">{timetableSettings.academicYear}</div>
+              <div className="bg-royalPurple-success p-3 rounded-md">
+                <div className="font-medium text-royalPurple-successTx">Academic Year</div>
+                <div className="text-royalPurple-successTx">{timetableSettings.academicYear}</div>
               </div>
-              <div className="bg-purple-50 p-3 rounded-md">
-                <div className="font-medium text-purple-900">Term Start</div>
-                <div className="text-purple-700">{new Date(timetableSettings.termStartDate).toLocaleDateString()}</div>
+              <div className="bg-royalPurple-pill p-3 rounded-md">
+                <div className="font-medium text-royalPurple-pillTx">Term Start</div>
+                <div className="text-royalPurple-pillTx">
+                  {new Date(timetableSettings.termStartDate).toLocaleDateString()}
+                </div>
               </div>
               <div className="bg-orange-50 p-3 rounded-md">
                 <div className="font-medium text-orange-900">Term End</div>
-                <div className="text-orange-700">{new Date(timetableSettings.termEndDate).toLocaleDateString()}</div>
+                <div className="text-orange-700">
+                  {new Date(timetableSettings.termEndDate).toLocaleDateString()}
+                </div>
               </div>
             </div>
           </CardContent>
@@ -538,7 +573,7 @@ export default function MasterTimetablePage() {
             <CardTitle className="flex items-center justify-between">
               <span>Weekly Timetable Grid</span>
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600">Week of:</span>
+                <span className="text-sm text-royalPurple-text2">Week of:</span>
                 <input
                   type="date"
                   value={selectedWeek}
@@ -550,61 +585,76 @@ export default function MasterTimetablePage() {
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse border border-gray-300">
+              <table className="w-full border-collapse border border-royalPurple-border">
                 <thead>
                   <tr>
-                    <th className="border border-gray-300 p-2 bg-gray-50 w-32">Time / Day</th>
-                    {timetableSettings.workingDays.map(day => (
-                      <th key={day} className="border border-gray-300 p-2 bg-gray-50 min-w-48">
+                    <th className="border border-royalPurple-border p-2 bg-royalPurple-page w-32">
+                      Time / Day
+                    </th>
+                    {timetableSettings.workingDays.map((day) => (
+                      <th
+                        key={day}
+                        className="border border-royalPurple-border p-2 bg-royalPurple-page min-w-48"
+                      >
                         {day}
                       </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {timetableSettings.timeSlots.map(slot => (
+                  {timetableSettings.timeSlots.map((slot) => (
                     <tr key={slot.id}>
-                      <td className={`border border-gray-300 p-2 font-medium text-center ${
-                        slot.isBreak ? 'bg-yellow-50 text-yellow-800' : 'bg-gray-50'
-                      }`}>
+                      <td
+                        className={`border border-royalPurple-border p-2 font-medium text-center ${
+                          slot.isBreak ? 'bg-yellow-50 text-yellow-800' : 'bg-royalPurple-page'
+                        }`}
+                      >
                         {editingTimeSlot === slot.id ? (
                           // Inline editing mode
                           <div className="space-y-2">
                             <input
                               type="text"
                               value={slot.label}
-                              onChange={(e) => updateTimeSlotInline(slot.id, 'label', e.target.value)}
-                              className="w-full p-1 text-xs border border-gray-300 rounded text-center"
+                              onChange={(e) =>
+                                updateTimeSlotInline(slot.id, 'label', e.target.value)
+                              }
+                              className="w-full p-1 text-xs border border-royalPurple-border rounded text-center"
                               placeholder="Period name"
                             />
                             <div className="flex space-x-1">
                               <input
                                 type="time"
                                 value={slot.startTime}
-                                onChange={(e) => updateTimeSlotInline(slot.id, 'startTime', e.target.value)}
-                                className="w-full p-1 text-xs border border-gray-300 rounded"
+                                onChange={(e) =>
+                                  updateTimeSlotInline(slot.id, 'startTime', e.target.value)
+                                }
+                                className="w-full p-1 text-xs border border-royalPurple-border rounded"
                               />
                               <input
                                 type="time"
                                 value={slot.endTime}
-                                onChange={(e) => updateTimeSlotInline(slot.id, 'endTime', e.target.value)}
-                                className="w-full p-1 text-xs border border-gray-300 rounded"
+                                onChange={(e) =>
+                                  updateTimeSlotInline(slot.id, 'endTime', e.target.value)
+                                }
+                                className="w-full p-1 text-xs border border-royalPurple-border rounded"
                               />
                             </div>
                             <div className="flex items-center justify-center space-x-1">
                               <input
                                 type="checkbox"
                                 checked={slot.isBreak}
-                                onChange={(e) => updateTimeSlotInline(slot.id, 'isBreak', e.target.checked)}
+                                onChange={(e) =>
+                                  updateTimeSlotInline(slot.id, 'isBreak', e.target.checked)
+                                }
                                 className="rounded"
                               />
-                              <span className="text-xs text-gray-600">Break</span>
+                              <span className="text-xs text-royalPurple-text2">Break</span>
                             </div>
                             <div className="flex space-x-1">
                               <Button
                                 size="sm"
                                 onClick={handleTimeSlotSave}
-                                className="text-xs px-2 py-1 bg-green-600 hover:bg-green-700"
+                                className="text-xs px-2 py-1 bg-royalPurple-success hover:bg-royalPurple-success"
                               >
                                 <CheckCircle className="h-3 w-3" />
                               </Button>
@@ -622,8 +672,12 @@ export default function MasterTimetablePage() {
                           // Display mode with edit button
                           <div className="group">
                             <div className="text-sm">{slot.label}</div>
-                            <div className="text-xs text-gray-600">{slot.startTime}-{slot.endTime}</div>
-                            {slot.isBreak && <div className="text-xs text-yellow-600 font-medium">Break</div>}
+                            <div className="text-xs text-royalPurple-text2">
+                              {slot.startTime}-{slot.endTime}
+                            </div>
+                            {slot.isBreak && (
+                              <div className="text-xs text-yellow-600 font-medium">Break</div>
+                            )}
                             <Button
                               size="sm"
                               variant="ghost"
@@ -636,15 +690,18 @@ export default function MasterTimetablePage() {
                           </div>
                         )}
                       </td>
-                      {timetableSettings.workingDays.map(day => (
-                        <td key={`${day}-${slot.id}`} className="border border-gray-300 p-1">
+                      {timetableSettings.workingDays.map((day) => (
+                        <td
+                          key={`${day}-${slot.id}`}
+                          className="border border-royalPurple-border p-1"
+                        >
                           {slot.isBreak ? (
                             <div className="text-center text-yellow-600 font-medium py-4">
                               {slot.label}
                             </div>
                           ) : (
                             <div className="space-y-1">
-                              {classes.map(cls => {
+                              {classes.map((cls) => {
                                 const content = getSlotContent(day, slot.id, cls.id)
                                 const hasConflictFlag = hasConflict(day, slot.id, cls.id)
 
@@ -654,36 +711,41 @@ export default function MasterTimetablePage() {
                                     className={`p-2 rounded text-xs cursor-pointer transition-colors ${
                                       content
                                         ? hasConflictFlag
-                                          ? 'bg-red-100 border-red-300 text-red-800 border'
-                                          : 'bg-blue-100 border-blue-300 text-blue-800 border'
-                                        : 'bg-gray-50 hover:bg-gray-100 border border-dashed border-gray-300'
+                                          ? 'bg-royalPurple-danger border-royalPurple-border text-royalPurple-dangerTx border'
+                                          : 'bg-royalPurple-accent border-royalPurple-border2 text-royalPurple-accentTx border'
+                                        : 'bg-royalPurple-page hover:bg-royalPurple-card2 border border-dashed border-royalPurple-border'
                                     }`}
                                     onClick={() => handleSlotClick(day, slot.id, cls.id)}
                                   >
                                     <div className="font-medium">{cls.name}</div>
                                     {content ? (
                                       <div className="mt-1 relative group">
-                                        <div className="font-semibold" style={{ color: content.subject?.color }}>
+                                        <div
+                                          className="font-semibold"
+                                          style={{ color: content.subject?.color }}
+                                        >
                                           {content.subject?.code}
                                         </div>
-                                        <div className="text-gray-600">
+                                        <div className="text-royalPurple-text2">
                                           {content.teacher?.name?.split(' ').slice(-1)[0]}
                                         </div>
-                                        <div className="text-gray-500">
+                                        <div className="text-royalPurple-text3">
                                           {content.classroom?.name}
                                         </div>
                                         {hasConflictFlag && (
-                                          <div className="text-red-600 font-bold">⚠ CONFLICT</div>
+                                          <div className="text-royalPurple-dangerTx font-bold">
+                                            ⚠ CONFLICT
+                                          </div>
                                         )}
                                         <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                                          <Edit className="h-3 w-3 text-gray-500" />
+                                          <Edit className="h-3 w-3 text-royalPurple-text3" />
                                         </div>
-                                        <div className="text-xs text-gray-400 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="text-xs text-royalPurple-text3 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                           Click to edit
                                         </div>
                                       </div>
                                     ) : (
-                                      <div className="text-gray-400 text-center py-2">
+                                      <div className="text-royalPurple-text3 text-center py-2">
                                         Click to assign
                                       </div>
                                     )}
@@ -704,20 +766,25 @@ export default function MasterTimetablePage() {
 
         {/* Assignment Modal */}
         {showAssignmentModal && selectedSlot && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md">
+          <div className="fixed inset-0 bg-royalPurple-deep bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-royalPurple-card rounded-lg p-6 w-full max-w-md">
               <h3 className="text-lg font-semibold mb-4">
-                {getSlotContent(selectedSlot.day, selectedSlot.slotId, selectedSlot.classId) ? 'Edit Assignment' : 'Create Assignment'} - {classes.find(c => c.id === selectedSlot.classId)?.name}
+                {getSlotContent(selectedSlot.day, selectedSlot.slotId, selectedSlot.classId)
+                  ? 'Edit Assignment'
+                  : 'Create Assignment'}{' '}
+                - {classes.find((c) => c.id === selectedSlot.classId)?.name}
               </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                {selectedSlot.day} - {timeSlots.find(s => s.id === selectedSlot.slotId)?.label}
-                ({timeSlots.find(s => s.id === selectedSlot.slotId)?.time})
+              <p className="text-sm text-royalPurple-text2 mb-4">
+                {selectedSlot.day} - {timeSlots.find((s) => s.id === selectedSlot.slotId)?.label}(
+                {timeSlots.find((s) => s.id === selectedSlot.slotId)?.time})
               </p>
 
               {loadingTeachers ? (
                 <div className="text-center py-8">
-                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                  <p className="text-sm text-gray-600 mt-3">Loading registered teachers...</p>
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-royalPurple-border2"></div>
+                  <p className="text-sm text-royalPurple-text2 mt-3">
+                    Loading registered teachers...
+                  </p>
                 </div>
               ) : (
                 <AssignmentForm
@@ -725,9 +792,15 @@ export default function MasterTimetablePage() {
                   subjects={subjects}
                   teachers={registeredTeachers}
                   classrooms={classrooms}
-                  currentAssignment={getSlotContent(selectedSlot.day, selectedSlot.slotId, selectedSlot.classId)}
+                  currentAssignment={getSlotContent(
+                    selectedSlot.day,
+                    selectedSlot.slotId,
+                    selectedSlot.classId
+                  )}
                   onAssign={assignSubject}
-                  onClear={() => clearSlot(selectedSlot.day, selectedSlot.slotId, selectedSlot.classId)}
+                  onClear={() =>
+                    clearSlot(selectedSlot.day, selectedSlot.slotId, selectedSlot.classId)
+                  }
                   onCancel={() => {
                     setShowAssignmentModal(false)
                     setSelectedSlot(null)
@@ -752,12 +825,21 @@ export default function MasterTimetablePage() {
 }
 
 // Assignment Form Component
-function AssignmentForm({ selectedSlot, subjects, teachers, classrooms, currentAssignment, onAssign, onClear, onCancel }) {
+function AssignmentForm({
+  selectedSlot,
+  subjects,
+  teachers,
+  classrooms,
+  currentAssignment,
+  onAssign,
+  onClear,
+  onCancel,
+}) {
   const [formData, setFormData] = useState({
     subjectId: currentAssignment?.assignment?.subjectId || '',
     teacherId: currentAssignment?.assignment?.teacherId || '',
     classroomId: currentAssignment?.assignment?.classroomId || '',
-    notes: currentAssignment?.assignment?.notes || ''
+    notes: currentAssignment?.assignment?.notes || '',
   })
 
   // Update form data when currentAssignment changes
@@ -766,7 +848,7 @@ function AssignmentForm({ selectedSlot, subjects, teachers, classrooms, currentA
       subjectId: currentAssignment?.assignment?.subjectId || '',
       teacherId: currentAssignment?.assignment?.teacherId || '',
       classroomId: currentAssignment?.assignment?.classroomId || '',
-      notes: currentAssignment?.assignment?.notes || ''
+      notes: currentAssignment?.assignment?.notes || '',
     })
   }, [currentAssignment])
 
@@ -782,59 +864,64 @@ function AssignmentForm({ selectedSlot, subjects, teachers, classrooms, currentA
       ...formData,
       subjectId: parseInt(formData.subjectId),
       teacherId: parseInt(formData.teacherId),
-      classroomId: parseInt(formData.classroomId)
+      classroomId: parseInt(formData.classroomId),
     })
   }
 
-  const filteredTeachers = teachers.filter(teacher =>
-    !formData.subjectId || teacher.subjects.includes(subjects.find(s => s.id === parseInt(formData.subjectId))?.name)
+  const filteredTeachers = teachers.filter(
+    (teacher) =>
+      !formData.subjectId ||
+      teacher.subjects.includes(subjects.find((s) => s.id === parseInt(formData.subjectId))?.name)
   )
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Subject *</label>
+        <label className="block text-sm font-medium text-royalPurple-text2 mb-1">Subject *</label>
         <select
           value={formData.subjectId}
           onChange={(e) => setFormData({ ...formData, subjectId: e.target.value, teacherId: '' })}
-          className="w-full border border-gray-300 rounded-md px-3 py-2"
+          className="w-full border border-royalPurple-border rounded-md px-3 py-2"
           required
         >
           <option value="">Select Subject</option>
-          {subjects.map(subject => (
-            <option key={subject.id} value={subject.id}>{subject.name}</option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Teacher *</label>
-        <select
-          value={formData.teacherId}
-          onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
-          className="w-full border border-gray-300 rounded-md px-3 py-2"
-          required
-          disabled={!formData.subjectId}
-        >
-          <option value="">Select Teacher</option>
-          {filteredTeachers.map(teacher => (
-            <option key={teacher.id} value={teacher.id}>
-              {teacher.name} {teacher.department ? `(${teacher.department})` : ''} {teacher.employeeId ? `- ${teacher.employeeId}` : ''}
+          {subjects.map((subject) => (
+            <option key={subject.id} value={subject.id}>
+              {subject.name}
             </option>
           ))}
         </select>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Classroom *</label>
+        <label className="block text-sm font-medium text-royalPurple-text2 mb-1">Teacher *</label>
+        <select
+          value={formData.teacherId}
+          onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
+          className="w-full border border-royalPurple-border rounded-md px-3 py-2"
+          required
+          disabled={!formData.subjectId}
+        >
+          <option value="">Select Teacher</option>
+          {filteredTeachers.map((teacher) => (
+            <option key={teacher.id} value={teacher.id}>
+              {teacher.name} {teacher.department ? `(${teacher.department})` : ''}{' '}
+              {teacher.employeeId ? `- ${teacher.employeeId}` : ''}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-royalPurple-text2 mb-1">Classroom *</label>
         <select
           value={formData.classroomId}
           onChange={(e) => setFormData({ ...formData, classroomId: e.target.value })}
-          className="w-full border border-gray-300 rounded-md px-3 py-2"
+          className="w-full border border-royalPurple-border rounded-md px-3 py-2"
           required
         >
           <option value="">Select Classroom</option>
-          {classrooms.map(classroom => (
+          {classrooms.map((classroom) => (
             <option key={classroom.id} value={classroom.id}>
               {classroom.name} ({classroom.type}, {classroom.capacity} seats)
             </option>
@@ -843,11 +930,11 @@ function AssignmentForm({ selectedSlot, subjects, teachers, classrooms, currentA
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+        <label className="block text-sm font-medium text-royalPurple-text2 mb-1">Notes</label>
         <textarea
           value={formData.notes}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          className="w-full border border-gray-300 rounded-md px-3 py-2"
+          className="w-full border border-royalPurple-border rounded-md px-3 py-2"
           rows="2"
           placeholder="Optional notes..."
         />
@@ -859,7 +946,7 @@ function AssignmentForm({ selectedSlot, subjects, teachers, classrooms, currentA
             <Button
               type="button"
               variant="outline"
-              className="text-red-600 border-red-300 hover:bg-red-50"
+              className="text-royalPurple-dangerTx border-royalPurple-border hover:bg-royalPurple-danger"
               onClick={() => {
                 onClear()
                 onCancel()
@@ -874,7 +961,7 @@ function AssignmentForm({ selectedSlot, subjects, teachers, classrooms, currentA
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
           </Button>
-          <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+          <Button type="submit" className="bg-royalPurple-accent hover:bg-royalPurple-accent">
             <Save className="h-4 w-4 mr-2" />
             {currentAssignment ? 'Update Assignment' : 'Create Assignment'}
           </Button>
@@ -895,7 +982,7 @@ function SettingsModal({ settings, onSave, onCancel }) {
     onSave({
       ...formData,
       timeSlots,
-      workingDays
+      workingDays,
     })
   }
 
@@ -905,34 +992,32 @@ function SettingsModal({ settings, onSave, onCancel }) {
       startTime: '08:00',
       endTime: '08:45',
       label: `Period ${timeSlots.length + 1}`,
-      isBreak: false
+      isBreak: false,
     }
     setTimeSlots([...timeSlots, newSlot])
   }
 
   const removeTimeSlot = (id) => {
-    setTimeSlots(timeSlots.filter(slot => slot.id !== id))
+    setTimeSlots(timeSlots.filter((slot) => slot.id !== id))
   }
 
   const updateTimeSlot = (id, field, value) => {
-    setTimeSlots(timeSlots.map(slot =>
-      slot.id === id ? { ...slot, [field]: value } : slot
-    ))
+    setTimeSlots(timeSlots.map((slot) => (slot.id === id ? { ...slot, [field]: value } : slot)))
   }
 
   const toggleWorkingDay = (day) => {
     if (workingDays.includes(day)) {
-      setWorkingDays(workingDays.filter(d => d !== day))
+      setWorkingDays(workingDays.filter((d) => d !== day))
     } else {
       setWorkingDays([...workingDays, day])
     }
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-royalPurple-deep bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-royalPurple-card rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Timetable Settings</h2>
+          <h2 className="text-2xl font-bold text-royalPurple-text1">Timetable Settings</h2>
           <Button variant="outline" onClick={onCancel}>
             <XCircle className="h-4 w-4" />
           </Button>
@@ -942,13 +1027,13 @@ function SettingsModal({ settings, onSave, onCancel }) {
           {/* Term Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                 Current Term
               </label>
               <select
                 value={formData.currentTerm}
-                onChange={(e) => setFormData({...formData, currentTerm: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => setFormData({ ...formData, currentTerm: e.target.value })}
+                className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500"
               >
                 <option value="Term 1">Term 1</option>
                 <option value="Term 2">Term 2</option>
@@ -956,70 +1041,70 @@ function SettingsModal({ settings, onSave, onCancel }) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                 Academic Year
               </label>
               <input
                 type="text"
                 value={formData.academicYear}
-                onChange={(e) => setFormData({...formData, academicYear: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => setFormData({ ...formData, academicYear: e.target.value })}
+                className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500"
                 placeholder="2024-2025"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                 Term Start Date
               </label>
               <input
                 type="date"
                 value={formData.termStartDate}
-                onChange={(e) => setFormData({...formData, termStartDate: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => setFormData({ ...formData, termStartDate: e.target.value })}
+                className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                 Term End Date
               </label>
               <input
                 type="date"
                 value={formData.termEndDate}
-                onChange={(e) => setFormData({...formData, termEndDate: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => setFormData({ ...formData, termEndDate: e.target.value })}
+                className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
 
           {/* Working Days */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-medium text-royalPurple-text2 mb-3">
               Working Days
             </label>
             <div className="flex flex-wrap gap-2">
-              {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
-                <button
-                  key={day}
-                  type="button"
-                  onClick={() => toggleWorkingDay(day)}
-                  className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    workingDays.includes(day)
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-                >
-                  {day}
-                </button>
-              ))}
+              {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(
+                (day) => (
+                  <button
+                    key={day}
+                    type="button"
+                    onClick={() => toggleWorkingDay(day)}
+                    className={`px-3 py-2 rounded-md text-sm font-medium ${
+                      workingDays.includes(day)
+                        ? 'bg-royalPurple-accent text-royalPurple-text1'
+                        : 'bg-royalPurple-card2 text-royalPurple-text2 hover:bg-royalPurple-card2'
+                    }`}
+                  >
+                    {day}
+                  </button>
+                )
+              )}
             </div>
           </div>
 
           {/* Time Slots */}
           <div>
             <div className="flex justify-between items-center mb-3">
-              <label className="block text-sm font-medium text-gray-700">
-                Time Slots
-              </label>
+              <label className="block text-sm font-medium text-royalPurple-text2">Time Slots</label>
               <Button type="button" variant="outline" onClick={addTimeSlot}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add Slot
@@ -1027,26 +1112,29 @@ function SettingsModal({ settings, onSave, onCancel }) {
             </div>
             <div className="space-y-3 max-h-60 overflow-y-auto">
               {timeSlots.map((slot, index) => (
-                <div key={slot.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-md">
+                <div
+                  key={slot.id}
+                  className="flex items-center space-x-3 p-3 bg-royalPurple-page rounded-md"
+                >
                   <div className="flex-1 grid grid-cols-4 gap-3">
                     <input
                       type="text"
                       value={slot.label}
                       onChange={(e) => updateTimeSlot(slot.id, 'label', e.target.value)}
-                      className="p-2 border border-gray-300 rounded-md text-sm"
+                      className="p-2 border border-royalPurple-border rounded-md text-sm"
                       placeholder="Period name"
                     />
                     <input
                       type="time"
                       value={slot.startTime}
                       onChange={(e) => updateTimeSlot(slot.id, 'startTime', e.target.value)}
-                      className="p-2 border border-gray-300 rounded-md text-sm"
+                      className="p-2 border border-royalPurple-border rounded-md text-sm"
                     />
                     <input
                       type="time"
                       value={slot.endTime}
                       onChange={(e) => updateTimeSlot(slot.id, 'endTime', e.target.value)}
-                      className="p-2 border border-gray-300 rounded-md text-sm"
+                      className="p-2 border border-royalPurple-border rounded-md text-sm"
                     />
                     <div className="flex items-center space-x-2">
                       <input
@@ -1055,7 +1143,7 @@ function SettingsModal({ settings, onSave, onCancel }) {
                         onChange={(e) => updateTimeSlot(slot.id, 'isBreak', e.target.checked)}
                         className="rounded"
                       />
-                      <span className="text-sm text-gray-600">Break</span>
+                      <span className="text-sm text-royalPurple-text2">Break</span>
                     </div>
                   </div>
                   <Button
@@ -1063,7 +1151,7 @@ function SettingsModal({ settings, onSave, onCancel }) {
                     variant="outline"
                     size="sm"
                     onClick={() => removeTimeSlot(slot.id)}
-                    className="text-red-600 hover:text-red-700"
+                    className="text-royalPurple-dangerTx hover:text-royalPurple-dangerTx"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -1077,7 +1165,7 @@ function SettingsModal({ settings, onSave, onCancel }) {
             <Button type="button" variant="outline" onClick={onCancel}>
               Cancel
             </Button>
-            <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+            <Button type="submit" className="bg-royalPurple-accent hover:bg-royalPurple-accent">
               <Save className="h-4 w-4 mr-2" />
               Save Settings
             </Button>

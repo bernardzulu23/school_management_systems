@@ -113,15 +113,15 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
                   <img
                     src={school.logo_url}
                     alt={school.name}
-                    className="h-8 w-8 rounded-[10px] object-contain bg-g-100 border border-black/[0.09] shrink-0"
+                    className="h-8 w-8 rounded-lg object-contain bg-royalPurple-card2 border border-royalPurple-border shrink-0"
                   />
                 ) : (
-                  <div className="h-8 w-8 rounded-[10px] bg-g-100 border border-black/[0.09] flex items-center justify-center shrink-0">
-                    <GraduationCap className="h-5 w-5 text-g-800" />
+                  <div className="h-8 w-8 rounded-lg bg-royalPurple-card2 border border-royalPurple-border flex items-center justify-center shrink-0">
+                    <GraduationCap className="h-5 w-5 text-royalPurple-text2" />
                   </div>
                 )}
                 <span
-                  className="font-bold text-lg tracking-tight truncate text-g-900 dark:text-g-50"
+                  className="font-bold text-lg tracking-tight truncate text-royalPurple-text1"
                   title={school.name}
                 >
                   {school.name}
@@ -129,10 +129,10 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
               </>
             ) : (
               <>
-                <div className="h-8 w-8 rounded-[10px] bg-g-100 border border-black/[0.09] flex items-center justify-center shrink-0">
-                  <GraduationCap className="h-5 w-5 text-g-800" />
+                <div className="h-8 w-8 rounded-lg bg-royalPurple-card2 border border-royalPurple-border flex items-center justify-center shrink-0">
+                  <GraduationCap className="h-5 w-5 text-royalPurple-text2" />
                 </div>
-                <span className="font-bold text-lg tracking-tight text-g-900 dark:text-g-50">
+                <span className="font-bold text-lg tracking-tight text-royalPurple-text1">
                   EduZambia
                 </span>
               </>
@@ -141,7 +141,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         )}
         <button
           onClick={() => (mobileOpen ? setMobileOpen(false) : setIsCollapsed(!isCollapsed))}
-          className="p-2 rounded-[10px] hover:bg-g-100 dark:hover:bg-g-800 transition-colors shrink-0 ml-2 text-g-700 dark:text-g-200"
+          className="p-2 rounded-lg hover:bg-royalPurple-card2 transition-colors shrink-0 ml-2 text-royalPurple-text2"
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {mobileOpen ? (
@@ -163,21 +163,21 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
               href={item.href}
               onClick={() => mobileOpen && setMobileOpen(false)}
               className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-[10px] transition-all duration-200 group relative border border-transparent',
+                'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors duration-200 group relative',
                 isActive
-                  ? 'bg-g-100 dark:bg-g-800 border-l-[3px] border-l-g-800 border-g-200 text-g-900 dark:text-g-50 font-semibold'
-                  : 'text-g-700 dark:text-g-200 hover:bg-g-50 dark:hover:bg-g-800 hover:border-black/[0.18]'
+                  ? 'bg-royalPurple-accentBg text-royalPurple-accentTx border-l-2 border-royalPurple-accent'
+                  : 'text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1'
               )}
             >
               <item.icon
                 className={cn(
                   'h-5 w-5 shrink-0',
-                  isActive ? 'text-g-800 dark:text-g-50' : 'text-g-700 dark:text-g-200'
+                  isActive ? 'text-royalPurple-accentTx' : 'text-royalPurple-text2'
                 )}
               />
               {(!isCollapsed || mobileOpen) && <span className="font-medium">{item.name}</span>}
               {isCollapsed && !mobileOpen && (
-                <div className="absolute left-14 px-2 py-1 bg-g-900 text-white text-xs rounded-[10px] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 border border-black/[0.18]">
+                <div className="absolute left-14 px-2 py-1 bg-royalPurple-deep text-royalPurple-text1 text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 border border-royalPurple-border">
                   {item.name}
                 </div>
               )}
@@ -186,10 +186,10 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         })}
       </div>
 
-      <div className="p-4 mt-auto border-t border-black/[0.09] dark:border-white/[0.09]">
+      <div className="p-4 mt-auto border-t border-royalPurple-border">
         <button
           onClick={logout}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-[10px] border border-g-300 text-g-700 dark:text-g-100 hover:bg-g-100 dark:hover:bg-g-800 transition-all duration-200 group"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border border-royalPurple-border2 text-royalPurple-text2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx transition-colors"
           aria-label="Logout"
         >
           <LogOut className="h-5 w-5 shrink-0" />
@@ -204,7 +204,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       {/* Mobile Backdrop */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-royalPurple-deep/80 z-40 lg:hidden transition-opacity"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -212,7 +212,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       {/* Sidebar for Desktop & Mobile */}
       <nav
         className={cn(
-          'fixed lg:static inset-y-0 left-0 bg-white dark:bg-g-900 text-g-900 dark:text-g-50 transition-all duration-300 border-r border-black/[0.09] dark:border-white/[0.09] z-50',
+          'fixed lg:static inset-y-0 left-0 bg-royalPurple-deep text-royalPurple-text1 transition-all duration-300 border-r border-royalPurple-border z-50',
           isCollapsed ? 'w-20' : 'w-64',
           mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
           className

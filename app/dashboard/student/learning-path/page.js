@@ -23,14 +23,13 @@ export default function LearningPathPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-600">
-              The Learning Path feature is currently under development.
-              This page will provide personalized learning recommendations
-              and track your academic progress.
+            <p className="text-royalPurple-text2">
+              The Learning Path feature is currently under development. This page will provide
+              personalized learning recommendations and track your academic progress.
             </p>
-            <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-              <h3 className="font-semibold text-blue-900">Coming Soon:</h3>
-              <ul className="mt-2 text-blue-800 space-y-1">
+            <div className="mt-4 p-4 bg-royalPurple-accent rounded-lg">
+              <h3 className="font-semibold text-royalPurple-accentTx">Coming Soon:</h3>
+              <ul className="mt-2 text-royalPurple-accentTx space-y-1">
                 <li>• Personalized learning recommendations</li>
                 <li>• Progress tracking and analytics</li>
                 <li>• Adaptive learning paths</li>

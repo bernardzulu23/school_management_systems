@@ -18,7 +18,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CalendarCheck,
-  RefreshCw
+  RefreshCw,
 } from 'lucide-react'
 
 // Helper function to get current week
@@ -41,7 +41,7 @@ export default function StudentTimetablePage() {
     name: user?.name || 'Student',
     studentId: user?.studentId || '',
     class: user?.class || '',
-    classId: user?.classId || null
+    classId: user?.classId || null,
   }
 
   const loadTimetableData = () => {
@@ -74,13 +74,13 @@ export default function StudentTimetablePage() {
     const todayClasses = []
 
     if (studentTimetable && studentTimetable[today]) {
-      timeSlots.forEach(slot => {
+      timeSlots.forEach((slot) => {
         if (!slot.isBreak && studentTimetable[today][slot.id]) {
           todayClasses.push({
             ...studentTimetable[today][slot.id],
             time: slot.time,
             period: slot.label,
-            slotId: slot.id
+            slotId: slot.id,
           })
         }
       })
@@ -96,7 +96,7 @@ export default function StudentTimetablePage() {
     const upcoming = []
 
     if (studentTimetable && studentTimetable[today]) {
-      timeSlots.forEach(slot => {
+      timeSlots.forEach((slot) => {
         if (!slot.isBreak && studentTimetable[today][slot.id]) {
           const [startTime] = slot.time.split('-')
           const [hours, minutes] = startTime.split(':').map(Number)
@@ -107,7 +107,7 @@ export default function StudentTimetablePage() {
               ...studentTimetable[today][slot.id],
               time: slot.time,
               period: slot.label,
-              minutesUntil: slotTime - currentTime
+              minutesUntil: slotTime - currentTime,
             })
           }
         }
@@ -123,12 +123,12 @@ export default function StudentTimetablePage() {
       const todayClasses = []
       const daySchedule = studentTimetable[today] || {}
 
-      timeSlots.forEach(slot => {
+      timeSlots.forEach((slot) => {
         if (!slot.isBreak && daySchedule[slot.id]) {
           todayClasses.push({
             ...daySchedule[slot.id],
             time: slot.time,
-            period: slot.label
+            period: slot.label,
           })
         }
       })
@@ -148,7 +148,7 @@ export default function StudentTimetablePage() {
     const daySchedule = studentTimetable[today] || {}
     const upcoming = []
 
-    timeSlots.forEach(slot => {
+    timeSlots.forEach((slot) => {
       if (!slot.isBreak && daySchedule[slot.id]) {
         const [startTime] = slot.time.split('-')
         const [hours, minutes] = startTime.split(':').map(Number)
@@ -159,7 +159,7 @@ export default function StudentTimetablePage() {
             ...daySchedule[slot.id],
             time: slot.time,
             period: slot.label,
-            minutesUntil: slotTime - currentTime
+            minutesUntil: slotTime - currentTime,
           })
         }
       }
@@ -178,7 +178,7 @@ export default function StudentTimetablePage() {
 
   const navigateWeek = (direction) => {
     const currentDate = new Date(selectedWeek)
-    currentDate.setDate(currentDate.getDate() + (direction * 7))
+    currentDate.setDate(currentDate.getDate() + direction * 7)
     setSelectedWeek(currentDate.toISOString().split('T')[0])
   }
 
@@ -201,8 +201,8 @@ export default function StudentTimetablePage() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">My Timetable</h1>
-            <p className="text-gray-600 mt-1">
+            <h1 className="text-3xl font-bold text-royalPurple-text1">My Timetable</h1>
+            <p className="text-royalPurple-text2 mt-1">
               {studentInfo.name} - {studentInfo.class} ({studentInfo.studentId})
             </p>
           </div>
@@ -228,7 +228,7 @@ export default function StudentTimetablePage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                <CalendarCheck className="h-5 w-5 mr-2 text-blue-600" />
+                <CalendarCheck className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
                 Today's Schedule
               </CardTitle>
             </CardHeader>
@@ -236,18 +236,22 @@ export default function StudentTimetablePage() {
               {todaySchedule.length > 0 ? (
                 <div className="space-y-3">
                   {todaySchedule.map((cls, index) => (
-                    <div key={index} className="flex items-center p-3 rounded-lg border" style={{ borderLeftColor: cls.color, borderLeftWidth: '4px' }}>
+                    <div
+                      key={index}
+                      className="flex items-center p-3 rounded-lg border"
+                      style={{ borderLeftColor: cls.color, borderLeftWidth: '4px' }}
+                    >
                       <div className="flex-1">
-                        <div className="font-semibold text-gray-900">{cls.subject}</div>
-                        <div className="text-sm text-gray-600 flex items-center mt-1">
+                        <div className="font-semibold text-royalPurple-text1">{cls.subject}</div>
+                        <div className="text-sm text-royalPurple-text2 flex items-center mt-1">
                           <Clock className="h-3 w-3 mr-1" />
                           {cls.time} ({cls.period})
                         </div>
-                        <div className="text-sm text-gray-600 flex items-center">
+                        <div className="text-sm text-royalPurple-text2 flex items-center">
                           <User className="h-3 w-3 mr-1" />
                           {cls.teacher}
                         </div>
-                        <div className="text-sm text-gray-600 flex items-center">
+                        <div className="text-sm text-royalPurple-text2 flex items-center">
                           <MapPin className="h-3 w-3 mr-1" />
                           {cls.classroom}
                         </div>
@@ -256,8 +260,8 @@ export default function StudentTimetablePage() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center text-gray-500 py-8">
-                  <Calendar className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                <div className="text-center text-royalPurple-text3 py-8">
+                  <Calendar className="h-12 w-12 mx-auto mb-4 text-royalPurple-text3" />
                   <p>No classes scheduled for today</p>
                 </div>
               )}
@@ -268,7 +272,7 @@ export default function StudentTimetablePage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                <Clock className="h-5 w-5 mr-2 text-green-600" />
+                <Clock className="h-5 w-5 mr-2 text-royalPurple-successTx" />
                 Next Classes
               </CardTitle>
             </CardHeader>
@@ -276,23 +280,30 @@ export default function StudentTimetablePage() {
               {upcomingClasses.length > 0 ? (
                 <div className="space-y-3">
                   {upcomingClasses.map((cls, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-green-50 border border-green-200">
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 rounded-lg bg-royalPurple-success border border-royalPurple-border"
+                    >
                       <div>
-                        <div className="font-semibold text-gray-900">{cls.subject}</div>
-                        <div className="text-sm text-gray-600">{cls.time} - {cls.classroom}</div>
+                        <div className="font-semibold text-royalPurple-text1">{cls.subject}</div>
+                        <div className="text-sm text-royalPurple-text2">
+                          {cls.time} - {cls.classroom}
+                        </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-sm font-medium text-green-600">
-                          {cls.minutesUntil < 60 ? `${cls.minutesUntil}m` : `${Math.floor(cls.minutesUntil / 60)}h ${cls.minutesUntil % 60}m`}
+                        <div className="text-sm font-medium text-royalPurple-successTx">
+                          {cls.minutesUntil < 60
+                            ? `${cls.minutesUntil}m`
+                            : `${Math.floor(cls.minutesUntil / 60)}h ${cls.minutesUntil % 60}m`}
                         </div>
-                        <div className="text-xs text-gray-500">remaining</div>
+                        <div className="text-xs text-royalPurple-text3">remaining</div>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="text-center text-gray-500 py-8">
-                  <Clock className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                <div className="text-center text-royalPurple-text3 py-8">
+                  <Clock className="h-12 w-12 mx-auto mb-4 text-royalPurple-text3" />
                   <p>No more classes today</p>
                 </div>
               )}
@@ -305,7 +316,7 @@ export default function StudentTimetablePage() {
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center">
-                <Calendar className="h-5 w-5 mr-2 text-blue-600" />
+                <Calendar className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
                 Weekly Timetable
               </span>
               <div className="flex items-center space-x-2">
@@ -324,28 +335,38 @@ export default function StudentTimetablePage() {
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse border border-gray-300">
+              <table className="w-full border-collapse border border-royalPurple-border">
                 <thead>
                   <tr>
-                    <th className="border border-gray-300 p-3 bg-gray-50 w-32">Time</th>
-                    {daysOfWeek.map(day => (
-                      <th key={day} className="border border-gray-300 p-3 bg-gray-50 min-w-48">
+                    <th className="border border-royalPurple-border p-3 bg-royalPurple-page w-32">
+                      Time
+                    </th>
+                    {daysOfWeek.map((day) => (
+                      <th
+                        key={day}
+                        className="border border-royalPurple-border p-3 bg-royalPurple-page min-w-48"
+                      >
                         {day}
                       </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {timeSlots.map(slot => (
+                  {timeSlots.map((slot) => (
                     <tr key={slot.id}>
-                      <td className={`border border-gray-300 p-3 font-medium text-center ${
-                        slot.isBreak ? 'bg-yellow-50 text-yellow-800' : 'bg-gray-50'
-                      }`}>
+                      <td
+                        className={`border border-royalPurple-border p-3 font-medium text-center ${
+                          slot.isBreak ? 'bg-yellow-50 text-yellow-800' : 'bg-royalPurple-page'
+                        }`}
+                      >
                         <div className="text-sm font-semibold">{slot.label}</div>
-                        <div className="text-xs text-gray-600">{slot.time}</div>
+                        <div className="text-xs text-royalPurple-text2">{slot.time}</div>
                       </td>
-                      {daysOfWeek.map(day => (
-                        <td key={`${day}-${slot.id}`} className="border border-gray-300 p-2">
+                      {daysOfWeek.map((day) => (
+                        <td
+                          key={`${day}-${slot.id}`}
+                          className="border border-royalPurple-border p-2"
+                        >
                           {slot.isBreak ? (
                             <div className="text-center text-yellow-600 font-medium py-6">
                               {slot.label}
@@ -354,7 +375,7 @@ export default function StudentTimetablePage() {
                             <div>
                               {studentTimetable?.[day]?.[slot.id] ? (
                                 <div
-                                  className="p-3 rounded-lg text-white text-sm"
+                                  className="p-3 rounded-lg text-royalPurple-text1 text-sm"
                                   style={{ backgroundColor: studentTimetable[day][slot.id].color }}
                                 >
                                   <div className="font-semibold mb-1">
@@ -370,7 +391,7 @@ export default function StudentTimetablePage() {
                                   </div>
                                 </div>
                               ) : (
-                                <div className="text-center text-gray-400 py-6">
+                                <div className="text-center text-royalPurple-text3 py-6">
                                   Free Period
                                 </div>
                               )}
@@ -390,7 +411,7 @@ export default function StudentTimetablePage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <BookOpen className="h-5 w-5 mr-2 text-purple-600" />
+              <BookOpen className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
               Weekly Subject Summary
             </CardTitle>
           </CardHeader>
@@ -398,8 +419,8 @@ export default function StudentTimetablePage() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {(() => {
                 const subjectCounts = {}
-                daysOfWeek.forEach(day => {
-                  timeSlots.forEach(slot => {
+                daysOfWeek.forEach((day) => {
+                  timeSlots.forEach((slot) => {
                     if (!slot.isBreak && studentTimetable?.[day]?.[slot.id]) {
                       const subject = studentTimetable[day][slot.id].subject
                       subjectCounts[subject] = (subjectCounts[subject] || 0) + 1
@@ -409,19 +430,19 @@ export default function StudentTimetablePage() {
 
                 return Object.entries(subjectCounts).map(([subject, count]) => {
                   const subjectData = Object.values(studentTimetable || {})
-                    .flatMap(day => Object.values(day))
-                    .find(cls => cls?.subject === subject)
+                    .flatMap((day) => Object.values(day))
+                    .find((cls) => cls?.subject === subject)
 
                   return (
                     <div key={subject} className="text-center p-3 rounded-lg border">
                       <div
-                        className="w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold"
+                        className="w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center text-royalPurple-text1 font-bold"
                         style={{ backgroundColor: subjectData?.color }}
                       >
                         {count}
                       </div>
-                      <div className="text-sm font-medium text-gray-900">{subject}</div>
-                      <div className="text-xs text-gray-600">
+                      <div className="text-sm font-medium text-royalPurple-text1">{subject}</div>
+                      <div className="text-xs text-royalPurple-text2">
                         {count} period{count !== 1 ? 's' : ''}/week
                       </div>
                     </div>

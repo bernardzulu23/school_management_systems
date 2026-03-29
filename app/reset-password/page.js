@@ -54,10 +54,13 @@ function ResetPasswordContent() {
 
   if (!token || !email) {
     return (
-      <div className="min-h-screen bg-[#F4F3F1] dark:bg-g-900 flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-g-800 p-8 rounded-[20px] border border-black/[0.09] dark:border-white/[0.09] text-center">
+      <div className="min-h-screen bg-royalPurple-page flex items-center justify-center p-4">
+        <div className="bg-royalPurple-card p-8 rounded-2xl border border-royalPurple-border text-center">
           <p>Invalid reset link.</p>
-          <Link href="/login" className="text-g-800 dark:text-g-100 mt-4 inline-block">
+          <Link
+            href="/login"
+            className="text-royalPurple-text2 hover:text-royalPurple-text1 mt-4 inline-block"
+          >
             Return to Login
           </Link>
         </div>
@@ -66,8 +69,8 @@ function ResetPasswordContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F4F3F1] dark:bg-g-900 flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white dark:bg-g-800 border border-black/[0.09] dark:border-white/[0.09] rounded-[20px] p-8">
+    <div className="min-h-screen bg-royalPurple-page flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md bg-royalPurple-card border border-royalPurple-border rounded-2xl p-8">
         <header className="flex flex-col items-center mb-8">
           {school ? (
             <>
@@ -75,16 +78,16 @@ function ResetPasswordContent() {
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={school.logo_url} alt={school.name} className="h-16 w-auto mx-auto mb-4" />
               )}
-              <h2 className="text-xl font-bold text-center text-g-900 dark:text-g-50">
+              <h2 className="text-xl font-bold text-center text-royalPurple-text1">
                 {school.name}
               </h2>
             </>
           ) : (
-            <div className="bg-g-100 dark:bg-g-900 rounded-[10px] border border-black/[0.09] dark:border-white/[0.09] p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
-              <GraduationCap className="h-6 w-6 text-g-800 dark:text-g-50" />
+            <div className="bg-royalPurple-card2 border border-royalPurple-border rounded-lg p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
+              <GraduationCap className="h-6 w-6 text-royalPurple-text2" />
             </div>
           )}
-          <h1 className="text-2xl font-bold text-g-900 dark:text-g-50 mt-4">Set New Password</h1>
+          <h1 className="text-2xl font-bold text-royalPurple-text1 mt-4">Set New Password</h1>
         </header>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -129,8 +132,8 @@ export default function ResetPasswordPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#F4F3F1] dark:bg-g-900 flex items-center justify-center">
-          <Loader2 className="h-8 w-8 text-g-700 dark:text-g-200 animate-spin" />
+        <div className="min-h-screen bg-royalPurple-page flex items-center justify-center">
+          <Loader2 className="h-8 w-8 text-royalPurple-text2 animate-spin" />
         </div>
       }
     >

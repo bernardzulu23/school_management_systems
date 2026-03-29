@@ -43,10 +43,10 @@ export default function ResultsPage() {
     switch (grade) {
       case 'A':
       case 'A+':
-        return 'text-green-600 bg-green-100'
+        return 'text-royalPurple-successTx bg-royalPurple-success'
       case 'A-':
       case 'B+':
-        return 'text-blue-600 bg-blue-100'
+        return 'text-royalPurple-accentTx bg-royalPurple-accent'
       case 'B':
       case 'B-':
         return 'text-yellow-600 bg-yellow-100'
@@ -54,7 +54,7 @@ export default function ResultsPage() {
       case 'C':
         return 'text-orange-600 bg-orange-100'
       default:
-        return 'text-red-600 bg-red-100'
+        return 'text-royalPurple-dangerTx bg-royalPurple-danger'
     }
   }
 
@@ -90,11 +90,14 @@ export default function ResultsPage() {
         <main className="space-y-6">
           <Card className="focus-within:ring-2 focus-within:ring-blue-500 transition-shadow">
             <CardContent className="text-center py-12">
-              <GraduationCap className="h-16 w-16 text-gray-400 mx-auto mb-4" aria-hidden="true" />
-              <h3 className="text-xl font-medium text-gray-900 mb-2">
+              <GraduationCap
+                className="h-16 w-16 text-royalPurple-text3 mx-auto mb-4"
+                aria-hidden="true"
+              />
+              <h3 className="text-xl font-medium text-royalPurple-text1 mb-2">
                 {isStudent ? 'No Results Available' : 'No Student Results Found'}
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-royalPurple-text2 mb-6">
                 {isStudent
                   ? 'Your results will appear here once they are published by your teachers.'
                   : 'Student results will appear here once assessments are graded and published.'}
@@ -132,10 +135,10 @@ export default function ResultsPage() {
         {/* Header */}
         <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-royalPurple-text1">
               {isStudent ? 'My Results' : 'Results & Grading'}
             </h1>
-            <p className="text-gray-600">
+            <p className="text-royalPurple-text2">
               {isStudent
                 ? 'View your assessment results and academic progress'
                 : 'View and manage student assessment results'}
@@ -175,20 +178,20 @@ export default function ResultsPage() {
               <div className="flex flex-col sm:flex-row items-center text-center sm:text-left">
                 {isStudent ? (
                   <BookOpen
-                    className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 mb-2 sm:mb-0"
+                    className="h-6 w-6 sm:h-8 sm:w-8 text-royalPurple-accentTx mb-2 sm:mb-0"
                     aria-hidden="true"
                   />
                 ) : (
                   <Users
-                    className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 mb-2 sm:mb-0"
+                    className="h-6 w-6 sm:h-8 sm:w-8 text-royalPurple-accentTx mb-2 sm:mb-0"
                     aria-hidden="true"
                   />
                 )}
                 <div className="sm:ml-4">
-                  <p className="text-[10px] sm:text-sm font-medium text-gray-600 uppercase tracking-tight">
+                  <p className="text-[10px] sm:text-sm font-medium text-royalPurple-text2 uppercase tracking-tight">
                     {isStudent ? 'Assessments' : 'Students'}
                   </p>
-                  <p className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">
+                  <p className="text-lg sm:text-2xl font-bold text-royalPurple-text1 leading-tight">
                     {isStudent ? resultsToShow.length : stats.totalStudents}
                   </p>
                 </div>
@@ -200,14 +203,14 @@ export default function ResultsPage() {
             <CardContent className="p-3 sm:p-6">
               <div className="flex flex-col sm:flex-row items-center text-center sm:text-left">
                 <TrendingUp
-                  className="h-6 w-6 sm:h-8 sm:w-8 text-green-600 mb-2 sm:mb-0"
+                  className="h-6 w-6 sm:h-8 sm:w-8 text-royalPurple-successTx mb-2 sm:mb-0"
                   aria-hidden="true"
                 />
                 <div className="sm:ml-4">
-                  <p className="text-[10px] sm:text-sm font-medium text-gray-600 uppercase tracking-tight">
+                  <p className="text-[10px] sm:text-sm font-medium text-royalPurple-text2 uppercase tracking-tight">
                     Average
                   </p>
-                  <p className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">
+                  <p className="text-lg sm:text-2xl font-bold text-royalPurple-text1 leading-tight">
                     {stats.average}%
                   </p>
                 </div>
@@ -219,14 +222,14 @@ export default function ResultsPage() {
             <CardContent className="p-3 sm:p-6">
               <div className="flex flex-col sm:flex-row items-center text-center sm:text-left">
                 <Award
-                  className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600 mb-2 sm:mb-0"
+                  className="h-6 w-6 sm:h-8 sm:w-8 text-royalPurple-pillTx mb-2 sm:mb-0"
                   aria-hidden="true"
                 />
                 <div className="sm:ml-4">
-                  <p className="text-[10px] sm:text-sm font-medium text-gray-600 uppercase tracking-tight">
+                  <p className="text-[10px] sm:text-sm font-medium text-royalPurple-text2 uppercase tracking-tight">
                     Highest
                   </p>
-                  <p className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">
+                  <p className="text-lg sm:text-2xl font-bold text-royalPurple-text1 leading-tight">
                     {stats.highest}%
                   </p>
                 </div>
@@ -242,10 +245,10 @@ export default function ResultsPage() {
                   aria-hidden="true"
                 />
                 <div className="sm:ml-4">
-                  <p className="text-[10px] sm:text-sm font-medium text-gray-600 uppercase tracking-tight">
+                  <p className="text-[10px] sm:text-sm font-medium text-royalPurple-text2 uppercase tracking-tight">
                     Lowest
                   </p>
-                  <p className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight">
+                  <p className="text-lg sm:text-2xl font-bold text-royalPurple-text1 leading-tight">
                     {stats.lowest}%
                   </p>
                 </div>
@@ -266,7 +269,7 @@ export default function ResultsPage() {
                   <div>
                     <label
                       htmlFor="class-filter"
-                      className="block text-sm font-medium text-gray-700 mb-2"
+                      className="block text-sm font-medium text-royalPurple-text2 mb-2"
                     >
                       Class
                     </label>
@@ -274,7 +277,7 @@ export default function ResultsPage() {
                       id="class-filter"
                       value={selectedClass}
                       onChange={(e) => setSelectedClass(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white"
+                      className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-royalPurple-card"
                       aria-label="Filter results by class"
                     >
                       <option value="">All Classes</option>
@@ -289,7 +292,7 @@ export default function ResultsPage() {
                   <div>
                     <label
                       htmlFor="subject-filter"
-                      className="block text-sm font-medium text-gray-700 mb-2"
+                      className="block text-sm font-medium text-royalPurple-text2 mb-2"
                     >
                       Subject
                     </label>
@@ -297,7 +300,7 @@ export default function ResultsPage() {
                       id="subject-filter"
                       value={selectedSubject}
                       onChange={(e) => setSelectedSubject(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white"
+                      className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-royalPurple-card"
                       aria-label="Filter results by subject"
                     >
                       <option value="">All Subjects</option>
@@ -312,13 +315,13 @@ export default function ResultsPage() {
                   <div>
                     <label
                       htmlFor="assessment-filter"
-                      className="block text-sm font-medium text-gray-700 mb-2"
+                      className="block text-sm font-medium text-royalPurple-text2 mb-2"
                     >
                       Assessment
                     </label>
                     <select
                       id="assessment-filter"
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white"
+                      className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-royalPurple-card"
                       aria-label="Filter results by assessment type"
                     >
                       <option value="">All Assessments</option>
@@ -348,53 +351,53 @@ export default function ResultsPage() {
                     <tr className="border-b" role="row">
                       {!isStudent && (
                         <th
-                          className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                          className="text-left py-3 px-4 font-semibold text-sm text-royalPurple-text2"
                           role="columnheader"
                         >
                           Student
                         </th>
                       )}
                       <th
-                        className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                        className="text-left py-3 px-4 font-semibold text-sm text-royalPurple-text2"
                         role="columnheader"
                       >
                         Assessment
                       </th>
                       <th
-                        className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                        className="text-left py-3 px-4 font-semibold text-sm text-royalPurple-text2"
                         role="columnheader"
                       >
                         Subject
                       </th>
                       {isStudent && (
                         <th
-                          className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                          className="text-left py-3 px-4 font-semibold text-sm text-royalPurple-text2"
                           role="columnheader"
                         >
                           Date
                         </th>
                       )}
                       <th
-                        className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                        className="text-left py-3 px-4 font-semibold text-sm text-royalPurple-text2"
                         role="columnheader"
                       >
                         Marks
                       </th>
                       <th
-                        className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                        className="text-left py-3 px-4 font-semibold text-sm text-royalPurple-text2"
                         role="columnheader"
                       >
                         Percentage
                       </th>
                       <th
-                        className="text-left py-3 px-4 font-semibold text-sm text-gray-700"
+                        className="text-left py-3 px-4 font-semibold text-sm text-royalPurple-text2"
                         role="columnheader"
                       >
                         Grade
                       </th>
                       {!isStudent && (
                         <th
-                          className="text-right py-3 px-4 font-semibold text-sm text-gray-700"
+                          className="text-right py-3 px-4 font-semibold text-sm text-royalPurple-text2"
                           role="columnheader"
                         >
                           Actions
@@ -406,23 +409,27 @@ export default function ResultsPage() {
                     {resultsToShow.map((result) => (
                       <tr
                         key={result.id}
-                        className="border-b hover:bg-gray-50 transition-colors"
+                        className="border-b hover:bg-royalPurple-page transition-colors"
                         role="row"
                       >
                         {!isStudent && (
                           <td className="py-3 px-4" role="cell">
-                            <div className="font-medium text-gray-900">{result.student_name}</div>
-                            <div className="text-xs text-gray-500">ID: {result.student_id}</div>
+                            <div className="font-medium text-royalPurple-text1">
+                              {result.student_name}
+                            </div>
+                            <div className="text-xs text-royalPurple-text3">
+                              ID: {result.student_id}
+                            </div>
                           </td>
                         )}
-                        <td className="py-3 px-4 text-sm text-gray-700" role="cell">
+                        <td className="py-3 px-4 text-sm text-royalPurple-text2" role="cell">
                           {result.assessment}
                         </td>
-                        <td className="py-3 px-4 text-sm text-gray-700" role="cell">
+                        <td className="py-3 px-4 text-sm text-royalPurple-text2" role="cell">
                           {result.subject}
                         </td>
                         {isStudent && (
-                          <td className="py-3 px-4 text-sm text-gray-500" role="cell">
+                          <td className="py-3 px-4 text-sm text-royalPurple-text3" role="cell">
                             {result.date}
                           </td>
                         )}
@@ -438,11 +445,11 @@ export default function ResultsPage() {
                               {result.percentage}%
                             </span>
                             <div
-                              className="w-24 bg-gray-100 rounded-full h-2 overflow-hidden"
+                              className="w-24 bg-royalPurple-card2 rounded-full h-2 overflow-hidden"
                               aria-hidden="true"
                             >
                               <div
-                                className="bg-blue-600 h-full rounded-full transition-all duration-500"
+                                className="bg-royalPurple-accent h-full rounded-full transition-all duration-500"
                                 style={{ width: `${result.percentage}%` }}
                               ></div>
                             </div>
@@ -478,12 +485,12 @@ export default function ResultsPage() {
                 {resultsToShow.map((result) => (
                   <article
                     key={result.id}
-                    className="p-4 rounded-xl border border-gray-200 bg-white shadow-sm space-y-3"
+                    className="p-4 rounded-xl border border-royalPurple-border bg-royalPurple-card shadow-sm space-y-3"
                   >
                     <div className="flex justify-between items-start">
                       <div>
-                        <h4 className="font-bold text-gray-900">{result.assessment}</h4>
-                        <p className="text-xs text-gray-500">
+                        <h4 className="font-bold text-royalPurple-text1">{result.assessment}</h4>
+                        <p className="text-xs text-royalPurple-text3">
                           {result.subject} • {result.date}
                         </p>
                       </div>
@@ -495,31 +502,35 @@ export default function ResultsPage() {
                     </div>
 
                     {!isStudent && (
-                      <div className="flex items-center gap-3 py-2 border-y border-gray-50">
-                        <div className="h-8 w-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-bold text-xs">
+                      <div className="flex items-center gap-3 py-2 border-y border-royalPurple-border">
+                        <div className="h-8 w-8 rounded-full bg-royalPurple-accent flex items-center justify-center text-royalPurple-accentTx font-bold text-xs">
                           {result.student_name.charAt(0)}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-gray-900">{result.student_name}</p>
-                          <p className="text-[10px] text-gray-500">ID: {result.student_id}</p>
+                          <p className="text-sm font-medium text-royalPurple-text1">
+                            {result.student_name}
+                          </p>
+                          <p className="text-[10px] text-royalPurple-text3">
+                            ID: {result.student_id}
+                          </p>
                         </div>
                       </div>
                     )}
 
                     <div className="flex items-center justify-between pt-1">
                       <div className="text-sm">
-                        <span className="text-gray-500">Score: </span>
+                        <span className="text-royalPurple-text3">Score: </span>
                         <span className="font-bold">
                           {result.marks}/{result.total}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-blue-600">
+                        <span className="text-sm font-bold text-royalPurple-accentTx">
                           {result.percentage}%
                         </span>
-                        <div className="w-16 bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                        <div className="w-16 bg-royalPurple-card2 rounded-full h-1.5 overflow-hidden">
                           <div
-                            className="bg-blue-600 h-full rounded-full"
+                            className="bg-royalPurple-accent h-full rounded-full"
                             style={{ width: `${result.percentage}%` }}
                           ></div>
                         </div>
@@ -557,7 +568,7 @@ export default function ResultsPage() {
                   return (
                     <div
                       key={grade}
-                      className="text-center p-4 rounded-lg focus-within:bg-gray-50 outline-none"
+                      className="text-center p-4 rounded-lg focus-within:bg-royalPurple-page outline-none"
                       role="listitem"
                       tabIndex="0"
                     >
@@ -567,8 +578,8 @@ export default function ResultsPage() {
                       >
                         {count}
                       </div>
-                      <div className="text-sm text-gray-600">Grade {grade}</div>
-                      <div className="text-xs text-gray-500">{percentage}%</div>
+                      <div className="text-sm text-royalPurple-text2">Grade {grade}</div>
+                      <div className="text-xs text-royalPurple-text3">{percentage}%</div>
                     </div>
                   )
                 })}

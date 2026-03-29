@@ -64,8 +64,8 @@ export default function SettingsPage() {
     <DashboardLayout title="Settings">
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <Settings className="h-6 w-6 text-gray-700" />
-          <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
+          <Settings className="h-6 w-6 text-royalPurple-text2" />
+          <h1 className="text-2xl font-bold text-royalPurple-text1">Settings</h1>
         </div>
 
         <div className="flex gap-2">
@@ -100,7 +100,7 @@ export default function SettingsPage() {
                     toast.error('Remove not supported yet')
                   }}
                 />
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-royalPurple-text2">
                   Assigned classes and subjects are managed by Admin and cannot be changed here.
                 </div>
               </CardContent>
@@ -116,36 +116,36 @@ export default function SettingsPage() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                       Current Password
                     </label>
                     <input
                       type="password"
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md"
+                      className="w-full p-2 border border-royalPurple-border rounded-md"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                       New Password
                     </label>
                     <input
                       type="password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md"
+                      className="w-full p-2 border border-royalPurple-border rounded-md"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                       Confirm Password
                     </label>
                     <input
                       type="password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md"
+                      className="w-full p-2 border border-royalPurple-border rounded-md"
                     />
                   </div>
                 </div>

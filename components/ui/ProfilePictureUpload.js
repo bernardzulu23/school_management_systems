@@ -3,24 +3,16 @@
 import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/Button'
 import NextImage from 'next/image'
-import { 
-  Upload, 
-  User, 
-  X, 
-  Camera, 
-  AlertCircle, 
-  CheckCircle,
-  Loader2
-} from 'lucide-react'
+import { Upload, User, X, Camera, AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-export default function ProfilePictureUpload({ 
-  currentImage, 
-  onImageSelect, 
+export default function ProfilePictureUpload({
+  currentImage,
+  onImageSelect,
   onImageRemove,
   role = 'student',
   disabled = false,
-  size = 'medium' // small, medium, large
+  size = 'medium', // small, medium, large
 }) {
   const [preview, setPreview] = useState(currentImage || null)
   const [isDragging, setIsDragging] = useState(false)
@@ -33,7 +25,10 @@ export default function ProfilePictureUpload({
     const maxSize = 5 * 1024 * 1024 // 5MB
 
     if (!validTypes.includes(file.type)) {
-      return { isValid: false, errors: ['Invalid file type. Please upload an image (JPEG, PNG, WebP, GIF).'] }
+      return {
+        isValid: false,
+        errors: ['Invalid file type. Please upload an image (JPEG, PNG, WebP, GIF).'],
+      }
     }
 
     if (file.size > maxSize) {
@@ -47,7 +42,7 @@ export default function ProfilePictureUpload({
   const sizeConfig = {
     small: { width: 'w-20', height: 'h-20', text: 'text-xs' },
     medium: { width: 'w-32', height: 'h-32', text: 'text-sm' },
-    large: { width: 'w-48', height: 'h-48', text: 'text-base' }
+    large: { width: 'w-48', height: 'h-48', text: 'text-base' },
   }
 
   const config = sizeConfig[size] || sizeConfig.medium
@@ -58,7 +53,7 @@ export default function ProfilePictureUpload({
     // Validate file
     const validation = validateImageFile(file)
     if (!validation.isValid) {
-      validation.errors.forEach(error => toast.error(error))
+      validation.errors.forEach((error) => toast.error(error))
       return
     }
 
@@ -97,7 +92,7 @@ export default function ProfilePictureUpload({
   const handleDrop = (e) => {
     e.preventDefault()
     setIsDragging(false)
-    
+
     if (disabled) return
 
     const files = e.dataTransfer.files
@@ -131,12 +126,13 @@ export default function ProfilePictureUpload({
           relative ${config.width} ${config.height} mx-auto
           border-2 border-dashed rounded-full
           transition-all duration-200 cursor-pointer
-          ${isDragging 
-            ? 'border-blue-500 bg-blue-50' 
-            : 'border-gray-300 hover:border-gray-400'
+          ${
+            isDragging
+              ? 'border-royalPurple-border2 bg-royalPurple-accent'
+              : 'border-royalPurple-border hover:border-royalPurple-border'
           }
           ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-          ${preview ? 'border-solid border-gray-200' : ''}
+          ${preview ? 'border-solid border-royalPurple-border' : ''}
         `}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -161,21 +157,21 @@ export default function ProfilePictureUpload({
                   e.stopPropagation()
                   handleRemoveImage()
                 }}
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                className="absolute -top-2 -right-2 bg-royalPurple-danger text-royalPurple-text1 rounded-full p-1 hover:bg-royalPurple-danger transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
             )}
             {/* Upload Overlay */}
             {!disabled && (
-              <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
-                <Camera className="h-6 w-6 text-white" />
+              <div className="absolute inset-0 bg-royalPurple-deep bg-opacity-50 rounded-full opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                <Camera className="h-6 w-6 text-royalPurple-text1" />
               </div>
             )}
           </div>
         ) : (
           /* Upload Placeholder */
-          <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
+          <div className="w-full h-full flex flex-col items-center justify-center text-royalPurple-text3">
             {isUploading ? (
               <Loader2 className="h-8 w-8 animate-spin" />
             ) : (
@@ -199,15 +195,13 @@ export default function ProfilePictureUpload({
       </div>
 
       {/* Upload Instructions */}
-      <div className={`text-center ${config.text} text-gray-600`}>
+      <div className={`text-center ${config.text} text-royalPurple-text2`}>
         {preview ? (
           <p>Click to change profile picture</p>
         ) : (
           <div>
             <p>Click or drag to upload</p>
-            <p className="text-xs text-gray-500 mt-1">
-              JPG, PNG, WebP up to 5MB
-            </p>
+            <p className="text-xs text-royalPurple-text3 mt-1">JPG, PNG, WebP up to 5MB</p>
           </div>
         )}
       </div>
@@ -234,7 +228,7 @@ export default function ProfilePictureUpload({
       )}
 
       {/* Role-specific Guidelines */}
-      <div className={`${config.text} text-gray-500 text-center`}>
+      <div className={`${config.text} text-royalPurple-text3 text-center`}>
         {role === 'headteacher' || role === 'deputy' ? (
           <p className="text-xs">Professional headshot recommended</p>
         ) : role === 'teacher' || role === 'hod' ? (
@@ -256,14 +250,14 @@ export function ValidationStatus({ file, className = '' }) {
   return (
     <div className={`space-y-2 ${className}`}>
       {validation.isValid ? (
-        <div className="flex items-center text-green-600 text-sm">
+        <div className="flex items-center text-royalPurple-successTx text-sm">
           <CheckCircle className="h-4 w-4 mr-2" />
           <span>Image is valid</span>
         </div>
       ) : (
         <div className="space-y-1">
           {validation.errors.map((error, index) => (
-            <div key={index} className="flex items-center text-red-600 text-sm">
+            <div key={index} className="flex items-center text-royalPurple-dangerTx text-sm">
               <AlertCircle className="h-4 w-4 mr-2" />
               <span>{error}</span>
             </div>

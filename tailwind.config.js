@@ -9,6 +9,27 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        royalPurple: {
+          page: '#1e1033',
+          deep: '#170d28',
+          card: '#2d1f4e',
+          card2: '#261843',
+          border: '#3b2a66',
+          border2: '#6d28d9',
+          text1: '#ede9fe',
+          text2: '#a78bfa',
+          text3: '#6d28d9',
+          accent: '#f59e0b',
+          accentBg: '#2d1f0a',
+          accentTx: '#fcd34d',
+          pill: '#7c3aed',
+          pillTx: '#ede9fe',
+          success: '#1a2e0f',
+          successTx: '#86efac',
+          danger: '#3b0a0a',
+          dangerTx: '#fca5a5',
+          muted: '#4b3575',
+        },
         g: {
           50: '#F8F8F7',
           100: '#EEEEED',
@@ -68,7 +89,7 @@ module.exports = {
         header: 'linear-gradient(135deg, #1C1C1A 0%, #333331 55%, #4E4D4A 100%)',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
       },
     },
   },

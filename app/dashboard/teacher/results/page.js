@@ -328,8 +328,8 @@ export default function ResultEntryPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Result Entry</h1>
-              <p className="text-gray-600">Enter subject results for your classes</p>
+              <h1 className="text-2xl font-bold text-royalPurple-text1">Result Entry</h1>
+              <p className="text-royalPurple-text2">Enter subject results for your classes</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -388,7 +388,7 @@ export default function ResultEntryPage() {
               </div>
               <div className="space-y-2">
                 <Label>Status</Label>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-royalPurple-text2">
                   {isOnline ? 'Online' : 'Offline (7+ days supported)'}
                 </div>
               </div>
@@ -404,18 +404,20 @@ export default function ResultEntryPage() {
                 <span>
                   {selectedAssignment.className} - {selectedAssignment.subjectName}
                 </span>
-                <span className="text-sm font-normal text-gray-500">{pupils.length} Pupils</span>
+                <span className="text-sm font-normal text-royalPurple-text3">
+                  {pupils.length} Pupils
+                </span>
               </CardTitle>
             </CardHeader>
             <CardContent>
               {loading ? (
                 <div className="flex justify-center py-8">
-                  <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+                  <Loader2 className="h-8 w-8 animate-spin text-royalPurple-accentTx" />
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm text-left">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                    <thead className="text-xs text-royalPurple-text2 uppercase bg-royalPurple-page">
                       <tr>
                         <th className="px-4 py-3">Student ID</th>
                         <th className="px-4 py-3">Name</th>
@@ -430,7 +432,7 @@ export default function ResultEntryPage() {
                         const gradeInfo = getGradeInfo(score)
 
                         return (
-                          <tr key={student.id} className="border-b hover:bg-gray-50">
+                          <tr key={student.id} className="border-b hover:bg-royalPurple-page">
                             <td className="px-4 py-3 font-medium">{student.id}</td>
                             <td className="px-4 py-3">{student.name}</td>
                             <td className="px-4 py-3">
@@ -449,23 +451,23 @@ export default function ResultEntryPage() {
                                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                   ${
                                     gradeInfo.color === 'green'
-                                      ? 'bg-green-100 text-green-800'
+                                      ? 'bg-royalPurple-success text-royalPurple-successTx'
                                       : gradeInfo.color === 'blue'
-                                        ? 'bg-blue-100 text-blue-800'
+                                        ? 'bg-royalPurple-accent text-royalPurple-accentTx'
                                         : gradeInfo.color === 'purple'
-                                          ? 'bg-purple-100 text-purple-800'
+                                          ? 'bg-royalPurple-pill text-royalPurple-pillTx'
                                           : gradeInfo.color === 'yellow'
                                             ? 'bg-yellow-100 text-yellow-800'
-                                            : 'bg-red-100 text-red-800'
+                                            : 'bg-royalPurple-danger text-royalPurple-dangerTx'
                                   }`}
                                 >
                                   {gradeInfo.grade} - {gradeInfo.status}
                                 </span>
                               ) : (
-                                <span className="text-gray-400">-</span>
+                                <span className="text-royalPurple-text3">-</span>
                               )}
                             </td>
-                            <td className="px-4 py-3 text-gray-500 italic">
+                            <td className="px-4 py-3 text-royalPurple-text3 italic">
                               {gradeInfo?.description || '-'}
                             </td>
                           </tr>
@@ -478,34 +480,36 @@ export default function ResultEntryPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="flex flex-col items-center justify-center py-12 text-gray-500">
-            <AlertCircle className="h-12 w-12 mb-4 text-gray-400" />
+          <div className="flex flex-col items-center justify-center py-12 text-royalPurple-text3">
+            <AlertCircle className="h-12 w-12 mb-4 text-royalPurple-text3" />
             <p className="text-lg font-medium">No teaching assignments found</p>
           </div>
         )}
       </div>
 
       {showConflicts && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-royalPurple-deep/80">
+          <div className="bg-royalPurple-card rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="p-4 border-b flex items-center justify-between">
-              <h3 className="font-semibold text-gray-900">Sync Conflicts</h3>
+              <h3 className="font-semibold text-royalPurple-text1">Sync Conflicts</h3>
               <Button variant="outline" onClick={() => setShowConflicts(false)}>
                 Close
               </Button>
             </div>
             <div className="p-4 space-y-3">
               {conflicts.length === 0 ? (
-                <p className="text-sm text-gray-600">No conflicts.</p>
+                <p className="text-sm text-royalPurple-text2">No conflicts.</p>
               ) : (
                 conflicts.map((c, idx) => (
                   <div key={idx} className="border rounded-lg p-3">
-                    <div className="text-sm font-medium text-gray-900">{c.key?.studentId}</div>
-                    <div className="text-sm text-gray-700">
+                    <div className="text-sm font-medium text-royalPurple-text1">
+                      {c.key?.studentId}
+                    </div>
+                    <div className="text-sm text-royalPurple-text2">
                       Server: {c.server?.score} (updated{' '}
                       {new Date(c.server?.updatedAt).toLocaleString()})
                     </div>
-                    <div className="text-sm text-gray-700">Yours: {c.client?.score}</div>
+                    <div className="text-sm text-royalPurple-text2">Yours: {c.client?.score}</div>
                     <div className="flex gap-2 mt-3">
                       <Button
                         onClick={async () => {

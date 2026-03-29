@@ -3,32 +3,52 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { 
-  Plus, 
-  Trash2, 
-  Save, 
-  Eye, 
+import {
+  Plus,
+  Trash2,
+  Save,
+  Eye,
   GamepadIcon,
   BookOpen,
   Clock,
   Target,
   Star,
-  Zap
+  Zap,
 } from 'lucide-react'
 
 const gameTypes = [
   { id: 'quiz', name: 'Quiz', icon: '❓', description: 'Multiple choice questions' },
-  { id: 'flashcards', name: 'Flashcards', icon: '📚', description: 'Study cards with front/back content' },
+  {
+    id: 'flashcards',
+    name: 'Flashcards',
+    icon: '📚',
+    description: 'Study cards with front/back content',
+  },
   { id: 'matching', name: 'Matching', icon: '🔗', description: 'Match pairs of related items' },
-  { id: 'word-search', name: 'Word Search', icon: '🔍', description: 'Find hidden words in a grid' },
-  { id: 'fill-blanks', name: 'Fill in the Blanks', icon: '✏️', description: 'Complete sentences with missing words' },
-  { id: 'drag-drop', name: 'Drag & Drop', icon: '🎯', description: 'Drag items to correct positions' }
+  {
+    id: 'word-search',
+    name: 'Word Search',
+    icon: '🔍',
+    description: 'Find hidden words in a grid',
+  },
+  {
+    id: 'fill-blanks',
+    name: 'Fill in the Blanks',
+    icon: '✏️',
+    description: 'Complete sentences with missing words',
+  },
+  {
+    id: 'drag-drop',
+    name: 'Drag & Drop',
+    icon: '🎯',
+    description: 'Drag items to correct positions',
+  },
 ]
 
 const difficultyLevels = [
   { id: 'easy', name: 'Easy', color: 'green', icon: '🟢' },
   { id: 'medium', name: 'Medium', color: 'yellow', icon: '🟡' },
-  { id: 'hard', name: 'Hard', color: 'red', icon: '🔴' }
+  { id: 'hard', name: 'Hard', color: 'red', icon: '🔴' },
 ]
 
 export default function GameCreationForm({ subjects, onSave, onCancel, initialData = null }) {
@@ -43,52 +63,61 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
     timeLimit: initialData?.timeLimit || 30,
     instructions: initialData?.instructions || '',
     content: initialData?.content || {
-      questions: [{ question: '', options: ['', '', '', ''], correctAnswer: '', explanation: '', points: 1 }]
-    }
+      questions: [
+        { question: '', options: ['', '', '', ''], correctAnswer: '', explanation: '', points: 1 },
+      ],
+    },
   })
 
   const [currentStep, setCurrentStep] = useState(1)
   const [isPreview, setIsPreview] = useState(false)
 
   const handleInputChange = (field, value) => {
-    setGameData(prev => ({
+    setGameData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }))
   }
 
   const handleContentChange = (type, index, field, value) => {
-    setGameData(prev => ({
+    setGameData((prev) => ({
       ...prev,
       content: {
         ...prev.content,
-        [type]: prev.content[type]?.map((item, i) => 
-          i === index ? { ...item, [field]: value } : item
-        ) || []
-      }
+        [type]:
+          prev.content[type]?.map((item, i) =>
+            i === index ? { ...item, [field]: value } : item
+          ) || [],
+      },
     }))
   }
 
   const addQuestion = () => {
-    setGameData(prev => ({
+    setGameData((prev) => ({
       ...prev,
       content: {
         ...prev.content,
         questions: [
           ...(prev.content.questions || []),
-          { question: '', options: ['', '', '', ''], correctAnswer: '', explanation: '', points: 1 }
-        ]
-      }
+          {
+            question: '',
+            options: ['', '', '', ''],
+            correctAnswer: '',
+            explanation: '',
+            points: 1,
+          },
+        ],
+      },
     }))
   }
 
   const removeQuestion = (index) => {
-    setGameData(prev => ({
+    setGameData((prev) => ({
       ...prev,
       content: {
         ...prev.content,
-        questions: prev.content.questions?.filter((_, i) => i !== index) || []
-      }
+        questions: prev.content.questions?.filter((_, i) => i !== index) || [],
+      },
     }))
   }
 
@@ -98,20 +127,20 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
 
   const renderGameTypeSelector = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {gameTypes.map(type => (
+      {gameTypes.map((type) => (
         <div
           key={type.id}
           onClick={() => handleInputChange('gameType', type.id)}
           className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
             gameData.gameType === type.id
-              ? 'border-blue-500 bg-blue-50 shadow-lg'
-              : 'border-gray-200 hover:border-blue-300'
+              ? 'border-royalPurple-border2 bg-royalPurple-accent shadow-lg'
+              : 'border-royalPurple-border hover:border-royalPurple-border2'
           }`}
         >
           <div className="text-center">
             <div className="text-3xl mb-2">{type.icon}</div>
-            <h3 className="font-semibold text-gray-900">{type.name}</h3>
-            <p className="text-sm text-gray-600 mt-1">{type.description}</p>
+            <h3 className="font-semibold text-royalPurple-text1">{type.name}</h3>
+            <p className="text-sm text-royalPurple-text2 mt-1">{type.description}</p>
           </div>
         </div>
       ))}
@@ -139,8 +168,10 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
             onChange={(e) => handleInputChange('subject', e.target.value)}
           >
             <option value="">Select Subject</option>
-            {subjects?.map(subject => (
-              <option key={subject.id} value={subject.id}>{subject.name}</option>
+            {subjects?.map((subject) => (
+              <option key={subject.id} value={subject.id}>
+                {subject.name}
+              </option>
             ))}
           </select>
         </div>
@@ -195,7 +226,7 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
       <div>
         <label className="form-label">Difficulty Level</label>
         <div className="flex space-x-4">
-          {difficultyLevels.map(level => (
+          {difficultyLevels.map((level) => (
             <button
               key={level.id}
               type="button"
@@ -203,7 +234,7 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
               className={`flex items-center space-x-2 px-4 py-2 rounded-xl border-2 transition-all duration-300 ${
                 gameData.difficulty === level.id
                   ? `border-${level.color}-500 bg-${level.color}-50`
-                  : 'border-gray-200 hover:border-gray-300'
+                  : 'border-royalPurple-border hover:border-royalPurple-border'
               }`}
             >
               <span>{level.icon}</span>
@@ -235,7 +266,7 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
                   variant="ghost"
                   size="sm"
                   onClick={() => removeQuestion(index)}
-                  className="text-red-600 hover:text-red-700"
+                  className="text-royalPurple-dangerTx hover:text-royalPurple-dangerTx"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -248,7 +279,9 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
               <textarea
                 className="textarea"
                 value={question.question}
-                onChange={(e) => handleContentChange('questions', index, 'question', e.target.value)}
+                onChange={(e) =>
+                  handleContentChange('questions', index, 'question', e.target.value)
+                }
                 placeholder="Enter your question"
                 rows={2}
               />
@@ -279,7 +312,9 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
                 <select
                   className="select"
                   value={question.correctAnswer}
-                  onChange={(e) => handleContentChange('questions', index, 'correctAnswer', e.target.value)}
+                  onChange={(e) =>
+                    handleContentChange('questions', index, 'correctAnswer', e.target.value)
+                  }
                 >
                   <option value="">Select correct answer</option>
                   {question.options.map((option, optionIndex) => (
@@ -295,7 +330,9 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
                   type="number"
                   className="input"
                   value={question.points}
-                  onChange={(e) => handleContentChange('questions', index, 'points', parseInt(e.target.value))}
+                  onChange={(e) =>
+                    handleContentChange('questions', index, 'points', parseInt(e.target.value))
+                  }
                   min="1"
                   max="10"
                 />
@@ -307,7 +344,9 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
               <textarea
                 className="textarea"
                 value={question.explanation}
-                onChange={(e) => handleContentChange('questions', index, 'explanation', e.target.value)}
+                onChange={(e) =>
+                  handleContentChange('questions', index, 'explanation', e.target.value)
+                }
                 placeholder="Explain why this is the correct answer"
                 rows={2}
               />
@@ -322,7 +361,7 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
     { id: 1, name: 'Game Type', icon: GamepadIcon },
     { id: 2, name: 'Basic Info', icon: BookOpen },
     { id: 3, name: 'Content', icon: Target },
-    { id: 4, name: 'Review', icon: Eye }
+    { id: 4, name: 'Review', icon: Eye },
   ]
 
   return (
@@ -334,21 +373,27 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
             const Icon = step.icon
             const isActive = currentStep === step.id
             const isCompleted = currentStep > step.id
-            
+
             return (
               <div key={step.id} className="flex items-center">
-                <div className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 ${
-                  isActive ? 'bg-blue-600 text-white shadow-lg' :
-                  isCompleted ? 'bg-green-600 text-white' :
-                  'bg-gray-200 text-gray-600'
-                }`}>
+                <div
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 ${
+                    isActive
+                      ? 'bg-royalPurple-accent text-royalPurple-text1 shadow-lg'
+                      : isCompleted
+                        ? 'bg-royalPurple-success text-royalPurple-text1'
+                        : 'bg-royalPurple-card2 text-royalPurple-text2'
+                  }`}
+                >
                   <Icon className="h-5 w-5" />
                   <span className="font-medium">{step.name}</span>
                 </div>
                 {index < steps.length - 1 && (
-                  <div className={`w-8 h-1 mx-2 rounded ${
-                    isCompleted ? 'bg-green-600' : 'bg-gray-200'
-                  }`} />
+                  <div
+                    className={`w-8 h-1 mx-2 rounded ${
+                      isCompleted ? 'bg-royalPurple-success' : 'bg-royalPurple-card2'
+                    }`}
+                  />
                 )}
               </div>
             )
@@ -359,7 +404,7 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
       <Card className="dashboard-card">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <GamepadIcon className="h-6 w-6 text-blue-600" />
+            <GamepadIcon className="h-6 w-6 text-royalPurple-accentTx" />
             <span>{initialData ? 'Edit Game' : 'Create New Game'}</span>
           </CardTitle>
         </CardHeader>
@@ -389,12 +434,12 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
           {currentStep === 4 && (
             <div>
               <h3 className="text-lg font-semibold mb-4">Review & Save</h3>
-              <div className="bg-gray-50 rounded-xl p-6">
+              <div className="bg-royalPurple-page rounded-xl p-6">
                 <h4 className="font-semibold text-lg">{gameData.title}</h4>
-                <p className="text-gray-600 mt-2">{gameData.description}</p>
+                <p className="text-royalPurple-text2 mt-2">{gameData.description}</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                   <div className="text-center">
-                    <Clock className="h-5 w-5 mx-auto text-blue-600" />
+                    <Clock className="h-5 w-5 mx-auto text-royalPurple-accentTx" />
                     <p className="text-sm font-medium mt-1">{gameData.timeLimit} min</p>
                   </div>
                   <div className="text-center">
@@ -402,11 +447,11 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
                     <p className="text-sm font-medium mt-1">{gameData.pointsReward} pts</p>
                   </div>
                   <div className="text-center">
-                    <Target className="h-5 w-5 mx-auto text-green-600" />
+                    <Target className="h-5 w-5 mx-auto text-royalPurple-successTx" />
                     <p className="text-sm font-medium mt-1">{gameData.targetClass}</p>
                   </div>
                   <div className="text-center">
-                    <Zap className="h-5 w-5 mx-auto text-purple-600" />
+                    <Zap className="h-5 w-5 mx-auto text-royalPurple-pillTx" />
                     <p className="text-sm font-medium mt-1 capitalize">{gameData.difficulty}</p>
                   </div>
                 </div>
@@ -418,10 +463,7 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
           <div className="flex justify-between mt-8">
             <div>
               {currentStep > 1 && (
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentStep(currentStep - 1)}
-                >
+                <Button variant="outline" onClick={() => setCurrentStep(currentStep - 1)}>
                   Previous
                 </Button>
               )}

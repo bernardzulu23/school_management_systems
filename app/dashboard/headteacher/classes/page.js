@@ -5,9 +5,21 @@ import { useQuery } from '@tanstack/react-query'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { 
-  School, Plus, Users, BookOpen, TrendingUp, Edit, Trash2,
-  ArrowLeft, Search, Filter, Download, Eye, UserCheck, Loader2
+import {
+  School,
+  Plus,
+  Users,
+  BookOpen,
+  TrendingUp,
+  Edit,
+  Trash2,
+  ArrowLeft,
+  Search,
+  Filter,
+  Download,
+  Eye,
+  UserCheck,
+  Loader2,
 } from 'lucide-react'
 import Link from 'next/link'
 import { api } from '@/lib/api'
@@ -19,26 +31,27 @@ export default function ClassesManagementPage() {
 
   const { data: classesData = [], isLoading } = useQuery({
     queryKey: ['headteacher-classes'],
-    queryFn: () => api.getHeadteacherClasses().then(res => res.data),
+    queryFn: () => api.getHeadteacherClasses().then((res) => res.data),
   })
 
   const getPerformanceColor = (performance) => {
-    if (performance >= 90) return 'text-green-600 bg-green-100'
-    if (performance >= 80) return 'text-blue-600 bg-blue-100'
+    if (performance >= 90) return 'text-royalPurple-successTx bg-royalPurple-success'
+    if (performance >= 80) return 'text-royalPurple-accentTx bg-royalPurple-accent'
     if (performance >= 70) return 'text-yellow-600 bg-yellow-100'
-    return 'text-red-600 bg-red-100'
+    return 'text-royalPurple-dangerTx bg-royalPurple-danger'
   }
 
   const getCapacityColor = (current, max) => {
     const percentage = (current / max) * 100
-    if (percentage >= 95) return 'text-red-600'
+    if (percentage >= 95) return 'text-royalPurple-dangerTx'
     if (percentage >= 85) return 'text-yellow-600'
-    return 'text-green-600'
+    return 'text-royalPurple-successTx'
   }
 
-  const filteredClasses = classesData.filter(classItem => {
-    const matchesSearch = classItem.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         classItem.classTeacher.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredClasses = classesData.filter((classItem) => {
+    const matchesSearch =
+      classItem.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      classItem.classTeacher.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesFilter = filterYear === 'all' || classItem.yearGroup === filterYear
     return matchesSearch && matchesFilter
   })
@@ -46,22 +59,28 @@ export default function ClassesManagementPage() {
   const classStats = {
     totalClasses: classesData.length,
     totalStudents: classesData.reduce((sum, cls) => sum + cls.currentEnrollment, 0),
-    averagePerformance: classesData.length > 0 
-      ? Math.round(classesData.reduce((sum, cls) => sum + cls.averagePerformance, 0) / classesData.length) 
-      : 0,
-    averageAttendance: classesData.length > 0 
-      ? Math.round(classesData.reduce((sum, cls) => sum + cls.attendanceRate, 0) / classesData.length) 
-      : 0
+    averagePerformance:
+      classesData.length > 0
+        ? Math.round(
+            classesData.reduce((sum, cls) => sum + cls.averagePerformance, 0) / classesData.length
+          )
+        : 0,
+    averageAttendance:
+      classesData.length > 0
+        ? Math.round(
+            classesData.reduce((sum, cls) => sum + cls.attendanceRate, 0) / classesData.length
+          )
+        : 0,
   }
 
   // Extract unique years for filter
-  const availableYears = [...new Set(classesData.map(c => c.yearGroup))].sort()
+  const availableYears = [...new Set(classesData.map((c) => c.yearGroup))].sort()
 
   if (isLoading) {
     return (
       <DashboardLayout title="Classes Management">
         <div className="flex items-center justify-center h-96">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <Loader2 className="h-8 w-8 animate-spin text-royalPurple-accentTx" />
         </div>
       </DashboardLayout>
     )
@@ -80,11 +99,13 @@ export default function ClassesManagementPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+              <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center">
                 <School className="h-6 w-6 mr-2" />
                 Classes Management
               </h1>
-              <p className="text-gray-600">Comprehensive class organization and monitoring</p>
+              <p className="text-royalPurple-text2">
+                Comprehensive class organization and monitoring
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -104,10 +125,12 @@ export default function ClassesManagementPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <School className="h-8 w-8 text-blue-600" />
+                <School className="h-8 w-8 text-royalPurple-accentTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Classes</p>
-                  <p className="text-2xl font-bold text-gray-900">{classStats.totalClasses}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Classes</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {classStats.totalClasses}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -115,10 +138,12 @@ export default function ClassesManagementPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Users className="h-8 w-8 text-green-600" />
+                <Users className="h-8 w-8 text-royalPurple-successTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Students</p>
-                  <p className="text-2xl font-bold text-gray-900">{classStats.totalStudents}</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Total Students</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {classStats.totalStudents}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -126,10 +151,12 @@ export default function ClassesManagementPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <TrendingUp className="h-8 w-8 text-purple-600" />
+                <TrendingUp className="h-8 w-8 text-royalPurple-pillTx" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Avg Performance</p>
-                  <p className="text-2xl font-bold text-gray-900">{classStats.averagePerformance}%</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Avg Performance</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {classStats.averagePerformance}%
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -139,8 +166,10 @@ export default function ClassesManagementPage() {
               <div className="flex items-center">
                 <UserCheck className="h-8 w-8 text-orange-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Avg Attendance</p>
-                  <p className="text-2xl font-bold text-gray-900">{classStats.averageAttendance}%</p>
+                  <p className="text-sm font-medium text-royalPurple-text2">Avg Attendance</p>
+                  <p className="text-2xl font-bold text-royalPurple-text1">
+                    {classStats.averageAttendance}%
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -154,23 +183,25 @@ export default function ClassesManagementPage() {
               <CardTitle>All Classes</CardTitle>
               <div className="flex items-center space-x-2">
                 <div className="relative">
-                  <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-royalPurple-text3" />
                   <input
                     type="text"
                     placeholder="Search classes or teachers..."
-                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <select
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={filterYear}
                   onChange={(e) => setFilterYear(e.target.value)}
                 >
                   <option value="all">All Year Groups</option>
-                  {availableYears.map(year => (
-                    <option key={year} value={year}>{year}</option>
+                  {availableYears.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -194,41 +225,48 @@ export default function ClassesManagementPage() {
                 <tbody>
                   {filteredClasses.length === 0 ? (
                     <tr>
-                      <td colSpan="8" className="text-center py-8 text-gray-500">
+                      <td colSpan="8" className="text-center py-8 text-royalPurple-text3">
                         No classes found. Create one to get started.
                       </td>
                     </tr>
                   ) : (
                     filteredClasses.map((classItem) => (
-                      <tr key={classItem.id} className="border-b hover:bg-gray-50">
+                      <tr key={classItem.id} className="border-b hover:bg-royalPurple-page">
                         <td className="py-3 px-4 font-medium">{classItem.name}</td>
                         <td className="py-3 px-4">
-                          <span className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+                          <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-accent text-royalPurple-accentTx">
                             {classItem.yearGroup}
                           </span>
                         </td>
                         <td className="py-3 px-4">{classItem.classTeacher}</td>
                         <td className="py-3 px-4">
-                          <span className={`font-medium ${getCapacityColor(classItem.currentEnrollment, classItem.maxCapacity)}`}>
+                          <span
+                            className={`font-medium ${getCapacityColor(classItem.currentEnrollment, classItem.maxCapacity)}`}
+                          >
                             {classItem.currentEnrollment}/{classItem.maxCapacity}
                           </span>
                         </td>
                         <td className="py-3 px-4">
                           <div className="flex flex-wrap gap-1">
                             {classItem.subjects.slice(0, 3).map((subject, index) => (
-                              <span key={index} className="px-2 py-1 text-xs rounded bg-gray-100 text-gray-700">
+                              <span
+                                key={index}
+                                className="px-2 py-1 text-xs rounded bg-royalPurple-card2 text-royalPurple-text2"
+                              >
                                 {subject}
                               </span>
                             ))}
                             {classItem.subjects.length > 3 && (
-                              <span className="px-2 py-1 text-xs rounded bg-gray-100 text-gray-700">
+                              <span className="px-2 py-1 text-xs rounded bg-royalPurple-card2 text-royalPurple-text2">
                                 +{classItem.subjects.length - 3}
                               </span>
                             )}
                           </div>
                         </td>
                         <td className="py-3 px-4">
-                          <span className={`px-2 py-1 text-xs rounded-full ${getPerformanceColor(classItem.averagePerformance)}`}>
+                          <span
+                            className={`px-2 py-1 text-xs rounded-full ${getPerformanceColor(classItem.averagePerformance)}`}
+                          >
                             {classItem.averagePerformance}%
                           </span>
                         </td>
@@ -266,29 +304,42 @@ export default function ClassesManagementPage() {
             <CardContent>
               <div className="space-y-4">
                 {availableYears.length === 0 ? (
-                   <p className="text-center text-gray-500 py-4">No data available for performance analysis</p>
+                  <p className="text-center text-royalPurple-text3 py-4">
+                    No data available for performance analysis
+                  </p>
                 ) : (
                   availableYears.map((year) => {
-                    const yearClasses = classesData.filter(cls => cls.yearGroup === year)
-                    const avgPerformance = yearClasses.length > 0 
-                      ? Math.round(yearClasses.reduce((sum, cls) => sum + cls.averagePerformance, 0) / yearClasses.length)
-                      : 0
-                    
+                    const yearClasses = classesData.filter((cls) => cls.yearGroup === year)
+                    const avgPerformance =
+                      yearClasses.length > 0
+                        ? Math.round(
+                            yearClasses.reduce((sum, cls) => sum + cls.averagePerformance, 0) /
+                              yearClasses.length
+                          )
+                        : 0
+
                     return (
-                      <div key={year} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div
+                        key={year}
+                        className="flex items-center justify-between p-3 bg-royalPurple-page rounded-lg"
+                      >
                         <div className="flex items-center">
-                          <BookOpen className="h-5 w-5 text-blue-600 mr-2" />
+                          <BookOpen className="h-5 w-5 text-royalPurple-accentTx mr-2" />
                           <span className="font-medium">{year}</span>
-                          <span className="text-sm text-gray-500 ml-2">({yearClasses.length} classes)</span>
+                          <span className="text-sm text-royalPurple-text3 ml-2">
+                            ({yearClasses.length} classes)
+                          </span>
                         </div>
                         <div className="flex items-center">
-                          <div className="w-24 bg-gray-200 rounded-full h-2 mr-3">
-                            <div 
-                              className="bg-blue-500 h-2 rounded-full" 
+                          <div className="w-24 bg-royalPurple-card2 rounded-full h-2 mr-3">
+                            <div
+                              className="bg-royalPurple-accent h-2 rounded-full"
                               style={{ width: `${avgPerformance}%` }}
                             ></div>
                           </div>
-                          <span className="font-bold text-blue-600">{avgPerformance}%</span>
+                          <span className="font-bold text-royalPurple-accentTx">
+                            {avgPerformance}%
+                          </span>
                         </div>
                       </div>
                     )

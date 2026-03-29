@@ -16,7 +16,7 @@ export function ThemeToggle() {
   if (!mounted) {
     return (
       <button
-        className="p-2 rounded-full text-g-700 hover:bg-g-100 dark:text-g-200 dark:hover:bg-g-800 transition-colors"
+        className="p-2 rounded-full text-royalPurple-text2 hover:bg-royalPurple-card2 transition-colors"
         aria-label="Toggle dark mode"
       >
         <Sun className="h-5 w-5" />
@@ -27,7 +27,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="p-2 rounded-full text-g-700 hover:bg-g-100 dark:text-g-200 dark:hover:bg-g-800 transition-colors"
+      className="p-2 rounded-full text-royalPurple-text2 hover:bg-royalPurple-card2 transition-colors"
       aria-label="Toggle dark mode"
     >
       {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
