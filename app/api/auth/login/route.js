@@ -110,6 +110,7 @@ export async function POST(request) {
       role: user.role,
       schoolId: user.schoolId,
       profile_picture_url: user.profile_picture_url,
+      department: user?.hodProfile?.department || undefined,
     })
 
     const response = NextResponse.json({
