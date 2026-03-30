@@ -71,6 +71,19 @@ export default function HodDashboard() {
 
   // Get current user data from auth context
   const { user: currentUser } = useAuth()
+  useEffect(() => {
+    if (!currentUser) return
+    const role = String(currentUser.role || '').toLowerCase()
+    const allowed =
+      role === 'hod' ||
+      role === 'headteacher' ||
+      role === 'admin' ||
+      Boolean(currentUser.hodProfile)
+
+    if (!allowed) {
+      router.replace(`/dashboard/${role || 'teacher'}`)
+    }
+  }, [currentUser, router])
 
   // Department configuration
   const departments = {

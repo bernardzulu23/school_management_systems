@@ -28,6 +28,7 @@ import SubjectSelection from '@/components/registration/SubjectSelection'
 export default function UserManagement() {
   const [activeUserType, setActiveUserType] = useState('all')
   const [users, setUsers] = useState([])
+  const [hodAssignments, setHodAssignments] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
@@ -36,6 +37,7 @@ export default function UserManagement() {
   const [editingUser, setEditingUser] = useState(null)
   const [editLookups, setEditLookups] = useState({ subjects: [], departments: [] })
   const [editLoading, setEditLoading] = useState(false)
+  const [showHodAssign, setShowHodAssign] = useState(false)
 
   const userTypes = [
     { id: 'all', name: 'All Users', icon: Users, count: users.length },
@@ -55,7 +57,7 @@ export default function UserManagement() {
       id: 'hods',
       name: 'HODs',
       icon: Settings,
-      count: users.filter((u) => u.role === 'hod').length,
+      count: hodAssignments.length,
     },
     {
       id: 'headteachers',
@@ -105,6 +107,7 @@ export default function UserManagement() {
     setHasError(false)
     try {
       let data = []
+      let hodsForCounts = []
       if (activeUserType === 'all') {
         const [studentsRes, teachersRes, hodsRes, headteachersRes] = await Promise.allSettled([
           api.get('/students'),
@@ -118,6 +121,17 @@ export default function UserManagement() {
         const hods = hodsRes.status === 'fulfilled' ? hodsRes.value.data.data || [] : []
         const headteachers =
           headteachersRes.status === 'fulfilled' ? headteachersRes.value.data.data || [] : []
+        hodsForCounts = hods
+        const hodByUserId = new Map(
+          hods.map((h) => [
+            String(h.userId || h.user?.id || ''),
+            {
+              id: String(h.id || ''),
+              department: h.departmentRef?.name || h.department || '',
+              departmentId: h.departmentId || h.departmentRef?.id || '',
+            },
+          ])
+        )
 
         data = [
           ...students.map((u) => ({
@@ -134,14 +148,8 @@ export default function UserManagement() {
             email: u.user?.email || 'N/A',
             role: 'teacher',
             status: 'Active',
-            original: u,
-          })),
-          ...hods.map((u) => ({
-            id: u.id,
-            name: u.user?.name || 'Unknown',
-            email: u.user?.email || 'N/A',
-            role: 'hod',
-            status: 'Active',
+            isHod: hodByUserId.has(String(u.userId || '')),
+            hodAssignment: hodByUserId.get(String(u.userId || '')) || null,
             original: u,
           })),
           ...headteachers.map((u) => ({
@@ -164,17 +172,33 @@ export default function UserManagement() {
           original: u,
         }))
       } else if (activeUserType === 'teachers') {
-        const res = await api.get('/teachers')
-        data = (res.data.data || []).map((u) => ({
+        const [res, hodsRes] = await Promise.allSettled([api.get('/teachers'), api.get('/hods')])
+        const teacherData = res.status === 'fulfilled' ? res.value.data.data || [] : []
+        const hods = hodsRes.status === 'fulfilled' ? hodsRes.value.data.data || [] : []
+        hodsForCounts = hods
+        const hodByUserId = new Map(
+          hods.map((h) => [
+            String(h.userId || h.user?.id || ''),
+            {
+              id: String(h.id || ''),
+              department: h.departmentRef?.name || h.department || '',
+              departmentId: h.departmentId || h.departmentRef?.id || '',
+            },
+          ])
+        )
+        data = teacherData.map((u) => ({
           id: u.id,
           name: u.user?.name || 'Unknown',
           email: u.user?.email || 'N/A',
           role: 'teacher',
           status: 'Active',
+          isHod: hodByUserId.has(String(u.userId || '')),
+          hodAssignment: hodByUserId.get(String(u.userId || '')) || null,
           original: u,
         }))
       } else if (activeUserType === 'hods') {
         const res = await api.get('/hods')
+        hodsForCounts = res.data.data || []
         data = (res.data.data || []).map((u) => ({
           id: u.id,
           name: u.user?.name || 'Unknown',
@@ -195,6 +219,9 @@ export default function UserManagement() {
         }))
       }
 
+      if (Array.isArray(hodsForCounts)) {
+        setHodAssignments(hodsForCounts)
+      }
       setUsers(data)
     } catch (error) {
       console.error('Error fetching users:', error)
@@ -429,9 +456,11 @@ export default function UserManagement() {
                 </div>
                 <div>
                   <CardTitle className="text-royalPurple-text1 font-semibold text-base">
-                    Register HODs
+                    Assign HODs
                   </CardTitle>
-                  <p className="text-royalPurple-text2 text-sm mt-1">Add new HODs to the system</p>
+                  <p className="text-royalPurple-text2 text-sm mt-1">
+                    Select an existing teacher and assign a department
+                  </p>
                 </div>
               </div>
             </CardHeader>
@@ -439,20 +468,20 @@ export default function UserManagement() {
               <div className="space-y-3">
                 <Button
                   className="bg-royalPurple-accent text-royalPurple-deep font-semibold rounded-lg w-full py-2"
-                  onClick={() => handleCreateUser('hod')}
-                  aria-label="Add a new Head of Department"
+                  onClick={() => setShowHodAssign(true)}
+                  aria-label="Assign a teacher as Head of Department"
                 >
                   <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
-                  Add HOD
+                  Assign HOD
                 </Button>
                 <Button
                   variant="outline"
                   className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
-                  onClick={() => toast('Assign departments functionality - Coming soon')}
-                  aria-label="Assign departments to HODs"
+                  onClick={() => setShowHodAssign(true)}
+                  aria-label="Manage HOD assignments"
                 >
                   <Users className="h-4 w-4 mr-2" aria-hidden="true" />
-                  Assign Departments
+                  Manage HOD Assignments
                 </Button>
               </div>
             </CardContent>
@@ -614,7 +643,9 @@ export default function UserManagement() {
                               <td className="py-4 text-royalPurple-text2">{user.email}</td>
                               <td className="py-4">
                                 <span className="px-3 py-1 text-xs rounded-full backdrop-blur-md bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50 capitalize font-medium">
-                                  {user.role}
+                                  {user.role === 'teacher' && user.isHod
+                                    ? 'teacher (hod)'
+                                    : user.role}
                                 </span>
                               </td>
                               <td className="py-4">
@@ -685,6 +716,348 @@ export default function UserManagement() {
           loadingLookups={editLoading}
         />
       )}
+      {showHodAssign && (
+        <HodAssignmentModal
+          onClose={() => setShowHodAssign(false)}
+          onUpdated={() => {
+            setShowHodAssign(false)
+            fetchUsers()
+          }}
+        />
+      )}
+    </div>
+  )
+}
+
+function HodAssignmentModal({ onClose, onUpdated }) {
+  const [teachers, setTeachers] = useState([])
+  const [hods, setHods] = useState([])
+  const [departments, setDepartments] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [search, setSearch] = useState('')
+  const [selectedTeacherId, setSelectedTeacherId] = useState('')
+  const [selectedDepartmentId, setSelectedDepartmentId] = useState('')
+
+  useEffect(() => {
+    let active = true
+    const load = async () => {
+      setLoading(true)
+      try {
+        const [teachersRes, hodsRes, departmentsRes] = await Promise.allSettled([
+          api.get('/teachers'),
+          api.get('/hods'),
+          api.get('/departments'),
+        ])
+
+        const teacherData =
+          teachersRes.status === 'fulfilled' ? teachersRes.value.data.data || [] : []
+        const hodData = hodsRes.status === 'fulfilled' ? hodsRes.value.data.data || [] : []
+        const deptData =
+          departmentsRes.status === 'fulfilled' ? departmentsRes.value.data.data || [] : []
+
+        if (!active) return
+        setTeachers(teacherData)
+        setHods(hodData)
+        setDepartments(deptData)
+      } catch (e) {
+        toast.error('Failed to load HOD assignment data')
+      } finally {
+        if (!active) return
+        setLoading(false)
+      }
+    }
+    load()
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const hodByUserId = new Map(
+    hods.map((h) => [
+      String(h.userId || h.user?.id || ''),
+      {
+        id: String(h.id || ''),
+        department: h.departmentRef?.name || h.department || '',
+        departmentId: String(h.departmentId || h.departmentRef?.id || ''),
+      },
+    ])
+  )
+
+  const filteredTeachers = teachers.filter((t) => {
+    const name = String(t.user?.name || '').toLowerCase()
+    const email = String(t.user?.email || '').toLowerCase()
+    const q = String(search || '')
+      .toLowerCase()
+      .trim()
+    if (!q) return true
+    return (
+      name.includes(q) ||
+      email.includes(q) ||
+      String(t.ts_number || '')
+        .toLowerCase()
+        .includes(q)
+    )
+  })
+
+  const selectedTeacher = teachers.find((t) => String(t.id) === String(selectedTeacherId))
+  const selectedUserId = selectedTeacher ? String(selectedTeacher.userId || '') : ''
+  const selectedHod = selectedUserId ? hodByUserId.get(selectedUserId) : null
+
+  const assign = async () => {
+    if (!selectedTeacherId) {
+      toast.error('Select a teacher first')
+      return
+    }
+    if (!selectedDepartmentId) {
+      toast.error('Select a department')
+      return
+    }
+    setSaving(true)
+    try {
+      await api.post('/hods/assign', {
+        teacherId: selectedTeacherId,
+        departmentId: selectedDepartmentId,
+      })
+      const [hodsRes] = await Promise.allSettled([api.get('/hods')])
+      if (hodsRes.status === 'fulfilled') {
+        setHods(hodsRes.value.data.data || [])
+      }
+      toast.success('HOD assignment saved')
+      onUpdated()
+    } catch (e) {
+      toast.error(e?.response?.data?.error || e?.message || 'Failed to assign HOD')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const unassign = async () => {
+    if (!selectedHod?.id) return
+    setSaving(true)
+    try {
+      await api.delete('/hods/assign', { data: { hodId: selectedHod.id } })
+      const [hodsRes] = await Promise.allSettled([api.get('/hods')])
+      if (hodsRes.status === 'fulfilled') {
+        setHods(hodsRes.value.data.data || [])
+      }
+      toast.success('HOD assignment removed')
+      onUpdated()
+    } catch (e) {
+      toast.error(e?.response?.data?.error || e?.message || 'Failed to remove HOD assignment')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-royalPurple-deep/80">
+      <div className="bg-royalPurple-card border border-royalPurple-border rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+        <div className="p-6 bg-royalPurple-card2 border-b border-royalPurple-border rounded-t-2xl flex justify-between items-center">
+          <h3 className="text-xl font-bold text-royalPurple-text1">Assign Head of Department</h3>
+          <button
+            onClick={onClose}
+            className="text-royalPurple-text2 hover:text-royalPurple-text1"
+            aria-label="Close"
+          >
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+
+        <div className="p-6 bg-royalPurple-card grid grid-cols-1 lg:grid-cols-2 gap-6 overflow-y-auto max-h-[calc(90vh-88px)]">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <Search className="h-4 w-4 text-royalPurple-text3 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full pl-9 input"
+                  placeholder="Search teachers by name, email, TS number..."
+                />
+              </div>
+              <Button
+                variant="outline"
+                className="border border-royalPurple-border2"
+                onClick={() => setSearch('')}
+              >
+                Clear
+              </Button>
+            </div>
+
+            <div className="bg-royalPurple-card2 border border-royalPurple-border rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-royalPurple-border text-sm font-semibold text-royalPurple-text1">
+                Teachers
+              </div>
+              <div className="max-h-[420px] overflow-y-auto">
+                {loading ? (
+                  <div className="p-4 text-sm text-royalPurple-text2">Loading…</div>
+                ) : filteredTeachers.length === 0 ? (
+                  <div className="p-4 text-sm text-royalPurple-text2">No teachers found</div>
+                ) : (
+                  filteredTeachers.map((t) => {
+                    const userId = String(t.userId || '')
+                    const hod = hodByUserId.get(userId)
+                    const isSelected = String(selectedTeacherId) === String(t.id)
+                    return (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedTeacherId(String(t.id))
+                          setSelectedDepartmentId(hod?.departmentId || '')
+                        }}
+                        className={`w-full text-left px-4 py-3 border-b border-royalPurple-border hover:bg-royalPurple-card transition-colors ${
+                          isSelected
+                            ? 'bg-royalPurple-card border-l-4 border-l-royalPurple-accent'
+                            : ''
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="min-w-0">
+                            <div className="font-semibold text-royalPurple-text1 truncate">
+                              {t.user?.name || 'Unknown'}
+                            </div>
+                            <div className="text-xs text-royalPurple-text2 truncate">
+                              {t.user?.email || 'N/A'} {t.ts_number ? `• TS: ${t.ts_number}` : ''}
+                            </div>
+                          </div>
+                          <div className="flex-shrink-0">
+                            {hod ? (
+                              <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-accentBg text-royalPurple-accentTx border border-royalPurple-border2">
+                                HOD: {hod.department || 'Assigned'}
+                              </span>
+                            ) : (
+                              <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-card border border-royalPurple-border text-royalPurple-text2">
+                                Teacher
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </button>
+                    )
+                  })
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="bg-royalPurple-card2 border border-royalPurple-border rounded-xl p-4">
+              <div className="text-sm font-semibold text-royalPurple-text1 mb-3">Assignment</div>
+
+              <div className="space-y-3">
+                <div>
+                  <div className="text-xs text-royalPurple-text3 mb-1">Selected Teacher</div>
+                  <div className="text-royalPurple-text1 font-semibold">
+                    {selectedTeacher ? selectedTeacher.user?.name || 'Unknown' : 'None'}
+                  </div>
+                  <div className="text-xs text-royalPurple-text2">
+                    {selectedTeacher ? selectedTeacher.user?.email || 'N/A' : ''}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm text-royalPurple-text2 mb-1">Department</label>
+                  <select
+                    className="select"
+                    value={selectedDepartmentId}
+                    disabled={loading || saving}
+                    onChange={(e) => setSelectedDepartmentId(e.target.value)}
+                  >
+                    <option value="">Select department</option>
+                    {departments.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {selectedHod ? (
+                  <div className="p-3 bg-royalPurple-card border border-royalPurple-border rounded-lg">
+                    <div className="text-sm text-royalPurple-text2">Current HOD Assignment</div>
+                    <div className="font-semibold text-royalPurple-text1">
+                      {selectedHod.department || 'N/A'}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-3 bg-royalPurple-card border border-royalPurple-border rounded-lg text-sm text-royalPurple-text2">
+                    This teacher is not assigned as an HOD yet.
+                  </div>
+                )}
+
+                <div className="flex gap-2">
+                  <Button
+                    onClick={assign}
+                    disabled={loading || saving}
+                    className="flex-1 bg-royalPurple-accent text-royalPurple-deep font-semibold hover:opacity-90 transition-opacity"
+                  >
+                    Save Assignment
+                  </Button>
+                  <Button
+                    onClick={unassign}
+                    disabled={loading || saving || !selectedHod}
+                    variant="outline"
+                    className="flex-1 border border-royalPurple-border text-royalPurple-dangerTx hover:bg-royalPurple-danger/20"
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-royalPurple-card2 border border-royalPurple-border rounded-xl p-4">
+              <div className="text-sm font-semibold text-royalPurple-text1 mb-3">
+                Current HODs ({hods.length})
+              </div>
+              <div className="space-y-2 max-h-[220px] overflow-y-auto">
+                {hods.length === 0 ? (
+                  <div className="text-sm text-royalPurple-text2">No HODs assigned yet</div>
+                ) : (
+                  hods.map((h) => (
+                    <div
+                      key={h.id}
+                      className="flex items-center justify-between gap-3 p-3 bg-royalPurple-card border border-royalPurple-border rounded-lg"
+                    >
+                      <div className="min-w-0">
+                        <div className="font-semibold text-royalPurple-text1 truncate">
+                          {h.user?.name || 'Unknown'}
+                        </div>
+                        <div className="text-xs text-royalPurple-text2 truncate">
+                          {h.user?.email || 'N/A'} •{' '}
+                          {h.departmentRef?.name || h.department || 'N/A'}
+                        </div>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="border-royalPurple-border text-royalPurple-dangerTx hover:bg-royalPurple-danger/20"
+                        onClick={async () => {
+                          setSaving(true)
+                          try {
+                            await api.delete('/hods/assign', { data: { hodId: h.id } })
+                            const next = hods.filter((x) => String(x.id) !== String(h.id))
+                            setHods(next)
+                            toast.success('HOD assignment removed')
+                          } catch (e) {
+                            toast.error(e?.response?.data?.error || 'Failed to remove HOD')
+                          } finally {
+                            setSaving(false)
+                          }
+                        }}
+                        disabled={saving}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

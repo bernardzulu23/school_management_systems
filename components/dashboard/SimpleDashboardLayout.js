@@ -28,6 +28,14 @@ export function DashboardLayout({ children, title }) {
               {title && String(title).trim() !== String(roleLabel).trim() && (
                 <span className="text-sm text-royalPurple-text3">| {title}</span>
               )}
+              {(user?.hodProfile || String(user?.role || '').toLowerCase() === 'hod') && (
+                <Link
+                  href="/dashboard/hod"
+                  className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
+                >
+                  HOD Dashboard
+                </Link>
+              )}
               <Link
                 href="/dashboard/profile"
                 className="inline-flex items-center gap-2 h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors"
