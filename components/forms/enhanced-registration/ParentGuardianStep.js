@@ -61,8 +61,8 @@ export default function ParentGuardianStep({ formData, errors, onInputChange }) 
         </div>
 
         {/* Mother's Information */}
-        <div className="bg-pink-50 p-6 rounded-xl border border-pink-200">
-          <h4 className="text-lg font-semibold text-pink-800 mb-4 flex items-center">
+        <div className="bg-royalPurple-card2 p-6 rounded-xl border border-royalPurple-border">
+          <h4 className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center">
             <User className="h-5 w-5 mr-2" />
             Mother's Information
           </h4>
@@ -92,8 +92,8 @@ export default function ParentGuardianStep({ formData, errors, onInputChange }) 
         </div>
 
         {/* Emergency Contact */}
-        <div className="bg-orange-50 p-6 rounded-xl border border-orange-200">
-          <h4 className="text-lg font-semibold text-orange-800 mb-4 flex items-center">
+        <div className="bg-royalPurple-card2 p-6 rounded-xl border border-royalPurple-border">
+          <h4 className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center">
             <Phone className="h-5 w-5 mr-2" />
             Emergency Contact
           </h4>

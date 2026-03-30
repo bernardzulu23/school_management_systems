@@ -185,11 +185,11 @@ const EnhancedStudentDashboard = ({ studentId, studentData }) => {
                 (assignment.dueDate - new Date()) / (24 * 60 * 60 * 1000)
               )
               return (
-                <div key={assignment.id} className="border-l-4 border-orange-500 pl-3">
+                <div key={assignment.id} className="border-l-4 border-royalPurple-accent pl-3">
                   <div className="font-medium text-sm">{assignment.title}</div>
                   <div className="text-xs text-royalPurple-text2">{assignment.subject}</div>
                   <div
-                    className={`text-xs ${daysUntilDue <= 1 ? 'text-royalPurple-dangerTx' : 'text-orange-600'}`}
+                    className={`text-xs ${daysUntilDue <= 1 ? 'text-royalPurple-dangerTx' : 'text-royalPurple-text3'}`}
                   >
                     Due in {daysUntilDue} day{daysUntilDue !== 1 ? 's' : ''}
                   </div>
@@ -309,7 +309,7 @@ const EnhancedStudentDashboard = ({ studentId, studentData }) => {
 
         <button
           onClick={() => setActiveTab('notebook')}
-          className="flex flex-col items-center p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors"
+          className="flex flex-col items-center p-4 bg-royalPurple-card2 rounded-lg hover:bg-royalPurple-border transition-colors"
         >
           <span className="text-2xl mb-2">📓</span>
           <span className="text-sm font-medium">Take Notes</span>
@@ -317,7 +317,7 @@ const EnhancedStudentDashboard = ({ studentId, studentData }) => {
 
         <button
           onClick={() => setActiveTab('groups')}
-          className="flex flex-col items-center p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors"
+          className="flex flex-col items-center p-4 bg-royalPurple-card2 rounded-lg hover:bg-royalPurple-border transition-colors"
         >
           <span className="text-2xl mb-2">👥</span>
           <span className="text-sm font-medium">Study Groups</span>
@@ -336,21 +336,21 @@ const EnhancedStudentDashboard = ({ studentId, studentData }) => {
 
   const renderNotifications = () =>
     notifications.length > 0 && (
-      <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+      <div className="bg-royalPurple-accentBg border-l-4 border-royalPurple-accent p-4 mb-6">
         <div className="flex">
           <div className="flex-shrink-0">
-            <span className="text-yellow-400 text-xl">🔔</span>
+            <span className="text-royalPurple-accentTx text-xl">🔔</span>
           </div>
           <div className="ml-3 flex-1">
-            <h3 className="text-sm font-medium text-yellow-800">Notifications</h3>
-            <div className="mt-2 text-sm text-yellow-700">
+            <h3 className="text-sm font-medium text-royalPurple-text1">Notifications</h3>
+            <div className="mt-2 text-sm text-royalPurple-text2">
               {notifications.slice(0, 3).map((notification) => (
                 <div key={notification.id} className="mb-1">
                   {notification.message}
                 </div>
               ))}
               {notifications.length > 3 && (
-                <div className="text-xs text-yellow-600">
+                <div className="text-xs text-royalPurple-text3">
                   +{notifications.length - 3} more notifications
                 </div>
               )}
@@ -359,7 +359,7 @@ const EnhancedStudentDashboard = ({ studentId, studentData }) => {
           <div className="ml-3 flex-shrink-0">
             <button
               onClick={() => setNotifications([])}
-              className="text-yellow-400 hover:text-yellow-600"
+              className="text-royalPurple-accentTx hover:text-royalPurple-accentTx"
             >
               ✕
             </button>

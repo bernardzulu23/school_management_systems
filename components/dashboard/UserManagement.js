@@ -290,9 +290,7 @@ export default function UserManagement() {
     <div className="space-y-8">
       {/* Header */}
       <header className="backdrop-blur-lg bg-royalPurple-card/60 border border-royalPurple-border2/40 rounded-3xl p-8 text-center shadow-2xl">
-        <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
-          User Management
-        </h2>
+        <h2 className="text-4xl font-bold text-royalPurple-text1 mb-4">User Management</h2>
         <p className="text-royalPurple-text2 text-lg">
           Register, manage, and oversee all system users
         </p>
@@ -638,7 +636,7 @@ export default function UserManagement() {
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    className="border-yellow-400 text-yellow-300 hover:bg-yellow-600/20"
+                                    className="border-royalPurple-border2 text-royalPurple-text2 hover:bg-royalPurple-card2"
                                     onClick={() => handleEditUser(user)}
                                     aria-label={`Edit ${user.name}`}
                                   >

@@ -55,7 +55,7 @@ export default function StudentSubjects({ studentData }) {
   const getGradeColor = (grade) => {
     if (grade >= 85) return 'text-royalPurple-successTx'
     if (grade >= 75) return 'text-royalPurple-accentTx'
-    if (grade >= 65) return 'text-yellow-600'
+    if (grade >= 65) return 'text-royalPurple-accentTx'
     return 'text-royalPurple-dangerTx'
   }
 
@@ -73,7 +73,7 @@ export default function StudentSubjects({ studentData }) {
   return (
     <div className="space-y-6">
       {/* Student Overview */}
-      <Card className="bg-gradient-to-br from-blue-50 to-indigo-100 border-royalPurple-border2">
+      <Card className="bg-royalPurple-card border border-royalPurple-border2">
         <CardHeader>
           <CardTitle className="flex items-center text-royalPurple-accentTx">
             <User className="h-6 w-6 mr-2" />
@@ -118,7 +118,7 @@ export default function StudentSubjects({ studentData }) {
             </div>
             <div className="w-full bg-royalPurple-card2 rounded-full h-3 mt-2">
               <div
-                className="bg-gradient-to-r from-blue-500 to-indigo-500 h-3 rounded-full transition-all duration-300"
+                className="bg-royalPurple-accent h-3 rounded-full transition-all duration-300"
                 style={{ width: `${studentInfo.overallGrade}%` }}
               ></div>
             </div>
@@ -128,7 +128,7 @@ export default function StudentSubjects({ studentData }) {
 
       {/* Performance Summary */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-royalPurple-border">
+        <Card className="bg-royalPurple-card border border-royalPurple-border">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -142,7 +142,7 @@ export default function StudentSubjects({ studentData }) {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-royalPurple-border2">
+        <Card className="bg-royalPurple-card border border-royalPurple-border2">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -156,7 +156,7 @@ export default function StudentSubjects({ studentData }) {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-50 to-red-100 border-royalPurple-border">
+        <Card className="bg-royalPurple-card border border-royalPurple-border">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -170,7 +170,7 @@ export default function StudentSubjects({ studentData }) {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-royalPurple-border2">
+        <Card className="bg-royalPurple-card border border-royalPurple-border2">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -202,7 +202,7 @@ export default function StudentSubjects({ studentData }) {
             {enrolledSubjects.map((subject) => (
               <div
                 key={subject.id}
-                className="border border-royalPurple-border rounded-lg p-4 hover:shadow-md transition-all cursor-pointer bg-gradient-to-br from-white to-gray-50"
+                className="border border-royalPurple-border rounded-lg p-4 hover:shadow-md transition-all cursor-pointer bg-royalPurple-card"
                 onClick={() => setSelectedSubject(subject)}
               >
                 <div className="flex items-center justify-between mb-3">

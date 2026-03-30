@@ -9,7 +9,7 @@ export function HeadteacherAnalytics() {
     <div className="space-y-8">
       {/* Comprehensive Analytics Header */}
       <div className="backdrop-blur-lg bg-royalPurple-card/60 border border-royalPurple-border2/40 rounded-3xl p-8 text-center shadow-2xl">
-        <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
+        <h2 className="text-4xl font-bold text-royalPurple-text1 mb-4">
           Comprehensive School Analytics
         </h2>
         <p className="text-royalPurple-text2 text-lg">
@@ -41,9 +41,7 @@ export function HeadteacherAnalytics() {
         {/* School Performance by Term */}
         <Card variant="glass">
           <CardHeader>
-            <CardTitle className="bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">
-              School Performance by Term
-            </CardTitle>
+            <CardTitle className="text-royalPurple-text1">School Performance by Term</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
@@ -61,9 +59,7 @@ export function HeadteacherAnalytics() {
         {/* Year Group Performance */}
         <Card variant="glass">
           <CardHeader>
-            <CardTitle className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
-              Year Group Performance
-            </CardTitle>
+            <CardTitle className="text-royalPurple-text1">Year Group Performance</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
@@ -86,7 +82,7 @@ export function HeadteacherAnalytics() {
                               ? 'bg-royalPurple-success'
                               : performance >= 75
                                 ? 'bg-royalPurple-accent'
-                                : 'bg-yellow-500'
+                                : 'bg-royalPurple-accent'
                           }`}
                           style={{ width: `${performance}%` }}
                         ></div>
@@ -103,9 +99,7 @@ export function HeadteacherAnalytics() {
       {/* Teacher Performance Analytics */}
       <Card variant="glass">
         <CardHeader>
-          <CardTitle className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
-            Teacher Performance Analytics
-          </CardTitle>
+          <CardTitle className="text-royalPurple-text1">Teacher Performance Analytics</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
@@ -142,7 +136,7 @@ export function HeadteacherAnalytics() {
                     <div className="text-royalPurple-text2 text-sm">Compliance</div>
                   </div>
                   <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-orange-400">
+                    <div className="text-2xl font-bold text-royalPurple-accentTx">
                       {schoolStats.teacherDevelopment}%
                     </div>
                     <div className="text-royalPurple-text2 text-sm">Development</div>

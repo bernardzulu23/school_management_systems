@@ -208,7 +208,7 @@ export default function ModernDashboard({ userRole, userId, userData }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-royalPurple-page">
       {/* Header */}
       <header className="bg-royalPurple-card shadow-lg border-b border-royalPurple-border2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -242,7 +242,7 @@ export default function ModernDashboard({ userRole, userId, userData }) {
                     wellbeingStatus?.riskLevel === 'LOW'
                       ? 'bg-royalPurple-success'
                       : wellbeingStatus?.riskLevel === 'MEDIUM'
-                        ? 'bg-yellow-500'
+                        ? 'bg-royalPurple-accent'
                         : 'bg-royalPurple-danger'
                   }`}
                 ></div>
@@ -386,7 +386,7 @@ const WellbeingWidget = ({ status, userId }) => (
             status?.riskLevel === 'LOW'
               ? 'bg-royalPurple-success text-royalPurple-successTx'
               : status?.riskLevel === 'MEDIUM'
-                ? 'bg-yellow-100 text-yellow-800'
+                ? 'bg-royalPurple-accentBg text-royalPurple-accentTx'
                 : 'bg-royalPurple-danger text-royalPurple-dangerTx'
           }`}
         >
@@ -417,7 +417,7 @@ const GamificationWidget = ({ data }) => {
           </div>
           <div className="bg-royalPurple-card2 rounded-full h-2">
             <div
-              className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500"
+              className="bg-royalPurple-accent h-2 rounded-full transition-all duration-500"
               style={{ width: `${progressPercent}%` }}
             ></div>
           </div>
@@ -539,7 +539,7 @@ const AnalyticsWidget = ({ data }) => (
             data?.prediction?.riskLevel?.level === 'low'
               ? 'bg-royalPurple-success text-royalPurple-successTx'
               : data?.prediction?.riskLevel?.level === 'medium'
-                ? 'bg-yellow-100 text-yellow-800'
+                ? 'bg-royalPurple-accentBg text-royalPurple-accentTx'
                 : 'bg-royalPurple-danger text-royalPurple-dangerTx'
           }`}
         >

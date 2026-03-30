@@ -82,9 +82,9 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
       case 'critical':
         return 'bg-royalPurple-danger text-royalPurple-dangerTx border-royalPurple-border'
       case 'high':
-        return 'bg-orange-100 text-orange-800 border-orange-200'
+        return 'bg-royalPurple-danger text-royalPurple-dangerTx border-royalPurple-border'
       case 'medium':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+        return 'bg-royalPurple-accentBg text-royalPurple-accentTx border-royalPurple-border2'
       default:
         return 'bg-royalPurple-card2 text-royalPurple-text1 border-royalPurple-border'
     }
@@ -95,7 +95,7 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
       green: 'bg-royalPurple-success text-royalPurple-successTx',
       blue: 'bg-royalPurple-accent text-royalPurple-accentTx',
       purple: 'bg-royalPurple-pill text-royalPurple-pillTx',
-      yellow: 'bg-yellow-100 text-yellow-800',
+      yellow: 'bg-royalPurple-accentBg text-royalPurple-accentTx',
       red: 'bg-royalPurple-danger text-royalPurple-dangerTx',
       gray: 'bg-royalPurple-card2 text-royalPurple-text1',
     }
@@ -132,7 +132,7 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
           <div className="backdrop-blur-md bg-royalPurple-danger/60 border border-royalPurple-border/50 rounded-2xl p-3 mr-4">
             <AlertTriangle className="h-8 w-8 text-royalPurple-text1" />
           </div>
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold text-royalPurple-text1">
             Students Requiring Immediate Attention
           </h2>
         </div>
@@ -150,11 +150,11 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
             </div>
             <div className="text-royalPurple-dangerTx font-medium">Critical Risk</div>
           </div>
-          <div className="backdrop-blur-lg bg-royalPurple-muted/60 border border-orange-500/40 rounded-2xl p-6 text-center hover:scale-105 transition-all duration-300">
+          <div className="backdrop-blur-lg bg-royalPurple-muted/60 border border-royalPurple-border2/40 rounded-2xl p-6 text-center hover:scale-105 transition-all duration-300">
             <div className="text-3xl font-bold text-royalPurple-text1 mb-2">
               {performanceSummary?.high_risk_students || 0}
             </div>
-            <div className="text-orange-300 font-medium">High Risk</div>
+            <div className="text-royalPurple-text2 font-medium">High Risk</div>
           </div>
           <div className="backdrop-blur-lg bg-royalPurple-muted/60 border border-royalPurple-border2/40 rounded-2xl p-6 text-center hover:scale-105 transition-all duration-300">
             <div className="text-3xl font-bold text-royalPurple-text1 mb-2">
@@ -198,8 +198,8 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
               student.risk_level === 'critical'
                 ? 'border-l-red-500'
                 : student.risk_level === 'high'
-                  ? 'border-l-orange-500'
-                  : 'border-l-yellow-500'
+                  ? 'border-l-royalPurple-accent'
+                  : 'border-l-royalPurple-border2'
             }`}
           >
             <CardHeader>

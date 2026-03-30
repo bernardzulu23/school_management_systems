@@ -32,12 +32,12 @@ export default function ProfilePictureDisplay({
 
   // Role-based styling
   const roleStyles = {
-    headteacher: 'ring-4 ring-purple-200 bg-gradient-to-br from-purple-500 to-purple-600',
-    deputy: 'ring-4 ring-purple-200 bg-gradient-to-br from-purple-400 to-purple-500',
-    hod: 'ring-4 ring-blue-200 bg-gradient-to-br from-blue-500 to-blue-600',
-    teacher: 'ring-2 ring-green-200 bg-gradient-to-br from-green-500 to-green-600',
-    student: 'ring-2 ring-gray-200 bg-gradient-to-br from-gray-400 to-gray-500',
-    admin: 'ring-4 ring-red-200 bg-gradient-to-br from-red-500 to-red-600',
+    headteacher: 'ring-2 ring-royalPurple-border2 bg-royalPurple-pill',
+    deputy: 'ring-2 ring-royalPurple-border2 bg-royalPurple-card2',
+    hod: 'ring-2 ring-royalPurple-border bg-royalPurple-card2',
+    teacher: 'ring-2 ring-royalPurple-border bg-royalPurple-muted',
+    student: 'ring-2 ring-royalPurple-border bg-royalPurple-card2',
+    admin: 'ring-2 ring-royalPurple-border2 bg-royalPurple-pill',
   }
 
   const roleStyle = roleStyles[role] || roleStyles.student

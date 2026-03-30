@@ -124,9 +124,9 @@ export default function TeacherPerformanceAnalysis({ teacherId, teacherData, per
       case 'Good':
         return 'text-royalPurple-accentTx bg-royalPurple-accent'
       case 'Satisfactory':
-        return 'text-yellow-600 bg-yellow-100'
+        return 'text-royalPurple-accentTx bg-royalPurple-accentBg'
       case 'Needs Improvement':
-        return 'text-orange-600 bg-orange-100'
+        return 'text-royalPurple-dangerTx bg-royalPurple-danger'
       case 'Unsatisfactory':
         return 'text-royalPurple-dangerTx bg-royalPurple-danger'
       default:
@@ -271,7 +271,9 @@ export default function TeacherPerformanceAnalysis({ teacherId, teacherData, per
                   )}
                   {data.areas_for_improvement && (
                     <div>
-                      <p className="text-sm font-medium text-orange-700">Areas for Improvement:</p>
+                      <p className="text-sm font-medium text-royalPurple-text2">
+                        Areas for Improvement:
+                      </p>
                       <p className="text-sm text-royalPurple-text2">
                         {data.areas_for_improvement.substring(0, 100)}...
                       </p>
@@ -361,7 +363,7 @@ export default function TeacherPerformanceAnalysis({ teacherId, teacherData, per
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="text-center p-2 bg-yellow-50 rounded">
+                    <div className="text-center p-2 bg-royalPurple-card2 rounded">
                       <div className="text-lg font-bold text-yellow-600">
                         {term.midterm_avg.toFixed(1)}%
                       </div>
@@ -398,7 +400,7 @@ export default function TeacherPerformanceAnalysis({ teacherId, teacherData, per
                             </p>
                           )}
                           {note.improvements && (
-                            <p className="text-orange-600">
+                            <p className="text-royalPurple-text2">
                               ⚠ {note.improvements.substring(0, 80)}...
                             </p>
                           )}
@@ -486,11 +488,13 @@ export default function TeacherPerformanceAnalysis({ teacherId, teacherData, per
                         )}
 
                         {obs.areas_for_improvement && (
-                          <div className="p-3 bg-orange-50 rounded-lg">
+                          <div className="p-3 bg-royalPurple-card2 rounded-lg">
                             <p className="font-medium text-orange-800 mb-1">
                               Areas for Improvement:
                             </p>
-                            <p className="text-sm text-orange-700">{obs.areas_for_improvement}</p>
+                            <p className="text-sm text-royalPurple-text2">
+                              {obs.areas_for_improvement}
+                            </p>
                           </div>
                         )}
 
@@ -521,7 +525,7 @@ export default function TeacherPerformanceAnalysis({ teacherId, teacherData, per
                         </h5>
 
                         <div className="grid grid-cols-2 gap-3">
-                          <div className="text-center p-3 bg-yellow-50 rounded-lg">
+                          <div className="text-center p-3 bg-royalPurple-card2 rounded-lg">
                             <div className="text-xl font-bold text-yellow-600">
                               {avgMidterm.toFixed(1)}%
                             </div>

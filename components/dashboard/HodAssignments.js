@@ -97,14 +97,14 @@ export default function HodAssignments({ hodData }) {
     if (grade >= 85) return 'text-royalPurple-pillTx'
     if (grade >= 80) return 'text-royalPurple-successTx'
     if (grade >= 70) return 'text-royalPurple-accentTx'
-    if (grade >= 60) return 'text-yellow-600'
+    if (grade >= 60) return 'text-royalPurple-accentTx'
     return 'text-royalPurple-dangerTx'
   }
 
   return (
     <div className="space-y-6">
       {/* Department Overview */}
-      <Card className="bg-gradient-to-br from-indigo-50 to-purple-100 border-royalPurple-border2">
+      <Card className="bg-royalPurple-card border border-royalPurple-border2">
         <CardHeader>
           <CardTitle className="flex items-center text-royalPurple-pillTx">
             <Building className="h-6 w-6 mr-2" />
@@ -149,7 +149,7 @@ export default function HodAssignments({ hodData }) {
             </div>
             <div className="w-full bg-royalPurple-card2 rounded-full h-3 mt-2">
               <div
-                className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full transition-all duration-300"
+                className="bg-royalPurple-accent h-3 rounded-full transition-all duration-300"
                 style={{ width: `${departmentData.averagePerformance}%` }}
               ></div>
             </div>

@@ -126,9 +126,9 @@ export default function TeacherPerformanceDashboard({
       case 'Good':
         return 'text-royalPurple-accentTx bg-royalPurple-accent'
       case 'Satisfactory':
-        return 'text-yellow-600 bg-yellow-100'
+        return 'text-royalPurple-accentTx bg-royalPurple-accentBg'
       case 'Needs Improvement':
-        return 'text-orange-600 bg-orange-100'
+        return 'text-royalPurple-dangerTx bg-royalPurple-danger'
       case 'Unsatisfactory':
         return 'text-royalPurple-dangerTx bg-royalPurple-danger'
       default:
@@ -244,8 +244,8 @@ export default function TeacherPerformanceDashboard({
                 {overall_metrics.average_student_performance?.toFixed(1) || '0.0'}%
               </p>
             </div>
-            <div className="p-3 bg-yellow-100 rounded-full">
-              <Award className="w-6 h-6 text-yellow-600" />
+            <div className="p-3 bg-royalPurple-accentBg rounded-full">
+              <Award className="w-6 h-6 text-royalPurple-accentTx" />
             </div>
           </div>
           <div className="mt-4 flex items-center gap-2">

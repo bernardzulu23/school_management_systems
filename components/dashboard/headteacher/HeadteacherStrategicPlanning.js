@@ -47,7 +47,7 @@ export function HeadteacherStrategicPlanning() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-royalPurple-text2">In Progress</span>
-                <span className="font-bold text-yellow-600">{goalsData.in_progress}</span>
+                <span className="text-royalPurple-accentTx font-bold">{goalsData.in_progress}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-royalPurple-text2">Not Started</span>
@@ -125,7 +125,7 @@ export function HeadteacherStrategicPlanning() {
                         goal.status === 'On Track'
                           ? 'bg-royalPurple-success text-royalPurple-successTx'
                           : goal.status === 'In Progress'
-                            ? 'bg-yellow-100 text-yellow-800'
+                            ? 'bg-royalPurple-accentBg text-royalPurple-accentTx'
                             : 'bg-royalPurple-accent text-royalPurple-accentTx'
                       }`}
                     >

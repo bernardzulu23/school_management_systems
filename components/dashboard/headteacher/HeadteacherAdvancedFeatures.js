@@ -8,7 +8,7 @@ export function HeadteacherAdvancedFeatures() {
     <div className="space-y-6">
       {/* Advanced Features Header */}
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+        <h2 className="text-3xl font-bold text-royalPurple-text1 mb-2">
           Advanced Educational Features
         </h2>
         <p className="text-royalPurple-text2">Cutting-edge tools for modern school management</p>
@@ -19,7 +19,7 @@ export function HeadteacherAdvancedFeatures() {
         {/* Institutional Analytics */}
         <Card variant="glass">
           <CardHeader>
-            <CardTitle className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent flex items-center">
+            <CardTitle className="text-royalPurple-text1 flex items-center">
               <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
               Institutional Analytics
             </CardTitle>
@@ -31,7 +31,7 @@ export function HeadteacherAdvancedFeatures() {
               <li>🎯 Strategic Planning Tools</li>
               <li>📋 Comprehensive Reporting Suite</li>
             </ul>
-            <Button className="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-royalPurple-text1">
+            <Button className="w-full mt-4 bg-royalPurple-accent hover:opacity-90 text-royalPurple-deep">
               Explore Analytics
             </Button>
           </CardContent>
@@ -40,7 +40,7 @@ export function HeadteacherAdvancedFeatures() {
         {/* Advanced Communication */}
         <Card variant="glass">
           <CardHeader>
-            <CardTitle className="bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent flex items-center">
+            <CardTitle className="text-royalPurple-text1 flex items-center">
               <Users className="h-6 w-6 mr-3 text-royalPurple-successTx" />
               Communication Hub
             </CardTitle>
@@ -52,7 +52,7 @@ export function HeadteacherAdvancedFeatures() {
               <li>👥 Community Engagement Tools</li>
               <li>📧 Automated Messaging</li>
             </ul>
-            <Button className="w-full mt-4 bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-royalPurple-text1">
+            <Button className="w-full mt-4 bg-royalPurple-accent hover:opacity-90 text-royalPurple-deep">
               Manage Communications
             </Button>
           </CardContent>
@@ -61,8 +61,8 @@ export function HeadteacherAdvancedFeatures() {
         {/* Innovation & Technology */}
         <Card variant="glass">
           <CardHeader>
-            <CardTitle className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center">
-              <Zap className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
+            <CardTitle className="text-royalPurple-text1 flex items-center">
+              <Zap className="h-6 w-6 mr-3 text-royalPurple-accent" />
               Innovation Center
             </CardTitle>
           </CardHeader>
@@ -73,7 +73,7 @@ export function HeadteacherAdvancedFeatures() {
               <li>🧠 Mental Health Monitoring</li>
               <li>🔗 Blockchain Credentials</li>
             </ul>
-            <Button className="w-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-royalPurple-text1">
+            <Button className="w-full mt-4 bg-royalPurple-accent hover:opacity-90 text-royalPurple-deep">
               Explore Innovation
             </Button>
           </CardContent>
@@ -83,21 +83,21 @@ export function HeadteacherAdvancedFeatures() {
       {/* Implementation Status Dashboard */}
       <Card variant="glass">
         <CardHeader>
-          <CardTitle className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent flex items-center">
-            <Target className="h-6 w-6 mr-3 text-orange-500" />
+          <CardTitle className="text-royalPurple-text1 flex items-center">
+            <Target className="h-6 w-6 mr-3 text-royalPurple-accent" />
             Advanced Features Implementation Status
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+              <div className="w-16 h-16 bg-royalPurple-card2 border border-royalPurple-border rounded-full flex items-center justify-center mx-auto mb-3">
                 <CheckCircle className="h-8 w-8 text-royalPurple-text1" />
               </div>
               <h4 className="font-semibold text-royalPurple-text1 mb-2">Student Features</h4>
               <div className="w-full bg-royalPurple-card2 rounded-full h-2 mb-2">
                 <div
-                  className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full"
+                  className="bg-royalPurple-accent h-2 rounded-full"
                   style={{ width: '100%' }}
                 ></div>
               </div>
@@ -105,13 +105,13 @@ export function HeadteacherAdvancedFeatures() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+              <div className="w-16 h-16 bg-royalPurple-card2 border border-royalPurple-border rounded-full flex items-center justify-center mx-auto mb-3">
                 <CheckCircle className="h-8 w-8 text-royalPurple-text1" />
               </div>
               <h4 className="font-semibold text-royalPurple-text1 mb-2">Learning Enhancement</h4>
               <div className="w-full bg-royalPurple-card2 rounded-full h-2 mb-2">
                 <div
-                  className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full"
+                  className="bg-royalPurple-accent h-2 rounded-full"
                   style={{ width: '100%' }}
                 ></div>
               </div>
@@ -119,13 +119,13 @@ export function HeadteacherAdvancedFeatures() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+              <div className="w-16 h-16 bg-royalPurple-card2 border border-royalPurple-border rounded-full flex items-center justify-center mx-auto mb-3">
                 <CheckCircle className="h-8 w-8 text-royalPurple-text1" />
               </div>
               <h4 className="font-semibold text-royalPurple-text1 mb-2">Cultural Integration</h4>
               <div className="w-full bg-royalPurple-card2 rounded-full h-2 mb-2">
                 <div
-                  className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full"
+                  className="bg-royalPurple-accent h-2 rounded-full"
                   style={{ width: '100%' }}
                 ></div>
               </div>
@@ -133,7 +133,7 @@ export function HeadteacherAdvancedFeatures() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+              <div className="w-16 h-16 bg-royalPurple-card2 border border-royalPurple-border rounded-full flex items-center justify-center mx-auto mb-3">
                 <Activity className="h-8 w-8 text-royalPurple-text1" />
               </div>
               <h4 className="font-semibold text-royalPurple-text1 mb-2">
@@ -141,7 +141,7 @@ export function HeadteacherAdvancedFeatures() {
               </h4>
               <div className="w-full bg-royalPurple-card2 rounded-full h-2 mb-2">
                 <div
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full"
+                  className="bg-royalPurple-accent h-2 rounded-full"
                   style={{ width: '90%' }}
                 ></div>
               </div>
@@ -149,7 +149,7 @@ export function HeadteacherAdvancedFeatures() {
             </div>
           </div>
 
-          <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-royalPurple-border2">
+          <div className="mt-6 p-4 bg-royalPurple-card2 rounded-lg border border-royalPurple-border">
             <h4 className="font-semibold text-royalPurple-accentTx mb-2">
               🎉 Latest Update: Cross-Dashboard Feature Integration
             </h4>

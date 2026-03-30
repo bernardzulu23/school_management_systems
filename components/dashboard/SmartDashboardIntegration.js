@@ -202,10 +202,10 @@ export default function SmartDashboardIntegration({
     if (userRole !== 'student' || !gamificationData.achievements) return null
 
     return (
-      <Card className="p-6 bg-gradient-to-br from-purple-50 to-blue-50">
+      <Card className="p-6 bg-royalPurple-card border border-royalPurple-border">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold flex items-center">
-            <Trophy className="w-5 h-5 text-yellow-500 mr-2" />
+            <Trophy className="w-5 h-5 text-royalPurple-accent mr-2" />
             Your Progress
           </h3>
           <div className="flex items-center space-x-2">
@@ -234,7 +234,7 @@ export default function SmartDashboardIntegration({
           </div>
           <div className="h-2 bg-royalPurple-card2 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-500"
+              className="h-full bg-royalPurple-accent transition-all duration-500"
               style={{
                 width: `${gamificationData.nextLevelPoints === 0 ? 100 : Math.min(100, Math.max(0, (((gamificationData.level?.requirement || 100) - (gamificationData.nextLevelPoints || 0)) / (gamificationData.level?.requirement || 100)) * 100))}%`,
               }}
@@ -270,7 +270,7 @@ export default function SmartDashboardIntegration({
                 <div className="text-sm text-royalPurple-text2">{achievement.level} Level</div>
               </div>
               <div className="text-right">
-                <div className="font-bold text-yellow-600">+{achievement.points}</div>
+                <div className="font-bold text-royalPurple-accentTx">+{achievement.points}</div>
               </div>
             </div>
           ))}

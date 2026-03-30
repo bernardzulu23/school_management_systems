@@ -44,7 +44,7 @@ export default function TeacherAssignments({ teacherData }) {
   const getGradeColor = (grade) => {
     if (grade >= 80) return 'text-royalPurple-successTx'
     if (grade >= 70) return 'text-royalPurple-accentTx'
-    if (grade >= 60) return 'text-yellow-600'
+    if (grade >= 60) return 'text-royalPurple-accentTx'
     return 'text-royalPurple-dangerTx'
   }
 
@@ -52,7 +52,7 @@ export default function TeacherAssignments({ teacherData }) {
     <div className="space-y-6">
       {/* Overview Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-royalPurple-border2">
+        <Card className="bg-royalPurple-card border border-royalPurple-border">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -66,7 +66,7 @@ export default function TeacherAssignments({ teacherData }) {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-royalPurple-border">
+        <Card className="bg-royalPurple-card border border-royalPurple-border">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -80,7 +80,7 @@ export default function TeacherAssignments({ teacherData }) {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-royalPurple-border2">
+        <Card className="bg-royalPurple-card border border-royalPurple-border">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -94,12 +94,12 @@ export default function TeacherAssignments({ teacherData }) {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+        <Card className="bg-royalPurple-card border border-royalPurple-border">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-orange-600 text-sm font-medium">Avg. Performance</p>
-                <p className="text-2xl font-bold text-orange-800">
+                <p className="text-royalPurple-text2 text-sm font-medium">Avg. Performance</p>
+                <p className="text-2xl font-bold text-royalPurple-text1">
                   {Math.round(
                     assignedSubjects.reduce((sum, subject) => sum + subject.averageGrade, 0) /
                       assignedSubjects.length
@@ -107,7 +107,7 @@ export default function TeacherAssignments({ teacherData }) {
                   %
                 </p>
               </div>
-              <TrendingUp className="h-8 w-8 text-orange-600" />
+              <TrendingUp className="h-8 w-8 text-royalPurple-text2" />
             </div>
           </CardContent>
         </Card>
@@ -126,7 +126,7 @@ export default function TeacherAssignments({ teacherData }) {
             {assignedSubjects.map((subject) => (
               <div
                 key={subject.id}
-                className="border border-royalPurple-border rounded-lg p-4 hover:shadow-md transition-all cursor-pointer bg-gradient-to-br from-white to-gray-50"
+                className="border border-royalPurple-border rounded-lg p-4 hover:shadow-md transition-all cursor-pointer bg-royalPurple-card"
                 onClick={() => setSelectedSubject(subject)}
               >
                 <div className="flex items-center justify-between mb-3">
@@ -201,13 +201,13 @@ export default function TeacherAssignments({ teacherData }) {
             {assignedClasses.map((classItem) => (
               <div
                 key={classItem.id}
-                className="border border-royalPurple-border rounded-lg p-4 hover:shadow-md transition-all cursor-pointer bg-gradient-to-br from-white to-gray-50"
+                className="border border-royalPurple-border rounded-lg p-4 hover:shadow-md transition-all cursor-pointer bg-royalPurple-card"
                 onClick={() => setSelectedClass(classItem)}
               >
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-lg font-semibold text-royalPurple-text1">{classItem.name}</h3>
                   {classItem.classTeacher && (
-                    <span className="px-2 py-1 text-xs rounded-full font-medium bg-yellow-100 text-yellow-800">
+                    <span className="px-2 py-1 text-xs rounded-full font-medium bg-royalPurple-accentBg text-royalPurple-accentTx">
                       Class Teacher
                     </span>
                   )}

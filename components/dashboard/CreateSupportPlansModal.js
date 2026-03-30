@@ -251,7 +251,7 @@ export default function CreateSupportPlansModal({ students, onClose }) {
                         <div className="text-sm text-royalPurple-text2">Overall Average</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-lg font-bold text-orange-600">
+                        <div className="text-lg font-bold text-royalPurple-accentTx">
                           {selectedStudentData.subjects.filter((s) => s.score < 40).length}
                         </div>
                         <div className="text-sm text-royalPurple-text2">Failing Subjects</div>

@@ -176,9 +176,9 @@ export default function SmartAnalyticsDashboard({
       case 'critical':
         return 'text-royalPurple-dangerTx bg-royalPurple-danger border-royalPurple-border'
       case 'high':
-        return 'text-orange-600 bg-orange-50 border-orange-200'
+        return 'text-royalPurple-dangerTx bg-royalPurple-danger border-royalPurple-border'
       case 'medium':
-        return 'text-yellow-600 bg-yellow-50 border-yellow-200'
+        return 'text-royalPurple-accentTx bg-royalPurple-accentBg border-royalPurple-border2'
       case 'low':
         return 'text-royalPurple-successTx bg-royalPurple-success border-royalPurple-border'
       default:
@@ -267,15 +267,15 @@ export default function SmartAnalyticsDashboard({
         <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold flex items-center">
-              <AlertTriangle className="w-5 h-5 text-orange-500 mr-2" />
+              <AlertTriangle className="w-5 h-5 text-royalPurple-dangerTx mr-2" />
               Early Warning Alerts ({analyticsData.alerts.length})
             </h3>
             <div className="flex items-center space-x-2">
               <span className="text-sm text-royalPurple-text3">Priority:</span>
               <div className="flex space-x-1">
                 <div className="w-3 h-3 bg-royalPurple-danger rounded-full" title="Critical"></div>
-                <div className="w-3 h-3 bg-orange-500 rounded-full" title="High"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full" title="Medium"></div>
+                <div className="w-3 h-3 bg-royalPurple-danger rounded-full" title="High"></div>
+                <div className="w-3 h-3 bg-royalPurple-accent rounded-full" title="Medium"></div>
                 <div className="w-3 h-3 bg-royalPurple-success rounded-full" title="Low"></div>
               </div>
             </div>
@@ -295,9 +295,9 @@ export default function SmartAnalyticsDashboard({
                     alert.priority === 4
                       ? 'border-royalPurple-border bg-royalPurple-danger'
                       : alert.priority === 3
-                        ? 'border-orange-500 bg-orange-50'
+                        ? 'border-royalPurple-danger bg-royalPurple-danger'
                         : alert.priority === 2
-                          ? 'border-yellow-500 bg-yellow-50'
+                          ? 'border-royalPurple-accent bg-royalPurple-accentBg'
                           : 'border-royalPurple-border bg-royalPurple-success'
                   }`}
                 >

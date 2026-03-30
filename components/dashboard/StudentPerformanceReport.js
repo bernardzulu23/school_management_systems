@@ -28,7 +28,7 @@ export default function StudentPerformanceReport({ student, onClose }) {
 
   const getAttendanceColor = (rate) => {
     if (rate >= 90) return 'text-royalPurple-successTx'
-    if (rate >= 75) return 'text-yellow-600'
+    if (rate >= 75) return 'text-royalPurple-text2'
     return 'text-royalPurple-dangerTx'
   }
 
@@ -114,7 +114,7 @@ export default function StudentPerformanceReport({ student, onClose }) {
 
             <Card>
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-orange-600">
+                <div className="text-2xl font-bold text-royalPurple-text2">
                   {student.subjects.filter((s) => s.score < 40).length}
                 </div>
                 <div className="text-sm text-royalPurple-text2">Failing Subjects</div>
@@ -131,8 +131,8 @@ export default function StudentPerformanceReport({ student, onClose }) {
                     student.risk_level === 'critical'
                       ? 'text-royalPurple-dangerTx'
                       : student.risk_level === 'high'
-                        ? 'text-orange-600'
-                        : 'text-yellow-600'
+                        ? 'text-royalPurple-dangerTx'
+                        : 'text-royalPurple-accentTx'
                   }`}
                 >
                   {student.risk_level.toUpperCase()}
@@ -253,11 +253,11 @@ export default function StudentPerformanceReport({ student, onClose }) {
 
                 {insights.riskFactors.length > 0 && (
                   <div>
-                    <h4 className="font-medium text-orange-700 mb-2">Risk Factors</h4>
+                    <h4 className="font-medium text-royalPurple-text2 mb-2">Risk Factors</h4>
                     <ul className="space-y-1">
                       {insights.riskFactors.map((risk, index) => (
-                        <li key={index} className="text-sm text-orange-600 flex items-start">
-                          <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
+                        <li key={index} className="text-sm text-royalPurple-text2 flex items-start">
+                          <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0 text-royalPurple-dangerTx" />
                           {risk}
                         </li>
                       ))}
@@ -296,10 +296,10 @@ export default function StudentPerformanceReport({ student, onClose }) {
                     </div>
                   </div>
 
-                  <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                  <div className="p-3 bg-royalPurple-card2 border border-royalPurple-border rounded-lg">
                     <div className="flex items-start">
-                      <FileText className="h-4 w-4 text-orange-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-orange-800">
+                      <FileText className="h-4 w-4 text-royalPurple-text2 mr-2 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-royalPurple-text1">
                         Develop individualized academic support plan
                       </span>
                     </div>
@@ -339,11 +339,11 @@ export default function StudentPerformanceReport({ student, onClose }) {
                     </div>
                   </div>
 
-                  <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg text-center">
-                    <div className="text-sm font-medium text-orange-800">
+                  <div className="p-3 bg-royalPurple-card2 border border-royalPurple-border rounded-lg text-center">
+                    <div className="text-sm font-medium text-royalPurple-text1">
                       Short-term (1-2 weeks)
                     </div>
-                    <div className="text-xs text-orange-600 mt-1">
+                    <div className="text-xs text-royalPurple-text2 mt-1">
                       Begin tutoring, monitor progress
                     </div>
                   </div>
@@ -367,7 +367,7 @@ export default function StudentPerformanceReport({ student, onClose }) {
               <Phone className="h-4 w-4 mr-2" />
               Contact Parent/Guardian
             </Button>
-            <Button className="flex-1 bg-orange-600 hover:bg-orange-700">
+            <Button className="flex-1 bg-royalPurple-accent hover:opacity-90 text-royalPurple-deep">
               <FileText className="h-4 w-4 mr-2" />
               Create Support Plan
             </Button>
