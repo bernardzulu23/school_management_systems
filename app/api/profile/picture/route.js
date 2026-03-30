@@ -59,7 +59,7 @@ export async function PUT(request) {
   const absPath = path.join(absDir, filename)
   await writeFile(absPath, buf)
 
-  const url = `/${relDir.replace(/\\\\/g, '/')}/${filename}`
+  const url = `/api/profile/picture/file/${encodeURIComponent(filename)}`
   await prisma.user.update({
     where: { id: user.id },
     data: { profile_picture_url: url },

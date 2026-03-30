@@ -41,8 +41,14 @@ export const POST = withErrorHandler(async function POST(request) {
   })
 
   if (existingDeptHod && existingDeptHod.userId !== teacher.userId) {
-    throw new ApiError('This department already has an HOD assigned', 400)
+    await prisma.headOfDepartment.delete({ where: { id: existingDeptHod.id } })
   }
+
+  await prisma.teacherDepartment.upsert({
+    where: { teacherId_departmentId: { teacherId: teacher.id, departmentId: department.id } },
+    create: { teacherId: teacher.id, departmentId: department.id },
+    update: {},
+  })
 
   const hod = await prisma.headOfDepartment.upsert({
     where: { userId: teacher.userId },

@@ -126,7 +126,11 @@ export default function HodDashboard() {
     'Home Economics': ['Home Economics', 'Fashion and Fabrics', 'Food and Nutrition'],
   }
 
-  const currentDepartment = currentUser?.department || ''
+  const currentDepartment =
+    currentUser?.department ||
+    currentUser?.hodProfile?.departmentRef?.name ||
+    currentUser?.hodProfile?.department ||
+    ''
   const departmentSubjects = useMemo(() => {
     return departments[currentDepartment] || []
   }, [currentDepartment])
@@ -150,9 +154,35 @@ export default function HodDashboard() {
   })
 
   const { data: dashboardData } = useQuery({
-    queryKey: ['teacher-dashboard'], // HOD uses same endpoint as teacher for now
-    queryFn: () => api.getTeacherDashboard().then((res) => res.data),
+    queryKey: ['hod-dashboard'],
+    queryFn: () => api.getHodDashboard().then((res) => res.data),
+    staleTime: 60 * 1000,
+    refetchOnWindowFocus: false,
   })
+
+  useEffect(() => {
+    const data = dashboardData?.data
+    if (!data) return
+
+    setDepartmentData({
+      teachers: Array.isArray(data.teachers) ? data.teachers : [],
+      students: Array.isArray(data.students) ? data.students : [],
+      subjects: Array.isArray(data.subjects) ? data.subjects : [],
+      classes: Array.isArray(data.classes) ? data.classes : [],
+      results: Array.isArray(data.results) ? data.results : [],
+      assessments: Array.isArray(data.assessments) ? data.assessments : [],
+    })
+
+    setDashboardStats((prev) => ({
+      ...prev,
+      totalTeachers: data.stats?.totalTeachers || 0,
+      totalStudents: data.stats?.totalStudents || 0,
+      totalSubjects: data.stats?.totalSubjects || 0,
+      totalClasses: data.stats?.totalClasses || 0,
+      averagePerformance: data.stats?.averagePerformance || 0,
+      pendingAssessments: data.stats?.pendingAssessments || 0,
+    }))
+  }, [dashboardData])
 
   // HOD Administrative Duties Data
   const fileManagementDuties = [

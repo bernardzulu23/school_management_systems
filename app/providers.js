@@ -10,20 +10,6 @@ function AuthSessionSync({ children }) {
   const syncSession = useAuth((s) => s.syncSession)
 
   useEffect(() => {
-    // ✅ Don't start at all if no session cookies exist
-    const hasCookies =
-      document.cookie.includes('session-token') ||
-      document.cookie.includes('refresh-token') ||
-      document.cookie.includes('accessToken') ||
-      document.cookie.includes('auth-token') ||
-      document.cookie.includes('refresh_token') ||
-      document.cookie.includes('access_token')
-
-    if (!hasCookies) {
-      console.log('[Auth] No session cookies found — skipping sync')
-      return
-    }
-
     let failCount = 0
     let interval
 
