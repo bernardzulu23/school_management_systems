@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import { User, AlertCircle } from 'lucide-react'
 
 export default function ProfilePictureDisplay({
@@ -17,6 +16,11 @@ export default function ProfilePictureDisplay({
 }) {
   const [imageError, setImageError] = useState(false)
   const [imageLoading, setImageLoading] = useState(true)
+
+  useEffect(() => {
+    setImageError(false)
+    setImageLoading(true)
+  }, [src])
 
   // Size configurations
   const sizeConfig = {
@@ -97,18 +101,16 @@ export default function ProfilePictureDisplay({
         `}
         onClick={handleClick}
       >
-        <Image
+        <img
           src={src}
           alt={alt}
-          fill
           className={`
-            object-cover
+            absolute inset-0 w-full h-full object-cover
             ${imageLoading ? 'opacity-0' : 'opacity-100'}
             transition-opacity duration-200
           `}
           onLoad={handleImageLoad}
           onError={handleImageError}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
 
         {/* Loading overlay */}
@@ -229,7 +231,7 @@ export function ProfilePictureWithStatus({
   const statusColors = {
     online: 'bg-royalPurple-success',
     offline: 'bg-royalPurple-card2',
-    away: 'bg-yellow-500',
+    away: 'bg-royalPurple-accent',
     busy: 'bg-royalPurple-danger',
   }
 

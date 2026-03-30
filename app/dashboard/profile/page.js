@@ -15,6 +15,16 @@ export default function ProfilePage() {
   const { user, isAuthenticated, updateUser } = useAuth()
   const [loading, setLoading] = useState(false)
   const [me, setMe] = useState(null)
+  const [picturePreviewUrl, setPicturePreviewUrl] = useState('')
+  const [editForm, setEditForm] = useState({
+    name: '',
+    email: '',
+    contact_number: '',
+    employeeId: '',
+    address: '',
+    gender: '',
+    date_of_birth: '',
+  })
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: '',
     newPassword: '',
@@ -42,6 +52,20 @@ export default function ProfilePage() {
       active = false
     }
   }, [])
+
+  useEffect(() => {
+    const u = me || user
+    if (!u) return
+    setEditForm({
+      name: u.name || '',
+      email: u.email || '',
+      contact_number: u.contact_number || '',
+      employeeId: u.employeeId || '',
+      address: u.address || '',
+      gender: u.gender || '',
+      date_of_birth: u.date_of_birth ? new Date(u.date_of_birth).toISOString().slice(0, 10) : '',
+    })
+  }, [me, user])
 
   const details = useMemo(() => {
     const u = me || user
@@ -94,7 +118,8 @@ export default function ProfilePage() {
     return rows
   }, [me, user])
 
-  const currentPicture = (me || user)?.profile_picture_url || user?.profile_picture_url || ''
+  const currentPicture =
+    picturePreviewUrl || (me || user)?.profile_picture_url || user?.profile_picture_url || ''
 
   const uploadPicture = async (file) => {
     if (!file) return
@@ -120,10 +145,48 @@ export default function ProfilePage() {
       if (nextUrl) {
         updateUser({ ...(user || {}), profile_picture_url: nextUrl })
         setMe((prev) => (prev ? { ...prev, profile_picture_url: nextUrl } : prev))
+        setPicturePreviewUrl(`${nextUrl}?t=${Date.now()}`)
       }
       toast.success('Profile picture updated')
     } catch (e) {
       toast.error(e?.message || 'Failed to update profile picture')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const role = String((me || user)?.role || '').toLowerCase()
+  const canEditDetails = role === 'admin' || role === 'headteacher'
+
+  const saveDetails = async () => {
+    if (!canEditDetails) return
+    setLoading(true)
+    try {
+      const res = await fetch('/api/profile/details', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: editForm.name,
+          email: editForm.email,
+          contact_number: editForm.contact_number,
+          employeeId: editForm.employeeId,
+          address: editForm.address,
+          gender: editForm.gender,
+          date_of_birth: editForm.date_of_birth || null,
+        }),
+        credentials: 'include',
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data?.error || 'Update failed')
+
+      const updated = data?.user
+      if (updated) {
+        updateUser({ ...(user || {}), ...updated })
+        setMe((prev) => (prev ? { ...prev, ...updated } : prev))
+      }
+      toast.success('Profile updated')
+    } catch (e) {
+      toast.error(e?.message || 'Failed to update profile')
     } finally {
       setLoading(false)
     }
@@ -239,6 +302,94 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         </div>
+
+        {canEditDetails && (
+          <Card className="bg-royalPurple-card border border-royalPurple-border rounded-2xl overflow-hidden">
+            <CardHeader className="bg-royalPurple-card2 border-b border-royalPurple-border">
+              <CardTitle className="text-royalPurple-text1">Edit Profile</CardTitle>
+            </CardHeader>
+            <CardContent className="bg-royalPurple-card p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-royalPurple-text2 mb-1">Name</label>
+                  <input
+                    className="input"
+                    value={editForm.name}
+                    disabled={loading}
+                    onChange={(e) => setEditForm((p) => ({ ...p, name: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-royalPurple-text2 mb-1">Email</label>
+                  <input
+                    className="input"
+                    value={editForm.email}
+                    disabled={loading}
+                    onChange={(e) => setEditForm((p) => ({ ...p, email: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-royalPurple-text2 mb-1">
+                    Contact Number
+                  </label>
+                  <input
+                    className="input"
+                    value={editForm.contact_number}
+                    disabled={loading}
+                    onChange={(e) => setEditForm((p) => ({ ...p, contact_number: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-royalPurple-text2 mb-1">Employee ID</label>
+                  <input
+                    className="input"
+                    value={editForm.employeeId}
+                    disabled={loading}
+                    onChange={(e) => setEditForm((p) => ({ ...p, employeeId: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-royalPurple-text2 mb-1">Gender</label>
+                  <input
+                    className="input"
+                    value={editForm.gender}
+                    disabled={loading}
+                    onChange={(e) => setEditForm((p) => ({ ...p, gender: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-royalPurple-text2 mb-1">Date of Birth</label>
+                  <input
+                    type="date"
+                    className="input"
+                    value={editForm.date_of_birth}
+                    disabled={loading}
+                    onChange={(e) => setEditForm((p) => ({ ...p, date_of_birth: e.target.value }))}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm text-royalPurple-text2 mb-1">Address</label>
+                  <input
+                    className="input"
+                    value={editForm.address}
+                    disabled={loading}
+                    onChange={(e) => setEditForm((p) => ({ ...p, address: e.target.value }))}
+                  />
+                </div>
+              </div>
+
+              <div className="mt-4 flex justify-end">
+                <Button
+                  onClick={saveDetails}
+                  disabled={loading}
+                  className="bg-royalPurple-accent text-royalPurple-deep font-semibold hover:opacity-90 transition-opacity"
+                >
+                  Save Changes
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <Card className="bg-royalPurple-card border border-royalPurple-border rounded-2xl overflow-hidden">
           <CardHeader className="bg-royalPurple-card2 border-b border-royalPurple-border">

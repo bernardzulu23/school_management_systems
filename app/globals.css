@@ -56,6 +56,22 @@
   --rp-pill: #7c3aed;
 }
 
+.light {
+  --rp-page: #f7f5ff;
+  --rp-deep: #f2efff;
+  --rp-card: #ffffff;
+  --rp-card2: #f6f1ff;
+  --rp-border: #d8d0f2;
+  --rp-border2: #6d28d9;
+  --rp-text1: #1e1033;
+  --rp-text2: #4b2a7a;
+  --rp-text3: #6d28d9;
+  --rp-accent: #f59e0b;
+  --rp-accentbg: #fff7e6;
+  --rp-accenttx: #8a4b00;
+  --rp-pill: #6d28d9;
+}
+
 .dark {
   --page-bg: #1c1c1a;
   --surface: #2c2c2a;
