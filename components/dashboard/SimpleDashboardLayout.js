@@ -2,7 +2,9 @@ import React from 'react'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useAuth } from '@/lib/auth'
 import { Button } from '@/components/ui/Button'
-import { LogOut } from 'lucide-react'
+import { LogOut, User as UserIcon } from 'lucide-react'
+import Link from 'next/link'
+import ProfilePictureDisplay from '@/components/ui/ProfilePictureDisplay'
 
 export function DashboardLayout({ children, title }) {
   const { user, logout } = useAuth()
@@ -26,6 +28,24 @@ export function DashboardLayout({ children, title }) {
               {title && String(title).trim() !== String(roleLabel).trim() && (
                 <span className="text-sm text-royalPurple-text3">| {title}</span>
               )}
+              <Link
+                href="/dashboard/profile"
+                className="inline-flex items-center gap-2 h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors"
+                aria-label="Open profile"
+              >
+                {user?.profile_picture_url || user?.name ? (
+                  <ProfilePictureDisplay
+                    src={user?.profile_picture_url}
+                    alt={user?.name || 'Profile picture'}
+                    name={user?.name || ''}
+                    role={String(user?.role || 'student').toLowerCase()}
+                    size="sm"
+                  />
+                ) : (
+                  <UserIcon className="h-5 w-5" />
+                )}
+                <span className="hidden sm:inline font-medium">Profile</span>
+              </Link>
               <ThemeToggle />
               <Button
                 variant="ghost"
