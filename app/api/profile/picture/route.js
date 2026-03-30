@@ -52,7 +52,7 @@ export async function PUT(request) {
 
   const buf = Buffer.from(await file.arrayBuffer())
   const relDir = path.join('uploads', 'profile')
-  const absDir = path.join(process.cwd(), 'public', relDir)
+  const absDir = path.join(process.cwd(), relDir)
   await mkdir(absDir, { recursive: true })
 
   const filename = `${user.id}-${Date.now()}.${ext}`

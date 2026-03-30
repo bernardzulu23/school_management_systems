@@ -15,6 +15,8 @@ export async function GET(request) {
     const teacher = await prisma.teacher.findFirst({
       where: { userId: auth.user.id, schoolId },
       include: {
+        classes: true,
+        subjects: true,
         teachingAssignments: {
           where: { schoolId },
           include: {
@@ -46,58 +48,141 @@ export async function GET(request) {
     }
 
     const assignments = teacher.teachingAssignments || []
-    const classIds = Array.from(new Set(assignments.map((a) => a.classId)))
-    const subjectIds = Array.from(new Set(assignments.map((a) => a.subjectId)))
-    const classNames = Array.from(new Set(assignments.map((a) => a.class?.name).filter(Boolean)))
-    const subjectNames = Array.from(
-      new Set(assignments.map((a) => a.subject?.name).filter(Boolean))
-    )
 
-    const classToSubjectIds = new Map()
-    for (const a of assignments) {
-      if (!classToSubjectIds.has(a.classId)) classToSubjectIds.set(a.classId, new Set())
-      classToSubjectIds.get(a.classId).add(a.subjectId)
-    }
-
-    const classStudentCounts = new Map()
-    await prisma.$transaction(async (tx) => {
-      for (const classId of classIds) {
-        const subjectIdSet = classToSubjectIds.get(classId) || new Set()
-        const subjectIdList = Array.from(subjectIdSet)
-        if (subjectIdList.length === 0) {
-          classStudentCounts.set(classId, 0)
-          continue
-        }
-
-        const pupils = await tx.pupilSubjectEnrollment.findMany({
-          where: {
-            schoolId,
-            classId,
-            subjectId: { in: subjectIdList },
-          },
-          distinct: ['pupilId'],
-          select: { pupilId: true },
-        })
-        classStudentCounts.set(classId, pupils.length)
-      }
+    const classById = new Map()
+    assignments.forEach((a) => {
+      if (a?.class?.id) classById.set(String(a.class.id), a.class)
+    })
+    ;(teacher.classes || []).forEach((c) => {
+      if (c?.id) classById.set(String(c.id), c)
     })
 
-    const totalStudents =
-      assignments.length > 0
-        ? (
-            await prisma.pupilSubjectEnrollment.findMany({
-              where: {
-                schoolId,
-                OR: assignments.map((a) => ({
-                  classId: a.classId,
-                  subjectId: a.subjectId,
-                })),
-              },
-              distinct: ['pupilId'],
-              select: { pupilId: true },
-            })
-          ).length
-        : 0
+    const subjectById = new Map()
+    assignments.forEach((a) => {
+      if (a?.subject?.id) subjectById.set(String(a.subject.id), a.subject)
+    })
+    ;(teacher.subjects || []).forEach((s) => {
+      if (s?.id) subjectById.set(String(s.id), s)
+    })
+
+    const assignedSubjectNames = Array.isArray(teacher.assignedSubjects)
+      ? teacher.assignedSubjects.map(String).filter(Boolean)
+      : []
+
+    if (assignedSubjectNames.length > 0) {
+      const existingSubjects = await prisma.subject.findMany({
+        where: { schoolId, name: { in: assignedSubjectNames } },
+        select: { id: true, name: true, code: true, topics: true },
+      })
+      existingSubjects.forEach((s) => {
+        if (s?.id) subjectById.set(String(s.id), s)
+      })
+    }
+
+    const classIds = Array.from(classById.keys())
+    const subjectIds = Array.from(subjectById.keys())
+    const myClassRecords = Array.from(classById.values())
+    const mySubjectRecords = Array.from(subjectById.values())
+
+    const classNames = myClassRecords.map((c) => String(c.name)).filter(Boolean)
+    const subjectNames = mySubjectRecords.map((s) => String(s.name)).filter(Boolean)
+
+    const classStudentCounts = new Map()
+    if (assignments.length > 0) {
+      const classToSubjectIds = new Map()
+      for (const a of assignments) {
+        if (!classToSubjectIds.has(a.classId)) classToSubjectIds.set(a.classId, new Set())
+        classToSubjectIds.get(a.classId).add(a.subjectId)
+      }
+
+      await prisma.$transaction(async (tx) => {
+        for (const classId of classIds) {
+          const subjectIdSet = classToSubjectIds.get(classId) || new Set()
+          const subjectIdList = Array.from(subjectIdSet)
+          if (subjectIdList.length === 0) {
+            classStudentCounts.set(classId, 0)
+            continue
+          }
+
+          const pupils = await tx.pupilSubjectEnrollment.findMany({
+            where: {
+              schoolId,
+              classId,
+              subjectId: { in: subjectIdList },
+            },
+            distinct: ['pupilId'],
+            select: { pupilId: true },
+          })
+          classStudentCounts.set(classId, pupils.length)
+        }
+      })
+    } else if (classNames.length > 0) {
+      const counts = await prisma.student.groupBy({
+        by: ['class'],
+        where: { schoolId, class: { in: classNames } },
+        _count: { _all: true },
+      })
+      const classIdByName = new Map(myClassRecords.map((c) => [String(c.name), String(c.id)]))
+      counts.forEach((c) => {
+        const id = classIdByName.get(String(c.class))
+        if (id) classStudentCounts.set(id, c._count._all)
+      })
+    }
+
+    const studentIdSet = new Set()
+
+    if (assignments.length > 0) {
+      const enrolled = await prisma.pupilSubjectEnrollment.findMany({
+        where: {
+          schoolId,
+          OR: assignments.map((a) => ({
+            classId: a.classId,
+            subjectId: a.subjectId,
+          })),
+        },
+        distinct: ['pupilId'],
+        select: { pupilId: true },
+      })
+      enrolled.forEach((e) => {
+        if (e?.pupilId) studentIdSet.add(String(e.pupilId))
+      })
+    }
+
+    if (classNames.length > 0) {
+      const classStudents = await prisma.student.findMany({
+        where: { schoolId, class: { in: classNames } },
+        select: { id: true },
+        take: 2000,
+      })
+      classStudents.forEach((s) => {
+        if (s?.id) studentIdSet.add(String(s.id))
+      })
+    }
+
+    if (studentIdSet.size === 0 && subjectIds.length > 0) {
+      const enrolled = await prisma.pupilSubjectEnrollment.findMany({
+        where: { schoolId, subjectId: { in: subjectIds } },
+        distinct: ['pupilId'],
+        select: { pupilId: true },
+        take: 5000,
+      })
+      enrolled.forEach((e) => {
+        if (e?.pupilId) studentIdSet.add(String(e.pupilId))
+      })
+    }
+
+    if (studentIdSet.size === 0 && subjectNames.length > 0) {
+      const selected = await prisma.student.findMany({
+        where: { schoolId, selected_subjects: { hasSome: subjectNames } },
+        select: { id: true },
+        take: 2000,
+      })
+      selected.forEach((s) => {
+        if (s?.id) studentIdSet.add(String(s.id))
+      })
+    }
+
+    const totalStudents = studentIdSet.size
 
     const totalAssessments =
       subjectNames.length > 0 && classNames.length > 0
@@ -143,56 +228,68 @@ export async function GET(request) {
           })
         : []
 
-    const myClasses = Array.from(new Map(assignments.map((a) => [a.classId, a.class])).values())
-      .filter(Boolean)
-      .map((c) => ({
-        id: c.id,
-        name: c.name,
-        year_group: c.year_group,
-        section: c.section,
-        capacity: 60,
-        student_count: classStudentCounts.get(c.id) || 0,
-        next_class: null,
-      }))
+    const myClasses = myClassRecords.filter(Boolean).map((c) => ({
+      id: c.id,
+      name: c.name,
+      year_group: c.year_group,
+      section: c.section,
+      capacity: 60,
+      student_count: classStudentCounts.get(c.id) || 0,
+      next_class: null,
+    }))
 
     const subjectMeta = new Map(SCHOOL_SUBJECTS.map((s) => [s.name, s]))
 
-    const mySubjects = Array.from(
-      new Map(assignments.map((a) => [a.subjectId, a.subject])).values()
-    )
-      .filter(Boolean)
-      .map((s) => {
-        const meta = subjectMeta.get(s.name)
-        const classCount = new Set(
-          assignments.filter((a) => a.subjectId === s.id).map((a) => a.classId)
-        ).size
-        return {
-          id: s.id,
-          name: s.name,
-          code: s.code || meta?.code || null,
-          category: meta?.category || null,
-          class_count: classCount,
-        }
-      })
+    const mySubjects = mySubjectRecords.filter(Boolean).map((s) => {
+      const meta = subjectMeta.get(s.name)
+      const classCount =
+        assignments.length > 0
+          ? new Set(assignments.filter((a) => a.subjectId === s.id).map((a) => a.classId)).size
+          : 0
+      return {
+        id: s.id,
+        name: s.name,
+        code: s.code || meta?.code || null,
+        category: meta?.category || null,
+        class_count: classCount,
+      }
+    })
 
     const subjectStudentCounts = new Map()
     await prisma.$transaction(async (tx) => {
       for (const s of mySubjects) {
-        const relevantPairs = assignments
-          .filter((a) => a.subjectId === s.id)
-          .map((a) => ({ classId: a.classId, subjectId: a.subjectId }))
+        const relevantPairs =
+          assignments.length > 0
+            ? assignments
+                .filter((a) => a.subjectId === s.id)
+                .map((a) => ({ classId: a.classId, subjectId: a.subjectId }))
+            : []
 
-        if (relevantPairs.length === 0) {
-          subjectStudentCounts.set(s.id, 0)
+        if (relevantPairs.length > 0) {
+          const pupils = await tx.pupilSubjectEnrollment.findMany({
+            where: { schoolId, OR: relevantPairs },
+            distinct: ['pupilId'],
+            select: { pupilId: true },
+          })
+          subjectStudentCounts.set(s.id, pupils.length)
           continue
         }
 
         const pupils = await tx.pupilSubjectEnrollment.findMany({
-          where: { schoolId, OR: relevantPairs },
+          where: { schoolId, subjectId: s.id },
           distinct: ['pupilId'],
           select: { pupilId: true },
+          take: 5000,
         })
-        subjectStudentCounts.set(s.id, pupils.length)
+        if (pupils.length > 0) {
+          subjectStudentCounts.set(s.id, pupils.length)
+          continue
+        }
+
+        const selected = await tx.student.count({
+          where: { schoolId, selected_subjects: { has: s.name } },
+        })
+        subjectStudentCounts.set(s.id, selected)
       }
     })
 

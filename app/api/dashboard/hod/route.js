@@ -110,12 +110,34 @@ export const GET = withErrorHandler(async function GET(request) {
   const classes = Array.from(classById.values())
   const subjects = Array.from(subjectById.values())
 
-  const classNames = classes.map((c) => String(c.name)).filter(Boolean)
+  const classNamesFromClasses = classes.map((c) => String(c.name)).filter(Boolean)
 
-  const students =
-    classNames.length > 0
+  const subjectIdSet = new Set(subjects.map((s) => String(s.id)).filter(Boolean))
+  const subjectNameSet = new Set(subjects.map((s) => String(s.name)).filter(Boolean))
+  const assignedSubjectNames = Array.from(
+    new Set(
+      teachers
+        .flatMap((t) => (Array.isArray(t.assignedSubjects) ? t.assignedSubjects : []))
+        .filter(Boolean)
+        .map(String)
+    )
+  )
+
+  if (assignedSubjectNames.length > 0) {
+    const existingSubjects = await prisma.subject.findMany({
+      where: { schoolId, name: { in: assignedSubjectNames } },
+      select: { id: true, name: true },
+    })
+    existingSubjects.forEach((s) => {
+      subjectIdSet.add(String(s.id))
+      subjectNameSet.add(String(s.name))
+    })
+  }
+
+  const studentsByClass =
+    classNamesFromClasses.length > 0
       ? await prisma.student.findMany({
-          where: { schoolId, class: { in: classNames } },
+          where: { schoolId, class: { in: classNamesFromClasses } },
           include: {
             user: { select: { id: true, name: true, email: true, profile_picture_url: true } },
           },
@@ -124,10 +146,67 @@ export const GET = withErrorHandler(async function GET(request) {
         })
       : []
 
+  const studentsByEnrollment =
+    subjectIdSet.size > 0
+      ? await (async () => {
+          const enrollments = await prisma.pupilSubjectEnrollment.findMany({
+            where: { schoolId, subjectId: { in: Array.from(subjectIdSet) } },
+            distinct: ['pupilId'],
+            select: { pupilId: true },
+            take: 500,
+          })
+          const pupilIds = enrollments.map((e) => e.pupilId).filter(Boolean)
+          if (pupilIds.length === 0) return []
+          return prisma.student.findMany({
+            where: { schoolId, id: { in: pupilIds } },
+            include: {
+              user: { select: { id: true, name: true, email: true, profile_picture_url: true } },
+            },
+            orderBy: { updatedAt: 'desc' },
+            take: 200,
+          })
+        })()
+      : []
+
+  const studentsBySelectedSubjects =
+    studentsByClass.length === 0 && studentsByEnrollment.length === 0 && subjectNameSet.size > 0
+      ? await prisma.student.findMany({
+          where: { schoolId, selected_subjects: { hasSome: Array.from(subjectNameSet) } },
+          include: {
+            user: { select: { id: true, name: true, email: true, profile_picture_url: true } },
+          },
+          orderBy: { updatedAt: 'desc' },
+          take: 200,
+        })
+      : []
+
+  const studentById = new Map()
+  ;[...studentsByClass, ...studentsByEnrollment, ...studentsBySelectedSubjects].forEach((s) => {
+    if (s?.id) studentById.set(String(s.id), s)
+  })
+  const students = Array.from(studentById.values())
+
+  const classNamesFromStudents = Array.from(
+    new Set(students.map((s) => String(s.class)).filter(Boolean))
+  )
+  const effectiveClassNames =
+    classNamesFromClasses.length > 0 ? classNamesFromClasses : classNamesFromStudents
+
+  if (classes.length === 0 && classNamesFromStudents.length > 0) {
+    const classRecords = await prisma.class.findMany({
+      where: { schoolId, name: { in: classNamesFromStudents } },
+      orderBy: { name: 'asc' },
+    })
+    classRecords.forEach((c) => {
+      if (c?.id) classById.set(String(c.id), c)
+    })
+  }
+  const mergedClasses = Array.from(classById.values())
+
   const results =
-    classNames.length > 0
+    effectiveClassNames.length > 0
       ? await prisma.result.findMany({
-          where: { schoolId, student: { class: { in: classNames } } },
+          where: { schoolId, student: { class: { in: effectiveClassNames } } },
           include: { student: true, subject: true },
           orderBy: { createdAt: 'desc' },
           take: 50,
@@ -135,9 +214,9 @@ export const GET = withErrorHandler(async function GET(request) {
       : []
 
   const assessments =
-    classNames.length > 0
+    effectiveClassNames.length > 0
       ? await prisma.assessment.findMany({
-          where: { schoolId, class: { in: classNames } },
+          where: { schoolId, class: { in: effectiveClassNames } },
           orderBy: { date: 'desc' },
           take: 50,
         })
@@ -153,7 +232,7 @@ export const GET = withErrorHandler(async function GET(request) {
       stats: {
         totalTeachers: teachers.length,
         totalStudents: students.length,
-        totalClasses: classes.length,
+        totalClasses: mergedClasses.length,
         totalSubjects: subjects.length,
         averagePerformance:
           results.length > 0
@@ -167,7 +246,7 @@ export const GET = withErrorHandler(async function GET(request) {
       },
       teachers,
       students,
-      classes,
+      classes: mergedClasses,
       subjects,
       results,
       assessments,

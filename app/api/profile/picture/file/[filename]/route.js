@@ -21,10 +21,20 @@ export async function GET(_request, { params }) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
 
-  const absPath = path.join(process.cwd(), 'public', 'uploads', 'profile', filename)
+  const candidatePaths = [
+    path.join(process.cwd(), 'uploads', 'profile', filename),
+    path.join(process.cwd(), 'public', 'uploads', 'profile', filename),
+  ]
 
   try {
-    const buf = await readFile(absPath)
+    const buf = await (async () => {
+      for (const p of candidatePaths) {
+        try {
+          return await readFile(p)
+        } catch {}
+      }
+      throw new Error('not found')
+    })()
     return new NextResponse(buf, {
       status: 200,
       headers: {
