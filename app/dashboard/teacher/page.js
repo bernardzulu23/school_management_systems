@@ -62,7 +62,7 @@ import { SCHOOL_SUBJECTS, getSubjectsByIds } from '@/data/subjects'
 
 export default function TeacherDashboard() {
   // Get current user data from auth context
-  const { user: currentUser, isAuthenticated, logout } = useAuth()
+  const { user: currentUser, isAuthenticated, logout, syncSession } = useAuth()
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -71,6 +71,10 @@ export default function TeacherDashboard() {
       return
     }
   }, [isAuthenticated])
+
+  useEffect(() => {
+    syncSession?.({ force: true })
+  }, [syncSession])
 
   // Enhanced state management
   const [teachingSubjects, setTeachingSubjects] = useState([])

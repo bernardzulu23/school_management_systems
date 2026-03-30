@@ -107,7 +107,7 @@ export default function HodDashboard() {
       'French',
     ],
     'Social Sciences': ['Geography', 'Social Studies', 'Civic', 'History'],
-    'Art and Design': [
+    'Arts and Design': [
       'Physical Education',
       'Music',
       'Expressive Art',
@@ -131,9 +131,11 @@ export default function HodDashboard() {
     currentUser?.hodProfile?.departmentRef?.name ||
     currentUser?.hodProfile?.department ||
     ''
+  const normalizedDepartment =
+    currentDepartment === 'Art and Design' ? 'Arts and Design' : currentDepartment
   const departmentSubjects = useMemo(() => {
-    return departments[currentDepartment] || []
-  }, [currentDepartment])
+    return departments[normalizedDepartment] || departments[currentDepartment] || []
+  }, [normalizedDepartment, currentDepartment])
 
   // Data initialization - Load from API
   useEffect(() => {

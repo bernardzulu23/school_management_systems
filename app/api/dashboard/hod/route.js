@@ -35,22 +35,44 @@ export const GET = withErrorHandler(async function GET(request) {
     throw new ApiError('No department assigned', 400)
   }
 
+  const departmentNameAliases = Array.from(
+    new Set(
+      [departmentName].filter(Boolean).flatMap((n) => {
+        const name = String(n)
+        if (name === 'Arts and Design') return [name, 'Art and Design']
+        if (name === 'Art and Design') return [name, 'Arts and Design']
+        return [name]
+      })
+    )
+  )
+
+  const departmentIds = new Set([departmentId].filter(Boolean).map(String))
+  if (departmentNameAliases.length > 0) {
+    const byName = await prisma.department.findMany({
+      where: { schoolId, name: { in: departmentNameAliases } },
+      select: { id: true },
+    })
+    byName.forEach((d) => departmentIds.add(String(d.id)))
+  }
+
   const teachers = await prisma.teacher.findMany({
     where: {
       schoolId,
-      ...(departmentId || departmentName
+      ...(departmentIds.size > 0 || departmentNameAliases.length > 0
         ? {
             OR: [
-              ...(departmentId
+              ...(departmentIds.size > 0
                 ? [
                     {
                       departments: {
-                        some: { departmentId },
+                        some: { departmentId: { in: Array.from(departmentIds) } },
                       },
                     },
                   ]
                 : []),
-              ...(departmentName ? [{ department: departmentName }] : []),
+              ...(departmentNameAliases.length > 0
+                ? [{ department: { in: departmentNameAliases } }]
+                : []),
             ],
           }
         : {}),
