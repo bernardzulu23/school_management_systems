@@ -317,6 +317,14 @@ export default function TeacherDashboard() {
                 </p>
               </div>
               <div className="flex items-center space-x-4">
+                {currentUser?.hodProfile && (
+                  <Link
+                    href="/dashboard/hod"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-royalPurple-card/70 dark:bg-royalPurple-muted/70 border border-royalPurple-border dark:border-royalPurple-border/40 text-royalPurple-text2 hover:text-royalPurple-text1 hover:bg-royalPurple-card2 transition-colors"
+                  >
+                    HOD Dashboard
+                  </Link>
+                )}
                 <button
                   type="button"
                   onClick={logout}

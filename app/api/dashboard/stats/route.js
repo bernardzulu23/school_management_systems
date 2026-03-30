@@ -14,6 +14,7 @@ export async function GET(request) {
 
     // Parallel fetch of counts - scoped by schoolId for multi-tenant isolation
     const [
+      totalUsers,
       totalStudents,
       totalTeachers,
       totalHods,
@@ -23,11 +24,10 @@ export async function GET(request) {
       totalSubjects,
       totalAssessments,
     ] = await Promise.all([
+      prisma.user.count({ where: { schoolId } }),
       prisma.user.count({ where: { role: { in: ['student', 'STUDENT'] }, schoolId } }),
       prisma.user.count({ where: { role: { in: ['teacher', 'TEACHER'] }, schoolId } }),
-      prisma.user.count({
-        where: { role: { in: ['hod', 'HOD', 'head of department'] }, schoolId },
-      }),
+      prisma.headOfDepartment.count({ where: { schoolId } }),
       prisma.user.count({
         where: { role: { in: ['headteacher', 'HEADTEACHER', 'admin', 'administrator'] }, schoolId },
       }),
@@ -63,7 +63,7 @@ export async function GET(request) {
       success: true,
       data: {
         ...stats,
-        totalUsers: totalStudents + totalTeachers + totalHods + totalHeadteachers,
+        totalUsers,
         averageAttendance: attendanceRate,
         averageGrade,
         recentActivities: [],
