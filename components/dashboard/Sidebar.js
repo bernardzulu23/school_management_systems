@@ -27,6 +27,7 @@ import {
   Upload,
   Shield,
   MessageSquare,
+  User as UserIcon,
 } from 'lucide-react'
 
 export function Sidebar({ className, mobileOpen, setMobileOpen }) {
@@ -41,6 +42,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         name: 'Dashboard',
         href: `/dashboard/${user?.role}`,
         icon: Home,
+      },
+      {
+        name: 'Profile',
+        href: '/dashboard/profile',
+        icon: UserIcon,
       },
     ]
 
