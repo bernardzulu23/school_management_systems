@@ -676,27 +676,59 @@ export default function HodDashboard() {
                         </span>
                       </div>
                       <div className="space-y-3">
-                        {departmentData.teachers.slice(0, 4).map((teacher, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
-                          >
-                            <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
-                                {teacher.name?.charAt(0)}
-                              </div>
-                              <div>
-                                <p className="text-royalPurple-text1 font-semibold text-sm">
-                                  {teacher.name}
-                                </p>
-                                <p className="text-royalPurple-text2 text-xs">
-                                  {teacher.subjects?.length || 0} subjects •{' '}
-                                  {teacher.assignedClasses?.length || 0} classes
-                                </p>
+                        {departmentData.teachers.slice(0, 4).map((teacher, index) => {
+                          const teacherName = teacher?.user?.name || teacher?.name || 'Unknown'
+                          const teacherSubjects = Array.isArray(teacher?.assignedSubjects)
+                            ? teacher.assignedSubjects
+                            : Array.isArray(teacher?.subjects)
+                              ? teacher.subjects
+                              : Array.isArray(teacher?.teachingAssignments)
+                                ? Array.from(
+                                    new Set(
+                                      teacher.teachingAssignments
+                                        .map((a) => a?.subject?.name || a?.subjectId)
+                                        .filter(Boolean)
+                                        .map(String)
+                                    )
+                                  )
+                                : []
+                          const teacherClasses = Array.isArray(teacher?.classes)
+                            ? teacher.classes
+                            : Array.isArray(teacher?.assignedClasses)
+                              ? teacher.assignedClasses
+                              : Array.isArray(teacher?.teachingAssignments)
+                                ? Array.from(
+                                    new Set(
+                                      teacher.teachingAssignments
+                                        .map((a) => a?.class?.name || a?.classId)
+                                        .filter(Boolean)
+                                        .map(String)
+                                    )
+                                  )
+                                : []
+
+                          return (
+                            <div
+                              key={index}
+                              className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
+                            >
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
+                                  {teacherName.charAt(0)}
+                                </div>
+                                <div>
+                                  <p className="text-royalPurple-text1 font-semibold text-sm">
+                                    {teacherName}
+                                  </p>
+                                  <p className="text-royalPurple-text2 text-xs">
+                                    {teacherSubjects.length} subjects • {teacherClasses.length}{' '}
+                                    classes
+                                  </p>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          )
+                        })}
                         {departmentData.teachers.length > 4 && (
                           <p className="text-royalPurple-text2 text-sm text-center">
                             +{departmentData.teachers.length - 4} more teachers
@@ -720,39 +752,51 @@ export default function HodDashboard() {
                         </span>
                       </div>
                       <div className="space-y-3">
-                        {departmentData.students.slice(0, 4).map((student, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
-                          >
-                            <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-blue-600 flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
-                                {student.name?.charAt(0)}
-                              </div>
-                              <div>
-                                <p className="text-royalPurple-text1 font-semibold text-sm">
-                                  {student.name}
-                                </p>
-                                <p className="text-royalPurple-text2 text-xs">
-                                  {student.yearGroup || 'No class'}
-                                </p>
-                                <div className="flex flex-wrap gap-1 mt-1">
-                                  {student.subjects
-                                    ?.filter((subject) => departmentSubjects.includes(subject))
-                                    .slice(0, 2)
-                                    .map((subject, idx) => (
-                                      <span
-                                        key={idx}
-                                        className="px-2 py-1 bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50 rounded text-xs"
-                                      >
-                                        {subject}
-                                      </span>
-                                    ))}
+                        {departmentData.students.slice(0, 4).map((student, index) => {
+                          const studentName = student?.user?.name || student?.name || 'Unknown'
+                          const studentClass =
+                            student?.class ||
+                            student?.yearGroup ||
+                            student?.year_group ||
+                            'No class'
+                          const studentSubjects = Array.isArray(student?.selected_subjects)
+                            ? student.selected_subjects
+                            : Array.isArray(student?.subjects)
+                              ? student.subjects
+                              : []
+
+                          return (
+                            <div
+                              key={index}
+                              className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
+                            >
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-blue-600 flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
+                                  {studentName.charAt(0)}
+                                </div>
+                                <div>
+                                  <p className="text-royalPurple-text1 font-semibold text-sm">
+                                    {studentName}
+                                  </p>
+                                  <p className="text-royalPurple-text2 text-xs">{studentClass}</p>
+                                  <div className="flex flex-wrap gap-1 mt-1">
+                                    {studentSubjects
+                                      .filter((subject) => departmentSubjects.includes(subject))
+                                      .slice(0, 2)
+                                      .map((subject, idx) => (
+                                        <span
+                                          key={idx}
+                                          className="px-2 py-1 bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50 rounded text-xs"
+                                        >
+                                          {subject}
+                                        </span>
+                                      ))}
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          )
+                        })}
                         {departmentData.students.length > 4 && (
                           <p className="text-royalPurple-text2 text-sm text-center">
                             +{departmentData.students.length - 4} more students
@@ -776,32 +820,47 @@ export default function HodDashboard() {
                         </span>
                       </div>
                       <div className="space-y-3">
-                        {departmentData.classes.slice(0, 4).map((classItem, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
-                          >
-                            <div className="flex items-center space-x-3">
-                              <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-lg p-2">
-                                <Group className="h-4 w-4 text-royalPurple-text1" />
+                        {departmentData.classes.slice(0, 4).map((classItem, index) => {
+                          const className = classItem?.name ? String(classItem.name) : ''
+                          const studentsInClass = className
+                            ? departmentData.students.filter(
+                                (s) => String(s?.class || '') === className
+                              ).length
+                            : 0
+                          const subjectsInClass = Array.isArray(classItem?.subjects)
+                            ? classItem.subjects
+                            : []
+
+                          return (
+                            <div
+                              key={index}
+                              className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
+                            >
+                              <div className="flex items-center space-x-3">
+                                <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-lg p-2">
+                                  <Group className="h-4 w-4 text-royalPurple-text1" />
+                                </div>
+                                <div>
+                                  <p className="text-royalPurple-text1 font-semibold text-sm">
+                                    {classItem.name}
+                                  </p>
+                                  <p className="text-royalPurple-text2 text-xs">
+                                    {typeof classItem.students === 'number'
+                                      ? classItem.students
+                                      : studentsInClass}{' '}
+                                    students
+                                  </p>
+                                </div>
                               </div>
-                              <div>
-                                <p className="text-royalPurple-text1 font-semibold text-sm">
-                                  {classItem.name}
+                              <div className="text-right">
+                                <p className="text-royalPurple-pillTx text-sm font-semibold">
+                                  {subjectsInClass.length}
                                 </p>
-                                <p className="text-royalPurple-text2 text-xs">
-                                  {classItem.students} students
-                                </p>
+                                <p className="text-royalPurple-text3 text-xs">subjects</p>
                               </div>
                             </div>
-                            <div className="text-right">
-                              <p className="text-royalPurple-pillTx text-sm font-semibold">
-                                {classItem.subjects?.length || 0}
-                              </p>
-                              <p className="text-royalPurple-text3 text-xs">subjects</p>
-                            </div>
-                          </div>
-                        ))}
+                          )
+                        })}
                         {departmentData.classes.length > 4 && (
                           <p className="text-royalPurple-text2 text-sm text-center">
                             +{departmentData.classes.length - 4} more classes
@@ -1327,30 +1386,63 @@ export default function HodDashboard() {
                     </h3>
                     <div className="space-y-3">
                       {departmentData.results.length > 0 ? (
-                        departmentData.results.slice(0, 4).map((result, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
-                          >
-                            <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-blue-600 flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
-                                {result.grade}
-                              </div>
-                              <div>
-                                <p className="text-royalPurple-text1 font-semibold text-sm">
-                                  {result.student}
-                                </p>
-                                <p className="text-royalPurple-text2 text-xs">
-                                  {result.subject} • {result.assessment}
-                                </p>
-                                <p className="text-royalPurple-text3 text-xs">
-                                  {result.marks}/{result.totalMarks} (
-                                  {Math.round((result.marks / result.totalMarks) * 100)}%)
-                                </p>
+                        departmentData.results.slice(0, 4).map((result, index) => {
+                          const studentName =
+                            result?.student?.name || result?.studentName || result?.student || 'N/A'
+                          const subjectName =
+                            result?.subject?.name || result?.subjectName || result?.subject || 'N/A'
+                          const score =
+                            typeof result?.score === 'number'
+                              ? result.score
+                              : typeof result?.marks === 'number'
+                                ? result.marks
+                                : null
+                          const total =
+                            typeof result?.totalMarks === 'number'
+                              ? result.totalMarks
+                              : score !== null
+                                ? 100
+                                : null
+                          const percent =
+                            score !== null && total
+                              ? Math.round((Number(score) / Number(total)) * 100)
+                              : null
+                          const gradeLabel =
+                            result?.grade || (percent !== null ? `${percent}%` : 'N/A')
+                          const meta = [
+                            result?.term ? String(result.term) : '',
+                            result?.year ? String(result.year) : '',
+                          ]
+                            .filter(Boolean)
+                            .join(' • ')
+
+                          return (
+                            <div
+                              key={index}
+                              className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
+                            >
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-blue-600 flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
+                                  {String(gradeLabel).slice(0, 2)}
+                                </div>
+                                <div>
+                                  <p className="text-royalPurple-text1 font-semibold text-sm">
+                                    {studentName}
+                                  </p>
+                                  <p className="text-royalPurple-text2 text-xs">
+                                    {subjectName}
+                                    {meta ? ` • ${meta}` : ''}
+                                  </p>
+                                  <p className="text-royalPurple-text3 text-xs">
+                                    {score !== null && total !== null && percent !== null
+                                      ? `${score}/${total} (${percent}%)`
+                                      : ''}
+                                  </p>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ))
+                          )
+                        })
                       ) : (
                         <p className="text-royalPurple-text2 text-center py-4">No recent results</p>
                       )}
