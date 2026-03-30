@@ -515,7 +515,10 @@ export default function HodDashboard() {
                         <li>🎯 Student Progress Tracking</li>
                         <li>📋 Resource Utilization Reports</li>
                       </ul>
-                      <Button className="w-full mt-3 bg-orange-600/60 hover:bg-orange-600/80 text-royalPurple-text1 border border-orange-400/50">
+                      <Button
+                        className="w-full mt-3 bg-orange-600/60 hover:bg-orange-600/80 text-royalPurple-text1 border border-orange-400/50"
+                        onClick={() => router.push('/dashboard/hod/exam-analysis')}
+                      >
                         View Analytics
                       </Button>
                     </div>
@@ -536,7 +539,10 @@ export default function HodDashboard() {
                         <li>🤝 Mentorship Programs</li>
                         <li>⭐ Performance Evaluations</li>
                       </ul>
-                      <Button className="w-full mt-3 bg-royalPurple-accent/60 hover:bg-royalPurple-accent/80 text-royalPurple-text1 border border-royalPurple-border2/50">
+                      <Button
+                        className="w-full mt-3 bg-royalPurple-accent/60 hover:bg-royalPurple-accent/80 text-royalPurple-text1 border border-royalPurple-border2/50"
+                        onClick={() => router.push('/dashboard/hod/cpd')}
+                      >
                         Manage Development
                       </Button>
                     </div>
@@ -557,7 +563,10 @@ export default function HodDashboard() {
                         <li>📅 Academic Calendar Management</li>
                         <li>🎯 Learning Outcome Tracking</li>
                       </ul>
-                      <Button className="w-full mt-3 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50">
+                      <Button
+                        className="w-full mt-3 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50"
+                        onClick={() => router.push('/dashboard/timetable/hod')}
+                      >
                         Manage Curriculum
                       </Button>
                     </div>
@@ -735,7 +744,10 @@ export default function HodDashboard() {
                           </p>
                         )}
                       </div>
-                      <Button className="w-full mt-4 bg-royalPurple-accent/60 hover:bg-royalPurple-accent/80 text-royalPurple-text1 border border-royalPurple-border2/50">
+                      <Button
+                        className="w-full mt-4 bg-royalPurple-accent/60 hover:bg-royalPurple-accent/80 text-royalPurple-text1 border border-royalPurple-border2/50"
+                        onClick={() => router.push('/dashboard/users?filter=teachers')}
+                      >
                         Manage Teachers
                       </Button>
                     </div>
@@ -803,7 +815,10 @@ export default function HodDashboard() {
                           </p>
                         )}
                       </div>
-                      <Button className="w-full mt-4 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50">
+                      <Button
+                        className="w-full mt-4 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50"
+                        onClick={() => router.push('/dashboard/users?filter=students')}
+                      >
                         View All Students
                       </Button>
                     </div>
@@ -867,7 +882,10 @@ export default function HodDashboard() {
                           </p>
                         )}
                       </div>
-                      <Button className="w-full mt-4 bg-royalPurple-pill/60 hover:bg-royalPurple-pill/80 text-royalPurple-text1 border border-royalPurple-border2/50">
+                      <Button
+                        className="w-full mt-4 bg-royalPurple-pill/60 hover:bg-royalPurple-pill/80 text-royalPurple-text1 border border-royalPurple-border2/50"
+                        onClick={() => router.push('/dashboard/classes')}
+                      >
                         Manage Classes
                       </Button>
                     </div>
@@ -932,7 +950,7 @@ export default function HodDashboard() {
                   <Group className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
                   Department Classes
                 </CardTitle>
-                <Link href="/dashboard/hod/classes">
+                <Link href="/dashboard/classes">
                   <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-royalPurple-text1">
                     Manage Classes
                   </Button>

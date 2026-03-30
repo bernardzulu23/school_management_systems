@@ -68,6 +68,17 @@ export default function UserManagement() {
   ]
 
   useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search)
+      const filter = String(params.get('filter') || '').toLowerCase()
+      if (!filter) return
+      if (['all', 'students', 'teachers', 'hods', 'headteachers'].includes(filter)) {
+        setActiveUserType(filter)
+      }
+    } catch {}
+  }, [])
+
+  useEffect(() => {
     fetchUsers()
   }, [activeUserType])
 

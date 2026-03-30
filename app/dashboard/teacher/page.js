@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@/lib/auth'
+import { useRouter } from 'next/navigation'
 // import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { StatsCard } from '@/components/dashboard/StatsCard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -61,6 +62,7 @@ import { SCHOOL_SUBJECTS, getSubjectsByIds } from '@/data/subjects'
 // import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeachingHub'
 
 export default function TeacherDashboard() {
+  const router = useRouter()
   // Get current user data from auth context
   const { user: currentUser, isAuthenticated, logout, syncSession } = useAuth()
 
@@ -530,7 +532,10 @@ export default function TeacherDashboard() {
                       <li>📊 Real-time Assessment Tools</li>
                       <li>🎯 Adaptive Content Delivery</li>
                     </ul>
-                    <Button className="w-full mt-3 bg-royalPurple-pill/60 hover:bg-royalPurple-pill/80 text-royalPurple-text1 border border-royalPurple-border2/50">
+                    <Button
+                      className="w-full mt-3 bg-royalPurple-pill/60 hover:bg-royalPurple-pill/80 text-royalPurple-text1 border border-royalPurple-border2/50"
+                      onClick={() => router.push('/dashboard/teacher/materials')}
+                    >
                       Explore Tools
                     </Button>
                   </div>
@@ -549,7 +554,10 @@ export default function TeacherDashboard() {
                       <li>📊 Engagement Metrics</li>
                       <li>🔍 Predictive Insights</li>
                     </ul>
-                    <Button className="w-full mt-3 bg-royalPurple-accent/60 hover:bg-royalPurple-accent/80 text-royalPurple-text1 border border-royalPurple-border2/50">
+                    <Button
+                      className="w-full mt-3 bg-royalPurple-accent/60 hover:bg-royalPurple-accent/80 text-royalPurple-text1 border border-royalPurple-border2/50"
+                      onClick={() => router.push('/dashboard/teacher/results')}
+                    >
                       View Analytics
                     </Button>
                   </div>
@@ -568,7 +576,10 @@ export default function TeacherDashboard() {
                       <li>💬 Parent Communication</li>
                       <li>🤝 Peer Mentoring</li>
                     </ul>
-                    <Button className="w-full mt-3 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50">
+                    <Button
+                      className="w-full mt-3 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50"
+                      onClick={() => router.push('/dashboard/teacher/community')}
+                    >
                       Join Community
                     </Button>
                   </div>
