@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
+import LoadingSpinner from '@/components/LoadingSpinner'
 import { useAuth } from '@/lib/auth'
 import {
   timetableAPI,
@@ -15,6 +16,7 @@ import {
   classrooms,
 } from '@/lib/timetableData'
 import { TeachersAPI } from '@/lib/teachersAPI'
+import { startTopLoading, stopTopLoading } from '@/lib/uiProgress'
 import {
   Calendar,
   Clock,
@@ -122,9 +124,11 @@ export default function MasterTimetablePage() {
   }
 
   const resetTimetable = () => {
+    startTopLoading('Resetting timetable')
     const emptyTimetable = initializeTimetableData()
     setTimetableData(emptyTimetable)
     timetableAPI.saveMasterTimetable(emptyTimetable)
+    setTimeout(() => stopTopLoading(), 350)
   }
 
   const addSampleData = () => {
@@ -781,10 +785,7 @@ export default function MasterTimetablePage() {
 
               {loadingTeachers ? (
                 <div className="text-center py-8">
-                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-royalPurple-border2"></div>
-                  <p className="text-sm text-royalPurple-text2 mt-3">
-                    Loading registered teachers...
-                  </p>
+                  <LoadingSpinner size="md" label="Loading registered teachers" />
                 </div>
               ) : (
                 <AssignmentForm

@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { GraduationCap, ArrowLeft, Loader2, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
@@ -9,16 +9,15 @@ import FormField from '@/components/forms/FormField'
 import { useSchool } from '@/lib/context/SchoolContext'
 import toast from 'react-hot-toast'
 
-function ResetPasswordContent() {
+export default function ResetPasswordTokenPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const token = searchParams.get('token')
-  const email = searchParams.get('email')
+  const params = useParams()
+  const token = String(params?.token || '')
+  const { school } = useSchool()
 
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const { school } = useSchool()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -29,27 +28,21 @@ function ResetPasswordContent() {
     }
 
     setIsLoading(true)
-
     try {
-      if (token && !email) {
-        router.replace(`/reset-password/${encodeURIComponent(token)}`)
-        return
-      }
-      const res = await fetch('/api/auth/reset-password', {
+      const res = await fetch(`/api/auth/reset-password/${encodeURIComponent(token)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, email, newPassword: password, confirmPassword }),
+        body: JSON.stringify({ newPassword: password, confirmPassword }),
       })
-
-      const data = await res.json()
+      const data = await res.json().catch(() => ({}))
 
       if (res.ok) {
         toast.success('Password reset successful! Please login.')
         router.push('/login')
       } else {
-        toast.error(data.error || 'Failed to reset password')
+        toast.error(data.error || data.message || 'Failed to reset password')
       }
-    } catch (error) {
+    } catch {
       toast.error('Network error')
     } finally {
       setIsLoading(false)
@@ -127,21 +120,16 @@ function ResetPasswordContent() {
             )}
           </Button>
         </form>
+
+        <div className="mt-6 text-center">
+          <Link
+            href="/login"
+            className="text-sm text-royalPurple-text2 hover:text-royalPurple-text1 flex items-center justify-center transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4 mr-1" /> Back to Login
+          </Link>
+        </div>
       </div>
     </div>
-  )
-}
-
-export default function ResetPasswordPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-royalPurple-page flex items-center justify-center">
-          <Loader2 className="h-8 w-8 text-royalPurple-text2 animate-spin" />
-        </div>
-      }
-    >
-      <ResetPasswordContent />
-    </Suspense>
   )
 }

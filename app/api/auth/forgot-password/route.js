@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import crypto from 'crypto'
+import { sendResetEmail } from '@/config/email'
 
 export async function POST(request) {
   try {
@@ -19,7 +20,7 @@ export async function POST(request) {
 
     // Find User
     const user = await prisma.user.findUnique({
-      where: { schoolId_email: { schoolId, email } },
+      where: { schoolId_email: { schoolId, email: String(email).toLowerCase() } },
     })
 
     if (!user) {
@@ -33,31 +34,31 @@ export async function POST(request) {
     // Generate Token
     const resetToken = crypto.randomBytes(32).toString('hex')
     const resetTokenExpiry = new Date(Date.now() + 3600000) // 1 hour
+    const resetTokenHash = crypto.createHash('sha256').update(resetToken).digest('hex')
 
     // Save to DB
     await prisma.user.update({
       where: { id: user.id },
       data: {
-        resetToken,
+        resetToken: resetTokenHash,
         resetTokenExpiry,
       },
     })
 
-    // MOCK EMAIL SENDING
-    const resetLink = `${request.headers.get('origin')}/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}`
+    const proto = request.headers.get('x-forwarded-proto') || 'https'
+    const host = request.headers.get('x-forwarded-host') || request.headers.get('host')
+    const originFromHeaders = host ? `${proto}://${host}` : request.headers.get('origin')
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || originFromHeaders
+    const resetLink = `${baseUrl}/reset-password/${resetToken}`
 
-    console.log('=================================================================')
-    console.log('PASSWORD RESET LINK (Dev Mode):')
-    console.log(resetLink)
-    console.log('=================================================================')
-
-    // In production, use your email service here (e.g. Resend, SendGrid)
-    // await sendEmail({ to: email, subject: 'Reset Password', text: resetLink })
+    const sent = await sendResetEmail(String(email).toLowerCase(), resetLink)
+    if (!sent) {
+      console.log('[forgot-password] Email send failed. Reset URL:', resetLink)
+    }
 
     return NextResponse.json({
       success: true,
       message: 'If an account exists, a reset link has been sent.',
-      devToken: process.env.NODE_ENV !== 'production' ? resetToken : undefined,
     })
   } catch (error) {
     console.error('Forgot password error:', error)

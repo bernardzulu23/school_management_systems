@@ -6,6 +6,7 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
+import { startTopLoading, stopTopLoading } from '@/lib/uiProgress'
 import { timetableAPI, timeSlots, daysOfWeek } from '@/lib/timetableData'
 import {
   Calendar,
@@ -45,6 +46,7 @@ export default function StudentTimetablePage() {
   }
 
   const loadTimetableData = () => {
+    startTopLoading('Refreshing timetable')
     // TODO: Fetch real timetable data from API
     if (studentInfo.classId) {
       const studentTimetableData = timetableAPI.getStudentTimetable(studentInfo.classId)
@@ -54,6 +56,7 @@ export default function StudentTimetablePage() {
       console.log('No class assigned to student, cannot load timetable')
       setStudentTimetable({})
     }
+    setTimeout(() => stopTopLoading(), 350)
   }
 
   // Load student timetable

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
+import LoadingSpinner from '@/components/LoadingSpinner'
 // import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { StatsCard } from '@/components/dashboard/StatsCard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -289,9 +290,8 @@ export default function TeacherDashboard() {
   if (!isAuthenticated || !currentUser) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-800">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-royalPurple-border2 mx-auto mb-4"></div>
-          <p className="text-royalPurple-text1 text-lg">Loading dashboard...</p>
+        <div className="text-center space-y-4">
+          <LoadingSpinner size="xl" color="white" label="Loading dashboard" />
         </div>
       </div>
     )

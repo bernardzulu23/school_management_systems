@@ -109,9 +109,6 @@ export default function ForgotPasswordPage() {
             <div className="bg-royalPurple-success text-royalPurple-successTx p-4 rounded-xl border border-royalPurple-border">
               <p>Check your email for the reset link.</p>
             </div>
-            <p className="text-sm text-royalPurple-text2">
-              (In development mode, check the server console logs for the link)
-            </p>
           </div>
         )}
 

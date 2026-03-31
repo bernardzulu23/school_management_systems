@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/auth'
 import { useSchool } from '@/lib/context/SchoolContext'
 import { Users, GraduationCap, BarChart3, Activity, Globe } from 'lucide-react'
 import Image from 'next/image'
+import LoadingSpinner from '@/components/LoadingSpinner'
 
 export default function HomePage() {
   const { isAuthenticated, user } = useAuth()
@@ -41,7 +42,7 @@ export default function HomePage() {
   if (!isHydrated || isSchoolLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-royalPurple-deep">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-royalPurple-border2"></div>
+        <LoadingSpinner size="xl" color="white" label="Loading" />
       </div>
     )
   }
@@ -49,7 +50,7 @@ export default function HomePage() {
   if (isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-royalPurple-deep">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-royalPurple-border2"></div>
+        <LoadingSpinner size="xl" color="white" label="Redirecting" />
       </div>
     )
   }

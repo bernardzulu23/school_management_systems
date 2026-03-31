@@ -4,16 +4,20 @@ import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
-export async function POST(request) {
+export async function POST(request, { params }) {
   try {
+    const token = String(params?.token || '')
     const body = await request.json().catch(() => ({}))
-    const token = String(body?.token || '')
-    const email = body?.email ? String(body.email).toLowerCase() : null
     const newPassword = String(body?.newPassword || body?.password || '')
     const confirmPassword = String(body?.confirmPassword || body?.confirm || body?.password || '')
+    const email = body?.email ? String(body.email).toLowerCase() : null
 
-    if (!token || !newPassword || !confirmPassword) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+    if (!token) {
+      return NextResponse.json({ error: 'Missing reset token' }, { status: 400 })
+    }
+
+    if (!newPassword || !confirmPassword) {
+      return NextResponse.json({ error: 'Password fields are required' }, { status: 400 })
     }
 
     if (newPassword !== confirmPassword) {
@@ -25,7 +29,9 @@ export async function POST(request) {
     }
 
     const schoolId = await getSchoolIdFromRequest(request)
-    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+    if (!schoolId) {
+      return NextResponse.json({ error: 'School context required' }, { status: 400 })
+    }
 
     const resetTokenHash = crypto.createHash('sha256').update(token).digest('hex')
 
@@ -40,12 +46,14 @@ export async function POST(request) {
     })
 
     if (!user) {
-      return NextResponse.json({ error: 'Invalid or expired reset token' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Invalid or expired reset link. Please request a new one.' },
+        { status: 400 }
+      )
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 12)
 
-    // Update User
     await prisma.user.update({
       where: { id: user.id },
       data: {
@@ -55,7 +63,10 @@ export async function POST(request) {
       },
     })
 
-    return NextResponse.json({ success: true, message: 'Password reset successfully' })
+    return NextResponse.json({
+      success: true,
+      message: 'Password reset successful! You can now login.',
+    })
   } catch (error) {
     console.error('Reset password error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

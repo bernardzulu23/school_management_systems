@@ -1,19 +1,87 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Sidebar } from './Sidebar'
 import { Menu, Bell, Search, User } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
 import { useSchool } from '@/lib/context/SchoolContext'
+import TopLoadingBar from '@/components/ui/TopLoadingBar'
 
 export default function ResponsiveDashboardLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { user } = useAuth()
   const { school } = useSchool()
+  const [topLoadingActive, setTopLoadingActive] = useState(false)
+  const [topLoadingPercent, setTopLoadingPercent] = useState(0)
+  const [topLoadingLabel, setTopLoadingLabel] = useState('Refreshing')
+  const countRef = useRef(0)
+  const simRef = useRef(null)
+
+  useEffect(() => {
+    const clearSim = () => {
+      if (simRef.current) clearInterval(simRef.current)
+      simRef.current = null
+    }
+
+    const startSim = () => {
+      if (simRef.current) return
+      simRef.current = setInterval(() => {
+        setTopLoadingPercent((p) => {
+          if (p >= 95) return p
+          const step = Math.floor(Math.random() * 7) + 1
+          return Math.min(95, p + step)
+        })
+      }, 220)
+    }
+
+    const onStart = (e) => {
+      countRef.current += 1
+      const label = e?.detail?.label
+      if (label) setTopLoadingLabel(String(label))
+      if (countRef.current === 1) {
+        setTopLoadingPercent(0)
+        setTopLoadingActive(true)
+        startSim()
+      }
+    }
+
+    const onUpdate = (e) => {
+      const percent = e?.detail?.percent
+      if (percent === undefined) return
+      setTopLoadingPercent(Math.max(0, Math.min(100, Math.round(Number(percent) || 0))))
+    }
+
+    const onStop = () => {
+      countRef.current = Math.max(0, countRef.current - 1)
+      if (countRef.current !== 0) return
+      clearSim()
+      setTopLoadingPercent(100)
+      setTimeout(() => {
+        if (countRef.current === 0) setTopLoadingActive(false)
+        setTopLoadingPercent(0)
+      }, 300)
+    }
+
+    window.addEventListener('top-loading:start', onStart)
+    window.addEventListener('top-loading:update', onUpdate)
+    window.addEventListener('top-loading:stop', onStop)
+
+    return () => {
+      clearSim()
+      window.removeEventListener('top-loading:start', onStart)
+      window.removeEventListener('top-loading:update', onUpdate)
+      window.removeEventListener('top-loading:stop', onStop)
+    }
+  }, [])
 
   return (
     <div className="flex h-screen bg-royalPurple-page overflow-hidden">
+      <TopLoadingBar
+        active={topLoadingActive}
+        percent={topLoadingPercent}
+        label={topLoadingLabel}
+      />
       {/* Sidebar */}
       <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
 

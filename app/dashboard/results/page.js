@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { api } from '@/lib/api'
 import { useAuth } from '@/lib/auth'
+import { startTopLoading } from '@/lib/uiProgress'
 import {
   BookOpen,
   TrendingUp,
@@ -105,7 +106,10 @@ export default function ResultsPage() {
               <div className="flex justify-center space-x-4">
                 <Button
                   variant="outline"
-                  onClick={() => window.location.reload()}
+                  onClick={() => {
+                    startTopLoading('Refreshing')
+                    setTimeout(() => window.location.reload(), 350)
+                  }}
                   className="focus:ring-2 focus:ring-blue-500 outline-none"
                   aria-label="Refresh results"
                 >

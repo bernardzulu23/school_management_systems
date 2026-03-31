@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/lib/auth'
 import InnovationHub from '@/components/innovation/InnovationHub'
+import LoadingSpinner from '@/components/LoadingSpinner'
 
 export default function InnovationPage() {
   const { user: currentUser, isAuthenticated } = useAuth()
@@ -10,9 +11,8 @@ export default function InnovationPage() {
   if (!isAuthenticated || !currentUser) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-800">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-royalPurple-border2 mx-auto mb-4"></div>
-          <p className="text-royalPurple-text1 text-lg">Loading Innovation Hub...</p>
+        <div className="text-center space-y-4">
+          <LoadingSpinner size="xl" color="white" label="Loading Innovation Hub" />
         </div>
       </div>
     )

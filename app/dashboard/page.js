@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/lib/auth'
 import { api } from '@/lib/api'
+import { startTopLoading, stopTopLoading } from '@/lib/uiProgress'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import LoadingSpinner from '@/components/LoadingSpinner'
@@ -55,6 +56,7 @@ export default function DashboardPage() {
   }, [])
 
   const fetchDashboardData = async () => {
+    startTopLoading('Refreshing')
     setIsLoading(true)
     setError(null)
     try {
@@ -70,6 +72,7 @@ export default function DashboardPage() {
       toast.error('Failed to load dashboard statistics.')
     } finally {
       setIsLoading(false)
+      stopTopLoading()
     }
   }
 
