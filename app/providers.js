@@ -5,6 +5,8 @@ import { ThemeProvider } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { SchoolProvider } from '@/lib/context/SchoolContext'
 import { useAuth } from '@/lib/auth'
+import GlobalTopLoadingBar from '@/components/ui/GlobalTopLoadingBar'
+import GlobalBackButton from '@/components/ui/GlobalBackButton'
 
 function AuthSessionSync({ children }) {
   const syncSession = useAuth((s) => s.syncSession)
@@ -78,6 +80,8 @@ export function Providers({ children }) {
       <SchoolProvider>
         <AuthSessionSync>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <GlobalTopLoadingBar />
+            <GlobalBackButton />
             {children}
           </ThemeProvider>
         </AuthSessionSync>

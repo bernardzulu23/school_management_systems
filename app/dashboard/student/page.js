@@ -78,6 +78,7 @@ export default function StudentDashboard() {
 
   // Get current user data from auth context
   const { user: currentUser } = useAuth()
+  const studentProfile = currentUser?.studentProfile || null
 
   const { data: stats } = useQuery({
     queryKey: ['dashboard-stats'],
@@ -282,7 +283,9 @@ export default function StudentDashboard() {
                             </span>
                           </div>
                           <p className="text-royalPurple-text1 font-semibold">
-                            {currentUser.yearGroup || 'Not assigned'}
+                            {dashboardData?.student?.class ||
+                              studentProfile?.class ||
+                              'Not assigned'}
                           </p>
                         </div>
                         <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
@@ -293,7 +296,9 @@ export default function StudentDashboard() {
                             </span>
                           </div>
                           <p className="text-royalPurple-text1 font-semibold">
-                            {currentUser.examNumber || 'Not provided'}
+                            {studentProfile?.exam_number ||
+                              dashboardData?.student?.exam_number ||
+                              'Not provided'}
                           </p>
                         </div>
                       </div>
@@ -1225,9 +1230,9 @@ export default function StudentDashboard() {
                 userRole="student"
                 userData={{
                   id: currentUser?.id || null,
-                  name: currentUser?.name || 'Student',
-                  studentId: currentUser?.studentId || '',
-                  class: currentUser?.yearGroup || '',
+                  name: dashboardData?.student?.name || currentUser?.name || 'Student',
+                  studentId: String(studentProfile?.id || dashboardData?.student?.id || ''),
+                  class: dashboardData?.student?.class || studentProfile?.class || '',
                   totalPoints: dashboardData?.stats?.points || 0,
                   level: dashboardData?.stats?.level || 1,
                   nextLevelPoints: dashboardData?.stats?.nextLevelXp,
@@ -1255,7 +1260,7 @@ export default function StudentDashboard() {
                     : []
                 }
                 classData={{
-                  name: currentUser?.yearGroup || '',
+                  name: dashboardData?.student?.class || studentProfile?.class || '',
                   teacher: '',
                   studentCount: 0,
                   subjects: dashboardData?.student?.subjects || [],

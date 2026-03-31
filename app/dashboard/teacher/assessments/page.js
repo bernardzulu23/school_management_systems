@@ -54,6 +54,11 @@ export default function TeacherAssessmentsPage() {
   const selectedAssignment = assignments.find((a) => a.id === selectedAssignmentId) || null
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (String(params.get('create') || '') === '1') setShowCreate(true)
+  }, [])
+
+  useEffect(() => {
     const loadAssignments = async () => {
       try {
         const res = await fetch('/api/teaching-assignments')

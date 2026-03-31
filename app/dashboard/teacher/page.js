@@ -1015,7 +1015,7 @@ export default function TeacherDashboard() {
                       </p>
                     </div>
                   </Link>
-                  <Link href="/dashboard/teacher/attendance">
+                  <Link href="/dashboard/attendance">
                     <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
                       <div className="backdrop-blur-md bg-yellow-600/60 border border-yellow-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                         <CheckCircle className="h-8 w-8 text-royalPurple-text1" />

@@ -34,6 +34,7 @@ export async function GET(request) {
   const resolvedDepartment =
     dbUser.hodProfile?.departmentRef?.name ||
     dbUser.hodProfile?.department ||
+    dbUser.teacherProfile?.departments?.[0]?.department?.name ||
     dbUser.teacherProfile?.department ||
     undefined
 

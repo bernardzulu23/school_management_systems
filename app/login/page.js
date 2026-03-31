@@ -9,6 +9,7 @@ import { useSchool } from '@/lib/context/SchoolContext'
 import toast from 'react-hot-toast'
 import FormField from '@/components/forms/FormField'
 import { Button } from '@/components/ui/Button'
+import { setTopLoading, startTopLoading, stopTopLoading } from '@/lib/uiProgress'
 
 export default function LoginPage() {
   const { school, isLoading: isSchoolLoading } = useSchool()
@@ -16,6 +17,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [loginPercent, setLoginPercent] = useState(0)
   const [detectedSubdomain, setDetectedSubdomain] = useState('')
   const { login, logout } = useAuth()
   const router = useRouter()
@@ -50,8 +52,22 @@ export default function LoginPage() {
     e.preventDefault()
     if (isLoading) return
     setIsLoading(true)
+    setLoginPercent(0)
+    startTopLoading('Signing in')
+    setTopLoading(0)
+    let interval
 
     try {
+      interval = setInterval(() => {
+        setLoginPercent((p) => {
+          if (p >= 95) return p
+          const step = Math.floor(Math.random() * 7) + 1
+          const next = Math.min(95, p + step)
+          setTopLoading(next)
+          return next
+        })
+      }, 220)
+
       // Extract subdomain from current URL
       let subdomain = ''
       if (typeof window !== 'undefined') {
@@ -67,6 +83,9 @@ export default function LoginPage() {
       const role = String(result?.user?.role || '')
         .trim()
         .toLowerCase()
+      setLoginPercent(100)
+      setTopLoading(100)
+      stopTopLoading()
 
       if (['headteacher', 'admin', 'administrator', 'superadmin'].includes(role)) {
         router.push('/dashboard/admin')
@@ -84,8 +103,11 @@ export default function LoginPage() {
       // Extract specific message if available
       const msg = error.message || 'Login failed'
       toast.error(msg)
+      stopTopLoading()
     } finally {
+      if (interval) clearInterval(interval)
       setIsLoading(false)
+      setLoginPercent(0)
     }
   }
 
@@ -195,8 +217,8 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          <Button type="submit" className="w-full py-3.5" isLoading={isLoading}>
-            {isLoading ? 'Signing in...' : 'Sign In'}
+          <Button type="submit" className="w-full py-3.5" disabled={isLoading}>
+            {isLoading ? `Signing in... ${loginPercent}%` : 'Sign In'}
           </Button>
         </form>
 

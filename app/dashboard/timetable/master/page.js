@@ -391,7 +391,6 @@ export default function MasterTimetablePage() {
             <div className="flex items-center mt-2">
               {loadingTeachers ? (
                 <div className="flex items-center text-sm text-orange-600">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-600 mr-2"></div>
                   Loading registered teachers...
                 </div>
               ) : (

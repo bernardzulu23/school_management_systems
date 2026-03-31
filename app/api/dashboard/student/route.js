@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export const dynamic = 'force-dynamic'
 
@@ -36,11 +37,15 @@ export async function GET(request) {
         startDate.setMonth(now.getMonth() - 3)
     }
 
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    if (!schoolId) {
+      return NextResponse.json({ error: 'School context required' }, { status: 400 })
+    }
+
     const student = await prisma.student.findFirst({
-      where: { userId: auth.user.id },
+      where: { userId: auth.user.id, schoolId },
       include: {
         user: true,
-        results: true,
         gamificationProfile: true,
       },
     })
@@ -49,14 +54,47 @@ export async function GET(request) {
       return NextResponse.json({ error: 'Student profile not found' }, { status: 404 })
     }
 
+    const enrollments = await prisma.pupilSubjectEnrollment.findMany({
+      where: { schoolId, pupilId: student.id },
+      include: {
+        subject: {
+          include: {
+            teacher: { include: { user: true } },
+          },
+        },
+      },
+    })
+
+    const enrolledSubjectNames = Array.from(
+      new Set(
+        enrollments
+          .map((e) => e?.subject?.name)
+          .filter(Boolean)
+          .map(String)
+      )
+    )
+
+    const selectedSubjects = Array.isArray(student.selected_subjects)
+      ? student.selected_subjects.filter(Boolean).map(String)
+      : []
+
+    const subjectNames = Array.from(new Set([...selectedSubjects, ...enrolledSubjectNames]))
+
+    const allResults = await prisma.result.findMany({
+      where: { schoolId, studentId: student.id },
+      include: { subject: { include: { teacher: { include: { user: true } } } } },
+      orderBy: { createdAt: 'desc' },
+      take: 200,
+    })
+
     // 1. Calculate Stats
-    const totalSubjects = student.selected_subjects.length
-    const totalResults = student.results.length
+    const totalSubjects = subjectNames.length
+    const totalResults = allResults.length
 
     // Calculate Average Grade
     let averageGrade = 0
     if (totalResults > 0) {
-      const totalScore = student.results.reduce((acc, curr) => acc + (curr.score || 0), 0)
+      const totalScore = allResults.reduce((acc, curr) => acc + (curr.score || 0), 0)
       averageGrade = totalScore / totalResults
     }
 
@@ -64,16 +102,16 @@ export async function GET(request) {
     let myClass = null
     if (student.class) {
       myClass = await prisma.class.findFirst({
-        where: { name: student.class },
+        where: { schoolId, name: student.class },
       })
     }
 
     // 3. Fetch Upcoming Assessments (scoped by schoolId)
     const upcomingAssessments = await prisma.assessment.findMany({
       where: {
-        schoolId: student.schoolId,
+        schoolId,
         class: student.class,
-        subject: { in: student.selected_subjects || [] },
+        subject: { in: subjectNames },
         date: { gte: new Date() },
       },
       orderBy: { date: 'asc' },
@@ -81,22 +119,14 @@ export async function GET(request) {
     })
 
     // 4. Fetch Recent Results (with filtering)
-    const recentResults = await prisma.result.findMany({
-      where: {
-        studentId: student.id,
-        // Filter by date if applicable, or just take latest
-        // For simplicity, we just take the latest ones
-      },
-      orderBy: { createdAt: 'desc' },
-      take: 10,
-    })
+    const recentResults = allResults.slice(0, 10)
 
     // 5. Fetch Assignments and calculate statuses (scoped by schoolId)
     const rawAssignments = await prisma.assignment.findMany({
       where: {
-        schoolId: student.schoolId,
+        schoolId,
         class: student.class,
-        subject: { in: student.selected_subjects || [] },
+        subject: { in: subjectNames },
       },
       include: {
         submissions: {
@@ -159,8 +189,8 @@ export async function GET(request) {
 
     const subjectRecords = await prisma.subject.findMany({
       where: {
-        schoolId: student.schoolId,
-        name: { in: student.selected_subjects },
+        schoolId,
+        name: { in: subjectNames },
       },
       include: {
         teacher: {
@@ -169,12 +199,12 @@ export async function GET(request) {
       },
     })
 
-    const enrolledSubjects = student.selected_subjects.map((subjectName) => {
+    const enrolledSubjects = subjectNames.map((subjectName) => {
       // Find matching record
       const record = subjectRecords.find((s) => s.name === subjectName)
 
       // Calculate grade for this subject
-      const subjectResults = student.results.filter((r) => r.subject === subjectName)
+      const subjectResults = allResults.filter((r) => r.subject?.name === subjectName)
       let currentGrade = 0
       if (subjectResults.length > 0) {
         currentGrade =
@@ -193,6 +223,11 @@ export async function GET(request) {
         status: status,
         trend: 'stable', // Placeholder
         currentGrade: Math.round(currentGrade),
+        assignments: rawAssignments.filter((a) => a.subject === subjectName).length,
+        completedAssignments: assignmentsList.filter(
+          (a) => a.subject === subjectName && a.status === 'completed'
+        ).length,
+        attendance: Math.round(attendancePercentage),
       }
     })
 
@@ -231,6 +266,7 @@ export async function GET(request) {
         id: student.id,
         name: student.name,
         class: student.class,
+        exam_number: student.exam_number,
         average_grade: Math.round(averageGrade),
         attendance_percentage: Math.round(attendancePercentage),
         total_subjects: totalSubjects,
@@ -238,6 +274,7 @@ export async function GET(request) {
         assignments_list: assignmentsList,
         attendance_records: attendanceRecords,
         gamification: student.gamificationProfile,
+        subjects: subjectNames,
       },
       enrolled_subjects: enrolledSubjects,
       subject_performance: subjectPerformance,

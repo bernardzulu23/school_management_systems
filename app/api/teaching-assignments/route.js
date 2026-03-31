@@ -50,6 +50,60 @@ export async function GET(request) {
     },
   })
 
+  if (assignments.length === 0) {
+    const teacher = await prisma.teacher.findFirst({
+      where: { id: resolvedTeacherId, schoolId },
+      include: {
+        user: { select: { name: true } },
+        classes: true,
+        subjects: true,
+      },
+    })
+
+    const assignedSubjectNames = Array.isArray(teacher?.assignedSubjects)
+      ? teacher.assignedSubjects.map(String).filter(Boolean)
+      : []
+
+    const subjectById = new Map((teacher?.subjects || []).map((s) => [String(s.id), s]))
+
+    if (assignedSubjectNames.length > 0) {
+      const subjectsByName = await prisma.subject.findMany({
+        where: {
+          schoolId,
+          OR: [{ name: { in: assignedSubjectNames } }, { id: { in: assignedSubjectNames } }],
+        },
+      })
+      subjectsByName.forEach((s) => {
+        if (s?.id) subjectById.set(String(s.id), s)
+      })
+    }
+
+    const classes = teacher?.classes || []
+    const subjects = Array.from(subjectById.values())
+
+    const virtual = []
+    for (const c of classes) {
+      for (const s of subjects) {
+        virtual.push({
+          id: `virtual:${String(c.id)}:${String(s.id)}`,
+          teacherId: resolvedTeacherId,
+          teacherName: teacher?.user?.name || null,
+          classId: c.id,
+          className: c.name || null,
+          classYearGroup: c.year_group || null,
+          subjectId: s.id,
+          subjectName: s.name || null,
+          createdAt: null,
+        })
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: virtual,
+    })
+  }
+
   return NextResponse.json({
     success: true,
     data: assignments.map((a) => ({

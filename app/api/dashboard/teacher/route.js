@@ -71,7 +71,10 @@ export async function GET(request) {
 
     if (assignedSubjectNames.length > 0) {
       const existingSubjects = await prisma.subject.findMany({
-        where: { schoolId, name: { in: assignedSubjectNames } },
+        where: {
+          schoolId,
+          OR: [{ name: { in: assignedSubjectNames } }, { id: { in: assignedSubjectNames } }],
+        },
         select: { id: true, name: true, code: true, topics: true },
       })
       existingSubjects.forEach((s) => {

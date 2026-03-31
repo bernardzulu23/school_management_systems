@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useQuery } from '@tanstack/react-query'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
@@ -18,21 +18,38 @@ export default function AttendancePage() {
     queryFn: () => api.getTeacherDashboard().then((res) => res.data),
   })
 
-  // Mock student data for the selected class
-  const mockStudents = [
-    { id: '1', name: 'John Doe', student_id: 'STU001', status: 'present' },
-    { id: '2', name: 'Jane Smith', student_id: 'STU002', status: 'present' },
-    { id: '3', name: 'Mike Johnson', student_id: 'STU003', status: 'absent' },
-    { id: '4', name: 'Sarah Wilson', student_id: 'STU004', status: 'present' },
-    { id: '5', name: 'David Brown', student_id: 'STU005', status: 'late' },
-  ]
+  const { data: studentsData, isLoading: studentsLoading } = useQuery({
+    queryKey: ['class-students', selectedClass],
+    enabled: Boolean(selectedClass),
+    queryFn: async () => {
+      const res = await fetch(`/api/classes/students?classId=${encodeURIComponent(selectedClass)}`)
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'Failed to load students')
+      return Array.isArray(json?.data) ? json.data : []
+    },
+  })
 
-  const [attendance, setAttendance] = useState(
-    mockStudents.reduce((acc, student) => {
-      acc[student.id] = student.status
-      return acc
-    }, {})
-  )
+  const students = useMemo(() => (Array.isArray(studentsData) ? studentsData : []), [studentsData])
+
+  const [attendance, setAttendance] = useState({})
+
+  useEffect(() => {
+    if (!selectedClass) return
+    if (students.length === 0) {
+      setAttendance({})
+      return
+    }
+    setAttendance((prev) => {
+      const next = { ...prev }
+      for (const s of students) {
+        if (!next[String(s.id)]) next[String(s.id)] = 'present'
+      }
+      Object.keys(next).forEach((id) => {
+        if (!students.some((s) => String(s.id) === id)) delete next[id]
+      })
+      return next
+    })
+  }, [selectedClass, students])
 
   const handleAttendanceChange = (studentId, status) => {
     setAttendance((prev) => ({
@@ -42,9 +59,23 @@ export default function AttendancePage() {
   }
 
   const handleSaveAttendance = () => {
-    // Here you would save the attendance data
-    console.log('Saving attendance:', { selectedClass, selectedDate, attendance })
-    toast.success('Attendance saved successfully!')
+    if (!selectedClass) return
+    const records = students.map((s) => ({
+      studentId: s.id,
+      status: attendance[String(s.id)] || 'present',
+    }))
+
+    fetch('/api/attendance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ date: selectedDate, records }),
+    })
+      .then(async (r) => {
+        const json = await r.json().catch(() => ({}))
+        if (!r.ok) throw new Error(json.error || 'Failed to save attendance')
+        toast.success('Attendance saved successfully!')
+      })
+      .catch((e) => toast.error(e.message || 'Failed to save attendance'))
   }
 
   return (
@@ -120,7 +151,7 @@ export default function AttendancePage() {
                   <Users className="h-6 w-6 text-royalPurple-accentTx" aria-hidden="true" />
                   <div className="ml-3">
                     <p className="text-sm text-royalPurple-text2">Total Students</p>
-                    <p className="text-lg font-semibold">{mockStudents.length}</p>
+                    <p className="text-lg font-semibold">{students.length}</p>
                   </div>
                 </div>
               </CardContent>
@@ -186,71 +217,87 @@ export default function AttendancePage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3" role="list">
-                  {mockStudents.map((student) => (
-                    <article
-                      key={student.id}
-                      className="flex items-center justify-between p-4 border rounded-lg focus-within:ring-2 focus-within:ring-blue-500 outline-none transition-shadow"
-                      role="listitem"
-                      tabIndex="0"
-                    >
-                      <div className="flex items-center space-x-4">
-                        <div
-                          className="w-10 h-10 bg-royalPurple-card2 rounded-full flex items-center justify-center"
-                          aria-hidden="true"
-                        >
-                          <span className="text-sm font-medium">
-                            {student.name
-                              .split(' ')
-                              .map((n) => n[0])
-                              .join('')}
-                          </span>
-                        </div>
-                        <div>
-                          <p className="font-medium text-royalPurple-text1">{student.name}</p>
-                          <p className="text-sm text-royalPurple-text3">ID: {student.student_id}</p>
-                        </div>
-                      </div>
-
-                      <div
-                        className="flex space-x-2"
-                        role="group"
-                        aria-label={`Attendance status for ${student.name}`}
+                  {studentsLoading ? (
+                    <div className="text-royalPurple-text2">Loading students...</div>
+                  ) : students.length === 0 ? (
+                    <div className="text-royalPurple-text2">No students found for this class.</div>
+                  ) : (
+                    students.map((student) => (
+                      <article
+                        key={student.id}
+                        className="flex items-center justify-between p-4 border rounded-lg focus-within:ring-2 focus-within:ring-blue-500 outline-none transition-shadow"
+                        role="listitem"
+                        tabIndex="0"
                       >
-                        <Button
-                          variant={attendance[student.id] === 'present' ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => handleAttendanceChange(student.id, 'present')}
-                          className={`${attendance[student.id] === 'present' ? 'bg-royalPurple-success hover:bg-royalPurple-success' : ''} focus:ring-2 focus:ring-green-500`}
-                          aria-pressed={attendance[student.id] === 'present'}
-                        >
-                          <Check className="h-4 w-4 mr-1" aria-hidden="true" />
-                          Present
-                        </Button>
+                        <div className="flex items-center space-x-4">
+                          <div
+                            className="w-10 h-10 bg-royalPurple-card2 rounded-full flex items-center justify-center"
+                            aria-hidden="true"
+                          >
+                            <span className="text-sm font-medium">
+                              {student.name
+                                .split(' ')
+                                .map((n) => n[0])
+                                .join('')}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="font-medium text-royalPurple-text1">{student.name}</p>
+                            <p className="text-sm text-royalPurple-text3">
+                              {student.exam_number
+                                ? `Exam: ${student.exam_number}`
+                                : `ID: ${student.student_id}`}
+                            </p>
+                          </div>
+                        </div>
 
-                        <Button
-                          variant={attendance[student.id] === 'absent' ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => handleAttendanceChange(student.id, 'absent')}
-                          className={`${attendance[student.id] === 'absent' ? 'bg-royalPurple-danger hover:bg-royalPurple-danger' : ''} focus:ring-2 focus:ring-red-500`}
-                          aria-pressed={attendance[student.id] === 'absent'}
+                        <div
+                          className="flex space-x-2"
+                          role="group"
+                          aria-label={`Attendance status for ${student.name}`}
                         >
-                          <X className="h-4 w-4 mr-1" aria-hidden="true" />
-                          Absent
-                        </Button>
+                          <Button
+                            variant={
+                              attendance[String(student.id)] === 'present' ? 'default' : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => handleAttendanceChange(student.id, 'present')}
+                            className={`${attendance[String(student.id)] === 'present' ? 'bg-royalPurple-success hover:bg-royalPurple-success' : ''} focus:ring-2 focus:ring-green-500`}
+                            aria-pressed={attendance[String(student.id)] === 'present'}
+                          >
+                            <Check className="h-4 w-4 mr-1" aria-hidden="true" />
+                            Present
+                          </Button>
 
-                        <Button
-                          variant={attendance[student.id] === 'late' ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => handleAttendanceChange(student.id, 'late')}
-                          className={`${attendance[student.id] === 'late' ? 'bg-yellow-600 hover:bg-yellow-700' : ''} focus:ring-2 focus:ring-yellow-500`}
-                          aria-pressed={attendance[student.id] === 'late'}
-                        >
-                          <Clock className="h-4 w-4 mr-1" aria-hidden="true" />
-                          Late
-                        </Button>
-                      </div>
-                    </article>
-                  ))}
+                          <Button
+                            variant={
+                              attendance[String(student.id)] === 'absent' ? 'default' : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => handleAttendanceChange(student.id, 'absent')}
+                            className={`${attendance[String(student.id)] === 'absent' ? 'bg-royalPurple-danger hover:bg-royalPurple-danger' : ''} focus:ring-2 focus:ring-red-500`}
+                            aria-pressed={attendance[String(student.id)] === 'absent'}
+                          >
+                            <X className="h-4 w-4 mr-1" aria-hidden="true" />
+                            Absent
+                          </Button>
+
+                          <Button
+                            variant={
+                              attendance[String(student.id)] === 'late' ? 'default' : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => handleAttendanceChange(student.id, 'late')}
+                            className={`${attendance[String(student.id)] === 'late' ? 'bg-yellow-600 hover:bg-yellow-700' : ''} focus:ring-2 focus:ring-yellow-500`}
+                            aria-pressed={attendance[String(student.id)] === 'late'}
+                          >
+                            <Clock className="h-4 w-4 mr-1" aria-hidden="true" />
+                            Late
+                          </Button>
+                        </div>
+                      </article>
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>
