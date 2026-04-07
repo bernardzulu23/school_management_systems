@@ -95,41 +95,58 @@ export const POST = withErrorHandler(async (request) => {
       },
     })
 
+    const classRecord = await tx.class.findFirst({
+      where: {
+        schoolId,
+        OR: [{ id: studentData.class_id }, { name: studentData.class_id }],
+      },
+      select: { id: true, name: true },
+    })
+
+    const selectedRaw = Array.isArray(studentData.selected_subjects)
+      ? studentData.selected_subjects.map((s) => String(s).trim()).filter(Boolean)
+      : []
+
+    const subjectRecords =
+      selectedRaw.length > 0
+        ? await tx.subject.findMany({
+            where: {
+              schoolId,
+              OR: [{ id: { in: selectedRaw } }, { name: { in: selectedRaw } }],
+            },
+            select: { id: true, name: true },
+          })
+        : []
+
+    const selectedSubjectNames = Array.from(
+      new Set([
+        ...subjectRecords.map((s) => s.name),
+        ...selectedRaw.filter((s) => !subjectRecords.some((r) => r.id === s)),
+      ])
+    )
+
     const student = await tx.student.create({
       data: {
         userId: user.id,
         schoolId,
         name: studentData.name,
-        class: studentData.class_id,
+        class: classRecord?.name || studentData.class_id,
         ...(studentData.student_id && { id: studentData.student_id }),
-        selected_subjects: studentData.selected_subjects || [],
+        selected_subjects: selectedSubjectNames,
       },
     })
 
     // Create PupilSubjectEnrollment records
-    if (studentData.selected_subjects?.length && studentData.class_id) {
-      const classRecord = await tx.class.findFirst({
-        where: {
+    if (subjectRecords.length > 0 && classRecord?.id) {
+      await tx.pupilSubjectEnrollment.createMany({
+        data: subjectRecords.map((sub) => ({
           schoolId,
-          OR: [{ id: studentData.class_id }, { name: studentData.class_id }],
-        },
+          pupilId: student.id,
+          subjectId: sub.id,
+          classId: classRecord.id,
+        })),
+        skipDuplicates: true,
       })
-
-      if (classRecord) {
-        const subjectRecords = await tx.subject.findMany({
-          where: { schoolId, name: { in: studentData.selected_subjects } },
-        })
-
-        await tx.pupilSubjectEnrollment.createMany({
-          data: subjectRecords.map((sub) => ({
-            schoolId,
-            pupilId: student.id,
-            subjectId: sub.id,
-            classId: classRecord.id,
-          })),
-          skipDuplicates: true,
-        })
-      }
     }
 
     return { ...student, user }

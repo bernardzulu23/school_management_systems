@@ -83,14 +83,48 @@ export const GET = withErrorHandler(async function GET(request) {
     },
   })
 
-  const pupils = enrollments.map((e) => ({
-    id: e.pupil.id,
-    name: e.pupil.name,
-    class: e.pupil.class,
-    exam_number: e.pupil.exam_number,
-    email: e.pupil.user?.email || null,
-    contact_number: e.pupil.user?.contact_number || null,
-  }))
+  const classRecord = await prisma.class.findFirst({
+    where: { schoolId, id: resolvedClass },
+    select: { id: true, name: true },
+  })
+
+  const subjectRecord = await prisma.subject.findFirst({
+    where: { schoolId, id: resolvedSubject },
+    select: { id: true, name: true },
+  })
+
+  const fallbackStudents =
+    classRecord && subjectRecord
+      ? await prisma.student.findMany({
+          where: {
+            schoolId,
+            OR: [{ class: classRecord.name }, { class: classRecord.id }],
+            selected_subjects: { hasSome: [subjectRecord.name, subjectRecord.id] },
+          },
+          include: { user: true },
+          orderBy: { name: 'asc' },
+          take: 5000,
+        })
+      : []
+
+  const combined = [...enrollments.map((e) => e.pupil), ...fallbackStudents]
+
+  const seen = new Set()
+  const pupils = combined
+    .filter((p) => {
+      const id = String(p?.id || '')
+      if (!id || seen.has(id)) return false
+      seen.add(id)
+      return true
+    })
+    .map((p) => ({
+      id: p.id,
+      name: p.name,
+      class: p.class,
+      exam_number: p.exam_number,
+      email: p.user?.email || null,
+      contact_number: p.user?.contact_number || null,
+    }))
 
   return NextResponse.json({ success: true, data: pupils })
 })
