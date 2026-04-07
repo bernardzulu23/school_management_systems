@@ -8,11 +8,13 @@ import { Button } from '@/components/ui/Button'
 import ProfilePictureDisplay from '@/components/ui/ProfilePictureDisplay'
 import { useAuth } from '@/lib/auth'
 import { User, KeyRound, Upload } from 'lucide-react'
+import { useQueryClient } from '@tanstack/react-query'
 
 const MAX_BYTES = 10 * 1024 * 1024
 
 export default function ProfilePage() {
   const { user, isAuthenticated, updateUser } = useAuth()
+  const queryClient = useQueryClient()
   const [loading, setLoading] = useState(false)
   const [me, setMe] = useState(null)
   const [picturePreviewUrl, setPicturePreviewUrl] = useState('')
@@ -146,6 +148,7 @@ export default function ProfilePage() {
         updateUser({ ...(user || {}), profile_picture_url: nextUrl })
         setMe((prev) => (prev ? { ...prev, profile_picture_url: nextUrl } : prev))
         setPicturePreviewUrl(`${nextUrl}?t=${Date.now()}`)
+        queryClient.invalidateQueries(['me'])
       }
       toast.success('Profile picture updated')
     } catch (e) {
@@ -183,6 +186,7 @@ export default function ProfilePage() {
       if (updated) {
         updateUser({ ...(user || {}), ...updated })
         setMe((prev) => (prev ? { ...prev, ...updated } : prev))
+        queryClient.invalidateQueries(['me'])
       }
       toast.success('Profile updated')
     } catch (e) {

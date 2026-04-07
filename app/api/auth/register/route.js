@@ -360,7 +360,7 @@ export const POST = withErrorHandler(async (request) => {
         })
 
         if (!teacher) throw new Error('Failed to create teacher profile')
-      } else if (role === 'hod') {
+      } else if (role.toLowerCase() === 'hod' || role.toLowerCase() === 'head of department') {
         const departmentName = String(body.department || '').trim()
         const dept =
           departmentName.length > 0
@@ -384,7 +384,7 @@ export const POST = withErrorHandler(async (request) => {
             userId: user.id,
             schoolId,
             department: departmentName,
-            departmentId: dept?.id ?? undefined,
+            departmentId: dept?.id ?? null,
           },
         })
       }

@@ -16,43 +16,26 @@ export const GET = withErrorHandler(async function GET(request) {
   const userId = String(auth.user?.id || '')
   if (!userId) throw new ApiError('Unauthorized', 401)
 
-  const role = String(auth.user?.role || '').toLowerCase()
   const isAdminOrHead = roleCheck(auth.user, ['ADMIN', 'headteacher'])
 
-  let hod = await prisma.headOfDepartment.findFirst({
-    where: { schoolId, userId },
-    include: { departmentRef: true },
+  const hodProfile = await prisma.headOfDepartment.findFirst({
+    where: { userId, schoolId },
+    include: {
+      user: true,
+      departmentRef: {
+        include: {
+          teachers: { include: { teacher: { include: { user: true } } } },
+        },
+      },
+    },
   })
 
-  if (!hod && role === 'hod') {
-    const teacher = await prisma.teacher.findFirst({
-      where: { schoolId, userId },
-      include: { departments: { include: { department: true } } },
-    })
-    const inferredDepartmentName =
-      teacher?.departments?.[0]?.department?.name || teacher?.department || null
-    if (inferredDepartmentName) {
-      const dept = await prisma.department.findFirst({
-        where: { schoolId, name: inferredDepartmentName },
-        select: { id: true, name: true },
-      })
-      hod = {
-        id: 'inferred',
-        userId,
-        schoolId,
-        department: dept?.name || inferredDepartmentName,
-        departmentId: dept?.id || null,
-        departmentRef: dept || null,
-      }
-    }
+  if (!hodProfile) {
+    throw new ApiError('HOD profile not found', 404)
   }
 
-  if (!hod && !isAdminOrHead) {
-    throw new ApiError('Forbidden', 403)
-  }
-
-  const departmentId = hod?.departmentId || null
-  const departmentName = hod?.departmentRef?.name || hod?.department || null
+  const departmentId = hodProfile.departmentId || null
+  const departmentName = hodProfile.departmentRef?.name || hodProfile.department || null
 
   if (!departmentId && !departmentName && !isAdminOrHead) {
     throw new ApiError('No department assigned', 400)

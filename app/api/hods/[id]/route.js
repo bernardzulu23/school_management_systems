@@ -2,8 +2,9 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
-export async function GET(request, { params }) {
+export const GET = withErrorHandler(async function GET(request, { params }) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -56,9 +57,9 @@ export async function GET(request, { params }) {
       assignedSubjects,
     },
   })
-}
+})
 
-export async function PUT(request, { params }) {
+export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -110,9 +111,9 @@ export async function PUT(request, { params }) {
   })
 
   return NextResponse.json({ success: true, data: updated })
-}
+})
 
-export async function DELETE(request, { params }) {
+export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -135,4 +136,4 @@ export async function DELETE(request, { params }) {
   })
 
   return NextResponse.json({ success: true })
-}
+})

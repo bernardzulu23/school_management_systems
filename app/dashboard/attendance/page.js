@@ -2,23 +2,32 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { api } from '@/lib/api'
-import { Users, Calendar, Check, X, Clock } from 'lucide-react'
+import { Users, Calendar, Check, X, Clock, Loader2, AlertTriangle } from 'lucide-react'
 
 export default function AttendancePage() {
   const [selectedClass, setSelectedClass] = useState('')
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
+  const queryClient = useQueryClient()
 
-  const { data: dashboardData } = useQuery({
+  const {
+    data: dashboardData,
+    isLoading: dashboardLoading,
+    isError: dashboardError,
+  } = useQuery({
     queryKey: ['teacher-dashboard'],
     queryFn: () => api.getTeacherDashboard().then((res) => res.data),
   })
 
-  const { data: studentsData, isLoading: studentsLoading } = useQuery({
+  const {
+    data: studentsData,
+    isLoading: studentsLoading,
+    isError: studentsError,
+  } = useQuery({
     queryKey: ['class-students', selectedClass],
     enabled: Boolean(selectedClass),
     queryFn: async () => {
@@ -58,24 +67,55 @@ export default function AttendancePage() {
     }))
   }
 
+  const attendanceMutation = useMutation({
+    mutationFn: (records) =>
+      fetch('/api/attendance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ date: selectedDate, records }),
+      }).then(async (r) => {
+        const json = await r.json().catch(() => ({}))
+        if (!r.ok) throw new Error(json.error || 'Failed to save attendance')
+        return json
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['teacher-dashboard'])
+      queryClient.invalidateQueries(['class-students', selectedClass])
+      toast.success('Attendance saved successfully!')
+    },
+    onError: (error) => {
+      toast.error(error.message || 'Failed to save attendance')
+    },
+  })
+
   const handleSaveAttendance = () => {
     if (!selectedClass) return
     const records = students.map((s) => ({
       studentId: s.id,
       status: attendance[String(s.id)] || 'present',
     }))
+    attendanceMutation.mutate(records)
+  }
 
-    fetch('/api/attendance', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ date: selectedDate, records }),
-    })
-      .then(async (r) => {
-        const json = await r.json().catch(() => ({}))
-        if (!r.ok) throw new Error(json.error || 'Failed to save attendance')
-        toast.success('Attendance saved successfully!')
-      })
-      .catch((e) => toast.error(e.message || 'Failed to save attendance'))
+  if (dashboardLoading) {
+    return (
+      <DashboardLayout title="Take Attendance">
+        <div className="flex justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-royalPurple-accentTx" />
+        </div>
+      </DashboardLayout>
+    )
+  }
+
+  if (dashboardError) {
+    return (
+      <DashboardLayout title="Take Attendance">
+        <Card className="p-8 text-center">
+          <AlertTriangle className="h-12 w-12 text-royalPurple-dangerTx mx-auto mb-4" />
+          <p className="text-royalPurple-text2">Failed to load attendance data. Please refresh.</p>
+        </Card>
+      </DashboardLayout>
+    )
   }
 
   return (

@@ -4,6 +4,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { calculateGrade } from '@/lib/gradingSystem'
 import { gunzipSync } from 'node:zlib'
+import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 
 export const runtime = 'nodejs'
 
@@ -23,16 +24,16 @@ function parseTermYear(termRaw) {
   return { term: term || 'Term 1', year: new Date().getFullYear() }
 }
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    throw new ApiError('Forbidden', 403)
   }
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  if (!schoolId) throw new ApiError('School context required', 400)
 
   const { searchParams } = new URL(request.url)
   const studentId = searchParams.get('studentId')
@@ -71,28 +72,28 @@ export async function GET(request) {
       updatedAt: r.updatedAt,
     })),
   })
-}
+})
 
-export async function POST(request) {
+export const POST = withErrorHandler(async function POST(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    throw new ApiError('Forbidden', 403)
   }
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  if (!schoolId) throw new ApiError('School context required', 400)
 
   const body = await readJson(request)
   const results = Array.isArray(body?.results) ? body.results : null
-  if (!results) return NextResponse.json({ error: 'Invalid data format' }, { status: 400 })
+  if (!results) throw new ApiError('Invalid data format', 400)
 
-  const teacher = await prisma.teacher.findUnique({
-    where: { userId: auth.user.id },
+  const teacher = await prisma.teacher.findFirst({
+    where: { userId: auth.user.id, schoolId },
     select: { id: true },
   })
-  if (!teacher) return NextResponse.json({ error: 'Teacher profile not found' }, { status: 404 })
+  if (!teacher) throw new ApiError('Teacher profile not found', 404)
 
   const conflicts = []
   let applied = 0
@@ -205,4 +206,62 @@ export async function POST(request) {
   }
 
   return NextResponse.json({ success: true, applied })
-}
+})
+
+export const DELETE = withErrorHandler(async function DELETE(request) {
+  const auth = authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+
+  if (!roleCheck(auth.user, ['TEACHER', 'teacher'])) {
+    throw new ApiError('Forbidden', 403)
+  }
+
+  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  if (!schoolId) throw new ApiError('School context required', 400)
+
+  const { searchParams } = new URL(request.url)
+  const id = String(searchParams.get('id') || '').trim()
+  if (!id) throw new ApiError('Result id is required', 400)
+
+  const teacher = await prisma.teacher.findFirst({
+    where: { userId: auth.user.id, schoolId },
+    select: { id: true },
+  })
+  if (!teacher) throw new ApiError('Teacher profile not found', 404)
+
+  const result = await prisma.result.findFirst({
+    where: { id, schoolId },
+    select: { id: true, studentId: true, subjectId: true },
+  })
+  if (!result) throw new ApiError('Result not found', 404)
+
+  const enrollment = await prisma.pupilSubjectEnrollment.findFirst({
+    where: {
+      schoolId,
+      pupilId: result.studentId,
+      subjectId: result.subjectId,
+    },
+    select: { classId: true },
+  })
+
+  const hasAssignment = enrollment?.classId
+    ? await prisma.teachingAssignment.findFirst({
+        where: {
+          schoolId,
+          teacherId: teacher.id,
+          classId: enrollment.classId,
+          subjectId: result.subjectId,
+        },
+        select: { id: true },
+      })
+    : await prisma.teachingAssignment.findFirst({
+        where: { schoolId, teacherId: teacher.id, subjectId: result.subjectId },
+        select: { id: true },
+      })
+
+  if (!hasAssignment) throw new ApiError('Forbidden', 403)
+
+  await prisma.result.delete({ where: { id: result.id } })
+
+  return NextResponse.json({ success: true })
+})

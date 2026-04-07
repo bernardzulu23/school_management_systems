@@ -19,42 +19,51 @@ export async function GET(request) {
     }
 
     // 1. Basic Stats (scoped by schoolId for multi-tenant isolation)
-    const [
-      totalStudents,
-      totalTeachers,
-      totalClasses,
-      totalSubjects,
-      resultsCount
-    ] = await Promise.all([
-      prisma.student.count({ where: { schoolId } }),
-      prisma.teacher.count({ where: { schoolId } }),
-      prisma.class.count({ where: { schoolId } }),
-      prisma.subject.count({ where: { schoolId } }),
-      prisma.result.count({ where: { schoolId } })
+    const [totalStudents, totalTeachers, totalClasses, totalSubjects, resultsCount] =
+      await Promise.all([
+        prisma.student.count({ where: { schoolId } }),
+        prisma.teacher.count({ where: { schoolId } }),
+        prisma.class.count({ where: { schoolId } }),
+        prisma.subject.count({ where: { schoolId } }),
+        prisma.result.count({ where: { schoolId } }),
+      ])
+
+    // 2. Attendance (Proper date-range scoped counting)
+    const today = new Date()
+    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)
+    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59)
+
+    const [todayAttendanceCount, presentCount] = await Promise.all([
+      prisma.attendance.count({
+        where: { schoolId, date: { gte: startOfDay, lte: endOfDay } },
+      }),
+      prisma.attendance.count({
+        where: { schoolId, date: { gte: startOfDay, lte: endOfDay }, status: 'present' },
+      }),
     ])
 
-    // 2. Attendance (Placeholder until model exists)
-    const attendanceRate = 0 // TODO: Implement Attendance model and logic
+    const attendanceRate =
+      todayAttendanceCount > 0 ? Math.round((presentCount / todayAttendanceCount) * 100) : 0
 
     // 3. Pass Rate Calculation (from Results, scoped by schoolId)
     const passedResults = await prisma.result.count({
-      where: { schoolId, score: { gte: 50 } }
+      where: { schoolId, score: { gte: 50 } },
     })
     const passRate = resultsCount > 0 ? Math.round((passedResults / resultsCount) * 100) : 0
 
     // 4. Students Requiring Attention (Score < 40, scoped by schoolId)
     const lowPerformingResults = await prisma.result.findMany({
       where: { schoolId, score: { lt: 40 } },
-      include: { 
+      include: {
         student: true,
-        subject: true
+        subject: true,
       },
       orderBy: { createdAt: 'desc' },
-      take: 20
+      take: 20,
     })
 
     const atRiskMap = new Map()
-    lowPerformingResults.forEach(r => {
+    lowPerformingResults.forEach((r) => {
       if (!atRiskMap.has(r.studentId)) {
         atRiskMap.set(r.studentId, {
           name: r.student.name,
@@ -63,7 +72,7 @@ export async function GET(request) {
           lowGrades: 0,
           subjects: new Set(),
           averageScore: r.score, // Simple implementation
-          parentContact: r.student.parent_father_contact || r.student.guardian_contact || 'N/A'
+          parentContact: r.student.parent_father_contact || r.student.guardian_contact || 'N/A',
         })
       }
       const student = atRiskMap.get(r.studentId)
@@ -73,10 +82,10 @@ export async function GET(request) {
         student.subjects.add(r.subject.name)
       }
     })
-    
-    const studentsRequiringAttention = Array.from(atRiskMap.values()).map(s => ({
+
+    const studentsRequiringAttention = Array.from(atRiskMap.values()).map((s) => ({
       ...s,
-      subjects: Array.from(s.subjects)
+      subjects: Array.from(s.subjects),
     }))
 
     // 5. Performance Trends (scoped by schoolId)
@@ -84,14 +93,14 @@ export async function GET(request) {
       where: { schoolId },
       select: {
         term: true,
-        score: true
-      }
+        score: true,
+      },
     })
 
     const trendsMap = {}
     const trendsCount = {}
 
-    allResultsForTrends.forEach(r => {
+    allResultsForTrends.forEach((r) => {
       const term = r.term || 'Unknown'
       if (!trendsMap[term]) {
         trendsMap[term] = 0
@@ -101,28 +110,30 @@ export async function GET(request) {
       trendsCount[term] += 1
     })
 
-    const performanceTrends = Object.keys(trendsMap).map(term => ({
+    const performanceTrends = Object.keys(trendsMap).map((term) => ({
       term,
       _avg: {
-        score: trendsMap[term] / trendsCount[term]
-      }
+        score: trendsMap[term] / trendsCount[term],
+      },
     }))
 
     // 5a. Performance Summary (for Attention System)
-    const criticalRiskCount = studentsRequiringAttention.filter(s => s.averageScore < 30).length
-    const highRiskCount = studentsRequiringAttention.filter(s => s.averageScore >= 30 && s.averageScore < 40).length
+    const criticalRiskCount = studentsRequiringAttention.filter((s) => s.averageScore < 30).length
+    const highRiskCount = studentsRequiringAttention.filter(
+      (s) => s.averageScore >= 30 && s.averageScore < 40
+    ).length
 
     const allResults = await prisma.result.findMany({
       where: { schoolId },
       include: {
         subject: true,
-        student: true
-      }
+        student: true,
+      },
     })
 
     // Aggregating Challenging Subjects
     const subjectStats = {}
-    allResults.forEach(r => {
+    allResults.forEach((r) => {
       const subjectName = r.subject?.name || 'Unknown'
       if (!subjectStats[subjectName]) {
         subjectStats[subjectName] = { total: 0, count: 0 }
@@ -134,15 +145,15 @@ export async function GET(request) {
     const challengingSubjects = Object.entries(subjectStats)
       .map(([subject, stats]) => ({
         subject,
-        avg: stats.total / stats.count
+        avg: stats.total / stats.count,
       }))
-      .filter(s => s.avg < 50)
+      .filter((s) => s.avg < 50)
       .sort((a, b) => a.avg - b.avg)
       .slice(0, 3)
 
     // Aggregating Struggling Classes
     const classStats = {}
-    allResults.forEach(r => {
+    allResults.forEach((r) => {
       const className = r.student?.class || 'Unknown'
       if (!classStats[className]) {
         classStats[className] = { total: 0, count: 0 }
@@ -154,19 +165,19 @@ export async function GET(request) {
     const strugglingClasses = Object.entries(classStats)
       .map(([className, stats]) => ({
         class: className,
-        avg: stats.total / stats.count
+        avg: stats.total / stats.count,
       }))
-      .filter(c => c.avg < 50)
+      .filter((c) => c.avg < 50)
       .sort((a, b) => a.avg - b.avg)
       .slice(0, 3)
 
     const performanceSummary = {
-        students_requiring_attention: studentsRequiringAttention.length,
-        critical_risk_students: criticalRiskCount,
-        high_risk_students: highRiskCount,
-        average_school_performance: passRate,
-        subjects_most_challenging: challengingSubjects.map(s => s.subject),
-        classes_needing_support: strugglingClasses.map(c => c.class)
+      students_requiring_attention: studentsRequiringAttention.length,
+      critical_risk_students: criticalRiskCount,
+      high_risk_students: highRiskCount,
+      average_school_performance: passRate,
+      subjects_most_challenging: challengingSubjects.map((s) => s.subject),
+      classes_needing_support: strugglingClasses.map((c) => c.class),
     }
 
     // 5b. Junior Results (scoped by schoolId)
@@ -175,12 +186,12 @@ export async function GET(request) {
         schoolId,
         student: {
           class: {
-            contains: '8'
-          }
-        }
+            contains: '8',
+          },
+        },
       },
       orderBy: { score: 'desc' },
-      take: 5
+      take: 5,
     })
 
     const data = {
@@ -193,15 +204,12 @@ export async function GET(request) {
       studentsRequiringAttention,
       performanceTrends,
       performanceSummary,
-      juniorResults
+      juniorResults,
     }
 
     return NextResponse.json(data)
   } catch (error) {
     console.error('Headteacher Dashboard Error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch dashboard stats' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to fetch dashboard stats' }, { status: 500 })
   }
 }

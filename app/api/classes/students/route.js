@@ -12,6 +12,9 @@ export async function GET(request) {
 
   const { searchParams } = new URL(request.url)
   const classId = String(searchParams.get('classId') || '')
+  const subjectId = searchParams.get('subjectId') ? String(searchParams.get('subjectId')) : ''
+  const includeFaceDataRaw = String(searchParams.get('includeFaceData') || '')
+  const includeFaceData = includeFaceDataRaw === 'true' || includeFaceDataRaw === '1'
   if (!classId) return NextResponse.json({ error: 'classId is required' }, { status: 400 })
 
   const cls = await prisma.class.findFirst({
@@ -20,37 +23,60 @@ export async function GET(request) {
   })
   if (!cls?.name) return NextResponse.json({ error: 'Class not found' }, { status: 404 })
 
-  const studentsByName = await prisma.student.findMany({
-    where: { schoolId, class: cls.name },
-    include: { user: { select: { id: true, name: true, email: true, profile_picture_url: true } } },
-    orderBy: { updatedAt: 'desc' },
-    take: 2000,
-  })
+  const studentInclude = {
+    user: { select: { id: true, name: true, email: true, profile_picture_url: true } },
+  }
 
-  const enrollments = await prisma.pupilSubjectEnrollment.findMany({
-    where: { schoolId, classId },
-    distinct: ['pupilId'],
-    select: { pupilId: true },
-    take: 5000,
-  })
-  const pupilIds = enrollments.map((e) => e.pupilId).filter(Boolean)
-  const studentsByEnrollment =
-    pupilIds.length > 0
-      ? await prisma.student.findMany({
-          where: { schoolId, id: { in: pupilIds } },
-          include: {
-            user: { select: { id: true, name: true, email: true, profile_picture_url: true } },
-          },
-          orderBy: { updatedAt: 'desc' },
-          take: 2000,
-        })
-      : []
+  let students = []
 
-  const byId = new Map()
-  ;[...studentsByName, ...studentsByEnrollment].forEach((s) => {
-    if (s?.id) byId.set(String(s.id), s)
-  })
-  const students = Array.from(byId.values())
+  if (subjectId) {
+    const enrollments = await prisma.pupilSubjectEnrollment.findMany({
+      where: { schoolId, classId, subjectId },
+      distinct: ['pupilId'],
+      select: { pupilId: true },
+      take: 5000,
+    })
+    const pupilIds = enrollments.map((e) => e.pupilId).filter(Boolean)
+    students =
+      pupilIds.length > 0
+        ? await prisma.student.findMany({
+            where: { schoolId, id: { in: pupilIds } },
+            include: studentInclude,
+            orderBy: { updatedAt: 'desc' },
+            take: 2000,
+          })
+        : []
+  } else {
+    const studentsByName = await prisma.student.findMany({
+      where: { schoolId, class: cls.name },
+      include: studentInclude,
+      orderBy: { updatedAt: 'desc' },
+      take: 2000,
+    })
+
+    const enrollments = await prisma.pupilSubjectEnrollment.findMany({
+      where: { schoolId, classId },
+      distinct: ['pupilId'],
+      select: { pupilId: true },
+      take: 5000,
+    })
+    const pupilIds = enrollments.map((e) => e.pupilId).filter(Boolean)
+    const studentsByEnrollment =
+      pupilIds.length > 0
+        ? await prisma.student.findMany({
+            where: { schoolId, id: { in: pupilIds } },
+            include: studentInclude,
+            orderBy: { updatedAt: 'desc' },
+            take: 2000,
+          })
+        : []
+
+    const byId = new Map()
+    ;[...studentsByName, ...studentsByEnrollment].forEach((s) => {
+      if (s?.id) byId.set(String(s.id), s)
+    })
+    students = Array.from(byId.values())
+  }
 
   return NextResponse.json({
     success: true,
@@ -60,6 +86,7 @@ export async function GET(request) {
       student_id: s.id,
       exam_number: s.exam_number || null,
       profile_picture_url: s.user?.profile_picture_url || null,
+      ...(includeFaceData ? { faceEmbedding: s.faceEmbedding || null } : {}),
     })),
   })
 }

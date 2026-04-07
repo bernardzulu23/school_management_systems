@@ -16,7 +16,7 @@ import {
 import { useAuth } from '@/lib/auth'
 import { calculateGrade } from '@/lib/gradingSystem'
 import { toast } from 'react-hot-toast'
-import { Save, ArrowLeft, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { Save, ArrowLeft, Loader2, CheckCircle, AlertCircle, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 
 export default function ResultEntryPage() {
@@ -32,6 +32,7 @@ export default function ResultEntryPage() {
   const [pupils, setPupils] = useState([])
   const [scores, setScores] = useState({})
   const [baseUpdatedAtByPupil, setBaseUpdatedAtByPupil] = useState({})
+  const [resultIdByPupil, setResultIdByPupil] = useState({})
 
   const [conflicts, setConflicts] = useState([])
   const [showConflicts, setShowConflicts] = useState(false)
@@ -147,21 +148,25 @@ export default function ResultEntryPage() {
 
       const initialScores = {}
       const baseMap = {}
+      const idMap = {}
       pupilsData.forEach((p) => {
         const existing = byStudent.get(p.id)
         if (existing) {
           initialScores[p.id] = existing.score
           baseMap[p.id] = existing.updatedAt
+          idMap[p.id] = existing.id
         }
       })
 
       setScores(initialScores)
       setBaseUpdatedAtByPupil(baseMap)
+      setResultIdByPupil(idMap)
     } catch (e) {
       toast.error('Failed to load gradebook data')
       setPupils([])
       setScores({})
       setBaseUpdatedAtByPupil({})
+      setResultIdByPupil({})
     } finally {
       setLoading(false)
     }
@@ -181,6 +186,55 @@ export default function ResultEntryPage() {
     const numValue = Number(value)
     if (!isNaN(numValue) && numValue >= 0 && numValue <= 100) {
       setScores((prev) => ({ ...prev, [studentId]: numValue }))
+    }
+  }
+
+  const deleteResult = async (studentId) => {
+    const resultId = resultIdByPupil[studentId]
+    if (!resultId) {
+      setScores((prev) => {
+        const next = { ...prev }
+        delete next[studentId]
+        return next
+      })
+      setBaseUpdatedAtByPupil((prev) => {
+        const next = { ...prev }
+        delete next[studentId]
+        return next
+      })
+      return
+    }
+
+    const ok = window.confirm('Delete this result entry?')
+    if (!ok) return
+
+    try {
+      const res = await fetch(`/api/teacher/results?id=${encodeURIComponent(resultId)}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.message || json?.error || 'Failed to delete result')
+
+      setScores((prev) => {
+        const next = { ...prev }
+        delete next[studentId]
+        return next
+      })
+      setBaseUpdatedAtByPupil((prev) => {
+        const next = { ...prev }
+        delete next[studentId]
+        return next
+      })
+      setResultIdByPupil((prev) => {
+        const next = { ...prev }
+        delete next[studentId]
+        return next
+      })
+
+      toast.success('Result deleted')
+    } catch (e) {
+      toast.error(e.message || 'Something went wrong. Please try again.')
     }
   }
 
@@ -452,31 +506,41 @@ export default function ResultEntryPage() {
                         <th className="px-4 py-3 w-32">Score (0-100)</th>
                         <th className="px-4 py-3">Grade</th>
                         <th className="px-4 py-3">Comment</th>
+                        <th className="px-4 py-3 text-right">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {pupils.map((student) => {
-                        const score = scores[student.id]
-                        const gradeInfo = getGradeInfo(score)
+                      {pupils.length === 0 ? (
+                        <tr>
+                          <td colSpan="6" className="px-4 py-8 text-center text-royalPurple-text2">
+                            No students enrolled in this class and subject.
+                          </td>
+                        </tr>
+                      ) : (
+                        pupils.map((student) => {
+                          const score = scores[student.id]
+                          const gradeInfo = getGradeInfo(score)
 
-                        return (
-                          <tr key={student.id} className="border-b hover:bg-royalPurple-page">
-                            <td className="px-4 py-3 font-medium">{student.id}</td>
-                            <td className="px-4 py-3">{student.name}</td>
-                            <td className="px-4 py-3">
-                              <Input
-                                type="number"
-                                min="0"
-                                max="100"
-                                value={score === undefined ? '' : score}
-                                onChange={(e) => handleScoreChange(student.id, e.target.value)}
-                                className="w-24"
-                              />
-                            </td>
-                            <td className="px-4 py-3">
-                              {gradeInfo ? (
-                                <span
-                                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                          return (
+                            <tr key={student.id} className="border-b hover:bg-royalPurple-page">
+                              <td className="px-4 py-3 font-medium">
+                                {student.exam_number || student.id}
+                              </td>
+                              <td className="px-4 py-3">{student.name}</td>
+                              <td className="px-4 py-3">
+                                <Input
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  value={score === undefined ? '' : score}
+                                  onChange={(e) => handleScoreChange(student.id, e.target.value)}
+                                  className="w-24"
+                                />
+                              </td>
+                              <td className="px-4 py-3">
+                                {gradeInfo ? (
+                                  <span
+                                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                   ${
                                     gradeInfo.color === 'green'
                                       ? 'bg-royalPurple-success text-royalPurple-successTx'
@@ -488,19 +552,29 @@ export default function ResultEntryPage() {
                                             ? 'bg-yellow-100 text-yellow-800'
                                             : 'bg-royalPurple-danger text-royalPurple-dangerTx'
                                   }`}
+                                  >
+                                    {gradeInfo.grade} - {gradeInfo.status}
+                                  </span>
+                                ) : (
+                                  <span className="text-royalPurple-text3">-</span>
+                                )}
+                              </td>
+                              <td className="px-4 py-3 text-royalPurple-text3 italic">
+                                {gradeInfo?.description || '-'}
+                              </td>
+                              <td className="px-4 py-3 text-right">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => deleteResult(student.id)}
                                 >
-                                  {gradeInfo.grade} - {gradeInfo.status}
-                                </span>
-                              ) : (
-                                <span className="text-royalPurple-text3">-</span>
-                              )}
-                            </td>
-                            <td className="px-4 py-3 text-royalPurple-text3 italic">
-                              {gradeInfo?.description || '-'}
-                            </td>
-                          </tr>
-                        )
-                      })}
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </td>
+                            </tr>
+                          )
+                        })
+                      )}
                     </tbody>
                   </table>
                 </div>

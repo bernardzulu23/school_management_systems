@@ -20,8 +20,16 @@ if (
 
 export async function POST(request) {
   try {
-    const body = await request.json()
+    let body = await request.json()
     console.log('[Login Debug] Request Body:', { email: body.email }) // Log email only for safety
+
+    const { subdomain: subdomainFromBody } = body
+    // If subdomain is in the body, set x-school-subdomain header so getSchoolIdFromRequest finds it
+    if (subdomainFromBody) {
+      const headers = new Headers(request.headers)
+      headers.set('x-school-subdomain', subdomainFromBody)
+      request = new Request(request, { headers, body: JSON.stringify(body) })
+    }
 
     // 1. Input Validation
     const validation = await validateRequest(loginSchema, body)
@@ -100,7 +108,9 @@ export async function POST(request) {
       { expiresIn: '15m' }
     )
 
-    const refreshToken = jwt.sign({ id: user.id }, JWT_REFRESH_SECRET, { expiresIn: '7d' })
+    const refreshToken = jwt.sign({ id: user.id, schoolId: user.schoolId }, JWT_REFRESH_SECRET, {
+      expiresIn: '7d',
+    })
 
     // 5. Sanitize Output
     const sanitizedUser = sanitizeOutput({

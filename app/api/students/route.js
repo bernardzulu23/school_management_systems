@@ -102,8 +102,35 @@ export const POST = withErrorHandler(async (request) => {
         name: studentData.name,
         class: studentData.class_id,
         ...(studentData.student_id && { id: studentData.student_id }),
+        selected_subjects: studentData.selected_subjects || [],
       },
     })
+
+    // Create PupilSubjectEnrollment records
+    if (studentData.selected_subjects?.length && studentData.class_id) {
+      const classRecord = await tx.class.findFirst({
+        where: {
+          schoolId,
+          OR: [{ id: studentData.class_id }, { name: studentData.class_id }],
+        },
+      })
+
+      if (classRecord) {
+        const subjectRecords = await tx.subject.findMany({
+          where: { schoolId, name: { in: studentData.selected_subjects } },
+        })
+
+        await tx.pupilSubjectEnrollment.createMany({
+          data: subjectRecords.map((sub) => ({
+            schoolId,
+            pupilId: student.id,
+            subjectId: sub.id,
+            classId: classRecord.id,
+          })),
+          skipDuplicates: true,
+        })
+      }
+    }
 
     return { ...student, user }
   })

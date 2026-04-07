@@ -25,7 +25,16 @@ export async function GET(request, { params }) {
   const teacher = await prisma.teacher.findFirst({
     where: { id: params.id, schoolId },
     include: {
-      user: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          profile_picture_url: true,
+          contact_number: true,
+          employeeId: true,
+        },
+      },
       classes: true,
       teachingAssignments: {
         include: {
@@ -39,7 +48,17 @@ export async function GET(request, { params }) {
 
   if (!teacher) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  return NextResponse.json({ success: true, data: teacher })
+  // Map user fields to top level
+  const shaped = {
+    ...teacher,
+    name: teacher.user?.name ?? teacher.name,
+    email: teacher.user?.email ?? null,
+    profilePicture: teacher.user?.profile_picture_url ?? null,
+    contactNumber: teacher.user?.contact_number ?? null,
+    employeeId: teacher.user?.employeeId ?? null,
+  }
+
+  return NextResponse.json({ success: true, data: shaped })
 }
 
 export async function PUT(request, { params }) {

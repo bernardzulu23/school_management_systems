@@ -170,6 +170,7 @@ export async function GET(request) {
     // 6. Fetch Attendance
     const attendanceRecords = await prisma.attendance.findMany({
       where: {
+        schoolId,
         studentId: student.id,
         date: { gte: startDate },
       },

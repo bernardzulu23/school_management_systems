@@ -40,6 +40,9 @@ export const PUT = withErrorHandler(async function PUT(request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
+  const schoolId = await getSchoolIdFromRequest(request)
+  if (!schoolId) throw new ApiError('School context required', 400)
+
   const data = await request.json()
   const { id, ...updateData } = data
 
@@ -54,8 +57,8 @@ export const PUT = withErrorHandler(async function PUT(request) {
   // Transaction to update both
   const result = await prisma.$transaction(async (tx) => {
     // 1. Get Teacher to find User ID
-    const teacher = await tx.teacher.findUnique({
-      where: { id },
+    const teacher = await tx.teacher.findFirst({
+      where: { id, schoolId },
       select: { userId: true },
     })
 
@@ -100,51 +103,46 @@ export const PUT = withErrorHandler(async function PUT(request) {
   })
 })
 
-export async function DELETE(request) {
-  try {
-    const auth = authMiddleware(request)
-    if (!auth.isAuthenticated) return auth.response
-    if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-
-    const { searchParams } = new URL(request.url)
-    const id = searchParams.get('id')
-
-    if (!id) {
-      return NextResponse.json({ error: 'Teacher ID is required' }, { status: 400 })
-    }
-
-    // Transaction to delete Teacher and User
-    await prisma.$transaction(async (tx) => {
-      // 1. Get User ID
-      const teacher = await tx.teacher.findUnique({
-        where: { id },
-        select: { userId: true },
-      })
-
-      if (!teacher) throw new Error('Teacher not found')
-
-      // 2. Delete Teacher Profile first (due to foreign key)
-      await tx.teacher.delete({
-        where: { id },
-      })
-
-      // 3. Delete User
-      await tx.user.delete({
-        where: { id: teacher.userId },
-      })
-    })
-
-    return NextResponse.json({
-      success: true,
-      message: 'Teacher deleted successfully',
-    })
-  } catch (error) {
-    console.error('Teacher delete error:', error)
-    return NextResponse.json(
-      { error: error.message || 'Failed to delete teacher' },
-      { status: 500 }
-    )
+export const DELETE = withErrorHandler(async function DELETE(request) {
+  const auth = authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+  if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
-}
+
+  const schoolId = await getSchoolIdFromRequest(request)
+  if (!schoolId) throw new ApiError('School context required', 400)
+
+  const { searchParams } = new URL(request.url)
+  const id = searchParams.get('id')
+
+  if (!id) {
+    throw new ApiError('Teacher ID is required', 400)
+  }
+
+  // Transaction to delete Teacher and User
+  await prisma.$transaction(async (tx) => {
+    // 1. Get User ID
+    const teacher = await tx.teacher.findFirst({
+      where: { id, schoolId },
+      select: { userId: true },
+    })
+
+    if (!teacher) throw new ApiError('Teacher not found', 404)
+
+    // 2. Delete Teacher Profile first (due to foreign key)
+    await tx.teacher.delete({
+      where: { id },
+    })
+
+    // 3. Delete User
+    await tx.user.delete({
+      where: { id: teacher.userId },
+    })
+  })
+
+  return NextResponse.json({
+    success: true,
+    message: 'Teacher deleted successfully',
+  })
+})

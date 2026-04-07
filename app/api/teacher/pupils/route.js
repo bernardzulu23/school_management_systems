@@ -2,13 +2,14 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    throw new ApiError('Forbidden', 403)
   }
 
   const { searchParams } = new URL(request.url)
@@ -18,19 +19,19 @@ export async function GET(request) {
   const subjectName = searchParams.get('subjectName')
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  if (!schoolId) throw new ApiError('School context required', 400)
 
-  const teacher = await prisma.teacher.findUnique({
-    where: { userId: auth.user.id },
+  const teacher = await prisma.teacher.findFirst({
+    where: { userId: auth.user.id, schoolId },
     select: { id: true },
   })
-  if (!teacher) return NextResponse.json({ error: 'Teacher profile not found' }, { status: 404 })
+  if (!teacher) throw new ApiError('Teacher profile not found', 404)
 
   const resolvedClass =
     classId ||
     (className
       ? (
-          await prisma.class.findUnique({
+          await prisma.class.findFirst({
             where: { schoolId_name: { schoolId, name: className } },
             select: { id: true },
           })
@@ -41,7 +42,7 @@ export async function GET(request) {
     subjectId ||
     (subjectName
       ? (
-          await prisma.subject.findUnique({
+          await prisma.subject.findFirst({
             where: { schoolId_name: { schoolId, name: subjectName } },
             select: { id: true },
           })
@@ -49,10 +50,7 @@ export async function GET(request) {
       : null)
 
   if (!resolvedClass || !resolvedSubject) {
-    return NextResponse.json(
-      { error: 'classId/className and subjectId/subjectName required' },
-      { status: 400 }
-    )
+    throw new ApiError('classId/className and subjectId/subjectName required', 400)
   }
 
   const assignment = await prisma.teachingAssignment.findFirst({
@@ -66,10 +64,7 @@ export async function GET(request) {
   })
 
   if (!assignment) {
-    return NextResponse.json(
-      { error: 'No teaching assignment for this class and subject' },
-      { status: 403 }
-    )
+    throw new ApiError('No teaching assignment for this class and subject', 403)
   }
 
   const enrollments = await prisma.pupilSubjectEnrollment.findMany({
@@ -98,4 +93,4 @@ export async function GET(request) {
   }))
 
   return NextResponse.json({ success: true, data: pupils })
-}
+})

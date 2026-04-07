@@ -133,6 +133,7 @@ model Student {
   previous_school String?
   grade_average Float?
   selected_subjects String[] // Array of subject names selected
+  faceEmbedding String?   // JSON-serialised FloatArray from ML Kit face recognition
 
   // Parent/Guardian Info
   parent_father_name    String?

@@ -15,6 +15,15 @@ export async function GET(request) {
     const teacher = await prisma.teacher.findFirst({
       where: { userId: auth.user.id, schoolId },
       include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            contact_number: true,
+            profile_picture_url: true,
+          },
+        },
         classes: true,
         subjects: true,
         teachingAssignments: {
@@ -187,47 +196,42 @@ export async function GET(request) {
 
     const totalStudents = studentIdSet.size
 
-    const totalAssessments =
-      subjectNames.length > 0 && classNames.length > 0
-        ? await prisma.assessment.count({
-            where: {
-              schoolId,
-              subject: { in: subjectNames },
-              class: { in: classNames },
-            },
-          })
-        : 0
+    const totalAssessments = await prisma.assessment.count({
+      where: { schoolId },
+    })
 
-    const totalResults =
-      subjectIds.length > 0
-        ? await prisma.result.count({
-            where: {
-              schoolId,
-              subjectId: { in: subjectIds },
-            },
-          })
-        : 0
+    const totalResults = await prisma.result.count({
+      where: { schoolId },
+    })
 
-    const avgScore =
-      subjectIds.length > 0
-        ? await prisma.result.aggregate({
-            where: { schoolId, subjectId: { in: subjectIds } },
-            _avg: { score: true },
-          })
-        : null
+    const avgScore = await prisma.result.aggregate({
+      where: { schoolId },
+      _avg: { score: true },
+    })
 
     const averagePerformance = avgScore?._avg?.score ? Math.round(avgScore._avg.score) : 0
 
-    const recentAssessments =
-      subjectNames.length > 0 && classNames.length > 0
-        ? await prisma.assessment.findMany({
+    const recentAssessments = await prisma.assessment.findMany({
+      where: { schoolId },
+      orderBy: { date: 'desc' },
+      take: 10,
+    })
+
+    const studentIdsForRecent = Array.from(studentIdSet).slice(0, 5000)
+    const recentResults =
+      subjectIds.length > 0
+        ? await prisma.result.findMany({
             where: {
               schoolId,
-              subject: { in: subjectNames },
-              class: { in: classNames },
+              subjectId: { in: subjectIds },
+              ...(studentIdsForRecent.length > 0 ? { studentId: { in: studentIdsForRecent } } : {}),
             },
-            orderBy: { date: 'desc' },
-            take: 10,
+            include: {
+              student: { select: { id: true, name: true, exam_number: true, class: true } },
+              subject: { select: { id: true, name: true, code: true } },
+            },
+            orderBy: { updatedAt: 'desc' },
+            take: 5,
           })
         : []
 
@@ -324,10 +328,29 @@ export async function GET(request) {
         status: 'published',
         start_date: a.date,
       })),
+      recent_results: recentResults.map((r) => ({
+        id: r.id,
+        studentId: r.studentId,
+        studentName: r.student?.name || null,
+        studentExamNumber: r.student?.exam_number || null,
+        class: r.student?.class || null,
+        subjectId: r.subjectId,
+        subjectName: r.subject?.name || null,
+        subjectCode: r.subject?.code || null,
+        score: r.score,
+        grade: r.grade,
+        term: r.term,
+        year: r.year,
+        updatedAt: r.updatedAt,
+      })),
       teacher: {
         id: teacher.id,
         department: teacher.department,
         ts_number: teacher.ts_number,
+        name: teacher.user?.name || null,
+        email: teacher.user?.email || null,
+        contact_number: teacher.user?.contact_number || null,
+        profile_picture_url: teacher.user?.profile_picture_url || null,
       },
     })
   } catch (error) {

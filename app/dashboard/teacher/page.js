@@ -156,12 +156,20 @@ export default function TeacherDashboard() {
     setTeacherGoals([])
   }, [currentUser])
 
-  const { data: stats } = useQuery({
+  const {
+    data: stats,
+    isLoading: statsLoading,
+    isError: statsError,
+  } = useQuery({
     queryKey: ['dashboard-stats'],
     queryFn: () => api.getDashboardStats().then((res) => res.data),
   })
 
-  const { data: dashboardData } = useQuery({
+  const {
+    data: dashboardData,
+    isLoading: dashboardLoading,
+    isError: dashboardError,
+  } = useQuery({
     queryKey: ['teacher-dashboard'],
     queryFn: () => api.getTeacherDashboard().then((res) => res.data),
   })
@@ -189,9 +197,45 @@ export default function TeacherDashboard() {
     }
 
     if (Array.isArray(dashboardData.my_classes)) {
-      setTeacherClasses(dashboardData.my_classes)
+      setTeacherClasses(
+        dashboardData.my_classes.map((c) => ({
+          id: c.id,
+          name: c.name,
+          students: c.student_count || 0,
+          subject: 'Multiple subjects',
+          attendance: 0,
+        }))
+      )
     }
   }, [dashboardData])
+
+  if (statsLoading || dashboardLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-royalPurple-page">
+        <div className="text-center">
+          <LoadingSpinner className="h-12 w-12 text-royalPurple-accentTx mb-4" />
+          <p className="text-royalPurple-text2">Loading dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (statsError || dashboardError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-royalPurple-page">
+        <Card className="p-8 text-center max-w-md">
+          <AlertTriangle className="h-12 w-12 text-royalPurple-dangerTx mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-royalPurple-text1 mb-2">
+            Failed to load dashboard
+          </h2>
+          <p className="text-royalPurple-text2 mb-6">
+            There was an error fetching your dashboard data. Please try refreshing the page.
+          </p>
+          <Button onClick={() => window.location.reload()}>Refresh Page</Button>
+        </Card>
+      </div>
+    )
+  }
 
   // Helper function to calculate grade color
   const getGradeColor = (grade) => {
@@ -850,7 +894,10 @@ export default function TeacherDashboard() {
               <CardContent>
                 <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
                   <div className="space-y-4">
-                    {results.slice(0, 5).map((result) => (
+                    {(Array.isArray(dashboardData?.recent_results)
+                      ? dashboardData.recent_results
+                      : []
+                    ).map((result) => (
                       <div
                         key={result.id}
                         className="flex items-center justify-between p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-colors duration-200"
@@ -861,19 +908,16 @@ export default function TeacherDashboard() {
                           </div>
                           <div>
                             <h4 className="font-semibold text-royalPurple-text1">
-                              {result.student}
+                              {result.studentName || 'Student'}
                             </h4>
                             <p className="text-royalPurple-text2 text-sm">
-                              {result.subject} - {result.assessment}
+                              {result.subjectName || 'Subject'} • {result.term} {result.year}
                             </p>
                           </div>
                         </div>
                         <div className="text-right">
                           <div className="text-xl font-bold text-royalPurple-text1">
-                            {result.marks}/{result.totalMarks}
-                          </div>
-                          <div className="text-lg font-semibold text-royalPurple-successTx">
-                            {Math.round((result.marks / result.totalMarks) * 100)}%
+                            {result.score}
                           </div>
                           <div
                             className={`text-xs px-3 py-1 rounded-full font-medium ${getGradeColor(result.grade)}`}
@@ -883,7 +927,8 @@ export default function TeacherDashboard() {
                         </div>
                       </div>
                     ))}
-                    {results.length === 0 && (
+                    {(!Array.isArray(dashboardData?.recent_results) ||
+                      dashboardData.recent_results.length === 0) && (
                       <div className="text-center py-8">
                         <div className="backdrop-blur-md bg-royalPurple-success/60 border border-royalPurple-border/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
                           <BarChart3 className="h-8 w-8 text-royalPurple-text1" />
@@ -1191,7 +1236,10 @@ export default function TeacherDashboard() {
                       <span className="text-royalPurple-text2 text-sm font-medium">Contact</span>
                     </div>
                     <p className="text-royalPurple-text1 font-semibold">
-                      {currentUser?.contactNumber || 'Not provided'}
+                      {dashboardData?.teacher?.contact_number ||
+                        currentUser?.contact_number ||
+                        currentUser?.contactNumber ||
+                        'Not provided'}
                     </p>
                   </div>
                 </div>

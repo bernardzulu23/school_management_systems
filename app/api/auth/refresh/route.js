@@ -24,7 +24,7 @@ export async function POST() {
     }
 
     const user = await prisma.user.findFirst({
-      where: { id: decoded.id },
+      where: { id: decoded.id, schoolId: decoded.schoolId },
       select: { id: true, email: true, role: true, schoolId: true },
     })
 

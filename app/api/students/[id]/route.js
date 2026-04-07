@@ -12,10 +12,32 @@ export async function GET(request, { params }) {
 
   const student = await prisma.student.findFirst({
     where: { id: params.id, schoolId },
-    include: { user: true },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          profile_picture_url: true,
+          contact_number: true,
+        },
+      },
+      results: true,
+      attendance: { orderBy: { date: 'desc' }, take: 30 },
+      subjectEnrollments: { include: { subject: true, class: true } },
+      gamificationProfile: true,
+    },
   })
 
   if (!student) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+  // Map user fields to top level
+  const shaped = {
+    ...student,
+    email: student.user?.email ?? null,
+    profilePicture: student.user?.profile_picture_url ?? null,
+    contactNumber: student.user?.contact_number ?? null,
+  }
 
   if (roleCheck(auth.user, ['STUDENT', 'student']) && student.userId !== auth.user.id) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
@@ -39,7 +61,7 @@ export async function GET(request, { params }) {
   return NextResponse.json({
     success: true,
     data: {
-      ...student,
+      ...shaped,
       updatedAt: student.updatedAt,
     },
   })

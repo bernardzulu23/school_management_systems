@@ -1,152 +1,160 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { headers } from 'next/headers'
+import prisma from '@/lib/prisma'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 
-export async function GET(request) {
-  try {
-    const headersList = headers()
-    const userId = headersList.get('x-user-id')
-    let studentId = null
+export const GET = withErrorHandler(async function GET(request) {
+  const auth = authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
 
-    if (userId) {
-      const student = await prisma.student.findUnique({
-        where: { userId: userId },
-        select: { id: true }
-      })
-      if (student) {
-        studentId = student.id
-      }
-    }
+  if (!roleCheck(auth.user, ['STUDENT', 'student', 'ADMIN', 'headteacher'])) {
+    throw new ApiError('Forbidden', 403)
+  }
 
-    // Fallback for dev/demo if no user context
-    if (!studentId) {
-      const student = await prisma.student.findFirst()
-      if (student) studentId = student.id
-    }
+  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  if (!schoolId) throw new ApiError('School context required', 400)
 
-    const materials = await prisma.studyMaterial.findMany({
-      include: {
-        teacher: {
-          include: { user: true }
+  const student = await prisma.student.findFirst({
+    where: { userId: auth.user.id, schoolId },
+    select: { id: true },
+  })
+  if (!student) throw new ApiError('Student profile not found', 404)
+
+  const materials = await prisma.studyMaterial.findMany({
+    where: { schoolId },
+    orderBy: { uploadDate: 'desc' },
+  })
+
+  const ids = materials.map((m) => m.id)
+
+  const interactions = ids.length
+    ? await prisma.studentMaterial.findMany({
+        where: { schoolId, studentId: student.id, studyMaterialId: { in: ids } },
+        select: {
+          studyMaterialId: true,
+          isBookmarked: true,
+          isDownloaded: true,
+          downloads: true,
         },
-        studentInteractions: studentId ? {
-          where: { studentId: studentId }
-        } : false
+      })
+    : []
+
+  const interactionByMaterialId = new Map(interactions.map((i) => [String(i.studyMaterialId), i]))
+
+  const grouped = ids.length
+    ? await prisma.studentMaterial.groupBy({
+        by: ['studyMaterialId'],
+        where: { schoolId, studyMaterialId: { in: ids } },
+        _sum: { downloads: true },
+      })
+    : []
+
+  const downloadsByMaterialId = new Map()
+  grouped.forEach((g) => {
+    downloadsByMaterialId.set(String(g.studyMaterialId), Number(g._sum?.downloads || 0))
+  })
+
+  const formatted = materials.map((m) => {
+    const interaction = interactionByMaterialId.get(String(m.id))
+    return {
+      id: m.id,
+      title: m.title,
+      subject: m.subject,
+      teacher: 'School Library',
+      type: m.type,
+      size: m.size || 'Unknown',
+      uploadDate: m.uploadDate.toISOString().split('T')[0],
+      downloads: downloadsByMaterialId.get(String(m.id)) || 0,
+      views: 0,
+      rating: 0,
+      description: m.description,
+      tags: m.tags,
+      fileUrl: m.fileUrl,
+      isBookmarked: interaction?.isBookmarked || false,
+      isDownloaded: interaction?.isDownloaded || false,
+    }
+  })
+
+  return NextResponse.json({ success: true, data: formatted })
+})
+
+export const POST = withErrorHandler(async function POST(request) {
+  const auth = authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+
+  if (!roleCheck(auth.user, ['STUDENT', 'student'])) {
+    throw new ApiError('Forbidden', 403)
+  }
+
+  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  if (!schoolId) throw new ApiError('School context required', 400)
+
+  const student = await prisma.student.findFirst({
+    where: { userId: auth.user.id, schoolId },
+    select: { id: true },
+  })
+  if (!student) throw new ApiError('Student profile not found', 404)
+
+  const { materialId, action } = await request.json().catch(() => ({}))
+  const studyMaterialId = String(materialId || '').trim()
+  const act = String(action || '').trim()
+
+  if (!studyMaterialId || !['bookmark', 'download'].includes(act)) {
+    throw new ApiError('Invalid request', 400)
+  }
+
+  const existing = await prisma.studentMaterial.findUnique({
+    where: {
+      studentId_studyMaterialId: {
+        studentId: student.id,
+        studyMaterialId,
       },
-      orderBy: { createdAt: 'desc' }
-    })
+    },
+  })
 
-    const formattedMaterials = materials.map(m => {
-      const interaction = m.studentInteractions?.[0]
-      return {
-        id: m.id,
-        title: m.title,
-        subject: m.subject,
-        teacher: m.teacher?.user?.name || 'Unknown Teacher',
-        type: m.type,
-        size: m.size || 'Unknown',
-        uploadDate: m.createdAt.toISOString().split('T')[0],
-        downloads: m.downloads + (interaction?.isDownloaded ? 0 : 0), // Use total downloads from material model
-        views: m.views,
-        rating: m.rating || 0,
-        description: m.description,
-        tags: m.tags,
-        fileUrl: m.fileUrl,
-        isBookmarked: interaction?.isBookmarked || false,
-        isDownloaded: interaction?.isDownloaded || false
-      }
-    })
-
-    return NextResponse.json({ success: true, data: formattedMaterials })
-
-  } catch (error) {
-    console.error('Fetch materials error:', error)
-    return NextResponse.json({ error: 'Failed to fetch materials' }, { status: 500 })
-  }
-}
-
-export async function POST(request) {
-  try {
-    const { materialId, action } = await request.json()
-    const headersList = headers()
-    const userId = headersList.get('x-user-id')
-    
-    let student = null
-    if (userId) {
-      student = await prisma.student.findUnique({
-        where: { userId: userId }
+  if (act === 'bookmark') {
+    if (existing) {
+      await prisma.studentMaterial.update({
+        where: { id: existing.id },
+        data: { isBookmarked: !existing.isBookmarked, lastAccessed: new Date() },
       })
-    }
-
-    if (!student) {
-      student = await prisma.student.findFirst()
-    }
-
-    if (!student) {
-      return NextResponse.json({ error: 'Student not found' }, { status: 404 })
-    }
-
-    if (!materialId || !['bookmark', 'download'].includes(action)) {
-      return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
-    }
-
-    // Check existing interaction first
-    const existingInteraction = await prisma.studentMaterial.findUnique({
-      where: {
-        studentId_studyMaterialId: {
+    } else {
+      await prisma.studentMaterial.create({
+        data: {
+          schoolId,
           studentId: student.id,
-          studyMaterialId: materialId
-        }
-      }
-    })
-
-    if (action === 'bookmark') {
-      if (existingInteraction) {
-        // Toggle
-        await prisma.studentMaterial.update({
-          where: { id: existingInteraction.id },
-          data: { isBookmarked: !existingInteraction.isBookmarked }
-        })
-      } else {
-        // Create
-        await prisma.studentMaterial.create({
-          data: {
-            studentId: student.id,
-            studyMaterialId: materialId,
-            isBookmarked: true
-          }
-        })
-      }
-    } else if (action === 'download') {
-       if (existingInteraction) {
-        await prisma.studentMaterial.update({
-          where: { id: existingInteraction.id },
-          data: { 
-            isDownloaded: true,
-            downloadDate: new Date()
-          }
-        })
-      } else {
-        await prisma.studentMaterial.create({
-          data: {
-            studentId: student.id,
-            studyMaterialId: materialId,
-            isDownloaded: true,
-            downloadDate: new Date()
-          }
-        })
-      }
-      
-      // Increment total downloads on material
-      await prisma.studyMaterial.update({
-        where: { id: materialId },
-        data: { downloads: { increment: 1 } }
+          studyMaterialId,
+          isBookmarked: true,
+          lastAccessed: new Date(),
+        },
       })
     }
-    
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error('Material interaction error:', error)
-    return NextResponse.json({ error: 'Action failed' }, { status: 500 })
   }
-}
+
+  if (act === 'download') {
+    if (existing) {
+      await prisma.studentMaterial.update({
+        where: { id: existing.id },
+        data: {
+          isDownloaded: true,
+          downloads: { increment: 1 },
+          lastAccessed: new Date(),
+        },
+      })
+    } else {
+      await prisma.studentMaterial.create({
+        data: {
+          schoolId,
+          studentId: student.id,
+          studyMaterialId,
+          isDownloaded: true,
+          downloads: 1,
+          lastAccessed: new Date(),
+        },
+      })
+    }
+  }
+
+  return NextResponse.json({ success: true })
+})

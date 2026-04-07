@@ -31,6 +31,11 @@ export async function GET(request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const school = await prisma.school.findFirst({
+    where: { id: schoolId },
+    select: { id: true, name: true, logo_url: true, subdomain: true },
+  })
+
   const resolvedDepartment =
     dbUser.hodProfile?.departmentRef?.name ||
     dbUser.hodProfile?.department ||
@@ -40,6 +45,7 @@ export async function GET(request) {
 
   return NextResponse.json({
     success: true,
+    school: school || null,
     user: {
       id: dbUser.id,
       name: dbUser.name,

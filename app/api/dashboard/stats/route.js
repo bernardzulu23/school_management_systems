@@ -25,8 +25,8 @@ export async function GET(request) {
       totalAssessments,
     ] = await Promise.all([
       prisma.user.count({ where: { schoolId } }),
-      prisma.user.count({ where: { role: { in: ['student', 'STUDENT'] }, schoolId } }),
-      prisma.user.count({ where: { role: { in: ['teacher', 'TEACHER'] }, schoolId } }),
+      prisma.student.count({ where: { schoolId } }),
+      prisma.teacher.count({ where: { schoolId } }),
       prisma.headOfDepartment.count({ where: { schoolId } }),
       prisma.user.count({
         where: { role: { in: ['headteacher', 'HEADTEACHER', 'admin', 'administrator'] }, schoolId },
@@ -37,6 +37,23 @@ export async function GET(request) {
       prisma.assessment.count({ where: { schoolId } }),
     ])
 
+    // Calculate attendance metrics
+    const today = new Date()
+    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)
+    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59)
+
+    const [todayAttendanceCount, presentCount] = await Promise.all([
+      prisma.attendance.count({
+        where: { schoolId, date: { gte: startOfDay, lte: endOfDay } },
+      }),
+      prisma.attendance.count({
+        where: { schoolId, date: { gte: startOfDay, lte: endOfDay }, status: 'present' },
+      }),
+    ])
+
+    const attendanceRate =
+      todayAttendanceCount > 0 ? Math.round((presentCount / todayAttendanceCount) * 100) : 0
+
     const stats = {
       totalStudents,
       totalTeachers,
@@ -46,9 +63,6 @@ export async function GET(request) {
       totalSubjects,
       totalAssessments,
     }
-
-    // Calculate additional metrics
-    const attendanceRate = 0 // Placeholder: Requires Attendance model
 
     // Calculate average grade (scoped by schoolId)
     const results = await prisma.result.aggregate({

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
@@ -8,16 +8,15 @@ export async function GET(request) {
     const auth = authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
 
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page')) || 1
     const limit = parseInt(searchParams.get('limit')) || 20
     const skip = (page - 1) * limit
-    const schoolId =
-      auth.user?.schoolId || (await getSchoolIdFromRequest(request)) || searchParams.get('schoolId')
     const className = searchParams.get('class')
     const subject = searchParams.get('subject')
-
-    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
     const where = {
       schoolId,

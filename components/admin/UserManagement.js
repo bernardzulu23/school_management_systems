@@ -8,12 +8,13 @@ import UserRegistrationForm from '@/components/forms/UserRegistrationForm'
 import { api } from '@/lib/api'
 import toast from 'react-hot-toast'
 import { Plus, Users, UserCheck, GraduationCap, BookOpen } from 'lucide-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export default function UserManagement() {
   const [selectedRole, setSelectedRole] = useState('')
   const [showForm, setShowForm] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [useEnhancedForm, setUseEnhancedForm] = useState(true)
+  const queryClient = useQueryClient()
 
   const roles = [
     {
@@ -49,51 +50,41 @@ export default function UserManagement() {
     setShowForm(true)
   }
 
-  const handleRegistration = async (formData) => {
-    setLoading(true)
-    try {
-      console.log('Sending registration data:', formData) // Debug log
-
-      const response = await api.post('/auth/register', formData)
-
-      console.log('Registration response:', response.data) // Debug log
-
+  const registrationMutation = useMutation({
+    mutationFn: (formData) => api.post('/auth/register', formData),
+    onSuccess: (response, formData) => {
       if (response.data.success) {
         toast.success(
           `${formData.role} registered successfully! They can now login with their credentials.`
         )
         setShowForm(false)
         setSelectedRole('')
-        // Optionally refresh user list here
+        // Invalidate relevant queries to refresh dashboard counts
+        queryClient.invalidateQueries(['dashboard-stats'])
+        queryClient.invalidateQueries(['headteacher-dashboard'])
+        queryClient.invalidateQueries(['users'])
+        queryClient.invalidateQueries(['students'])
+        queryClient.invalidateQueries(['teachers'])
+        queryClient.invalidateQueries(['hods'])
       } else {
-        console.error('Registration failed:', response.data)
         toast.error(response.data.message || 'Registration failed')
       }
-    } catch (error) {
-      console.error('Registration error details:', {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-      })
-
+    },
+    onError: (error) => {
+      console.error('Registration error details:', error)
       if (error.response?.status === 403) {
         toast.error('Access denied. Only headteachers can register new users.')
-      } else if (error.response?.status === 422) {
-        toast.error(
-          'Validation error: ' + (error.response?.data?.message || 'Please check your input data.')
-        )
-      } else if (error.response?.status === 500) {
-        toast.error('Server error. Please try again later.')
       } else {
-        toast.error(
-          error.response?.data?.message || error.message || 'Registration failed. Please try again.'
-        )
+        toast.error(error.response?.data?.message || error.message || 'Registration failed')
       }
-    } finally {
-      setLoading(false)
-    }
+    },
+  })
+
+  const handleRegistration = (formData) => {
+    registrationMutation.mutate(formData)
   }
+
+  const loading = registrationMutation.isLoading
 
   const handleCancel = () => {
     setShowForm(false)
