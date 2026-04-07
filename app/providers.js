@@ -8,6 +8,63 @@ import { useAuth } from '@/lib/auth'
 import GlobalTopLoadingBar from '@/components/ui/GlobalTopLoadingBar'
 import GlobalBackButton from '@/components/ui/GlobalBackButton'
 
+function ActivitySessionKeeper({ children }) {
+  const isAuthenticated = useAuth((s) => s.isAuthenticated)
+  const lastActivityAt = useAuth((s) => s.lastActivityAt)
+  const markActivity = useAuth((s) => s.markActivity)
+  const syncSession = useAuth((s) => s.syncSession)
+  const logout = useAuth((s) => s.logout)
+
+  useEffect(() => {
+    let lastMarkedAt = 0
+    const handler = () => {
+      const now = Date.now()
+      if (now - lastMarkedAt < 1500) return
+      lastMarkedAt = now
+      markActivity?.()
+    }
+
+    handler()
+
+    const events = ['click', 'keydown', 'mousemove', 'scroll', 'touchstart']
+    events.forEach((e) => window.addEventListener(e, handler, { passive: true }))
+
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, handler))
+    }
+  }, [markActivity])
+
+  useEffect(() => {
+    let interval
+    let lastKeepAliveAt = 0
+    const idleLimitMs = 10 * 60 * 1000
+    const keepAliveEveryMs = 8 * 60 * 1000
+
+    const tick = async () => {
+      if (!isAuthenticated) return
+      const now = Date.now()
+      const idleMs = lastActivityAt && lastActivityAt > 0 ? now - lastActivityAt : idleLimitMs + 1
+
+      if (idleMs > idleLimitMs) {
+        await logout?.()
+        return
+      }
+
+      if (now - lastKeepAliveAt > keepAliveEveryMs) {
+        lastKeepAliveAt = now
+        await syncSession?.({ force: true })
+      }
+    }
+
+    interval = setInterval(tick, 60 * 1000)
+    tick()
+
+    return () => clearInterval(interval)
+  }, [isAuthenticated, lastActivityAt, logout, syncSession])
+
+  return children
+}
+
 function AuthSessionSync({ children }) {
   const syncSession = useAuth((s) => s.syncSession)
 
@@ -52,9 +109,9 @@ function AuthSessionSync({ children }) {
       }
     }
 
-    // Run once immediately, then every 30s (not 5s)
+    // Run once immediately, then every 2 minutes
     attemptSync()
-    interval = setInterval(attemptSync, 30000)
+    interval = setInterval(attemptSync, 120000)
 
     return () => clearInterval(interval)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -78,13 +135,15 @@ export function Providers({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
       <SchoolProvider>
-        <AuthSessionSync>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <GlobalTopLoadingBar />
-            <GlobalBackButton />
-            {children}
-          </ThemeProvider>
-        </AuthSessionSync>
+        <ActivitySessionKeeper>
+          <AuthSessionSync>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <GlobalTopLoadingBar />
+              <GlobalBackButton />
+              {children}
+            </ThemeProvider>
+          </AuthSessionSync>
+        </ActivitySessionKeeper>
       </SchoolProvider>
     </QueryClientProvider>
   )

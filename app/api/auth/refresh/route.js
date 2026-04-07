@@ -39,6 +39,10 @@ export async function POST() {
       { expiresIn: '15m' }
     )
 
+    const newRefreshToken = jwt.sign({ id: user.id, schoolId: user.schoolId }, JWT_REFRESH_SECRET, {
+      expiresIn: '7d',
+    })
+
     const response = NextResponse.json({ success: true, accessToken: newAccessToken })
 
     response.cookies.set('access_token', newAccessToken, {
@@ -46,6 +50,14 @@ export async function POST() {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 15 * 60,
+      path: '/',
+    })
+
+    response.cookies.set('refresh_token', newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60,
       path: '/',
     })
 
