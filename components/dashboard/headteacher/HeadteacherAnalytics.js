@@ -4,7 +4,13 @@ import { TrendingUp, Users, FileBarChart, BookOpen } from 'lucide-react'
 import { useHeadteacher } from '@/lib/context/HeadteacherContext'
 
 export function HeadteacherAnalytics() {
-  const { selectedTerm, setSelectedTerm, yearGroupPerformanceData, schoolStats } = useHeadteacher()
+  const {
+    selectedTerm,
+    setSelectedTerm,
+    yearGroupPerformanceData,
+    seniorResultsAnalysis,
+    schoolStats,
+  } = useHeadteacher()
   return (
     <div className="space-y-8">
       {/* Comprehensive Analytics Header */}
@@ -95,6 +101,102 @@ export function HeadteacherAnalytics() {
           </CardContent>
         </Card>
       </div>
+
+      <Card variant="glass">
+        <CardHeader>
+          <CardTitle className="text-royalPurple-text1">
+            Senior Results Analysis (Grade 12)
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {!seniorResultsAnalysis ? (
+            <div className="text-center py-10 text-royalPurple-text2">No senior results found.</div>
+          ) : (
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl text-center">
+                  <div className="text-2xl font-bold text-royalPurple-text1">
+                    {seniorResultsAnalysis.totalStudents || 0}
+                  </div>
+                  <div className="text-royalPurple-text2 text-sm">Senior Students</div>
+                </div>
+                <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl text-center">
+                  <div className="text-2xl font-bold text-royalPurple-successTx">
+                    {seniorResultsAnalysis.averageScore || 0}%
+                  </div>
+                  <div className="text-royalPurple-text2 text-sm">Average Score</div>
+                </div>
+                <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl text-center">
+                  <div className="text-2xl font-bold text-royalPurple-accentTx">
+                    {seniorResultsAnalysis.passRate || 0}%
+                  </div>
+                  <div className="text-royalPurple-text2 text-sm">Pass Rate</div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="p-6 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl">
+                  <h3 className="text-royalPurple-text1 font-bold mb-4">Grade Distribution</h3>
+                  {Array.isArray(seniorResultsAnalysis.gradeDistribution) &&
+                  seniorResultsAnalysis.gradeDistribution.length > 0 ? (
+                    <div className="space-y-3">
+                      {seniorResultsAnalysis.gradeDistribution.map((g) => (
+                        <div key={g.grade} className="flex items-center justify-between">
+                          <div className="text-royalPurple-text2">{g.grade}</div>
+                          <div className="text-royalPurple-text1 font-semibold">
+                            {g.count} ({g.percentage}%)
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-royalPurple-text2">No grade data.</div>
+                  )}
+                </div>
+
+                <div className="p-6 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl">
+                  <h3 className="text-royalPurple-text1 font-bold mb-4">Subject Performance</h3>
+                  {Array.isArray(seniorResultsAnalysis.subjects) &&
+                  seniorResultsAnalysis.subjects.length > 0 ? (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b border-royalPurple-border/40">
+                            <th className="text-left py-2 text-royalPurple-text2 font-medium">
+                              Subject
+                            </th>
+                            <th className="text-right py-2 text-royalPurple-text2 font-medium">
+                              Avg
+                            </th>
+                            <th className="text-right py-2 text-royalPurple-text2 font-medium">
+                              Pass
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {seniorResultsAnalysis.subjects.slice(0, 8).map((s) => (
+                            <tr key={s.subject} className="border-b border-royalPurple-border/20">
+                              <td className="py-2 text-royalPurple-text1">{s.subject}</td>
+                              <td className="py-2 text-right text-royalPurple-successTx font-semibold">
+                                {s.average}%
+                              </td>
+                              <td className="py-2 text-right text-royalPurple-accentTx font-semibold">
+                                {s.passRate}%
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <div className="text-royalPurple-text2">No subject data.</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Teacher Performance Analytics */}
       <Card variant="glass">

@@ -194,6 +194,121 @@ export async function GET(request) {
       take: 5,
     })
 
+    const seniorClasses = await prisma.class.findMany({
+      where: {
+        schoolId,
+        OR: [
+          { name: { contains: '12' } },
+          { year_group: { contains: '12' } },
+          { name: { contains: 'Grade 12' } },
+          { year_group: { contains: 'Grade 12' } },
+        ],
+      },
+      select: { name: true, year_group: true },
+      take: 200,
+    })
+
+    const seniorClassValues = Array.from(
+      new Set(
+        seniorClasses
+          .flatMap((c) => [c.name, c.year_group])
+          .map((v) => String(v || '').trim())
+          .filter(Boolean)
+      )
+    )
+
+    const seniorStudents = await prisma.student.findMany({
+      where: {
+        schoolId,
+        OR: [
+          ...(seniorClassValues.length > 0 ? [{ class: { in: seniorClassValues } }] : []),
+          { class: { contains: '12' } },
+        ],
+      },
+      select: { id: true },
+      take: 20000,
+    })
+
+    const seniorStudentIds = seniorStudents.map((s) => String(s.id))
+
+    const seniorResults =
+      seniorStudentIds.length > 0
+        ? await prisma.result.findMany({
+            where: { schoolId, studentId: { in: seniorStudentIds } },
+            include: { subject: true },
+            take: 50000,
+          })
+        : []
+
+    const seniorScores = seniorResults.map((r) => Number(r.score || 0))
+    const seniorAverage =
+      seniorScores.length > 0
+        ? Math.round(seniorScores.reduce((s, v) => s + v, 0) / seniorScores.length)
+        : 0
+
+    const seniorPassRate =
+      seniorScores.length > 0
+        ? Math.round((seniorScores.filter((s) => s >= 50).length / seniorScores.length) * 100)
+        : 0
+
+    const gradeCounts = {}
+    seniorResults.forEach((r) => {
+      const g = String(r.grade || 'Unknown')
+        .trim()
+        .toUpperCase()
+      const bucket = g.startsWith('A')
+        ? 'A'
+        : g.startsWith('B')
+          ? 'B'
+          : g.startsWith('C')
+            ? 'C'
+            : g.startsWith('D')
+              ? 'D'
+              : g.startsWith('E')
+                ? 'E'
+                : g.startsWith('F')
+                  ? 'F'
+                  : g || 'Unknown'
+      gradeCounts[bucket] = (gradeCounts[bucket] || 0) + 1
+    })
+
+    const seniorGradeDistribution = Object.entries(gradeCounts).map(([grade, count]) => ({
+      grade,
+      count,
+      percentage: seniorResults.length ? Math.round((count / seniorResults.length) * 100) : 0,
+    }))
+
+    seniorGradeDistribution.sort((a, b) => String(a.grade).localeCompare(String(b.grade)))
+
+    const subjectStatsSenior = {}
+    const subjectStudentSets = {}
+    seniorResults.forEach((r) => {
+      const name = r.subject?.name || 'Unknown'
+      if (!subjectStatsSenior[name]) subjectStatsSenior[name] = { total: 0, count: 0, pass: 0 }
+      subjectStatsSenior[name].total += Number(r.score || 0)
+      subjectStatsSenior[name].count += 1
+      if (Number(r.score || 0) >= 50) subjectStatsSenior[name].pass += 1
+      if (!subjectStudentSets[name]) subjectStudentSets[name] = new Set()
+      subjectStudentSets[name].add(String(r.studentId))
+    })
+
+    const seniorSubjectAnalysis = Object.entries(subjectStatsSenior)
+      .map(([subject, stats]) => ({
+        subject,
+        students: subjectStudentSets[subject]?.size || 0,
+        average: stats.count ? Math.round(stats.total / stats.count) : 0,
+        passRate: stats.count ? Math.round((stats.pass / stats.count) * 100) : 0,
+      }))
+      .sort((a, b) => a.subject.localeCompare(b.subject))
+
+    const seniorResultsAnalysis = {
+      totalStudents: seniorStudentIds.length,
+      averageScore: seniorAverage,
+      passRate: seniorPassRate,
+      gradeDistribution: seniorGradeDistribution,
+      subjects: seniorSubjectAnalysis,
+    }
+
     const data = {
       totalStudents,
       totalTeachers,
@@ -205,6 +320,7 @@ export async function GET(request) {
       performanceTrends,
       performanceSummary,
       juniorResults,
+      seniorResultsAnalysis,
     }
 
     return NextResponse.json(data)

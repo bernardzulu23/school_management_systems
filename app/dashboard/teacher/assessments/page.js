@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -52,6 +53,32 @@ export default function TeacherAssessmentsPage() {
   })
 
   const selectedAssignment = assignments.find((a) => a.id === selectedAssignmentId) || null
+
+  const {
+    data: analyticsResponse,
+    isLoading: analyticsLoading,
+    isError: analyticsError,
+  } = useQuery({
+    queryKey: [
+      'teacher-assessment-analytics',
+      selectedAssignment?.classId || null,
+      selectedAssignment?.subjectId || null,
+    ],
+    enabled: Boolean(selectedAssignment?.classId && selectedAssignment?.subjectId),
+    queryFn: async () => {
+      const params = new URLSearchParams()
+      params.set('classId', selectedAssignment.classId)
+      params.set('subjectId', selectedAssignment.subjectId)
+      const res = await fetch(`/api/dashboard/teacher/assessments-analytics?${params.toString()}`, {
+        credentials: 'include',
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.message || json?.error || 'Failed to load analytics')
+      return json
+    },
+  })
+
+  const analytics = analyticsResponse?.data || null
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -593,31 +620,60 @@ export default function TeacherAssessmentsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="p-3 bg-royalPurple-success border border-royalPurple-border rounded-lg">
-                  <h4 className="font-medium text-royalPurple-successTx mb-1">
-                    Assessment Completed
-                  </h4>
-                  <p className="text-sm text-royalPurple-successTx">
-                    Statistics Test - Results uploaded
-                  </p>
-                  <p className="text-xs text-royalPurple-successTx mt-1">2 hours ago</p>
-                </div>
-                <div className="p-3 bg-royalPurple-accent border border-royalPurple-border2 rounded-lg">
-                  <h4 className="font-medium text-royalPurple-accentTx mb-1">
-                    Assessment Scheduled
-                  </h4>
-                  <p className="text-sm text-royalPurple-accentTx">
-                    Algebra Mid-term Test - Jan 30, 10:00 AM
-                  </p>
-                  <p className="text-xs text-royalPurple-accentTx mt-1">1 day ago</p>
-                </div>
-                <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <h4 className="font-medium text-yellow-800 mb-1">Draft Saved</h4>
-                  <p className="text-sm text-yellow-700">
-                    Trigonometry Assignment - Ready for review
-                  </p>
-                  <p className="text-xs text-yellow-600 mt-1">3 days ago</p>
-                </div>
+                {!selectedAssignment ? (
+                  <p className="text-royalPurple-text2 text-sm">Select a class and subject.</p>
+                ) : analyticsLoading ? (
+                  <div className="flex items-center gap-2 text-royalPurple-text2 text-sm">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Loading activity...
+                  </div>
+                ) : analyticsError ? (
+                  <p className="text-royalPurple-dangerTx text-sm">Failed to load activity</p>
+                ) : !analytics || !Array.isArray(analytics.recentActivity) ? (
+                  <p className="text-royalPurple-text2 text-sm">No activity found</p>
+                ) : analytics.recentActivity.length === 0 ? (
+                  <p className="text-royalPurple-text2 text-sm">No recent activity</p>
+                ) : (
+                  analytics.recentActivity.slice(0, 3).map((item) => {
+                    const bg =
+                      item.type === 'completed'
+                        ? 'bg-royalPurple-success border-royalPurple-border'
+                        : item.type === 'scheduled'
+                          ? 'bg-royalPurple-accent border-royalPurple-border2'
+                          : 'bg-yellow-50 border-yellow-200'
+
+                    const titleColor =
+                      item.type === 'completed'
+                        ? 'text-royalPurple-successTx'
+                        : item.type === 'scheduled'
+                          ? 'text-royalPurple-accentTx'
+                          : 'text-yellow-800'
+
+                    const descColor =
+                      item.type === 'completed'
+                        ? 'text-royalPurple-successTx'
+                        : item.type === 'scheduled'
+                          ? 'text-royalPurple-accentTx'
+                          : 'text-yellow-700'
+
+                    const timeColor =
+                      item.type === 'completed'
+                        ? 'text-royalPurple-successTx'
+                        : item.type === 'scheduled'
+                          ? 'text-royalPurple-accentTx'
+                          : 'text-yellow-600'
+
+                    const timeLabel = item.time ? new Date(item.time).toLocaleString() : ''
+
+                    return (
+                      <div key={item.id} className={`p-3 border rounded-lg ${bg}`}>
+                        <h4 className={`font-medium mb-1 ${titleColor}`}>{item.title}</h4>
+                        <p className={`text-sm ${descColor}`}>{item.description}</p>
+                        <p className={`text-xs mt-1 ${timeColor}`}>{timeLabel}</p>
+                      </div>
+                    )
+                  })
+                )}
               </div>
             </CardContent>
           </Card>
@@ -641,14 +697,18 @@ export default function TeacherAssessmentsPage() {
               <div className="text-center p-4 bg-royalPurple-success rounded-lg">
                 <TrendingUp className="h-8 w-8 text-royalPurple-successTx mx-auto mb-2" />
                 <h4 className="font-medium text-royalPurple-successTx">Average Performance</h4>
-                <p className="text-2xl font-bold text-royalPurple-successTx">82%</p>
-                <p className="text-sm text-royalPurple-successTx">Across all classes</p>
+                <p className="text-2xl font-bold text-royalPurple-successTx">
+                  {analytics?.averageScore ?? 0}%
+                </p>
+                <p className="text-sm text-royalPurple-successTx">For selected class & subject</p>
               </div>
               <div className="text-center p-4 bg-royalPurple-pill rounded-lg">
                 <Users className="h-8 w-8 text-royalPurple-pillTx mx-auto mb-2" />
                 <h4 className="font-medium text-royalPurple-pillTx">Students Assessed</h4>
-                <p className="text-2xl font-bold text-royalPurple-pillTx">83</p>
-                <p className="text-sm text-royalPurple-pillTx">Total participants</p>
+                <p className="text-2xl font-bold text-royalPurple-pillTx">
+                  {analytics?.studentsAssessed ?? 0}
+                </p>
+                <p className="text-sm text-royalPurple-pillTx">For selected class & subject</p>
               </div>
             </div>
           </CardContent>

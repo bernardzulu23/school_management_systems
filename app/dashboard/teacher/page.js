@@ -46,6 +46,7 @@ import {
   Rocket,
   Globe,
   LogOut,
+  Loader2,
 } from 'lucide-react'
 import Link from 'next/link'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
@@ -173,6 +174,27 @@ export default function TeacherDashboard() {
     queryKey: ['teacher-dashboard'],
     queryFn: () => api.getTeacherDashboard().then((res) => res.data),
   })
+
+  const {
+    data: departmentAnalysisResponse,
+    isLoading: departmentAnalysisLoading,
+    isError: departmentAnalysisError,
+  } = useQuery({
+    queryKey: ['teacher-department-analysis'],
+    queryFn: async () => {
+      const res = await fetch('/api/dashboard/teacher/department-analysis', {
+        credentials: 'include',
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok)
+        throw new Error(json?.message || json?.error || 'Failed to load department analysis')
+      return json
+    },
+    enabled: Boolean(isAuthenticated),
+    staleTime: 5 * 60 * 1000,
+  })
+
+  const departmentAnalysis = departmentAnalysisResponse?.data || null
 
   useEffect(() => {
     if (!dashboardData) return
@@ -716,6 +738,62 @@ export default function TeacherDashboard() {
             </CardContent>
           </Card>
 
+          <Card variant="glass">
+            <CardHeader>
+              <CardTitle className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent flex items-center">
+                <Layers className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
+                Department Performance
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+                {departmentAnalysisLoading ? (
+                  <div className="flex items-center gap-2 text-royalPurple-text2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Loading department performance...
+                  </div>
+                ) : departmentAnalysisError ? (
+                  <div className="text-royalPurple-dangerTx">
+                    Failed to load department performance
+                  </div>
+                ) : !departmentAnalysis ? (
+                  <div className="text-royalPurple-text2">No department data available</div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
+                      <div className="text-royalPurple-text2 text-sm">Department</div>
+                      <div className="text-royalPurple-text1 font-bold text-lg mt-1">
+                        {departmentAnalysis.department || 'Not set'}
+                      </div>
+                    </div>
+                    <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
+                      <div className="text-royalPurple-text2 text-sm">Your Average / Pass Rate</div>
+                      <div className="text-royalPurple-text1 font-bold text-lg mt-1">
+                        {departmentAnalysis.teacher?.averageScore || 0}% /{' '}
+                        {departmentAnalysis.teacher?.passRate || 0}%
+                      </div>
+                      <div className="text-royalPurple-text3 text-xs mt-1">
+                        Based on results in your teaching assignments
+                      </div>
+                    </div>
+                    <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
+                      <div className="text-royalPurple-text2 text-sm">
+                        Department Average / Pass Rate
+                      </div>
+                      <div className="text-royalPurple-text1 font-bold text-lg mt-1">
+                        {departmentAnalysis.departmentStats?.averageScore || 0}% /{' '}
+                        {departmentAnalysis.departmentStats?.passRate || 0}%
+                      </div>
+                      <div className="text-royalPurple-text3 text-xs mt-1">
+                        Across teachers in your department
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Teaching Subjects */}
           <Card variant="glass">
             <CardHeader>
@@ -726,15 +804,13 @@ export default function TeacherDashboard() {
             </CardHeader>
             <CardContent>
               <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                {(currentUser?.subjects || []).length > 0 ? (
+                {(Array.isArray(dashboardData?.my_subjects) ? dashboardData.my_subjects : [])
+                  .length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {(currentUser?.subjects || []).map((subject, index) => {
-                      // Subject performance data will come from API
-                      const data = { students: 0, avgScore: 0, assessments: 0, trend: '0%' }
-
+                    {(dashboardData?.my_subjects || []).map((subject) => {
                       return (
                         <div
-                          key={index}
+                          key={subject.id}
                           className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer"
                         >
                           <div className="flex items-center justify-between mb-4">
@@ -743,50 +819,30 @@ export default function TeacherDashboard() {
                             </div>
                             <div
                               className={`px-3 py-1 rounded-full text-xs font-medium ${
-                                data.avgScore >= 85
-                                  ? 'bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50'
-                                  : data.avgScore >= 75
-                                    ? 'bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50'
-                                    : 'bg-yellow-600/60 text-yellow-100 border border-yellow-400/50'
+                                (subject.student_count || 0) > 0
+                                  ? 'bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50'
+                                  : 'bg-yellow-600/60 text-yellow-100 border border-yellow-400/50'
                               }`}
                             >
-                              {data.avgScore}% Avg
+                              {subject.class_count || 0} Classes
                             </div>
                           </div>
                           <h3 className="text-royalPurple-text1 font-bold text-lg mb-2">
-                            {subject}
+                            {subject.name}
                           </h3>
 
                           <div className="space-y-3">
                             <div className="flex justify-between items-center">
                               <span className="text-royalPurple-text2 text-sm">Students</span>
                               <span className="text-royalPurple-text1 font-semibold">
-                                {data.students}
+                                {subject.student_count || 0}
                               </span>
                             </div>
                             <div className="flex justify-between items-center">
-                              <span className="text-royalPurple-text2 text-sm">Assessments</span>
+                              <span className="text-royalPurple-text2 text-sm">Classes</span>
                               <span className="text-royalPurple-text1 font-semibold">
-                                {data.assessments}
+                                {subject.class_count || 0}
                               </span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-royalPurple-text2 text-sm">Trend</span>
-                              <span className="text-royalPurple-successTx font-semibold">
-                                {data.trend}
-                              </span>
-                            </div>
-                            <div className="w-full bg-royalPurple-muted/60 rounded-full h-2 mt-3">
-                              <div
-                                className={`h-2 rounded-full ${
-                                  data.avgScore >= 85
-                                    ? 'bg-royalPurple-success'
-                                    : data.avgScore >= 75
-                                      ? 'bg-royalPurple-accent'
-                                      : 'bg-yellow-500'
-                                }`}
-                                style={{ width: `${Math.min(data.avgScore, 100)}%` }}
-                              ></div>
                             </div>
                           </div>
                         </div>
@@ -1372,18 +1428,20 @@ export default function TeacherDashboard() {
                       </h3>
                       <span className="text-royalPurple-text2 text-sm">
                         {
-                          (currentUser?.subjects || ['Mathematics', 'Physics', 'Computer Science'])
-                            .length
+                          (Array.isArray(dashboardData?.my_subjects)
+                            ? dashboardData.my_subjects
+                            : []
+                          ).length
                         }{' '}
                         subjects
                       </span>
                     </div>
                     <div className="space-y-3">
-                      {(currentUser?.subjects || ['Mathematics', 'Physics', 'Computer Science'])
+                      {(Array.isArray(dashboardData?.my_subjects) ? dashboardData.my_subjects : [])
                         .slice(0, 3)
-                        .map((subject, index) => (
+                        .map((subject) => (
                           <div
-                            key={index}
+                            key={subject.id}
                             className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
                           >
                             <div className="flex items-center space-x-3">
@@ -1392,7 +1450,7 @@ export default function TeacherDashboard() {
                               </div>
                               <div>
                                 <p className="text-royalPurple-text1 font-semibold text-sm">
-                                  {subject}
+                                  {subject.name}
                                 </p>
                                 <p className="text-royalPurple-text2 text-xs">Active subject</p>
                               </div>
