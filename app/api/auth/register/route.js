@@ -23,6 +23,26 @@ const parseYearGroupSectionFromClassName = (className) => {
   return { year_group: raw, section: '' }
 }
 
+const normalizeYearGroup = (yearGroupRaw) => {
+  const raw = String(yearGroupRaw || '').trim()
+  if (!raw) return ''
+  const numeric = raw.match(/^(\d{1,2})$/)
+  if (numeric) return `Grade ${Number(numeric[1])}`
+  const grade = raw.match(/^grade\s*(\d{1,2})$/i)
+  if (grade) return `Grade ${Number(grade[1])}`
+  return raw
+}
+
+const buildClassName = (yearGroupRaw, sectionRaw) => {
+  const yearGroup = normalizeYearGroup(yearGroupRaw)
+  const section = String(sectionRaw || '')
+    .trim()
+    .toUpperCase()
+  if (!yearGroup) return section ? section : ''
+  if (!section) return yearGroup
+  return `${yearGroup}${section}`
+}
+
 export const POST = withErrorHandler(async (request) => {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
@@ -110,7 +130,7 @@ export const POST = withErrorHandler(async (request) => {
           : []
 
         const incomingClassId = body.classId ? String(body.classId).trim() : ''
-        const fallbackClassName = `${body.year_group || ''}${body.section || ''}`.trim()
+        const fallbackClassName = buildClassName(body.year_group, body.section)
 
         const classRecord = incomingClassId
           ? await tx.class.findFirst({
@@ -122,8 +142,11 @@ export const POST = withErrorHandler(async (request) => {
                 create: {
                   schoolId,
                   name: fallbackClassName,
-                  year_group: String(body.year_group || '').trim() || fallbackClassName,
-                  section: String(body.section || '').trim() || '',
+                  year_group: normalizeYearGroup(body.year_group) || fallbackClassName,
+                  section:
+                    String(body.section || '')
+                      .trim()
+                      .toUpperCase() || '',
                 },
                 update: {},
               })
