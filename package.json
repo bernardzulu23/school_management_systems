@@ -28,7 +28,8 @@
     "format": "prettier --write .",
     "prepare": "husky",
     "seed": "node prisma/seed.js",
-    "seed:schools": "node prisma/seed-schools.js"
+    "seed:schools": "node prisma/seed-schools.js",
+    "export:users": "node scripts/export-users-excel.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
