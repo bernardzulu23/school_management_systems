@@ -24,11 +24,20 @@ import LoadingSpinner from '@/components/LoadingSpinner'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
 import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
 import SubjectSelection from '@/components/registration/SubjectSelection'
+import UserTypeCards from '@/components/dashboard/UserTypeCards'
 
 export default function UserManagement() {
   const [activeUserType, setActiveUserType] = useState('all')
   const [users, setUsers] = useState([])
   const [hodAssignments, setHodAssignments] = useState([])
+  const [userCounts, setUserCounts] = useState({
+    totalUsers: 0,
+    totalStudents: 0,
+    totalTeachers: 0,
+    totalHods: 0,
+    totalHeadteachers: 0,
+  })
+  const [countsLoading, setCountsLoading] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
@@ -39,31 +48,56 @@ export default function UserManagement() {
   const [editLoading, setEditLoading] = useState(false)
   const [showHodAssign, setShowHodAssign] = useState(false)
 
+  const fetchCounts = async () => {
+    setCountsLoading(true)
+    try {
+      const res = await api.getDashboardStats()
+      const data = res?.data?.data || {}
+      setUserCounts({
+        totalUsers: data.totalUsers || 0,
+        totalStudents: data.totalStudents || 0,
+        totalTeachers: data.totalTeachers || 0,
+        totalHods: data.totalHods || 0,
+        totalHeadteachers: data.totalHeadteachers || 0,
+      })
+    } catch {
+      setUserCounts({
+        totalUsers: 0,
+        totalStudents: 0,
+        totalTeachers: 0,
+        totalHods: 0,
+        totalHeadteachers: 0,
+      })
+    } finally {
+      setCountsLoading(false)
+    }
+  }
+
   const userTypes = [
-    { id: 'all', name: 'All Users', icon: Users, count: users.length },
+    { id: 'all', name: 'All Users', icon: Users, count: userCounts.totalUsers },
     {
       id: 'students',
       name: 'Students',
       icon: User,
-      count: users.filter((u) => u.role === 'student').length,
+      count: userCounts.totalStudents,
     },
     {
       id: 'teachers',
       name: 'Teachers',
       icon: GraduationCap,
-      count: users.filter((u) => u.role === 'teacher').length,
+      count: userCounts.totalTeachers,
     },
     {
       id: 'hods',
       name: 'HODs',
       icon: Settings,
-      count: hodAssignments.length,
+      count: userCounts.totalHods,
     },
     {
       id: 'headteachers',
       name: 'Headteachers',
       icon: UserPlus,
-      count: users.filter((u) => u.role === 'headteacher').length,
+      count: userCounts.totalHeadteachers,
     },
   ]
 
@@ -81,6 +115,10 @@ export default function UserManagement() {
   useEffect(() => {
     fetchUsers()
   }, [activeUserType])
+
+  useEffect(() => {
+    fetchCounts()
+  }, [])
 
   useEffect(() => {
     if (!editingUser) return
@@ -336,45 +374,12 @@ export default function UserManagement() {
 
       <main className="space-y-8">
         {/* User Type Cards */}
-        <section
-          aria-label="User categories summary"
-          className="grid grid-cols-1 md:grid-cols-5 gap-6"
-        >
-          {userTypes.map((type) => {
-            const Icon = type.icon
-            const isActive = activeUserType === type.id
-            return (
-              <Card
-                key={type.id}
-                variant="glass"
-                className={`cursor-pointer transition-all duration-300 ${
-                  isActive
-                    ? 'scale-105 border-royalPurple-border2/60'
-                    : 'hover:scale-105 hover:border-royalPurple-border2/40'
-                }`}
-                onClick={() => setActiveUserType(type.id)}
-                role="button"
-                aria-pressed={isActive}
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && setActiveUserType(type.id)}
-              >
-                <CardContent className="p-6 text-center">
-                  <div
-                    className={`backdrop-blur-md rounded-2xl p-4 mb-4 ${
-                      isActive
-                        ? 'bg-royalPurple-accent/60 border border-royalPurple-border2/50'
-                        : 'bg-royalPurple-muted/60 border border-royalPurple-border/40'
-                    }`}
-                  >
-                    <Icon className="h-8 w-8 text-royalPurple-text1 mx-auto" aria-hidden="true" />
-                  </div>
-                  <h3 className="font-bold text-royalPurple-text1 text-lg mb-2">{type.name}</h3>
-                  <p className="text-3xl font-bold text-royalPurple-accentTx">{type.count}</p>
-                </CardContent>
-              </Card>
-            )
-          })}
-        </section>
+        <UserTypeCards
+          userTypes={userTypes}
+          activeUserType={activeUserType}
+          setActiveUserType={setActiveUserType}
+          countsLoading={countsLoading}
+        />
 
         {/* Management Actions */}
         <section
