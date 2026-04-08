@@ -19,9 +19,21 @@ export async function GET(request) {
 
   const cls = await prisma.class.findFirst({
     where: { id: classId, schoolId },
-    select: { name: true },
+    select: { id: true, name: true, year_group: true, section: true },
   })
   if (!cls?.name) return NextResponse.json({ error: 'Class not found' }, { status: 404 })
+
+  const yearGroup = String(cls.year_group || '').trim()
+  const section = String(cls.section || '').trim()
+  const compact = `${yearGroup}${section}`.trim()
+  const spaced = `${yearGroup} ${section}`.trim()
+  const classCandidates = Array.from(
+    new Set(
+      [cls.name, cls.id, yearGroup, compact, spaced, String(cls.name || '').replace(/\s+/g, '')]
+        .map((v) => String(v || '').trim())
+        .filter(Boolean)
+    )
+  )
 
   const studentInclude = {
     user: { select: { id: true, name: true, email: true, profile_picture_url: true } },
@@ -48,7 +60,7 @@ export async function GET(request) {
         : []
   } else {
     const studentsByName = await prisma.student.findMany({
-      where: { schoolId, class: cls.name },
+      where: { schoolId, class: { in: classCandidates } },
       include: studentInclude,
       orderBy: { updatedAt: 'desc' },
       take: 2000,

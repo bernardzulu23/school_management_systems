@@ -85,7 +85,13 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const classRecord = await prisma.class.findFirst({
     where: { schoolId, id: resolvedClass },
-    select: { id: true, name: true, subjects: { select: { id: true, name: true } } },
+    select: {
+      id: true,
+      name: true,
+      year_group: true,
+      section: true,
+      subjects: { select: { id: true, name: true } },
+    },
   })
 
   const subjectRecord = await prisma.subject.findFirst({
@@ -100,13 +106,36 @@ export const GET = withErrorHandler(async function GET(request) {
         )
       : false
 
+  const yearGroup = String(classRecord?.year_group || '').trim()
+  const section = String(classRecord?.section || '').trim()
+  const compact = `${yearGroup}${section}`.trim()
+  const spaced = `${yearGroup} ${section}`.trim()
+  const classCandidates = classRecord
+    ? Array.from(
+        new Set(
+          [
+            classRecord.name,
+            classRecord.id,
+            yearGroup,
+            compact,
+            spaced,
+            String(classRecord.name || '').replace(/\s+/g, ''),
+          ]
+            .map((v) => String(v || '').trim())
+            .filter(Boolean)
+        )
+      )
+    : []
+
   const fallbackStudents =
     classRecord && subjectRecord
       ? (
           await prisma.student.findMany({
             where: {
               schoolId,
-              OR: [{ class: classRecord.name }, { class: classRecord.id }],
+              ...(classCandidates.length > 0
+                ? { class: { in: classCandidates } }
+                : { OR: [{ class: classRecord.name }, { class: classRecord.id }] }),
             },
             include: { user: true },
             orderBy: { name: 'asc' },

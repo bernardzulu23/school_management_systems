@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { findStudentByUserId, findStudentsByClass } from '@/lib/db/queries'
+import {
+  findStudentByUserId,
+  findStudentsByClass,
+  findStudentsByClassNames,
+} from '@/lib/db/queries'
 import bcrypt from 'bcryptjs'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
@@ -32,15 +36,55 @@ export const GET = withErrorHandler(async (request) => {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   let resolvedClassName = className ? String(className) : null
+  let classCandidates = []
   if (!resolvedClassName && classId) {
     const cls = await prisma.class.findFirst({
       where: { id: String(classId), schoolId },
-      select: { name: true },
+      select: { id: true, name: true, year_group: true, section: true },
     })
     resolvedClassName = cls?.name || null
+    if (cls) {
+      const yearGroup = String(cls.year_group || '').trim()
+      const section = String(cls.section || '').trim()
+      const compact = `${yearGroup}${section}`.trim()
+      const spaced = `${yearGroup} ${section}`.trim()
+      classCandidates = [
+        cls.name,
+        cls.id,
+        yearGroup,
+        compact,
+        spaced,
+        String(cls.name || '').replace(/\s+/g, ''),
+      ]
+    }
+  } else if (resolvedClassName) {
+    const cls = await prisma.class.findFirst({
+      where: { schoolId, name: { equals: resolvedClassName, mode: 'insensitive' } },
+      select: { id: true, name: true, year_group: true, section: true },
+    })
+    if (cls) {
+      const yearGroup = String(cls.year_group || '').trim()
+      const section = String(cls.section || '').trim()
+      const compact = `${yearGroup}${section}`.trim()
+      const spaced = `${yearGroup} ${section}`.trim()
+      classCandidates = [
+        cls.name,
+        cls.id,
+        yearGroup,
+        compact,
+        spaced,
+        String(cls.name || '').replace(/\s+/g, ''),
+        resolvedClassName,
+      ]
+    } else {
+      classCandidates = [resolvedClassName]
+    }
   }
 
-  const { students, total } = await findStudentsByClass(schoolId, resolvedClassName, page, limit)
+  const { students, total } =
+    classCandidates.length > 0
+      ? await findStudentsByClassNames(schoolId, classCandidates, page, limit)
+      : await findStudentsByClass(schoolId, resolvedClassName, page, limit)
 
   return NextResponse.json({
     success: true,
