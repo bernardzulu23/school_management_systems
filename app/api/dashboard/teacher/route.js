@@ -224,16 +224,26 @@ export async function GET(request) {
 
     const totalStudents = studentIdSet.size
 
-    const totalAssessments = await prisma.assessment.count({
-      where: { schoolId },
-    })
+    const totalAssessments =
+      classIds.length > 0 && subjectNames.length > 0
+        ? await prisma.assessment.count({
+            where: {
+              schoolId,
+              OR: [
+                ...(classIds.length > 0 ? [{ classId: { in: classIds } }] : []),
+                ...(classNames.length > 0 ? [{ class: { in: classNames } }] : []),
+              ],
+              subject: { in: subjectNames },
+            },
+          })
+        : 0
 
     const totalResults = await prisma.result.count({
-      where: { schoolId },
+      where: { schoolId, enteredByUserId: auth.user.id },
     })
 
     const avgScore = await prisma.result.aggregate({
-      where: { schoolId },
+      where: { schoolId, enteredByUserId: auth.user.id },
       _avg: { score: true },
     })
 
@@ -251,6 +261,7 @@ export async function GET(request) {
         ? await prisma.result.findMany({
             where: {
               schoolId,
+              enteredByUserId: auth.user.id,
               subjectId: { in: subjectIds },
               ...(studentIdsForRecent.length > 0 ? { studentId: { in: studentIdsForRecent } } : {}),
             },

@@ -231,6 +231,63 @@ export const GET = withErrorHandler(async function GET(request) {
         })
       : []
 
+  const teacherUserIds = teachers.map((t) => String(t.user?.id || '')).filter(Boolean)
+  const subjectIds = subjects.map((s) => String(s.id || '')).filter(Boolean)
+
+  const teacherAgg =
+    teacherUserIds.length > 0
+      ? await prisma.result.groupBy({
+          by: ['enteredByUserId'],
+          where: {
+            schoolId,
+            enteredByUserId: { in: teacherUserIds },
+            ...(subjectIds.length > 0 ? { subjectId: { in: subjectIds } } : {}),
+          },
+          _avg: { score: true },
+          _count: { _all: true },
+          take: 50000,
+        })
+      : []
+
+  const aggByUserId = new Map(
+    teacherAgg
+      .filter((a) => a.enteredByUserId)
+      .map((a) => [
+        String(a.enteredByUserId),
+        { avg: a._avg?.score || 0, count: a._count?._all || 0 },
+      ])
+  )
+
+  const teacherPerformance = teachers
+    .filter((t) => t?.user?.id)
+    .map((t) => {
+      const userId = String(t.user.id)
+      const agg = aggByUserId.get(userId) || { avg: 0, count: 0 }
+      const classSet = new Set()
+      const subjectSet = new Set()
+      ;(t.teachingAssignments || []).forEach((a) => {
+        if (a?.class?.name) classSet.add(String(a.class.name))
+        if (a?.subject?.name) subjectSet.add(String(a.subject.name))
+      })
+      return {
+        userId,
+        name: t.user.name || '',
+        email: t.user.email || '',
+        department:
+          (Array.isArray(t.departments) && t.departments.length > 0
+            ? t.departments
+                .map((d) => d.department?.name)
+                .filter(Boolean)
+                .join(', ')
+            : t.department) || '',
+        averageScore: Math.round(Number(agg.avg) || 0),
+        resultsEntered: Number(agg.count) || 0,
+        classes: Array.from(classSet),
+        subjects: Array.from(subjectSet),
+      }
+    })
+    .sort((a, b) => (b.averageScore || 0) - (a.averageScore || 0))
+
   return NextResponse.json({
     success: true,
     data: {
@@ -259,6 +316,7 @@ export const GET = withErrorHandler(async function GET(request) {
       subjects,
       results,
       assessments,
+      teacherPerformance,
     },
   })
 })

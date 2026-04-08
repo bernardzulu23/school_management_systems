@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -34,6 +35,7 @@ import { toast } from 'react-hot-toast'
 import { Loader2, X } from 'lucide-react'
 
 export default function TeacherAssessmentsPage() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState('upcoming')
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState('all')
@@ -107,7 +109,7 @@ export default function TeacherAssessmentsPage() {
       setLoading(true)
       try {
         const params = new URLSearchParams()
-        params.set('class', selectedAssignment.className)
+        params.set('classId', selectedAssignment.classId)
         params.set('subject', selectedAssignment.subjectName)
         params.set('limit', '50')
         const res = await fetch(`/api/assessments?${params.toString()}`)
@@ -127,6 +129,23 @@ export default function TeacherAssessmentsPage() {
     }
     loadAssessments()
   }, [selectedAssignmentId])
+
+  const handleExportResults = () => {
+    if (!selectedAssignment?.classId || !selectedAssignment?.subjectId) return
+    const params = new URLSearchParams()
+    params.set('classId', selectedAssignment.classId)
+    params.set('subjectId', selectedAssignment.subjectId)
+    window.open(`/api/teacher/results/export?${params.toString()}`, '_blank')
+  }
+
+  const handleDownloadTemplate = () => {
+    if (!selectedAssignment?.classId || !selectedAssignment?.subjectId) return
+    const params = new URLSearchParams()
+    params.set('classId', selectedAssignment.classId)
+    params.set('subjectId', selectedAssignment.subjectId)
+    params.set('template', '1')
+    window.open(`/api/teacher/results/export?${params.toString()}`, '_blank')
+  }
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -177,10 +196,14 @@ export default function TeacherAssessmentsPage() {
     totalAssessments: assessmentsData.upcoming.length + assessmentsData.completed.length,
     upcomingAssessments: assessmentsData.upcoming.length,
     completedAssessments: assessmentsData.completed.length,
-    averagePassRate: Math.round(
-      assessmentsData.completed.reduce((sum, assessment) => sum + (assessment.passRate || 0), 0) /
-        assessmentsData.completed.length
-    ),
+    averagePassRate: assessmentsData.completed.length
+      ? Math.round(
+          assessmentsData.completed.reduce(
+            (sum, assessment) => sum + (assessment.passRate || 0),
+            0
+          ) / assessmentsData.completed.length
+        )
+      : 0,
   }
 
   return (
@@ -206,7 +229,7 @@ export default function TeacherAssessmentsPage() {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <Button variant="outline">
+            <Button variant="outline" onClick={handleExportResults} disabled={!selectedAssignment}>
               <Download className="h-4 w-4 mr-2" />
               Export Results
             </Button>
@@ -590,23 +613,47 @@ export default function TeacherAssessmentsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <Button className="w-full justify-start">
+                <Button
+                  className="w-full justify-start"
+                  onClick={() => setShowCreate(true)}
+                  disabled={!selectedAssignment}
+                >
                   <Plus className="h-4 w-4 mr-2" />
                   Create New Assessment
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => router.push('/dashboard/teacher/assessments/question-bank')}
+                >
                   <ClipboardList className="h-4 w-4 mr-2" />
                   Question Bank
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => router.push('/dashboard/teacher/assessments/calendar')}
+                >
                   <Calendar className="h-4 w-4 mr-2" />
                   Assessment Calendar
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    const el = document.getElementById('assessment-analytics')
+                    if (el) el.scrollIntoView({ behavior: 'smooth' })
+                  }}
+                >
                   <TrendingUp className="h-4 w-4 mr-2" />
                   Analytics Dashboard
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={handleDownloadTemplate}
+                  disabled={!selectedAssignment}
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Export Templates
                 </Button>
@@ -680,7 +727,7 @@ export default function TeacherAssessmentsPage() {
         </div>
 
         {/* Assessment Analytics Summary */}
-        <Card>
+        <Card id="assessment-analytics">
           <CardHeader>
             <CardTitle>Assessment Performance Overview</CardTitle>
           </CardHeader>

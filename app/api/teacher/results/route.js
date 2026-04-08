@@ -40,10 +40,15 @@ export const GET = withErrorHandler(async function GET(request) {
   const subjectId = searchParams.get('subjectId')
   const termRaw = searchParams.get('term')
   const yearRaw = searchParams.get('year')
+  const scope = String(searchParams.get('scope') || '')
+    .trim()
+    .toLowerCase()
 
   const { term, year } = yearRaw
     ? { term: String(termRaw || '').trim(), year: Number(yearRaw) }
     : parseTermYear(termRaw)
+
+  const isTeacher = roleCheck(auth.user, ['TEACHER', 'teacher'])
 
   const where = {
     schoolId,
@@ -51,6 +56,7 @@ export const GET = withErrorHandler(async function GET(request) {
     ...(subjectId ? { subjectId } : {}),
     ...(term ? { term } : {}),
     ...(year ? { year } : {}),
+    ...(isTeacher && scope !== 'all' ? { enteredByUserId: auth.user.id } : {}),
   }
 
   const results = await prisma.result.findMany({
@@ -181,6 +187,7 @@ export const POST = withErrorHandler(async function POST(request) {
           data: {
             score: score ?? 0,
             grade,
+            enteredByUserId: auth.user.id,
           },
         })
       } else {
@@ -193,6 +200,7 @@ export const POST = withErrorHandler(async function POST(request) {
             grade,
             term,
             year,
+            enteredByUserId: auth.user.id,
           },
         })
       }

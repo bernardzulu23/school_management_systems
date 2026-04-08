@@ -55,6 +55,7 @@ export default function HodDashboard() {
     classes: [],
     results: [],
     assessments: [],
+    teacherPerformance: [],
   })
 
   const [dashboardStats, setDashboardStats] = useState({
@@ -173,6 +174,7 @@ export default function HodDashboard() {
       classes: Array.isArray(data.classes) ? data.classes : [],
       results: Array.isArray(data.results) ? data.results : [],
       assessments: Array.isArray(data.assessments) ? data.assessments : [],
+      teacherPerformance: Array.isArray(data.teacherPerformance) ? data.teacherPerformance : [],
     })
 
     setDashboardStats((prev) => ({
@@ -687,6 +689,7 @@ export default function HodDashboard() {
                       <div className="space-y-3">
                         {departmentData.teachers.slice(0, 4).map((teacher, index) => {
                           const teacherName = teacher?.user?.name || teacher?.name || 'Unknown'
+                          const teacherUserId = String(teacher?.user?.id || teacher?.userId || '')
                           const teacherSubjects = Array.isArray(teacher?.assignedSubjects)
                             ? teacher.assignedSubjects
                             : Array.isArray(teacher?.subjects)
@@ -716,6 +719,11 @@ export default function HodDashboard() {
                                   )
                                 : []
 
+                          const perf =
+                            departmentData.teacherPerformance.find(
+                              (p) => String(p?.userId || '') === teacherUserId
+                            ) || null
+
                           return (
                             <div
                               key={index}
@@ -731,7 +739,8 @@ export default function HodDashboard() {
                                   </p>
                                   <p className="text-royalPurple-text2 text-xs">
                                     {teacherSubjects.length} subjects • {teacherClasses.length}{' '}
-                                    classes
+                                    classes • Avg {perf?.averageScore ?? 0}% •{' '}
+                                    {perf?.resultsEntered ?? 0} results
                                   </p>
                                 </div>
                               </div>
@@ -749,6 +758,13 @@ export default function HodDashboard() {
                         onClick={() => router.push('/dashboard/users?filter=teachers')}
                       >
                         Manage Teachers
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="w-full mt-3"
+                        onClick={() => router.push('/dashboard/hod/teacher-performance')}
+                      >
+                        Teacher Performance
                       </Button>
                     </div>
 

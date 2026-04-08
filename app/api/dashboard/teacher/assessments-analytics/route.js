@@ -93,7 +93,12 @@ export const GET = withErrorHandler(async function GET(request) {
   const results =
     studentIds.length > 0
       ? await prisma.result.findMany({
-          where: { schoolId, subjectId, studentId: { in: studentIds } },
+          where: {
+            schoolId,
+            subjectId,
+            studentId: { in: studentIds },
+            ...(teacher ? { enteredByUserId: auth.user.id } : {}),
+          },
           select: { studentId: true, score: true, updatedAt: true },
           orderBy: { updatedAt: 'desc' },
           take: 50000,

@@ -18,6 +18,27 @@ export async function GET(request) {
       return NextResponse.json({ error: 'School context required' }, { status: 403 })
     }
 
+    const { searchParams } = new URL(request.url)
+    const termParam = String(searchParams.get('term') || '').trim()
+    const yearParam = searchParams.get('year')
+    const yearFilter = yearParam ? Number(yearParam) : null
+    const termFilter = (() => {
+      const raw = termParam
+      if (!raw || raw === 'All Terms') return ''
+      const lower = raw.toLowerCase()
+      if (lower.startsWith('term')) {
+        const digits = lower.replace(/[^0-9]/g, '')
+        if (digits) return `Term ${Number(digits)}`
+      }
+      return raw
+    })()
+
+    const resultWhere = {
+      schoolId,
+      ...(termFilter ? { term: termFilter } : {}),
+      ...(yearFilter ? { year: yearFilter } : {}),
+    }
+
     // 1. Basic Stats (scoped by schoolId for multi-tenant isolation)
     const [
       totalStudents,
@@ -36,7 +57,7 @@ export async function GET(request) {
       }),
       prisma.class.count({ where: { schoolId } }),
       prisma.subject.count({ where: { schoolId } }),
-      prisma.result.count({ where: { schoolId } }),
+      prisma.result.count({ where: resultWhere }),
     ])
 
     // 2. Attendance (Proper date-range scoped counting)
@@ -58,13 +79,13 @@ export async function GET(request) {
 
     // 3. Pass Rate Calculation (from Results, scoped by schoolId)
     const passedResults = await prisma.result.count({
-      where: { schoolId, score: { gte: 50 } },
+      where: { ...resultWhere, score: { gte: 50 } },
     })
     const passRate = resultsCount > 0 ? Math.round((passedResults / resultsCount) * 100) : 0
 
     // 4. Students Requiring Attention (Score < 40, scoped by schoolId)
     const lowPerformingResults = await prisma.result.findMany({
-      where: { schoolId, score: { lt: 40 } },
+      where: { ...resultWhere, score: { lt: 40 } },
       include: {
         student: true,
         subject: true,
@@ -135,7 +156,7 @@ export async function GET(request) {
     ).length
 
     const allResults = await prisma.result.findMany({
-      where: { schoolId },
+      where: resultWhere,
       include: {
         subject: true,
         student: true,
@@ -194,7 +215,7 @@ export async function GET(request) {
     // 5b. Junior Results (scoped by schoolId)
     const juniorResults = await prisma.result.findMany({
       where: {
-        schoolId,
+        ...resultWhere,
         student: {
           class: {
             contains: '8',
@@ -245,7 +266,7 @@ export async function GET(request) {
     const seniorResults =
       seniorStudentIds.length > 0
         ? await prisma.result.findMany({
-            where: { schoolId, studentId: { in: seniorStudentIds } },
+            where: { ...resultWhere, studentId: { in: seniorStudentIds } },
             include: { subject: true },
             take: 50000,
           })

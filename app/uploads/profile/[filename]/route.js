@@ -11,14 +11,14 @@ const TYPE_BY_EXT = {
   webp: 'image/webp',
 }
 
-export async function GET(_request, { params }) {
+export async function GET(request, { params }) {
   const raw = String(params?.filename || '')
   const filename = path.basename(raw)
   const ext = filename.split('.').pop()?.toLowerCase() || ''
   const contentType = TYPE_BY_EXT[ext]
 
   if (!filename || !contentType) {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    return NextResponse.redirect(new URL('/images/default-profile.svg', request.url), 302)
   }
 
   const candidatePaths = [
@@ -43,6 +43,6 @@ export async function GET(_request, { params }) {
       },
     })
   } catch {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    return NextResponse.redirect(new URL('/images/default-profile.svg', request.url), 302)
   }
 }

@@ -4,67 +4,75 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function GET(request, { params }) {
-  const auth = authMiddleware(request)
-  if (!auth.isAuthenticated) return auth.response
+  try {
+    const auth = authMiddleware(request)
+    if (!auth.isAuthenticated) return auth.response
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+    if (
+      !roleCheck(auth.user, [
+        'ADMIN',
+        'headteacher',
+        'HOD',
+        'hod',
+        'TEACHER',
+        'teacher',
+        'STUDENT',
+        'student',
+      ])
+    ) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
 
-  const student = await prisma.student.findFirst({
-    where: { id: params.id, schoolId },
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          profile_picture_url: true,
-          contact_number: true,
+    const id = String(params?.id || '').trim()
+    if (!id) return NextResponse.json({ error: 'Student id is required' }, { status: 400 })
+
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+    const student = await prisma.student.findFirst({
+      where: { id, schoolId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            profile_picture_url: true,
+            contact_number: true,
+          },
         },
+        results: true,
+        attendance: { orderBy: { date: 'desc' }, take: 30 },
+        subjectEnrollments: { include: { subject: true, class: true } },
+        gamificationProfile: true,
       },
-      results: true,
-      attendance: { orderBy: { date: 'desc' }, take: 30 },
-      subjectEnrollments: { include: { subject: true, class: true } },
-      gamificationProfile: true,
-    },
-  })
+    })
 
-  if (!student) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    if (!student) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  // Map user fields to top level
-  const shaped = {
-    ...student,
-    email: student.user?.email ?? null,
-    profilePicture: student.user?.profile_picture_url ?? null,
-    contactNumber: student.user?.contact_number ?? null,
+    // Map user fields to top level
+    const shaped = {
+      ...student,
+      email: student.user?.email ?? null,
+      profilePicture: student.user?.profile_picture_url ?? null,
+      contactNumber: student.user?.contact_number ?? null,
+    }
+
+    if (roleCheck(auth.user, ['STUDENT', 'student']) && student.userId !== auth.user.id) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        ...shaped,
+        updatedAt: student.updatedAt,
+      },
+    })
+  } catch (error) {
+    console.error('GET /api/students/[id] error:', error)
+    return NextResponse.json({ error: 'Failed to load student' }, { status: 500 })
   }
-
-  if (roleCheck(auth.user, ['STUDENT', 'student']) && student.userId !== auth.user.id) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  }
-
-  if (
-    !roleCheck(auth.user, [
-      'ADMIN',
-      'headteacher',
-      'HOD',
-      'hod',
-      'TEACHER',
-      'teacher',
-      'STUDENT',
-      'student',
-    ])
-  ) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  }
-
-  return NextResponse.json({
-    success: true,
-    data: {
-      ...shaped,
-      updatedAt: student.updatedAt,
-    },
-  })
 }
 
 export async function PUT(request, { params }) {
