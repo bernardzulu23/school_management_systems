@@ -65,7 +65,7 @@ export async function GET(request) {
       },
     })
 
-    const enrolledSubjectNames = Array.from(
+    const subjectNames = Array.from(
       new Set(
         enrollments
           .map((e) => e?.subject?.name)
@@ -73,12 +73,6 @@ export async function GET(request) {
           .map(String)
       )
     )
-
-    const selectedSubjects = Array.isArray(student.selected_subjects)
-      ? student.selected_subjects.filter(Boolean).map(String)
-      : []
-
-    const subjectNames = Array.from(new Set([...selectedSubjects, ...enrolledSubjectNames]))
 
     const allResults = await prisma.result.findMany({
       where: { schoolId, studentId: student.id },
@@ -188,49 +182,40 @@ export async function GET(request) {
     // We need to map student.selected_subjects to rich objects
     // Since we store subjects as strings in selected_subjects, we try to find Subject records if they exist, or mock defaults
 
-    const subjectRecords = await prisma.subject.findMany({
-      where: {
-        schoolId,
-        name: { in: subjectNames },
-      },
-      include: {
-        teacher: {
-          include: { user: true },
-        },
-      },
-    })
+    const enrolledSubjects = enrollments
+      .filter((e) => e?.subject?.name)
+      .map((e) => {
+        const subjectName = String(e.subject.name)
+        const subjectId = e.subject.id
+        const teacherName = e.subject?.teacher?.user?.name || 'Not Assigned'
 
-    const enrolledSubjects = subjectNames.map((subjectName) => {
-      // Find matching record
-      const record = subjectRecords.find((s) => s.name === subjectName)
+        const subjectResults = allResults.filter(
+          (r) => r.subjectId === subjectId || r.subject?.name === subjectName
+        )
+        let currentGrade = 0
+        if (subjectResults.length > 0) {
+          currentGrade =
+            subjectResults.reduce((acc, curr) => acc + (curr.score || 0), 0) / subjectResults.length
+        }
 
-      // Calculate grade for this subject
-      const subjectResults = allResults.filter((r) => r.subject?.name === subjectName)
-      let currentGrade = 0
-      if (subjectResults.length > 0) {
-        currentGrade =
-          subjectResults.reduce((acc, curr) => acc + (curr.score || 0), 0) / subjectResults.length
-      }
+        let status = 'good'
+        if (currentGrade >= 80) status = 'excellent'
+        else if (currentGrade < 50) status = 'needs-improvement'
 
-      // Determine status based on grade
-      let status = 'good'
-      if (currentGrade >= 80) status = 'excellent'
-      else if (currentGrade < 50) status = 'needs-improvement'
-
-      return {
-        id: record?.id || subjectName, // Use name as ID if record not found
-        name: subjectName,
-        teacher: record?.teacher?.user?.name || 'Not Assigned',
-        status: status,
-        trend: 'stable', // Placeholder
-        currentGrade: Math.round(currentGrade),
-        assignments: rawAssignments.filter((a) => a.subject === subjectName).length,
-        completedAssignments: assignmentsList.filter(
-          (a) => a.subject === subjectName && a.status === 'completed'
-        ).length,
-        attendance: Math.round(attendancePercentage),
-      }
-    })
+        return {
+          id: subjectId,
+          name: subjectName,
+          teacher: teacherName,
+          status,
+          trend: 'stable',
+          currentGrade: Math.round(currentGrade),
+          assignments: rawAssignments.filter((a) => a.subject === subjectName).length,
+          completedAssignments: assignmentsList.filter(
+            (a) => a.subject === subjectName && a.status === 'completed'
+          ).length,
+          attendance: Math.round(attendancePercentage),
+        }
+      })
 
     // Subject Performance (for the "My Subjects" card)
     const subjectPerformance = enrolledSubjects.map((sub) => ({
@@ -270,7 +255,7 @@ export async function GET(request) {
         exam_number: student.exam_number,
         average_grade: Math.round(averageGrade),
         attendance_percentage: Math.round(attendancePercentage),
-        total_subjects: totalSubjects,
+        total_subjects: subjectNames.length,
         assignments_pending: assignmentsList.filter((a) => a.status === 'pending').length,
         assignments_list: assignmentsList,
         attendance_records: attendanceRecords,
