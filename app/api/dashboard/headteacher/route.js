@@ -19,14 +19,25 @@ export async function GET(request) {
     }
 
     // 1. Basic Stats (scoped by schoolId for multi-tenant isolation)
-    const [totalStudents, totalTeachers, totalClasses, totalSubjects, resultsCount] =
-      await Promise.all([
-        prisma.student.count({ where: { schoolId } }),
-        prisma.teacher.count({ where: { schoolId } }),
-        prisma.class.count({ where: { schoolId } }),
-        prisma.subject.count({ where: { schoolId } }),
-        prisma.result.count({ where: { schoolId } }),
-      ])
+    const [
+      totalStudents,
+      totalTeachers,
+      totalHods,
+      totalHeadteachers,
+      totalClasses,
+      totalSubjects,
+      resultsCount,
+    ] = await Promise.all([
+      prisma.student.count({ where: { schoolId } }),
+      prisma.teacher.count({ where: { schoolId } }),
+      prisma.headOfDepartment.count({ where: { schoolId } }),
+      prisma.user.count({
+        where: { role: { in: ['headteacher', 'HEADTEACHER', 'admin', 'administrator'] }, schoolId },
+      }),
+      prisma.class.count({ where: { schoolId } }),
+      prisma.subject.count({ where: { schoolId } }),
+      prisma.result.count({ where: { schoolId } }),
+    ])
 
     // 2. Attendance (Proper date-range scoped counting)
     const today = new Date()
@@ -312,6 +323,8 @@ export async function GET(request) {
     const data = {
       totalStudents,
       totalTeachers,
+      totalHods,
+      totalHeadteachers,
       totalClasses,
       totalSubjects,
       attendanceRate,

@@ -95,15 +95,30 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const fallbackStudents =
     classRecord && subjectRecord
-      ? await prisma.student.findMany({
-          where: {
-            schoolId,
-            OR: [{ class: classRecord.name }, { class: classRecord.id }],
-            selected_subjects: { hasSome: [subjectRecord.name, subjectRecord.id] },
-          },
-          include: { user: true },
-          orderBy: { name: 'asc' },
-          take: 5000,
+      ? (
+          await prisma.student.findMany({
+            where: {
+              schoolId,
+              OR: [{ class: classRecord.name }, { class: classRecord.id }],
+            },
+            include: { user: true },
+            orderBy: { name: 'asc' },
+            take: 10000,
+          })
+        ).filter((s) => {
+          const selected = Array.isArray(s.selected_subjects) ? s.selected_subjects : []
+          const targetName = String(subjectRecord.name || '')
+            .trim()
+            .toLowerCase()
+          const targetId = String(subjectRecord.id || '')
+            .trim()
+            .toLowerCase()
+          return selected.some((v) => {
+            const norm = String(v || '')
+              .trim()
+              .toLowerCase()
+            return norm === targetName || norm === targetId
+          })
         })
       : []
 

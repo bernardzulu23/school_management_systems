@@ -48,6 +48,32 @@ export default function UserManagement() {
   const [editLoading, setEditLoading] = useState(false)
   const [showHodAssign, setShowHodAssign] = useState(false)
 
+  const fetchAllPaged = async (path, { limit = 200, params = {} } = {}) => {
+    let page = 1
+    let items = []
+    while (true) {
+      const query = new URLSearchParams()
+      query.set('page', String(page))
+      query.set('limit', String(limit))
+      Object.entries(params).forEach(([k, v]) => {
+        if (v === undefined || v === null || String(v) === '') return
+        query.set(k, String(v))
+      })
+
+      const res = await api.get(`${path}?${query.toString()}`)
+      const data = Array.isArray(res.data?.data) ? res.data.data : []
+      const pagination = res.data?.pagination || null
+
+      items = items.concat(data)
+
+      if (!pagination?.totalPages) break
+      if (page >= pagination.totalPages) break
+      page += 1
+      if (page > 200) break
+    }
+    return items
+  }
+
   const fetchCounts = async () => {
     setCountsLoading(true)
     try {
@@ -159,14 +185,14 @@ export default function UserManagement() {
       let hodsForCounts = []
       if (activeUserType === 'all') {
         const [studentsRes, teachersRes, hodsRes, headteachersRes] = await Promise.allSettled([
-          api.get('/students'),
-          api.get('/teachers'),
+          fetchAllPaged('/students', { limit: 200 }),
+          fetchAllPaged('/teachers', { limit: 200 }),
           api.get('/hods'),
           api.get('/users?role=headteacher'),
         ])
 
-        const students = studentsRes.status === 'fulfilled' ? studentsRes.value.data.data || [] : []
-        const teachers = teachersRes.status === 'fulfilled' ? teachersRes.value.data.data || [] : []
+        const students = studentsRes.status === 'fulfilled' ? studentsRes.value || [] : []
+        const teachers = teachersRes.status === 'fulfilled' ? teachersRes.value || [] : []
         const hods = hodsRes.status === 'fulfilled' ? hodsRes.value.data.data || [] : []
         const headteachers =
           headteachersRes.status === 'fulfilled' ? headteachersRes.value.data.data || [] : []
@@ -211,8 +237,8 @@ export default function UserManagement() {
           })),
         ]
       } else if (activeUserType === 'students') {
-        const res = await api.get('/students')
-        data = (res.data.data || []).map((u) => ({
+        const allStudents = await fetchAllPaged('/students', { limit: 200 })
+        data = (allStudents || []).map((u) => ({
           id: u.id,
           name: u.name,
           email: u.user?.email || 'N/A',
@@ -221,8 +247,11 @@ export default function UserManagement() {
           original: u,
         }))
       } else if (activeUserType === 'teachers') {
-        const [res, hodsRes] = await Promise.allSettled([api.get('/teachers'), api.get('/hods')])
-        const teacherData = res.status === 'fulfilled' ? res.value.data.data || [] : []
+        const [teachersRes, hodsRes] = await Promise.allSettled([
+          fetchAllPaged('/teachers', { limit: 200 }),
+          api.get('/hods'),
+        ])
+        const teacherData = teachersRes.status === 'fulfilled' ? teachersRes.value || [] : []
         const hods = hodsRes.status === 'fulfilled' ? hodsRes.value.data.data || [] : []
         hodsForCounts = hods
         const hodByUserId = new Map(
