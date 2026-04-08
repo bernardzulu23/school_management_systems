@@ -18,8 +18,8 @@ async function main() {
       email: 'admin@demo.school.com',
       currency: 'USD',
       timezone: 'UTC',
-      academicYear: '2025/2026'
-    }
+      academicYear: '2025/2026',
+    },
   })
   console.log(`Created school: ${school.name} (${school.id})`)
 
@@ -38,9 +38,9 @@ async function main() {
       where: {
         schoolId_email: {
           schoolId: school.id,
-          email: u.email
-        }
-      }
+          email: u.email,
+        },
+      },
     })
 
     let user = existingUser
@@ -66,7 +66,7 @@ async function main() {
           data: {
             userId: user.id,
             schoolId: school.id,
-          }
+          },
         })
       }
     } else if (u.role === 'student') {
@@ -79,8 +79,8 @@ async function main() {
             schoolId: school.id,
             name: u.name,
             class: 'Form 1A',
-            exam_number: 'EXAM2025000'
-          }
+            exam_number: 'EXAM2025000',
+          },
         })
       }
     }
@@ -89,22 +89,54 @@ async function main() {
   // Seed Subjects
   console.log('Seeding subjects...')
   const subjects = [
-    { name: 'Mathematics', code: 'MATH', topics: ['Algebra', 'Geometry', 'Calculus', 'Statistics'] },
-    { name: 'English Language', code: 'ENG', topics: ['Grammar', 'Composition', 'Comprehension', 'Literature'] },
+    {
+      name: 'Mathematics',
+      code: 'MATH',
+      topics: ['Algebra', 'Geometry', 'Calculus', 'Statistics'],
+    },
+    {
+      name: 'English Language',
+      code: 'ENG',
+      topics: ['Grammar', 'Composition', 'Comprehension', 'Literature'],
+    },
     { name: 'Science', code: 'SCI', topics: ['Biology', 'Physics', 'Chemistry', 'Environment'] },
-    { name: 'Social Studies', code: 'SST', topics: ['History', 'Civics', 'Geography', 'Economics'] },
-    { name: 'ICT', code: 'ICT', topics: ['Computer Basics', 'Programming', 'Networking', 'Digital Literacy'] },
+    {
+      name: 'Social Studies',
+      code: 'SST',
+      topics: ['History', 'Civics', 'Geography', 'Economics'],
+    },
+    {
+      name: 'ICT',
+      code: 'ICT',
+      topics: ['Computer Basics', 'Programming', 'Networking', 'Digital Literacy'],
+    },
     { name: 'History', code: 'HIST' },
     { name: 'Geography', code: 'GEO' },
     { name: 'Religious Education', code: 'RE' },
     { name: 'Physical Education', code: 'PE' },
-    { name: 'Physics', code: 'PHY', topics: ['Mechanics', 'Thermodynamics', 'Optics', 'Electricity'] },
-    { name: 'Chemistry', code: 'CHEM', topics: ['Organic Chemistry', 'Inorganic Chemistry', 'Physical Chemistry'] },
-    { name: 'Biology', code: 'BIO', topics: ['Cell Biology', 'Genetics', 'Ecology', 'Human Physiology'] },
+    {
+      name: 'Physics',
+      code: 'PHY',
+      topics: ['Mechanics', 'Thermodynamics', 'Optics', 'Electricity'],
+    },
+    {
+      name: 'Chemistry',
+      code: 'CHEM',
+      topics: ['Organic Chemistry', 'Inorganic Chemistry', 'Physical Chemistry'],
+    },
+    {
+      name: 'Biology',
+      code: 'BIO',
+      topics: ['Cell Biology', 'Genetics', 'Ecology', 'Human Physiology'],
+    },
     { name: 'Accounting', code: 'ACC' },
     { name: 'Business Studies', code: 'BUS' },
     { name: 'Economics', code: 'ECO' },
-    { name: 'English Literature', code: 'LIT', topics: ['Shakespeare', 'Modern Drama', 'Poetry', 'Novels'] },
+    {
+      name: 'English Literature',
+      code: 'LIT',
+      topics: ['Shakespeare', 'Modern Drama', 'Poetry', 'Novels'],
+    },
     { name: 'Shona', code: 'SHO' },
     { name: 'Ndebele', code: 'NDE' },
     { name: 'French', code: 'FRE' },
@@ -127,10 +159,10 @@ async function main() {
     { name: 'Statistics', code: 'STAT' },
     { name: 'Psychology', code: 'PSY' },
     { name: 'Sociology', code: 'SOC' },
-    { name: 'General Science', code: 'GENS' }
+    { name: 'General Science', code: 'GENS' },
   ]
-  
-   // Seed Games
+
+  // Seed Games
   console.log('Seeding games...')
   const games = [
     {
@@ -139,7 +171,7 @@ async function main() {
       type: 'puzzle',
       subject: 'Mathematics',
       difficulty: 'medium',
-      content: { levels: 10, timeLimit: 300 }
+      content: { levels: 10, timeLimit: 300 },
     },
     {
       title: 'Science Explorer: Cells',
@@ -147,7 +179,7 @@ async function main() {
       type: 'challenge',
       subject: 'Science',
       difficulty: 'easy',
-      content: { mode: 'exploration' }
+      content: { mode: 'exploration' },
     },
     {
       title: 'History Time Travel',
@@ -155,16 +187,16 @@ async function main() {
       type: 'quiz',
       subject: 'History',
       difficulty: 'hard',
-      content: { questions: 20 }
-    }
+      content: { questions: 20 },
+    },
   ]
 
   for (const game of games) {
     await prisma.game.create({
       data: {
         ...game,
-        schoolId: school.id
-      }
+        schoolId: school.id,
+      },
     })
   }
 
@@ -179,8 +211,9 @@ async function main() {
       type: 'virtual',
       subject: 'Art and Design',
       grade: 'All',
-      imageUrl: 'https://images.unsplash.com/photo-1499856871940-a09e32842449?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-      status: 'upcoming'
+      imageUrl:
+        'https://images.unsplash.com/photo-1499856871940-a09e32842449?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      status: 'upcoming',
     },
     {
       title: 'Mars Rover Expedition',
@@ -190,8 +223,9 @@ async function main() {
       type: 'virtual',
       subject: 'Science',
       grade: 'Form 1',
-      imageUrl: 'https://images.unsplash.com/photo-1614728853980-40bc488f1d48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-      status: 'upcoming'
+      imageUrl:
+        'https://images.unsplash.com/photo-1614728853980-40bc488f1d48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      status: 'upcoming',
     },
     {
       title: 'Ancient Egypt Walkthrough',
@@ -201,17 +235,18 @@ async function main() {
       type: 'virtual',
       subject: 'History',
       grade: 'Form 2',
-      imageUrl: 'https://images.unsplash.com/photo-1539650116455-251d9a0d63f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-      status: 'upcoming'
-    }
+      imageUrl:
+        'https://images.unsplash.com/photo-1539650116455-251d9a0d63f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      status: 'upcoming',
+    },
   ]
 
   for (const trip of fieldTrips) {
     await prisma.fieldTrip.create({
       data: {
         ...trip,
-        schoolId: school.id
-      }
+        schoolId: school.id,
+      },
     })
   }
 
@@ -225,7 +260,7 @@ async function main() {
       date: new Date('2025-06-01'),
       duration_minutes: 90,
       type: 'exam',
-      description: 'Covers Algebra and Geometry.'
+      description: 'Covers Algebra and Geometry.',
     },
     {
       title: 'Science Quiz: Biology',
@@ -234,7 +269,7 @@ async function main() {
       date: new Date('2025-05-20'),
       duration_minutes: 30,
       type: 'quiz',
-      description: 'Focus on Cell Biology.'
+      description: 'Focus on Cell Biology.',
     },
     {
       title: 'English Essay',
@@ -243,42 +278,42 @@ async function main() {
       date: new Date('2025-05-25'),
       duration_minutes: 60,
       type: 'assignment',
-      description: 'Write an essay about your favorite book.'
-    }
+      description: 'Write an essay about your favorite book.',
+    },
   ]
 
   for (const assessment of assessments) {
     await prisma.assessment.create({
       data: {
         ...assessment,
-        schoolId: school.id
-      }
+        schoolId: school.id,
+      },
     })
   }
 
   // Gamification profile seeding is handled later in the file
   for (const subject of subjects) {
     const existingSubject = await prisma.subject.findFirst({
-      where: { 
+      where: {
         schoolId: school.id,
-        name: subject.name 
-      }
+        name: subject.name,
+      },
     })
-    
+
     if (!existingSubject) {
       await prisma.subject.create({
         data: {
           ...subject,
-          schoolId: school.id
-        }
+          schoolId: school.id,
+        },
       })
     } else {
       // Update topics if subject exists
       await prisma.subject.update({
         where: { id: existingSubject.id },
         data: {
-          topics: subject.topics || []
-        }
+          topics: subject.topics || [],
+        },
       })
     }
   }
@@ -296,28 +331,28 @@ async function main() {
           schoolId: school.id,
           name: `Student ${i} (Form 1A)`,
           class: 'Form 1A',
-          exam_number: `EXAM${2025000 + i}`
-        }
+          exam_number: `EXAM${2025000 + i}`,
+        },
       })
     }
   }
 
   // Get demo student
   const studentEmail = 'student@school.com'
-  const studentUser = await prisma.user.findUnique({ 
-    where: { 
+  const studentUser = await prisma.user.findUnique({
+    where: {
       schoolId_email: {
         schoolId: school.id,
-        email: studentEmail 
-      }
-    } 
+        email: studentEmail,
+      },
+    },
   })
-  
+
   if (studentUser) {
     const studentProfile = await prisma.student.findUnique({ where: { userId: studentUser.id } })
     if (studentProfile) {
       console.log('Seeding data for demo student...')
-      
+
       // Seed Goals
       const goalsData = [
         {
@@ -333,7 +368,7 @@ async function main() {
           description: 'Expand knowledge and improve reading comprehension',
           status: 'in_progress',
           progress: 40,
-        }
+        },
       ]
 
       for (const goal of goalsData) {
@@ -341,56 +376,65 @@ async function main() {
           where: {
             schoolId: school.id,
             studentId: studentProfile.id,
-            title: goal.title
-          }
+            title: goal.title,
+          },
         })
-        
+
         if (!existingGoal) {
           await prisma.goal.create({
             data: {
               ...goal,
               schoolId: school.id,
-              studentId: studentProfile.id
-            }
+              studentId: studentProfile.id,
+            },
           })
         }
       }
 
       // Seed Attendance
       console.log('Seeding attendance...')
-      const attendanceStatuses = ['present', 'present', 'present', 'present', 'late', 'present', 'absent']
+      const attendanceStatuses = [
+        'present',
+        'present',
+        'present',
+        'present',
+        'late',
+        'present',
+        'absent',
+      ]
       const today = new Date()
-      
+
       for (let i = 0; i < 30; i++) {
         const date = new Date()
         date.setDate(today.getDate() - i)
         // Skip weekends
         if (date.getDay() === 0 || date.getDay() === 6) continue
-        
+
         const status = attendanceStatuses[Math.floor(Math.random() * attendanceStatuses.length)]
-        
-        const existingAttendance = await prisma.attendance.findFirst({
+        const canonicalDate = new Date(
+          Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0)
+        )
+
+        await prisma.attendance.upsert({
           where: {
+            studentId_date: {
+              studentId: studentProfile.id,
+              date: canonicalDate,
+            },
+          },
+          update: {
+            status: status,
+            remarks: status === 'absent' ? 'Sick leave' : status === 'late' ? 'Bus delay' : null,
+            schoolId: school.id,
+          },
+          create: {
             schoolId: school.id,
             studentId: studentProfile.id,
-            date: {
-              gte: new Date(date.setHours(0,0,0,0)),
-              lt: new Date(date.setHours(23,59,59,999))
-            }
-          }
+            date: canonicalDate,
+            status: status,
+            remarks: status === 'absent' ? 'Sick leave' : status === 'late' ? 'Bus delay' : null,
+          },
         })
-
-        if (!existingAttendance) {
-          await prisma.attendance.create({
-            data: {
-              schoolId: school.id,
-              studentId: studentProfile.id,
-              date: date,
-              status: status,
-              remarks: status === 'absent' ? 'Sick leave' : status === 'late' ? 'Bus delay' : null
-            }
-          })
-        }
       }
 
       // Seed Assignments
@@ -401,47 +445,47 @@ async function main() {
           subject: 'Mathematics',
           class: 'Form 1A',
           dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Due in 7 days
-          description: 'Complete problems 1-20 from Chapter 3'
+          description: 'Complete problems 1-20 from Chapter 3',
         },
         {
           title: 'Essay: The Great Gatsby',
           subject: 'English Literature',
           class: 'Form 1A',
           dueDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // Overdue
-          description: 'Write a 500-word essay on the themes of the novel'
+          description: 'Write a 500-word essay on the themes of the novel',
         },
         {
           title: 'Physics Lab Report',
           subject: 'Physics',
           class: 'Form 1A',
           dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-          description: 'Submit report for the pendulum experiment'
-        }
+          description: 'Submit report for the pendulum experiment',
+        },
       ]
 
       for (const assign of assignmentsData) {
         let assignment = await prisma.assignment.findFirst({
-          where: { 
+          where: {
             schoolId: school.id,
-            title: assign.title 
-          }
+            title: assign.title,
+          },
         })
 
         if (!assignment) {
           assignment = await prisma.assignment.create({
             data: {
               ...assign,
-              schoolId: school.id
-            }
+              schoolId: school.id,
+            },
           })
         }
 
         // Create submission for some
         if (assign.subject === 'Physics') {
           const submission = await prisma.assignmentSubmission.findFirst({
-             where: { assignmentId: assignment.id, studentId: studentProfile.id }
+            where: { assignmentId: assignment.id, studentId: studentProfile.id },
           })
-          
+
           if (!submission) {
             await prisma.assignmentSubmission.create({
               data: {
@@ -450,8 +494,8 @@ async function main() {
                 schoolId: school.id,
                 status: 'submitted',
                 content: 'Here is my lab report...',
-                submittedAt: new Date()
-              }
+                submittedAt: new Date(),
+              },
             })
           }
         }
@@ -466,7 +510,7 @@ async function main() {
           type: 'science',
           likes: 24,
           views: 156,
-          isPublic: true
+          isPublic: true,
         },
         {
           title: 'Abstract Painting',
@@ -474,7 +518,7 @@ async function main() {
           type: 'art',
           likes: 45,
           views: 230,
-          isPublic: true
+          isPublic: true,
         },
         {
           title: 'Python Calculator',
@@ -482,17 +526,17 @@ async function main() {
           type: 'coding',
           likes: 12,
           views: 89,
-          isPublic: true
-        }
+          isPublic: true,
+        },
       ]
 
       for (const work of worksData) {
         const existingWork = await prisma.studentWork.findFirst({
-          where: { 
+          where: {
             schoolId: school.id,
-            studentId: studentProfile.id, 
-            title: work.title 
-          }
+            studentId: studentProfile.id,
+            title: work.title,
+          },
         })
 
         if (!existingWork) {
@@ -500,8 +544,8 @@ async function main() {
             data: {
               ...work,
               schoolId: school.id,
-              studentId: studentProfile.id
-            }
+              studentId: studentProfile.id,
+            },
           })
         }
       }
@@ -517,32 +561,53 @@ async function main() {
           points: 1250,
           level: 8,
           xp: 1250,
-          nextLevelXp: 1600
-        }
+          nextLevelXp: 1600,
+        },
       })
-      
+
       // Ensure badges exist
       const badgesData = [
-        { name: 'First Steps', description: 'Complete your first game', icon: '🎯', category: 'academic', rarity: 'common', xpValue: 10 },
-        { name: 'Perfect Score', description: 'Get 100% on any game', icon: '⭐', category: 'academic', rarity: 'rare', xpValue: 50 },
-        { name: 'Speed Demon', description: 'Complete a game in under 5 minutes', icon: '⚡', category: 'academic', rarity: 'epic', xpValue: 30 }
+        {
+          name: 'First Steps',
+          description: 'Complete your first game',
+          icon: '🎯',
+          category: 'academic',
+          rarity: 'common',
+          xpValue: 10,
+        },
+        {
+          name: 'Perfect Score',
+          description: 'Get 100% on any game',
+          icon: '⭐',
+          category: 'academic',
+          rarity: 'rare',
+          xpValue: 50,
+        },
+        {
+          name: 'Speed Demon',
+          description: 'Complete a game in under 5 minutes',
+          icon: '⚡',
+          category: 'academic',
+          rarity: 'epic',
+          xpValue: 30,
+        },
       ]
 
       for (const badge of badgesData) {
-         const exists = await prisma.badge.findFirst({ 
-           where: { 
-             schoolId: school.id,
-             name: badge.name 
-           } 
-         })
-         if (!exists) {
-           await prisma.badge.create({ 
-             data: {
-               ...badge,
-               schoolId: school.id
-             } 
-           })
-         }
+        const exists = await prisma.badge.findFirst({
+          where: {
+            schoolId: school.id,
+            name: badge.name,
+          },
+        })
+        if (!exists) {
+          await prisma.badge.create({
+            data: {
+              ...badge,
+              schoolId: school.id,
+            },
+          })
+        }
       }
 
       // Assign badges
@@ -552,42 +617,56 @@ async function main() {
           where: {
             profileId_badgeId: {
               profileId: gamification.id,
-              badgeId: badge.id
-            }
-          }
+              badgeId: badge.id,
+            },
+          },
         })
-        
+
         if (!assigned) {
           await prisma.studentBadge.create({
             data: {
               profileId: gamification.id,
               badgeId: badge.id,
               schoolId: school.id,
-              awardedAt: new Date()
-            }
+              awardedAt: new Date(),
+            },
           })
         }
       }
 
       // Seed Games and Game Plays
       const gamesData = [
-        { title: 'Math Quiz', description: 'Algebra basics', type: 'quiz', difficulty: 'medium', content: {}, subject: 'Mathematics' },
-        { title: 'Vocab Blast', description: 'English vocabulary', type: 'quiz', difficulty: 'easy', content: {}, subject: 'English Language' }
+        {
+          title: 'Math Quiz',
+          description: 'Algebra basics',
+          type: 'quiz',
+          difficulty: 'medium',
+          content: {},
+          subject: 'Mathematics',
+        },
+        {
+          title: 'Vocab Blast',
+          description: 'English vocabulary',
+          type: 'quiz',
+          difficulty: 'easy',
+          content: {},
+          subject: 'English Language',
+        },
       ]
 
       for (const game of gamesData) {
-        let gameRec = await prisma.game.findFirst({ 
-          where: { 
+        let gameRec = await prisma.game.findFirst({
+          where: {
             schoolId: school.id,
-            title: game.title 
-          } 
+            title: game.title,
+          },
         })
         if (!gameRec) {
-          gameRec = await prisma.game.create({ 
+          gameRec = await prisma.game.create({
             data: {
               ...game,
-              schoolId: school.id
-            } 
+              schoolId: school.id,
+            },
           })
         }
 
@@ -599,8 +678,8 @@ async function main() {
             schoolId: school.id,
             score: Math.floor(Math.random() * 100),
             completed: true,
-            playedAt: new Date()
-          }
+            playedAt: new Date(),
+          },
         })
       }
     }
@@ -617,12 +696,27 @@ async function main() {
       type: 'virtual',
       subject: 'History',
       grade: 'Form 1',
-      imageUrl: 'https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?auto=format&fit=crop&q=80&w=1000',
+      imageUrl:
+        'https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?auto=format&fit=crop&q=80&w=1000',
       status: 'upcoming',
       stops: [
-        { id: 1, title: 'Main Hall', description: 'The grand entrance', image: 'https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?auto=format&fit=crop&q=80&w=1000', audioUrl: '' },
-        { id: 2, title: 'Ancient Egypt', description: 'Mummies and artifacts', image: 'https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?auto=format&fit=crop&q=80&w=1000', audioUrl: '' }
-      ]
+        {
+          id: 1,
+          title: 'Main Hall',
+          description: 'The grand entrance',
+          image:
+            'https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?auto=format&fit=crop&q=80&w=1000',
+          audioUrl: '',
+        },
+        {
+          id: 2,
+          title: 'Ancient Egypt',
+          description: 'Mummies and artifacts',
+          image:
+            'https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?auto=format&fit=crop&q=80&w=1000',
+          audioUrl: '',
+        },
+      ],
     },
     {
       title: 'Space Station Visit',
@@ -632,29 +726,44 @@ async function main() {
       type: 'virtual',
       subject: 'Science',
       grade: 'Form 1',
-      imageUrl: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=1000',
+      imageUrl:
+        'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=1000',
       status: 'upcoming',
       stops: [
-        { id: 1, title: 'Control Room', description: 'Where operations happen', image: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=1000', audioUrl: '' },
-        { id: 2, title: 'Observation Deck', description: 'View of Earth', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000', audioUrl: '' }
-      ]
-    }
+        {
+          id: 1,
+          title: 'Control Room',
+          description: 'Where operations happen',
+          image:
+            'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=1000',
+          audioUrl: '',
+        },
+        {
+          id: 2,
+          title: 'Observation Deck',
+          description: 'View of Earth',
+          image:
+            'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000',
+          audioUrl: '',
+        },
+      ],
+    },
   ]
 
   for (const trip of fieldTripsData) {
     const existingTrip = await prisma.fieldTrip.findFirst({
-      where: { 
+      where: {
         schoolId: school.id,
-        title: trip.title 
-      }
+        title: trip.title,
+      },
     })
-    
+
     if (!existingTrip) {
       await prisma.fieldTrip.create({
         data: {
           ...trip,
-          schoolId: school.id
-        }
+          schoolId: school.id,
+        },
       })
     }
   }
@@ -670,7 +779,7 @@ async function main() {
       roles: ['teacher', 'student'],
       difficulty: 'Beginner',
       estimatedTime: 'Instant',
-      iconName: 'PenTool'
+      iconName: 'PenTool',
     },
     {
       featureId: 'ai_story_generator',
@@ -680,7 +789,7 @@ async function main() {
       roles: ['student'],
       difficulty: 'Intermediate',
       estimatedTime: '15-30 mins',
-      iconName: 'BookOpen'
+      iconName: 'BookOpen',
     },
     {
       featureId: 'virtual_lab',
@@ -690,7 +799,7 @@ async function main() {
       roles: ['student', 'teacher'],
       difficulty: 'Advanced',
       estimatedTime: '45 mins',
-      iconName: 'FlaskConical'
+      iconName: 'FlaskConical',
     },
     {
       featureId: 'code_playground',
@@ -700,7 +809,7 @@ async function main() {
       roles: ['student'],
       difficulty: 'Intermediate',
       estimatedTime: 'Flexible',
-      iconName: 'Code'
+      iconName: 'Code',
     },
     {
       featureId: 'music_composer',
@@ -710,7 +819,7 @@ async function main() {
       roles: ['student'],
       difficulty: 'Beginner',
       estimatedTime: '20 mins',
-      iconName: 'Music'
+      iconName: 'Music',
     },
     {
       featureId: '3d_modeler',
@@ -720,26 +829,26 @@ async function main() {
       roles: ['student'],
       difficulty: 'Advanced',
       estimatedTime: '30 mins',
-      iconName: 'Box'
-    }
+      iconName: 'Box',
+    },
   ]
 
   for (const feature of creativeFeaturesData) {
     const existingFeature = await prisma.creativeFeature.findUnique({
-      where: { 
+      where: {
         schoolId_featureId: {
           schoolId: school.id,
-          featureId: feature.featureId 
-        }
-      }
+          featureId: feature.featureId,
+        },
+      },
     })
-    
+
     if (!existingFeature) {
       await prisma.creativeFeature.create({
         data: {
           ...feature,
-          schoolId: school.id
-        }
+          schoolId: school.id,
+        },
       })
     }
   }

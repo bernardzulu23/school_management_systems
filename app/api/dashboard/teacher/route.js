@@ -98,6 +98,27 @@ export async function GET(request) {
 
     const classNames = myClassRecords.map((c) => String(c.name)).filter(Boolean)
     const subjectNames = mySubjectRecords.map((s) => String(s.name)).filter(Boolean)
+    const classNameCandidates = Array.from(
+      new Set(
+        myClassRecords
+          .flatMap((c) => {
+            const yearGroup = String(c?.year_group || '').trim()
+            const section = String(c?.section || '').trim()
+            const compact = `${yearGroup}${section}`.trim()
+            const spaced = `${yearGroup} ${section}`.trim()
+            return [
+              c?.name,
+              c?.id,
+              yearGroup,
+              compact,
+              spaced,
+              String(c?.name || '').replace(/\s+/g, ''),
+            ]
+          })
+          .map((v) => String(v || '').trim())
+          .filter(Boolean)
+      )
+    )
 
     const classStudentCounts = new Map()
     if (assignments.length > 0) {
@@ -160,13 +181,20 @@ export async function GET(request) {
       })
     }
 
-    if (classNames.length > 0) {
-      const classStudents = await prisma.student.findMany({
-        where: { schoolId, class: { in: classNames } },
+    if (subjectNames.length > 0 && (classIds.length > 0 || classNameCandidates.length > 0)) {
+      const selectedInClasses = await prisma.student.findMany({
+        where: {
+          schoolId,
+          selected_subjects: { hasSome: subjectNames },
+          OR: [
+            ...(classIds.length > 0 ? [{ classId: { in: classIds } }] : []),
+            ...(classNameCandidates.length > 0 ? [{ class: { in: classNameCandidates } }] : []),
+          ],
+        },
         select: { id: true },
-        take: 2000,
+        take: 50000,
       })
-      classStudents.forEach((s) => {
+      selectedInClasses.forEach((s) => {
         if (s?.id) studentIdSet.add(String(s.id))
       })
     }
