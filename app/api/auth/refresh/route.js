@@ -6,7 +6,7 @@ import prisma from '@/lib/prisma'
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
 
-export async function POST() {
+export async function POST(request) {
   try {
     const cookieStore = cookies()
     const refreshToken = cookieStore.get('refresh_token')?.value
@@ -32,6 +32,17 @@ export async function POST() {
       return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
     }
 
+    const host = request?.headers?.get?.('host') || ''
+    const cookieDomain =
+      process.env.COOKIE_DOMAIN ||
+      (() => {
+        const h = String(host || '').split(':')[0]
+        if (!h || h === 'localhost' || /^[0-9.]+$/.test(h)) return undefined
+        const parts = h.split('.').filter(Boolean)
+        if (parts.length < 2) return undefined
+        return `.${parts.slice(-2).join('.')}`
+      })()
+
     // Generate new access token
     const newAccessToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role, schoolId: user.schoolId },
@@ -51,6 +62,7 @@ export async function POST() {
       sameSite: 'strict',
       maxAge: 15 * 60,
       path: '/',
+      ...(cookieDomain ? { domain: cookieDomain } : {}),
     })
 
     response.cookies.set('refresh_token', newRefreshToken, {
@@ -59,6 +71,7 @@ export async function POST() {
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60,
       path: '/',
+      ...(cookieDomain ? { domain: cookieDomain } : {}),
     })
 
     return response

@@ -1,7 +1,18 @@
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
-export async function POST() {
+export async function POST(request) {
+  const host = request?.headers?.get?.('host') || ''
+  const cookieDomain =
+    process.env.COOKIE_DOMAIN ||
+    (() => {
+      const h = String(host || '').split(':')[0]
+      if (!h || h === 'localhost' || /^[0-9.]+$/.test(h)) return undefined
+      const parts = h.split('.').filter(Boolean)
+      if (parts.length < 2) return undefined
+      return `.${parts.slice(-2).join('.')}`
+    })()
+
   const response = NextResponse.json({
     success: true,
     message: 'Logged out successfully',
@@ -13,6 +24,7 @@ export async function POST() {
     sameSite: 'strict',
     maxAge: 0,
     path: '/',
+    ...(cookieDomain ? { domain: cookieDomain } : {}),
   })
   response.cookies.set('refresh_token', '', {
     httpOnly: true,
@@ -20,6 +32,7 @@ export async function POST() {
     sameSite: 'strict',
     maxAge: 0,
     path: '/',
+    ...(cookieDomain ? { domain: cookieDomain } : {}),
   })
 
   return response

@@ -20,6 +20,16 @@ if (
 
 export async function POST(request) {
   try {
+    const host = request.headers.get('host') || ''
+    const cookieDomain =
+      process.env.COOKIE_DOMAIN ||
+      (() => {
+        const h = String(host || '').split(':')[0]
+        if (!h || h === 'localhost' || /^[0-9.]+$/.test(h)) return undefined
+        const parts = h.split('.').filter(Boolean)
+        if (parts.length < 2) return undefined
+        return `.${parts.slice(-2).join('.')}`
+      })()
     let body = await request.json()
     console.log('[Login Debug] Request Body:', { email: body.email }) // Log email only for safety
 
@@ -134,6 +144,7 @@ export async function POST(request) {
       sameSite: 'strict',
       maxAge: 15 * 60,
       path: '/',
+      ...(cookieDomain ? { domain: cookieDomain } : {}),
     })
 
     response.cookies.set('refresh_token', refreshToken, {
@@ -142,6 +153,7 @@ export async function POST(request) {
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60,
       path: '/',
+      ...(cookieDomain ? { domain: cookieDomain } : {}),
     })
 
     return response
