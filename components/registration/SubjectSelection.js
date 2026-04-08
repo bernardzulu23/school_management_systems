@@ -7,6 +7,57 @@ import { Button } from '@/components/ui/Button'
 import { SCHOOL_SUBJECTS, SUBJECT_CATEGORIES, getSubjectsByCategory } from '@/data/subjects'
 import { Search, Check, X, BookOpen, Filter } from 'lucide-react'
 
+const SUBJECT_ORDER = [
+  'mathematics',
+  'english',
+  'science',
+  'biology',
+  'geography',
+  'home management',
+  'religious education',
+  'cinyanja',
+  'principals of accounts',
+  'principles of accounts',
+  'commerce',
+]
+
+const SUBJECT_ORDER_MAP = (() => {
+  const map = new Map()
+  SUBJECT_ORDER.forEach((name, index) => {
+    if (!map.has(name)) map.set(name, index)
+  })
+  if (!map.has('mathematics')) map.set('mathematics', 0)
+  if (!map.has('mthematics')) map.set('mthematics', map.get('mathematics'))
+  if (!map.has('principals of accounts') && map.has('principles of accounts')) {
+    map.set('principals of accounts', map.get('principles of accounts'))
+  }
+  if (!map.has('principles of accounts') && map.has('principals of accounts')) {
+    map.set('principles of accounts', map.get('principals of accounts'))
+  }
+  return map
+})()
+
+function normalizeSubjectName(value) {
+  const n = String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+  if (n === 'mthematics') return 'mathematics'
+  return n
+}
+
+function compareSubjects(a, b) {
+  const ra = SUBJECT_ORDER_MAP.has(normalizeSubjectName(a.name))
+    ? SUBJECT_ORDER_MAP.get(normalizeSubjectName(a.name))
+    : Number.POSITIVE_INFINITY
+  const rb = SUBJECT_ORDER_MAP.has(normalizeSubjectName(b.name))
+    ? SUBJECT_ORDER_MAP.get(normalizeSubjectName(b.name))
+    : Number.POSITIVE_INFINITY
+
+  if (ra !== rb) return ra - rb
+  return String(a.name || '').localeCompare(String(b.name || ''))
+}
+
 export default function SubjectSelection({
   selectedSubjects = [],
   onSubjectsChange,
@@ -36,7 +87,7 @@ export default function SubjectSelection({
       )
     }
 
-    setFilteredSubjects(subjects)
+    setFilteredSubjects(subjects.slice().sort(compareSubjects))
   }, [searchQuery, selectedCategory])
 
   const getValue = (subject) => {
@@ -185,37 +236,40 @@ export default function SubjectSelection({
         <div className="space-y-3">
           <h4 className="text-sm font-medium text-royalPurple-text2">Selected Subjects:</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {selectedSubjects.map((subjectId) => {
-              const subject =
-                valueType === 'name'
-                  ? SCHOOL_SUBJECTS.find((s) => s.name === String(subjectId))
-                  : SCHOOL_SUBJECTS.find((s) => s.id === Number(subjectId))
-              if (!subject) return null
+            {selectedSubjects
+              .map((subjectId) => {
+                const subject =
+                  valueType === 'name'
+                    ? SCHOOL_SUBJECTS.find((s) => s.name === String(subjectId))
+                    : SCHOOL_SUBJECTS.find((s) => s.id === Number(subjectId))
+                if (!subject) return null
 
-              const colorClass = getCategoryColor(subject.category)
+                const colorClass = getCategoryColor(subject.category)
 
-              return (
-                <div
-                  key={subject.id}
-                  className="flex items-center justify-between p-3 bg-royalPurple-card rounded-lg border border-royalPurple-border shadow-sm group hover:border-royalPurple-border transition-colors"
-                >
-                  <div className="flex items-center">
-                    <div className={`w-2 h-8 rounded-full bg-${colorClass}-500 mr-3`}></div>
-                    <div>
-                      <p className="font-medium text-royalPurple-text1">{subject.name}</p>
-                      <p className="text-xs text-royalPurple-text3">{subject.category}</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleSubjectToggle(getValue(subject))}
-                    className="p-1.5 rounded-full text-royalPurple-text3 hover:bg-royalPurple-danger hover:text-royalPurple-dangerTx transition-colors"
-                    title="Remove subject"
+                return (
+                  <div
+                    key={subject.id}
+                    className="flex items-center justify-between p-3 bg-royalPurple-card rounded-lg border border-royalPurple-border shadow-sm group hover:border-royalPurple-border transition-colors"
                   >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              )
-            })}
+                    <div className="flex items-center">
+                      <div className={`w-2 h-8 rounded-full bg-${colorClass}-500 mr-3`}></div>
+                      <div>
+                        <p className="font-medium text-royalPurple-text1">{subject.name}</p>
+                        <p className="text-xs text-royalPurple-text3">{subject.category}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleSubjectToggle(getValue(subject))}
+                      className="p-1.5 rounded-full text-royalPurple-text3 hover:bg-royalPurple-danger hover:text-royalPurple-dangerTx transition-colors"
+                      title="Remove subject"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                )
+              })
+              .filter(Boolean)
+              .sort(compareSubjects)}
           </div>
         </div>
       ) : (

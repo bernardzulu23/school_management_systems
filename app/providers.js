@@ -10,16 +10,13 @@ import GlobalBackButton from '@/components/ui/GlobalBackButton'
 
 function ActivitySessionKeeper({ children }) {
   const isAuthenticated = useAuth((s) => s.isAuthenticated)
-  const lastActivityAt = useAuth((s) => s.lastActivityAt)
   const markActivity = useAuth((s) => s.markActivity)
-  const syncSession = useAuth((s) => s.syncSession)
-  const logout = useAuth((s) => s.logout)
 
   useEffect(() => {
     let lastMarkedAt = 0
     const handler = () => {
       const now = Date.now()
-      if (now - lastMarkedAt < 1500) return
+      if (now - lastMarkedAt < 3000) return
       lastMarkedAt = now
       markActivity?.()
     }
@@ -35,24 +32,40 @@ function ActivitySessionKeeper({ children }) {
   }, [markActivity])
 
   useEffect(() => {
+    if (!isAuthenticated) return
+
     let interval
     let lastKeepAliveAt = 0
     const idleLimitMs = 10 * 60 * 1000
-    const keepAliveEveryMs = 8 * 60 * 1000
+    const keepAliveEveryMs = 5 * 60 * 1000
 
     const tick = async () => {
-      if (!isAuthenticated) return
       const now = Date.now()
-      const idleMs = lastActivityAt && lastActivityAt > 0 ? now - lastActivityAt : idleLimitMs + 1
+      const state = useAuth.getState()
+      if (!state?.isAuthenticated) return
+
+      const idleMs =
+        state.lastActivityAt && state.lastActivityAt > 0
+          ? now - state.lastActivityAt
+          : idleLimitMs + 1
 
       if (idleMs > idleLimitMs) {
-        await logout?.()
+        await state.logout?.()
         return
       }
 
       if (now - lastKeepAliveAt > keepAliveEveryMs) {
-        lastKeepAliveAt = now
-        await syncSession?.({ force: true })
+        try {
+          const res = await fetch('/api/auth/refresh', {
+            method: 'POST',
+            credentials: 'include',
+          })
+
+          if (res.ok) {
+            lastKeepAliveAt = now
+            await state.syncSession?.({ force: true })
+          }
+        } catch {}
       }
     }
 
@@ -60,7 +73,7 @@ function ActivitySessionKeeper({ children }) {
     tick()
 
     return () => clearInterval(interval)
-  }, [isAuthenticated, lastActivityAt, logout, syncSession])
+  }, [isAuthenticated])
 
   return children
 }

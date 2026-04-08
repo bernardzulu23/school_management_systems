@@ -85,13 +85,20 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const classRecord = await prisma.class.findFirst({
     where: { schoolId, id: resolvedClass },
-    select: { id: true, name: true },
+    select: { id: true, name: true, subjects: { select: { id: true, name: true } } },
   })
 
   const subjectRecord = await prisma.subject.findFirst({
     where: { schoolId, id: resolvedSubject },
     select: { id: true, name: true },
   })
+
+  const hasSubjectOnClass =
+    classRecord && subjectRecord
+      ? (Array.isArray(classRecord.subjects) ? classRecord.subjects : []).some(
+          (s) => String(s.id) === String(subjectRecord.id)
+        )
+      : false
 
   const fallbackStudents =
     classRecord && subjectRecord
@@ -106,6 +113,7 @@ export const GET = withErrorHandler(async function GET(request) {
             take: 10000,
           })
         ).filter((s) => {
+          if (hasSubjectOnClass) return true
           const selected = Array.isArray(s.selected_subjects) ? s.selected_subjects : []
           const targetName = String(subjectRecord.name || '')
             .trim()
