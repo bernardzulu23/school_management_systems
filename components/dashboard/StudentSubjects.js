@@ -28,13 +28,16 @@ export default function StudentSubjects({ studentData }) {
   const stats = studentData?.stats || {}
 
   const enrolledSubjects = studentData?.enrolled_subjects || []
+  const upcomingAssessments = Array.isArray(studentData?.upcoming_assessments)
+    ? studentData.upcoming_assessments
+    : []
 
   const studentInfo = {
     name: student.name || 'Student',
-    studentId: student.examNumber || 'N/A',
+    studentId: student.exam_number || 'N/A',
     yearGroup: student.class ? student.class.replace(/[A-Z]$/, '') : 'N/A', // "Form 3A" -> "Form 3" (approx)
     class: student.class || 'N/A',
-    overallGrade: Math.round(stats.average_grade || 0),
+    overallGrade: Math.round(stats.averageGrade || student.average_grade || 0),
     ranking: 'N/A',
     totalSubjects: enrolledSubjects.length,
   }
@@ -47,6 +50,8 @@ export default function StudentSubjects({ studentData }) {
         return 'text-royalPurple-accentTx bg-royalPurple-accent'
       case 'needs-improvement':
         return 'text-royalPurple-dangerTx bg-royalPurple-danger'
+      case 'no-data':
+        return 'text-royalPurple-text2 bg-royalPurple-card2'
       default:
         return 'text-royalPurple-text2 bg-royalPurple-card2'
     }
@@ -176,10 +181,14 @@ export default function StudentSubjects({ studentData }) {
               <div>
                 <p className="text-royalPurple-pillTx text-sm font-medium">Avg. Grade</p>
                 <p className="text-2xl font-bold text-royalPurple-pillTx">
-                  {Math.round(
-                    enrolledSubjects.reduce((sum, subject) => sum + subject.currentGrade, 0) /
-                      enrolledSubjects.length
-                  )}
+                  {enrolledSubjects.length
+                    ? Math.round(
+                        enrolledSubjects.reduce(
+                          (sum, subject) => sum + (Number(subject.currentGrade) || 0),
+                          0
+                        ) / enrolledSubjects.length
+                      )
+                    : 0}
                   %
                 </p>
               </div>
@@ -215,7 +224,10 @@ export default function StudentSubjects({ studentData }) {
                     <span
                       className={`px-2 py-1 text-xs rounded-full font-medium ${getStatusColor(subject.status)}`}
                     >
-                      {subject.status.replace('-', ' ').toUpperCase()}
+                      {String(subject.status || '')
+                        .replace('-', ' ')
+                        .replace('no data', 'no results')
+                        .toUpperCase()}
                     </span>
                   </div>
                 </div>
@@ -224,7 +236,7 @@ export default function StudentSubjects({ studentData }) {
                   <div className="flex justify-between text-sm">
                     <span className="text-royalPurple-text2">Current Grade:</span>
                     <span className={`font-bold text-lg ${getGradeColor(subject.currentGrade)}`}>
-                      {subject.currentGrade}%
+                      {subject.status === 'no-data' ? '—' : `${subject.currentGrade}%`}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
@@ -252,7 +264,11 @@ export default function StudentSubjects({ studentData }) {
                     <div
                       className="bg-royalPurple-accent h-2 rounded-full transition-all duration-300"
                       style={{
-                        width: `${(subject.completedAssignments / subject.assignments) * 100}%`,
+                        width: `${
+                          subject.assignments
+                            ? Math.round((subject.completedAssignments / subject.assignments) * 100)
+                            : 0
+                        }%`,
                       }}
                     ></div>
                   </div>
@@ -261,7 +277,10 @@ export default function StudentSubjects({ studentData }) {
                 <div className="flex items-center justify-between">
                   <div className="text-sm text-royalPurple-text2">
                     <Calendar className="h-4 w-4 inline mr-1" />
-                    Next Assessment: {new Date(subject.nextAssessment).toLocaleDateString()}
+                    Next Assessment:{' '}
+                    {subject?.nextAssessment
+                      ? new Date(subject.nextAssessment).toLocaleDateString()
+                      : 'None scheduled'}
                   </div>
                   <ChevronRight className="h-4 w-4 text-royalPurple-text3" />
                 </div>
@@ -281,38 +300,42 @@ export default function StudentSubjects({ studentData }) {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {enrolledSubjects
-              .filter((s) => s.nextAssessment)
-              .sort((a, b) => new Date(a.nextAssessment) - new Date(b.nextAssessment))
-              .slice(0, 3)
-              .map((subject) => (
-                <div
-                  key={subject.id}
-                  className="flex items-center justify-between p-3 border rounded-lg bg-gradient-to-r from-gray-50 to-white"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-lg bg-royalPurple-accent flex items-center justify-center">
-                      <BookOpen className="h-5 w-5 text-royalPurple-accentTx" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-royalPurple-text1">{subject.name}</h4>
-                      <p className="text-sm text-royalPurple-text2">Teacher: {subject.teacher}</p>
-                    </div>
+            {upcomingAssessments.slice(0, 3).map((assessment) => (
+              <div
+                key={assessment.id}
+                className="flex items-center justify-between p-3 border rounded-lg bg-gradient-to-r from-gray-50 to-white"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-lg bg-royalPurple-accent flex items-center justify-center">
+                    <BookOpen className="h-5 w-5 text-royalPurple-accentTx" />
                   </div>
-                  <div className="text-right">
-                    <div className="text-sm font-medium text-royalPurple-text1">
-                      {new Date(subject.nextAssessment).toLocaleDateString()}
-                    </div>
+                  <div>
+                    <h4 className="font-medium text-royalPurple-text1">{assessment.title}</h4>
+                    <p className="text-sm text-royalPurple-text2">{assessment.subject}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-medium text-royalPurple-text1">
+                    {assessment.start_date
+                      ? new Date(assessment.start_date).toLocaleDateString()
+                      : new Date(assessment.date).toLocaleDateString()}
+                  </div>
+                  {(assessment.start_date || assessment.date) && (
                     <div className="text-xs text-royalPurple-text3">
-                      {Math.ceil(
-                        (new Date(subject.nextAssessment) - new Date()) / (1000 * 60 * 60 * 24)
+                      {Math.max(
+                        0,
+                        Math.ceil(
+                          (new Date(assessment.start_date || assessment.date) - new Date()) /
+                            (1000 * 60 * 60 * 24)
+                        )
                       )}{' '}
                       days left
                     </div>
-                  </div>
+                  )}
                 </div>
-              ))}
-            {enrolledSubjects.filter((s) => s.nextAssessment).length === 0 && (
+              </div>
+            ))}
+            {upcomingAssessments.length === 0 && (
               <div className="text-center py-4 text-royalPurple-text3 text-sm">
                 No upcoming assessments
               </div>

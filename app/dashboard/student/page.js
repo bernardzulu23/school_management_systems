@@ -187,29 +187,37 @@ export default function StudentDashboard() {
           </div>
 
           {/* Tab Navigation */}
-          <div className="tab-nav">
-            {[
-              { id: 'overview', name: 'Overview', icon: BarChart3 },
-              { id: 'creative-teaching', name: 'Creative Learning', icon: Rocket },
-              { id: 'advanced', name: 'Advanced Features', icon: Zap },
-              { id: 'analytics', name: 'Smart Analytics', icon: Zap },
-              { id: 'games', name: 'Games & Learning', icon: GamepadIcon },
-              { id: 'achievements', name: 'Achievements', icon: Trophy },
-              { id: 'subjects', name: 'My Subjects', icon: BookOpen },
-              { id: 'learning-path', name: 'Learning Path', icon: LearningPathIcon },
-            ].map((tab) => {
-              const Icon = tab.icon
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span>{tab.name}</span>
-                </button>
-              )
-            })}
+          <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-2 overflow-x-auto">
+            <div className="flex gap-2 min-w-max">
+              {[
+                { id: 'overview', name: 'Overview', icon: BarChart3 },
+                { id: 'creative-teaching', name: 'Creative Learning', icon: Rocket },
+                { id: 'advanced', name: 'Advanced Features', icon: Zap },
+                { id: 'analytics', name: 'Smart Analytics', icon: Zap },
+                { id: 'games', name: 'Games & Learning', icon: GamepadIcon },
+                { id: 'achievements', name: 'Achievements', icon: Trophy },
+                { id: 'subjects', name: 'My Subjects', icon: BookOpen },
+                { id: 'learning-path', name: 'Learning Path', icon: LearningPathIcon },
+              ].map((tab) => {
+                const Icon = tab.icon
+                const active = activeTab === tab.id
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-colors border ${
+                      active
+                        ? 'bg-royalPurple-accent/60 text-royalPurple-text1 border-royalPurple-border2/60'
+                        : 'bg-royalPurple-card/40 text-royalPurple-text2 border-royalPurple-border/40 hover:bg-royalPurple-card/70'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span className="font-medium">{tab.name}</span>
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
           {/* Tab Content */}
@@ -217,30 +225,43 @@ export default function StudentDashboard() {
             <div className="space-y-8">
               {/* Overview Stats */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="stats-card p-6">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('games')}
+                  className="text-left p-6 rounded-2xl backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 hover:bg-royalPurple-card/80 transition-colors"
+                >
                   <h3 className="text-lg font-semibold text-royalPurple-text1">Games</h3>
                   <p className="text-3xl font-bold text-royalPurple-accentTx">
                     {dashboardData?.stats?.gamesPlayed || 0}
                   </p>
-                </div>
-                <div className="stats-card p-6">
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('achievements')}
+                  className="text-left p-6 rounded-2xl backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 hover:bg-royalPurple-card/80 transition-colors"
+                >
                   <h3 className="text-lg font-semibold text-royalPurple-text1">Achievements</h3>
                   <p className="text-3xl font-bold text-royalPurple-successTx">
                     {dashboardData?.stats?.achievements || 0}
                   </p>
-                </div>
-                <div className="stats-card p-6">
+                </button>
+                <div className="p-6 rounded-2xl backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40">
                   <h3 className="text-lg font-semibold text-royalPurple-text1">Level</h3>
                   <p className="text-3xl font-bold text-royalPurple-pillTx">
                     {dashboardData?.stats?.level || 1}
                   </p>
                 </div>
-                <div className="stats-card p-6">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('subjects')}
+                  className="text-left p-6 rounded-2xl backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 hover:bg-royalPurple-card/80 transition-colors"
+                >
                   <h3 className="text-lg font-semibold text-royalPurple-text1">Points</h3>
                   <p className="text-3xl font-bold text-yellow-600">
                     {dashboardData?.stats?.points || 0}
                   </p>
-                </div>
+                  <p className="text-xs text-royalPurple-text2 mt-1">Best 6 subjects</p>
+                </button>
               </div>
 
               {/* Student Information Card */}

@@ -81,6 +81,68 @@ export async function GET(request) {
       take: 200,
     })
 
+    const normalize = (value) =>
+      String(value || '')
+        .trim()
+        .toLowerCase()
+    const isEnglish = (name) => normalize(name).includes('english')
+    const isMath = (name) => {
+      const n = normalize(name)
+      return n.includes('mathematics') || n.includes('math')
+    }
+    const isScience = (name) => {
+      const n = normalize(name)
+      return (
+        n.includes('biology') ||
+        n.includes('chemistry') ||
+        n.includes('physics') ||
+        n.includes('integrated science') ||
+        (n.includes('science') && !n.includes('social'))
+      )
+    }
+
+    const subjectAgg = new Map()
+    for (const r of allResults) {
+      const subjectId = String(r.subjectId || '')
+      if (!subjectId) continue
+      const subjectName = r.subject?.name || 'Unknown'
+      if (!subjectAgg.has(subjectId)) {
+        subjectAgg.set(subjectId, { subjectId, subjectName, scores: [] })
+      }
+      subjectAgg.get(subjectId).scores.push(Number(r.score || 0))
+    }
+
+    const subjectAverages = Array.from(subjectAgg.values())
+      .map((s) => ({
+        subjectId: s.subjectId,
+        subjectName: s.subjectName,
+        avg: s.scores.length ? s.scores.reduce((a, b) => a + b, 0) / s.scores.length : 0,
+      }))
+      .sort((a, b) => b.avg - a.avg)
+
+    const english = subjectAverages.find((s) => isEnglish(s.subjectName)) || null
+    const math = subjectAverages.find((s) => isMath(s.subjectName)) || null
+    const sciences = subjectAverages.filter((s) => isScience(s.subjectName)).slice(0, 3)
+
+    const pickedIds = new Set(
+      [english?.subjectId, math?.subjectId, ...sciences.map((s) => s.subjectId)]
+        .filter(Boolean)
+        .map(String)
+    )
+
+    const others = subjectAverages.filter((s) => !pickedIds.has(String(s.subjectId)))
+
+    const bestSix = []
+    ;[english, math, ...sciences, ...others].forEach((s) => {
+      if (!s) return
+      const id = String(s.subjectId)
+      if (bestSix.length >= 6) return
+      if (bestSix.some((x) => String(x.subjectId) === id)) return
+      bestSix.push(s)
+    })
+
+    const bestSixPoints = Math.round(bestSix.reduce((sum, s) => sum + (Number(s.avg) || 0), 0))
+
     // 1. Calculate Stats
     const totalSubjects = subjectNames.length
     const totalResults = allResults.length
@@ -105,7 +167,7 @@ export async function GET(request) {
     }
 
     // 3. Fetch Upcoming Assessments (scoped by schoolId)
-    const upcomingAssessments = await prisma.assessment.findMany({
+    const upcomingAssessmentsRaw = await prisma.assessment.findMany({
       where: {
         schoolId,
         ...(student.classId ? { classId: student.classId } : { class: student.class }),
@@ -115,6 +177,11 @@ export async function GET(request) {
       orderBy: { date: 'asc' },
       take: 5,
     })
+
+    const upcomingAssessments = upcomingAssessmentsRaw.map((a) => ({
+      ...a,
+      start_date: a.date,
+    }))
 
     // 4. Fetch Recent Results (with filtering)
     const recentResults = allResults.slice(0, 10)
@@ -203,8 +270,12 @@ export async function GET(request) {
         }
 
         let status = 'good'
-        if (currentGrade >= 80) status = 'excellent'
+        if (subjectResults.length === 0) status = 'no-data'
+        else if (currentGrade >= 80) status = 'excellent'
         else if (currentGrade < 50) status = 'needs-improvement'
+
+        const nextAssessment =
+          upcomingAssessmentsRaw.find((a) => String(a.subject || '') === subjectName)?.date || null
 
         return {
           id: subjectId,
@@ -218,6 +289,7 @@ export async function GET(request) {
             (a) => a.subject === subjectName && a.status === 'completed'
           ).length,
           attendance: Math.round(attendancePercentage),
+          nextAssessment,
         }
       })
 
@@ -249,8 +321,13 @@ export async function GET(request) {
         gamesPlayed: 0,
         achievements: 0,
         level: 1,
-        points: 0,
+        points: bestSixPoints,
         attendanceRate: `${Math.round(attendancePercentage)}%`,
+        bestSixSubjects: bestSix.map((s) => ({
+          subjectId: s.subjectId,
+          subject: s.subjectName,
+          averageScore: Math.round(Number(s.avg) || 0),
+        })),
       },
       student: {
         id: student.id,
@@ -265,6 +342,12 @@ export async function GET(request) {
         attendance_records: attendanceRecords,
         gamification: student.gamificationProfile,
         subjects: subjectNames,
+        emergency_contact: {
+          name: student.emergency_contact_name || null,
+          relationship: student.emergency_contact_relationship || null,
+          phone: student.emergency_contact_phone || null,
+          address: student.emergency_contact_address || null,
+        },
       },
       enrolled_subjects: enrolledSubjects,
       subject_performance: subjectPerformance,

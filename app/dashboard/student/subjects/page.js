@@ -1,12 +1,35 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { BookOpen, School } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
+import { useAuth } from '@/lib/auth'
 
 export default function SubjectsPage() {
+  const router = useRouter()
+  const currentUser = useAuth((state) => state.user)
+
+  useEffect(() => {
+    const role = String(currentUser?.role || '').toLowerCase()
+    if (role && role !== 'student') {
+      const path =
+        role === 'admin'
+          ? '/dashboard/admin'
+          : role === 'headteacher'
+            ? '/dashboard/headteacher'
+            : role === 'teacher'
+              ? '/dashboard/teacher'
+              : role === 'hod'
+                ? '/dashboard/hod'
+                : '/dashboard'
+      router.replace(path)
+    }
+  }, [currentUser, router])
+
   const { data: subjectsData, isLoading } = useQuery({
     queryKey: ['student-subjects'],
     queryFn: async () => {
@@ -16,7 +39,7 @@ export default function SubjectsPage() {
   })
 
   return (
-    <DashboardLayout>
+    <DashboardLayout title="My Subjects">
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">My Subjects</h1>

@@ -1,10 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { BarChart3, Search, Filter, Download, TrendingUp, Award, AlertCircle } from 'lucide-react'
+import { useAuth } from '@/lib/auth'
 import {
   LineChart,
   Line,
@@ -16,6 +18,8 @@ import {
 } from 'recharts'
 
 export default function StudentResultsPage() {
+  const router = useRouter()
+  const currentUser = useAuth((state) => state.user)
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -23,12 +27,40 @@ export default function StudentResultsPage() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    const role = String(currentUser?.role || '').toLowerCase()
+    if (role && role !== 'student') {
+      const path =
+        role === 'admin'
+          ? '/dashboard/admin'
+          : role === 'headteacher'
+            ? '/dashboard/headteacher'
+            : role === 'teacher'
+              ? '/dashboard/teacher'
+              : role === 'hod'
+                ? '/dashboard/hod'
+                : '/dashboard'
+      router.replace(path)
+      return
+    }
     fetchResults()
-  }, [])
+  }, [currentUser, router])
 
   const fetchResults = async () => {
     try {
-      const response = await fetch('/api/student/results')
+      const fetchResultsRequest = async () =>
+        fetch('/api/student/results', { credentials: 'include', cache: 'no-store' })
+
+      let response = await fetchResultsRequest()
+      if (response.status === 401) {
+        const refresh = await fetch('/api/auth/refresh', {
+          method: 'POST',
+          credentials: 'include',
+          cache: 'no-store',
+        })
+        if (refresh.ok) {
+          response = await fetchResultsRequest()
+        }
+      }
       if (!response.ok) throw new Error('Failed to fetch results')
       const data = await response.json()
       setResults(data.data || [])
@@ -57,6 +89,36 @@ export default function StudentResultsPage() {
       : 0
 
   const highestScore = results.length > 0 ? Math.max(...results.map((r) => r.score)) : 0
+
+  const handleExport = () => {
+    const rows = filteredResults.map((r) => ({
+      Subject: r.subject,
+      Code: r.subjectCode || '',
+      Term: r.term,
+      Year: r.year,
+      Score: r.score,
+      Grade: r.grade,
+      Date: r.date,
+      Comments: r.comments || '',
+    }))
+
+    const headers = Object.keys(rows[0] || {})
+    const escape = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`
+    const csv = [
+      headers.join(','),
+      ...rows.map((row) => headers.map((h) => escape(row[h])).join(',')),
+    ].join('\n')
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `my_results_${new Date().toISOString().slice(0, 10)}.csv`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
+  }
 
   return (
     <DashboardLayout title="My Results">
@@ -126,7 +188,12 @@ export default function StudentResultsPage() {
               ))}
             </select>
 
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2"
+              onClick={handleExport}
+              disabled={filteredResults.length === 0}
+            >
               <Download className="w-4 h-4" />
               Export
             </Button>

@@ -1,29 +1,46 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { headers } from 'next/headers'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 
-export async function GET(request) {
-  try {
-    // In production, get user from auth context/token
-    // For now, get the first student as we did in dashboard route
-    const firstStudent = await prisma.student.findFirst()
+export const GET = withErrorHandler(async function GET(request) {
+  const auth = authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
 
-    if (!firstStudent) {
-      return NextResponse.json({ error: 'Student profile not found' }, { status: 404 })
-    }
-
-    const subjects = await prisma.subject.findMany({
-      where: {
-        name: { in: firstStudent.selected_subjects }
-      }
-    })
-
-    return NextResponse.json({ success: true, data: subjects })
-  } catch (error) {
-    console.error('Fetch student subjects error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch subjects' },
-      { status: 500 }
-    )
+  if (!roleCheck(auth.user, ['STUDENT', 'student', 'ADMIN', 'headteacher'])) {
+    throw new ApiError('Forbidden', 403)
   }
-}
+
+  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  if (!schoolId) throw new ApiError('School context required', 400)
+
+  const student = await prisma.student.findFirst({
+    where: { userId: auth.user.id, schoolId },
+    select: { id: true },
+  })
+
+  if (!student) throw new ApiError('Student profile not found', 404)
+
+  const enrollments = await prisma.pupilSubjectEnrollment.findMany({
+    where: { schoolId, pupilId: student.id },
+    include: {
+      subject: { include: { teacher: { include: { user: true } } } },
+      class: true,
+    },
+    take: 50000,
+  })
+
+  const subjects = enrollments
+    .map((e) => e.subject)
+    .filter(Boolean)
+    .map((s) => ({
+      id: s.id,
+      name: s.name,
+      code: s.code || null,
+      teacher: s.teacher?.user?.name || null,
+      classId: s.classId || null,
+    }))
+
+  return NextResponse.json({ success: true, data: subjects })
+})
