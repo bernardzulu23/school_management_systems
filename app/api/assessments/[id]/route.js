@@ -1,55 +1,93 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import prisma from '@/lib/prisma'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 
-export async function GET(request, { params }) {
-  try {
-    const { id } = params
-    const assessment = await prisma.assessment.findUnique({
-      where: { id }
-    })
+export const GET = withErrorHandler(async function GET(request, { params }) {
+  const auth = authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
 
-    if (!assessment) {
-      return NextResponse.json({ error: 'Assessment not found' }, { status: 404 })
-    }
+  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  if (!schoolId) throw new ApiError('School context required', 400)
 
-    return NextResponse.json({ success: true, data: assessment })
-  } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  const assessment = await prisma.assessment.findFirst({
+    where: { id: params.id, schoolId },
+  })
+
+  if (!assessment) throw new ApiError('Assessment not found', 404)
+
+  return NextResponse.json({ success: true, data: assessment })
+})
+
+export const PUT = withErrorHandler(async function PUT(request, { params }) {
+  const auth = authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+
+  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
+    throw new ApiError('Forbidden', 403)
   }
-}
 
-export async function PUT(request, { params }) {
-  try {
-    const { id } = params
-    const data = await request.json()
+  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  if (!schoolId) throw new ApiError('School context required', 400)
 
-    const updatedAssessment = await prisma.assessment.update({
-      where: { id },
-      data: {
-        title: data.title,
-        type: data.type,
-        subject: data.subject,
-        class: data.class,
-        date: data.date ? new Date(data.date) : undefined,
-        totalMarks: parseInt(data.totalMarks)
-      }
-    })
+  const data = await request.json().catch(() => ({}))
+  const classId = data.classId ? String(data.classId).trim() : ''
+  const className = data.class ? String(data.class).trim() : ''
 
-    return NextResponse.json({ success: true, data: updatedAssessment })
-  } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  const classRecord = classId
+    ? await prisma.class.findFirst({
+        where: { schoolId, id: classId },
+        select: { id: true, name: true },
+      })
+    : className
+      ? await prisma.class.findFirst({
+          where: { schoolId, name: { equals: className, mode: 'insensitive' } },
+          select: { id: true, name: true },
+        })
+      : null
+
+  const updated = await prisma.assessment.updateMany({
+    where: { id: params.id, schoolId },
+    data: {
+      ...(data.title !== undefined ? { title: String(data.title) } : {}),
+      ...(data.type !== undefined ? { type: String(data.type) } : {}),
+      ...(data.subject !== undefined ? { subject: String(data.subject) } : {}),
+      ...(classId || className
+        ? { classId: classRecord?.id || null, class: classRecord?.name || className }
+        : {}),
+      ...(data.date ? { date: new Date(data.date) } : {}),
+      ...(data.duration_minutes !== undefined
+        ? { duration_minutes: Number.parseInt(data.duration_minutes) || 60 }
+        : {}),
+      ...(data.description !== undefined
+        ? { description: data.description ? String(data.description) : null }
+        : {}),
+    },
+  })
+
+  if (updated.count === 0) throw new ApiError('Assessment not found', 404)
+
+  const assessment = await prisma.assessment.findFirst({ where: { id: params.id, schoolId } })
+  return NextResponse.json({ success: true, data: assessment })
+})
+
+export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
+  const auth = authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+
+  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
+    throw new ApiError('Forbidden', 403)
   }
-}
 
-export async function DELETE(request, { params }) {
-  try {
-    const { id } = params
-    await prisma.assessment.delete({
-      where: { id }
-    })
+  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  if (!schoolId) throw new ApiError('School context required', 400)
 
-    return NextResponse.json({ success: true, message: 'Assessment deleted successfully' })
-  } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
-}
+  const deleted = await prisma.assessment.deleteMany({
+    where: { id: params.id, schoolId },
+  })
+
+  if (deleted.count === 0) throw new ApiError('Assessment not found', 404)
+
+  return NextResponse.json({ success: true })
+})

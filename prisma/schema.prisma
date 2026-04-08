@@ -128,6 +128,8 @@ model Student {
   school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   
   // Academic Info
+  classId   String?
+  classRef  Class?   @relation(fields: [classId], references: [id], onDelete: SetNull)
   class     String   // 'Form 1A' - combination of year_group and section
   exam_number String?
   previous_school String?
@@ -177,6 +179,7 @@ model Student {
   updatedAt DateTime @updatedAt
   
   @@index([schoolId])
+  @@index([classId])
   @@index([class])
   @@index([name])
   @@index([grade_average])
@@ -285,6 +288,9 @@ model Class {
   teacherId   String? 
   teacher     Teacher? @relation(fields: [teacherId], references: [id]) 
   
+  students    Student[]
+  assessments Assessment[]
+  assignments Assignment[]
   subjects    Subject[] 
   teachingAssignments TeachingAssignment[]
   subjectEnrollments PupilSubjectEnrollment[]
@@ -663,6 +669,8 @@ model Assessment {
   id               String   @id @default(uuid()) 
   title            String 
   subject          String 
+  classId          String?
+  classRef         Class?   @relation(fields: [classId], references: [id], onDelete: SetNull)
   class            String   // e.g. "Form 1A" 
   
   // Multi-tenancy 
@@ -679,6 +687,7 @@ model Assessment {
   
   @@index([schoolId]) 
   @@index([subject])
+  @@index([classId])
   @@index([class])
   @@index([date])
 } 
@@ -749,6 +758,8 @@ model Assignment {
   title       String
   description String?
   subject     String
+  classId     String?
+  classRef    Class?   @relation(fields: [classId], references: [id], onDelete: SetNull)
   class       String
   
   // Multi-tenancy
@@ -764,6 +775,7 @@ model Assignment {
   updatedAt   DateTime @updatedAt
   
   @@index([schoolId])
+  @@index([classId])
   @@index([dueDate])
 }
 

@@ -64,9 +64,14 @@ export const POST = withErrorHandler(async function POST(request) {
     const students = await prisma.student.findMany({
       where: {
         schoolId,
-        OR: [{ class: cls.name }, { class: cls.id }, { class: cls.year_group }],
+        OR: [
+          { classId: cls.id },
+          { class: cls.name },
+          { class: cls.id },
+          { class: cls.year_group },
+        ],
       },
-      select: { id: true, class: true, selected_subjects: true },
+      select: { id: true, classId: true, class: true, selected_subjects: true },
       take: 10000,
     })
 

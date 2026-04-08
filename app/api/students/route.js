@@ -83,7 +83,13 @@ export const GET = withErrorHandler(async (request) => {
 
   const { students, total } =
     classCandidates.length > 0
-      ? await findStudentsByClassNames(schoolId, classCandidates, page, limit)
+      ? await findStudentsByClassNames(
+          schoolId,
+          classCandidates,
+          classId ? String(classId) : null,
+          page,
+          limit
+        )
       : await findStudentsByClass(schoolId, resolvedClassName, page, limit)
 
   return NextResponse.json({
@@ -174,6 +180,7 @@ export const POST = withErrorHandler(async (request) => {
         userId: user.id,
         schoolId,
         name: studentData.name,
+        ...(classRecord?.id ? { classId: classRecord.id } : {}),
         class: classRecord?.name || studentData.class_id,
         ...(studentData.student_id && { id: studentData.student_id }),
         selected_subjects: selectedSubjectNames,

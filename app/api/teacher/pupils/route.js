@@ -134,7 +134,7 @@ export const GET = withErrorHandler(async function GET(request) {
             where: {
               schoolId,
               ...(classCandidates.length > 0
-                ? { class: { in: classCandidates } }
+                ? { OR: [{ classId: classRecord.id }, { class: { in: classCandidates } }] }
                 : { OR: [{ class: classRecord.name }, { class: classRecord.id }] }),
             },
             include: { user: true },

@@ -16,11 +16,12 @@ export async function GET(request) {
     const limit = parseInt(searchParams.get('limit')) || 20
     const skip = (page - 1) * limit
     const className = searchParams.get('class')
+    const classId = searchParams.get('classId')
     const subject = searchParams.get('subject')
 
     const where = {
       schoolId,
-      ...(className ? { class: className } : {}),
+      ...(classId ? { classId: String(classId) } : className ? { class: className } : {}),
       ...(subject ? { subject } : {}),
     }
 
@@ -63,19 +64,35 @@ export async function POST(request) {
 
     const data = await request.json()
 
-    if (!data.title || !data.date || !data.subject || !data.class) {
+    const classId = data.classId ? String(data.classId).trim() : ''
+    const className = data.class ? String(data.class).trim() : ''
+
+    if (!data.title || !data.date || !data.subject || (!classId && !className)) {
       return NextResponse.json(
         { error: 'Title, subject, class and date are required' },
         { status: 400 }
       )
     }
 
+    const classRecord = classId
+      ? await prisma.class.findFirst({
+          where: { schoolId, id: classId },
+          select: { id: true, name: true },
+        })
+      : className
+        ? await prisma.class.findFirst({
+            where: { schoolId, name: { equals: className, mode: 'insensitive' } },
+            select: { id: true, name: true },
+          })
+        : null
+
     const newAssessment = await prisma.assessment.create({
       data: {
         title: data.title,
         type: data.type || 'quiz',
         subject: String(data.subject),
-        class: String(data.class),
+        classId: classRecord?.id || null,
+        class: classRecord?.name || className,
         date: new Date(data.date),
         duration_minutes: parseInt(data.duration_minutes) || 60,
         description: data.description ? String(data.description) : null,

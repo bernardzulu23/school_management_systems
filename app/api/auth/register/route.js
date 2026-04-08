@@ -161,6 +161,7 @@ export const POST = withErrorHandler(async (request) => {
             userId: user.id,
             name: user.name,
             schoolId,
+            classId: classRecord.id,
             class: classRecord.name,
             exam_number: body.exam_number,
             previous_school: body.previous_school,

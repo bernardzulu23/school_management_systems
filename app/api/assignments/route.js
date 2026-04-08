@@ -12,18 +12,19 @@ export async function GET(request) {
 
   const { searchParams } = new URL(request.url)
   const className = searchParams.get('class')
+  const classId = searchParams.get('classId')
   const subject = searchParams.get('subject')
 
   if (roleCheck(auth.user, ['STUDENT', 'student'])) {
     const student = await prisma.student.findFirst({
       where: { userId: auth.user.id, schoolId },
-      select: { class: true, selected_subjects: true },
+      select: { classId: true, class: true, selected_subjects: true },
     })
     if (!student) return NextResponse.json({ error: 'Student profile not found' }, { status: 404 })
 
     const where = {
       schoolId,
-      class: student.class,
+      ...(student.classId ? { classId: student.classId } : { class: student.class }),
       ...(subject ? { subject } : { subject: { in: student.selected_subjects || [] } }),
     }
 
@@ -41,7 +42,7 @@ export async function GET(request) {
 
   const where = {
     schoolId,
-    ...(className ? { class: className } : {}),
+    ...(classId ? { classId: String(classId) } : className ? { class: className } : {}),
     ...(subject ? { subject } : {}),
   }
 
@@ -67,10 +68,17 @@ export async function POST(request) {
   const body = await request.json()
   const title = String(body.title || '').trim()
   const subject = String(body.subject || '').trim()
+  const classId = body.classId ? String(body.classId).trim() : ''
   const className = String(body.class || '').trim()
   const dueDate = body.dueDate ? new Date(body.dueDate) : null
 
-  if (!title || !subject || !className || !dueDate || Number.isNaN(dueDate.getTime())) {
+  if (
+    !title ||
+    !subject ||
+    (!classId && !className) ||
+    !dueDate ||
+    Number.isNaN(dueDate.getTime())
+  ) {
     return NextResponse.json(
       { error: 'title, subject, class, dueDate are required' },
       { status: 400 }
@@ -81,12 +89,25 @@ export async function POST(request) {
     ? await prisma.teacher.findUnique({ where: { userId: auth.user.id }, select: { id: true } })
     : null
 
+  const classRecord = classId
+    ? await prisma.class.findFirst({
+        where: { schoolId, id: classId },
+        select: { id: true, name: true },
+      })
+    : className
+      ? await prisma.class.findFirst({
+          where: { schoolId, name: { equals: className, mode: 'insensitive' } },
+          select: { id: true, name: true },
+        })
+      : null
+
   const assignment = await prisma.assignment.create({
     data: {
       title,
       description: body.description ? String(body.description) : null,
       subject,
-      class: className,
+      classId: classRecord?.id || null,
+      class: classRecord?.name || className,
       dueDate,
       schoolId,
       teacherId: teacher?.id || null,

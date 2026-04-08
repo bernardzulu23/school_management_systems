@@ -37,19 +37,34 @@ export async function GET(request) {
     })
     students = enrollments.map((e) => e.pupil)
   } else {
-    // Return all students in the class via Student.class field match
-    // Note: The schema has Student.class as a String (e.g., 'Form 1A')
-    // but also a Class model. Let's find the class name first if classId is a UUID.
     const classRecord = await prisma.class.findFirst({
       where: { id: classId, schoolId },
-      select: { name: true },
+      select: { id: true, name: true, year_group: true, section: true },
     })
 
     if (classRecord) {
+      const yearGroup = String(classRecord.year_group || '').trim()
+      const section = String(classRecord.section || '').trim()
+      const compact = `${yearGroup}${section}`.trim()
+      const spaced = `${yearGroup} ${section}`.trim()
+      const classCandidates = Array.from(
+        new Set(
+          [
+            classRecord.name,
+            classRecord.id,
+            yearGroup,
+            compact,
+            spaced,
+            String(classRecord.name || '').replace(/\s+/g, ''),
+          ]
+            .map((v) => String(v || '').trim())
+            .filter(Boolean)
+        )
+      )
       students = await prisma.student.findMany({
         where: {
           schoolId,
-          class: classRecord.name,
+          OR: [{ classId: classRecord.id }, { class: { in: classCandidates } }],
         },
       })
     }

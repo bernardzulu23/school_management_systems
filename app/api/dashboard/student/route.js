@@ -94,7 +94,11 @@ export async function GET(request) {
 
     // 2. Fetch Class Info
     let myClass = null
-    if (student.class) {
+    if (student.classId) {
+      myClass = await prisma.class.findFirst({
+        where: { schoolId, id: student.classId },
+      })
+    } else if (student.class) {
       myClass = await prisma.class.findFirst({
         where: { schoolId, name: student.class },
       })
@@ -104,7 +108,7 @@ export async function GET(request) {
     const upcomingAssessments = await prisma.assessment.findMany({
       where: {
         schoolId,
-        class: student.class,
+        ...(student.classId ? { classId: student.classId } : { class: student.class }),
         subject: { in: subjectNames },
         date: { gte: new Date() },
       },
@@ -119,7 +123,7 @@ export async function GET(request) {
     const rawAssignments = await prisma.assignment.findMany({
       where: {
         schoolId,
-        class: student.class,
+        ...(student.classId ? { classId: student.classId } : { class: student.class }),
         subject: { in: subjectNames },
       },
       include: {

@@ -60,7 +60,10 @@ export async function GET(request) {
         : []
   } else {
     const studentsByName = await prisma.student.findMany({
-      where: { schoolId, class: { in: classCandidates } },
+      where: {
+        schoolId,
+        OR: [{ classId }, { class: { in: classCandidates } }],
+      },
       include: studentInclude,
       orderBy: { updatedAt: 'desc' },
       take: 2000,

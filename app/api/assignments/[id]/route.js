@@ -19,11 +19,15 @@ export async function GET(request, { params }) {
   if (roleCheck(auth.user, ['STUDENT', 'student'])) {
     const student = await prisma.student.findFirst({
       where: { userId: auth.user.id, schoolId },
-      select: { class: true, selected_subjects: true },
+      select: { classId: true, class: true, selected_subjects: true },
     })
     if (!student) return NextResponse.json({ error: 'Student profile not found' }, { status: 404 })
-    if (assignment.class !== student.class)
+    if (student.classId) {
+      if (String(assignment.classId || '') !== String(student.classId))
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    } else if (assignment.class !== student.class) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
     if (!(student.selected_subjects || []).includes(assignment.subject)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
@@ -44,6 +48,20 @@ export async function PUT(request, { params }) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const body = await request.json()
+  const classId = body.classId ? String(body.classId).trim() : ''
+  const className = body.class ? String(body.class).trim() : ''
+
+  const classRecord = classId
+    ? await prisma.class.findFirst({
+        where: { schoolId, id: classId },
+        select: { id: true, name: true },
+      })
+    : className
+      ? await prisma.class.findFirst({
+          where: { schoolId, name: { equals: className, mode: 'insensitive' } },
+          select: { id: true, name: true },
+        })
+      : null
 
   const updated = await prisma.assignment.updateMany({
     where: { id: params.id, schoolId },
@@ -51,7 +69,9 @@ export async function PUT(request, { params }) {
       title: body.title ? String(body.title).trim() : undefined,
       description: body.description !== undefined ? String(body.description) : undefined,
       subject: body.subject ? String(body.subject).trim() : undefined,
-      class: body.class ? String(body.class).trim() : undefined,
+      ...(classId || className
+        ? { classId: classRecord?.id || null, class: classRecord?.name || className }
+        : {}),
       dueDate: body.dueDate ? new Date(body.dueDate) : undefined,
     },
   })
