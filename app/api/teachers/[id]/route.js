@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { deleteUserCascade } from '@/lib/db/deleteCascade'
 
 const parseClassNameParts = (className) => {
   const name = String(className || '').trim()
@@ -220,14 +221,7 @@ export async function DELETE(request, { params }) {
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   await prisma.$transaction(async (tx) => {
-    await tx.teachingAssignment.deleteMany({ where: { schoolId, teacherId: existing.id } })
-    await tx.teacherDepartment.deleteMany({ where: { teacherId: existing.id } })
-    await tx.teacher.update({
-      where: { id: existing.id },
-      data: { classes: { set: [] } },
-    })
-    await tx.teacher.delete({ where: { id: existing.id } })
-    await tx.user.delete({ where: { id: existing.userId } })
+    await deleteUserCascade({ tx, schoolId, userId: existing.userId })
   })
 
   return NextResponse.json({ success: true })

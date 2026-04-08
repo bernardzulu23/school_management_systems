@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { deleteUserCascade } from '@/lib/db/deleteCascade'
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
   const auth = authMiddleware(request)
@@ -131,8 +132,7 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   await prisma.$transaction(async (tx) => {
-    await tx.headOfDepartment.delete({ where: { id: existing.id } })
-    await tx.user.delete({ where: { id: existing.userId } })
+    await deleteUserCascade({ tx, schoolId, userId: existing.userId })
   })
 
   return NextResponse.json({ success: true })

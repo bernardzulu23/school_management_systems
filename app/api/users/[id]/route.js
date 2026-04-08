@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { deleteUserCascade } from '@/lib/db/deleteCascade'
 
 export async function GET(request, { params }) {
   const auth = authMiddleware(request)
@@ -74,27 +75,7 @@ export async function DELETE(request, { params }) {
   if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   await prisma.$transaction(async (tx) => {
-    if (user.studentProfile?.id) {
-      await tx.pupilSubjectEnrollment.deleteMany({
-        where: { schoolId, pupilId: user.studentProfile.id },
-      })
-      await tx.student.delete({ where: { id: user.studentProfile.id } })
-    }
-    if (user.teacherProfile?.id) {
-      await tx.teachingAssignment.deleteMany({
-        where: { schoolId, teacherId: user.teacherProfile.id },
-      })
-      await tx.teacherDepartment.deleteMany({ where: { teacherId: user.teacherProfile.id } })
-      await tx.teacher.update({
-        where: { id: user.teacherProfile.id },
-        data: { classes: { set: [] } },
-      })
-      await tx.teacher.delete({ where: { id: user.teacherProfile.id } })
-    }
-    if (user.hodProfile?.id) {
-      await tx.headOfDepartment.delete({ where: { id: user.hodProfile.id } })
-    }
-    await tx.user.delete({ where: { id: user.id } })
+    await deleteUserCascade({ tx, schoolId, userId: user.id })
   })
 
   return NextResponse.json({ success: true })

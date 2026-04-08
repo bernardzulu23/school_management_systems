@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { deleteStudentCascade, deleteUserCascade } from '@/lib/db/deleteCascade'
 
 export async function GET(request, { params }) {
   try {
@@ -240,11 +241,11 @@ export async function DELETE(request, { params }) {
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   await prisma.$transaction(async (tx) => {
-    await tx.pupilSubjectEnrollment.deleteMany({ where: { schoolId, pupilId: existing.id } })
-    await tx.student.delete({ where: { id: existing.id } })
     if (existing.userId) {
-      await tx.user.delete({ where: { id: existing.userId } })
+      await deleteUserCascade({ tx, schoolId, userId: existing.userId })
+      return
     }
+    await deleteStudentCascade({ tx, schoolId, studentId: existing.id })
   })
 
   return NextResponse.json({ success: true })
