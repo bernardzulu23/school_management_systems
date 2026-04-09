@@ -95,14 +95,48 @@ export const POST = withErrorHandler(async function POST(request) {
   const results = Array.isArray(body?.results) ? body.results : null
   if (!results) throw new ApiError('Invalid data format', 400)
 
-  const teacher = await prisma.teacher.findFirst({
+  const teacherProfile = await prisma.teacher.findFirst({
     where: { userId: auth.user.id, schoolId },
-    select: { id: true },
+    select: {
+      id: true,
+      assignedSubjects: true,
+      classes: { select: { id: true, name: true } },
+      subjects: { select: { id: true, name: true } },
+      teachingAssignments: { where: { schoolId }, select: { classId: true, subjectId: true } },
+    },
   })
-  if (!teacher) throw new ApiError('Teacher profile not found', 404)
+  if (!teacherProfile) throw new ApiError('Teacher profile not found', 404)
+
+  const assignmentPairs = new Set(
+    (teacherProfile.teachingAssignments || [])
+      .filter((a) => a?.classId && a?.subjectId)
+      .map((a) => `${a.classId}:${a.subjectId}`)
+  )
+  const hasTeachingAssignments = assignmentPairs.size > 0
+  const allowedClassIds = new Set((teacherProfile.classes || []).map((c) => String(c.id)))
+  const allowedSubjectIds = new Set((teacherProfile.subjects || []).map((s) => String(s.id)))
+  const assignedSubjectTokens = new Set(
+    (Array.isArray(teacherProfile.assignedSubjects) ? teacherProfile.assignedSubjects : [])
+      .map((v) => String(v || '').trim())
+      .filter(Boolean)
+  )
+
+  const subjectIdsInPayload = Array.from(
+    new Set(results.map((r) => String(r.subjectId || '').trim()).filter(Boolean))
+  )
+  const subjectsInPayload =
+    subjectIdsInPayload.length > 0
+      ? await prisma.subject.findMany({
+          where: { schoolId, id: { in: subjectIdsInPayload } },
+          select: { id: true, name: true },
+          take: 50000,
+        })
+      : []
+  const subjectNameById = new Map(subjectsInPayload.map((s) => [String(s.id), s.name]))
 
   const conflicts = []
   let applied = 0
+  let skippedNotAssigned = 0
 
   const classIds = Array.from(
     new Set(
@@ -132,11 +166,17 @@ export const POST = withErrorHandler(async function POST(request) {
       if (!studentId || !subjectId || !classId) continue
       if (score !== null && (Number.isNaN(score) || score < 0 || score > 100)) continue
 
-      const hasAssignment = await tx.teachingAssignment.findFirst({
-        where: { schoolId, teacherId: teacher.id, classId, subjectId },
-        select: { id: true },
-      })
-      if (!hasAssignment) continue
+      const allowed = hasTeachingAssignments
+        ? assignmentPairs.has(`${classId}:${subjectId}`)
+        : allowedClassIds.has(classId) &&
+          (allowedSubjectIds.has(subjectId) ||
+            assignedSubjectTokens.has(subjectId) ||
+            assignedSubjectTokens.has(String(subjectNameById.get(subjectId) || '')))
+
+      if (!allowed) {
+        skippedNotAssigned += 1
+        continue
+      }
 
       const termYear = parseTermYear(r.term)
       const term = String(r.term || termYear.term).trim() || termYear.term
@@ -213,7 +253,7 @@ export const POST = withErrorHandler(async function POST(request) {
     return NextResponse.json({ success: false, conflicts, applied }, { status: 409 })
   }
 
-  return NextResponse.json({ success: true, applied })
+  return NextResponse.json({ success: true, applied, skippedNotAssigned })
 })
 
 export const DELETE = withErrorHandler(async function DELETE(request) {

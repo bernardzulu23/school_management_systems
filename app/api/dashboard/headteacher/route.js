@@ -593,10 +593,11 @@ export async function GET(request) {
 
     const recentResults = await prisma.result.findMany({
       where: { schoolId },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { updatedAt: 'desc' },
       select: {
         id: true,
         createdAt: true,
+        updatedAt: true,
         score: true,
         grade: true,
         term: true,
@@ -623,7 +624,7 @@ export async function GET(request) {
     const recent_activities = recentResults.map((r) => ({
       id: r.id,
       type: 'result',
-      created_at: r.createdAt,
+      created_at: r.updatedAt || r.createdAt,
       title: `${r.subject?.name || 'Subject'} result entered`,
       description: `${r.student?.name || 'Student'} • ${r.student?.class || ''} • ${Math.round(
         Number(r.score || 0)

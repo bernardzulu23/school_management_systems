@@ -208,15 +208,24 @@ export const GET = withErrorHandler(async function GET(request) {
   }
   const mergedClasses = Array.from(classById.values())
 
-  const results =
-    effectiveClassNames.length > 0
-      ? await prisma.result.findMany({
-          where: { schoolId, student: { class: { in: effectiveClassNames } } },
-          include: { student: true, subject: true },
-          orderBy: { createdAt: 'desc' },
-          take: 50,
-        })
-      : []
+  const teacherUserIds = teachers.map((t) => String(t.user?.id || '')).filter(Boolean)
+  const subjectIds = subjects.map((s) => String(s.id || '')).filter(Boolean)
+
+  const results = await prisma.result.findMany({
+    where: {
+      schoolId,
+      OR: [
+        ...(teacherUserIds.length > 0 ? [{ enteredByUserId: { in: teacherUserIds } }] : []),
+        ...(subjectIds.length > 0 ? [{ subjectId: { in: subjectIds } }] : []),
+        ...(effectiveClassNames.length > 0
+          ? [{ student: { class: { in: effectiveClassNames } } }]
+          : []),
+      ],
+    },
+    include: { student: true, subject: true },
+    orderBy: { updatedAt: 'desc' },
+    take: 50,
+  })
 
   const assessments =
     effectiveClassNames.length > 0
@@ -226,9 +235,6 @@ export const GET = withErrorHandler(async function GET(request) {
           take: 50,
         })
       : []
-
-  const teacherUserIds = teachers.map((t) => String(t.user?.id || '')).filter(Boolean)
-  const subjectIds = subjects.map((s) => String(s.id || '')).filter(Boolean)
 
   const teacherAgg =
     teacherUserIds.length > 0
