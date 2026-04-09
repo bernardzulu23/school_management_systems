@@ -63,14 +63,52 @@ export const GET = withErrorHandler(async function GET(request) {
     departmentName: hodProfile.department,
   })
   const departmentIds = resolved.departmentIds
+  const departmentNameAliases = resolved.departmentNameAliases
   if (departmentIds.length === 0) throw new ApiError('Department not assigned', 400)
 
   const teacherDepartments = await prisma.teacherDepartment.findMany({
     where: { departmentId: { in: departmentIds } },
     select: { teacherId: true },
   })
+
+  const teachersByNameOrJoin =
+    departmentNameAliases.length > 0 || departmentIds.length > 0
+      ? await prisma.teacher.findMany({
+          where: {
+            schoolId,
+            OR: [
+              ...(departmentIds.length > 0
+                ? [
+                    {
+                      departments: {
+                        some: { departmentId: { in: departmentIds } },
+                      },
+                    },
+                  ]
+                : []),
+              ...(departmentNameAliases.length > 0
+                ? [
+                    {
+                      OR: departmentNameAliases.map((n) => ({
+                        department: { equals: String(n), mode: 'insensitive' },
+                      })),
+                    },
+                  ]
+                : []),
+            ],
+          },
+          select: { id: true },
+          take: 20000,
+        })
+      : []
+
   const teacherIds = Array.from(
-    new Set(teacherDepartments.map((t) => String(t.teacherId || '')).filter(Boolean))
+    new Set(
+      [
+        ...teacherDepartments.map((t) => String(t.teacherId || '')).filter(Boolean),
+        ...teachersByNameOrJoin.map((t) => String(t.id || '')).filter(Boolean),
+      ].filter(Boolean)
+    )
   )
 
   if (teacherIds.length === 0) {
