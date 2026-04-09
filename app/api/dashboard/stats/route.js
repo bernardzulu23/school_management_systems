@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
+import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function GET(request) {
   try {
     const auth = authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
 
-    const schoolId = auth.user?.schoolId
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
     if (!schoolId) {
       return NextResponse.json({ error: 'School context required' }, { status: 403 })
     }
@@ -125,6 +126,10 @@ export async function GET(request) {
         averageGrade,
         totalResults,
         recentActivities,
+        recent_activities: recentActivities.map((a) => ({
+          ...a,
+          created_at: a.createdAt,
+        })),
       },
     })
   } catch (error) {

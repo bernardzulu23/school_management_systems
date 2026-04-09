@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export const dynamic = 'force-dynamic'
 
@@ -77,7 +78,7 @@ export async function GET(request) {
       return NextResponse.json({ error: 'Forbidden: Headteacher access only' }, { status: 403 })
     }
 
-    const schoolId = auth.user?.schoolId
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
     if (!schoolId) {
       return NextResponse.json({ error: 'School context required' }, { status: 403 })
     }
@@ -183,7 +184,6 @@ export async function GET(request) {
             },
             _avg: { score: true },
             _count: { _all: true },
-            take: 50000,
           })
         : []
 
@@ -222,7 +222,6 @@ export async function GET(request) {
               enteredByUserId: { not: null },
             },
             _avg: { score: true },
-            take: 50000,
           }),
           prisma.result.groupBy({
             by: ['enteredByUserId'],
@@ -233,7 +232,6 @@ export async function GET(request) {
               enteredByUserId: { not: null },
             },
             _avg: { score: true },
-            take: 50000,
           }),
         ])
 
@@ -329,13 +327,11 @@ export async function GET(request) {
       where: { schoolId, year: yearForTrends },
       _avg: { score: true },
       _count: { _all: true },
-      take: 50000,
     })
     const termPassAgg = await prisma.result.groupBy({
       by: ['term'],
       where: { schoolId, year: yearForTrends, score: { gte: 50 } },
       _count: { _all: true },
-      take: 50000,
     })
 
     const passByTerm = new Map(
@@ -370,13 +366,11 @@ export async function GET(request) {
       where: resultWhere,
       _avg: { score: true },
       _count: { _all: true },
-      take: 50000,
     })
     const subjectPassAgg = await prisma.result.groupBy({
       by: ['subjectId'],
       where: { ...resultWhere, score: { gte: 50 } },
       _count: { _all: true },
-      take: 50000,
     })
     const passBySubjectId = new Map(
       subjectPassAgg.map((r) => [String(r.subjectId), Number(r._count?._all || 0)])

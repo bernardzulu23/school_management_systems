@@ -354,6 +354,24 @@ function HeadteacherDashboardContent() {
             </div>
           </header>
 
+          {error && (
+            <div className="bg-royalPurple-card border border-royalPurple-danger/40 rounded-2xl p-4">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5">
+                  <AlertCircle className="h-5 w-5 text-royalPurple-dangerTx" aria-hidden="true" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-royalPurple-text1 font-semibold">
+                    Dashboard data failed to load
+                  </div>
+                  <div className="text-royalPurple-text2 text-sm break-words">
+                    {error?.response?.data?.error || error?.message || ERROR_MESSAGES.GENERIC}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Quick Stats Overview */}
           <section aria-label="School Statistics" className="overflow-x-auto pb-2">
             {isLoading ? (

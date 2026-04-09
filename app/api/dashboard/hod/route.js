@@ -247,7 +247,6 @@ export const GET = withErrorHandler(async function GET(request) {
           },
           _avg: { score: true },
           _count: { _all: true },
-          take: 50000,
         })
       : []
 
