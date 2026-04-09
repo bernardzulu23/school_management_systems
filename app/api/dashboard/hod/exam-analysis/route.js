@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
 
 function parseTermParam(termRaw) {
   const raw = String(termRaw || '').trim()
@@ -55,10 +56,17 @@ export const GET = withErrorHandler(async function GET(request) {
     select: { id: true, departmentId: true, department: true },
   })
   if (!hodProfile) throw new ApiError('HOD profile not found', 404)
-  if (!hodProfile.departmentId) throw new ApiError('Department not assigned', 400)
+  const resolved = await resolveDepartmentScope({
+    prisma,
+    schoolId,
+    departmentId: hodProfile.departmentId,
+    departmentName: hodProfile.department,
+  })
+  const departmentIds = resolved.departmentIds
+  if (departmentIds.length === 0) throw new ApiError('Department not assigned', 400)
 
   const teacherDepartments = await prisma.teacherDepartment.findMany({
-    where: { departmentId: hodProfile.departmentId },
+    where: { departmentId: { in: departmentIds } },
     select: { teacherId: true },
   })
   const teacherIds = Array.from(

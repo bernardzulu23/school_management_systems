@@ -72,7 +72,9 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
+  const isAdminOrHead = roleCheck(auth.user, ['ADMIN', 'headteacher'])
+  const isHod = roleCheck(auth.user, ['HOD', 'hod'])
+  if (!isAdminOrHead && !isHod) {
     throw new ApiError('Forbidden', 403)
   }
 
@@ -86,9 +88,13 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
 
   const existing = await prisma.headOfDepartment.findFirst({
     where: { id: hodId, schoolId },
-    select: { id: true },
+    select: { id: true, userId: true },
   })
   if (!existing) throw new ApiError('HOD assignment not found', 404)
+
+  if (isHod && !isAdminOrHead && String(existing.userId) !== String(auth.user.id)) {
+    throw new ApiError('Forbidden', 403)
+  }
 
   await prisma.headOfDepartment.delete({ where: { id: hodId } })
   return NextResponse.json({ success: true })

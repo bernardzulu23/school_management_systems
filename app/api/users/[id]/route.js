@@ -64,7 +64,9 @@ export async function DELETE(request, { params }) {
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
+  const isAdminOrHead = roleCheck(auth.user, ['ADMIN', 'headteacher'])
+  const isHod = roleCheck(auth.user, ['HOD', 'hod'])
+  if (!isAdminOrHead && !isHod) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -73,6 +75,54 @@ export async function DELETE(request, { params }) {
     include: { studentProfile: true, teacherProfile: true, hodProfile: true },
   })
   if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+  if (isHod && !isAdminOrHead) {
+    const targetRole = String(user.role || '').toLowerCase()
+    if (targetRole === 'admin' || targetRole === 'headteacher' || targetRole === 'hod') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    if (!user.teacherProfile?.id) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    const hodProfile = await prisma.headOfDepartment.findFirst({
+      where: { schoolId, userId: auth.user.id },
+      select: { departmentId: true, department: true },
+    })
+    if (!hodProfile) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+
+    const deptId = hodProfile.departmentId ? String(hodProfile.departmentId) : ''
+    const deptName = String(hodProfile.department || '').trim()
+
+    const teacherInDept = await prisma.teacher.findFirst({
+      where: {
+        id: user.teacherProfile.id,
+        schoolId,
+        OR: [
+          ...(deptId
+            ? [
+                {
+                  departments: {
+                    some: { departmentId: deptId },
+                  },
+                },
+              ]
+            : []),
+          ...(deptName
+            ? [
+                {
+                  department: { equals: deptName, mode: 'insensitive' },
+                },
+              ]
+            : []),
+        ],
+      },
+      select: { id: true },
+    })
+
+    if (!teacherInDept) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
 
   await prisma.$transaction(async (tx) => {
     await deleteUserCascade({ tx, schoolId, userId: user.id })

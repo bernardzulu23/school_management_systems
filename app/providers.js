@@ -36,7 +36,7 @@ function ActivitySessionKeeper({ children }) {
 
     let interval
     let lastKeepAliveAt = 0
-    const idleLimitMs = 10 * 60 * 1000
+    const idleLimitMs = 60 * 60 * 1000
     const keepAliveEveryMs = 5 * 60 * 1000
 
     const tick = async () => {
@@ -50,7 +50,6 @@ function ActivitySessionKeeper({ children }) {
           : idleLimitMs + 1
 
       if (idleMs > idleLimitMs) {
-        await state.logout?.()
         return
       }
 
@@ -59,6 +58,7 @@ function ActivitySessionKeeper({ children }) {
           const res = await fetch('/api/auth/refresh', {
             method: 'POST',
             credentials: 'include',
+            cache: 'no-store',
           })
 
           if (res.ok) {
@@ -86,12 +86,6 @@ function AuthSessionSync({ children }) {
     let interval
 
     const attemptSync = async () => {
-      // ✅ Already hit limit — do nothing (belt + suspenders)
-      if (failCount >= 3) {
-        clearInterval(interval)
-        return
-      }
-
       try {
         const result = await syncSession()
 
@@ -104,21 +98,9 @@ function AuthSessionSync({ children }) {
 
         // ✅ Any non-success non-rateLimited response = failure
         failCount += 1
-        console.log(`[Auth] Sync failed (${failCount}/3)`)
-
-        if (failCount >= 3) {
-          clearInterval(interval)
-          console.log('[Auth] Session sync stopped — not authenticated')
-        }
       } catch (err) {
         // ✅ syncSession threw instead of returning — still counts as failure
         failCount += 1
-        console.log(`[Auth] Sync error (${failCount}/3):`, err?.message)
-
-        if (failCount >= 3) {
-          clearInterval(interval)
-          console.log('[Auth] Session sync stopped — error threshold reached')
-        }
       }
     }
 

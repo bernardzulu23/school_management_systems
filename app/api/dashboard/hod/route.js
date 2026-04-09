@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
 
 export const dynamic = 'force-dynamic'
 
@@ -41,25 +42,14 @@ export const GET = withErrorHandler(async function GET(request) {
     throw new ApiError('No department assigned', 400)
   }
 
-  const departmentNameAliases = Array.from(
-    new Set(
-      [departmentName].filter(Boolean).flatMap((n) => {
-        const name = String(n)
-        if (name === 'Arts and Design') return [name, 'Art and Design']
-        if (name === 'Art and Design') return [name, 'Arts and Design']
-        return [name]
-      })
-    )
-  )
-
-  const departmentIds = new Set([departmentId].filter(Boolean).map(String))
-  if (departmentNameAliases.length > 0) {
-    const byName = await prisma.department.findMany({
-      where: { schoolId, name: { in: departmentNameAliases } },
-      select: { id: true },
-    })
-    byName.forEach((d) => departmentIds.add(String(d.id)))
-  }
+  const resolved = await resolveDepartmentScope({
+    prisma,
+    schoolId,
+    departmentId,
+    departmentName,
+  })
+  const departmentNameAliases = resolved.departmentNameAliases
+  const departmentIds = new Set(resolved.departmentIds.map(String))
 
   const teachers = await prisma.teacher.findMany({
     where: {
@@ -77,7 +67,13 @@ export const GET = withErrorHandler(async function GET(request) {
                   ]
                 : []),
               ...(departmentNameAliases.length > 0
-                ? [{ department: { in: departmentNameAliases } }]
+                ? [
+                    {
+                      OR: departmentNameAliases.map((n) => ({
+                        department: { equals: String(n), mode: 'insensitive' },
+                      })),
+                    },
+                  ]
                 : []),
             ],
           }
