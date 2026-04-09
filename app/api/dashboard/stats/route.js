@@ -73,6 +73,48 @@ export async function GET(request) {
     })
     const averageGrade = results._avg.score ? Math.round(results._avg.score) : 0
 
+    const recentResults = await prisma.result.findMany({
+      where: { schoolId },
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        createdAt: true,
+        score: true,
+        grade: true,
+        term: true,
+        year: true,
+        enteredByUserId: true,
+        student: { select: { name: true, class: true } },
+        subject: { select: { name: true } },
+      },
+      take: 20,
+    })
+
+    const enteredByIds = Array.from(
+      new Set(recentResults.map((r) => String(r.enteredByUserId || '')).filter(Boolean))
+    )
+    const enteredByUsers = enteredByIds.length
+      ? await prisma.user.findMany({
+          where: { schoolId, id: { in: enteredByIds } },
+          select: { id: true, name: true },
+          take: 2000,
+        })
+      : []
+    const userNameById = new Map(enteredByUsers.map((u) => [String(u.id), u.name]))
+
+    const recentActivities = recentResults.map((r) => ({
+      id: r.id,
+      type: 'result',
+      createdAt: r.createdAt,
+      title: `${r.subject?.name || 'Subject'} result entered`,
+      description: `${r.student?.name || 'Student'} • ${r.student?.class || ''} • ${Math.round(
+        Number(r.score || 0)
+      )}%`,
+      actor: userNameById.get(String(r.enteredByUserId || '')) || 'Unknown',
+      term: r.term,
+      year: r.year,
+    }))
+
     return NextResponse.json({
       success: true,
       data: {
@@ -80,7 +122,8 @@ export async function GET(request) {
         totalUsers,
         averageAttendance: attendanceRate,
         averageGrade,
-        recentActivities: [],
+        totalResults,
+        recentActivities,
       },
     })
   } catch (error) {

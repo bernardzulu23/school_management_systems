@@ -74,7 +74,7 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                 </div>
                 <h3 className="text-royalPurple-text1 font-semibold">Student Achievement</h3>
                 <p className="text-2xl font-bold text-royalPurple-text2 mt-2">
-                  {schoolStats.passRate}%
+                  {schoolStats.studentAchievement}%
                 </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">Based on recent results</p>
               </div>
