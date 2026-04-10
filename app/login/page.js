@@ -10,6 +10,7 @@ import toast from 'react-hot-toast'
 import FormField from '@/components/forms/FormField'
 import { Button } from '@/components/ui/Button'
 import { setTopLoading, startTopLoading, stopTopLoading } from '@/lib/uiProgress'
+import { SchoolLogo } from '@/components/SchoolLogo'
 
 export default function LoginPage() {
   const { school, isLoading: isSchoolLoading } = useSchool()
@@ -134,8 +135,12 @@ export default function LoginPage() {
           {school ? (
             <>
               {school.logo_url && (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img src={school.logo_url} alt={school.name} className="h-16 w-auto mx-auto mb-4" />
+                <SchoolLogo
+                  src={school.logo_url}
+                  alt={school.name}
+                  className="h-16 w-auto mx-auto mb-4"
+                  priority
+                />
               )}
               <h2 className="text-2xl font-bold text-center text-royalPurple-text1">
                 {school.name}

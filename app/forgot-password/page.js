@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import FormField from '@/components/forms/FormField'
 import { useSchool } from '@/lib/context/SchoolContext'
 import toast from 'react-hot-toast'
+import { SchoolLogo } from '@/components/SchoolLogo'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
@@ -63,8 +64,12 @@ export default function ForgotPasswordPage() {
           {school ? (
             <>
               {school.logo_url && (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img src={school.logo_url} alt={school.name} className="h-16 w-auto mx-auto mb-4" />
+                <SchoolLogo
+                  src={school.logo_url}
+                  alt={school.name}
+                  className="h-16 w-auto mx-auto mb-4"
+                  priority
+                />
               )}
               <h2 className="text-xl font-bold text-center text-royalPurple-text1">
                 {school.name}
