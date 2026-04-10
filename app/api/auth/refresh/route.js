@@ -47,7 +47,7 @@ export async function POST(request) {
     const newAccessToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role, schoolId: user.schoolId },
       JWT_SECRET,
-      { expiresIn: '15m' }
+      { expiresIn: '8h' }
     )
 
     const newRefreshToken = jwt.sign({ id: user.id, schoolId: user.schoolId }, JWT_REFRESH_SECRET, {
@@ -60,7 +60,7 @@ export async function POST(request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 15 * 60,
+      maxAge: 8 * 60 * 60,
       path: '/',
       ...(cookieDomain ? { domain: cookieDomain } : {}),
     })
