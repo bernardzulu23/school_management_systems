@@ -1,7 +1,7 @@
 import React from 'react'
 import { GraduationCap, FileText, Building, BookOpen } from 'lucide-react'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
-import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
+import { GRADE_LEVELS, SECTIONS, STUDENT_SUBJECTS_MAX, STUDENT_SUBJECTS_MIN } from '@/lib/constants'
 import { useSubjects } from '@/lib/hooks/useSubjects'
 import SubjectSelection from '@/components/registration/SubjectSelection'
 
@@ -137,7 +137,8 @@ export default function AcademicInfoStep({
               selectedSubjects={formData.selected_subjects || []}
               onSubjectsChange={onSubjectsChange}
               userRole="student"
-              maxSelections={8}
+              minSelections={STUDENT_SUBJECTS_MIN}
+              maxSelections={STUDENT_SUBJECTS_MAX}
               valueType="name"
             />
             {errors.selected_subjects && (

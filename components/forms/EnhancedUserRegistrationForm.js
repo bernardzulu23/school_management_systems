@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 
 // Shared Utilities & Constants
-import { USER_ROLES } from '@/lib/constants'
+import { STUDENT_SUBJECTS_MAX, STUDENT_SUBJECTS_MIN, USER_ROLES } from '@/lib/constants'
 import { handleInputChange, handleMultiSelectChange } from '@/lib/utils/formHelpers'
 import { api } from '@/lib/api'
 import { useAuth } from '@/lib/auth'
@@ -327,8 +327,13 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         if (!formData.year_group) newErrors.year_group = 'Year group is required'
         if (!formData.section) newErrors.section = 'Section is required'
         if (!formData.exam_number?.trim()) newErrors.exam_number = 'Exam number is required'
-        if (!formData.selected_subjects || formData.selected_subjects.length < 8) {
-          newErrors.selected_subjects = 'At least 8 subjects must be selected'
+        const count = Array.isArray(formData.selected_subjects)
+          ? formData.selected_subjects.length
+          : 0
+        if (count < STUDENT_SUBJECTS_MIN) {
+          newErrors.selected_subjects = `Select at least ${STUDENT_SUBJECTS_MIN} subjects`
+        } else if (count > STUDENT_SUBJECTS_MAX) {
+          newErrors.selected_subjects = `Select at most ${STUDENT_SUBJECTS_MAX} subjects`
         }
       } else if (role === 'headteacher') {
         if (!formData.employee_id.trim()) newErrors.employee_id = 'Employee ID is required'

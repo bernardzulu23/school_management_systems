@@ -63,6 +63,7 @@ export default function SubjectSelection({
   onSubjectsChange,
   userRole = 'student',
   maxSelections = null,
+  minSelections = null,
   valueType = 'id',
 }) {
   const [searchQuery, setSearchQuery] = useState('')
@@ -142,13 +143,23 @@ export default function SubjectSelection({
           {userRole === 'hod' && ' to Manage'}
         </h3>
         <p className="text-royalPurple-text2">
-          {maxSelections
-            ? `Choose up to ${maxSelections} subjects`
-            : 'Choose the subjects you want to work with'}
+          {minSelections && maxSelections
+            ? `Choose ${minSelections} to ${maxSelections} subjects`
+            : maxSelections
+              ? `Choose up to ${maxSelections} subjects`
+              : minSelections
+                ? `Choose at least ${minSelections} subjects`
+                : 'Choose the subjects you want to work with'}
         </p>
         {selectedSubjects.length > 0 && (
           <p className="text-sm text-royalPurple-accentTx mt-2">
             Selected: {selectedSubjects.length} subject{selectedSubjects.length !== 1 ? 's' : ''}
+          </p>
+        )}
+        {minSelections && selectedSubjects.length < minSelections && (
+          <p className="text-sm text-royalPurple-dangerTx mt-2">
+            Select {minSelections - selectedSubjects.length} more subject
+            {minSelections - selectedSubjects.length !== 1 ? 's' : ''} to continue
           </p>
         )}
       </div>
