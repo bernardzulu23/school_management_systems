@@ -967,7 +967,9 @@ export default function TeacherDashboard() {
                               {result.studentName || 'Student'}
                             </h4>
                             <p className="text-royalPurple-text2 text-sm">
-                              {result.subjectName || 'Subject'} • {result.term} {result.year}
+                              {result.subjectName || 'Subject'}
+                              {result.class ? ` • ${result.class}` : ''} • {result.term}{' '}
+                              {result.year}
                             </p>
                           </div>
                         </div>

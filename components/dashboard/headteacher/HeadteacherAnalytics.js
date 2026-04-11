@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { TrendingUp, Users, FileBarChart, BookOpen } from 'lucide-react'
 import { useHeadteacher } from '@/lib/context/HeadteacherContext'
+import { GenderByGradeCard } from '@/components/dashboard/GenderByGradeCard'
 
 export function HeadteacherAnalytics() {
   const {
@@ -10,6 +11,7 @@ export function HeadteacherAnalytics() {
     yearGroupPerformanceData,
     seniorResultsAnalysis,
     schoolStats,
+    dashboardData,
   } = useHeadteacher()
   return (
     <div className="space-y-8">
@@ -105,7 +107,7 @@ export function HeadteacherAnalytics() {
       <Card variant="glass">
         <CardHeader>
           <CardTitle className="text-royalPurple-text1">
-            Senior Results Analysis (Grade 12)
+            Senior Results Analysis (Grades 10–12)
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -113,6 +115,12 @@ export function HeadteacherAnalytics() {
             <div className="text-center py-10 text-royalPurple-text2">No senior results found.</div>
           ) : (
             <div className="space-y-6">
+              <GenderByGradeCard
+                title="Boys vs Girls (Grades 10–12)"
+                data={
+                  dashboardData?.senior_gender_by_grade || dashboardData?.seniorGenderByGrade || []
+                }
+              />
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl text-center">
                   <div className="text-2xl font-bold text-royalPurple-text1">

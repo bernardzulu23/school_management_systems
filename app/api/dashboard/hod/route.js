@@ -227,6 +227,24 @@ export const GET = withErrorHandler(async function GET(request) {
     take: 50,
   })
 
+  const enteredByIds = Array.from(
+    new Set(results.map((r) => String(r.enteredByUserId || '')).filter(Boolean))
+  )
+  const enteredByUsers = enteredByIds.length
+    ? await prisma.user.findMany({
+        where: { id: { in: enteredByIds } },
+        select: { id: true, name: true },
+        take: 2000,
+      })
+    : []
+  const enteredByNameById = new Map(enteredByUsers.map((u) => [String(u.id), u.name]))
+
+  const resultsWithMeta = results.map((r) => ({
+    ...r,
+    enteredByName: enteredByNameById.get(String(r.enteredByUserId || '')) || '',
+    className: r.student?.class || '',
+  }))
+
   const assessments =
     effectiveClassNames.length > 0
       ? await prisma.assessment.findMany({
@@ -315,7 +333,7 @@ export const GET = withErrorHandler(async function GET(request) {
       students,
       classes: mergedClasses,
       subjects,
-      results,
+      results: resultsWithMeta,
       assessments,
       teacherPerformance,
     },

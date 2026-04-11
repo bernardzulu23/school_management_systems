@@ -14,6 +14,7 @@ import {
   GraduationCap,
   FileText,
   Plus,
+  Clock,
 } from 'lucide-react'
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
 import { HeadteacherStats } from './HeadteacherStats'
@@ -147,7 +148,7 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                 <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                   <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
                     <BookOpen className="h-5 w-5 mr-2 text-royalPurple-successTx" />
-                    Subject Performance
+                    Subject Pass Rate (≥40%)
                   </h3>
                   <div className="space-y-4">
                     {subjectPerformanceData?.slice(0, 5).map((subject, index) => {
@@ -187,6 +188,40 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
           </CardContent>
         </Card>
       )}
+
+      {Array.isArray(dashboardData?.recent_activities) &&
+        dashboardData.recent_activities.length > 0 && (
+          <Card variant="glass">
+            <CardHeader>
+              <CardTitle className="text-royalPurple-text1 flex items-center">
+                <Clock className="h-6 w-6 mr-3 text-royalPurple-text2" />
+                Recent Results Entered
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+                <div className="space-y-3">
+                  {dashboardData.recent_activities.slice(0, 6).map((a) => (
+                    <div
+                      key={a.id}
+                      className="flex items-center justify-between p-3 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-lg"
+                    >
+                      <div>
+                        <div className="text-royalPurple-text1 font-semibold text-sm">
+                          {a.title}
+                        </div>
+                        <div className="text-royalPurple-text2 text-xs">
+                          {a.description}
+                          {a.actor ? ` • ${a.actor}` : ''}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
       <StudentRosterCard />
 

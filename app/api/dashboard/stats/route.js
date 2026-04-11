@@ -97,7 +97,7 @@ export async function GET(request) {
     )
     const enteredByUsers = enteredByIds.length
       ? await prisma.user.findMany({
-          where: { schoolId, id: { in: enteredByIds } },
+          where: { id: { in: enteredByIds } },
           select: { id: true, name: true },
           take: 2000,
         })
@@ -113,6 +113,8 @@ export async function GET(request) {
         Number(r.score || 0)
       )}%`,
       actor: userNameById.get(String(r.enteredByUserId || '')) || 'Unknown',
+      class_name: r.student?.class || '',
+      subject_name: r.subject?.name || '',
       term: r.term,
       year: r.year,
     }))

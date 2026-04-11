@@ -69,6 +69,60 @@ function gradeFromAverage(score, gradeLevel) {
   return { grade: 'F', status: 'FAIL' }
 }
 
+function normalizeGender(value) {
+  const g = String(value || '')
+    .trim()
+    .toLowerCase()
+  if (!g) return 'unknown'
+  if (g.startsWith('m')) return 'male'
+  if (g.startsWith('f')) return 'female'
+  return 'unknown'
+}
+
+function yearGroupFromClassName(value) {
+  const raw = String(value || '').trim()
+  if (!raw) return null
+  const lower = raw.toLowerCase()
+  const formMatch = lower.match(/\bform\s*([1-6])\b/)
+  if (formMatch?.[1]) return `Form ${Number(formMatch[1])}`
+  const gradeMatch = lower.match(/\bgrade\s*(1[0-2]|[1-9])\b/)
+  if (gradeMatch?.[1]) return `Grade ${Number(gradeMatch[1])}`
+  const leadingNumber = lower.match(/^\s*(\d{1,2})\b/)
+  if (leadingNumber?.[1]) {
+    const n = Number(leadingNumber[1])
+    if (n >= 1 && n <= 12) return `Grade ${n}`
+  }
+  return null
+}
+
+function buildGenderByGrade({ rows, allowedYearGroups }) {
+  const allowed = new Set(allowedYearGroups.map((x) => String(x)))
+  const byGroup = new Map()
+  const seen = new Set()
+
+  for (const r of rows) {
+    const studentId = String(r?.studentId || '')
+    if (!studentId || seen.has(studentId)) continue
+    seen.add(studentId)
+
+    const className = r?.student?.class || ''
+    const group = yearGroupFromClassName(className)
+    if (!group || !allowed.has(group)) continue
+
+    const gender = normalizeGender(r?.student?.user?.gender)
+    if (!byGroup.has(group)) byGroup.set(group, { grade: group, male: 0, female: 0, unknown: 0 })
+    const entry = byGroup.get(group)
+    entry[gender] += 1
+  }
+
+  return allowedYearGroups
+    .filter((g) => byGroup.has(String(g)))
+    .map((g) => {
+      const row = byGroup.get(String(g))
+      return { ...row, total: row.male + row.female + row.unknown }
+    })
+}
+
 export async function GET(request) {
   try {
     const auth = authMiddleware(request)
@@ -134,7 +188,7 @@ export async function GET(request) {
 
     // 3. Pass Rate Calculation (from Results, scoped by schoolId)
     const passedResults = await prisma.result.count({
-      where: { ...resultWhere, score: { gte: 50 } },
+      where: { ...resultWhere, score: { gte: 40 } },
     })
     const passRate = resultsCount > 0 ? Math.round((passedResults / resultsCount) * 100) : 0
 
@@ -330,7 +384,7 @@ export async function GET(request) {
     })
     const termPassAgg = await prisma.result.groupBy({
       by: ['term'],
-      where: { schoolId, year: yearForTrends, score: { gte: 50 } },
+      where: { schoolId, year: yearForTrends, score: { gte: 40 } },
       _count: { _all: true },
     })
 
@@ -369,7 +423,7 @@ export async function GET(request) {
     })
     const subjectPassAgg = await prisma.result.groupBy({
       by: ['subjectId'],
-      where: { ...resultWhere, score: { gte: 50 } },
+      where: { ...resultWhere, score: { gte: 40 } },
       _count: { _all: true },
     })
     const passBySubjectId = new Map(
@@ -403,6 +457,11 @@ export async function GET(request) {
       .sort((a, b) => a.subject.localeCompare(b.subject))
 
     const subject_performance = subjectPerformanceRows.reduce((acc, row) => {
+      acc[row.subject] = row.passRate
+      return acc
+    }, {})
+
+    const subject_average_scores = subjectPerformanceRows.reduce((acc, row) => {
       acc[row.subject] = row.average
       return acc
     }, {})
@@ -461,47 +520,31 @@ export async function GET(request) {
       where: {
         ...resultWhere,
         student: {
-          class: {
-            contains: '8',
-          },
+          OR: [
+            { class: { contains: 'Form 1', mode: 'insensitive' } },
+            { class: { contains: 'Form 2', mode: 'insensitive' } },
+            { class: { contains: 'Form1', mode: 'insensitive' } },
+            { class: { contains: 'Form2', mode: 'insensitive' } },
+          ],
         },
       },
       orderBy: { score: 'desc' },
       take: 5,
     })
 
-    const seniorClasses = await prisma.class.findMany({
-      where: {
-        schoolId,
-        OR: [
-          { name: { contains: '12' } },
-          { year_group: { contains: '12' } },
-          { name: { contains: 'Grade 12' } },
-          { year_group: { contains: 'Grade 12' } },
-        ],
-      },
-      select: { name: true, year_group: true },
-      take: 200,
-    })
-
-    const seniorClassValues = Array.from(
-      new Set(
-        seniorClasses
-          .flatMap((c) => [c.name, c.year_group])
-          .map((v) => String(v || '').trim())
-          .filter(Boolean)
-      )
-    )
-
     const seniorStudents = await prisma.student.findMany({
       where: {
         schoolId,
         OR: [
-          ...(seniorClassValues.length > 0 ? [{ class: { in: seniorClassValues } }] : []),
-          { class: { contains: '12' } },
+          { class: { contains: 'Grade 10', mode: 'insensitive' } },
+          { class: { contains: 'Grade 11', mode: 'insensitive' } },
+          { class: { contains: 'Grade 12', mode: 'insensitive' } },
+          { class: { startsWith: '10' } },
+          { class: { startsWith: '11' } },
+          { class: { startsWith: '12' } },
         ],
       },
-      select: { id: true },
+      select: { id: true, class: true, user: { select: { gender: true } } },
       take: 20000,
     })
 
@@ -524,7 +567,7 @@ export async function GET(request) {
 
     const seniorPassRate =
       seniorScores.length > 0
-        ? Math.round((seniorScores.filter((s) => s >= 50).length / seniorScores.length) * 100)
+        ? Math.round((seniorScores.filter((s) => s >= 40).length / seniorScores.length) * 100)
         : 0
 
     const gradeCounts = {}
@@ -563,7 +606,7 @@ export async function GET(request) {
       if (!subjectStatsSenior[name]) subjectStatsSenior[name] = { total: 0, count: 0, pass: 0 }
       subjectStatsSenior[name].total += Number(r.score || 0)
       subjectStatsSenior[name].count += 1
-      if (Number(r.score || 0) >= 50) subjectStatsSenior[name].pass += 1
+      if (Number(r.score || 0) >= 40) subjectStatsSenior[name].pass += 1
       if (!subjectStudentSets[name]) subjectStudentSets[name] = new Set()
       subjectStudentSets[name].add(String(r.studentId))
     })
@@ -584,6 +627,46 @@ export async function GET(request) {
       gradeDistribution: seniorGradeDistribution,
       subjects: seniorSubjectAnalysis,
     }
+
+    const juniorGenderRows = await prisma.result.findMany({
+      where: {
+        ...resultWhere,
+        student: {
+          OR: [
+            { class: { contains: 'Form 1', mode: 'insensitive' } },
+            { class: { contains: 'Form 2', mode: 'insensitive' } },
+            { class: { contains: 'Form1', mode: 'insensitive' } },
+            { class: { contains: 'Form2', mode: 'insensitive' } },
+          ],
+        },
+      },
+      select: {
+        studentId: true,
+        student: { select: { class: true, user: { select: { gender: true } } } },
+      },
+      take: 200000,
+    })
+
+    const seniorGenderRows =
+      seniorStudentIds.length > 0
+        ? await prisma.result.findMany({
+            where: { ...resultWhere, studentId: { in: seniorStudentIds } },
+            select: {
+              studentId: true,
+              student: { select: { class: true, user: { select: { gender: true } } } },
+            },
+            take: 200000,
+          })
+        : []
+
+    const junior_gender_by_grade = buildGenderByGrade({
+      rows: juniorGenderRows,
+      allowedYearGroups: ['Form 1', 'Form 2'],
+    })
+    const senior_gender_by_grade = buildGenderByGrade({
+      rows: seniorGenderRows,
+      allowedYearGroups: ['Grade 10', 'Grade 11', 'Grade 12'],
+    })
 
     const recentResults = await prisma.result.findMany({
       where: { schoolId },
@@ -608,7 +691,7 @@ export async function GET(request) {
     )
     const enteredByUsers = enteredByIds.length
       ? await prisma.user.findMany({
-          where: { schoolId, id: { in: enteredByIds } },
+          where: { id: { in: enteredByIds } },
           select: { id: true, name: true, role: true },
           take: 2000,
         })
@@ -624,6 +707,8 @@ export async function GET(request) {
         Number(r.score || 0)
       )}%`,
       actor: userNameById.get(String(r.enteredByUserId || '')) || 'Unknown',
+      class_name: r.student?.class || '',
+      subject_name: r.subject?.name || '',
       term: r.term,
       year: r.year,
     }))
@@ -647,7 +732,10 @@ export async function GET(request) {
       performanceSummary,
       juniorResults,
       seniorResultsAnalysis,
+      junior_gender_by_grade,
+      senior_gender_by_grade,
       subject_performance,
+      subject_average_scores,
       subjectPerformanceRows,
       year_group_performance,
       recent_activities,
@@ -655,6 +743,8 @@ export async function GET(request) {
       performance_summary: performanceSummary,
       junior_results: juniorResults,
       seniorResultsAnalysis,
+      juniorGenderByGrade: junior_gender_by_grade,
+      seniorGenderByGrade: senior_gender_by_grade,
       teacher_effectiveness: teacherEffectiveness,
       compliance_rate: complianceRate,
       teacher_development: teacherDevelopment,

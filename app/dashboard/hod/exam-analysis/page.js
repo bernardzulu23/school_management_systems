@@ -23,6 +23,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer,
   PieChart,
   Pie,
@@ -64,6 +65,12 @@ export default function ExamAnalysisPage() {
   const gradeDistribution = Array.isArray(data?.gradeDistribution) ? data.gradeDistribution : []
   const termComparison = Array.isArray(data?.termComparison) ? data.termComparison : []
   const actions = Array.isArray(data?.recommendedActions) ? data.recommendedActions : []
+  const juniorGenderByGrade = Array.isArray(data?.junior_gender_by_grade)
+    ? data.junior_gender_by_grade
+    : []
+  const seniorGenderByGrade = Array.isArray(data?.senior_gender_by_grade)
+    ? data.senior_gender_by_grade
+    : []
 
   const subjectOptions = useMemo(() => {
     const set = new Set(subjects.map((s) => String(s.subject || '').trim()).filter(Boolean))
@@ -196,6 +203,74 @@ export default function ExamAnalysisPage() {
                     </div>
                     <TrendingUp className="h-12 w-12 text-white/60" />
                   </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Boys vs Girls (Forms 1–2)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {juniorGenderByGrade.length === 0 ? (
+                    <p className="text-royalPurple-text2 text-center py-10">No data found.</p>
+                  ) : (
+                    <div className="h-72">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={juniorGenderByGrade}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                          <XAxis dataKey="grade" stroke="#9CA3AF" fontSize={12} />
+                          <YAxis stroke="#9CA3AF" fontSize={12} allowDecimals={false} />
+                          <Tooltip
+                            contentStyle={{
+                              backgroundColor: '#1F2937',
+                              border: '1px solid #374151',
+                              borderRadius: '8px',
+                              color: '#F9FAFB',
+                            }}
+                          />
+                          <Legend />
+                          <Bar dataKey="male" stackId="g" fill="#3B82F6" name="Male" />
+                          <Bar dataKey="female" stackId="g" fill="#EC4899" name="Female" />
+                          <Bar dataKey="unknown" stackId="g" fill="#9CA3AF" name="Unknown" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Boys vs Girls (Grades 10–12)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {seniorGenderByGrade.length === 0 ? (
+                    <p className="text-royalPurple-text2 text-center py-10">No data found.</p>
+                  ) : (
+                    <div className="h-72">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={seniorGenderByGrade}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                          <XAxis dataKey="grade" stroke="#9CA3AF" fontSize={12} />
+                          <YAxis stroke="#9CA3AF" fontSize={12} allowDecimals={false} />
+                          <Tooltip
+                            contentStyle={{
+                              backgroundColor: '#1F2937',
+                              border: '1px solid #374151',
+                              borderRadius: '8px',
+                              color: '#F9FAFB',
+                            }}
+                          />
+                          <Legend />
+                          <Bar dataKey="male" stackId="g" fill="#3B82F6" name="Male" />
+                          <Bar dataKey="female" stackId="g" fill="#EC4899" name="Female" />
+                          <Bar dataKey="unknown" stackId="g" fill="#9CA3AF" name="Unknown" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>

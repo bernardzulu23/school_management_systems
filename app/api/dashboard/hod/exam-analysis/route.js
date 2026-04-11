@@ -35,6 +35,54 @@ function avg(values) {
   return values.reduce((s, v) => s + v, 0) / values.length
 }
 
+function normalizeGender(value) {
+  const g = String(value || '')
+    .trim()
+    .toLowerCase()
+  if (!g) return 'unknown'
+  if (g.startsWith('m')) return 'male'
+  if (g.startsWith('f')) return 'female'
+  return 'unknown'
+}
+
+function yearGroupFromClassName(value) {
+  const raw = String(value || '').trim()
+  if (!raw) return null
+  const lower = raw.toLowerCase()
+  const formMatch = lower.match(/\bform\s*([1-6])\b/)
+  if (formMatch?.[1]) return `Form ${Number(formMatch[1])}`
+  const gradeMatch = lower.match(/\bgrade\s*(1[0-2]|[1-9])\b/)
+  if (gradeMatch?.[1]) return `Grade ${Number(gradeMatch[1])}`
+  const leadingNumber = lower.match(/^\s*(\d{1,2})\b/)
+  if (leadingNumber?.[1]) {
+    const n = Number(leadingNumber[1])
+    if (n >= 1 && n <= 12) return `Grade ${n}`
+  }
+  return null
+}
+
+function buildGenderByGrade({ students, allowedYearGroups }) {
+  const allowed = new Set(allowedYearGroups.map((x) => String(x)))
+  const byGroup = new Map()
+
+  for (const s of students) {
+    const className = s?.class || ''
+    const group = yearGroupFromClassName(className)
+    if (!group || !allowed.has(group)) continue
+    const gender = normalizeGender(s?.user?.gender)
+    if (!byGroup.has(group)) byGroup.set(group, { grade: group, male: 0, female: 0, unknown: 0 })
+    const entry = byGroup.get(group)
+    entry[gender] += 1
+  }
+
+  return allowedYearGroups
+    .filter((g) => byGroup.has(String(g)))
+    .map((g) => {
+      const row = byGroup.get(String(g))
+      return { ...row, total: row.male + row.female + row.unknown }
+    })
+}
+
 export const GET = withErrorHandler(async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
@@ -249,7 +297,7 @@ export const GET = withErrorHandler(async function GET(request) {
     const subjectId = String(r.subjectId)
     const score = Number(r.score || 0)
     const studentId = String(r.studentId)
-    const pass = score >= 50
+    const pass = score >= 40
 
     overallScores.push(score)
     overallStudents.add(studentId)
@@ -316,7 +364,7 @@ export const GET = withErrorHandler(async function GET(request) {
     const scores = termResults.map((x) => Number(x.score || 0))
     const average = Math.round(avg(scores))
     const passRate = scores.length
-      ? Math.round((scores.filter((s) => s >= 50).length / scores.length) * 100)
+      ? Math.round((scores.filter((s) => s >= 40).length / scores.length) * 100)
       : 0
     termComparison.push({ term: t, average, passRate })
   }
@@ -325,6 +373,26 @@ export const GET = withErrorHandler(async function GET(request) {
   const departmentPassRate = resultsForTerm.length
     ? Math.round((overallPassCount / resultsForTerm.length) * 100)
     : 0
+
+  const resultStudentIds = Array.from(
+    new Set(resultsForTerm.map((r) => String(r.studentId || '')).filter(Boolean))
+  )
+  const studentsForGender = resultStudentIds.length
+    ? await prisma.student.findMany({
+        where: { schoolId, id: { in: resultStudentIds } },
+        select: { id: true, class: true, user: { select: { gender: true } } },
+        take: 20000,
+      })
+    : []
+
+  const junior_gender_by_grade = buildGenderByGrade({
+    students: studentsForGender,
+    allowedYearGroups: ['Form 1', 'Form 2'],
+  })
+  const senior_gender_by_grade = buildGenderByGrade({
+    students: studentsForGender,
+    allowedYearGroups: ['Grade 10', 'Grade 11', 'Grade 12'],
+  })
 
   const previousDepartmentAverage = prevTerm
     ? Math.round(avg(resultsPrevTerm.map((r) => Number(r.score || 0))))
@@ -370,6 +438,8 @@ export const GET = withErrorHandler(async function GET(request) {
       gradeDistribution,
       termComparison,
       recommendedActions,
+      junior_gender_by_grade,
+      senior_gender_by_grade,
       term,
       year,
     },

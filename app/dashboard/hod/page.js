@@ -1447,8 +1447,12 @@ export default function HodDashboard() {
                           const gradeLabel =
                             result?.grade || (percent !== null ? `${percent}%` : 'N/A')
                           const meta = [
+                            result?.student?.class || result?.className || '',
                             result?.term ? String(result.term) : '',
                             result?.year ? String(result.year) : '',
+                            result?.enteredByName
+                              ? `Entered by ${String(result.enteredByName)}`
+                              : '',
                           ]
                             .filter(Boolean)
                             .join(' • ')

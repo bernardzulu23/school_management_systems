@@ -26,6 +26,7 @@ import { logger } from '@/lib/utils/logger'
 import { ERROR_MESSAGES } from '@/lib/utils/errorMessages'
 import SkeletonLoader from '@/components/SkeletonLoader'
 import Link from 'next/link'
+import { GenderByGradeCard } from '@/components/dashboard/GenderByGradeCard'
 
 // Lazy load heavy dashboard components
 const HeadteacherOverview = dynamic(
@@ -245,7 +246,17 @@ function HeadteacherDashboardContent() {
       case 'performance-analytics':
         return <HeadteacherAnalytics />
       case 'junior-analysis':
-        return <JuniorPerformanceAnalysis results={dashboardData?.junior_results || []} />
+        return (
+          <div className="space-y-6">
+            <GenderByGradeCard
+              title="Boys vs Girls (Forms 1–2)"
+              data={
+                dashboardData?.junior_gender_by_grade || dashboardData?.juniorGenderByGrade || []
+              }
+            />
+            <JuniorPerformanceAnalysis results={dashboardData?.junior_results || []} />
+          </div>
+        )
       case 'user-management':
         return <UserManagement />
       case 'academic-management':
