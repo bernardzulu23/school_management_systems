@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/auth'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { StatsCard } from '@/components/dashboard/StatsCard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { StudentRosterCard } from '@/components/dashboard/StudentRosterCard'
 import { Button } from '@/components/ui/Button'
 import HodAssignments from '@/components/dashboard/HodAssignments'
 import { api } from '@/lib/api'
@@ -663,6 +664,8 @@ export default function HodDashboard() {
                 </div>
               </CardContent>
             </Card>
+
+            <StudentRosterCard title="Registered Students by Class (School-wide)" />
 
             {/* Department Management */}
             <Card variant="glass">

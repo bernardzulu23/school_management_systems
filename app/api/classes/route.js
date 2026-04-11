@@ -5,8 +5,20 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 function standardZambianClasses() {
   const sections = ['A', 'B', 'C', 'D']
-  const grades = [8, 9, 10, 11, 12]
   const classes = []
+
+  const forms = [1, 2, 3, 4, 5, 6]
+  for (const form of forms) {
+    for (const section of sections) {
+      classes.push({
+        name: `Form ${form}${section}`,
+        year_group: `Form ${form}`,
+        section,
+      })
+    }
+  }
+
+  const grades = [8, 9, 10, 11, 12]
   for (const grade of grades) {
     for (const section of sections) {
       classes.push({

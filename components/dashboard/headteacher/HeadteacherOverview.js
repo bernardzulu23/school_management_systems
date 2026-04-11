@@ -18,6 +18,7 @@ import {
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
 import { HeadteacherStats } from './HeadteacherStats'
 import { useHeadteacher } from '@/lib/context/HeadteacherContext'
+import { StudentRosterCard } from '@/components/dashboard/StudentRosterCard'
 
 export const HeadteacherOverview = memo(function HeadteacherOverview() {
   const { dashboardData, schoolStats, setActiveTab, subjectPerformanceData } = useHeadteacher()
@@ -186,6 +187,8 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
           </CardContent>
         </Card>
       )}
+
+      <StudentRosterCard />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Monthly Registrations Chart */}
