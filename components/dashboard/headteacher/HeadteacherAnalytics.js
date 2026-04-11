@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { TrendingUp, Users, FileBarChart, BookOpen } from 'lucide-react'
 import { useHeadteacher } from '@/lib/context/HeadteacherContext'
 import { GenderByGradeCard } from '@/components/dashboard/GenderByGradeCard'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 export function HeadteacherAnalytics() {
   const {
@@ -13,6 +14,17 @@ export function HeadteacherAnalytics() {
     schoolStats,
     dashboardData,
   } = useHeadteacher()
+  const teacherPerformanceRows = Array.isArray(dashboardData?.teacher_performance_rows)
+    ? dashboardData.teacher_performance_rows
+    : Array.isArray(dashboardData?.teacherPerformanceRows)
+      ? dashboardData.teacherPerformanceRows
+      : []
+  const topTeacherPerformance = teacherPerformanceRows.slice(0, 10).map((t) => ({
+    name: String(t?.name || '').trim() || 'Unknown',
+    averageScore: Number(t?.averageScore || 0),
+    passRate: Number(t?.passRate || 0),
+    resultsEntered: Number(t?.resultsEntered || 0),
+  }))
   return (
     <div className="space-y-8">
       {/* Comprehensive Analytics Header */}
@@ -215,12 +227,54 @@ export function HeadteacherAnalytics() {
           <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Teacher Performance Chart */}
-              <div className="h-64 flex items-center justify-center bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                <div className="text-center">
-                  <Users className="h-12 w-12 text-royalPurple-text3 mx-auto mb-4" />
-                  <p className="text-royalPurple-text2">Teacher Performance Chart</p>
-                  <p className="text-royalPurple-text3 text-sm">Individual teacher analytics</p>
-                </div>
+              <div className="h-64 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl p-4">
+                {topTeacherPerformance.length === 0 ? (
+                  <div className="h-full flex items-center justify-center text-center">
+                    <div>
+                      <Users className="h-12 w-12 text-royalPurple-text3 mx-auto mb-4" />
+                      <p className="text-royalPurple-text2">No teacher performance data yet</p>
+                      <p className="text-royalPurple-text3 text-sm">
+                        Performance appears after teachers enter results
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={topTeacherPerformance}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.15)" />
+                      <XAxis
+                        dataKey="name"
+                        stroke="#94a3b8"
+                        fontSize={11}
+                        interval={0}
+                        angle={-20}
+                        textAnchor="end"
+                        height={60}
+                      />
+                      <YAxis stroke="#94a3b8" fontSize={12} domain={[0, 100]} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#1e293b',
+                          borderColor: '#334155',
+                          color: '#fff',
+                        }}
+                        itemStyle={{ color: '#fff' }}
+                      />
+                      <Bar
+                        dataKey="averageScore"
+                        fill="#8B5CF6"
+                        name="Avg Score %"
+                        radius={[4, 4, 0, 0]}
+                      />
+                      <Bar
+                        dataKey="passRate"
+                        fill="#10B981"
+                        name="Pass Rate %"
+                        radius={[4, 4, 0, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
               </div>
 
               {/* Teacher Summary */}

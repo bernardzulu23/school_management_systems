@@ -49,11 +49,11 @@ function yearGroupFromClassName(value) {
   const raw = String(value || '').trim()
   if (!raw) return null
   const lower = raw.toLowerCase()
-  const formMatch = lower.match(/\bform\s*([1-6])\b/)
+  const formMatch = lower.match(/\bform\s*([1-6])(?=\b|[a-z])/)
   if (formMatch?.[1]) return `Form ${Number(formMatch[1])}`
-  const gradeMatch = lower.match(/\bgrade\s*(1[0-2]|[1-9])\b/)
+  const gradeMatch = lower.match(/\bgrade\s*(1[0-2]|[1-9])(?=\b|[a-z])/)
   if (gradeMatch?.[1]) return `Grade ${Number(gradeMatch[1])}`
-  const leadingNumber = lower.match(/^\s*(\d{1,2})\b/)
+  const leadingNumber = lower.match(/^\s*(\d{1,2})(?=\b|[a-z])/)
   if (leadingNumber?.[1]) {
     const n = Number(leadingNumber[1])
     if (n >= 1 && n <= 12) return `Grade ${n}`

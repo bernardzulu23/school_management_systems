@@ -83,11 +83,11 @@ function yearGroupFromClassName(value) {
   const raw = String(value || '').trim()
   if (!raw) return null
   const lower = raw.toLowerCase()
-  const formMatch = lower.match(/\bform\s*([1-6])\b/)
+  const formMatch = lower.match(/\bform\s*([1-6])(?=\b|[a-z])/)
   if (formMatch?.[1]) return `Form ${Number(formMatch[1])}`
-  const gradeMatch = lower.match(/\bgrade\s*(1[0-2]|[1-9])\b/)
+  const gradeMatch = lower.match(/\bgrade\s*(1[0-2]|[1-9])(?=\b|[a-z])/)
   if (gradeMatch?.[1]) return `Grade ${Number(gradeMatch[1])}`
-  const leadingNumber = lower.match(/^\s*(\d{1,2})\b/)
+  const leadingNumber = lower.match(/^\s*(\d{1,2})(?=\b|[a-z])/)
   if (leadingNumber?.[1]) {
     const n = Number(leadingNumber[1])
     if (n >= 1 && n <= 12) return `Grade ${n}`
@@ -241,6 +241,19 @@ export async function GET(request) {
           })
         : []
 
+    const teacherPassAgg =
+      resultsCount > 0
+        ? await prisma.result.groupBy({
+            by: ['enteredByUserId'],
+            where: {
+              ...resultWhere,
+              enteredByUserId: { not: null },
+              score: { gte: 40 },
+            },
+            _count: { _all: true },
+          })
+        : []
+
     const teacherAvgRows = teacherAgg
       .filter((r) => r.enteredByUserId && teacherUserIds.includes(String(r.enteredByUserId)))
       .map((r) => Number(r._avg?.score || 0))
@@ -309,6 +322,49 @@ export async function GET(request) {
         }
       }
     }
+
+    const teacherUserIdSet = new Set(teacherUserIds)
+    const teacherAggByUserId = new Map(
+      teacherAgg
+        .filter((r) => r.enteredByUserId)
+        .map((r) => [
+          String(r.enteredByUserId),
+          { avg: Number(r._avg?.score || 0), count: Number(r._count?._all || 0) },
+        ])
+    )
+    const teacherPassByUserId = new Map(
+      teacherPassAgg
+        .filter((r) => r.enteredByUserId)
+        .map((r) => [String(r.enteredByUserId), Number(r._count?._all || 0)])
+    )
+
+    const teacherIdsWithResults = Array.from(
+      new Set(Array.from(teachersWithAnyResults.values()).filter((id) => teacherUserIdSet.has(id)))
+    )
+    const teacherUsers =
+      teacherIdsWithResults.length > 0
+        ? await prisma.user.findMany({
+            where: { schoolId, id: { in: teacherIdsWithResults } },
+            select: { id: true, name: true },
+            take: 50000,
+          })
+        : []
+    const teacherNameById = new Map(teacherUsers.map((u) => [String(u.id), u.name]))
+
+    const teacher_performance_rows = teacherIdsWithResults
+      .map((id) => {
+        const agg = teacherAggByUserId.get(id) || { avg: 0, count: 0 }
+        const passed = teacherPassByUserId.get(id) || 0
+        const total = agg.count || 0
+        return {
+          userId: id,
+          name: teacherNameById.get(id) || 'Unknown',
+          averageScore: Math.round(agg.avg || 0),
+          passRate: total > 0 ? Math.round((passed / total) * 100) : 0,
+          resultsEntered: total,
+        }
+      })
+      .sort((a, b) => (b.resultsEntered || 0) - (a.resultsEntered || 0))
 
     // 4. Students Requiring Attention (Score < 40, scoped by schoolId)
     const lowPerformingResults = await prisma.result.findMany({
@@ -727,6 +783,8 @@ export async function GET(request) {
       teacherEffectiveness,
       complianceRate,
       teacherDevelopment,
+      teacher_performance_rows,
+      teacherPerformanceRows: teacher_performance_rows,
       studentsRequiringAttention,
       performanceTrends,
       performanceSummary,

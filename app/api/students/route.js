@@ -11,6 +11,58 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { studentSchema, validateRequest, sanitizeOutput } from '@/lib/middleware/inputValidation'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
+const normalizeYearGroup = (yearGroupRaw) => {
+  const raw = String(yearGroupRaw || '').trim()
+  if (!raw) return ''
+  const numeric = raw.match(/^(\d{1,2})$/)
+  if (numeric) return `Grade ${Number(numeric[1])}`
+  const grade = raw.match(/^grade\s*(\d{1,2})$/i)
+  if (grade) return `Grade ${Number(grade[1])}`
+  const form = raw.match(/^form\s*([1-6])$/i)
+  if (form) return `Form ${Number(form[1])}`
+  return raw
+}
+
+const buildClassName = (yearGroupRaw, sectionRaw) => {
+  const yearGroup = normalizeYearGroup(yearGroupRaw)
+  const section = String(sectionRaw || '')
+    .trim()
+    .toUpperCase()
+  if (!yearGroup) return section ? section : ''
+  if (!section) return yearGroup
+  return `${yearGroup}${section}`
+}
+
+const parseYearGroupSectionFromClassName = (className) => {
+  const raw = String(className || '').trim()
+  if (!raw) return { year_group: '', section: '' }
+
+  const numeric = raw.match(/^(\d{1,2})([A-Za-z])$/)
+  if (numeric) {
+    return { year_group: `Grade ${Number(numeric[1])}`, section: numeric[2].toUpperCase() }
+  }
+
+  const grade = raw.match(/^grade\s*(\d{1,2})\s*([A-Za-z])?$/i)
+  if (grade) {
+    return {
+      year_group: `Grade ${Number(grade[1])}`,
+      section: String(grade[2] || '').toUpperCase(),
+    }
+  }
+
+  const form = raw.match(/^form\s*([1-6])\s*([A-Za-z])?$/i)
+  if (form) {
+    return { year_group: `Form ${Number(form[1])}`, section: String(form[2] || '').toUpperCase() }
+  }
+
+  const last = raw.slice(-1)
+  if (/[A-Za-z]/.test(last) && raw.length > 1) {
+    return { year_group: raw.slice(0, -1).trim(), section: last.toUpperCase() }
+  }
+
+  return { year_group: raw, section: '' }
+}
+
 export const GET = withErrorHandler(async (request) => {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
@@ -153,6 +205,31 @@ export const POST = withErrorHandler(async (request) => {
       select: { id: true, name: true },
     })
 
+    const parsedClass = parseYearGroupSectionFromClassName(studentData.class_id)
+    const derivedClassName =
+      buildClassName(parsedClass.year_group, parsedClass.section) || studentData.class_id
+
+    const ensuredClass =
+      classRecord ||
+      (studentData.class_id
+        ? await tx.class.upsert({
+            where: {
+              schoolId_name: {
+                schoolId,
+                name: derivedClassName,
+              },
+            },
+            create: {
+              schoolId,
+              name: derivedClassName,
+              year_group: normalizeYearGroup(parsedClass.year_group || derivedClassName),
+              section: parsedClass.section,
+            },
+            update: {},
+            select: { id: true, name: true },
+          })
+        : null)
+
     const selectedRaw = Array.isArray(studentData.selected_subjects)
       ? studentData.selected_subjects.map((s) => String(s).trim()).filter(Boolean)
       : []
@@ -180,21 +257,21 @@ export const POST = withErrorHandler(async (request) => {
         userId: user.id,
         schoolId,
         name: studentData.name,
-        ...(classRecord?.id ? { classId: classRecord.id } : {}),
-        class: classRecord?.name || studentData.class_id,
+        ...(ensuredClass?.id ? { classId: ensuredClass.id } : {}),
+        class: ensuredClass?.name || studentData.class_id,
         ...(studentData.student_id && { id: studentData.student_id }),
         selected_subjects: selectedSubjectNames,
       },
     })
 
     // Create PupilSubjectEnrollment records
-    if (subjectRecords.length > 0 && classRecord?.id) {
+    if (subjectRecords.length > 0 && ensuredClass?.id) {
       await tx.pupilSubjectEnrollment.createMany({
         data: subjectRecords.map((sub) => ({
           schoolId,
           pupilId: student.id,
           subjectId: sub.id,
-          classId: classRecord.id,
+          classId: ensuredClass.id,
         })),
         skipDuplicates: true,
       })
