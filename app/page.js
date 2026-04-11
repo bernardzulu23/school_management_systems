@@ -13,6 +13,7 @@ export default function HomePage() {
   const { school, isLoading: isSchoolLoading } = useSchool()
   const router = useRouter()
   const [isHydrated, setIsHydrated] = useState(false)
+  const [isMarketingSite, setIsMarketingSite] = useState(true)
   const [schoolSearch, setSchoolSearch] = useState('')
   const heroRef = useRef(null)
   const [schoolsDirectory, setSchoolsDirectory] = useState([])
@@ -116,8 +117,36 @@ export default function HomePage() {
   }, [])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    const hostname = String(window.location.hostname || '')
+      .split(':')[0]
+      .toLowerCase()
+
+    if (!hostname || hostname === 'localhost' || /^[0-9.]+$/.test(hostname)) {
+      setIsMarketingSite(true)
+      return
+    }
+
+    const parts = hostname.split('.').filter(Boolean)
+    if (parts.length < 3) {
+      setIsMarketingSite(true)
+      return
+    }
+
+    if (parts[0] === 'www') {
+      setIsMarketingSite(parts.length < 4)
+      return
+    }
+
+    setIsMarketingSite(false)
+  }, [])
+
+  const tenantSchool = isMarketingSite ? null : school
+  const registerUrl = tenantSchool ? '/register' : '/register-school'
+
+  useEffect(() => {
     const load = async () => {
-      if (school) return
+      if (!isMarketingSite && school) return
       setIsSchoolDirectoryLoading(true)
       try {
         const res = await fetch('/api/public/schools', { cache: 'no-store' })
@@ -130,7 +159,7 @@ export default function HomePage() {
       }
     }
     load()
-  }, [school])
+  }, [isMarketingSite, school])
 
   const handleSearchSchools = async () => {
     setIsSchoolDirectoryLoading(true)
@@ -301,14 +330,14 @@ export default function HomePage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{ width: 40, height: 28, display: 'flex', alignItems: 'center' }}>
             <SchoolLogo
-              src={school?.logo_url || '/Assets/logo.jpg'}
-              alt={school?.name || 'ZSMS'}
+              src={tenantSchool?.logo_url || '/Assets/logo.jpg'}
+              alt={tenantSchool?.name || 'ZSMS'}
               className="h-7 w-auto object-contain"
               priority
             />
           </div>
           <span style={{ fontWeight: 700, fontSize: 16, color: '#ede9fe' }}>
-            {school?.name || 'ZSMS'}
+            {tenantSchool?.name || 'ZSMS'}
           </span>
           <span
             style={{
@@ -325,18 +354,18 @@ export default function HomePage() {
           </span>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          {!school && (
+          {!tenantSchool && (
             <Link href="#find-school" className="btn-sm">
               Find my school
             </Link>
           )}
-          {school ? (
+          {tenantSchool ? (
             <>
               <Link href="/login" className="btn-sm">
                 Sign in
               </Link>
               <Link
-                href="/register"
+                href={registerUrl}
                 className="btn-primary"
                 style={{ padding: '9px 20px', fontSize: 13 }}
               >
@@ -345,7 +374,7 @@ export default function HomePage() {
             </>
           ) : (
             <Link
-              href="/register-school"
+              href={registerUrl}
               className="btn-primary"
               style={{ padding: '9px 20px', fontSize: 13 }}
             >
@@ -428,8 +457,8 @@ export default function HomePage() {
             marginBottom: '3rem',
           }}
         >
-          <Link href={school ? '/register' : '/register-school'} className="btn-primary">
-            {school ? 'Create an account →' : 'Register your school free →'}
+          <Link href={registerUrl} className="btn-primary">
+            {tenantSchool ? 'Create an account →' : 'Register your school free →'}
           </Link>
           <Link href="#features" className="btn-secondary">
             See all features
@@ -560,7 +589,7 @@ export default function HomePage() {
             </div>
 
             <Link
-              href={school ? '/register' : '/register-school'}
+              href={registerUrl}
               className="btn-primary"
               style={{
                 display: 'block',
@@ -612,7 +641,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {!school && (
+      {!tenantSchool && (
         <>
           <hr className="divider" />
 
@@ -721,11 +750,11 @@ export default function HomePage() {
             community schools welcome.
           </p>
           <Link
-            href={school ? '/register' : '/register-school'}
+            href={registerUrl}
             className="btn-primary"
             style={{ fontSize: 16, padding: '16px 36px' }}
           >
-            {school ? 'Create account →' : 'Register your school free →'}
+            {tenantSchool ? 'Create account →' : 'Register your school free →'}
           </Link>
           <p style={{ fontSize: 13, color: '#6d28d9', marginTop: '1.5rem' }}>
             Questions? Call or WhatsApp:{' '}
@@ -752,8 +781,8 @@ export default function HomePage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ width: 30, height: 22, display: 'flex', alignItems: 'center' }}>
             <SchoolLogo
-              src={school?.logo_url || '/Assets/logo.jpg'}
-              alt={school?.name || 'ZSMS'}
+              src={tenantSchool?.logo_url || '/Assets/logo.jpg'}
+              alt={tenantSchool?.name || 'ZSMS'}
               className="h-5 w-auto object-contain"
             />
           </div>
@@ -768,9 +797,9 @@ export default function HomePage() {
           <Link href="/terms" style={{ fontSize: 12, color: '#6d28d9', textDecoration: 'none' }}>
             Terms
           </Link>
-          {!school && (
+          {!tenantSchool && (
             <Link
-              href="/register-school"
+              href={registerUrl}
               style={{ fontSize: 12, color: '#a78bfa', textDecoration: 'none', fontWeight: 600 }}
             >
               Register school
