@@ -8,7 +8,7 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-f
 
 export async function POST(request) {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const refreshToken = cookieStore.get('refresh_token')?.value
 
     if (!refreshToken) {
@@ -33,15 +33,16 @@ export async function POST(request) {
     }
 
     const host = request?.headers?.get?.('host') || ''
+    const hostName = String(host || '')
+      .split(':')[0]
+      .toLowerCase()
+    const hostParts = hostName.split('.').filter(Boolean)
     const cookieDomain =
-      process.env.COOKIE_DOMAIN ||
-      (() => {
-        const h = String(host || '').split(':')[0]
-        if (!h || h === 'localhost' || /^[0-9.]+$/.test(h)) return undefined
-        const parts = h.split('.').filter(Boolean)
-        if (parts.length < 2) return undefined
-        return `.${parts.slice(-2).join('.')}`
-      })()
+      hostParts.length > 2
+        ? undefined
+        : process.env.COOKIE_DOMAIN
+          ? String(process.env.COOKIE_DOMAIN)
+          : undefined
 
     // Generate new access token
     const newAccessToken = jwt.sign(

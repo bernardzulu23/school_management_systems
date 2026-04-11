@@ -42,20 +42,24 @@ export async function GET(request) {
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  await prisma.$transaction(async (tx) => {
-    for (const c of standardZambianClasses()) {
-      await tx.class.upsert({
-        where: { schoolId_name: { schoolId, name: c.name } },
-        create: {
-          schoolId,
-          name: c.name,
-          year_group: c.year_group,
-          section: c.section,
-        },
-        update: {},
-      })
-    }
-  })
+  const { searchParams } = new URL(request.url)
+  const seedDefaults = String(searchParams.get('seedDefaults') || '').toLowerCase() === 'true'
+  if (seedDefaults && roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
+    await prisma.$transaction(async (tx) => {
+      for (const c of standardZambianClasses()) {
+        await tx.class.upsert({
+          where: { schoolId_name: { schoolId, name: c.name } },
+          create: {
+            schoolId,
+            name: c.name,
+            year_group: c.year_group,
+            section: c.section,
+          },
+          update: {},
+        })
+      }
+    })
+  }
 
   const classes = await prisma.class.findMany({
     where: { schoolId },

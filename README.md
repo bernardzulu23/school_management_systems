@@ -22,7 +22,7 @@ This README is intentionally **detailed** to help you integrate the same backend
 - Database (Prisma) Schema Overview
 - API Reference (route catalog)
 - Web Routes (page catalog)
-- Email Password Reset (SendGrid)
+- Email Password Reset (Resend)
 - Attendance (Real DB-backed)
 - UI Theme / Color Palette
 - Offline / PWA Notes
@@ -47,7 +47,7 @@ Core concepts:
 
 - Every record is scoped by a `schoolId` (multi-tenancy)
 - Auth uses **JWT** stored in **HTTP-only cookies** (web-first), with optional Bearer token support
-- Password reset uses **SendGrid** and token hashing
+- Password reset uses **Resend** and token hashing
 
 ---
 
@@ -76,7 +76,7 @@ Core concepts:
 
 **Email**
 
-- SendGrid (`@sendgrid/mail`): [email.js](config/email.js)
+- Resend (`resend`): [email.js](config/email.js)
 
 ---
 
@@ -320,7 +320,7 @@ The repo includes many additional dashboard pages: results, materials, timetable
 
 ---
 
-## Email Password Reset (SendGrid)
+## Email Password Reset (Resend)
 
 ### Flow
 
@@ -338,7 +338,7 @@ Email sender:
 
 Required env vars:
 
-- `SENDGRID_API_KEY`
+- `RESEND_API_KEY`
 - `EMAIL_FROM`
 - optional: `NEXT_PUBLIC_APP_URL`
 
@@ -496,7 +496,7 @@ NEXT_PUBLIC_API_URL="/api"
 Email (password reset):
 
 ```env
-SENDGRID_API_KEY="SG...."
+RESEND_API_KEY="re_...."
 EMAIL_FROM="no-reply@yourdomain.com"
 ```
 

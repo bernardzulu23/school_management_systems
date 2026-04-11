@@ -52,6 +52,19 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (isLoading) return
+
+    const emailValidation = validateEmail(email)
+    if (emailValidation !== true) {
+      toast.error(emailValidation)
+      return
+    }
+
+    const passwordValidation = validatePassword(password)
+    if (passwordValidation !== true) {
+      toast.error(passwordValidation)
+      return
+    }
+
     setIsLoading(true)
     setLoginPercent(0)
     startTopLoading('Signing in')
