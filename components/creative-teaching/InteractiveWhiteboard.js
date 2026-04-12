@@ -1,390 +1,211 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/Button'
-import {
-  Palette,
-  Eraser,
-  Square,
-  Circle,
-  Type,
-  Image,
-  Save,
-  Download,
-  Undo,
-  Redo,
-  Trash2,
-  Layers,
-  MousePointer,
-  Pen,
-  Highlighter,
-  Shapes,
-  Grid,
-  ZoomIn,
-  ZoomOut,
-  RotateCcw,
-  Share2,
-  Play,
-  Pause,
-} from 'lucide-react'
+import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
 
-export default function InteractiveWhiteboard() {
-  const canvasRef = useRef(null)
-  const [isDrawing, setIsDrawing] = useState(false)
-  const [currentTool, setCurrentTool] = useState('pen')
-  const [currentColor, setCurrentColor] = useState('#000000')
-  const [brushSize, setBrushSize] = useState(3)
-  const [canvasHistory, setCanvasHistory] = useState([])
-  const [historyIndex, setHistoryIndex] = useState(-1)
-  const [zoom, setZoom] = useState(1)
-  const [showGrid, setShowGrid] = useState(false)
-  const [layers, setLayers] = useState([{ id: 1, name: 'Layer 1', visible: true, active: true }])
-  const [isPresenting, setIsPresenting] = useState(false)
+const Excalidraw = dynamic(
+  async () => {
+    const { Excalidraw } = await import('@excalidraw/excalidraw')
+    return Excalidraw
+  },
+  { ssr: false, loading: () => <WhiteboardLoader /> }
+)
 
-  // Drawing tools configuration
-  const tools = [
-    { id: 'pointer', icon: MousePointer, label: 'Select' },
-    { id: 'pen', icon: Pen, label: 'Pen' },
-    { id: 'highlighter', icon: Highlighter, label: 'Highlighter' },
-    { id: 'eraser', icon: Eraser, label: 'Eraser' },
-    { id: 'text', icon: Type, label: 'Text' },
-    { id: 'rectangle', icon: Square, label: 'Rectangle' },
-    { id: 'circle', icon: Circle, label: 'Circle' },
-    { id: 'line', icon: Shapes, label: 'Line' },
-  ]
+function WhiteboardLoader() {
+  return (
+    <div
+      style={{
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#1e1033',
+        flexDirection: 'column',
+        gap: 12,
+      }}
+    >
+      <div
+        style={{
+          width: 40,
+          height: 40,
+          border: '3px solid #3b2a66',
+          borderTop: '3px solid #7c3aed',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite',
+        }}
+      />
+      <p style={{ color: '#a78bfa', fontSize: 14 }}>Loading whiteboard...</p>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    </div>
+  )
+}
 
-  const colors = [
-    '#000000',
-    '#FF0000',
-    '#00FF00',
-    '#0000FF',
-    '#FFFF00',
-    '#FF00FF',
-    '#00FFFF',
-    '#FFA500',
-    '#800080',
-    '#008000',
-    '#FFC0CB',
-    '#A52A2A',
-    '#808080',
-    '#FFFFFF',
-  ]
+export default function InteractiveWhiteboard({ user }) {
+  const [excalidrawAPI, setExcalidrawAPI] = useState(null)
+  const [saved, setSaved] = useState(false)
+  const [boardName, setBoardName] = useState('My Whiteboard')
+  const [showNameInput, setShowNameInput] = useState(false)
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (canvas) {
-      const ctx = canvas.getContext('2d')
-      ctx.lineCap = 'round'
-      ctx.lineJoin = 'round'
-
-      // Set canvas size
-      canvas.width = 1200
-      canvas.height = 800
-
-      // Fill with white background
-      ctx.fillStyle = '#FFFFFF'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-      // Save initial state
-      saveToHistory()
+    if (typeof window !== 'undefined') {
+      window.EXCALIDRAW_ASSET_PATH = window.origin
     }
   }, [])
 
-  const startDrawing = (e) => {
-    if (currentTool === 'pointer') return
-
-    setIsDrawing(true)
-    const canvas = canvasRef.current
-    const rect = canvas.getBoundingClientRect()
-    const x = (e.clientX - rect.left) / zoom
-    const y = (e.clientY - rect.top) / zoom
-
-    const ctx = canvas.getContext('2d')
-    ctx.beginPath()
-    ctx.moveTo(x, y)
+  const handleSave = () => {
+    if (!excalidrawAPI) return
+    const elements = excalidrawAPI.getSceneElements()
+    const appState = excalidrawAPI.getAppState()
+    const blob = new Blob(
+      [JSON.stringify({ elements, appState, savedAt: new Date().toISOString(), boardName })],
+      { type: 'application/json' }
+    )
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${boardName.replace(/\s+/g, '-')}.excalidraw`
+    a.click()
+    URL.revokeObjectURL(url)
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
   }
 
-  const draw = (e) => {
-    if (!isDrawing || currentTool === 'pointer') return
-
-    const canvas = canvasRef.current
-    const rect = canvas.getBoundingClientRect()
-    const x = (e.clientX - rect.left) / zoom
-    const y = (e.clientY - rect.top) / zoom
-
-    const ctx = canvas.getContext('2d')
-
-    if (currentTool === 'pen' || currentTool === 'highlighter') {
-      ctx.globalCompositeOperation = currentTool === 'highlighter' ? 'multiply' : 'source-over'
-      ctx.strokeStyle = currentColor
-      ctx.lineWidth = currentTool === 'highlighter' ? brushSize * 3 : brushSize
-      ctx.globalAlpha = currentTool === 'highlighter' ? 0.3 : 1
-      ctx.lineTo(x, y)
-      ctx.stroke()
-    } else if (currentTool === 'eraser') {
-      ctx.globalCompositeOperation = 'destination-out'
-      ctx.lineWidth = brushSize * 2
-      ctx.lineTo(x, y)
-      ctx.stroke()
-    }
+  const handleExportPNG = async () => {
+    if (!excalidrawAPI) return
+    const { exportToBlob } = await import('@excalidraw/excalidraw')
+    const blob = await exportToBlob({
+      elements: excalidrawAPI.getSceneElements(),
+      appState: { ...excalidrawAPI.getAppState(), exportBackground: true },
+      files: excalidrawAPI.getFiles(),
+    })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${boardName.replace(/\s+/g, '-')}.png`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
-  const stopDrawing = () => {
-    if (isDrawing) {
-      setIsDrawing(false)
-      saveToHistory()
-    }
-  }
-
-  const saveToHistory = () => {
-    const canvas = canvasRef.current
-    const imageData = canvas.toDataURL()
-    const newHistory = canvasHistory.slice(0, historyIndex + 1)
-    newHistory.push(imageData)
-    setCanvasHistory(newHistory)
-    setHistoryIndex(newHistory.length - 1)
-  }
-
-  const undo = () => {
-    if (historyIndex > 0) {
-      setHistoryIndex(historyIndex - 1)
-      restoreFromHistory(historyIndex - 1)
-    }
-  }
-
-  const redo = () => {
-    if (historyIndex < canvasHistory.length - 1) {
-      setHistoryIndex(historyIndex + 1)
-      restoreFromHistory(historyIndex + 1)
-    }
-  }
-
-  const restoreFromHistory = (index) => {
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext('2d')
-    const img = new Image()
-    img.onload = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.drawImage(img, 0, 0)
-    }
-    img.src = canvasHistory[index]
-  }
-
-  const clearCanvas = () => {
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext('2d')
-    ctx.fillStyle = '#FFFFFF'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-    saveToHistory()
-  }
-
-  const saveCanvas = () => {
-    const canvas = canvasRef.current
-    const link = document.createElement('a')
-    link.download = `whiteboard-${new Date().toISOString().split('T')[0]}.png`
-    link.href = canvas.toDataURL()
-    link.click()
-  }
-
-  const toggleGrid = () => {
-    setShowGrid(!showGrid)
-    // Grid implementation would go here
-  }
-
-  const zoomIn = () => setZoom(Math.min(zoom * 1.2, 3))
-  const zoomOut = () => setZoom(Math.max(zoom / 1.2, 0.3))
-
-  const addLayer = () => {
-    const newLayer = {
-      id: layers.length + 1,
-      name: `Layer ${layers.length + 1}`,
-      visible: true,
-      active: false,
-    }
-    setLayers([...layers, newLayer])
-  }
-
-  const togglePresentation = () => {
-    setIsPresenting(!isPresenting)
+  const handleClear = () => {
+    if (!excalidrawAPI) return
+    excalidrawAPI.updateScene({ elements: [] })
   }
 
   return (
-    <div className="space-y-6">
-      <Card className="bg-royalPurple-card/60 border-royalPurple-border/40">
-        <CardHeader>
-          <CardTitle className="text-royalPurple-text1 flex items-center justify-between">
-            <div className="flex items-center">
-              <Palette className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
-              Interactive Whiteboard
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                onClick={togglePresentation}
-                className={`${isPresenting ? 'bg-royalPurple-danger' : 'bg-royalPurple-success'} text-royalPurple-text1`}
-              >
-                {isPresenting ? (
-                  <Pause className="h-4 w-4 mr-2" />
-                ) : (
-                  <Play className="h-4 w-4 mr-2" />
-                )}
-                {isPresenting ? 'Stop Presenting' : 'Start Presentation'}
-              </Button>
-              <Button onClick={saveCanvas} className="bg-royalPurple-accent text-royalPurple-text1">
-                <Save className="h-4 w-4 mr-2" />
-                Save
-              </Button>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Toolbar */}
-          <div className="flex flex-wrap items-center gap-2 p-4 bg-royalPurple-muted/40 rounded-lg">
-            {/* Drawing Tools */}
-            <div className="flex items-center space-x-1 border-r border-royalPurple-border pr-3">
-              {tools.map((tool) => (
-                <Button
-                  key={tool.id}
-                  onClick={() => setCurrentTool(tool.id)}
-                  className={`p-2 ${currentTool === tool.id ? 'bg-royalPurple-pill' : 'bg-royalPurple-muted'} text-royalPurple-text1`}
-                  title={tool.label}
-                >
-                  <tool.icon className="h-4 w-4" />
-                </Button>
-              ))}
-            </div>
-
-            {/* Colors */}
-            <div className="flex items-center space-x-1 border-r border-royalPurple-border pr-3">
-              {colors.map((color) => (
-                <button
-                  key={color}
-                  onClick={() => setCurrentColor(color)}
-                  className={`w-6 h-6 rounded border-2 ${currentColor === color ? 'border-white' : 'border-royalPurple-border'}`}
-                  style={{ backgroundColor: color }}
-                />
-              ))}
-            </div>
-
-            {/* Brush Size */}
-            <div className="flex items-center space-x-2 border-r border-royalPurple-border pr-3">
-              <span className="text-royalPurple-text1 text-sm">Size:</span>
-              <input
-                type="range"
-                min="1"
-                max="20"
-                value={brushSize}
-                onChange={(e) => setBrushSize(parseInt(e.target.value))}
-                className="w-20"
-              />
-              <span className="text-royalPurple-text1 text-sm">{brushSize}px</span>
-            </div>
-
-            {/* Actions */}
-            <div className="flex items-center space-x-1 border-r border-royalPurple-border pr-3">
-              <Button
-                onClick={undo}
-                className="p-2 bg-royalPurple-muted text-royalPurple-text1"
-                disabled={historyIndex <= 0}
-              >
-                <Undo className="h-4 w-4" />
-              </Button>
-              <Button
-                onClick={redo}
-                className="p-2 bg-royalPurple-muted text-royalPurple-text1"
-                disabled={historyIndex >= canvasHistory.length - 1}
-              >
-                <Redo className="h-4 w-4" />
-              </Button>
-              <Button
-                onClick={clearCanvas}
-                className="p-2 bg-royalPurple-danger text-royalPurple-text1"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
-
-            {/* View Controls */}
-            <div className="flex items-center space-x-1">
-              <Button onClick={zoomOut} className="p-2 bg-royalPurple-muted text-royalPurple-text1">
-                <ZoomOut className="h-4 w-4" />
-              </Button>
-              <span className="text-royalPurple-text1 text-sm">{Math.round(zoom * 100)}%</span>
-              <Button onClick={zoomIn} className="p-2 bg-royalPurple-muted text-royalPurple-text1">
-                <ZoomIn className="h-4 w-4" />
-              </Button>
-              <Button
-                onClick={toggleGrid}
-                className={`p-2 ${showGrid ? 'bg-royalPurple-pill' : 'bg-royalPurple-muted'} text-royalPurple-text1`}
-              >
-                <Grid className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Canvas Container */}
-          <div
-            className="relative bg-royalPurple-card rounded-lg overflow-hidden"
-            style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
-          >
-            <canvas
-              ref={canvasRef}
-              onMouseDown={startDrawing}
-              onMouseMove={draw}
-              onMouseUp={stopDrawing}
-              onMouseLeave={stopDrawing}
-              className="border border-royalPurple-border cursor-crosshair"
-              style={{ maxWidth: '100%', height: 'auto' }}
+    <div
+      style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#170d28' }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '10px 16px',
+          background: '#2d1f4e',
+          borderBottom: '1px solid #3b2a66',
+          flexWrap: 'wrap',
+          gap: 8,
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span style={{ fontSize: 18 }}>🖊️</span>
+          {showNameInput ? (
+            <input
+              autoFocus
+              value={boardName}
+              onChange={(e) => setBoardName(e.target.value)}
+              onBlur={() => setShowNameInput(false)}
+              onKeyDown={(e) => e.key === 'Enter' && setShowNameInput(false)}
+              style={{
+                background: '#261843',
+                border: '1px solid #7c3aed',
+                borderRadius: 6,
+                color: '#ede9fe',
+                padding: '4px 10px',
+                fontSize: 14,
+                outline: 'none',
+              }}
             />
-          </div>
+          ) : (
+            <span
+              onClick={() => setShowNameInput(true)}
+              style={{ color: '#ede9fe', fontWeight: 600, fontSize: 15, cursor: 'text' }}
+              title="Click to rename"
+            >
+              {boardName}
+            </span>
+          )}
+          {user ? (
+            <span
+              style={{
+                fontSize: 11,
+                padding: '2px 8px',
+                borderRadius: 99,
+                background: '#0f2318',
+                color: '#86efac',
+                border: '1px solid #166534',
+              }}
+            >
+              {user.role}
+            </span>
+          ) : null}
+        </div>
 
-          {/* Layer Panel */}
-          <div className="bg-royalPurple-muted/40 rounded-lg p-4">
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="text-royalPurple-text1 font-medium flex items-center">
-                <Layers className="h-4 w-4 mr-2" />
-                Layers
-              </h4>
-              <Button
-                onClick={addLayer}
-                className="bg-royalPurple-pill text-royalPurple-text1 text-sm px-3 py-1"
-              >
-                Add Layer
-              </Button>
-            </div>
-            <div className="space-y-2">
-              {layers.map((layer) => (
-                <div
-                  key={layer.id}
-                  className={`flex items-center justify-between p-2 rounded ${layer.active ? 'bg-royalPurple-pill/40' : 'bg-royalPurple-muted/40'}`}
-                >
-                  <span className="text-royalPurple-text1 text-sm">{layer.name}</span>
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={layer.visible}
-                      onChange={() => {
-                        setLayers(
-                          layers.map((l) => (l.id === layer.id ? { ...l, visible: !l.visible } : l))
-                        )
-                      }}
-                      className="text-royalPurple-pillTx"
-                    />
-                    <Button
-                      onClick={() => {
-                        setLayers(layers.map((l) => ({ ...l, active: l.id === layer.id })))
-                      }}
-                      className="text-xs px-2 py-1 bg-royalPurple-muted text-royalPurple-text1"
-                    >
-                      Select
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button onClick={handleClear} style={btnStyle('danger')}>
+            🗑️ Clear
+          </button>
+          <button onClick={handleExportPNG} style={btnStyle('secondary')}>
+            📷 Export PNG
+          </button>
+          <button onClick={handleSave} style={btnStyle('primary')}>
+            {saved ? '✓ Saved!' : '💾 Save'}
+          </button>
+        </div>
+      </div>
+
+      <div style={{ flex: 1, position: 'relative' }}>
+        <Excalidraw
+          excalidrawAPI={(api) => setExcalidrawAPI(api)}
+          theme="dark"
+          UIOptions={{
+            canvasActions: {
+              changeViewBackgroundColor: true,
+              clearCanvas: false,
+              export: false,
+              loadScene: true,
+              saveAsImage: false,
+              saveToActiveFile: false,
+            },
+          }}
+          initialData={{
+            appState: {
+              viewBackgroundColor: '#1e1033',
+              currentItemFontFamily: 1,
+            },
+          }}
+        />
+      </div>
     </div>
   )
+}
+
+function btnStyle(variant) {
+  const base = {
+    border: 'none',
+    borderRadius: 8,
+    padding: '8px 16px',
+    fontSize: 13,
+    fontWeight: 600,
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 6,
+  }
+  if (variant === 'primary') return { ...base, background: '#7c3aed', color: '#fff' }
+  if (variant === 'secondary')
+    return { ...base, background: '#261843', color: '#a78bfa', border: '1px solid #3b2a66' }
+  if (variant === 'danger')
+    return { ...base, background: '#3b0a0a', color: '#fca5a5', border: '1px solid #7f1d1d' }
+  return base
 }

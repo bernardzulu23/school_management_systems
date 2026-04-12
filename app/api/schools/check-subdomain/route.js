@@ -21,6 +21,17 @@ const RESERVED = new Set([
   'staging',
   'bluepeack',
   'bluepeacktechnologies',
+  'superadmin',
+  'root',
+  'system',
+  'null',
+  'undefined',
+  'ftp',
+  'ssh',
+  'vpn',
+  'dev',
+  'zsms',
+  'zms',
 ])
 
 function normalizeSubdomain(input) {
@@ -44,10 +55,10 @@ export async function GET(request) {
   const subdomain = normalizeSubdomain(searchParams.get('subdomain'))
 
   if (!subdomain || subdomain.length < 3) {
-    return NextResponse.json({ available: false })
+    return NextResponse.json({ available: false, reason: 'Too short' })
   }
   if (RESERVED.has(subdomain)) {
-    return NextResponse.json({ available: false })
+    return NextResponse.json({ available: false, reason: 'Reserved' })
   }
 
   const existing = await prisma.school.findFirst({
@@ -55,5 +66,5 @@ export async function GET(request) {
     select: { id: true },
   })
 
-  return NextResponse.json({ available: !existing })
+  return NextResponse.json({ available: !existing, reason: existing ? 'Taken' : 'Available' })
 }

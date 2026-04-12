@@ -100,3 +100,34 @@ export async function sendWelcomeEmail({ to, schoolName, subdomain, loginUrl }) 
 
   return sendEmail(to, `Your ${schoolName} portal is ready`, html)
 }
+
+export async function sendSchoolVerificationEmail({ to, schoolName, subdomain, verifyUrl }) {
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 640px; margin: 0 auto;">
+      <div style="background-color: #2d1b4e; color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <h2 style="margin: 0;">Verify your school portal</h2>
+      </div>
+      <div style="background-color: #f5f5f5; padding: 28px; border-radius: 0 0 10px 10px;">
+        <p style="margin-top: 0;">Hi ${schoolName},</p>
+        <p>Please verify this email to activate your school portal.</p>
+        <div style="background: #1e293b; padding: 16px; border-radius: 12px; margin: 18px 0;">
+          <div style="color: #c4b5fd; font-size: 13px; margin-bottom: 6px;">Portal URL</div>
+          <div style="color: #f59e0b; font-size: 16px; font-weight: bold;">
+            ${subdomain}.bluepeacktechnologies.com
+          </div>
+        </div>
+        <div style="text-align: center; margin: 24px 0;">
+          <a href="${verifyUrl}" style="background-color: #f59e0b; color: black; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+            Activate Portal
+          </a>
+        </div>
+        <p style="color: #666; font-size: 12px; margin-bottom: 0;">
+          If the button doesn’t work, copy and paste this link into your browser:<br />
+          <code style="background-color: white; padding: 6px; border-radius: 6px; display: inline-block; margin-top: 8px;">${verifyUrl}</code>
+        </p>
+      </div>
+    </div>
+  `
+
+  return sendEmail(to, `Activate your ${schoolName} portal`, html)
+}

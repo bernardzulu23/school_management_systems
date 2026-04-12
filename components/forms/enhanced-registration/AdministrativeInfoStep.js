@@ -1,17 +1,24 @@
-import React from 'react';
-import { Building, FileText, GraduationCap } from 'lucide-react';
-import { FormGroup, FormSection } from '@/components/ui/FormGroup';
+import React from 'react'
+import { Building, FileText, GraduationCap } from 'lucide-react'
+import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 
-export default function AdministrativeInfoStep({ formData, errors, onInputChange }) {
+export default function AdministrativeInfoStep({ formData, errors, onInputChange, role }) {
+  const roleValue = String(role || '')
+    .trim()
+    .toLowerCase()
+  const isHeadteacher = roleValue === 'headteacher'
+  const employeeLabel = isHeadteacher ? 'T.S No.' : 'Employee ID'
+  const employeePlaceholder = isHeadteacher ? 'Enter T.S No.' : 'Enter employee ID'
+
   return (
     <FormSection title="Administrative Information" icon={Building}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <FormGroup
-          label="Employee ID"
+          label={employeeLabel}
           name="employee_id"
           value={formData.employee_id}
           onChange={onInputChange}
-          placeholder="Enter employee ID"
+          placeholder={employeePlaceholder}
           required
           icon={FileText}
           error={errors.employee_id}
@@ -34,5 +41,5 @@ export default function AdministrativeInfoStep({ formData, errors, onInputChange
         />
       </div>
     </FormSection>
-  );
+  )
 }

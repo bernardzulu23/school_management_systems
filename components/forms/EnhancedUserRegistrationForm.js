@@ -343,7 +343,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
           newErrors.selected_subjects = `Select at most ${STUDENT_SUBJECTS_MAX} subjects`
         }
       } else if (role === 'headteacher') {
-        if (!formData.employee_id.trim()) newErrors.employee_id = 'Employee ID is required'
+        if (!formData.employee_id.trim()) newErrors.employee_id = 'T.S No. is required'
         if (!formData.qualifications.trim())
           newErrors.qualifications = 'Qualifications are required'
       }
@@ -495,6 +495,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
               formData={formData}
               errors={errors}
               onInputChange={onInputChange}
+              role={role}
             />
           )
         }

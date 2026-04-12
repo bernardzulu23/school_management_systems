@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 function normalizeSubdomain(input) {
   const raw = String(input || '')
@@ -25,6 +25,41 @@ function slugFromSchoolName(value) {
 
 export default function RegisterSchoolPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const RESERVED = useMemo(
+    () =>
+      new Set([
+        'www',
+        'admin',
+        'api',
+        'login',
+        'register',
+        'dashboard',
+        'billing',
+        'support',
+        'help',
+        'demo',
+        'test',
+        'staging',
+        'register-school',
+        'superadmin',
+        'root',
+        'system',
+        'null',
+        'undefined',
+        'mail',
+        'smtp',
+        'ftp',
+        'ssh',
+        'vpn',
+        'dev',
+        'bluepeack',
+        'bluepeacktechnologies',
+        'zsms',
+        'zms',
+      ]),
+    []
+  )
   const [form, setForm] = useState({
     schoolName: '',
     subdomain: '',
@@ -38,6 +73,37 @@ export default function RegisterSchoolPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [subdomainAvailable, setSubdomainAvailable] = useState(null)
+  const [subdomainError, setSubdomainError] = useState('')
+  const [passwordStrength, setPasswordStrength] = useState(0)
+  const [passwordStrengthLabel, setPasswordStrengthLabel] = useState('')
+  const [phoneError, setPhoneError] = useState('')
+
+  const strengthLabel = useMemo(
+    () => ['', 'Very weak', 'Weak', 'Fair', 'Strong', 'Very strong'],
+    []
+  )
+  const strengthColor = useMemo(
+    () => ['', '#ef4444', '#f97316', '#f59e0b', '#22c55e', '#16a34a'],
+    []
+  )
+
+  const getPasswordStrength = (pwd) => {
+    const p = String(pwd || '')
+    let score = 0
+    if (p.length >= 8) score++
+    if (p.length >= 12) score++
+    if (/[A-Z]/.test(p)) score++
+    if (/[0-9]/.test(p)) score++
+    if (/[^A-Za-z0-9]/.test(p)) score++
+    return score
+  }
+
+  const validateZambianPhone = (phone) => {
+    const cleaned = String(phone || '').replace(/\s/g, '')
+    if (!cleaned) return true
+    const zambianRegex = /^(\+260|0)(9[567]\d{7})$/
+    return zambianRegex.test(cleaned)
+  }
 
   const portalUrlPreview = useMemo(() => {
     const s = normalizeSubdomain(form.subdomain)
@@ -48,6 +114,17 @@ export default function RegisterSchoolPage() {
     const s = normalizeSubdomain(slug)
     if (!s || s.length < 3) {
       setSubdomainAvailable(null)
+      setSubdomainError(s ? 'Too short — minimum 3 characters' : '')
+      return
+    }
+    if (RESERVED.has(s)) {
+      setSubdomainAvailable(false)
+      setSubdomainError('This name is reserved')
+      return
+    }
+    if (!/^[a-z0-9-]{3,40}$/.test(s)) {
+      setSubdomainAvailable(false)
+      setSubdomainError('Only lowercase letters, numbers and hyphens allowed')
       return
     }
     try {
@@ -56,8 +133,10 @@ export default function RegisterSchoolPage() {
       })
       const data = await res.json().catch(() => ({}))
       setSubdomainAvailable(Boolean(data?.available))
+      setSubdomainError(!data?.available ? String(data?.reason || 'Unavailable') : '')
     } catch {
       setSubdomainAvailable(null)
+      setSubdomainError('')
     }
   }
 
@@ -80,6 +159,29 @@ export default function RegisterSchoolPage() {
     setError('')
 
     try {
+      const s = normalizeSubdomain(form.subdomain)
+      if (!s || s.length < 3) {
+        setError('Subdomain must be at least 3 characters')
+        setLoading(false)
+        return
+      }
+      if (RESERVED.has(s)) {
+        setError('Subdomain is reserved')
+        setLoading(false)
+        return
+      }
+      if (!validateZambianPhone(form.phone)) {
+        setError('Invalid Zambian phone number')
+        setLoading(false)
+        return
+      }
+      const pwdScore = getPasswordStrength(form.adminPassword)
+      if (pwdScore < 3) {
+        setError('Password is too weak (use uppercase, lowercase, number)')
+        setLoading(false)
+        return
+      }
+
       const res = await fetch('/api/schools/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -91,23 +193,33 @@ export default function RegisterSchoolPage() {
         setLoading(false)
         return
       }
-      const loginUrl = String(data?.loginUrl || '')
-      if (loginUrl) {
-        window.location.href = loginUrl
-        return
-      }
-      router.push('/login?welcome=true')
+      setLoading(false)
+      router.push('/register-school?success=check-email')
     } catch {
       setError('Registration failed')
       setLoading(false)
     }
   }
 
+  const success = searchParams?.get('success')
+
   return (
     <div className="min-h-screen bg-royalPurple-page flex items-center justify-center p-4">
       <div className="bg-royalPurple-card rounded-2xl p-8 w-full max-w-lg border border-royalPurple-border/40">
         <h1 className="text-2xl font-bold text-royalPurple-text1 mb-2">Register Your School</h1>
         <p className="text-royalPurple-text2 mb-6">Create your school portal and admin account</p>
+
+        {success === 'check-email' ? (
+          <div className="border border-royalPurple-border bg-royalPurple-deep rounded-lg p-4 mb-6">
+            <p className="text-royalPurple-text1 font-semibold">
+              Check your email to activate your portal.
+            </p>
+            <p className="text-royalPurple-text2 text-sm mt-1">
+              We sent an activation link to the admin email address. Your portal will go live after
+              verification.
+            </p>
+          </div>
+        ) : null}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -139,7 +251,9 @@ export default function RegisterSchoolPage() {
               <p className="text-royalPurple-successTx text-xs mt-1">Available</p>
             )}
             {subdomainAvailable === false && (
-              <p className="text-royalPurple-dangerTx text-xs mt-1">Already taken</p>
+              <p className="text-royalPurple-dangerTx text-xs mt-1">
+                {subdomainError || 'Unavailable'}
+              </p>
             )}
           </div>
 
@@ -172,10 +286,31 @@ export default function RegisterSchoolPage() {
                 type="password"
                 placeholder="Password (min 8 characters)"
                 value={form.adminPassword}
-                onChange={(e) => setForm((prev) => ({ ...prev, adminPassword: e.target.value }))}
+                onChange={(e) => {
+                  const v = e.target.value
+                  const score = getPasswordStrength(v)
+                  setPasswordStrength(score)
+                  setPasswordStrengthLabel(strengthLabel[score])
+                  setForm((prev) => ({ ...prev, adminPassword: v }))
+                }}
                 minLength={8}
                 required
               />
+              <div className="mt-2">
+                <div className="w-full h-2 bg-royalPurple-border rounded-full overflow-hidden">
+                  <div
+                    className="h-2"
+                    style={{
+                      width: `${(passwordStrength / 5) * 100}%`,
+                      background: strengthColor[passwordStrength],
+                      transition: 'width 0.2s ease',
+                    }}
+                  />
+                </div>
+                <p className="text-xs mt-1" style={{ color: strengthColor[passwordStrength] }}>
+                  {passwordStrengthLabel}
+                </p>
+              </div>
             </div>
             <div>
               <label className="text-royalPurple-text2 text-sm">Phone</label>
@@ -183,8 +318,15 @@ export default function RegisterSchoolPage() {
                 className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1 mt-1"
                 placeholder="+260..."
                 value={form.phone}
-                onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))}
+                onChange={(e) => {
+                  const v = e.target.value
+                  setForm((prev) => ({ ...prev, phone: v }))
+                  setPhoneError(validateZambianPhone(v) ? '' : 'Invalid Zambian number')
+                }}
               />
+              {phoneError ? (
+                <p className="text-royalPurple-dangerTx text-xs mt-1">{phoneError}</p>
+              ) : null}
             </div>
             <div>
               <label className="text-royalPurple-text2 text-sm">Province</label>
@@ -210,7 +352,13 @@ export default function RegisterSchoolPage() {
 
           <button
             type="submit"
-            disabled={loading || subdomainAvailable === false}
+            disabled={
+              loading ||
+              subdomainAvailable === false ||
+              Boolean(subdomainError) ||
+              Boolean(phoneError) ||
+              passwordStrength < 3
+            }
             className="w-full bg-royalPurple-accent text-black font-bold py-3 rounded-lg hover:opacity-90 disabled:opacity-50"
           >
             {loading ? 'Creating your portal...' : 'Create School Portal'}
@@ -218,7 +366,7 @@ export default function RegisterSchoolPage() {
         </form>
 
         <p className="text-royalPurple-text2 text-xs text-center mt-4">
-          Your login will open at {portalUrlPreview}
+          Portal URL: {portalUrlPreview}
         </p>
       </div>
     </div>

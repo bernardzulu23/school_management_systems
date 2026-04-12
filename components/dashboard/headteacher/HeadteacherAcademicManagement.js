@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
@@ -11,11 +11,11 @@ import {
   FileText,
   Calendar,
 } from 'lucide-react'
-import { useHeadteacher } from '@/lib/context/HeadteacherContext'
 import { useHeadteacherActions } from '@/lib/hooks/useHeadteacherActions'
 
 export const HeadteacherAcademicManagement = memo(function HeadteacherAcademicManagement() {
-  const { stats, schoolStats } = useHeadteacher()
+  const [stats, setStats] = useState({ classes: 0, subjects: 0, assessments: 0 })
+  const [loading, setLoading] = useState(true)
   const {
     handleCreateClass,
     handleAddSubject,
@@ -26,6 +26,35 @@ export const HeadteacherAcademicManagement = memo(function HeadteacherAcademicMa
     handleViewResults,
     handleManageSchedule,
   } = useHeadteacherActions()
+
+  useEffect(() => {
+    let cancelled = false
+    const load = async () => {
+      try {
+        const res = await fetch('/api/dashboard/academic-management', {
+          credentials: 'include',
+          cache: 'no-store',
+        })
+        const data = await res.json().catch(() => null)
+        if (cancelled) return
+        setStats({
+          classes: Number(data?.classes) || 0,
+          subjects: Number(data?.subjects) || 0,
+          assessments: Number(data?.assessments) || 0,
+        })
+      } catch {
+        if (cancelled) return
+        setStats({ classes: 0, subjects: 0, assessments: 0 })
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+    load()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   return (
     <div className="space-y-8">
       {/* Academic Management Header */}
@@ -51,7 +80,7 @@ export const HeadteacherAcademicManagement = memo(function HeadteacherAcademicMa
               <div className="flex items-center justify-between p-3 bg-royalPurple-card2 border border-royalPurple-border rounded-lg">
                 <span className="text-royalPurple-text2 font-medium">Total Classes</span>
                 <span className="font-bold text-royalPurple-text1 text-xl">
-                  {stats?.stats?.total_classes || 0}
+                  {loading ? '—' : stats.classes}
                 </span>
               </div>
               <div className="space-y-3">
@@ -89,7 +118,7 @@ export const HeadteacherAcademicManagement = memo(function HeadteacherAcademicMa
               <div className="flex items-center justify-between p-3 bg-royalPurple-card2 border border-royalPurple-border rounded-lg">
                 <span className="text-royalPurple-text2 font-medium">Total Subjects</span>
                 <span className="font-bold text-royalPurple-text1 text-xl">
-                  {stats?.stats?.total_subjects || 0}
+                  {loading ? '—' : stats.subjects}
                 </span>
               </div>
               <div className="space-y-3">
@@ -123,7 +152,7 @@ export const HeadteacherAcademicManagement = memo(function HeadteacherAcademicMa
               <div className="flex items-center justify-between p-3 bg-royalPurple-card2 border border-royalPurple-border rounded-lg">
                 <span className="text-royalPurple-text2 font-medium">Total Assessments</span>
                 <span className="font-bold text-royalPurple-text1 text-xl">
-                  {stats?.stats?.total_assessments || 0}
+                  {loading ? '—' : stats.assessments}
                 </span>
               </div>
               <div className="space-y-3">

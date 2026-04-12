@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
-import { sendWelcomeEmail } from '@/config/email'
+import crypto from 'crypto'
+import { sendSchoolVerificationEmail } from '@/config/email'
 
 const RESERVED = new Set([
   'www',
@@ -23,6 +24,17 @@ const RESERVED = new Set([
   'staging',
   'bluepeack',
   'bluepeacktechnologies',
+  'superadmin',
+  'root',
+  'system',
+  'null',
+  'undefined',
+  'ftp',
+  'ssh',
+  'vpn',
+  'dev',
+  'zsms',
+  'zms',
 ])
 
 function normalizeSubdomain(input) {
@@ -46,13 +58,24 @@ function getBaseDomain(host) {
 
 export async function POST(request) {
   const rate = rateLimiter(request, {
-    limit: 30,
+    limit: 3,
     windowMs: 60 * 60 * 1000,
     keyPrefix: 'rl_school_register_',
   })
   if (rate.isLimited) return rate.response
 
   try {
+    const origin = request.headers.get('origin')
+    if (process.env.NODE_ENV === 'production') {
+      const allowedOrigins = [
+        'https://bluepeacktechnologies.com',
+        'https://www.bluepeacktechnologies.com',
+      ]
+      if (origin && !allowedOrigins.includes(origin)) {
+        return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 })
+      }
+    }
+
     const body = await request.json().catch(() => ({}))
     const schoolName = String(body.schoolName || body.name || '').trim()
     const adminName = String(body.adminName || '').trim()
@@ -60,7 +83,8 @@ export async function POST(request) {
       .trim()
       .toLowerCase()
     const adminPassword = String(body.adminPassword || '')
-    const phone = String(body.phone || '').trim() || null
+    const phoneRaw = String(body.phone || '').trim()
+    const phone = phoneRaw || null
     const address = String(body.address || '').trim() || null
     const province = String(body.province || '').trim() || null
     const email = String(body.schoolEmail || body.email || '').trim() || null
@@ -87,6 +111,29 @@ export async function POST(request) {
         { success: false, error: 'Password must be at least 8 characters' },
         { status: 400 }
       )
+    }
+    if (
+      !/[A-Z]/.test(adminPassword) ||
+      !/[a-z]/.test(adminPassword) ||
+      !/[0-9]/.test(adminPassword)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Password must include uppercase, lowercase, and a number',
+        },
+        { status: 400 }
+      )
+    }
+    if (phoneRaw) {
+      const cleaned = phoneRaw.replace(/\s/g, '')
+      const zambianRegex = /^(\+260|0)(9[567]\d{7})$/
+      if (!zambianRegex.test(cleaned)) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid Zambian phone number' },
+          { status: 400 }
+        )
+      }
     }
     if (!subdomain || subdomain.length < 3) {
       return NextResponse.json(
@@ -121,7 +168,9 @@ export async function POST(request) {
     const host = request.headers.get('host') || ''
     const baseDomain =
       process.env.APP_BASE_DOMAIN || getBaseDomain(host) || 'bluepeacktechnologies.com'
-    const loginUrl = `https://${subdomain}.${baseDomain}/login?welcome=true`
+    const verificationToken = crypto.randomBytes(32).toString('hex')
+    const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
+    const verifyUrl = `https://${baseDomain}/api/schools/verify/${verificationToken}`
 
     const hashedPassword = await bcrypt.hash(adminPassword, 12)
 
@@ -134,7 +183,10 @@ export async function POST(request) {
           email,
           phone,
           address: [address, province].filter(Boolean).join(', ') || null,
-          active: true,
+          active: false,
+          emailVerified: false,
+          verificationToken,
+          verificationExpiry,
         },
         select: { id: true, name: true, subdomain: true },
       })
@@ -154,14 +206,14 @@ export async function POST(request) {
       return school
     })
 
-    await sendWelcomeEmail({
+    await sendSchoolVerificationEmail({
       to: adminEmail,
       schoolName: created.name,
       subdomain: created.subdomain,
-      loginUrl,
+      verifyUrl,
     })
 
-    return NextResponse.json({ success: true, loginUrl })
+    return NextResponse.json({ success: true, requiresVerification: true })
   } catch (error) {
     return NextResponse.json({ success: false, error: 'Registration failed' }, { status: 500 })
   }

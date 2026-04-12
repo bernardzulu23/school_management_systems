@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -35,6 +35,9 @@ import {
   Plus,
   Eye,
   Award,
+  PenTool,
+  FlaskConical,
+  Box,
 } from 'lucide-react'
 
 // Import feature components
@@ -42,6 +45,10 @@ import InteractiveWhiteboard from './InteractiveWhiteboard'
 import MultimediaLessonCreator from './MultimediaLessonCreator'
 import VirtualFieldTrips from './VirtualFieldTrips'
 import StudentWorkShowcase from './StudentWorkShowcase'
+import AIStoryWeaver from './AIStoryWeaver'
+import DigitalMusicComposer from './DigitalMusicComposer'
+import VirtualScienceLab from './VirtualScienceLab'
+import CodePlayground from './CodePlayground'
 
 const iconMap = {
   Palette,
@@ -73,18 +80,24 @@ const iconMap = {
   Plus,
   Eye,
   Award,
+  PenTool,
+  FlaskConical,
+  Box,
 }
 
 const componentMap = {
-  whiteboard: InteractiveWhiteboard,
-  'virtual-trips': VirtualFieldTrips,
-  'work-showcase': StudentWorkShowcase,
-  'multimedia-lesson': MultimediaLessonCreator,
+  interactive_whiteboard: InteractiveWhiteboard,
+  ai_story_generator: AIStoryWeaver,
+  music_composer: DigitalMusicComposer,
+  virtual_lab: VirtualScienceLab,
+  code_playground: CodePlayground,
+  virtual_field_trips: VirtualFieldTrips,
+  student_work_showcase: StudentWorkShowcase,
+  multimedia_lesson_creator: MultimediaLessonCreator,
 }
 
 export default function CreativeTeachingHub() {
   const [activeFeature, setActiveFeature] = useState('overview')
-  const userRole = 'student' // Enforce student role for this view
 
   const { data: dbFeatures = [], isLoading } = useQuery({
     queryKey: ['creative-features'],
@@ -103,10 +116,32 @@ export default function CreativeTeachingHub() {
   }))
 
   // Filter features based on user role
-  const availableFeatures = features.filter((feature) => feature.roles.includes(userRole))
+  const availableFeatures = features.filter((feature) => {
+    if (feature.access === 'none') return false
+    return true
+  })
 
   const creativeFeatures = availableFeatures.filter((f) => f.category === 'creative')
   const stemFeatures = availableFeatures.filter((f) => f.category === 'stem')
+
+  const accessLabel = useMemo(() => {
+    return (access) => {
+      const a = String(access || '').toLowerCase()
+      if (a === 'full') return 'Full'
+      if (a === 'partial') return 'Limited'
+      if (a === 'view') return 'Read-only'
+      return ''
+    }
+  }, [])
+
+  const canLaunch = useMemo(() => {
+    return (feature) => {
+      if (!feature?.component) return false
+      const a = String(feature?.access || '').toLowerCase()
+      if (a === 'view') return false
+      return true
+    }
+  }, [])
 
   const renderFeatureComponent = () => {
     const feature = features.find((f) => f.id === activeFeature)
@@ -225,9 +260,13 @@ export default function CreativeTeachingHub() {
                       <Button
                         onClick={() => setActiveFeature(feature.id)}
                         className="w-full bg-royalPurple-pill text-royalPurple-text1"
-                        disabled={!feature.component}
+                        disabled={!canLaunch(feature)}
                       >
-                        {feature.component ? 'Launch' : 'Coming Soon'}
+                        {canLaunch(feature)
+                          ? 'Launch'
+                          : accessLabel(feature.access)
+                            ? `${accessLabel(feature.access)} Access`
+                            : 'Coming Soon'}
                       </Button>
                     </div>
                   </CardContent>
@@ -269,13 +308,15 @@ export default function CreativeTeachingHub() {
                         <Button
                           onClick={() => setActiveFeature(feature.id)}
                           className="w-full bg-royalPurple-pill text-royalPurple-text1"
-                          disabled={!feature.component}
+                          disabled={!canLaunch(feature)}
                         >
-                          {feature.component ? (
+                          {canLaunch(feature) ? (
                             <>
                               <Play className="h-4 w-4 mr-2" />
                               Launch Tool
                             </>
+                          ) : accessLabel(feature.access) ? (
+                            `${accessLabel(feature.access)} Access`
                           ) : (
                             'Coming Soon'
                           )}
@@ -321,13 +362,15 @@ export default function CreativeTeachingHub() {
                         <Button
                           onClick={() => setActiveFeature(feature.id)}
                           className="w-full bg-royalPurple-accent text-royalPurple-text1"
-                          disabled={!feature.component}
+                          disabled={!canLaunch(feature)}
                         >
-                          {feature.component ? (
+                          {canLaunch(feature) ? (
                             <>
                               <Play className="h-4 w-4 mr-2" />
                               Launch Tool
                             </>
+                          ) : accessLabel(feature.access) ? (
+                            `${accessLabel(feature.access)} Access`
                           ) : (
                             'Coming Soon'
                           )}

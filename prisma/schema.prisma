@@ -22,6 +22,9 @@ model School {
   logo_url    String?  // URL to the school's logo
   active      Boolean  @default(true)
   isPubliclyListed Boolean @default(false)
+  emailVerified Boolean @default(false)
+  verificationToken String? @unique
+  verificationExpiry DateTime?
   
   // School Settings
   timezone    String   @default("Africa/Lusaka")
@@ -63,6 +66,8 @@ model School {
   assignmentSubmissions AssignmentSubmission[]
   fieldTrips           FieldTrip[]
   feedbacks            Feedback[]
+  strategicGoals       StrategicGoal[]
+  strategicReviews     StrategicReview[]
   
   // Join Table Relations
   activityParticipants ActivityParticipant[]
@@ -112,6 +117,8 @@ model User {
   organizedActivities     Activity[]
   activityParticipations  ActivityParticipant[]
   feedbacks               Feedback[]
+  strategicGoalsCreated   StrategicGoal[]  @relation("StrategicGoalCreatedBy")
+  strategicReviewsCreated StrategicReview[] @relation("StrategicReviewCreatedBy")
   
   @@unique([schoolId, email]) // Email must be unique per school
   @@index([schoolId])
@@ -856,4 +863,46 @@ model Feedback {
   @@index([userId])
   @@index([createdAt])
   @@index([isPublic])
+}
+
+model StrategicGoal {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  status      String   @default("not_started") // not_started | in_progress | completed
+  progress    Int      @default(0)             // 0-100
+  dueDate     DateTime?
+
+  // Multi-tenancy
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  createdById String?
+  createdBy   User?    @relation("StrategicGoalCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([status])
+  @@index([dueDate])
+}
+
+model StrategicReview {
+  id          String   @id @default(uuid())
+  title       String
+  notes       String?
+  scheduledAt DateTime
+
+  // Multi-tenancy
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  createdById String?
+  createdBy   User?    @relation("StrategicReviewCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
+  createdAt   DateTime @default(now())
+
+  @@index([schoolId])
+  @@index([scheduledAt])
 }

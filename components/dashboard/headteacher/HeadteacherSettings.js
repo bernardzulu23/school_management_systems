@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
+import { useRouter } from 'next/navigation'
 import {
   Settings,
   Database,
@@ -16,6 +17,8 @@ import {
 } from 'lucide-react'
 
 export function HeadteacherSettings() {
+  const router = useRouter()
+
   return (
     <div className="space-y-6">
       {/* Settings Header */}
@@ -35,19 +38,35 @@ export function HeadteacherSettings() {
           </CardHeader>
           <CardContent className="p-6">
             <div className="space-y-3">
-              <Button variant="outline" className="w-full justify-start">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={() => router.push('/dashboard/settings')}
+              >
                 <Database className="h-4 w-4 mr-2" />
                 Database Management
               </Button>
-              <Button variant="outline" className="w-full justify-start">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={() => router.push('/dashboard/settings')}
+              >
                 <Shield className="h-4 w-4 mr-2" />
                 Security Settings
               </Button>
-              <Button variant="outline" className="w-full justify-start">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={() => router.push('/dashboard/settings')}
+              >
                 <Globe className="h-4 w-4 mr-2" />
                 Integration Management
               </Button>
-              <Button variant="outline" className="w-full justify-start">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={() => router.push('/dashboard/settings')}
+              >
                 <Monitor className="h-4 w-4 mr-2" />
                 System Monitoring
               </Button>
@@ -64,19 +83,35 @@ export function HeadteacherSettings() {
           </CardHeader>
           <CardContent className="p-6">
             <div className="space-y-3">
-              <Button variant="outline" className="w-full justify-start">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={() => router.push('/dashboard/settings')}
+              >
                 <FileText className="h-4 w-4 mr-2" />
                 School Information
               </Button>
-              <Button variant="outline" className="w-full justify-start">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={() => router.push('/dashboard/timetable')}
+              >
                 <Calendar className="h-4 w-4 mr-2" />
                 Academic Calendar
               </Button>
-              <Button variant="outline" className="w-full justify-start">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={() => router.push('/dashboard/users')}
+              >
                 <Users className="h-4 w-4 mr-2" />
                 User Permissions
               </Button>
-              <Button variant="outline" className="w-full justify-start">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={() => router.push('/dashboard/results')}
+              >
                 <BarChart3 className="h-4 w-4 mr-2" />
                 Grading System
               </Button>
