@@ -18,53 +18,56 @@ export default function HomePage() {
   const heroRef = useRef(null)
   const [schoolsDirectory, setSchoolsDirectory] = useState([])
   const [isSchoolDirectoryLoading, setIsSchoolDirectoryLoading] = useState(false)
-
-  const getPortalUrl = useMemo(() => {
-    if (typeof window === 'undefined')
-      return (subdomain) => `https://${subdomain}.bluepeacktechnologies.com/login`
-    const host = String(window.location.hostname || '')
-      .split(':')[0]
-      .toLowerCase()
-    const parts = host.split('.').filter(Boolean)
-    const baseDomain = parts.length >= 2 ? parts.slice(-2).join('.') : 'bluepeacktechnologies.com'
-    return (subdomain) => `https://${subdomain}.${baseDomain}/login`
-  }, [])
+  const [publicFeedback, setPublicFeedback] = useState([])
+  const [isPublicFeedbackLoading, setIsPublicFeedbackLoading] = useState(false)
 
   const problems = useMemo(
     () => [
       {
         icon: '📋',
-        color: '#3b0a0a',
+        accent: '#f59e0b',
+        accentBg: 'rgba(245, 158, 11, 0.12)',
+        grad: 'linear-gradient(135deg, rgba(245, 158, 11, 0.16) 0%, transparent 60%)',
         title: 'Paper registers getting lost',
         body: 'Digital attendance records that cannot be destroyed, lost, or altered. Ministry inspectors can verify anytime.',
       },
       {
         icon: '📊',
-        color: '#2d1f0a',
+        accent: '#22c55e',
+        accentBg: 'rgba(34, 197, 94, 0.12)',
+        grad: 'linear-gradient(135deg, rgba(34, 197, 94, 0.14) 0%, transparent 60%)',
         title: 'No visibility on student performance',
         body: 'Spot students at risk of failing before it is too late. Track marks across all subjects in real-time.',
       },
       {
         icon: '👩‍🏫',
-        color: '#0f2318',
+        accent: '#38bdf8',
+        accentBg: 'rgba(56, 189, 248, 0.12)',
+        grad: 'linear-gradient(135deg, rgba(56, 189, 248, 0.14) 0%, transparent 60%)',
         title: 'Headteacher reporting burden',
         body: 'Generate MOE-ready reports in one click. No more compiling data from each teacher manually before district visits.',
       },
       {
         icon: '🏫',
-        color: '#0c1e33',
+        accent: '#a78bfa',
+        accentBg: 'rgba(167, 139, 250, 0.12)',
+        grad: 'linear-gradient(135deg, rgba(167, 139, 250, 0.16) 0%, transparent 60%)',
         title: 'HOD coordination challenges',
         body: 'Department heads manage their subjects, teachers, and performance from a dedicated dashboard — no WhatsApp groups needed.',
       },
       {
         icon: '👧',
-        color: '#3b0a0a',
+        accent: '#fb7185',
+        accentBg: 'rgba(251, 113, 133, 0.12)',
+        grad: 'linear-gradient(135deg, rgba(251, 113, 133, 0.14) 0%, transparent 60%)',
         title: "Girls' dropout tracking",
         body: 'Identify female students with declining attendance early. Especially critical for rural schools where girls face higher dropout risk.',
       },
       {
         icon: '📱',
-        color: '#1e1033',
+        accent: '#f97316',
+        accentBg: 'rgba(249, 115, 22, 0.12)',
+        grad: 'linear-gradient(135deg, rgba(249, 115, 22, 0.14) 0%, transparent 60%)',
         title: 'Works on any device',
         body: 'Phone, tablet, or computer — and works offline when internet is slow. Critical for rural and peri-urban schools across Zambia.',
       },
@@ -94,23 +97,18 @@ export default function HomePage() {
     []
   )
 
-  const testimonials = useMemo(
-    () => [
-      {
-        quote:
-          'Before ZSMS, we were compiling attendance from many teachers every week manually. Now it takes minutes.',
-        name: 'Headteacher, Ndake Day Secondary School',
-        location: 'Eastern Province',
-      },
-      {
-        quote:
-          'The HOD dashboard helped us identify girls whose attendance was dropping. We intervened early and they stayed in school.',
-        name: 'Head of Department, Sciences',
-        location: 'Lusaka Province',
-      },
-    ],
-    []
-  )
+  const formatRoleLabel = useMemo(() => {
+    return (role) => {
+      const raw = String(role || '').toLowerCase()
+      if (!raw) return 'User'
+      if (raw === 'headteacher') return 'Headteacher'
+      if (raw === 'teacher') return 'Teacher'
+      if (raw === 'hod') return 'HOD'
+      if (raw === 'student') return 'Student'
+      if (raw === 'admin') return 'Admin'
+      return raw.charAt(0).toUpperCase() + raw.slice(1)
+    }
+  }, [])
 
   useEffect(() => {
     setIsHydrated(true)
@@ -160,6 +158,22 @@ export default function HomePage() {
     }
     load()
   }, [isMarketingSite, school])
+
+  useEffect(() => {
+    const load = async () => {
+      setIsPublicFeedbackLoading(true)
+      try {
+        const res = await fetch('/api/public/feedback', { cache: 'no-store' })
+        const data = await res.json().catch(() => null)
+        setPublicFeedback(Array.isArray(data?.feedbacks) ? data.feedbacks : [])
+      } catch {
+        setPublicFeedback([])
+      } finally {
+        setIsPublicFeedbackLoading(false)
+      }
+    }
+    load()
+  }, [])
 
   const handleSearchSchools = async () => {
     setIsSchoolDirectoryLoading(true)
@@ -256,22 +270,72 @@ export default function HomePage() {
         }
         .btn-sm:hover { background: #2d1f4e; }
         .card {
-          background: #2d1f4e; border: 1px solid #3b2a66;
-          border-radius: 14px; padding: 1.5rem;
+          background: rgba(45, 31, 78, 0.5);
+          border: 1px solid rgba(59, 42, 102, 0.6);
+          border-radius: 16px;
+          padding: 1.5rem;
+          backdrop-filter: blur(12px);
         }
         .problem-card {
-          border-radius: 14px; padding: 1.25rem;
-          border: 1px solid #3b2a66; transition: border-color 0.2s, transform 0.2s;
+          border-radius: 16px;
+          padding: 1.5rem;
+          position: relative;
+          overflow: hidden;
+          background: rgba(45, 31, 78, 0.5);
+          border: 1px solid rgba(59, 42, 102, 0.6);
+          backdrop-filter: blur(12px);
+          transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+          cursor: default;
         }
-        .problem-card:hover { border-color: #7c3aed; transform: translateY(-2px); }
+        .problem-card::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 16px;
+          padding: 1px;
+          background: linear-gradient(135deg, var(--card-accent) 0%, transparent 50%);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        .problem-card:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+        .problem-card:hover::before { opacity: 1; }
+        .accent-line {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          border-radius: 16px 16px 0 0;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        .problem-card:hover .accent-line { opacity: 1; }
+        .icon-wrap {
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+          margin-bottom: 1rem;
+          position: relative;
+        }
         .section-label {
           font-size: 11px; color: #6d28d9; text-transform: uppercase;
           letter-spacing: 0.12em; font-weight: 700; margin-bottom: 0.75rem;
         }
         .divider { border: none; border-top: 1px solid #3b2a66; margin: 0; }
         .stat-card {
-          background: #261843; border: 1px solid #3b2a66;
-          border-radius: 12px; padding: 1.25rem; text-align: center;
+          background: rgba(38, 24, 67, 0.65);
+          border: 1px solid rgba(59, 42, 102, 0.7);
+          border-radius: 16px;
+          padding: 1.25rem;
+          text-align: center;
+          backdrop-filter: blur(12px);
         }
         .tag {
           display: inline-block; font-size: 11px; padding: 4px 12px;
@@ -294,7 +358,8 @@ export default function HomePage() {
         .testimonial-bar { border-left: 3px solid #f59e0b; padding-left: 1.25rem; }
         .pill {
           display: inline-flex; align-items: center; gap: 6px;
-          background: #261843; border: 1px solid #3b2a66;
+          background: rgba(38, 24, 67, 0.7);
+          border: 1px solid rgba(59, 42, 102, 0.7);
           border-radius: 99px; padding: 6px 14px; font-size: 13px;
           color: #a78bfa; margin: 3px;
         }
@@ -483,23 +548,107 @@ export default function HomePage() {
 
       <hr className="divider" />
 
-      <section style={{ padding: '3.5rem 1.5rem', background: '#1e1033' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+      <section
+        style={{
+          padding: '4rem 1.5rem',
+          background: '#1e1033',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            top: '10%',
+            left: '5%',
+            width: 300,
+            height: 300,
+            background: 'radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '10%',
+            right: '5%',
+            width: 400,
+            height: 400,
+            background: 'radial-gradient(circle, rgba(245,158,11,0.05) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+        <div style={{ maxWidth: 960, margin: '0 auto', position: 'relative' }}>
           <div className="section-label">The real problems ZSMS solves</div>
-          <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: '2rem', color: '#ede9fe' }}>
+          <h2
+            style={{
+              fontSize: 'clamp(22px,3.5vw,30px)',
+              fontWeight: 800,
+              marginBottom: '0.5rem',
+              color: '#ede9fe',
+            }}
+          >
             Built around how Zambian schools actually work
           </h2>
+          <p style={{ color: '#a78bfa', fontSize: 14, marginBottom: '2.5rem', maxWidth: 520 }}>
+            Every feature exists because a real Zambian headteacher asked for it.
+          </p>
           <div
             className="problems-grid"
-            style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem' }}
           >
             {problems.map((p, i) => (
-              <div key={i} className="problem-card" style={{ background: p.color }}>
-                <div style={{ fontSize: 24, marginBottom: 10 }}>{p.icon}</div>
-                <p style={{ fontWeight: 700, fontSize: 14, marginBottom: 8, color: '#ede9fe' }}>
+              <div
+                key={i}
+                className="problem-card"
+                style={{
+                  '--card-accent': p.accent,
+                  backgroundColor: 'rgba(45, 31, 78, 0.55)',
+                  backgroundImage: p.grad,
+                }}
+              >
+                <div
+                  className="accent-line"
+                  style={{ background: `linear-gradient(90deg, ${p.accent} 0%, transparent 85%)` }}
+                />
+                <div
+                  className="icon-wrap"
+                  style={{
+                    background: p.accentBg,
+                    color: p.accent,
+                    border: `1px solid ${p.accent}33`,
+                  }}
+                >
+                  {p.icon}
+                </div>
+                <p
+                  style={{
+                    fontWeight: 700,
+                    fontSize: 15,
+                    marginBottom: 10,
+                    color: '#ede9fe',
+                    lineHeight: 1.35,
+                  }}
+                >
                   {p.title}
                 </p>
-                <p style={{ fontSize: 13, color: '#a78bfa', lineHeight: 1.65 }}>{p.body}</p>
+                <p style={{ fontSize: 13, color: '#a78bfa', lineHeight: 1.7 }}>{p.body}</p>
+                <div
+                  style={{ marginTop: '1.25rem', display: 'flex', alignItems: 'center', gap: 6 }}
+                >
+                  <div style={{ width: 20, height: 2, background: p.accent, borderRadius: 99 }} />
+                  <span
+                    style={{
+                      fontSize: 11,
+                      color: p.accent,
+                      fontWeight: 700,
+                      letterSpacing: '0.06em',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    Solved
+                  </span>
+                </div>
               </div>
             ))}
           </div>
@@ -573,13 +722,15 @@ export default function HomePage() {
 
           <div
             style={{
-              background: '#2d1f4e',
-              border: '2px solid #f59e0b',
+              background: 'rgba(45, 31, 78, 0.55)',
+              border: '1px solid rgba(245, 158, 11, 0.65)',
               borderRadius: 18,
               padding: '2.5rem 2rem',
               position: 'relative',
               maxWidth: 480,
               margin: '0 auto',
+              backdropFilter: 'blur(14px)',
+              boxShadow: '0 24px 80px rgba(0,0,0,0.45)',
             }}
           >
             <div style={{ marginBottom: '0.25rem' }}>
@@ -610,33 +761,47 @@ export default function HomePage() {
 
       <section style={{ padding: '3.5rem 1.5rem' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <div className="section-label">What Zambian educators are saying</div>
+          <div className="section-label">Recent feedback</div>
           <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: '2rem', color: '#ede9fe' }}>
-            Trusted by schools across the Eastern Province
+            What users are saying
           </h2>
           <div
             className="testimonials-grid"
             style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}
           >
-            {testimonials.map((t, i) => (
-              <div key={i} className="card">
-                <div className="testimonial-bar">
-                  <p
-                    style={{
-                      fontSize: 15,
-                      lineHeight: 1.75,
-                      color: '#a78bfa',
-                      marginBottom: 12,
-                      fontStyle: 'italic',
-                    }}
-                  >
-                    &ldquo;{t.quote}&rdquo;
-                  </p>
-                  <p style={{ fontSize: 13, fontWeight: 700, color: '#ede9fe' }}>{t.name}</p>
-                  <p style={{ fontSize: 12, color: '#6d28d9' }}>{t.location}</p>
-                </div>
+            {isPublicFeedbackLoading ? (
+              <div className="card" style={{ gridColumn: '1 / -1' }}>
+                <p style={{ color: '#a78bfa', fontSize: 14 }}>Loading feedback…</p>
               </div>
-            ))}
+            ) : publicFeedback.length === 0 ? (
+              <div className="card" style={{ gridColumn: '1 / -1' }}>
+                <p style={{ color: '#a78bfa', fontSize: 14 }}>No public feedback yet.</p>
+              </div>
+            ) : (
+              publicFeedback.map((f) => (
+                <div key={f.id} className="card">
+                  <div className="testimonial-bar">
+                    <p
+                      style={{
+                        fontSize: 15,
+                        lineHeight: 1.75,
+                        color: '#a78bfa',
+                        marginBottom: 12,
+                        fontStyle: 'italic',
+                      }}
+                    >
+                      &ldquo;{f.message}&rdquo;
+                    </p>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: '#ede9fe' }}>
+                      {formatRoleLabel(f.role)}
+                    </p>
+                    {f.schoolName ? (
+                      <p style={{ fontSize: 12, color: '#6d28d9' }}>{f.schoolName}</p>
+                    ) : null}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>
@@ -687,6 +852,12 @@ export default function HomePage() {
                       Loading schools…
                     </p>
                   </div>
+                ) : !schoolSearch && schoolsDirectory.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
+                    <p style={{ color: '#a78bfa', fontSize: 14, marginBottom: 8 }}>
+                      No schools are publicly listed yet.
+                    </p>
+                  </div>
                 ) : schoolSearch && schoolsDirectory.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
                     <p style={{ color: '#a78bfa', fontSize: 14, marginBottom: 8 }}>
@@ -701,8 +872,8 @@ export default function HomePage() {
                     </Link>
                   </div>
                 ) : (
-                  schoolsDirectory.map((s, i) => (
-                    <div key={i} className="school-row">
+                  schoolsDirectory.map((s) => (
+                    <div key={s.id} className="school-row">
                       <div>
                         <p
                           style={{
@@ -714,18 +885,15 @@ export default function HomePage() {
                         >
                           {s.name}
                         </p>
-                        {s.address ? (
-                          <p style={{ fontSize: 12, color: '#6d28d9' }}>{s.address}</p>
-                        ) : null}
                       </div>
-                      <a
-                        href={getPortalUrl(s.subdomain)}
+                      <Link
+                        href={`/go/${s.id}`}
                         className="btn-sm"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
                         Open portal →
-                      </a>
+                      </Link>
                     </div>
                   ))
                 )}

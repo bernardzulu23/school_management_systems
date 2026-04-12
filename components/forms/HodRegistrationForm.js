@@ -18,7 +18,7 @@ import {
   BookOpen,
 } from 'lucide-react'
 import { DEPARTMENTS, USER_ROLES } from '@/lib/constants'
-import { handleInputChange } from '@/lib/utils/formHelpers'
+import { handleInputChange, parseDateInput } from '@/lib/utils/formHelpers'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 import FormField from '@/components/forms/FormField'
 import LoadingSpinner from '@/components/LoadingSpinner'
@@ -54,6 +54,10 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
   const [errors, setErrors] = useState({})
 
   const validateRequired = (value) => (value ? true : 'This field is required')
+  const validateDob = (value) => {
+    if (!value) return 'This field is required'
+    return parseDateInput(value) ? true : 'Use DD/MM/YYYY'
+  }
   const validateEmail = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!value) return 'Email is required'
@@ -131,8 +135,10 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
     }
 
     try {
+      const dob = formData.date_of_birth ? parseDateInput(formData.date_of_birth) : null
       await onSubmit({
         ...formData,
+        date_of_birth: dob ? dob.toISOString().slice(0, 10) : formData.date_of_birth,
         role: USER_ROLES.HOD,
       })
     } catch (error) {
@@ -224,10 +230,11 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
             <FormGroup
               label="Date of Birth"
               name="date_of_birth"
-              type="date"
+              type="text"
               value={formData.date_of_birth}
               onChange={onInputChange}
-              validate={validateRequired}
+              placeholder="DD/MM/YYYY"
+              validate={validateDob}
               icon={Calendar}
               aria-describedby="date_of_birth-error"
             />

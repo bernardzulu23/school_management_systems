@@ -16,7 +16,7 @@ import {
 
 // Shared Utilities & Constants
 import { STUDENT_SUBJECTS_MAX, STUDENT_SUBJECTS_MIN, USER_ROLES } from '@/lib/constants'
-import { handleInputChange, handleMultiSelectChange } from '@/lib/utils/formHelpers'
+import { handleInputChange, handleMultiSelectChange, parseDateInput } from '@/lib/utils/formHelpers'
 import { api } from '@/lib/api'
 import { useAuth } from '@/lib/auth'
 
@@ -274,18 +274,25 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         if (!formData.date_of_birth) {
           newErrors.date_of_birth = 'Date of birth is required'
         } else {
-          const dob = new Date(formData.date_of_birth)
-          const today = new Date()
-          let age = today.getFullYear() - dob.getFullYear()
-          const m = today.getMonth() - dob.getMonth()
-          if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
-            age--
-          }
+          const dob = parseDateInput(formData.date_of_birth)
+          if (!dob) {
+            newErrors.date_of_birth = 'Use DD/MM/YYYY'
+          } else {
+            const today = new Date()
+            const todayUtc = new Date(
+              Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+            )
+            let age = todayUtc.getUTCFullYear() - dob.getUTCFullYear()
+            const m = todayUtc.getUTCMonth() - dob.getUTCMonth()
+            if (m < 0 || (m === 0 && todayUtc.getUTCDate() < dob.getUTCDate())) {
+              age--
+            }
 
-          if (dob > today) {
-            newErrors.date_of_birth = 'Date cannot be in the future'
-          } else if (age < 12) {
-            newErrors.date_of_birth = 'Must be at least 12 years old'
+            if (dob.getTime() > todayUtc.getTime()) {
+              newErrors.date_of_birth = 'Date cannot be in the future'
+            } else if (age < 12) {
+              newErrors.date_of_birth = 'Must be at least 12 years old'
+            }
           }
         }
       }
@@ -378,6 +385,13 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         ...formData,
         role: String(role || '').toUpperCase(),
         schoolId: currentUser?.schoolId,
+      }
+
+      if (submitData.date_of_birth) {
+        const dob = parseDateInput(submitData.date_of_birth)
+        if (dob) {
+          submitData = { ...submitData, date_of_birth: dob.toISOString().slice(0, 10) }
+        }
       }
 
       if (role === 'teacher') {

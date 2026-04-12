@@ -39,11 +39,6 @@ export async function POST(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  // Admin/headteacher cannot submit feedback
-  if (roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
-    return NextResponse.json({ error: 'Administrators cannot submit feedback' }, { status: 403 })
-  }
-
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) {
     return NextResponse.json({ error: 'School context could not be determined' }, { status: 400 })
@@ -69,6 +64,7 @@ export async function POST(request) {
     : 'general'
   const rating =
     typeof body.rating === 'number' && body.rating >= 1 && body.rating <= 5 ? body.rating : null
+  const isPublic = body?.isPublic === true
 
   try {
     const feedback = await prisma.feedback.create({
@@ -78,6 +74,7 @@ export async function POST(request) {
         message,
         category,
         rating,
+        isPublic,
       },
     })
     return NextResponse.json({ success: true, id: feedback.id })
@@ -85,4 +82,39 @@ export async function POST(request) {
     console.error('Feedback create error:', err)
     return NextResponse.json({ error: 'Failed to submit feedback' }, { status: 500 })
   }
+}
+
+/** PATCH /api/feedback — Mark feedback public/private (admin/headteacher only) */
+export async function PATCH(request) {
+  const auth = authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+
+  if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
+    return NextResponse.json(
+      { error: 'Only administrators can manage feedback visibility' },
+      { status: 403 }
+    )
+  }
+
+  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  if (!schoolId) {
+    return NextResponse.json({ error: 'School context could not be determined' }, { status: 400 })
+  }
+
+  const body = await request.json().catch(() => ({}))
+  const id = typeof body?.id === 'string' ? body.id.trim() : ''
+  const isPublic = body?.isPublic === true
+
+  if (!id) return NextResponse.json({ error: 'Feedback id is required' }, { status: 400 })
+
+  const updated = await prisma.feedback.updateMany({
+    where: { id, schoolId },
+    data: { isPublic },
+  })
+
+  if (updated.count === 0) {
+    return NextResponse.json({ error: 'Feedback not found' }, { status: 404 })
+  }
+
+  return NextResponse.json({ success: true })
 }

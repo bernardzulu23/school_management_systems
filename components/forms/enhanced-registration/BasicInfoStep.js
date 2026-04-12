@@ -4,11 +4,6 @@ import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 import { GENDERS } from '@/lib/constants'
 
 export default function BasicInfoStep({ formData, errors, onInputChange, role }) {
-  const today = new Date()
-  const maxDate = new Date(today.getFullYear() - 12, today.getMonth(), today.getDate())
-    .toISOString()
-    .split('T')[0]
-
   return (
     <FormSection title="Basic Information" icon={User}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -43,13 +38,12 @@ export default function BasicInfoStep({ formData, errors, onInputChange, role })
           <FormGroup
             label="Date of Birth"
             name="date_of_birth"
-            type="date"
+            type="text"
             value={formData.date_of_birth}
             onChange={onInputChange}
             required
             icon={Calendar}
-            min="1950-01-01"
-            max={maxDate}
+            placeholder="DD/MM/YYYY"
             error={errors.date_of_birth}
             aria-describedby="date_of_birth-error"
           />

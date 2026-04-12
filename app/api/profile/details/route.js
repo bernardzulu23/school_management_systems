@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { parseDateInput } from '@/lib/utils/formHelpers'
 
 export async function PUT(request) {
   const auth = authMiddleware(request)
@@ -86,8 +87,8 @@ export async function PUT(request) {
     if (date_of_birth === null || date_of_birth === '') {
       data.date_of_birth = null
     } else {
-      const parsed = new Date(date_of_birth)
-      if (Number.isNaN(parsed.getTime())) {
+      const parsed = parseDateInput(date_of_birth) || new Date(date_of_birth)
+      if (!parsed || Number.isNaN(parsed.getTime())) {
         return NextResponse.json({ error: 'Invalid date of birth' }, { status: 400 })
       }
       data.date_of_birth = parsed

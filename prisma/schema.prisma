@@ -21,6 +21,7 @@ model School {
   domain      String?  @unique  // Optional custom domain
   logo_url    String?  // URL to the school's logo
   active      Boolean  @default(true)
+  isPubliclyListed Boolean @default(false)
   
   // School Settings
   timezone    String   @default("Africa/Lusaka")
@@ -71,6 +72,7 @@ model School {
 
   @@index([subdomain])
   @@index([active])
+  @@index([isPubliclyListed])
 }
 
 model User {
@@ -846,10 +848,12 @@ model Feedback {
   message   String
   category  String?  // 'general', 'usability', 'feature', 'bug', 'other'
   rating    Int?    // 1-5 optional
+  isPublic  Boolean  @default(false)
   
   createdAt DateTime @default(now())
   
   @@index([schoolId])
   @@index([userId])
   @@index([createdAt])
+  @@index([isPublic])
 }

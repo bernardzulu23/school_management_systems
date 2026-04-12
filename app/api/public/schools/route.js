@@ -1,28 +1,42 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
+const BLOCKED_SUBDOMAINS = [
+  'demo',
+  'test',
+  'staging',
+  'zsms',
+  'demoschool',
+  'demointernationalschool',
+  'demohighschool',
+]
+
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url)
     const q = String(searchParams.get('q') || '').trim()
 
-    const where = q
-      ? {
-          active: true,
-          OR: [
-            { name: { contains: q, mode: 'insensitive' } },
-            { subdomain: { contains: q, mode: 'insensitive' } },
-            { address: { contains: q, mode: 'insensitive' } },
-          ],
-        }
-      : { active: true }
+    const where = {
+      active: true,
+      isPubliclyListed: true,
+      ...(q
+        ? {
+            name: { contains: q, mode: 'insensitive' },
+          }
+        : {}),
+      NOT: [
+        { subdomain: { in: BLOCKED_SUBDOMAINS } },
+        { name: { contains: 'test', mode: 'insensitive' } },
+        { name: { contains: 'demo', mode: 'insensitive' } },
+        { name: { contains: 'zambian school management system', mode: 'insensitive' } },
+      ],
+    }
 
     const schools = await prisma.school.findMany({
       where,
       select: {
+        id: true,
         name: true,
-        subdomain: true,
-        address: true,
       },
       orderBy: { createdAt: 'desc' },
       take: 10,

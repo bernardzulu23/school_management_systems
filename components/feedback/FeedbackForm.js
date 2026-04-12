@@ -18,6 +18,7 @@ export default function FeedbackForm() {
   const [message, setMessage] = useState('')
   const [category, setCategory] = useState('general')
   const [rating, setRating] = useState(null)
+  const [isPublic, setIsPublic] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e) => {
@@ -36,6 +37,7 @@ export default function FeedbackForm() {
           message: message.trim(),
           category,
           rating: rating || undefined,
+          isPublic,
         }),
       })
       const data = await res.json()
@@ -46,6 +48,7 @@ export default function FeedbackForm() {
       setMessage('')
       setCategory('general')
       setRating(null)
+      setIsPublic(false)
     } catch (err) {
       toast.error(err.message || 'Failed to submit feedback')
     } finally {
@@ -129,6 +132,16 @@ export default function FeedbackForm() {
               className="w-full rounded-lg border border-royalPurple-border bg-royalPurple-card px-3 py-2 text-royalPurple-text1 placeholder:text-royalPurple-muted focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2"
             />
           </div>
+
+          <label className="flex items-center gap-2 text-sm text-royalPurple-text2 dark:text-royalPurple-text3">
+            <input
+              type="checkbox"
+              checked={isPublic}
+              onChange={(e) => setIsPublic(e.target.checked)}
+              disabled={isSubmitting}
+            />
+            Allow this feedback to appear on the public landing page
+          </label>
 
           <Button type="submit" disabled={isSubmitting}>
             <Send className="h-4 w-4 mr-2" />

@@ -5,6 +5,7 @@ import { registerSchema, validateRequest, sanitizeOutput } from '@/lib/middlewar
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { parseDateInput } from '@/lib/utils/formHelpers'
 
 const parseYearGroupSectionFromClassName = (className) => {
   const raw = String(className || '').trim()
@@ -117,7 +118,9 @@ export const POST = withErrorHandler(async (request) => {
           role,
           schoolId,
           contact_number: body.contact_number,
-          date_of_birth: body.date_of_birth ? new Date(body.date_of_birth) : undefined,
+          date_of_birth: body.date_of_birth
+            ? parseDateInput(body.date_of_birth) || new Date(body.date_of_birth)
+            : undefined,
           gender: body.gender,
           employeeId: body.employee_id, // Map employee_id if provided
         },

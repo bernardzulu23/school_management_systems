@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { MessageSquare, User, Calendar, Star, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import toast from 'react-hot-toast'
 
 const CATEGORY_LABELS = {
   general: 'General',
@@ -83,8 +84,7 @@ export function HeadteacherFeedbackView() {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-royalPurple-text2 dark:text-royalPurple-text3 mb-6">
-            Feedback submitted by teachers, students, and HODs. Administrators cannot submit
-            feedback.
+            Feedback submitted by users. Mark any item as public to display it on the landing page.
           </p>
 
           {feedbacks.length === 0 ? (
@@ -100,6 +100,37 @@ export function HeadteacherFeedbackView() {
                   className="border border-royalPurple-border dark:border-royalPurple-border rounded-lg p-4 bg-royalPurple-page/50 dark:bg-royalPurple-card/50"
                 >
                   <p className="text-royalPurple-text1 mb-3">{fb.message}</p>
+                  <div className="mb-3">
+                    <label className="inline-flex items-center gap-2 text-sm text-royalPurple-text2 dark:text-royalPurple-text3">
+                      <input
+                        type="checkbox"
+                        checked={fb.isPublic === true}
+                        onChange={async (e) => {
+                          const next = e.target.checked
+                          setFeedbacks((prev) =>
+                            prev.map((x) => (x.id === fb.id ? { ...x, isPublic: next } : x))
+                          )
+                          try {
+                            const res = await fetch('/api/feedback', {
+                              method: 'PATCH',
+                              headers: { 'Content-Type': 'application/json' },
+                              credentials: 'include',
+                              body: JSON.stringify({ id: fb.id, isPublic: next }),
+                            })
+                            const data = await res.json().catch(() => ({}))
+                            if (!res.ok) throw new Error(data?.error || 'Failed to update')
+                            toast.success(next ? 'Now public' : 'Now private')
+                          } catch (err) {
+                            setFeedbacks((prev) =>
+                              prev.map((x) => (x.id === fb.id ? { ...x, isPublic: !next } : x))
+                            )
+                            toast.error(err?.message || 'Failed to update')
+                          }
+                        }}
+                      />
+                      Show on landing page
+                    </label>
+                  </div>
                   <div className="flex flex-wrap items-center gap-4 text-sm text-royalPurple-text3 dark:text-royalPurple-text3">
                     <span className="flex items-center gap-1">
                       <User className="h-4 w-4" />

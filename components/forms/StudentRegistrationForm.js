@@ -17,7 +17,12 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
-import { handleInputChange, handleMultiSelectChange, formatFullName } from '@/lib/utils/formHelpers'
+import {
+  handleInputChange,
+  handleMultiSelectChange,
+  formatFullName,
+  parseDateInput,
+} from '@/lib/utils/formHelpers'
 import { useSubjects } from '@/lib/hooks/useSubjects'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 import FormField from '@/components/forms/FormField'
@@ -73,6 +78,12 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
     if (!phoneRegex.test(value)) return 'Invalid phone number'
     return true
   }
+  const validateDob = (value) => {
+    if (!value) return 'This field is required'
+    const d = parseDateInput(value)
+    if (!d) return 'Use DD/MM/YYYY'
+    return true
+  }
 
   const onInputChange = handleInputChange(setFormData)
   const onSubjectChange = handleMultiSelectChange(setFormData)
@@ -106,6 +117,9 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
       // Prepare submission data
       const submissionData = {
         ...formData,
+        dateOfBirth: parseDateInput(formData.dateOfBirth)
+          ? parseDateInput(formData.dateOfBirth).toISOString().slice(0, 10)
+          : formData.dateOfBirth,
         class: `${formData.gradeLevel} ${formData.section}`,
         name: formatFullName(formData.firstName, formData.lastName),
         role: 'student',
@@ -219,12 +233,13 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
             <FormGroup
               label="Date of Birth"
               name="dateOfBirth"
-              type="date"
+              type="text"
               required
+              placeholder="DD/MM/YYYY"
               value={formData.dateOfBirth}
               onChange={onInputChange}
               error={errors.dateOfBirth}
-              validate={validateRequired}
+              validate={validateDob}
               icon={Calendar}
               aria-describedby="dateOfBirth-error"
             />

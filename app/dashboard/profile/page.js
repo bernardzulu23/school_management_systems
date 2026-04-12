@@ -9,6 +9,7 @@ import ProfilePictureDisplay from '@/components/ui/ProfilePictureDisplay'
 import { useAuth } from '@/lib/auth'
 import { User, KeyRound, Upload } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
+import { formatDDMMYYYY } from '@/lib/utils/formHelpers'
 
 const MAX_BYTES = 10 * 1024 * 1024
 
@@ -65,7 +66,7 @@ export default function ProfilePage() {
       employeeId: u.employeeId || '',
       address: u.address || '',
       gender: u.gender || '',
-      date_of_birth: u.date_of_birth ? new Date(u.date_of_birth).toISOString().slice(0, 10) : '',
+      date_of_birth: u.date_of_birth ? formatDDMMYYYY(u.date_of_birth) : '',
     })
   }, [me, user])
 
@@ -364,10 +365,11 @@ export default function ProfilePage() {
                 <div>
                   <label className="block text-sm text-royalPurple-text2 mb-1">Date of Birth</label>
                   <input
-                    type="date"
+                    type="text"
                     className="input"
                     value={editForm.date_of_birth}
                     disabled={loading}
+                    placeholder="DD/MM/YYYY"
                     onChange={(e) => setEditForm((p) => ({ ...p, date_of_birth: e.target.value }))}
                   />
                 </div>

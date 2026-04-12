@@ -134,53 +134,81 @@ export default function DashboardPage() {
 
         {/* Quick Stats */}
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-          <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
-            <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
-              <Users className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs font-semibold text-g-600 dark:text-g-300">Total Students</p>
-              <p className="text-[22px] font-bold text-g-900 dark:text-g-50 leading-tight">
-                {stats.totalStudents}
-              </p>
-            </div>
-          </Card>
+          <button
+            type="button"
+            className="text-left w-full h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-royalPurple-border2 rounded-xl"
+            onClick={() => (window.location.href = '/dashboard/users')}
+            aria-label="Open students"
+          >
+            <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
+              <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
+                <Users className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold text-g-600 dark:text-g-300">Total Students</p>
+                <p className="text-[22px] font-bold text-g-900 dark:text-g-50 leading-tight">
+                  {stats.totalStudents}
+                </p>
+              </div>
+            </Card>
+          </button>
 
-          <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
-            <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
-              <BookOpen className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs font-semibold text-g-600 dark:text-g-300">Total Teachers</p>
-              <p className="text-[22px] font-bold text-g-900 dark:text-g-50 leading-tight">
-                {stats.totalTeachers}
-              </p>
-            </div>
-          </Card>
+          <button
+            type="button"
+            className="text-left w-full h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-royalPurple-border2 rounded-xl"
+            onClick={() => (window.location.href = '/dashboard/users')}
+            aria-label="Open teachers"
+          >
+            <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
+              <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
+                <BookOpen className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold text-g-600 dark:text-g-300">Total Teachers</p>
+                <p className="text-[22px] font-bold text-g-900 dark:text-g-50 leading-tight">
+                  {stats.totalTeachers}
+                </p>
+              </div>
+            </Card>
+          </button>
 
-          <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
-            <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
-              <Calendar className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs font-semibold text-g-600 dark:text-g-300">Total Classes</p>
-              <p className="text-[22px] font-bold text-g-900 dark:text-g-50 leading-tight">
-                {stats.totalClasses}
-              </p>
-            </div>
-          </Card>
+          <button
+            type="button"
+            className="text-left w-full h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-royalPurple-border2 rounded-xl"
+            onClick={() => (window.location.href = '/dashboard/classes')}
+            aria-label="Open classes"
+          >
+            <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
+              <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
+                <Calendar className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold text-g-600 dark:text-g-300">Total Classes</p>
+                <p className="text-[22px] font-bold text-g-900 dark:text-g-50 leading-tight">
+                  {stats.totalClasses}
+                </p>
+              </div>
+            </Card>
+          </button>
 
-          <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
-            <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
-              <TrendingUp className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs font-semibold text-g-600 dark:text-g-300">Avg Attendance</p>
-              <p className="text-[22px] font-bold text-g-900 dark:text-g-50 leading-tight">
-                {stats.averageAttendance}%
-              </p>
-            </div>
-          </Card>
+          <button
+            type="button"
+            className="text-left w-full h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-royalPurple-border2 rounded-xl"
+            onClick={() => (window.location.href = '/dashboard/attendance')}
+            aria-label="Open attendance"
+          >
+            <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
+              <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
+                <TrendingUp className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold text-g-600 dark:text-g-300">Avg Attendance</p>
+                <p className="text-[22px] font-bold text-g-900 dark:text-g-50 leading-tight">
+                  {stats.averageAttendance}%
+                </p>
+              </div>
+            </Card>
+          </button>
         </section>
 
         {/* Smart Analytics Integration */}
