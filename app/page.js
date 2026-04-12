@@ -758,7 +758,21 @@ export default function HomePage() {
           </Link>
           <p style={{ fontSize: 13, color: '#6d28d9', marginTop: '1.5rem' }}>
             Questions? Call or WhatsApp:{' '}
-            <strong style={{ color: '#a78bfa' }}>+260 XXX XXX XXX</strong>
+            <a
+              href="tel:0977934996"
+              style={{ color: '#a78bfa', fontWeight: 800, textDecoration: 'none' }}
+            >
+              0977934996
+            </a>
+            {' · '}
+            <a
+              href="https://wa.me/260977934996"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: '#a78bfa', fontWeight: 800, textDecoration: 'none' }}
+            >
+              WhatsApp
+            </a>
           </p>
           <p style={{ fontSize: 12, color: '#3b2a66', marginTop: '0.5rem' }}>
             Free trial · No credit card required · Cancel anytime
