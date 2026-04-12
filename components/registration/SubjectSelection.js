@@ -37,6 +37,20 @@ const SUBJECT_ORDER_MAP = (() => {
   return map
 })()
 
+const CATEGORY_BAR_COLOR_CLASS = {
+  gray: 'bg-gray-500',
+  blue: 'bg-blue-500',
+  green: 'bg-green-500',
+  yellow: 'bg-yellow-500',
+  orange: 'bg-orange-500',
+  red: 'bg-red-500',
+  purple: 'bg-purple-500',
+  indigo: 'bg-indigo-500',
+  teal: 'bg-teal-500',
+  cyan: 'bg-cyan-500',
+  pink: 'bg-pink-500',
+}
+
 function normalizeSubjectName(value) {
   const n = String(value || '')
     .trim()
@@ -129,7 +143,8 @@ export default function SubjectSelection({
 
   const getCategoryColor = (category) => {
     const categoryData = SUBJECT_CATEGORIES.find((cat) => cat.id === category)
-    return categoryData ? categoryData.color : 'gray'
+    const color = categoryData ? categoryData.color : 'gray'
+    return CATEGORY_BAR_COLOR_CLASS[color] || CATEGORY_BAR_COLOR_CLASS.gray
   }
 
   return (
@@ -263,7 +278,7 @@ export default function SubjectSelection({
                     className="flex items-center justify-between p-3 bg-royalPurple-card rounded-lg border border-royalPurple-border shadow-sm group hover:border-royalPurple-border transition-colors"
                   >
                     <div className="flex items-center">
-                      <div className={`w-2 h-8 rounded-full bg-${colorClass}-500 mr-3`}></div>
+                      <div className={`w-2 h-8 rounded-full mr-3 ${colorClass}`}></div>
                       <div>
                         <p className="font-medium text-royalPurple-text1">{subject.name}</p>
                         <p className="text-xs text-royalPurple-text3">{subject.category}</p>

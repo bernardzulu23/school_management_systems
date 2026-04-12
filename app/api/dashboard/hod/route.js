@@ -19,6 +19,28 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const isAdminOrHead = roleCheck(auth.user, ['ADMIN', 'headteacher'])
 
+  const { searchParams } = new URL(request.url)
+  const termRaw = String(searchParams.get('term') || '').trim()
+  const yearRaw = String(searchParams.get('year') || '').trim()
+  const year = Number.isFinite(Number(yearRaw)) ? Number(yearRaw) : new Date().getFullYear()
+  const termNum = (() => {
+    if (!termRaw || termRaw === 'All Terms') return null
+    const m = termRaw.match(/(\d)/)
+    const n = m ? Number(m[1]) : null
+    if (n === 1 || n === 2 || n === 3) return n
+    return null
+  })()
+  const term = termNum ? `Term ${termNum}` : null
+  const termRange = (() => {
+    if (!termNum) return null
+    if (termNum === 1)
+      return { gte: new Date(Date.UTC(year, 0, 1)), lt: new Date(Date.UTC(year, 4, 1)) }
+    if (termNum === 2)
+      return { gte: new Date(Date.UTC(year, 4, 1)), lt: new Date(Date.UTC(year, 8, 1)) }
+    return { gte: new Date(Date.UTC(year, 8, 1)), lt: new Date(Date.UTC(year + 1, 0, 1)) }
+  })()
+  const resultTermWhere = term ? { term, year } : yearRaw ? { year } : {}
+
   const hodProfile = await prisma.headOfDepartment.findFirst({
     where: { userId, schoolId },
     include: {
@@ -214,6 +236,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const results = await prisma.result.findMany({
     where: {
       schoolId,
+      ...resultTermWhere,
       OR: [
         ...(teacherUserIds.length > 0 ? [{ enteredByUserId: { in: teacherUserIds } }] : []),
         ...(subjectIds.length > 0 ? [{ subjectId: { in: subjectIds } }] : []),
@@ -248,7 +271,11 @@ export const GET = withErrorHandler(async function GET(request) {
   const assessments =
     effectiveClassNames.length > 0
       ? await prisma.assessment.findMany({
-          where: { schoolId, class: { in: effectiveClassNames } },
+          where: {
+            schoolId,
+            class: { in: effectiveClassNames },
+            ...(termRange ? { date: termRange } : {}),
+          },
           orderBy: { date: 'desc' },
           take: 50,
         })
@@ -262,6 +289,7 @@ export const GET = withErrorHandler(async function GET(request) {
             schoolId,
             enteredByUserId: { in: teacherUserIds },
             ...(subjectIds.length > 0 ? { subjectId: { in: subjectIds } } : {}),
+            ...resultTermWhere,
           },
           _avg: { score: true },
           _count: { _all: true },
@@ -314,6 +342,8 @@ export const GET = withErrorHandler(async function GET(request) {
         id: departmentId,
         name: departmentName,
       },
+      selectedTerm: term || 'All Terms',
+      selectedYear: year,
       stats: {
         totalTeachers: teachers.length,
         totalStudents: students.length,

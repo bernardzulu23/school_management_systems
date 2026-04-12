@@ -30,6 +30,16 @@ const achievementCategories = {
   special: { name: 'Special', icon: Crown, color: 'indigo' },
 }
 
+const categoryIconColorClass = {
+  yellow: 'text-yellow-600',
+  blue: 'text-blue-600',
+  orange: 'text-orange-600',
+  green: 'text-green-600',
+  purple: 'text-purple-600',
+  red: 'text-red-600',
+  indigo: 'text-indigo-600',
+}
+
 const rarityConfig = {
   common: {
     name: 'Common',
@@ -212,7 +222,9 @@ export default function AchievementSystem({
             {/* Points and Category */}
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center space-x-1">
-                <CategoryIcon className={`h-4 w-4 text-${category.color}-600`} />
+                <CategoryIcon
+                  className={`h-4 w-4 ${categoryIconColorClass[category.color] || 'text-royalPurple-text2'}`}
+                />
                 <span className="text-royalPurple-text2">{category.name}</span>
               </div>
               <div className="flex items-center space-x-1">

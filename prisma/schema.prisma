@@ -68,6 +68,7 @@ model School {
   feedbacks            Feedback[]
   strategicGoals       StrategicGoal[]
   strategicReviews     StrategicReview[]
+  teacherTermProgress  TeacherTermProgress[]
   
   // Join Table Relations
   activityParticipants ActivityParticipant[]
@@ -255,6 +256,7 @@ model Teacher {
   subjects  Subject[] 
   departments TeacherDepartment[]
   teachingAssignments TeachingAssignment[]
+  termProgress TeacherTermProgress[]
   
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt 
@@ -357,6 +359,31 @@ model Department {
   @@unique([schoolId, name])
   @@index([schoolId])
   @@index([name])
+}
+
+model TeacherTermProgress {
+  id              String   @id @default(uuid())
+
+  teacherId       String
+  teacher         Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  schoolId        String
+  school          School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  year            Int
+  term            Int
+
+  cpdHours        Int      @default(0)
+  cpdTargetHours  Int      @default(10)
+  schemeSubmitted Boolean  @default(false)
+  recordsSubmitted Boolean @default(false)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([teacherId, year, term])
+  @@index([schoolId, year, term])
+  @@index([teacherId])
 }
 
 model TeacherDepartment {

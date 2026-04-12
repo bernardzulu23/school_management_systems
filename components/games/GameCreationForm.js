@@ -46,9 +46,9 @@ const gameTypes = [
 ]
 
 const difficultyLevels = [
-  { id: 'easy', name: 'Easy', color: 'green', icon: '🟢' },
-  { id: 'medium', name: 'Medium', color: 'yellow', icon: '🟡' },
-  { id: 'hard', name: 'Hard', color: 'red', icon: '🔴' },
+  { id: 'easy', name: 'Easy', activeClasses: 'border-green-500 bg-green-50', icon: '🟢' },
+  { id: 'medium', name: 'Medium', activeClasses: 'border-yellow-500 bg-yellow-50', icon: '🟡' },
+  { id: 'hard', name: 'Hard', activeClasses: 'border-red-500 bg-red-50', icon: '🔴' },
 ]
 
 export default function GameCreationForm({ subjects, onSave, onCancel, initialData = null }) {
@@ -233,7 +233,7 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
               onClick={() => handleInputChange('difficulty', level.id)}
               className={`flex items-center space-x-2 px-4 py-2 rounded-xl border-2 transition-all duration-300 ${
                 gameData.difficulty === level.id
-                  ? `border-${level.color}-500 bg-${level.color}-50`
+                  ? level.activeClasses
                   : 'border-royalPurple-border hover:border-royalPurple-border'
               }`}
             >

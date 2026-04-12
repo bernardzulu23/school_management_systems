@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
@@ -47,6 +47,7 @@ import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeaching
 
 export default function HodDashboard() {
   const router = useRouter()
+  const queryClient = useQueryClient()
 
   // Enhanced state management
   const [departmentData, setDepartmentData] = useState({
@@ -70,6 +71,13 @@ export default function HodDashboard() {
 
   const [performanceData, setPerformanceData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedTerm, setSelectedTerm] = useState(() => {
+    const m = new Date().getMonth()
+    if (m <= 3) return 'Term 1'
+    if (m <= 7) return 'Term 2'
+    return 'Term 3'
+  })
+  const [selectedYear, setSelectedYear] = useState(() => String(new Date().getFullYear()))
 
   // Get current user data from auth context
   const { user: currentUser } = useAuth()
@@ -158,11 +166,44 @@ export default function HodDashboard() {
   })
 
   const { data: dashboardData } = useQuery({
-    queryKey: ['hod-dashboard'],
-    queryFn: () => api.getHodDashboard().then((res) => res.data),
+    queryKey: ['hod-dashboard', selectedTerm, selectedYear],
+    queryFn: () =>
+      api.getHodDashboard({ term: selectedTerm, year: selectedYear }).then((res) => res.data),
     staleTime: 60 * 1000,
     refetchOnWindowFocus: false,
   })
+
+  const { data: teacherProgressData } = useQuery({
+    queryKey: ['hod-teacher-progress', selectedTerm, selectedYear],
+    queryFn: async () => {
+      const qs = new URLSearchParams()
+      if (selectedTerm && selectedTerm !== 'All Terms') qs.set('term', selectedTerm)
+      if (selectedYear) qs.set('year', selectedYear)
+      const suffix = qs.toString()
+      const res = await api.get(`/dashboard/hod/teacher-progress${suffix ? `?${suffix}` : ''}`)
+      return res.data
+    },
+    staleTime: 60 * 1000,
+    refetchOnWindowFocus: false,
+  })
+
+  const updateTeacherProgress = async (teacherId, patch) => {
+    const termValue = selectedTerm && selectedTerm !== 'All Terms' ? selectedTerm : undefined
+    await fetch('/api/dashboard/hod/teacher-progress', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        teacherId,
+        ...(termValue ? { term: termValue } : {}),
+        year: selectedYear,
+        ...patch,
+      }),
+    })
+    await queryClient.invalidateQueries({
+      queryKey: ['hod-teacher-progress', selectedTerm, selectedYear],
+    })
+  }
 
   useEffect(() => {
     const data = dashboardData?.data
@@ -244,39 +285,18 @@ export default function HodDashboard() {
       route: '/dashboard/hod/cpd',
     },
     {
-      id: 'syllabus',
-      title: 'Syllabus File',
-      description: 'Curriculum and syllabus management',
-      icon: BookOpen,
-      route: '/dashboard/hod/syllabus',
-    },
-    {
-      id: 'assessments',
-      title: 'Assessment Results',
-      description: 'Student assessment and results for learners',
-      icon: ClipboardList,
-      route: '/dashboard/hod/assessment-results',
-    },
-    {
-      id: 'computer-sba',
-      title: 'Computer SBA File',
-      description: 'School-Based Assessment for computer subjects',
-      icon: Monitor,
-      route: '/dashboard/hod/computer-sba',
-    },
-    {
       id: 'timetable',
       title: 'Timetable & Class Allocation',
       description: 'Schedule and class management',
       icon: CalendarDays,
-      route: '/dashboard/hod/timetable',
+      route: '/dashboard/timetable/hod',
     },
     {
-      id: 'homework-checks',
-      title: 'Homework Checks',
-      description: 'Daily homework monitoring',
-      icon: CheckCircle,
-      route: '/dashboard/hod/homework-checks',
+      id: 'teacher-performance',
+      title: 'Teacher Performance',
+      description: 'Monitor teacher performance and effectiveness',
+      icon: TrendingUp,
+      route: '/dashboard/hod/teacher-performance',
     },
   ]
 
@@ -287,13 +307,6 @@ export default function HodDashboard() {
       description: 'Day-to-day operational tasks',
       icon: Clock,
       route: '/dashboard/hod/daily-routine',
-    },
-    {
-      id: 'administration',
-      title: 'Administration',
-      description: 'General administrative duties',
-      icon: Settings,
-      route: '/dashboard/hod/administration',
     },
   ]
 
@@ -318,9 +331,9 @@ export default function HodDashboard() {
     router.push(route)
   }
 
-  const renderDutySection = (title, duties, colorClass, bgClass) => (
+  const renderDutySection = (title, duties, headerBgClass, buttonHoverClasses) => (
     <Card className="mb-6">
-      <CardHeader className={`${bgClass} text-royalPurple-text1`}>
+      <CardHeader className={`${headerBgClass} text-royalPurple-text1`}>
         <CardTitle className="flex items-center">
           <Briefcase className="h-5 w-5 mr-2" />
           {title}
@@ -334,7 +347,7 @@ export default function HodDashboard() {
               <Button
                 key={duty.id}
                 variant="outline"
-                className={`h-auto p-4 justify-start text-left hover:${bgClass} hover:text-royalPurple-text1 transition-all duration-200`}
+                className={`h-auto p-4 justify-start text-left ${buttonHoverClasses} transition-all duration-200`}
                 onClick={() => handleDutyClick(duty.route)}
               >
                 <div className="flex items-start w-full">
@@ -404,6 +417,32 @@ export default function HodDashboard() {
                   </div>
                   <div className="text-sm text-orange-200">
                     {new Date().toLocaleDateString('en-US', { month: 'short' })}
+                  </div>
+                </div>
+                <div className="backdrop-blur-md bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-4">
+                  <div className="flex items-center gap-3">
+                    <div>
+                      <div className="text-xs text-royalPurple-text3 mb-1">Term</div>
+                      <select
+                        className="bg-royalPurple-deep border border-royalPurple-border rounded-lg px-3 py-2 text-sm text-royalPurple-text1 outline-none"
+                        value={selectedTerm}
+                        onChange={(e) => setSelectedTerm(e.target.value)}
+                      >
+                        <option value="All Terms">All Terms</option>
+                        <option value="Term 1">Term 1</option>
+                        <option value="Term 2">Term 2</option>
+                        <option value="Term 3">Term 3</option>
+                      </select>
+                    </div>
+                    <div>
+                      <div className="text-xs text-royalPurple-text3 mb-1">Year</div>
+                      <input
+                        className="bg-royalPurple-deep border border-royalPurple-border rounded-lg px-3 py-2 text-sm text-royalPurple-text1 outline-none w-24"
+                        value={selectedYear}
+                        onChange={(e) => setSelectedYear(e.target.value)}
+                        inputMode="numeric"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="w-16 h-16 rounded-full bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center text-royalPurple-text1 font-bold text-xl">
@@ -490,6 +529,162 @@ export default function HodDashboard() {
                 trend={{ isPositive: false, value: 2 }}
               />
             </div>
+
+            <Card variant="glass">
+              <CardHeader>
+                <CardTitle className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent flex items-center">
+                  <UserCheck className="h-6 w-6 mr-3 text-orange-400" />
+                  Teacher Progress & CPD ({teacherProgressData?.data?.term || 'Term'})
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div className="bg-royalPurple-deep/60 border border-royalPurple-border/40 rounded-xl p-4">
+                      <div className="text-sm text-royalPurple-text2 mb-2">Schemes of Work</div>
+                      <div className="flex items-end justify-between">
+                        <div className="text-2xl font-bold text-royalPurple-text1">
+                          {teacherProgressData?.data?.summary?.schemePercent || 0}%
+                        </div>
+                        <div className="text-sm text-royalPurple-text3">
+                          {teacherProgressData?.data?.summary?.schemeCount || 0}/
+                          {teacherProgressData?.data?.summary?.totalTeachers || 0}
+                        </div>
+                      </div>
+                      <div className="w-full bg-royalPurple-card2 rounded-full h-2 mt-3">
+                        <div
+                          className="bg-royalPurple-pill h-2 rounded-full"
+                          style={{
+                            width: `${teacherProgressData?.data?.summary?.schemePercent || 0}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="bg-royalPurple-deep/60 border border-royalPurple-border/40 rounded-xl p-4">
+                      <div className="text-sm text-royalPurple-text2 mb-2">Records of Work</div>
+                      <div className="flex items-end justify-between">
+                        <div className="text-2xl font-bold text-royalPurple-text1">
+                          {teacherProgressData?.data?.summary?.recordsPercent || 0}%
+                        </div>
+                        <div className="text-sm text-royalPurple-text3">
+                          {teacherProgressData?.data?.summary?.recordsCount || 0}/
+                          {teacherProgressData?.data?.summary?.totalTeachers || 0}
+                        </div>
+                      </div>
+                      <div className="w-full bg-royalPurple-card2 rounded-full h-2 mt-3">
+                        <div
+                          className="bg-royalPurple-success h-2 rounded-full"
+                          style={{
+                            width: `${teacherProgressData?.data?.summary?.recordsPercent || 0}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="bg-royalPurple-deep/60 border border-royalPurple-border/40 rounded-xl p-4">
+                      <div className="text-sm text-royalPurple-text2 mb-2">CPD Hours (Term)</div>
+                      <div className="flex items-end justify-between">
+                        <div className="text-2xl font-bold text-royalPurple-text1">
+                          {teacherProgressData?.data?.summary?.cpdPercent || 0}%
+                        </div>
+                        <div className="text-sm text-royalPurple-text3">
+                          {teacherProgressData?.data?.summary?.totalCpdHours || 0}/
+                          {teacherProgressData?.data?.summary?.totalCpdTarget || 0}
+                        </div>
+                      </div>
+                      <div className="w-full bg-royalPurple-card2 rounded-full h-2 mt-3">
+                        <div
+                          className="bg-royalPurple-accent h-2 rounded-full"
+                          style={{
+                            width: `${teacherProgressData?.data?.summary?.cpdPercent || 0}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="text-left text-royalPurple-text3">
+                          <th className="py-2 pr-4 font-semibold">Teacher</th>
+                          <th className="py-2 pr-4 font-semibold">Scheme</th>
+                          <th className="py-2 pr-4 font-semibold">Records</th>
+                          <th className="py-2 pr-4 font-semibold">CPD Hours</th>
+                          <th className="py-2 pr-4 font-semibold">Target</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(teacherProgressData?.data?.teachers || []).slice(0, 10).map((t) => (
+                          <tr key={t.teacherId} className="border-t border-royalPurple-border/30">
+                            <td className="py-3 pr-4">
+                              <div className="text-royalPurple-text1 font-medium">{t.name}</div>
+                              <div className="text-royalPurple-text3 text-xs">{t.email}</div>
+                            </td>
+                            <td className="py-3 pr-4">
+                              <input
+                                type="checkbox"
+                                checked={t.schemeSubmitted === true}
+                                onChange={(e) =>
+                                  updateTeacherProgress(t.teacherId, {
+                                    schemeSubmitted: e.target.checked,
+                                  })
+                                }
+                              />
+                            </td>
+                            <td className="py-3 pr-4">
+                              <input
+                                type="checkbox"
+                                checked={t.recordsSubmitted === true}
+                                onChange={(e) =>
+                                  updateTeacherProgress(t.teacherId, {
+                                    recordsSubmitted: e.target.checked,
+                                  })
+                                }
+                              />
+                            </td>
+                            <td className="py-3 pr-4">
+                              <input
+                                type="number"
+                                min="0"
+                                defaultValue={t.cpdHours ?? 0}
+                                className="bg-royalPurple-deep border border-royalPurple-border rounded-lg px-3 py-2 text-royalPurple-text1 w-28"
+                                onBlur={(e) =>
+                                  updateTeacherProgress(t.teacherId, { cpdHours: e.target.value })
+                                }
+                              />
+                            </td>
+                            <td className="py-3 pr-4">
+                              <input
+                                type="number"
+                                min="0"
+                                defaultValue={t.cpdTargetHours ?? 10}
+                                className="bg-royalPurple-deep border border-royalPurple-border rounded-lg px-3 py-2 text-royalPurple-text1 w-28"
+                                onBlur={(e) =>
+                                  updateTeacherProgress(t.teacherId, {
+                                    cpdTargetHours: e.target.value,
+                                  })
+                                }
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="flex justify-end mt-5">
+                    <Button
+                      className="bg-orange-600/60 hover:bg-orange-600/80 text-royalPurple-text1 border border-orange-400/50"
+                      onClick={() => router.push('/dashboard/hod/cpd')}
+                    >
+                      Open CPD Tracker
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Advanced HOD Features */}
             <Card variant="glass">
@@ -929,32 +1124,32 @@ export default function HodDashboard() {
             {renderDutySection(
               'File Management',
               fileManagementDuties,
-              'text-royalPurple-accentTx',
-              'bg-royalPurple-accent'
+              'bg-royalPurple-accent',
+              'hover:bg-royalPurple-accent hover:text-royalPurple-text1'
             )}
 
             {/* Academic Management Section */}
             {renderDutySection(
               'Academic Management',
               academicManagementDuties,
-              'text-royalPurple-pillTx',
-              'bg-royalPurple-pill'
+              'bg-royalPurple-pill',
+              'hover:bg-royalPurple-pill hover:text-royalPurple-text1'
             )}
 
             {/* Daily Operations Section */}
             {renderDutySection(
               'Daily Operations',
               dailyOperationsDuties,
-              'text-royalPurple-successTx',
-              'bg-royalPurple-success'
+              'bg-royalPurple-success',
+              'hover:bg-royalPurple-success hover:text-royalPurple-text1'
             )}
 
             {/* Financial Management Section */}
             {renderDutySection(
               'Financial Management',
               financialManagementDuties,
-              'text-orange-600',
-              'bg-orange-600'
+              'bg-orange-600',
+              'hover:bg-orange-600 hover:text-royalPurple-text1'
             )}
           </div>
 
