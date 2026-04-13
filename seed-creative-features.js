@@ -8,172 +8,142 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 const CREATIVE_FEATURES = [
-  // ── Creative Teaching Tools ──────────────────────────────
   {
-    featureId: 'interactive-whiteboard',
+    featureId: 'interactive_whiteboard',
     name: 'Interactive Whiteboard',
     description:
       'Digital canvas for real-time drawing, annotation and collaboration between teacher and students.',
     category: 'creative',
-    icon: 'Palette',
+    iconName: 'PenTool',
     difficulty: 'Beginner',
     estimatedTime: 'Instant',
-    route: '/dashboard/teacher/whiteboard',
-    isActive: true,
-    isFeatured: true,
-    accessRoles: ['teacher', 'hod', 'headteacher', 'administrator'],
-    tags: ['drawing', 'collaboration', 'visual'],
-    order: 1,
+    roles: ['teacher', 'student', 'hod', 'headteacher', 'administrator'],
   },
   {
-    featureId: 'ai-story-weaver',
+    featureId: 'ai_story_generator',
     name: 'AI Story Weaver',
     description:
       'Generate engaging Zambian-context educational stories, fables, and poems using AI for any subject and grade.',
     category: 'creative',
-    icon: 'BookOpen',
+    iconName: 'BookOpen',
     difficulty: 'Intermediate',
     estimatedTime: '15-30 mins',
-    route: '/dashboard/teacher/story-weaver',
-    isActive: true,
-    isFeatured: true,
-    accessRoles: ['teacher', 'hod', 'headteacher', 'administrator'],
-    tags: ['AI', 'stories', 'English', 'writing'],
-    order: 2,
+    roles: ['teacher', 'hod', 'headteacher', 'administrator'],
   },
   {
-    featureId: 'digital-music-composer',
+    featureId: 'music_composer',
     name: 'Digital Music Composer',
     description:
       'Create and play music sequences using an interactive note sequencer with piano roll visualisation.',
     category: 'creative',
-    icon: 'Music',
+    iconName: 'Music',
     difficulty: 'Beginner',
     estimatedTime: '20 mins',
-    route: '/dashboard/student/music',
-    isActive: true,
-    isFeatured: false,
-    accessRoles: ['student', 'teacher'],
-    tags: ['music', 'creative arts', 'composition'],
-    order: 3,
+    roles: ['student', 'teacher'],
   },
   {
-    featureId: 'ai-lesson-planner',
+    featureId: 'ai_lesson_planner',
     name: 'AI Lesson Planner',
     description:
       'Generate complete lesson plans for any subject and grade using AI, aligned to the Zambian curriculum.',
     category: 'creative',
-    icon: 'ClipboardList',
+    iconName: 'ClipboardList',
     difficulty: 'Beginner',
     estimatedTime: '5 mins',
-    route: '/dashboard/teacher/lesson-planner',
-    isActive: true,
-    isFeatured: true,
-    accessRoles: ['teacher', 'hod', 'headteacher', 'administrator'],
-    tags: ['AI', 'planning', 'curriculum'],
-    order: 4,
+    roles: ['teacher', 'hod', 'headteacher', 'administrator'],
   },
   {
-    featureId: 'ai-quiz-maker',
+    featureId: 'ai_quiz_maker',
     name: 'AI Quiz Maker',
     description:
       'Instantly generate MCQ, true/false, and short answer questions for any topic and difficulty level.',
     category: 'creative',
-    icon: 'HelpCircle',
+    iconName: 'HelpCircle',
     difficulty: 'Beginner',
     estimatedTime: '10 mins',
-    route: '/dashboard/teacher/quiz-maker',
-    isActive: true,
-    isFeatured: true,
-    accessRoles: ['teacher', 'hod', 'headteacher', 'administrator'],
-    tags: ['AI', 'assessment', 'quiz', 'ECZ'],
-    order: 5,
+    roles: ['teacher', 'hod', 'headteacher', 'administrator'],
   },
   {
-    featureId: 'ai-report-comments',
+    featureId: 'ai_report_comments',
     name: 'AI Report Card Comments',
     description:
       'Auto-generate professional student report card comments based on performance data.',
     category: 'creative',
-    icon: 'FileText',
+    iconName: 'FileText',
     difficulty: 'Beginner',
     estimatedTime: '5 mins',
-    route: '/dashboard/teacher/report-comments',
-    isActive: true,
-    isFeatured: false,
-    accessRoles: ['teacher', 'hod', 'headteacher', 'administrator'],
-    tags: ['AI', 'reports', 'comments'],
-    order: 6,
+    roles: ['teacher', 'hod', 'headteacher', 'administrator'],
   },
 
-  // ── STEM Learning Features ────────────────────────────────
   {
-    featureId: 'virtual-science-lab',
+    featureId: 'virtual_lab',
     name: 'Virtual Science Lab',
     description:
       'Interactive PhET simulations for Physics, Chemistry, and Biology — no equipment or chemicals needed.',
     category: 'stem',
-    icon: 'FlaskConical',
+    iconName: 'FlaskConical',
     difficulty: 'Advanced',
     estimatedTime: '45 mins',
-    route: '/dashboard/student/virtual-lab',
-    isActive: true,
-    isFeatured: true,
-    accessRoles: ['student', 'teacher', 'hod'],
-    tags: ['science', 'physics', 'chemistry', 'biology', 'simulation'],
-    order: 7,
+    roles: ['student', 'teacher', 'hod', 'headteacher', 'administrator'],
   },
   {
-    featureId: 'code-playground',
+    featureId: 'code_playground',
     name: 'Code Playground',
     description:
       'Write and run Python, JavaScript, Java, C, and Bash code in the browser with instant output.',
     category: 'stem',
-    icon: 'Code2',
+    iconName: 'Code2',
     difficulty: 'Intermediate',
     estimatedTime: 'Flexible',
-    route: '/dashboard/student/code-playground',
-    isActive: true,
-    isFeatured: true,
-    accessRoles: ['student', 'teacher'],
-    tags: ['coding', 'programming', 'ICT', 'Python', 'JavaScript'],
-    order: 8,
+    roles: ['student', 'teacher', 'hod', 'headteacher', 'administrator'],
   },
   {
-    featureId: '3d-shape-builder',
+    featureId: '3d_modeler',
     name: '3D Shape Builder',
     description:
       'Build and rotate 3D geometric shapes to understand volume, surface area, and spatial relationships.',
     category: 'stem',
-    icon: 'Box',
+    iconName: 'Box',
     difficulty: 'Advanced',
     estimatedTime: '30 mins',
-    route: '/dashboard/student/3d-shapes',
-    isActive: true,
-    isFeatured: false,
-    accessRoles: ['student', 'teacher'],
-    tags: ['mathematics', '3D', 'geometry', 'shapes'],
-    order: 9,
+    roles: ['student', 'teacher', 'hod', 'headteacher', 'administrator'],
   },
   {
-    featureId: 'ecz-practice',
+    featureId: 'ecz_practice',
     name: 'ECZ Exam Practice',
     description:
       'AI-generated past-paper style questions for Grade 9 and Grade 12 ECZ examinations.',
     category: 'stem',
-    icon: 'GraduationCap',
+    iconName: 'GraduationCap',
     difficulty: 'Intermediate',
     estimatedTime: '30-60 mins',
-    route: '/dashboard/student/ecz-practice',
-    isActive: true,
-    isFeatured: true,
-    accessRoles: ['student', 'teacher', 'hod'],
-    tags: ['ECZ', 'exam', 'Grade 9', 'Grade 12', 'practice'],
-    order: 10,
+    roles: ['student', 'teacher', 'hod', 'headteacher', 'administrator'],
   },
 ]
 
+function loadEnvIfNeeded() {
+  if (process.env.DATABASE_URL) return
+  const fs = require('fs')
+  const path = require('path')
+  const envPath = path.join(process.cwd(), '.env')
+  if (!fs.existsSync(envPath)) return
+  const raw = fs.readFileSync(envPath, 'utf8')
+  for (const line of raw.split(/\r?\n/)) {
+    const trimmed = line.trim()
+    if (!trimmed || trimmed.startsWith('#')) continue
+    const idx = trimmed.indexOf('=')
+    if (idx <= 0) continue
+    const key = trimmed.slice(0, idx).trim()
+    let val = trimmed.slice(idx + 1).trim()
+    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+      val = val.slice(1, -1)
+    }
+    if (!process.env[key]) process.env[key] = val
+  }
+}
+
 async function seedCreativeFeatures(schoolId = null) {
+  loadEnvIfNeeded()
   console.log('🌱 Seeding creative features...')
 
   let schools = []
@@ -202,15 +172,10 @@ async function seedCreativeFeatures(schoolId = null) {
           name: feature.name,
           description: feature.description,
           category: feature.category,
-          icon: feature.icon,
+          iconName: feature.iconName,
           difficulty: feature.difficulty,
           estimatedTime: feature.estimatedTime,
-          route: feature.route,
-          isActive: feature.isActive,
-          isFeatured: feature.isFeatured,
-          accessRoles: feature.accessRoles,
-          tags: feature.tags,
-          order: feature.order,
+          roles: feature.roles,
         },
         create: {
           schoolId: school.id,
@@ -218,15 +183,10 @@ async function seedCreativeFeatures(schoolId = null) {
           name: feature.name,
           description: feature.description,
           category: feature.category,
-          icon: feature.icon,
+          iconName: feature.iconName,
           difficulty: feature.difficulty,
           estimatedTime: feature.estimatedTime,
-          route: feature.route,
-          isActive: feature.isActive,
-          isFeatured: feature.isFeatured,
-          accessRoles: feature.accessRoles,
-          tags: feature.tags,
-          order: feature.order,
+          roles: feature.roles,
         },
       })
       process.stdout.write('.')
@@ -237,9 +197,22 @@ async function seedCreativeFeatures(schoolId = null) {
   console.log('✅ Creative features seeding complete!')
 }
 
-seedCreativeFeatures()
+const arg = process.argv[2] || null
+if (arg === '--help' || arg === '-h') {
+  console.log('Usage: node seed-creative-features.js [schoolId]')
+  process.exit(0)
+}
+
+const schoolIdArg = arg && String(arg).startsWith('-') ? null : arg
+
+seedCreativeFeatures(schoolIdArg)
   .catch((e) => {
     console.error(e)
+    if (String(e?.message || '').includes("Can't reach database server")) {
+      console.error(
+        'Tip: run this with Railway env/network via: railway run node seed-creative-features.js'
+      )
+    }
     process.exit(1)
   })
   .finally(() => prisma.$disconnect())

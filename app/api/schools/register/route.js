@@ -225,13 +225,17 @@ export async function POST(request) {
     })
 
     console.log(`📧 Sending verification email to: ${adminEmail}`)
-    await sendSchoolVerificationEmail({
+    const emailSent = await sendSchoolVerificationEmail({
       to: adminEmail,
       schoolName: created.name,
       subdomain: created.subdomain,
       verifyUrl,
     })
-    console.log(`✅ Verification email sent`)
+    if (!emailSent) {
+      console.error(`❌ Failed to send verification email to ${adminEmail}`)
+    } else {
+      console.log(`✅ Verification email sent`)
+    }
 
     return NextResponse.json({ success: true, requiresVerification: true })
   } catch (error) {
