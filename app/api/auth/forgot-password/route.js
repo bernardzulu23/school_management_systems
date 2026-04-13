@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import crypto from 'crypto'
 import { sendResetEmail } from '@/config/email'
+import { rateLimiter } from '@/lib/middleware/rateLimiter'
 
 export async function POST(request) {
   try {
@@ -12,6 +13,15 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 })
     }
 
+    const normalizedEmail = String(email).trim().toLowerCase()
+    const rl = rateLimiter(request, {
+      limit: process.env.NODE_ENV === 'production' ? 5 : 50,
+      windowMs: 15 * 60 * 1000,
+      keyPrefix: 'auth_forgot_',
+      keyGenerator: ({ ip }) => `${ip}-${normalizedEmail}`,
+    })
+    if (rl.isLimited) return rl.response
+
     // Resolve School
     const schoolId = await getSchoolIdFromRequest(request, subdomain)
     if (!schoolId) {
@@ -20,7 +30,7 @@ export async function POST(request) {
 
     // Find User
     const user = await prisma.user.findUnique({
-      where: { schoolId_email: { schoolId, email: String(email).toLowerCase() } },
+      where: { schoolId_email: { schoolId, email: normalizedEmail } },
     })
 
     if (!user) {
@@ -51,7 +61,7 @@ export async function POST(request) {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || originFromHeaders
     const resetLink = `${baseUrl}/reset-password/${resetToken}`
 
-    const sent = await sendResetEmail(String(email).toLowerCase(), resetLink)
+    const sent = await sendResetEmail(normalizedEmail, resetLink)
     if (!sent) {
       console.log('[forgot-password] Email send failed. Reset URL:', resetLink)
     }

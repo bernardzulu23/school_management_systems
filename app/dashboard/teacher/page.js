@@ -51,6 +51,7 @@ import {
 import Link from 'next/link'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { SCHOOL_SUBJECTS, getSubjectsByIds } from '@/data/subjects'
+import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeachingHub'
 // Temporarily commented out to isolate error
 // import {
 //   renderCurriculumMapping,
@@ -324,7 +325,7 @@ export default function TeacherDashboard() {
   const renderAdvancedTeacherFeatures = () => {
     switch (activeAdvancedTab) {
       case 'creative-teaching':
-        return <div className="p-4 text-royalPurple-text1">Creative Teaching Hub - Coming Soon</div>
+        return <CreativeTeachingHub />
       case 'curriculum-mapping':
         return <div className="p-4 text-royalPurple-text1">Curriculum Mapping - Coming Soon</div>
       case 'differentiated-instruction':

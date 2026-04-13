@@ -1,34 +1,26 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { headers } from 'next/headers'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function GET(request) {
   try {
-    const headersList = headers()
-    const userId = headersList.get('x-user-id')
-    
-    // For demo purposes, we'll fetch the first student if no user ID is provided
-    // In a real app, we would use the authenticated user's ID
-    let student = null
-    
-    if (userId) {
-      student = await prisma.student.findUnique({
-        where: { userId: userId },
-        include: { user: true }
-      })
-    }
-    
-    if (!student) {
-      student = await prisma.student.findFirst({
-        include: { user: true }
-      })
+    const auth = authMiddleware(request)
+    if (!auth.isAuthenticated) return auth.response
+    if (!roleCheck(auth.user, ['STUDENT', 'student'])) {
+      return NextResponse.json({ error: 'Forbidden: Student access only' }, { status: 403 })
     }
 
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+    const student = await prisma.student.findFirst({
+      where: { userId: auth.user.id, schoolId },
+      select: { id: true, name: true, class: true },
+    })
+
     if (!student) {
-      return NextResponse.json(
-        { error: 'Student profile not found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Student profile not found' }, { status: 404 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -38,23 +30,18 @@ export async function GET(request) {
 
     const [goals, total] = await Promise.all([
       prisma.goal.findMany({
-        where: { studentId: student.id },
-        include: {
-          milestones: {
-            orderBy: { createdAt: 'asc' }
-          }
-        },
+        where: { schoolId, studentId: student.id },
         orderBy: { createdAt: 'desc' },
         skip,
-        take: limit
+        take: limit,
       }),
-      prisma.goal.count({ where: { studentId: student.id } })
+      prisma.goal.count({ where: { schoolId, studentId: student.id } }),
     ])
 
     // Group goals by type for the frontend
     const groupedGoals = {
-      academic: goals.filter(g => g.type === 'academic').map(formatGoal),
-      personal: goals.filter(g => g.type === 'personal').map(formatGoal)
+      academic: goals.filter((g) => g.category !== 'personal').map(formatGoal),
+      personal: goals.filter((g) => g.category === 'personal').map(formatGoal),
     }
 
     return NextResponse.json({
@@ -64,16 +51,12 @@ export async function GET(request) {
         total,
         page,
         limit,
-        totalPages: Math.ceil(total / limit)
-      }
+        totalPages: Math.ceil(total / limit),
+      },
     })
-
   } catch (error) {
     console.error('Fetch student goals error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch goals' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to fetch goals' }, { status: 500 })
   }
 }
 
@@ -83,58 +66,66 @@ function formatGoal(goal) {
     title: goal.title,
     category: goal.category,
     description: goal.description,
-    targetDate: goal.targetDate.toISOString().split('T')[0], // YYYY-MM-DD
+    targetDate: goal.deadline ? goal.deadline.toISOString().split('T')[0] : '', // YYYY-MM-DD
     progress: goal.progress,
-    status: goal.status,
-    priority: goal.priority,
-    currentValue: goal.currentValue,
-    targetValue: goal.targetValue,
-    milestones: goal.milestones.map(m => ({
-      id: m.id,
-      name: m.name,
-      completed: m.completed
-    }))
+    status:
+      goal.status === 'in_progress'
+        ? 'in_progress'
+        : goal.status === 'completed'
+          ? 'completed'
+          : 'pending',
+    priority: 'medium',
+    currentValue: '',
+    targetValue: '',
+    milestones: [],
   }
 }
 
 export async function POST(request) {
   try {
     const body = await request.json()
-    const { title, type, category, description, targetDate, priority, currentValue, targetValue, milestones } = body
+    const auth = authMiddleware(request)
+    if (!auth.isAuthenticated) return auth.response
+    if (!roleCheck(auth.user, ['STUDENT', 'student'])) {
+      return NextResponse.json({ error: 'Forbidden: Student access only' }, { status: 403 })
+    }
 
-    const student = await prisma.student.findFirst() // Demo: grab first student
-    
-    if (!student) {
-      return NextResponse.json({ error: 'Student not found' }, { status: 404 })
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+    const student = await prisma.student.findFirst({
+      where: { userId: auth.user.id, schoolId },
+      select: { id: true },
+    })
+    if (!student) return NextResponse.json({ error: 'Student not found' }, { status: 404 })
+
+    const title = String(body?.title || '').trim()
+    if (!title) return NextResponse.json({ error: 'Title is required' }, { status: 400 })
+
+    const type = String(body?.type || 'academic')
+      .trim()
+      .toLowerCase()
+    const category = type === 'personal' ? 'personal' : 'academic'
+    const description = body?.description ? String(body.description) : null
+    const deadline = body?.targetDate ? new Date(body.targetDate) : null
+    if (deadline && Number.isNaN(deadline.getTime())) {
+      return NextResponse.json({ error: 'Invalid targetDate' }, { status: 400 })
     }
 
     const newGoal = await prisma.goal.create({
       data: {
+        schoolId,
         studentId: student.id,
         title,
-        type,
-        category,
         description,
-        targetDate: new Date(targetDate),
+        deadline,
         status: 'in_progress',
-        priority,
         progress: 0,
-        currentValue,
-        targetValue,
-        milestones: {
-          create: milestones?.map(m => ({
-            name: m.name,
-            completed: false
-          })) || []
-        }
+        category,
       },
-      include: {
-        milestones: true
-      }
     })
 
     return NextResponse.json({ success: true, data: formatGoal(newGoal) })
-
   } catch (error) {
     console.error('Create goal error:', error)
     return NextResponse.json({ error: 'Failed to create goal' }, { status: 500 })
@@ -144,38 +135,66 @@ export async function POST(request) {
 export async function PUT(request) {
   try {
     const body = await request.json()
+    const auth = authMiddleware(request)
+    if (!auth.isAuthenticated) return auth.response
+    if (!roleCheck(auth.user, ['STUDENT', 'student'])) {
+      return NextResponse.json({ error: 'Forbidden: Student access only' }, { status: 403 })
+    }
+
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+    const student = await prisma.student.findFirst({
+      where: { userId: auth.user.id, schoolId },
+      select: { id: true },
+    })
+    if (!student) return NextResponse.json({ error: 'Student not found' }, { status: 404 })
+
     const { id, ...updates } = body
 
     if (!id) return NextResponse.json({ error: 'Goal ID required' }, { status: 400 })
 
-    // Handle milestones update separately if provided
-    if (updates.milestones) {
-       // This is a simplified update logic. 
-       // In a real app, you might want to handle add/update/delete of milestones more carefully.
-       // Here we just update the completed status of existing ones.
-       for (const m of updates.milestones) {
-         if (m.id) {
-           await prisma.goalMilestone.update({
-             where: { id: m.id },
-             data: { completed: m.completed }
-           })
-         }
-       }
-       delete updates.milestones
+    const data = {}
+    if (updates.title !== undefined) {
+      const t = String(updates.title || '').trim()
+      if (!t) return NextResponse.json({ error: 'Invalid title' }, { status: 400 })
+      data.title = t
+    }
+    if (updates.description !== undefined) {
+      data.description = updates.description ? String(updates.description) : null
+    }
+    if (updates.targetDate !== undefined) {
+      const d = updates.targetDate ? new Date(updates.targetDate) : null
+      if (d && Number.isNaN(d.getTime()))
+        return NextResponse.json({ error: 'Invalid targetDate' }, { status: 400 })
+      data.deadline = d
+    }
+    if (updates.status !== undefined) {
+      const s = String(updates.status || '')
+        .trim()
+        .toLowerCase()
+      if (!['pending', 'in_progress', 'completed'].includes(s)) {
+        return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
+      }
+      data.status = s
+    }
+    if (updates.progress !== undefined) {
+      const p = Number(updates.progress)
+      if (!Number.isFinite(p) || p < 0 || p > 100)
+        return NextResponse.json({ error: 'Invalid progress' }, { status: 400 })
+      data.progress = Math.round(p)
     }
 
-    if (updates.targetDate) {
-      updates.targetDate = new Date(updates.targetDate)
-    }
-
-    const updatedGoal = await prisma.goal.update({
-      where: { id },
-      data: updates,
-      include: { milestones: true }
+    const updated = await prisma.goal.updateMany({
+      where: { id, schoolId, studentId: student.id },
+      data,
     })
+    if (updated.count === 0) return NextResponse.json({ error: 'Goal not found' }, { status: 404 })
 
+    const updatedGoal = await prisma.goal.findFirst({
+      where: { id, schoolId, studentId: student.id },
+    })
     return NextResponse.json({ success: true, data: formatGoal(updatedGoal) })
-
   } catch (error) {
     console.error('Update goal error:', error)
     return NextResponse.json({ error: 'Failed to update goal' }, { status: 500 })
@@ -184,17 +203,32 @@ export async function PUT(request) {
 
 export async function DELETE(request) {
   try {
+    const auth = authMiddleware(request)
+    if (!auth.isAuthenticated) return auth.response
+    if (!roleCheck(auth.user, ['STUDENT', 'student'])) {
+      return NextResponse.json({ error: 'Forbidden: Student access only' }, { status: 403 })
+    }
+
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+    const student = await prisma.student.findFirst({
+      where: { userId: auth.user.id, schoolId },
+      select: { id: true },
+    })
+    if (!student) return NextResponse.json({ error: 'Student not found' }, { status: 404 })
+
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')
 
     if (!id) return NextResponse.json({ error: 'Goal ID required' }, { status: 400 })
 
-    await prisma.goal.delete({
-      where: { id }
+    const deleted = await prisma.goal.deleteMany({
+      where: { id, schoolId, studentId: student.id },
     })
+    if (deleted.count === 0) return NextResponse.json({ error: 'Goal not found' }, { status: 404 })
 
     return NextResponse.json({ success: true })
-
   } catch (error) {
     console.error('Delete goal error:', error)
     return NextResponse.json({ error: 'Failed to delete goal' }, { status: 500 })

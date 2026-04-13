@@ -40,7 +40,7 @@ function WhiteboardLoader() {
   )
 }
 
-export default function InteractiveWhiteboard({ user }) {
+export default function InteractiveWhiteboard({ user, height = '100vh' }) {
   const [excalidrawAPI, setExcalidrawAPI] = useState(null)
   const [saved, setSaved] = useState(false)
   const [boardName, setBoardName] = useState('My Whiteboard')
@@ -92,9 +92,7 @@ export default function InteractiveWhiteboard({ user }) {
   }
 
   return (
-    <div
-      style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#170d28' }}
-    >
+    <div style={{ display: 'flex', flexDirection: 'column', height, background: '#170d28' }}>
       <div
         style={{
           display: 'flex',

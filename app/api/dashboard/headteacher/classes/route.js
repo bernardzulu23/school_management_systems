@@ -1,52 +1,69 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
-export async function GET() {
+export async function GET(request) {
   try {
+    const auth = authMiddleware(request)
+    if (!auth.isAuthenticated) return auth.response
+    if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    if (!schoolId) {
+      return NextResponse.json({ error: 'School context required' }, { status: 400 })
+    }
+
     const classes = await prisma.class.findMany({
-      orderBy: { name: 'asc' }
+      where: { schoolId },
+      orderBy: { name: 'asc' },
     })
 
     // Fetch related data
     const [allStudents, allResults, teachers] = await Promise.all([
       // Fetch all students to group manually
       prisma.student.findMany({
-        select: { class: true }
+        where: { schoolId },
+        select: { class: true },
       }),
       // Fetch all results to aggregate manually
       prisma.result.findMany({
+        where: { schoolId },
         include: {
           student: {
-            select: { class: true }
+            select: { class: true },
           },
           subject: {
-            select: { name: true }
-          }
-        }
+            select: { name: true },
+          },
+        },
       }),
       // Fetch all teachers to map names
       prisma.teacher.findMany({
+        where: { schoolId },
         include: {
           user: {
-            select: { name: true }
-          }
-        }
-      })
+            select: { name: true },
+          },
+        },
+      }),
     ])
 
     // Group students by class manually
     const studentsByClass = []
     const classCountMap = {}
-    
-    allStudents.forEach(s => {
+
+    allStudents.forEach((s) => {
       const className = s.class || 'Unknown'
       classCountMap[className] = (classCountMap[className] || 0) + 1
     })
 
-    Object.keys(classCountMap).forEach(className => {
+    Object.keys(classCountMap).forEach((className) => {
       studentsByClass.push({
         class: className,
-        _count: { _all: classCountMap[className] }
+        _count: { _all: classCountMap[className] },
       })
     })
 
@@ -61,10 +78,10 @@ export async function GET() {
     const subjectsMap = {}
     const classScoreCounts = {}
 
-    allResults.forEach(result => {
+    allResults.forEach((result) => {
       const className = result.student?.class
       const subjectName = result.subject?.name
-      
+
       if (!className) return
 
       // Performance Aggregation
@@ -85,7 +102,7 @@ export async function GET() {
     })
 
     // Finalize averages
-    Object.keys(performanceMap).forEach(className => {
+    Object.keys(performanceMap).forEach((className) => {
       if (classScoreCounts[className] > 0) {
         performanceMap[className] = performanceMap[className] / classScoreCounts[className]
       }
@@ -97,21 +114,21 @@ export async function GET() {
     }, {})
 
     // Combine data
-    const classesData = classes.map(cls => ({
+    const classesData = classes.map((cls) => ({
       id: cls.id,
       name: cls.name,
       yearGroup: cls.level || 'General', // Default if level is missing
       classTeacher: teacherMap[cls.classTeacherId] || 'Unassigned',
       currentEnrollment: enrollmentMap[cls.name] || 0,
       maxCapacity: cls.capacity,
-      subjects: subjectsMap[cls.name] ? Array.from(subjectsMap[cls.name]).slice(0, 5) : [], 
+      subjects: subjectsMap[cls.name] ? Array.from(subjectsMap[cls.name]).slice(0, 5) : [],
       averagePerformance: Math.round(performanceMap[cls.name] || 0),
-      attendanceRate: 0 // TODO: Implement Attendance model
+      attendanceRate: 0, // TODO: Implement Attendance model
     }))
 
     return NextResponse.json({ success: true, data: classesData })
   } catch (error) {
     console.error('Error fetching classes data:', error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to fetch classes data' }, { status: 500 })
   }
 }

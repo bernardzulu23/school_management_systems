@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { getAuthUser } from '@/lib/middleware/auth'
+import { rateLimiter } from '@/lib/middleware/rateLimiter'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -12,6 +13,14 @@ export async function POST(request) {
   if (!allowedRoles.includes(String(user.role || '').toLowerCase())) {
     return NextResponse.json({ error: 'Access denied' }, { status: 403 })
   }
+
+  const rl = rateLimiter(request, {
+    limit: process.env.NODE_ENV === 'production' ? 30 : 300,
+    windowMs: 60 * 60 * 1000,
+    keyPrefix: 'ai_story_weaver_',
+    keyGenerator: ({ ip }) => `${ip}-${String(user.id || '')}`,
+  })
+  if (rl.isLimited) return rl.response
 
   const body = await request.json().catch(() => ({}))
   const grade = String(body?.grade || '').trim()

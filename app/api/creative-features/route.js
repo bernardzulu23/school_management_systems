@@ -1,39 +1,39 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
-import { requireRole } from '@/lib/middleware/requireRole'
+import { getAuthUser } from '@/lib/middleware/auth'
 
-const ALLOWED_ROLES = ['student', 'teacher', 'HOD', 'hod', 'headteacher']
+const ADMIN_ROLES = new Set(['headteacher', 'administrator', 'admin', 'superadmin'])
 
-const ACCESS = {
-  interactive_whiteboard: { headteacher: 'partial', hod: 'full', teacher: 'full', student: 'none' },
-  ai_story_generator: { headteacher: 'full', hod: 'full', teacher: 'full', student: 'none' },
-  virtual_lab: { headteacher: 'none', hod: 'view', teacher: 'full', student: 'full' },
-  code_playground: { headteacher: 'none', hod: 'none', teacher: 'partial', student: 'full' },
-  music_composer: { headteacher: 'none', hod: 'none', teacher: 'none', student: 'full' },
-  '3d_modeler': { headteacher: 'none', hod: 'none', teacher: 'none', student: 'full' },
+const ROUTE_BY_FEATURE_ID = {
+  interactive_whiteboard: '/dashboard/teacher/whiteboard',
+  ai_story_generator: '/dashboard/teacher/story-weaver',
+  music_composer: '/dashboard/student/music',
+  virtual_lab: '/dashboard/student/virtual-lab',
+  code_playground: '/dashboard/student/code-playground',
+  '3d_modeler': '/dashboard/student/3d-shapes',
+  ai_lesson_planner: '/dashboard/teacher/lesson-planner',
+  ai_quiz_maker: '/dashboard/teacher/quiz-maker',
+  ai_report_comments: '/dashboard/teacher/report-comments',
+  ecz_practice: '/dashboard/student/ecz-practice',
 }
 
 function normalizeRole(value) {
   const r = String(value || '')
     .trim()
     .toLowerCase()
-  if (r === 'headteacher') return 'headteacher'
-  if (r === 'teacher') return 'teacher'
-  if (r === 'student') return 'student'
   if (r === 'hod' || r === 'head of department') return 'hod'
   return r
 }
 
 export async function GET(request) {
-  const auth = requireRole(request, ALLOWED_ROLES)
-  if (!auth.isAuthenticated) return auth.response
-  if (auth.denied) return auth.response
+  const schoolId = await getSchoolIdFromRequest(request)
+  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  const user = await getAuthUser(request)
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const role = normalizeRole(auth.user?.role)
+  const userRole = normalizeRole(user.role)
 
   const features = await prisma.creativeFeature.findMany({
     where: { schoolId },
@@ -50,15 +50,29 @@ export async function GET(request) {
     },
   })
 
-  const decorated = features
-    .map((f) => {
-      const access = ACCESS[f.featureId]?.[role] || 'none'
-      return {
-        ...f,
-        access,
-      }
-    })
-    .filter((f) => f.access !== 'none')
+  const accessible = features.filter((f) => {
+    if (ADMIN_ROLES.has(userRole)) return true
+    return Array.isArray(f.roles) && f.roles.some((r) => normalizeRole(r) === userRole)
+  })
 
-  return NextResponse.json({ success: true, data: decorated })
+  const enriched = accessible.map((f) => ({
+    ...f,
+    route: ROUTE_BY_FEATURE_ID[f.featureId] || null,
+  }))
+
+  const creative = enriched.filter((f) => f.category === 'creative')
+  const stem = enriched.filter((f) => f.category === 'stem')
+  const featured = enriched.slice(0, 4)
+
+  return NextResponse.json({
+    stats: {
+      creativeTools: creative.length,
+      stemFeatures: stem.length,
+      availableFeatures: enriched.length,
+    },
+    featured,
+    creative,
+    stem,
+    all: enriched,
+  })
 }

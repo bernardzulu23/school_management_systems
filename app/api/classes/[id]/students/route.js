@@ -1,9 +1,16 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 
 export async function GET(request, { params }) {
   try {
+    const auth = authMiddleware(request)
+    if (!auth.isAuthenticated) return auth.response
+    if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher'])) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     const { id } = params
     // In this route structure, the 'id' parameter corresponds to the class name
     // when accessing /api/classes/[className]/students
@@ -16,22 +23,19 @@ export async function GET(request, { params }) {
     const subject = searchParams.get('subject')
 
     const schoolId = await getSchoolIdFromRequest(request)
+    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
     if (subject) {
       const [classRecord, subjectRecord] = await Promise.all([
-        schoolId
-          ? prisma.class.findUnique({
-              where: { schoolId_name: { schoolId, name: decodedClass } },
-            })
-          : Promise.resolve(null),
-        schoolId
-          ? prisma.subject.findUnique({
-              where: { schoolId_name: { schoolId, name: subject } },
-            })
-          : Promise.resolve(null),
+        prisma.class.findUnique({
+          where: { schoolId_name: { schoolId, name: decodedClass } },
+        }),
+        prisma.subject.findUnique({
+          where: { schoolId_name: { schoolId, name: subject } },
+        }),
       ])
 
-      if (schoolId && classRecord && subjectRecord) {
+      if (classRecord && subjectRecord) {
         const enrollments = await prisma.pupilSubjectEnrollment.findMany({
           where: {
             schoolId,
@@ -57,6 +61,7 @@ export async function GET(request, { params }) {
 
     const students = await prisma.student.findMany({
       where: {
+        schoolId,
         class: decodedClass,
         ...(subject ? { selected_subjects: { has: subject } } : {}),
       },

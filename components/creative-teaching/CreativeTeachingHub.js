@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
+import { useRouter } from 'next/navigation'
 import {
   Palette,
   Video,
@@ -97,18 +98,19 @@ const componentMap = {
 }
 
 export default function CreativeTeachingHub() {
+  const router = useRouter()
   const [activeFeature, setActiveFeature] = useState('overview')
 
-  const { data: dbFeatures = [], isLoading } = useQuery({
+  const { data: apiFeatures, isLoading } = useQuery({
     queryKey: ['creative-features'],
     queryFn: async () => {
       const res = await api.getCreativeFeatures()
-      return res.data.data
+      return res.data
     },
   })
 
   // Map DB features to frontend components and icons
-  const features = dbFeatures.map((f) => ({
+  const features = (apiFeatures?.all || []).map((f) => ({
     ...f,
     id: f.featureId, // Map featureId to id for frontend compatibility
     icon: iconMap[f.iconName] || Star,
@@ -117,7 +119,6 @@ export default function CreativeTeachingHub() {
 
   // Filter features based on user role
   const availableFeatures = features.filter((feature) => {
-    if (feature.access === 'none') return false
     return true
   })
 
@@ -257,17 +258,40 @@ export default function CreativeTeachingHub() {
                       <p className="text-royalPurple-text3 text-sm mb-3 line-clamp-2">
                         {feature.description}
                       </p>
-                      <Button
-                        onClick={() => setActiveFeature(feature.id)}
-                        className="w-full bg-royalPurple-pill text-royalPurple-text1"
-                        disabled={!canLaunch(feature)}
-                      >
-                        {canLaunch(feature)
-                          ? 'Launch'
-                          : accessLabel(feature.access)
-                            ? `${accessLabel(feature.access)} Access`
-                            : 'Coming Soon'}
-                      </Button>
+                      {feature.route ? (
+                        <button
+                          onClick={() => {
+                            router.push(feature.route)
+                            if (feature.component) setActiveFeature(feature.id)
+                          }}
+                          style={{
+                            background: '#7c3aed',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: 8,
+                            padding: '10px 20px',
+                            cursor: 'pointer',
+                            fontWeight: 700,
+                            width: '100%',
+                          }}
+                        >
+                          Open →
+                        </button>
+                      ) : (
+                        <button
+                          disabled
+                          style={{
+                            background: '#2d1f4e',
+                            color: '#4b3575',
+                            border: '1px solid #3b2a66',
+                            borderRadius: 8,
+                            padding: '10px 20px',
+                            width: '100%',
+                          }}
+                        >
+                          Coming Soon
+                        </button>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -305,22 +329,40 @@ export default function CreativeTeachingHub() {
                           </span>
                         </div>
 
-                        <Button
-                          onClick={() => setActiveFeature(feature.id)}
-                          className="w-full bg-royalPurple-pill text-royalPurple-text1"
-                          disabled={!canLaunch(feature)}
-                        >
-                          {canLaunch(feature) ? (
-                            <>
-                              <Play className="h-4 w-4 mr-2" />
-                              Launch Tool
-                            </>
-                          ) : accessLabel(feature.access) ? (
-                            `${accessLabel(feature.access)} Access`
-                          ) : (
-                            'Coming Soon'
-                          )}
-                        </Button>
+                        {feature.route ? (
+                          <button
+                            onClick={() => {
+                              router.push(feature.route)
+                              if (feature.component) setActiveFeature(feature.id)
+                            }}
+                            style={{
+                              background: '#7c3aed',
+                              color: '#fff',
+                              border: 'none',
+                              borderRadius: 8,
+                              padding: '10px 20px',
+                              cursor: 'pointer',
+                              fontWeight: 700,
+                              width: '100%',
+                            }}
+                          >
+                            Open →
+                          </button>
+                        ) : (
+                          <button
+                            disabled
+                            style={{
+                              background: '#2d1f4e',
+                              color: '#4b3575',
+                              border: '1px solid #3b2a66',
+                              borderRadius: 8,
+                              padding: '10px 20px',
+                              width: '100%',
+                            }}
+                          >
+                            Coming Soon
+                          </button>
+                        )}
                       </div>
                     </div>
                   </CardContent>
@@ -359,22 +401,40 @@ export default function CreativeTeachingHub() {
                           </span>
                         </div>
 
-                        <Button
-                          onClick={() => setActiveFeature(feature.id)}
-                          className="w-full bg-royalPurple-accent text-royalPurple-text1"
-                          disabled={!canLaunch(feature)}
-                        >
-                          {canLaunch(feature) ? (
-                            <>
-                              <Play className="h-4 w-4 mr-2" />
-                              Launch Tool
-                            </>
-                          ) : accessLabel(feature.access) ? (
-                            `${accessLabel(feature.access)} Access`
-                          ) : (
-                            'Coming Soon'
-                          )}
-                        </Button>
+                        {feature.route ? (
+                          <button
+                            onClick={() => {
+                              router.push(feature.route)
+                              if (feature.component) setActiveFeature(feature.id)
+                            }}
+                            style={{
+                              background: '#7c3aed',
+                              color: '#fff',
+                              border: 'none',
+                              borderRadius: 8,
+                              padding: '10px 20px',
+                              cursor: 'pointer',
+                              fontWeight: 700,
+                              width: '100%',
+                            }}
+                          >
+                            Open →
+                          </button>
+                        ) : (
+                          <button
+                            disabled
+                            style={{
+                              background: '#2d1f4e',
+                              color: '#4b3575',
+                              border: '1px solid #3b2a66',
+                              borderRadius: 8,
+                              padding: '10px 20px',
+                              width: '100%',
+                            }}
+                          >
+                            Coming Soon
+                          </button>
+                        )}
                       </div>
                     </div>
                   </CardContent>

@@ -85,7 +85,8 @@ const nextConfig = {
 
   // API routes configuration
   async headers() {
-    return [
+    const isProd = process.env.NODE_ENV === 'production'
+    const baseHeaders = [
       {
         source: '/:path*',
         headers: [
@@ -94,7 +95,10 @@ const nextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
         ],
       },
-      {
+    ]
+
+    if (!isProd) {
+      baseHeaders.push({
         source: '/api/:path*',
         headers: [
           { key: 'Access-Control-Allow-Origin', value: '*' },
@@ -104,8 +108,10 @@ const nextConfig = {
             value: 'Content-Type, Authorization, X-Requested-With, x-school-id, x-school-subdomain',
           },
         ],
-      },
-    ]
+      })
+    }
+
+    return baseHeaders
   },
 
   // Redirects for better SEO

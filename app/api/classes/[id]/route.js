@@ -1,11 +1,23 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function GET(request, { params }) {
   try {
+    const auth = authMiddleware(request)
+    if (!auth.isAuthenticated) return auth.response
+    if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher'])) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     const { id } = params
-    const classItem = await prisma.class.findUnique({
-      where: { id }
+
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+    const classItem = await prisma.class.findFirst({
+      where: { id, schoolId },
     })
 
     if (!classItem) {
@@ -14,41 +26,76 @@ export async function GET(request, { params }) {
 
     return NextResponse.json({ success: true, data: classItem })
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to fetch class' }, { status: 500 })
   }
 }
 
 export async function PUT(request, { params }) {
   try {
+    const auth = authMiddleware(request)
+    if (!auth.isAuthenticated) return auth.response
+    if (!roleCheck(auth.user, ['HOD', 'hod', 'ADMIN', 'headteacher'])) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     const { id } = params
     const data = await request.json()
+
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+    const exists = await prisma.class.findFirst({ where: { id, schoolId }, select: { id: true } })
+    if (!exists) return NextResponse.json({ error: 'Class not found' }, { status: 404 })
+
+    const name = data?.name !== undefined ? String(data.name).trim() : undefined
+    if (name !== undefined && !name)
+      return NextResponse.json({ error: 'Invalid name' }, { status: 400 })
+
+    const capacity =
+      data?.capacity !== undefined && data.capacity !== null && String(data.capacity).trim() !== ''
+        ? Number.parseInt(String(data.capacity), 10)
+        : undefined
+    if (capacity !== undefined && (!Number.isFinite(capacity) || capacity < 0)) {
+      return NextResponse.json({ error: 'Invalid capacity' }, { status: 400 })
+    }
 
     const updatedClass = await prisma.class.update({
       where: { id },
       data: {
-        name: data.name,
-        capacity: parseInt(data.capacity),
-        level: data.level,
-        stream: data.stream,
-        classTeacherId: data.classTeacherId
-      }
+        ...(name !== undefined ? { name } : {}),
+        ...(capacity !== undefined ? { capacity } : {}),
+        ...(data?.level !== undefined ? { level: data.level } : {}),
+        ...(data?.stream !== undefined ? { stream: data.stream } : {}),
+        ...(data?.classTeacherId !== undefined ? { classTeacherId: data.classTeacherId } : {}),
+      },
     })
 
     return NextResponse.json({ success: true, data: updatedClass })
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to update class' }, { status: 500 })
   }
 }
 
 export async function DELETE(request, { params }) {
   try {
+    const auth = authMiddleware(request)
+    if (!auth.isAuthenticated) return auth.response
+    if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     const { id } = params
-    await prisma.class.delete({
-      where: { id }
+
+    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+    const deleted = await prisma.class.deleteMany({
+      where: { id, schoolId },
     })
+    if (deleted.count === 0) return NextResponse.json({ error: 'Class not found' }, { status: 404 })
 
     return NextResponse.json({ success: true, message: 'Class deleted successfully' })
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to delete class' }, { status: 500 })
   }
 }
