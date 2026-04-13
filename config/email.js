@@ -12,21 +12,44 @@ async function sendEmail(to, subject, html) {
   const from = getEmailFrom()
 
   if (!resend || !from) {
-    console.warn('[email] Resend not configured. Missing RESEND_API_KEY or EMAIL_FROM.')
-    console.warn('[email] Email not sent to:', to)
+    console.warn('[email] ⚠️ Resend not configured.')
+    console.warn('[email] - RESEND_API_KEY:', !!process.env.RESEND_API_KEY)
+    console.warn('[email] - EMAIL_FROM:', from)
+    console.warn('[email] Email NOT sent to:', to)
     return false
   }
 
   try {
-    await resend.emails.send({
+    console.log('[email] 📧 Sending email via Resend...')
+    console.log('[email] - From:', from)
+    console.log('[email] - To:', to)
+    console.log('[email] - Subject:', subject)
+
+    const response = await resend.emails.send({
       from,
       to,
       subject,
       html,
     })
-    return true
+
+    console.log('[email] Raw Resend response:', JSON.stringify(response, null, 2))
+
+    if (response.error) {
+      console.error('[email] ❌ Resend API returned error:', response.error)
+      return false
+    }
+
+    if (response.data?.id) {
+      console.log('[email] ✅ Email sent successfully!')
+      console.log('[email] - Message ID:', response.data.id)
+      return true
+    }
+
+    console.warn('[email] ⚠️ Unexpected response format:', response)
+    return false
   } catch (error) {
-    console.error('[email] Resend error:', error)
+    console.error('[email] ❌ Exception thrown:', error?.message || error)
+    console.error('[email] Full error:', error)
     return false
   }
 }
