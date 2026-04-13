@@ -32,12 +32,17 @@ describe('MobileMoneySystem', () => {
       amount: 100,
       feeType: 'school_fees',
       studentId: 'STU001',
-      reference: 'REF001'
+      reference: 'REF001',
     }
 
     global.fetch.mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ transactionId: 'TXN_PROV_001', success: true })
+      json: async () => ({
+        success: true,
+        provider: 'lipila',
+        referenceId: 'TXN_PROV_001',
+        data: { status: 'Pending' },
+      }),
     })
 
     const transaction = await mmSystem.processPayment(paymentData)
@@ -52,32 +57,36 @@ describe('MobileMoneySystem', () => {
     const paymentData = {
       phoneNumber: '0111234567',
       amount: 100,
-      feeType: 'school_fees'
+      feeType: 'school_fees',
     }
 
-    await expect(mmSystem.processPayment(paymentData)).rejects.toThrow('Unsupported mobile money provider')
+    await expect(mmSystem.processPayment(paymentData)).rejects.toThrow(
+      'Unsupported mobile money provider'
+    )
   })
 
   test('validates transaction limits', async () => {
     const paymentData = {
       phoneNumber: '0971234567',
       amount: 0.5, // Below minimum K1
-      feeType: 'school_fees'
+      feeType: 'school_fees',
     }
 
-    await expect(mmSystem.processPayment(paymentData)).rejects.toThrow('Minimum transaction amount is K1')
+    await expect(mmSystem.processPayment(paymentData)).rejects.toThrow(
+      'Minimum transaction amount is K1'
+    )
   })
 
   test('calculates statistics correctly', async () => {
     mmSystem.transactionHistory = [
       { status: 'completed', amount: 100, transactionFee: 2, provider: 'airtel' },
       { status: 'completed', amount: 200, transactionFee: 4, provider: 'mtn' },
-      { status: 'failed', amount: 50, transactionFee: 1, provider: 'airtel' }
+      { status: 'failed', amount: 50, transactionFee: 1, provider: 'airtel' },
     ]
 
     const stats = mmSystem.getMobileMoneyStats()
     expect(stats.totalTransactions).toBe(2)
     expect(stats.totalAmount).toBe(300)
-    expect(stats.successRate).toBe("66.7")
+    expect(stats.successRate).toBe('66.7')
   })
 })

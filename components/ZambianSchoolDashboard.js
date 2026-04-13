@@ -38,7 +38,7 @@ const ZambianSchoolDashboard = () => {
     // Initialize system and setup event listeners
     initializeZambianSystem()
     setupEventListeners()
-    
+
     // Cleanup on unmount
     return () => {
       removeEventListeners()
@@ -65,18 +65,18 @@ const ZambianSchoolDashboard = () => {
     window.addEventListener('zambian-school-system-ready', updateSystemStatus)
     window.addEventListener('system-health-check', handleHealthCheck)
     window.addEventListener('emergency-alert', handleEmergencyAlert)
-    
+
     // Power events
     window.addEventListener('power-mode-changed', updatePowerStatus)
     window.addEventListener('power-metrics-updated', updatePowerStatus)
-    
+
     // Offline events
     window.addEventListener('offline-sync-progress', updateOfflineStatus)
     window.addEventListener('offline-data-loaded', updateOfflineStatus)
-    
+
     // Language events
     window.addEventListener('language-changed', updateLanguageStatus)
-    
+
     // Connectivity events
     window.addEventListener('online', handleConnectivityChange)
     window.addEventListener('offline', handleConnectivityChange)
@@ -99,7 +99,7 @@ const ZambianSchoolDashboard = () => {
     const status = zambianSchoolSystem.getSystemStatus()
     setSystemStatus(status.systemStatus)
     setEmergencyMode(status.emergencyMode)
-    
+
     // Update individual system statuses
     updatePowerStatus()
     updateOfflineStatus()
@@ -194,7 +194,7 @@ const ZambianSchoolDashboard = () => {
         </div>
       </div>
     `
-    
+
     document.body.appendChild(notification)
   }
 
@@ -209,9 +209,9 @@ const ZambianSchoolDashboard = () => {
       type: 'manual',
       description: 'Emergency button pressed',
       location: 'School Dashboard',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     }
-    
+
     window.dispatchEvent(new CustomEvent('emergency-alert', { detail: alertData }))
   }
 
@@ -226,7 +226,7 @@ const ZambianSchoolDashboard = () => {
     }
   }
 
-  const testMobileMoneyPayment = async () => {
+  const testMobileMoneyPayment = async (provider = null) => {
     if (mobileMoneySystem) {
       try {
         const payment = await mobileMoneySystem.processPayment({
@@ -234,7 +234,8 @@ const ZambianSchoolDashboard = () => {
           amount: 100,
           feeType: 'school_fees',
           studentId: 'TEST_STUDENT',
-          reference: 'TEST_PAYMENT'
+          reference: 'TEST_PAYMENT',
+          provider,
         })
         toast.success('Test payment processed successfully!')
       } catch (error) {
@@ -245,10 +246,14 @@ const ZambianSchoolDashboard = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'operational': return '#10b981'
-      case 'warning': return '#f59e0b'
-      case 'error': return '#ef4444'
-      default: return '#6b7280'
+      case 'operational':
+        return '#10b981'
+      case 'warning':
+        return '#f59e0b'
+      case 'error':
+        return '#ef4444'
+      default:
+        return '#6b7280'
     }
   }
 
@@ -260,13 +265,15 @@ const ZambianSchoolDashboard = () => {
 
   if (systemStatus === 'initializing') {
     return (
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        height: '100vh',
-        background: '#f3f4f6'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh',
+          background: '#f3f4f6',
+        }}
+      >
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '48px', marginBottom: '20px' }}>🇿🇲</div>
           <h2>Initializing Zambian School System...</h2>
@@ -277,65 +284,58 @@ const ZambianSchoolDashboard = () => {
   }
 
   return (
-    <div style={{ 
-      padding: '20px', 
-      background: emergencyMode ? '#fee2e2' : '#f9fafb',
-      minHeight: '100vh'
-    }}>
+    <div
+      style={{
+        padding: '20px',
+        background: emergencyMode ? '#fee2e2' : '#f9fafb',
+        minHeight: '100vh',
+      }}
+    >
       {/* Header */}
-      <DashboardHeader 
-        currentLanguage={currentLanguage} 
-        handleLanguageChange={handleLanguageChange} 
-        handleEmergencyButton={handleEmergencyButton} 
+      <DashboardHeader
+        currentLanguage={currentLanguage}
+        handleLanguageChange={handleLanguageChange}
+        handleEmergencyButton={handleEmergencyButton}
       />
 
       {/* System Status Grid */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-        gap: '20px',
-        marginBottom: '30px'
-      }}>
-        <SystemStatusCard 
-          systemStatus={systemStatus} 
-          emergencyMode={emergencyMode} 
-          getStatusColor={getStatusColor} 
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '20px',
+          marginBottom: '30px',
+        }}
+      >
+        <SystemStatusCard
+          systemStatus={systemStatus}
+          emergencyMode={emergencyMode}
+          getStatusColor={getStatusColor}
         />
-        
-        <PowerStatusCard 
-          powerStatus={powerStatus} 
-          getBatteryColor={getBatteryColor} 
-        />
-        
-        <OfflineStatusCard 
-          offlineStatus={offlineStatus} 
-        />
-        
-        <SMSSystemCard 
-          smsStats={smsStats} 
-          testSMSSystem={testSMSSystem} 
-        />
-        
-        <MobileMoneyCard 
-          moneyStats={moneyStats} 
-          testMobileMoneyPayment={testMobileMoneyPayment} 
-        />
-        
-        <LanguageSupportCard 
-          languageStats={languageStats} 
-        />
+
+        <PowerStatusCard powerStatus={powerStatus} getBatteryColor={getBatteryColor} />
+
+        <OfflineStatusCard offlineStatus={offlineStatus} />
+
+        <SMSSystemCard smsStats={smsStats} testSMSSystem={testSMSSystem} />
+
+        <MobileMoneyCard moneyStats={moneyStats} testMobileMoneyPayment={testMobileMoneyPayment} />
+
+        <LanguageSupportCard languageStats={languageStats} />
       </div>
 
       {/* Quick Actions */}
       <QuickActions />
 
       {/* Footer */}
-      <div style={{ 
-        marginTop: '30px', 
-        textAlign: 'center', 
-        color: '#6b7280', 
-        fontSize: '14px' 
-      }}>
+      <div
+        style={{
+          marginTop: '30px',
+          textAlign: 'center',
+          color: '#6b7280',
+          fontSize: '14px',
+        }}
+      >
         <p>🇿🇲 Zambian School Management System - Designed for Rural Schools</p>
         <p>Ultra-Low Infrastructure • 7-Day Offline Mode • Solar Powered • Local Languages</p>
       </div>

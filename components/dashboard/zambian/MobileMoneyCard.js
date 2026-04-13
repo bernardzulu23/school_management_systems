@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import StatusCard from './StatusCard'
 
 const MobileMoneyCard = ({ moneyStats, testMobileMoneyPayment }) => {
+  const [provider, setProvider] = useState('airtel_zambia')
+
   return (
     <StatusCard title="Mobile Money" icon="💰">
       <div style={{ marginBottom: '10px' }} aria-label="Mobile money statistics">
@@ -9,8 +11,27 @@ const MobileMoneyCard = ({ moneyStats, testMobileMoneyPayment }) => {
         <span className="block">Total Amount: K{moneyStats.totalAmount?.toFixed(2) || '0.00'}</span>
         <span className="block">Success Rate: {moneyStats.successRate || 0}%</span>
       </div>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 10 }}>
+        <select
+          value={provider}
+          onChange={(e) => setProvider(e.target.value)}
+          style={{
+            padding: '8px 10px',
+            borderRadius: 6,
+            border: '1px solid #d1d5db',
+            fontSize: 12,
+            background: 'white',
+            outline: 'none',
+          }}
+          aria-label="Select mobile money provider"
+        >
+          <option value="airtel_zambia">Airtel Zambia</option>
+          <option value="mtn_zambia">MTN_Zambia</option>
+          <option value="zamtel">Zamtel</option>
+        </select>
+      </div>
       <button
-        onClick={testMobileMoneyPayment}
+        onClick={() => testMobileMoneyPayment(provider)}
         style={{
           padding: '8px 12px',
           background: '#10b981',
@@ -20,13 +41,13 @@ const MobileMoneyCard = ({ moneyStats, testMobileMoneyPayment }) => {
           cursor: 'pointer',
           fontSize: '12px',
           outline: 'none',
-          transition: 'background 0.2s'
+          transition: 'background 0.2s',
         }}
         aria-label="Test mobile money payment"
-        onFocus={(e) => e.currentTarget.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.4)'}
-        onBlur={(e) => e.currentTarget.style.boxShadow = 'none'}
-        onMouseOver={(e) => e.currentTarget.style.background = '#059669'}
-        onMouseOut={(e) => e.currentTarget.style.background = '#10b981'}
+        onFocus={(e) => (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.4)')}
+        onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
+        onMouseOver={(e) => (e.currentTarget.style.background = '#059669')}
+        onMouseOut={(e) => (e.currentTarget.style.background = '#10b981')}
       >
         Test Payment
       </button>
