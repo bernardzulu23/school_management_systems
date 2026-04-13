@@ -65,14 +65,25 @@ export async function POST(request) {
   if (rate.isLimited) return rate.response
 
   try {
+    // ✅ IMPROVED CORS CHECK
     const origin = request.headers.get('origin')
-    if (process.env.NODE_ENV === 'production') {
-      const allowedOrigins = [
-        'https://bluepeacktechnologies.com',
-        'https://www.bluepeacktechnologies.com',
-      ]
-      if (origin && !allowedOrigins.includes(origin)) {
+    if (process.env.NODE_ENV === 'production' && origin) {
+      // Allow bluepeacktechnologies.com and all subdomains
+      const isAllowed =
+        origin === 'https://bluepeacktechnologies.com' ||
+        origin === 'https://www.bluepeacktechnologies.com' ||
+        /^https:\/\/[a-z0-9-]+\.bluepeacktechnologies\.com$/.test(origin)
+
+      if (!isAllowed) {
+        console.warn(`⚠️ CORS blocked origin: ${origin}`)
         return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 })
+      }
+    }
+
+    // Allow localhost in development
+    if (process.env.NODE_ENV !== 'production' && origin) {
+      if (!origin.includes('localhost') && !origin.includes('127.0.0.1')) {
+        console.warn(`⚠️ Dev CORS warning: ${origin}`)
       }
     }
 
@@ -174,6 +185,9 @@ export async function POST(request) {
 
     const hashedPassword = await bcrypt.hash(adminPassword, 12)
 
+    console.log(`📝 Creating school: ${schoolName} (${subdomain})`)
+    console.log(`👤 Admin email: ${adminEmail}`)
+
     const created = await prisma.$transaction(async (tx) => {
       const school = await tx.school.create({
         data: {
@@ -191,6 +205,8 @@ export async function POST(request) {
         select: { id: true, name: true, subdomain: true },
       })
 
+      console.log(`✅ School created: ${school.id}`)
+
       await tx.user.create({
         data: {
           schoolId: school.id,
@@ -203,18 +219,23 @@ export async function POST(request) {
         select: { id: true },
       })
 
+      console.log(`✅ Admin user created`)
+
       return school
     })
 
+    console.log(`📧 Sending verification email to: ${adminEmail}`)
     await sendSchoolVerificationEmail({
       to: adminEmail,
       schoolName: created.name,
       subdomain: created.subdomain,
       verifyUrl,
     })
+    console.log(`✅ Verification email sent`)
 
     return NextResponse.json({ success: true, requiresVerification: true })
   } catch (error) {
+    console.error(`❌ Registration error:`, error)
     return NextResponse.json({ success: false, error: 'Registration failed' }, { status: 500 })
   }
 }

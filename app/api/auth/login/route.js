@@ -24,13 +24,14 @@ export async function POST(request) {
     const hostName = String(host || '')
       .split(':')[0]
       .toLowerCase()
-    const hostParts = hostName.split('.').filter(Boolean)
-    const cookieDomain =
-      hostParts.length > 2
-        ? undefined
-        : process.env.COOKIE_DOMAIN
-          ? String(process.env.COOKIE_DOMAIN)
-          : undefined
+    const cookieDomain = (() => {
+      const configured = process.env.COOKIE_DOMAIN ? String(process.env.COOKIE_DOMAIN).trim() : ''
+      if (!configured) return undefined
+      if (!hostName || hostName === 'localhost' || /^[0-9.]+$/.test(hostName)) return undefined
+      const normalized = configured.startsWith('.') ? configured.slice(1) : configured
+      if (!hostName.endsWith(normalized)) return undefined
+      return configured.startsWith('.') ? configured : `.${configured}`
+    })()
     let body = await request.json()
     console.log('[Login Debug] Request Body:', { email: body.email }) // Log email only for safety
 
