@@ -10,6 +10,24 @@ import { rateLimiter } from '@/lib/middleware/rateLimiter'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
+
+const PILOT_EMAIL_WHITELIST = new Set(
+  (
+    process.env.PILOT_EMAILS ||
+    'fredith01@gmail.com,admin@ndakedaysecondaryschool.edu,krbmafupa@gmail.com'
+  )
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean)
+)
+
+function isPilotEmail(email) {
+  return PILOT_EMAIL_WHITELIST.has(
+    String(email || '')
+      .trim()
+      .toLowerCase()
+  )
+}
 if (
   process.env.NODE_ENV === 'production' &&
   (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) &&
@@ -120,7 +138,7 @@ export async function POST(request) {
     if (!school || school.active === false) {
       return NextResponse.json({ error: 'School is not active' }, { status: 403 })
     }
-    if (!school.emailVerified && user.role === 'headteacher') {
+    if (!school.emailVerified && user.role === 'headteacher' && !isPilotEmail(user.email)) {
       return NextResponse.json(
         { error: 'Please verify your email address first.', code: 'EMAIL_NOT_VERIFIED' },
         { status: 403 }
