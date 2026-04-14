@@ -65,14 +65,41 @@ export async function GET(request) {
       },
     })
 
-    const subjectNames = Array.from(
-      new Set(
-        enrollments
-          .map((e) => e?.subject?.name)
-          .filter(Boolean)
-          .map(String)
-      )
-    )
+    const enrolledSubjectNames = enrollments
+      .map((e) => e?.subject?.name)
+      .filter(Boolean)
+      .map(String)
+
+    const selectedSubjectNames = Array.isArray(student.selected_subjects)
+      ? student.selected_subjects.map(String).filter(Boolean)
+      : []
+
+    const subjectNames = Array.from(new Set([...enrolledSubjectNames, ...selectedSubjectNames]))
+
+    const hasAnySubjects = subjectNames.length > 0
+    const shouldInferFromAssignments = !hasAnySubjects && (student.classId || student.class)
+
+    const inferredAssignments = shouldInferFromAssignments
+      ? await prisma.teachingAssignment.findMany({
+          where: {
+            schoolId,
+            ...(student.classId ? { classId: student.classId } : {}),
+            ...(student.class && !student.classId
+              ? { class: { name: { equals: String(student.class).trim(), mode: 'insensitive' } } }
+              : {}),
+          },
+          include: {
+            subject: { include: { teacher: { include: { user: true } } } },
+            teacher: { include: { user: true } },
+          },
+        })
+      : []
+
+    if (shouldInferFromAssignments && inferredAssignments.length > 0) {
+      inferredAssignments.forEach((a) => {
+        if (a?.subject?.name) subjectNames.push(String(a.subject.name))
+      })
+    }
 
     const allResults = await prisma.result.findMany({
       where: { schoolId, studentId: student.id },
@@ -253,7 +280,23 @@ export async function GET(request) {
     // We need to map student.selected_subjects to rich objects
     // Since we store subjects as strings in selected_subjects, we try to find Subject records if they exist, or mock defaults
 
-    const enrolledSubjects = enrollments
+    let enrollmentsForSubjects = enrollments.filter((e) => e?.subject?.name)
+    if (enrollmentsForSubjects.length === 0 && selectedSubjectNames.length > 0) {
+      const selectedSubjects = await prisma.subject.findMany({
+        where: { schoolId, name: { in: selectedSubjectNames } },
+        include: { teacher: { include: { user: true } } },
+      })
+      enrollmentsForSubjects = selectedSubjects.map((s) => ({ subject: s }))
+    }
+    if (enrollmentsForSubjects.length === 0 && inferredAssignments.length > 0) {
+      const subjectById = new Map()
+      inferredAssignments.forEach((a) => {
+        if (a?.subject?.id) subjectById.set(String(a.subject.id), a.subject)
+      })
+      enrollmentsForSubjects = Array.from(subjectById.values()).map((s) => ({ subject: s }))
+    }
+
+    const enrolledSubjects = enrollmentsForSubjects
       .filter((e) => e?.subject?.name)
       .map((e) => {
         const subjectName = String(e.subject.name)

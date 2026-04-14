@@ -33,6 +33,7 @@ export async function GET(request) {
             subject: true,
           },
         },
+        departments: { include: { department: true } },
       },
     })
 
@@ -384,7 +385,11 @@ export async function GET(request) {
       })),
       teacher: {
         id: teacher.id,
-        department: teacher.department,
+        department:
+          teacher.department ||
+          teacher.departments?.[0]?.department?.name ||
+          teacher.departments?.[0]?.department?.department ||
+          null,
         ts_number: teacher.ts_number,
         name: teacher.user?.name || null,
         email: teacher.user?.email || null,

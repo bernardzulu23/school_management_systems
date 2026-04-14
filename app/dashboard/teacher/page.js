@@ -268,14 +268,55 @@ export default function TeacherDashboard() {
     return 'text-royalPurple-dangerTx bg-royalPurple-danger'
   }
 
+  const teacherTitle = String(currentUser?.gender || '')
+    .trim()
+    .toLowerCase()
+    .startsWith('f')
+    ? 'Mrs'
+    : String(currentUser?.gender || '')
+          .trim()
+          .toLowerCase()
+          .startsWith('m')
+      ? 'Mr'
+      : ''
+
   // Placeholder functions for remaining features
   const renderAssessmentBuilder = () => (
-    <div className="text-center py-12">
-      <PenTool className="h-12 w-12 mx-auto text-royalPurple-pillTx mb-4" />
-      <h3 className="text-xl font-bold text-royalPurple-text1 mb-2">Assessment Builder</h3>
-      <p className="text-royalPurple-text2">
-        Create comprehensive assessments with multiple question types and automated grading.
-      </p>
+    <div className="space-y-6">
+      <div className="text-center">
+        <PenTool className="h-12 w-12 mx-auto text-royalPurple-pillTx mb-4" />
+        <h3 className="text-xl font-bold text-royalPurple-text1 mb-2">Assessment Tools</h3>
+        <p className="text-royalPurple-text2">
+          Create assessments, manage questions, and track performance.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Link href="/dashboard/teacher/assessments?create=1" className="block">
+          <Button className="w-full justify-start">
+            <Plus className="h-4 w-4 mr-2" />
+            Create New Assessment
+          </Button>
+        </Link>
+        <Link href="/dashboard/teacher/assessments/question-bank" className="block">
+          <Button variant="outline" className="w-full justify-start">
+            <ClipboardList className="h-4 w-4 mr-2" />
+            Question Bank
+          </Button>
+        </Link>
+        <Link href="/dashboard/teacher/assessments/calendar" className="block">
+          <Button variant="outline" className="w-full justify-start">
+            <Calendar className="h-4 w-4 mr-2" />
+            Assessment Calendar
+          </Button>
+        </Link>
+        <Link href="/dashboard/teacher/assessments" className="block">
+          <Button variant="outline" className="w-full justify-start">
+            <TrendingUp className="h-4 w-4 mr-2" />
+            Analytics Dashboard
+          </Button>
+        </Link>
+      </div>
     </div>
   )
 
@@ -386,7 +427,8 @@ export default function TeacherDashboard() {
                   Manage your classes and track student progress
                 </p>
                 <p className="text-royalPurple-text2 dark:text-royalPurple-text3 text-sm mt-2">
-                  Welcome back, {currentUser?.name || 'Teacher'}!
+                  Welcome back, {teacherTitle ? `${teacherTitle} ` : ''}
+                  {currentUser?.name || 'Teacher'}!
                 </p>
               </div>
               <div className="flex items-center space-x-4">
@@ -440,6 +482,7 @@ export default function TeacherDashboard() {
                       </span>
                     </div>
                     <p className="text-royalPurple-text1 dark:text-royalPurple-text1 font-semibold">
+                      {teacherTitle ? `${teacherTitle} ` : ''}
                       {currentUser?.name}
                     </p>
                   </div>

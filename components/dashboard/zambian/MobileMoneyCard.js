@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import StatusCard from './StatusCard'
 
 const MobileMoneyCard = ({ moneyStats, testMobileMoneyPayment }) => {
-  const [provider, setProvider] = useState('airtel_zambia')
+  const [provider, setProvider] = useState('airtel')
 
   return (
     <StatusCard title="Mobile Money" icon="💰">
@@ -25,8 +25,8 @@ const MobileMoneyCard = ({ moneyStats, testMobileMoneyPayment }) => {
           }}
           aria-label="Select mobile money provider"
         >
-          <option value="airtel_zambia">Airtel Zambia</option>
-          <option value="mtn_zambia">MTN_Zambia</option>
+          <option value="airtel">Airtel Zambia</option>
+          <option value="mtn">MTN Zambia</option>
           <option value="zamtel">Zamtel</option>
         </select>
       </div>

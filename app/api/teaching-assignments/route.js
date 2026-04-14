@@ -82,8 +82,37 @@ export async function GET(request) {
     const subjects = Array.from(subjectById.values())
 
     const virtual = []
-    for (const c of classes) {
-      for (const s of subjects) {
+    const subjectClassIds = Array.from(
+      new Set(subjects.map((s) => String(s?.classId || '')).filter(Boolean))
+    )
+    const subjectClasses =
+      subjectClassIds.length > 0
+        ? await prisma.class.findMany({
+            where: { schoolId, id: { in: subjectClassIds } },
+          })
+        : []
+    const classById = new Map(subjectClasses.map((c) => [String(c.id), c]))
+
+    const resolvedClasses = classes.length > 0 ? classes : subjectClasses
+
+    for (const s of subjects) {
+      const preferredClassId = s?.classId ? String(s.classId) : ''
+      const preferredClass = preferredClassId ? classById.get(preferredClassId) : null
+      if (preferredClass) {
+        virtual.push({
+          id: `virtual:${String(preferredClass.id)}:${String(s.id)}`,
+          teacherId: resolvedTeacherId,
+          teacherName: teacher?.user?.name || null,
+          classId: preferredClass.id,
+          className: preferredClass.name || null,
+          classYearGroup: preferredClass.year_group || null,
+          subjectId: s.id,
+          subjectName: s.name || null,
+          createdAt: null,
+        })
+        continue
+      }
+      for (const c of resolvedClasses) {
         virtual.push({
           id: `virtual:${String(c.id)}:${String(s.id)}`,
           teacherId: resolvedTeacherId,

@@ -1,11 +1,11 @@
 -- AlterTable
-ALTER TABLE "School" ADD COLUMN     "plan" TEXT NOT NULL DEFAULT 'trial';
-ALTER TABLE "School" ADD COLUMN     "planExpiresAt" TIMESTAMP(3);
-ALTER TABLE "School" ADD COLUMN     "trialEndsAt" TIMESTAMP(3);
-ALTER TABLE "School" ADD COLUMN     "level" TEXT NOT NULL DEFAULT 'combined';
+ALTER TABLE "School" ADD COLUMN IF NOT EXISTS "plan" TEXT NOT NULL DEFAULT 'trial';
+ALTER TABLE "School" ADD COLUMN IF NOT EXISTS "planExpiresAt" TIMESTAMP(3);
+ALTER TABLE "School" ADD COLUMN IF NOT EXISTS "trialEndsAt" TIMESTAMP(3);
+ALTER TABLE "School" ADD COLUMN IF NOT EXISTS "level" TEXT NOT NULL DEFAULT 'combined';
 
 -- CreateTable
-CREATE TABLE "AIRequest" (
+CREATE TABLE IF NOT EXISTS "AIRequest" (
     "id" TEXT NOT NULL,
     "schoolId" TEXT NOT NULL,
     "feature" TEXT NOT NULL,
@@ -18,14 +18,24 @@ CREATE TABLE "AIRequest" (
 );
 
 -- CreateIndex
-CREATE INDEX "AIRequest_schoolId_idx" ON "AIRequest"("schoolId");
+CREATE INDEX IF NOT EXISTS "AIRequest_schoolId_idx" ON "AIRequest"("schoolId");
 
 -- CreateIndex
-CREATE INDEX "AIRequest_feature_idx" ON "AIRequest"("feature");
+CREATE INDEX IF NOT EXISTS "AIRequest_feature_idx" ON "AIRequest"("feature");
 
 -- CreateIndex
-CREATE INDEX "AIRequest_createdAt_idx" ON "AIRequest"("createdAt");
+CREATE INDEX IF NOT EXISTS "AIRequest_createdAt_idx" ON "AIRequest"("createdAt");
 
 -- AddForeignKey
-ALTER TABLE "AIRequest" ADD CONSTRAINT "AIRequest_schoolId_fkey" FOREIGN KEY ("schoolId") REFERENCES "School"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = 'AIRequest_schoolId_fkey'
+  ) THEN
+    ALTER TABLE "AIRequest"
+      ADD CONSTRAINT "AIRequest_schoolId_fkey"
+      FOREIGN KEY ("schoolId") REFERENCES "School"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
+END $$;

@@ -28,6 +28,8 @@ import {
   Shield,
   MessageSquare,
   User as UserIcon,
+  CreditCard,
+  Sparkles,
 } from 'lucide-react'
 
 export function Sidebar({ className, mobileOpen, setMobileOpen }) {
@@ -63,6 +65,8 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Assessments', href: '/dashboard/assessments', icon: ClipboardList },
         { name: 'Results', href: '/dashboard/results', icon: BarChart3 },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
+        { name: 'Payments', href: '/dashboard/payments', icon: CreditCard },
+        { name: 'Billing', href: '/dashboard/billing', icon: CreditCard },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
         { name: 'Reports', href: '/dashboard/reports', icon: FileText },
       ],
@@ -86,11 +90,16 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Materials', href: '/dashboard/materials', icon: Upload },
         { name: 'My Timetable', href: '/dashboard/timetable/teacher', icon: Calendar },
         { name: 'Games', href: '/dashboard/teacher/games', icon: GamepadIcon },
+        { name: 'AI Lesson Planner', href: '/dashboard/teacher/lesson-planner', icon: Sparkles },
+        { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
+        { name: 'AI Report Comments', href: '/dashboard/teacher/report-comments', icon: Sparkles },
+        { name: 'AI Story Weaver', href: '/dashboard/teacher/story-weaver', icon: Sparkles },
         { name: 'Assessments', href: '/dashboard/assessments', icon: ClipboardList },
         { name: 'Results', href: '/dashboard/results', icon: BarChart3 },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
         { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
+        { name: 'Payments', href: '/dashboard/payments', icon: CreditCard },
       ],
       student: [
         { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
