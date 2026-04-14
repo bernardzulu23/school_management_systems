@@ -29,6 +29,8 @@ const PAYMENT_TYPES = [
   { value: 'meals', label: 'Meal Program', icon: '🍽️' },
   { value: 'transport', label: 'Transport', icon: '🚌' },
   { value: 'examination', label: 'Examination Fees', icon: '📝' },
+  { value: 'activation', label: 'Platform Activation', icon: '🔓' },
+  { value: 'subscription', label: 'Monthly Subscription', icon: '📅' },
   { value: 'other', label: 'Other', icon: '💰' },
 ]
 
