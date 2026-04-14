@@ -8,6 +8,24 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { parseDateInput } from '@/lib/utils/formHelpers'
 
+const PILOT_EMAIL_WHITELIST = new Set(
+  (
+    process.env.PILOT_EMAILS ||
+    'fredith01@gmail.com,admin@ndakedaysecondaryschool.edu,krbmafupa@gmail.com'
+  )
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean)
+)
+
+function isPilotEmail(email) {
+  return PILOT_EMAIL_WHITELIST.has(
+    String(email || '')
+      .trim()
+      .toLowerCase()
+  )
+}
+
 function generateAutoPassword() {
   const length = 16
   const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*'
@@ -99,6 +117,24 @@ export const POST = withErrorHandler(async (request) => {
     return NextResponse.json({ success: false, message: 'Invalid school context' }, { status: 400 })
   }
 
+  // 2b. Check if school has paid (payment gate) - skip for pilot schools
+  const school = await prisma.school.findUnique({
+    where: { id: schoolId },
+    select: { plan: true, emailVerified: true },
+  })
+  const isPilotUser = isPilotEmail(auth.user?.email)
+  if (school?.plan === 'unpaid' && !isPilotUser) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Account Inactive',
+        message: 'Student registration is disabled until the school activation fee is paid.',
+        code: 'PAYMENT_REQUIRED',
+      },
+      { status: 402 }
+    )
+  }
+
   // 3. Check duplicate
   const existingUser = await prisma.user.findFirst({
     where: {
@@ -109,7 +145,11 @@ export const POST = withErrorHandler(async (request) => {
 
   if (existingUser) {
     return NextResponse.json(
-      { success: false, message: 'User with this email already exists in this school' },
+      {
+        success: false,
+        message: 'User with this email already exists in this school',
+        code: 'DUPLICATE_USER',
+      },
       { status: 400 }
     )
   }
@@ -179,35 +219,51 @@ export const POST = withErrorHandler(async (request) => {
           throw new Error('Class is required')
         }
 
-        const student = await tx.student.create({
-          data: {
-            userId: user.id,
-            name: user.name,
-            schoolId,
-            classId: classRecord.id,
-            class: classRecord.name,
-            exam_number: body.exam_number,
-            previous_school: body.previous_school,
-            selected_subjects: selectedSubjects,
+        let student
+        try {
+          student = await tx.student.create({
+            data: {
+              userId: user.id,
+              name: user.name,
+              schoolId,
+              classId: classRecord.id,
+              class: classRecord.name,
+              exam_number: body.exam_number,
+              previous_school: body.previous_school,
+              selected_subjects: selectedSubjects,
 
-            // Parents
-            parent_father_name: body.parent_father_name,
-            parent_father_contact: body.parent_father_contact,
-            parent_father_email: body.parent_father_email,
-            parent_mother_name: body.parent_mother_name,
-            parent_mother_contact: body.parent_mother_contact,
+              // Parents
+              parent_father_name: body.parent_father_name,
+              parent_father_contact: body.parent_father_contact,
+              parent_father_email: body.parent_father_email,
+              parent_mother_name: body.parent_mother_name,
+              parent_mother_contact: body.parent_mother_contact,
 
-            // Emergency
-            emergency_contact_name: body.emergency_contact_name,
-            emergency_contact_phone: body.emergency_contact_phone,
+              // Emergency
+              emergency_contact_name: body.emergency_contact_name,
+              emergency_contact_phone: body.emergency_contact_phone,
 
-            // Medical (optional)
-            blood_type: body.blood_type,
-            medical_aid_scheme: body.medical_aid_scheme,
-            allergies: body.allergies,
-            medical_conditions: body.medical_conditions,
-          },
-        })
+              // Medical (optional)
+              blood_type: body.blood_type,
+              medical_aid_scheme: body.medical_aid_scheme,
+              allergies: body.allergies,
+              medical_conditions: body.medical_conditions,
+            },
+          })
+        } catch (studentError) {
+          if (studentError.code === 'P2002') {
+            return NextResponse.json(
+              {
+                success: false,
+                error: 'Duplicate Exam Number',
+                message: `A student with exam number "${body.exam_number}" already exists in this school. Each student must have a unique ECZ exam number.`,
+                code: 'DUPLICATE_EXAM_NUMBER',
+              },
+              { status: 400 }
+            )
+          }
+          throw studentError
+        }
 
         if (selectedSubjects.length > 0) {
           const subjectRecords = await Promise.all(
