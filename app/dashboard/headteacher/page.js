@@ -6,6 +6,8 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
+import { api } from '@/lib/api'
+import toast from 'react-hot-toast'
 import {
   Settings,
   BarChart3,
@@ -114,6 +116,32 @@ function HeadteacherDashboardContent() {
   const isHeadteacher = role === 'headteacher' || role === 'admin' || role === 'administrator'
 
   const [showRegistrationForm, setShowRegistrationForm] = useState(null) // 'teacher', 'student', 'hod', or null
+  const [registrationLoading, setRegistrationLoading] = useState(false)
+
+  const handleRegistration = async (formData, userType) => {
+    if (registrationLoading) return
+    setRegistrationLoading(true)
+    try {
+      const response = await api.post('/auth/register', {
+        ...formData,
+        role: String(userType || '').toLowerCase(),
+        schoolId: user?.schoolId,
+      })
+
+      if (response.data.success) {
+        toast.success(`${userType} registered successfully!`)
+        setShowRegistrationForm(null)
+      } else {
+        throw new Error(response.data.message || 'Registration failed')
+      }
+    } catch (error) {
+      logger.error('Registration error', error)
+      const message = error?.response?.data?.message || error.message || ERROR_MESSAGES.GENERIC
+      toast.error(message)
+    } finally {
+      setRegistrationLoading(false)
+    }
+  }
 
   const tabs = useMemo(
     () => [
@@ -300,30 +328,21 @@ function HeadteacherDashboardContent() {
           <section aria-label="Registration Form">
             {showRegistrationForm === 'teacher' && (
               <TeacherRegistrationForm
-                onSubmit={(data) => {
-                  console.log('Teacher registration:', data)
-                  setShowRegistrationForm(null)
-                }}
+                onSubmit={(data) => handleRegistration(data, 'teacher')}
                 onCancel={() => setShowRegistrationForm(null)}
               />
             )}
 
             {showRegistrationForm === 'student' && (
               <StudentRegistrationForm
-                onSubmit={(data) => {
-                  console.log('Student registration:', data)
-                  setShowRegistrationForm(null)
-                }}
+                onSubmit={(data) => handleRegistration(data, 'student')}
                 onCancel={() => setShowRegistrationForm(null)}
               />
             )}
 
             {showRegistrationForm === 'hod' && (
               <HodRegistrationForm
-                onSubmit={(data) => {
-                  console.log('HOD registration:', data)
-                  setShowRegistrationForm(null)
-                }}
+                onSubmit={(data) => handleRegistration(data, 'hod')}
                 onCancel={() => setShowRegistrationForm(null)}
               />
             )}

@@ -42,23 +42,41 @@ export default function AttendancePage() {
 
   const [attendance, setAttendance] = useState({})
 
+  const { data: savedRecords } = useQuery({
+    queryKey: ['attendance-records', selectedClass, selectedDate],
+    enabled: Boolean(selectedClass && selectedDate),
+    queryFn: async () => {
+      const params = new URLSearchParams()
+      params.set('classId', selectedClass)
+      params.set('date', selectedDate)
+      const res = await fetch(`/api/attendance?${params.toString()}`, { credentials: 'include' })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'Failed to load attendance')
+      return Array.isArray(json?.data) ? json.data : []
+    },
+  })
+
   useEffect(() => {
     if (!selectedClass) return
     if (students.length === 0) {
       setAttendance({})
       return
     }
-    setAttendance((prev) => {
-      const next = { ...prev }
+    const savedMap = new Map(
+      (Array.isArray(savedRecords) ? savedRecords : []).map((r) => [
+        String(r.studentId),
+        String(r.status),
+      ])
+    )
+    setAttendance(() => {
+      const next = {}
       for (const s of students) {
-        if (!next[String(s.id)]) next[String(s.id)] = 'present'
+        const id = String(s.id)
+        next[id] = savedMap.get(id) || 'present'
       }
-      Object.keys(next).forEach((id) => {
-        if (!students.some((s) => String(s.id) === id)) delete next[id]
-      })
       return next
     })
-  }, [selectedClass, students])
+  }, [selectedClass, selectedDate, students, savedRecords])
 
   const handleAttendanceChange = (studentId, status) => {
     setAttendance((prev) => ({
@@ -72,6 +90,7 @@ export default function AttendancePage() {
       fetch('/api/attendance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ date: selectedDate, records }),
       }).then(async (r) => {
         const json = await r.json().catch(() => ({}))
@@ -81,6 +100,7 @@ export default function AttendancePage() {
     onSuccess: () => {
       queryClient.invalidateQueries(['teacher-dashboard'])
       queryClient.invalidateQueries(['class-students', selectedClass])
+      queryClient.invalidateQueries(['attendance-records', selectedClass, selectedDate])
       toast.success('Attendance saved successfully!')
     },
     onError: (error) => {
@@ -251,6 +271,7 @@ export default function AttendancePage() {
                   onClick={handleSaveAttendance}
                   className="bg-royalPurple-success hover:bg-royalPurple-success focus:ring-2 focus:ring-green-500 focus:ring-offset-2 outline-none"
                   aria-label="Save current attendance"
+                  disabled={attendanceMutation.isLoading}
                 >
                   Save Attendance
                 </Button>

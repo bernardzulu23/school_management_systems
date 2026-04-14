@@ -4,6 +4,44 @@ import { authMiddleware } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
+export const GET = withErrorHandler(async function GET(request) {
+  const auth = authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+
+  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const { searchParams } = new URL(request.url)
+  const classId = String(searchParams.get('classId') || '').trim()
+  const dateStr = String(searchParams.get('date') || '').trim()
+  if (!classId || !dateStr) {
+    return NextResponse.json({ error: 'classId and date are required' }, { status: 400 })
+  }
+
+  const date = new Date(dateStr)
+  if (Number.isNaN(date.getTime())) {
+    return NextResponse.json({ error: 'Invalid date' }, { status: 400 })
+  }
+
+  const normalized = new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+  )
+
+  const students = await prisma.student.findMany({
+    where: { schoolId, classId },
+    select: { id: true },
+  })
+  const ids = students.map((s) => s.id)
+  if (ids.length === 0) return NextResponse.json({ success: true, data: [] })
+
+  const records = await prisma.attendance.findMany({
+    where: { schoolId, date: normalized, studentId: { in: ids } },
+    select: { studentId: true, status: true, remarks: true },
+  })
+
+  return NextResponse.json({ success: true, data: records })
+})
+
 export const POST = withErrorHandler(async function POST(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response

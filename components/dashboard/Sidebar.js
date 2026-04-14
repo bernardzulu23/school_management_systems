@@ -60,6 +60,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Subjects', href: '/admin/subjects', icon: BookOpen },
         { name: 'Teacher Performance', href: '/admin/teacher-performance', icon: Target },
         { name: 'Classes', href: '/dashboard/classes', icon: GraduationCap },
+        { name: 'Attendance Returns', href: '/dashboard/attendance/returns', icon: UserCheck },
         { name: 'Master Timetable', href: '/dashboard/timetable/master', icon: Calendar },
         { name: 'Department Timetable', href: '/dashboard/timetable/hod', icon: Calendar },
         { name: 'Assessments', href: '/dashboard/assessments', icon: ClipboardList },
@@ -82,6 +83,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
         { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
+        { name: 'Attendance Returns', href: '/dashboard/attendance/returns', icon: UserCheck },
       ],
       teacher: [
         { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },

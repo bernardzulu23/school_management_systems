@@ -637,10 +637,42 @@ export default function TeacherDashboard() {
                       </h4>
                     </div>
                     <ul className="space-y-2 text-sm text-royalPurple-text2">
-                      <li>🎨 Interactive Lesson Builder</li>
-                      <li>🔬 Virtual Lab Simulations</li>
-                      <li>📊 Real-time Assessment Tools</li>
-                      <li>🎯 Adaptive Content Delivery</li>
+                      <li>
+                        <button
+                          type="button"
+                          className="w-full text-left hover:text-royalPurple-text1"
+                          onClick={() => router.push('/dashboard/teacher/lesson-planner')}
+                        >
+                          🎨 Interactive Lesson Builder
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          type="button"
+                          className="w-full text-left hover:text-royalPurple-text1"
+                          onClick={() => router.push('/dashboard/teacher/virtual-lab')}
+                        >
+                          🔬 Virtual Lab Simulations
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          type="button"
+                          className="w-full text-left hover:text-royalPurple-text1"
+                          onClick={() => router.push('/dashboard/teacher/assessments')}
+                        >
+                          📊 Real-time Assessment Tools
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          type="button"
+                          className="w-full text-left hover:text-royalPurple-text1"
+                          onClick={() => router.push('/dashboard/teacher/materials')}
+                        >
+                          🎯 Adaptive Content Delivery
+                        </button>
+                      </li>
                     </ul>
                     <Button
                       className="w-full mt-3 bg-royalPurple-pill/60 hover:bg-royalPurple-pill/80 text-royalPurple-text1 border border-royalPurple-border2/50"
@@ -659,10 +691,42 @@ export default function TeacherDashboard() {
                       <h4 className="font-semibold text-royalPurple-text1">Student Analytics</h4>
                     </div>
                     <ul className="space-y-2 text-sm text-royalPurple-text2">
-                      <li>📈 Performance Tracking</li>
-                      <li>🎯 Learning Gap Analysis</li>
-                      <li>📊 Engagement Metrics</li>
-                      <li>🔍 Predictive Insights</li>
+                      <li>
+                        <button
+                          type="button"
+                          className="w-full text-left hover:text-royalPurple-text1"
+                          onClick={() => router.push('/dashboard/teacher/results')}
+                        >
+                          📈 Performance Tracking
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          type="button"
+                          className="w-full text-left hover:text-royalPurple-text1"
+                          onClick={() => router.push('/dashboard/teacher/results')}
+                        >
+                          🎯 Learning Gap Analysis
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          type="button"
+                          className="w-full text-left hover:text-royalPurple-text1"
+                          onClick={() => router.push('/dashboard/teacher/results')}
+                        >
+                          📊 Engagement Metrics
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          type="button"
+                          className="w-full text-left hover:text-royalPurple-text1"
+                          onClick={() => router.push('/dashboard/teacher/results')}
+                        >
+                          🔍 Predictive Insights
+                        </button>
+                      </li>
                     </ul>
                     <Button
                       className="w-full mt-3 bg-royalPurple-accent/60 hover:bg-royalPurple-accent/80 text-royalPurple-text1 border border-royalPurple-border2/50"
@@ -681,10 +745,42 @@ export default function TeacherDashboard() {
                       <h4 className="font-semibold text-royalPurple-text1">Collaboration Hub</h4>
                     </div>
                     <ul className="space-y-2 text-sm text-royalPurple-text2">
-                      <li>👥 Teacher Communities</li>
-                      <li>📚 Resource Sharing</li>
-                      <li>💬 Parent Communication</li>
-                      <li>🤝 Peer Mentoring</li>
+                      <li>
+                        <button
+                          type="button"
+                          className="w-full text-left hover:text-royalPurple-text1"
+                          onClick={() => router.push('/dashboard/teacher/community')}
+                        >
+                          👥 Teacher Communities
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          type="button"
+                          className="w-full text-left hover:text-royalPurple-text1"
+                          onClick={() => router.push('/dashboard/teacher/materials')}
+                        >
+                          📚 Resource Sharing
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          type="button"
+                          className="w-full text-left hover:text-royalPurple-text1"
+                          onClick={() => router.push('/dashboard/sms')}
+                        >
+                          💬 Parent Communication
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          type="button"
+                          className="w-full text-left hover:text-royalPurple-text1"
+                          onClick={() => router.push('/dashboard/teacher/community')}
+                        >
+                          🤝 Peer Mentoring
+                        </button>
+                      </li>
                     </ul>
                     <Button
                       className="w-full mt-3 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50"
@@ -1601,8 +1697,11 @@ export default function TeacherDashboard() {
                       </p>
                     </div>
                   </div>
-                  <Button className="w-full mt-6 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-royalPurple-text1">
-                    Create Assessment
+                  <Button
+                    asChild
+                    className="w-full mt-6 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-royalPurple-text1"
+                  >
+                    <Link href="/dashboard/teacher/assessments/create">Create Assessment</Link>
                   </Button>
                 </div>
               </CardContent>
@@ -1630,8 +1729,11 @@ export default function TeacherDashboard() {
                       </p>
                     </div>
                   </div>
-                  <Button className="w-full mt-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-royalPurple-text1">
-                    Continue Marking
+                  <Button
+                    asChild
+                    className="w-full mt-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-royalPurple-text1"
+                  >
+                    <Link href="/dashboard/teacher/results">Continue Marking</Link>
                   </Button>
                 </div>
               </CardContent>

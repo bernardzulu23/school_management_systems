@@ -106,6 +106,27 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
 
+    const school = await prisma.school.findUnique({
+      where: { id: schoolId },
+      select: {
+        id: true,
+        active: true,
+        emailVerified: true,
+        plan: true,
+        planExpiresAt: true,
+        trialEndsAt: true,
+      },
+    })
+    if (!school || school.active === false) {
+      return NextResponse.json({ error: 'School is not active' }, { status: 403 })
+    }
+    if (!school.emailVerified) {
+      return NextResponse.json(
+        { error: 'Please verify your email address first.', code: 'EMAIL_NOT_VERIFIED' },
+        { status: 403 }
+      )
+    }
+
     // 3. Password Verification
     const isValid = await bcrypt.compare(password, user.password)
 
