@@ -2,7 +2,12 @@ import { NextResponse } from 'next/server'
 import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
-import { checkMonthlyAIQuota, getPerMinuteLimit } from '@/lib/ai/aiAccess'
+import {
+  checkAILimit,
+  getPerMinuteLimit,
+  getSchoolPlanForUsage,
+  trackAIUsage,
+} from '@/lib/middleware/aiUsageTracker'
 import { analyzeCBCCompetencies } from '@/lib/ai/zambia-features'
 
 export async function POST(request) {
@@ -15,8 +20,10 @@ export async function POST(request) {
   const schoolId = String(user.schoolId || '').trim()
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  const quota = await checkMonthlyAIQuota(schoolId)
-  const perMinuteLimit = getPerMinuteLimit(quota?.plan)
+  const school = await getSchoolPlanForUsage(schoolId)
+  if (!school) return NextResponse.json({ error: 'School not found' }, { status: 404 })
+
+  const perMinuteLimit = getPerMinuteLimit(school.plan)
   const rl = rateLimiter(request, {
     limit: process.env.NODE_ENV === 'production' ? perMinuteLimit : perMinuteLimit * 20,
     windowMs: 60 * 1000,
@@ -25,15 +32,11 @@ export async function POST(request) {
   })
   if (rl.isLimited) return rl.response
 
-  if (quota?.exceeded) {
-    return NextResponse.json(
-      { error: 'Monthly AI quota exceeded', code: 'AI_QUOTA_EXCEEDED', plan: quota.plan },
-      { status: 429 }
-    )
-  }
-
   const blocked = await requireFeature(schoolId, 'cbc-competency-tracker')
   if (blocked) return blocked
+
+  const limitBlock = await checkAILimit(schoolId)
+  if (limitBlock) return limitBlock
 
   const body = await request.json().catch(() => ({}))
   const studentName = String(body?.studentName || '').trim()
@@ -55,6 +58,7 @@ export async function POST(request) {
     )
   }
 
+  await trackAIUsage(schoolId, 'cbc-competency-tracker')
   return NextResponse.json({
     success: true,
     analysis: result.analysis,

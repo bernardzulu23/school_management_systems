@@ -5,7 +5,12 @@ import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import crypto from 'crypto'
 import prisma from '@/lib/prisma'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
-import { checkMonthlyAIQuota, getPerMinuteLimit } from '@/lib/ai/aiAccess'
+import {
+  checkAILimit,
+  getPerMinuteLimit,
+  getSchoolPlanForUsage,
+  trackAIUsage,
+} from '@/lib/middleware/aiUsageTracker'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -21,8 +26,10 @@ export async function POST(request) {
   const schoolId = String(user.schoolId || '').trim()
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  const quota = await checkMonthlyAIQuota(schoolId)
-  const perMinuteLimit = getPerMinuteLimit(quota?.plan)
+  const school = await getSchoolPlanForUsage(schoolId)
+  if (!school) return NextResponse.json({ error: 'School not found' }, { status: 404 })
+
+  const perMinuteLimit = getPerMinuteLimit(school.plan)
   const rl = rateLimiter(request, {
     limit: process.env.NODE_ENV === 'production' ? perMinuteLimit : perMinuteLimit * 20,
     windowMs: 60 * 1000,
@@ -31,15 +38,11 @@ export async function POST(request) {
   })
   if (rl.isLimited) return rl.response
 
-  if (quota?.exceeded) {
-    return NextResponse.json(
-      { error: 'Monthly AI quota exceeded', code: 'AI_QUOTA_EXCEEDED', plan: quota.plan },
-      { status: 429 }
-    )
-  }
-
   const blocked = await requireFeature(schoolId, 'ai-story-weaver')
   if (blocked) return blocked
+
+  const limitBlock = await checkAILimit(schoolId)
+  if (limitBlock) return limitBlock
 
   const body = await request.json().catch(() => ({}))
   const grade = String(body?.grade || '').trim()
@@ -93,28 +96,55 @@ COMPREHENSION QUESTIONS:
 
 Write the ${storyType} now:`
 
-  try {
-    const model = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6'
-    const message = await client.messages.create({
-      model,
-      max_tokens: 1500,
-      messages: [{ role: 'user', content: prompt }],
-    })
+  const encoder = new TextEncoder()
+  const stream = new ReadableStream({
+    async start(controller) {
+      let responseText = ''
+      try {
+        const claudeStream = await client.messages.stream({
+          model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6',
+          max_tokens: 1500,
+          messages: [{ role: 'user', content: prompt }],
+        })
 
-    const story = String(message?.content?.[0]?.text || '')
-    await prisma.aIRequest.create({
-      data: {
-        id: crypto.randomUUID(),
-        schoolId,
-        feature: 'ai-story-weaver',
-        prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
-        response: story.length > 20000 ? story.slice(0, 20000) : story,
-        tokens: Number(message?.usage?.output_tokens || 0),
-      },
-    })
-    return NextResponse.json({ story })
-  } catch (err) {
-    console.error('[story-weaver] Claude error:', err?.message)
-    return NextResponse.json({ error: 'Failed to generate story. Try again.' }, { status: 500 })
-  }
+        for await (const event of claudeStream) {
+          if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta') {
+            const chunk = String(event.delta.text || '')
+            responseText += chunk
+            const data = JSON.stringify({ text: chunk })
+            controller.enqueue(encoder.encode(`data: ${data}\n\n`))
+          }
+        }
+
+        await trackAIUsage(schoolId, 'ai-story-weaver')
+        await prisma.aIRequest.create({
+          data: {
+            id: crypto.randomUUID(),
+            schoolId,
+            feature: 'ai-story-weaver',
+            prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
+            response: responseText.length > 20000 ? responseText.slice(0, 20000) : responseText,
+            tokens: 0,
+          },
+        })
+        controller.enqueue(encoder.encode('data: [DONE]\n\n'))
+        controller.close()
+      } catch (err) {
+        controller.enqueue(
+          encoder.encode(
+            `data: ${JSON.stringify({ error: err?.message || 'Failed to generate story' })}\n\n`
+          )
+        )
+        controller.close()
+      }
+    },
+  })
+
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+    },
+  })
 }

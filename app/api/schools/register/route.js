@@ -57,6 +57,21 @@ function getBaseDomain(host) {
 }
 
 export async function POST(request) {
+  if (
+    String(process.env.ALLOW_DIRECT_SCHOOL_REGISTRATION || '')
+      .trim()
+      .toLowerCase() !== 'true'
+  ) {
+    return NextResponse.json(
+      {
+        success: false,
+        error:
+          'Direct registration is disabled. Use the onboarding flow (email verification + payment) to register a new school.',
+      },
+      { status: 403 }
+    )
+  }
+
   const rate = rateLimiter(request, {
     limit: 3,
     windowMs: 60 * 60 * 1000,

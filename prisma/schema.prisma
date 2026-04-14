@@ -75,6 +75,7 @@ model School {
   strategicReviews     StrategicReview[]
   teacherTermProgress  TeacherTermProgress[]
   aiRequests           AIRequest[]
+  aiUsageLogs          AIUsageLog[]
   
   // Join Table Relations
   activityParticipants ActivityParticipant[]
@@ -956,4 +957,45 @@ model AIRequest {
   @@index([schoolId])
   @@index([feature])
   @@index([createdAt])
+}
+
+model AIUsageLog {
+  id        String   @id @default(uuid())
+
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  featureId String
+  monthKey  String
+  count     Int      @default(0)
+  lastUsedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([schoolId, monthKey, featureId])
+  @@index([schoolId, monthKey])
+}
+
+model SchoolRegistration {
+  id        String   @id @default(uuid())
+
+  email     String   @unique
+  passwordHash String
+
+  isVerified Boolean @default(false)
+  verificationToken String? @unique
+  verificationExpiry DateTime?
+
+  plan      String?
+  paymentStatus String @default("unpaid")
+  paymentProvider String?
+  paymentReference String?
+
+  adminName String?
+  schoolName String?
+  subdomain String?
+  level     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

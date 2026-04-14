@@ -42,14 +42,16 @@ describe('AI access policy', () => {
   })
 
   test('monthly quota by plan', () => {
-    expect(getMonthlyAIQuota('basic')).toBe(5)
+    expect(getMonthlyAIQuota('trial')).toBe(10)
+    expect(getMonthlyAIQuota('basic')).toBe(0)
     expect(getMonthlyAIQuota('standard')).toBe(50)
     expect(getMonthlyAIQuota('premium')).toBe(Number.POSITIVE_INFINITY)
   })
 
   test('per-minute limit by plan', () => {
-    expect(getPerMinuteLimit('basic')).toBe(2)
+    expect(getPerMinuteLimit('trial')).toBe(5)
+    expect(getPerMinuteLimit('basic')).toBe(1)
     expect(getPerMinuteLimit('standard')).toBe(10)
-    expect(getPerMinuteLimit('premium')).toBe(100)
+    expect(getPerMinuteLimit('premium')).toBe(60)
   })
 })

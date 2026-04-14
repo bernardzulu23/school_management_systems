@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import UpgradePrompt from '@/components/shared/UpgradePrompt'
+import { useAIStream } from '@/hooks/useAIStream'
 
 const GRADES = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']
 const SUBJECTS = [
@@ -40,45 +42,20 @@ export default function AIStoryWeaver() {
     length: 'medium',
     includeQuestions: true,
   })
-  const [story, setStory] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const { text: story, loading, error, start, reset, stop } = useAIStream('/api/ai/story-weaver')
   const [copied, setCopied] = useState(false)
 
   const generate = async () => {
-    if (!form.topic.trim()) {
-      setError('Please enter a topic first')
-      return
-    }
-    setLoading(true)
-    setError('')
-    setStory('')
-
     const lengthMap = { short: '2-3 paragraphs', medium: '4-5 paragraphs', long: '6-8 paragraphs' }
-
-    try {
-      const res = await fetch('/api/ai/story-weaver', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          grade: form.grade,
-          subject: form.subject,
-          topic: form.topic,
-          storyType: form.storyType,
-          setting: form.setting,
-          length: lengthMap[form.length],
-          includeQuestions: form.includeQuestions,
-        }),
-      })
-      const data = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(data?.error || 'Failed to generate story')
-      setStory(String(data?.story || ''))
-    } catch (err) {
-      setError(err?.message || 'Failed to generate story')
-    } finally {
-      setLoading(false)
-    }
+    await start({
+      grade: form.grade,
+      subject: form.subject,
+      topic: form.topic,
+      storyType: form.storyType,
+      setting: form.setting,
+      length: lengthMap[form.length],
+      includeQuestions: form.includeQuestions,
+    })
   }
 
   const copyToClipboard = async () => {
@@ -215,21 +192,7 @@ export default function AIStoryWeaver() {
           </label>
         </div>
 
-        {error ? (
-          <div
-            style={{
-              background: '#3b0a0a',
-              border: '1px solid #7f1d1d',
-              borderRadius: 8,
-              padding: '10px 12px',
-              color: '#fca5a5',
-              fontSize: 13,
-              marginBottom: 12,
-            }}
-          >
-            {error}
-          </div>
-        ) : null}
+        {error ? <UpgradePrompt error={error} onDismiss={reset} /> : null}
 
         <button
           onClick={generate}
@@ -268,6 +231,25 @@ export default function AIStoryWeaver() {
             '✨ Generate Story'
           )}
         </button>
+        {loading ? (
+          <button
+            onClick={stop}
+            style={{
+              width: '100%',
+              padding: '11px',
+              background: 'transparent',
+              border: '1px solid #3b2a66',
+              borderRadius: 10,
+              color: '#a78bfa',
+              fontWeight: 700,
+              fontSize: 13,
+              cursor: 'pointer',
+              marginTop: 10,
+            }}
+          >
+            Stop
+          </button>
+        ) : null}
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
 
@@ -288,10 +270,7 @@ export default function AIStoryWeaver() {
             <button onClick={printStory} style={actionBtn}>
               🖨️ Print / Save PDF
             </button>
-            <button
-              onClick={() => setStory('')}
-              style={{ ...actionBtn, marginLeft: 'auto', color: '#fca5a5' }}
-            >
+            <button onClick={reset} style={{ ...actionBtn, marginLeft: 'auto', color: '#fca5a5' }}>
               🗑️ Clear
             </button>
           </div>

@@ -1,11 +1,11 @@
 'use client'
 
-import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/Button'
-import { ArrowLeft, ClipboardList } from 'lucide-react'
 import Link from 'next/link'
-import toast from 'react-hot-toast'
+import { ArrowLeft } from 'lucide-react'
+import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import { Button } from '@/components/ui/Button'
+import { FeatureGate } from '@/components/FeatureGate'
+import AILessonPlanner from '@/components/creative/AILessonPlanner'
 
 export default function TeacherLessonPlannerPage() {
   return (
@@ -17,27 +17,9 @@ export default function TeacherLessonPlannerPage() {
             Back to Dashboard
           </Button>
         </Link>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <ClipboardList className="h-5 w-5 text-royalPurple-accentTx" />
-              Feature Coming Soon
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="text-royalPurple-text1 font-semibold">AI Lesson Planner</div>
-            <div className="text-royalPurple-text2 text-sm">
-              Generate lesson plans aligned to the Zambian curriculum, including objectives,
-              activities, and assessment.
-            </div>
-            <Button
-              onClick={() => toast.success('You will be notified when this feature is ready')}
-            >
-              Notify me when ready
-            </Button>
-          </CardContent>
-        </Card>
+        <FeatureGate featureId="ai-lesson-planner">
+          <AILessonPlanner />
+        </FeatureGate>
       </div>
     </DashboardLayout>
   )

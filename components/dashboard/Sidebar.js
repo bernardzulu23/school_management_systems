@@ -109,6 +109,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'My Timetable', href: '/dashboard/timetable/student', icon: Calendar },
         { name: 'Assessments', href: '/dashboard/assessments', icon: ClipboardList },
         { name: 'Results', href: '/dashboard/results', icon: BarChart3 },
+        { name: 'ECZ Practice', href: '/dashboard/student/ecz-practice', icon: Target },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
       ],

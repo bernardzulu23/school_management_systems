@@ -1,4 +1,7 @@
 import { NextResponse } from 'next/server'
+import Anthropic from '@anthropic-ai/sdk'
+import crypto from 'crypto'
+import prisma from '@/lib/prisma'
 import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
@@ -8,9 +11,6 @@ import {
   getSchoolPlanForUsage,
   trackAIUsage,
 } from '@/lib/middleware/aiUsageTracker'
-import Anthropic from '@anthropic-ai/sdk'
-import crypto from 'crypto'
-import prisma from '@/lib/prisma'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -20,7 +20,6 @@ function extractJSONObject(text) {
 
   const fenced = s.match(/```json\s*([\s\S]*?)\s*```/i) || s.match(/```\s*([\s\S]*?)\s*```/i)
   const candidate = fenced ? fenced[1] : s
-
   const first = candidate.indexOf('{')
   const last = candidate.lastIndexOf('}')
   if (first === -1 || last === -1 || last <= first) return null
@@ -35,8 +34,19 @@ function extractJSONObject(text) {
 export async function POST(request) {
   const user = await getAuthUser(request)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  if (!roleCheck(user, ['TEACHER', 'HOD', 'ADMIN'])) {
-    return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+  if (
+    !roleCheck(user, [
+      'STUDENT',
+      'student',
+      'TEACHER',
+      'teacher',
+      'HOD',
+      'hod',
+      'ADMIN',
+      'headteacher',
+    ])
+  ) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
   const schoolId = String(user.schoolId || '').trim()
@@ -49,65 +59,63 @@ export async function POST(request) {
   const rl = rateLimiter(request, {
     limit: process.env.NODE_ENV === 'production' ? perMinuteLimit : perMinuteLimit * 20,
     windowMs: 60 * 1000,
-    keyPrefix: 'ai_quiz_maker_',
+    keyPrefix: 'ai_ecz_practice_',
     keyGenerator: ({ ip }) => `${ip}-${schoolId}-${String(user.id || '')}`,
   })
   if (rl.isLimited) return rl.response
 
-  const blocked = await requireFeature(schoolId, 'ai-quiz-maker')
+  const blocked = await requireFeature(schoolId, 'ecz-practice')
   if (blocked) return blocked
 
   const limitBlock = await checkAILimit(schoolId)
   if (limitBlock) return limitBlock
 
   const body = await request.json().catch(() => ({}))
-  const grade = String(body?.grade || '').trim()
   const subject = String(body?.subject || '').trim()
+  const examLevel = String(body?.examLevel || body?.level || '').trim() || 'grade9'
   const topic = String(body?.topic || '').trim()
-  const questionCount = Number(body?.questionCount ?? 10)
-  const difficulty = String(body?.difficulty || 'medium').trim()
+  const questionCount = Number(body?.questionCount ?? 5)
 
-  if (!grade || !subject || !topic) {
-    return NextResponse.json({ error: 'grade, subject, topic required' }, { status: 400 })
+  if (!subject || !topic) {
+    return NextResponse.json({ error: 'subject and topic required' }, { status: 400 })
   }
 
   const count =
-    Number.isFinite(questionCount) && questionCount > 0 ? Math.min(30, questionCount) : 10
+    Number.isFinite(questionCount) && questionCount > 0 ? Math.min(20, questionCount) : 5
+  const prompt = `Create ECZ-style practice questions and return ONLY valid JSON.
 
-  const prompt = `Create a formative quiz for Zambian students and return ONLY valid JSON.
-
-Grade: ${grade}
 Subject: ${subject}
+Exam Level: ${examLevel} (grade9 or grade12)
 Topic: ${topic}
-Difficulty: ${difficulty}
 Question Count: ${count}
-Curriculum: CBC (Competency-Based)
 
 Return JSON with this shape:
 {
-  "title": "string",
-  "grade": "string",
-  "subject": "string",
-  "topic": "string",
-  "totalMarks": number,
-  "questions": [
-    {
-      "id": "q1",
-      "type": "mcq|short|true_false",
-      "question": "string",
-      "options": ["string"] (only for mcq),
-      "answer": "string",
-      "marks": number,
-      "competencies": ["string"],
-      "explanation": "string"
-    }
-  ]
+  "paper": {
+    "examInfo": {
+      "subject": "string",
+      "level": "string",
+      "topic": "string",
+      "totalMarks": number,
+      "timeAllowed": "string"
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq|short|structured",
+        "question": "string",
+        "options": ["string"] (only for mcq),
+        "marks": number,
+        "answer": "string",
+        "explanation": "string"
+      }
+    ]
+  }
 }
 
 Rules:
-- Keep language age-appropriate for ${grade}
-- Include at least 2 critical-thinking questions
-- Reference Zambian context where appropriate
+- Match ECZ tone and difficulty for the level
+- Include marking guidance in 'answer' and 'explanation'
 - Do not include markdown, code fences, or any extra text.`
 
   try {
@@ -116,27 +124,30 @@ Rules:
       max_tokens: 2500,
       messages: [{ role: 'user', content: prompt }],
     })
-
     const text = String(message?.content?.[0]?.text || '')
-    const quiz = extractJSONObject(text)
-    if (!quiz || !Array.isArray(quiz.questions)) {
-      return NextResponse.json({ error: 'AI returned invalid quiz JSON' }, { status: 502 })
+    const parsed = extractJSONObject(text)
+    const paper = parsed?.paper
+    if (!paper || !Array.isArray(paper.questions)) {
+      return NextResponse.json({ error: 'AI returned invalid ECZ JSON' }, { status: 502 })
     }
 
-    await trackAIUsage(schoolId, 'ai-quiz-maker')
+    await trackAIUsage(schoolId, 'ecz-practice')
     await prisma.aIRequest.create({
       data: {
         id: crypto.randomUUID(),
         schoolId,
-        feature: 'ai-quiz-maker',
+        feature: 'ecz-practice',
         prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
         response: text.length > 20000 ? text.slice(0, 20000) : text,
         tokens: Number(message?.usage?.output_tokens || 0),
       },
     })
 
-    return NextResponse.json({ success: true, quiz })
+    return NextResponse.json({ success: true, paper })
   } catch (err) {
-    return NextResponse.json({ error: err?.message || 'Failed to generate quiz' }, { status: 500 })
+    return NextResponse.json(
+      { error: err?.message || 'Failed to generate practice paper' },
+      { status: 500 }
+    )
   }
 }

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PlanComparisonCard } from '@/components/FeatureGate'
+import ProviderLogos from '@/components/payments/ProviderLogos'
 
 function formatDate(value) {
   if (!value) return null
@@ -82,6 +83,18 @@ export default function BillingPage() {
                 ) : null}
               </>
             )}
+          </CardContent>
+        </Card>
+
+        <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
+          <CardHeader>
+            <CardTitle className="text-royalPurple-text1">Supported Mobile Money</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="text-royalPurple-text2 text-sm">
+              Pay your subscription using any of these providers:
+            </div>
+            <ProviderLogos size={40} />
           </CardContent>
         </Card>
 

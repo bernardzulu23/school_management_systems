@@ -154,3 +154,28 @@ export async function sendSchoolVerificationEmail({ to, schoolName, subdomain, v
 
   return sendEmail(to, `Activate your ${schoolName} portal`, html)
 }
+
+export async function sendOnboardingVerificationEmail({ to, verifyUrl }) {
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 640px; margin: 0 auto;">
+      <div style="background-color: #2d1b4e; color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <h2 style="margin: 0;">Verify your email</h2>
+      </div>
+      <div style="background-color: #f5f5f5; padding: 28px; border-radius: 0 0 10px 10px;">
+        <p style="margin-top: 0;">Welcome,</p>
+        <p>Please verify your email to continue with plan selection and payment.</p>
+        <div style="text-align: center; margin: 24px 0;">
+          <a href="${verifyUrl}" style="background-color: #f59e0b; color: black; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+            Verify Email
+          </a>
+        </div>
+        <p style="color: #666; font-size: 12px; margin-bottom: 0;">
+          If the button doesn’t work, copy and paste this link into your browser:<br />
+          <code style="background-color: white; padding: 6px; border-radius: 6px; display: inline-block; margin-top: 8px;">${verifyUrl}</code>
+        </p>
+      </div>
+    </div>
+  `
+
+  return sendEmail(to, 'Verify your email to continue registration', html)
+}

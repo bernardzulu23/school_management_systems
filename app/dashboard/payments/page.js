@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuth } from '@/lib/auth'
+import ProviderLogos from '@/components/payments/ProviderLogos'
 
 const PROVIDERS = [
   { value: 'airtel', label: 'Airtel Zambia' },
@@ -73,6 +74,15 @@ export default function PaymentsPage() {
   return (
     <DashboardLayout title="Payments">
       <div className="space-y-6">
+        <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
+          <CardHeader>
+            <CardTitle className="text-royalPurple-text1">Supported Providers</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ProviderLogos size={44} />
+          </CardContent>
+        </Card>
+
         <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
           <CardHeader>
             <CardTitle className="text-royalPurple-text1">Mobile Money Payment</CardTitle>
