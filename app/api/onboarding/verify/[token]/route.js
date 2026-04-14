@@ -49,6 +49,6 @@ export async function GET(request, { params }) {
     ...(cookieDomain ? { domain: cookieDomain } : {}),
   })
 
-  const origin = request.headers.get('origin') || new URL(request.url).origin
-  return NextResponse.redirect(`${origin}/onboarding?step=plan`)
+  const baseDomain = process.env.APP_BASE_DOMAIN || 'bluepeacktechnologies.com'
+  return NextResponse.redirect(`https://${baseDomain}/onboarding?step=plan`)
 }

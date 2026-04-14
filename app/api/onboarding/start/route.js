@@ -63,8 +63,8 @@ export async function POST(request) {
   })
 
   if (!existing?.isVerified) {
-    const origin = request.headers.get('origin') || new URL(request.url).origin
-    const verifyUrl = `${origin}/api/onboarding/verify/${verificationToken}`
+    const baseDomain = process.env.APP_BASE_DOMAIN || 'bluepeacktechnologies.com'
+    const verifyUrl = `https://${baseDomain}/api/onboarding/verify/${verificationToken}`
     await sendOnboardingVerificationEmail({ to: email, verifyUrl })
     return NextResponse.json({ success: true, requiresVerification: true })
   }
