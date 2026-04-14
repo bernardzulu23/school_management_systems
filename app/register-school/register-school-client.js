@@ -63,6 +63,7 @@ export default function RegisterSchoolClient() {
   const [form, setForm] = useState({
     schoolName: '',
     subdomain: '',
+    level: 'combined',
     adminName: '',
     adminEmail: '',
     adminPassword: '',
@@ -255,6 +256,20 @@ export default function RegisterSchoolClient() {
                 {subdomainError || 'Unavailable'}
               </p>
             ) : null}
+          </div>
+
+          <div>
+            <label className="text-royalPurple-text2 text-sm">School Level</label>
+            <select
+              className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1 mt-1"
+              value={form.level}
+              onChange={(e) => setForm((prev) => ({ ...prev, level: e.target.value }))}
+              required
+            >
+              <option value="primary">Primary School Only (Grades 1-7)</option>
+              <option value="secondary">Secondary School Only (Grades 8-12)</option>
+              <option value="combined">Combined Primary & Secondary</option>
+            </select>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

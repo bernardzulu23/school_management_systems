@@ -10,7 +10,7 @@ function standardZambianClassNames() {
   for (const form of [1, 2, 3, 4, 5, 6]) {
     for (const section of sections) names.push(`Form ${form}${section}`)
   }
-  for (const grade of [8, 9, 10, 11, 12]) {
+  for (const grade of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]) {
     for (const section of sections) names.push(`${grade}${section}`)
   }
   return names

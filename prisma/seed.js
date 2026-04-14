@@ -19,6 +19,9 @@ async function main() {
       currency: 'USD',
       timezone: 'UTC',
       academicYear: '2025/2026',
+      plan: 'premium',
+      planExpiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+      level: 'combined',
     },
   })
   console.log(`Created school: ${school.name} (${school.id})`)

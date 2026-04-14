@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { getAuthUser } from '@/lib/middleware/auth'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
+import crypto from 'crypto'
+import prisma from '@/lib/prisma'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
+import { checkMonthlyAIQuota, getPerMinuteLimit } from '@/lib/ai/aiAccess'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -14,13 +18,28 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Access denied' }, { status: 403 })
   }
 
+  const schoolId = String(user.schoolId || '').trim()
+  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const quota = await checkMonthlyAIQuota(schoolId)
+  const perMinuteLimit = getPerMinuteLimit(quota?.plan)
   const rl = rateLimiter(request, {
-    limit: process.env.NODE_ENV === 'production' ? 30 : 300,
-    windowMs: 60 * 60 * 1000,
+    limit: process.env.NODE_ENV === 'production' ? perMinuteLimit : perMinuteLimit * 20,
+    windowMs: 60 * 1000,
     keyPrefix: 'ai_story_weaver_',
-    keyGenerator: ({ ip }) => `${ip}-${String(user.id || '')}`,
+    keyGenerator: ({ ip }) => `${ip}-${schoolId}-${String(user.id || '')}`,
   })
   if (rl.isLimited) return rl.response
+
+  if (quota?.exceeded) {
+    return NextResponse.json(
+      { error: 'Monthly AI quota exceeded', code: 'AI_QUOTA_EXCEEDED', plan: quota.plan },
+      { status: 429 }
+    )
+  }
+
+  const blocked = await requireFeature(schoolId, 'ai-story-weaver')
+  if (blocked) return blocked
 
   const body = await request.json().catch(() => ({}))
   const grade = String(body?.grade || '').trim()
@@ -83,6 +102,16 @@ Write the ${storyType} now:`
     })
 
     const story = String(message?.content?.[0]?.text || '')
+    await prisma.aIRequest.create({
+      data: {
+        id: crypto.randomUUID(),
+        schoolId,
+        feature: 'ai-story-weaver',
+        prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
+        response: story.length > 20000 ? story.slice(0, 20000) : story,
+        tokens: Number(message?.usage?.output_tokens || 0),
+      },
+    })
     return NextResponse.json({ story })
   } catch (err) {
     console.error('[story-weaver] Claude error:', err?.message)

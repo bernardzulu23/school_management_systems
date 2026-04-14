@@ -26,6 +26,11 @@ model School {
   verificationToken String? @unique
   verificationExpiry DateTime?
   
+  plan        String   @default("trial")
+  planExpiresAt DateTime?
+  trialEndsAt DateTime?
+  level       String   @default("combined")
+
   // School Settings
   timezone    String   @default("Africa/Lusaka")
   currency    String   @default("ZMW")
@@ -69,6 +74,7 @@ model School {
   strategicGoals       StrategicGoal[]
   strategicReviews     StrategicReview[]
   teacherTermProgress  TeacherTermProgress[]
+  aiRequests           AIRequest[]
   
   // Join Table Relations
   activityParticipants ActivityParticipant[]
@@ -932,4 +938,22 @@ model StrategicReview {
 
   @@index([schoolId])
   @@index([scheduledAt])
+}
+
+model AIRequest {
+  id        String   @id @default(uuid())
+
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  feature   String
+  prompt    String   @db.Text
+  response  String   @db.Text
+  tokens    Int
+
+  createdAt DateTime @default(now())
+
+  @@index([schoolId])
+  @@index([feature])
+  @@index([createdAt])
 }

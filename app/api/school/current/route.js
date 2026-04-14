@@ -27,6 +27,10 @@ export async function GET(request) {
         subdomain: true,
         logo_url: true,
         active: true,
+        plan: true,
+        planExpiresAt: true,
+        trialEndsAt: true,
+        level: true,
         // Add other fields as needed for branding
       },
     })

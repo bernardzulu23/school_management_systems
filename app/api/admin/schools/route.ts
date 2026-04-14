@@ -63,6 +63,8 @@ export async function POST(request: NextRequest) {
       timezone,
       currency,
       academicYear,
+      plan,
+      level,
       // Admin user details
       adminName,
       adminEmail,
@@ -101,6 +103,18 @@ export async function POST(request: NextRequest) {
 
     // Hash admin password
     const hashedPassword = await hash(adminPassword, 12)
+    const normalizedPlan = String(plan || 'trial')
+      .trim()
+      .toLowerCase()
+    const normalizedLevel = String(level || 'combined')
+      .trim()
+      .toLowerCase()
+    if (!['trial', 'basic', 'standard', 'premium'].includes(normalizedPlan)) {
+      return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
+    }
+    if (!['primary', 'secondary', 'combined'].includes(normalizedLevel)) {
+      return NextResponse.json({ error: 'Invalid school level' }, { status: 400 })
+    }
 
     // Create school and admin user in a transaction
     const result = await prisma.$transaction(async (tx) => {
@@ -117,6 +131,10 @@ export async function POST(request: NextRequest) {
           currency: currency || 'ZMW',
           academicYear: academicYear || null,
           active: true,
+          plan: normalizedPlan,
+          trialEndsAt:
+            normalizedPlan === 'trial' ? new Date(Date.now() + 14 * 24 * 60 * 60 * 1000) : null,
+          level: normalizedLevel,
         },
       })
 

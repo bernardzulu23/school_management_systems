@@ -99,6 +99,10 @@ export async function POST(request) {
     const address = String(body.address || '').trim() || null
     const province = String(body.province || '').trim() || null
     const email = String(body.schoolEmail || body.email || '').trim() || null
+    const levelRaw = String(
+      body.level || body.schoolLevel || body.schoolLevelSelection || ''
+    ).trim()
+    const level = (levelRaw || 'combined').toLowerCase()
 
     const subdomain = normalizeSubdomain(body.subdomain)
 
@@ -152,6 +156,9 @@ export async function POST(request) {
         { status: 400 }
       )
     }
+    if (!['primary', 'secondary', 'combined'].includes(level)) {
+      return NextResponse.json({ success: false, error: 'Invalid school level' }, { status: 400 })
+    }
     if (RESERVED.has(subdomain)) {
       return NextResponse.json({ success: false, error: 'Subdomain is reserved' }, { status: 409 })
     }
@@ -197,6 +204,9 @@ export async function POST(request) {
           email,
           phone,
           address: [address, province].filter(Boolean).join(', ') || null,
+          level,
+          plan: 'trial',
+          trialEndsAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
           active: false,
           emailVerified: false,
           verificationToken,

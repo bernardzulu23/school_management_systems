@@ -3,6 +3,7 @@
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Button } from '@/components/ui/Button'
 import AIStoryWeaver from '@/components/creative-teaching/AIStoryWeaver'
+import { FeatureGate } from '@/components/FeatureGate'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
@@ -18,7 +19,9 @@ export default function TeacherStoryWeaverPage() {
             </Button>
           </Link>
         </div>
-        <AIStoryWeaver />
+        <FeatureGate featureId="ai-story-weaver">
+          <AIStoryWeaver />
+        </FeatureGate>
       </div>
     </DashboardLayout>
   )
