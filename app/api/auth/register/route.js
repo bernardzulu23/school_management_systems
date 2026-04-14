@@ -9,12 +9,14 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { parseDateInput } from '@/lib/utils/formHelpers'
 
 function generateAutoPassword() {
-  const adjectives = ['Welcome', 'School', 'Student', 'New', 'Learn', 'Smart', 'Bright', 'Star']
-  const nouns = ['2024', '2025', 'Zambia', 'School', 'Class', 'Grade', 'Student', 'Admin']
-  const adj = adjectives[Math.floor(Math.random() * adjectives.length)]
-  const noun = nouns[Math.floor(Math.random() * nouns.length)]
-  const num = Math.floor(1000 + Math.random() * 9000)
-  return `${adj}${noun}${num}!`
+  const length = 16
+  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*'
+  const randomBytes = crypto.randomBytes(length)
+  let password = ''
+  for (let i = 0; i < length; i++) {
+    password += charset[randomBytes[i] % charset.length]
+  }
+  return password
 }
 
 const parseYearGroupSectionFromClassName = (className) => {

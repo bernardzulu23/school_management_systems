@@ -120,7 +120,7 @@ export async function POST(request) {
     if (!school || school.active === false) {
       return NextResponse.json({ error: 'School is not active' }, { status: 403 })
     }
-    if (!school.emailVerified) {
+    if (!school.emailVerified && user.role === 'headteacher') {
       return NextResponse.json(
         { error: 'Please verify your email address first.', code: 'EMAIL_NOT_VERIFIED' },
         { status: 403 }

@@ -64,6 +64,24 @@ export default function OnboardingPage({ searchParams }) {
         body: JSON.stringify({ email, password }),
       })
       const json = await res.json().catch(() => ({}))
+
+      if (json.alreadyCompleted) {
+        toast.success('Welcome back! Redirecting to dashboard...')
+        window.location.href = '/dashboard'
+        return
+      }
+
+      if (json.requiresVerification) {
+        toast.success('Check your email for a verification link')
+        return
+      }
+
+      if (json.requiresPayment) {
+        toast.success('Email already verified! Proceeding to payment...')
+        await refreshStatus()
+        return
+      }
+
       if (!res.ok) throw new Error(json?.error || 'Failed to start onboarding')
       toast.success('Check your email for a verification link')
     } catch (e) {

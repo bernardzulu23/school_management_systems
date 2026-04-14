@@ -53,18 +53,21 @@ export async function POST(request) {
     },
     update: {
       passwordHash,
-      isVerified: false,
-      verificationToken,
-      verificationExpiry,
+      isVerified: existing?.isVerified || false,
+      verificationToken: existing?.isVerified ? existing.verificationToken : verificationToken,
+      verificationExpiry: existing?.isVerified ? existing.verificationExpiry : verificationExpiry,
       paymentStatus: existing?.paymentStatus || 'unpaid',
       plan: existing?.plan || null,
     },
     select: { id: true },
   })
 
-  const origin = request.headers.get('origin') || new URL(request.url).origin
-  const verifyUrl = `${origin}/api/onboarding/verify/${verificationToken}`
-  await sendOnboardingVerificationEmail({ to: email, verifyUrl })
+  if (!existing?.isVerified) {
+    const origin = request.headers.get('origin') || new URL(request.url).origin
+    const verifyUrl = `${origin}/api/onboarding/verify/${verificationToken}`
+    await sendOnboardingVerificationEmail({ to: email, verifyUrl })
+    return NextResponse.json({ success: true, requiresVerification: true })
+  }
 
-  return NextResponse.json({ success: true, requiresVerification: true })
+  return NextResponse.json({ success: true, alreadyVerified: true, requiresPayment: true })
 }
