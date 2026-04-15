@@ -3,6 +3,8 @@ import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request) {
   try {
     const auth = authMiddleware(request)
@@ -37,6 +39,8 @@ export async function GET(request) {
       prisma.subject.count({ where: { schoolId } }),
       prisma.assessment.count({ where: { schoolId } }),
     ])
+
+    console.log(`[DASHBOARD-STATS] schoolId: ${schoolId}, totalStudents: ${totalStudents}`)
 
     // Calculate attendance metrics
     const today = new Date()

@@ -106,6 +106,9 @@ export const POST = withErrorHandler(async (request) => {
 
   // 2. Resolve schoolId
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+
+  console.log(`[REGISTER] email: ${email}, role: ${role}, resolvedSchoolId: ${schoolId}`)
+
   if (!schoolId) {
     return NextResponse.json(
       { success: false, message: 'School context required' },
@@ -250,6 +253,7 @@ export const POST = withErrorHandler(async (request) => {
               medical_conditions: body.medical_conditions,
             },
           })
+          console.log(`[STUDENT-CREATED] id: ${student.id}, schoolId: ${student.schoolId}`)
         } catch (studentError) {
           if (studentError.code === 'P2002') {
             return NextResponse.json(

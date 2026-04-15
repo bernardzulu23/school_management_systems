@@ -111,8 +111,16 @@ const HeadteacherStats = dynamic(
 function HeadteacherDashboardContent() {
   const { user } = useAuth()
   const queryClient = useQueryClient()
-  const { activeTab, setActiveTab, schoolStats, dashboardData, stats, isLoading, error } =
-    useHeadteacher()
+  const {
+    activeTab,
+    setActiveTab,
+    schoolStats,
+    dashboardData,
+    stats,
+    isLoading,
+    error,
+    refreshAll,
+  } = useHeadteacher()
 
   const role = String(user?.role || '').toLowerCase()
   const isHeadteacher = role === 'headteacher' || role === 'admin' || role === 'administrator'
@@ -150,6 +158,8 @@ function HeadteacherDashboardContent() {
       }
 
       if (response.data.success) {
+        // Force immediate refresh of all dashboard data
+        await refreshAll()
         queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
         queryClient.invalidateQueries({ queryKey: ['headteacher-dashboard'] })
 

@@ -34,6 +34,7 @@ import {
 } from 'lucide-react'
 import { CardContent } from '@/components/ui/card'
 import ResponsiveDashboardLayout from '@/components/dashboard/ResponsiveDashboardLayout'
+import AIFeaturesShowcase from '@/components/dashboard/AIFeaturesShowcase'
 
 export default function DashboardPage() {
   const { user, logout } = useAuth()
@@ -210,6 +211,9 @@ export default function DashboardPage() {
             </Card>
           </button>
         </section>
+
+        {/* AI Features Showcase */}
+        <AIFeaturesShowcase />
 
         {/* Smart Analytics Integration */}
         {showSmartAnalytics && (

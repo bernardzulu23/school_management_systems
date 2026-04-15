@@ -169,6 +169,8 @@ export async function GET(request) {
       prisma.result.count({ where: resultWhere }),
     ])
 
+    console.log(`[HEADTEACHER-DASHBOARD] schoolId: ${schoolId}, totalStudents: ${totalStudents}`)
+
     // 2. Attendance (Proper date-range scoped counting)
     const today = new Date()
     const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)
