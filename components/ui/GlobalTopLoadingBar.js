@@ -11,6 +11,11 @@ export default function GlobalTopLoadingBar() {
   const simRef = useRef(null)
 
   useEffect(() => {
+    const defer = (fn) => {
+      if (typeof queueMicrotask === 'function') queueMicrotask(fn)
+      else setTimeout(fn, 0)
+    }
+
     const clearSim = () => {
       if (simRef.current) clearInterval(simRef.current)
       simRef.current = null
@@ -30,10 +35,10 @@ export default function GlobalTopLoadingBar() {
     const onStart = (e) => {
       countRef.current += 1
       const nextLabel = e?.detail?.label
-      if (nextLabel) setLabel(String(nextLabel))
+      if (nextLabel) defer(() => setLabel(String(nextLabel)))
       if (countRef.current === 1) {
-        setPercent(0)
-        setActive(true)
+        defer(() => setPercent(0))
+        defer(() => setActive(true))
         startSim()
       }
     }
@@ -41,17 +46,17 @@ export default function GlobalTopLoadingBar() {
     const onUpdate = (e) => {
       const p = e?.detail?.percent
       if (p === undefined) return
-      setPercent(Math.max(0, Math.min(100, Math.round(Number(p) || 0))))
+      defer(() => setPercent(Math.max(0, Math.min(100, Math.round(Number(p) || 0)))))
     }
 
     const onStop = () => {
       countRef.current = Math.max(0, countRef.current - 1)
       if (countRef.current !== 0) return
       clearSim()
-      setPercent(100)
+      defer(() => setPercent(100))
       setTimeout(() => {
-        if (countRef.current === 0) setActive(false)
-        setPercent(0)
+        if (countRef.current === 0) defer(() => setActive(false))
+        defer(() => setPercent(0))
       }, 300)
     }
 

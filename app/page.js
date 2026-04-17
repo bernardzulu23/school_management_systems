@@ -7,6 +7,10 @@ import { useAuth } from '@/lib/auth'
 import { useSchool } from '@/lib/context/SchoolContext'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { SchoolLogo } from '@/components/SchoolLogo'
+import { AlertTriangle, BarChart2, ClipboardList, FileX, Smartphone, Users } from 'lucide-react'
+import { AIFeatures } from '@/components/sections/AIFeatures'
+import { TimeSavings } from '@/components/sections/TimeSavings'
+import { Pricing } from '@/components/sections/Pricing'
 
 export default function HomePage() {
   const { isAuthenticated, user } = useAuth()
@@ -24,50 +28,38 @@ export default function HomePage() {
   const problems = useMemo(
     () => [
       {
-        icon: '📋',
-        accent: '#f59e0b',
-        accentBg: 'rgba(245, 158, 11, 0.12)',
-        grad: 'linear-gradient(135deg, rgba(245, 158, 11, 0.16) 0%, transparent 60%)',
+        icon: FileX,
+        accent: '#7c3aed',
         title: 'Paper registers getting lost',
         body: 'Digital attendance records that cannot be destroyed, lost, or altered. Ministry inspectors can verify anytime.',
       },
       {
-        icon: '📊',
-        accent: '#22c55e',
-        accentBg: 'rgba(34, 197, 94, 0.12)',
-        grad: 'linear-gradient(135deg, rgba(34, 197, 94, 0.14) 0%, transparent 60%)',
+        icon: BarChart2,
+        accent: '#7c3aed',
         title: 'No visibility on student performance',
         body: 'Spot students at risk of failing before it is too late. Track marks across all subjects in real-time.',
       },
       {
-        icon: '👩‍🏫',
-        accent: '#38bdf8',
-        accentBg: 'rgba(56, 189, 248, 0.12)',
-        grad: 'linear-gradient(135deg, rgba(56, 189, 248, 0.14) 0%, transparent 60%)',
+        icon: ClipboardList,
+        accent: '#7c3aed',
         title: 'Headteacher reporting burden',
         body: 'Generate MOE-ready reports in one click. No more compiling data from each teacher manually before district visits.',
       },
       {
-        icon: '🏫',
-        accent: '#a78bfa',
-        accentBg: 'rgba(167, 139, 250, 0.12)',
-        grad: 'linear-gradient(135deg, rgba(167, 139, 250, 0.16) 0%, transparent 60%)',
+        icon: Users,
+        accent: '#7c3aed',
         title: 'HOD coordination challenges',
         body: 'Department heads manage their subjects, teachers, and performance from a dedicated dashboard — no WhatsApp groups needed.',
       },
       {
-        icon: '👧',
-        accent: '#fb7185',
-        accentBg: 'rgba(251, 113, 133, 0.12)',
-        grad: 'linear-gradient(135deg, rgba(251, 113, 133, 0.14) 0%, transparent 60%)',
+        icon: AlertTriangle,
+        accent: '#7c3aed',
         title: "Girls' dropout tracking",
         body: 'Identify female students with declining attendance early. Especially critical for rural schools where girls face higher dropout risk.',
       },
       {
-        icon: '📱',
-        accent: '#f97316',
-        accentBg: 'rgba(249, 115, 22, 0.12)',
-        grad: 'linear-gradient(135deg, rgba(249, 115, 22, 0.14) 0%, transparent 60%)',
+        icon: Smartphone,
+        accent: '#7c3aed',
         title: 'Works on any device',
         body: 'Phone, tablet, or computer — and works offline when internet is slow. Critical for rural and peri-urban schools across Zambia.',
       },
@@ -213,16 +205,16 @@ export default function HomePage() {
 
   if (!isHydrated || isSchoolLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-royalPurple-deep">
-        <LoadingSpinner size="xl" color="white" label="Loading" />
+      <div className="min-h-screen flex items-center justify-center bg-royalPurple-page">
+        <LoadingSpinner size="xl" color="primary" label="Loading" />
       </div>
     )
   }
 
   if (isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-royalPurple-deep">
-        <LoadingSpinner size="xl" color="white" label="Redirecting" />
+      <div className="min-h-screen flex items-center justify-center bg-royalPurple-page">
+        <LoadingSpinner size="xl" color="primary" label="Redirecting" />
       </div>
     )
   }
@@ -230,10 +222,10 @@ export default function HomePage() {
   return (
     <div
       style={{
-        background: '#170d28',
+        background: 'var(--rp-page)',
         minHeight: '100vh',
-        color: '#ede9fe',
-        fontFamily: "'Segoe UI', system-ui, sans-serif",
+        color: 'var(--rp-text1)',
+        fontFamily: "'Inter', system-ui, sans-serif",
       }}
     >
       <style>{`
@@ -247,72 +239,53 @@ export default function HomePage() {
         .fade-up-3 { animation-delay: 0.4s; opacity: 0; }
         .fade-up-4 { animation-delay: 0.55s; opacity: 0; }
         .btn-primary {
-          background: #f59e0b; color: #170d28; border: none;
-          padding: 14px 28px; border-radius: 10px; font-size: 15px;
+          background: #7c3aed; color: #ffffff; border: none;
+          padding: 12px 20px; border-radius: 8px; font-size: 15px;
           font-weight: 700; cursor: pointer; text-decoration: none;
           display: inline-block; transition: opacity 0.2s, transform 0.15s;
           letter-spacing: 0.01em;
         }
-        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-primary:hover { opacity: 0.9; }
         .btn-secondary {
-          background: transparent; color: #ede9fe;
-          border: 1px solid #3b2a66; padding: 13px 28px;
-          border-radius: 10px; font-size: 15px; font-weight: 600;
+          background: #ffffff; color: #1f2937;
+          border: 1px solid #e5e7eb; padding: 12px 20px;
+          border-radius: 8px; font-size: 15px; font-weight: 600;
           cursor: pointer; text-decoration: none; display: inline-block;
-          transition: background 0.2s, border-color 0.2s;
+          transition: background 0.2s, border-color 0.2s, color 0.2s;
         }
-        .btn-secondary:hover { background: #2d1f4e; border-color: #6d28d9; }
+        .btn-secondary:hover { background: #f9fafb; border-color: #d1d5db; }
         .btn-sm {
-          padding: 8px 18px; font-size: 13px; border-radius: 8px;
-          border: 1px solid #3b2a66; background: transparent;
-          color: #a78bfa; cursor: pointer; text-decoration: none;
+          padding: 8px 14px; font-size: 13px; border-radius: 8px;
+          border: 1px solid #e5e7eb; background: #ffffff;
+          color: #1f2937; cursor: pointer; text-decoration: none;
           display: inline-block; transition: background 0.2s;
         }
-        .btn-sm:hover { background: #2d1f4e; }
+        .btn-sm:hover { background: #f9fafb; }
         .card {
-          background: rgba(45, 31, 78, 0.5);
-          border: 1px solid rgba(59, 42, 102, 0.6);
-          border-radius: 16px;
+          background: #ffffff;
+          border: 1px solid #e5e7eb;
+          border-radius: 12px;
           padding: 1.5rem;
-          backdrop-filter: blur(12px);
         }
         .problem-card {
-          border-radius: 16px;
+          border-radius: 12px;
           padding: 1.5rem;
           position: relative;
           overflow: hidden;
-          background: rgba(45, 31, 78, 0.5);
-          border: 1px solid rgba(59, 42, 102, 0.6);
-          backdrop-filter: blur(12px);
-          transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+          background: #ffffff;
+          border: 1px solid #e5e7eb;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
           cursor: default;
         }
-        .problem-card::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: 16px;
-          padding: 1px;
-          background: linear-gradient(135deg, var(--card-accent) 0%, transparent 50%);
-          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-          -webkit-mask-composite: xor;
-          mask-composite: exclude;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-        .problem-card:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
-        .problem-card:hover::before { opacity: 1; }
+        .problem-card:hover { border-color: #7c3aed; box-shadow: 0 4px 6px -2px rgba(0,0,0,0.1); }
         .accent-line {
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
           height: 2px;
-          border-radius: 16px 16px 0 0;
-          opacity: 0;
-          transition: opacity 0.3s ease;
+          border-radius: 12px 12px 0 0;
         }
-        .problem-card:hover .accent-line { opacity: 1; }
         .icon-wrap {
           width: 44px;
           height: 44px;
@@ -320,53 +293,51 @@ export default function HomePage() {
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 20px;
           margin-bottom: 1rem;
           position: relative;
         }
         .section-label {
-          font-size: 11px; color: #6d28d9; text-transform: uppercase;
+          font-size: 11px; color: #7c3aed; text-transform: uppercase;
           letter-spacing: 0.12em; font-weight: 700; margin-bottom: 0.75rem;
         }
-        .divider { border: none; border-top: 1px solid #3b2a66; margin: 0; }
+        .divider { border: none; border-top: 1px solid #e5e7eb; margin: 0; }
         .stat-card {
-          background: rgba(38, 24, 67, 0.65);
-          border: 1px solid rgba(59, 42, 102, 0.7);
-          border-radius: 16px;
+          background: #ffffff;
+          border: 1px solid #e5e7eb;
+          border-radius: 12px;
           padding: 1.25rem;
           text-align: center;
-          backdrop-filter: blur(12px);
         }
         .tag {
           display: inline-block; font-size: 11px; padding: 4px 12px;
-          border-radius: 99px; border: 1px solid #3b2a66;
-          color: #a78bfa; margin: 3px; background: #261843;
+          border-radius: 999px; border: 1px solid #e5e7eb;
+          color: #4b5563; margin: 3px; background: #f9fafb;
         }
         .search-input {
           flex: 1; padding: 12px 16px;
-          border: 1px solid #3b2a66; border-radius: 10px;
-          background: #261843; color: #ede9fe; font-size: 14px;
+          border: 1px solid #e5e7eb; border-radius: 10px;
+          background: #ffffff; color: #1f2937; font-size: 14px;
           outline: none; transition: border-color 0.2s;
         }
         .search-input:focus { border-color: #7c3aed; }
-        .search-input::placeholder { color: #6d28d9; }
+        .search-input::placeholder { color: #6b7280; }
         .school-row {
           display: flex; align-items: center; justify-content: space-between;
-          padding: 14px 0; border-bottom: 1px solid #3b2a66;
+          padding: 14px 0; border-bottom: 1px solid #e5e7eb;
         }
         .school-row:last-child { border-bottom: none; }
-        .testimonial-bar { border-left: 3px solid #f59e0b; padding-left: 1.25rem; }
+        .testimonial-bar { border-left: 3px solid #7c3aed; padding-left: 1.25rem; }
         .pill {
           display: inline-flex; align-items: center; gap: 6px;
-          background: rgba(38, 24, 67, 0.7);
-          border: 1px solid rgba(59, 42, 102, 0.7);
-          border-radius: 99px; padding: 6px 14px; font-size: 13px;
-          color: #a78bfa; margin: 3px;
+          background: #f9fafb;
+          border: 1px solid #e5e7eb;
+          border-radius: 999px; padding: 6px 14px; font-size: 13px;
+          color: #4b5563; margin: 3px;
         }
         .alert-box {
-          background: #3b0a0a; border: 1px solid #7f1d1d;
+          background: #fef2f2; border: 1px solid #fecaca;
           border-radius: 10px; padding: 10px 14px; font-size: 13px;
-          color: #fca5a5;
+          color: #dc2626;
         }
         nav a { text-decoration: none; }
         @media (max-width: 640px) {
@@ -385,10 +356,10 @@ export default function HomePage() {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '1rem 1.5rem',
-          borderBottom: '1px solid #3b2a66',
+          borderBottom: '1px solid #e5e7eb',
           position: 'sticky',
           top: 0,
-          background: '#170d28',
+          background: '#ffffff',
           zIndex: 100,
         }}
       >
@@ -401,7 +372,7 @@ export default function HomePage() {
               priority
             />
           </div>
-          <span style={{ fontWeight: 700, fontSize: 16, color: '#ede9fe' }}>
+          <span style={{ fontWeight: 700, fontSize: 16, color: '#1f2937' }}>
             {tenantSchool?.name || 'ZSMS'}
           </span>
           <span
@@ -409,9 +380,9 @@ export default function HomePage() {
               fontSize: 11,
               padding: '3px 10px',
               borderRadius: 99,
-              background: '#0f2318',
-              color: '#86efac',
-              border: '1px solid #166534',
+              background: '#ecfdf5',
+              color: '#16a34a',
+              border: '1px solid #a7f3d0',
               fontWeight: 600,
             }}
           >
@@ -419,11 +390,6 @@ export default function HomePage() {
           </span>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          {!tenantSchool && (
-            <Link href="#find-school" className="btn-sm">
-              Find my school
-            </Link>
-          )}
           {tenantSchool ? (
             <>
               <Link href="/login" className="btn-sm">
@@ -452,97 +418,95 @@ export default function HomePage() {
       <section
         ref={heroRef}
         style={{
-          padding: '4rem 1.5rem 3rem',
-          textAlign: 'center',
-          maxWidth: 900,
-          margin: '0 auto',
+          background: '#ffffff',
+          borderBottom: '1px solid #e5e7eb',
+          padding: '5rem 0',
         }}
       >
-        <div className="fade-up fade-up-1" style={{ marginBottom: '1.25rem' }}>
-          <span className="tag">Secondary schools</span>
-          <span className="tag">Government schools</span>
-          <span className="tag">Grant-aided schools</span>
-          <span className="tag">Private schools</span>
-          <span className="tag">Community schools</span>
-        </div>
-
         <div
-          className="fade-up fade-up-1"
           style={{
-            background: '#261843',
-            border: '1px solid #7c3aed',
-            borderRadius: 10,
-            padding: '10px 20px',
-            display: 'inline-block',
-            marginBottom: '1.5rem',
-            fontSize: 13,
-            color: '#a78bfa',
-          }}
-        >
-          For Headteachers &amp; School Administrators across Zambia — manage your entire school
-          from one place, online.
-        </div>
-
-        <h1
-          className="fade-up fade-up-2"
-          style={{
-            fontSize: 'clamp(28px, 5vw, 46px)',
-            fontWeight: 800,
-            lineHeight: 1.15,
-            marginBottom: '1.25rem',
-            color: '#ede9fe',
-          }}
-        >
-          The school management system
-          <br />
-          <span style={{ color: '#f59e0b' }}>built for Zambia</span>
-        </h1>
-
-        <p
-          className="fade-up fade-up-2"
-          style={{
-            fontSize: 17,
-            color: '#a78bfa',
-            maxWidth: 560,
-            margin: '0 auto 2rem',
-            lineHeight: 1.75,
-          }}
-        >
-          Track attendance, manage ECZ results, coordinate teachers — all through your school&apos;s
-          own portal. No more paper registers. No more lost records.
-        </p>
-
-        <div
-          className="fade-up fade-up-3 hero-buttons"
-          style={{
-            display: 'flex',
-            gap: 12,
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            marginBottom: '3rem',
-          }}
-        >
-          <Link href={registerUrl} className="btn-primary">
-            {tenantSchool ? 'Create an account →' : 'Register your school free →'}
-          </Link>
-          <Link href="#features" className="btn-secondary">
-            See all features
-          </Link>
-        </div>
-
-        <div
-          className="fade-up fade-up-4 stats-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(1, 1fr)',
-            gap: 12,
-            maxWidth: 240,
+            maxWidth: 896,
             margin: '0 auto',
+            padding: '0 24px',
+            textAlign: 'center',
           }}
         >
-          <div className="stat-card">
-            <div style={{ fontSize: 28, fontWeight: 800, color: '#ede9fe' }}>K300</div>
+          <div
+            className="fade-up fade-up-1"
+            style={{
+              fontSize: 12,
+              fontWeight: 700,
+              color: '#7c3aed',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              marginBottom: 16,
+            }}
+          >
+            School Management System
           </div>
+
+          <h1
+            className="fade-up fade-up-2"
+            style={{
+              fontSize: 'clamp(32px, 5vw, 48px)',
+              fontWeight: 800,
+              lineHeight: 1.15,
+              marginBottom: 24,
+              color: '#1f2937',
+            }}
+          >
+            Built for Zambian schools
+          </h1>
+
+          <p
+            className="fade-up fade-up-2"
+            style={{
+              fontSize: 20,
+              color: '#4b5563',
+              maxWidth: 720,
+              margin: '0 auto 16px',
+              lineHeight: 1.75,
+            }}
+          >
+            Manage attendance, track grades, generate reports, and coordinate teachers. AI tools
+            save teachers 14+ hours every month.
+          </p>
+
+          <p
+            className="fade-up fade-up-2"
+            style={{
+              fontSize: 18,
+              color: '#374151',
+              maxWidth: 720,
+              margin: '0 auto 28px',
+              fontWeight: 600,
+              lineHeight: 1.65,
+            }}
+          >
+            All from one platform. No more paper registers. No more lost records.
+          </p>
+
+          <div
+            className="fade-up fade-up-3 hero-buttons"
+            style={{
+              display: 'flex',
+              gap: 12,
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+              marginBottom: 20,
+            }}
+          >
+            <Link href={registerUrl} className="btn-primary">
+              Start free trial
+            </Link>
+            <Link href="#features" className="btn-secondary">
+              View features
+            </Link>
+          </div>
+
+          <p className="fade-up fade-up-4" style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>
+            Free 30-day trial · No credit card required · Cancel anytime
+          </p>
         </div>
       </section>
 
@@ -551,33 +515,11 @@ export default function HomePage() {
       <section
         style={{
           padding: '4rem 1.5rem',
-          background: '#1e1033',
+          background: '#ffffff',
           position: 'relative',
           overflow: 'hidden',
         }}
       >
-        <div
-          style={{
-            position: 'absolute',
-            top: '10%',
-            left: '5%',
-            width: 300,
-            height: 300,
-            background: 'radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '10%',
-            right: '5%',
-            width: 400,
-            height: 400,
-            background: 'radial-gradient(circle, rgba(245,158,11,0.05) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }}
-        />
         <div style={{ maxWidth: 960, margin: '0 auto', position: 'relative' }}>
           <div className="section-label">The real problems ZSMS solves</div>
           <h2
@@ -585,83 +527,82 @@ export default function HomePage() {
               fontSize: 'clamp(22px,3.5vw,30px)',
               fontWeight: 800,
               marginBottom: '0.5rem',
-              color: '#ede9fe',
+              color: '#1f2937',
             }}
           >
             Built around how Zambian schools actually work
           </h2>
-          <p style={{ color: '#a78bfa', fontSize: 14, marginBottom: '2.5rem', maxWidth: 520 }}>
+          <p style={{ color: '#4b5563', fontSize: 14, marginBottom: '2.5rem', maxWidth: 520 }}>
             Every feature exists because a real Zambian headteacher asked for it.
           </p>
           <div
             className="problems-grid"
             style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem' }}
           >
-            {problems.map((p, i) => (
-              <div
-                key={i}
-                className="problem-card"
-                style={{
-                  '--card-accent': p.accent,
-                  backgroundColor: 'rgba(45, 31, 78, 0.55)',
-                  backgroundImage: p.grad,
-                }}
-              >
-                <div
-                  className="accent-line"
-                  style={{ background: `linear-gradient(90deg, ${p.accent} 0%, transparent 85%)` }}
-                />
-                <div
-                  className="icon-wrap"
-                  style={{
-                    background: p.accentBg,
-                    color: p.accent,
-                    border: `1px solid ${p.accent}33`,
-                  }}
-                >
-                  {p.icon}
-                </div>
-                <p
-                  style={{
-                    fontWeight: 700,
-                    fontSize: 15,
-                    marginBottom: 10,
-                    color: '#ede9fe',
-                    lineHeight: 1.35,
-                  }}
-                >
-                  {p.title}
-                </p>
-                <p style={{ fontSize: 13, color: '#a78bfa', lineHeight: 1.7 }}>{p.body}</p>
-                <div
-                  style={{ marginTop: '1.25rem', display: 'flex', alignItems: 'center', gap: 6 }}
-                >
-                  <div style={{ width: 20, height: 2, background: p.accent, borderRadius: 99 }} />
-                  <span
+            {problems.map((p, i) => {
+              const Icon = p.icon
+              return (
+                <div key={i} className="problem-card" style={{ '--card-accent': p.accent }}>
+                  <div
+                    className="accent-line"
                     style={{
-                      fontSize: 11,
-                      color: p.accent,
+                      background: p.accent,
+                    }}
+                  />
+                  <div
+                    className="icon-wrap"
+                    style={{ background: '#f3f0ff', border: '1px solid #e5e7eb' }}
+                  >
+                    {Icon ? (
+                      <Icon size={24} color="#7c3aed" strokeWidth={1.5} aria-hidden="true" />
+                    ) : null}
+                  </div>
+                  <p
+                    style={{
                       fontWeight: 700,
-                      letterSpacing: '0.06em',
-                      textTransform: 'uppercase',
+                      fontSize: 15,
+                      marginBottom: 10,
+                      color: '#1f2937',
+                      lineHeight: 1.35,
                     }}
                   >
-                    Solved
-                  </span>
+                    {p.title}
+                  </p>
+                  <p style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.7 }}>{p.body}</p>
+                  <div
+                    style={{ marginTop: '1.25rem', display: 'flex', alignItems: 'center', gap: 6 }}
+                  >
+                    <div style={{ width: 20, height: 2, background: p.accent, borderRadius: 99 }} />
+                    <span
+                      style={{
+                        fontSize: 11,
+                        color: p.accent,
+                        fontWeight: 700,
+                        letterSpacing: '0.06em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Solved
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
 
       <hr className="divider" />
 
-      <section id="features" style={{ padding: '3.5rem 1.5rem' }}>
+      <AIFeatures registerUrl={registerUrl} />
+
+      <hr className="divider" />
+
+      <section id="features" style={{ padding: '3.5rem 1.5rem', background: '#ffffff' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <div className="section-label">Features built for the Zambian curriculum</div>
-          <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: '2rem', color: '#ede9fe' }}>
-            Everything your school needs, nothing it doesn&apos;t
+          <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: '2rem', color: '#1f2937' }}>
+            Attendance, grades, reporting, coordination
           </h2>
           <div
             className="features-grid"
@@ -670,11 +611,11 @@ export default function HomePage() {
             <div>
               {features.map((f, i) => (
                 <div key={i} style={{ marginBottom: '1.75rem' }}>
-                  <p style={{ fontWeight: 700, fontSize: 15, marginBottom: 8, color: '#ede9fe' }}>
-                    <span style={{ color: '#f59e0b', marginRight: 8 }}>✓</span>
+                  <p style={{ fontWeight: 700, fontSize: 15, marginBottom: 8, color: '#1f2937' }}>
+                    <span style={{ color: '#7c3aed', marginRight: 8 }}>•</span>
                     {f.title}
                   </p>
-                  <p style={{ fontSize: 13, color: '#a78bfa', lineHeight: 1.65, paddingLeft: 22 }}>
+                  <p style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.65, paddingLeft: 22 }}>
                     {f.body}
                   </p>
                 </div>
@@ -682,7 +623,7 @@ export default function HomePage() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div className="card">
-                <p style={{ fontSize: 12, color: '#6d28d9', marginBottom: 10 }}>
+                <p style={{ fontSize: 12, color: '#7c3aed', marginBottom: 10 }}>
                   Headteacher dashboard
                 </p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: 12 }}>
@@ -690,15 +631,15 @@ export default function HomePage() {
                   <span className="pill">Performance</span>
                   <span className="pill">HODs</span>
                 </div>
-                <p style={{ fontSize: 12, color: '#6d28d9' }}>
+                <p style={{ fontSize: 12, color: '#4b5563' }}>
                   Attendance, performance, HODs — all on one screen.
                 </p>
               </div>
               <div className="card">
-                <p style={{ fontSize: 12, color: '#6d28d9', marginBottom: 6 }}>
+                <p style={{ fontSize: 12, color: '#7c3aed', marginBottom: 6 }}>
                   Works on MTN, Airtel &amp; Zamtel networks
                 </p>
-                <p style={{ fontSize: 13, color: '#a78bfa', lineHeight: 1.65 }}>
+                <p style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.65 }}>
                   Designed for Zambian internet speeds. No data-heavy downloads required. Works
                   offline too.
                 </p>
@@ -710,115 +651,66 @@ export default function HomePage() {
 
       <hr className="divider" />
 
-      <section style={{ padding: '3.5rem 1.5rem', background: '#1e1033' }}>
-        <div style={{ maxWidth: 680, margin: '0 auto', textAlign: 'center' }}>
-          <div className="section-label">Simple pricing in Zambian Kwacha</div>
-          <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: '0.5rem', color: '#ede9fe' }}>
-            One plan. Everything included.
-          </h2>
-          <p style={{ color: '#a78bfa', fontSize: 14, marginBottom: '2.5rem' }}>
-            Pay via Airtel Money, MTN Mobile Money, or bank transfer. No international card needed.
-          </p>
-
-          <div
-            style={{
-              background: 'rgba(45, 31, 78, 0.55)',
-              border: '1px solid rgba(245, 158, 11, 0.65)',
-              borderRadius: 18,
-              padding: '2.5rem 2rem',
-              position: 'relative',
-              maxWidth: 480,
-              margin: '0 auto',
-              backdropFilter: 'blur(14px)',
-              boxShadow: '0 24px 80px rgba(0,0,0,0.45)',
-            }}
-          >
-            <div style={{ marginBottom: '0.25rem' }}>
-              <span style={{ fontSize: 52, fontWeight: 900, color: '#f59e0b', lineHeight: 1 }}>
-                K300
-              </span>
-            </div>
-
-            <Link
-              href={registerUrl}
-              className="btn-primary"
-              style={{
-                display: 'block',
-                textAlign: 'center',
-                fontSize: 15,
-                padding: '15px 24px',
-                width: '100%',
-                boxSizing: 'border-box',
-              }}
-            >
-              Get started →
-            </Link>
-          </div>
-        </div>
-      </section>
+      <TimeSavings />
 
       <hr className="divider" />
 
-      <section style={{ padding: '3.5rem 1.5rem' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <div className="section-label">Recent feedback</div>
-          <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: '2rem', color: '#ede9fe' }}>
-            What users are saying
-          </h2>
-          <div
-            className="testimonials-grid"
-            style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}
-          >
-            {isPublicFeedbackLoading ? (
-              <div className="card" style={{ gridColumn: '1 / -1' }}>
-                <p style={{ color: '#a78bfa', fontSize: 14 }}>Loading feedback…</p>
-              </div>
-            ) : publicFeedback.length === 0 ? (
-              <div className="card" style={{ gridColumn: '1 / -1' }}>
-                <p style={{ color: '#a78bfa', fontSize: 14 }}>No public feedback yet.</p>
-              </div>
-            ) : (
-              publicFeedback.map((f) => (
+      <Pricing />
+
+      <hr className="divider" />
+
+      {publicFeedback.length > 0 && (
+        <section style={{ padding: '3.5rem 1.5rem' }}>
+          <div style={{ maxWidth: 900, margin: '0 auto' }}>
+            <div className="section-label">Recent feedback</div>
+            <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: '2rem', color: '#1f2937' }}>
+              School administrator feedback
+            </h2>
+            <div
+              className="testimonials-grid"
+              style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}
+            >
+              {publicFeedback.map((f) => (
                 <div key={f.id} className="card">
                   <div className="testimonial-bar">
                     <p
                       style={{
                         fontSize: 15,
                         lineHeight: 1.75,
-                        color: '#a78bfa',
+                        color: '#4b5563',
                         marginBottom: 12,
                         fontStyle: 'italic',
                       }}
                     >
                       &ldquo;{f.message}&rdquo;
                     </p>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: '#ede9fe' }}>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: '#1f2937' }}>
                       {formatRoleLabel(f.role)}
                     </p>
                     {f.schoolName ? (
-                      <p style={{ fontSize: 12, color: '#6d28d9' }}>{f.schoolName}</p>
+                      <p style={{ fontSize: 12, color: '#6b7280' }}>{f.schoolName}</p>
                     ) : null}
                   </div>
                 </div>
-              ))
-            )}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {!tenantSchool && (
+      {!tenantSchool && (schoolSearch || schoolsDirectory.length > 0) && (
         <>
           <hr className="divider" />
 
-          <section id="find-school" style={{ padding: '3.5rem 1.5rem', background: '#1e1033' }}>
+          <section id="find-school" style={{ padding: '3.5rem 1.5rem', background: '#f9fafb' }}>
             <div style={{ maxWidth: 700, margin: '0 auto' }}>
               <div className="section-label">Find your school</div>
               <h2
-                style={{ fontSize: 26, fontWeight: 700, marginBottom: '0.5rem', color: '#ede9fe' }}
+                style={{ fontSize: 26, fontWeight: 700, marginBottom: '0.5rem', color: '#1f2937' }}
               >
                 Already registered? Access your portal
               </h2>
-              <p style={{ color: '#a78bfa', fontSize: 14, marginBottom: '1.5rem' }}>
+              <p style={{ color: '#4b5563', fontSize: 14, marginBottom: '1.5rem' }}>
                 Search by school name or district to go directly to your school&apos;s login page.
               </p>
               <div style={{ display: 'flex', gap: 10, marginBottom: '1.5rem' }}>
@@ -848,19 +740,27 @@ export default function HomePage() {
               <div className="card">
                 {isSchoolDirectoryLoading ? (
                   <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
-                    <p style={{ color: '#a78bfa', fontSize: 14, marginBottom: 8 }}>
+                    <p style={{ color: '#4b5563', fontSize: 14, marginBottom: 8 }}>
                       Loading schools…
                     </p>
                   </div>
                 ) : !schoolSearch && schoolsDirectory.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
-                    <p style={{ color: '#a78bfa', fontSize: 14, marginBottom: 8 }}>
-                      No schools are publicly listed yet.
+                    <p style={{ color: '#4b5563', fontSize: 14, marginBottom: 8 }}>
+                      Search for your school to open the portal. If it is not listed, register your
+                      school.
                     </p>
+                    <Link
+                      href="/register-school"
+                      className="btn-primary"
+                      style={{ fontSize: 13, padding: '10px 20px' }}
+                    >
+                      Register your school free →
+                    </Link>
                   </div>
                 ) : schoolSearch && schoolsDirectory.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
-                    <p style={{ color: '#a78bfa', fontSize: 14, marginBottom: 8 }}>
+                    <p style={{ color: '#4b5563', fontSize: 14, marginBottom: 8 }}>
                       School not found in the directory.
                     </p>
                     <Link
@@ -879,7 +779,7 @@ export default function HomePage() {
                           style={{
                             fontSize: 14,
                             fontWeight: 700,
-                            color: '#ede9fe',
+                            color: '#1f2937',
                             marginBottom: 3,
                           }}
                         >
@@ -908,12 +808,12 @@ export default function HomePage() {
       <section style={{ padding: '4rem 1.5rem', textAlign: 'center' }}>
         <div style={{ maxWidth: 620, margin: '0 auto' }}>
           <div className="section-label">Ready to modernise your school?</div>
-          <h2 style={{ fontSize: 30, fontWeight: 800, marginBottom: '1rem', color: '#ede9fe' }}>
-            Your school&apos;s portal is ready
+          <h2 style={{ fontSize: 30, fontWeight: 800, marginBottom: '1rem', color: '#ffffff' }}>
+            Launch your school portal
             <br />
-            <span style={{ color: '#f59e0b' }}>in minutes</span>
+            <span style={{ color: '#ffffff' }}>Setup takes minutes</span>
           </h2>
-          <p style={{ fontSize: 16, color: '#a78bfa', marginBottom: '2rem', lineHeight: 1.75 }}>
+          <p style={{ fontSize: 16, color: '#4b5563', marginBottom: '2rem', lineHeight: 1.75 }}>
             Join schools across Zambia already using ZSMS. Government, private, grant-aided, and
             community schools welcome.
           </p>
@@ -924,11 +824,11 @@ export default function HomePage() {
           >
             {tenantSchool ? 'Create account →' : 'Register your school free →'}
           </Link>
-          <p style={{ fontSize: 13, color: '#6d28d9', marginTop: '1.5rem' }}>
+          <p style={{ fontSize: 13, color: '#6b7280', marginTop: '1.5rem' }}>
             Questions? Call or WhatsApp:{' '}
             <a
               href="tel:0977934996"
-              style={{ color: '#a78bfa', fontWeight: 800, textDecoration: 'none' }}
+              style={{ color: '#7c3aed', fontWeight: 800, textDecoration: 'none' }}
             >
               0977934996
             </a>
@@ -937,12 +837,12 @@ export default function HomePage() {
               href="https://wa.me/260977934996"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: '#a78bfa', fontWeight: 800, textDecoration: 'none' }}
+              style={{ color: '#7c3aed', fontWeight: 800, textDecoration: 'none' }}
             >
               WhatsApp
             </a>
           </p>
-          <p style={{ fontSize: 12, color: '#3b2a66', marginTop: '0.5rem' }}>
+          <p style={{ fontSize: 12, color: '#6b7280', marginTop: '0.5rem' }}>
             Free trial · No credit card required · Cancel anytime
           </p>
         </div>
@@ -968,21 +868,19 @@ export default function HomePage() {
               className="h-5 w-auto object-contain"
             />
           </div>
-          <p style={{ fontSize: 12, color: '#6d28d9' }}>
-            © Bluepeack Technologies · Lusaka, Zambia
-          </p>
+          <p style={{ fontSize: 12, color: '#6b7280' }}>Bluepeack Technologies · Lusaka, Zambia</p>
         </div>
         <div style={{ display: 'flex', gap: 16 }}>
-          <Link href="/privacy" style={{ fontSize: 12, color: '#6d28d9', textDecoration: 'none' }}>
+          <Link href="/privacy" style={{ fontSize: 12, color: '#6b7280', textDecoration: 'none' }}>
             Privacy
           </Link>
-          <Link href="/terms" style={{ fontSize: 12, color: '#6d28d9', textDecoration: 'none' }}>
+          <Link href="/terms" style={{ fontSize: 12, color: '#6b7280', textDecoration: 'none' }}>
             Terms
           </Link>
           {!tenantSchool && (
             <Link
               href={registerUrl}
-              style={{ fontSize: 12, color: '#a78bfa', textDecoration: 'none', fontWeight: 600 }}
+              style={{ fontSize: 12, color: '#7c3aed', textDecoration: 'none', fontWeight: 600 }}
             >
               Register school
             </Link>

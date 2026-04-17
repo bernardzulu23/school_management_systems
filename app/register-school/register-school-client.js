@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { Eye, EyeOff } from 'lucide-react'
 
 function normalizeSubdomain(input) {
   const raw = String(input || '')
@@ -26,6 +27,7 @@ function slugFromSchoolName(value) {
 export default function RegisterSchoolClient() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const [showAdminPassword, setShowAdminPassword] = useState(false)
   const RESERVED = useMemo(
     () =>
       new Set([
@@ -296,21 +298,31 @@ export default function RegisterSchoolClient() {
             </div>
             <div className="md:col-span-2">
               <label className="text-royalPurple-text2 text-sm">Password</label>
-              <input
-                className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1 mt-1"
-                type="password"
-                placeholder="Password (min 8 characters)"
-                value={form.adminPassword}
-                onChange={(e) => {
-                  const v = e.target.value
-                  const score = getPasswordStrength(v)
-                  setPasswordStrength(score)
-                  setPasswordStrengthLabel(strengthLabel[score])
-                  setForm((prev) => ({ ...prev, adminPassword: v }))
-                }}
-                minLength={8}
-                required
-              />
+              <div className="relative mt-1">
+                <input
+                  className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1 pr-10 focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2"
+                  type={showAdminPassword ? 'text' : 'password'}
+                  placeholder="Password (min 8 characters)"
+                  value={form.adminPassword}
+                  onChange={(e) => {
+                    const v = e.target.value
+                    const score = getPasswordStrength(v)
+                    setPasswordStrength(score)
+                    setPasswordStrengthLabel(strengthLabel[score])
+                    setForm((prev) => ({ ...prev, adminPassword: v }))
+                  }}
+                  minLength={8}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowAdminPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-royalPurple-text3 hover:text-royalPurple-text1 transition-colors"
+                  aria-label={showAdminPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showAdminPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
               <div className="mt-2">
                 <div className="w-full h-2 bg-royalPurple-border rounded-full overflow-hidden">
                   <div

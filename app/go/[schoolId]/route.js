@@ -22,7 +22,8 @@ function getBaseDomain(host) {
 }
 
 export async function GET(request, { params }) {
-  const schoolId = String(params?.schoolId || '').trim()
+  const routeParams = await params
+  const schoolId = String(routeParams?.schoolId || '').trim()
   if (!schoolId) {
     return NextResponse.redirect(new URL('/register-school', request.url))
   }

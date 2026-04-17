@@ -11,7 +11,7 @@ const LABS = [
     grade: 'Form 3–5',
     difficulty: 'Intermediate',
     duration: '30 mins',
-    icon: '⚡',
+    icon: 'ELEC',
     color: '#f59e0b',
     colorBg: 'rgba(245,158,11,0.12)',
     description:
@@ -32,7 +32,7 @@ const LABS = [
     grade: 'Form 4–5',
     difficulty: 'Intermediate',
     duration: '25 mins',
-    icon: '🧪',
+    icon: 'CHEM',
     color: '#10b981',
     colorBg: 'rgba(16,185,129,0.12)',
     description:
@@ -49,7 +49,7 @@ const LABS = [
     grade: 'Form 2–4',
     difficulty: 'Beginner',
     duration: '20 mins',
-    icon: '🦎',
+    icon: 'BIO',
     color: '#8b5cf6',
     colorBg: 'rgba(139,92,246,0.12)',
     description:
@@ -87,7 +87,7 @@ const LABS = [
     grade: 'Form 3–5',
     difficulty: 'Intermediate',
     duration: '25 mins',
-    icon: '⚗️',
+    icon: 'CHEM',
     color: '#ef4444',
     colorBg: 'rgba(239,68,68,0.12)',
     description:
@@ -108,7 +108,7 @@ const LABS = [
     grade: 'Form 1–3',
     difficulty: 'Beginner',
     duration: '15 mins',
-    icon: '🏃',
+    icon: 'MOTION',
     color: '#f97316',
     colorBg: 'rgba(249,115,22,0.12)',
     description: "Explore Newton's laws of motion with a skateboard, applied forces, and friction.",
@@ -128,7 +128,7 @@ const LABS = [
     grade: 'Form 5',
     difficulty: 'Advanced',
     duration: '20 mins',
-    icon: '🌟',
+    icon: 'PHYS',
     color: '#a78bfa',
     colorBg: 'rgba(167,139,250,0.12)',
     description: 'Explore how light knocks electrons loose from a metal surface.',
@@ -148,7 +148,7 @@ const LABS = [
     grade: 'Form 1–3',
     difficulty: 'Beginner',
     duration: '15 mins',
-    icon: '🧊',
+    icon: 'STATE',
     color: '#38bdf8',
     colorBg: 'rgba(56,189,248,0.12)',
     description:
@@ -165,7 +165,7 @@ const LABS = [
     grade: 'Form 3–5',
     difficulty: 'Intermediate',
     duration: '15 mins',
-    icon: '🔌',
+    icon: 'ELEC',
     color: '#22c55e',
     colorBg: 'rgba(34,197,94,0.12)',
     description: 'Explore the relationship between voltage, current, and resistance.',
@@ -237,7 +237,7 @@ export default function VirtualScienceLab() {
               fontSize: 13,
             }}
           >
-            ← Back to Labs
+            Back to Labs
           </button>
           <span style={{ fontSize: 20 }}>{activeLab.icon}</span>
           <div>
@@ -294,7 +294,6 @@ export default function VirtualScienceLab() {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-          <span style={{ fontSize: 24 }}>🔬</span>
           <div>
             <h2 style={{ color: '#ede9fe', fontWeight: 700, fontSize: 18, margin: 0 }}>
               Virtual Science Lab
@@ -477,12 +476,12 @@ export default function VirtualScienceLab() {
                       border: '1px solid #3b2a66',
                     }}
                   >
-                    ⏱ {lab.duration}
+                    {lab.duration}
                   </span>
                 </div>
 
                 <div style={{ fontSize: 11, color: '#4b3575', marginBottom: 12, lineHeight: 1.5 }}>
-                  📚 {lab.curriculum}
+                  {lab.curriculum}
                 </div>
 
                 <button
@@ -498,7 +497,7 @@ export default function VirtualScienceLab() {
                     cursor: 'pointer',
                   }}
                 >
-                  Start Lab →
+                  Start Lab
                 </button>
               </div>
             ))}

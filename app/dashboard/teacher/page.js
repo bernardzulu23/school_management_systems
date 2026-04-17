@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
 import LoadingSpinner from '@/components/LoadingSpinner'
-// import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { StatsCard } from '@/components/dashboard/StatsCard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -45,13 +45,12 @@ import {
   Users as HandshakeIcon,
   Rocket,
   Globe,
-  LogOut,
   Loader2,
 } from 'lucide-react'
 import Link from 'next/link'
-import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { SCHOOL_SUBJECTS, getSubjectsByIds } from '@/data/subjects'
 import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeachingHub'
+import { percentTextClass } from '@/lib/utils/percentColor'
 // Temporarily commented out to isolate error
 // import {
 //   renderCurriculumMapping,
@@ -68,6 +67,23 @@ export default function TeacherDashboard() {
   const router = useRouter()
   // Get current user data from auth context
   const { user: currentUser, isAuthenticated, logout, syncSession } = useAuth()
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--rp-accent', '#2563eb')
+    document.documentElement.style.setProperty('--rp-accentbg', '#dbeafe')
+    document.documentElement.style.setProperty('--rp-accenttx', '#ffffff')
+    return () => {
+      document.documentElement.style.removeProperty('--rp-accent')
+      document.documentElement.style.removeProperty('--rp-accentbg')
+      document.documentElement.style.removeProperty('--rp-accenttx')
+    }
+  }, [])
+
+  const ACTION_THEMES = {
+    'enter-results': { bg: 'bg-purple-50', text: 'text-purple-600' },
+    'my-classes': { bg: 'bg-blue-50', text: 'text-blue-600' },
+    assessments: { bg: 'bg-green-50', text: 'text-green-600' },
+  }
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -406,21 +422,13 @@ export default function TeacherDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-purple-100 to-indigo-100 dark:from-slate-900 dark:via-purple-900 dark:to-indigo-800 relative overflow-hidden transition-colors duration-300">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-40 left-40 w-80 h-80 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-4000"></div>
-      </div>
-
-      <div className="p-6">
-        <div className="space-y-8 relative z-10">
-          {/* Enhanced Header */}
-          <div className="backdrop-blur-lg bg-royalPurple-card/60 dark:bg-royalPurple-card/60 border border-royalPurple-border2 dark:border-royalPurple-border2/40 rounded-3xl p-8 shadow-2xl transition-colors duration-300">
+    <DashboardLayout title="Teacher Dashboard">
+      <div className="space-y-8">
+        <div className="space-y-8">
+          <div className="backdrop-blur-lg bg-royalPurple-card/60 dark:bg-royalPurple-card/60 rounded-3xl p-8 shadow-2xl transition-colors duration-300">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent mb-4">
+                <h1 className="text-4xl font-bold text-royalPurple-text1 mb-4">
                   Teacher Dashboard
                 </h1>
                 <p className="text-royalPurple-text2 dark:text-royalPurple-text2 text-lg">
@@ -440,14 +448,6 @@ export default function TeacherDashboard() {
                     HOD Dashboard
                   </Link>
                 )}
-                <button
-                  type="button"
-                  onClick={logout}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-royalPurple-card/70 dark:bg-royalPurple-muted/70 border border-royalPurple-border dark:border-royalPurple-border/40 text-royalPurple-dangerTx hover:text-royalPurple-dangerTx hover:bg-royalPurple-danger/60 dark:hover:bg-royalPurple-danger/20 transition-colors"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </button>
                 <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 text-center">
                   <div className="text-2xl font-bold text-royalPurple-text1">
                     {new Date().getDate()}
@@ -466,7 +466,7 @@ export default function TeacherDashboard() {
           {/* Teacher Information Card */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <User className="h-6 w-6 mr-3 text-royalPurple-pillTx dark:text-royalPurple-pillTx" />
                 Teacher Information
               </CardTitle>
@@ -527,7 +527,7 @@ export default function TeacherDashboard() {
           {/* Quick Actions */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <Zap className="h-6 w-6 mr-3 text-royalPurple-pillTx dark:text-royalPurple-pillTx" />
                 Quick Actions
               </CardTitle>
@@ -536,8 +536,10 @@ export default function TeacherDashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <Link href="/dashboard/teacher/results" className="block">
                   <div className="p-6 bg-royalPurple-card/60 dark:bg-royalPurple-card/60 border border-royalPurple-border2 dark:border-royalPurple-border2/40 hover:border-royalPurple-border2 hover:bg-royalPurple-page dark:hover:bg-royalPurple-muted/80 rounded-2xl transition-all duration-300 group cursor-pointer h-full shadow-sm hover:shadow-md">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <Edit className="h-6 w-6 text-royalPurple-text1" />
+                    <div
+                      className={`flex h-12 w-12 items-center justify-center rounded-xl mb-4 group-hover:scale-110 transition-transform ${ACTION_THEMES['enter-results'].bg}`}
+                    >
+                      <Edit className={`h-6 w-6 ${ACTION_THEMES['enter-results'].text}`} />
                     </div>
                     <h3 className="text-xl font-bold text-royalPurple-text1 dark:text-royalPurple-text1 mb-2">
                       Enter Results
@@ -550,8 +552,10 @@ export default function TeacherDashboard() {
 
                 <Link href="/dashboard/teacher/classes" className="block">
                   <div className="p-6 bg-royalPurple-card/60 dark:bg-royalPurple-card/60 border border-royalPurple-border2 dark:border-royalPurple-border2/40 hover:border-royalPurple-border2 hover:bg-royalPurple-page dark:hover:bg-royalPurple-muted/80 rounded-2xl transition-all duration-300 group cursor-pointer h-full shadow-sm hover:shadow-md">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <Users className="h-6 w-6 text-royalPurple-text1" />
+                    <div
+                      className={`flex h-12 w-12 items-center justify-center rounded-xl mb-4 group-hover:scale-110 transition-transform ${ACTION_THEMES['my-classes'].bg}`}
+                    >
+                      <Users className={`h-6 w-6 ${ACTION_THEMES['my-classes'].text}`} />
                     </div>
                     <h3 className="text-xl font-bold text-royalPurple-text1 dark:text-royalPurple-text1 mb-2">
                       My Classes
@@ -564,8 +568,10 @@ export default function TeacherDashboard() {
 
                 <Link href="/dashboard/teacher/assessments" className="block">
                   <div className="p-6 bg-royalPurple-card/60 dark:bg-royalPurple-card/60 border border-royalPurple-border dark:border-royalPurple-border/40 hover:border-royalPurple-border hover:bg-royalPurple-page dark:hover:bg-royalPurple-muted/80 rounded-2xl transition-all duration-300 group cursor-pointer h-full shadow-sm hover:shadow-md">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <ClipboardList className="h-6 w-6 text-royalPurple-text1" />
+                    <div
+                      className={`flex h-12 w-12 items-center justify-center rounded-xl mb-4 group-hover:scale-110 transition-transform ${ACTION_THEMES.assessments.bg}`}
+                    >
+                      <ClipboardList className={`h-6 w-6 ${ACTION_THEMES.assessments.text}`} />
                     </div>
                     <h3 className="text-xl font-bold text-royalPurple-text1 dark:text-royalPurple-text1 mb-2">
                       Assessments
@@ -580,252 +586,47 @@ export default function TeacherDashboard() {
           </Card>
 
           {/* Enhanced Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatsCard
-              title="My Classes"
-              value={dashboardStats.totalClasses}
-              icon={Users}
-              color="blue"
-              description="Classes assigned to you"
-              trend={{ isPositive: true, value: 2 }}
-            />
-            <StatsCard
-              title="Total Students"
-              value={dashboardStats.totalStudents}
-              icon={School}
-              color="green"
-              description="Students under your guidance"
-              trend={{ isPositive: true, value: 15 }}
-            />
-            <StatsCard
-              title="My Assessments"
-              value={dashboardStats.totalAssessments}
-              icon={ClipboardList}
-              color="yellow"
-              description="Assessments created"
-              trend={{ isPositive: true, value: 3 }}
-            />
-            <StatsCard
-              title="Average Performance"
-              value={`${dashboardStats.averagePerformance}%`}
-              icon={TrendingUp}
-              color="purple"
-              description="Class average score"
-              trend={{ isPositive: true, value: 2.5 }}
-            />
-          </div>
-
-          {/* Advanced Teacher Features */}
-          <Card variant="glass">
-            <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent flex items-center">
-                <Zap className="h-6 w-6 mr-3 text-yellow-400" />
-                Advanced Teaching Features
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                  {/* Creative Teaching Tools */}
-                  <div className="bg-gradient-to-br from-purple-600/20 to-blue-600/20 border border-royalPurple-border2/30 rounded-xl p-4">
-                    <div className="flex items-center mb-3">
-                      <div className="w-10 h-10 bg-royalPurple-pill/30 rounded-lg flex items-center justify-center mr-3">
-                        <BookOpen className="h-5 w-5 text-royalPurple-pillTx" />
-                      </div>
-                      <h4 className="font-semibold text-royalPurple-text1">
-                        Creative Teaching Tools
-                      </h4>
-                    </div>
-                    <ul className="space-y-2 text-sm text-royalPurple-text2">
-                      <li>
-                        <button
-                          type="button"
-                          className="w-full text-left hover:text-royalPurple-text1"
-                          onClick={() => router.push('/dashboard/teacher/lesson-planner')}
-                        >
-                          🎨 Interactive Lesson Builder
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          type="button"
-                          className="w-full text-left hover:text-royalPurple-text1"
-                          onClick={() => router.push('/dashboard/teacher/virtual-lab')}
-                        >
-                          🔬 Virtual Lab Simulations
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          type="button"
-                          className="w-full text-left hover:text-royalPurple-text1"
-                          onClick={() => router.push('/dashboard/teacher/assessments')}
-                        >
-                          📊 Real-time Assessment Tools
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          type="button"
-                          className="w-full text-left hover:text-royalPurple-text1"
-                          onClick={() => router.push('/dashboard/teacher/materials')}
-                        >
-                          🎯 Adaptive Content Delivery
-                        </button>
-                      </li>
-                    </ul>
-                    <Button
-                      className="w-full mt-3 bg-royalPurple-pill/60 hover:bg-royalPurple-pill/80 text-royalPurple-text1 border border-royalPurple-border2/50"
-                      onClick={() => router.push('/dashboard/teacher/materials')}
-                    >
-                      Explore Tools
-                    </Button>
-                  </div>
-
-                  {/* Student Analytics */}
-                  <div className="bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-royalPurple-border2/30 rounded-xl p-4">
-                    <div className="flex items-center mb-3">
-                      <div className="w-10 h-10 bg-royalPurple-accent/30 rounded-lg flex items-center justify-center mr-3">
-                        <BarChart3 className="h-5 w-5 text-royalPurple-accentTx" />
-                      </div>
-                      <h4 className="font-semibold text-royalPurple-text1">Student Analytics</h4>
-                    </div>
-                    <ul className="space-y-2 text-sm text-royalPurple-text2">
-                      <li>
-                        <button
-                          type="button"
-                          className="w-full text-left hover:text-royalPurple-text1"
-                          onClick={() => router.push('/dashboard/teacher/results')}
-                        >
-                          📈 Performance Tracking
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          type="button"
-                          className="w-full text-left hover:text-royalPurple-text1"
-                          onClick={() => router.push('/dashboard/teacher/results')}
-                        >
-                          🎯 Learning Gap Analysis
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          type="button"
-                          className="w-full text-left hover:text-royalPurple-text1"
-                          onClick={() => router.push('/dashboard/teacher/results')}
-                        >
-                          📊 Engagement Metrics
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          type="button"
-                          className="w-full text-left hover:text-royalPurple-text1"
-                          onClick={() => router.push('/dashboard/teacher/results')}
-                        >
-                          🔍 Predictive Insights
-                        </button>
-                      </li>
-                    </ul>
-                    <Button
-                      className="w-full mt-3 bg-royalPurple-accent/60 hover:bg-royalPurple-accent/80 text-royalPurple-text1 border border-royalPurple-border2/50"
-                      onClick={() => router.push('/dashboard/teacher/results')}
-                    >
-                      View Analytics
-                    </Button>
-                  </div>
-
-                  {/* Collaboration Hub */}
-                  <div className="bg-gradient-to-br from-green-600/20 to-teal-600/20 border border-royalPurple-border/30 rounded-xl p-4">
-                    <div className="flex items-center mb-3">
-                      <div className="w-10 h-10 bg-royalPurple-success/30 rounded-lg flex items-center justify-center mr-3">
-                        <Users className="h-5 w-5 text-royalPurple-successTx" />
-                      </div>
-                      <h4 className="font-semibold text-royalPurple-text1">Collaboration Hub</h4>
-                    </div>
-                    <ul className="space-y-2 text-sm text-royalPurple-text2">
-                      <li>
-                        <button
-                          type="button"
-                          className="w-full text-left hover:text-royalPurple-text1"
-                          onClick={() => router.push('/dashboard/teacher/community')}
-                        >
-                          👥 Teacher Communities
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          type="button"
-                          className="w-full text-left hover:text-royalPurple-text1"
-                          onClick={() => router.push('/dashboard/teacher/materials')}
-                        >
-                          📚 Resource Sharing
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          type="button"
-                          className="w-full text-left hover:text-royalPurple-text1"
-                          onClick={() => router.push('/dashboard/sms')}
-                        >
-                          💬 Parent Communication
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          type="button"
-                          className="w-full text-left hover:text-royalPurple-text1"
-                          onClick={() => router.push('/dashboard/teacher/community')}
-                        >
-                          🤝 Peer Mentoring
-                        </button>
-                      </li>
-                    </ul>
-                    <Button
-                      className="w-full mt-3 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50"
-                      onClick={() => router.push('/dashboard/teacher/community')}
-                    >
-                      Join Community
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Implementation Status */}
-                <div className="bg-gradient-to-r from-orange-600/20 to-red-600/20 border border-orange-400/30 rounded-xl p-4">
-                  <h4 className="font-semibold text-royalPurple-text1 mb-3 flex items-center">
-                    <Target className="h-5 w-5 mr-2 text-orange-300" />
-                    Advanced Features Implementation Status
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <div className="flex justify-between text-sm mb-2">
-                        <span className="text-royalPurple-text2">Teacher Dashboard Features</span>
-                        <span className="font-semibold text-orange-300">In Progress</span>
-                      </div>
-                      <div className="w-full bg-royalPurple-muted rounded-full h-2">
-                        <div
-                          className="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full"
-                          style={{ width: '60%' }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div className="text-xs text-royalPurple-text3 space-y-1">
-                      <div>✅ Student Features Complete</div>
-                      <div>✅ Learning Enhancement Complete</div>
-                      <div>✅ Cultural Integration Complete</div>
-                      <div>🔄 Teacher Features (60% Complete)</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <section className="w-full py-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-10 gap-y-6">
+              <StatsCard
+                title="My Classes"
+                value={dashboardStats.totalClasses}
+                icon={Users}
+                color="blue"
+                description="Classes assigned to you"
+                variant="flat"
+              />
+              <StatsCard
+                title="Total Students"
+                value={dashboardStats.totalStudents}
+                icon={School}
+                color="green"
+                description="Students under your guidance"
+                variant="flat"
+              />
+              <StatsCard
+                title="My Assessments"
+                value={dashboardStats.totalAssessments}
+                icon={ClipboardList}
+                color="yellow"
+                description="Assessments created"
+                variant="flat"
+              />
+              <StatsCard
+                title="Average Performance"
+                value={`${dashboardStats.averagePerformance}%`}
+                icon={TrendingUp}
+                color="purple"
+                description="Class average score"
+                variant="flat"
+              />
+            </div>
+          </section>
 
           {/* Performance Overview */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <TrendingUp className="h-6 w-6 mr-3 text-royalPurple-successTx" />
                 Performance Overview
               </CardTitle>
@@ -838,8 +639,10 @@ export default function TeacherDashboard() {
                       <Award className="h-10 w-10 text-royalPurple-text1" />
                     </div>
                     <h3 className="font-bold text-royalPurple-text1 text-lg">Class Average</h3>
-                    <p className="text-3xl font-bold text-royalPurple-accentTx mt-2">
-                      {dashboardStats.averagePerformance}%
+                    <p
+                      className={`text-3xl font-bold mt-2 ${percentTextClass(dashboardStats.averagePerformance)}`}
+                    >
+                      {Number(dashboardStats.averagePerformance) || 0}%
                     </p>
                     <p className="text-royalPurple-text2 text-sm mt-1">Above school average</p>
                   </div>
@@ -848,8 +651,10 @@ export default function TeacherDashboard() {
                       <CheckCircle className="h-10 w-10 text-royalPurple-text1" />
                     </div>
                     <h3 className="font-bold text-royalPurple-text1 text-lg">Attendance Rate</h3>
-                    <p className="text-3xl font-bold text-royalPurple-successTx mt-2">
-                      {dashboardStats.attendanceRate}%
+                    <p
+                      className={`text-3xl font-bold mt-2 ${percentTextClass(dashboardStats.attendanceRate)}`}
+                    >
+                      {Number(dashboardStats.attendanceRate) || 0}%
                     </p>
                     <p className="text-royalPurple-text2 text-sm mt-1">Excellent attendance</p>
                   </div>
@@ -880,7 +685,7 @@ export default function TeacherDashboard() {
 
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <Layers className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
                 Department Performance
               </CardTitle>
@@ -937,7 +742,7 @@ export default function TeacherDashboard() {
           {/* Teaching Subjects */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <BookOpen className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
                 My Teaching Subjects
               </CardTitle>
@@ -1010,7 +815,7 @@ export default function TeacherDashboard() {
             {/* My Classes */}
             <Card variant="glass">
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent flex items-center">
+                <CardTitle className="text-royalPurple-text1 flex items-center">
                   <Users className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
                   My Classes
                 </CardTitle>
@@ -1077,7 +882,7 @@ export default function TeacherDashboard() {
             {/* Recent Results */}
             <Card variant="glass">
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent flex items-center">
+                <CardTitle className="text-royalPurple-text1 flex items-center">
                   <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-successTx" />
                   Recent Results
                 </CardTitle>
@@ -1146,7 +951,7 @@ export default function TeacherDashboard() {
           {/* Goals Progress Section */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <Target className="h-6 w-6 mr-3 text-yellow-400" />
                 Teaching Goals Progress
               </CardTitle>
@@ -1224,7 +1029,7 @@ export default function TeacherDashboard() {
           {/* Quick Actions */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <Plus className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
                 Quick Actions
               </CardTitle>
@@ -1305,7 +1110,7 @@ export default function TeacherDashboard() {
           {/* Recent Assessments */}
           <Card variant="glass">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <ClipboardList className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
                 Recent Assessments
               </CardTitle>
@@ -1395,7 +1200,7 @@ export default function TeacherDashboard() {
           {/* Enhanced Teacher Information */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <User className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
                 Teacher Information
               </CardTitle>
@@ -1448,7 +1253,7 @@ export default function TeacherDashboard() {
           {/* Advanced Teacher Dashboard Features */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <Brain className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
                 Advanced Teaching Tools
               </CardTitle>
@@ -1504,7 +1309,7 @@ export default function TeacherDashboard() {
           {/* Teaching Management Overview */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <Users className="h-6 w-6 mr-3 text-royalPurple-successTx" />
                 My Teaching Management
               </CardTitle>
@@ -1678,7 +1483,7 @@ export default function TeacherDashboard() {
             {/* Upcoming Assessments */}
             <Card variant="glass">
               <CardHeader>
-                <CardTitle className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent flex items-center">
+                <CardTitle className="text-royalPurple-text1 flex items-center">
                   <ClipboardList className="h-6 w-6 mr-3 text-orange-400" />
                   Upcoming Assessments
                 </CardTitle>
@@ -1710,7 +1515,7 @@ export default function TeacherDashboard() {
             {/* Marking Progress */}
             <Card variant="glass">
               <CardHeader>
-                <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent flex items-center">
+                <CardTitle className="text-royalPurple-text1 flex items-center">
                   <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
                   Marking Progress
                 </CardTitle>
@@ -1744,7 +1549,7 @@ export default function TeacherDashboard() {
           {hasResults && (
             <Card variant="glass">
               <CardHeader>
-                <CardTitle className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent flex items-center">
+                <CardTitle className="text-royalPurple-text1 flex items-center">
                   <TrendingUp className="h-6 w-6 mr-3 text-royalPurple-successTx" />
                   Teacher Performance Analytics
                 </CardTitle>
@@ -1819,7 +1624,7 @@ export default function TeacherDashboard() {
           {/* Teaching Tools */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <Library className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
                 Teaching Tools
               </CardTitle>
@@ -1891,6 +1696,6 @@ export default function TeacherDashboard() {
           </div>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }

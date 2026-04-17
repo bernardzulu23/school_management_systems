@@ -140,7 +140,7 @@ export function StudentRosterCard({ title = 'Registered Students by Class' }) {
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span className="flex items-center">
-            <Users className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+            <Users className="h-5 w-5 mr-2 text-royalPurple-accent" aria-hidden="true" />
             {title}
           </span>
           {selectedClass ? (
@@ -186,7 +186,9 @@ export function StudentRosterCard({ title = 'Registered Students by Class' }) {
                 <SelectContent>
                   {classesInYearGroup.map((c) => (
                     <SelectItem key={c.id} value={String(c.id)}>
-                      {c.name}
+                      {String(c?.name || '').trim() ||
+                        [c?.year_group, c?.section].filter(Boolean).join(' ') ||
+                        String(c.id)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -214,7 +216,10 @@ export function StudentRosterCard({ title = 'Registered Students by Class' }) {
 
           {loadingStudents ? (
             <div className="flex justify-center py-10">
-              <Loader2 className="h-8 w-8 animate-spin text-royalPurple-accentTx" />
+              <Loader2
+                className="h-8 w-8 animate-spin text-royalPurple-accent"
+                aria-hidden="true"
+              />
             </div>
           ) : filteredStudents.length > 0 ? (
             <div className="overflow-x-auto">

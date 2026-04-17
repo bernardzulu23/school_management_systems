@@ -512,9 +512,9 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
   }
 
   return (
-    <div className="max-w-4xl mx-auto bg-royalPurple-card rounded-2xl shadow-xl overflow-hidden">
+    <div className="max-w-4xl mx-auto bg-[#2d1b4e] border border-royalPurple-border rounded-2xl shadow-xl overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-royalPurple-text1">
+      <div className="bg-[#2d1b4e] border-b border-royalPurple-border p-8 text-royalPurple-text1">
         <h2 className="text-3xl font-bold mb-2">Registration</h2>
         <p className="opacity-90 capitalize">{role} Account Setup</p>
       </div>

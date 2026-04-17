@@ -42,13 +42,16 @@ export default function UpgradePrompt({ error, onDismiss }) {
             onClick={onDismiss}
             className="text-royalPurple-text2 hover:text-royalPurple-text1"
           >
-            ✕
+            Close
           </button>
         ) : null}
       </div>
 
       <div className="flex flex-wrap gap-2 mt-4">
-        <Button asChild className="bg-amber-400 hover:opacity-90 text-black">
+        <Button
+          asChild
+          className="bg-royalPurple-accent hover:opacity-90 text-royalPurple-accentTx"
+        >
           <Link href="/dashboard/billing">Upgrade Plan</Link>
         </Button>
         {onDismiss ? (

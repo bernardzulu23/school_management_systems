@@ -15,6 +15,7 @@ import {
   Search,
   Filter,
   Eye,
+  EyeOff,
   RefreshCcw,
   X,
 } from 'lucide-react'
@@ -212,7 +213,7 @@ export default function UserManagement() {
           ...students.map((u) => ({
             id: u.id,
             name: u.name,
-            email: u.user?.email || 'N/A',
+            email: u.user?.email ?? u.email ?? '',
             role: 'student',
             status: 'Active',
             original: u,
@@ -220,7 +221,7 @@ export default function UserManagement() {
           ...teachers.map((u) => ({
             id: u.id,
             name: u.user?.name || 'Unknown',
-            email: u.user?.email || 'N/A',
+            email: u.user?.email ?? u.email ?? '',
             role: 'teacher',
             status: 'Active',
             isHod: hodByUserId.has(String(u.userId || '')),
@@ -230,7 +231,7 @@ export default function UserManagement() {
           ...headteachers.map((u) => ({
             id: u.id,
             name: u.name || 'Unknown',
-            email: u.email || 'N/A',
+            email: u.email ?? '',
             role: 'headteacher',
             status: 'Active',
             original: u,
@@ -241,7 +242,7 @@ export default function UserManagement() {
         data = (allStudents || []).map((u) => ({
           id: u.id,
           name: u.name,
-          email: u.user?.email || 'N/A',
+          email: u.user?.email ?? u.email ?? '',
           role: 'student',
           status: 'Active',
           original: u,
@@ -267,7 +268,7 @@ export default function UserManagement() {
         data = teacherData.map((u) => ({
           id: u.id,
           name: u.user?.name || 'Unknown',
-          email: u.user?.email || 'N/A',
+          email: u.user?.email ?? u.email ?? '',
           role: 'teacher',
           status: 'Active',
           isHod: hodByUserId.has(String(u.userId || '')),
@@ -280,7 +281,7 @@ export default function UserManagement() {
         data = (res.data.data || []).map((u) => ({
           id: u.id,
           name: u.user?.name || 'Unknown',
-          email: u.user?.email || 'N/A',
+          email: u.user?.email ?? u.email ?? '',
           role: 'hod',
           status: 'Active',
           original: u,
@@ -290,7 +291,7 @@ export default function UserManagement() {
         data = (res.data.data || []).map((u) => ({
           id: u.id,
           name: u.name || 'Unknown',
-          email: u.email || 'N/A',
+          email: u.email ?? '',
           role: 'headteacher',
           status: 'Active',
           original: u,
@@ -389,6 +390,16 @@ export default function UserManagement() {
     } finally {
       setViewingLoading(false)
     }
+  }
+
+  const roleLabel = (user) => {
+    if (user.role === 'teacher' && user.isHod) return 'HOD'
+    if (user.role === 'hod') return 'HOD'
+    if (user.role === 'headteacher') return 'Headteacher'
+    if (user.role === 'student') return 'Student'
+    if (!user.role && (String(user.id || '').startsWith('STU') || user.original?.student_id))
+      return 'Student'
+    return user.role ? String(user.role).replace(/\b\w/g, (c) => c.toUpperCase()) : ''
   }
 
   return (
@@ -576,7 +587,7 @@ export default function UserManagement() {
         <section aria-label="User list and search" className="space-y-4">
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              <CardTitle className="text-royalPurple-text1">
                 {activeUserType === 'all'
                   ? 'All Users'
                   : userTypes.find((t) => t.id === activeUserType)?.name}
@@ -685,12 +696,16 @@ export default function UserManagement() {
                               <td className="py-4 text-royalPurple-text1 font-medium">
                                 {user.name}
                               </td>
-                              <td className="py-4 text-royalPurple-text2">{user.email}</td>
+                              <td className="py-4 text-royalPurple-text2">
+                                {user.email ? (
+                                  user.email
+                                ) : (
+                                  <span className="text-gray-400 italic">No email</span>
+                                )}
+                              </td>
                               <td className="py-4">
                                 <span className="px-3 py-1 text-xs rounded-full backdrop-blur-md bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50 capitalize font-medium">
-                                  {user.role === 'teacher' && user.isHod
-                                    ? 'teacher (hod)'
-                                    : user.role}
+                                  {roleLabel(user)}
                                 </span>
                               </td>
                               <td className="py-4">
@@ -1506,6 +1521,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
   const [saving, setSaving] = useState(false)
   const [passwordSaving, setPasswordSaving] = useState(false)
   const [newPassword, setNewPassword] = useState('')
+  const [showNewPassword, setShowNewPassword] = useState(false)
 
   const [form, setForm] = useState(() => ({
     user: {
@@ -1707,13 +1723,23 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
               Admin Password Reset
             </h4>
             <div className="flex flex-col md:flex-row gap-3">
-              <input
-                type="password"
-                placeholder="New password (min 6 chars)"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="flex-1 border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
-              />
+              <div className="relative flex-1">
+                <input
+                  type={showNewPassword ? 'text' : 'password'}
+                  placeholder="New password (min 6 chars)"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1 pr-10 focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-royalPurple-text3 hover:text-royalPurple-text1 transition-colors"
+                  aria-label={showNewPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
               <Button
                 onClick={resetPassword}
                 disabled={passwordSaving || !newPassword || newPassword.length < 6}

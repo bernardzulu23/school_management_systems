@@ -7,7 +7,6 @@ import {
   User,
   Mail,
   Phone,
-  MapPin,
   GraduationCap,
   BookOpen,
   Calendar,
@@ -228,7 +227,6 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
               onChange={onInputChange}
               className="md:col-span-2"
               error={errors.address}
-              icon={MapPin}
               aria-describedby="address-error"
             />
           </FormSection>

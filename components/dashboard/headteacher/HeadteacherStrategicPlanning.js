@@ -16,6 +16,7 @@ import {
   Save,
 } from 'lucide-react'
 import { api } from '@/lib/api'
+import { percentTextClass } from '@/lib/utils/percentColor'
 
 export function HeadteacherStrategicPlanning() {
   const [showCreateGoal, setShowCreateGoal] = useState(false)
@@ -390,8 +391,8 @@ export function HeadteacherStrategicPlanning() {
           <CardContent className="p-6 text-center">
             <Target className="h-8 w-8 text-royalPurple-accentTx mx-auto mb-2" />
             <h4 className="font-medium text-royalPurple-text1">Goal Completion Rate</h4>
-            <p className="text-2xl font-bold text-royalPurple-accentTx">
-              {summary.completion_rate || 0}%
+            <p className={`text-2xl font-bold ${percentTextClass(summary.completion_rate)}`}>
+              {Number(summary.completion_rate) || 0}%
             </p>
             <p className="text-sm text-royalPurple-text2">
               {summary.completion_rate >= 70 ? 'Above target of 70%' : 'Below target of 70%'}
@@ -402,7 +403,9 @@ export function HeadteacherStrategicPlanning() {
           <CardContent className="p-6 text-center">
             <Clock className="h-8 w-8 text-royalPurple-successTx mx-auto mb-2" />
             <h4 className="font-medium text-royalPurple-text1">On-Time Delivery</h4>
-            <p className="text-2xl font-bold text-royalPurple-successTx">
+            <p
+              className={`text-2xl font-bold ${percentTextClass(summary.completed > 0 ? 100 : 0)}`}
+            >
               {summary.completed > 0 ? 100 : 0}%
             </p>
             <p className="text-sm text-royalPurple-text2">Goals completed on schedule</p>

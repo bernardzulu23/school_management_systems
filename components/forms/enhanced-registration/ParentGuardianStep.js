@@ -1,5 +1,5 @@
 import React from 'react'
-import { Users, User, Phone, Mail, Briefcase, Building, FileText, MapPin } from 'lucide-react'
+import { Users, User, Phone, Mail, Briefcase } from 'lucide-react'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 
 export default function ParentGuardianStep({ formData, errors, onInputChange }) {

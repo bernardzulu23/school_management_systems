@@ -80,24 +80,7 @@ export default function SubjectsPage() {
   }
 
   const getCategoryColor = (category) => {
-    switch (category) {
-      case 'core':
-        return 'bg-royalPurple-accent text-royalPurple-accentTx border-royalPurple-border2'
-      case 'science':
-        return 'bg-royalPurple-success text-royalPurple-successTx border-royalPurple-border'
-      case 'language':
-        return 'bg-royalPurple-pill text-royalPurple-pillTx border-royalPurple-border2'
-      case 'practical':
-        return 'bg-orange-100 text-orange-800 border-orange-200'
-      case 'commercial':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'arts':
-        return 'bg-pink-100 text-pink-800 border-pink-200'
-      case 'elective':
-        return 'bg-royalPurple-card2 text-royalPurple-text1 border-royalPurple-border'
-      default:
-        return 'bg-royalPurple-card2 text-royalPurple-text1 border-royalPurple-border'
-    }
+    return 'bg-purple-600 text-white border-purple-500/40'
   }
 
   const filteredSubjects = subjects.filter((subject) => {

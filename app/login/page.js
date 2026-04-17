@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth'
-import { Eye, EyeOff, GraduationCap, Loader2, ArrowLeft } from 'lucide-react'
+import { GraduationCap, Loader2, ArrowLeft } from 'lucide-react'
 import { useSchool } from '@/lib/context/SchoolContext'
 import toast from 'react-hot-toast'
 import FormField from '@/components/forms/FormField'
@@ -16,7 +16,6 @@ export default function LoginPage() {
   const { school, isLoading: isSchoolLoading } = useSchool()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [loginPercent, setLoginPercent] = useState(0)
   const [detectedSubdomain, setDetectedSubdomain] = useState('')
@@ -191,27 +190,17 @@ export default function LoginPage() {
               validate={validateEmail}
             />
 
-            <div className="relative">
-              <FormField
-                label="Password"
-                name="password"
-                type={showPassword ? 'text' : 'password'}
-                autoComplete="current-password"
-                required
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                validate={validatePassword}
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-[38px] text-royalPurple-text3 hover:text-royalPurple-text1 transition-colors"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-              >
-                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-              </button>
-            </div>
+            <FormField
+              label="Password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              validate={validatePassword}
+            />
           </div>
 
           <div className="flex items-center justify-between text-sm">

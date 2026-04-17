@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card } from '@/components/ui/card'
+import { Lock } from 'lucide-react'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -13,10 +14,12 @@ export default function RegisterPage() {
   }, [router])
 
   return (
-    <div className="min-h-screen bg-royalPurple-page flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <Card className="max-w-md w-full p-8 text-center">
         <div className="mb-6">
-          <div className="text-6xl mb-4">🔒</div>
+          <div className="flex justify-center mb-4">
+            <Lock className="w-12 h-12 text-royalPurple-text1" aria-hidden="true" />
+          </div>
           <h2 className="text-2xl font-bold text-royalPurple-text1 mb-2">Access Restricted</h2>
           <p className="text-royalPurple-text2">
             User registration is only available to authorized school administrators.
@@ -46,7 +49,7 @@ export default function RegisterPage() {
         <div className="mt-6">
           <button
             onClick={() => router.push('/login')}
-            className="w-full bg-primary-600 text-royalPurple-text1 py-2 px-4 rounded-md hover:bg-primary-700 transition-colors"
+            className="w-full bg-royalPurple-accent text-royalPurple-accentTx py-2 px-4 rounded-md hover:opacity-90 transition-all"
           >
             Go to Login
           </button>

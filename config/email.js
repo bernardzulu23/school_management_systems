@@ -12,7 +12,7 @@ async function sendEmail(to, subject, html) {
   const from = getEmailFrom()
 
   if (!resend || !from) {
-    console.warn('[email] ⚠️ Resend not configured.')
+    console.warn('[email] Resend not configured.')
     console.warn('[email] - RESEND_API_KEY:', !!process.env.RESEND_API_KEY)
     console.warn('[email] - EMAIL_FROM:', from)
     console.warn('[email] Email NOT sent to:', to)
@@ -20,7 +20,7 @@ async function sendEmail(to, subject, html) {
   }
 
   try {
-    console.log('[email] 📧 Sending email via Resend...')
+    console.log('[email] Sending email via Resend...')
     console.log('[email] - From:', from)
     console.log('[email] - To:', to)
     console.log('[email] - Subject:', subject)
@@ -35,20 +35,20 @@ async function sendEmail(to, subject, html) {
     console.log('[email] Raw Resend response:', JSON.stringify(response, null, 2))
 
     if (response.error) {
-      console.error('[email] ❌ Resend API returned error:', response.error)
+      console.error('[email] Resend API returned error:', response.error)
       return false
     }
 
     if (response.data?.id) {
-      console.log('[email] ✅ Email sent successfully!')
+      console.log('[email] Email sent successfully!')
       console.log('[email] - Message ID:', response.data.id)
       return true
     }
 
-    console.warn('[email] ⚠️ Unexpected response format:', response)
+    console.warn('[email] Unexpected response format:', response)
     return false
   } catch (error) {
-    console.error('[email] ❌ Exception thrown:', error?.message || error)
+    console.error('[email] Exception thrown:', error?.message || error)
     console.error('[email] Full error:', error)
     return false
   }
@@ -80,12 +80,12 @@ export async function sendResetEmail(email, resetUrl) {
         <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
 
         <p style="color: #999; font-size: 12px;">
-          <strong>⏰ Important:</strong> This link expires in 1 hour.<br>
+          <strong>Important:</strong> This link expires in 1 hour.<br>
           If you didn't request a password reset, please ignore this email.
         </p>
 
         <p style="color: #999; font-size: 11px;">
-          © 2024 Ndake Day Secondary School. All rights reserved.
+          2024 Ndake Day Secondary School. All rights reserved.
         </p>
       </div>
     </div>

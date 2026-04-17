@@ -345,7 +345,7 @@ export default function MeetingFilesPage() {
                       <div className="mt-3 flex items-center justify-between">
                         <div className="flex items-center space-x-4">
                           <span className="text-sm text-royalPurple-successTx">
-                            ✓ Minutes: {meeting.minutes}
+                            Minutes: {meeting.minutes}
                           </span>
                           <span className="text-sm text-royalPurple-accentTx">
                             Action Items: {meeting.actionItems}

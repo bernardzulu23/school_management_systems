@@ -16,31 +16,31 @@ export async function GET(request) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const usedCodes = new Set()
-  await prisma.$transaction(async (tx) => {
-    for (const s of SCHOOL_SUBJECTS) {
-      const name = String(s.name || '').trim()
-      if (!name) continue
+  const createData = []
+  for (const s of SCHOOL_SUBJECTS) {
+    const name = String(s.name || '').trim()
+    if (!name) continue
 
-      let code = s.code ? String(s.code) : null
-      if (code && usedCodes.has(code)) {
-        code = `${code}_${name.substring(0, 3).toUpperCase()}`
-      }
-      if (code) usedCodes.add(code)
-
-      await tx.subject.upsert({
-        where: { schoolId_name: { schoolId, name } },
-        create: {
-          schoolId,
-          name,
-          code,
-          topics: [],
-        },
-        update: {
-          code: code ?? undefined,
-        },
-      })
+    let code = s.code ? String(s.code) : null
+    if (code && usedCodes.has(code)) {
+      code = `${code}_${name.substring(0, 3).toUpperCase()}`
     }
-  })
+    if (code) usedCodes.add(code)
+
+    createData.push({
+      schoolId,
+      name,
+      code,
+      topics: [],
+    })
+  }
+
+  if (createData.length > 0) {
+    await prisma.subject.createMany({
+      data: createData,
+      skipDuplicates: true,
+    })
+  }
 
   const subjects = await prisma.subject.findMany({
     where: { schoolId },

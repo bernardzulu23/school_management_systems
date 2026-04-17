@@ -7,16 +7,16 @@
 
 A revolutionary educational technology platform specifically designed for rural and resource-constrained schools in Zambia and other developing countries. Unlike traditional school management systems that require constant internet and power, our solution operates **completely offline for 7+ days**, uses **SMS/USSD for communication**, and integrates with **solar power systems**.
 
-## 🌟 **Perfect for RootLab Ignite 2025**
+## **Perfect for RootLab Ignite 2025**
 
 This project aligns with multiple RootLab focus areas:
 
-- 🤖 **AI for Social Good**: Smart analytics without external APIs
-- 🌿 **Green Tech**: Solar power optimization and sustainability
-- 🌾 **AgriTech**: Agricultural calendar integration
-- 📱 **Innovation**: Offline-first PWA technology
+- **AI for Social Good**: Smart analytics without external APIs
+- **Green Tech**: Solar power optimization and sustainability
+- **AgriTech**: Agricultural calendar integration
+- **Innovation**: Offline-first PWA technology
 
-## 🌟 Key Features
+## Key Features
 
 ### 🇿🇲 **Zambian Rural School Adaptations**
 
@@ -28,7 +28,7 @@ This project aligns with multiple RootLab focus areas:
 - **Mobile Money Integration**: Fee payments via Airtel Money/MTN Mobile Money
 - **Multi-Grade Classroom Support**: Tools for combined grade classes
 
-### 🔐 **Enterprise Security**
+### **Enterprise Security**
 
 - **AES-256-GCM Encryption**: Military-grade data protection
 - **TLS 1.3 Protocol**: Latest transport layer security
@@ -38,7 +38,7 @@ This project aligns with multiple RootLab focus areas:
 - **Rate Limiting**: API protection against abuse
 - **Security Headers**: XSS, clickjacking, and CSRF protection
 
-### 📱 **Progressive Web App (PWA) with Offline Support**
+### **Progressive Web App (PWA) with Offline Support**
 
 - **Offline Functionality**: Full app functionality without internet
 - **Service Worker**: Smart caching and background sync
@@ -47,7 +47,7 @@ This project aligns with multiple RootLab focus areas:
 - **Background Sync**: Automatic data synchronization when online
 - **App-like Experience**: Native app feel on all devices
 
-### 📊 **Smart Analytics Engine**
+### **Smart Analytics Engine**
 
 - **Rule-based Analytics**: Advanced data analysis without external AI APIs
 - **Statistical Analysis**: Comprehensive performance metrics and insights
@@ -56,7 +56,7 @@ This project aligns with multiple RootLab focus areas:
 - **Custom Reports**: Automated report generation with PDF export
 - **Performance Monitoring**: System and user performance tracking
 
-### 🎮 **Gamification System**
+### **Gamification System**
 
 - **Achievement Badges**: Subject-specific rewards and recognition
 - **Progress Tracking**: Visual progress indicators and milestones
@@ -65,14 +65,14 @@ This project aligns with multiple RootLab focus areas:
 - **Reward Points**: Point-based incentive system
 - **Subject Integration**: Curriculum-aligned gaming elements
 
-### 🎯 **Multi-Role Dashboard System**
+### **Multi-Role Dashboard System**
 
 - **Students**: Dashboard, grades, attendance, gamification, offline access
 - **Teachers**: Class management, grading, analytics, game creation
 - **HODs**: Department oversight, performance analysis, reporting
 - **Admins**: System administration, security monitoring, user management
 
-### ☁️ **Azure Cloud Integration**
+### **Azure Cloud Integration**
 
 - **Azure for Students**: Free hosting with .azurewebsites.net subdomain
 - **Azure Storage**: Secure file and data storage
@@ -80,7 +80,7 @@ This project aligns with multiple RootLab focus areas:
 - **Application Insights**: Performance and error monitoring
 - **Auto-scaling**: Automatic resource scaling based on demand
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### Frontend
 
@@ -111,7 +111,7 @@ This project aligns with multiple RootLab focus areas:
 - **Rate Limiting**: API protection
 - **Security Headers**: Comprehensive protection
 
-## 🚀 Deployment
+## Deployment
 
 ### Railway + Cloudflare (Recommended)
 

@@ -258,22 +258,6 @@ export default function VirtualFieldTrips() {
                         {/* Media Player Simulation */}
                         <div className="bg-royalPurple-deep rounded-lg aspect-video flex items-center justify-center">
                           <div className="text-center">
-                            <div className="text-6xl mb-4">
-                              {currentStopData.type === '360-video' && '🎥'}
-                              {currentStopData.type === 'interactive' && '🎮'}
-                              {currentStopData.type === 'documentary' && '📺'}
-                              {currentStopData.type === 'simulation' && '🔬'}
-                              {currentStopData.type === 'presentation' && '📊'}
-                              {currentStopData.type === 'virtual-walk' && '🚶'}
-                              {currentStopData.type === 'hands-on' && '✋'}
-                              {currentStopData.type === 'multimedia' && '🎭'}
-                              {currentStopData.type === 'comparison' && '⚖️'}
-                              {currentStopData.type === 'animation' && '🎬'}
-                              {currentStopData.type === 'data-visualization' && '📈'}
-                              {currentStopData.type === 'case-study' && '📋'}
-                              {currentStopData.type === 'interviews' && '🎤'}
-                              {currentStopData.type === 'prediction' && '🔮'}
-                            </div>
                             <p className="text-royalPurple-text1 text-lg">
                               {currentStopData.type.replace('-', ' ').toUpperCase()}
                             </p>

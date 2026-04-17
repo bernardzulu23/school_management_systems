@@ -4,6 +4,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function GET(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -11,7 +12,7 @@ export async function GET(request, { params }) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const assignment = await prisma.assignment.findFirst({
-    where: { id: params.id, schoolId },
+    where: { id: routeParams.id, schoolId },
   })
 
   if (!assignment) return NextResponse.json({ error: 'Not found' }, { status: 404 })
@@ -37,6 +38,7 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -64,7 +66,7 @@ export async function PUT(request, { params }) {
       : null
 
   const updated = await prisma.assignment.updateMany({
-    where: { id: params.id, schoolId },
+    where: { id: routeParams.id, schoolId },
     data: {
       title: body.title ? String(body.title).trim() : undefined,
       description: body.description !== undefined ? String(body.description) : undefined,
@@ -78,11 +80,12 @@ export async function PUT(request, { params }) {
 
   if (updated.count === 0) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  const assignment = await prisma.assignment.findFirst({ where: { id: params.id, schoolId } })
+  const assignment = await prisma.assignment.findFirst({ where: { id: routeParams.id, schoolId } })
   return NextResponse.json({ success: true, data: assignment })
 }
 
 export async function DELETE(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -94,7 +97,7 @@ export async function DELETE(request, { params }) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const deleted = await prisma.assignment.deleteMany({
-    where: { id: params.id, schoolId },
+    where: { id: routeParams.id, schoolId },
   })
 
   if (deleted.count === 0) return NextResponse.json({ error: 'Not found' }, { status: 404 })

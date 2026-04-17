@@ -4,6 +4,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function PUT(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -14,7 +15,7 @@ export async function PUT(request, { params }) {
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  const id = String(params?.id || '').trim()
+  const id = String(routeParams?.id || '').trim()
   if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
 
   const body = await request.json().catch(() => ({}))
@@ -54,6 +55,7 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -64,7 +66,7 @@ export async function DELETE(request, { params }) {
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  const id = String(params?.id || '').trim()
+  const id = String(routeParams?.id || '').trim()
   if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
 
   const existing = await prisma.game.findFirst({

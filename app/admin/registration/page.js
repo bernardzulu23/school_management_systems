@@ -162,39 +162,41 @@ function RegistrationContent() {
   if (activeForm) {
     return (
       <DashboardLayout>
-        <div className="container mx-auto px-4 py-6">
-          <div className="max-w-4xl mx-auto mb-6 flex justify-between items-center">
-            <Button
-              variant="ghost"
-              onClick={() => {
-                setActiveForm(null)
-                router.push('/admin/registration')
-              }}
-              className="flex items-center text-royalPurple-text2 hover:text-royalPurple-text1"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Selection
-            </Button>
-            <Link href="/dashboard">
+        <div className="min-h-screen bg-[#1a0a2e]">
+          <div className="container mx-auto px-4 py-6">
+            <div className="max-w-4xl mx-auto mb-6 flex justify-between items-center">
               <Button
                 variant="ghost"
+                onClick={() => {
+                  setActiveForm(null)
+                  router.push('/admin/registration')
+                }}
                 className="flex items-center text-royalPurple-text2 hover:text-royalPurple-text1"
               >
-                <Home className="mr-2 h-4 w-4" />
-                Dashboard
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Selection
               </Button>
-            </Link>
-          </div>
+              <Link href="/dashboard">
+                <Button
+                  variant="ghost"
+                  className="flex items-center text-royalPurple-text2 hover:text-royalPurple-text1"
+                >
+                  <Home className="mr-2 h-4 w-4" />
+                  Dashboard
+                </Button>
+              </Link>
+            </div>
 
-          <div className="bg-royalPurple-card dark:bg-g-800 rounded-[20px] border border-black/[0.09] dark:border-white/[0.09] overflow-hidden">
-            <EnhancedUserRegistrationForm
-              role={activeForm}
-              onSubmit={(data) => handleSubmit(data, activeForm)}
-              onCancel={() => {
-                setActiveForm(null)
-                router.push('/admin/registration')
-              }}
-            />
+            <div className="bg-[#2d1b4e] rounded-[20px] border border-royalPurple-border overflow-hidden">
+              <EnhancedUserRegistrationForm
+                role={activeForm}
+                onSubmit={(data) => handleSubmit(data, activeForm)}
+                onCancel={() => {
+                  setActiveForm(null)
+                  router.push('/admin/registration')
+                }}
+              />
+            </div>
           </div>
         </div>
       </DashboardLayout>
@@ -203,181 +205,177 @@ function RegistrationContent() {
 
   return (
     <DashboardLayout>
-      <div className="container mx-auto px-4 py-6">
-        {/* Back Navigation */}
-        <div className="mb-6">
-          <Link href="/dashboard">
-            <Button
-              variant="ghost"
-              className="flex items-center text-royalPurple-text2 hover:text-royalPurple-text1 pl-0"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Dashboard
-            </Button>
-          </Link>
-        </div>
-
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-royalPurple-text1 flex items-center gap-2">
-            <UserPlus className="w-8 h-8" />
-            User Registration System
-          </h1>
-          <p className="text-royalPurple-text2 mt-2">
-            Register new users with comprehensive subject integration and role-specific features
-          </p>
-        </div>
-
-        {/* System Information */}
-        <Card className="p-6 mb-8">
-          <div className="flex items-start gap-4">
-            <BookOpen className="w-8 h-8 text-white mt-1" />
-            <div>
-              <h2 className="text-xl font-semibold text-royalPurple-text1 mb-2">
-                Comprehensive Subject Integration
-              </h2>
-              <p className="text-royalPurple-text2 mb-4">
-                Our registration system includes all 29 subjects for Zambian secondary education,
-                ensuring proper academic planning and resource allocation.
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                <div>
-                  <div className="font-semibold text-white">Core Subjects</div>
-                  <div className="text-white/80">Mathematics, English, Additional Math</div>
-                </div>
-                <div>
-                  <div className="font-semibold text-white">Sciences</div>
-                  <div className="text-white/80">Physics, Chemistry, Biology, Agriculture</div>
-                </div>
-                <div>
-                  <div className="font-semibold text-white">Local Languages</div>
-                  <div className="text-white/80">8 indigenous languages supported</div>
-                </div>
-                <div>
-                  <div className="font-semibold text-white">Practical Subjects</div>
-                  <div className="text-white/80">Technical, Home Economics, Arts</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        {/* Registration Options */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {registrationTypes.map((type) => (
-            <Card
-              key={type.id}
-              className="p-6 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all"
-            >
-              <div className="text-center mb-6">
-                <div
-                  className={`w-16 h-16 rounded-full ${type.color} flex items-center justify-center mx-auto mb-4`}
-                >
-                  <type.icon className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-semibold text-royalPurple-text1 mb-2">{type.title}</h3>
-                <p className="text-royalPurple-text2 text-sm">{type.description}</p>
-              </div>
-
-              <div className="space-y-3 mb-6">
-                <h4 className="font-medium text-royalPurple-text1 text-sm">Key Features:</h4>
-                <ul className="space-y-2">
-                  {type.features.map((feature, index) => (
-                    <li
-                      key={index}
-                      className="flex items-start gap-2 text-sm text-royalPurple-text2"
-                    >
-                      <div className="w-1.5 h-1.5 bg-royalPurple-accent rounded-full mt-2 flex-shrink-0" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <Button onClick={() => setActiveForm(type.id)} className="w-full" disabled={loading}>
-                Register {type.title.split(' ')[0]}
+      <div className="min-h-screen bg-[#1a0a2e]">
+        <div className="container mx-auto px-4 py-6">
+          {/* Back Navigation */}
+          <div className="mb-6">
+            <Link href="/dashboard">
+              <Button
+                variant="ghost"
+                className="flex items-center text-royalPurple-text2 hover:text-royalPurple-text1 pl-0"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Dashboard
               </Button>
-            </Card>
-          ))}
-        </div>
+            </Link>
+          </div>
 
-        {/* Additional Information */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              Current System Status
-            </h3>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-royalPurple-text2">Total Subjects Available:</span>
-                <span className="font-semibold">29</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-royalPurple-text2">Local Languages Supported:</span>
-                <span className="font-semibold">8</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-royalPurple-text2">Subject Categories:</span>
-                <span className="font-semibold">7</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-royalPurple-text2">Headteacher:</span>
-                <span className="font-semibold">Brian B. Zulu</span>
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-royalPurple-text1 flex items-center gap-2">
+              <UserPlus className="w-8 h-8" />
+              User Registration System
+            </h1>
+            <p className="text-royalPurple-text2 mt-2">
+              Register new users with comprehensive subject integration and role-specific features
+            </p>
+          </div>
+
+          {/* System Information */}
+          <Card className="p-6 mb-8">
+            <div className="flex items-start gap-4">
+              <BookOpen className="w-8 h-8 text-white mt-1" />
+              <div>
+                <h2 className="text-xl font-semibold text-royalPurple-text1 mb-2">
+                  Comprehensive Subject Integration
+                </h2>
+                <p className="text-royalPurple-text2 mb-4">
+                  Our registration system includes all 29 subjects for Zambian secondary education,
+                  ensuring proper academic planning and resource allocation.
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                  <div>
+                    <div className="font-semibold text-white">Core Subjects</div>
+                    <div className="text-white/80">Mathematics, English, Additional Math</div>
+                  </div>
+                  <div>
+                    <div className="font-semibold text-white">Sciences</div>
+                    <div className="text-white/80">Physics, Chemistry, Biology, Agriculture</div>
+                  </div>
+                  <div>
+                    <div className="font-semibold text-white">Local Languages</div>
+                    <div className="text-white/80">8 indigenous languages supported</div>
+                  </div>
+                  <div>
+                    <div className="font-semibold text-white">Practical Subjects</div>
+                    <div className="text-white/80">Technical, Home Economics, Arts</div>
+                  </div>
+                </div>
               </div>
             </div>
           </Card>
 
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">
-              Subject Categories Available
-            </h3>
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <div className="p-2 bg-royalPurple-accent rounded text-royalPurple-accentTx">
-                Core Subjects
-              </div>
-              <div className="p-2 bg-royalPurple-success rounded text-royalPurple-successTx">
-                Sciences
-              </div>
-              <div className="p-2 bg-royalPurple-pill rounded text-royalPurple-pillTx">
-                Languages
-              </div>
-              <div className="p-2 bg-orange-50 rounded text-orange-700">Practical</div>
-              <div className="p-2 bg-yellow-50 rounded text-yellow-700">Commercial</div>
-              <div className="p-2 bg-pink-50 rounded text-pink-700">Arts & Humanities</div>
-              <div className="p-2 bg-royalPurple-page rounded text-royalPurple-text2">
-                Technology
-              </div>
-            </div>
-          </Card>
-        </div>
+          {/* Registration Options */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {registrationTypes.map((type) => (
+              <Card
+                key={type.id}
+                className="p-6 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all"
+              >
+                <div className="text-center mb-6">
+                  <div
+                    className={`w-16 h-16 rounded-full ${type.color} flex items-center justify-center mx-auto mb-4`}
+                  >
+                    <type.icon className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-royalPurple-text1 mb-2">
+                    {type.title}
+                  </h3>
+                  <p className="text-royalPurple-text2 text-sm">{type.description}</p>
+                </div>
 
-        {/* Local Languages Showcase */}
-        <Card className="p-6 mt-8">
-          <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">
-            Supported Local Languages
-          </h3>
-          <p className="text-royalPurple-text2 mb-4">
-            Our system supports all major Zambian languages, ensuring cultural preservation and
-            linguistic diversity in education.
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              'Chichewa',
-              'Chitonga',
-              'Luvale',
-              'Lunda',
-              'Kikaonde',
-              'Bemba',
-              'Silozi',
-              'French',
-            ].map((language) => (
-              <div key={language} className="p-3 bg-royalPurple-pill rounded-lg text-center">
-                <span className="text-royalPurple-pillTx font-medium">{language}</span>
-              </div>
+                <div className="space-y-3 mb-6">
+                  <h4 className="font-medium text-royalPurple-text1 text-sm">Key Features:</h4>
+                  <ul className="space-y-2">
+                    {type.features.map((feature, index) => (
+                      <li
+                        key={index}
+                        className="flex items-start gap-2 text-sm text-royalPurple-text2"
+                      >
+                        <div className="w-1.5 h-1.5 bg-royalPurple-accent rounded-full mt-2 flex-shrink-0" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <Button
+                  onClick={() => setActiveForm(type.id)}
+                  className="w-full"
+                  disabled={loading}
+                >
+                  Register {type.title.split(' ')[0]}
+                </Button>
+              </Card>
             ))}
           </div>
-        </Card>
+
+          {/* Additional Information */}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center gap-2">
+                <Users className="w-5 h-5" />
+                Current System Status
+              </h3>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-royalPurple-text2">Total Subjects Available:</span>
+                  <span className="font-semibold">29</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-royalPurple-text2">Local Languages Supported:</span>
+                  <span className="font-semibold">8</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-royalPurple-text2">Subject Categories:</span>
+                  <span className="font-semibold">7</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-royalPurple-text2">Headteacher:</span>
+                  <span className="font-semibold">Brian B. Zulu</span>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">
+                Subject Categories Available
+              </h3>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="p-2 bg-purple-600 rounded text-white">Core Subjects</div>
+                <div className="p-2 bg-purple-600 rounded text-white">Sciences</div>
+                <div className="p-2 bg-purple-600 rounded text-white">Languages</div>
+                <div className="p-2 bg-purple-600 rounded text-white">Practical</div>
+                <div className="p-2 bg-purple-600 rounded text-white">Commercial</div>
+                <div className="p-2 bg-purple-600 rounded text-white">Arts & Humanities</div>
+                <div className="p-2 bg-purple-600 rounded text-white">Technology</div>
+              </div>
+            </Card>
+          </div>
+
+          {/* Local Languages Showcase */}
+          <Card className="p-6 mt-8">
+            <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">
+              Supported Local Languages
+            </h3>
+            <p className="text-royalPurple-text2 mb-4">
+              Our system supports all major Zambian languages, ensuring cultural preservation and
+              linguistic diversity in education.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {['Bemba', 'Tonga', 'Nyanja', 'Lozi', 'Kaonde', 'Luvale', 'Lunda', 'English'].map(
+                (language) => (
+                  <div
+                    key={language}
+                    className="p-3 bg-purple-600 rounded-lg text-center text-white font-medium"
+                  >
+                    {language}
+                  </div>
+                )
+              )}
+            </div>
+          </Card>
+        </div>
       </div>
     </DashboardLayout>
   )

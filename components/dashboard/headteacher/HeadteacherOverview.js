@@ -20,6 +20,7 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Toolti
 import { HeadteacherStats } from './HeadteacherStats'
 import { useHeadteacher } from '@/lib/context/HeadteacherContext'
 import { StudentRosterCard } from '@/components/dashboard/StudentRosterCard'
+import { percentTextClass } from '@/lib/utils/percentColor'
 
 export const HeadteacherOverview = memo(function HeadteacherOverview() {
   const { dashboardData, schoolStats, setActiveTab, subjectPerformanceData } = useHeadteacher()
@@ -57,13 +58,15 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
       )}
 
       {/* Enhanced Stats Cards */}
-      <HeadteacherStats schoolStats={schoolStats} />
+      <div className="bg-royalPurple-deep border border-royalPurple-border rounded-2xl p-4">
+        <HeadteacherStats schoolStats={schoolStats} />
+      </div>
 
       {/* School Performance Overview */}
       <Card variant="glass">
         <CardHeader>
           <CardTitle className="text-royalPurple-text1 flex items-center">
-            <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-successTx" />
+            <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accent" aria-hidden="true" />
             School Performance Overview
           </CardTitle>
         </CardHeader>
@@ -75,8 +78,10 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                   <TrendingUp className="h-8 w-8 text-royalPurple-accent" />
                 </div>
                 <h3 className="text-royalPurple-text1 font-semibold">Student Achievement</h3>
-                <p className="text-2xl font-bold text-royalPurple-text2 mt-2">
-                  {schoolStats.studentAchievement}%
+                <p
+                  className={`text-2xl font-bold mt-2 ${percentTextClass(schoolStats.studentAchievement)}`}
+                >
+                  {Number(schoolStats.studentAchievement) || 0}%
                 </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">Based on recent results</p>
               </div>
@@ -85,8 +90,10 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                   <Users className="h-8 w-8 text-royalPurple-accent" />
                 </div>
                 <h3 className="text-royalPurple-text1 font-semibold">Teacher Effectiveness</h3>
-                <p className="text-2xl font-bold text-royalPurple-text2 mt-2">
-                  {schoolStats.teacherEffectiveness}%
+                <p
+                  className={`text-2xl font-bold mt-2 ${percentTextClass(schoolStats.teacherEffectiveness)}`}
+                >
+                  {Number(schoolStats.teacherEffectiveness) || 0}%
                 </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">Based on student performance</p>
               </div>
@@ -95,8 +102,10 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                   <CheckCircle className="h-8 w-8 text-royalPurple-accent" />
                 </div>
                 <h3 className="text-royalPurple-text1 font-semibold">Attendance Rate</h3>
-                <p className="text-2xl font-bold text-royalPurple-text2 mt-2">
-                  {schoolStats.attendanceRate}%
+                <p
+                  className={`text-2xl font-bold mt-2 ${percentTextClass(schoolStats.attendanceRate)}`}
+                >
+                  {Number(schoolStats.attendanceRate) || 0}%
                 </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">Current term</p>
               </div>
@@ -105,8 +114,8 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                   <Award className="h-8 w-8 text-royalPurple-accent" />
                 </div>
                 <h3 className="text-royalPurple-text1 font-semibold">Pass Rate</h3>
-                <p className="text-2xl font-bold text-royalPurple-text2 mt-2">
-                  {schoolStats.passRate}%
+                <p className={`text-2xl font-bold mt-2 ${percentTextClass(schoolStats.passRate)}`}>
+                  {Number(schoolStats.passRate) || 0}%
                 </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">Current term</p>
               </div>
@@ -120,7 +129,7 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
         <Card variant="glass">
           <CardHeader>
             <CardTitle className="text-royalPurple-text1 flex items-center">
-              <FileBarChart className="h-6 w-6 mr-3 text-royalPurple-text2" />
+              <FileBarChart className="h-6 w-6 mr-3 text-royalPurple-accent" aria-hidden="true" />
               School Performance Analytics
             </CardTitle>
           </CardHeader>
@@ -130,15 +139,23 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                 {/* School Performance Trends */}
                 <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                   <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
-                    <TrendingUp className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+                    <TrendingUp
+                      className="h-5 w-5 mr-2 text-royalPurple-accent"
+                      aria-hidden="true"
+                    />
                     Performance Trends by Term
                   </h3>
-                  <div className="h-64 flex items-center justify-center bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg">
-                    <div className="text-center">
-                      <BarChart3 className="h-12 w-12 text-royalPurple-text3 mx-auto mb-4" />
-                      <p className="text-royalPurple-text2">School Performance Chart</p>
-                      <p className="text-royalPurple-text3 text-sm">
-                        Term comparison visualization
+                  <div className="h-64 flex items-center justify-center bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg p-6 text-center">
+                    <div>
+                      <BarChart3
+                        className="h-12 w-12 text-royalPurple-accent mx-auto mb-4"
+                        aria-hidden="true"
+                      />
+                      <p className="text-royalPurple-text1 font-semibold">
+                        No performance trend data yet
+                      </p>
+                      <p className="text-royalPurple-text2 text-sm mt-1">
+                        Add results to see term-by-term charts here.
                       </p>
                     </div>
                   </div>
@@ -147,7 +164,7 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                 {/* Subject Performance */}
                 <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                   <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
-                    <BookOpen className="h-5 w-5 mr-2 text-royalPurple-successTx" />
+                    <BookOpen className="h-5 w-5 mr-2 text-royalPurple-accent" aria-hidden="true" />
                     Subject Pass Rate (≥40%)
                   </h3>
                   <div className="space-y-4">
@@ -162,8 +179,8 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                             <span className="text-royalPurple-text1 font-semibold text-sm">
                               {subject.name}
                             </span>
-                            <span className="text-royalPurple-accentTx font-bold">
-                              {performance}%
+                            <span className={`font-bold ${percentTextClass(performance)}`}>
+                              {Number(performance) || 0}%
                             </span>
                           </div>
                           <div className="w-full bg-royalPurple-muted/60 rounded-full h-2">
@@ -229,9 +246,7 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
         {/* Monthly Registrations Chart */}
         <Card variant="glass">
           <CardHeader>
-            <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Monthly Registrations
-            </CardTitle>
+            <CardTitle className="text-royalPurple-text1">Monthly Registrations</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
@@ -258,8 +273,8 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
         {/* Quick Actions Card */}
         <Card variant="glass">
           <CardHeader>
-            <CardTitle className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent flex items-center">
-              <Plus className="h-6 w-6 mr-3 text-yellow-400" />
+            <CardTitle className="text-royalPurple-text1 flex items-center">
+              <Plus className="h-6 w-6 mr-3 text-royalPurple-accent" aria-hidden="true" />
               Quick Actions
             </CardTitle>
           </CardHeader>
@@ -270,28 +285,28 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                   onClick={() => setActiveTab('user-management')}
                   className="bg-royalPurple-muted/60 hover:bg-royalPurple-muted/60 text-royalPurple-text1 border border-royalPurple-border/40 h-24 flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-300"
                 >
-                  <UserPlus className="h-6 w-6 text-royalPurple-accentTx" />
+                  <UserPlus className="h-6 w-6 text-royalPurple-accent" aria-hidden="true" />
                   <span>Register User</span>
                 </Button>
                 <Button
                   onClick={() => setActiveTab('academic-management')}
                   className="bg-royalPurple-muted/60 hover:bg-royalPurple-muted/60 text-royalPurple-text1 border border-royalPurple-border/40 h-24 flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-300"
                 >
-                  <GraduationCap className="h-6 w-6 text-royalPurple-successTx" />
+                  <GraduationCap className="h-6 w-6 text-royalPurple-accent" aria-hidden="true" />
                   <span>Create Class</span>
                 </Button>
                 <Button
                   onClick={() => setActiveTab('academic-management')}
                   className="bg-royalPurple-muted/60 hover:bg-royalPurple-muted/60 text-royalPurple-text1 border border-royalPurple-border/40 h-24 flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-300"
                 >
-                  <BookOpen className="h-6 w-6 text-royalPurple-pillTx" />
+                  <BookOpen className="h-6 w-6 text-royalPurple-accent" aria-hidden="true" />
                   <span>Add Subject</span>
                 </Button>
                 <Button
                   onClick={() => setActiveTab('performance-analytics')}
                   className="bg-royalPurple-muted/60 hover:bg-royalPurple-muted/60 text-royalPurple-text1 border border-royalPurple-border/40 h-24 flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-300"
                 >
-                  <FileText className="h-6 w-6 text-orange-400" />
+                  <FileText className="h-6 w-6 text-royalPurple-accent" aria-hidden="true" />
                   <span>Generate Report</span>
                 </Button>
               </div>

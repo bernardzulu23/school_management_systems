@@ -5,6 +5,7 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { deleteUserCascade } from '@/lib/db/deleteCascade'
 
 export async function GET(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -16,7 +17,7 @@ export async function GET(request, { params }) {
   }
 
   const user = await prisma.user.findFirst({
-    where: { id: params.id, schoolId },
+    where: { id: routeParams.id, schoolId },
     include: { studentProfile: true, teacherProfile: true, hodProfile: true },
   })
 
@@ -25,6 +26,7 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -38,7 +40,7 @@ export async function PUT(request, { params }) {
   const body = await request.json()
 
   const existing = await prisma.user.findFirst({
-    where: { id: params.id, schoolId },
+    where: { id: routeParams.id, schoolId },
     select: { id: true },
   })
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
@@ -58,6 +60,7 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -71,7 +74,7 @@ export async function DELETE(request, { params }) {
   }
 
   const user = await prisma.user.findFirst({
-    where: { id: params.id, schoolId },
+    where: { id: routeParams.id, schoolId },
     include: { studentProfile: true, teacherProfile: true, hodProfile: true },
   })
   if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 })

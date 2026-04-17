@@ -15,12 +15,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
   Globe,
+  GraduationCap,
+  Home,
   Target,
   TrendingUp,
+  Utensils,
   Users,
   ArrowLeft,
   BarChart3,
   FileText,
+  Stethoscope,
   Settings,
 } from 'lucide-react'
 
@@ -186,7 +190,7 @@ export default function SDGPage() {
                   className="h-auto p-4 flex-col space-y-2"
                   onClick={() => setActiveView('sdg1')}
                 >
-                  <span className="text-2xl">🏚️</span>
+                  <Home className="h-6 w-6 text-royalPurple-accent" aria-hidden="true" />
                   <span className="font-semibold">No Poverty</span>
                   <span className="text-xs text-royalPurple-text3">Scholarships & Support</span>
                 </Button>
@@ -196,7 +200,7 @@ export default function SDGPage() {
                   className="h-auto p-4 flex-col space-y-2"
                   onClick={() => setActiveView('sdg2')}
                 >
-                  <span className="text-2xl">🍽️</span>
+                  <Utensils className="h-6 w-6 text-royalPurple-accent" aria-hidden="true" />
                   <span className="font-semibold">Zero Hunger</span>
                   <span className="text-xs text-royalPurple-text3">Nutrition & Agriculture</span>
                 </Button>
@@ -206,7 +210,7 @@ export default function SDGPage() {
                   className="h-auto p-4 flex-col space-y-2"
                   onClick={() => setActiveView('sdg3')}
                 >
-                  <span className="text-2xl">🏥</span>
+                  <Stethoscope className="h-6 w-6 text-royalPurple-accent" aria-hidden="true" />
                   <span className="font-semibold">Good Health</span>
                   <span className="text-xs text-royalPurple-text3">Health & Well-being</span>
                 </Button>
@@ -216,7 +220,7 @@ export default function SDGPage() {
                   className="h-auto p-4 flex-col space-y-2"
                   onClick={() => setActiveView('sdg5')}
                 >
-                  <span className="text-2xl">👩‍🎓</span>
+                  <GraduationCap className="h-6 w-6 text-royalPurple-accent" aria-hidden="true" />
                   <span className="font-semibold">Gender Equality</span>
                   <span className="text-xs text-royalPurple-text3">Equal Opportunities</span>
                 </Button>
@@ -229,10 +233,10 @@ export default function SDGPage() {
         {renderActiveView()}
 
         {/* Global Actions (always visible) */}
-        <Card className="bg-gradient-to-r from-blue-50 to-purple-50">
+        <Card className="bg-royalPurple-card border border-royalPurple-border">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Globe className="h-5 w-5 text-royalPurple-accentTx" />
+              <Globe className="h-5 w-5 text-royalPurple-accent" aria-hidden="true" />
               <span>Global Impact & Partnerships</span>
             </CardTitle>
           </CardHeader>

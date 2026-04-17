@@ -106,7 +106,6 @@ export default function InteractiveWhiteboard({ user, height = '100vh' }) {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 18 }}>🖊️</span>
           {showNameInput ? (
             <input
               autoFocus
@@ -151,13 +150,13 @@ export default function InteractiveWhiteboard({ user, height = '100vh' }) {
 
         <div style={{ display: 'flex', gap: 8 }}>
           <button onClick={handleClear} style={btnStyle('danger')}>
-            🗑️ Clear
+            Clear
           </button>
           <button onClick={handleExportPNG} style={btnStyle('secondary')}>
-            📷 Export PNG
+            Export PNG
           </button>
           <button onClick={handleSave} style={btnStyle('primary')}>
-            {saved ? '✓ Saved!' : '💾 Save'}
+            {saved ? 'Saved' : 'Save'}
           </button>
         </div>
       </div>

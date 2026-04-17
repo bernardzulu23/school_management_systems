@@ -5,6 +5,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function POST(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -22,7 +23,7 @@ export async function POST(request, { params }) {
   }
 
   const user = await prisma.user.findFirst({
-    where: { id: params.id, schoolId },
+    where: { id: routeParams.id, schoolId },
     select: { id: true },
   })
   if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 })

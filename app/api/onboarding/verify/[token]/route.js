@@ -4,7 +4,8 @@ import { cookies } from 'next/headers'
 import { signOnboardingToken } from '@/lib/middleware/onboardingAuth'
 
 export async function GET(request, { params }) {
-  const token = String(params?.token || '').trim()
+  const routeParams = await params
+  const token = String(routeParams?.token || '').trim()
   if (!token) return NextResponse.json({ error: 'Invalid token' }, { status: 400 })
 
   const reg = await prisma.schoolRegistration.findFirst({

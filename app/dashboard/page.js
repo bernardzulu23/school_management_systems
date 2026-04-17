@@ -548,12 +548,12 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">
-                    🚀 Innovation Hub
+                    Innovation Hub
                   </h3>
                   <p className="text-sm text-royalPurple-pillTx mb-3">
                     AI, AR/VR, Mental Health & Blockchain
                   </p>
-                  <div className="text-xs text-royalPurple-pillTx">✨ Explore Innovation →</div>
+                  <div className="text-xs text-royalPurple-pillTx">Explore Innovation →</div>
                 </Card>
               </button>
             </li>
@@ -578,7 +578,7 @@ export default function DashboardPage() {
       <footer className="bg-royalPurple-card border-t mt-12 py-8" aria-label="Dashboard footer">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-royalPurple-text3 text-sm">
-            © 2025 Zambian School Management System - Empowering Rural Education Through Innovation
+            2025 Zambian School Management System - Empowering Rural Education Through Innovation
           </p>
         </div>
       </footer>

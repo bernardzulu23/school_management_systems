@@ -31,6 +31,7 @@ import {
   Search,
   Filter,
 } from 'lucide-react'
+import { percentTextClass } from '@/lib/utils/percentColor'
 
 // Curriculum Mapping System
 export const CurriculumMapping = () => {
@@ -182,7 +183,9 @@ export const DifferentiatedInstruction = () => {
                 <span>{strategy.strategy}</span>
                 <div className="flex items-center">
                   <Star className="h-4 w-4 text-yellow-400 mr-1" />
-                  <span className="text-sm text-royalPurple-text2">{strategy.effectiveness}%</span>
+                  <span className={`text-sm ${percentTextClass(strategy.effectiveness)}`}>
+                    {Number(strategy.effectiveness) || 0}%
+                  </span>
                 </div>
               </CardTitle>
             </CardHeader>
@@ -263,19 +266,19 @@ export const DifferentiatedInstruction = () => {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center p-4 bg-royalPurple-card/60 rounded-lg">
-              <div className="text-2xl font-bold text-royalPurple-accentTx">32%</div>
+              <div className={`text-2xl font-bold ${percentTextClass(32)}`}>32%</div>
               <div className="text-sm text-royalPurple-text2">Visual Learners</div>
             </div>
             <div className="text-center p-4 bg-royalPurple-card/60 rounded-lg">
-              <div className="text-2xl font-bold text-royalPurple-successTx">28%</div>
+              <div className={`text-2xl font-bold ${percentTextClass(28)}`}>28%</div>
               <div className="text-sm text-royalPurple-text2">Auditory Learners</div>
             </div>
             <div className="text-center p-4 bg-royalPurple-card/60 rounded-lg">
-              <div className="text-2xl font-bold text-yellow-400">25%</div>
+              <div className={`text-2xl font-bold ${percentTextClass(25)}`}>25%</div>
               <div className="text-sm text-royalPurple-text2">Kinesthetic Learners</div>
             </div>
             <div className="text-center p-4 bg-royalPurple-card/60 rounded-lg">
-              <div className="text-2xl font-bold text-royalPurple-pillTx">15%</div>
+              <div className={`text-2xl font-bold ${percentTextClass(15)}`}>15%</div>
               <div className="text-sm text-royalPurple-text2">Mixed Learning</div>
             </div>
           </div>

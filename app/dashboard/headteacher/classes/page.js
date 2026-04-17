@@ -226,7 +226,19 @@ export default function ClassesManagementPage() {
                   {filteredClasses.length === 0 ? (
                     <tr>
                       <td colSpan="8" className="text-center py-8 text-royalPurple-text3">
-                        No classes found. Create one to get started.
+                        <div className="max-w-md mx-auto">
+                          <div className="text-royalPurple-text1 font-semibold mb-2">
+                            No classes yet
+                          </div>
+                          <div className="text-sm text-royalPurple-text2 mb-4">
+                            Create your first class to start enrolling students, assigning teachers,
+                            and capturing results.
+                          </div>
+                          <Button onClick={() => setShowAddDialog(true)}>
+                            <Plus className="h-4 w-4 mr-2" />
+                            Create Your First Class
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   ) : (

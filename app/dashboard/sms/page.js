@@ -51,7 +51,7 @@ export default function SmsLogPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div>
-              <h1 className="text-2xl font-bold text-royalPurple-text1">📱 SMS Interaction Logs</h1>
+              <h1 className="text-2xl font-bold text-royalPurple-text1">SMS Interaction Logs</h1>
               <p className="text-royalPurple-text2">View incoming and outgoing SMS messages</p>
             </div>
             <Button onClick={fetchSmsLogs} className="btn-secondary btn-sm">

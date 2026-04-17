@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import UpgradePrompt from '@/components/shared/UpgradePrompt'
 import { useAIStream } from '@/hooks/useAIStream'
+import { BookOpen, Check, Copy, PenLine, Printer, Sparkles, Trash2 } from 'lucide-react'
 
 const GRADES = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']
 const SUBJECTS = [
@@ -16,10 +17,10 @@ const SUBJECTS = [
   'Civic Education',
 ]
 const STORY_TYPES = [
-  { id: 'story', label: '📖 Narrative Story', desc: 'Engaging story with characters' },
-  { id: 'fable', label: '🦁 Fable', desc: 'Animal story with a moral lesson' },
-  { id: 'dialogue', label: '💬 Dialogue', desc: 'Conversation between characters' },
-  { id: 'poem', label: '✍️ Poem', desc: 'Rhythmic verse on the topic' },
+  { id: 'story', label: 'Narrative Story', desc: 'Engaging story with characters' },
+  { id: 'fable', label: 'Fable', desc: 'Animal story with a moral lesson' },
+  { id: 'dialogue', label: 'Dialogue', desc: 'Conversation between characters' },
+  { id: 'poem', label: 'Poem', desc: 'Rhythmic verse on the topic' },
 ]
 const ZAMBIAN_SETTINGS = [
   'Lusaka',
@@ -93,7 +94,7 @@ export default function AIStoryWeaver() {
     >
       <div style={{ borderRight: '1px solid #3b2a66', overflowY: 'auto', padding: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '1.5rem' }}>
-          <span style={{ fontSize: 24 }}>📚</span>
+          <BookOpen size={22} color="#ede9fe" aria-hidden="true" />
           <div>
             <h2 style={{ color: '#ede9fe', fontSize: 17, fontWeight: 700, margin: 0 }}>
               AI Story Weaver
@@ -228,7 +229,10 @@ export default function AIStoryWeaver() {
               Weaving story...
             </>
           ) : (
-            '✨ Generate Story'
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+              <Sparkles size={16} aria-hidden="true" />
+              Generate Story
+            </span>
           )}
         </button>
         {loading ? (
@@ -265,13 +269,26 @@ export default function AIStoryWeaver() {
             }}
           >
             <button onClick={copyToClipboard} style={actionBtn}>
-              {copied ? '✓ Copied!' : '📋 Copy'}
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                {copied ? (
+                  <Check size={16} aria-hidden="true" />
+                ) : (
+                  <Copy size={16} aria-hidden="true" />
+                )}
+                {copied ? 'Copied' : 'Copy'}
+              </span>
             </button>
             <button onClick={printStory} style={actionBtn}>
-              🖨️ Print / Save PDF
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                <Printer size={16} aria-hidden="true" />
+                Print / Save PDF
+              </span>
             </button>
             <button onClick={reset} style={{ ...actionBtn, marginLeft: 'auto', color: '#fca5a5' }}>
-              🗑️ Clear
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                <Trash2 size={16} aria-hidden="true" />
+                Clear
+              </span>
             </button>
           </div>
         ) : null}
@@ -279,7 +296,9 @@ export default function AIStoryWeaver() {
         <div style={{ flex: 1, overflowY: 'auto', padding: '2rem' }}>
           {!story && !loading ? (
             <div style={{ textAlign: 'center', paddingTop: '4rem' }}>
-              <div style={{ fontSize: 64, marginBottom: 16 }}>📖</div>
+              <div style={{ marginBottom: 16 }}>
+                <BookOpen size={56} color="#ede9fe" aria-hidden="true" />
+              </div>
               <h3 style={{ color: '#ede9fe', fontWeight: 600, marginBottom: 8 }}>
                 Your story will appear here
               </h3>
@@ -299,7 +318,7 @@ export default function AIStoryWeaver() {
                   animation: 'pulse 1.5s ease-in-out infinite',
                 }}
               >
-                ✍️
+                <PenLine size={48} color="#ede9fe" aria-hidden="true" />
               </div>
               <p style={{ color: '#a78bfa', fontSize: 15 }}>Writing your story…</p>
               <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>

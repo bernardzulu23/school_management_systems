@@ -1,145 +1,146 @@
-# 📁 School Management System v2.0.0 - Project Structure
+# School Management System v2.0.0 - Project Structure
 
-## 🏗️ **Overall Architecture**
+## **Overall Architecture**
 
 ```
 school-management-system/
-├── 🎨 school-management-frontend/    # Next.js 14 Frontend with PWA
-├── 🔧 school-management-api/         # Laravel 10 Backend API
-├── 📚 README.md                      # Project documentation
-├── 📋 PROJECT_STRUCTURE.md           # This file
-└── 🔐 SECURITY.md                    # Security documentation
+├── school-management-frontend/    # Next.js 14 Frontend with PWA
+├── school-management-api/         # Laravel 10 Backend API
+├── README.md                      # Project documentation
+├── PROJECT_STRUCTURE.md           # This file
+└── SECURITY.md                    # Security documentation
 ```
 
-## 🎨 **Frontend Structure (Next.js 14 + PWA)**
+## **Frontend Structure (Next.js 14 + PWA)**
 
 ```
 school-management-frontend/
-├── 📱 app/                           # Next.js App Router
-│   ├── 🏠 page.js                    # Landing page
-│   ├── 🎨 layout.js                  # Root layout with security
-│   ├── 🌐 globals.css                # Global styles
-│   ├── ⚙️ providers.js               # Context providers
-│   ├── 🔐 login/                     # Authentication pages
-│   ├── 📊 dashboard/                 # Multi-role dashboards
-│   ├── 👨‍💼 admin/                      # Admin-specific pages
-│   ├── 👨‍🏫 hod/                        # HOD-specific pages
-│   ├── 📝 register/                  # Registration forms
-│   └── 🧪 test/                      # Testing pages
+├── app/                           # Next.js App Router
+│   ├── page.js                    # Landing page
+│   ├── layout.js                  # Root layout with security
+│   ├── globals.css                # Global styles
+│   ├── providers.js               # Context providers
+│   ├── login/                     # Authentication pages
+│   ├── dashboard/                 # Multi-role dashboards
+│   ├── admin/                     # Admin-specific pages
+│   ├── hod/                       # HOD-specific pages
+│   ├── register/                  # Registration forms
+│   └── test/                      # Testing pages
 │
-├── 🧩 components/                    # Reusable React components
-│   ├── 👨‍💼 admin/                      # Admin components
-│   ├── 📊 dashboard/                 # Dashboard components
-│   ├── 📝 forms/                     # Form components
-│   ├── 🎮 games/                     # Gamification components
-│   ├── 🔐 security/                  # Security components
-│   └── 🎨 ui/                        # UI components
+├── components/                    # Reusable React components
+│   ├── admin/                     # Admin components
+│   ├── dashboard/                 # Dashboard components
+│   ├── forms/                     # Form components
+│   ├── games/                     # Gamification components
+│   ├── security/                  # Security components
+│   └── ui/                        # UI components
 │
-├── 🔧 lib/                           # Core libraries and utilities
-│   ├── 🔐 encryption.js              # AES-256 encryption library
-│   ├── 🔒 secure-auth.js             # Enhanced authentication
-│   ├── 🌐 tls-config.js              # TLS 1.3 configuration
-│   ├── 💾 offline-storage.js         # PWA offline storage
-│   ├── 📊 analytics.js               # Smart analytics engine
-│   ├── 🎮 gamificationEngine.js      # Gamification system
-│   ├── 📈 statisticalAnalysis.js     # Statistical analysis
-│   ├── 📄 reportGenerator.js         # Report generation
-│   ├── 🔍 searchEngine.js            # Search functionality
-│   ├── 📱 pwaUtils.js                # PWA utilities
-│   ├── 🎯 gradingSystem.js           # Grading algorithms
-│   ├── 🌐 api.js                     # API client
-│   ├── 🔑 auth.js                    # Authentication
-│   ├── 🔐 security.js                # Security utilities
-│   └── 🛠️ utils.js                   # General utilities
+├── lib/                           # Core libraries and utilities
+│   ├── encryption.js              # AES-256 encryption library
+│   ├── secure-auth.js             # Enhanced authentication
+│   ├── tls-config.js                # TLS 1.3 configuration
+│   ├── offline-storage.js           # PWA offline storage
+│   ├── analytics.js                 # Smart analytics engine
+│   ├── gamificationEngine.js        # Gamification system
+│   ├── statisticalAnalysis.js       # Statistical analysis
+│   ├── reportGenerator.js           # Report generation
+│   ├── searchEngine.js              # Search functionality
+│   ├── pwaUtils.js                  # PWA utilities
+│   ├── gradingSystem.js             # Grading algorithms
+│   ├── api.js                       # API client
+│   ├── auth.js                      # Authentication
+│   ├── security.js                  # Security utilities
+│   ├── utils/percentColor.js        # Standardized KPI percent thresholds
+│   └── utils.js                     # General utilities
 │
-├── 📱 public/                        # Static assets and PWA files
-│   ├── 📋 manifest.json              # PWA manifest
-│   ├── ⚙️ sw.js                      # Service worker
-│   ├── 🔐 security-demo.html         # Security demonstration
-│   ├── 📊 smart-analytics-demo.html  # Analytics demo
-│   ├── 🧪 test-pwa.html              # PWA testing
-│   └── 📄 test-reports.html          # Report testing
+├── public/                          # Static assets and PWA files
+│   ├── manifest.json                # PWA manifest
+│   ├── sw.js                        # Service worker
+│   ├── security-demo.html           # Security demonstration
+│   ├── smart-analytics-demo.html    # Analytics demo
+│   ├── test-pwa.html                # PWA testing
+│   └── test-reports.html            # Report testing
 │
-├── ⚙️ config/                        # Configuration files
-│   └── 📚 subjects.js                # Subject definitions
+├── config/                          # Configuration files
+│   └── subjects.js                  # Subject definitions
 │
-├── 🎨 styles/                        # Styling files
-│   └── ✨ glassmorphism.css          # Modern UI effects
+├── styles/                          # Styling files
+│   └── glassmorphism.css            # Modern UI effects
 │
-├── 🔧 hooks/                         # Custom React hooks
-├── 📦 package.json                   # Dependencies and scripts
-├── 🌐 next.config.js                 # Next.js configuration
-├── 🎨 tailwind.config.js             # Tailwind CSS config
-├── 📝 postcss.config.js              # PostCSS configuration
-├── ⚙️ jsconfig.json                  # JavaScript configuration
-├── 🌍 .env.production                # Production environment
-└── 🔧 web.config                     # IIS configuration
+├── hooks/                           # Custom React hooks
+├── package.json                     # Dependencies and scripts
+├── next.config.js                   # Next.js configuration
+├── tailwind.config.js               # Tailwind CSS config
+├── postcss.config.js                # PostCSS configuration
+├── jsconfig.json                    # JavaScript configuration
+├── .env.production                  # Production environment
+└── web.config                       # IIS configuration
 ```
 
-## 🔧 **Backend Structure (Laravel 10 + Security)**
+## **Backend Structure (Laravel 10 + Security)**
 
 ```
 school-management-api/
-├── 📱 app/                           # Laravel application
-│   ├── 🌐 Http/                      # HTTP layer
-│   │   ├── 🎮 Controllers/           # API controllers
-│   │   ├── 🛡️ Middleware/            # Security middleware
-│   │   ├── 📝 Requests/              # Form requests
-│   │   └── 📊 Resources/             # API resources
+├── app/                             # Laravel application
+│   ├── Http/                        # HTTP layer
+│   │   ├── Controllers/             # API controllers
+│   │   ├── Middleware/              # Security middleware
+│   │   ├── Requests/                # Form requests
+│   │   └── Resources/               # API resources
 │   │
-│   ├── 🗄️ Models/                    # Eloquent models
-│   ├── 🔧 Services/                  # Business logic services
-│   │   ├── 🔐 AES256EncryptionService.php  # Server-side encryption
-│   │   ├── 📊 AnalyticsService.php   # Analytics processing
-│   │   ├── 🎮 GamificationService.php # Gamification logic
-│   │   └── 📄 ReportService.php      # Report generation
+│   ├── Models/                      # Eloquent models
+│   ├── Services/                    # Business logic services
+│   │   ├── AES256EncryptionService.php  # Server-side encryption
+│   │   ├── AnalyticsService.php     # Analytics processing
+│   │   ├── GamificationService.php  # Gamification logic
+│   │   └── ReportService.php        # Report generation
 │   │
-│   ├── 📧 Mail/                      # Email templates
-│   ├── 📢 Notifications/             # Notification classes
-│   ├── 🎯 Events/                    # Event classes
-│   ├── 👂 Listeners/                 # Event listeners
-│   ├── 💼 Jobs/                      # Queue jobs
-│   └── 🔧 Providers/                 # Service providers
+│   ├── Mail/                        # Email templates
+│   ├── Notifications/               # Notification classes
+│   ├── Events/                      # Event classes
+│   ├── Listeners/                   # Event listeners
+│   ├── Jobs/                        # Queue jobs
+│   └── Providers/                   # Service providers
 │
-├── ⚙️ config/                        # Configuration files
-│   ├── 🔐 tls.php                    # TLS 1.3 configuration
-│   ├── 🔒 security.php               # Security settings
-│   ├── 📊 analytics.php              # Analytics configuration
-│   └── 🎮 gamification.php           # Gamification settings
+├── config/                          # Configuration files
+│   ├── tls.php                      # TLS 1.3 configuration
+│   ├── security.php                 # Security settings
+│   ├── analytics.php                # Analytics configuration
+│   └── gamification.php             # Gamification settings
 │
-├── 🗄️ database/                      # Database files
-│   ├── 📊 migrations/                # Database migrations
-│   ├── 🌱 seeders/                   # Database seeders
-│   └── 🏭 factories/                 # Model factories
+├── database/                        # Database files
+│   ├── migrations/                  # Database migrations
+│   ├── seeders/                     # Database seeders
+│   └── factories/                   # Model factories
 │
-├── 🛣️ routes/                        # Route definitions
-│   ├── 🌐 api.php                    # API routes
-│   ├── 🌍 web.php                    # Web routes
-│   └── 📺 channels.php               # Broadcast channels
+├── routes/                          # Route definitions
+│   ├── api.php                      # API routes
+│   ├── web.php                      # Web routes
+│   └── channels.php                 # Broadcast channels
 │
-├── 📦 composer.json                  # PHP dependencies
-├── 🌍 .env.example                   # Environment template
-└── ⚙️ artisan                        # Laravel CLI tool
+├── composer.json                    # PHP dependencies
+├── .env.example                     # Environment template
+└── artisan                          # Laravel CLI tool
 ```
 
-## 🔐 **Security Implementation Files**
+## **Security Implementation Files**
 
 ### **Frontend Security**
 
 ```
 lib/
-├── 🔐 encryption.js                  # AES-256-GCM encryption
+├── encryption.js                    # AES-256-GCM encryption
 │   ├── AES256Encryption class        # Main encryption class
 │   ├── DataClassificationManager     # Data security levels
 │   ├── SecureStorageManager          # Encrypted localStorage
 │   └── SecurityUtils                 # Security utilities
 │
-├── 🔒 secure-auth.js                 # Enhanced authentication
+├── secure-auth.js                   # Enhanced authentication
 │   ├── SecureAuthWrapper             # Auth with encryption
 │   ├── SessionIntegrityChecker       # Session validation
 │   └── AccountLockoutManager         # Brute force protection
 │
-└── 🌐 tls-config.js                  # TLS 1.3 configuration
+└── tls-config.js                    # TLS 1.3 configuration
     ├── TLS_CONFIG                    # TLS settings
     ├── SecureHTTPSClient             # HTTPS client
     └── CertificatePinning            # Certificate validation
@@ -149,48 +150,48 @@ lib/
 
 ```
 app/Services/
-├── 🔐 AES256EncryptionService.php    # Server-side encryption
+├── AES256EncryptionService.php      # Server-side encryption
 │   ├── encrypt()                     # Data encryption
 │   ├── decrypt()                     # Data decryption
 │   ├── encryptStudentData()          # Student data protection
 │   └── generateSecureToken()         # Token generation
 │
 app/Http/Middleware/
-├── 🛡️ TLSSecurityMiddleware.php      # TLS validation
-├── 🔒 EncryptionMiddleware.php       # Request/response encryption
-└── 🚫 RateLimitMiddleware.php        # Rate limiting
+├── TLSSecurityMiddleware.php        # TLS validation
+├── EncryptionMiddleware.php         # Request/response encryption
+└── RateLimitMiddleware.php          # Rate limiting
 
 config/
-├── 🔐 tls.php                        # TLS 1.3 configuration
-└── 🔒 security.php                   # Security policies
+├── tls.php                          # TLS 1.3 configuration
+└── security.php                     # Security policies
 ```
 
-## 📱 **PWA Implementation Files**
+## **PWA Implementation Files**
 
 ### **Service Worker & Caching**
 
 ```
 public/
-├── ⚙️ sw.js                          # Main service worker
+├── sw.js                            # Main service worker
 │   ├── Static file caching           # HTML, CSS, JS caching
 │   ├── Dynamic API caching           # API response caching
 │   ├── Background sync               # Offline data sync
 │   └── Push notifications            # Real-time updates
 │
-├── 📋 manifest.json                  # PWA manifest
+├── manifest.json                    # PWA manifest
 │   ├── App metadata                  # Name, icons, theme
 │   ├── Display settings              # Standalone mode
 │   ├── Shortcuts                     # Quick actions
 │   └── File handlers                 # File associations
 │
-└── 💾 offline-storage.js             # Offline data management
+└── offline-storage.js               # Offline data management
     ├── IndexedDB management          # Local database
     ├── Sync queue                    # Offline actions
     ├── Cache strategies              # Data caching
     └── Storage optimization          # Performance tuning
 ```
 
-## 🎮 **Gamification System Files**
+## **Gamification System Files**
 
 ### **Frontend Gamification**
 
@@ -226,7 +227,7 @@ app/Models/                           # Gamification models
 └── Reward.php                        # Reward system
 ```
 
-## 📊 **Analytics System Files**
+## **Analytics System Files**
 
 ### **Frontend Analytics**
 
@@ -260,24 +261,24 @@ config/analytics.php                 # Analytics configuration
 └── Analysis rules                   # Processing rules
 ```
 
-## 🔧 **Configuration Files**
+## **Configuration Files**
 
 ### **Frontend Configuration**
 
 ```
-📦 package.json                      # Dependencies and scripts v2.0.0
+package.json                        # Dependencies and scripts v2.0.0
 ├── Production dependencies          # Runtime libraries
 ├── Development dependencies         # Build tools
 ├── Scripts                          # Build and deploy commands
 └── Browser compatibility            # Target browsers
 
-⚙️ next.config.js                    # Next.js configuration
+next.config.js                      # Next.js configuration
 ├── PWA configuration               # Workbox settings
 ├── Security headers                # CSP, HSTS settings
 ├── Performance optimization        # Bundle optimization
 └── API proxy settings              # Development proxy
 
-🎨 tailwind.config.js                # Tailwind CSS configuration
+tailwind.config.js                  # Tailwind CSS configuration
 ├── Theme customization             # Colors, fonts, spacing
 ├── Component classes               # Custom components
 ├── Responsive breakpoints          # Mobile-first design
@@ -287,31 +288,31 @@ config/analytics.php                 # Analytics configuration
 ### **Backend Configuration**
 
 ```
-📦 composer.json                     # PHP dependencies v2.0.0
+composer.json                       # PHP dependencies v2.0.0
 ├── Laravel framework               # Core framework
 ├── Security packages               # Encryption, authentication
 ├── Analytics packages              # Data processing
 └── Development tools               # Testing, debugging
 
-🌍 .env.production                   # Production environment
+.env.production                     # Production environment
 ├── Database configuration          # MySQL settings
 ├── Security settings               # Encryption keys
 ├── API configurations              # External services
 └── Performance settings            # Caching, optimization
 ```
 
-## 🧪 **Testing Files**
+## **Testing Files**
 
 ### **Frontend Testing**
 
 ```
-📁 __tests__/                        # Test files
+__tests__/                          # Test files
 ├── components/                      # Component tests
 ├── lib/                            # Library tests
 ├── security/                       # Security tests
 └── pwa/                            # PWA tests
 
-🔧 jest.config.js                    # Jest configuration
+jest.config.js                      # Jest configuration
 ├── Test environment setup          # Testing environment
 ├── Coverage settings               # Code coverage
 └── Mock configurations             # API mocking
@@ -320,53 +321,53 @@ config/analytics.php                 # Analytics configuration
 ### **Backend Testing**
 
 ```
-📁 tests/                           # Laravel tests
+tests/                              # Laravel tests
 ├── Feature/                        # Feature tests
 ├── Unit/                           # Unit tests
 ├── Security/                       # Security tests
 └── Integration/                    # Integration tests
 
-⚙️ phpunit.xml                      # PHPUnit configuration
+phpunit.xml                         # PHPUnit configuration
 ├── Test suites                     # Test organization
 ├── Coverage settings               # Code coverage
 └── Database testing                # Test database
 ```
 
-## 🚀 **Deployment Files**
+## **Deployment Files**
 
 ### **Azure Deployment**
 
 ```
-🌐 web.config                        # IIS configuration
+web.config                          # IIS configuration
 ├── URL rewriting                   # Route handling
 ├── Security headers                # HTTP security
 └── Performance optimization        # Caching, compression
 
-📋 azure-pipelines.yml               # CI/CD pipeline
+azure-pipelines.yml                 # CI/CD pipeline
 ├── Build steps                     # Compilation
 ├── Testing phases                  # Automated testing
 ├── Security scanning               # Vulnerability checks
 └── Deployment stages               # Production deployment
 ```
 
-## 📚 **Documentation Files**
+## **Documentation Files**
 
 ```
-📚 README.md                         # Main project documentation
-📋 PROJECT_STRUCTURE.md              # This file - project structure
-🔐 SECURITY.md                       # Security documentation
-📊 ANALYTICS.md                      # Analytics documentation
-🎮 GAMIFICATION.md                   # Gamification guide
-📱 PWA.md                            # PWA implementation guide
-☁️ AZURE_DEPLOYMENT.md               # Azure deployment guide
-🧪 TESTING.md                        # Testing documentation
+README.md                           # Main project documentation
+PROJECT_STRUCTURE.md                # This file - project structure
+SECURITY.md                         # Security documentation
+ANALYTICS.md                        # Analytics documentation
+GAMIFICATION.md                     # Gamification guide
+PWA.md                              # PWA implementation guide
+AZURE_DEPLOYMENT.md                 # Azure deployment guide
+TESTING.md                          # Testing documentation
 ```
 
 ---
 
-## 🎯 **Key Features by Directory**
+## **Key Features by Directory**
 
-### 🔐 **Security Features**
+### **Security Features**
 
 - **AES-256-GCM encryption** for all sensitive data
 - **TLS 1.3 protocol** for secure communications
@@ -374,7 +375,7 @@ config/analytics.php                 # Analytics configuration
 - **Intrusion detection** and monitoring
 - **Rate limiting** and DDoS protection
 
-### 📱 **PWA Features**
+### **PWA Features**
 
 - **Offline functionality** with full app access
 - **Service worker** for intelligent caching
@@ -382,7 +383,7 @@ config/analytics.php                 # Analytics configuration
 - **Push notifications** for real-time updates
 - **App-like experience** on all devices
 
-### 🎮 **Gamification Features**
+### **Gamification Features**
 
 - **Achievement system** with subject-specific badges
 - **Progress tracking** and visual indicators
@@ -390,7 +391,7 @@ config/analytics.php                 # Analytics configuration
 - **Educational challenges** and quizzes
 - **Reward system** with points and recognition
 
-### 📊 **Analytics Features**
+### **Analytics Features**
 
 - **Rule-based analytics** without external APIs
 - **Statistical analysis** and trend detection
@@ -398,7 +399,7 @@ config/analytics.php                 # Analytics configuration
 - **Custom reports** with PDF generation
 - **Real-time dashboards** with live data
 
-### ☁️ **Azure Integration**
+### **Azure Integration**
 
 - **Azure App Service** deployment ready
 - **Azure Storage** for file management
@@ -408,4 +409,4 @@ config/analytics.php                 # Analytics configuration
 
 ---
 
-**🏗️ Built with enterprise architecture for scalability and security**
+**Built with enterprise architecture for scalability and security**

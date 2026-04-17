@@ -31,6 +31,7 @@ import {
   LineChart,
   Line,
 } from 'recharts'
+import { percentTextClass } from '@/lib/utils/percentColor'
 
 export default function ExamAnalysisPage() {
   const [selectedTerm, setSelectedTerm] = useState('Term 2')
@@ -168,8 +169,10 @@ export default function ExamAnalysisPage() {
                       <p className="text-royalPurple-successTx/80 text-sm font-medium">
                         Average Score
                       </p>
-                      <p className="text-3xl font-bold text-royalPurple-successTx">
-                        {departmentStats.averageScore || 0}%
+                      <p
+                        className={`text-3xl font-bold ${percentTextClass(departmentStats.averageScore)}`}
+                      >
+                        {Number(departmentStats.averageScore) || 0}%
                       </p>
                     </div>
                     <TrendingUp className="h-12 w-12 text-royalPurple-successTx/60" />
@@ -182,8 +185,10 @@ export default function ExamAnalysisPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-royalPurple-pillTx/80 text-sm font-medium">Pass Rate</p>
-                      <p className="text-3xl font-bold text-royalPurple-pillTx">
-                        {departmentStats.passRate || 0}%
+                      <p
+                        className={`text-3xl font-bold ${percentTextClass(departmentStats.passRate)}`}
+                      >
+                        {Number(departmentStats.passRate) || 0}%
                       </p>
                     </div>
                     <Award className="h-12 w-12 text-royalPurple-pillTx/60" />
@@ -452,13 +457,13 @@ export default function ExamAnalysisPage() {
                               {subject.students}
                             </td>
                             <td className="py-4 px-4 text-center">
-                              <span className="font-medium text-royalPurple-text1">
-                                {subject.average}%
+                              <span className={`font-medium ${percentTextClass(subject.average)}`}>
+                                {Number(subject.average) || 0}%
                               </span>
                             </td>
                             <td className="py-4 px-4 text-center">
-                              <span className="font-medium text-royalPurple-successTx">
-                                {subject.passRate}%
+                              <span className={`font-medium ${percentTextClass(subject.passRate)}`}>
+                                {Number(subject.passRate) || 0}%
                               </span>
                             </td>
                             <td className="py-4 px-4 text-center">

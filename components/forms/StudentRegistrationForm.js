@@ -3,18 +3,7 @@
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import {
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  GraduationCap,
-  BookOpen,
-  Calendar,
-  Users,
-  Save,
-  X,
-} from 'lucide-react'
+import { User, Mail, Phone, GraduationCap, BookOpen, Calendar, Users, Save, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
 import {
@@ -268,7 +257,6 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
               onChange={onInputChange}
               rows={2}
               className="md:col-span-2"
-              icon={MapPin}
               error={errors.address}
               aria-describedby="address-error"
             />
@@ -470,7 +458,6 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
               onChange={onInputChange}
               rows={2}
               className="md:col-span-2"
-              icon={MapPin}
               error={errors.parentAddress}
               aria-describedby="parentAddress-error"
             />

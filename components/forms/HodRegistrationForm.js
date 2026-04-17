@@ -10,7 +10,6 @@ import {
   Mail,
   Phone,
   Calendar,
-  MapPin,
   Building,
   GraduationCap,
   Award,
@@ -264,7 +263,6 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
               placeholder="Enter address"
               className="md:col-span-2"
               rows={3}
-              icon={MapPin}
               error={errors.address}
               aria-describedby="address-error"
             />

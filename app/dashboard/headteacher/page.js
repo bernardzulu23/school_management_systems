@@ -466,7 +466,9 @@ function HeadteacherDashboardContent() {
                 ))}
               </div>
             ) : (
-              <HeadteacherStats schoolStats={schoolStats} />
+              <div className="bg-royalPurple-deep border border-royalPurple-border rounded-2xl p-4">
+                <HeadteacherStats schoolStats={schoolStats} />
+              </div>
             )}
           </section>
 
@@ -533,40 +535,34 @@ function HeadteacherDashboardContent() {
             </div>
           </section>
 
-          {/* Active Feature Content - Collapsible */}
+          {/* Active Feature Content */}
           {activeTab && (
-            <section
-              id="active-feature-content"
-              role="tabpanel"
-              aria-labelledby={`tab-${activeTab}`}
-              className="bg-royalPurple-card rounded-[14px] border border-royalPurple-border p-4"
-            >
-              <Card>
-                <CardHeader className="bg-royalPurple-card2 py-3 rounded-t-[14px] border-b border-royalPurple-border">
-                  <CardTitle className="flex items-center justify-between text-lg">
-                    <div className="flex items-center" id={`tab-${activeTab}`}>
-                      {tabs.find((t) => t.id === activeTab)?.icon &&
-                        React.createElement(tabs.find((t) => t.id === activeTab).icon, {
-                          className: 'h-5 w-5 mr-2 text-royalPurple-text2',
-                          'aria-hidden': 'true',
-                        })}
+            <section className="bg-royalPurple-deep rounded-[14px] border border-royalPurple-border p-6">
+              <div className="flex items-start justify-between gap-4 mb-6">
+                <div className="flex items-start" id={`tab-${activeTab}`}>
+                  {tabs.find((t) => t.id === activeTab)?.icon &&
+                    React.createElement(tabs.find((t) => t.id === activeTab).icon, {
+                      className: 'h-5 w-5 mr-2 text-royalPurple-accent',
+                      'aria-hidden': 'true',
+                    })}
+                  <div>
+                    <div className="text-lg font-semibold text-royalPurple-text1">
                       {tabs.find((t) => t.id === activeTab)?.name}
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setActiveTab('')}
-                      className="h-8 w-8 p-0 text-royalPurple-text2 hover:text-royalPurple-text1"
-                      aria-label="Close feature content"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="bg-royalPurple-card p-4 max-h-96 overflow-y-auto">
-                  {renderTabContent()}
-                </CardContent>
-              </Card>
+                    <div className="text-sm text-royalPurple-text2">
+                      {tabs.find((t) => t.id === activeTab)?.description}
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('')}
+                  className="inline-flex items-center justify-center h-9 px-4 rounded-lg border border-royalPurple-border text-royalPurple-text1 bg-transparent hover:bg-royalPurple-card2 transition-colors"
+                >
+                  Back
+                </button>
+              </div>
+              <div className="space-y-6">{renderTabContent()}</div>
             </section>
           )}
         </main>

@@ -283,9 +283,7 @@ export default function InnovationHub() {
             <Sparkles className="h-6 w-6 text-yellow-400 absolute -top-1 -right-1 animate-pulse" />
           </div>
         </div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-4">
-          Innovation Hub
-        </h1>
+        <h1 className="text-4xl font-bold text-royalPurple-text1 mb-4">Innovation Hub</h1>
         <p className="text-xl text-royalPurple-text2 mb-2">Explore Innovation</p>
         <p className="text-royalPurple-text3">
           Cutting-edge educational technology for the future of learning

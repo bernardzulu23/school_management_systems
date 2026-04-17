@@ -1,8 +1,9 @@
 import { redirect } from 'next/navigation'
 
-export default function RegisterSchoolPage({ searchParams }) {
+export default async function RegisterSchoolPage({ searchParams }) {
+  const params = await searchParams
   const qs = new URLSearchParams()
-  Object.entries(searchParams || {}).forEach(([k, v]) => {
+  Object.entries(params || {}).forEach(([k, v]) => {
     if (v === undefined || v === null) return
     if (Array.isArray(v)) v.forEach((vv) => qs.append(k, String(vv)))
     else qs.set(k, String(v))

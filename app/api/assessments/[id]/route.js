@@ -5,6 +5,7 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -12,7 +13,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const assessment = await prisma.assessment.findFirst({
-    where: { id: params.id, schoolId },
+    where: { id: routeParams.id, schoolId },
   })
 
   if (!assessment) throw new ApiError('Assessment not found', 404)
@@ -21,6 +22,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
 })
 
 export const PUT = withErrorHandler(async function PUT(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -48,7 +50,7 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
       : null
 
   const updated = await prisma.assessment.updateMany({
-    where: { id: params.id, schoolId },
+    where: { id: routeParams.id, schoolId },
     data: {
       ...(data.title !== undefined ? { title: String(data.title) } : {}),
       ...(data.type !== undefined ? { type: String(data.type) } : {}),
@@ -68,11 +70,12 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
 
   if (updated.count === 0) throw new ApiError('Assessment not found', 404)
 
-  const assessment = await prisma.assessment.findFirst({ where: { id: params.id, schoolId } })
+  const assessment = await prisma.assessment.findFirst({ where: { id: routeParams.id, schoolId } })
   return NextResponse.json({ success: true, data: assessment })
 })
 
 export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -84,7 +87,7 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const deleted = await prisma.assessment.deleteMany({
-    where: { id: params.id, schoolId },
+    where: { id: routeParams.id, schoolId },
   })
 
   if (deleted.count === 0) throw new ApiError('Assessment not found', 404)

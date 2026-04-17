@@ -24,14 +24,14 @@ const PROVIDERS = [
 ]
 
 const PAYMENT_TYPES = [
-  { value: 'tuition', label: 'Tuition Fees', icon: '📚' },
-  { value: 'uniform', label: 'Uniform & Books', icon: '👕' },
-  { value: 'meals', label: 'Meal Program', icon: '🍽️' },
-  { value: 'transport', label: 'Transport', icon: '🚌' },
-  { value: 'examination', label: 'Examination Fees', icon: '📝' },
-  { value: 'activation', label: 'Platform Activation', icon: '🔓' },
-  { value: 'subscription', label: 'Monthly Subscription', icon: '📅' },
-  { value: 'other', label: 'Other', icon: '💰' },
+  { value: 'tuition', label: 'Tuition Fees' },
+  { value: 'uniform', label: 'Uniform & Books' },
+  { value: 'meals', label: 'Meal Program' },
+  { value: 'transport', label: 'Transport' },
+  { value: 'examination', label: 'Examination Fees' },
+  { value: 'activation', label: 'Platform Activation' },
+  { value: 'subscription', label: 'Monthly Subscription' },
+  { value: 'other', label: 'Other' },
 ]
 
 const PAYMENT_STATUS = {
@@ -139,7 +139,7 @@ export default function PaymentForm({ onSuccess, schoolId, userRole }) {
               >
                 {PAYMENT_TYPES.map((t) => (
                   <option key={t.value} value={t.value}>
-                    {t.icon} {t.label}
+                    {t.label}
                   </option>
                 ))}
               </select>

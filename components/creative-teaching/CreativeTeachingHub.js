@@ -177,7 +177,7 @@ export default function CreativeTeachingHub() {
                 onClick={() => setActiveFeature('overview')}
                 className="bg-royalPurple-muted text-royalPurple-text1"
               >
-                ← Back to Creative Teaching Hub
+                Back to Creative Teaching Hub
               </Button>
               <div className="text-royalPurple-text1">
                 <span className="text-royalPurple-text3">Current Feature: </span>
@@ -418,7 +418,7 @@ export default function CreativeTeachingHub() {
                               width: '100%',
                             }}
                           >
-                            Open →
+                            Open
                           </button>
                         ) : (
                           <button
@@ -441,72 +441,6 @@ export default function CreativeTeachingHub() {
                 </Card>
               ))}
             </div>
-          </div>
-
-          {/* Feature Development Roadmap */}
-          <div>
-            <h3 className="text-xl font-bold text-royalPurple-text1 mb-4 flex items-center">
-              <Brain className="h-5 w-5 mr-2 text-royalPurple-successTx" />
-              Development Roadmap
-            </h3>
-            <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
-              <CardContent className="p-4">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="text-royalPurple-text1 font-medium">
-                        Phase 1: Core Creative Tools
-                      </h4>
-                      <p className="text-royalPurple-text3 text-sm">
-                        Interactive Whiteboard, Multimedia Lessons, Virtual Trips, Work Showcase
-                      </p>
-                    </div>
-                    <span className="bg-royalPurple-success text-royalPurple-text1 px-3 py-1 rounded text-sm">
-                      ✓ Complete
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="text-royalPurple-text1 font-medium">
-                        Phase 2: Advanced Creative Features
-                      </h4>
-                      <p className="text-royalPurple-text3 text-sm">
-                        Project Templates, Digital Storytelling, Art & Music Integration
-                      </p>
-                    </div>
-                    <span className="bg-yellow-600 text-royalPurple-text1 px-3 py-1 rounded text-sm">
-                      In Progress
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="text-royalPurple-text1 font-medium">
-                        Phase 3: STEM Laboratory
-                      </h4>
-                      <p className="text-royalPurple-text3 text-sm">
-                        Science Experiments, Math Problems, Engineering Challenges
-                      </p>
-                    </div>
-                    <span className="bg-royalPurple-accent text-royalPurple-text1 px-3 py-1 rounded text-sm">
-                      Planned
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="text-royalPurple-text1 font-medium">
-                        Phase 4: Technology Integration
-                      </h4>
-                      <p className="text-royalPurple-text3 text-sm">
-                        Coding Tools, Data Collection, Scientific Method Tracking
-                      </p>
-                    </div>
-                    <span className="bg-royalPurple-pill text-royalPurple-text1 px-3 py-1 rounded text-sm">
-                      Future
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </CardContent>
       </Card>

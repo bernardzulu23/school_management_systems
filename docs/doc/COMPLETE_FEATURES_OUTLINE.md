@@ -1,12 +1,12 @@
-# 🇿🇲 ZAMBIAN SCHOOL MANAGEMENT SYSTEM
+# ZAMBIAN SCHOOL MANAGEMENT SYSTEM
 
 ## Complete Features Outline by User Role
 
 ---
 
-## 📊 STUDENT DASHBOARD FEATURES
+## STUDENT DASHBOARD FEATURES
 
-### 🎓 Academic Management
+### Academic Management
 
 - **Personal Timetable Display** - Daily/weekly schedule with subjects and teachers
 - **Grade Tracking** - Real-time access to test scores, assignments, and report cards
@@ -17,7 +17,7 @@
 - **Subject Resources** - Access to textbooks, notes, and learning materials (offline)
 - **Multi-Grade Learning Support** - Age-appropriate content for combined classes
 
-### 🎮 Gamification & Engagement
+### Gamification & Engagement
 
 - **Achievement Badges** - Rewards for academic milestones and good behavior
 - **Skill Trees** - Visual progress tracking for different subjects
@@ -27,7 +27,7 @@
 - **Progress Tracking** - XP points and level progression
 - **Challenge Participation** - Weekly academic challenges and competitions
 
-### 🏥 Health & Wellbeing
+### Health & Wellbeing
 
 - **Health Record Access** - Personal medical history and vaccination records
 - **Nutrition Tracking** - Daily meal records and nutritional information
@@ -36,7 +36,7 @@
 - **Health Alerts** - Reminders for medical appointments and medications
 - **Feeding Program Status** - School meal eligibility and schedule
 
-### 💬 Communication
+### Communication
 
 - **SMS Notifications** - Receive alerts on basic phones via SMS
 - **Parent Communication** - Messages between student, parents, and teachers
@@ -44,8 +44,9 @@
 - **Language Selection** - Interface in Bemba, Tonga, Nyanja, or English
 - **Voice Messages** - Audio communication for low-literacy users
 - **Emergency Alerts** - Critical safety and health notifications
+- **Consistent KPI Semantics** - Percentage KPIs use consistent thresholds (0% grey, <40% red, 40–69% amber, 70%+ green)
 
-### 🌾 Rural-Specific Features
+### Rural-Specific Features
 
 - **Agricultural Calendar** - School schedule adapted to farming seasons
 - **Seasonal Learning** - Curriculum adjusted for planting/harvest times
@@ -53,7 +54,7 @@
 - **Transportation Schedule** - Bus routes and pickup times
 - **Weather Alerts** - School closure notifications due to weather
 
-### 💰 Financial & Economic
+### Financial & Economic
 
 - **Fee Status** - Outstanding balances and payment history
 - **Mobile Money Integration** - Pay fees via Airtel Money/MTN Mobile Money
@@ -63,9 +64,9 @@
 
 ---
 
-## 👨‍🏫 TEACHER DASHBOARD FEATURES
+## TEACHER DASHBOARD FEATURES
 
-### 📚 Academic Management
+### Academic Management
 
 - **Class Management** - Student lists, attendance, and performance tracking
 - **Lesson Planning** - Curriculum planning with agricultural calendar integration
@@ -76,7 +77,7 @@
 - **Resource Library** - Teaching materials and lesson plans
 - **Multi-Grade Teaching** - Tools for combined grade classes
 
-### 📊 Analytics & Insights
+### Analytics & Insights
 
 - **Student Performance Analytics** - Individual and class performance trends
 - **Attendance Patterns** - Identify at-risk students with poor attendance
@@ -85,7 +86,7 @@
 - **Comparative Analysis** - Class performance vs. school/national averages
 - **Parent Engagement Metrics** - Communication frequency and response rates
 
-### 🎮 Gamification Management
+### Gamification Management
 
 - **Game Creation** - Design educational games for specific subjects
 - **Badge Assignment** - Award achievements to students
@@ -94,7 +95,7 @@
 - **Skill Tree Management** - Design learning pathways for students
 - **Leaderboard Management** - Manage class rankings and competitions
 
-### 💬 Communication Hub
+### Communication Hub
 
 - **Parent Communication** - SMS and voice messages to parents
 - **Student Messaging** - Direct communication with students
@@ -103,7 +104,7 @@
 - **Emergency Notifications** - Send urgent alerts to students and parents
 - **Language Support** - Communicate in local languages
 
-### 🏥 Health & Wellbeing Monitoring
+### Health & Wellbeing Monitoring
 
 - **Student Health Tracking** - Monitor student health conditions
 - **Nutrition Oversight** - Track student participation in feeding programs
@@ -112,7 +113,7 @@
 - **Health Referrals** - Connect students with health services
 - **Wellness Programs** - Implement health education initiatives
 
-### 🌾 Rural Education Tools
+### Rural Education Tools
 
 - **Traveling Teacher Schedule** - Coordinate visits to multiple schools
 - **Agricultural Integration** - Incorporate farming knowledge into lessons
@@ -120,7 +121,7 @@
 - **Community Engagement** - Connect lessons to local community needs
 - **Multi-School Coordination** - Collaborate with other rural schools
 
-### 💰 Economic & Skills Development
+### Economic & Skills Development
 
 - **Skills Training Coordination** - Organize vocational training programs
 - **Income Project Management** - Oversee school-based income generation
@@ -130,9 +131,9 @@
 
 ---
 
-## 👨‍💼 HEAD OF DEPARTMENT (HOD) DASHBOARD FEATURES
+## HEAD OF DEPARTMENT (HOD) DASHBOARD FEATURES
 
-### 📊 Department Management
+### Department Management
 
 - **Teacher Supervision** - Monitor and evaluate department teachers
 - **Curriculum Oversight** - Ensure curriculum compliance and quality
@@ -142,7 +143,7 @@
 - **Professional Development** - Coordinate teacher training and development
 - **Quality Assurance** - Monitor teaching standards and student outcomes
 
-### 📈 Advanced Analytics
+### Advanced Analytics
 
 - **Department Performance Metrics** - Comprehensive performance dashboards
 - **Teacher Effectiveness Analysis** - Individual teacher performance evaluation
@@ -152,7 +153,7 @@
 - **Predictive Modeling** - Forecast student outcomes and intervention needs
 - **Resource Utilization Reports** - Efficiency of resource usage
 
-### 🎯 Strategic Planning
+### Strategic Planning
 
 - **Curriculum Planning** - Long-term curriculum development and updates
 - **Teacher Development Plans** - Individual teacher improvement strategies
@@ -161,7 +162,7 @@
 - **Innovation Implementation** - New teaching methods and technologies
 - **Assessment Strategy** - Department-wide assessment planning
 
-### 👥 Team Management
+### Team Management
 
 - **Teacher Scheduling** - Coordinate teacher assignments and timetables
 - **Meeting Coordination** - Schedule and manage department meetings
@@ -170,7 +171,7 @@
 - **Performance Reviews** - Conduct teacher evaluations and feedback
 - **Recognition Programs** - Acknowledge outstanding teacher performance
 
-### 🏥 Student Welfare Oversight
+### Student Welfare Oversight
 
 - **Health Program Coordination** - Oversee student health initiatives
 - **Special Needs Support** - Coordinate support for students with special needs
@@ -178,7 +179,7 @@
 - **Intervention Programs** - Coordinate academic and behavioral interventions
 - **Parent Engagement** - Facilitate parent-teacher communication
 
-### 🌾 Rural-Specific Management
+### Rural-Specific Management
 
 - **Multi-School Coordination** - Manage teachers across multiple rural schools
 - **Agricultural Program Integration** - Incorporate farming education
@@ -188,9 +189,9 @@
 
 ---
 
-## 🏫 HEADTEACHER DASHBOARD FEATURES
+## HEADTEACHER DASHBOARD FEATURES
 
-### 🎯 School Leadership & Management
+### School Leadership & Management
 
 - **Comprehensive School Overview** - Real-time school performance dashboard
 - **Strategic Planning** - Long-term school development planning
@@ -200,7 +201,7 @@
 - **School Culture Development** - Foster positive school environment
 - **Vision & Mission Implementation** - Drive school's educational goals
 
-### 📊 Advanced Analytics & Reporting
+### Advanced Analytics & Reporting
 
 - **School Performance Dashboard** - Comprehensive metrics and KPIs
 - **Predictive Analytics** - Forecast trends and potential issues
@@ -209,8 +210,9 @@
 - **Financial Analytics** - Budget analysis and financial planning
 - **Enrollment Projections** - Student enrollment forecasting
 - **Teacher Performance Analytics** - Comprehensive staff evaluation
+- **Consistent KPI Semantics** - Percentage KPIs use consistent thresholds (0% grey, <40% red, 40–69% amber, 70%+ green)
 
-### 👥 Human Resource Management
+### Human Resource Management
 
 - **Staff Management** - Teacher and support staff oversight
 - **Recruitment & Hiring** - Manage teacher recruitment process
@@ -220,7 +222,7 @@
 - **Recognition & Rewards** - Acknowledge outstanding performance
 - **Succession Planning** - Develop future school leaders
 
-### 💰 Financial Management
+### Financial Management
 
 - **Budget Planning & Control** - Comprehensive financial management
 - **Fee Collection Oversight** - Monitor student fee payments
@@ -230,7 +232,7 @@
 - **Audit Preparation** - Prepare for financial audits
 - **Economic Assistance Programs** - Oversee student financial aid
 
-### 🏗️ Infrastructure & Operations
+### Infrastructure & Operations
 
 - **Facility Management** - Oversee school buildings and infrastructure
 - **Equipment Management** - Manage school equipment and technology
@@ -240,7 +242,7 @@
 - **Utility Management** - Oversee power, water, and other utilities
 - **Emergency Preparedness** - Develop and implement emergency plans
 
-### 📋 Master Timetable Management
+### Master Timetable Management
 
 - **Timetable Creation** - Design comprehensive school timetables
 - **Resource Allocation** - Assign classrooms, teachers, and equipment
@@ -250,7 +252,7 @@
 - **Seasonal Adjustments** - Adapt schedules to agricultural calendar
 - **Multi-Grade Coordination** - Manage combined class schedules
 
-### 🏥 Student Welfare & Health
+### Student Welfare & Health
 
 - **Health Program Oversight** - Manage comprehensive health initiatives
 - **Nutrition Program Management** - Oversee school feeding programs
@@ -259,7 +261,7 @@
 - **Safety & Protection** - Implement child protection policies
 - **Emergency Health Response** - Coordinate medical emergencies
 
-### 🌍 Community & External Relations
+### Community & External Relations
 
 - **Community Engagement** - Build strong community partnerships
 - **Parent Relations** - Foster positive parent-school relationships
@@ -268,7 +270,7 @@
 - **Media Relations** - Handle school publicity and communications
 - **Donor Relations** - Manage relationships with funding organizations
 
-### 🌾 Rural-Specific Leadership
+### Rural-Specific Leadership
 
 - **Agricultural Integration** - Incorporate farming into school programs
 - **Seasonal Planning** - Adapt school operations to agricultural calendar
@@ -277,7 +279,7 @@
 - **Cultural Preservation** - Promote local languages and traditions
 - **Economic Development** - Support community economic activities
 
-### ⚡ Emergency & Crisis Management
+### Emergency & Crisis Management
 
 - **Emergency Protocols** - Implement comprehensive emergency procedures
 - **Communication Systems** - Coordinate emergency communications
@@ -288,9 +290,9 @@
 
 ---
 
-## 🎯 PROBLEMS ADDRESSED & SOLUTIONS PROVIDED
+## PROBLEMS ADDRESSED & SOLUTIONS PROVIDED
 
-### 📚 ACADEMIC PROBLEMS & SOLUTIONS
+### ACADEMIC PROBLEMS & SOLUTIONS
 
 #### Problem: Poor Academic Performance Tracking
 
@@ -322,7 +324,7 @@
 - Parent-teacher communication platform
 - Mobile-friendly interfaces
 
-### 🏥 HEALTH & NUTRITION PROBLEMS & SOLUTIONS
+### HEALTH & NUTRITION PROBLEMS & SOLUTIONS
 
 #### Problem: Inadequate Health Monitoring
 
@@ -354,7 +356,7 @@
 - Community health worker coordination
 - Telemedicine capabilities
 
-### 💰 ECONOMIC & FINANCIAL PROBLEMS & SOLUTIONS
+### ECONOMIC & FINANCIAL PROBLEMS & SOLUTIONS
 
 #### Problem: High Education Costs
 
@@ -386,7 +388,7 @@
 - Financial reporting and analytics
 - Audit trail maintenance
 
-### 🌾 RURAL-SPECIFIC PROBLEMS & SOLUTIONS
+### RURAL-SPECIFIC PROBLEMS & SOLUTIONS
 
 #### Problem: Agricultural Calendar Conflicts
 
@@ -418,7 +420,7 @@
 - Weather-responsive scheduling
 - Community transport coordination
 
-### 🔌 INFRASTRUCTURE PROBLEMS & SOLUTIONS
+### INFRASTRUCTURE PROBLEMS & SOLUTIONS
 
 #### Problem: Unreliable Electricity (55% of schools have no power)
 
@@ -450,7 +452,7 @@
 - Progressive Web App compatibility
 - Feature phone support
 
-### 🗣️ LANGUAGE & CULTURAL PROBLEMS & SOLUTIONS
+### LANGUAGE & CULTURAL PROBLEMS & SOLUTIONS
 
 #### Problem: Language Barriers
 
@@ -472,7 +474,7 @@
 - Traditional knowledge incorporation
 - Local cultural celebration
 
-### 🎮 ENGAGEMENT & MOTIVATION PROBLEMS & SOLUTIONS
+### ENGAGEMENT & MOTIVATION PROBLEMS & SOLUTIONS
 
 #### Problem: Low Student Engagement
 
@@ -494,7 +496,7 @@
 - Multimedia learning materials
 - Community resource sharing
 
-### 🚨 EMERGENCY & SAFETY PROBLEMS & SOLUTIONS
+### EMERGENCY & SAFETY PROBLEMS & SOLUTIONS
 
 #### Problem: Poor Emergency Communication
 
@@ -518,9 +520,9 @@
 
 ---
 
-## 🎯 COMPREHENSIVE IMPACT SUMMARY
+## COMPREHENSIVE IMPACT SUMMARY
 
-### 📈 Quantifiable Benefits
+### Quantifiable Benefits
 
 - **90% reduction** in operational costs
 - **95% improvement** in record-keeping accuracy
@@ -530,7 +532,7 @@
 - **70% faster** health intervention response
 - **80% increase** in community engagement
 
-### 🌍 Transformational Outcomes
+### Transformational Outcomes
 
 - **Digital Inclusion:** Bringing modern technology to rural communities
 - **Educational Equity:** Equal access to quality education regardless of location
@@ -544,9 +546,9 @@ This comprehensive system addresses every major challenge facing rural Zambian s
 
 ---
 
-## 🔧 TECHNICAL IMPLEMENTATION DETAILS
+## TECHNICAL IMPLEMENTATION DETAILS
 
-### 📱 Cross-Platform Compatibility
+### Cross-Platform Compatibility
 
 **Student Dashboard:**
 
@@ -576,7 +578,7 @@ This comprehensive system addresses every major challenge facing rural Zambian s
 - Tablet interface for school walkthroughs
 - Offline crisis management tools
 
-### 🌐 Offline Capabilities by Role
+### Offline Capabilities by Role
 
 **All Users:**
 
@@ -606,7 +608,7 @@ This comprehensive system addresses every major challenge facing rural Zambian s
 - Emergency communication protocols
 - Crisis management procedures
 
-### 📊 Data Analytics Framework
+### Data Analytics Framework
 
 **Real-Time Dashboards:**
 
@@ -629,7 +631,7 @@ This comprehensive system addresses every major challenge facing rural Zambian s
 - Student progress benchmarking
 - Resource utilization efficiency
 
-### 🔒 Security & Privacy Implementation
+### Security & Privacy Implementation
 
 **Role-Based Access Control:**
 
@@ -652,7 +654,7 @@ This comprehensive system addresses every major challenge facing rural Zambian s
 - Data backup procedures
 - Recovery mechanisms
 
-### 🎮 Gamification Engine
+### Gamification Engine
 
 **Achievement System:**
 
@@ -675,7 +677,7 @@ This comprehensive system addresses every major challenge facing rural Zambian s
 - Intervention triggers
 - Success celebration
 
-### 🏥 Health Monitoring System
+### Health Monitoring System
 
 **Comprehensive Tracking:**
 
@@ -698,7 +700,7 @@ This comprehensive system addresses every major challenge facing rural Zambian s
 - Peer support coordination
 - Crisis intervention protocols
 
-### 💰 Economic Integration
+### Economic Integration
 
 **Mobile Money Platform:**
 
@@ -721,7 +723,7 @@ This comprehensive system addresses every major challenge facing rural Zambian s
 - Market linkage facilitation
 - Community cooperation support
 
-### 🌾 Agricultural Calendar Integration
+### Agricultural Calendar Integration
 
 **Seasonal Adaptations:**
 
@@ -744,7 +746,7 @@ This comprehensive system addresses every major challenge facing rural Zambian s
 - Community labor coordination
 - Traditional knowledge preservation
 
-### 📞 Communication Systems
+### Communication Systems
 
 **Multi-Channel Communication:**
 
@@ -767,7 +769,7 @@ This comprehensive system addresses every major challenge facing rural Zambian s
 - Emergency contact protocols
 - Disaster response coordination
 
-### ⚡ Power Management
+### Power Management
 
 **Solar Integration:**
 
@@ -790,7 +792,7 @@ This comprehensive system addresses every major challenge facing rural Zambian s
 - Background process management
 - Charging schedule optimization
 
-### 🔄 Synchronization & Backup
+### Synchronization & Backup
 
 **Data Synchronization:**
 
@@ -815,7 +817,7 @@ This comprehensive system addresses every major challenge facing rural Zambian s
 
 ---
 
-## 🎯 IMPLEMENTATION ROADMAP
+## IMPLEMENTATION ROADMAP
 
 ### Phase 1: Core System Deployment (Months 1-6)
 
@@ -857,3 +859,97 @@ This comprehensive system addresses every major challenge facing rural Zambian s
 **🇿🇲 Complete Feature Set: 200+ Features Across 4 User Roles**
 **Addressing 15+ Critical Problems with Comprehensive Solutions**
 **Ready for Immediate Deployment in Rural Zambian Schools**
+
+---
+
+## Recent UI/UX Professionalization Updates (Landing + Core Forms)
+
+### Landing Page Sections
+
+- **Problems / Pain-Points Cards (Icons Restored)**  
+  Replaced grey icon placeholders with consistent Lucide icons (purple, outline style) for each problem card:
+  - Paper registers getting lost → FileX
+  - No visibility on student performance → BarChart2
+  - Headteacher reporting burden → ClipboardList
+  - HOD coordination challenges → Users
+  - Girls' dropout tracking → AlertTriangle
+  - Works on any device → Smartphone
+
+- **AI Features CTA (Brand Consistency)**  
+  Updated the “Try all AI features free” CTA to match the primary purple brand button styling used across the landing page.
+
+- **Landing Section Contrast Fixes**  
+  Ensured key CTA headings remain readable on dark backgrounds and removed visual background bleed between adjacent sections.
+
+- **AIFeatures import hardening**  
+  Updated `AIFeatures.tsx` CTA link rendering to avoid a local module-resolution issue on `next/link` in some dev environments.
+
+### Password Field UX (Visibility Toggle Everywhere)
+
+All password fields now support a consistent **Show/Hide Password** toggle using Lucide `Eye` / `EyeOff`, with accessibility labels and independent per-field state.
+
+- **Shared FormField component (Global Coverage)**  
+  Any form that uses the shared `FormField` with `type="password"` automatically gets the toggle.
+
+- **Profile Settings (Change Password)**  
+  Current password, new password, confirm password fields now include visibility toggles.
+
+- **Dashboard Settings (Change Password)**  
+  Current password, new password, confirm password fields now include visibility toggles.
+
+- **Admin School Registration**  
+  Admin password field now includes a visibility toggle.
+
+- **User Management (Admin Password Reset Input)**  
+  Password reset input now includes a visibility toggle.
+
+- **Register School Client Form**  
+  Admin password field now includes a visibility toggle (works alongside strength meter and validation).
+
+- **Onboarding (Stage 1: Email Verification)**  
+  Stage 1 password field now includes a visibility toggle.
+
+### Registration / Onboarding Brand Consistency
+
+The registration/onboarding flow was updated to visually match the landing page brand:
+
+- **Accent styling on cards** (subtle purple left border) to connect onboarding stages to the primary brand.
+- **Primary purple link styling** for “Already have a school portal? Login”.
+- **Plan selection highlight** uses purple accent borders instead of amber.
+
+### Dashboard Navigation + Stability Fixes
+
+- **Role-based routing (Sidebar)**  
+  Fixed role normalization (e.g., `TEACHER` → `teacher`) and updated links so each role routes to existing pages (student pages no longer point to teacher-only routes).
+
+- **Missing student route added**  
+  Added `/dashboard/student/class` so “My Class” is a real page instead of a dead link.
+
+- **Next.js 15 runtime fix (searchParams)**  
+  Updated `register-school` redirect to await `searchParams` before reading it (prevents runtime crash in Next.js 15).
+
+- **Next.js 15 runtime fix (route params)**  
+  Updated dynamic route handlers to await `params` before reading values (e.g., profile image routes and entity-by-id API routes) to prevent runtime crashes in Next.js 15.
+
+- **Prisma 7 config migration**  
+  Migrated Prisma CLI configuration from `package.json` into `prisma.config.ts`, updated generator `engineType`, and moved datasource URL configuration out of `schema.prisma` to satisfy Prisma 7 validation.
+  Updated runtime Prisma client initialization to use the PostgreSQL driver adapter (`@prisma/adapter-pg` + `pg`) as required by Prisma 7.
+
+- **Headteacher dashboard content structure**  
+  Removed nested modal-like wrapper chrome for the active feature section (no close-button modal behavior; uses inline section + Back button).
+
+- **Theme consistency (dark mode visibility)**  
+  Updated Tailwind `royalPurple.*` tokens to read from CSS variables and adjusted dark-mode brand tokens so text/icons remain visible on dark backgrounds.
+
+- **Dev stability (service worker reset)**  
+  In development, any previously registered service workers are automatically unregistered once to prevent stale cache issues that can cause chunk loading errors and aborted API requests.
+
+- **Local subdomain fallback for school context**  
+  Updated school resolution in `lib/utils/getSchoolId.js` so localhost development requests (`localhost`, `127.0.0.1`, `0.0.0.0`, or `x-school-subdomain` like `localhost`) resolve to the first active school instead of returning `null`.
+
+- **Dashboard credibility + role identity polish**  
+  Removed fake trend percentage badges from KPI cards, removed developer-only roadmap/status sections from live dashboards, flattened KPI stats rows (no per-card borders), added role-based accent colors (Teacher = blue, Student = amber), and improved empty states to guide first-time setup.
+
+### Maintenance Note (Required)
+
+- This document is treated as a living specification. When new UI changes, fixes, or new dashboard routes/components are introduced, add a short entry to this section describing what changed and where it lives.

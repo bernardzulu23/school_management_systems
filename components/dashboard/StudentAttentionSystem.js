@@ -356,9 +356,7 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
           <div className="backdrop-blur-md bg-orange-600/60 border border-orange-400/50 rounded-2xl p-3 mr-4">
             <AlertCircle className="h-8 w-8 text-royalPurple-text1" />
           </div>
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent">
-            Immediate Actions Required
-          </h2>
+          <h2 className="text-3xl font-bold text-royalPurple-text1">Immediate Actions Required</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">

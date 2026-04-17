@@ -36,6 +36,7 @@ import {
   Award,
   Settings,
 } from 'lucide-react'
+import { percentTextClass } from '@/lib/utils/percentColor'
 
 // Collaborative Lesson Planning
 export const LessonPlanning = () => {
@@ -326,7 +327,7 @@ export const ParentConferences = () => {
               <div className="text-sm text-royalPurple-text2">Pending</div>
             </div>
             <div className="text-center p-4 bg-royalPurple-card/60 rounded-lg">
-              <div className="text-2xl font-bold text-royalPurple-pillTx">96%</div>
+              <div className={`text-2xl font-bold ${percentTextClass(96)}`}>96%</div>
               <div className="text-sm text-royalPurple-text2">Attendance Rate</div>
             </div>
           </div>

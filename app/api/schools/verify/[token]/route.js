@@ -22,7 +22,8 @@ function getBaseDomain(host) {
 }
 
 export async function GET(request, { params }) {
-  const token = String(params?.token || '').trim()
+  const routeParams = await params
+  const token = String(routeParams?.token || '').trim()
   if (!token)
     return NextResponse.redirect(new URL('/register-school?error=invalid-token', request.url))
 

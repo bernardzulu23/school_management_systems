@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import StatusCard from './StatusCard'
+import { DollarSign } from 'lucide-react'
 
 const MobileMoneyCard = ({ moneyStats, testMobileMoneyPayment }) => {
   const [provider, setProvider] = useState('airtel')
 
   return (
-    <StatusCard title="Mobile Money" icon="💰">
+    <StatusCard title="Mobile Money" icon={<DollarSign size={16} aria-hidden="true" />}>
       <div style={{ marginBottom: '10px' }} aria-label="Mobile money statistics">
         <span className="block">Total Transactions: {moneyStats.totalTransactions || 0}</span>
         <span className="block">Total Amount: K{moneyStats.totalAmount?.toFixed(2) || '0.00'}</span>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
-import { Check, AlertCircle } from 'lucide-react'
+import { Check, AlertCircle, Eye, EyeOff } from 'lucide-react'
 
 const FormField = ({
   label,
@@ -23,6 +23,7 @@ const FormField = ({
   const [isValid, setIsValid] = useState(false)
   const [localError, setLocalError] = useState('')
   const [isDebouncing, setIsDebouncing] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   useEffect(() => {
     if (validate && value !== undefined && value !== '') {
@@ -48,6 +49,8 @@ const FormField = ({
 
   const displayError = error || localError
   const showSuccess = isValid && !displayError && !isDebouncing && value
+  const isPasswordField = type === 'password'
+  const inputType = isPasswordField ? (showPassword ? 'text' : 'password') : type
 
   return (
     <div className={cn('space-y-1.5 w-full', className)}>
@@ -140,7 +143,7 @@ const FormField = ({
           <input
             id={name}
             name={name}
-            type={type}
+            type={inputType}
             value={value}
             onChange={onChange}
             disabled={disabled}
@@ -150,6 +153,7 @@ const FormField = ({
             className={cn(
               'w-full px-4 py-2.5 rounded-lg bg-royalPurple-card2 border border-royalPurple-border text-royalPurple-text1 placeholder:text-royalPurple-muted transition-colors duration-200 outline-none',
               Icon && 'pl-10',
+              isPasswordField && 'pr-11',
               'disabled:opacity-50 disabled:cursor-not-allowed',
               displayError
                 ? 'border-royalPurple-dangerTx focus:ring-1 focus:ring-royalPurple-border2'
@@ -164,12 +168,26 @@ const FormField = ({
           />
         )}
 
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-1 pointer-events-none">
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-1">
+          {isPasswordField && (
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="text-royalPurple-text3 hover:text-royalPurple-text1 transition-colors"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+            </button>
+          )}
           {isDebouncing && (
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-royalPurple-border border-t-royalPurple-accent" />
           )}
-          {showSuccess && <Check className="h-5 w-5 text-royalPurple-successTx" />}
-          {displayError && <AlertCircle className="h-5 w-5 text-royalPurple-dangerTx" />}
+          {showSuccess && (
+            <Check className="h-5 w-5 text-royalPurple-successTx" aria-hidden="true" />
+          )}
+          {displayError && (
+            <AlertCircle className="h-5 w-5 text-royalPurple-dangerTx" aria-hidden="true" />
+          )}
           {type === 'select' && (
             <svg
               className="h-5 w-5 text-royalPurple-text3"

@@ -4,6 +4,7 @@ import { TrendingUp, Users, FileBarChart, BookOpen } from 'lucide-react'
 import { useHeadteacher } from '@/lib/context/HeadteacherContext'
 import { GenderByGradeCard } from '@/components/dashboard/GenderByGradeCard'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { percentTextClass } from '@/lib/utils/percentColor'
 
 export function HeadteacherAnalytics() {
   const {
@@ -93,7 +94,9 @@ export function HeadteacherAnalytics() {
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-royalPurple-text1 font-semibold">{item.name}</span>
-                        <span className="text-royalPurple-accentTx font-bold">{performance}%</span>
+                        <span className={`font-bold ${percentTextClass(performance)}`}>
+                          {Number(performance) || 0}%
+                        </span>
                       </div>
                       <div className="w-full bg-royalPurple-muted/60 rounded-full h-2">
                         <div
@@ -141,14 +144,18 @@ export function HeadteacherAnalytics() {
                   <div className="text-royalPurple-text2 text-sm">Senior Students</div>
                 </div>
                 <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl text-center">
-                  <div className="text-2xl font-bold text-royalPurple-successTx">
-                    {seniorResultsAnalysis.averageScore || 0}%
+                  <div
+                    className={`text-2xl font-bold ${percentTextClass(seniorResultsAnalysis.averageScore)}`}
+                  >
+                    {Number(seniorResultsAnalysis.averageScore) || 0}%
                   </div>
                   <div className="text-royalPurple-text2 text-sm">Average Score</div>
                 </div>
                 <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl text-center">
-                  <div className="text-2xl font-bold text-royalPurple-accentTx">
-                    {seniorResultsAnalysis.passRate || 0}%
+                  <div
+                    className={`text-2xl font-bold ${percentTextClass(seniorResultsAnalysis.passRate)}`}
+                  >
+                    {Number(seniorResultsAnalysis.passRate) || 0}%
                   </div>
                   <div className="text-royalPurple-text2 text-sm">Pass Rate</div>
                 </div>
@@ -197,11 +204,15 @@ export function HeadteacherAnalytics() {
                           {seniorResultsAnalysis.subjects.slice(0, 8).map((s) => (
                             <tr key={s.subject} className="border-b border-royalPurple-border/20">
                               <td className="py-2 text-royalPurple-text1">{s.subject}</td>
-                              <td className="py-2 text-right text-royalPurple-successTx font-semibold">
-                                {s.average}%
+                              <td
+                                className={`py-2 text-right font-semibold ${percentTextClass(s.average)}`}
+                              >
+                                {Number(s.average) || 0}%
                               </td>
-                              <td className="py-2 text-right text-royalPurple-accentTx font-semibold">
-                                {s.passRate}%
+                              <td
+                                className={`py-2 text-right font-semibold ${percentTextClass(s.passRate)}`}
+                              >
+                                {Number(s.passRate) || 0}%
                               </td>
                             </tr>
                           ))}
@@ -288,20 +299,26 @@ export function HeadteacherAnalytics() {
                     <div className="text-royalPurple-text2 text-sm">Total Teachers</div>
                   </div>
                   <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-royalPurple-accentTx">
-                      {schoolStats.teacherEffectiveness}%
+                    <div
+                      className={`text-2xl font-bold ${percentTextClass(schoolStats.teacherEffectiveness)}`}
+                    >
+                      {Number(schoolStats.teacherEffectiveness) || 0}%
                     </div>
                     <div className="text-royalPurple-text2 text-sm">Effectiveness</div>
                   </div>
                   <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-royalPurple-pillTx">
-                      {schoolStats.complianceRate}%
+                    <div
+                      className={`text-2xl font-bold ${percentTextClass(schoolStats.complianceRate)}`}
+                    >
+                      {Number(schoolStats.complianceRate) || 0}%
                     </div>
                     <div className="text-royalPurple-text2 text-sm">Compliance</div>
                   </div>
                   <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl text-center">
-                    <div className="text-2xl font-bold text-royalPurple-accentTx">
-                      {schoolStats.teacherDevelopment}%
+                    <div
+                      className={`text-2xl font-bold ${percentTextClass(schoolStats.teacherDevelopment)}`}
+                    >
+                      {Number(schoolStats.teacherDevelopment) || 0}%
                     </div>
                     <div className="text-royalPurple-text2 text-sm">Development</div>
                   </div>

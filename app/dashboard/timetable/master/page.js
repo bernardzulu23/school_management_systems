@@ -68,13 +68,13 @@ export default function MasterTimetablePage() {
   const loadRegisteredTeachers = async () => {
     try {
       setLoadingTeachers(true)
-      console.log('🔄 Starting to load registered teachers...')
+      console.log('Starting to load registered teachers...')
       const teachers = await TeachersAPI.getRegisteredTeachers()
       setRegisteredTeachers(teachers)
-      console.log('✅ Loaded registered teachers:', teachers)
-      console.log(`📊 Total teachers loaded: ${teachers.length}`)
+      console.log('Loaded registered teachers:', teachers)
+      console.log(`Total teachers loaded: ${teachers.length}`)
     } catch (error) {
-      console.error('❌ Error loading registered teachers:', error)
+      console.error('Error loading registered teachers:', error)
     } finally {
       setLoadingTeachers(false)
     }
@@ -385,8 +385,8 @@ export default function MasterTimetablePage() {
             <p className="text-royalPurple-text2 mt-1">
               Create and manage the school's master timetable
             </p>
-            <p className="text-sm text-royalPurple-accentTx mt-1">
-              💡 Hover over time slots in the "Time / Day" column and click "Edit" to modify periods
+            <p className="text-sm text-royalPurple-text3 mt-1">
+              Hover over time slots in the "Time / Day" column and click "Edit" to modify periods
             </p>
             <div className="flex items-center mt-2">
               {loadingTeachers ? (
@@ -479,28 +479,26 @@ export default function MasterTimetablePage() {
         </div>
 
         {/* Teacher Data Status */}
-        <div className="bg-royalPurple-accent border border-royalPurple-border2 rounded-lg p-4 mb-6">
-          <h3 className="text-lg font-semibold text-royalPurple-accentTx mb-2">
-            👥 Teacher Data Status
-          </h3>
+        <div className="bg-royalPurple-card border border-royalPurple-border rounded-lg p-4 mb-6">
+          <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">Teacher Data Status</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="font-medium text-royalPurple-accentTx">Status:</span>
-              <span className="ml-2 text-royalPurple-accentTx">
+              <span className="font-medium text-royalPurple-text1">Status:</span>
+              <span className="ml-2 text-royalPurple-text2">
                 {loadingTeachers
-                  ? '🔄 Loading teachers...'
-                  : `✅ ${registeredTeachers.length} registered teachers loaded`}
+                  ? 'Loading teachers...'
+                  : `${registeredTeachers.length} registered teachers loaded`}
               </span>
             </div>
             <div>
-              <span className="font-medium text-royalPurple-accentTx">Source:</span>
-              <span className="ml-2 text-royalPurple-accentTx">Database API (/api/teachers)</span>
+              <span className="font-medium text-royalPurple-text1">Source:</span>
+              <span className="ml-2 text-royalPurple-text2">Database API (/api/teachers)</span>
             </div>
           </div>
           {registeredTeachers.length > 0 && (
             <div className="mt-3 p-2 bg-royalPurple-success border border-royalPurple-border rounded">
               <span className="text-royalPurple-successTx font-medium">
-                ✅ Using registered teachers from database
+                Using registered teachers from database
               </span>
               <div className="text-xs text-royalPurple-successTx mt-1">
                 Teachers: {registeredTeachers.map((t) => `${t.name} (${t.department})`).join(', ')}
@@ -737,7 +735,7 @@ export default function MasterTimetablePage() {
                                         </div>
                                         {hasConflictFlag && (
                                           <div className="text-royalPurple-dangerTx font-bold">
-                                            ⚠ CONFLICT
+                                            Conflict
                                           </div>
                                         )}
                                         <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity">

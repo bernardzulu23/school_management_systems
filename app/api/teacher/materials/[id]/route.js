@@ -15,6 +15,7 @@ function normalizeTags(tags) {
 }
 
 export const PUT = withErrorHandler(async function PUT(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -25,7 +26,7 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const materialId = String(params?.id || '').trim()
+  const materialId = String(routeParams?.id || '').trim()
   if (!materialId) throw new ApiError('Material id is required', 400)
 
   const existing = await prisma.studyMaterial.findFirst({
@@ -78,6 +79,7 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
 })
 
 export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -88,7 +90,7 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const materialId = String(params?.id || '').trim()
+  const materialId = String(routeParams?.id || '').trim()
   if (!materialId) throw new ApiError('Material id is required', 400)
 
   const existing = await prisma.studyMaterial.findFirst({

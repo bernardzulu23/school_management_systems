@@ -16,14 +16,16 @@
   "author": "School Management Team",
   "license": "MIT",
   "overrides": {
-    "serialize-javascript": "^6.0.2"
+    "serialize-javascript": "^6.0.2",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3"
   },
   "scripts": {
     "copy:excalidraw-fonts": "node scripts/copy-excalidraw-fonts.js",
     "dev": "npm run copy:excalidraw-fonts && next dev",
     "build": "npm run copy:excalidraw-fonts && prisma generate && next build",
     "start": "node server.js",
-    "lint": "next lint",
+    "lint": "node ./node_modules/eslint/bin/eslint.js .",
     "test": "jest",
     "test:watch": "jest --watch",
     "format": "prettier --write .",
@@ -43,10 +45,12 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.40.1",
-    "@excalidraw/excalidraw": "^0.18.0",
+    "@eslint/object-schema": "^2.1.7",
+    "@excalidraw/excalidraw": "^0.17.6",
     "@headlessui/react": "^1.7.17",
     "@monaco-editor/react": "^4.7.0",
-    "@prisma/client": "^5.22.0",
+    "@prisma/adapter-pg": "^7.7.0",
+    "@prisma/client": "^7.7.0",
     "@react-email/components": "^1.0.12",
     "@tanstack/react-query": "^4.35.0",
     "autoprefixer": "^10.0.1",
@@ -62,12 +66,12 @@
     "jspdf": "^4.1.0",
     "lru-cache": "^11.2.6",
     "lucide-react": "^0.290.0",
-    "next": "^15.3.8",
+    "next": "16.2.4",
     "next-themes": "^0.4.6",
+    "pg": "^8.20.0",
     "postcss": "8.4.47",
-    "prisma": "5.22.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
     "react-hook-form": "^7.47.0",
     "react-hot-toast": "^2.6.0",
     "recharts": "^2.8.0",
@@ -82,15 +86,16 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
-    "@next/eslint-plugin-next": "^15.3.0",
+    "@next/eslint-plugin-next": "16.2.4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^13.4.0",
     "@types/node": "^20.19.0",
-    "@types/react": "18.3.28",
-    "@types/react-dom": "18.3.7",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^15.3.0",
+    "eslint-config-next": "16.2.4",
     "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.0",
     "html-encoding-sniffer": "^3.0.0",
     "husky": "^9.1.7",
     "jest": "^30.2.0",
@@ -98,6 +103,7 @@
     "jsdom": "^29.0.1",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
+    "prisma": "^7.7.0",
     "typescript": "^5",
     "workbox-webpack-plugin": "^7.0.0"
   },
@@ -116,8 +122,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "prisma": {
-    "seed": "node prisma/seed.js"
   }
 }

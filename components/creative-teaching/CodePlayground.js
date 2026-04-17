@@ -10,7 +10,7 @@ const LANGUAGES = [
     id: 'python',
     label: 'Python',
     version: '3.10.0',
-    icon: '🐍',
+    icon: 'PY',
     starter:
       '# Python Playground\n# Write your code here\n\nname = "Chanda"\nprint(f"Hello from Zambia! My name is {name}")\n\nfor i in range(1, 6):\n    print(f"{i} x {i} = {i * i}")\n',
   },
@@ -18,7 +18,7 @@ const LANGUAGES = [
     id: 'javascript',
     label: 'JavaScript',
     version: '18.15.0',
-    icon: '🌐',
+    icon: 'JS',
     starter:
       '// JavaScript Playground\n// Write your code here\n\nconst name = "Mwamba";\nconsole.log(`Hello from Zambia! My name is ${name}`);\n\nfunction fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\nfor (let i = 0; i < 8; i++) {\n  console.log(`fibonacci(${i}) = ${fibonacci(i)}`);\n}\n',
   },
@@ -26,7 +26,7 @@ const LANGUAGES = [
     id: 'java',
     label: 'Java',
     version: '15.0.2',
-    icon: '☕',
+    icon: 'JAVA',
     starter:
       '// Java Playground\npublic class Main {\n  public static void main(String[] args) {\n    String name = "Nalumino";\n    System.out.println("Hello from Zambia! My name is " + name);\n\n    for (int i = 1; i <= 5; i++) {\n      System.out.println(i + " squared = " + (i * i));\n    }\n  }\n}\n',
   },
@@ -34,7 +34,7 @@ const LANGUAGES = [
     id: 'c',
     label: 'C',
     version: '10.2.0',
-    icon: '⚙️',
+    icon: 'C',
     starter:
       '#include <stdio.h>\n\nint main() {\n  printf(\"Hello from Zambia!\\n\");\n\n  for (int i = 1; i <= 5; i++) {\n    printf(\"%d squared = %d\\n\", i, i * i);\n  }\n\n  return 0;\n}\n',
   },
@@ -42,7 +42,7 @@ const LANGUAGES = [
     id: 'bash',
     label: 'Bash',
     version: '5.2.0',
-    icon: '💻',
+    icon: 'SH',
     starter:
       '#!/bin/bash\n# Bash Playground\n\nname="Bwalya"\necho "Hello from Zambia! My name is $name"\n\nfor i in 1 2 3 4 5; do\n  echo "$i squared = $((i * i))"\ndone\n',
   },
@@ -196,7 +196,7 @@ export default function CodePlayground() {
               cursor: 'pointer',
             }}
           >
-            🎯 Challenges
+            Challenges
           </button>
           <button
             onClick={runCode}
@@ -230,7 +230,7 @@ export default function CodePlayground() {
                 Running...
               </>
             ) : (
-              '▶ Run Code'
+              'Run Code'
             )}
           </button>
         </div>
@@ -337,9 +337,9 @@ export default function CodePlayground() {
               wordBreak: 'break-word',
             }}
           >
-            {running ? '⏳ Running your code...\n' : null}
+            {running ? 'Running your code...\n' : null}
             {!running && !output ? (
-              <span style={{ color: '#3b2a66' }}>Click ▶ Run Code to see output here...</span>
+              <span style={{ color: '#3b2a66' }}>Click Run Code to see output here...</span>
             ) : null}
             {output}
           </pre>

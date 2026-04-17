@@ -6,7 +6,8 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function POST(request, { params }) {
   try {
-    const token = String(params?.token || '')
+    const routeParams = await params
+    const token = String(routeParams?.token || '')
     const body = await request.json().catch(() => ({}))
     const newPassword = String(body?.newPassword || body?.password || '')
     const confirmPassword = String(body?.confirmPassword || body?.confirm || body?.password || '')

@@ -144,7 +144,7 @@ function loadEnvIfNeeded() {
 
 async function seedCreativeFeatures(schoolId = null) {
   loadEnvIfNeeded()
-  console.log('🌱 Seeding creative features...')
+  console.log('Seeding creative features...')
 
   let schools = []
   if (schoolId) {
@@ -194,7 +194,7 @@ async function seedCreativeFeatures(schoolId = null) {
     console.log(` ✓ ${CREATIVE_FEATURES.length} features seeded`)
   }
 
-  console.log('✅ Creative features seeding complete!')
+  console.log('Creative features seeding complete!')
 }
 
 const arg = process.argv[2] || null

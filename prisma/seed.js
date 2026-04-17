@@ -1,7 +1,49 @@
 const { PrismaClient } = require('@prisma/client')
+const { PrismaPg } = require('@prisma/adapter-pg')
 const bcrypt = require('bcryptjs')
 
-const prisma = new PrismaClient()
+const connectionString = process.env.DATABASE_URL
+if (!connectionString) {
+  throw new Error('DATABASE_URL is required to seed the database')
+}
+
+const isDev = process.env.NODE_ENV !== 'production'
+
+let sslmode = ''
+let sslParam = ''
+try {
+  const u = new URL(connectionString)
+  sslmode = String(u.searchParams.get('sslmode') || '').toLowerCase()
+  sslParam = String(u.searchParams.get('ssl') || '').toLowerCase()
+} catch {}
+
+const envSslMode = String(process.env.PGSSLMODE || '').toLowerCase()
+const sslDisabled =
+  sslmode === 'disable' || sslParam === '0' || sslParam === 'false' || envSslMode === 'disable'
+const sslEnabled =
+  sslmode === 'require' ||
+  sslmode === 'verify-ca' ||
+  sslmode === 'verify-full' ||
+  sslParam === '1' ||
+  sslParam === 'true' ||
+  envSslMode === 'require' ||
+  envSslMode === 'verify-ca' ||
+  envSslMode === 'verify-full'
+
+if (
+  isDev &&
+  sslEnabled &&
+  String(process.env.ALLOW_SELF_SIGNED_CERTS || 'true').toLowerCase() !== 'false'
+) {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+}
+
+const poolConfig = {
+  connectionString,
+  ssl: sslDisabled ? false : sslEnabled ? { rejectUnauthorized: false } : undefined,
+}
+
+const prisma = new PrismaClient({ adapter: new PrismaPg(poolConfig) })
 
 async function main() {
   console.log('Start seeding ...')
@@ -10,12 +52,17 @@ async function main() {
   console.log('Seeding school...')
   const school = await prisma.school.upsert({
     where: { subdomain: 'demo' },
-    update: {},
+    update: {
+      active: true,
+      emailVerified: true,
+    },
     create: {
       name: 'Demo International School',
       subdomain: 'demo',
       domain: 'demo.school.com', // Optional
       email: 'admin@demo.school.com',
+      active: true,
+      emailVerified: true,
       currency: 'USD',
       timezone: 'UTC',
       academicYear: '2025/2026',
@@ -573,7 +620,7 @@ async function main() {
         {
           name: 'First Steps',
           description: 'Complete your first game',
-          icon: '🎯',
+          icon: 'TARGET',
           category: 'academic',
           rarity: 'common',
           xpValue: 10,
@@ -581,7 +628,7 @@ async function main() {
         {
           name: 'Perfect Score',
           description: 'Get 100% on any game',
-          icon: '⭐',
+          icon: 'STAR',
           category: 'academic',
           rarity: 'rare',
           xpValue: 50,
@@ -589,7 +636,7 @@ async function main() {
         {
           name: 'Speed Demon',
           description: 'Complete a game in under 5 minutes',
-          icon: '⚡',
+          icon: 'SPEED',
           category: 'academic',
           rarity: 'epic',
           xpValue: 30,

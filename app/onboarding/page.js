@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import ProviderLogos from '@/components/payments/ProviderLogos'
+import { Eye, EyeOff } from 'lucide-react'
 
 export default function OnboardingPage({ searchParams }) {
   const [status, setStatus] = useState(null)
@@ -15,6 +16,7 @@ export default function OnboardingPage({ searchParams }) {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
   const [plan, setPlan] = useState('standard')
@@ -137,7 +139,7 @@ export default function OnboardingPage({ searchParams }) {
   const paid = String(status?.registration?.paymentStatus || '').toLowerCase() === 'paid'
 
   return (
-    <div className="min-h-screen bg-royalPurple-page flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl space-y-4">
         <Card className="bg-royalPurple-card border-royalPurple-border/40">
           <CardHeader>
@@ -153,13 +155,13 @@ export default function OnboardingPage({ searchParams }) {
         </Card>
 
         {loadingStatus ? (
-          <Card className="bg-royalPurple-card border-royalPurple-border/40">
+          <Card className="bg-royalPurple-card border-royalPurple-border/40 border-l-4 border-l-royalPurple-accent">
             <CardContent className="p-6 text-royalPurple-text2">Loading...</CardContent>
           </Card>
         ) : null}
 
         {!status?.authenticated || !verified ? (
-          <Card className="bg-royalPurple-card border-royalPurple-border/40">
+          <Card className="bg-royalPurple-card border-royalPurple-border/40 border-l-4 border-l-royalPurple-accent">
             <CardHeader>
               <CardTitle className="text-royalPurple-text1">Stage 1: Email Verification</CardTitle>
             </CardHeader>
@@ -175,12 +177,23 @@ export default function OnboardingPage({ searchParams }) {
                 </div>
                 <div className="space-y-2">
                   <Label>Password</Label>
-                  <Input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Min 6 characters"
-                  />
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Min 6 characters"
+                      className="pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-royalPurple-text3 hover:text-royalPurple-text1 transition-colors"
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    </button>
+                  </div>
                 </div>
               </div>
               <Button onClick={start} disabled={!canStart || submitting}>
@@ -194,7 +207,7 @@ export default function OnboardingPage({ searchParams }) {
         ) : null}
 
         {status?.authenticated && verified && !paid ? (
-          <Card className="bg-royalPurple-card border-royalPurple-border/40">
+          <Card className="bg-royalPurple-card border-royalPurple-border/40 border-l-4 border-l-royalPurple-accent">
             <CardHeader>
               <CardTitle className="text-royalPurple-text1">
                 Stage 2: Plan Selection & Payment
@@ -205,7 +218,7 @@ export default function OnboardingPage({ searchParams }) {
                 <button
                   type="button"
                   onClick={() => setPlan('basic')}
-                  className={`p-4 rounded-xl border ${plan === 'basic' ? 'border-amber-400' : 'border-royalPurple-border'} bg-royalPurple-deep text-left`}
+                  className={`p-4 rounded-xl border ${plan === 'basic' ? 'border-royalPurple-accent' : 'border-royalPurple-border'} bg-royalPurple-deep text-left`}
                 >
                   <div className="text-royalPurple-text1 font-bold">Basic</div>
                   <div className="text-royalPurple-text2 text-sm">K150 / month</div>
@@ -213,7 +226,7 @@ export default function OnboardingPage({ searchParams }) {
                 <button
                   type="button"
                   onClick={() => setPlan('standard')}
-                  className={`p-4 rounded-xl border ${plan === 'standard' ? 'border-amber-400' : 'border-royalPurple-border'} bg-royalPurple-deep text-left`}
+                  className={`p-4 rounded-xl border ${plan === 'standard' ? 'border-royalPurple-accent' : 'border-royalPurple-border'} bg-royalPurple-deep text-left`}
                 >
                   <div className="text-royalPurple-text1 font-bold">Standard</div>
                   <div className="text-royalPurple-text2 text-sm">K300 / month</div>
@@ -221,7 +234,7 @@ export default function OnboardingPage({ searchParams }) {
                 <button
                   type="button"
                   onClick={() => setPlan('premium')}
-                  className={`p-4 rounded-xl border ${plan === 'premium' ? 'border-amber-400' : 'border-royalPurple-border'} bg-royalPurple-deep text-left`}
+                  className={`p-4 rounded-xl border ${plan === 'premium' ? 'border-royalPurple-accent' : 'border-royalPurple-border'} bg-royalPurple-deep text-left`}
                 >
                   <div className="text-royalPurple-text1 font-bold">Premium</div>
                   <div className="text-royalPurple-text2 text-sm">K600 / month</div>
@@ -269,8 +282,8 @@ export default function OnboardingPage({ searchParams }) {
           </Card>
         ) : null}
 
-        {status?.authenticated && verified && paid ? (
-          <Card className="bg-royalPurple-card border-royalPurple-border/40">
+        {status?.authenticated && verified && paid && !completed?.loginUrl ? (
+          <Card className="bg-royalPurple-card border-royalPurple-border/40 border-l-4 border-l-royalPurple-accent">
             <CardHeader>
               <CardTitle className="text-royalPurple-text1">Stage 3: School Details</CardTitle>
             </CardHeader>
@@ -346,7 +359,7 @@ export default function OnboardingPage({ searchParams }) {
 
         <div className="text-center text-xs text-royalPurple-text3">
           Already have a school portal?{' '}
-          <Link href="/login" className="text-amber-300">
+          <Link href="/login" className="text-royalPurple-accent hover:text-royalPurple-border2">
             Login
           </Link>
         </div>

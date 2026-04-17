@@ -6,6 +6,7 @@ import { IntelligentLearningAssistant } from '../lib/intelligentLearningAssistan
 import { PersonalizedLearningPaths } from '../lib/personalizedLearningPaths'
 import { ModernAssessmentSystem } from '../lib/modernAssessmentSystem'
 import { EmergingTechIntegration } from '../lib/emergingTechIntegration'
+import { Bot, Check, Gem, Mic, Star, TrendingUp, Trophy } from 'lucide-react'
 
 /**
  * Modern Dashboard Component
@@ -215,7 +216,7 @@ export default function ModernDashboard({ userRole, userId, userData }) {
           <div className="flex justify-between items-center py-6">
             <div>
               <h1 className="text-3xl font-bold text-royalPurple-text1">
-                Welcome back, {userData.name}! 👋
+                Welcome back, {userData.name}
               </h1>
               <p className="text-royalPurple-text2 mt-1">
                 Your intelligent learning companion is ready to help
@@ -232,7 +233,7 @@ export default function ModernDashboard({ userRole, userId, userData }) {
                 }`}
                 title="Voice Assistant"
               >
-                🎤
+                <Mic className="h-5 w-5" aria-hidden="true" />
               </button>
 
               {/* Wellbeing Status Indicator */}
@@ -261,28 +262,28 @@ export default function ModernDashboard({ userRole, userId, userData }) {
             title="Learning Progress"
             value={`${Math.round(dashboardData.gamification?.level || 0)}`}
             subtitle="Current Level"
-            icon="📈"
+            icon={<TrendingUp className="h-5 w-5" aria-hidden="true" />}
             color="blue"
           />
           <StatCard
             title="Skill Points"
             value={dashboardData.gamification?.totalPoints || 0}
             subtitle="Total Earned"
-            icon="⭐"
+            icon={<Star className="h-5 w-5" aria-hidden="true" />}
             color="yellow"
           />
           <StatCard
             title="Achievements"
             value={dashboardData.gamification?.achievements?.length || 0}
             subtitle="Unlocked"
-            icon="🏆"
+            icon={<Trophy className="h-5 w-5" aria-hidden="true" />}
             color="green"
           />
           <StatCard
             title="NFT Collection"
             value={dashboardData.gamification?.nftCollection?.length || 0}
             subtitle="Rare Items"
-            icon="💎"
+            icon={<Gem className="h-5 w-5" aria-hidden="true" />}
             color="purple"
           />
         </div>
@@ -302,8 +303,9 @@ export default function ModernDashboard({ userRole, userId, userData }) {
         {/* AI Predictions & Recommendations */}
         {dashboardData.analytics && (
           <div className="mt-8 bg-royalPurple-card rounded-xl shadow-lg p-6">
-            <h3 className="text-xl font-bold text-royalPurple-text1 mb-4">
-              🤖 AI Insights & Recommendations
+            <h3 className="text-xl font-bold text-royalPurple-text1 mb-4 flex items-center gap-2">
+              <Bot className="h-5 w-5 text-royalPurple-accent" aria-hidden="true" />
+              AI Insights & Recommendations
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -336,7 +338,10 @@ export default function ModernDashboard({ userRole, userId, userData }) {
                 <ul className="space-y-1">
                   {dashboardData.analytics.recommendations?.slice(0, 3).map((rec, index) => (
                     <li key={index} className="text-sm text-royalPurple-text2 flex items-start">
-                      <span className="text-royalPurple-successTx mr-2">✓</span>
+                      <Check
+                        className="h-4 w-4 text-royalPurple-successTx mr-2 mt-0.5"
+                        aria-hidden="true"
+                      />
                       {rec.title}
                     </li>
                   ))}
@@ -353,10 +358,10 @@ export default function ModernDashboard({ userRole, userId, userData }) {
 // Widget Components
 const StatCard = ({ title, value, subtitle, icon, color }) => {
   const colorClasses = {
-    blue: 'bg-royalPurple-accent',
-    yellow: 'bg-yellow-500',
-    green: 'bg-royalPurple-success',
-    purple: 'bg-royalPurple-pill',
+    blue: 'bg-royalPurple-accent text-royalPurple-accentTx',
+    yellow: 'bg-royalPurple-accentBg text-royalPurple-accent',
+    green: 'bg-royalPurple-accentBg text-royalPurple-accent',
+    purple: 'bg-royalPurple-accentBg text-royalPurple-accent',
   }
 
   return (
@@ -367,9 +372,7 @@ const StatCard = ({ title, value, subtitle, icon, color }) => {
           <p className="text-2xl font-bold text-royalPurple-text1">{value}</p>
           <p className="text-royalPurple-text3 text-xs">{subtitle}</p>
         </div>
-        <div className={`p-3 rounded-full ${colorClasses[color]} text-royalPurple-text1 text-xl`}>
-          {icon}
-        </div>
+        <div className={`p-3 rounded-full ${colorClasses[color]} text-xl`}>{icon}</div>
       </div>
     </div>
   )
@@ -377,7 +380,7 @@ const StatCard = ({ title, value, subtitle, icon, color }) => {
 
 const WellbeingWidget = ({ status, userId }) => (
   <div>
-    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">🌟 Wellbeing Check</h3>
+    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">Wellbeing Check</h3>
     <div className="space-y-3">
       <div className="flex justify-between items-center">
         <span className="text-royalPurple-text2">Overall Status</span>
@@ -408,7 +411,7 @@ const GamificationWidget = ({ data }) => {
 
   return (
     <div>
-      <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">🎮 Your Progress</h3>
+      <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">Your Progress</h3>
       <div className="space-y-3">
         <div>
           <div className="flex justify-between text-sm text-royalPurple-text2 mb-1">
@@ -441,7 +444,10 @@ const GamificationWidget = ({ data }) => {
 
 const VoiceAssistantWidget = ({ isListening, onVoiceCommand, assistant }) => (
   <div>
-    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">🎤 Voice Assistant</h3>
+    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center gap-2">
+      <Mic className="h-5 w-5 text-royalPurple-accent" aria-hidden="true" />
+      Voice Assistant
+    </h3>
     <div className="text-center">
       <button
         onClick={onVoiceCommand}
@@ -451,7 +457,7 @@ const VoiceAssistantWidget = ({ isListening, onVoiceCommand, assistant }) => (
             : 'bg-royalPurple-accent hover:bg-royalPurple-accent'
         } text-royalPurple-text1 text-2xl`}
       >
-        🎤
+        <Mic className="h-5 w-5" aria-hidden="true" />
       </button>
       <p className="text-sm text-royalPurple-text2">
         {isListening ? 'Listening...' : 'Click to speak'}
@@ -465,7 +471,7 @@ const VoiceAssistantWidget = ({ isListening, onVoiceCommand, assistant }) => (
 
 const LearningPathsWidget = ({ paths }) => (
   <div>
-    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">🛤️ Learning Paths</h3>
+    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">Learning Paths</h3>
     <div className="space-y-3">
       <div className="bg-royalPurple-accent rounded-lg p-3">
         <h4 className="font-medium text-royalPurple-accentTx">{paths?.subject || 'Mathematics'}</h4>
@@ -488,7 +494,7 @@ const LearningPathsWidget = ({ paths }) => (
 
 const SkillTreeWidget = ({ data }) => (
   <div>
-    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">🌳 Skill Trees</h3>
+    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">Skill Trees</h3>
     <div className="space-y-2">
       {Object.entries(data || {})
         .slice(0, 3)
@@ -509,18 +515,24 @@ const SkillTreeWidget = ({ data }) => (
 
 const AchievementsWidget = ({ achievements, nfts }) => (
   <div>
-    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">🏆 Recent Achievements</h3>
+    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center gap-2">
+      <Trophy className="h-5 w-5 text-royalPurple-accent" aria-hidden="true" />
+      Recent Achievements
+    </h3>
     <div className="space-y-2">
       {achievements?.slice(0, 3).map((achievement, index) => (
         <div key={index} className="flex items-center space-x-2">
-          <span className="text-lg">{achievement.badge || '🏅'}</span>
+          <Trophy className="h-5 w-5 text-royalPurple-accent" aria-hidden="true" />
           <span className="text-sm text-royalPurple-text2">{achievement.name}</span>
         </div>
       ))}
       {nfts?.length > 0 && (
         <div className="mt-3 p-2 bg-royalPurple-pill rounded-lg">
           <p className="text-xs text-royalPurple-pillTx">
-            💎 {nfts.length} NFT{nfts.length !== 1 ? 's' : ''} collected
+            <span className="inline-flex items-center gap-2">
+              <Gem className="h-4 w-4 text-royalPurple-accent" aria-hidden="true" />
+              {nfts.length} NFT{nfts.length !== 1 ? 's' : ''} collected
+            </span>
           </p>
         </div>
       )}
@@ -530,7 +542,10 @@ const AchievementsWidget = ({ achievements, nfts }) => (
 
 const AnalyticsWidget = ({ data }) => (
   <div>
-    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">📊 Performance Analytics</h3>
+    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4 flex items-center gap-2">
+      <TrendingUp className="h-5 w-5 text-royalPurple-accent" aria-hidden="true" />
+      Performance Analytics
+    </h3>
     <div className="space-y-3">
       <div className="flex justify-between">
         <span className="text-royalPurple-text2">Risk Level</span>

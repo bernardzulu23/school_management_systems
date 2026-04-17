@@ -4,13 +4,14 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function GET(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  const teacherId = params.id
+  const teacherId = routeParams.id
 
   const teacher = await prisma.teacher.findFirst({
     where: { id: teacherId, schoolId },
@@ -38,6 +39,7 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -48,7 +50,7 @@ export async function PUT(request, { params }) {
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  const teacherId = params.id
+  const teacherId = routeParams.id
   const body = await request.json()
 
   const departmentNames = Array.isArray(body.departmentNames)

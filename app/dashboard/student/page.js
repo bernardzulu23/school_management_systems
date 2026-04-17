@@ -13,6 +13,7 @@ import GamePlayer from '@/components/games/GamePlayer'
 import AchievementSystem from '@/components/games/AchievementSystem'
 import SmartDashboardIntegration from '@/components/dashboard/SmartDashboardIntegration'
 import { api } from '@/lib/api'
+import { percentTextClass } from '@/lib/utils/percentColor'
 import {
   BookOpen,
   ClipboardList,
@@ -46,6 +47,17 @@ import toast from 'react-hot-toast'
 // Games data is now fetched dynamically via API
 
 export default function StudentDashboard() {
+  useEffect(() => {
+    document.documentElement.style.setProperty('--rp-accent', '#7c3aed')
+    document.documentElement.style.setProperty('--rp-accentbg', '#ede9fe')
+    document.documentElement.style.setProperty('--rp-accenttx', '#ffffff')
+    return () => {
+      document.documentElement.style.removeProperty('--rp-accent')
+      document.documentElement.style.removeProperty('--rp-accentbg')
+      document.documentElement.style.removeProperty('--rp-accenttx')
+    }
+  }, [])
+
   const [activeTab, setActiveTab] = useState('overview')
   const [currentGame, setCurrentGame] = useState(null)
   const [studentData, setStudentData] = useState({
@@ -150,21 +162,13 @@ export default function StudentDashboard() {
 
   return (
     <div className="dashboard-layout">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-500/10 to-blue-600/10 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-blue-400/10 to-blue-500/10 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-40 left-40 w-80 h-80 bg-gradient-to-r from-blue-600/10 to-blue-700/10 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-blob animation-delay-4000"></div>
-      </div>
-
       <DashboardLayout title="Student Dashboard">
         <div className="space-y-8 relative z-10">
-          {/* Enhanced Header */}
-          <div className="content-section">
+          <header className="backdrop-blur-lg bg-royalPurple-card/60 border border-royalPurple-border2/40 rounded-3xl p-8 shadow-2xl">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent mb-4">
-                  Welcome Back, {currentUser?.name?.split(' ')[0] || 'Student'}! 👋
+                <h1 className="text-4xl font-bold text-royalPurple-text1 mb-4">
+                  Welcome back, {currentUser?.name?.split(' ')[0] || 'Student'}.
                 </h1>
                 <p className="text-royalPurple-text2 text-lg">
                   Track your academic progress and achievements
@@ -172,66 +176,65 @@ export default function StudentDashboard() {
               </div>
               {currentUser && (
                 <div className="flex items-center space-x-4">
-                  <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-royalPurple-text1 rounded-2xl p-4 text-center shadow-lg">
+                  <div className="bg-purple-600 text-white rounded-2xl p-4 text-center shadow-sm border border-royalPurple-border">
                     <div className="text-2xl font-bold">{new Date().getDate()}</div>
                     <div className="text-sm opacity-90">
                       {new Date().toLocaleDateString('en-US', { month: 'short' })}
                     </div>
                   </div>
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 flex items-center justify-center text-royalPurple-text1 font-bold text-xl shadow-lg">
+                  <div className="w-16 h-16 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-sm border border-royalPurple-border">
                     {currentUser.name?.charAt(0) || 'S'}
                   </div>
                 </div>
               )}
             </div>
-          </div>
 
-          {/* Tab Navigation */}
-          <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-2 overflow-x-auto">
-            <div className="flex gap-2 min-w-max">
-              {[
-                { id: 'overview', name: 'Overview', icon: BarChart3 },
-                { id: 'creative-teaching', name: 'Creative Learning', icon: Rocket },
-                { id: 'advanced', name: 'Advanced Features', icon: Zap },
-                { id: 'analytics', name: 'Smart Analytics', icon: Zap },
-                { id: 'games', name: 'Games & Learning', icon: GamepadIcon },
-                { id: 'achievements', name: 'Achievements', icon: Trophy },
-                { id: 'subjects', name: 'My Subjects', icon: BookOpen },
-                { id: 'learning-path', name: 'Learning Path', icon: LearningPathIcon },
-              ].map((tab) => {
-                const Icon = tab.icon
-                const active = activeTab === tab.id
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-colors border ${
-                      active
-                        ? 'bg-royalPurple-accent/60 text-royalPurple-text1 border-royalPurple-border2/60'
-                        : 'bg-royalPurple-card/40 text-royalPurple-text2 border-royalPurple-border/40 hover:bg-royalPurple-card/70'
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span className="font-medium">{tab.name}</span>
-                  </button>
-                )
-              })}
+            <div className="mt-6 -mx-2 px-2 overflow-x-auto">
+              <div className="flex gap-2 min-w-max">
+                {[
+                  { id: 'overview', name: 'Overview', icon: BarChart3 },
+                  { id: 'creative-teaching', name: 'Creative Learning', icon: Rocket },
+                  { id: 'advanced', name: 'Advanced Features', icon: Zap },
+                  { id: 'analytics', name: 'Smart Analytics', icon: Zap },
+                  { id: 'games', name: 'Games & Learning', icon: GamepadIcon },
+                  { id: 'achievements', name: 'Achievements', icon: Trophy },
+                  { id: 'subjects', name: 'My Subjects', icon: BookOpen },
+                  { id: 'learning-path', name: 'Learning Path', icon: LearningPathIcon },
+                ].map((tab) => {
+                  const Icon = tab.icon
+                  const active = activeTab === tab.id
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-colors border ${
+                        active
+                          ? 'bg-royalPurple-accent/60 text-royalPurple-text1 border-royalPurple-border2/60'
+                          : 'bg-royalPurple-card/40 text-royalPurple-text2 border-royalPurple-border/40 hover:bg-royalPurple-card/70'
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span className="font-medium">{tab.name}</span>
+                    </button>
+                  )
+                })}
+              </div>
             </div>
-          </div>
 
-          {/* Tab Content */}
-          {activeTab === 'overview' && (
-            <div className="space-y-8">
-              {/* Overview Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {activeTab === 'overview' && (
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-6">
                 <button
                   type="button"
                   onClick={() => setActiveTab('games')}
                   className="text-left p-6 rounded-2xl backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 hover:bg-royalPurple-card/80 transition-colors"
                 >
                   <h3 className="text-lg font-semibold text-royalPurple-text1">Games</h3>
-                  <p className="text-3xl font-bold text-royalPurple-accentTx">
+                  <p
+                    className={`text-3xl font-bold ${
+                      Number(dashboardData?.stats?.gamesPlayed) > 0 ? 'text-white' : 'text-gray-400'
+                    }`}
+                  >
                     {dashboardData?.stats?.gamesPlayed || 0}
                   </p>
                 </button>
@@ -241,13 +244,19 @@ export default function StudentDashboard() {
                   className="text-left p-6 rounded-2xl backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 hover:bg-royalPurple-card/80 transition-colors"
                 >
                   <h3 className="text-lg font-semibold text-royalPurple-text1">Achievements</h3>
-                  <p className="text-3xl font-bold text-royalPurple-successTx">
+                  <p
+                    className={`text-3xl font-bold ${
+                      Number(dashboardData?.stats?.achievements) > 0
+                        ? 'text-white'
+                        : 'text-gray-400'
+                    }`}
+                  >
                     {dashboardData?.stats?.achievements || 0}
                   </p>
                 </button>
                 <div className="p-6 rounded-2xl backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40">
                   <h3 className="text-lg font-semibold text-royalPurple-text1">Level</h3>
-                  <p className="text-3xl font-bold text-royalPurple-pillTx">
+                  <p className="text-3xl font-bold text-white">
                     {dashboardData?.stats?.level || 1}
                   </p>
                 </div>
@@ -257,18 +266,23 @@ export default function StudentDashboard() {
                   className="text-left p-6 rounded-2xl backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 hover:bg-royalPurple-card/80 transition-colors"
                 >
                   <h3 className="text-lg font-semibold text-royalPurple-text1">Points</h3>
-                  <p className="text-3xl font-bold text-yellow-600">
+                  <p className="text-3xl font-bold text-white">
                     {dashboardData?.stats?.points || 0}
                   </p>
                   <p className="text-xs text-royalPurple-text2 mt-1">Best 6 subjects</p>
                 </button>
               </div>
+            )}
+          </header>
 
+          {/* Tab Content */}
+          {activeTab === 'overview' && (
+            <div className="space-y-8">
               {/* Student Information Card */}
               {currentUser && (
                 <Card variant="glass">
                   <CardHeader>
-                    <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent flex items-center">
+                    <CardTitle className="text-royalPurple-text1 flex items-center">
                       <User className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
                       Student Information
                     </CardTitle>
@@ -329,45 +343,47 @@ export default function StudentDashboard() {
               )}
 
               {/* Enhanced Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <StatsCard
-                  title="My Subjects"
-                  value={dashboardStats.totalSubjects}
-                  icon={BookOpen}
-                  color="blue"
-                  description="Enrolled subjects"
-                  trend={{ isPositive: true, value: 2 }}
-                />
-                <StatsCard
-                  title="My Results"
-                  value={dashboardStats.totalResults}
-                  icon={BarChart3}
-                  color="green"
-                  description="Total results"
-                  trend={{ isPositive: true, value: 5 }}
-                />
-                <StatsCard
-                  title="Average Grade"
-                  value={`${dashboardStats.averageGrade.toFixed(1)}%`}
-                  icon={Award}
-                  color="purple"
-                  description="Overall performance"
-                  trend={{ isPositive: true, value: 3.2 }}
-                />
-                <StatsCard
-                  title="Goals Progress"
-                  value={`${dashboardStats.completedGoals}/${dashboardStats.totalGoals}`}
-                  icon={Target}
-                  color="yellow"
-                  description="Completed goals"
-                  trend={{ isPositive: true, value: 15 }}
-                />
-              </div>
+              <section className="w-full py-3">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-x-10 gap-y-6">
+                  <StatsCard
+                    title="My Subjects"
+                    value={dashboardStats.totalSubjects}
+                    icon={BookOpen}
+                    color="blue"
+                    description="Enrolled subjects"
+                    variant="flat"
+                  />
+                  <StatsCard
+                    title="My Results"
+                    value={dashboardStats.totalResults}
+                    icon={BarChart3}
+                    color="green"
+                    description="Total results"
+                    variant="flat"
+                  />
+                  <StatsCard
+                    title="Average Grade"
+                    value={`${dashboardStats.averageGrade.toFixed(1)}%`}
+                    icon={Award}
+                    color="purple"
+                    description="Overall performance"
+                    variant="flat"
+                  />
+                  <StatsCard
+                    title="Goals Progress"
+                    value={`${dashboardStats.completedGoals}/${dashboardStats.totalGoals}`}
+                    icon={Target}
+                    color="yellow"
+                    description="Completed goals"
+                    variant="flat"
+                  />
+                </div>
+              </section>
 
               {/* Performance Overview Chart */}
               <Card variant="glass">
                 <CardHeader>
-                  <CardTitle className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent flex items-center">
+                  <CardTitle className="text-royalPurple-text1 flex items-center">
                     <TrendingUp className="h-6 w-6 mr-3 text-royalPurple-successTx" />
                     Performance Overview
                   </CardTitle>
@@ -390,8 +406,10 @@ export default function StudentDashboard() {
                           <BarChart3 className="h-10 w-10 text-royalPurple-text1" />
                         </div>
                         <h3 className="font-bold text-royalPurple-text1 text-lg">Average Score</h3>
-                        <p className="text-3xl font-bold text-royalPurple-accentTx mt-2">
-                          {dashboardStats.averageGrade.toFixed(1)}%
+                        <p
+                          className={`text-3xl font-bold mt-2 ${percentTextClass(dashboardStats.averageGrade)}`}
+                        >
+                          {Number(dashboardStats.averageGrade) || 0}%
                         </p>
                         <p className="text-royalPurple-text2 text-sm mt-1">Last 5 assessments</p>
                       </div>
@@ -400,9 +418,17 @@ export default function StudentDashboard() {
                           <Calendar className="h-10 w-10 text-royalPurple-text1" />
                         </div>
                         <h3 className="font-bold text-royalPurple-text1 text-lg">Attendance</h3>
-                        <p className="text-3xl font-bold text-royalPurple-pillTx mt-2">
-                          {dashboardData?.stats?.attendanceRate || 'N/A'}
-                        </p>
+                        {Number.isFinite(Number(dashboardData?.stats?.attendanceRate)) ? (
+                          <p
+                            className={`text-3xl font-bold mt-2 ${percentTextClass(
+                              Number(dashboardData?.stats?.attendanceRate)
+                            )}`}
+                          >
+                            {Number(dashboardData?.stats?.attendanceRate)}%
+                          </p>
+                        ) : (
+                          <p className="text-3xl font-bold text-gray-400 mt-2 italic">No data</p>
+                        )}
                         <p className="text-royalPurple-text2 text-sm mt-1">This semester</p>
                       </div>
                     </div>
@@ -414,7 +440,7 @@ export default function StudentDashboard() {
                 {/* My Class Info */}
                 <Card variant="glass">
                   <CardHeader>
-                    <CardTitle className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent flex items-center">
+                    <CardTitle className="text-royalPurple-text1 flex items-center">
                       <BookOpen className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
                       My Class Information
                     </CardTitle>
@@ -462,7 +488,7 @@ export default function StudentDashboard() {
                 {/* Upcoming Assessments */}
                 <Card variant="glass">
                   <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent flex items-center">
+                    <CardTitle className="text-royalPurple-text1 flex items-center">
                       <ClipboardList className="h-6 w-6 mr-3 text-royalPurple-successTx" />
                       Upcoming Assessments
                     </CardTitle>
@@ -533,7 +559,7 @@ export default function StudentDashboard() {
               {/* Goals Progress Section */}
               <Card variant="glass">
                 <CardHeader>
-                  <CardTitle className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent flex items-center">
+                  <CardTitle className="text-royalPurple-text1 flex items-center">
                     <Target className="h-6 w-6 mr-3 text-yellow-400" />
                     My Goals Progress
                   </CardTitle>
@@ -628,7 +654,7 @@ export default function StudentDashboard() {
               {/* My Subjects Section */}
               <Card variant="glass">
                 <CardHeader>
-                  <CardTitle className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent flex items-center">
+                  <CardTitle className="text-royalPurple-text1 flex items-center">
                     <BookOpen className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
                     My Subjects
                   </CardTitle>
@@ -673,8 +699,10 @@ export default function StudentDashboard() {
                                   <span className="text-royalPurple-text2 text-sm">
                                     Average Score
                                   </span>
-                                  <span className="text-royalPurple-text1 font-semibold">
-                                    {performance.avgScore}%
+                                  <span
+                                    className={`font-semibold ${percentTextClass(performance.avgScore)}`}
+                                  >
+                                    {Number(performance.avgScore) || 0}%
                                   </span>
                                 </div>
                                 <div className="w-full bg-royalPurple-muted/60 rounded-full h-2">
@@ -730,7 +758,7 @@ export default function StudentDashboard() {
               {/* Recent Results */}
               <Card variant="glass">
                 <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle className="bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent flex items-center">
+                  <CardTitle className="text-royalPurple-text1 flex items-center">
                     <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
                     Recent Results
                   </CardTitle>
@@ -766,8 +794,10 @@ export default function StudentDashboard() {
                             <div className="text-xl font-bold text-royalPurple-text1">
                               {result.score}/100
                             </div>
-                            <div className="text-lg font-semibold text-royalPurple-accentTx">
-                              {result.score}%
+                            <div
+                              className={`text-lg font-semibold ${percentTextClass(result.score)}`}
+                            >
+                              {Number(result.score) || 0}%
                             </div>
                             <div
                               className={`text-xs px-3 py-1 rounded-full font-medium flex items-center ${
@@ -808,7 +838,7 @@ export default function StudentDashboard() {
               {/* Quick Actions */}
               <Card variant="glass">
                 <CardHeader>
-                  <CardTitle className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent flex items-center">
+                  <CardTitle className="text-royalPurple-text1 flex items-center">
                     <Target className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
                     Quick Actions
                   </CardTitle>
@@ -891,7 +921,7 @@ export default function StudentDashboard() {
                 {/* Study Materials */}
                 <Card variant="glass">
                   <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle className="bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent flex items-center">
+                    <CardTitle className="text-royalPurple-text1 flex items-center">
                       <Download className="h-6 w-6 mr-3 text-royalPurple-successTx" />
                       Study Materials
                     </CardTitle>
@@ -946,7 +976,7 @@ export default function StudentDashboard() {
                 {/* Assessment Schedule Detail */}
                 <Card variant="glass">
                   <CardHeader>
-                    <CardTitle className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent flex items-center">
+                    <CardTitle className="text-royalPurple-text1 flex items-center">
                       <ClipboardList className="h-6 w-6 mr-3 text-orange-400" />
                       Assessment Schedule
                     </CardTitle>
@@ -997,7 +1027,7 @@ export default function StudentDashboard() {
               {/* Emergency Contact Information */}
               <Card variant="glass">
                 <CardHeader>
-                  <CardTitle className="bg-gradient-to-r from-red-400 to-pink-400 bg-clip-text text-transparent flex items-center">
+                  <CardTitle className="text-royalPurple-text1 flex items-center">
                     <Phone className="h-6 w-6 mr-3 text-royalPurple-dangerTx" />
                     Emergency Contact
                   </CardTitle>
@@ -1084,12 +1114,12 @@ export default function StudentDashboard() {
 
               <div className="bg-royalPurple-card rounded-lg p-6 shadow-lg">
                 <h3 className="text-xl font-bold text-royalPurple-text1 mb-4">
-                  🎓 Advanced Educational Features
+                  Advanced Educational Features
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <div className="bg-royalPurple-accent p-4 rounded-lg border border-royalPurple-border2">
                     <h4 className="font-semibold text-royalPurple-accentTx mb-2">
-                      📚 Digital Library
+                      Digital Library
                     </h4>
                     <p className="text-royalPurple-accentTx text-sm">
                       Access thousands of books offline
@@ -1102,9 +1132,7 @@ export default function StudentDashboard() {
                     </Link>
                   </div>
                   <div className="bg-royalPurple-success p-4 rounded-lg border border-royalPurple-border">
-                    <h4 className="font-semibold text-royalPurple-successTx mb-2">
-                      👥 Study Groups
-                    </h4>
+                    <h4 className="font-semibold text-royalPurple-successTx mb-2">Study Groups</h4>
                     <p className="text-royalPurple-successTx text-sm">Join peer learning groups</p>
                     <Link
                       href="/dashboard/student/study-groups"
@@ -1114,9 +1142,7 @@ export default function StudentDashboard() {
                     </Link>
                   </div>
                   <div className="bg-royalPurple-pill p-4 rounded-lg border border-royalPurple-border2">
-                    <h4 className="font-semibold text-royalPurple-pillTx mb-2">
-                      🧠 Learning Paths
-                    </h4>
+                    <h4 className="font-semibold text-royalPurple-pillTx mb-2">Learning Paths</h4>
                     <p className="text-royalPurple-pillTx text-sm">Adaptive learning routes</p>
                     <button
                       onClick={() => setActiveTab('learning-path')}
@@ -1126,7 +1152,7 @@ export default function StudentDashboard() {
                     </button>
                   </div>
                   <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                    <h4 className="font-semibold text-yellow-900 mb-2">🎯 Goal Setting</h4>
+                    <h4 className="font-semibold text-yellow-900 mb-2">Goal Setting</h4>
                     <p className="text-yellow-700 text-sm">Track academic goals</p>
                     <Link
                       href="/dashboard/student/goals"
@@ -1136,7 +1162,7 @@ export default function StudentDashboard() {
                     </Link>
                   </div>
                   <div className="bg-royalPurple-danger p-4 rounded-lg border border-royalPurple-border">
-                    <h4 className="font-semibold text-royalPurple-dangerTx mb-2">📝 Study Tools</h4>
+                    <h4 className="font-semibold text-royalPurple-dangerTx mb-2">Study Tools</h4>
                     <p className="text-royalPurple-dangerTx text-sm">
                       Flashcards, notes, calculators
                     </p>
@@ -1149,7 +1175,7 @@ export default function StudentDashboard() {
                   </div>
                   <div className="bg-royalPurple-pill p-4 rounded-lg border border-royalPurple-border2">
                     <h4 className="font-semibold text-royalPurple-pillTx mb-2">
-                      🌍 Cultural Learning
+                      Cultural Learning
                     </h4>
                     <p className="text-royalPurple-pillTx text-sm">Zambian history & languages</p>
                     <Link
@@ -1163,55 +1189,55 @@ export default function StudentDashboard() {
 
                 <div className="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg">
                   <h4 className="text-lg font-bold text-royalPurple-text1 mb-4">
-                    ✨ Recently Implemented Features
+                    Recently Implemented Features
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-royalPurple-card p-4 rounded-lg shadow-sm">
                       <h5 className="font-semibold text-royalPurple-text1 mb-2">
-                        🎓 Advanced Student Features
+                        Advanced Student Features
                       </h5>
                       <ul className="text-sm text-royalPurple-text2 space-y-1">
-                        <li>✅ Digital Library System</li>
-                        <li>✅ Peer Study Groups</li>
-                        <li>✅ Learning Style Assessment</li>
-                        <li>✅ Academic Goal Setting</li>
-                        <li>✅ Homework Reminders</li>
+                        <li>Digital Library System</li>
+                        <li>Peer Study Groups</li>
+                        <li>Learning Style Assessment</li>
+                        <li>Academic Goal Setting</li>
+                        <li>Homework Reminders</li>
                       </ul>
                     </div>
                     <div className="bg-royalPurple-card p-4 rounded-lg shadow-sm">
                       <h5 className="font-semibold text-royalPurple-text1 mb-2">
-                        🧠 Learning Enhancement
+                        Learning Enhancement
                       </h5>
                       <ul className="text-sm text-royalPurple-text2 space-y-1">
-                        <li>✅ Adaptive Learning Paths</li>
-                        <li>✅ Concept Mapping Tools</li>
-                        <li>✅ Flashcard Creator</li>
-                        <li>✅ Practice Test Generator</li>
-                        <li>✅ Learning Analytics</li>
+                        <li>Adaptive Learning Paths</li>
+                        <li>Concept Mapping Tools</li>
+                        <li>Flashcard Creator</li>
+                        <li>Practice Test Generator</li>
+                        <li>Learning Analytics</li>
                       </ul>
                     </div>
                     <div className="bg-royalPurple-card p-4 rounded-lg shadow-sm">
                       <h5 className="font-semibold text-royalPurple-text1 mb-2">
-                        🌍 Cultural Integration
+                        Cultural Integration
                       </h5>
                       <ul className="text-sm text-royalPurple-text2 space-y-1">
-                        <li>✅ Local History Module</li>
-                        <li>✅ Traditional Knowledge Library</li>
-                        <li>✅ Community Heroes Database</li>
-                        <li>✅ Environmental Education</li>
-                        <li>✅ Language Learning Center</li>
+                        <li>Local History Module</li>
+                        <li>Traditional Knowledge Library</li>
+                        <li>Community Heroes Database</li>
+                        <li>Environmental Education</li>
+                        <li>Language Learning Center</li>
                       </ul>
                     </div>
                     <div className="bg-royalPurple-card p-4 rounded-lg shadow-sm">
                       <h5 className="font-semibold text-royalPurple-text1 mb-2">
-                        📊 Progress Tracking
+                        Progress Tracking
                       </h5>
                       <ul className="text-sm text-royalPurple-text2 space-y-1">
-                        <li>✅ Study Time Tracker</li>
-                        <li>✅ Subject Calculators</li>
-                        <li>✅ Digital Notebook System</li>
-                        <li>✅ Research Project Manager</li>
-                        <li>✅ Performance Analytics</li>
+                        <li>Study Time Tracker</li>
+                        <li>Subject Calculators</li>
+                        <li>Digital Notebook System</li>
+                        <li>Research Project Manager</li>
+                        <li>Performance Analytics</li>
                       </ul>
                     </div>
                   </div>
@@ -1302,16 +1328,19 @@ export default function StudentDashboard() {
           {activeTab === 'achievements' && (
             <div className="space-y-6">
               <div className="content-section">
-                <h2 className="text-2xl font-bold text-royalPurple-text1 mb-4">
-                  🏆 My Achievements
-                </h2>
+                <h2 className="text-2xl font-bold text-royalPurple-text1 mb-4">My Achievements</h2>
                 <p className="text-royalPurple-text2 mb-6">Badges and rewards you've earned</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                   {dashboardData?.achievements_list?.length > 0 ? (
                     dashboardData.achievements_list.map((achievement) => (
                       <div key={achievement.id} className="stats-card p-6 text-center">
-                        <div className="text-4xl mb-4">{achievement.icon || '🏆'}</div>
+                        <div className="flex justify-center mb-4">
+                          <Trophy
+                            className="h-10 w-10 text-royalPurple-accent"
+                            aria-hidden="true"
+                          />
+                        </div>
                         <h3 className="font-bold text-lg text-royalPurple-text1">
                           {achievement.name}
                         </h3>
@@ -1323,12 +1352,14 @@ export default function StudentDashboard() {
                     ))
                   ) : (
                     <div className="col-span-4 text-center py-12">
-                      <div className="text-6xl mb-4">🏆</div>
+                      <div className="flex justify-center mb-4">
+                        <Trophy className="h-14 w-14 text-royalPurple-accent" aria-hidden="true" />
+                      </div>
                       <h3 className="text-xl font-bold text-royalPurple-text1">
                         No Achievements Yet
                       </h3>
                       <p className="text-royalPurple-text2 mt-2">
-                        Play games and complete lessons to earn badges!
+                        Play games and complete lessons to earn badges.
                       </p>
                     </div>
                   )}
@@ -1343,7 +1374,7 @@ export default function StudentDashboard() {
               {/* My Subjects Section */}
               <Card variant="glass">
                 <CardHeader>
-                  <CardTitle className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent flex items-center">
+                  <CardTitle className="text-royalPurple-text1 flex items-center">
                     <BookOpen className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
                     My Subjects
                   </CardTitle>

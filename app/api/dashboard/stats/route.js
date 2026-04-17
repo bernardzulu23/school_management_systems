@@ -140,7 +140,17 @@ export async function GET(request) {
     })
   } catch (error) {
     console.error('Dashboard stats error:', error)
-    return NextResponse.json({ error: 'Failed to fetch dashboard stats' }, { status: 500 })
+    const devDetails =
+      process.env.NODE_ENV === 'development'
+        ? {
+            details: String(error?.message || error),
+            code: error?.code || error?.name || 'UNKNOWN',
+          }
+        : undefined
+    return NextResponse.json(
+      { error: 'Failed to fetch dashboard stats', ...(devDetails || {}) },
+      { status: 500 }
+    )
   }
 }
 

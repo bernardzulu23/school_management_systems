@@ -1,5 +1,5 @@
 import React from 'react'
-import { User, Phone, Calendar, MapPin } from 'lucide-react'
+import { User, Phone, Calendar } from 'lucide-react'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 import { GENDERS } from '@/lib/constants'
 
@@ -75,7 +75,6 @@ export default function BasicInfoStep({ formData, errors, onInputChange, role })
           value={formData.address}
           onChange={onInputChange}
           placeholder="Enter your full address"
-          icon={MapPin}
           className="md:col-span-2"
           rows={3}
           error={errors.address}

@@ -1,14 +1,14 @@
-# 🇿🇲 Zambian School Management System - Setup Guide
+# Zambian School Management System - Setup Guide
 
-## 🚀 Quick Start (Current Setup)
+## Quick Start (Current Setup)
 
-### ✅ What's Working Now:
+### What's Working Now:
 
 - **Backend API**: Running on http://localhost:8000
 - **Database**: SQLite with sample data
 - **Simple Frontend**: HTML interface available
 
-### 🎯 Immediate Access:
+### Immediate Access:
 
 1. **Start Backend** (if not running):
 
@@ -30,13 +30,13 @@
    - **Teacher**: teacher@zambianschool.zm / teacher123
    - **Student**: student@zambianschool.zm / student123
 
-## 🔧 Full Setup (For Complete Experience)
+## Full Setup (For Complete Experience)
 
 ### Prerequisites:
 
-- ✅ PHP 8.1+ (Already installed)
-- ❌ Node.js 18+ (Not installed)
-- ❌ npm 9+ (Comes with Node.js)
+- PHP 8.1+ (Already installed)
+- Node.js 18+ (Not installed)
+- npm 9+ (Comes with Node.js)
 
 ### Install Node.js for Full Frontend:
 
@@ -64,7 +64,7 @@
    - Frontend: http://localhost:3000
    - Backend: http://localhost:8000
 
-## 🌟 System Features
+## System Features
 
 ### 🇿🇲 Zambian-Specific Features:
 
@@ -76,21 +76,21 @@
 - **Mobile Money**: Airtel Money/MTN integration
 - **Multi-Grade Classes**: Combined classroom support
 
-### 🔐 Security Features:
+### Security Features:
 
 - **AES-256 Encryption**: Military-grade protection
 - **TLS 1.3**: Latest security protocol
 - **Offline Data Protection**: Secure local storage
 - **Role-Based Access**: Granular permissions
 
-### 📱 Progressive Web App:
+### Progressive Web App:
 
 - **Offline Functionality**: Works without internet
 - **Mobile Responsive**: All device support
 - **App Installation**: Install like native app
 - **Background Sync**: Auto-sync when online
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 school_management_systems/
@@ -108,7 +108,7 @@ school_management_systems/
 └── start-simple-frontend.bat       # Open simple frontend
 ```
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### Backend Issues:
 
@@ -128,7 +128,7 @@ school_management_systems/
 - **API not responding**: Ensure backend is running
 - **Firewall blocking**: Allow localhost connections
 
-## 📊 API Endpoints
+## API Endpoints
 
 ### Authentication:
 
@@ -152,7 +152,7 @@ school_management_systems/
 - `GET /api/classes` - List classes
 - `POST /api/classes` - Create class
 
-## 🎯 Next Steps
+## Next Steps
 
 1. **Install Node.js** for full frontend experience
 2. **Test all user roles** with provided credentials
@@ -160,7 +160,7 @@ school_management_systems/
 4. **Review Zambian-specific features** in the interface
 5. **Check mobile responsiveness** on different devices
 
-## 📞 Support
+## Support
 
 For issues or questions:
 

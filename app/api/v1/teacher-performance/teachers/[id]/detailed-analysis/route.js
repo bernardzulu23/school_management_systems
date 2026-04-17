@@ -6,6 +6,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getTeacherPerformance } from '@/lib/analytics/teacherPerformance'
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -16,7 +17,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const teacherUserId = String(params?.id || '').trim()
+  const teacherUserId = String(routeParams?.id || '').trim()
   if (!teacherUserId) throw new ApiError('Teacher id is required', 400)
 
   const { searchParams } = new URL(request.url)

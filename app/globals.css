@@ -41,35 +41,19 @@
   --radius-lg: 20px;
   --radius-sm: 10px;
 
-  --rp-page: #1e1033;
-  --rp-deep: #170d28;
-  --rp-card: #2d1f4e;
-  --rp-card2: #261843;
-  --rp-border: #3b2a66;
-  --rp-border2: #6d28d9;
-  --rp-text1: #ede9fe;
-  --rp-text2: #a78bfa;
-  --rp-text3: #6d28d9;
-  --rp-accent: #f59e0b;
-  --rp-accentbg: #2d1f0a;
-  --rp-accenttx: #fcd34d;
-  --rp-pill: #7c3aed;
-}
-
-.light {
-  --rp-page: #f7f5ff;
-  --rp-deep: #f2efff;
+  --rp-page: #ffffff;
+  --rp-deep: #f9fafb;
   --rp-card: #ffffff;
-  --rp-card2: #f6f1ff;
-  --rp-border: #d8d0f2;
+  --rp-card2: #f9fafb;
+  --rp-border: #e5e7eb;
   --rp-border2: #6d28d9;
-  --rp-text1: #1e1033;
-  --rp-text2: #4b2a7a;
-  --rp-text3: #6d28d9;
-  --rp-accent: #f59e0b;
-  --rp-accentbg: #fff7e6;
-  --rp-accenttx: #8a4b00;
-  --rp-pill: #6d28d9;
+  --rp-text1: #1f2937;
+  --rp-text2: #4b5563;
+  --rp-text3: #6b7280;
+  --rp-accent: #7c3aed;
+  --rp-accentbg: #f3f0ff;
+  --rp-accenttx: #ffffff;
+  --rp-pill: #ede9fe;
 }
 
 .dark {
@@ -80,6 +64,19 @@
   --text-primary: #f8f8f7;
   --text-secondary: #c4c3bf;
   --text-muted: #6b6a66;
+  --rp-page: #1e1033;
+  --rp-deep: #170d28;
+  --rp-card: #2d1f4e;
+  --rp-card2: #261843;
+  --rp-border: #3b2a66;
+  --rp-border2: #6d28d9;
+  --rp-text1: #ede9fe;
+  --rp-text2: #a78bfa;
+  --rp-text3: #6d28d9;
+  --rp-accent: #7c3aed;
+  --rp-accentbg: #261843;
+  --rp-accenttx: #ffffff;
+  --rp-pill: #7c3aed;
 }
 
 body {
@@ -96,12 +93,26 @@ body {
     border-color: var(--border);
   }
 
+  .white-card {
+    background-color: #ffffff;
+    --card-text-primary: 15 23 42;
+    --card-text-secondary: 71 85 105;
+    --card-text-muted: 148 163 184;
+    --card-border: 226 232 240;
+    --rp-card: #ffffff;
+    --rp-card2: #f8fafc;
+    --rp-border: #e2e8f0;
+    --rp-text1: #0f172a;
+    --rp-text2: #475569;
+    --rp-text3: #94a3b8;
+  }
+
   body {
     background: var(--rp-page);
   }
 
   select {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   select option,
@@ -112,6 +123,30 @@ body {
 
   html {
     scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(
+      a,
+      button,
+      input,
+      select,
+      textarea,
+      summary,
+      [role='button'],
+      [role='link'],
+      .btn,
+      .input,
+      .textarea,
+      .select,
+      .cursor-pointer
+    ) {
+      transition-property:
+        color, background-color, border-color, text-decoration-color, fill, stroke, opacity,
+        box-shadow, transform, filter;
+      transition-duration: 260ms;
+      transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    }
   }
 
   ::-webkit-scrollbar {
@@ -137,28 +172,28 @@ body {
   }
 
   .btn-primary {
-    @apply btn bg-royalPurple-accent text-royalPurple-accentTx font-semibold rounded-lg hover:bg-amber-400 transition-colors px-4 py-2;
+    @apply btn bg-royalPurple-accent text-royalPurple-accentTx font-semibold rounded-lg hover:opacity-90 transition-all px-4 py-2;
   }
 
   .btn-secondary {
-    @apply btn border border-royalPurple-border2 text-royalPurple-text2 rounded-lg hover:border-royalPurple-accent hover:text-royalPurple-accentTx transition-colors px-4 py-2;
-    background: transparent;
+    @apply btn border border-royalPurple-border text-royalPurple-text1 rounded-lg hover:bg-royalPurple-card2 transition-colors px-4 py-2;
+    background: white;
   }
 
   .input {
-    @apply w-full bg-royalPurple-card2 border border-royalPurple-border text-royalPurple-text1 placeholder:text-royalPurple-muted rounded-lg focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2;
+    @apply w-full bg-royalPurple-card border border-royalPurple-border text-royalPurple-text1 placeholder:text-royalPurple-text3 rounded-lg focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2;
     padding: 0.75rem 0.875rem;
   }
 
   .textarea {
-    @apply w-full bg-royalPurple-card2 border border-royalPurple-border text-royalPurple-text1 placeholder:text-royalPurple-muted rounded-lg focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2;
+    @apply w-full bg-royalPurple-card border border-royalPurple-border text-royalPurple-text1 placeholder:text-royalPurple-text3 rounded-lg focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2;
     padding: 0.75rem 0.875rem;
   }
 
   .select {
-    @apply w-full bg-royalPurple-card2 border border-royalPurple-border text-royalPurple-text1 rounded-lg focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2 appearance-none;
+    @apply w-full bg-royalPurple-card border border-royalPurple-border text-royalPurple-text1 rounded-lg focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2 appearance-none;
     padding: 0.75rem 0.875rem;
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   .select option,
@@ -173,6 +208,22 @@ body {
 }
 
 @layer utilities {
+  .text-card-primary {
+    color: rgb(var(--card-text-primary));
+  }
+
+  .text-card-secondary {
+    color: rgb(var(--card-text-secondary));
+  }
+
+  .text-card-muted {
+    color: rgb(var(--card-text-muted));
+  }
+
+  .border-card {
+    border-color: rgb(var(--card-border));
+  }
+
   .backdrop-blur,
   .backdrop-blur-sm,
   .backdrop-blur-md,

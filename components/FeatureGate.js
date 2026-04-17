@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { PLAN_FEATURES, PRIMARY_ONLY_FEATURES, planIncludes } from '@/lib/zambiaSchoolFeatures'
+import { Check, Lock, School } from 'lucide-react'
 
 export function FeatureGate({ featureId, children, fallback = null }) {
   const [access, setAccess] = useState(null)
@@ -61,7 +62,7 @@ export function FeatureLockedPrompt({ featureId, reason, isPrimaryOnly, schoolLe
       <div className="relative z-10 text-center">
         {isPrimaryOnly ? (
           <>
-            <div className="text-3xl mb-3">🏫</div>
+            <School className="w-10 h-10 mx-auto mb-3 text-royalPurple-text1" aria-hidden="true" />
             <h3 className="text-lg font-bold text-royalPurple-text1">
               {featureMeta.name || 'Primary Only'}
             </h3>
@@ -74,7 +75,7 @@ export function FeatureLockedPrompt({ featureId, reason, isPrimaryOnly, schoolLe
           </>
         ) : (
           <>
-            <div className="text-3xl mb-3">🔒</div>
+            <Lock className="w-10 h-10 mx-auto mb-3 text-royalPurple-text1" aria-hidden="true" />
             <h3 className="text-lg font-bold text-royalPurple-text1">Feature Locked</h3>
             <p className="text-royalPurple-text2 mt-2">
               {reason || 'This feature requires a higher plan.'}
@@ -104,7 +105,7 @@ export function FeatureBadge({ featureId, plan, schoolLevel, size = 'sm' }) {
   if (isPrimaryOnly) {
     return (
       <span className={`inline-flex items-center gap-1 rounded ${cls} bg-blue-100 text-blue-800`}>
-        <span>🏫</span> Primary Only
+        <School className="w-4 h-4" aria-hidden="true" /> Primary Only
       </span>
     )
   }
@@ -112,7 +113,7 @@ export function FeatureBadge({ featureId, plan, schoolLevel, size = 'sm' }) {
   if (!isInPlan) {
     return (
       <span className={`inline-flex items-center gap-1 rounded ${cls} bg-amber-100 text-amber-900`}>
-        🔒 Locked
+        <Lock className="w-4 h-4" aria-hidden="true" /> Locked
       </span>
     )
   }
@@ -121,7 +122,7 @@ export function FeatureBadge({ featureId, plan, schoolLevel, size = 'sm' }) {
     <span
       className={`inline-flex items-center gap-1 rounded ${cls} bg-emerald-100 text-emerald-900`}
     >
-      ✓ Included
+      <Check className="w-4 h-4" aria-hidden="true" /> Included
     </span>
   )
 }
@@ -192,7 +193,7 @@ export function PlanComparisonCard({ plan, schoolLevel = 'combined' }) {
       <ul className="space-y-2">
         {display.slice(0, 6).map((f) => (
           <li key={f} className="text-sm text-royalPurple-text2 flex items-center gap-2">
-            <span className="text-emerald-300">✓</span>
+            <Check className="w-4 h-4 text-royalPurple-successTx" aria-hidden="true" />
             <span className="truncate">{f}</span>
           </li>
         ))}

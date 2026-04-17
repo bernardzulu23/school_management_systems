@@ -1,5 +1,4 @@
 import './globals.css'
-import '../styles/glassmorphism.css'
 import '../styles/accessibility.css'
 import { Providers } from './providers'
 import { Toaster } from 'react-hot-toast'
@@ -42,7 +41,7 @@ export default function RootLayout({ children }) {
             toastOptions={{
               duration: 4000,
               style: {
-                background: 'var(--rp-deep)',
+                background: 'var(--rp-card)',
                 color: 'var(--rp-text1)',
                 border: '1px solid var(--rp-border)',
               },
@@ -50,14 +49,14 @@ export default function RootLayout({ children }) {
                 duration: 3000,
                 iconTheme: {
                   primary: 'var(--rp-accent)',
-                  secondary: 'var(--rp-text1)',
+                  secondary: '#ffffff',
                 },
               },
               error: {
                 duration: 5000,
                 iconTheme: {
-                  primary: 'var(--rp-accent)',
-                  secondary: 'var(--rp-text1)',
+                  primary: '#dc2626',
+                  secondary: '#ffffff',
                 },
               },
             }}

@@ -15,14 +15,9 @@ export async function GET(request) {
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  await prisma.$transaction(async (tx) => {
-    for (const name of DEPARTMENTS) {
-      await tx.department.upsert({
-        where: { schoolId_name: { schoolId, name } },
-        create: { schoolId, name },
-        update: {},
-      })
-    }
+  await prisma.department.createMany({
+    data: DEPARTMENTS.map((name) => ({ schoolId, name })),
+    skipDuplicates: true,
   })
 
   const departments = await prisma.department.findMany({

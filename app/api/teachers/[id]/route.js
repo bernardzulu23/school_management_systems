@@ -13,6 +13,7 @@ const parseClassNameParts = (className) => {
 }
 
 export async function GET(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -24,7 +25,7 @@ export async function GET(request, { params }) {
   }
 
   const teacher = await prisma.teacher.findFirst({
-    where: { id: params.id, schoolId },
+    where: { id: routeParams.id, schoolId },
     include: {
       user: {
         select: {
@@ -63,6 +64,7 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -76,7 +78,7 @@ export async function PUT(request, { params }) {
   const body = await request.json()
 
   const existing = await prisma.teacher.findFirst({
-    where: { id: params.id, schoolId },
+    where: { id: routeParams.id, schoolId },
     select: { id: true, userId: true },
   })
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
@@ -204,6 +206,7 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
+  const routeParams = await params
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -215,7 +218,7 @@ export async function DELETE(request, { params }) {
   }
 
   const existing = await prisma.teacher.findFirst({
-    where: { id: params.id, schoolId },
+    where: { id: routeParams.id, schoolId },
     select: { id: true, userId: true },
   })
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })

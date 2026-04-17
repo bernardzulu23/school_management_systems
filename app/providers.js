@@ -8,6 +8,30 @@ import { useAuth } from '@/lib/auth'
 import GlobalTopLoadingBar from '@/components/ui/GlobalTopLoadingBar'
 import GlobalBackButton from '@/components/ui/GlobalBackButton'
 
+function DevServiceWorkerReset() {
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') return
+    if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) return
+
+    const run = async () => {
+      const regs = await navigator.serviceWorker.getRegistrations().catch(() => [])
+      if (!regs || regs.length === 0) return
+
+      const alreadyReloaded = sessionStorage.getItem('dev-sw-reset') === '1'
+      await Promise.all(regs.map((r) => r.unregister().catch(() => false)))
+
+      if (!alreadyReloaded) {
+        sessionStorage.setItem('dev-sw-reset', '1')
+        window.location.reload()
+      }
+    }
+
+    run()
+  }, [])
+
+  return null
+}
+
 function ActivitySessionKeeper({ children }) {
   const isAuthenticated = useAuth((s) => s.isAuthenticated)
   const markActivity = useAuth((s) => s.markActivity)
@@ -96,10 +120,10 @@ function AuthSessionSync({ children }) {
 
         if (result?.rateLimited) return
 
-        // ✅ Any non-success non-rateLimited response = failure
+        // Any non-success non-rateLimited response = failure
         failCount += 1
       } catch (err) {
-        // ✅ syncSession threw instead of returning — still counts as failure
+        // syncSession threw instead of returning — still counts as failure
         failCount += 1
       }
     }
@@ -130,6 +154,7 @@ export function Providers({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
       <SchoolProvider>
+        <DevServiceWorkerReset />
         <ActivitySessionKeeper>
           <AuthSessionSync>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

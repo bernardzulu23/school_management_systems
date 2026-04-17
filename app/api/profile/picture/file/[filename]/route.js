@@ -12,7 +12,8 @@ const TYPE_BY_EXT = {
 }
 
 export async function GET(_request, { params }) {
-  const raw = String(params?.filename || '')
+  const routeParams = await params
+  const raw = String(routeParams?.filename || '')
   const filename = path.basename(raw)
   const ext = filename.split('.').pop()?.toLowerCase() || ''
   const contentType = TYPE_BY_EXT[ext]

@@ -13,7 +13,7 @@ topic: 'Electricity & Circuits',
 grade: 'Form 3–5',
 difficulty: 'Intermediate',
 duration: '30 mins',
-icon: '⚡',
+icon: 'ELEC',
 color: '#f59e0b',
 colorBg: 'rgba(245,158,11,0.12)',
 description: 'Build and test electrical circuits with batteries, wires, bulbs, and switches — safely without any physical equipment.',
@@ -29,7 +29,7 @@ topic: 'Acids, Bases & pH',
 grade: 'Form 4–5',
 difficulty: 'Intermediate',
 duration: '25 mins',
-icon: '🧪',
+icon: 'CHEM',
 color: '#10b981',
 colorBg: 'rgba(16,185,129,0.12)',
 description: 'Explore how acids and bases affect pH, test household liquids, and understand neutralisation reactions without lab chemicals.',
@@ -45,7 +45,7 @@ topic: 'Evolution & Adaptation',
 grade: 'Form 2–4',
 difficulty: 'Beginner',
 duration: '20 mins',
-icon: '🦎',
+icon: 'BIO',
 color: '#8b5cf6',
 colorBg: 'rgba(139,92,246,0.12)',
 description: 'Simulate how animals adapt and evolve over generations through natural selection — relevant to Zambian wildlife.',
@@ -77,7 +77,7 @@ topic: 'Chemical Equations',
 grade: 'Form 3–5',
 difficulty: 'Intermediate',
 duration: '25 mins',
-icon: '⚗️',
+icon: 'CHEM',
 color: '#ef4444',
 colorBg: 'rgba(239,68,68,0.12)',
 description: 'Practise balancing chemical equations interactively with visual molecular models — no more trial and error.',
@@ -93,7 +93,7 @@ topic: "Newton's Laws",
 grade: 'Form 1–3',
 difficulty: 'Beginner',
 duration: '15 mins',
-icon: '🏃',
+icon: 'MOTION',
 color: '#f97316',
 colorBg: 'rgba(249,115,22,0.12)',
 description: "Explore Newton's laws of motion with a skateboard, applied forces, and friction. Intuitive and visual.",
@@ -109,7 +109,7 @@ topic: 'Light & Quantum Physics',
 grade: 'Form 5',
 difficulty: 'Advanced',
 duration: '35 mins',
-icon: '💡',
+icon: 'IDEA',
 color: '#fbbf24',
 colorBg: 'rgba(251,191,36,0.12)',
 description: 'Explore how light ejects electrons from metals — the experiment that won Einstein the Nobel Prize.',
@@ -125,7 +125,7 @@ topic: 'States of Matter',
 grade: 'Form 4–5',
 difficulty: 'Intermediate',
 duration: '30 mins',
-icon: '🫧',
+icon: 'BUBBLE',
 color: '#a78bfa',
 colorBg: 'rgba(167,139,250,0.12)',
 description: 'Visualise Boyle\'s Law, Charles\'s Law, and Gay-Lussac\'s Law by manipulating pressure, temperature, and volume.',
@@ -141,7 +141,7 @@ topic: 'Electricity',
 grade: 'Form 3–4',
 difficulty: 'Beginner',
 duration: '15 mins',
-icon: '🔋',
+icon: 'POWER',
 color: '#34d399',
 colorBg: 'rgba(52,211,153,0.12)',
 description: 'Investigate the relationship between voltage, current, and resistance using a virtual ammeter and voltmeter.',
@@ -172,6 +172,7 @@ return true
 
 if (activeLab) {
 return (
+
 <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#170d28' }}>
 <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 16px', background: '#2d1f4e', borderBottom: '1px solid #3b2a66' }}>
 <button
@@ -203,11 +204,12 @@ allow="accelerometer; camera; microphone"
 }
 
 return (
+
 <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#170d28', overflow: 'hidden' }}>
 {/_ Header _/}
 <div style={{ padding: '1.25rem 1.5rem', background: '#2d1f4e', borderBottom: '1px solid #3b2a66' }}>
 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-<span style={{ fontSize: 24 }}>🔬</span>
+<span style={{ fontSize: 24 }} />
 <div>
 <h2 style={{ color: '#ede9fe', fontWeight: 700, fontSize: 18, margin: 0 }}>Virtual Science Lab</h2>
 <p style={{ color: '#6d28d9', fontSize: 12, margin: 0 }}>PhET interactive simulations · Zambian curriculum aligned · No equipment needed</p>
@@ -281,11 +283,11 @@ return (
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
                   <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 99, background: '#261843', color: '#6d28d9', border: '1px solid #3b2a66' }}>{lab.grade}</span>
                   <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 99, background: '#261843', color: '#6d28d9', border: '1px solid #3b2a66' }}>{lab.difficulty}</span>
-                  <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 99, background: '#261843', color: '#6d28d9', border: '1px solid #3b2a66' }}>⏱ {lab.duration}</span>
+                  <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 99, background: '#261843', color: '#6d28d9', border: '1px solid #3b2a66' }}>{lab.duration}</span>
                 </div>
 
                 <div style={{ fontSize: 11, color: '#4b3575', marginBottom: 12, lineHeight: 1.5 }}>
-                  📚 {lab.curriculum}
+                  {lab.curriculum}
                 </div>
 
                 <button style={{
@@ -313,19 +315,19 @@ import { useState, useRef } from 'react'
 const Editor = dynamic(() => import('@monaco-editor/react'), { ssr: false })
 
 const LANGUAGES = [
-{ id: 'python', label: 'Python', version: '3.10.0', icon: '🐍',
+{ id: 'python', label: 'Python', version: '3.10.0', icon: 'PY',
 starter: '# Python Playground\n# Write your code here\n\nname = "Chanda"\nprint(f"Hello from Zambia! My name is {name}")\n\n# Try a simple calculation\nfor i in range(1, 6):\n print(f"{i} x {i} = {i _ i}")'
 },
-{ id: 'javascript', label: 'JavaScript', version: '18.15.0', icon: '🌐',
+{ id: 'javascript', label: 'JavaScript', version: '18.15.0', icon: 'JS',
 starter: '// JavaScript Playground\n// Write your code here\n\nconst name = "Mwamba";\nconsole.log(`Hello from Zambia! My name is ${name}`);\n\n// Try a simple function\nfunction fibonacci(n) {\n if (n <= 1) return n;\n return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\nfor (let i = 0; i < 8; i++) {\n console.log(`fibonacci(${i}) = ${fibonacci(i)}`);\n}'
 },
-{ id: 'java', label: 'Java', version: '15.0.2', icon: '☕',
+{ id: 'java', label: 'Java', version: '15.0.2', icon: 'JAVA',
 starter: '// Java Playground\npublic class Main {\n public static void main(String[] args) {\n String name = "Nalumino";\n System.out.println("Hello from Zambia! My name is " + name);\n \n // Simple loop\n for (int i = 1; i <= 5; i++) {\n System.out.println(i + " squared = " + (i _ i));\n }\n }\n}'
 },
-{ id: 'c', label: 'C', version: '10.2.0', icon: '⚙️',
+{ id: 'c', label: 'C', version: '10.2.0', icon: 'C',
 starter: '#include <stdio.h>\n\nint main() {\n printf("Hello from Zambia!\\n");\n \n // Count to 5\n for (int i = 1; i <= 5; i++) {\n printf("%d squared = %d\\n", i, i _ i);\n }\n \n return 0;\n}'
 },
-{ id: 'bash', label: 'Bash', version: '5.2.0', icon: '💻',
+{ id: 'bash', label: 'Bash', version: '5.2.0', icon: 'SH',
 starter: '#!/bin/bash\n# Bash Playground\n\nname="Bwalya"\necho "Hello from Zambia! My name is $name"\n\n# Simple loop\nfor i in 1 2 3 4 5; do\n    echo "$i squared = $((i _ i))"\ndone'
 },
 ]
@@ -400,6 +402,7 @@ setShowChallenges(false)
 }
 
 return (
+
 <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#1e1e2e' }}>
 
       {/* Top bar */}
@@ -433,7 +436,7 @@ return (
             onClick={() => setShowChallenges(!showChallenges)}
             style={{ padding: '7px 14px', background: '#261843', border: '1px solid #3b2a66', borderRadius: 8, color: '#a78bfa', fontSize: 13, cursor: 'pointer' }}
           >
-            🎯 Challenges
+            Challenges
           </button>
           <button
             onClick={runCode}
@@ -447,7 +450,7 @@ return (
           >
             {running ? (
               <><div style={{ width: 12, height: 12, border: '2px solid #fff3', borderTop: '2px solid #fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} /> Running...</>
-            ) : '▶ Run Code'}
+            ) : 'Run Code'}
           </button>
         </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -513,9 +516,9 @@ return (
             background: '#0d0d1a',
             whiteSpace: 'pre-wrap', wordBreak: 'break-word'
           }}>
-            {running && '⏳ Running your code...\n'}
+            {running && 'Running your code...\n'}
             {!running && !output && (
-              <span style={{ color: '#3b2a66' }}>Click ▶ Run Code to see output here...</span>
+              <span style={{ color: '#3b2a66' }}>Click Run Code to see output here...</span>
             )}
             {output}
           </pre>

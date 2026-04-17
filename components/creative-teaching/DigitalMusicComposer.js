@@ -215,7 +215,6 @@ export default function DigitalMusicComposer() {
           flexWrap: 'wrap',
         }}
       >
-        <span style={{ fontSize: 20 }}>🎵</span>
         <span style={{ color: '#ede9fe', fontWeight: 700, fontSize: 16 }}>
           Digital Music Composer
         </span>
@@ -274,7 +273,7 @@ export default function DigitalMusicComposer() {
               cursor: 'pointer',
             }}
           >
-            {playing ? '⏹ Stop' : '▶ Play'}
+            {playing ? 'Stop' : 'Play'}
           </button>
           <button
             onClick={() => setSequence([])}
@@ -288,7 +287,7 @@ export default function DigitalMusicComposer() {
               cursor: 'pointer',
             }}
           >
-            🗑️ Clear
+            Clear
           </button>
         </div>
       </div>
@@ -316,7 +315,7 @@ export default function DigitalMusicComposer() {
                 fontSize: 13,
               }}
             >
-              🎼 {p.name}
+              {p.name}
             </button>
           ))}
 
@@ -406,7 +405,7 @@ export default function DigitalMusicComposer() {
                 cursor: 'pointer',
               }}
             >
-              📋 Copy Sequence
+              Copy Sequence
             </button>
           ) : null}
         </div>
@@ -414,7 +413,6 @@ export default function DigitalMusicComposer() {
         <div style={{ overflowY: 'auto', padding: '1.25rem' }}>
           {sequence.length === 0 ? (
             <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
-              <div style={{ fontSize: 60, marginBottom: 12 }}>🎹</div>
               <p style={{ color: '#ede9fe', fontWeight: 600, fontSize: 16, marginBottom: 8 }}>
                 Your composition is empty
               </p>

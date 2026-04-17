@@ -449,7 +449,7 @@ export default function StudentWorkShowcase() {
                   onClick={() => setSelectedWork(null)}
                   className="bg-royalPurple-muted text-royalPurple-text1"
                 >
-                  ✕
+                  Close
                 </Button>
               </CardTitle>
             </CardHeader>
@@ -457,12 +457,6 @@ export default function StudentWorkShowcase() {
               {/* Work Display */}
               <div className="bg-royalPurple-deep rounded-lg aspect-video flex items-center justify-center">
                 <div className="text-center">
-                  <div className="text-6xl mb-4">
-                    {selectedWork.type === 'image' && '🖼️'}
-                    {selectedWork.type === 'video' && '🎥'}
-                    {selectedWork.type === 'audio' && '🎵'}
-                    {selectedWork.type === 'document' && '📄'}
-                  </div>
                   <p className="text-royalPurple-text1 text-lg">{selectedWork.title}</p>
                   <p className="text-royalPurple-text3">Click to view full {selectedWork.type}</p>
                 </div>

@@ -11,6 +11,7 @@ import { StudentRosterCard } from '@/components/dashboard/StudentRosterCard'
 import { Button } from '@/components/ui/Button'
 import HodAssignments from '@/components/dashboard/HodAssignments'
 import { api } from '@/lib/api'
+import { percentTextClass } from '@/lib/utils/percentColor'
 import {
   Users,
   BookOpen,
@@ -402,7 +403,7 @@ export default function HodDashboard() {
           <div className="backdrop-blur-lg bg-royalPurple-card/60 border border-orange-500/40 rounded-3xl p-8 shadow-2xl">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-4">
+                <h1 className="text-4xl font-bold text-royalPurple-text1 mb-4">
                   {currentDepartment} Department
                 </h1>
                 <p className="text-royalPurple-text2 text-lg">Head of Department Dashboard</p>
@@ -455,7 +456,7 @@ export default function HodDashboard() {
           {/* Department Subjects Overview */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <Library className="h-6 w-6 mr-3 text-orange-400" />
                 Department Subjects
               </CardTitle>
@@ -479,60 +480,62 @@ export default function HodDashboard() {
 
           <div className="space-y-6">
             {/* Enhanced Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
-              <StatsCard
-                title="Teachers"
-                value={dashboardStats.totalTeachers}
-                icon={Users}
-                color="blue"
-                description="Department teachers"
-                trend={{ isPositive: true, value: 2 }}
-              />
-              <StatsCard
-                title="Students"
-                value={dashboardStats.totalStudents}
-                icon={School}
-                color="green"
-                description="Department students"
-                trend={{ isPositive: true, value: 15 }}
-              />
-              <StatsCard
-                title="Subjects"
-                value={dashboardStats.totalSubjects}
-                icon={Library}
-                color="purple"
-                description="Subjects managed"
-                trend={{ isPositive: true, value: 1 }}
-              />
-              <StatsCard
-                title="Classes"
-                value={dashboardStats.totalClasses}
-                icon={Group}
-                color="yellow"
-                description="Classes supervised"
-                trend={{ isPositive: true, value: 3 }}
-              />
-              <StatsCard
-                title="Performance"
-                value={`${dashboardStats.averagePerformance}%`}
-                icon={TrendingUp}
-                color="orange"
-                description="Average performance"
-                trend={{ isPositive: true, value: 5.2 }}
-              />
-              <StatsCard
-                title="Assessments"
-                value={dashboardStats.pendingAssessments}
-                icon={ClipboardList}
-                color="red"
-                description="Pending assessments"
-                trend={{ isPositive: false, value: 2 }}
-              />
-            </div>
+            <section className="w-full py-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-10 gap-y-6">
+                <StatsCard
+                  title="Teachers"
+                  value={dashboardStats.totalTeachers}
+                  icon={Users}
+                  color="blue"
+                  description="Department teachers"
+                  variant="flat"
+                />
+                <StatsCard
+                  title="Students"
+                  value={dashboardStats.totalStudents}
+                  icon={School}
+                  color="green"
+                  description="Department students"
+                  variant="flat"
+                />
+                <StatsCard
+                  title="Subjects"
+                  value={dashboardStats.totalSubjects}
+                  icon={Library}
+                  color="purple"
+                  description="Subjects managed"
+                  variant="flat"
+                />
+                <StatsCard
+                  title="Classes"
+                  value={dashboardStats.totalClasses}
+                  icon={Group}
+                  color="yellow"
+                  description="Classes supervised"
+                  variant="flat"
+                />
+                <StatsCard
+                  title="Performance"
+                  value={`${dashboardStats.averagePerformance}%`}
+                  icon={TrendingUp}
+                  color="orange"
+                  description="Average performance"
+                  variant="flat"
+                />
+                <StatsCard
+                  title="Assessments"
+                  value={dashboardStats.pendingAssessments}
+                  icon={ClipboardList}
+                  color="red"
+                  description="Pending assessments"
+                  variant="flat"
+                />
+              </div>
+            </section>
 
             <Card variant="glass">
               <CardHeader>
-                <CardTitle className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent flex items-center">
+                <CardTitle className="text-royalPurple-text1 flex items-center">
                   <UserCheck className="h-6 w-6 mr-3 text-orange-400" />
                   Teacher Progress & CPD ({teacherProgressData?.data?.term || 'Term'})
                 </CardTitle>
@@ -689,7 +692,7 @@ export default function HodDashboard() {
             {/* Advanced HOD Features */}
             <Card variant="glass">
               <CardHeader>
-                <CardTitle className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent flex items-center">
+                <CardTitle className="text-royalPurple-text1 flex items-center">
                   <Zap className="h-6 w-6 mr-3 text-yellow-400" />
                   Advanced Department Management Features
                 </CardTitle>
@@ -708,10 +711,10 @@ export default function HodDashboard() {
                         </h4>
                       </div>
                       <ul className="space-y-2 text-sm text-royalPurple-text2">
-                        <li>📊 Performance Dashboards</li>
-                        <li>📈 Teacher Effectiveness Metrics</li>
-                        <li>🎯 Student Progress Tracking</li>
-                        <li>📋 Resource Utilization Reports</li>
+                        <li>Performance Dashboards</li>
+                        <li>Teacher Effectiveness Metrics</li>
+                        <li>Student Progress Tracking</li>
+                        <li>Resource Utilization Reports</li>
                       </ul>
                       <Button
                         className="w-full mt-3 bg-orange-600/60 hover:bg-orange-600/80 text-royalPurple-text1 border border-orange-400/50"
@@ -732,10 +735,10 @@ export default function HodDashboard() {
                         </h4>
                       </div>
                       <ul className="space-y-2 text-sm text-royalPurple-text2">
-                        <li>🎓 Professional Development Plans</li>
-                        <li>📚 Training Resource Library</li>
-                        <li>🤝 Mentorship Programs</li>
-                        <li>⭐ Performance Evaluations</li>
+                        <li>Professional Development Plans</li>
+                        <li>Training Resource Library</li>
+                        <li>Mentorship Programs</li>
+                        <li>Performance Evaluations</li>
                       </ul>
                       <Button
                         className="w-full mt-3 bg-royalPurple-accent/60 hover:bg-royalPurple-accent/80 text-royalPurple-text1 border border-royalPurple-border2/50"
@@ -756,10 +759,10 @@ export default function HodDashboard() {
                         </h4>
                       </div>
                       <ul className="space-y-2 text-sm text-royalPurple-text2">
-                        <li>📖 Curriculum Planning Tools</li>
-                        <li>🔄 Assessment Coordination</li>
-                        <li>📅 Academic Calendar Management</li>
-                        <li>🎯 Learning Outcome Tracking</li>
+                        <li>Curriculum Planning Tools</li>
+                        <li>Assessment Coordination</li>
+                        <li>Academic Calendar Management</li>
+                        <li>Learning Outcome Tracking</li>
                       </ul>
                       <Button
                         className="w-full mt-3 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50"
@@ -792,11 +795,11 @@ export default function HodDashboard() {
                         </div>
                       </div>
                       <div className="text-xs text-royalPurple-text3 space-y-1">
-                        <div>✅ Student Features Complete</div>
-                        <div>✅ Learning Enhancement Complete</div>
-                        <div>✅ Cultural Integration Complete</div>
-                        <div>✅ Teacher Features Complete</div>
-                        <div>🔄 HOD Features (80% Complete)</div>
+                        <div>Student Features Complete</div>
+                        <div>Learning Enhancement Complete</div>
+                        <div>Cultural Integration Complete</div>
+                        <div>Teacher Features Complete</div>
+                        <div>HOD Features (80% Complete)</div>
                       </div>
                     </div>
                   </div>
@@ -807,7 +810,7 @@ export default function HodDashboard() {
             {/* Department Overview */}
             <Card variant="glass">
               <CardHeader>
-                <CardTitle className="bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent flex items-center">
+                <CardTitle className="text-royalPurple-text1 flex items-center">
                   <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
                   Department Overview
                 </CardTitle>
@@ -865,7 +868,7 @@ export default function HodDashboard() {
             {/* Department Management */}
             <Card variant="glass">
               <CardHeader>
-                <CardTitle className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent flex items-center">
+                <CardTitle className="text-royalPurple-text1 flex items-center">
                   <Users className="h-6 w-6 mr-3 text-royalPurple-successTx" />
                   Department Management
                 </CardTitle>
@@ -1160,7 +1163,7 @@ export default function HodDashboard() {
             {/* Enhanced Department Classes */}
             <Card variant="glass">
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent flex items-center">
+                <CardTitle className="text-royalPurple-text1 flex items-center">
                   <Group className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
                   Department Classes
                 </CardTitle>
@@ -1229,7 +1232,7 @@ export default function HodDashboard() {
             {/* Enhanced Department Subjects */}
             <Card variant="glass">
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent flex items-center">
+                <CardTitle className="text-royalPurple-text1 flex items-center">
                   <Library className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
                   Department Subjects
                 </CardTitle>
@@ -1283,7 +1286,7 @@ export default function HodDashboard() {
           {/* Enhanced Department Assessments */}
           <Card variant="glass">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <ClipboardList className="h-6 w-6 mr-3 text-orange-400" />
                 Department Assessments
               </CardTitle>
@@ -1405,7 +1408,7 @@ export default function HodDashboard() {
           {/* Enhanced Performance Analytics */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <TrendingUp className="h-6 w-6 mr-3 text-royalPurple-successTx" />
                 Department Performance Analytics
               </CardTitle>
@@ -1417,8 +1420,10 @@ export default function HodDashboard() {
                     <div className="backdrop-blur-md bg-royalPurple-success/60 border border-royalPurple-border/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
                       <Award className="h-8 w-8 text-royalPurple-text1" />
                     </div>
-                    <div className="text-3xl font-bold text-royalPurple-successTx mb-2">
-                      {dashboardStats.averagePerformance}%
+                    <div
+                      className={`text-3xl font-bold mb-2 ${percentTextClass(dashboardStats.averagePerformance)}`}
+                    >
+                      {Number(dashboardStats.averagePerformance) || 0}%
                     </div>
                     <p className="text-royalPurple-text2 font-medium">Average Grade</p>
                     <div className="w-full bg-royalPurple-muted/60 rounded-full h-3 mt-3">
@@ -1432,7 +1437,7 @@ export default function HodDashboard() {
                     <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
                       <UserCheck className="h-8 w-8 text-royalPurple-text1" />
                     </div>
-                    <div className="text-3xl font-bold text-royalPurple-accentTx mb-2">92%</div>
+                    <div className={`text-3xl font-bold mb-2 ${percentTextClass(92)}`}>92%</div>
                     <p className="text-royalPurple-text2 font-medium">Attendance Rate</p>
                     <div className="w-full bg-royalPurple-muted/60 rounded-full h-3 mt-3">
                       <div
@@ -1465,7 +1470,7 @@ export default function HodDashboard() {
           {departmentData.results.length > 0 && (
             <Card variant="glass">
               <CardHeader>
-                <CardTitle className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent flex items-center">
+                <CardTitle className="text-royalPurple-text1 flex items-center">
                   <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
                   Department Performance Analytics
                 </CardTitle>
@@ -1491,8 +1496,8 @@ export default function HodDashboard() {
                                 <span className="text-royalPurple-text1 font-semibold text-sm">
                                   {subject}
                                 </span>
-                                <span className="text-royalPurple-accentTx font-bold">
-                                  {performance}%
+                                <span className={`font-bold ${percentTextClass(performance)}`}>
+                                  {Number(performance) || 0}%
                                 </span>
                               </div>
                               <div className="w-full bg-royalPurple-muted/60 rounded-full h-2">
@@ -1557,7 +1562,7 @@ export default function HodDashboard() {
           {/* Recent Department Activities */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <Clock className="h-6 w-6 mr-3 text-yellow-400" />
                 Recent Department Activities
               </CardTitle>
@@ -1692,7 +1697,7 @@ export default function HodDashboard() {
           {/* Creative Teaching & STEM Hub */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent flex items-center">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
                 <Rocket className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
                 Creative Teaching & STEM Hub
               </CardTitle>

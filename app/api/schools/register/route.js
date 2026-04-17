@@ -80,7 +80,7 @@ export async function POST(request) {
   if (rate.isLimited) return rate.response
 
   try {
-    // ✅ IMPROVED CORS CHECK
+    // IMPROVED CORS CHECK
     const origin = request.headers.get('origin')
     if (process.env.NODE_ENV === 'production' && origin) {
       // Allow bluepeacktechnologies.com and all subdomains
@@ -90,7 +90,7 @@ export async function POST(request) {
         /^https:\/\/[a-z0-9-]+\.bluepeacktechnologies\.com$/.test(origin)
 
       if (!isAllowed) {
-        console.warn(`⚠️ CORS blocked origin: ${origin}`)
+        console.warn(`CORS blocked origin: ${origin}`)
         return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 })
       }
     }
@@ -98,7 +98,7 @@ export async function POST(request) {
     // Allow localhost in development
     if (process.env.NODE_ENV !== 'production' && origin) {
       if (!origin.includes('localhost') && !origin.includes('127.0.0.1')) {
-        console.warn(`⚠️ Dev CORS warning: ${origin}`)
+        console.warn(`Dev CORS warning: ${origin}`)
       }
     }
 
@@ -207,8 +207,8 @@ export async function POST(request) {
 
     const hashedPassword = await bcrypt.hash(adminPassword, 12)
 
-    console.log(`📝 Creating school: ${schoolName} (${subdomain})`)
-    console.log(`👤 Admin email: ${adminEmail}`)
+    console.log(`Creating school: ${schoolName} (${subdomain})`)
+    console.log(`Admin email: ${adminEmail}`)
 
     const created = await prisma.$transaction(async (tx) => {
       const school = await tx.school.create({
@@ -230,7 +230,7 @@ export async function POST(request) {
         select: { id: true, name: true, subdomain: true },
       })
 
-      console.log(`✅ School created: ${school.id}`)
+      console.log(`School created: ${school.id}`)
 
       await tx.user.create({
         data: {
@@ -244,12 +244,12 @@ export async function POST(request) {
         select: { id: true },
       })
 
-      console.log(`✅ Admin user created`)
+      console.log(`Admin user created`)
 
       return school
     })
 
-    console.log(`📧 Sending verification email to: ${adminEmail}`)
+    console.log(`Sending verification email to: ${adminEmail}`)
     const emailSent = await sendSchoolVerificationEmail({
       to: adminEmail,
       schoolName: created.name,
@@ -257,14 +257,14 @@ export async function POST(request) {
       verifyUrl,
     })
     if (!emailSent) {
-      console.error(`❌ Failed to send verification email to ${adminEmail}`)
+      console.error(`Failed to send verification email to ${adminEmail}`)
     } else {
-      console.log(`✅ Verification email sent`)
+      console.log(`Verification email sent`)
     }
 
     return NextResponse.json({ success: true, requiresVerification: true })
   } catch (error) {
-    console.error(`❌ Registration error:`, error)
+    console.error(`Registration error:`, error)
     return NextResponse.json({ success: false, error: 'Registration failed' }, { status: 500 })
   }
 }
