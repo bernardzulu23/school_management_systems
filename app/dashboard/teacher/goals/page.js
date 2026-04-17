@@ -19,6 +19,7 @@ import {
   Clock,
 } from 'lucide-react'
 import Link from 'next/link'
+import { percentTextClass } from '@/lib/utils/percentColor'
 
 export default function TeacherGoalsPage() {
   const [activeTab, setActiveTab] = useState('professional')
@@ -167,22 +168,7 @@ export default function TeacherGoalsPage() {
   }
 
   const getCategoryColor = (category) => {
-    switch (category) {
-      case 'Professional Development':
-        return 'bg-royalPurple-pill text-royalPurple-pillTx'
-      case 'Teaching Excellence':
-        return 'bg-royalPurple-accent text-royalPurple-accentTx'
-      case 'Certification':
-        return 'bg-royalPurple-success text-royalPurple-successTx'
-      case 'Student Achievement':
-        return 'bg-orange-100 text-orange-800'
-      case 'Student Support':
-        return 'bg-royalPurple-danger text-royalPurple-dangerTx'
-      case 'Student Engagement':
-        return 'bg-royalPurple-pill text-royalPurple-pillTx'
-      default:
-        return 'bg-royalPurple-card2 text-royalPurple-text1'
-    }
+    return 'badge-brand'
   }
 
   const currentGoals = activeTab === 'professional' ? professionalGoals : studentGoals
@@ -348,11 +334,7 @@ export default function TeacherGoalsPage() {
                         <h3 className="text-lg font-semibold text-royalPurple-text1 mr-3">
                           {goal.title}
                         </h3>
-                        <span
-                          className={`px-2 py-1 text-xs rounded-full ${getCategoryColor(goal.category)}`}
-                        >
-                          {goal.category}
-                        </span>
+                        <span className={getCategoryColor(goal.category)}>{goal.category}</span>
                         <span
                           className={`ml-2 px-2 py-1 text-xs rounded border ${getPriorityColor(goal.priority)}`}
                         >
@@ -389,15 +371,15 @@ export default function TeacherGoalsPage() {
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-royalPurple-text2">Progress</span>
-                      <span className="text-sm font-bold text-royalPurple-accentTx">
-                        {goal.progress}%
+                      <span className={`text-sm font-bold ${percentTextClass(goal.progress)}`}>
+                        {Number(goal.progress) || 0}%
                       </span>
                     </div>
-                    <div className="w-full bg-royalPurple-card2 rounded-full h-3">
+                    <div className="progress-track h-3 overflow-hidden">
                       <div
-                        className="bg-royalPurple-accent h-3 rounded-full transition-all duration-300"
-                        style={{ width: `${goal.progress}%` }}
-                      ></div>
+                        className={`progress-fill progress-fill-semantic ${percentTextClass(goal.progress)}`}
+                        style={{ width: `${Math.min(Number(goal.progress) || 0, 100)}%` }}
+                      />
                     </div>
                   </div>
 
@@ -432,18 +414,22 @@ export default function TeacherGoalsPage() {
                       <h4 className="font-medium text-royalPurple-text1 mb-3">Metrics:</h4>
                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         {goal.currentAverage && (
-                          <div className="text-center p-3 bg-royalPurple-accent rounded-lg">
-                            <p className="text-sm text-royalPurple-accentTx">Current Average</p>
-                            <p className="text-lg font-bold text-royalPurple-accentTx">
-                              {goal.currentAverage}%
+                          <div className="text-center p-3 bg-royalPurple-card2 rounded-lg">
+                            <p className="text-sm text-royalPurple-text2">Current Average</p>
+                            <p
+                              className={`text-lg font-bold ${percentTextClass(goal.currentAverage)}`}
+                            >
+                              {Number(goal.currentAverage) || 0}%
                             </p>
                           </div>
                         )}
                         {goal.targetAverage && (
-                          <div className="text-center p-3 bg-royalPurple-success rounded-lg">
-                            <p className="text-sm text-royalPurple-successTx">Target Average</p>
-                            <p className="text-lg font-bold text-royalPurple-successTx">
-                              {goal.targetAverage}%
+                          <div className="text-center p-3 bg-royalPurple-card2 rounded-lg">
+                            <p className="text-sm text-royalPurple-text2">Target Average</p>
+                            <p
+                              className={`text-lg font-bold ${percentTextClass(goal.targetAverage)}`}
+                            >
+                              {Number(goal.targetAverage) || 0}%
                             </p>
                           </div>
                         )}
@@ -456,9 +442,13 @@ export default function TeacherGoalsPage() {
                           </div>
                         )}
                         {goal.successRate && (
-                          <div className="text-center p-3 bg-orange-50 rounded-lg">
-                            <p className="text-sm text-orange-600">Success Rate</p>
-                            <p className="text-lg font-bold text-orange-800">{goal.successRate}%</p>
+                          <div className="text-center p-3 bg-royalPurple-card2 rounded-lg">
+                            <p className="text-sm text-royalPurple-text2">Success Rate</p>
+                            <p
+                              className={`text-lg font-bold ${percentTextClass(goal.successRate)}`}
+                            >
+                              {Number(goal.successRate) || 0}%
+                            </p>
                           </div>
                         )}
                       </div>

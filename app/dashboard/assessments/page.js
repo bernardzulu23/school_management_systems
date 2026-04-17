@@ -91,9 +91,9 @@ export default function AssessmentsPage() {
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="zsms-table">
                 <thead>
-                  <tr className="border-b">
+                  <tr>
                     <th className="text-left py-3 px-4">Title</th>
                     <th className="text-left py-3 px-4">Type</th>
                     <th className="text-left py-3 px-4">Subject</th>
@@ -105,12 +105,10 @@ export default function AssessmentsPage() {
                 </thead>
                 <tbody>
                   {dashboardData?.recent_assessments?.map((assessment) => (
-                    <tr key={assessment.id} className="border-b hover:bg-royalPurple-page">
+                    <tr key={assessment.id}>
                       <td className="py-3 px-4 font-medium">{assessment.title}</td>
                       <td className="py-3 px-4">
-                        <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-accent text-royalPurple-accentTx capitalize">
-                          {assessment.type}
-                        </span>
+                        <span className="badge-brand">{assessment.type}</span>
                       </td>
                       <td className="py-3 px-4">{assessment.subject}</td>
                       <td className="py-3 px-4">{assessment.class}</td>

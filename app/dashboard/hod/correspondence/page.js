@@ -206,9 +206,9 @@ export default function CorrespondencePage() {
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="zsms-table">
                 <thead>
-                  <tr className="border-b">
+                  <tr>
                     <th className="text-left py-3 px-4">Subject</th>
                     <th className="text-left py-3 px-4">
                       {activeTab === 'incoming' ? 'Sender' : 'Recipient'}
@@ -223,7 +223,7 @@ export default function CorrespondencePage() {
                 </thead>
                 <tbody>
                   {correspondenceData[activeTab].map((item) => (
-                    <tr key={item.id} className="border-b hover:bg-royalPurple-page">
+                    <tr key={item.id}>
                       <td className="py-3 px-4 font-medium">{item.subject}</td>
                       <td className="py-3 px-4">
                         {activeTab === 'incoming' ? item.sender : item.recipient}
@@ -249,9 +249,7 @@ export default function CorrespondencePage() {
                         </div>
                       </td>
                       <td className="py-3 px-4">
-                        <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-card2 text-royalPurple-text1">
-                          {item.type}
-                        </span>
+                        <span className="badge-brand">{item.type}</span>
                       </td>
                       <td className="py-3 px-4 text-center">
                         {item.attachments > 0 && (

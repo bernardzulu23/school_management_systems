@@ -162,7 +162,7 @@ function RegistrationContent() {
   if (activeForm) {
     return (
       <DashboardLayout>
-        <div className="min-h-screen bg-[#1a0a2e]">
+        <div className="form-page">
           <div className="container mx-auto px-4 py-6">
             <div className="max-w-4xl mx-auto mb-6 flex justify-between items-center">
               <Button
@@ -187,7 +187,7 @@ function RegistrationContent() {
               </Link>
             </div>
 
-            <div className="bg-[#2d1b4e] rounded-[20px] border border-royalPurple-border overflow-hidden">
+            <div className="form-card rounded-[20px] border border-royalPurple-border overflow-hidden">
               <EnhancedUserRegistrationForm
                 role={activeForm}
                 onSubmit={(data) => handleSubmit(data, activeForm)}
@@ -205,7 +205,7 @@ function RegistrationContent() {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-[#1a0a2e]">
+      <div className="form-page">
         <div className="container mx-auto px-4 py-6">
           {/* Back Navigation */}
           <div className="mb-6">
@@ -342,13 +342,13 @@ function RegistrationContent() {
                 Subject Categories Available
               </h3>
               <div className="grid grid-cols-2 gap-2 text-sm">
-                <div className="p-2 bg-purple-600 rounded text-white">Core Subjects</div>
-                <div className="p-2 bg-purple-600 rounded text-white">Sciences</div>
-                <div className="p-2 bg-purple-600 rounded text-white">Languages</div>
-                <div className="p-2 bg-purple-600 rounded text-white">Practical</div>
-                <div className="p-2 bg-purple-600 rounded text-white">Commercial</div>
-                <div className="p-2 bg-purple-600 rounded text-white">Arts & Humanities</div>
-                <div className="p-2 bg-purple-600 rounded text-white">Technology</div>
+                <div className="badge-brand justify-center w-full">Core Subjects</div>
+                <div className="badge-brand justify-center w-full">Sciences</div>
+                <div className="badge-brand justify-center w-full">Languages</div>
+                <div className="badge-brand justify-center w-full">Practical</div>
+                <div className="badge-brand justify-center w-full">Commercial</div>
+                <div className="badge-brand justify-center w-full">Arts & Humanities</div>
+                <div className="badge-brand justify-center w-full">Technology</div>
               </div>
             </Card>
           </div>
@@ -365,10 +365,7 @@ function RegistrationContent() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {['Bemba', 'Tonga', 'Nyanja', 'Lozi', 'Kaonde', 'Luvale', 'Lunda', 'English'].map(
                 (language) => (
-                  <div
-                    key={language}
-                    className="p-3 bg-purple-600 rounded-lg text-center text-white font-medium"
-                  >
+                  <div key={language} className="badge-brand justify-center w-full">
                     {language}
                   </div>
                 )

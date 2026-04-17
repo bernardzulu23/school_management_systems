@@ -188,7 +188,7 @@ export function StudentRosterCard({ title = 'Registered Students by Class' }) {
                     <SelectItem key={c.id} value={String(c.id)}>
                       {String(c?.name || '').trim() ||
                         [c?.year_group, c?.section].filter(Boolean).join(' ') ||
-                        String(c.id)}
+                        'Unnamed class'}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -223,8 +223,8 @@ export function StudentRosterCard({ title = 'Registered Students by Class' }) {
             </div>
           ) : filteredStudents.length > 0 ? (
             <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left">
-                <thead className="text-xs text-royalPurple-text2 uppercase bg-royalPurple-page">
+              <table className="zsms-table text-sm text-left">
+                <thead>
                   <tr>
                     <th className="px-4 py-3">Name</th>
                     <th className="px-4 py-3">Class</th>
@@ -233,7 +233,7 @@ export function StudentRosterCard({ title = 'Registered Students by Class' }) {
                 </thead>
                 <tbody>
                   {filteredStudents.map((s) => (
-                    <tr key={s.id} className="border-b hover:bg-royalPurple-page">
+                    <tr key={s.id}>
                       <td className="px-4 py-3 font-medium">{s.name}</td>
                       <td className="px-4 py-3">{s.class || selectedClass?.name || '-'}</td>
                       <td className="px-4 py-3">{s.exam_number || '-'}</td>

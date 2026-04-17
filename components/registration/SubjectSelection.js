@@ -37,20 +37,6 @@ const SUBJECT_ORDER_MAP = (() => {
   return map
 })()
 
-const CATEGORY_BAR_COLOR_CLASS = {
-  gray: 'bg-gray-500',
-  blue: 'bg-blue-500',
-  green: 'bg-green-500',
-  yellow: 'bg-yellow-500',
-  orange: 'bg-orange-500',
-  red: 'bg-red-500',
-  purple: 'bg-purple-500',
-  indigo: 'bg-indigo-500',
-  teal: 'bg-teal-500',
-  cyan: 'bg-cyan-500',
-  pink: 'bg-pink-500',
-}
-
 function normalizeSubjectName(value) {
   const n = String(value || '')
     .trim()
@@ -141,10 +127,8 @@ export default function SubjectSelection({
     )
   }
 
-  const getCategoryColor = (category) => {
-    const categoryData = SUBJECT_CATEGORIES.find((cat) => cat.id === category)
-    const color = categoryData ? categoryData.color : 'gray'
-    return CATEGORY_BAR_COLOR_CLASS[color] || CATEGORY_BAR_COLOR_CLASS.gray
+  const getCategoryColor = () => {
+    return 'badge-brand'
   }
 
   return (
@@ -188,7 +172,7 @@ export default function SubjectSelection({
             placeholder="Search subjects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="form-input pl-10 pr-4 py-2"
           />
         </div>
         <div className="relative">
@@ -196,7 +180,7 @@ export default function SubjectSelection({
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="pl-10 pr-8 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-royalPurple-card"
+            className="zsms-select pl-10 pr-8 py-2 appearance-none"
           >
             <option value="All">All Categories</option>
             {SUBJECT_CATEGORIES.map((category) => (
@@ -215,7 +199,7 @@ export default function SubjectSelection({
         </label>
         <div className="relative">
           <select
-            className="w-full p-3 pr-10 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1 appearance-none"
+            className="zsms-select p-3 pr-10 appearance-none"
             onChange={(e) => {
               if (e.target.value) {
                 const value = valueType === 'name' ? String(e.target.value) : Number(e.target.value)
@@ -269,8 +253,7 @@ export default function SubjectSelection({
                     ? SCHOOL_SUBJECTS.find((s) => s.name === String(subjectId))
                     : SCHOOL_SUBJECTS.find((s) => s.id === Number(subjectId))
                 if (!subject) return null
-
-                const colorClass = getCategoryColor(subject.category)
+                const colorClass = getCategoryColor()
 
                 return (
                   <div
@@ -278,10 +261,9 @@ export default function SubjectSelection({
                     className="flex items-center justify-between p-3 bg-royalPurple-card rounded-lg border border-royalPurple-border shadow-sm group hover:border-royalPurple-border transition-colors"
                   >
                     <div className="flex items-center">
-                      <div className={`w-2 h-8 rounded-full mr-3 ${colorClass}`}></div>
                       <div>
                         <p className="font-medium text-royalPurple-text1">{subject.name}</p>
-                        <p className="text-xs text-royalPurple-text3">{subject.category}</p>
+                        <span className={colorClass}>{subject.category}</span>
                       </div>
                     </div>
                     <button

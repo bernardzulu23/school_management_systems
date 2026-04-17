@@ -169,22 +169,7 @@ export default function DailyRoutinePage() {
   }
 
   const getCategoryColor = (category) => {
-    switch (category) {
-      case 'Management':
-        return 'bg-royalPurple-pill text-royalPurple-pillTx'
-      case 'Academic':
-        return 'bg-royalPurple-accent text-royalPurple-accentTx'
-      case 'Student Support':
-        return 'bg-royalPurple-success text-royalPurple-successTx'
-      case 'Resources':
-        return 'bg-orange-100 text-orange-800'
-      case 'Staff Development':
-        return 'bg-royalPurple-pill text-royalPurple-pillTx'
-      case 'Administration':
-        return 'bg-royalPurple-card2 text-royalPurple-text1'
-      default:
-        return 'bg-royalPurple-card2 text-royalPurple-text1'
-    }
+    return 'badge-brand'
   }
 
   const routineStats = {
@@ -397,11 +382,7 @@ export default function DailyRoutinePage() {
                         <div className="flex items-center space-x-4 text-sm text-royalPurple-text3">
                           <span>Duration: {task.duration}</span>
                           <span>Assigned to: {task.assignedTo}</span>
-                          <span
-                            className={`px-2 py-1 text-xs rounded ${getCategoryColor(task.category)}`}
-                          >
-                            {task.category}
-                          </span>
+                          <span className={getCategoryColor(task.category)}>{task.category}</span>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">

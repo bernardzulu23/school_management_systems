@@ -293,9 +293,9 @@ export default function ReportsPage() {
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="zsms-table">
                 <thead>
-                  <tr className="border-b">
+                  <tr>
                     <th className="text-left py-3 px-4">Report Name</th>
                     <th className="text-left py-3 px-4">Type</th>
                     <th className="text-left py-3 px-4">Generated</th>
@@ -305,12 +305,10 @@ export default function ReportsPage() {
                 </thead>
                 <tbody>
                   {recentReports.map((report, index) => (
-                    <tr key={index} className="border-b hover:bg-royalPurple-page">
+                    <tr key={index}>
                       <td className="py-3 px-4 font-medium">{report.name}</td>
                       <td className="py-3 px-4">
-                        <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-accent text-royalPurple-accentTx">
-                          {report.type}
-                        </span>
+                        <span className="badge-brand">{report.type}</span>
                       </td>
                       <td className="py-3 px-4 text-sm text-royalPurple-text3">
                         {new Date(report.generated).toLocaleDateString()}

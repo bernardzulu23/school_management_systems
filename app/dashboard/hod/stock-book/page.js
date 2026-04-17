@@ -19,6 +19,7 @@ import {
   TrendingUp,
 } from 'lucide-react'
 import Link from 'next/link'
+import { percentTextClass } from '@/lib/utils/percentColor'
 
 export default function StockBookPage() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -59,18 +60,7 @@ export default function StockBookPage() {
   }
 
   const getCategoryColor = (category) => {
-    switch (category) {
-      case 'Books':
-        return 'bg-royalPurple-accent text-royalPurple-accentTx'
-      case 'Equipment':
-        return 'bg-royalPurple-pill text-royalPurple-pillTx'
-      case 'Stationery':
-        return 'bg-royalPurple-success text-royalPurple-successTx'
-      case 'Technology':
-        return 'bg-orange-100 text-orange-800'
-      default:
-        return 'bg-royalPurple-card2 text-royalPurple-text1'
-    }
+    return 'badge-brand'
   }
 
   const getStockLevel = (current, minimum, maximum) => {
@@ -199,13 +189,13 @@ export default function StockBookPage() {
                   <input
                     type="text"
                     placeholder="Search items..."
-                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="form-input pl-10 pr-4 py-2"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <select
-                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="zsms-select px-3 py-2"
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
                 >
@@ -216,7 +206,7 @@ export default function StockBookPage() {
                   <option value="Technology">Technology</option>
                 </select>
                 <select
-                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="zsms-select px-3 py-2"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                 >
@@ -231,9 +221,9 @@ export default function StockBookPage() {
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="zsms-table">
                 <thead>
-                  <tr className="border-b">
+                  <tr>
                     <th className="text-left py-3 px-4">Item Name</th>
                     <th className="text-left py-3 px-4">Category</th>
                     <th className="text-left py-3 px-4">Current Stock</th>
@@ -246,78 +236,75 @@ export default function StockBookPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredStock.map((item) => (
-                    <tr key={item.id} className="border-b hover:bg-royalPurple-page">
-                      <td className="py-3 px-4">
-                        <div>
-                          <div className="font-medium text-royalPurple-text1">{item.itemName}</div>
-                          <div className="text-sm text-royalPurple-text3">
-                            Supplier: {item.supplier}
+                  {filteredStock.map((item) => {
+                    const percent =
+                      item.maximumStock > 0
+                        ? Math.round((item.currentStock / item.maximumStock) * 100)
+                        : 0
+                    const pctClass = percentTextClass(percent)
+                    return (
+                      <tr key={item.id}>
+                        <td className="py-3 px-4">
+                          <div>
+                            <div className="font-medium text-royalPurple-text1">
+                              {item.itemName}
+                            </div>
+                            <div className="text-sm text-royalPurple-text3">
+                              Supplier: {item.supplier}
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span
-                          className={`px-2 py-1 text-xs rounded-full ${getCategoryColor(item.category)}`}
-                        >
-                          {item.category}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4">
-                        <div className="text-center">
-                          <div className="font-medium">{item.currentStock}</div>
-                          <div className="text-xs text-royalPurple-text3">
-                            Min: {item.minimumStock}
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className={getCategoryColor(item.category)}>{item.category}</span>
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="text-center">
+                            <div className="font-medium">{item.currentStock}</div>
+                            <div className="text-xs text-royalPurple-text3">
+                              Min: {item.minimumStock}
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <div className="w-full bg-royalPurple-card2 rounded-full h-2">
-                          <div
-                            className={`h-2 rounded-full ${
-                              item.currentStock <= item.minimumStock * 0.5
-                                ? 'bg-royalPurple-danger'
-                                : item.currentStock <= item.minimumStock
-                                  ? 'bg-yellow-500'
-                                  : 'bg-royalPurple-success'
-                            }`}
-                            style={{
-                              width: `${Math.min((item.currentStock / item.maximumStock) * 100, 100)}%`,
-                            }}
-                          ></div>
-                        </div>
-                        <div className="text-xs text-royalPurple-text3 mt-1">
-                          {Math.round((item.currentStock / item.maximumStock) * 100)}%
-                        </div>
-                      </td>
-                      <td className="py-3 px-4 font-medium">${item.unitPrice.toFixed(2)}</td>
-                      <td className="py-3 px-4 font-medium">${item.totalValue.toFixed(2)}</td>
-                      <td className="py-3 px-4">
-                        <div className="flex items-center">
-                          {getStatusIcon(item.status)}
-                          <span
-                            className={`ml-2 px-2 py-1 text-xs rounded-full ${getStatusColor(item.status)}`}
-                          >
-                            {item.status.replace('_', ' ')}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="py-3 px-4 text-sm text-royalPurple-text2">{item.location}</td>
-                      <td className="py-3 px-4">
-                        <div className="flex items-center space-x-2">
-                          <Button size="sm" variant="outline">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <TrendingDown className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="progress-track">
+                            <div
+                              className={`progress-fill progress-fill-semantic ${pctClass}`}
+                              style={{ width: `${Math.min(percent, 100)}%` }}
+                            />
+                          </div>
+                          <div className={`text-xs mt-1 ${pctClass}`}>{percent}%</div>
+                        </td>
+                        <td className="py-3 px-4 font-medium">${item.unitPrice.toFixed(2)}</td>
+                        <td className="py-3 px-4 font-medium">${item.totalValue.toFixed(2)}</td>
+                        <td className="py-3 px-4">
+                          <div className="flex items-center">
+                            {getStatusIcon(item.status)}
+                            <span
+                              className={`ml-2 px-2 py-1 text-xs rounded-full ${getStatusColor(item.status)}`}
+                            >
+                              {item.status.replace('_', ' ')}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-sm text-royalPurple-text2">
+                          {item.location}
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="flex items-center space-x-2">
+                            <Button size="sm" variant="outline">
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button size="sm" variant="outline">
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                            <Button size="sm" variant="outline">
+                              <TrendingDown className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
             </div>

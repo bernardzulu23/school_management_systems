@@ -207,8 +207,8 @@ export default function TeacherClassesPage() {
                 </div>
               ) : activeTab === 'pupils' ? (
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-left">
-                    <thead className="text-xs text-royalPurple-text2 uppercase bg-royalPurple-page">
+                  <table className="zsms-table text-sm text-left">
+                    <thead className="text-xs uppercase">
                       <tr>
                         <th className="px-4 py-3">Student ID</th>
                         <th className="px-4 py-3">Name</th>
@@ -218,7 +218,7 @@ export default function TeacherClassesPage() {
                     </thead>
                     <tbody>
                       {filteredPupils.map((p) => (
-                        <tr key={p.id} className="border-b hover:bg-royalPurple-page">
+                        <tr key={p.id}>
                           <td className="px-4 py-3 font-medium">{p.id}</td>
                           <td className="px-4 py-3">{p.name}</td>
                           <td className="px-4 py-3">{p.exam_number || '-'}</td>

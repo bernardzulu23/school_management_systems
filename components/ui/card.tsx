@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import { colors, spacing, radius, shadows } from '@/lib/design-tokens'
 
 export interface CardProps {
   children: React.ReactNode
@@ -14,20 +13,19 @@ export interface CardProps {
 export function Card({ children, clickable = false, className, style, onClick }: CardProps) {
   const [isHovered, setIsHovered] = useState(false)
 
-  const baseStyles: React.CSSProperties = {
-    borderRadius: radius.lg,
-    padding: spacing.md,
-    boxShadow: isHovered && clickable ? shadows.md : shadows.sm,
-    transition: 'all 200ms ease',
-    cursor: clickable ? 'pointer' : 'default',
-    borderColor: isHovered && clickable ? colors.primary[600] : undefined,
-    ...style,
-  }
+  const baseStyles: React.CSSProperties = { ...style }
 
   return (
     <div
       style={baseStyles}
-      className={['white-card border border-card', className].filter(Boolean).join(' ')}
+      className={[
+        'white-card border border-card shadow-sm transition-all duration-200',
+        clickable ? 'cursor-pointer hover:shadow-md hover:border-brand-primary' : '',
+        isHovered && clickable ? 'hover:border-brand-primary' : '',
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
       onClick={onClick}
       onMouseEnter={() => clickable && setIsHovered(true)}
       onMouseLeave={() => clickable && setIsHovered(false)}
@@ -52,7 +50,7 @@ export const CardHeader = ({
       display: 'flex',
       flexDirection: 'column',
       gap: '6px',
-      marginBottom: spacing.md,
+      marginBottom: '16px',
       ...style,
     }}
     className={className}
@@ -71,14 +69,8 @@ export const CardTitle = ({
   style?: React.CSSProperties
 }) => (
   <h3
-    style={{
-      fontSize: '18px',
-      fontWeight: '600',
-      color: 'rgb(var(--card-text-primary, 15 23 42))',
-      margin: 0,
-      ...style,
-    }}
-    className={className}
+    style={{ margin: 0, ...style }}
+    className={['zsms-card-title', className].filter(Boolean).join(' ')}
   >
     {children}
   </h3>
@@ -94,13 +86,8 @@ export const CardDescription = ({
   style?: React.CSSProperties
 }) => (
   <p
-    style={{
-      fontSize: '14px',
-      color: 'rgb(var(--card-text-secondary, 71 85 105))',
-      margin: 0,
-      ...style,
-    }}
-    className={className}
+    style={{ margin: 0, ...style }}
+    className={['zsms-card-description', className].filter(Boolean).join(' ')}
   >
     {children}
   </p>
@@ -130,7 +117,7 @@ export const CardFooter = ({
   style?: React.CSSProperties
 }) => (
   <div
-    style={{ display: 'flex', alignItems: 'center', marginTop: spacing.md, ...style }}
+    style={{ display: 'flex', alignItems: 'center', marginTop: '16px', ...style }}
     className={className}
   >
     {children}

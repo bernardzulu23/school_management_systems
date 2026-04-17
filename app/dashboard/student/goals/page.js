@@ -225,25 +225,6 @@ export default function StudentGoalsPage() {
     }
   }
 
-  const getCategoryColor = (category) => {
-    switch (category) {
-      case 'Academic Excellence':
-        return 'bg-royalPurple-accent text-royalPurple-accentTx'
-      case 'Practical Skills':
-        return 'bg-royalPurple-pill text-royalPurple-pillTx'
-      case 'Attendance':
-        return 'bg-royalPurple-success text-royalPurple-successTx'
-      case 'Personal Development':
-        return 'bg-orange-100 text-orange-800'
-      case 'Language Learning':
-        return 'bg-royalPurple-pill text-royalPurple-pillTx'
-      case 'Leadership':
-        return 'bg-royalPurple-danger text-royalPurple-dangerTx'
-      default:
-        return 'bg-royalPurple-card2 text-royalPurple-text1'
-    }
-  }
-
   const currentGoals = studentGoals[activeTab]
 
   const goalStats = {
@@ -432,11 +413,7 @@ export default function StudentGoalsPage() {
                         <h3 className="text-lg font-semibold text-royalPurple-text1 mr-3">
                           {goal.title}
                         </h3>
-                        <span
-                          className={`px-2 py-1 text-xs rounded-full ${getCategoryColor(goal.category)}`}
-                        >
-                          {goal.category}
-                        </span>
+                        <span className="badge-brand">{goal.category}</span>
                         <span
                           className={`ml-2 px-2 py-1 text-xs rounded border ${getPriorityColor(goal.priority)}`}
                         >

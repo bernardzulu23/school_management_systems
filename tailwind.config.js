@@ -9,6 +9,24 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        brand: {
+          primary: 'var(--color-brand-primary)',
+          hover: 'var(--color-brand-hover)',
+          light: 'var(--color-brand-light)',
+          accent: 'var(--color-brand-accent)',
+        },
+        dash: {
+          bg: 'var(--color-dash-bg)',
+          card: 'var(--color-dash-card)',
+          text: 'var(--color-dash-text)',
+          muted: 'var(--color-dash-muted)',
+        },
+        kpi: {
+          zero: 'var(--color-kpi-zero)',
+          fail: 'var(--color-kpi-fail)',
+          warn: 'var(--color-kpi-warn)',
+          pass: 'var(--color-kpi-pass)',
+        },
         royalPurple: {
           page: 'var(--rp-page)',
           deep: 'var(--rp-deep)',
@@ -44,42 +62,6 @@ module.exports = {
         up: { bg: '#e6faf0', text: '#0d7a4c' },
         down: { bg: '#fef2f2', text: '#b91c1c' },
         warn: { bg: '#fffbeb', text: '#92400e' },
-        blue: {
-          50: '#F8F8F7',
-          100: '#EEEEED',
-          200: '#DDDCDA',
-          300: '#C4C3BF',
-          400: '#A8A7A2',
-          500: '#6B6A66',
-          600: '#4E4D4A',
-          700: '#333331',
-          800: '#333331',
-          900: '#1C1C1A',
-        },
-        purple: {
-          50: '#F8F8F7',
-          100: '#EEEEED',
-          200: '#DDDCDA',
-          300: '#C4C3BF',
-          400: '#A8A7A2',
-          500: '#6B6A66',
-          600: '#4E4D4A',
-          700: '#333331',
-          800: '#333331',
-          900: '#1C1C1A',
-        },
-        indigo: {
-          50: '#F8F8F7',
-          100: '#EEEEED',
-          200: '#DDDCDA',
-          300: '#C4C3BF',
-          400: '#A8A7A2',
-          500: '#6B6A66',
-          600: '#4E4D4A',
-          700: '#333331',
-          800: '#333331',
-          900: '#1C1C1A',
-        },
       },
       borderRadius: {
         card: '14px',

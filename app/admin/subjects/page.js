@@ -80,7 +80,7 @@ export default function SubjectsPage() {
   }
 
   const getCategoryColor = (category) => {
-    return 'bg-purple-600 text-white border-purple-500/40'
+    return 'badge-brand'
   }
 
   const filteredSubjects = subjects.filter((subject) => {
@@ -277,10 +277,7 @@ export default function SubjectsPage() {
                                   ? 'Core Subjects'
                                   : category}
                   </h2>
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium border ${getCategoryColor(category)}`}
-                    role="status"
-                  >
+                  <span className="badge-brand" role="status">
                     {categorySubjects.length} subjects
                   </span>
                 </div>
@@ -305,11 +302,7 @@ export default function SubjectsPage() {
                         </div>
 
                         <div className="flex justify-between items-center">
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium border ${getCategoryColor(category)}`}
-                          >
-                            {category}
-                          </span>
+                          <span className="badge-brand">{category}</span>
                           <Button
                             variant="outline"
                             size="sm"
@@ -392,11 +385,7 @@ export default function SubjectsPage() {
                         {subject.department}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getCategoryColor(subject.category)}`}
-                        >
-                          {subject.category}
-                        </span>
+                        <span className="badge-brand">{subject.category}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex gap-2">

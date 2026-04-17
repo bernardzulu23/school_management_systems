@@ -26,6 +26,7 @@ import ContactParentsModal from './ContactParentsModal'
 import GenerateReportsModal from './GenerateReportsModal'
 import CreateSupportPlansModal from './CreateSupportPlansModal'
 import ScheduleMeetingsModal from './ScheduleMeetingsModal'
+import { percentTextClass } from '@/lib/utils/percentColor'
 
 export default function StudentAttentionSystem({ studentsData, performanceSummary }) {
   const [selectedStudent, setSelectedStudent] = useState(null)
@@ -158,7 +159,9 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
           </div>
           <div className="backdrop-blur-lg bg-royalPurple-muted/60 border border-royalPurple-border2/40 rounded-2xl p-6 text-center hover:scale-105 transition-all duration-300">
             <div className="text-3xl font-bold text-royalPurple-text1 mb-2">
-              {performanceSummary?.average_school_performance || 0}%
+              <span className={percentTextClass(performanceSummary?.average_school_performance)}>
+                {Number(performanceSummary?.average_school_performance) || 0}%
+              </span>
             </div>
             <div className="text-royalPurple-accentTx font-medium">School Average</div>
           </div>
@@ -228,8 +231,10 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
                 <div className="bg-royalPurple-page p-3 rounded-lg">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium">Overall Average</span>
-                    <span className="text-lg font-bold text-royalPurple-dangerTx">
-                      {student.overall_average}%
+                    <span
+                      className={`text-lg font-bold ${percentTextClass(student.overall_average)}`}
+                    >
+                      {Number(student.overall_average) || 0}%
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
@@ -253,7 +258,11 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
                         >
                           <span className="text-sm">{subject.name}</span>
                           <div className="flex items-center space-x-2">
-                            <span className="text-sm font-medium">{subject.score}%</span>
+                            <span
+                              className={`text-sm font-medium ${percentTextClass(subject.score)}`}
+                            >
+                              {Number(subject.score) || 0}%
+                            </span>
                             <span
                               className={`px-2 py-1 text-xs rounded-full ${getGradeColor(gradeInfo.color)}`}
                             >
@@ -270,7 +279,9 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center">
                     <Clock className="h-4 w-4 mr-2 text-royalPurple-text3" />
-                    <span>Attendance: {student.attendance_rate}%</span>
+                    <span className={percentTextClass(student.attendance_rate)}>
+                      Attendance: {Number(student.attendance_rate) || 0}%
+                    </span>
                   </div>
                   <div className="flex items-center">
                     <Calendar className="h-4 w-4 mr-2 text-royalPurple-text3" />

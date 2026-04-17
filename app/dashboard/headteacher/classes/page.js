@@ -22,6 +22,7 @@ import {
   Loader2,
 } from 'lucide-react'
 import Link from 'next/link'
+import { percentTextClass } from '@/lib/utils/percentColor'
 import { api } from '@/lib/api'
 
 export default function ClassesManagementPage() {
@@ -33,13 +34,6 @@ export default function ClassesManagementPage() {
     queryKey: ['headteacher-classes'],
     queryFn: () => api.getHeadteacherClasses().then((res) => res.data),
   })
-
-  const getPerformanceColor = (performance) => {
-    if (performance >= 90) return 'text-royalPurple-successTx bg-royalPurple-success'
-    if (performance >= 80) return 'text-royalPurple-accentTx bg-royalPurple-accent'
-    if (performance >= 70) return 'text-yellow-600 bg-yellow-100'
-    return 'text-royalPurple-dangerTx bg-royalPurple-danger'
-  }
 
   const getCapacityColor = (current, max) => {
     const percentage = (current / max) * 100
@@ -209,9 +203,9 @@ export default function ClassesManagementPage() {
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="zsms-table">
                 <thead>
-                  <tr className="border-b">
+                  <tr>
                     <th className="text-left py-3 px-4">Class Name</th>
                     <th className="text-left py-3 px-4">Year Group</th>
                     <th className="text-left py-3 px-4">Class Teacher</th>
@@ -243,12 +237,10 @@ export default function ClassesManagementPage() {
                     </tr>
                   ) : (
                     filteredClasses.map((classItem) => (
-                      <tr key={classItem.id} className="border-b hover:bg-royalPurple-page">
+                      <tr key={classItem.id}>
                         <td className="py-3 px-4 font-medium">{classItem.name}</td>
                         <td className="py-3 px-4">
-                          <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-accent text-royalPurple-accentTx">
-                            {classItem.yearGroup}
-                          </span>
+                          <span className="badge-brand">{classItem.yearGroup}</span>
                         </td>
                         <td className="py-3 px-4">{classItem.classTeacher}</td>
                         <td className="py-3 px-4">
@@ -261,29 +253,28 @@ export default function ClassesManagementPage() {
                         <td className="py-3 px-4">
                           <div className="flex flex-wrap gap-1">
                             {classItem.subjects.slice(0, 3).map((subject, index) => (
-                              <span
-                                key={index}
-                                className="px-2 py-1 text-xs rounded bg-royalPurple-card2 text-royalPurple-text2"
-                              >
+                              <span key={index} className="badge-brand">
                                 {subject}
                               </span>
                             ))}
                             {classItem.subjects.length > 3 && (
-                              <span className="px-2 py-1 text-xs rounded bg-royalPurple-card2 text-royalPurple-text2">
-                                +{classItem.subjects.length - 3}
-                              </span>
+                              <span className="badge-brand">+{classItem.subjects.length - 3}</span>
                             )}
                           </div>
                         </td>
                         <td className="py-3 px-4">
                           <span
-                            className={`px-2 py-1 text-xs rounded-full ${getPerformanceColor(classItem.averagePerformance)}`}
+                            className={`px-2 py-1 text-xs rounded-full bg-royalPurple-card2 ${percentTextClass(classItem.averagePerformance)}`}
                           >
                             {classItem.averagePerformance}%
                           </span>
                         </td>
                         <td className="py-3 px-4">
-                          <span className="text-sm font-medium">{classItem.attendanceRate}%</span>
+                          <span
+                            className={`text-sm font-medium ${percentTextClass(classItem.attendanceRate)}`}
+                          >
+                            {classItem.attendanceRate}%
+                          </span>
                         </td>
                         <td className="py-3 px-4">
                           <div className="flex items-center space-x-2">
@@ -343,13 +334,13 @@ export default function ClassesManagementPage() {
                           </span>
                         </div>
                         <div className="flex items-center">
-                          <div className="w-24 bg-royalPurple-card2 rounded-full h-2 mr-3">
+                          <div className="w-24 mr-3 progress-track overflow-hidden">
                             <div
-                              className="bg-royalPurple-accent h-2 rounded-full"
+                              className={`progress-fill progress-fill-semantic ${percentTextClass(avgPerformance)}`}
                               style={{ width: `${avgPerformance}%` }}
-                            ></div>
+                            />
                           </div>
-                          <span className="font-bold text-royalPurple-accentTx">
+                          <span className={`font-bold ${percentTextClass(avgPerformance)}`}>
                             {avgPerformance}%
                           </span>
                         </div>

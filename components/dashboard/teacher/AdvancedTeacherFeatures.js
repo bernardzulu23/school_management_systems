@@ -429,7 +429,7 @@ export const StudentPortfolios = () => {
               <div className="text-sm text-royalPurple-text2">Total Submissions</div>
             </div>
             <div className="text-center p-4 bg-royalPurple-card/60 rounded-lg">
-              <div className="text-2xl font-bold text-royalPurple-successTx">89%</div>
+              <div className={`text-2xl font-bold ${percentTextClass(89)}`}>89%</div>
               <div className="text-sm text-royalPurple-text2">Avg. Quality Score</div>
             </div>
             <div className="text-center p-4 bg-royalPurple-card/60 rounded-lg">
@@ -437,7 +437,7 @@ export const StudentPortfolios = () => {
               <div className="text-sm text-royalPurple-text2">Pending Reviews</div>
             </div>
             <div className="text-center p-4 bg-royalPurple-card/60 rounded-lg">
-              <div className="text-2xl font-bold text-royalPurple-pillTx">95%</div>
+              <div className={`text-2xl font-bold ${percentTextClass(95)}`}>95%</div>
               <div className="text-sm text-royalPurple-text2">On-Time Rate</div>
             </div>
           </div>

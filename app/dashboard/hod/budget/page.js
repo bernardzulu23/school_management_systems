@@ -33,6 +33,7 @@ import {
   Tooltip,
 } from 'recharts'
 import Link from 'next/link'
+import { percentTextClass } from '@/lib/utils/percentColor'
 
 export default function BudgetPage() {
   const [selectedPeriod, setSelectedPeriod] = useState('current')
@@ -46,6 +47,11 @@ export default function BudgetPage() {
     pendingRequests: 5,
     approvedRequests: 12,
   }
+
+  const utilizedPercent =
+    budgetOverview.totalAllocated > 0
+      ? Math.round((budgetOverview.totalSpent / budgetOverview.totalAllocated) * 100)
+      : 0
 
   const budgetCategories = [
     {
@@ -229,7 +235,9 @@ export default function BudgetPage() {
               <h3 className="text-lg font-semibold">Budget Health</h3>
               <div className="flex items-center">
                 <Target className="h-5 w-5 text-royalPurple-successTx mr-2" />
-                <span className="text-royalPurple-successTx font-medium">65% Utilized</span>
+                <span className={`font-medium ${percentTextClass(utilizedPercent)}`}>
+                  {utilizedPercent}% Utilized
+                </span>
               </div>
             </div>
             <div className="w-full bg-royalPurple-card2 rounded-full h-4">
@@ -303,9 +311,9 @@ export default function BudgetPage() {
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="zsms-table">
                 <thead>
-                  <tr className="border-b">
+                  <tr>
                     <th className="text-left py-3 px-4">Category</th>
                     <th className="text-left py-3 px-4">Allocated</th>
                     <th className="text-left py-3 px-4">Spent</th>
@@ -317,22 +325,24 @@ export default function BudgetPage() {
                 <tbody>
                   {budgetCategories.map((category, index) => {
                     const utilization = (category.spent / category.allocated) * 100
+                    const utilizationPercent = Math.round(utilization)
+                    const pctClass = percentTextClass(utilizationPercent)
                     const health = getBudgetHealth(category.spent, category.allocated)
                     return (
-                      <tr key={index} className="border-b hover:bg-royalPurple-page">
+                      <tr key={index}>
                         <td className="py-3 px-4 font-medium">{category.name}</td>
                         <td className="py-3 px-4">${category.allocated.toLocaleString()}</td>
                         <td className="py-3 px-4">${category.spent.toLocaleString()}</td>
                         <td className="py-3 px-4">${category.remaining.toLocaleString()}</td>
                         <td className="py-3 px-4">
                           <div className="flex items-center">
-                            <div className="w-16 bg-royalPurple-card2 rounded-full h-2 mr-2">
+                            <div className="w-16 mr-2 progress-track overflow-hidden">
                               <div
-                                className="bg-royalPurple-accent h-2 rounded-full"
-                                style={{ width: `${Math.min(utilization, 100)}%` }}
-                              ></div>
+                                className={`progress-fill progress-fill-semantic ${pctClass}`}
+                                style={{ width: `${Math.min(utilizationPercent, 100)}%` }}
+                              />
                             </div>
-                            <span className="text-sm">{Math.round(utilization)}%</span>
+                            <span className={`text-sm ${pctClass}`}>{utilizationPercent}%</span>
                           </div>
                         </td>
                         <td className="py-3 px-4">
@@ -358,9 +368,9 @@ export default function BudgetPage() {
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="zsms-table">
                 <thead>
-                  <tr className="border-b">
+                  <tr>
                     <th className="text-left py-3 px-4">Description</th>
                     <th className="text-left py-3 px-4">Category</th>
                     <th className="text-left py-3 px-4">Amount</th>
@@ -371,12 +381,10 @@ export default function BudgetPage() {
                 </thead>
                 <tbody>
                   {recentTransactions.map((transaction) => (
-                    <tr key={transaction.id} className="border-b hover:bg-royalPurple-page">
+                    <tr key={transaction.id}>
                       <td className="py-3 px-4 font-medium">{transaction.description}</td>
                       <td className="py-3 px-4">
-                        <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-card2 text-royalPurple-text1">
-                          {transaction.category}
-                        </span>
+                        <span className="badge-brand">{transaction.category}</span>
                       </td>
                       <td className="py-3 px-4 font-medium">
                         ${transaction.amount.toLocaleString()}
