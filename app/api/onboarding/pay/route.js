@@ -86,8 +86,11 @@ export async function POST(request) {
     paymentType: PAYMENT_OPTION_BY_PROVIDER[provider].paymentType,
   }
 
-  const apiKey = String(process.env.LIPILA_API_KEY || '').trim()
-  const baseUrl = String(process.env.LIPILA_BASE_URL || 'https://api.lipila.dev').trim()
+  const apiKey = String(process.env.LIPILA_API_KEY || process.env.LIPILA_SECRET_KEY || '').trim()
+  const baseUrl = String(
+    process.env.LIPILA_BASE_URL ||
+      (process.env.NODE_ENV === 'production' ? 'https://blz.lipila.io' : 'https://api.lipila.dev')
+  ).trim()
   const url = `${baseUrl.replace(/\/+$/, '')}/api/v1/collections/mobile-money`
 
   if (!apiKey) {
@@ -123,8 +126,11 @@ export async function POST(request) {
   })
 
   try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 25_000)
     const response = await fetch(url, {
       method: 'POST',
+      signal: controller.signal,
       headers: {
         accept: 'application/json',
         'x-api-key': apiKey,
@@ -132,6 +138,7 @@ export async function POST(request) {
       },
       body: JSON.stringify(lipilaPayload),
     })
+    clearTimeout(timeout)
     const contentType = String(response.headers.get('content-type') || '')
     const raw = await response.text().catch(() => '')
     let data = {}
@@ -181,11 +188,14 @@ export async function POST(request) {
       { success: true, provider: 'lipila', referenceId, data },
       { status: 200 }
     )
-  } catch {
+  } catch (error) {
     await prisma.schoolRegistration.update({
       where: { id: reg.id },
       data: { paymentStatus: 'unpaid' },
     })
+    if (error?.name === 'AbortError') {
+      return NextResponse.json({ error: 'Payment gateway timeout' }, { status: 504 })
+    }
     return NextResponse.json({ error: 'Payment gateway unavailable' }, { status: 502 })
   }
 }
