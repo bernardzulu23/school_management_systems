@@ -104,36 +104,26 @@ function ActivitySessionKeeper({ children }) {
 
 function AuthSessionSync({ children }) {
   const syncSession = useAuth((s) => s.syncSession)
+  const isAuthenticated = useAuth((s) => s.isAuthenticated)
 
   useEffect(() => {
-    let failCount = 0
     let interval
 
     const attemptSync = async () => {
       try {
-        const result = await syncSession()
-
-        if (result?.success) {
-          failCount = 0 // reset on success
-          return
-        }
-
-        if (result?.rateLimited) return
-
-        // Any non-success non-rateLimited response = failure
-        failCount += 1
+        await syncSession()
       } catch (err) {
-        // syncSession threw instead of returning — still counts as failure
-        failCount += 1
+        return
       }
     }
 
-    // Run once immediately, then every 2 minutes
     attemptSync()
-    interval = setInterval(attemptSync, 120000)
+    if (isAuthenticated) {
+      interval = setInterval(attemptSync, 120000)
+    }
 
     return () => clearInterval(interval)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return children
 }

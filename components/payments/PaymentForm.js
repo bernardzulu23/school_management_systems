@@ -18,9 +18,9 @@ import {
 } from 'lucide-react'
 
 const PROVIDERS = [
-  { value: 'airtel', label: 'Airtel Zambia', color: '#E60000' },
-  { value: 'mtn', label: 'MTN Zambia', color: '#FFD500' },
-  { value: 'zamtel', label: 'Zamtel', color: '#0067A0' },
+  { value: 'airtel', label: 'Airtel Zambia' },
+  { value: 'mtn', label: 'MTN Zambia' },
+  { value: 'zamtel', label: 'Zamtel' },
 ]
 
 const PAYMENT_TYPES = [
@@ -35,9 +35,13 @@ const PAYMENT_TYPES = [
 ]
 
 const PAYMENT_STATUS = {
-  pending: { label: 'Pending', color: '#F59E0B', icon: Clock },
-  completed: { label: 'Completed', color: '#10B981', icon: CheckCircle },
-  failed: { label: 'Failed', color: '#EF4444', icon: XCircle },
+  pending: { label: 'Pending', className: 'payment-status payment-status-pending', icon: Clock },
+  completed: {
+    label: 'Completed',
+    className: 'payment-status payment-status-completed',
+    icon: CheckCircle,
+  },
+  failed: { label: 'Failed', className: 'payment-status payment-status-failed', icon: XCircle },
 }
 
 function normalizeMsisdn(value) {
@@ -133,7 +137,7 @@ export default function PaymentForm({ onSuccess, schoolId, userRole }) {
             <div className="space-y-2">
               <Label>Payment Type</Label>
               <select
-                className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
+                className="zsms-select"
                 value={form.paymentType}
                 onChange={(e) => setForm((p) => ({ ...p, paymentType: e.target.value }))}
               >
@@ -161,17 +165,31 @@ export default function PaymentForm({ onSuccess, schoolId, userRole }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Provider</Label>
-              <select
-                className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
-                value={form.provider}
-                onChange={(e) => setForm((p) => ({ ...p, provider: e.target.value }))}
-              >
+              <div className="provider-row">
                 {PROVIDERS.map((p) => (
-                  <option key={p.value} value={p.value}>
-                    {p.label}
-                  </option>
+                  <button
+                    key={p.value}
+                    type="button"
+                    onClick={() => setForm((prev) => ({ ...prev, provider: p.value }))}
+                    className={`provider-pill zsms-hover-raise ${
+                      form.provider === p.value ? 'provider-pill-active' : ''
+                    }`}
+                  >
+                    <span
+                      className={`provider-dot ${
+                        p.value === 'mtn'
+                          ? 'provider-dot-mtn'
+                          : p.value === 'zamtel'
+                            ? 'provider-dot-zamtel'
+                            : 'provider-dot-airtel'
+                      }`}
+                    >
+                      {p.label.charAt(0)}
+                    </span>
+                    <span className="step-label">{p.label}</span>
+                  </button>
                 ))}
-              </select>
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -216,7 +234,7 @@ export default function PaymentForm({ onSuccess, schoolId, userRole }) {
           <Button
             type="submit"
             disabled={loading || !form.amount || !form.accountNumber}
-            className="w-full"
+            className="w-full zsms-hover-raise"
           >
             {loading ? (
               <>
@@ -311,19 +329,20 @@ export function PaymentHistory({ transactions = [] }) {
             const status = PAYMENT_STATUS[tx.status] || PAYMENT_STATUS.pending
             const StatusIcon = status.icon
             const provider = PROVIDERS.find((p) => p.value === tx.provider) || PROVIDERS[0]
+            const providerBadge =
+              tx.provider === 'mtn'
+                ? 'provider-dot-mtn'
+                : tx.provider === 'zamtel'
+                  ? 'provider-dot-zamtel'
+                  : 'provider-dot-airtel'
 
             return (
               <div
                 key={tx.id || i}
-                className="flex items-center justify-between p-3 bg-royalPurple-deep rounded-lg border border-royalPurple-border/40"
+                className="flex items-center justify-between p-3 bg-royalPurple-deep rounded-lg border border-royalPurple-border/40 zsms-hover-raise"
               >
                 <div className="flex items-center gap-3">
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold"
-                    style={{ backgroundColor: provider.color }}
-                  >
-                    {provider.label.charAt(0)}
-                  </div>
+                  <div className={`provider-dot ${providerBadge}`}>{provider.label.charAt(0)}</div>
                   <div>
                     <p className="font-medium text-royalPurple-text1">
                       K{tx.amount?.toFixed(2)} - {tx.type || 'Payment'}
@@ -334,7 +353,7 @@ export function PaymentHistory({ transactions = [] }) {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="flex items-center gap-1 text-sm" style={{ color: status.color }}>
+                  <div className={status.className}>
                     <StatusIcon className="w-4 h-4" />
                     <span>{status.label}</span>
                   </div>
@@ -373,7 +392,7 @@ export function PaymentStats({ stats }) {
 
       <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
         <CardContent className="py-4 text-center">
-          <CreditCard className="w-6 h-6 mx-auto text-green-500 mb-2" />
+          <CreditCard className="w-6 h-6 mx-auto kpi-pass mb-2" />
           <p className="text-2xl font-bold text-royalPurple-text1">K{s.totalAmount?.toFixed(2)}</p>
           <p className="text-xs text-royalPurple-text3">Total Amount</p>
         </CardContent>
@@ -381,7 +400,7 @@ export function PaymentStats({ stats }) {
 
       <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
         <CardContent className="py-4 text-center">
-          <CheckCircle className="w-6 h-6 mx-auto text-emerald-500 mb-2" />
+          <CheckCircle className="w-6 h-6 mx-auto kpi-pass mb-2" />
           <p className="text-2xl font-bold text-royalPurple-text1">{s.successRate}%</p>
           <p className="text-xs text-royalPurple-text3">Success Rate</p>
         </CardContent>
@@ -389,7 +408,7 @@ export function PaymentStats({ stats }) {
 
       <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
         <CardContent className="py-4 text-center">
-          <Clock className="w-6 h-6 mx-auto text-yellow-500 mb-2" />
+          <Clock className="w-6 h-6 mx-auto kpi-warn mb-2" />
           <p className="text-2xl font-bold text-royalPurple-text1">{s.pendingCount}</p>
           <p className="text-xs text-royalPurple-text3">Pending</p>
         </CardContent>

@@ -195,33 +195,52 @@ export default function OnboardingPage({ searchParams }) {
   const paid = String(status?.registration?.paymentStatus || '').toLowerCase() === 'paid'
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl space-y-4">
-        <Card className="bg-royalPurple-card border-royalPurple-border/40">
-          <CardHeader>
-            <CardTitle className="text-royalPurple-text1">Register Your School</CardTitle>
-            <div className="text-royalPurple-text2 text-sm">
-              Verify email → Choose plan & pay → Create school portal
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="text-royalPurple-text2 text-sm">Supported Mobile Money Providers</div>
-            <ProviderLogos size={38} />
-          </CardContent>
-        </Card>
+    <div className="onboard-page">
+      <div className="onboard-shell space-y-4">
+        <div className="onboard-card">
+          <div className="onboard-card-header">
+            <div className="onboard-title">Register your school</div>
+            <div className="onboard-subtitle">Verify email → Plan & payment → Create portal</div>
 
-        {loadingStatus ? (
-          <Card className="bg-royalPurple-card border-royalPurple-border/40 border-l-4 border-l-royalPurple-accent">
-            <CardContent className="p-6 text-royalPurple-text2">Loading...</CardContent>
-          </Card>
-        ) : null}
+            <div className="stepper">
+              <div className="step">
+                <div className={`step-dot ${verified ? 'step-dot-done' : 'step-dot-active'}`}>
+                  {verified ? '✓' : '1'}
+                </div>
+                <div className="step-label">Verify email</div>
+              </div>
+              <div className="step">
+                <div
+                  className={`step-dot ${verified && !paid ? 'step-dot-active' : paid ? 'step-dot-done' : ''}`}
+                >
+                  2
+                </div>
+                <div className="step-label">Plan & payment</div>
+              </div>
+              <div className="step">
+                <div className={`step-dot ${paid ? 'step-dot-active' : ''}`}>3</div>
+                <div className="step-label">Create portal</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="onboard-card-body space-y-3">
+            <div className="onboard-subtitle onboard-section-label">
+              Supported mobile money providers
+            </div>
+            <ProviderLogos size={38} />
+          </div>
+        </div>
+
+        {loadingStatus ? <div className="onboard-card onboard-card-body">Loading...</div> : null}
 
         {!status?.authenticated || !verified ? (
-          <Card className="bg-royalPurple-card border-royalPurple-border/40 border-l-4 border-l-royalPurple-accent">
-            <CardHeader>
-              <CardTitle className="text-royalPurple-text1">Stage 1: Email Verification</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div className="onboard-card">
+            <div className="onboard-card-header">
+              <div className="plan-name">Verify email</div>
+              <div className="onboard-subtitle">We’ll email you a verification link.</div>
+            </div>
+            <div className="onboard-card-body space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Email</Label>
@@ -252,7 +271,11 @@ export default function OnboardingPage({ searchParams }) {
                   </div>
                 </div>
               </div>
-              <Button onClick={start} disabled={!canStart || submitting}>
+              <Button
+                onClick={start}
+                disabled={!canStart || submitting}
+                className="zsms-hover-raise"
+              >
                 {submitting ? 'Sending...' : 'Send Verification Link'}
               </Button>
               <div className="text-sm text-royalPurple-text2">
@@ -277,84 +300,133 @@ export default function OnboardingPage({ searchParams }) {
               <div className="text-xs text-royalPurple-text3">
                 After verifying your email, you will be redirected to plan selection.
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         ) : null}
 
         {status?.authenticated && verified && !paid ? (
-          <Card className="bg-royalPurple-card border-royalPurple-border/40 border-l-4 border-l-royalPurple-accent">
-            <CardHeader>
-              <CardTitle className="text-royalPurple-text1">
-                Stage 2: Plan Selection & Payment
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="onboard-card">
+            <div className="onboard-card-header">
+              <div className="plan-name">Choose your plan</div>
+              <div className="onboard-subtitle">Select a plan, then pay via mobile money.</div>
+            </div>
+            <div className="onboard-card-body space-y-5">
+              <div className="plan-grid">
                 <button
                   type="button"
                   onClick={() => setPlan('basic')}
-                  className={`p-4 rounded-xl border ${plan === 'basic' ? 'border-royalPurple-accent' : 'border-royalPurple-border'} bg-royalPurple-deep text-left`}
+                  className={`plan-tile zsms-hover-raise text-left ${plan === 'basic' ? 'plan-tile-active' : ''}`}
                 >
-                  <div className="text-royalPurple-text1 font-bold">Basic</div>
-                  <div className="text-royalPurple-text2 text-sm">K150 / month</div>
+                  <div className="plan-name">Basic</div>
+                  <div>
+                    <span className="plan-price">K150</span>{' '}
+                    <span className="plan-price-sub">/ month</span>
+                  </div>
+                  <div className="plan-desc">Up to 300 students · Core modules</div>
                 </button>
+
                 <button
                   type="button"
                   onClick={() => setPlan('standard')}
-                  className={`p-4 rounded-xl border ${plan === 'standard' ? 'border-royalPurple-accent' : 'border-royalPurple-border'} bg-royalPurple-deep text-left`}
+                  className={`plan-tile zsms-hover-raise text-left ${plan === 'standard' ? 'plan-tile-active' : ''}`}
                 >
-                  <div className="text-royalPurple-text1 font-bold">Standard</div>
-                  <div className="text-royalPurple-text2 text-sm">K300 / month</div>
+                  <div className="flex items-center justify-between">
+                    <div className="plan-name">Standard</div>
+                    <span className="plan-badge">Most popular</span>
+                  </div>
+                  <div>
+                    <span className="plan-price">K300</span>{' '}
+                    <span className="plan-price-sub">/ month</span>
+                  </div>
+                  <div className="plan-desc">Up to 800 students · Analytics + SMS</div>
                 </button>
+
                 <button
                   type="button"
                   onClick={() => setPlan('premium')}
-                  className={`p-4 rounded-xl border ${plan === 'premium' ? 'border-royalPurple-accent' : 'border-royalPurple-border'} bg-royalPurple-deep text-left`}
+                  className={`plan-tile zsms-hover-raise text-left ${plan === 'premium' ? 'plan-tile-active' : ''}`}
                 >
-                  <div className="text-royalPurple-text1 font-bold">Premium</div>
-                  <div className="text-royalPurple-text2 text-sm">K600 / month</div>
+                  <div className="plan-name">Premium</div>
+                  <div>
+                    <span className="plan-price">K600</span>{' '}
+                    <span className="plan-price-sub">/ month</span>
+                  </div>
+                  <div className="plan-desc">Unlimited · All features + priority support</div>
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Provider</Label>
-                  <select
-                    className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
-                    value={provider}
-                    onChange={(e) => setProvider(e.target.value)}
+              <div className="payment-panel space-y-4">
+                <div className="provider-row">
+                  <button
+                    type="button"
+                    onClick={() => setProvider('mtn')}
+                    className={`provider-pill zsms-hover-raise ${provider === 'mtn' ? 'provider-pill-active' : ''}`}
                   >
-                    <option value="airtel">Airtel Zambia</option>
-                    <option value="mtn">MTN Zambia</option>
-                    <option value="zamtel">Zamtel</option>
-                  </select>
+                    <span className="provider-dot provider-dot-mtn">M</span>
+                    <span className="step-label">MTN Zambia</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setProvider('airtel')}
+                    className={`provider-pill zsms-hover-raise ${provider === 'airtel' ? 'provider-pill-active' : ''}`}
+                  >
+                    <span className="provider-dot provider-dot-airtel">A</span>
+                    <span className="step-label">Airtel Zambia</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setProvider('zamtel')}
+                    className={`provider-pill zsms-hover-raise ${provider === 'zamtel' ? 'provider-pill-active' : ''}`}
+                  >
+                    <span className="provider-dot provider-dot-zamtel">Z</span>
+                    <span className="step-label">Zamtel</span>
+                  </button>
                 </div>
-                <div className="space-y-2">
-                  <Label>Mobile Money Number</Label>
-                  <Input
-                    value={accountNumber}
-                    onChange={(e) => setAccountNumber(e.target.value)}
-                    placeholder="097... or +26097..."
-                  />
-                </div>
-              </div>
 
-              <div className="flex flex-wrap gap-2">
-                <Button onClick={pay} disabled={!canPay || paying}>
-                  {paying ? 'Processing...' : 'Pay Now'}
-                </Button>
-                <Button variant="outline" onClick={refreshStatus}>
-                  Refresh Status
-                </Button>
-              </div>
-
-              {String(status?.registration?.paymentStatus || '').toLowerCase() === 'pending' ? (
-                <div className="text-sm text-royalPurple-text2">
-                  Payment is pending. Complete the prompt on your phone, then click Refresh Status.
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Mobile Money Number</Label>
+                    <Input
+                      value={accountNumber}
+                      onChange={(e) => setAccountNumber(e.target.value)}
+                      placeholder="097... or +26097..."
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Plan</Label>
+                    <div className="onboard-summary">
+                      <span className="onboard-summary-title">
+                        {plan === 'basic' ? 'Basic' : plan === 'premium' ? 'Premium' : 'Standard'}
+                      </span>
+                      <span className="onboard-summary-meta">
+                        {plan === 'basic'
+                          ? 'K150 / month'
+                          : plan === 'premium'
+                            ? 'K600 / month'
+                            : 'K300 / month'}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              ) : null}
-            </CardContent>
-          </Card>
+
+                <div className="flex flex-wrap gap-2">
+                  <Button onClick={pay} disabled={!canPay || paying} className="zsms-hover-raise">
+                    {paying ? 'Processing...' : 'Pay Now'}
+                  </Button>
+                  <Button variant="outline" onClick={refreshStatus} className="zsms-hover-raise">
+                    Refresh Status
+                  </Button>
+                </div>
+
+                {String(status?.registration?.paymentStatus || '').toLowerCase() === 'pending' ? (
+                  <div className="onboard-subtitle">
+                    Payment is pending. Complete the prompt on your phone, then click Refresh
+                    Status.
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          </div>
         ) : null}
 
         {status?.authenticated && verified && paid && !completed?.loginUrl ? (
@@ -367,7 +439,10 @@ export default function OnboardingPage({ searchParams }) {
                 <div className="rounded-xl border border-royalPurple-border bg-royalPurple-deep p-4">
                   <div className="text-royalPurple-text1 font-semibold">Portal Ready</div>
                   <div className="text-royalPurple-text2 text-sm mt-1">Login URL:</div>
-                  <a className="text-amber-300 text-sm break-all" href={completed.loginUrl}>
+                  <a
+                    className="text-royalPurple-accent text-sm break-all"
+                    href={completed.loginUrl}
+                  >
                     {completed.loginUrl}
                   </a>
                 </div>
