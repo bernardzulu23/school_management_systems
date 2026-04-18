@@ -985,6 +985,7 @@ model SchoolRegistration {
   isVerified Boolean @default(false)
   verificationToken String? @unique
   verificationExpiry DateTime?
+  lastVerificationSentAt DateTime?
 
   plan      String?
   paymentStatus String @default("unpaid")

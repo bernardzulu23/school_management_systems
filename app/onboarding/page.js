@@ -18,6 +18,8 @@ export default function OnboardingPage({ searchParams }) {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [resendCooldown, setResendCooldown] = useState(0)
+  const [resending, setResending] = useState(false)
 
   const [plan, setPlan] = useState('standard')
   const [provider, setProvider] = useState('airtel')
@@ -71,6 +73,14 @@ export default function OnboardingPage({ searchParams }) {
     refreshStatus()
   }, [])
 
+  useEffect(() => {
+    if (resendCooldown <= 0) return
+    const t = setInterval(() => {
+      setResendCooldown((s) => Math.max(0, s - 1))
+    }, 1000)
+    return () => clearInterval(t)
+  }, [resendCooldown])
+
   const start = async () => {
     if (!canStart) return
     setSubmitting(true)
@@ -82,6 +92,11 @@ export default function OnboardingPage({ searchParams }) {
       })
       const json = await res.json().catch(() => ({}))
 
+      if (res.status === 429) {
+        setResendCooldown(Number(json?.retryAfter) || 60)
+        throw new Error(json?.error || 'Please wait before resending')
+      }
+
       if (json.alreadyCompleted) {
         toast.success('Welcome back! Redirecting to dashboard...')
         window.location.href = '/dashboard'
@@ -90,6 +105,7 @@ export default function OnboardingPage({ searchParams }) {
 
       if (json.requiresVerification) {
         toast.success('Check your email for a verification link')
+        setResendCooldown(60)
         return
       }
 
@@ -101,10 +117,35 @@ export default function OnboardingPage({ searchParams }) {
 
       if (!res.ok) throw new Error(json?.error || 'Failed to start onboarding')
       toast.success('Check your email for a verification link')
+      setResendCooldown(60)
     } catch (e) {
       toast.error(e?.message || 'Failed to start onboarding')
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  const resendVerification = async () => {
+    if (!email.trim()) return
+    setResending(true)
+    try {
+      const res = await fetch('/api/onboarding/resend-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (res.status === 429) {
+        setResendCooldown(Number(json?.retryAfter) || 60)
+        throw new Error(json?.error || 'Please wait before resending')
+      }
+      if (!res.ok) throw new Error(json?.error || 'Failed to resend verification email')
+      toast.success('Verification email resent!')
+      setResendCooldown(60)
+    } catch (e) {
+      toast.error(e?.message || 'Failed to resend verification email')
+    } finally {
+      setResending(false)
     }
   }
 
@@ -214,6 +255,25 @@ export default function OnboardingPage({ searchParams }) {
               <Button onClick={start} disabled={!canStart || submitting}>
                 {submitting ? 'Sending...' : 'Send Verification Link'}
               </Button>
+              <div className="text-sm text-royalPurple-text2">
+                Didn&apos;t receive it?{' '}
+                <button
+                  type="button"
+                  disabled={resendCooldown > 0 || !email.trim() || resending}
+                  onClick={resendVerification}
+                  className={`underline ${
+                    resendCooldown > 0 || !email.trim() || resending
+                      ? 'text-royalPurple-text3 cursor-not-allowed'
+                      : 'text-royalPurple-accent hover:text-royalPurple-border2'
+                  }`}
+                >
+                  {resending
+                    ? 'Resending...'
+                    : resendCooldown > 0
+                      ? `Resend in ${resendCooldown}s`
+                      : 'Resend verification email'}
+                </button>
+              </div>
               <div className="text-xs text-royalPurple-text3">
                 After verifying your email, you will be redirected to plan selection.
               </div>

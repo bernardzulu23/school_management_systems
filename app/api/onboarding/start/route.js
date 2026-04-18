@@ -43,9 +43,22 @@ export async function POST(request) {
     return NextResponse.json({ success: true, alreadyCompleted: true }, { status: 200 })
   }
 
+  if (existing && !existing.isVerified && existing.lastVerificationSentAt) {
+    const last = new Date(existing.lastVerificationSentAt).getTime()
+    const elapsed = Date.now() - last
+    if (elapsed < 60_000) {
+      const retryAfter = Math.max(1, Math.ceil((60_000 - elapsed) / 1000))
+      return NextResponse.json(
+        { error: `Please wait ${retryAfter}s before resending`, retryAfter },
+        { status: 429 }
+      )
+    }
+  }
+
   const verificationToken = crypto.randomUUID()
   const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
   const passwordHash = await bcrypt.hash(password, 12)
+  const lastVerificationSentAt = new Date()
 
   const reg = await prisma.schoolRegistration.upsert({
     where: { email },
@@ -56,6 +69,7 @@ export async function POST(request) {
       isVerified: false,
       verificationToken,
       verificationExpiry,
+      lastVerificationSentAt,
       paymentStatus: 'unpaid',
       ...(plan ? { plan } : {}),
     },
@@ -64,6 +78,9 @@ export async function POST(request) {
       isVerified: existing?.isVerified || false,
       verificationToken: existing?.isVerified ? existing.verificationToken : verificationToken,
       verificationExpiry: existing?.isVerified ? existing.verificationExpiry : verificationExpiry,
+      lastVerificationSentAt: existing?.isVerified
+        ? existing.lastVerificationSentAt
+        : lastVerificationSentAt,
       paymentStatus: existing?.paymentStatus || 'unpaid',
       plan: existing?.plan || plan || null,
     },
