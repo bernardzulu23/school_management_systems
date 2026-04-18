@@ -37,7 +37,9 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
   const { user, logout } = useAuth()
   const { school } = useSchool()
   const pathname = usePathname()
-  const roleKey = String(user?.role || '').toLowerCase()
+  const rawRoleKey = String(user?.role || '').toLowerCase()
+  const roleKey =
+    rawRoleKey === 'admin' || rawRoleKey === 'administrator' ? 'headteacher' : rawRoleKey
 
   const getNavigationItems = () => {
     const baseItems = [
