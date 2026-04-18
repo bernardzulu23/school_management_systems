@@ -64,7 +64,13 @@ export async function POST(request) {
   const amount = PLAN_PRICING[plan]
   const referenceId = crypto.randomUUID()
 
-  const origin = request.headers.get('origin') || new URL(request.url).origin
+  const forwardedHost = request.headers.get('x-forwarded-host')
+  const host = forwardedHost || request.headers.get('host')
+  const forwardedProto = request.headers.get('x-forwarded-proto')
+  const proto = forwardedProto || (host && String(host).includes('localhost') ? 'http' : 'https')
+  const origin = host
+    ? `${proto}://${host}`
+    : request.headers.get('origin') || new URL(request.url).origin
   const callbackUrl = `${origin}/api/onboarding/lipila/callback`
 
   const lipilaPayload = {
@@ -126,14 +132,49 @@ export async function POST(request) {
       },
       body: JSON.stringify(lipilaPayload),
     })
-    const data = await response.json().catch(() => ({}))
+    const contentType = String(response.headers.get('content-type') || '')
+    const raw = await response.text().catch(() => '')
+    let data = {}
+    if (raw && contentType.includes('application/json')) {
+      data = JSON.parse(raw)
+    } else if (raw) {
+      try {
+        data = JSON.parse(raw)
+      } catch {
+        data = { raw }
+      }
+    }
     if (!response.ok) {
       await prisma.schoolRegistration.update({
         where: { id: reg.id },
         data: { paymentStatus: 'unpaid' },
       })
-      const msg = typeof data?.message === 'string' ? data.message : 'Payment request failed'
-      return NextResponse.json({ error: msg }, { status: 502 })
+      const rawMessage =
+        typeof data?.message === 'string'
+          ? data.message
+          : typeof data?.error === 'string'
+            ? data.error
+            : typeof data?.raw === 'string'
+              ? data.raw
+              : ''
+
+      const looksLikeBotGate =
+        typeof rawMessage === 'string' &&
+        (rawMessage.includes('Performing security verification') ||
+          rawMessage.includes('Just a moment') ||
+          rawMessage.includes('<html') ||
+          rawMessage.includes('<!doctype html'))
+
+      const msg = looksLikeBotGate
+        ? 'Payment gateway is blocked by security verification. Disable bot protection for the gateway endpoint or whitelist server-to-server requests.'
+        : typeof rawMessage === 'string' && rawMessage.trim()
+          ? rawMessage.trim()
+          : 'Payment request failed'
+
+      return NextResponse.json(
+        { error: msg, upstreamStatus: response.status, upstreamContentType: contentType },
+        { status: 502 }
+      )
     }
 
     return NextResponse.json(
