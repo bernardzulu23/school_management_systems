@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { colors, typography, spacing } from '@/lib/design-tokens'
@@ -71,6 +72,16 @@ const plans = [
 ]
 
 export function Pricing() {
+  const router = useRouter()
+
+  const planSlug = (name: string) => {
+    const key = String(name || '')
+      .trim()
+      .toLowerCase()
+    if (key === 'basic' || key === 'standard' || key === 'premium') return key
+    return 'standard'
+  }
+
   return (
     <section style={{ backgroundColor: colors.gray[50], padding: `${spacing.xxl} ${spacing.md}` }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -172,6 +183,8 @@ export function Pricing() {
                   variant={plan.highlight ? 'primary' : 'secondary'}
                   fullWidth
                   style={{ marginBottom: spacing.lg }}
+                  type="button"
+                  onClick={() => router.push(`/onboarding?plan=${planSlug(plan.name)}`)}
                 >
                   {plan.cta}
                 </Button>

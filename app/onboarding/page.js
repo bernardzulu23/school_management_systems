@@ -31,6 +31,15 @@ export default function OnboardingPage({ searchParams }) {
   const [saving, setSaving] = useState(false)
   const [completed, setCompleted] = useState(null)
 
+  useEffect(() => {
+    const raw = String(searchParams?.plan || '')
+      .trim()
+      .toLowerCase()
+    if (raw === 'basic' || raw === 'standard' || raw === 'premium') {
+      setPlan(raw)
+    }
+  }, [searchParams?.plan])
+
   const canStart = useMemo(() => email.trim() && password.length >= 6, [email, password])
   const canPay = useMemo(() => accountNumber.trim(), [accountNumber])
   const canSetup = useMemo(
@@ -47,6 +56,12 @@ export default function OnboardingPage({ searchParams }) {
       })
       const json = await res.json().catch(() => ({}))
       setStatus(json)
+      const currentPlan = String(json?.registration?.plan || '')
+        .trim()
+        .toLowerCase()
+      if (currentPlan === 'basic' || currentPlan === 'standard' || currentPlan === 'premium') {
+        setPlan(currentPlan)
+      }
     } finally {
       setLoadingStatus(false)
     }
@@ -63,7 +78,7 @@ export default function OnboardingPage({ searchParams }) {
       const res = await fetch('/api/onboarding/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, plan }),
       })
       const json = await res.json().catch(() => ({}))
 

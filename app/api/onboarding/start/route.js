@@ -26,6 +26,13 @@ export async function POST(request) {
     .trim()
     .toLowerCase()
   const password = String(body?.password || '')
+  const requestedPlan = String(body?.plan || '')
+    .trim()
+    .toLowerCase()
+  const plan =
+    requestedPlan === 'basic' || requestedPlan === 'standard' || requestedPlan === 'premium'
+      ? requestedPlan
+      : null
   if (!isValidEmail(email)) return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
   if (password.length < 6) {
     return NextResponse.json({ error: 'Password must be at least 6 characters' }, { status: 400 })
@@ -50,6 +57,7 @@ export async function POST(request) {
       verificationToken,
       verificationExpiry,
       paymentStatus: 'unpaid',
+      ...(plan ? { plan } : {}),
     },
     update: {
       passwordHash,
@@ -57,7 +65,7 @@ export async function POST(request) {
       verificationToken: existing?.isVerified ? existing.verificationToken : verificationToken,
       verificationExpiry: existing?.isVerified ? existing.verificationExpiry : verificationExpiry,
       paymentStatus: existing?.paymentStatus || 'unpaid',
-      plan: existing?.plan || null,
+      plan: existing?.plan || plan || null,
     },
     select: { id: true },
   })
