@@ -356,6 +356,7 @@ azure-pipelines.yml                 # CI/CD pipeline
 README.md                           # Main project documentation
 PROJECT_STRUCTURE.md                # This file - project structure
 SECURITY.md                         # Security documentation
+API_VERSIONING.md                   # Canonical API path + optional alias policy
 ANALYTICS.md                        # Analytics documentation
 GAMIFICATION.md                     # Gamification guide
 PWA.md                              # PWA implementation guide
