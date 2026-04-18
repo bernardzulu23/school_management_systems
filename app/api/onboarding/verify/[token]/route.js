@@ -41,7 +41,9 @@ export async function GET(request, { params }) {
     return configured.startsWith('.') ? configured : `.${configured}`
   })()
 
-  cookies().set('onboarding_token', onboardingToken, {
+  // ✅ FIX: await cookies() before calling .set()
+  const cookieStore = await cookies()
+  cookieStore.set('onboarding_token', onboardingToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
