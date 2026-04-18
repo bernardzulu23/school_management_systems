@@ -136,6 +136,13 @@ export default async function proxy(request) {
     response.headers.set(key, value)
   })
 
+  // Signal v1 APIs are compatibility routes and may be retired.
+  if (pathname.startsWith('/api/v1/')) {
+    response.headers.set('Deprecation', 'true')
+    response.headers.set('Sunset', 'Tue, 31 Dec 2026 23:59:59 GMT')
+    response.headers.set('Link', '</api>; rel="successor-version"')
+  }
+
   return response
 }
 

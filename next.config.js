@@ -11,7 +11,8 @@ const nextConfig = {
   },
 
   typescript: {
-    ignoreBuildErrors: true,
+    // Enforce TS correctness to avoid shipping broken builds.
+    ignoreBuildErrors: false,
   },
 
   images: {
@@ -86,19 +87,11 @@ const nextConfig = {
   // API routes configuration
   async headers() {
     const isProd = process.env.NODE_ENV === 'production'
-    const baseHeaders = [
-      {
-        source: '/:path*',
-        headers: [
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-        ],
-      },
-    ]
+    const headers = []
 
+    // Keep CORS headers only here; security headers are centralized in proxy.js.
     if (!isProd) {
-      baseHeaders.push({
+      headers.push({
         source: '/api/:path*',
         headers: [
           { key: 'Access-Control-Allow-Origin', value: '*' },
@@ -111,7 +104,7 @@ const nextConfig = {
       })
     }
 
-    return baseHeaders
+    return headers
   },
 
   // Redirects for better SEO
