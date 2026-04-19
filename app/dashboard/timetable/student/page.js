@@ -1,461 +1,109 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/Button'
+import { StudentTimetableView } from '@/components/timetable/StudentTimetableView'
 import { useAuth } from '@/lib/auth'
-import { startTopLoading, stopTopLoading } from '@/lib/uiProgress'
-import { timetableAPI, timeSlots, daysOfWeek } from '@/lib/timetableData'
-import {
-  Calendar,
-  Clock,
-  BookOpen,
-  MapPin,
-  User,
-  Download,
-  Printer,
-  ChevronLeft,
-  ChevronRight,
-  CalendarCheck,
-  RefreshCw,
-} from 'lucide-react'
 
-// Helper function to get current week
-function getCurrentWeek() {
-  const now = new Date()
-  const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1))
-  return startOfWeek.toISOString().split('T')[0]
+function genTimeSlots() {
+  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+  const periods = [
+    { label: 'Period 1', start: '08:00', end: '08:40', period: 1, isBreak: false },
+    { label: 'Period 2', start: '08:45', end: '09:25', period: 2, isBreak: false },
+    { label: 'Period 3', start: '09:30', end: '10:10', period: 3, isBreak: false },
+    { label: 'Break', start: '10:10', end: '10:30', period: 4, isBreak: true },
+    { label: 'Period 4', start: '10:30', end: '11:10', period: 5, isBreak: false },
+    { label: 'Period 5', start: '11:15', end: '11:55', period: 6, isBreak: false },
+    { label: 'Lunch', start: '12:00', end: '12:40', period: 7, isBreak: true },
+    { label: 'Period 6', start: '12:40', end: '13:20', period: 8, isBreak: false },
+    { label: 'Period 7', start: '13:25', end: '14:05', period: 9, isBreak: false },
+    { label: 'Period 8', start: '14:10', end: '14:50', period: 10, isBreak: false },
+    { label: 'Period 9', start: '14:55', end: '15:35', period: 11, isBreak: false },
+  ]
+  const out = []
+  for (const d of days) {
+    for (const p of periods) {
+      out.push({
+        id: `${d}-${p.period}`,
+        dayOfWeek: d,
+        startTime: p.start,
+        endTime: p.end,
+        period: p.period,
+        isBreak: p.isBreak,
+        label: p.label,
+      })
+    }
+  }
+  return out
+}
+
+function defaultClassrooms(count) {
+  const n = Math.max(8, Math.min(60, count))
+  return Array.from({ length: n }).map((_, i) => ({
+    id: `room-${i + 1}`,
+    name: `Rm${String(101 + i)}`,
+    capacity: 50,
+    equipment: ['chalkboard'],
+    accessibility: ['ground-floor'],
+  }))
 }
 
 export default function StudentTimetablePage() {
   const { user } = useAuth()
-  const [selectedWeek, setSelectedWeek] = useState(getCurrentWeek())
-  const [studentTimetable, setStudentTimetable] = useState(null)
-  const [todaySchedule, setTodaySchedule] = useState([])
-  const [upcomingClasses, setUpcomingClasses] = useState([])
+  const [classes, setClasses] = useState([])
+  const [teachers, setTeachers] = useState([])
+  const [classrooms, setClassrooms] = useState([])
+  const timeSlots = useMemo(() => genTimeSlots(), [])
+  const classId = user?.studentProfile?.classId ? String(user.studentProfile.classId) : undefined
 
-  // Student data - derived from authenticated user
-  const studentInfo = {
-    id: user?.id || null,
-    name: user?.name || 'Student',
-    studentId: user?.studentId || '',
-    class: user?.class || '',
-    classId: user?.classId || null,
-  }
-
-  const loadTimetableData = () => {
-    startTopLoading('Refreshing timetable')
-    // TODO: Fetch real timetable data from API
-    if (studentInfo.classId) {
-      const studentTimetableData = timetableAPI.getStudentTimetable(studentInfo.classId)
-      console.log('Student timetable data loaded:', studentTimetableData)
-      setStudentTimetable(studentTimetableData)
-    } else {
-      console.log('No class assigned to student, cannot load timetable')
-      setStudentTimetable({})
-    }
-    setTimeout(() => stopTopLoading(), 350)
-  }
-
-  // Load student timetable
   useEffect(() => {
-    loadTimetableData()
-  }, [user])
+    const load = async () => {
+      try {
+        const [classesRes, teachersRes] = await Promise.all([
+          fetch('/api/classes?limit=200', { cache: 'no-store' }),
+          fetch('/api/teachers?limit=200', { cache: 'no-store' }),
+        ])
+        const classesJson = await classesRes.json().catch(() => ({}))
+        const teachersJson = await teachersRes.json().catch(() => ({}))
 
-  // Update today's schedule and upcoming classes when timetable data changes
-  useEffect(() => {
-    if (studentTimetable) {
-      updateTodaySchedule()
-      updateUpcomingClasses()
-    }
-  }, [studentTimetable])
+        const cList = Array.isArray(classesJson?.data) ? classesJson.data : []
+        const mappedClasses = cList.map((c) => ({
+          id: c.id,
+          name: c.name || c.className || 'Class',
+          grade: Number(String(c.yearGroup || c.year_group || '').match(/\d+/)?.[0] || 8),
+          students: Number(c.studentCount || 40),
+          subjects: [],
+        }))
+        setClasses(mappedClasses)
+        setClassrooms(defaultClassrooms(mappedClasses.length))
 
-  function updateTodaySchedule() {
-    const today = new Date().toLocaleDateString('en-US', { weekday: 'long' })
-    const todayClasses = []
-
-    if (studentTimetable && studentTimetable[today]) {
-      timeSlots.forEach((slot) => {
-        if (!slot.isBreak && studentTimetable[today][slot.id]) {
-          todayClasses.push({
-            ...studentTimetable[today][slot.id],
-            time: slot.time,
-            period: slot.label,
-            slotId: slot.id,
-          })
-        }
-      })
-    }
-
-    setTodaySchedule(todayClasses)
-  }
-
-  function updateUpcomingClasses() {
-    const now = new Date()
-    const currentTime = now.getHours() * 60 + now.getMinutes()
-    const today = now.toLocaleDateString('en-US', { weekday: 'long' })
-    const upcoming = []
-
-    if (studentTimetable && studentTimetable[today]) {
-      timeSlots.forEach((slot) => {
-        if (!slot.isBreak && studentTimetable[today][slot.id]) {
-          const [startTime] = slot.time.split('-')
-          const [hours, minutes] = startTime.split(':').map(Number)
-          const slotTime = hours * 60 + minutes
-
-          if (slotTime > currentTime) {
-            upcoming.push({
-              ...studentTimetable[today][slot.id],
-              time: slot.time,
-              period: slot.label,
-              minutesUntil: slotTime - currentTime,
-            })
-          }
-        }
-      })
-    }
-
-    setUpcomingClasses(upcoming.slice(0, 3)) // Show next 3 classes
-  }
-
-  function getTodaySchedule() {
-    const today = new Date().toLocaleDateString('en-US', { weekday: 'long' })
-    if (daysOfWeek.includes(today) && studentTimetable) {
-      const todayClasses = []
-      const daySchedule = studentTimetable[today] || {}
-
-      timeSlots.forEach((slot) => {
-        if (!slot.isBreak && daySchedule[slot.id]) {
-          todayClasses.push({
-            ...daySchedule[slot.id],
-            time: slot.time,
-            period: slot.label,
-          })
-        }
-      })
-
-      return todayClasses
-    }
-    return []
-  }
-
-  function getUpcomingClasses() {
-    const now = new Date()
-    const currentTime = now.getHours() * 60 + now.getMinutes()
-    const today = now.toLocaleDateString('en-US', { weekday: 'long' })
-
-    if (!daysOfWeek.includes(today) || !studentTimetable) return []
-
-    const daySchedule = studentTimetable[today] || {}
-    const upcoming = []
-
-    timeSlots.forEach((slot) => {
-      if (!slot.isBreak && daySchedule[slot.id]) {
-        const [startTime] = slot.time.split('-')
-        const [hours, minutes] = startTime.split(':').map(Number)
-        const slotTime = hours * 60 + minutes
-
-        if (slotTime > currentTime) {
-          upcoming.push({
-            ...daySchedule[slot.id],
-            time: slot.time,
-            period: slot.label,
-            minutesUntil: slotTime - currentTime,
-          })
-        }
+        const tList = Array.isArray(teachersJson?.data) ? teachersJson.data : []
+        const mappedTeachers = tList.map((t) => ({
+          id: t.id,
+          fullName: t?.user?.name || t?.name || 'Teacher',
+          subjects: [],
+          availability: [],
+          maxHours: {},
+          traveling: { enabled: false, schools: [] },
+        }))
+        setTeachers(mappedTeachers)
+      } catch (e) {
+        toast.error('Failed to load timetable metadata')
       }
-    })
-
-    return upcoming.slice(0, 3) // Next 3 classes
-  }
-
-  // Update schedule when studentTimetable changes
-  useEffect(() => {
-    if (studentTimetable) {
-      setTodaySchedule(getTodaySchedule())
-      setUpcomingClasses(getUpcomingClasses())
     }
-  }, [studentTimetable])
-
-  const navigateWeek = (direction) => {
-    const currentDate = new Date(selectedWeek)
-    currentDate.setDate(currentDate.getDate() + direction * 7)
-    setSelectedWeek(currentDate.toISOString().split('T')[0])
-  }
-
-  const goToCurrentWeek = () => {
-    setSelectedWeek(getCurrentWeek())
-  }
-
-  const printTimetable = () => {
-    window.print()
-  }
-
-  const downloadTimetable = () => {
-    // Here you would generate and download a PDF
-    toast('Timetable download feature - Coming soon')
-  }
+    load()
+  }, [])
 
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-royalPurple-text1">My Timetable</h1>
-            <p className="text-royalPurple-text2 mt-1">
-              {studentInfo.name} - {studentInfo.class} ({studentInfo.studentId})
-            </p>
-          </div>
-          <div className="flex space-x-3">
-            <Button variant="outline" onClick={loadTimetableData}>
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh
-            </Button>
-            <Button variant="outline" onClick={printTimetable}>
-              <Printer className="h-4 w-4 mr-2" />
-              Print
-            </Button>
-            <Button variant="outline" onClick={downloadTimetable}>
-              <Download className="h-4 w-4 mr-2" />
-              Download
-            </Button>
-          </div>
-        </div>
-
-        {/* Today's Overview */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Today's Schedule */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <CalendarCheck className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
-                Today's Schedule
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {todaySchedule.length > 0 ? (
-                <div className="space-y-3">
-                  {todaySchedule.map((cls, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center p-3 rounded-lg border"
-                      style={{ borderLeftColor: cls.color, borderLeftWidth: '4px' }}
-                    >
-                      <div className="flex-1">
-                        <div className="font-semibold text-royalPurple-text1">{cls.subject}</div>
-                        <div className="text-sm text-royalPurple-text2 flex items-center mt-1">
-                          <Clock className="h-3 w-3 mr-1" />
-                          {cls.time} ({cls.period})
-                        </div>
-                        <div className="text-sm text-royalPurple-text2 flex items-center">
-                          <User className="h-3 w-3 mr-1" />
-                          {cls.teacher}
-                        </div>
-                        <div className="text-sm text-royalPurple-text2 flex items-center">
-                          <MapPin className="h-3 w-3 mr-1" />
-                          {cls.classroom}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center text-royalPurple-text3 py-8">
-                  <Calendar className="h-12 w-12 mx-auto mb-4 text-royalPurple-text3" />
-                  <p>No classes scheduled for today</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Upcoming Classes */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Clock className="h-5 w-5 mr-2 text-royalPurple-successTx" />
-                Next Classes
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {upcomingClasses.length > 0 ? (
-                <div className="space-y-3">
-                  {upcomingClasses.map((cls, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-3 rounded-lg bg-royalPurple-success border border-royalPurple-border"
-                    >
-                      <div>
-                        <div className="font-semibold text-royalPurple-text1">{cls.subject}</div>
-                        <div className="text-sm text-royalPurple-text2">
-                          {cls.time} - {cls.classroom}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-sm font-medium text-royalPurple-successTx">
-                          {cls.minutesUntil < 60
-                            ? `${cls.minutesUntil}m`
-                            : `${Math.floor(cls.minutesUntil / 60)}h ${cls.minutesUntil % 60}m`}
-                        </div>
-                        <div className="text-xs text-royalPurple-text3">remaining</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center text-royalPurple-text3 py-8">
-                  <Clock className="h-12 w-12 mx-auto mb-4 text-royalPurple-text3" />
-                  <p>No more classes today</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Weekly Timetable */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <span className="flex items-center">
-                <Calendar className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
-                Weekly Timetable
-              </span>
-              <div className="flex items-center space-x-2">
-                <Button variant="outline" size="sm" onClick={() => navigateWeek(-1)}>
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <Button variant="outline" size="sm" onClick={goToCurrentWeek}>
-                  <CalendarCheck className="h-4 w-4 mr-1" />
-                  This Week
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => navigateWeek(1)}>
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse border border-royalPurple-border">
-                <thead>
-                  <tr>
-                    <th className="border border-royalPurple-border p-3 bg-royalPurple-page w-32">
-                      Time
-                    </th>
-                    {daysOfWeek.map((day) => (
-                      <th
-                        key={day}
-                        className="border border-royalPurple-border p-3 bg-royalPurple-page min-w-48"
-                      >
-                        {day}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {timeSlots.map((slot) => (
-                    <tr key={slot.id}>
-                      <td
-                        className={`border border-royalPurple-border p-3 font-medium text-center ${
-                          slot.isBreak ? 'bg-yellow-50 text-yellow-800' : 'bg-royalPurple-page'
-                        }`}
-                      >
-                        <div className="text-sm font-semibold">{slot.label}</div>
-                        <div className="text-xs text-royalPurple-text2">{slot.time}</div>
-                      </td>
-                      {daysOfWeek.map((day) => (
-                        <td
-                          key={`${day}-${slot.id}`}
-                          className="border border-royalPurple-border p-2"
-                        >
-                          {slot.isBreak ? (
-                            <div className="text-center text-yellow-600 font-medium py-6">
-                              {slot.label}
-                            </div>
-                          ) : (
-                            <div>
-                              {studentTimetable?.[day]?.[slot.id] ? (
-                                <div
-                                  className="p-3 rounded-lg text-royalPurple-text1 text-sm"
-                                  style={{ backgroundColor: studentTimetable[day][slot.id].color }}
-                                >
-                                  <div className="font-semibold mb-1">
-                                    {studentTimetable[day][slot.id].subject}
-                                  </div>
-                                  <div className="text-xs opacity-90 flex items-center mb-1">
-                                    <User className="h-3 w-3 mr-1" />
-                                    {studentTimetable[day][slot.id].teacher}
-                                  </div>
-                                  <div className="text-xs opacity-90 flex items-center">
-                                    <MapPin className="h-3 w-3 mr-1" />
-                                    {studentTimetable[day][slot.id].classroom}
-                                  </div>
-                                </div>
-                              ) : (
-                                <div className="text-center text-royalPurple-text3 py-6">
-                                  Free Period
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Subject Summary */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <BookOpen className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
-              Weekly Subject Summary
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {(() => {
-                const subjectCounts = {}
-                daysOfWeek.forEach((day) => {
-                  timeSlots.forEach((slot) => {
-                    if (!slot.isBreak && studentTimetable?.[day]?.[slot.id]) {
-                      const subject = studentTimetable[day][slot.id].subject
-                      subjectCounts[subject] = (subjectCounts[subject] || 0) + 1
-                    }
-                  })
-                })
-
-                return Object.entries(subjectCounts).map(([subject, count]) => {
-                  const subjectData = Object.values(studentTimetable || {})
-                    .flatMap((day) => Object.values(day))
-                    .find((cls) => cls?.subject === subject)
-
-                  return (
-                    <div key={subject} className="text-center p-3 rounded-lg border">
-                      <div
-                        className="w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center text-royalPurple-text1 font-bold"
-                        style={{ backgroundColor: subjectData?.color }}
-                      >
-                        {count}
-                      </div>
-                      <div className="text-sm font-medium text-royalPurple-text1">{subject}</div>
-                      <div className="text-xs text-royalPurple-text2">
-                        {count} period{count !== 1 ? 's' : ''}/week
-                      </div>
-                    </div>
-                  )
-                })
-              })()}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+    <DashboardLayout title="My Timetable">
+      <StudentTimetableView
+        timeSlots={timeSlots}
+        classId={classId}
+        classes={classes}
+        teachers={teachers}
+        classrooms={classrooms}
+      />
     </DashboardLayout>
   )
 }

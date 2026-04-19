@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StudentRosterCard } from '@/components/dashboard/StudentRosterCard'
 import { Button } from '@/components/ui/Button'
 import HodAssignments from '@/components/dashboard/HodAssignments'
+import { TimetableSummary } from '@/components/dashboard/TimetableSummary'
 import { api } from '@/lib/api'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import {
@@ -452,6 +453,8 @@ export default function HodDashboard() {
               </div>
             </div>
           </div>
+
+          <TimetableSummary userRole="hod" userId={currentUser?.id} className="max-w-none" />
 
           {/* Department Subjects Overview */}
           <Card variant="glass">

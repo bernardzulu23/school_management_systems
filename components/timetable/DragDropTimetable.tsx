@@ -12,6 +12,7 @@ export interface DragDropTimetableProps {
   studentClasses: Class[]
   onAssignmentChange: (assignment: Assignment) => void
   onConflictDetected: (conflicts: Map<string, import('@/lib/timetable/types').Conflict[]>) => void
+  season?: 'normal' | 'planting' | 'harvest'
 }
 
 type DragState =
@@ -52,6 +53,7 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
     studentClasses,
     onAssignmentChange,
     onConflictDetected,
+    season = 'normal',
   } = props
 
   const [drag, setDrag] = useState<DragState>({ active: false })
@@ -63,7 +65,7 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
       allTeachers: teachers,
       allClassrooms: classrooms,
       allClasses: studentClasses,
-      season: 'normal',
+      season,
     })
 
   const days = useMemo(() => {

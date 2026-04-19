@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 // import TeacherAssignments from '@/components/dashboard/TeacherAssignments'
 import { api } from '@/lib/api'
+import { TimetableSummary } from '@/components/dashboard/TimetableSummary'
 import {
   Users,
   BookOpen,
@@ -462,6 +463,8 @@ export default function TeacherDashboard() {
               </div>
             </div>
           </div>
+
+          <TimetableSummary userRole="teacher" userId={currentUser?.id} className="max-w-none" />
 
           {/* Teacher Information Card */}
           <Card variant="glass">

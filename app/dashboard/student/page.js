@@ -12,6 +12,7 @@ import StudentGameDashboard from '@/components/games/StudentGameDashboard'
 import GamePlayer from '@/components/games/GamePlayer'
 import AchievementSystem from '@/components/games/AchievementSystem'
 import SmartDashboardIntegration from '@/components/dashboard/SmartDashboardIntegration'
+import { TimetableSummary } from '@/components/dashboard/TimetableSummary'
 import { api } from '@/lib/api'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import {
@@ -278,6 +279,12 @@ export default function StudentDashboard() {
           {/* Tab Content */}
           {activeTab === 'overview' && (
             <div className="space-y-8">
+              <TimetableSummary
+                userRole="student"
+                userId={currentUser?.id}
+                className="max-w-none"
+              />
+
               {/* Student Information Card */}
               {currentUser && (
                 <Card variant="glass">

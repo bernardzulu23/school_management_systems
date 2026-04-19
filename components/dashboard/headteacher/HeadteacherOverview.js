@@ -20,6 +20,7 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Toolti
 import { HeadteacherStats } from './HeadteacherStats'
 import { useHeadteacher } from '@/lib/context/HeadteacherContext'
 import { StudentRosterCard } from '@/components/dashboard/StudentRosterCard'
+import { TimetableSummary } from '@/components/dashboard/TimetableSummary'
 import { percentTextClass } from '@/lib/utils/percentColor'
 
 export const HeadteacherOverview = memo(function HeadteacherOverview() {
@@ -61,6 +62,8 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
       <div className="bg-royalPurple-deep border border-royalPurple-border rounded-2xl p-4">
         <HeadteacherStats schoolStats={schoolStats} />
       </div>
+
+      <TimetableSummary userRole="headteacher" className="max-w-none" />
 
       {/* School Performance Overview */}
       <Card variant="glass">

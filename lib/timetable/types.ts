@@ -253,6 +253,7 @@ export interface Class {
   name: string
   grade: GradeLevel
   band?: GradeBand
+  color?: ColorRef
   students: number | StudentRef[]
   subjects: SubjectRef[]
   /** Optional preferred room for home-room teaching. */

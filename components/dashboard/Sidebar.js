@@ -68,7 +68,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'AI Report Comments', href: '/dashboard/teacher/report-comments', icon: Sparkles },
         { name: 'AI Story Weaver', href: '/dashboard/teacher/story-weaver', icon: Sparkles },
         { name: 'Attendance Returns', href: '/dashboard/attendance/returns', icon: UserCheck },
-        { name: 'Master Timetable', href: '/dashboard/timetable/master', icon: Calendar },
+        { name: 'Master Timetable', href: '/dashboard/headteacher/timetable', icon: Calendar },
         { name: 'Department Timetable', href: '/dashboard/timetable/hod', icon: Calendar },
         { name: 'Assessments', href: '/dashboard/assessments', icon: ClipboardList },
         { name: 'Results', href: '/dashboard/results', icon: BarChart3 },

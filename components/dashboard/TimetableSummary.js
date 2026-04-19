@@ -1,101 +1,172 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { timetableAPI, timeSlots } from '@/lib/timetableData'
 import SkeletonLoader from '@/components/SkeletonLoader'
-import {
-  Calendar,
-  Clock,
-  BookOpen,
-  MapPin,
-  Users,
-  User,
-  ChevronRight,
-  AlertCircle,
-} from 'lucide-react'
+import toast from 'react-hot-toast'
+import { useAuth } from '@/lib/auth'
+import { useTimetableStore } from '@/lib/timetable/timetableStore'
+import { Calendar, Clock, MapPin, User, ChevronRight, AlertCircle } from 'lucide-react'
+
+const DAYS = [
+  { key: 'monday', label: 'MON' },
+  { key: 'tuesday', label: 'TUE' },
+  { key: 'wednesday', label: 'WED' },
+  { key: 'thursday', label: 'THU' },
+  { key: 'friday', label: 'FRI' },
+]
+
+const PREVIEW_SLOTS = [
+  { startTime: '08:00', endTime: '08:40' },
+  { startTime: '08:45', endTime: '09:25' },
+  { startTime: '09:30', endTime: '10:10' },
+]
+
+function dayKeyFromDate(d) {
+  const key = String(
+    d.toLocaleDateString('en-US', {
+      weekday: 'long',
+      timeZone: 'Africa/Lusaka',
+    })
+  ).toLowerCase()
+  if (key.startsWith('mon')) return 'monday'
+  if (key.startsWith('tue')) return 'tuesday'
+  if (key.startsWith('wed')) return 'wednesday'
+  if (key.startsWith('thu')) return 'thursday'
+  if (key.startsWith('fri')) return 'friday'
+  return null
+}
+
+function hhmmToMinutes(v) {
+  const [h, m] = String(v || '0:0')
+    .split(':')
+    .map((x) => Number(x))
+  if (!Number.isFinite(h) || !Number.isFinite(m)) return 0
+  return h * 60 + m
+}
+
+function pastelBgFor(id) {
+  const palette = [
+    '#dbeafe',
+    '#dcfce7',
+    '#fef9c3',
+    '#ffe4e6',
+    '#e0e7ff',
+    '#fae8ff',
+    '#cffafe',
+    '#ffedd5',
+  ]
+  const s = String(id || '')
+  let hash = 0
+  for (let i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0
+  return palette[hash % palette.length]
+}
+
+function seasonFromMode(mode) {
+  if (mode === 'harvest') return 'farming'
+  if (mode === 'planting') return 'planting'
+  return 'normal'
+}
+
+function timeAgo(iso) {
+  const ts = Date.parse(String(iso || ''))
+  if (!Number.isFinite(ts)) return null
+  const diffMs = Date.now() - ts
+  if (diffMs < 30 * 1000) return 'Just now'
+  const mins = Math.floor(diffMs / 60000)
+  if (mins < 60) return `${mins}m ago`
+  const hrs = Math.floor(mins / 60)
+  if (hrs < 24) return `${hrs}h ago`
+  const days = Math.floor(hrs / 24)
+  return `${days}d ago`
+}
 
 export function TimetableSummary({ userRole, userId, className = '' }) {
-  const [todaySchedule, setTodaySchedule] = useState([])
-  const [nextClass, setNextClass] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const { user } = useAuth()
+  const [mounted, setMounted] = useState(false)
 
-  // Get timetable data based on user role
-  const getTimetableData = () => {
-    if (userRole === 'student') {
-      // TODO: Get student's class ID from user profile context
-      const studentClassId = 5 // Placeholder for now until context is available
-      return timetableAPI.getStudentTimetable(studentClassId)
-    } else if (userRole === 'teacher') {
-      // TODO: Get teacher ID from user profile context
-      const teacherId = 1 // Placeholder for now until context is available
-      return timetableAPI.getTeacherTimetable(teacherId)
+  const assignments = useTimetableStore((s) => s.assignments)
+  const conflictCount = useTimetableStore((s) => s.getConflictCount())
+  const isPublished = useTimetableStore((s) => s.isPublished)
+  const lastPublishedAt = useTimetableStore((s) => s.lastPublishedAt)
+  const pendingChanges = useTimetableStore((s) => s.pendingChanges)
+  const seasonMode = useTimetableStore((s) => s.currentSeason)
+  const publish = useTimetableStore((s) => s.publish)
+
+  useEffect(() => setMounted(true), [])
+
+  const resolvedRole = String(userRole || user?.role || '').toLowerCase()
+  const activeSeason = seasonFromMode(seasonMode)
+
+  const filteredAssignments = useMemo(() => {
+    const base = Array.isArray(assignments) ? assignments : []
+    const bySeason = base.filter((a) => String(a?.season) === activeSeason)
+
+    if (resolvedRole === 'student') {
+      const classId = String(user?.studentProfile?.classId || '').trim()
+      if (!classId) return []
+      return bySeason.filter((a) => String(a?.classId) === classId)
     }
-    return {}
-  }
 
-  function getTodaySchedule() {
-    const today = new Date().toLocaleDateString('en-US', { weekday: 'long' })
-    const timetableData = getTimetableData()
+    if (resolvedRole === 'teacher' || resolvedRole === 'hod') {
+      const teacherId = String(user?.teacherProfile?.id || userId || '').trim()
+      if (!teacherId) return []
+      return bySeason.filter((a) => String(a?.teacherId) === teacherId)
+    }
 
-    if (!timetableData[today]) return []
+    return bySeason
+  }, [
+    assignments,
+    activeSeason,
+    resolvedRole,
+    user?.studentProfile?.classId,
+    user?.teacherProfile?.id,
+    userId,
+  ])
 
-    const todayClasses = []
-    const daySchedule = timetableData[today]
+  const todayKey = useMemo(() => {
+    if (!mounted) return null
+    return dayKeyFromDate(new Date())
+  }, [mounted])
 
-    timeSlots.forEach((slot) => {
-      if (!slot.isBreak && daySchedule[slot.id]) {
-        todayClasses.push({
-          ...daySchedule[slot.id],
-          time: slot.time,
-          period: slot.label,
-          slotId: slot.id,
-        })
-      }
-    })
+  const todaySchedule = useMemo(() => {
+    if (!todayKey) return []
+    return filteredAssignments
+      .filter((a) => String(a?.dayOfWeek) === todayKey && !a?.isBreak)
+      .slice()
+      .sort((a, b) => hhmmToMinutes(a?.startTime) - hhmmToMinutes(b?.startTime))
+      .map((a) => ({
+        id: a.id,
+        subject: String(a?.subjectId || 'Subject'),
+        class: String(a?.classId || 'Class'),
+        teacher: String(a?.teacherId || 'Teacher'),
+        classroom: String(a?.classroomId || 'Room'),
+        time: `${a?.startTime || ''}-${a?.endTime || ''}`,
+        startTime: a?.startTime,
+        period: a?.period,
+      }))
+  }, [filteredAssignments, todayKey])
 
-    return todayClasses
-  }
-
-  function getNextClass() {
+  const nextClass = useMemo(() => {
+    if (!todayKey || !mounted) return null
     const now = new Date()
-    const currentTime = now.getHours() * 60 + now.getMinutes()
-    const today = now.toLocaleDateString('en-US', { weekday: 'long' })
-    const timetableData = getTimetableData()
-
-    if (!timetableData[today]) return null
-
-    const daySchedule = timetableData[today]
-
-    for (const slot of timeSlots) {
-      if (!slot.isBreak && daySchedule[slot.id]) {
-        const [startTime] = slot.time.split('-')
-        const [hours, minutes] = startTime.split(':').map(Number)
-        const slotTime = hours * 60 + minutes
-
-        if (slotTime > currentTime) {
-          return {
-            ...daySchedule[slot.id],
-            time: slot.time,
-            period: slot.label,
-            minutesUntil: slotTime - currentTime,
-          }
+    const currentMinutes = now.getHours() * 60 + now.getMinutes()
+    for (const a of todaySchedule) {
+      const start = hhmmToMinutes(a.startTime)
+      if (start > currentMinutes) {
+        return {
+          ...a,
+          minutesUntil: start - currentMinutes,
         }
       }
     }
-
     return null
-  }
-
-  useEffect(() => {
-    setTodaySchedule(getTodaySchedule())
-    setNextClass(getNextClass())
-    setIsLoading(false)
-  }, [userRole, userId])
+  }, [todayKey, todaySchedule, mounted])
 
   const getTimetableLink = () => {
-    switch (userRole) {
+    switch (resolvedRole) {
       case 'student':
         return '/dashboard/timetable/student'
       case 'teacher':
@@ -103,13 +174,15 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
       case 'hod':
         return '/dashboard/timetable/hod'
       case 'headteacher':
-        return '/dashboard/timetable/master'
+        return '/dashboard/headteacher/timetable'
       default:
         return '/dashboard'
     }
   }
 
-  if (isLoading) {
+  const href = getTimetableLink()
+
+  if (!mounted) {
     return (
       <Card
         className={className}
@@ -131,6 +204,142 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
     )
   }
 
+  if (resolvedRole === 'headteacher') {
+    const status =
+      assignments.length === 0
+        ? { label: 'Not created', tone: 'text-royalPurple-text3' }
+        : conflictCount > 0
+          ? { label: `${conflictCount} conflicts`, tone: 'text-royalPurple-dangerTx' }
+          : isPublished
+            ? { label: 'Published', tone: 'text-royalPurple-successTx' }
+            : { label: 'Draft', tone: 'text-royalPurple-text2' }
+
+    const lastChangeAt =
+      pendingChanges?.[0]?.at || (lastPublishedAt ? lastPublishedAt.toISOString() : null)
+    const updated = timeAgo(lastChangeAt)
+    const canPublish = conflictCount === 0 && assignments.length > 0 && !isPublished
+
+    return (
+      <Card className={className}>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex flex-wrap items-center justify-between gap-3">
+            <span className="flex items-center">
+              <Calendar className="h-5 w-5 mr-2 text-royalPurple-accentTx" aria-hidden="true" />
+              Master Timetable
+            </span>
+            <div className="flex items-center gap-2">
+              <span className={`text-sm font-semibold ${status.tone}`}>{status.label}</span>
+              <Link href={href} className="inline-flex">
+                <Button variant="ghost" size="sm" aria-label="View full timetable">
+                  View Full
+                  <ChevronRight className="h-4 w-4 ml-1" aria-hidden="true" />
+                </Button>
+              </Link>
+            </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {assignments.length === 0 ? (
+            <div className="rounded-xl border border-royalPurple-border bg-royalPurple-card/40 p-6 text-center">
+              <div className="text-royalPurple-text1 font-semibold">
+                Master Timetable Not Created
+              </div>
+              <div className="mt-1 text-sm text-royalPurple-text3">Ready to generate</div>
+              <div className="mt-5 flex items-center justify-center gap-2">
+                <Link href={href} className="inline-flex">
+                  <Button className="zsms-hover-raise">Generate Now</Button>
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="overflow-x-auto rounded-xl border border-royalPurple-border bg-royalPurple-card/40">
+              <table className="min-w-[720px] w-full text-sm">
+                <thead>
+                  <tr className="bg-royalPurple-deep/40">
+                    <th className="px-3 py-2 text-left text-royalPurple-text3 font-semibold">
+                      Time
+                    </th>
+                    {DAYS.map((d) => (
+                      <th
+                        key={d.key}
+                        className="px-3 py-2 text-left text-royalPurple-text3 font-semibold"
+                      >
+                        {d.label}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {PREVIEW_SLOTS.map((slot) => (
+                    <tr key={slot.startTime} className="border-t border-royalPurple-border/40">
+                      <td className="px-3 py-3 text-royalPurple-text2 whitespace-nowrap">
+                        {slot.startTime}-{slot.endTime}
+                      </td>
+                      {DAYS.map((d) => {
+                        const a = filteredAssignments.find(
+                          (x) =>
+                            String(x?.dayOfWeek) === d.key &&
+                            String(x?.startTime) === slot.startTime &&
+                            !x?.isBreak
+                        )
+                        if (!a)
+                          return (
+                            <td key={d.key} className="px-3 py-3 text-royalPurple-text3">
+                              —
+                            </td>
+                          )
+                        const bg = pastelBgFor(a.subjectId)
+                        return (
+                          <td key={d.key} className="px-3 py-3 align-top">
+                            <div
+                              className="rounded-lg border border-royalPurple-border/50 p-2"
+                              style={{ background: bg }}
+                            >
+                              <div className="font-semibold text-royalPurple-text1">
+                                {String(a.subjectId)}
+                              </div>
+                              <div className="text-xs text-royalPurple-text2">
+                                {String(a.classId)}
+                              </div>
+                            </div>
+                          </td>
+                        )
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="text-xs text-royalPurple-text3">
+              {updated
+                ? `Updated: ${updated}`
+                : lastPublishedAt
+                  ? `Published: ${lastPublishedAt.toLocaleString()}`
+                  : ''}
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-royalPurple-text2">Conflicts: {conflictCount}</span>
+              <Button
+                onClick={() => {
+                  if (!canPublish) return
+                  publish()
+                  toast.success('Timetable published')
+                }}
+                disabled={!canPublish}
+                className="zsms-hover-raise"
+              >
+                Publish
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card className={className}>
       <CardHeader className="pb-3">
@@ -142,7 +351,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => (window.location.href = getTimetableLink())}
+            onClick={() => (window.location.href = href)}
             aria-label="View full timetable"
           >
             View Full
@@ -163,7 +372,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
               <div className="flex-1">
                 <div className="text-sm font-medium text-royalPurple-successTx">
                   <span className="sr-only">Next class: </span>
-                  {nextClass.subject} {userRole === 'teacher' && `- ${nextClass.class}`}
+                  {nextClass.subject} {resolvedRole === 'teacher' && `- ${nextClass.class}`}
                 </div>
                 <div className="text-xs text-royalPurple-successTx">
                   {nextClass.time} •{' '}
@@ -184,12 +393,12 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
               <li key={index}>
                 <article
                   className="flex items-center p-3 rounded-lg border focus-within:ring-2 focus-within:ring-blue-500 outline-none transition-shadow"
-                  style={{ borderLeftColor: cls.color, borderLeftWidth: '4px' }}
+                  style={{ borderLeftColor: pastelBgFor(cls.subject), borderLeftWidth: '4px' }}
                   tabIndex="0"
                 >
                   <div className="flex-1">
                     <div className="font-semibold text-royalPurple-text1 text-sm">
-                      {cls.subject} {userRole === 'teacher' && `- ${cls.class}`}
+                      {cls.subject} {resolvedRole === 'teacher' && `- ${cls.class}`}
                     </div>
                     <div className="text-xs text-royalPurple-text2 flex items-center mt-1">
                       <Clock className="h-3 w-3 mr-1" aria-hidden="true" />
@@ -201,18 +410,11 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
                       <span className="sr-only">Location: </span>
                       {cls.classroom}
                     </div>
-                    {userRole === 'student' && (
+                    {resolvedRole === 'student' && (
                       <div className="text-xs text-royalPurple-text2 flex items-center">
                         <User className="h-3 w-3 mr-1" aria-hidden="true" />
                         <span className="sr-only">Teacher: </span>
                         {cls.teacher}
-                      </div>
-                    )}
-                    {userRole === 'teacher' && (
-                      <div className="text-xs text-royalPurple-text2 flex items-center">
-                        <Users className="h-3 w-3 mr-1" aria-hidden="true" />
-                        <span className="sr-only">Students: </span>
-                        {cls.students} students
                       </div>
                     )}
                   </div>
@@ -224,7 +426,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => (window.location.href = getTimetableLink())}
+                  onClick={() => (window.location.href = href)}
                   aria-label={`View ${todaySchedule.length - 4} more classes`}
                 >
                   +{todaySchedule.length - 4} more classes
