@@ -84,6 +84,7 @@ model School {
   teacherTermProgress  TeacherTermProgress[]
   aiRequests           AIRequest[]
   aiUsageLogs          AIUsageLog[]
+  schedulingRecipes    SchedulingRecipe[]
   
   // Join Table Relations
   activityParticipants ActivityParticipant[]
@@ -136,6 +137,7 @@ model User {
   strategicGoalsCreated   StrategicGoal[]  @relation("StrategicGoalCreatedBy")
   strategicReviewsCreated StrategicReview[] @relation("StrategicReviewCreatedBy")
   timetableVersionsCreated TimetableVersion[] @relation("TimetableVersionCreatedBy")
+  schedulingRecipesCreated SchedulingRecipe[] @relation("SchedulingRecipeCreatedBy")
   
   @@unique([schoolId, email]) // Email must be unique per school
   @@index([schoolId])
@@ -277,6 +279,7 @@ model Teacher {
   substitutionsCover    Substitution[] @relation("SubstitutionCoverTeacher")
   periodAssignments     TeacherPeriodAssignment[]
   timetableEntries      TimetableEntry[]
+  schedulingRecipes     SchedulingRecipe[]
   
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt 
@@ -326,6 +329,7 @@ model Class {
   teachingAssignments TeachingAssignment[]
   subjectEnrollments PupilSubjectEnrollment[]
   timetableEntries TimetableEntry[]
+  schedulingRecipes SchedulingRecipe[]
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -355,6 +359,7 @@ model Subject {
   teachingAssignments TeachingAssignment[]
   pupilEnrollments PupilSubjectEnrollment[]
   timetableEntries TimetableEntry[]
+  schedulingRecipes SchedulingRecipe[]
   
   createdAt   DateTime @default(now()) 
   updatedAt   DateTime @updatedAt 
@@ -435,6 +440,7 @@ model TeachingAssignment {
   class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
 
   timetableEntries TimetableEntry[]
+  schedulingRecipes SchedulingRecipe[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -611,6 +617,125 @@ model TeacherPeriodAssignment {
   @@index([schoolId])
   @@index([teacherId])
   @@index([timeSlotId])
+}
+
+enum RecipeStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum RecipeBlockType {
+  SINGLE
+  DOUBLE
+  TRIPLE
+  QUAD
+}
+
+enum RecipeConstraintType {
+  HARD
+  SOFT
+}
+
+model SchedulingRecipe {
+  id        String @id @default(uuid())
+
+  schoolId  String
+  school    School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  teachingAssignmentId String
+  teachingAssignment   TeachingAssignment @relation(fields: [teachingAssignmentId], references: [id], onDelete: Cascade)
+
+  teacherId String
+  teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  classId   String
+  class     Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  status    RecipeStatus @default(DRAFT)
+
+  season    String?  // e.g. "normal" | "planting" | "farming"
+  seasonVariantOfId String?
+  seasonVariantOf   SchedulingRecipe? @relation("RecipeSeasonVariants", fields: [seasonVariantOfId], references: [id], onDelete: SetNull)
+  seasonVariants     SchedulingRecipe[] @relation("RecipeSeasonVariants")
+
+  expectedPeriodsPerWeek Int?
+
+  placementPriority Int @default(5) // 1 (highest) .. 10 (lowest)
+
+  isValid          Boolean @default(false)
+  validationErrors Json?
+  validatedAt      DateTime?
+
+  createdByUserId  String?
+  createdByUser    User? @relation("SchedulingRecipeCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
+
+  blocks      RecipeBlock[]
+  constraints RecipeConstraint[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([schoolId, teachingAssignmentId, season])
+  @@index([schoolId])
+  @@index([schoolId, status])
+  @@index([schoolId, teacherId])
+  @@index([schoolId, classId])
+  @@index([schoolId, subjectId])
+  @@index([teachingAssignmentId])
+  @@index([isValid])
+  @@index([season])
+}
+
+model RecipeBlock {
+  id       String @id @default(uuid())
+
+  recipeId String
+  recipe   SchedulingRecipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  type     RecipeBlockType
+  size     Int // number of consecutive periods, e.g. 1/2/3
+
+  quantity Int @default(1) // how many times this block repeats per week
+
+  placementPriority Int @default(5) // higher priority blocks placed first
+
+  preferredDays     String[] @default([]) // e.g. ["monday","wednesday"]
+  preferredPeriods  Int[]    @default([]) // e.g. [1,2,3]
+  forbiddenDays     String[] @default([])
+  forbiddenPeriods  Int[]    @default([])
+
+  allowSplitAcrossBreaks Boolean @default(false)
+
+  isLocked Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([recipeId])
+  @@index([recipeId, placementPriority])
+  @@index([type])
+}
+
+model RecipeConstraint {
+  id       String @id @default(uuid())
+
+  recipeId String
+  recipe   SchedulingRecipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  type     RecipeConstraintType
+  priority Int @default(5) // 1 (highest) .. 10 (lowest)
+  config   Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([recipeId])
+  @@index([recipeId, type])
+  @@index([priority])
 }
 
 model Constraint {
