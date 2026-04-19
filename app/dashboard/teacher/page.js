@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 // import TeacherAssignments from '@/components/dashboard/TeacherAssignments'
 import { api } from '@/lib/api'
-import { TimetableSummary } from '@/components/dashboard/TimetableSummary'
+import { TeacherTimetableView } from '@/components/timetable/TeacherTimetableView'
 import {
   Users,
   BookOpen,
@@ -64,10 +64,57 @@ import { percentTextClass } from '@/lib/utils/percentColor'
 // } from '@/components/dashboard/teacher/AdvancedTeacherFeatures2'
 // import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeachingHub'
 
+function genTimeSlots() {
+  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+  const periods = [
+    { label: 'Period 1', start: '08:00', end: '08:40', period: 1, isBreak: false },
+    { label: 'Period 2', start: '08:45', end: '09:25', period: 2, isBreak: false },
+    { label: 'Period 3', start: '09:30', end: '10:10', period: 3, isBreak: false },
+    { label: 'Break', start: '10:10', end: '10:30', period: 4, isBreak: true },
+    { label: 'Period 4', start: '10:30', end: '11:10', period: 5, isBreak: false },
+    { label: 'Period 5', start: '11:15', end: '11:55', period: 6, isBreak: false },
+    { label: 'Lunch', start: '12:00', end: '12:40', period: 7, isBreak: true },
+    { label: 'Period 6', start: '12:40', end: '13:20', period: 8, isBreak: false },
+    { label: 'Period 7', start: '13:25', end: '14:05', period: 9, isBreak: false },
+    { label: 'Period 8', start: '14:10', end: '14:50', period: 10, isBreak: false },
+    { label: 'Period 9', start: '14:55', end: '15:35', period: 11, isBreak: false },
+  ]
+  const out = []
+  for (const d of days) {
+    for (const p of periods) {
+      out.push({
+        id: `${d}-${p.period}`,
+        dayOfWeek: d,
+        startTime: p.start,
+        endTime: p.end,
+        period: p.period,
+        isBreak: p.isBreak,
+        label: p.label,
+      })
+    }
+  }
+  return out
+}
+
+function defaultClassrooms(count) {
+  const n = Math.max(8, Math.min(60, count))
+  return Array.from({ length: n }).map((_, i) => ({
+    id: `room-${i + 1}`,
+    name: `Rm${String(101 + i)}`,
+    capacity: 50,
+    equipment: ['chalkboard'],
+    accessibility: ['ground-floor'],
+  }))
+}
+
 export default function TeacherDashboard() {
   const router = useRouter()
   // Get current user data from auth context
   const { user: currentUser, isAuthenticated, logout, syncSession } = useAuth()
+  const timeSlots = useMemo(() => genTimeSlots(), [])
+  const [timetableClasses, setTimetableClasses] = useState([])
+  const [timetableClassrooms, setTimetableClassrooms] = useState([])
+  const [timetableMobile, setTimetableMobile] = useState(false)
 
   useEffect(() => {
     document.documentElement.style.setProperty('--rp-accent', '#2563eb')
@@ -97,6 +144,36 @@ export default function TeacherDashboard() {
   useEffect(() => {
     syncSession?.({ force: true })
   }, [syncSession])
+
+  useEffect(() => {
+    const update = () => setTimetableMobile(window.innerWidth < 768)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch('/api/classes?limit=200', { cache: 'no-store' })
+        const json = await res.json().catch(() => ({}))
+        const list = Array.isArray(json?.data) ? json.data : []
+        const mapped = list.map((c) => ({
+          id: c.id,
+          name: c.name || c.className || 'Class',
+          grade: Number(String(c.yearGroup || c.year_group || '').match(/\d+/)?.[0] || 8),
+          students: Number(c.studentCount || 40),
+          subjects: [],
+        }))
+        setTimetableClasses(mapped)
+        setTimetableClassrooms(defaultClassrooms(mapped.length))
+      } catch {
+        setTimetableClasses([])
+        setTimetableClassrooms(defaultClassrooms(12))
+      }
+    }
+    load()
+  }, [])
 
   // Enhanced state management
   const [teachingSubjects, setTeachingSubjects] = useState([])
@@ -426,6 +503,37 @@ export default function TeacherDashboard() {
     <DashboardLayout title="Teacher Dashboard">
       <div className="space-y-8">
         <div className="space-y-8">
+          <section className="max-w-none">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <h2 className="text-2xl font-bold text-royalPurple-text1">My Teaching Schedule</h2>
+              <div className="flex items-center gap-2 print:hidden">
+                <Link
+                  href="/dashboard/timetable/teacher"
+                  className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-royalPurple-card/70 border border-royalPurple-border text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-semibold"
+                >
+                  <Calendar className="h-4 w-4" />
+                  Open Timetable
+                </Link>
+                <Button
+                  variant="outline"
+                  onClick={() => window.print()}
+                  className="zsms-hover-raise"
+                >
+                  Print
+                </Button>
+              </div>
+            </div>
+            <div className="mt-4 max-w-none max-h-[40vh] overflow-auto">
+              <TeacherTimetableView
+                timeSlots={timeSlots}
+                teacherId={String(currentUser?.teacherProfile?.id || '') || undefined}
+                classes={timetableClasses}
+                classrooms={timetableClassrooms}
+                mobile={timetableMobile}
+              />
+            </div>
+          </section>
+
           <div className="backdrop-blur-lg bg-royalPurple-card/60 dark:bg-royalPurple-card/60 rounded-3xl p-8 shadow-2xl transition-colors duration-300">
             <div className="flex justify-between items-center">
               <div>
@@ -463,8 +571,6 @@ export default function TeacherDashboard() {
               </div>
             </div>
           </div>
-
-          <TimetableSummary userRole="teacher" userId={currentUser?.id} className="max-w-none" />
 
           {/* Teacher Information Card */}
           <Card variant="glass">

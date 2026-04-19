@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@/lib/auth'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
@@ -12,7 +12,7 @@ import StudentGameDashboard from '@/components/games/StudentGameDashboard'
 import GamePlayer from '@/components/games/GamePlayer'
 import AchievementSystem from '@/components/games/AchievementSystem'
 import SmartDashboardIntegration from '@/components/dashboard/SmartDashboardIntegration'
-import { TimetableSummary } from '@/components/dashboard/TimetableSummary'
+import { StudentTimetableView } from '@/components/timetable/StudentTimetableView'
 import { api } from '@/lib/api'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import {
@@ -47,6 +47,49 @@ import toast from 'react-hot-toast'
 
 // Games data is now fetched dynamically via API
 
+function genTimeSlots() {
+  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+  const periods = [
+    { label: 'Period 1', start: '08:00', end: '08:40', period: 1, isBreak: false },
+    { label: 'Period 2', start: '08:45', end: '09:25', period: 2, isBreak: false },
+    { label: 'Period 3', start: '09:30', end: '10:10', period: 3, isBreak: false },
+    { label: 'Break', start: '10:10', end: '10:30', period: 4, isBreak: true },
+    { label: 'Period 4', start: '10:30', end: '11:10', period: 5, isBreak: false },
+    { label: 'Period 5', start: '11:15', end: '11:55', period: 6, isBreak: false },
+    { label: 'Lunch', start: '12:00', end: '12:40', period: 7, isBreak: true },
+    { label: 'Period 6', start: '12:40', end: '13:20', period: 8, isBreak: false },
+    { label: 'Period 7', start: '13:25', end: '14:05', period: 9, isBreak: false },
+    { label: 'Period 8', start: '14:10', end: '14:50', period: 10, isBreak: false },
+    { label: 'Period 9', start: '14:55', end: '15:35', period: 11, isBreak: false },
+  ]
+  const out = []
+  for (const d of days) {
+    for (const p of periods) {
+      out.push({
+        id: `${d}-${p.period}`,
+        dayOfWeek: d,
+        startTime: p.start,
+        endTime: p.end,
+        period: p.period,
+        isBreak: p.isBreak,
+        label: p.label,
+      })
+    }
+  }
+  return out
+}
+
+function defaultClassrooms(count) {
+  const n = Math.max(8, Math.min(60, count))
+  return Array.from({ length: n }).map((_, i) => ({
+    id: `room-${i + 1}`,
+    name: `Rm${String(101 + i)}`,
+    capacity: 50,
+    equipment: ['chalkboard'],
+    accessibility: ['ground-floor'],
+  }))
+}
+
 export default function StudentDashboard() {
   useEffect(() => {
     document.documentElement.style.setProperty('--rp-accent', '#7c3aed')
@@ -61,6 +104,11 @@ export default function StudentDashboard() {
 
   const [activeTab, setActiveTab] = useState('overview')
   const [currentGame, setCurrentGame] = useState(null)
+  const timeSlots = useMemo(() => genTimeSlots(), [])
+  const [timetableClasses, setTimetableClasses] = useState([])
+  const [timetableTeachers, setTimetableTeachers] = useState([])
+  const [timetableClassrooms, setTimetableClassrooms] = useState([])
+  const [timetableMobile, setTimetableMobile] = useState(false)
   const [studentData, setStudentData] = useState({
     results: [],
     goals: [],
@@ -88,6 +136,54 @@ export default function StudentDashboard() {
       },
     ],
   })
+
+  useEffect(() => {
+    const update = () => setTimetableMobile(window.innerWidth < 768)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const [classesRes, teachersRes] = await Promise.all([
+          fetch('/api/classes?limit=200', { cache: 'no-store' }),
+          fetch('/api/teachers?limit=200', { cache: 'no-store' }),
+        ])
+        const classesJson = await classesRes.json().catch(() => ({}))
+        const teachersJson = await teachersRes.json().catch(() => ({}))
+
+        const cList = Array.isArray(classesJson?.data) ? classesJson.data : []
+        const mappedClasses = cList.map((c) => ({
+          id: c.id,
+          name: c.name || c.className || 'Class',
+          grade: Number(String(c.yearGroup || c.year_group || '').match(/\d+/)?.[0] || 8),
+          students: Number(c.studentCount || 40),
+          subjects: [],
+        }))
+        setTimetableClasses(mappedClasses)
+        setTimetableClassrooms(defaultClassrooms(mappedClasses.length))
+
+        const tList = Array.isArray(teachersJson?.data) ? teachersJson.data : []
+        const mappedTeachers = tList.map((t) => ({
+          id: t.id,
+          fullName: t?.user?.name || t?.name || 'Teacher',
+          subjects: [],
+          availability: [],
+          maxHours: {},
+          traveling: { enabled: false, schools: [] },
+        }))
+        setTimetableTeachers(mappedTeachers)
+      } catch (e) {
+        toast.error('Failed to load timetable metadata')
+        setTimetableClasses([])
+        setTimetableTeachers([])
+        setTimetableClassrooms(defaultClassrooms(12))
+      }
+    }
+    load()
+  }, [])
 
   // Get current user data from auth context
   const { user: currentUser } = useAuth()
@@ -276,15 +372,41 @@ export default function StudentDashboard() {
             )}
           </header>
 
+          <section className="max-w-none">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <h2 className="text-2xl font-bold text-royalPurple-text1">My Class Timetable</h2>
+              <div className="flex items-center gap-2 print:hidden">
+                <Link
+                  href="/dashboard/timetable/student"
+                  className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-royalPurple-card/70 border border-royalPurple-border text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-semibold"
+                >
+                  <Calendar className="h-4 w-4" />
+                  Open Timetable
+                </Link>
+                <Button
+                  variant="outline"
+                  onClick={() => window.print()}
+                  className="zsms-hover-raise"
+                >
+                  Print
+                </Button>
+              </div>
+            </div>
+            <div className="mt-4 max-w-none max-h-[50vh] overflow-auto">
+              <StudentTimetableView
+                timeSlots={timeSlots}
+                classId={String(currentUser?.studentProfile?.classId || '') || undefined}
+                classes={timetableClasses}
+                teachers={timetableTeachers}
+                classrooms={timetableClassrooms}
+                mobile={timetableMobile}
+              />
+            </div>
+          </section>
+
           {/* Tab Content */}
           {activeTab === 'overview' && (
             <div className="space-y-8">
-              <TimetableSummary
-                userRole="student"
-                userId={currentUser?.id}
-                className="max-w-none"
-              />
-
               {/* Student Information Card */}
               {currentUser && (
                 <Card variant="glass">

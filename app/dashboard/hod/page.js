@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StudentRosterCard } from '@/components/dashboard/StudentRosterCard'
 import { Button } from '@/components/ui/Button'
 import HodAssignments from '@/components/dashboard/HodAssignments'
-import { TimetableSummary } from '@/components/dashboard/TimetableSummary'
+import { DepartmentTimetableView } from '@/components/timetable/DepartmentTimetableView'
 import { api } from '@/lib/api'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import {
@@ -46,6 +46,49 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeachingHub'
+
+function genTimeSlots() {
+  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+  const periods = [
+    { label: 'Period 1', start: '08:00', end: '08:40', period: 1, isBreak: false },
+    { label: 'Period 2', start: '08:45', end: '09:25', period: 2, isBreak: false },
+    { label: 'Period 3', start: '09:30', end: '10:10', period: 3, isBreak: false },
+    { label: 'Break', start: '10:10', end: '10:30', period: 4, isBreak: true },
+    { label: 'Period 4', start: '10:30', end: '11:10', period: 5, isBreak: false },
+    { label: 'Period 5', start: '11:15', end: '11:55', period: 6, isBreak: false },
+    { label: 'Lunch', start: '12:00', end: '12:40', period: 7, isBreak: true },
+    { label: 'Period 6', start: '12:40', end: '13:20', period: 8, isBreak: false },
+    { label: 'Period 7', start: '13:25', end: '14:05', period: 9, isBreak: false },
+    { label: 'Period 8', start: '14:10', end: '14:50', period: 10, isBreak: false },
+    { label: 'Period 9', start: '14:55', end: '15:35', period: 11, isBreak: false },
+  ]
+  const out = []
+  for (const d of days) {
+    for (const p of periods) {
+      out.push({
+        id: `${d}-${p.period}`,
+        dayOfWeek: d,
+        startTime: p.start,
+        endTime: p.end,
+        period: p.period,
+        isBreak: p.isBreak,
+        label: p.label,
+      })
+    }
+  }
+  return out
+}
+
+function defaultClassrooms(count) {
+  const n = Math.max(8, Math.min(60, count))
+  return Array.from({ length: n }).map((_, i) => ({
+    id: `room-${i + 1}`,
+    name: `Rm${String(101 + i)}`,
+    capacity: 50,
+    equipment: ['chalkboard'],
+    accessibility: ['ground-floor'],
+  }))
+}
 
 export default function HodDashboard() {
   const router = useRouter()
@@ -143,11 +186,41 @@ export default function HodDashboard() {
     currentUser?.hodProfile?.departmentRef?.name ||
     currentUser?.hodProfile?.department ||
     ''
+
+  const timeSlots = useMemo(() => genTimeSlots(), [])
+  const [timetableMobile, setTimetableMobile] = useState(false)
+  const timetableTeachers = useMemo(() => {
+    const list = Array.isArray(departmentData?.teachers) ? departmentData.teachers : []
+    return list.map((t) => ({
+      id: String(t?.id || t?.user?.id || t?.userId || ''),
+      fullName: t?.user?.name || t?.name || t?.fullName || 'Teacher',
+      subjects: [],
+      availability: [],
+      maxHours: {},
+      traveling: { enabled: false, schools: [] },
+      department: t?.department || t?.user?.department,
+    }))
+  }, [departmentData?.teachers])
+  const departmentTeacherIds = useMemo(
+    () => timetableTeachers.map((t) => String(t.id)).filter(Boolean),
+    [timetableTeachers]
+  )
+  const timetableClassrooms = useMemo(
+    () => defaultClassrooms(Math.max(12, timetableTeachers.length)),
+    [timetableTeachers.length]
+  )
   const normalizedDepartment =
     currentDepartment === 'Art and Design' ? 'Arts and Design' : currentDepartment
   const departmentSubjects = useMemo(() => {
     return departments[normalizedDepartment] || departments[currentDepartment] || []
   }, [normalizedDepartment, currentDepartment])
+
+  useEffect(() => {
+    const update = () => setTimetableMobile(window.innerWidth < 768)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
 
   // Data initialization - Load from API
   useEffect(() => {
@@ -454,8 +527,6 @@ export default function HodDashboard() {
             </div>
           </div>
 
-          <TimetableSummary userRole="hod" userId={currentUser?.id} className="max-w-none" />
-
           {/* Department Subjects Overview */}
           <Card variant="glass">
             <CardHeader>
@@ -532,6 +603,37 @@ export default function HodDashboard() {
                   color="red"
                   description="Pending assessments"
                   variant="flat"
+                />
+              </div>
+            </section>
+
+            <section className="max-w-none">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <h2 className="text-2xl font-bold text-royalPurple-text1">Department Timetable</h2>
+                <div className="flex items-center gap-2 print:hidden">
+                  <Link
+                    href="/dashboard/timetable/hod"
+                    className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-royalPurple-card/70 border border-royalPurple-border text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-semibold"
+                  >
+                    <Calendar className="h-4 w-4" />
+                    Open Timetable
+                  </Link>
+                  <Button
+                    variant="outline"
+                    onClick={() => window.print()}
+                    className="zsms-hover-raise"
+                  >
+                    Print
+                  </Button>
+                </div>
+              </div>
+              <div className="mt-4 max-w-none max-h-[45vh] overflow-auto">
+                <DepartmentTimetableView
+                  timeSlots={timeSlots}
+                  departmentTeacherIds={departmentTeacherIds}
+                  teachers={timetableTeachers}
+                  classrooms={timetableClassrooms}
+                  mobile={timetableMobile}
                 />
               </div>
             </section>
