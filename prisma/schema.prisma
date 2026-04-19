@@ -9,6 +9,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // ============================================
@@ -52,6 +53,13 @@ model School {
   departments          Department[]
   classes              Class[]
   subjects             Subject[]
+  classrooms           Classroom[]
+  timeSlots            TimeSlot[]
+  timetableVersions    TimetableVersion[]
+  timetableEntries     TimetableEntry[]
+  teacherPeriodAssignments TeacherPeriodAssignment[]
+  constraints          Constraint[]
+  substitutions        Substitution[]
   results              Result[]
   teachingAssignments  TeachingAssignment[]
   pupilSubjectEnrollments PupilSubjectEnrollment[]
@@ -127,6 +135,7 @@ model User {
   feedbacks               Feedback[]
   strategicGoalsCreated   StrategicGoal[]  @relation("StrategicGoalCreatedBy")
   strategicReviewsCreated StrategicReview[] @relation("StrategicReviewCreatedBy")
+  timetableVersionsCreated TimetableVersion[] @relation("TimetableVersionCreatedBy")
   
   @@unique([schoolId, email]) // Email must be unique per school
   @@index([schoolId])
@@ -264,6 +273,10 @@ model Teacher {
   departments TeacherDepartment[]
   teachingAssignments TeachingAssignment[]
   termProgress TeacherTermProgress[]
+  substitutionsOriginal Substitution[] @relation("SubstitutionOriginalTeacher")
+  substitutionsCover    Substitution[] @relation("SubstitutionCoverTeacher")
+  periodAssignments     TeacherPeriodAssignment[]
+  timetableEntries      TimetableEntry[]
   
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt 
@@ -312,6 +325,7 @@ model Class {
   subjects    Subject[] 
   teachingAssignments TeachingAssignment[]
   subjectEnrollments PupilSubjectEnrollment[]
+  timetableEntries TimetableEntry[]
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -340,6 +354,7 @@ model Subject {
   results     Result[] 
   teachingAssignments TeachingAssignment[]
   pupilEnrollments PupilSubjectEnrollment[]
+  timetableEntries TimetableEntry[]
   
   createdAt   DateTime @default(now()) 
   updatedAt   DateTime @updatedAt 
@@ -419,12 +434,233 @@ model TeachingAssignment {
   classId   String
   class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
 
+  timetableEntries TimetableEntry[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([schoolId, teacherId, subjectId, classId])
   @@index([schoolId])
   @@index([teacherId, classId, subjectId])
+}
+
+enum ConstraintType {
+  HARD
+  SOFT
+}
+
+enum ConstraintScope {
+  TEACHER
+  CLASS
+  ROOM
+  SCHOOL
+}
+
+enum SubstitutionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum TimetableVersionStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Classroom {
+  id        String   @id @default(uuid())
+
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  name      String
+  capacity  Int      @default(0)
+  equipment String[] @default([])
+
+  timetableEntries TimetableEntry[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([schoolId, name])
+  @@index([schoolId])
+  @@index([name])
+}
+
+model TimeSlot {
+  id        String   @id @default(uuid())
+
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  dayOfWeek String
+  startTime String
+  endTime   String
+  period    Int
+  isBreak   Boolean  @default(false)
+  label     String?
+  breakName String?
+  breakDuration Int?
+
+  periodAssignments TeacherPeriodAssignment[]
+  timetableEntries TimetableEntry[]
+  substitutions    Substitution[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([schoolId, dayOfWeek, period])
+}
+
+model TimetableVersion {
+  id              String               @id @default(uuid())
+
+  schoolId         String
+  school           School               @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  status           TimetableVersionStatus @default(DRAFT)
+  generationStatus String? @default("NOT_STARTED")
+  seasonId         String?
+  season           String?
+  solverScore      Float?
+  solverStats      Json?
+  periodAssignmentsLocked Int?
+  totalPeriodsNeeded Int?
+  name             String?
+  createdByUserId  String?
+  createdByUser    User?                @relation("TimetableVersionCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  publishedAt      DateTime?
+
+  entries          TimetableEntry[]
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([schoolId, status])
+  @@index([createdByUserId])
+}
+
+model TimetableEntry {
+  id                 String   @id @default(uuid())
+
+  schoolId            String
+  school              School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  versionId           String
+  version             TimetableVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+
+  timeSlotId          String
+  timeSlot            TimeSlot @relation(fields: [timeSlotId], references: [id], onDelete: Cascade)
+
+  teacherId           String?
+  teacher             Teacher? @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+
+  classId             String?
+  class               Class? @relation(fields: [classId], references: [id], onDelete: SetNull)
+
+  subjectId           String?
+  subject             Subject? @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+
+  teachingAssignmentId String?
+  teachingAssignment   TeachingAssignment? @relation(fields: [teachingAssignmentId], references: [id], onDelete: SetNull)
+
+  classroomId         String?
+  classroom           Classroom? @relation(fields: [classroomId], references: [id], onDelete: SetNull)
+
+  isLockedPeriodAssignment Boolean @default(false)
+  solvedByAlgorithm        Boolean @default(false)
+  notes               String?
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@unique([versionId, timeSlotId, teacherId])
+  @@unique([versionId, timeSlotId, classId])
+  @@index([schoolId])
+  @@index([versionId])
+  @@index([teacherId])
+  @@index([classId])
+  @@index([subjectId])
+  @@index([teachingAssignmentId])
+  @@index([timeSlotId])
+}
+
+model TeacherPeriodAssignment {
+  id        String   @id @default(uuid())
+
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  teacherId String
+  teacher   Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  timeSlotId String
+  timeSlot   TimeSlot @relation(fields: [timeSlotId], references: [id], onDelete: Cascade)
+
+  lockedForGeneration Boolean @default(true)
+  notes     String?
+  createdBy String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([schoolId, teacherId, timeSlotId])
+  @@index([schoolId])
+  @@index([teacherId])
+  @@index([timeSlotId])
+}
+
+model Constraint {
+  id        String         @id @default(uuid())
+
+  schoolId  String
+  school    School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  type      ConstraintType
+  scope     ConstraintScope
+  targetId  String?
+  priority  Int            @default(5)
+  config    Json
+  active    Boolean        @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([schoolId, type])
+  @@index([schoolId, scope])
+  @@index([targetId])
+}
+
+model Substitution {
+  id                String             @id @default(uuid())
+
+  schoolId           String
+  school             School             @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  date              DateTime
+  slotId            String
+  slot              TimeSlot            @relation(fields: [slotId], references: [id], onDelete: Cascade)
+
+  originalTeacherId String
+  originalTeacher   Teacher             @relation("SubstitutionOriginalTeacher", fields: [originalTeacherId], references: [id], onDelete: Cascade)
+
+  coverTeacherId    String
+  coverTeacher      Teacher             @relation("SubstitutionCoverTeacher", fields: [coverTeacherId], references: [id], onDelete: Cascade)
+
+  status            SubstitutionStatus  @default(PENDING)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([schoolId, date])
+  @@index([originalTeacherId])
+  @@index([coverTeacherId])
+  @@index([slotId])
 }
 
 model PupilSubjectEnrollment {

@@ -3,6 +3,9 @@
 import { useMemo, useState } from 'react'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useCollisionDetection } from '@/hooks/useCollisionDetection'
+import { CollisionDetector } from '@/lib/timetable/collisionDetector'
+import Modal from '@/components/ui/Modal'
+import { Button } from '@/components/ui/Button'
 
 export interface DragDropTimetableProps {
   assignments: Assignment[]
@@ -25,6 +28,16 @@ type DragState =
         startTime: Assignment['startTime']
         endTime: Assignment['endTime']
       }
+    }
+
+type SwapState =
+  | { open: false }
+  | {
+      open: true
+      a: Assignment
+      b: Assignment
+      nextA: Assignment
+      nextB: Assignment
     }
 
 function slotKey(slot: Pick<TimeSlot, 'period' | 'startTime' | 'endTime' | 'isBreak'>) {
@@ -58,6 +71,7 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
 
   const [drag, setDrag] = useState<DragState>({ active: false })
   const [hoverCell, setHoverCell] = useState<{ dayOfWeek: string; key: string } | null>(null)
+  const [swap, setSwap] = useState<SwapState>({ open: false })
 
   const { conflicts, validateAssignment, getConflictCount, getCriticalConflictCount } =
     useCollisionDetection({
@@ -153,6 +167,22 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
     setHoverCell(null)
   }
 
+  const validateHypothetical = (nextAssignments: Assignment[], candidate: Assignment) => {
+    try {
+      const detector = new CollisionDetector({
+        assignments: nextAssignments,
+        teachers,
+        classrooms,
+        classes: studentClasses,
+        travelingTeacherRoutes: [],
+        seasonMode: season,
+      })
+      return detector.validateAssignment(candidate)
+    } catch {
+      return []
+    }
+  }
+
   const onDropCell = (dayOfWeek: string, slot: TimeSlot) => {
     if (!drag.active) return
     const a = assignmentById.get(String(drag.assignmentId))
@@ -165,12 +195,42 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
       period: slot.period,
       isBreak: slot.isBreak,
     }
+    const cellKey = `${dayOfWeek}|${slot.period}|${slot.startTime}|${slot.endTime}`
+    const occupants = cellAssignments.get(cellKey) || []
+
     const issues = validateAssignment(next)
     if (issues.length > 0) {
+      if (occupants.length === 1 && String(occupants[0].id) !== String(a.id) && !slot.isBreak) {
+        const b = occupants[0]
+        const nextB: Assignment = {
+          ...b,
+          dayOfWeek: a.dayOfWeek,
+          startTime: a.startTime,
+          endTime: a.endTime,
+          period: a.period,
+          isBreak: a.isBreak,
+        }
+
+        const hypothetical = assignments.map((x) => {
+          if (String(x.id) === String(a.id)) return next
+          if (String(x.id) === String(b.id)) return nextB
+          return x
+        })
+
+        const aIssues = validateHypothetical(hypothetical, next)
+        const bIssues = validateHypothetical(hypothetical, nextB)
+        if (aIssues.length === 0 && bIssues.length === 0) {
+          setSwap({ open: true, a, b, nextA: next, nextB })
+          onDragEnd()
+          return
+        }
+      }
+
       onConflictDetected(new Map([[String(next.id), issues]]))
       onDragEnd()
       return
     }
+
     onAssignmentChange(next)
     onDragEnd()
   }
@@ -332,6 +392,51 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={swap.open}
+        onClose={() => setSwap({ open: false })}
+        title="Toss-and-Swap suggestion"
+        size="md"
+      >
+        {swap.open ? (
+          <div className="space-y-4">
+            <div className="text-sm text-royalPurple-text2">
+              The target slot is occupied. A swap keeps the timetable valid.
+            </div>
+            <div className="rounded-xl border border-royalPurple-border bg-royalPurple-card/40 p-4">
+              <div className="text-sm font-semibold text-royalPurple-text1">Swap lessons</div>
+              <div className="mt-2 text-sm text-royalPurple-text2">
+                Move{' '}
+                <span className="font-semibold text-royalPurple-text1">
+                  {className.get(String(swap.a.classId)) || 'Class'}
+                </span>{' '}
+                to {swap.nextA.dayOfWeek} P{swap.nextA.period}, and move{' '}
+                <span className="font-semibold text-royalPurple-text1">
+                  {className.get(String(swap.b.classId)) || 'Class'}
+                </span>{' '}
+                to {swap.nextB.dayOfWeek} P{swap.nextB.period}.
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-2">
+              <Button variant="outline" onClick={() => setSwap({ open: false })}>
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  if (!swap.open) return
+                  onAssignmentChange(swap.nextB)
+                  onAssignmentChange(swap.nextA)
+                  setSwap({ open: false })
+                }}
+                className="zsms-hover-raise"
+              >
+                Apply swap
+              </Button>
+            </div>
+          </div>
+        ) : null}
+      </Modal>
     </div>
   )
 }

@@ -1,0 +1,43 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: zsms
+    ports:
+      - "5432:5432"
+    volumes:
+      - zsms_postgres_data:/var/lib/postgresql/data
+
+  solver:
+    image: python:3.11-slim
+    working_dir: /app
+    command: >
+      sh -c "pip install --no-cache-dir -r requirements.txt &&
+             uvicorn main:app --host 0.0.0.0 --port 8001"
+    volumes:
+      - ./solver-service:/app
+    ports:
+      - "8001:8001"
+
+  web:
+    build: .
+    working_dir: /app
+    command: >
+      sh -c "npx prisma generate &&
+             npm run dev -- -H 0.0.0.0 -p 3000"
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/zsms?schema=public
+      SOLVER_SERVICE_URL: http://solver:8001
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - solver
+
+volumes:
+  zsms_postgres_data:

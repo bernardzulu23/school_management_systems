@@ -1,57 +1,12 @@
-# syntax=docker/dockerfile:1
+FROM node:20-slim
 
-ARG NODE_VERSION=20.19.0
-FROM node:${NODE_VERSION}-slim AS base
+RUN apt-get update -y && apt-get install -y openssl libssl-dev
 
 WORKDIR /app
 
-ENV NODE_ENV="production"
-
-# Install runtime dependencies
-RUN apt-get update -qq && \
-    apt-get install -y --no-install-recommends \
-    openssl \
-    ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
-
-# Build stage
-FROM base AS build
-
-RUN apt-get update -qq && \
-    apt-get install -y --no-install-recommends \
-    build-essential \
-    pkg-config \
-    python3 && \
-    rm -rf /var/lib/apt/lists/*
-ENV HUSKY=0
-COPY package-lock.json package.json ./
-RUN npm ci --include=dev
-
-COPY prisma ./prisma/
-ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
-RUN npx prisma generate
+COPY package*.json ./
+RUN npm ci
 
 COPY . .
-RUN npm run build
-RUN npm prune --omit=dev
 
-# Production stage
-FROM base
-
-COPY --from=build /app/public ./public
-COPY --from=build /app/.next/standalone ./
-COPY --from=build /app/.next/static ./.next/static
-COPY --from=build /app/prisma ./prisma
-COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=build /app/node_modules/prisma ./node_modules/prisma
-COPY scripts/start.sh ./start.sh
-RUN chmod +x ./start.sh
-
-RUN chown -R node:node /app
-USER node
-
-EXPOSE 3000
-ENV HOSTNAME="0.0.0.0"
-
-CMD ["sh", "./start.sh"]
+RUN npx prisma generate

@@ -6,6 +6,7 @@ import { AutoGenerateButton } from '@/components/timetable/AutoGenerateButton'
 import { ConflictDisplay } from '@/components/timetable/ConflictDisplay'
 import { DragDropTimetable } from '@/components/timetable/DragDropTimetable'
 import { MasterTimetableGrid } from '@/components/timetable/MasterTimetableGrid'
+import TeacherPeriodAssignmentUI from '@/components/timetable/TeacherPeriodAssignmentUI'
 import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
@@ -19,7 +20,7 @@ import type {
 } from '@/lib/timetable/types'
 import type { TimetableSchoolData } from '@/lib/timetable/automationService'
 
-type Tab = 'overview' | 'edit' | 'conflicts' | 'settings'
+type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings'
 
 function genTimeSlots(): TimeSlot[] {
   const days: Array<TimeSlot['dayOfWeek']> = [
@@ -141,14 +142,20 @@ function toClass(c: any, subjects: Array<{ id: string; name: string }>): Class {
 }
 
 export default function HeadteacherTimetablePage() {
-  const [tab, setTab] = useState<Tab>('overview')
+  const [tab, setTab] = useState<Tab>('assignment')
   const [loading, setLoading] = useState(true)
+  const [solverGenerating, setSolverGenerating] = useState(false)
+  const [solverDraftVersionId, setSolverDraftVersionId] = useState<string | null>(null)
+  const [coverTeacherId, setCoverTeacherId] = useState<string>('')
+  const [coverDay, setCoverDay] = useState<string>('monday')
+  const [coverPeriod, setCoverPeriod] = useState<number>(1)
   const [teachers, setTeachers] = useState<Teacher[]>([])
   const [classes, setClasses] = useState<Class[]>([])
   const [classrooms, setClassrooms] = useState<Classroom[]>([])
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>(() => genTimeSlots())
   const [travelingTeacherRoutes, setTravelingTeacherRoutes] = useState<TravelingTeacherRoute[]>([])
   const [season, setSeason] = useState<'normal' | 'farming' | 'planting'>('normal')
+  const [schoolId, setSchoolId] = useState<string>('')
 
   const assignments = useTimetableStore((s) => s.assignments)
   const conflicts = useTimetableStore((s) => s.conflicts)
@@ -165,15 +172,34 @@ export default function HeadteacherTimetablePage() {
     const load = async () => {
       setLoading(true)
       try {
-        const [teachersRes, classesRes, subjectsRes] = await Promise.all([
+        const [teachersRes, classesRes, subjectsRes, schoolRes, timeSlotsRes] = await Promise.all([
           fetch('/api/teachers?limit=200', { cache: 'no-store' }),
           fetch('/api/classes?limit=200', { cache: 'no-store' }),
           fetch('/api/subjects?limit=500', { cache: 'no-store' }),
+          fetch('/api/school/current', { cache: 'no-store', credentials: 'include' }),
+          fetch('/api/timetable/timeSlots', { cache: 'no-store', credentials: 'include' }),
         ])
 
         const teachersJson = await teachersRes.json().catch(() => ({}))
         const classesJson = await classesRes.json().catch(() => ({}))
         const subjectsJson = await subjectsRes.json().catch(() => ({}))
+        const schoolJson = await schoolRes.json().catch(() => ({}))
+        const timeSlotsJson = await timeSlotsRes.json().catch(() => ({}))
+
+        if (schoolJson?.school?.id) setSchoolId(String(schoolJson.school.id))
+        if (Array.isArray(timeSlotsJson?.data) && timeSlotsJson.data.length) {
+          setTimeSlots(
+            timeSlotsJson.data.map((s: any) => ({
+              id: String(s.id),
+              dayOfWeek: String(s.dayOfWeek),
+              startTime: String(s.startTime) as any,
+              endTime: String(s.endTime) as any,
+              period: Number(s.period),
+              isBreak: Boolean(s.isBreak),
+              label: s.label ? String(s.label) : s.breakName ? String(s.breakName) : undefined,
+            }))
+          )
+        }
 
         const subjectList = Array.isArray(subjectsJson?.data) ? subjectsJson.data : []
         const subjectRefs = subjectList.map((s: any) => ({
@@ -191,7 +217,16 @@ export default function HeadteacherTimetablePage() {
 
         setTeachers(mappedTeachers)
         setClasses(mappedClasses)
-        setClassrooms(defaultClassrooms(Math.max(mappedClasses.length, mappedTeachers.length)))
+        setClassrooms([
+          {
+            id: 'room-unassigned',
+            name: 'Unassigned',
+            capacity: 999,
+            equipment: [],
+            accessibility: [],
+          },
+          ...defaultClassrooms(Math.max(mappedClasses.length, mappedTeachers.length)),
+        ])
       } catch (e: any) {
         toast.error(e?.message || 'Failed to load timetable data')
       } finally {
@@ -264,6 +299,108 @@ export default function HeadteacherTimetablePage() {
 
   const canPublish = stats.conflicts === 0 && assignments.length > 0
 
+  const coverBaseSlots = useMemo(() => {
+    const map = new Map<string, TimeSlot>()
+    for (const s of timeSlots) {
+      const key = `${s.period}|${s.startTime}|${s.endTime}|${s.isBreak ? 1 : 0}`
+      if (!map.has(key)) map.set(key, { ...s, dayOfWeek: 'monday' })
+    }
+    return Array.from(map.values())
+      .filter((s) => !s.isBreak)
+      .sort((a, b) => a.period - b.period)
+  }, [timeSlots])
+
+  const coverDays = useMemo(() => {
+    const set = new Set<string>(['monday', 'tuesday', 'wednesday', 'thursday', 'friday'])
+    for (const s of timeSlots) set.add(String(s.dayOfWeek))
+    return Array.from(set)
+  }, [timeSlots])
+
+  useEffect(() => {
+    if (!teachers.length) return
+    if (!coverTeacherId) setCoverTeacherId(String(teachers[0]?.id || ''))
+  }, [teachers, coverTeacherId])
+
+  useEffect(() => {
+    if (!coverDays.includes(coverDay)) setCoverDay(coverDays[0] || 'monday')
+  }, [coverDays, coverDay])
+
+  useEffect(() => {
+    const valid = coverBaseSlots.some((s) => s.period === coverPeriod)
+    if (!valid) setCoverPeriod(coverBaseSlots[0]?.period || 1)
+  }, [coverBaseSlots, coverPeriod])
+
+  const coverSuggestions = useMemo(() => {
+    const teacherById = new Map<string, Teacher>()
+    for (const t of teachers) teacherById.set(String(t.id), t)
+
+    const seasonAssignments = assignments.filter((a) => a.season === (season as any))
+    const absent = seasonAssignments.filter(
+      (a) =>
+        String(a.teacherId) === String(coverTeacherId) &&
+        String(a.dayOfWeek) === String(coverDay) &&
+        Number(a.period) === Number(coverPeriod)
+    )
+
+    const busy = new Map<string, number>()
+    for (const a of seasonAssignments) {
+      busy.set(String(a.teacherId), (busy.get(String(a.teacherId)) || 0) + 1)
+    }
+
+    const isTeacherFree = (teacherId: string) => {
+      return (
+        seasonAssignments.find(
+          (a) =>
+            String(a.teacherId) === String(teacherId) &&
+            String(a.dayOfWeek) === String(coverDay) &&
+            Number(a.period) === Number(coverPeriod)
+        ) == null
+      )
+    }
+
+    const suggestions = absent.map((lesson) => {
+      const candidates = teachers
+        .filter((t) => String(t.id) !== String(coverTeacherId))
+        .filter((t) => isTeacherFree(String(t.id)))
+        .filter((t) => (t.subjects || []).some((s) => String(s.id) === String(lesson.subjectId)))
+        .map((t) => {
+          const load = busy.get(String(t.id)) || 0
+          return { teacher: t, load }
+        })
+        .sort((a, b) => a.load - b.load)
+        .slice(0, 5)
+
+      return { lesson, candidates }
+    })
+
+    const absentTeacher = teacherById.get(String(coverTeacherId))
+    return { absentTeacher, suggestions }
+  }, [assignments, teachers, coverTeacherId, coverDay, coverPeriod, season])
+
+  const generateWithSolver = async () => {
+    setSolverGenerating(true)
+    try {
+      const res = await fetch('/api/timetable/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ timeoutMs: 15_000, maxSolutions: 800 }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || 'Solver generation failed')
+      const next = Array.isArray(json?.assignments) ? json.assignments : []
+      replaceAssignments(next, { source: 'generate' })
+      const score = Number(json?.version?.optimizationScore) || 0
+      setSolverDraftVersionId(json?.version?.id ? String(json.version.id) : null)
+      toast.success(`Solver draft generated (score ${score}/100)`)
+      setTab('edit')
+    } catch (e: any) {
+      toast.error(e?.message || 'Solver generation failed')
+    } finally {
+      setSolverGenerating(false)
+    }
+  }
+
   return (
     <DashboardLayout title="Master Timetable">
       <div className="space-y-6">
@@ -286,8 +423,36 @@ export default function HeadteacherTimetablePage() {
               onDone={() => setTab('edit')}
             />
             <Button
+              variant="outline"
+              onClick={generateWithSolver}
+              disabled={solverGenerating}
+              className="zsms-hover-raise"
+            >
+              {solverGenerating ? 'Generating…' : 'Generate (Solver Engine)'}
+            </Button>
+            <Button
               onClick={() => {
                 if (!canPublish) return
+                if (solverDraftVersionId) {
+                  fetch('/api/timetable/publish', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ versionId: solverDraftVersionId }),
+                  })
+                    .then((r) =>
+                      r
+                        .json()
+                        .catch(() => ({}))
+                        .then((j) => ({ ok: r.ok, j }))
+                    )
+                    .then(({ ok, j }) => {
+                      if (!ok) throw new Error(j?.error || 'Failed to publish to database')
+                      toast.success('Published to database')
+                      setSolverDraftVersionId(null)
+                    })
+                    .catch((e) => toast.error(e?.message || 'Failed to publish to database'))
+                }
                 publish()
                 toast.success('Timetable published')
               }}
@@ -338,9 +503,11 @@ export default function HeadteacherTimetablePage() {
         <div className="flex flex-wrap items-center gap-2 border-b border-royalPurple-border/30 pb-2">
           {(
             [
+              { id: 'assignment', label: 'Teacher Period Assignment' },
               { id: 'overview', label: 'Overview' },
               { id: 'edit', label: 'Edit' },
               { id: 'conflicts', label: 'Conflicts' },
+              { id: 'cover', label: 'Daily Cover' },
               { id: 'settings', label: 'Settings' },
             ] as const
           ).map((t) => (
@@ -369,6 +536,30 @@ export default function HeadteacherTimetablePage() {
             season={season}
             showConflicts
           />
+        ) : null}
+
+        {tab === 'assignment' ? (
+          <div className="space-y-4">
+            <div className="onboard-card p-5">
+              <div className="text-royalPurple-text1 font-bold text-lg">How it works</div>
+              <ol className="list-decimal list-inside text-royalPurple-text2 space-y-1 text-sm mt-2">
+                <li>HOD assigns key teachers to specific periods (locked)</li>
+                <li>Headteacher generates draft (solver respects locks)</li>
+                <li>Review, resolve conflicts, then publish</li>
+              </ol>
+            </div>
+
+            {schoolId ? (
+              <TeacherPeriodAssignmentUI
+                schoolId={schoolId}
+                timetableVersionId={solverDraftVersionId || undefined}
+              />
+            ) : (
+              <div className="onboard-card p-5">
+                <div className="text-royalPurple-text2 text-sm">Loading school context…</div>
+              </div>
+            )}
+          </div>
         ) : null}
 
         {tab === 'edit' ? (
@@ -420,6 +611,137 @@ export default function HeadteacherTimetablePage() {
             <div className="text-royalPurple-text2 text-sm mt-2">
               Time slots, working days, seasonal settings, and constraints configuration will appear
               here.
+            </div>
+          </div>
+        ) : null}
+
+        {tab === 'cover' ? (
+          <div className="space-y-4">
+            <div className="onboard-card p-5">
+              <div className="text-royalPurple-text1 font-bold text-lg">Daily Cover</div>
+              <div className="text-royalPurple-text2 text-sm mt-1">
+                Mark a teacher absent and apply best-match cover suggestions (free + qualified + low
+                workload).
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div className="onboard-card p-4">
+                <div className="text-xs text-royalPurple-text3">Absent teacher</div>
+                <select
+                  className="zsms-select w-full mt-2"
+                  value={coverTeacherId}
+                  onChange={(e) => setCoverTeacherId(e.target.value)}
+                >
+                  {teachers.map((t) => (
+                    <option key={String(t.id)} value={String(t.id)}>
+                      {t.fullName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="onboard-card p-4">
+                <div className="text-xs text-royalPurple-text3">Day</div>
+                <select
+                  className="zsms-select w-full mt-2"
+                  value={coverDay}
+                  onChange={(e) => setCoverDay(e.target.value)}
+                >
+                  {coverDays.slice(0, 5).map((d) => (
+                    <option key={d} value={d}>
+                      {d.toUpperCase()}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="onboard-card p-4">
+                <div className="text-xs text-royalPurple-text3">Period</div>
+                <select
+                  className="zsms-select w-full mt-2"
+                  value={String(coverPeriod)}
+                  onChange={(e) => setCoverPeriod(Number(e.target.value) || 1)}
+                >
+                  {coverBaseSlots.map((s) => (
+                    <option key={`${s.period}`} value={String(s.period)}>
+                      P{s.period} ({s.startTime}-{s.endTime})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="onboard-card p-4">
+                <div className="text-xs text-royalPurple-text3">Season</div>
+                <div className="mt-2 text-sm font-semibold text-royalPurple-text1">{season}</div>
+              </div>
+            </div>
+
+            <div className="onboard-card p-5">
+              <div className="text-sm font-bold text-royalPurple-text1">Suggestions</div>
+              <div className="text-xs text-royalPurple-text3 mt-1">
+                {coverSuggestions.absentTeacher
+                  ? `Absent: ${coverSuggestions.absentTeacher.fullName}`
+                  : 'Select a teacher'}
+              </div>
+
+              <div className="mt-4 space-y-3">
+                {coverSuggestions.suggestions.length ? (
+                  coverSuggestions.suggestions.map(({ lesson, candidates }) => (
+                    <div
+                      key={String(lesson.id)}
+                      className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-deep/40 p-4"
+                    >
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                          <div className="text-sm font-semibold text-royalPurple-text1">
+                            {String(lesson.subjectId)} · Class {String(lesson.classId)}
+                          </div>
+                          <div className="text-xs text-royalPurple-text3">
+                            {String(lesson.dayOfWeek)} P{lesson.period} ({lesson.startTime}-
+                            {lesson.endTime})
+                          </div>
+                        </div>
+                      </div>
+
+                      {candidates.length ? (
+                        <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+                          {candidates.map((c) => (
+                            <div
+                              key={String(c.teacher.id)}
+                              className="rounded-lg border border-royalPurple-border/40 bg-royalPurple-card/40 px-3 py-2 flex items-center justify-between gap-3"
+                            >
+                              <div className="min-w-0">
+                                <div className="text-sm font-semibold text-royalPurple-text1 truncate">
+                                  {c.teacher.fullName}
+                                </div>
+                                <div className="text-xs text-royalPurple-text3">
+                                  Current load: {c.load} periods
+                                </div>
+                              </div>
+                              <Button
+                                variant="outline"
+                                onClick={() => {
+                                  updateAssignment(lesson.id, { teacherId: c.teacher.id })
+                                  toast.success('Cover applied to draft')
+                                }}
+                                className="zsms-hover-raise"
+                              >
+                                Assign
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="mt-2 text-sm text-royalPurple-text2">
+                          No qualified + free cover teacher found for this slot.
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-sm text-royalPurple-text2">
+                    No lessons found for this teacher at the selected day/period.
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         ) : null}

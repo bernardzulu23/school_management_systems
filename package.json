@@ -32,6 +32,7 @@
     "prepare": "husky",
     "seed": "node prisma/seed.js",
     "seed:schools": "node prisma/seed-schools.js",
+    "seed:timeslots": "ts-node --transpile-only --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" prisma/seedTimeSlots.ts",
     "export:users": "node scripts/export-users-excel.js"
   },
   "lint-staged": {
@@ -50,7 +51,7 @@
     "@headlessui/react": "^2.2.10",
     "@monaco-editor/react": "^4.7.0",
     "@prisma/adapter-pg": "^7.7.0",
-    "@prisma/client": "^7.7.0",
+    "@prisma/client": "^5.22.0",
     "@react-email/components": "^1.0.12",
     "@tanstack/react-query": "^4.35.0",
     "autoprefixer": "^10.0.1",
@@ -63,6 +64,7 @@
     "dompurify": "^3.3.1",
     "effect": "^3.21.1",
     "exceljs": "^4.4.0",
+    "fast-check": "^4.7.0",
     "jsonwebtoken": "^9.0.3",
     "jspdf": "^4.1.0",
     "lru-cache": "^11.2.6",
@@ -104,7 +106,8 @@
     "jsdom": "^29.0.1",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
-    "prisma": "^7.7.0",
+    "prisma": "^5.22.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5",
     "workbox-webpack-plugin": "^7.0.0"
   },
