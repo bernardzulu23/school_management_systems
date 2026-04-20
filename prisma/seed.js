@@ -1,4 +1,6 @@
 const { PrismaClient } = require('@prisma/client')
+const { Pool } = require('pg')
+const { PrismaPg } = require('@prisma/adapter-pg')
 const bcrypt = require('bcryptjs')
 
 const connectionString = process.env.DATABASE_URL
@@ -6,9 +8,9 @@ if (!connectionString) {
   throw new Error('DATABASE_URL is required to seed the database')
 }
 
-const prisma = new PrismaClient({
-  datasourceUrl: connectionString,
-})
+const pool = new Pool({ connectionString })
+const adapter = new PrismaPg(pool)
+const prisma = new PrismaClient({ adapter })
 
 async function main() {
   console.log('Start seeding ...')
