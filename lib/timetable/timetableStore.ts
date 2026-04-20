@@ -383,8 +383,11 @@ export const useTimetableStore = create<TimetableStoreState>()(
               endTime: e.endTime,
               period: e.periodNumber,
               teacherId: e.teacherId,
+              teacherName: e.allocation?.teacher?.name,
               classId: e.classId,
+              className: e.allocation?.class?.name,
               subjectId: e.subjectId,
+              subjectName: e.allocation?.subject?.name,
               classroomId: 'room-1', // Placeholder as v2 doesn't have rooms yet
               source: 'generated',
             }))

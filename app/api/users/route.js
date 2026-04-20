@@ -7,7 +7,7 @@ export async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
+  if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod'])) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 

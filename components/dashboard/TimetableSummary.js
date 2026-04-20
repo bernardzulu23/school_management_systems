@@ -143,9 +143,9 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
       .sort((a, b) => hhmmToMinutes(a?.startTime) - hhmmToMinutes(b?.startTime))
       .map((a) => ({
         id: a.id,
-        subject: String(a?.subjectId || 'Subject'),
-        class: String(a?.classId || 'Class'),
-        teacher: String(a?.teacherId || 'Teacher'),
+        subject: String(a?.subjectName || a?.subjectId || 'Subject'),
+        class: String(a?.className || a?.classId || 'Class'),
+        teacher: String(a?.teacherName || a?.teacherId || 'Teacher'),
         classroom: String(a?.classroomId || 'Room'),
         time: `${a?.startTime || ''}-${a?.endTime || ''}`,
         startTime: a?.startTime,
@@ -297,13 +297,13 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
                           <td key={d.key} className="px-3 py-3 align-top">
                             <div
                               className="rounded-lg border border-royalPurple-border/50 p-2"
-                              style={{ background: bg }}
+                              style={{ backgroundColor: bg }}
                             >
-                              <div className="font-semibold text-royalPurple-text1">
-                                {String(a.subjectId)}
+                              <div className="font-bold text-slate-900 truncate">
+                                {a.subjectName || a.subjectId}
                               </div>
-                              <div className="text-xs text-royalPurple-text2">
-                                {String(a.classId)}
+                              <div className="text-[11px] text-slate-600 truncate mt-1">
+                                {a.className || a.classId} · {a.teacherName || a.teacherId}
                               </div>
                             </div>
                           </td>

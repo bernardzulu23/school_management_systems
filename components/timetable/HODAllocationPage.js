@@ -76,9 +76,9 @@ export default function HODAllocationPage() {
         classesRes.json(),
         allocRes.json(),
       ])
-      setTeachers(teachersData.users || teachersData || [])
-      setSubjects(subjectsData.subjects || subjectsData || [])
-      setClasses(classesData.classes || classesData || [])
+      setTeachers(teachersData.data || teachersData.users || teachersData || [])
+      setSubjects(subjectsData.subjects || subjectsData.data || subjectsData || [])
+      setClasses(classesData.classes || classesData.data || classesData || [])
       setAllocations(allocData.allocations || [])
     } catch (err) {
       toast.error('Failed to load data')

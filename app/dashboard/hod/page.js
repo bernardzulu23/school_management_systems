@@ -609,32 +609,31 @@ export default function HodDashboard() {
 
             <section className="max-w-none">
               <div className="flex items-center justify-between gap-3 flex-wrap">
-                <h2 className="text-2xl font-bold text-royalPurple-text1">Department Timetable</h2>
+                <h2 className="text-2xl font-bold text-royalPurple-text1">Class Allocations</h2>
                 <div className="flex items-center gap-2 print:hidden">
                   <Link
-                    href="/dashboard/timetable/hod"
-                    className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-royalPurple-card/70 border border-royalPurple-border text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-semibold"
+                    href="/dashboard/hod/allocation"
+                    className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-orange-600/70 border border-orange-400/50 text-royalPurple-text1 hover:bg-orange-600 transition-colors font-semibold"
                   >
-                    <Calendar className="h-4 w-4" />
-                    Open Timetable
+                    <Plus className="h-4 w-4" />
+                    Add/Push Allocations
                   </Link>
-                  <Button
-                    variant="outline"
-                    onClick={() => window.print()}
-                    className="zsms-hover-raise"
-                  >
-                    Print
-                  </Button>
                 </div>
               </div>
-              <div className="mt-4 max-w-none max-h-[45vh] overflow-auto">
-                <DepartmentTimetableView
-                  timeSlots={timeSlots}
-                  departmentTeacherIds={departmentTeacherIds}
-                  teachers={timetableTeachers}
-                  classrooms={timetableClassrooms}
-                  mobile={timetableMobile}
-                />
+              <div className="mt-4 p-8 backdrop-blur-md bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-3xl text-center">
+                <BookOpen className="h-12 w-12 text-orange-400 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-royalPurple-text1">
+                  Manage Department Teaching
+                </h3>
+                <p className="text-royalPurple-text2 mt-2 max-w-md mx-auto">
+                  Assign teachers to subjects and classes. Once complete, push them to the
+                  headteacher to generate the master timetable.
+                </p>
+                <Link href="/dashboard/hod/allocation">
+                  <Button className="mt-6 bg-orange-600/60 hover:bg-orange-600/80 text-royalPurple-text1 border border-orange-400/50">
+                    Open Allocation Manager
+                  </Button>
+                </Link>
               </div>
             </section>
 

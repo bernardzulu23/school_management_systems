@@ -386,30 +386,59 @@ export default function DashboardPage() {
               </button>
             </li>
 
-            {/* Timetable Management */}
-            <li role="listitem">
-              <button
-                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-xl transition-shadow"
-                onClick={() => (window.location.href = '/dashboard/timetable/master')}
-                aria-label="Go to Master Timetable"
-              >
-                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-royalPurple-border2">
-                  <div className="flex items-center justify-between mb-4">
-                    <Calendar className="h-8 w-8 text-royalPurple-pillTx" aria-hidden="true" />
-                    <div className="text-right">
-                      <p className="text-2xl font-bold text-royalPurple-text1">Master</p>
-                      <p className="text-sm text-royalPurple-text3">Timetable</p>
+            {/* Timetable Management - Headteacher */}
+            {user?.role?.toLowerCase() === 'headteacher' && (
+              <li role="listitem">
+                <button
+                  className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-xl transition-shadow"
+                  onClick={() => (window.location.href = '/dashboard/headteacher/timetable')}
+                  aria-label="Go to Timetable Generator"
+                >
+                  <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-royalPurple-border2">
+                    <div className="flex items-center justify-between mb-4">
+                      <Calendar className="h-8 w-8 text-royalPurple-pillTx" aria-hidden="true" />
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-royalPurple-text1">Gen</p>
+                        <p className="text-sm text-royalPurple-text3">Timetable</p>
+                      </div>
                     </div>
-                  </div>
-                  <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">
-                    Master Timetable
-                  </h3>
-                  <p className="text-sm text-royalPurple-text2">
-                    View and manage the school-wide timetable
-                  </p>
-                </Card>
-              </button>
-            </li>
+                    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">
+                      Master Timetable
+                    </h3>
+                    <p className="text-sm text-royalPurple-text2">
+                      Generate and manage the school schedule
+                    </p>
+                  </Card>
+                </button>
+              </li>
+            )}
+
+            {/* Class Allocation - HOD */}
+            {user?.role?.toLowerCase() === 'hod' && (
+              <li role="listitem">
+                <button
+                  className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 rounded-xl transition-shadow"
+                  onClick={() => (window.location.href = '/dashboard/hod/allocation')}
+                  aria-label="Go to Class Allocation"
+                >
+                  <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-royalPurple-border2">
+                    <div className="flex items-center justify-between mb-4">
+                      <BookOpen className="h-8 w-8 text-royalPurple-pillTx" aria-hidden="true" />
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-royalPurple-text1">Push</p>
+                        <p className="text-sm text-royalPurple-text3">Assignments</p>
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">
+                      Class Allocation
+                    </h3>
+                    <p className="text-sm text-royalPurple-text2">
+                      Assign teachers to subjects and classes
+                    </p>
+                  </Card>
+                </button>
+              </li>
+            )}
 
             {/* Gamification */}
             <li role="listitem">
@@ -460,33 +489,6 @@ export default function DashboardPage() {
                 </Card>
               </button>
             </li>
-
-            {/* Department Timetable - Only for HOD */}
-            {user?.role === 'hod' && (
-              <li role="listitem">
-                <button
-                  className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 rounded-xl transition-shadow"
-                  onClick={() => (window.location.href = '/dashboard/timetable/hod')}
-                  aria-label="Go to Department Timetable"
-                >
-                  <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-royalPurple-border2">
-                    <div className="flex items-center justify-between mb-4">
-                      <Calendar className="h-8 w-8 text-royalPurple-pillTx" aria-hidden="true" />
-                      <div className="text-right">
-                        <p className="text-2xl font-bold text-royalPurple-text1">0</p>
-                        <p className="text-sm text-royalPurple-text3">Teachers</p>
-                      </div>
-                    </div>
-                    <h3 className="text-lg font-semibold text-royalPurple-text1 mb-2">
-                      Department Timetable
-                    </h3>
-                    <p className="text-sm text-royalPurple-text2">
-                      View department schedule overview
-                    </p>
-                  </Card>
-                </button>
-              </li>
-            )}
 
             {/* My Timetable - For Teachers and Students */}
             {(user?.role === 'teacher' || user?.role === 'student') && (
