@@ -6,7 +6,9 @@ if (!connectionString) {
   throw new Error('DATABASE_URL is required to seed the database')
 }
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+  datasourceUrl: connectionString,
+})
 
 async function main() {
   console.log('Start seeding ...')

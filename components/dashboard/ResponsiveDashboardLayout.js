@@ -6,6 +6,7 @@ import { Menu, Bell, Search, User } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
 import { useSchool } from '@/lib/context/SchoolContext'
+import { TimetableNotificationBell } from '@/components/timetable/MasterTimetableGenerator'
 
 export default function ResponsiveDashboardLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -49,6 +50,7 @@ export default function ResponsiveDashboardLayout({ children }) {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-4">
+            {user?.role?.toLowerCase() === 'headteacher' && <TimetableNotificationBell />}
             <button
               className="p-2 rounded-full text-royalPurple-text2 hover:bg-royalPurple-card2 relative"
               aria-label="Notifications"

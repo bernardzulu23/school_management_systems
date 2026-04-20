@@ -80,6 +80,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Reports', href: '/dashboard/reports', icon: FileText },
       ],
       hod: [
+        { name: 'Class Allocation', href: '/dashboard/hod/allocation', icon: BookOpen },
         { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'My Classes', href: '/dashboard/classes', icon: GraduationCap },
         { name: 'Subjects', href: '/admin/subjects', icon: BookOpen },
