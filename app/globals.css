@@ -97,6 +97,7 @@
   --rp-accentbg: var(--color-brand-light);
   --rp-accenttx: #ffffff;
   --rp-pill: var(--color-brand-light);
+  --rp-pill-text: var(--color-brand-primary);
 }
 
 .dark {
@@ -121,6 +122,7 @@
   --rp-accentbg: var(--color-brand-light);
   --rp-accenttx: #ffffff;
   --rp-pill: var(--color-brand-primary);
+  --rp-pill-text: #ffffff;
 }
 
 .dash-page {

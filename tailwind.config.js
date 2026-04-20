@@ -41,7 +41,7 @@ module.exports = {
           accentBg: 'var(--rp-accentbg)',
           accentTx: 'var(--rp-accenttx)',
           pill: 'var(--rp-pill)',
-          pillTx: 'var(--rp-accent)',
+          pillTx: 'var(--rp-pill-text)',
           success: '#ecfdf5',
           successTx: '#16a34a',
           danger: '#fef2f2',
