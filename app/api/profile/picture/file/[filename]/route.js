@@ -44,6 +44,19 @@ export async function GET(_request, { params }) {
       },
     })
   } catch {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    // Fallback to default profile picture
+    try {
+      const defaultPath = path.join(process.cwd(), 'public', 'images', 'default-profile.svg')
+      const buf = await readFile(defaultPath)
+      return new NextResponse(buf, {
+        status: 200,
+        headers: {
+          'Content-Type': 'image/svg+xml',
+          'Cache-Control': 'public, max-age=3600',
+        },
+      })
+    } catch {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    }
   }
 }

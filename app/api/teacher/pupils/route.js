@@ -8,7 +8,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['TEACHER', 'teacher'])) {
+  if (!roleCheck(auth.user, ['ADMIN', 'HOD', 'TEACHER'])) {
     throw new ApiError('Forbidden', 403)
   }
 
@@ -21,11 +21,17 @@ export const GET = withErrorHandler(async function GET(request) {
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const teacher = await prisma.teacher.findFirst({
-    where: { userId: auth.user.id, schoolId },
-    select: { id: true },
-  })
-  if (!teacher) throw new ApiError('Teacher profile not found', 404)
+  const isStaff = roleCheck(auth.user, ['ADMIN', 'HOD'])
+  let teacherId = null
+
+  if (!isStaff) {
+    const teacher = await prisma.teacher.findFirst({
+      where: { userId: auth.user.id, schoolId },
+      select: { id: true },
+    })
+    if (!teacher) throw new ApiError('Teacher profile not found', 404)
+    teacherId = teacher.id
+  }
 
   const resolvedClass =
     classId ||
@@ -53,18 +59,20 @@ export const GET = withErrorHandler(async function GET(request) {
     throw new ApiError('classId/className and subjectId/subjectName required', 400)
   }
 
-  const assignment = await prisma.teachingAssignment.findFirst({
-    where: {
-      schoolId,
-      teacherId: teacher.id,
-      classId: resolvedClass,
-      subjectId: resolvedSubject,
-    },
-    select: { id: true },
-  })
+  if (!isStaff) {
+    const assignment = await prisma.teachingAssignment.findFirst({
+      where: {
+        schoolId,
+        teacherId,
+        classId: resolvedClass,
+        subjectId: resolvedSubject,
+      },
+      select: { id: true },
+    })
 
-  if (!assignment) {
-    throw new ApiError('No teaching assignment for this class and subject', 403)
+    if (!assignment) {
+      throw new ApiError('No teaching assignment for this class and subject', 403)
+    }
   }
 
   const enrollments = await prisma.pupilSubjectEnrollment.findMany({
