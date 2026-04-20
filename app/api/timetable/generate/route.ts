@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
   const timeoutMs = Math.max(1000, Math.min(120_000, safeNumber(body.timeoutMs, 15_000)))
   const versionName = safeString(body.name) || 'Draft (Solver)'
 
-  const [teachers, rooms, classes, slots, lessons, constraints, lockedPeriodAssignments] =
+  const [teachers, rooms, classes, slots, lessons, constraints, lockedPeriodAssignments, recipes] =
     await Promise.all([
       prisma.teacher.findMany({
         where: { schoolId },
@@ -86,6 +86,39 @@ export async function POST(req: NextRequest) {
         where: { schoolId, lockedForGeneration: true },
         select: { teacherId: true, timeSlotId: true },
       }),
+      prisma.schedulingRecipe.findMany({
+        where: { schoolId, isValid: true, status: { not: 'ARCHIVED' } },
+        select: {
+          id: true,
+          teachingAssignmentId: true,
+          teacherId: true,
+          classId: true,
+          subjectId: true,
+          expectedPeriodsPerWeek: true,
+          blocks: {
+            select: {
+              id: true,
+              size: true,
+              quantity: true,
+              placementPriority: true,
+              preferredDays: true,
+              preferredPeriods: true,
+              forbiddenDays: true,
+              forbiddenPeriods: true,
+              allowSplitAcrossBreaks: true,
+              isLocked: true,
+            },
+          },
+          constraints: {
+            select: {
+              id: true,
+              type: true,
+              priority: true,
+              config: true,
+            },
+          },
+        },
+      }),
     ])
 
   if (!slots.length) {
@@ -104,6 +137,122 @@ export async function POST(req: NextRequest) {
   const solverUrl = safeString(process.env.SOLVER_SERVICE_URL) || 'http://localhost:8001'
   const solveEndpoint = `${solverUrl.replace(/\/+$/, '')}/solve`
 
+  const slotRows = slots.map((s) => ({
+    id: String(s.id),
+    dayOfWeek: safeString(s.dayOfWeek).toLowerCase(),
+    period: Number(s.period),
+    startTime: safeString(s.startTime),
+    endTime: safeString(s.endTime),
+    isBreak: Boolean(s.isBreak),
+  }))
+
+  const recipeByTeachingAssignmentId = new Map<string, (typeof recipes)[number]>()
+  for (const r of recipes) recipeByTeachingAssignmentId.set(String(r.teachingAssignmentId), r)
+
+  const expandedLessons: Array<{
+    id: string
+    teacherId: string
+    classId: string
+    subjectId: string
+    teachingAssignmentId: string
+  }> = []
+  const atomicGroups: Array<{
+    lessonIds: string[]
+    allowedDays?: string[] | null
+    preferMorning?: boolean
+  }> = []
+
+  const makeInstanceId = (teachingAssignmentId: string, i: number) =>
+    `${teachingAssignmentId}::${i}`
+
+  const recipePayload = recipes.map((r) => {
+    const blocks = (r.blocks || []).map((b) => {
+      const preferredDays = (b.preferredDays || [])
+        .map((d) => safeString(d).toLowerCase())
+        .filter(Boolean)
+      const preferMorning =
+        Array.isArray(b.preferredPeriods) &&
+        b.preferredPeriods.length > 0 &&
+        b.preferredPeriods.every((p) => Number(p) > 0 && Number(p) <= 4)
+      return {
+        size: Number(b.size),
+        count: Number(b.quantity),
+        mustBeAtomic: true,
+        preferMorning,
+        allowedDays: preferredDays.length ? preferredDays : null,
+      }
+    })
+    return {
+      recipeId: String(r.id),
+      teachingAssignmentId: String(r.teachingAssignmentId),
+      blocks,
+      constraints: (r.constraints || []).map((c: any) => ({
+        id: String(c.id),
+        type: String(c.type),
+        priority: Number(c.priority),
+        config: c.config,
+      })),
+    }
+  })
+
+  for (const ta of lessons) {
+    const baseId = String(ta.id)
+    const recipe = recipeByTeachingAssignmentId.get(baseId)
+    const blocks = recipe?.blocks || []
+    const totalFromBlocks = blocks.reduce((acc, b) => acc + Number(b.size) * Number(b.quantity), 0)
+    const expected = recipe?.expectedPeriodsPerWeek ?? null
+    const totalPeriods = Math.max(1, expected != null ? Number(expected) : totalFromBlocks || 1)
+
+    let cursor = 0
+    if (blocks.length) {
+      const sortedBlocks = blocks
+        .slice()
+        .sort((a, b) => Number(a.placementPriority) - Number(b.placementPriority))
+      for (const b of sortedBlocks) {
+        for (let rep = 0; rep < Number(b.quantity); rep++) {
+          const ids: string[] = []
+          for (let k = 0; k < Number(b.size); k++) {
+            const instanceId = makeInstanceId(baseId, cursor)
+            cursor += 1
+            ids.push(instanceId)
+            expandedLessons.push({
+              id: instanceId,
+              teacherId: String(ta.teacherId),
+              classId: String(ta.classId),
+              subjectId: String(ta.subjectId),
+              teachingAssignmentId: baseId,
+            })
+          }
+
+          const preferredDays = (b.preferredDays || [])
+            .map((d) => safeString(d).toLowerCase())
+            .filter(Boolean)
+          const preferMorning =
+            Array.isArray(b.preferredPeriods) &&
+            b.preferredPeriods.length > 0 &&
+            b.preferredPeriods.every((p) => Number(p) > 0 && Number(p) <= 4)
+
+          atomicGroups.push({
+            lessonIds: ids,
+            allowedDays: preferredDays.length ? preferredDays : null,
+            preferMorning,
+          })
+        }
+      }
+    }
+
+    for (; cursor < totalPeriods; cursor += 1) {
+      const instanceId = makeInstanceId(baseId, cursor)
+      expandedLessons.push({
+        id: instanceId,
+        teacherId: String(ta.teacherId),
+        classId: String(ta.classId),
+        subjectId: String(ta.subjectId),
+        teachingAssignmentId: baseId,
+      })
+    }
+  }
+
   const payload = {
     teachers: teachers.map((t) => ({
       id: String(t.id),
@@ -113,15 +262,8 @@ export async function POST(req: NextRequest) {
     })),
     rooms: rooms.map((r) => ({ id: String(r.id), name: safeString(r.name) })),
     classes: classes.map((c) => ({ id: String(c.id), name: safeString(c.name) })),
-    slots: slots.map((s) => ({
-      id: String(s.id),
-      dayOfWeek: safeString(s.dayOfWeek),
-      period: Number(s.period),
-      startTime: safeString(s.startTime),
-      endTime: safeString(s.endTime),
-      isBreak: Boolean(s.isBreak),
-    })),
-    lessons: lessons.map((l) => ({
+    slots: slotRows,
+    lessons: expandedLessons.map((l) => ({
       id: String(l.id),
       teacherId: String(l.teacherId),
       classId: String(l.classId),
@@ -140,6 +282,8 @@ export async function POST(req: NextRequest) {
       teacherId: String(la.teacherId),
       slotId: String(la.timeSlotId),
     })),
+    atomicGroups,
+    recipes: recipePayload,
     maxSolutions,
     timeoutMs,
   }
@@ -185,8 +329,14 @@ export async function POST(req: NextRequest) {
 
     const lessonById = new Map<
       string,
-      { id: string; teacherId: string; classId: string; subjectId: string }
-    >(lessons.map((l: any) => [String(l.id), l]))
+      {
+        id: string
+        teacherId: string
+        classId: string
+        subjectId: string
+        teachingAssignmentId: string
+      }
+    >(expandedLessons.map((l) => [String(l.id), l]))
     const slotById = new Map<
       string,
       {
@@ -211,7 +361,7 @@ export async function POST(req: NextRequest) {
           teacherId: String(lesson.teacherId),
           classId: String(lesson.classId),
           subjectId: String(lesson.subjectId),
-          teachingAssignmentId: String(lesson.id),
+          teachingAssignmentId: String(lesson.teachingAssignmentId),
           classroomId: null as string | null,
           isLockedPeriodAssignment: false,
           solvedByAlgorithm: true,
@@ -241,11 +391,10 @@ export async function POST(req: NextRequest) {
 
     const uiAssignments = entriesData
       .map((e) => {
-        const lesson = lessonById.get(String(e.teachingAssignmentId))
         const slot = slotById.get(String(e.timeSlotId))
-        if (!lesson || !slot) return null
+        if (!slot) return null
         return {
-          id: `${version.id}:${e.teachingAssignmentId}`,
+          id: `${version.id}:${e.timeSlotId}:${e.teacherId}:${e.classId}`,
           season: 'normal',
           dayOfWeek: String(slot.dayOfWeek),
           timeSlotId: String(slot.id),
@@ -253,9 +402,9 @@ export async function POST(req: NextRequest) {
           endTime: String(slot.endTime),
           period: Number(slot.period),
           isBreak: Boolean(slot.isBreak),
-          teacherId: String(lesson.teacherId),
-          classId: String(lesson.classId),
-          subjectId: String(lesson.subjectId),
+          teacherId: String(e.teacherId),
+          classId: String(e.classId),
+          subjectId: String(e.subjectId),
           classroomId: e.classroomId ? String(e.classroomId) : 'room-unassigned',
           source: 'generated',
         }

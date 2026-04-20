@@ -60,6 +60,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'User Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'User Management', href: '/dashboard/users', icon: Users },
         { name: 'Registration', href: '/admin/registration', icon: UserPlus },
+        { name: 'Scheduling Recipes', href: '/dashboard/admin/recipes', icon: ClipboardList },
         { name: 'Subjects', href: '/admin/subjects', icon: BookOpen },
         { name: 'Teacher Performance', href: '/admin/teacher-performance', icon: Target },
         { name: 'Classes', href: '/dashboard/classes', icon: GraduationCap },

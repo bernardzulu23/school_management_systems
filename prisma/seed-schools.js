@@ -1,9 +1,10 @@
 const { PrismaClient } = require('@prisma/client')
 const { hash } = require('bcryptjs')
 
-// Override DATABASE_URL to use the public proxy for local seeding
-process.env.DATABASE_URL =
-  'postgresql://postgres:TBGUIpaIMczwHWzrupsNdkgwiFLRDTTr@ballast.proxy.rlwy.net:17921/railway'
+if (String(process.env.SEED_REMOTE_DB || '').toLowerCase() === 'true') {
+  process.env.DATABASE_URL =
+    'postgresql://postgres:TBGUIpaIMczwHWzrupsNdkgwiFLRDTTr@ballast.proxy.rlwy.net:17921/railway'
+}
 
 const prisma = new PrismaClient()
 

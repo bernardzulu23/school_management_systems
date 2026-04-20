@@ -1,5 +1,4 @@
 const { PrismaClient } = require('@prisma/client')
-const { PrismaPg } = require('@prisma/adapter-pg')
 const bcrypt = require('bcryptjs')
 
 const connectionString = process.env.DATABASE_URL
@@ -7,43 +6,7 @@ if (!connectionString) {
   throw new Error('DATABASE_URL is required to seed the database')
 }
 
-const isDev = process.env.NODE_ENV !== 'production'
-
-let sslmode = ''
-let sslParam = ''
-try {
-  const u = new URL(connectionString)
-  sslmode = String(u.searchParams.get('sslmode') || '').toLowerCase()
-  sslParam = String(u.searchParams.get('ssl') || '').toLowerCase()
-} catch {}
-
-const envSslMode = String(process.env.PGSSLMODE || '').toLowerCase()
-const sslDisabled =
-  sslmode === 'disable' || sslParam === '0' || sslParam === 'false' || envSslMode === 'disable'
-const sslEnabled =
-  sslmode === 'require' ||
-  sslmode === 'verify-ca' ||
-  sslmode === 'verify-full' ||
-  sslParam === '1' ||
-  sslParam === 'true' ||
-  envSslMode === 'require' ||
-  envSslMode === 'verify-ca' ||
-  envSslMode === 'verify-full'
-
-if (
-  isDev &&
-  sslEnabled &&
-  String(process.env.ALLOW_SELF_SIGNED_CERTS || 'true').toLowerCase() !== 'false'
-) {
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-}
-
-const poolConfig = {
-  connectionString,
-  ssl: sslDisabled ? false : sslEnabled ? { rejectUnauthorized: false } : undefined,
-}
-
-const prisma = new PrismaClient({ adapter: new PrismaPg(poolConfig) })
+const prisma = new PrismaClient()
 
 async function main() {
   console.log('Start seeding ...')

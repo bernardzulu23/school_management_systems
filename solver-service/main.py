@@ -60,6 +60,27 @@ class LockedAssignmentIn(BaseModel):
     slotId: str
 
 
+class AtomicGroupIn(BaseModel):
+    lessonIds: List[str]
+    allowedDays: Optional[List[str]] = None
+    preferMorning: bool = False
+
+
+class RecipeBlockPayloadIn(BaseModel):
+    size: int
+    count: int
+    mustBeAtomic: bool = True
+    preferMorning: bool = False
+    allowedDays: Optional[List[str]] = None
+
+
+class RecipePayloadIn(BaseModel):
+    recipeId: str
+    teachingAssignmentId: str
+    blocks: List[RecipeBlockPayloadIn] = Field(default_factory=list)
+    constraints: List[Dict[str, Any]] = Field(default_factory=list)
+
+
 class SolveRequest(BaseModel):
     teachers: List[TeacherIn]
     rooms: List[RoomIn] = Field(default_factory=list)
@@ -68,6 +89,8 @@ class SolveRequest(BaseModel):
     lessons: List[LessonIn]
     constraints: List[ConstraintIn] = Field(default_factory=list)
     lockedAssignments: List[LockedAssignmentIn] = Field(default_factory=list)
+    atomicGroups: List[AtomicGroupIn] = Field(default_factory=list)
+    recipes: List[RecipePayloadIn] = Field(default_factory=list)
 
     maxSolutions: int = 500
     timeoutMs: int = 15_000
@@ -183,10 +206,74 @@ def _solve(req: SolveRequest) -> SolveResponse:
 
     idx = _build_indexes(req)
     slot_ids = [s.id for s in usable_slots]
+    next_slot_by_id: Dict[str, Optional[str]] = {}
+    slot_by_id: Dict[str, SlotIn] = idx["slot_by_id"]
+    by_day_period: Dict[Tuple[str, int], str] = {}
+    for s in usable_slots:
+        by_day_period[(str(s.dayOfWeek), int(s.period))] = s.id
+    for s in usable_slots:
+        next_slot_by_id[s.id] = by_day_period.get((str(s.dayOfWeek), int(s.period) + 1))
+
+    domains: Dict[str, List[str]] = {l.id: list(slot_ids) for l in req.lessons}
+
+    def _normalize_day(day: str) -> str:
+        return str(day or "").strip().lower()
+
+    def _allowed_starts_for_group(size: int, allowed_days: Optional[List[str]], prefer_morning: bool) -> List[List[str]]:
+        allowed_day_set = set(_normalize_day(d) for d in (allowed_days or []) if str(d).strip())
+        runs: List[List[str]] = []
+        for s in usable_slots:
+            day = _normalize_day(s.dayOfWeek)
+            if allowed_day_set and day not in allowed_day_set:
+                continue
+            if prefer_morning and int(s.period) > 4:
+                continue
+            run = [s.id]
+            cur = s.id
+            ok = True
+            for _ in range(size - 1):
+                nxt = next_slot_by_id.get(cur)
+                if not nxt:
+                    ok = False
+                    break
+                run.append(nxt)
+                cur = nxt
+            if ok:
+                runs.append(run)
+        return runs
+
+    for g in req.atomicGroups:
+        lesson_ids = list(dict.fromkeys([str(x) for x in g.lessonIds if str(x).strip()]))
+        if len(lesson_ids) < 2:
+            continue
+        for lid in lesson_ids:
+            if lid not in domains:
+                raise HTTPException(status_code=422, detail=f"Atomic group references unknown lessonId: {lid}")
+
+        runs = _allowed_starts_for_group(len(lesson_ids), g.allowedDays, bool(g.preferMorning))
+        if not runs:
+            raise HTTPException(status_code=422, detail="No feasible consecutive runs for an atomic group.")
+
+        for i, lid in enumerate(lesson_ids):
+            allowed_here = sorted({r[i] for r in runs})
+            current = set(domains[lid])
+            domains[lid] = [s for s in allowed_here if s in current]
+            if not domains[lid]:
+                raise HTTPException(status_code=422, detail="Atomic group domain became empty.")
 
     prob = Problem()
     for lesson in req.lessons:
-        prob.addVariable(lesson.id, slot_ids)
+        prob.addVariable(lesson.id, domains.get(lesson.id, slot_ids))
+
+    def _adjacent(a: str, b: str) -> bool:
+        return next_slot_by_id.get(a) == b
+
+    for g in req.atomicGroups:
+        lesson_ids = list(dict.fromkeys([str(x) for x in g.lessonIds if str(x).strip()]))
+        if len(lesson_ids) < 2:
+            continue
+        for i in range(len(lesson_ids) - 1):
+            prob.addConstraint(_adjacent, (lesson_ids[i], lesson_ids[i + 1]))
 
     for _, group in idx["lessons_by_teacher"].items():
         if len(group) > 1:

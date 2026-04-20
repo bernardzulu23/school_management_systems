@@ -20,6 +20,9 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "scripts": {
     "copy:excalidraw-fonts": "node scripts/copy-excalidraw-fonts.js",
     "dev": "npm run copy:excalidraw-fonts && next dev",
@@ -33,6 +36,8 @@
     "seed": "node prisma/seed.js",
     "seed:schools": "node prisma/seed-schools.js",
     "seed:timeslots": "ts-node --transpile-only --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" prisma/seedTimeSlots.ts",
+    "seed:schools:docker": "docker compose exec -T web npm run seed:schools",
+    "seed:timeslots:docker": "docker compose exec -T web npm run seed:timeslots",
     "export:users": "node scripts/export-users-excel.js"
   },
   "lint-staged": {

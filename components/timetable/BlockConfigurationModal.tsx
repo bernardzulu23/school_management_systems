@@ -14,6 +14,15 @@ export type RecipeBlockDraft = {
   placementPriority: number
 }
 
+function useDebounce<T>(value: T, delayMs = 600) {
+  const [debounced, setDebounced] = useState(value)
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced(value), delayMs)
+    return () => clearTimeout(t)
+  }, [value, delayMs])
+  return debounced
+}
+
 export function BlockConfigurationModal(props: {
   isOpen: boolean
   onClose: () => void
@@ -23,11 +32,15 @@ export function BlockConfigurationModal(props: {
 }) {
   const [expected, setExpected] = useState(props.expectedPeriodsPerWeek)
   const [blocks, setBlocks] = useState<RecipeBlockDraft[]>(props.initialBlocks)
+  const [validating, setValidating] = useState(false)
+  const [serverValidation, setServerValidation] = useState<any>(null)
 
   useEffect(() => {
     if (!props.isOpen) return
     setExpected(props.expectedPeriodsPerWeek)
     setBlocks(props.initialBlocks)
+    setValidating(false)
+    setServerValidation(null)
   }, [props.isOpen, props.expectedPeriodsPerWeek, props.initialBlocks])
 
   const total = useMemo(() => {
@@ -61,7 +74,41 @@ export function BlockConfigurationModal(props: {
     return { errors, warnings, totalPeriods: total }
   }, [blocks, expected, total])
 
-  const canSave = validation.errors.length === 0
+  const debouncedPayload = useDebounce({ expected, blocks }, 600)
+
+  useEffect(() => {
+    if (!props.isOpen) return
+    if (validation.errors.length) {
+      setServerValidation(null)
+      setValidating(false)
+      return
+    }
+
+    const run = async () => {
+      setValidating(true)
+      try {
+        const res = await fetch('/api/recipes/validate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            expectedPeriodsPerWeek: debouncedPayload.expected,
+            blocks: debouncedPayload.blocks,
+          }),
+        })
+        const json = await res.json().catch(() => ({}))
+        if (!res.ok || !json?.success) throw new Error(json?.error || 'Validation failed')
+        setServerValidation(json)
+      } catch {
+        setServerValidation(null)
+      } finally {
+        setValidating(false)
+      }
+    }
+
+    run()
+  }, [debouncedPayload, props.isOpen, validation.errors.length])
+
+  const canSave = validation.errors.length === 0 && (serverValidation?.feasible ?? true)
 
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose} title="Block Configuration" size="lg">
@@ -173,7 +220,10 @@ export function BlockConfigurationModal(props: {
           </div>
         </div>
 
-        <RecipeValidationDisplay validation={validation} />
+        {validating ? (
+          <div className="text-sm text-royalPurple-text2">Checking feasibility…</div>
+        ) : null}
+        <RecipeValidationDisplay validation={serverValidation?.result || validation} />
 
         <div className="flex items-center justify-end gap-2">
           <Button variant="outline" onClick={props.onClose}>
