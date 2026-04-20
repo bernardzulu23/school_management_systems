@@ -71,7 +71,49 @@ export const GET = withErrorHandler(async function GET(request) {
     })
 
     if (!assignment) {
-      throw new ApiError('No teaching assignment for this class and subject', 403)
+      // Fallback: Check if the teacher is assigned to this class and subject via many-to-many relations or assignedSubjects array
+      const [teacher, targetSubject] = await Promise.all([
+        prisma.teacher.findFirst({
+          where: { id: teacherId, schoolId },
+          include: {
+            classes: { where: { id: resolvedClass }, select: { id: true } },
+            subjects: { where: { id: resolvedSubject }, select: { id: true } },
+          },
+        }),
+        prisma.subject.findFirst({
+          where: { id: resolvedSubject, schoolId },
+          select: { id: true, name: true },
+        }),
+      ])
+
+      const isAssignedToClass =
+        teacher?.classes?.length > 0 ||
+        (await prisma.class
+          .findFirst({
+            where: {
+              schoolId,
+              id: resolvedClass,
+              teacherId: teacher.id,
+            },
+            select: { id: true },
+          })
+          .then((c) => !!c))
+
+      const targetSubjectName = targetSubject?.name?.trim()?.toLowerCase() || ''
+      const isAssignedToSubject =
+        teacher?.subjects?.length > 0 ||
+        (Array.isArray(teacher?.assignedSubjects) &&
+          teacher.assignedSubjects.some((s) => {
+            const norm = String(s || '')
+              .trim()
+              .toLowerCase()
+            return norm === resolvedSubject || (targetSubjectName && norm === targetSubjectName)
+          }))
+
+      // If they have both class and subject assigned (even if not as a specific pair in TeachingAssignment), allow it.
+      if (!isAssignedToClass || !isAssignedToSubject) {
+        throw new ApiError('No teaching assignment for this class and subject', 403)
+      }
     }
   }
 

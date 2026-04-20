@@ -104,10 +104,10 @@ export async function GET(request) {
           teacherId: resolvedTeacherId,
           teacherName: teacher?.user?.name || null,
           classId: preferredClass.id,
-          className: preferredClass.name || null,
+          className: preferredClass.name || 'Unknown Class',
           classYearGroup: preferredClass.year_group || null,
           subjectId: s.id,
-          subjectName: s.name || null,
+          subjectName: s.name || 'Unknown Subject',
           createdAt: null,
         })
         continue
@@ -118,10 +118,10 @@ export async function GET(request) {
           teacherId: resolvedTeacherId,
           teacherName: teacher?.user?.name || null,
           classId: c.id,
-          className: c.name || null,
+          className: c.name || 'Unknown Class',
           classYearGroup: c.year_group || null,
           subjectId: s.id,
-          subjectName: s.name || null,
+          subjectName: s.name || 'Unknown Subject',
           createdAt: null,
         })
       }
@@ -138,12 +138,12 @@ export async function GET(request) {
     data: assignments.map((a) => ({
       id: a.id,
       teacherId: a.teacherId,
-      teacherName: a.teacher?.user?.name || null,
+      teacherName: a.teacher?.user?.name || 'Unknown Teacher',
       classId: a.classId,
-      className: a.class?.name || null,
+      className: a.class?.name || 'Unknown Class',
       classYearGroup: a.class?.year_group || null,
       subjectId: a.subjectId,
-      subjectName: a.subject?.name || null,
+      subjectName: a.subject?.name || 'Unknown Subject',
       createdAt: a.createdAt,
     })),
   })
