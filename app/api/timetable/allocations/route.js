@@ -52,7 +52,7 @@ export async function GET(req) {
             id: true,
             name: true,
             email: true,
-            teacherProfile: { select: { department: true, employeeId: true } },
+            teacherProfile: { select: { department: true, ts_number: true } },
           },
         },
         hod: {
