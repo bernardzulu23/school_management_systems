@@ -70,18 +70,49 @@ export default function HODAllocationPage() {
         fetch('/api/classes'),
         fetch(`/api/timetable/allocations?term=${term}&academicYear=${academicYear}`),
       ])
+      const safeJson = async (res) => {
+        try {
+          return await res.json()
+        } catch {
+          return null
+        }
+      }
       const [teachersData, subjectsData, classesData, allocData] = await Promise.all([
-        teachersRes.json(),
-        subjectsRes.json(),
-        classesRes.json(),
-        allocRes.json(),
+        safeJson(teachersRes),
+        safeJson(subjectsRes),
+        safeJson(classesRes),
+        safeJson(allocRes),
       ])
-      setTeachers(teachersData.data || teachersData.users || teachersData || [])
-      setSubjects(subjectsData.subjects || subjectsData.data || subjectsData || [])
-      setClasses(classesData.classes || classesData.data || classesData || [])
-      setAllocations(allocData.allocations || [])
+
+      const firstError =
+        (!teachersRes.ok && {
+          label: 'Teachers',
+          status: teachersRes.status,
+          body: teachersData,
+        }) ||
+        (!subjectsRes.ok && {
+          label: 'Subjects',
+          status: subjectsRes.status,
+          body: subjectsData,
+        }) ||
+        (!classesRes.ok && { label: 'Classes', status: classesRes.status, body: classesData }) ||
+        (!allocRes.ok && { label: 'Allocations', status: allocRes.status, body: allocData }) ||
+        null
+
+      if (firstError) {
+        const msg =
+          String(firstError?.body?.error || firstError?.body?.message || '').trim() ||
+          `${firstError.label} failed (${firstError.status})`
+        throw new Error(msg)
+      }
+
+      const ensureArray = (v) => (Array.isArray(v) ? v : [])
+      setTeachers(ensureArray(teachersData?.data || teachersData?.users || teachersData))
+      setSubjects(ensureArray(subjectsData?.subjects || subjectsData?.data || subjectsData))
+      setClasses(ensureArray(classesData?.classes || classesData?.data || classesData))
+      setAllocations(ensureArray(allocData?.allocations || allocData?.data || allocData))
     } catch (err) {
-      toast.error('Failed to load data')
+      toast.error(err?.message || 'Failed to load data')
     } finally {
       setLoading(false)
     }
