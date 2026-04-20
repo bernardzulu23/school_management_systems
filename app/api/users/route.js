@@ -7,12 +7,17 @@ export async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  }
-
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const isAllowedRole = roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod'])
+  const hasHodProfile = await prisma.headOfDepartment.findFirst({
+    where: { userId: auth.user.id, schoolId },
+    select: { id: true },
+  })
+  if (!isAllowedRole && !hasHodProfile) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
 
   const { searchParams } = new URL(request.url)
   const role = searchParams.get('role')

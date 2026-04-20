@@ -19,12 +19,25 @@ export async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['HOD', 'headteacher', 'ADMIN'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  }
-
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const isAllowedRole = roleCheck(auth.user, [
+    'HOD',
+    'hod',
+    'headteacher',
+    'ADMIN',
+    'admin',
+    'administrator',
+    'superadmin',
+  ])
+  const hasHodProfile = await prisma.headOfDepartment.findFirst({
+    where: { userId: auth.user.id, schoolId },
+    select: { id: true },
+  })
+  if (!isAllowedRole && !hasHodProfile) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
 
   const userId = String(auth.user?.id || '')
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -167,12 +180,25 @@ export async function PATCH(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['HOD', 'headteacher', 'ADMIN'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  }
-
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const isAllowedRole = roleCheck(auth.user, [
+    'HOD',
+    'hod',
+    'headteacher',
+    'ADMIN',
+    'admin',
+    'administrator',
+    'superadmin',
+  ])
+  const hasHodProfile = await prisma.headOfDepartment.findFirst({
+    where: { userId: auth.user.id, schoolId },
+    select: { id: true },
+  })
+  if (!isAllowedRole && !hasHodProfile) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
 
   const body = await request.json().catch(() => ({}))
   const teacherId = String(body?.teacherId || '').trim()

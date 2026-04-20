@@ -2,18 +2,24 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
-import { getAuthUser } from '@/lib/middleware/auth'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 
 // POST — HOD pushes department allocations to the headteacher
 export async function POST(req) {
-  const schoolId = await getSchoolIdFromRequest(req)
+  const auth = authMiddleware(req)
+  if (!auth.isAuthenticated) return auth.response
+
+  const user = auth.user
+  const schoolId = user.schoolId || (await getSchoolIdFromRequest(req))
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
-  const user = await getAuthUser(req)
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-
-  const role = user.role?.toLowerCase()
-  if (!['hod', 'headteacher', 'administrator', 'admin'].includes(role)) {
+  const isAdmin = roleCheck(user, ['ADMIN'])
+  const hasHodProfile = await prisma.headOfDepartment.findFirst({
+    where: { userId: user.id, schoolId },
+    select: { id: true },
+  })
+  const isHod = roleCheck(user, ['HOD', 'hod']) || Boolean(hasHodProfile)
+  if (!isAdmin && !isHod) {
     return NextResponse.json({ error: 'HOD role required' }, { status: 403 })
   }
 
@@ -23,13 +29,17 @@ export async function POST(req) {
     return NextResponse.json({ error: 'term and academicYear required' }, { status: 400 })
   }
 
+  if (!isHod && !(allocationIds?.length > 0)) {
+    return NextResponse.json({ error: 'allocationIds required for non-HOD users' }, { status: 400 })
+  }
+
   // Fetch allocations to push — either specific IDs or all draft for this HOD
   const where = {
     schoolId,
     status: 'draft',
     term,
     academicYear,
-    ...(allocationIds?.length ? { id: { in: allocationIds } } : { hodId: user.id }),
+    ...(allocationIds?.length ? { id: { in: allocationIds } } : isHod ? { hodId: user.id } : {}),
   }
 
   const allocations = await prisma.teacherAllocation.findMany({
