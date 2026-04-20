@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest) {
   const auth = authMiddleware(req as any)
   if (!auth.isAuthenticated) return auth.response
-  if (!roleCheck(auth.user, ['ADMIN', 'HOD'])) {
+  if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'TEACHER', 'teacher', 'hod'])) {
     return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 })
   }
 
