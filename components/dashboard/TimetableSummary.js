@@ -94,8 +94,12 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
   const pendingChanges = useTimetableStore((s) => s.pendingChanges)
   const seasonMode = useTimetableStore((s) => s.currentSeason)
   const publish = useTimetableStore((s) => s.publish)
+  const loadFromApi = useTimetableStore((s) => s.loadFromApi)
 
-  useEffect(() => setMounted(true), [])
+  useEffect(() => {
+    setMounted(true)
+    loadFromApi() // Initial load from database
+  }, [loadFromApi])
 
   const resolvedRole = String(userRole || user?.role || '').toLowerCase()
   const activeSeason = seasonFromMode(seasonMode)

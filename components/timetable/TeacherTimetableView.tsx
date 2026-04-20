@@ -1,7 +1,14 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
+import type {
+  Assignment,
+  Class,
+  Classroom,
+  Teacher,
+  TimeSlot,
+  SubjectRef,
+} from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { useAuth } from '@/lib/auth'
 
@@ -10,6 +17,7 @@ export interface TeacherTimetableViewProps {
   timeSlots: TimeSlot[]
   teacherId?: string
   classes?: Class[]
+  subjects?: SubjectRef[]
   classrooms?: Classroom[]
   mobile?: boolean
 }
@@ -91,6 +99,12 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
     for (const c of props.classes || []) map.set(String(c.id), c.name)
     return map
   }, [props.classes])
+
+  const subjectName = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const s of props.subjects || []) map.set(String(s.id), s.name)
+    return map
+  }, [props.subjects])
 
   const roomName = useMemo(() => {
     const map = new Map<string, string>()
@@ -234,7 +248,8 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
                             className="rounded-xl border border-royalPurple-border/40 bg-white/70 px-3 py-2"
                           >
                             <div className="font-bold text-[13px] text-slate-900 truncate">
-                              {className.get(String(a.classId)) || 'Class'}
+                              {className.get(String(a.classId)) || 'Class'} —{' '}
+                              {subjectName.get(String(a.subjectId)) || 'Subject'}
                             </div>
                             <div className="text-[12px] text-slate-600 truncate">
                               {roomName.get(String(a.classroomId)) || 'Room'}

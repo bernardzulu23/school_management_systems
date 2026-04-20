@@ -63,6 +63,7 @@ export interface TimetableStoreState {
   switchSeason: (season: TimetableSeasonMode) => void
   addTravelingTeacherRoute: (route: TravelingTeacherRoute) => void
   optimizeWorkload: () => void
+  loadFromApi: (opts?: { term?: string; academicYear?: string; status?: string }) => Promise<void>
 
   getConflictCount: () => number
   getAssignmentsByTeacher: (teacherId: Assignment['teacherId']) => Assignment[]
@@ -363,6 +364,41 @@ export const useTimetableStore = create<TimetableStoreState>()(
           pushSnapshot()
           set((s) => ({ conflicts: detect(s.assignments) }))
           trackChange({ id: genId(), kind: 'optimize', at: nowIso() })
+        },
+
+        loadFromApi: async (opts = {}) => {
+          const { term = 'Term 1', academicYear = '2025', status = 'published' } = opts
+          try {
+            const url = `/api/timetable/entries?term=${term}&academicYear=${academicYear}${status ? `&status=${status}` : ''}`
+            const res = await fetch(url)
+            if (!res.ok) throw new Error('Failed to fetch timetable entries')
+            const data = await res.json()
+            const entries = data.entries || []
+
+            const assignments = entries.map((e: any) => ({
+              id: e.id,
+              season: 'normal', // Default for v2
+              dayOfWeek: e.dayOfWeek.toLowerCase(),
+              startTime: e.startTime,
+              endTime: e.endTime,
+              period: e.periodNumber,
+              teacherId: e.teacherId,
+              classId: e.classId,
+              subjectId: e.subjectId,
+              classroomId: 'room-1', // Placeholder as v2 doesn't have rooms yet
+              source: 'generated',
+            }))
+
+            set({
+              assignments,
+              conflicts: detect(assignments),
+              isPublished: status === 'published',
+              lastPublishedAt: status === 'published' ? new Date() : null,
+            })
+          } catch (err) {
+            console.error('[timetableStore loadFromApi]', err)
+            // Silently fail to not interrupt UI
+          }
         },
 
         getConflictCount: () => {

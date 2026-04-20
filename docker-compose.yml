@@ -30,7 +30,7 @@ services:
     environment:
       NODE_ENV: development
       DATABASE_URL: postgresql://postgres:postgres@db:5432/zsms?schema=public
-      DATABASE_URL: postgresql://postgres:TBGUIpaIMczwHWzrupsNdkgwiFLRDTTr@ballast.proxy.rlwy.net:17921/railway?sslmode=require
+      # DATABASE_URL: postgresql://postgres:TBGUIpaIMczwHWzrupsNdkgwiFLRDTTr@ballast.proxy.rlwy.net:17921/railway?sslmode=require
 
       SOLVER_SERVICE_URL: http://solver:8001
     volumes:

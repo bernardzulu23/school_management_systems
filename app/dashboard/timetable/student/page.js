@@ -49,23 +49,100 @@ function defaultClassrooms(count) {
   }))
 }
 
+import { useTimetableStore } from '@/lib/timetable/timetableStore'
+
+function timeToMin(t) {
+  const [h, m] = t.split(':').map(Number)
+  return h * 60 + m
+}
+
+function minToTime(min) {
+  const h = Math.floor(min / 60)
+  const m = min % 60
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+}
+
+function buildTimeSlots(config) {
+  if (!config) return []
+  const startMin = timeToMin(config.startTime || '07:00')
+  const endMin = timeToMin(config.endTime || '17:00')
+  const singleMin = config.singleDuration || 40
+  const breakSlots = Array.isArray(config.breakSlots)
+    ? config.breakSlots
+    : JSON.parse(config.breakSlots || '[]')
+  const workingDays = config.workingDays || ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+
+  const out = []
+  for (const day of workingDays) {
+    let cursor = startMin
+    let periodNum = 1
+    while (cursor < endMin) {
+      const inBreak = breakSlots.find(
+        (b) => timeToMin(b.start) <= cursor && timeToMin(b.end) > cursor
+      )
+      if (inBreak) {
+        out.push({
+          id: `${day.toLowerCase()}-break-${cursor}`,
+          dayOfWeek: day.toLowerCase(),
+          startTime: inBreak.start,
+          endTime: inBreak.end,
+          period: 0,
+          isBreak: true,
+          label: inBreak.label,
+        })
+        cursor = timeToMin(inBreak.end)
+        continue
+      }
+      const nextBreak = breakSlots.find((b) => timeToMin(b.start) > cursor)
+      const ceilMin = nextBreak ? Math.min(endMin, timeToMin(nextBreak.start)) : endMin
+
+      if (cursor + singleMin <= ceilMin) {
+        out.push({
+          id: `${day.toLowerCase()}-${periodNum}`,
+          dayOfWeek: day.toLowerCase(),
+          startTime: minToTime(cursor),
+          endTime: minToTime(cursor + singleMin),
+          period: periodNum,
+          isBreak: false,
+          label: `Period ${periodNum}`,
+        })
+        cursor += singleMin
+        periodNum++
+      } else {
+        cursor = nextBreak ? timeToMin(nextBreak.start) : endMin
+      }
+    }
+  }
+  return out
+}
+
 export default function StudentTimetablePage() {
   const { user } = useAuth()
+  const loadFromApi = useTimetableStore((s) => s.loadFromApi)
   const [classes, setClasses] = useState([])
+  const [subjects, setSubjects] = useState([])
   const [teachers, setTeachers] = useState([])
   const [classrooms, setClassrooms] = useState([])
-  const timeSlots = useMemo(() => genTimeSlots(), [])
+  const [timeSlots, setTimeSlots] = useState([])
   const classId = user?.studentProfile?.classId ? String(user.studentProfile.classId) : undefined
 
   useEffect(() => {
     const load = async () => {
       try {
-        const [classesRes, teachersRes] = await Promise.all([
+        const [classesRes, teachersRes, subjectsRes, configRes] = await Promise.all([
           fetch('/api/classes?limit=200', { cache: 'no-store' }),
           fetch('/api/teachers?limit=200', { cache: 'no-store' }),
+          fetch('/api/subjects?limit=200', { cache: 'no-store' }),
+          fetch('/api/timetable/generate', { cache: 'no-store' }),
         ])
         const classesJson = await classesRes.json().catch(() => ({}))
         const teachersJson = await teachersRes.json().catch(() => ({}))
+        const subjectsJson = await subjectsRes.json().catch(() => ({}))
+        const configJson = await configRes.json().catch(() => ({}))
+
+        if (configJson.config) {
+          setTimeSlots(buildTimeSlots(configJson.config))
+        }
 
         const cList = Array.isArray(classesJson?.data) ? classesJson.data : []
         const mappedClasses = cList.map((c) => ({
@@ -76,6 +153,10 @@ export default function StudentTimetablePage() {
           subjects: [],
         }))
         setClasses(mappedClasses)
+
+        const sList = Array.isArray(subjectsJson?.subjects) ? subjectsJson.subjects : []
+        setSubjects(sList.map((s) => ({ id: s.id, name: s.name })))
+
         setClassrooms(defaultClassrooms(mappedClasses.length))
 
         const tList = Array.isArray(teachersJson?.data) ? teachersJson.data : []
@@ -88,12 +169,15 @@ export default function StudentTimetablePage() {
           traveling: { enabled: false, schools: [] },
         }))
         setTeachers(mappedTeachers)
+
+        // Load assignments from v2 API
+        await loadFromApi()
       } catch (e) {
         toast.error('Failed to load timetable metadata')
       }
     }
     load()
-  }, [])
+  }, [loadFromApi])
 
   return (
     <DashboardLayout title="My Timetable">
@@ -101,6 +185,7 @@ export default function StudentTimetablePage() {
         timeSlots={timeSlots}
         classId={classId}
         classes={classes}
+        subjects={subjects}
         teachers={teachers}
         classrooms={classrooms}
       />
