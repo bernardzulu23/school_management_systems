@@ -24,7 +24,7 @@ const plans = [
   },
   {
     name: 'Basic',
-    price: 'K150',
+    price: 'K5',
     period: '/month',
     description: 'Core management only',
     features: [

@@ -95,16 +95,19 @@ export default function OnboardingPage({ searchParams }) {
     return () => clearInterval(t)
   }, [resendCooldown])
 
-  const start = async () => {
+  const start = async (overridePlan) => {
     if (!canStart) return
     setSubmitting(true)
     try {
+      const planToSend = String(overridePlan || plan || '')
+        .trim()
+        .toLowerCase()
       const res = await fetch('/api/onboarding/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         cache: 'no-store',
-        body: JSON.stringify({ email, password, plan }),
+        body: JSON.stringify({ email, password, plan: planToSend }),
       })
       const contentType = String(res.headers.get('content-type') || '')
       const rawText = await res.text().catch(() => '')
@@ -254,7 +257,7 @@ export default function OnboardingPage({ searchParams }) {
     forceSetupStep ||
     isTrialPlan ||
     String(status?.registration?.paymentStatus || '').toLowerCase() === 'paid'
-  const monthlyPrice = plan === 'basic' ? 150 : plan === 'premium' ? 600 : 300
+  const monthlyPrice = plan === 'basic' ? 5 : plan === 'premium' ? 600 : 300
   const totalAmount = monthlyPrice * (Number(months) || 1)
 
   return (
@@ -335,11 +338,19 @@ export default function OnboardingPage({ searchParams }) {
                 </div>
               </div>
               <Button
-                onClick={start}
+                onClick={() => start()}
                 disabled={!canStart || submitting}
                 className="zsms-hover-raise"
               >
                 {submitting ? 'Sending...' : 'Send Verification Link'}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => start('trial')}
+                disabled={!canStart || submitting}
+                className="zsms-hover-raise"
+              >
+                {submitting ? 'Sending...' : 'Start Free Trial (Skip payment)'}
               </Button>
               <div className="text-sm text-royalPurple-text2">
                 Didn&apos;t receive it?{' '}
@@ -361,7 +372,13 @@ export default function OnboardingPage({ searchParams }) {
                 </button>
               </div>
               <div className="text-xs text-royalPurple-text3">
-                After verifying your email, you will be redirected to plan selection.
+                After verifying your email, you will be redirected to{' '}
+                {String(plan || '')
+                  .trim()
+                  .toLowerCase() === 'trial'
+                  ? 'school setup'
+                  : 'plan selection'}
+                .
               </div>
             </div>
           </div>
@@ -382,7 +399,7 @@ export default function OnboardingPage({ searchParams }) {
                 >
                   <div className="plan-name">Basic</div>
                   <div>
-                    <span className="plan-price">K150</span>{' '}
+                    <span className="plan-price">K5</span>{' '}
                     <span className="plan-price-sub">/ month</span>
                   </div>
                   <div className="plan-desc">Up to 300 students · Core modules</div>
