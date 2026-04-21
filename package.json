@@ -27,7 +27,7 @@
     "copy:excalidraw-fonts": "node scripts/copy-excalidraw-fonts.js",
     "dev": "npm run copy:excalidraw-fonts && next dev",
     "build": "npm run copy:excalidraw-fonts && prisma generate && node scripts/clean-next-standalone.js && next build",
-    "start": "node .next/standalone/server.js",
+    "start": "node server.js",
     "lint": "node ./node_modules/eslint/bin/eslint.js .",
     "test": "jest",
     "test:watch": "jest --watch",
