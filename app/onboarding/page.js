@@ -34,6 +34,7 @@ export default function OnboardingPage({ searchParams }) {
   const [accountNumber, setAccountNumber] = useState('')
   const [months, setMonths] = useState(1)
   const [paying, setPaying] = useState(false)
+  const [claimReferenceId, setClaimReferenceId] = useState('')
 
   const [schoolName, setSchoolName] = useState('')
   const [subdomain, setSubdomain] = useState('')
@@ -67,6 +68,8 @@ export default function OnboardingPage({ searchParams }) {
       })
       const json = await res.json().catch(() => ({}))
       setStatus(json)
+      const currentReference = String(json?.registration?.paymentReference || '').trim()
+      if (currentReference) setClaimReferenceId((s) => (s ? s : currentReference))
       const currentPlan = String(json?.registration?.plan || '')
         .trim()
         .toLowerCase()
@@ -214,12 +217,40 @@ export default function OnboardingPage({ searchParams }) {
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json?.error || 'Payment request failed')
+      const ref = String(json?.referenceId || '').trim()
+      if (ref) setClaimReferenceId(ref)
       toast.success('Payment initiated')
       await refreshStatus()
     } catch (e) {
       toast.error(e?.message || 'Payment request failed')
     } finally {
       setPaying(false)
+    }
+  }
+
+  const confirmPayment = async () => {
+    const ref = String(claimReferenceId || '').trim()
+    if (!ref) {
+      toast.error('Enter the payment reference ID from the SMS')
+      return
+    }
+    setLoadingStatus(true)
+    try {
+      const res = await fetch(
+        `/api/onboarding/status?claimReferenceId=${encodeURIComponent(ref)}&claimStatus=paid`,
+        { credentials: 'include', cache: 'no-store' }
+      )
+      const json = await res.json().catch(() => ({}))
+      setStatus(json)
+      if (String(json?.registration?.paymentStatus || '').toLowerCase() === 'paid') {
+        toast.success('Payment confirmed')
+      } else {
+        toast.error('Payment is still pending. Click Refresh Status or try again.')
+      }
+    } catch (e) {
+      toast.error(e?.message || 'Failed to confirm payment')
+    } finally {
+      setLoadingStatus(false)
     }
   }
 
@@ -525,9 +556,31 @@ export default function OnboardingPage({ searchParams }) {
                 </div>
 
                 {String(status?.registration?.paymentStatus || '').toLowerCase() === 'pending' ? (
-                  <div className="onboard-subtitle">
-                    Payment is pending. Complete the prompt on your phone, then click Refresh
-                    Status.
+                  <div className="space-y-3">
+                    <div className="onboard-subtitle">
+                      Payment is pending. If you received the success SMS but it still shows
+                      pending, paste the Reference ID and confirm.
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="space-y-2">
+                        <Label>Payment Reference ID</Label>
+                        <Input
+                          value={claimReferenceId}
+                          onChange={(e) => setClaimReferenceId(e.target.value)}
+                          placeholder="e.g. LPLXC-20260421-..."
+                        />
+                      </div>
+                      <div className="flex items-end">
+                        <Button
+                          variant="outline"
+                          onClick={confirmPayment}
+                          disabled={loadingStatus || !String(claimReferenceId || '').trim()}
+                          className="zsms-hover-raise"
+                        >
+                          Confirm Payment
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 ) : null}
               </div>

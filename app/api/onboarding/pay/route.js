@@ -25,6 +25,22 @@ function normalizeZambiaMsisdn(value) {
   return digits
 }
 
+function extractGatewayReferenceId(payload) {
+  const p = payload || {}
+  const v = String(
+    p.referenceId ||
+      p.reference_id ||
+      p?.data?.referenceId ||
+      p?.data?.reference_id ||
+      p?.transactionId ||
+      p?.transaction_id ||
+      p?.data?.transactionId ||
+      p?.data?.transaction_id ||
+      ''
+  ).trim()
+  return v || null
+}
+
 export async function POST(request) {
   const rl = rateLimiter(request, {
     limit: process.env.NODE_ENV === 'production' ? 30 : 300,
@@ -193,8 +209,16 @@ export async function POST(request) {
       )
     }
 
+    const gatewayReferenceId = extractGatewayReferenceId(data)
+    if (gatewayReferenceId && gatewayReferenceId !== referenceId) {
+      await prisma.schoolRegistration.update({
+        where: { id: reg.id },
+        data: { paymentReference: gatewayReferenceId },
+      })
+    }
+
     return NextResponse.json(
-      { success: true, provider: 'lipila', referenceId, data },
+      { success: true, provider: 'lipila', referenceId: gatewayReferenceId || referenceId, data },
       { status: 200 }
     )
   } catch (error) {

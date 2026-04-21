@@ -9,6 +9,25 @@ export async function GET(request) {
     return NextResponse.json({ authenticated: false }, { status: 200 })
   }
 
+  const { searchParams } = new URL(request.url)
+  const claimReferenceId = String(searchParams.get('claimReferenceId') || '').trim()
+  const claimStatus = String(searchParams.get('claimStatus') || '')
+    .trim()
+    .toLowerCase()
+  const shouldClaimPaid =
+    claimReferenceId &&
+    (claimStatus === 'paid' ||
+      claimStatus === 'success' ||
+      claimStatus === 'successful' ||
+      claimStatus === 'completed')
+
+  if (shouldClaimPaid) {
+    await prisma.schoolRegistration.updateMany({
+      where: { id: registrationId, paymentStatus: { in: ['pending', 'unpaid'] } },
+      data: { paymentStatus: 'paid', paymentReference: claimReferenceId },
+    })
+  }
+
   const reg = await prisma.schoolRegistration.findUnique({
     where: { id: registrationId },
     select: {
