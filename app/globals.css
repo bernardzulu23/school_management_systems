@@ -501,6 +501,9 @@
 
 .bg-white {
   color: #111827;
+  --rp-text1: #111827;
+  --rp-text2: #374151;
+  --rp-text3: #6b7280;
 }
 
 .bg-white .text-white,

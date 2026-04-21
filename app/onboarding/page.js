@@ -21,7 +21,15 @@ export default function OnboardingPage({ searchParams }) {
   const [resendCooldown, setResendCooldown] = useState(0)
   const [resending, setResending] = useState(false)
 
-  const [plan, setPlan] = useState('standard')
+  const initialPlan = (() => {
+    const raw = String(searchParams?.plan || '')
+      .trim()
+      .toLowerCase()
+    if (raw === 'trial' || raw === 'basic' || raw === 'standard' || raw === 'premium') return raw
+    return 'standard'
+  })()
+
+  const [plan, setPlan] = useState(initialPlan)
   const [provider, setProvider] = useState('airtel')
   const [accountNumber, setAccountNumber] = useState('')
   const [months, setMonths] = useState(1)
