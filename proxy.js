@@ -91,6 +91,8 @@ export default async function proxy(request) {
     '/api/auth/register',
     '/api/auth/logout',
     '/api/auth/refresh',
+    '/api/auth/forgot-password',
+    '/api/auth/reset-password',
     '/api/public',
     '/api/onboarding',
     '/api/schools/check-subdomain',
