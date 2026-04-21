@@ -85,11 +85,17 @@ export async function POST(request) {
     ...(selectedOption ? { paymentType: selectedOption.paymentType } : {}),
   }
 
-  const apiKey = String(process.env.LIPILA_API_KEY || '').trim()
-  const baseUrl = String(process.env.LIPILA_BASE_URL || 'https://api.lipila.dev').trim()
+  const apiKey = String(process.env.LIPILA_API_KEY || process.env.LIPILA_SECRET_KEY || '').trim()
+  const baseUrl = String(
+    process.env.LIPILA_BASE_URL ||
+      (process.env.NODE_ENV === 'production' ? 'https://blz.lipila.io' : 'https://api.lipila.dev')
+  ).trim()
   const url = `${baseUrl.replace(/\/+$/, '')}/api/v1/collections/mobile-money`
 
   if (!apiKey) {
+    if (process.env.NODE_ENV === 'production') {
+      return NextResponse.json({ error: 'Payment gateway is not configured' }, { status: 500 })
+    }
     return NextResponse.json(
       {
         success: true,
@@ -113,27 +119,70 @@ export async function POST(request) {
   }
 
   try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 25_000)
     const response = await fetch(url, {
       method: 'POST',
+      signal: controller.signal,
       headers: {
         accept: 'application/json',
         'x-api-key': apiKey,
         'Content-Type': 'application/json',
+        'User-Agent': 'ZSMS-Server',
       },
       body: JSON.stringify(lipilaPayload),
     })
+    clearTimeout(timeout)
 
-    const data = await response.json().catch(() => ({}))
+    const contentType = String(response.headers.get('content-type') || '')
+    const raw = await response.text().catch(() => '')
+    let data = {}
+    if (raw && contentType.includes('application/json')) {
+      data = JSON.parse(raw)
+    } else if (raw) {
+      try {
+        data = JSON.parse(raw)
+      } catch {
+        data = { raw }
+      }
+    }
     if (!response.ok) {
-      const msg = typeof data?.message === 'string' ? data.message : 'Payment request failed'
-      return NextResponse.json({ error: msg }, { status: 502 })
+      const rawMessage =
+        typeof data?.message === 'string'
+          ? data.message
+          : typeof data?.error === 'string'
+            ? data.error
+            : typeof data?.raw === 'string'
+              ? data.raw
+              : ''
+
+      const looksLikeBotGate =
+        typeof rawMessage === 'string' &&
+        (rawMessage.includes('Performing security verification') ||
+          rawMessage.includes('Just a moment') ||
+          rawMessage.includes('<html') ||
+          rawMessage.includes('<!doctype html'))
+
+      const msg = looksLikeBotGate
+        ? 'Payment gateway is blocked by security verification. Disable bot protection for the gateway endpoint or whitelist server-to-server requests.'
+        : typeof rawMessage === 'string' && rawMessage.trim()
+          ? rawMessage.trim()
+          : 'Payment request failed'
+
+      return NextResponse.json(
+        { error: msg, upstreamStatus: response.status, upstreamContentType: contentType },
+        { status: 502 }
+      )
     }
 
     return NextResponse.json(
       { success: true, provider: 'lipila', referenceId, data },
       { status: 200 }
     )
-  } catch {
+  } catch (error) {
+    if (error?.name === 'AbortError') {
+      return NextResponse.json({ error: 'Payment gateway timeout' }, { status: 504 })
+    }
     return NextResponse.json({ error: 'Payment gateway unavailable' }, { status: 502 })
   }
 }

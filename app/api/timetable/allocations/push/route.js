@@ -62,17 +62,33 @@ export async function POST(req) {
   const totalPeriods = allocations.reduce((s, a) => s + a.periodsPerWeek, 0)
   const teacherNames = [...new Set(allocations.map((a) => a.teacher.name))].join(', ')
 
-  // Find the headteacher for this school
-  const headteacher = await prisma.user.findFirst({
-    where: {
-      schoolId,
-      role: { in: ['HEADTEACHER', 'headteacher', 'admin', 'administrator'] },
-    },
-    select: { id: true, name: true },
+  const primaryRoles = ['headteacher', 'HEADTEACHER']
+  const fallbackRoles = [
+    'admin',
+    'ADMIN',
+    'administrator',
+    'ADMINISTRATOR',
+    'superadmin',
+    'SUPERADMIN',
+  ]
+
+  let recipients = await prisma.user.findMany({
+    where: { schoolId, role: { in: primaryRoles } },
+    select: { id: true, name: true, role: true },
   })
 
-  if (!headteacher) {
-    return NextResponse.json({ error: 'No headteacher found for this school' }, { status: 404 })
+  if (recipients.length === 0) {
+    recipients = await prisma.user.findMany({
+      where: { schoolId, role: { in: fallbackRoles } },
+      select: { id: true, name: true, role: true },
+    })
+  }
+
+  if (recipients.length === 0) {
+    return NextResponse.json(
+      { error: 'No headteacher/admin account found for this school' },
+      { status: 404 }
+    )
   }
 
   // Run in transaction: mark allocations as pushed + create notification
@@ -84,34 +100,46 @@ export async function POST(req) {
     })
 
     // 2. Create notification for headteacher
-    await tx.timetableNotification.create({
-      data: {
-        schoolId,
-        fromUserId: user.id,
-        toUserId: headteacher.id,
-        type: 'HOD_ALLOCATION_PUSHED',
-        title: `${department} Department — Class Allocations Ready`,
-        message: `${user.name} has submitted ${allocations.length} teaching allocations for ${term} ${academicYear}. ${allocations.length} subjects across ${[...new Set(allocations.map((a) => a.class.name))].length} classes (${totalPeriods} total periods per week). Teachers: ${teacherNames}.`,
-        department,
-        term,
-        read: false,
-        meta: {
-          allocationIds: allocations.map((a) => a.id),
-          teacherCount: [...new Set(allocations.map((a) => a.teacherId))].length,
-          classCount: [...new Set(allocations.map((a) => a.classId))].length,
-          totalPeriods,
-          hodName: user.name,
-          department,
-          subjects: [...new Set(allocations.map((a) => a.subject.name))],
-        },
-      },
-    })
+    const classCount = [...new Set(allocations.map((a) => a.classId))].length
+    const teacherCount = [...new Set(allocations.map((a) => a.teacherId))].length
+    const subjects = [...new Set(allocations.map((a) => a.subject.name))]
+    const allocationIdsMeta = allocations.map((a) => a.id)
+
+    await Promise.all(
+      recipients.map((r) =>
+        tx.timetableNotification.create({
+          data: {
+            schoolId,
+            fromUserId: user.id,
+            toUserId: r.id,
+            type: 'HOD_ALLOCATION_PUSHED',
+            title: `${department} Department — Class Allocations Ready`,
+            message: `${user.name} has submitted ${allocations.length} teaching allocations for ${term} ${academicYear}. ${allocations.length} subjects across ${[...new Set(allocations.map((a) => a.class.name))].length} classes (${totalPeriods} total periods per week). Teachers: ${teacherNames}.`,
+            department,
+            term,
+            read: false,
+            meta: {
+              allocationIds: allocationIdsMeta,
+              teacherCount,
+              classCount,
+              totalPeriods,
+              hodName: user.name,
+              department,
+              subjects,
+              recipientRole: r.role,
+              recipientName: r.name,
+            },
+          },
+        })
+      )
+    )
   })
 
   return NextResponse.json({
     success: true,
-    message: `${allocations.length} allocations pushed to ${headteacher.name}`,
+    message: `${allocations.length} allocations pushed to ${recipients.map((r) => r.name).join(', ')}`,
     pushed: allocations.length,
-    notified: headteacher.name,
+    notifiedCount: recipients.length,
+    notified: recipients.map((r) => ({ id: r.id, name: r.name, role: r.role })),
   })
 }

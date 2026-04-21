@@ -50,7 +50,11 @@ export default function ResponsiveDashboardLayout({ children }) {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-4">
-            {user?.role?.toLowerCase() === 'headteacher' && <TimetableNotificationBell />}
+            {['headteacher', 'admin', 'administrator', 'superadmin'].includes(
+              String(user?.role || '')
+                .trim()
+                .toLowerCase()
+            ) && <TimetableNotificationBell />}
             <button
               className="p-2 rounded-full text-royalPurple-text2 hover:bg-royalPurple-card2 relative"
               aria-label="Notifications"

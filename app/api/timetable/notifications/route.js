@@ -39,8 +39,8 @@ export async function POST(req) {
       data: { read: true, readAt: new Date() },
     })
   } else if (id) {
-    await prisma.timetableNotification.update({
-      where: { id, toUserId: user.id },
+    await prisma.timetableNotification.updateMany({
+      where: { schoolId, id, toUserId: user.id },
       data: { read: true, readAt: new Date() },
     })
   }

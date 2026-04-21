@@ -4,6 +4,7 @@ import crypto from 'crypto'
 import prisma from '@/lib/prisma'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { sendOnboardingVerificationEmail } from '@/config/email'
+import { signOnboardingToken } from '@/lib/middleware/onboardingAuth'
 
 function isValidEmail(value) {
   const email = String(value || '')
@@ -94,5 +95,32 @@ export async function POST(request) {
     return NextResponse.json({ success: true, requiresVerification: true })
   }
 
-  return NextResponse.json({ success: true, alreadyVerified: true, requiresPayment: true })
+  const onboardingToken = signOnboardingToken(reg.id)
+  const host = request.headers.get('host') || ''
+  const hostName = String(host || '')
+    .split(':')[0]
+    .toLowerCase()
+  const cookieDomain = (() => {
+    const configured = process.env.COOKIE_DOMAIN ? String(process.env.COOKIE_DOMAIN).trim() : ''
+    if (!configured) return undefined
+    if (!hostName || hostName === 'localhost' || /^[0-9.]+$/.test(hostName)) return undefined
+    const normalized = configured.startsWith('.') ? configured.slice(1) : configured
+    if (!hostName.endsWith(normalized)) return undefined
+    return configured.startsWith('.') ? configured : `.${configured}`
+  })()
+
+  const response = NextResponse.json({
+    success: true,
+    alreadyVerified: true,
+    requiresPayment: true,
+  })
+  response.cookies.set('onboarding_token', onboardingToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 2 * 24 * 60 * 60,
+    path: '/',
+    ...(cookieDomain ? { domain: cookieDomain } : {}),
+  })
+  return response
 }

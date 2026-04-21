@@ -77,9 +77,10 @@ export async function POST(request) {
       .toLowerCase()
     // Note: 'subdomain' is optional in schema, but passed from frontend if available
 
+    const isProd = process.env.NODE_ENV === 'production'
     const rateLimitResult = rateLimiter(request, {
-      limit: 20,
-      windowMs: 15 * 60 * 1000,
+      limit: isProd ? 12 : 60,
+      windowMs: 5 * 60 * 1000,
       keyPrefix: 'auth_login_',
       keyGenerator: ({ ip }) => `${ip}-${normalizedEmail}`,
     })
