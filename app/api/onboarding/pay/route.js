@@ -100,6 +100,7 @@ export async function POST(request) {
   const lipilaPayload = {
     callbackUrl,
     referenceId,
+    identifier: reg.id,
     amount,
     narration: `ZSMS ${plan} plan`,
     accountNumber,
