@@ -46,8 +46,33 @@ export async function POST(request) {
     }
 
     const existing = await prisma.schoolRegistration.findUnique({ where: { email } })
-    if (existing?.isVerified && existing?.paymentStatus === 'paid') {
-      return NextResponse.json({ success: true, alreadyCompleted: true }, { status: 200 })
+    const existingStatus = String(existing?.paymentStatus || '')
+      .trim()
+      .toLowerCase()
+    const isPortalCreated = Boolean(
+      existing?.schoolName && existing?.subdomain && existing?.adminName
+    )
+    const existingPlan = String(existing?.plan || '')
+      .trim()
+      .toLowerCase()
+    const requested = String(plan || '')
+      .trim()
+      .toLowerCase()
+
+    const isPaidOrPending = existingStatus === 'paid' || existingStatus === 'pending'
+    const canChangePlan = !existing || !isPaidOrPending
+    const finalPlan = canChangePlan && requested ? requested : existingPlan || requested || null
+    const isTrial = finalPlan === 'trial'
+
+    if (existing?.isVerified && isPortalCreated && (isTrial || existingStatus === 'paid')) {
+      const baseDomain = String(
+        process.env.BASE_DOMAIN || process.env.COOKIE_DOMAIN || 'bluepeacktechnologies.com'
+      )
+        .trim()
+        .replace(/^\./, '')
+      const isLocal = baseDomain.includes('localhost') || baseDomain.includes('127.0.0.1')
+      const loginUrl = isLocal ? `/login` : `https://${existing.subdomain}.${baseDomain}/login`
+      return NextResponse.json({ success: true, alreadyCompleted: true, loginUrl }, { status: 200 })
     }
 
     if (existing && !existing.isVerified && existing.lastVerificationSentAt) {
@@ -77,8 +102,9 @@ export async function POST(request) {
         verificationToken,
         verificationExpiry,
         lastVerificationSentAt,
-        paymentStatus: plan === 'trial' ? 'paid' : 'unpaid',
-        ...(plan ? { plan } : {}),
+        paymentStatus: 'unpaid',
+        ...(finalPlan ? { plan: finalPlan } : {}),
+        ...(finalPlan ? { subscriptionMonths: 1 } : {}),
       },
       update: {
         passwordHash,
@@ -88,10 +114,15 @@ export async function POST(request) {
         lastVerificationSentAt: existing?.isVerified
           ? existing.lastVerificationSentAt
           : lastVerificationSentAt,
-        paymentStatus:
-          existing?.paymentStatus ||
-          (existing?.plan === 'trial' || plan === 'trial' ? 'paid' : 'unpaid'),
-        plan: existing?.plan || plan || null,
+        paymentStatus: isTrial ? 'unpaid' : existing?.paymentStatus || 'unpaid',
+        plan: finalPlan,
+        subscriptionMonths: existing?.subscriptionMonths || 1,
+        ...(isTrial
+          ? {
+              paymentProvider: null,
+              paymentReference: null,
+            }
+          : {}),
       },
       select: { id: true },
     })
@@ -123,15 +154,13 @@ export async function POST(request) {
       return configured.startsWith('.') ? configured : `.${configured}`
     })()
 
-    const planForFlow = String(existing?.plan || plan || '')
-      .trim()
-      .toLowerCase()
-    const requiresPayment = planForFlow !== 'trial'
+    const requiresPayment = !isTrial && existingStatus !== 'paid'
 
     const response = NextResponse.json({
       success: true,
       alreadyVerified: true,
       requiresPayment,
+      nextStep: requiresPayment ? 'plan' : 'setup',
     })
     response.cookies.set('onboarding_token', onboardingToken, {
       httpOnly: true,

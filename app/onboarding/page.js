@@ -62,7 +62,12 @@ export default function OnboardingPage({ searchParams }) {
       const currentPlan = String(json?.registration?.plan || '')
         .trim()
         .toLowerCase()
-      if (currentPlan === 'basic' || currentPlan === 'standard' || currentPlan === 'premium') {
+      if (
+        currentPlan === 'trial' ||
+        currentPlan === 'basic' ||
+        currentPlan === 'standard' ||
+        currentPlan === 'premium'
+      ) {
         setPlan(currentPlan)
       }
     } finally {
@@ -121,7 +126,8 @@ export default function OnboardingPage({ searchParams }) {
 
       if (json.alreadyCompleted) {
         toast.success('Welcome back! Redirecting to dashboard...')
-        window.location.href = '/dashboard'
+        window.location.href =
+          typeof json?.loginUrl === 'string' && json.loginUrl.trim() ? json.loginUrl : '/dashboard'
         return
       }
 
@@ -133,6 +139,12 @@ export default function OnboardingPage({ searchParams }) {
 
       if (json.requiresPayment) {
         toast.success('Email already verified! Proceeding to payment...')
+        await refreshStatus()
+        return
+      }
+
+      if (String(json?.nextStep || '').toLowerCase() === 'setup') {
+        toast.success('Proceeding to school setup...')
         await refreshStatus()
         return
       }
