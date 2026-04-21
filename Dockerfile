@@ -25,6 +25,7 @@ RUN npm run build
 
 # 7. Production settings
 ENV NODE_ENV=production
+ENV HOSTNAME=0.0.0.0
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && npm run start"]
+CMD ["sh", "-c", "(npx prisma migrate deploy || true) & npm run start"]

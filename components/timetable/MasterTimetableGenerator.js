@@ -25,7 +25,7 @@ export function TimetableNotificationBell() {
 
   const fetchNotifications = useCallback(async () => {
     try {
-      const res = await fetch('/api/timetable/notifications')
+      const res = await fetch('/api/timetable/notifications', { cache: 'no-store' })
       const data = await res.json()
       const list = data.notifications || []
       setNotifications(list)
@@ -50,6 +50,12 @@ export function TimetableNotificationBell() {
     } catch {}
   }
 
+  async function openNotification(n) {
+    await markRead(n.id)
+    setShowPanel(false)
+    window.location.href = '/dashboard/headteacher/timetable'
+  }
+
   return (
     <div style={{ position: 'relative' }}>
       <button
@@ -61,6 +67,7 @@ export function TimetableNotificationBell() {
           cursor: 'pointer',
           position: 'relative',
           padding: 8,
+          zIndex: 10000,
         }}
       >
         <Bell size={20} />
@@ -95,8 +102,9 @@ export function TimetableNotificationBell() {
             borderRadius: 12,
             border: '1px solid #3b2a66',
             boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
-            zIndex: 100,
+            zIndex: 10000,
             marginTop: 8,
+            pointerEvents: 'auto',
           }}
         >
           <div
@@ -129,14 +137,20 @@ export function TimetableNotificationBell() {
               </div>
             ) : (
               notifications.map((n) => (
-                <div
+                <button
                   key={n.id}
-                  onClick={() => markRead(n.id)}
+                  type="button"
+                  onClick={() => openNotification(n)}
                   style={{
                     padding: '12px 16px',
                     borderBottom: '1px solid #261843',
                     cursor: 'pointer',
                     background: n.read ? 'transparent' : '#7c3aed10',
+                    width: '100%',
+                    textAlign: 'left',
+                    border: 'none',
+                    color: '#ede9fe',
+                    display: 'block',
                   }}
                 >
                   <div
@@ -161,8 +175,12 @@ export function TimetableNotificationBell() {
                     {n.message}
                   </p>
                   <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
-                    <a
-                      href="/dashboard/headteacher/timetable"
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        openNotification(n)
+                      }}
                       style={{
                         fontSize: 10,
                         color: '#7c3aed',
@@ -171,12 +189,15 @@ export function TimetableNotificationBell() {
                         display: 'flex',
                         alignItems: 'center',
                         gap: 2,
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
                       }}
                     >
                       Open Timetable <ChevronRight size={10} />
-                    </a>
+                    </button>
                   </div>
-                </div>
+                </button>
               ))
             )}
           </div>
