@@ -499,17 +499,17 @@
   gap: 12px;
 }
 
-.bg-white {
+html:not(.dark) .bg-white {
   color: #111827;
   --rp-text1: #111827;
   --rp-text2: #374151;
   --rp-text3: #6b7280;
 }
 
-.bg-white .text-white,
-.bg-white .text-royalPurple-text1,
-.bg-white .text-royalPurple-text2,
-.bg-white .text-royalPurple-text3 {
+html:not(.dark) .bg-white .text-white,
+html:not(.dark) .bg-white .text-royalPurple-text1,
+html:not(.dark) .bg-white .text-royalPurple-text2,
+html:not(.dark) .bg-white .text-royalPurple-text3 {
   color: #111827 !important;
 }
 
