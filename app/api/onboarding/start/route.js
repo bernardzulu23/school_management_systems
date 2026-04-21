@@ -143,12 +143,34 @@ export async function POST(request) {
     })
     return response
   } catch (error) {
+    const raw = String(error?.message || error || '')
+    const missingTables =
+      raw.includes('P2021') ||
+      raw.toLowerCase().includes('does not exist') ||
+      raw.includes('relation')
+    if (missingTables) {
+      return NextResponse.json(
+        { error: 'Database tables are missing. Run migrations on the production database.' },
+        { status: 503 }
+      )
+    }
+
+    const dbDown =
+      raw.includes('P1001') ||
+      raw.toLowerCase().includes("can't reach database server") ||
+      raw.toLowerCase().includes('connection') ||
+      raw.toLowerCase().includes('timeout')
+    if (dbDown) {
+      return NextResponse.json(
+        { error: 'Database is unavailable. Try again later.' },
+        { status: 503 }
+      )
+    }
+
     return NextResponse.json(
       {
         error: 'Failed to start onboarding',
-        ...(process.env.NODE_ENV === 'development'
-          ? { details: String(error?.message || error) }
-          : {}),
+        ...(process.env.NODE_ENV === 'development' ? { details: raw } : {}),
       },
       { status: 500 }
     )

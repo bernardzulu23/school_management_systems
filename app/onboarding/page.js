@@ -89,9 +89,30 @@ export default function OnboardingPage({ searchParams }) {
       const res = await fetch('/api/onboarding/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        cache: 'no-store',
         body: JSON.stringify({ email, password, plan }),
       })
-      const json = await res.json().catch(() => ({}))
+      const contentType = String(res.headers.get('content-type') || '')
+      const rawText = await res.text().catch(() => '')
+      let json = {}
+      if (rawText) {
+        try {
+          json = JSON.parse(rawText)
+        } catch {
+          json = {}
+        }
+      }
+
+      const looksLikeSecurityChallenge =
+        contentType.includes('text/html') &&
+        (rawText.includes('Performing security verification') || rawText.includes('Just a moment'))
+
+      if (looksLikeSecurityChallenge) {
+        throw new Error(
+          'Security verification is blocking onboarding. Disable bot protection/challenge for /onboarding and /api/onboarding/* on your security service.'
+        )
+      }
 
       if (res.status === 429) {
         setResendCooldown(Number(json?.retryAfter) || 60)
@@ -116,7 +137,15 @@ export default function OnboardingPage({ searchParams }) {
         return
       }
 
-      if (!res.ok) throw new Error(json?.error || 'Failed to start onboarding')
+      if (!res.ok) {
+        const msg =
+          typeof json?.error === 'string' && json.error.trim()
+            ? json.error.trim()
+            : rawText && rawText.trim()
+              ? rawText.trim().slice(0, 180)
+              : 'Failed to start onboarding'
+        throw new Error(msg)
+      }
       toast.success('Check your email for a verification link')
       setResendCooldown(60)
     } catch (e) {

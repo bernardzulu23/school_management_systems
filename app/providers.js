@@ -2,6 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'next-themes'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { SchoolProvider } from '@/lib/context/SchoolContext'
 import { useAuth } from '@/lib/auth'
@@ -141,19 +142,35 @@ export function Providers({ children }) {
       })
   )
 
+  const pathname = usePathname()
+  const skipSessionSync =
+    typeof pathname === 'string' &&
+    (pathname === '/onboarding' ||
+      pathname.startsWith('/onboarding/') ||
+      pathname === '/login' ||
+      pathname.startsWith('/login/'))
+
   return (
     <QueryClientProvider client={queryClient}>
       <SchoolProvider>
         <DevServiceWorkerReset />
-        <ActivitySessionKeeper>
-          <AuthSessionSync>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <GlobalTopLoadingBar />
-              <GlobalBackButton />
-              {children}
-            </ThemeProvider>
-          </AuthSessionSync>
-        </ActivitySessionKeeper>
+        {skipSessionSync ? (
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <GlobalTopLoadingBar />
+            <GlobalBackButton />
+            {children}
+          </ThemeProvider>
+        ) : (
+          <ActivitySessionKeeper>
+            <AuthSessionSync>
+              <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                <GlobalTopLoadingBar />
+                <GlobalBackButton />
+                {children}
+              </ThemeProvider>
+            </AuthSessionSync>
+          </ActivitySessionKeeper>
+        )}
       </SchoolProvider>
     </QueryClientProvider>
   )
