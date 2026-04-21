@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { LogOut, MessageSquare, User as UserIcon, X } from 'lucide-react'
 import Link from 'next/link'
 import ProfilePictureDisplay from '@/components/ui/ProfilePictureDisplay'
+import { TimetableNotificationBell } from '@/components/timetable/MasterTimetableGenerator'
 import toast from 'react-hot-toast'
 
 export function DashboardLayout({ children, title }) {
@@ -90,6 +91,11 @@ export function DashboardLayout({ children, title }) {
               {title && String(title).trim() !== String(roleLabel).trim() && (
                 <span className="text-sm text-royalPurple-text3">| {title}</span>
               )}
+              {['headteacher', 'admin', 'administrator', 'superadmin'].includes(
+                String(user?.role || '')
+                  .trim()
+                  .toLowerCase()
+              ) && <TimetableNotificationBell />}
               <button
                 type="button"
                 onClick={() => setShowFeedback(true)}

@@ -732,6 +732,7 @@ export default function HodDashboard() {
                             <td className="py-3 pr-4">
                               <input
                                 type="checkbox"
+                                className="h-4 w-4 rounded border-royalPurple-border bg-royalPurple-deep accent-royalPurple-accent focus:ring-1 focus:ring-royalPurple-border2 focus:ring-offset-0"
                                 checked={t.schemeSubmitted === true}
                                 onChange={(e) =>
                                   updateTeacherProgress(t.teacherId, {
@@ -743,6 +744,7 @@ export default function HodDashboard() {
                             <td className="py-3 pr-4">
                               <input
                                 type="checkbox"
+                                className="h-4 w-4 rounded border-royalPurple-border bg-royalPurple-deep accent-royalPurple-accent focus:ring-1 focus:ring-royalPurple-border2 focus:ring-offset-0"
                                 checked={t.recordsSubmitted === true}
                                 onChange={(e) =>
                                   updateTeacherProgress(t.teacherId, {

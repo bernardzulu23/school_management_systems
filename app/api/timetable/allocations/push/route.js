@@ -62,24 +62,19 @@ export async function POST(req) {
   const totalPeriods = allocations.reduce((s, a) => s + a.periodsPerWeek, 0)
   const teacherNames = [...new Set(allocations.map((a) => a.teacher.name))].join(', ')
 
-  const primaryRoles = ['headteacher', 'HEADTEACHER']
-  const fallbackRoles = [
-    'admin',
-    'ADMIN',
-    'administrator',
-    'ADMINISTRATOR',
-    'superadmin',
-    'SUPERADMIN',
-  ]
+  const primaryRoles = ['headteacher', 'head teacher', 'head-teacher', 'head_teacher']
+  const fallbackRoles = ['admin', 'administrator', 'superadmin']
+
+  const roleOr = (roles) => roles.map((r) => ({ role: { equals: r, mode: 'insensitive' } }))
 
   let recipients = await prisma.user.findMany({
-    where: { schoolId, role: { in: primaryRoles } },
+    where: { schoolId, OR: roleOr(primaryRoles) },
     select: { id: true, name: true, role: true },
   })
 
   if (recipients.length === 0) {
     recipients = await prisma.user.findMany({
-      where: { schoolId, role: { in: fallbackRoles } },
+      where: { schoolId, OR: roleOr(fallbackRoles) },
       select: { id: true, name: true, role: true },
     })
   }

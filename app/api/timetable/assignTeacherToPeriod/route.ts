@@ -4,6 +4,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 type Body = {
   teacherId?: string
@@ -20,7 +21,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const schoolId = await getSchoolIdFromRequest(req as any)
+  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(req as any))
   if (!schoolId) {
     return NextResponse.json({ error: 'Missing school context' }, { status: 400 })
   }
