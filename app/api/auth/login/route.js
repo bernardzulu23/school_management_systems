@@ -90,19 +90,19 @@ export async function POST(request) {
     let schoolId = await getSchoolIdFromRequest(request, subdomain)
     console.log('[Login Debug] Resolved School ID:', schoolId)
 
-    // Dev-friendly fallback: on localhost there's no subdomain, so infer school from email.
-    // This also handles when the fallback schoolId doesn't contain the user
-    if (process.env.NODE_ENV !== 'production') {
-      const userSchool = await prisma.user.findFirst({
+    if (!schoolId) {
+      const matches = await prisma.user.findMany({
         where: {
           email: { equals: normalizedEmail, mode: 'insensitive' },
           school: { active: true },
         },
         select: { schoolId: true },
+        distinct: ['schoolId'],
+        take: 3,
       })
-      if (userSchool?.schoolId) {
-        schoolId = userSchool.schoolId
-        console.log('[Login Debug] Inferred School ID (dev fallback):', schoolId)
+      if (matches.length === 1) {
+        schoolId = matches[0].schoolId
+        console.log('[Login Debug] Inferred School ID (email fallback):', schoolId)
       }
     }
 
