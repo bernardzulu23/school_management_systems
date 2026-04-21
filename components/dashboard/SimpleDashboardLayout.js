@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from 'react'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useAuth } from '@/lib/auth'
+import { useSchool } from '@/lib/context/SchoolContext'
 import { Button } from '@/components/ui/Button'
 import { LogOut, MessageSquare, User as UserIcon, X } from 'lucide-react'
 import Link from 'next/link'
@@ -12,6 +13,7 @@ import toast from 'react-hot-toast'
 
 export function DashboardLayout({ children, title }) {
   const { user, logout } = useAuth()
+  const { school } = useSchool()
   const [showFeedback, setShowFeedback] = useState(false)
   const [feedbackForm, setFeedbackForm] = useState({
     category: 'general',
@@ -34,6 +36,19 @@ export function DashboardLayout({ children, title }) {
     ],
     []
   )
+
+  const plan = String(school?.plan || '')
+    .trim()
+    .toLowerCase()
+  const trialEndsAt = school?.trialEndsAt ? new Date(school.trialEndsAt) : null
+  const planExpiresAt = school?.planExpiresAt ? new Date(school.planExpiresAt) : null
+  const now = new Date()
+  const expiresAt = plan === 'trial' ? trialEndsAt : planExpiresAt
+  const msLeft = expiresAt ? expiresAt.getTime() - now.getTime() : null
+  const daysLeft = typeof msLeft === 'number' ? Math.ceil(msLeft / (24 * 60 * 60 * 1000)) : null
+  const isExpired = typeof msLeft === 'number' ? msLeft < 0 : false
+  const shouldWarn =
+    plan === 'trial' && typeof daysLeft === 'number' && daysLeft >= 0 && daysLeft <= 7
 
   const submitFeedback = async () => {
     const message = String(feedbackForm.message || '').trim()
@@ -155,7 +170,38 @@ export function DashboardLayout({ children, title }) {
       </header>
       {/* Main content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">{children}</div>
+        <div className="px-4 py-6 sm:px-0 space-y-4">
+          {shouldWarn && expiresAt ? (
+            <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div className="text-sm text-amber-500 font-semibold">
+                  Free trial ends in {daysLeft} day{daysLeft === 1 ? '' : 's'} (
+                  {expiresAt.toLocaleDateString()})
+                </div>
+                <a href="/dashboard/billing" className="text-sm font-bold text-amber-500 underline">
+                  Upgrade now
+                </a>
+              </div>
+            </div>
+          ) : null}
+
+          {isExpired && expiresAt ? (
+            <div className="rounded-xl border border-red-500/40 bg-red-500/10 p-6">
+              <div className="text-red-400 font-bold">Your access has expired</div>
+              <div className="text-sm text-royalPurple-text2 mt-1">
+                Your {plan === 'trial' ? 'free trial' : 'subscription'} expired on{' '}
+                {expiresAt.toLocaleDateString()}. Upgrade to restore access.
+              </div>
+              <div className="mt-4">
+                <a href="/dashboard/billing" className="text-sm font-bold text-red-300 underline">
+                  Go to Billing
+                </a>
+              </div>
+            </div>
+          ) : (
+            children
+          )}
+        </div>
       </main>
 
       {showFeedback && (

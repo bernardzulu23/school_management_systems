@@ -14,6 +14,8 @@ export async function GET(request, { params }) {
       id: true,
       isVerified: true,
       verificationExpiry: true,
+      plan: true,
+      paymentStatus: true,
     },
   })
 
@@ -53,5 +55,12 @@ export async function GET(request, { params }) {
   })
 
   const baseDomain = process.env.APP_BASE_DOMAIN || 'bluepeacktechnologies.com'
-  return NextResponse.redirect(`https://${baseDomain}/onboarding?step=plan`)
+  const plan = String(reg?.plan || '')
+    .trim()
+    .toLowerCase()
+  const paymentStatus = String(reg?.paymentStatus || '')
+    .trim()
+    .toLowerCase()
+  const step = plan === 'trial' || paymentStatus === 'paid' ? 'setup' : 'plan'
+  return NextResponse.redirect(`https://${baseDomain}/onboarding?step=${step}`)
 }

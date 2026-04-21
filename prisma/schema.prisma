@@ -1362,6 +1362,7 @@ model SchoolRegistration {
   lastVerificationSentAt DateTime?
 
   plan      String?
+  subscriptionMonths Int @default(1)
   paymentStatus String @default("unpaid")
   paymentProvider String?
   paymentReference String?

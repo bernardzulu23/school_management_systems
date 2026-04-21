@@ -32,11 +32,17 @@ function normalizeLevel(value) {
   return null
 }
 
-function planToExpiresAt(plan) {
+function planToExpiresAt(plan, months) {
   const p = String(plan || '')
     .trim()
     .toLowerCase()
   if (!['basic', 'standard', 'premium'].includes(p)) return null
+  const mRaw = Number(months ?? 1)
+  const m = Number.isFinite(mRaw) ? Math.max(1, Math.min(12, Math.trunc(mRaw))) : 1
+  return new Date(Date.now() + m * 30 * 24 * 60 * 60 * 1000)
+}
+
+function trialEndsAt() {
   return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 }
 
@@ -54,12 +60,17 @@ export async function POST(request) {
       isVerified: true,
       plan: true,
       paymentStatus: true,
+      subscriptionMonths: true,
     },
   })
   if (!reg) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   if (!reg.isVerified)
     return NextResponse.json({ error: 'Verify your email first' }, { status: 401 })
-  if (String(reg.paymentStatus || '').toLowerCase() !== 'paid') {
+  const plan = String(reg.plan || 'basic')
+    .trim()
+    .toLowerCase()
+  const isTrial = plan === 'trial'
+  if (!isTrial && String(reg.paymentStatus || '').toLowerCase() !== 'paid') {
     return NextResponse.json({ error: 'Payment required' }, { status: 402 })
   }
 
@@ -105,9 +116,9 @@ export async function POST(request) {
         subdomain,
         domain: `${subdomain}.${baseDomain}`,
         email: reg.email,
-        plan: String(reg.plan || 'basic').toLowerCase(),
-        planExpiresAt: planToExpiresAt(reg.plan),
-        trialEndsAt: null,
+        plan,
+        planExpiresAt: isTrial ? null : planToExpiresAt(plan, reg.subscriptionMonths),
+        trialEndsAt: isTrial ? trialEndsAt() : null,
         level,
         active: true,
         emailVerified: true,

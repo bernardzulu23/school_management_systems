@@ -31,7 +31,10 @@ export async function POST(request) {
     .trim()
     .toLowerCase()
   const plan =
-    requestedPlan === 'basic' || requestedPlan === 'standard' || requestedPlan === 'premium'
+    requestedPlan === 'trial' ||
+    requestedPlan === 'basic' ||
+    requestedPlan === 'standard' ||
+    requestedPlan === 'premium'
       ? requestedPlan
       : null
   if (!isValidEmail(email)) return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
@@ -71,7 +74,7 @@ export async function POST(request) {
       verificationToken,
       verificationExpiry,
       lastVerificationSentAt,
-      paymentStatus: 'unpaid',
+      paymentStatus: plan === 'trial' ? 'paid' : 'unpaid',
       ...(plan ? { plan } : {}),
     },
     update: {
@@ -82,7 +85,9 @@ export async function POST(request) {
       lastVerificationSentAt: existing?.isVerified
         ? existing.lastVerificationSentAt
         : lastVerificationSentAt,
-      paymentStatus: existing?.paymentStatus || 'unpaid',
+      paymentStatus:
+        existing?.paymentStatus ||
+        (existing?.plan === 'trial' || plan === 'trial' ? 'paid' : 'unpaid'),
       plan: existing?.plan || plan || null,
     },
     select: { id: true },

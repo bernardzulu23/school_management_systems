@@ -221,7 +221,7 @@ export async function POST(request) {
           address: [address, province].filter(Boolean).join(', ') || null,
           level,
           plan: 'trial',
-          trialEndsAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+          trialEndsAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
           active: false,
           emailVerified: false,
           verificationToken,

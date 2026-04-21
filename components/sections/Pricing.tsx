@@ -78,6 +78,7 @@ export function Pricing() {
     const key = String(name || '')
       .trim()
       .toLowerCase()
+    if (key === 'trial') return 'trial'
     if (key === 'basic' || key === 'standard' || key === 'premium') return key
     return 'standard'
   }

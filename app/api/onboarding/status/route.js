@@ -16,6 +16,7 @@ export async function GET(request) {
       email: true,
       isVerified: true,
       plan: true,
+      subscriptionMonths: true,
       paymentStatus: true,
       paymentProvider: true,
       paymentReference: true,

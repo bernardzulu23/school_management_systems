@@ -24,6 +24,7 @@ export default function OnboardingPage({ searchParams }) {
   const [plan, setPlan] = useState('standard')
   const [provider, setProvider] = useState('airtel')
   const [accountNumber, setAccountNumber] = useState('')
+  const [months, setMonths] = useState(1)
   const [paying, setPaying] = useState(false)
 
   const [schoolName, setSchoolName] = useState('')
@@ -37,7 +38,7 @@ export default function OnboardingPage({ searchParams }) {
     const raw = String(searchParams?.plan || '')
       .trim()
       .toLowerCase()
-    if (raw === 'basic' || raw === 'standard' || raw === 'premium') {
+    if (raw === 'trial' || raw === 'basic' || raw === 'standard' || raw === 'premium') {
       setPlan(raw)
     }
   }, [searchParams?.plan])
@@ -157,7 +158,7 @@ export default function OnboardingPage({ searchParams }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ plan, provider, accountNumber }),
+        body: JSON.stringify({ plan, provider, accountNumber, months }),
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json?.error || 'Payment request failed')
@@ -192,7 +193,14 @@ export default function OnboardingPage({ searchParams }) {
   }
 
   const verified = Boolean(status?.registration?.isVerified)
-  const paid = String(status?.registration?.paymentStatus || '').toLowerCase() === 'paid'
+  const isTrialPlan =
+    String(status?.registration?.plan || plan || '')
+      .trim()
+      .toLowerCase() === 'trial'
+  const paid =
+    isTrialPlan || String(status?.registration?.paymentStatus || '').toLowerCase() === 'paid'
+  const monthlyPrice = plan === 'basic' ? 150 : plan === 'premium' ? 600 : 300
+  const totalAmount = monthlyPrice * (Number(months) || 1)
 
   return (
     <div className="onboard-page">
@@ -400,11 +408,37 @@ export default function OnboardingPage({ searchParams }) {
                       </span>
                       <span className="onboard-summary-meta">
                         {plan === 'basic'
-                          ? 'K150 / month'
+                          ? `K${totalAmount} (${months} month${months === 1 ? '' : 's'})`
                           : plan === 'premium'
-                            ? 'K600 / month'
-                            : 'K300 / month'}
+                            ? `K${totalAmount} (${months} month${months === 1 ? '' : 's'})`
+                            : `K${totalAmount} (${months} month${months === 1 ? '' : 's'})`}
                       </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Number of months</Label>
+                    <select
+                      className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
+                      value={String(months)}
+                      onChange={(e) =>
+                        setMonths(Math.max(1, Math.min(12, Number(e.target.value) || 1)))
+                      }
+                    >
+                      {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                        <option key={m} value={String(m)}>
+                          {m} month{m === 1 ? '' : 's'}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Total</Label>
+                    <div className="onboard-summary">
+                      <span className="onboard-summary-title">Total</span>
+                      <span className="onboard-summary-meta">K{totalAmount}</span>
                     </div>
                   </div>
                 </div>

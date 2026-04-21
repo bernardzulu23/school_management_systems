@@ -40,11 +40,14 @@ export async function POST(request) {
 
   const reg = await prisma.schoolRegistration.findUnique({
     where: { id: registrationId },
-    select: { id: true, email: true, isVerified: true },
+    select: { id: true, email: true, isVerified: true, plan: true },
   })
   if (!reg) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   if (!reg.isVerified)
     return NextResponse.json({ error: 'Verify your email first' }, { status: 401 })
+  if (String(reg.plan || '').toLowerCase() === 'trial') {
+    return NextResponse.json({ error: 'Payment is not required for free trial' }, { status: 400 })
+  }
 
   const body = await request.json().catch(() => ({}))
   const plan = String(body?.plan || '')
@@ -54,14 +57,19 @@ export async function POST(request) {
     .trim()
     .toLowerCase()
   const accountNumber = normalizeZambiaMsisdn(body?.accountNumber)
+  const monthsRaw = Number(body?.months ?? 1)
+  const months = Number.isFinite(monthsRaw) ? Math.trunc(monthsRaw) : 1
 
   if (!PLAN_PRICING[plan]) return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
   if (!PAYMENT_OPTION_BY_PROVIDER[provider]) {
     return NextResponse.json({ error: 'Invalid provider' }, { status: 400 })
   }
   if (!accountNumber) return NextResponse.json({ error: 'Invalid accountNumber' }, { status: 400 })
+  if (months < 1 || months > 12) {
+    return NextResponse.json({ error: 'Invalid months (1-12)' }, { status: 400 })
+  }
 
-  const amount = PLAN_PRICING[plan]
+  const amount = PLAN_PRICING[plan] * months
   const referenceId = crypto.randomUUID()
 
   const forwardedHost = request.headers.get('x-forwarded-host')
@@ -119,6 +127,7 @@ export async function POST(request) {
     where: { id: reg.id },
     data: {
       plan,
+      subscriptionMonths: months,
       paymentStatus: 'pending',
       paymentProvider: provider,
       paymentReference: referenceId,
