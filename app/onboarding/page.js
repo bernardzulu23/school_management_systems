@@ -234,12 +234,18 @@ export default function OnboardingPage({ searchParams }) {
   }
 
   const verified = Boolean(status?.registration?.isVerified)
+  const stepParam = String(searchParams?.step || '')
+    .trim()
+    .toLowerCase()
+  const forceSetupStep = stepParam === 'setup'
   const isTrialPlan =
     String(status?.registration?.plan || plan || '')
       .trim()
       .toLowerCase() === 'trial'
   const paid =
-    isTrialPlan || String(status?.registration?.paymentStatus || '').toLowerCase() === 'paid'
+    forceSetupStep ||
+    isTrialPlan ||
+    String(status?.registration?.paymentStatus || '').toLowerCase() === 'paid'
   const monthlyPrice = plan === 'basic' ? 150 : plan === 'premium' ? 600 : 300
   const totalAmount = monthlyPrice * (Number(months) || 1)
 

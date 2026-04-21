@@ -59,8 +59,10 @@ export async function POST(request) {
       .trim()
       .toLowerCase()
 
-    const isPaidOrPending = existingStatus === 'paid' || existingStatus === 'pending'
-    const canChangePlan = !existing || !isPaidOrPending
+    const isPaid = existingStatus === 'paid'
+    const allowTrialOverride = requested === 'trial' && !isPaid
+    const canChangePlan =
+      !existing || allowTrialOverride || existingStatus === 'unpaid' || !existingStatus
     const finalPlan = canChangePlan && requested ? requested : existingPlan || requested || null
     const isTrial = finalPlan === 'trial'
 

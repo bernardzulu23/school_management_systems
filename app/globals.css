@@ -499,6 +499,24 @@
   gap: 12px;
 }
 
+.bg-white {
+  color: #111827;
+}
+
+.bg-white .text-white,
+.bg-white .text-royalPurple-text1,
+.bg-white .text-royalPurple-text2,
+.bg-white .text-royalPurple-text3 {
+  color: #111827 !important;
+}
+
+.bg-royalPurple-page,
+.bg-royalPurple-deep,
+.bg-royalPurple-card,
+.bg-royalPurple-card2 {
+  color: var(--rp-text1);
+}
+
 .provider-pill {
   display: inline-flex;
   align-items: center;
