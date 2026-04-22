@@ -3,6 +3,13 @@ import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import {
+  buildPasswordResetConfirmationSmsMessage,
+  getBaseUrlFromRequest,
+  normalizePhoneNumbers,
+  pushSmsLog,
+  sendAfricasTalkingSms,
+} from '@/lib/sms'
 
 export async function POST(request) {
   try {
@@ -35,7 +42,7 @@ export async function POST(request) {
         resetToken: resetTokenHash,
         resetTokenExpiry: { gt: new Date() },
       },
-      select: { id: true },
+      select: { id: true, contact_number: true, schoolId: true },
     })
 
     if (!user) {
@@ -53,6 +60,24 @@ export async function POST(request) {
         resetTokenExpiry: null,
       },
     })
+
+    try {
+      const recipients = normalizePhoneNumbers(user?.contact_number)
+      if (recipients.length > 0) {
+        const appUrl = getBaseUrlFromRequest(request)
+        const supportUrl = appUrl ? `${appUrl}/forgot-password` : ''
+        const message = buildPasswordResetConfirmationSmsMessage({ appUrl, supportUrl })
+        const sent = await sendAfricasTalkingSms({ to: recipients, message })
+        pushSmsLog({
+          direction: 'out',
+          schoolId: user.schoolId || null,
+          to: sent.recipients,
+          message,
+          event: 'password_reset_confirmation',
+          userId: user.id,
+        })
+      }
+    } catch {}
 
     return NextResponse.json({ success: true, message: 'Password reset successfully' })
   } catch (error) {

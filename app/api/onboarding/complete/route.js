@@ -3,6 +3,12 @@ import prisma from '@/lib/prisma'
 import crypto from 'crypto'
 import { verifyOnboardingToken } from '@/lib/middleware/onboardingAuth'
 import { sendWelcomeEmail } from '@/config/email'
+import {
+  buildWelcomeSmsMessage,
+  normalizePhoneNumbers,
+  pushSmsLog,
+  sendAfricasTalkingSms,
+} from '@/lib/sms'
 
 const RESERVED = new Set([
   'www',
@@ -79,6 +85,7 @@ export async function POST(request) {
   const subdomain = normalizeSubdomain(body?.subdomain)
   const level = normalizeLevel(body?.level)
   const adminName = String(body?.adminName || '').trim()
+  const adminPhone = body?.adminPhone ?? body?.phone ?? null
 
   if (!schoolName || schoolName.length < 2) {
     return NextResponse.json({ error: 'School name is required' }, { status: 400 })
@@ -116,6 +123,7 @@ export async function POST(request) {
         subdomain,
         domain: `${subdomain}.${baseDomain}`,
         email: reg.email,
+        ...(adminPhone ? { phone: String(adminPhone).trim() || null } : {}),
         plan,
         planExpiresAt: isTrial ? null : planToExpiresAt(plan, reg.subscriptionMonths),
         trialEndsAt: isTrial ? trialEndsAt() : null,
@@ -133,6 +141,7 @@ export async function POST(request) {
         password: reg.passwordHash,
         name: adminName,
         role: 'headteacher',
+        ...(adminPhone ? { contact_number: String(adminPhone).trim() || null } : {}),
       },
       select: { id: true },
     })
@@ -151,6 +160,21 @@ export async function POST(request) {
     subdomain: created.subdomain,
     loginUrl,
   })
+
+  try {
+    const recipients = normalizePhoneNumbers(adminPhone)
+    if (recipients.length > 0) {
+      const message = buildWelcomeSmsMessage({ schoolName: created.name, loginUrl })
+      const sent = await sendAfricasTalkingSms({ to: recipients, message })
+      pushSmsLog({
+        direction: 'out',
+        schoolId: created.id,
+        to: sent.recipients,
+        message,
+        event: 'school_welcome',
+      })
+    }
+  } catch {}
 
   const response = NextResponse.json({
     success: true,

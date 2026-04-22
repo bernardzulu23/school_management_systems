@@ -24,7 +24,7 @@ const plans = [
   },
   {
     name: 'Basic',
-    price: 'K5',
+    price: 'K500',
     period: '/month',
     description: 'Core management only',
     features: [
@@ -39,7 +39,7 @@ const plans = [
   },
   {
     name: 'Standard',
-    price: 'K300',
+    price: 'K800',
     period: '/month',
     description: 'Most popular for schools',
     features: [
@@ -55,7 +55,7 @@ const plans = [
   },
   {
     name: 'Premium',
-    price: 'K600',
+    price: 'K1200',
     period: '/month',
     description: 'Unlimited for large schools',
     features: [

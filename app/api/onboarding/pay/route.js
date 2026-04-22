@@ -5,9 +5,9 @@ import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { verifyOnboardingToken } from '@/lib/middleware/onboardingAuth'
 
 const PLAN_PRICING = {
-  basic: 5,
-  standard: 300,
-  premium: 600,
+  basic: 500,
+  standard: 800,
+  premium: 1200,
 }
 
 const PAYMENT_OPTION_BY_PROVIDER = {

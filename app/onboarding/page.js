@@ -288,7 +288,7 @@ export default function OnboardingPage({ searchParams }) {
     forceSetupStep ||
     isTrialPlan ||
     String(status?.registration?.paymentStatus || '').toLowerCase() === 'paid'
-  const monthlyPrice = plan === 'basic' ? 5 : plan === 'premium' ? 600 : 300
+  const monthlyPrice = plan === 'basic' ? 500 : plan === 'premium' ? 1200 : 800
   const totalAmount = monthlyPrice * (Number(months) || 1)
 
   return (
@@ -430,7 +430,7 @@ export default function OnboardingPage({ searchParams }) {
                 >
                   <div className="plan-name">Basic</div>
                   <div>
-                    <span className="plan-price">K5</span>{' '}
+                    <span className="plan-price">K500</span>{' '}
                     <span className="plan-price-sub">/ month</span>
                   </div>
                   <div className="plan-desc">Up to 300 students · Core modules</div>
@@ -446,7 +446,7 @@ export default function OnboardingPage({ searchParams }) {
                     <span className="plan-badge">Most popular</span>
                   </div>
                   <div>
-                    <span className="plan-price">K300</span>{' '}
+                    <span className="plan-price">K800</span>{' '}
                     <span className="plan-price-sub">/ month</span>
                   </div>
                   <div className="plan-desc">Up to 800 students · Analytics + SMS</div>
@@ -459,7 +459,7 @@ export default function OnboardingPage({ searchParams }) {
                 >
                   <div className="plan-name">Premium</div>
                   <div>
-                    <span className="plan-price">K600</span>{' '}
+                    <span className="plan-price">K1200</span>{' '}
                     <span className="plan-price-sub">/ month</span>
                   </div>
                   <div className="plan-desc">Unlimited · All features + priority support</div>
