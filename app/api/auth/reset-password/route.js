@@ -25,13 +25,12 @@ export async function POST(request) {
     }
 
     const schoolId = await getSchoolIdFromRequest(request)
-    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
     const resetTokenHash = crypto.createHash('sha256').update(token).digest('hex')
 
     const user = await prisma.user.findFirst({
       where: {
-        schoolId,
+        ...(schoolId ? { schoolId } : {}),
         ...(email ? { email } : {}),
         resetToken: resetTokenHash,
         resetTokenExpiry: { gt: new Date() },

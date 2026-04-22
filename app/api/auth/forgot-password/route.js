@@ -5,6 +5,24 @@ import crypto from 'crypto'
 import { sendResetEmail } from '@/config/email'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 
+function resolveBaseUrl(request) {
+  const proto = request.headers.get('x-forwarded-proto') || 'https'
+  const host = request.headers.get('x-forwarded-host') || request.headers.get('host') || ''
+  const originFromHeaders = host ? `${proto}://${host}` : ''
+
+  const configured = String(process.env.NEXT_PUBLIC_APP_URL || '').trim()
+  const configuredLooksLocal = configured.includes('localhost') || configured.includes('127.0.0.1')
+
+  // In production, never emit localhost reset links.
+  if (process.env.NODE_ENV === 'production') {
+    if (originFromHeaders) return originFromHeaders
+    if (configured && !configuredLooksLocal) return configured
+    return 'https://bluepeacktechnologies.com'
+  }
+
+  return configured || originFromHeaders || 'http://localhost:3000'
+}
+
 export async function POST(request) {
   try {
     const { email, subdomain } = await request.json()
@@ -55,10 +73,7 @@ export async function POST(request) {
       },
     })
 
-    const proto = request.headers.get('x-forwarded-proto') || 'https'
-    const host = request.headers.get('x-forwarded-host') || request.headers.get('host')
-    const originFromHeaders = host ? `${proto}://${host}` : request.headers.get('origin')
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || originFromHeaders
+    const baseUrl = resolveBaseUrl(request)
     const resetLink = `${baseUrl}/reset-password/${resetToken}`
 
     const sent = await sendResetEmail(normalizedEmail, resetLink)
