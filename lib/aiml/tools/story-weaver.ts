@@ -1,14 +1,15 @@
 import OpenAI from 'openai'
 
-const baseRaw = String(process.env.AIML_API_BASE || '')
-  .trim()
-  .replace(/\/+$/, '')
-const baseURL = baseRaw ? (baseRaw.endsWith('/v1') ? baseRaw : `${baseRaw}/v1`) : undefined
-
-const client = new OpenAI({
-  apiKey: process.env.AIML_API_KEY,
-  baseURL,
-})
+function getClient() {
+  const apiKey = String(process.env.AIML_API_KEY || '').trim()
+  const baseRaw = String(process.env.AIML_API_BASE || '')
+    .trim()
+    .replace(/\/+$/, '')
+  const baseURL = baseRaw ? (baseRaw.endsWith('/v1') ? baseRaw : `${baseRaw}/v1`) : undefined
+  if (!apiKey) throw new Error('Missing AIML_API_KEY')
+  if (!baseURL) throw new Error('Missing AIML_API_BASE')
+  return new OpenAI({ apiKey, baseURL })
+}
 
 export interface StoryRequest {
   title: string
@@ -50,6 +51,7 @@ Format as JSON:
 }`
 
   try {
+    const client = getClient()
     const response = await client.chat.completions.create({
       model: 'claude-sonnet-4-6',
       messages: [{ role: 'user', content: prompt }],
