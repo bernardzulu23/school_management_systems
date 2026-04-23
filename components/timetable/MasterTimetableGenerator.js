@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 import {
   Settings,
@@ -53,7 +54,31 @@ export function TimetableNotificationBell() {
   async function openNotification(n) {
     await markRead(n.id)
     setShowPanel(false)
-    window.location.href = '/dashboard/headteacher/timetable'
+    const meta = n?.meta && typeof n.meta === 'object' ? n.meta : {}
+    const msg = String(n?.message || '')
+    const term =
+      String(n?.term || meta?.term || '').trim() ||
+      String((msg.match(/\bTerm\s*\d+\b/i) || [])[0] || '').trim()
+    const academicYear =
+      String(meta?.academicYear || meta?.year || '').trim() ||
+      String((msg.match(/\b(20\d{2})\b/) || [])[1] || '').trim()
+    const deptRaw = meta?.departments || meta?.department || meta?.dept || null
+    const departments = Array.isArray(deptRaw)
+      ? deptRaw.map((d) => String(d).trim()).filter(Boolean)
+      : typeof deptRaw === 'string'
+        ? deptRaw
+            .split(',')
+            .map((d) => d.trim())
+            .filter(Boolean)
+        : []
+
+    const qs = new URLSearchParams()
+    if (term) qs.set('term', term)
+    if (academicYear) qs.set('academicYear', academicYear)
+    if (departments.length) qs.set('departments', departments.join(','))
+    qs.set('autoGenerate', '1')
+    const suffix = qs.toString()
+    window.location.href = `/dashboard/headteacher/timetable${suffix ? `?${suffix}` : ''}`
   }
 
   return (
@@ -208,6 +233,16 @@ export function TimetableNotificationBell() {
 }
 
 export default function MasterTimetableGenerator() {
+  const searchParams = useSearchParams()
+  const desiredTerm = String(searchParams.get('term') || '').trim()
+  const desiredAcademicYear = String(
+    searchParams.get('academicYear') || searchParams.get('year') || ''
+  ).trim()
+  const desiredDepartments = String(
+    searchParams.get('departments') || searchParams.get('department') || ''
+  ).trim()
+  const autoGenerate = String(searchParams.get('autoGenerate') || '').trim() === '1'
+
   const [config, setConfig] = useState({
     startTime: '07:00',
     endTime: '17:00',
@@ -215,8 +250,18 @@ export default function MasterTimetableGenerator() {
     workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
     breakSlots: [],
   })
-  const [term, setTerm] = useState('Term 1')
-  const [academicYear, setAcademicYear] = useState(new Date().getFullYear().toString())
+  const [term, setTerm] = useState(desiredTerm || 'Term 1')
+  const [academicYear, setAcademicYear] = useState(
+    desiredAcademicYear || new Date().getFullYear().toString()
+  )
+  const [departments, setDepartments] = useState(() =>
+    desiredDepartments
+      ? desiredDepartments
+          .split(',')
+          .map((d) => d.trim())
+          .filter(Boolean)
+      : []
+  )
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
   const [entries, setEntries] = useState([])
@@ -254,6 +299,21 @@ export default function MasterTimetableGenerator() {
     loadData()
   }, [loadData])
 
+  useEffect(() => {
+    if (desiredTerm && desiredTerm !== term) setTerm(desiredTerm)
+    if (desiredAcademicYear && desiredAcademicYear !== academicYear)
+      setAcademicYear(desiredAcademicYear)
+    const nextDepartments = desiredDepartments
+      ? desiredDepartments
+          .split(',')
+          .map((d) => d.trim())
+          .filter(Boolean)
+      : []
+    const current = departments.join(',')
+    const next = nextDepartments.join(',')
+    if (next && next !== current) setDepartments(nextDepartments)
+  }, [desiredTerm, desiredAcademicYear, desiredDepartments])
+
   async function saveConfig() {
     try {
       const res = await fetch('/api/timetable/config', {
@@ -277,7 +337,12 @@ export default function MasterTimetableGenerator() {
       const res = await fetch('/api/timetable/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ term, academicYear, replaceExisting: true }),
+        body: JSON.stringify({
+          term,
+          academicYear,
+          departments: departments.length ? departments : undefined,
+          replaceExisting: true,
+        }),
       })
       const data = await res.json()
       if (!res.ok) {
@@ -295,6 +360,21 @@ export default function MasterTimetableGenerator() {
       setGenerating(false)
     }
   }
+
+  const autoTriggered = useRef(false)
+  const canAutoGenerate = useMemo(() => {
+    const matchesTerm = !desiredTerm || desiredTerm === term
+    const matchesYear = !desiredAcademicYear || desiredAcademicYear === academicYear
+    return autoGenerate && matchesTerm && matchesYear
+  }, [autoGenerate, desiredTerm, desiredAcademicYear, term, academicYear])
+
+  useEffect(() => {
+    if (!canAutoGenerate) return
+    if (autoTriggered.current) return
+    if (loading || generating) return
+    autoTriggered.current = true
+    generate()
+  }, [canAutoGenerate, loading, generating])
 
   async function publish() {
     if (entries.length === 0) return

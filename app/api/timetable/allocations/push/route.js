@@ -58,7 +58,15 @@ export async function POST(req) {
     return NextResponse.json({ error: 'No draft allocations found to push' }, { status: 400 })
   }
 
-  const department = allocations[0]?.hod?.hodProfile?.department || user.name
+  const sender = await prisma.user.findUnique({
+    where: { id: user.id },
+    select: { name: true, email: true },
+  })
+  const senderName = String(sender?.name || user?.name || sender?.email || user?.email || 'Staff')
+    .trim()
+    .slice(0, 120)
+
+  const department = allocations[0]?.hod?.hodProfile?.department || senderName
   const totalPeriods = allocations.reduce((s, a) => s + a.periodsPerWeek, 0)
   const teacherNames = [...new Set(allocations.map((a) => a.teacher.name))].join(', ')
 
@@ -109,16 +117,17 @@ export async function POST(req) {
             toUserId: r.id,
             type: 'HOD_ALLOCATION_PUSHED',
             title: `${department} Department — Class Allocations Ready`,
-            message: `${user.name} has submitted ${allocations.length} teaching allocations for ${term} ${academicYear}. ${allocations.length} subjects across ${[...new Set(allocations.map((a) => a.class.name))].length} classes (${totalPeriods} total periods per week). Teachers: ${teacherNames}.`,
+            message: `${senderName} has submitted ${allocations.length} teaching allocations for ${term} ${academicYear}. ${allocations.length} subjects across ${[...new Set(allocations.map((a) => a.class.name))].length} classes (${totalPeriods} total periods per week). Teachers: ${teacherNames}.`,
             department,
             term,
             read: false,
             meta: {
               allocationIds: allocationIdsMeta,
+              academicYear,
               teacherCount,
               classCount,
               totalPeriods,
-              hodName: user.name,
+              hodName: senderName,
               department,
               subjects,
               recipientRole: r.role,
