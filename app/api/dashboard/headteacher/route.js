@@ -819,13 +819,24 @@ export async function GET(request) {
     return NextResponse.json(data)
   } catch (error) {
     console.error('Headteacher Dashboard Error:', error)
-    const devDetails =
-      process.env.NODE_ENV === 'development'
-        ? {
-            details: String(error?.message || error),
-            code: error?.code || error?.name || 'UNKNOWN',
-          }
-        : undefined
+    const sanitizeErrorDetails = (value) =>
+      String(value || '')
+        .replace(/postgres(?:ql)?:\/\/[^\s'"]+/gi, 'postgres://***')
+        .replace(/password=[^&\s]+/gi, 'password=***')
+        .slice(0, 2000)
+
+    const auth = authMiddleware(request)
+    const isPrivileged =
+      auth?.isAuthenticated && roleCheck(auth.user, ['ADMIN', 'headteacher', 'HEADTEACHER'])
+    const canExpose = process.env.NODE_ENV === 'development' || isPrivileged
+    const code = error?.code || error?.name || 'UNKNOWN'
+    const devDetails = canExpose
+      ? {
+          details: sanitizeErrorDetails(error?.message || error),
+          code,
+          ...(process.env.NODE_ENV === 'development' && error?.stack ? { stack: error.stack } : {}),
+        }
+      : { code }
     return NextResponse.json(
       { error: 'Failed to fetch dashboard stats', ...(devDetails || {}) },
       { status: 500 }
