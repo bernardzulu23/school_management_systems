@@ -6,6 +6,9 @@ const databaseUrl = process.env.DATABASE_URL || 'postgresql://dummy:password@loc
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',
+  migrations: {
+    seed: 'node prisma/seed.js',
+  },
   datasource: {
     url: databaseUrl,
   },

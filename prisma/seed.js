@@ -8,7 +8,33 @@ if (!connectionString) {
   throw new Error('DATABASE_URL is required to seed the database')
 }
 
-const pool = new Pool({ connectionString })
+const poolConnectionString = (() => {
+  try {
+    const url = new URL(connectionString)
+    const sslmode = (url.searchParams.get('sslmode') || '').toLowerCase()
+    const compat = (url.searchParams.get('uselibpqcompat') || '').toLowerCase()
+    if (!compat && (sslmode === 'require' || sslmode === 'prefer' || sslmode === 'verify-ca')) {
+      url.searchParams.set('uselibpqcompat', 'true')
+      return url.toString()
+    }
+    return connectionString
+  } catch {
+    return connectionString
+  }
+})()
+
+const ssl = (() => {
+  try {
+    const url = new URL(poolConnectionString)
+    const sslmode = (url.searchParams.get('sslmode') || '').toLowerCase()
+    if (sslmode && sslmode !== 'disable') return { rejectUnauthorized: false }
+    return undefined
+  } catch {
+    return undefined
+  }
+})()
+
+const pool = new Pool({ connectionString: poolConnectionString, ...(ssl ? { ssl } : {}) })
 const adapter = new PrismaPg(pool)
 const prisma = new PrismaClient({ adapter })
 
