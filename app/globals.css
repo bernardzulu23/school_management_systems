@@ -398,6 +398,12 @@
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
 }
 
+.dark .onboard-card {
+  background: var(--rp-card);
+  border-color: var(--rp-border);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
 .onboard-card-header {
   padding: 24px 24px 0 24px;
 }

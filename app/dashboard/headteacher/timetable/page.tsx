@@ -1,24 +1,17 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
-import { AutoGenerateButton } from '@/components/timetable/AutoGenerateButton'
 import { ConflictDisplay } from '@/components/timetable/ConflictDisplay'
 import { DragDropTimetable } from '@/components/timetable/DragDropTimetable'
 import { MasterTimetableGrid } from '@/components/timetable/MasterTimetableGrid'
 import TeacherPeriodAssignmentUI from '@/components/timetable/TeacherPeriodAssignmentUI'
+import { TimetableNotificationBell } from '@/components/timetable/MasterTimetableGenerator'
 import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
-import type {
-  Assignment,
-  Class,
-  Classroom,
-  Teacher,
-  TimeSlot,
-  TravelingTeacherRoute,
-} from '@/lib/timetable/types'
-import type { TimetableSchoolData } from '@/lib/timetable/automationService'
+import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 
 type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings'
 
@@ -81,7 +74,7 @@ function toTeacher(t: any, subjectsByName: Map<string, { id: string; name: strin
     .map((s: any) => ({ id: s.id, name: s.name }))
 
   return {
-    id: String(t?.id || t?.user?.id || name),
+    id: String(t?.userId || t?.user?.id || t?.id || name),
     fullName: name,
     subjects: subjectRefs,
     availability: [
@@ -142,10 +135,17 @@ function toClass(c: any, subjects: Array<{ id: string; name: string }>): Class {
 }
 
 export default function HeadteacherTimetablePage() {
+  const searchParams = useSearchParams()
   const [tab, setTab] = useState<Tab>('assignment')
   const [loading, setLoading] = useState(true)
   const [solverGenerating, setSolverGenerating] = useState(false)
   const [solverDraftVersionId, setSolverDraftVersionId] = useState<string | null>(null)
+  const [term, setTerm] = useState(() => String(searchParams.get('term') || 'Term 1'))
+  const [academicYear, setAcademicYear] = useState(() =>
+    String(searchParams.get('academicYear') || new Date().getFullYear())
+  )
+  const [dbGenerating, setDbGenerating] = useState(false)
+  const [dbPublishing, setDbPublishing] = useState(false)
   const [coverTeacherId, setCoverTeacherId] = useState<string>('')
   const [coverDay, setCoverDay] = useState<string>('monday')
   const [coverPeriod, setCoverPeriod] = useState<number>(1)
@@ -153,13 +153,13 @@ export default function HeadteacherTimetablePage() {
   const [classes, setClasses] = useState<Class[]>([])
   const [classrooms, setClassrooms] = useState<Classroom[]>([])
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>(() => genTimeSlots())
-  const [travelingTeacherRoutes, setTravelingTeacherRoutes] = useState<TravelingTeacherRoute[]>([])
   const [season, setSeason] = useState<'normal' | 'farming' | 'planting'>('normal')
   const [schoolId, setSchoolId] = useState<string>('')
 
   const assignments = useTimetableStore((s) => s.assignments)
   const conflicts = useTimetableStore((s) => s.conflicts)
   const updateAssignment = useTimetableStore((s) => s.updateAssignment)
+  const removeAssignment = useTimetableStore((s) => s.removeAssignment)
   const replaceAssignments = useTimetableStore((s) => s.replaceAssignments)
   const undo = useTimetableStore((s) => s.undo)
   const publish = useTimetableStore((s) => s.publish)
@@ -167,6 +167,7 @@ export default function HeadteacherTimetablePage() {
   const lastPublishedAt = useTimetableStore((s) => s.lastPublishedAt)
   const pendingChanges = useTimetableStore((s) => s.pendingChanges)
   const conflictCount = useTimetableStore((s) => s.getConflictCount)
+  const loadFromApi = useTimetableStore((s) => s.loadFromApi)
 
   useEffect(() => {
     const load = async () => {
@@ -255,20 +256,68 @@ export default function HeadteacherTimetablePage() {
     lastPublishedAt,
   ])
 
-  const schoolData = useMemo<TimetableSchoolData | null>(() => {
-    if (!teachers.length || !classes.length || !classrooms.length || !timeSlots.length) return null
-    return {
-      timeSlots,
-      teachers,
-      classrooms,
-      classes,
-      travelingTeacherRoutes,
-      seasonMode: season === 'farming' ? 'harvest' : season === 'planting' ? 'planting' : 'normal',
-    }
-  }, [timeSlots, teachers, classrooms, classes, travelingTeacherRoutes, season])
+  useEffect(() => {
+    setTerm(String(searchParams.get('term') || 'Term 1'))
+    setAcademicYear(String(searchParams.get('academicYear') || new Date().getFullYear()))
+  }, [searchParams])
 
-  const onAssignmentChange = (a: Assignment) => {
-    updateAssignment(a.id, a)
+  useEffect(() => {
+    const run = async () => {
+      await loadFromApi({ term, academicYear, status: 'draft' })
+      if (useTimetableStore.getState().assignments.length === 0) {
+        await loadFromApi({ term, academicYear, status: 'published' })
+      }
+    }
+    run()
+  }, [term, academicYear, loadFromApi])
+
+  const onAssignmentChange = async (a: Assignment) => {
+    updateAssignment(a.id, {
+      dayOfWeek: a.dayOfWeek,
+      startTime: a.startTime,
+      endTime: a.endTime,
+      period: a.period,
+      isBreak: a.isBreak,
+    })
+
+    try {
+      const res = await fetch('/api/timetable/entries', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          id: a.id,
+          term,
+          academicYear,
+          dayOfWeek: a.dayOfWeek,
+          startTime: a.startTime,
+          endTime: a.endTime,
+          periodNumber: a.period,
+        }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || 'Failed to save timetable change')
+    } catch (e: any) {
+      toast.error(e?.message || 'Failed to save timetable change')
+      await loadFromApi({ term, academicYear, status: 'draft' })
+    }
+  }
+
+  const onDeleteAssignment = async (assignmentId: string) => {
+    try {
+      const res = await fetch('/api/timetable/entries', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ id: assignmentId, term, academicYear }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || 'Failed to delete timetable entry')
+      removeAssignment(assignmentId as any)
+      toast.success('Deleted')
+    } catch (e: any) {
+      toast.error(e?.message || 'Failed to delete timetable entry')
+    }
   }
 
   const suggestionsByAssignmentId = (assignmentId: string) => {
@@ -377,10 +426,31 @@ export default function HeadteacherTimetablePage() {
     return { absentTeacher, suggestions }
   }, [assignments, teachers, coverTeacherId, coverDay, coverPeriod, season])
 
+  const generateFromAllocations = async () => {
+    setDbGenerating(true)
+    try {
+      const res = await fetch('/api/timetable/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ term, academicYear, replaceExisting: true }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || 'Generation failed')
+      toast.success(`Generated ${Number(json?.generated || 0)} periods`)
+      await loadFromApi({ term, academicYear, status: 'draft' })
+      setTab('edit')
+    } catch (e: any) {
+      toast.error(e?.message || 'Generation failed')
+    } finally {
+      setDbGenerating(false)
+    }
+  }
+
   const generateWithSolver = async () => {
     setSolverGenerating(true)
     try {
-      const res = await fetch('/api/timetable/generate', {
+      const res = await fetch('/api/timetable/solver/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -411,17 +481,14 @@ export default function HeadteacherTimetablePage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <AutoGenerateButton
-              schoolData={schoolData}
-              disabledReason={
-                schoolData
-                  ? undefined
-                  : loading
-                    ? 'Loading data…'
-                    : 'Missing teachers/classes/rooms/slots'
-              }
-              onDone={() => setTab('edit')}
-            />
+            <TimetableNotificationBell />
+            <Button
+              onClick={generateFromAllocations}
+              disabled={dbGenerating}
+              className="zsms-hover-raise"
+            >
+              {dbGenerating ? 'Generating…' : 'Generate Perfect Timetable'}
+            </Button>
             <Button
               variant="outline"
               onClick={generateWithSolver}
@@ -433,34 +500,48 @@ export default function HeadteacherTimetablePage() {
             <Button
               onClick={() => {
                 if (!canPublish) return
-                if (solverDraftVersionId) {
-                  fetch('/api/timetable/publish', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({ versionId: solverDraftVersionId }),
+                setDbPublishing(true)
+                fetch('/api/timetable/publish', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  credentials: 'include',
+                  body: JSON.stringify({ term, academicYear }),
+                })
+                  .then((r) =>
+                    r
+                      .json()
+                      .catch(() => ({}))
+                      .then((j) => ({ ok: r.ok, j }))
+                  )
+                  .then(async ({ ok, j }) => {
+                    if (!ok) throw new Error(j?.error || 'Failed to publish to database')
+                    publish()
+                    toast.success('Published')
+                    await loadFromApi({ term, academicYear, status: 'published' })
                   })
-                    .then((r) =>
-                      r
-                        .json()
-                        .catch(() => ({}))
-                        .then((j) => ({ ok: r.ok, j }))
-                    )
-                    .then(({ ok, j }) => {
-                      if (!ok) throw new Error(j?.error || 'Failed to publish to database')
-                      toast.success('Published to database')
-                      setSolverDraftVersionId(null)
-                    })
-                    .catch((e) => toast.error(e?.message || 'Failed to publish to database'))
-                }
-                publish()
-                toast.success('Timetable published')
+                  .catch((e) => toast.error(e?.message || 'Failed to publish to database'))
+                  .finally(() => setDbPublishing(false))
               }}
-              disabled={!canPublish}
+              disabled={!canPublish || dbPublishing}
               className="zsms-hover-raise"
             >
-              Publish
+              {dbPublishing ? 'Publishing…' : 'Publish'}
             </Button>
+            <select
+              className="zsms-select max-w-[140px]"
+              value={term}
+              onChange={(e) => setTerm(e.target.value)}
+            >
+              <option value="Term 1">Term 1</option>
+              <option value="Term 2">Term 2</option>
+              <option value="Term 3">Term 3</option>
+            </select>
+            <input
+              className="zsms-input max-w-[120px]"
+              value={academicYear}
+              onChange={(e) => setAcademicYear(e.target.value)}
+              inputMode="numeric"
+            />
             <select
               className="zsms-select max-w-[180px]"
               value={season}
@@ -535,6 +616,8 @@ export default function HeadteacherTimetablePage() {
             classrooms={classrooms}
             season={season}
             showConflicts
+            editable
+            onDeleteAssignment={onDeleteAssignment}
           />
         ) : null}
 

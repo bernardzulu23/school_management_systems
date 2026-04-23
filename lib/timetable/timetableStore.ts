@@ -367,7 +367,11 @@ export const useTimetableStore = create<TimetableStoreState>()(
         },
 
         loadFromApi: async (opts = {}) => {
-          const { term = 'Term 1', academicYear = '2025', status = 'published' } = opts
+          const {
+            term = 'Term 1',
+            academicYear = new Date().getFullYear().toString(),
+            status = 'published',
+          } = opts
           try {
             const url = `/api/timetable/entries?term=${term}&academicYear=${academicYear}${status ? `&status=${status}` : ''}`
             const res = await fetch(url)

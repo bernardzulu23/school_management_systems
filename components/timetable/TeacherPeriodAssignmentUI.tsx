@@ -179,7 +179,7 @@ export default function TeacherPeriodAssignmentUI(props: TeacherPeriodAssignment
 
   const generateMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch('/api/timetable/generate', {
+      const res = await fetch('/api/timetable/solver/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

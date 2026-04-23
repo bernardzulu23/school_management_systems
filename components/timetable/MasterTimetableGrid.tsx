@@ -12,6 +12,7 @@ import type {
 } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import Modal from '@/components/ui/Modal'
+import { Button } from '@/components/ui/Button'
 
 export interface MasterTimetableGridProps {
   assignments?: Assignment[]
@@ -20,6 +21,7 @@ export interface MasterTimetableGridProps {
   teachers?: Teacher[]
   classrooms?: Classroom[]
   onAssignmentClick?: (assignment: Assignment) => void
+  onDeleteAssignment?: (assignmentId: Assignment['id']) => void
   showConflicts?: boolean
   editable?: boolean
   mobile?: boolean
@@ -364,6 +366,22 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
               <span className="onboard-summary-title">Season</span>
               <span className="onboard-summary-meta">{selectedAssignment.season}</span>
             </div>
+            {props.editable && props.onDeleteAssignment ? (
+              <div className="pt-2 flex justify-end">
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => {
+                    const ok = window.confirm('Delete this timetable entry?')
+                    if (!ok) return
+                    props.onDeleteAssignment?.(selectedAssignment.id)
+                    setSelectedAssignment(null)
+                  }}
+                >
+                  Delete
+                </Button>
+              </div>
+            ) : null}
           </div>
         ) : null}
       </Modal>
