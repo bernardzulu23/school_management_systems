@@ -60,6 +60,7 @@ model School {
   constraints          Constraint[]
   substitutions        Substitution[]
   results              Result[]
+  resultsStatuses      ResultsStatus[]
   teachingAssignments  TeachingAssignment[]
   pupilSubjectEnrollments PupilSubjectEnrollment[]
   studentWorks         StudentWork[]
@@ -205,6 +206,7 @@ model Student {
   allergies             String?
   
   results             Result[]
+  resultsStatuses     ResultsStatus[]
   goals               Goal[]
   works               StudentWork[]
   materialInteractions StudentMaterial[]
@@ -836,6 +838,7 @@ model Result {
   school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
   
   enteredByUserId String?
+  workflowStatus String @default("finalized")
   score       Float 
   grade       String 
   term        String 
@@ -850,9 +853,46 @@ model Result {
   @@index([studentId]) 
   @@index([subjectId])
   @@index([enteredByUserId])
+  @@index([workflowStatus])
   @@index([score])
   @@index([term, year]) 
 } 
+
+model ResultsStatus {
+  id                String   @id @default(uuid())
+
+  schoolId          String
+  school            School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  studentId         String
+  student           Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  term              String
+  year              Int
+
+  isComplete        Boolean  @default(false)
+  completedAt       DateTime?
+
+  subjectsEnrolled  Int      @default(0)
+  subjectsFinalized Int      @default(0)
+
+  smsSending        Boolean  @default(false)
+  smsSentAt         DateTime?
+  smsLastError      String?
+  smsLastAttemptAt  DateTime?
+
+  lastEvaluatedAt   DateTime @default(now())
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([schoolId, studentId, term, year])
+  @@index([schoolId])
+  @@index([studentId])
+  @@index([term, year])
+  @@index([isComplete])
+  @@index([smsSentAt])
+}
 
 model StudentWork { 
   id          String   @id @default(uuid()) 

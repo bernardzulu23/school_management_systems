@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import OpenAI from 'openai'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -11,6 +12,15 @@ type GenerateBody = {
   timeoutMs?: number
   name?: string
 }
+
+type SolveResult = {
+  assignments: Record<string, string>
+  optimizationScore: number
+  stats: any
+  source: 'ai' | 'local'
+}
+
+let skipAiUntilMs = 0
 
 function withTimeout(ms: number) {
   const controller = new AbortController()
@@ -26,6 +36,130 @@ function safeNumber(value: unknown, fallback: number) {
 function safeString(value: unknown) {
   const s = String(value ?? '').trim()
   return s
+}
+
+function extractJSONObject(text: string) {
+  const s = String(text || '').trim()
+  if (!s) return null
+
+  const fenced = s.match(/```json\s*([\s\S]*?)\s*```/i) || s.match(/```\s*([\s\S]*?)\s*```/i)
+  const candidate = fenced ? fenced[1] : s
+
+  const first = candidate.indexOf('{')
+  const last = candidate.lastIndexOf('}')
+  if (first === -1 || last === -1 || last <= first) return null
+
+  const jsonText = candidate.slice(first, last + 1)
+  try {
+    return JSON.parse(jsonText)
+  } catch {
+    return null
+  }
+}
+
+function isInsufficientCreditsError(err: any) {
+  const status = Number(err?.status)
+  if (status !== 403) return false
+  const msg = String(err?.error?.message || err?.message || '')
+  return /out of credits|insufficent_credits|insufficient_credits/i.test(msg)
+}
+
+function buildAiPrompt(payload: any) {
+  return `You are an expert school timetable generator.
+
+You MUST return ONLY valid JSON (no markdown, no prose).
+
+Given this JSON input, produce a feasible timetable assignment mapping each lesson.id to a slots.id.
+
+Hard rules:
+- Do not assign any lesson to a slot where slots[].isBreak is true.
+- A teacher cannot teach two lessons in the same slot (unique by teacherId+slotId).
+- A class cannot have two lessons in the same slot (unique by classId+slotId).
+- Every lesson in lessons[] MUST be assigned exactly one slot id.
+- Use only slot ids from slots[] and lesson ids from lessons[].
+- Respect lockedAssignments: for any lockedAssignments item {teacherId, slotId}, that teacher cannot be assigned any lesson in that slot unless already implied by the chosen lesson mapping (but still must avoid teacher conflicts).
+
+Return JSON with shape:
+{
+  "assignments": { "lessonId": "slotId" },
+  "optimizationScore": number,
+  "stats": { "notes": "string" }
+}
+
+INPUT_JSON:
+${JSON.stringify(payload)}`
+}
+
+function buildOpenAiClient() {
+  const apiKey = safeString(process.env.AIML_API_KEY)
+  const baseRaw = safeString(process.env.AIML_API_BASE).replace(/\/+$/, '')
+  const baseURL = baseRaw ? (baseRaw.endsWith('/v1') ? baseRaw : `${baseRaw}/v1`) : undefined
+  return {
+    client: new OpenAI({ apiKey, baseURL }),
+    apiKey,
+    baseURL,
+  }
+}
+
+async function callAIProvider(payload: any, signal: AbortSignal): Promise<SolveResult> {
+  const { client, apiKey, baseURL } = buildOpenAiClient()
+  if (!apiKey) throw new Error('Missing AIML_API_KEY')
+  if (!baseURL) throw new Error('Missing AIML_API_BASE')
+
+  const model =
+    safeString(process.env.AIML_TIMETABLE_MODEL || process.env.AIML_CHAT_MODEL) ||
+    'claude-sonnet-4-6'
+  const prompt = buildAiPrompt(payload)
+
+  const resp = await client.chat.completions.create(
+    {
+      model,
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.2,
+      max_tokens: 3500,
+    },
+    { signal }
+  )
+
+  const content = resp.choices[0]?.message?.content || ''
+  const parsed = extractJSONObject(content)
+  const assignments = parsed?.assignments
+  if (!assignments || typeof assignments !== 'object') {
+    throw new Error('AI returned invalid JSON (missing assignments)')
+  }
+  return {
+    assignments,
+    optimizationScore: safeNumber(parsed?.optimizationScore, 0),
+    stats: parsed?.stats || {},
+    source: 'ai',
+  }
+}
+
+async function callLocalPythonSolver(
+  solveEndpoint: string,
+  payload: any,
+  signal: AbortSignal
+): Promise<SolveResult> {
+  const solverRes = await fetch(solveEndpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    signal,
+  })
+
+  const solverJson = await solverRes.json().catch(() => null)
+  if (!solverRes.ok) {
+    throw Object.assign(new Error('Solver service failed'), {
+      status: solverRes.status,
+      details: solverJson ?? { status: solverRes.status },
+    })
+  }
+
+  const assignments: Record<string, string> = solverJson?.assignments || {}
+  const optimizationScore = safeNumber(solverJson?.optimizationScore, 0)
+  const stats = solverJson?.stats || {}
+
+  return { assignments, optimizationScore, stats, source: 'local' }
 }
 
 export async function POST(req: NextRequest) {
@@ -291,42 +425,21 @@ export async function POST(req: NextRequest) {
 
   const timeout = withTimeout(timeoutMs + 5000)
   try {
-    const solverRes = await fetch(solveEndpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      signal: timeout.controller.signal,
-    })
+    const now = Date.now()
+    const cooldownMs = 10 * 60 * 1000
+    const shouldSkipAi = now < skipAiUntilMs
 
-    const solverJson = await solverRes.json().catch(() => null)
-    if (!solverRes.ok) {
-      return NextResponse.json(
-        {
-          error: 'Solver service failed',
-          details: solverJson ?? { status: solverRes.status },
-        },
-        { status: 502 }
-      )
+    let result: SolveResult
+    if (!shouldSkipAi) {
+      try {
+        result = await callAIProvider(payload, timeout.controller.signal)
+      } catch (error: any) {
+        if (isInsufficientCreditsError(error)) skipAiUntilMs = Date.now() + cooldownMs
+        result = await callLocalPythonSolver(solveEndpoint, payload, timeout.controller.signal)
+      }
+    } else {
+      result = await callLocalPythonSolver(solveEndpoint, payload, timeout.controller.signal)
     }
-
-    const assignments: Record<string, string> = solverJson?.assignments || {}
-    const optimizationScore = safeNumber(solverJson?.optimizationScore, 0)
-    const stats = solverJson?.stats || {}
-
-    const version = await prisma.timetableVersion.create({
-      data: {
-        schoolId,
-        status: 'DRAFT',
-        generationStatus: 'SOLVED',
-        season: 'normal',
-        solverScore: optimizationScore,
-        solverStats: stats,
-        periodAssignmentsLocked: lockedPeriodAssignments.length,
-        name: versionName,
-        createdByUserId: auth.user?.id ? String(auth.user.id) : null,
-      },
-      select: { id: true, status: true, createdAt: true },
-    })
 
     const lessonById = new Map<
       string,
@@ -348,46 +461,92 @@ export async function POST(req: NextRequest) {
         endTime: string
         isBreak: boolean
       }
-    >(slots.map((s: any) => [String(s.id), s]))
+    >(slotRows.map((s: any) => [String(s.id), s]))
 
-    const entriesData = Object.entries(assignments)
-      .map(([lessonId, slotId]) => {
-        const lesson = lessonById.get(String(lessonId))
-        const slot = slotById.get(String(slotId))
-        if (!lesson || !slot) return null
-        return {
-          schoolId,
-          versionId: version.id,
-          timeSlotId: String(slot.id),
-          teacherId: String(lesson.teacherId),
-          classId: String(lesson.classId),
-          subjectId: String(lesson.subjectId),
-          teachingAssignmentId: String(lesson.teachingAssignmentId),
-          classroomId: null as string | null,
-          isLockedPeriodAssignment: false,
-          solvedByAlgorithm: true,
-        }
-      })
-      .filter(Boolean) as Array<{
-      schoolId: string
-      versionId: string
-      timeSlotId: string
-      teacherId: string
-      classId: string
-      subjectId: string
-      teachingAssignmentId: string
-      classroomId: string | null
-      isLockedPeriodAssignment: boolean
-      solvedByAlgorithm: boolean
-    }>
+    const buildEntriesDataBase = (r: SolveResult) => {
+      const assignments: Record<string, string> = (r?.assignments || {}) as any
+      if (!assignments || typeof assignments !== 'object') {
+        throw new Error('Invalid schedule: missing assignments')
+      }
+      for (const l of expandedLessons) {
+        if (!assignments[String(l.id)]) throw new Error('Invalid schedule: incomplete assignments')
+      }
 
-    if (!entriesData.length) {
-      return NextResponse.json(
-        { error: 'Solver returned empty schedule', details: { optimizationScore, stats } },
-        { status: 502 }
-      )
+      const teacherSlotKeys = new Set<string>()
+      const classSlotKeys = new Set<string>()
+      return Object.entries(assignments)
+        .map(([lessonId, slotId]) => {
+          const lesson = lessonById.get(String(lessonId))
+          const slot = slotById.get(String(slotId))
+          if (!lesson || !slot) return null
+          if (slot.isBreak) throw new Error('Invalid schedule: assigned to break slot')
+          const teacherKey = `${lesson.teacherId}:${slot.id}`
+          const classKey = `${lesson.classId}:${slot.id}`
+          if (teacherSlotKeys.has(teacherKey)) throw new Error('Invalid schedule: teacher conflict')
+          if (classSlotKeys.has(classKey)) throw new Error('Invalid schedule: class conflict')
+          teacherSlotKeys.add(teacherKey)
+          classSlotKeys.add(classKey)
+          return {
+            schoolId,
+            timeSlotId: String(slot.id),
+            teacherId: String(lesson.teacherId),
+            classId: String(lesson.classId),
+            subjectId: String(lesson.subjectId),
+            teachingAssignmentId: String(lesson.teachingAssignmentId),
+            classroomId: null as string | null,
+            isLockedPeriodAssignment: false,
+            solvedByAlgorithm: r.source !== 'ai',
+          }
+        })
+        .filter(Boolean) as Array<{
+        schoolId: string
+        timeSlotId: string
+        teacherId: string
+        classId: string
+        subjectId: string
+        teachingAssignmentId: string
+        classroomId: string | null
+        isLockedPeriodAssignment: boolean
+        solvedByAlgorithm: boolean
+      }>
     }
 
+    let finalResult = result
+    let entriesDataBase: ReturnType<typeof buildEntriesDataBase>
+    try {
+      entriesDataBase = buildEntriesDataBase(finalResult)
+    } catch (err) {
+      if (finalResult.source === 'ai') {
+        finalResult = await callLocalPythonSolver(solveEndpoint, payload, timeout.controller.signal)
+        entriesDataBase = buildEntriesDataBase(finalResult)
+      } else {
+        throw err
+      }
+    }
+
+    if (!entriesDataBase.length) {
+      throw new Error('Solver returned empty schedule')
+    }
+
+    const optimizationScore = safeNumber(finalResult.optimizationScore, 0)
+    const stats = finalResult.stats || {}
+
+    const version = await prisma.timetableVersion.create({
+      data: {
+        schoolId,
+        status: 'DRAFT',
+        generationStatus: finalResult.source === 'ai' ? 'AI_SOLVED' : 'SOLVED',
+        season: 'normal',
+        solverScore: optimizationScore,
+        solverStats: stats,
+        periodAssignmentsLocked: lockedPeriodAssignments.length,
+        name: versionName,
+        createdByUserId: auth.user?.id ? String(auth.user.id) : null,
+      },
+      select: { id: true, status: true, createdAt: true },
+    })
+
+    const entriesData = entriesDataBase.map((e) => ({ ...e, versionId: version.id }))
     await prisma.timetableEntry.createMany({ data: entriesData })
 
     const uiAssignments = entriesData

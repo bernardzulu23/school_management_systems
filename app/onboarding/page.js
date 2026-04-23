@@ -280,13 +280,17 @@ export default function OnboardingPage({ searchParams }) {
     .trim()
     .toLowerCase()
   const forceSetupStep = stepParam === 'setup'
-  const isTrialPlan =
-    String(status?.registration?.plan || plan || '')
+  const selectedPlanIsTrial =
+    String(plan || '')
+      .trim()
+      .toLowerCase() === 'trial'
+  const registrationPlanIsTrial =
+    String(status?.registration?.plan || '')
       .trim()
       .toLowerCase() === 'trial'
   const paid =
     forceSetupStep ||
-    isTrialPlan ||
+    (verified && registrationPlanIsTrial) ||
     String(status?.registration?.paymentStatus || '').toLowerCase() === 'paid'
   const monthlyPrice = plan === 'basic' ? 500 : plan === 'premium' ? 1200 : 800
   const totalAmount = monthlyPrice * (Number(months) || 1)
@@ -404,12 +408,7 @@ export default function OnboardingPage({ searchParams }) {
               </div>
               <div className="text-xs text-royalPurple-text3">
                 After verifying your email, you will be redirected to{' '}
-                {String(plan || '')
-                  .trim()
-                  .toLowerCase() === 'trial'
-                  ? 'school setup'
-                  : 'plan selection'}
-                .
+                {selectedPlanIsTrial ? 'school setup' : 'plan selection'}.
               </div>
             </div>
           </div>

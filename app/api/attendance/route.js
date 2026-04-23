@@ -129,21 +129,31 @@ export const POST = withErrorHandler(async function POST(request) {
   let smsSummary = { attempted: 0, sent: 0, skipped: 0, failed: 0 }
 
   if (notifyWrites.length > 0) {
+    const school = await prisma.school.findUnique({
+      where: { id: schoolId },
+      select: { name: true, plan: true },
+    })
+    const plan = String(school?.plan || '')
+      .trim()
+      .toLowerCase()
+    const smsAllowed = plan === 'standard' || plan === 'premium'
+    if (!smsAllowed) {
+      smsSummary.skipped += notifyWrites.length
+      return NextResponse.json({ success: true, sms: smsSummary })
+    }
+
     const studentIds = Array.from(new Set(notifyWrites.map((r) => r.studentId)))
 
-    const [school, students] = await Promise.all([
-      prisma.school.findUnique({ where: { id: schoolId }, select: { name: true } }),
-      prisma.student.findMany({
-        where: { schoolId, id: { in: studentIds } },
-        select: {
-          id: true,
-          name: true,
-          parent_father_contact: true,
-          parent_mother_contact: true,
-          guardian_contact: true,
-        },
-      }),
-    ])
+    const students = await prisma.student.findMany({
+      where: { schoolId, id: { in: studentIds } },
+      select: {
+        id: true,
+        name: true,
+        parent_father_contact: true,
+        parent_mother_contact: true,
+        guardian_contact: true,
+      },
+    })
 
     const schoolName = school?.name || 'School'
     const studentById = new Map(students.map((s) => [s.id, s]))
