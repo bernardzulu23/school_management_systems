@@ -160,7 +160,7 @@ export async function GET(request) {
       : { code }
     return NextResponse.json(
       { error: 'Failed to fetch dashboard stats', ...(devDetails || {}) },
-      { status: 500 }
+      { status: 500, headers: { 'x-error-code': String(code) } }
     )
   }
 }
