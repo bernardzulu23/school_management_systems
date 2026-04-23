@@ -4,6 +4,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 function toTermLabel(termParam) {
   const raw = String(termParam || '').trim()

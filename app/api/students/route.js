@@ -11,6 +11,8 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { studentSchema, validateRequest, sanitizeOutput } from '@/lib/middleware/inputValidation'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
+export const runtime = 'nodejs'
+
 const normalizeYearGroup = (yearGroupRaw) => {
   const raw = String(yearGroupRaw || '').trim()
   if (!raw) return ''
