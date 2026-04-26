@@ -9,13 +9,7 @@ export const runtime = 'nodejs'
 function isMissingTableError(error) {
   const raw = String(error?.message || '')
   const code = String(error?.code || '')
-  return (
-    code === 'P2021' ||
-    raw.includes('P2021') ||
-    raw.toLowerCase().includes('does not exist') ||
-    raw.toLowerCase().includes('relation') ||
-    raw.toLowerCase().includes('table')
-  )
+  return code === 'P2021' || code === 'P2022' || raw.includes('P2021') || raw.includes('P2022')
 }
 
 function isDbUnreachableError(error) {
