@@ -5,13 +5,18 @@ import { defineConfig } from 'prisma/config'
 const databaseUrl = process.env.DATABASE_URL || 'postgresql://dummy:password@localhost:5432/db'
 const directUrl = process.env.DIRECT_URL || databaseUrl
 
+const usesMigrationsConnection = process.argv.some((arg) =>
+  ['migrate', 'db', 'introspect', 'push', 'deploy', 'reset'].includes(arg)
+)
+
+const prismaCliUrl = usesMigrationsConnection ? directUrl : databaseUrl
+
 export default defineConfig({
   schema: 'prisma/schema.prisma',
   migrations: {
     seed: 'node prisma/seed.js',
   },
   datasource: {
-    url: databaseUrl,
-    directUrl,
+    url: prismaCliUrl,
   },
 })
