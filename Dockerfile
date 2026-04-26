@@ -24,7 +24,10 @@ RUN npx prisma generate
 RUN npm run build
 
 RUN mkdir -p .next/standalone/node_modules/.prisma && \
-    cp -r node_modules/.prisma/* .next/standalone/node_modules/.prisma/
+    cp -r node_modules/.prisma/* .next/standalone/node_modules/.prisma/ && \
+    mkdir -p .next/standalone/.next && \
+    cp -r .next/static .next/standalone/.next/static && \
+    cp -r public .next/standalone/public
 
 # 7. Production settings
 ENV NODE_ENV=production
