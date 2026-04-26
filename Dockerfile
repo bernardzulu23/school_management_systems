@@ -23,9 +23,12 @@ RUN npx prisma generate
 # 6. Build the Next.js app
 RUN npm run build
 
+RUN mkdir -p .next/standalone/node_modules/.prisma && \
+    cp -r node_modules/.prisma/* .next/standalone/node_modules/.prisma/
+
 # 7. Production settings
 ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && npm run start"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma generate && npm run start"]

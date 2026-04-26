@@ -26,7 +26,7 @@
   "scripts": {
     "copy:excalidraw-fonts": "node scripts/copy-excalidraw-fonts.js",
     "dev": "npm run copy:excalidraw-fonts && next dev",
-    "build": "npm run copy:excalidraw-fonts && prisma generate && node scripts/clean-next-standalone.js && next build",
+    "build": "npm run copy:excalidraw-fonts && prisma generate && node scripts/clean-next-standalone.js && next build && node -e \"const fs=require('fs');const path=require('path');const src=path.join(process.cwd(),'node_modules','.prisma');const dst=path.join(process.cwd(),'.next','standalone','node_modules','.prisma');if(!fs.existsSync(src)){process.exit(0)};try{fs.rmSync(dst,{recursive:true,force:true})}catch{};fs.mkdirSync(path.dirname(dst),{recursive:true});fs.cpSync(src,dst,{recursive:true});\"",
     "start": "node server.js",
     "lint": "node ./node_modules/eslint/bin/eslint.js .",
     "test": "jest",
