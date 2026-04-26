@@ -27,6 +27,11 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
   const { dashboardData, schoolStats, setActiveTab, subjectPerformanceData } = useHeadteacher()
 
   const hasResults = !!dashboardData
+  const performanceTrends = Array.isArray(dashboardData?.performanceTrends)
+    ? dashboardData.performanceTrends
+    : Array.isArray(dashboardData?.performance_trends)
+      ? dashboardData.performance_trends
+      : []
 
   return (
     <div className="space-y-8">
@@ -148,20 +153,50 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                     />
                     Performance Trends by Term
                   </h3>
-                  <div className="h-64 flex items-center justify-center bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg p-6 text-center">
-                    <div>
-                      <BarChart3
-                        className="h-12 w-12 text-royalPurple-accent mx-auto mb-4"
-                        aria-hidden="true"
-                      />
-                      <p className="text-royalPurple-text1 font-semibold">
-                        No performance trend data yet
-                      </p>
-                      <p className="text-royalPurple-text2 text-sm mt-1">
-                        Add results to see term-by-term charts here.
-                      </p>
+                  {performanceTrends.length > 0 ? (
+                    <div className="h-64 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg p-4">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={performanceTrends}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.25)" />
+                          <XAxis dataKey="term" stroke="rgba(203,213,225,0.8)" />
+                          <YAxis domain={[0, 100]} stroke="rgba(203,213,225,0.8)" />
+                          <Tooltip
+                            contentStyle={{
+                              background: 'rgba(15, 23, 42, 0.95)',
+                              border: '1px solid rgba(148, 163, 184, 0.25)',
+                              borderRadius: 12,
+                              color: 'rgba(226, 232, 240, 0.95)',
+                            }}
+                          />
+                          <Bar
+                            dataKey="average"
+                            fill="rgba(124, 58, 237, 0.9)"
+                            radius={[8, 8, 0, 0]}
+                          />
+                          <Bar
+                            dataKey="passRate"
+                            fill="rgba(34, 197, 94, 0.85)"
+                            radius={[8, 8, 0, 0]}
+                          />
+                        </BarChart>
+                      </ResponsiveContainer>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="h-64 flex items-center justify-center bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg p-6 text-center">
+                      <div>
+                        <BarChart3
+                          className="h-12 w-12 text-royalPurple-accent mx-auto mb-4"
+                          aria-hidden="true"
+                        />
+                        <p className="text-royalPurple-text1 font-semibold">
+                          No performance trend data yet
+                        </p>
+                        <p className="text-royalPurple-text2 text-sm mt-1">
+                          Add results to see term-by-term charts here.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Subject Performance */}

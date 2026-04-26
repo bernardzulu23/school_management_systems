@@ -414,8 +414,13 @@ export const POST = withErrorHandler(async function POST(request) {
         continue
       }
 
-      const termYear = parseTermYear(r.term)
-      const term = String(r.term || termYear.term).trim() || termYear.term
+      const termRaw = String(r.term || '').trim()
+      if (!termRaw) {
+        throw new ApiError('Select the term you are entering the results', 400)
+      }
+
+      const termYear = parseTermYear(termRaw)
+      const term = termYear.term
       const year = Number(r.year || termYear.year)
 
       const existing = await tx.result.findFirst({

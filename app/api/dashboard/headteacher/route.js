@@ -9,12 +9,23 @@ export const runtime = 'nodejs'
 function toTermLabel(termParam) {
   const raw = String(termParam || '').trim()
   if (!raw || raw === 'All Terms') return ''
-  const lower = raw.toLowerCase()
-  if (lower.startsWith('term')) {
-    const digits = lower.replace(/[^0-9]/g, '')
-    if (digits) return `Term ${Number(digits)}`
-  }
+  const match = raw.match(/term\s*([1-3])/i)
+  if (match?.[1]) return `Term ${Number(match[1])}`
+  return raw.trim()
+}
+
+function normalizeStoredTerm(termValue) {
+  const raw = String(termValue || '').trim()
+  if (!raw) return ''
+  const match = raw.match(/term\s*([1-3])/i)
+  if (match?.[1]) return `Term ${Number(match[1])}`
   return raw
+}
+
+function termSortKey(termLabel) {
+  const m = String(termLabel || '').match(/term\s*([1-3])/i)
+  if (!m?.[1]) return 99
+  return Number(m[1])
 }
 
 function gradeFromAverage(score, gradeLevel) {
@@ -447,16 +458,30 @@ export async function GET(request) {
       _count: { _all: true },
     })
 
-    const passByTerm = new Map(
-      termPassAgg.map((r) => [String(r.term || ''), Number(r._count?._all || 0)])
-    )
-    const performanceTrends = termAgg
-      .filter((r) => r.term)
-      .map((r) => {
-        const term = String(r.term)
-        const total = Number(r._count?._all || 0)
-        const passed = passByTerm.get(term) || 0
-        const avg = r._avg?.score ? Number(r._avg.score) : 0
+    const passedCountByTerm = new Map()
+    for (const r of termPassAgg) {
+      const key = normalizeStoredTerm(r?.term)
+      if (!key) continue
+      passedCountByTerm.set(key, (passedCountByTerm.get(key) || 0) + Number(r._count?._all || 0))
+    }
+
+    const aggByTerm = new Map()
+    for (const r of termAgg) {
+      const key = normalizeStoredTerm(r?.term)
+      if (!key) continue
+      const total = Number(r._count?._all || 0)
+      const avg = r._avg?.score ? Number(r._avg.score) : 0
+      const prev = aggByTerm.get(key) || { sumScore: 0, results: 0 }
+      prev.sumScore += avg * total
+      prev.results += total
+      aggByTerm.set(key, prev)
+    }
+
+    const performanceTrends = Array.from(aggByTerm.entries())
+      .map(([term, v]) => {
+        const total = Number(v.results || 0)
+        const passed = Number(passedCountByTerm.get(term) || 0)
+        const avg = total > 0 ? v.sumScore / total : 0
         return {
           term,
           average: Math.round(avg),
@@ -464,7 +489,12 @@ export async function GET(request) {
           results: total,
         }
       })
-      .sort((a, b) => a.term.localeCompare(b.term))
+      .sort((a, b) => {
+        const ka = termSortKey(a.term)
+        const kb = termSortKey(b.term)
+        if (ka !== kb) return ka - kb
+        return String(a.term).localeCompare(String(b.term))
+      })
 
     // 5a. Performance Summary (for Attention System)
     const criticalRiskCount = studentsRequiringAttention.filter(

@@ -28,6 +28,7 @@ export default function ResultEntryPage() {
   const [assignments, setAssignments] = useState([])
   const [selectedAssignmentId, setSelectedAssignmentId] = useState('')
   const [selectedTerm, setSelectedTerm] = useState('')
+  const [termError, setTermError] = useState(false)
 
   const [pupils, setPupils] = useState([])
   const [scores, setScores] = useState({})
@@ -96,8 +97,7 @@ export default function ResultEntryPage() {
 
   useEffect(() => {
     setIsOnline(typeof navigator !== 'undefined' ? navigator.onLine : true)
-    if (!selectedTerm) setSelectedTerm(terms[0])
-  }, [selectedTerm, terms])
+  }, [])
 
   useEffect(() => {
     const loadAssignments = async () => {
@@ -109,6 +109,8 @@ export default function ResultEntryPage() {
         setAssignments(data)
         const draft = loadDraft()
         const preferred = draft?.selectedAssignmentId
+        const draftTerm = String(draft?.selectedTerm || '').trim()
+        if (draftTerm && terms.includes(draftTerm)) setSelectedTerm(draftTerm)
         if (preferred && data.some((a) => a.id === preferred)) {
           setSelectedAssignmentId(preferred)
         } else if (!selectedAssignmentId && data.length > 0) {
@@ -233,6 +235,7 @@ export default function ResultEntryPage() {
       })
 
       toast.success('Result deleted')
+      broadcastResultsUpdated()
     } catch (e) {
       toast.error(e.message || 'Something went wrong. Please try again.')
     }
@@ -268,6 +271,19 @@ export default function ResultEntryPage() {
       payload,
     })
     setQueue(queue)
+  }
+
+  const broadcastResultsUpdated = () => {
+    try {
+      if (typeof window === 'undefined') return
+      const msg = { type: 'results-updated', at: Date.now() }
+      if (typeof BroadcastChannel !== 'undefined') {
+        const ch = new BroadcastChannel('zsms-events')
+        ch.postMessage(msg)
+        ch.close()
+      }
+      localStorage.setItem('zsms-events:last-results-updated', String(msg.at))
+    } catch {}
   }
 
   const syncOnce = async (payload) => {
@@ -335,6 +351,7 @@ export default function ResultEntryPage() {
       }
       setQueue([])
       toast.success('Offline changes synced')
+      broadcastResultsUpdated()
       await fetchPupilsAndResults()
     } catch (e) {
       if (String(e?.message || '') !== 'conflicts') toast.error('Sync failed')
@@ -361,11 +378,17 @@ export default function ResultEntryPage() {
   }, [isOnline])
 
   const handleSave = async () => {
+    if (!selectedTerm) {
+      setTermError(true)
+      toast.error('Select the term you are entering the results')
+      return
+    }
     const payload = buildPayload()
     if (!payload || !selectedAssignment) {
       toast.error('Select a class and subject')
       return
     }
+    setTermError(false)
 
     setSaving(true)
     try {
@@ -382,6 +405,7 @@ export default function ResultEntryPage() {
       } else {
         toast.success('Results saved successfully')
       }
+      broadcastResultsUpdated()
       await fetchPupilsAndResults()
     } catch (e) {
       const msg = String(e?.message || '')
@@ -423,7 +447,7 @@ export default function ResultEntryPage() {
               )}
               Sync
             </Button>
-            <Button onClick={handleSave} disabled={saving || pupils.length === 0}>
+            <Button onClick={handleSave} disabled={saving || !selectedAssignment}>
               {saving ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
               ) : (
@@ -440,7 +464,13 @@ export default function ResultEntryPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <Label>Term</Label>
-                <Select value={selectedTerm} onValueChange={setSelectedTerm}>
+                <Select
+                  value={selectedTerm}
+                  onValueChange={(v) => {
+                    setSelectedTerm(v)
+                    if (v) setTermError(false)
+                  }}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select Term" />
                   </SelectTrigger>
@@ -452,6 +482,11 @@ export default function ResultEntryPage() {
                     ))}
                   </SelectContent>
                 </Select>
+                {termError && (
+                  <div className="text-sm text-royalPurple-dangerTx">
+                    Select the term you are entering the results
+                  </div>
+                )}
               </div>
               <div className="space-y-2">
                 <Label>Rapid Subject Switcher</Label>

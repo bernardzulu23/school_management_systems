@@ -15,6 +15,11 @@ export function HeadteacherAnalytics() {
     schoolStats,
     dashboardData,
   } = useHeadteacher()
+  const performanceTrends = Array.isArray(dashboardData?.performanceTrends)
+    ? dashboardData.performanceTrends
+    : Array.isArray(dashboardData?.performance_trends)
+      ? dashboardData.performance_trends
+      : []
   const teacherPerformanceRows = Array.isArray(dashboardData?.teacher_performance_rows)
     ? dashboardData.teacher_performance_rows
     : Array.isArray(dashboardData?.teacherPerformanceRows)
@@ -66,13 +71,41 @@ export function HeadteacherAnalytics() {
           </CardHeader>
           <CardContent>
             <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-              <div className="h-80 flex items-center justify-center">
-                <div className="text-center">
-                  <TrendingUp className="h-16 w-16 text-royalPurple-text3 mx-auto mb-4" />
-                  <p className="text-royalPurple-text2 text-lg">Performance Trends</p>
-                  <p className="text-royalPurple-text3">School vs National Average</p>
+              {performanceTrends.length > 0 ? (
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={performanceTrends}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.25)" />
+                      <XAxis dataKey="term" stroke="rgba(203,213,225,0.8)" />
+                      <YAxis domain={[0, 100]} stroke="rgba(203,213,225,0.8)" />
+                      <Tooltip
+                        contentStyle={{
+                          background: 'rgba(15, 23, 42, 0.95)',
+                          border: '1px solid rgba(148, 163, 184, 0.25)',
+                          borderRadius: 12,
+                          color: 'rgba(226, 232, 240, 0.95)',
+                        }}
+                      />
+                      <Bar dataKey="average" fill="rgba(124, 58, 237, 0.9)" radius={[8, 8, 0, 0]} />
+                      <Bar
+                        dataKey="passRate"
+                        fill="rgba(34, 197, 94, 0.85)"
+                        radius={[8, 8, 0, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
-              </div>
+              ) : (
+                <div className="h-80 flex items-center justify-center">
+                  <div className="text-center">
+                    <TrendingUp className="h-16 w-16 text-royalPurple-text3 mx-auto mb-4" />
+                    <p className="text-royalPurple-text2 text-lg">No term performance yet</p>
+                    <p className="text-royalPurple-text3">
+                      Enter results to populate term analytics.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

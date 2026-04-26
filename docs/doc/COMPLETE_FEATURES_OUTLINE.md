@@ -4,11 +4,19 @@
 
 ---
 
+## PROJECT UPDATES (APRIL 2026)
+
+- **Timetable System V2 (DB-Driven)** - HOD allocations → push workflow → headteacher generation → editing → publish (draft/published)
+- **Master Timetable Full CRUD** - Drag/drop edits persist to database, delete draft entries, regenerate, and publish by term/academic year
+- **Timetable Notifications (Database-Backed)** - HOD “push” creates alerts for headteacher/admin; users can mark notifications as read
+- **Deployment Reliability** - Production deploy runs Prisma migrations before app start to prevent schema-mismatch 500s
+- **Operational Debugging** - Server errors expose safe error codes (e.g., Prisma `P2022`) to speed up production troubleshooting
+
 ## STUDENT DASHBOARD FEATURES
 
 ### Academic Management
 
-- **Personal Timetable Display** - Daily/weekly schedule with subjects and teachers
+- **Personal Timetable Display** - Daily/weekly schedule with subjects and teachers (published master timetable, term/academic year aware)
 - **Grade Tracking** - Real-time access to test scores, assignments, and report cards
 - **Assignment Submission** - Upload homework and projects (offline capable)
 - **Attendance Monitoring** - Personal attendance records and alerts
@@ -165,6 +173,11 @@
 ### Team Management
 
 - **Teacher Scheduling** - Coordinate teacher assignments and timetables
+- **Department Teaching Allocations (CRUD)** - Assign teacher → subject → class with periods-per-week and block types (single/double/triple/mixed)
+- **Push Allocations to Headteacher/Admin** - Submit department allocations for timetable generation (term + academic year)
+- **Locked Period Assignments (Pre-Generation)** - Lock key teachers to specific periods to guide the generator/solver
+- **Department Timetable View** - Preview draft/published timetables for the department and validate coverage
+- **Timetable Alerts & Follow-Ups** - Receive confirmation/status updates when allocations are pushed and scheduled
 - **Meeting Coordination** - Schedule and manage department meetings
 - **Collaboration Tools** - Facilitate teacher collaboration and sharing
 - **Mentorship Programs** - Pair experienced with new teachers
@@ -244,13 +257,15 @@
 
 ### Master Timetable Management
 
-- **Timetable Creation** - Design comprehensive school timetables
-- **Resource Allocation** - Assign classrooms, teachers, and equipment
-- **Conflict Resolution** - Prevent scheduling conflicts and overlaps
-- **Distribution Management** - Ensure all stakeholders receive schedules
-- **Optimization Tools** - Maximize resource utilization efficiency
-- **Seasonal Adjustments** - Adapt schedules to agricultural calendar
-- **Multi-Grade Coordination** - Manage combined class schedules
+- **HOD Allocation Inbox** - Review pushed department allocations (term + academic year scoped)
+- **Draft Generation (DB-Driven)** - Generate master timetable from pushed allocations; regenerate as needed
+- **Solver Engine (Optional)** - Generate draft with constraint support and locked period inputs when configured
+- **Full CRUD Editing** - Drag/drop to adjust slots, delete draft entries, and iterate without losing changes
+- **Conflict Detection & Resolution** - Identify clashes and apply suggested resolutions before publishing
+- **Publish Workflow** - Publish draft to all teachers/students; status tracking (draft vs published) and auditability
+- **Timetable Configuration** - Manage school hours, working days, and break slots that drive generation
+- **Seasonal Modes** - Support timetable adjustments for normal/planting/farming seasons
+- **Distribution & Visibility** - Ensure timetable updates propagate to teacher/student views and dashboards
 
 ### Student Welfare & Health
 
