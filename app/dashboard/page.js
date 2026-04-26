@@ -37,7 +37,7 @@ import ResponsiveDashboardLayout from '@/components/dashboard/ResponsiveDashboar
 import AIFeaturesShowcase from '@/components/dashboard/AIFeaturesShowcase'
 
 export default function DashboardPage() {
-  const { user, logout } = useAuth()
+  const { user, logout, syncSession } = useAuth()
   const [stats, setStats] = useState({
     totalStudents: 0,
     totalTeachers: 0,
@@ -51,9 +51,20 @@ export default function DashboardPage() {
   const [error, setError] = useState(null)
   const [showSmartAnalytics, setShowSmartAnalytics] = useState(true)
   const [analyticsData, setAnalyticsData] = useState([])
+  const [authChecked, setAuthChecked] = useState(false)
 
   useEffect(() => {
-    fetchDashboardData()
+    const bootstrap = async () => {
+      try {
+        setIsLoading(true)
+        setError(null)
+        await syncSession?.({ force: true })
+      } finally {
+        setAuthChecked(true)
+      }
+    }
+
+    bootstrap()
   }, [])
 
   const fetchDashboardData = async () => {
@@ -77,11 +88,20 @@ export default function DashboardPage() {
     }
   }
 
+  useEffect(() => {
+    if (!authChecked) return
+    if (!user) {
+      setIsLoading(false)
+      return
+    }
+    fetchDashboardData()
+  }, [authChecked, user?.id])
+
   const getUserRole = () => {
     return user?.role || 'teacher' // Default to teacher for demo
   }
 
-  if (isLoading) {
+  if (isLoading || !authChecked) {
     return (
       <ResponsiveDashboardLayout>
         <div className="space-y-6">

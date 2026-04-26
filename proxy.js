@@ -5,6 +5,10 @@ import { authMiddleware, roleCheck } from './lib/middleware/auth'
 export default async function proxy(request) {
   const { pathname } = request.nextUrl
 
+  if (pathname === '/api/health') {
+    return NextResponse.next()
+  }
+
   // 1. Rate Limiting
   const isAuthRoute = pathname.startsWith('/api/auth')
   const rateLimitOptions = isAuthRoute
