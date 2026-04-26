@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { ConflictDisplay } from '@/components/timetable/ConflictDisplay'
@@ -135,6 +135,14 @@ function toClass(c: any, subjects: Array<{ id: string; name: string }>): Class {
 }
 
 export default function HeadteacherTimetablePage() {
+  return (
+    <Suspense fallback={<div>Loading timetable...</div>}>
+      <HeadteacherTimetablePageContent />
+    </Suspense>
+  )
+}
+
+function HeadteacherTimetablePageContent() {
   const searchParams = useSearchParams()
   const [tab, setTab] = useState<Tab>('assignment')
   const [loading, setLoading] = useState(true)
