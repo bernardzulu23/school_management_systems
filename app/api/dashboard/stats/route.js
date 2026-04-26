@@ -4,6 +4,29 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
+function isMissingTableError(error) {
+  const raw = String(error?.message || '')
+  const code = String(error?.code || '')
+  return (
+    code === 'P2021' ||
+    raw.includes('P2021') ||
+    raw.toLowerCase().includes('does not exist') ||
+    raw.toLowerCase().includes('relation') ||
+    raw.toLowerCase().includes('table')
+  )
+}
+
+function isDbUnreachableError(error) {
+  const raw = String(error?.message || '')
+  const code = String(error?.code || '')
+  return (
+    code === 'P1001' ||
+    raw.includes('P1001') ||
+    raw.toLowerCase().includes("can't reach database server")
+  )
+}
 
 export async function GET(request) {
   try {
@@ -52,7 +75,7 @@ export async function GET(request) {
         where: { schoolId, date: { gte: startOfDay, lte: endOfDay } },
       }),
       prisma.attendance.count({
-        where: { schoolId, date: { gte: startOfDay, lte: endOfDay }, status: 'present' },
+        where: { schoolId, date: { gte: startOfDay, lte: endOfDay }, status: 'PRESENT' },
       }),
     ])
 
@@ -158,6 +181,30 @@ export async function GET(request) {
           ...(process.env.NODE_ENV === 'development' && error?.stack ? { stack: error.stack } : {}),
         }
       : { code }
+
+    if (isDbUnreachableError(error)) {
+      return NextResponse.json(
+        {
+          error: 'Database unavailable',
+          message: 'Cannot reach the database server. Check DATABASE_URL / network / SSL settings.',
+          ...(devDetails || {}),
+        },
+        { status: 503, headers: { 'x-error-code': String(code) } }
+      )
+    }
+
+    if (isMissingTableError(error)) {
+      return NextResponse.json(
+        {
+          error: 'Database schema out of date',
+          message:
+            'Database tables are missing. Run Prisma migrations (prisma migrate deploy) for this environment.',
+          ...(devDetails || {}),
+        },
+        { status: 503, headers: { 'x-error-code': String(code) } }
+      )
+    }
+
     return NextResponse.json(
       { error: 'Failed to fetch dashboard stats', ...(devDetails || {}) },
       { status: 500, headers: { 'x-error-code': String(code) } }

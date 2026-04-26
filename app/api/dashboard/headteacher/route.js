@@ -193,7 +193,7 @@ export async function GET(request) {
         where: { schoolId, date: { gte: startOfDay, lte: endOfDay } },
       }),
       prisma.attendance.count({
-        where: { schoolId, date: { gte: startOfDay, lte: endOfDay }, status: 'present' },
+        where: { schoolId, date: { gte: startOfDay, lte: endOfDay }, status: 'PRESENT' },
       }),
     ])
 
@@ -849,6 +849,28 @@ export async function GET(request) {
     return NextResponse.json(data)
   } catch (error) {
     console.error('Headteacher Dashboard Error:', error)
+    const isMissingTableError = (err) => {
+      const raw = String(err?.message || '')
+      const code = String(err?.code || '')
+      return (
+        code === 'P2021' ||
+        raw.includes('P2021') ||
+        raw.toLowerCase().includes('does not exist') ||
+        raw.toLowerCase().includes('relation') ||
+        raw.toLowerCase().includes('table')
+      )
+    }
+
+    const isDbUnreachableError = (err) => {
+      const raw = String(err?.message || '')
+      const code = String(err?.code || '')
+      return (
+        code === 'P1001' ||
+        raw.includes('P1001') ||
+        raw.toLowerCase().includes("can't reach database server")
+      )
+    }
+
     const sanitizeErrorDetails = (value) =>
       String(value || '')
         .replace(/postgres(?:ql)?:\/\/[^\s'"]+/gi, 'postgres://***')
@@ -867,8 +889,32 @@ export async function GET(request) {
           ...(process.env.NODE_ENV === 'development' && error?.stack ? { stack: error.stack } : {}),
         }
       : { code }
+
+    if (isDbUnreachableError(error)) {
+      return NextResponse.json(
+        {
+          error: 'Database unavailable',
+          message: 'Cannot reach the database server. Check DATABASE_URL / network / SSL settings.',
+          ...(devDetails || {}),
+        },
+        { status: 503, headers: { 'x-error-code': String(code) } }
+      )
+    }
+
+    if (isMissingTableError(error)) {
+      return NextResponse.json(
+        {
+          error: 'Database schema out of date',
+          message:
+            'Database tables are missing. Run Prisma migrations (prisma migrate deploy) for this environment.',
+          ...(devDetails || {}),
+        },
+        { status: 503, headers: { 'x-error-code': String(code) } }
+      )
+    }
+
     return NextResponse.json(
-      { error: 'Failed to fetch dashboard stats', ...(devDetails || {}) },
+      { error: 'Failed to fetch headteacher dashboard', ...(devDetails || {}) },
       { status: 500, headers: { 'x-error-code': String(code) } }
     )
   }
