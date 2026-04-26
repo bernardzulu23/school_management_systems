@@ -306,7 +306,7 @@ export function DashboardLayout({ children, title }) {
       <footer className="bg-royalPurple-deep border-t border-royalPurple-border mt-auto transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-4 text-center text-sm text-royalPurple-text2">
-            2025 Zambian School Management System - Empowering Rural Education
+            {new Date().getFullYear()} Zambian School Management System - Empowering Rural Education
           </div>
         </div>
       </footer>

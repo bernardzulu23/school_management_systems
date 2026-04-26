@@ -11,8 +11,19 @@ import {
 } from 'lucide-react'
 import { useHeadteacher } from '@/lib/context/HeadteacherContext'
 
-export const HeadteacherStats = memo(function HeadteacherStats() {
-  const { schoolStats } = useHeadteacher()
+export const HeadteacherStats = memo(function HeadteacherStats({
+  schoolStats: schoolStatsProp,
+} = {}) {
+  const ctx = useHeadteacher()
+  const schoolStats = schoolStatsProp || ctx.schoolStats
+
+  const percentText = (value) => {
+    if (value === null || value === undefined) return '—'
+    if (typeof value === 'string' && value.trim() === '—') return '—'
+    const num = Number(value)
+    if (!Number.isFinite(num)) return '—'
+    return `${num}%`
+  }
 
   return (
     <section className="w-full py-3">
@@ -59,7 +70,7 @@ export const HeadteacherStats = memo(function HeadteacherStats() {
         />
         <StatsCard
           title="Attendance"
-          value={`${Number(schoolStats.attendanceRate) || 0}%`}
+          value={percentText(schoolStats.attendanceRate)}
           icon={CheckCircle}
           color="teal"
           description="School attendance"
@@ -67,7 +78,7 @@ export const HeadteacherStats = memo(function HeadteacherStats() {
         />
         <StatsCard
           title="Pass Rate"
-          value={`${Number(schoolStats.passRate) || 0}%`}
+          value={percentText(schoolStats.passRate)}
           icon={Award}
           color="indigo"
           description="Overall pass rate"
