@@ -15,10 +15,14 @@ function isMissingTableError(error) {
 function isDbUnreachableError(error) {
   const raw = String(error?.message || '')
   const code = String(error?.code || '')
+  const name = String(error?.name || '')
   return (
     code === 'P1001' ||
     raw.includes('P1001') ||
-    raw.toLowerCase().includes("can't reach database server")
+    raw.toLowerCase().includes("can't reach database server") ||
+    code === 'DriverAdapterError' ||
+    name === 'DriverAdapterError' ||
+    raw.includes('DriverAdapterError')
   )
 }
 
