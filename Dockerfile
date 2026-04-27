@@ -36,7 +36,8 @@ RUN mkdir -p .next/standalone/node_modules/.prisma && \
 
 # 7. Production settings
 ENV NODE_ENV=production
+ENV PORT=8080
 ENV HOSTNAME=0.0.0.0
-EXPOSE 3000
+EXPOSE 8080
 
-CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma generate && npm run start"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node .next/standalone/server.js"]

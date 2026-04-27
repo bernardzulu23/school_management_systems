@@ -36,6 +36,27 @@ export async function GET(request) {
       return NextResponse.json({ error: 'School context required' }, { status: 403 })
     }
 
+    try {
+      await prisma.$queryRaw`SELECT 1`
+    } catch (dbError) {
+      const sanitizeErrorDetails = (value) =>
+        String(value || '')
+          .replace(/postgres(?:ql)?:\/\/[^\s'"]+/gi, 'postgres://***')
+          .replace(/password=[^&\s]+/gi, 'password=***')
+          .slice(0, 2000)
+
+      const code = dbError?.code || dbError?.name || 'UNKNOWN'
+      return NextResponse.json(
+        {
+          error: 'Database unavailable',
+          code,
+          hint: 'Check DATABASE_URL and Prisma adapter configuration',
+          details: sanitizeErrorDetails(dbError?.message || dbError),
+        },
+        { status: 503, headers: { 'x-error-code': String(code) } }
+      )
+    }
+
     // Parallel fetch of counts - scoped by schoolId for multi-tenant isolation
     const [
       totalUsers,
