@@ -20,6 +20,8 @@ RUN npm install --legacy-peer-deps
 # 4. Copy the rest of the source code
 COPY . .
 
+RUN node -e "const fs=require('fs');const p='prisma/schema.prisma';const b=fs.readFileSync(p);if(b[0]===0xEF&&b[1]===0xBB&&b[2]===0xBF){fs.writeFileSync(p,b.slice(3));}"
+
 # 5. Generate Prisma Client (uses your prisma.config.ts)
 RUN npx prisma generate
 
