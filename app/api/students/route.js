@@ -69,6 +69,28 @@ export const GET = withErrorHandler(async (request) => {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
+  try {
+    await prisma.$queryRaw`SELECT 1`
+  } catch (dbError) {
+    const sanitizeErrorDetails = (value) =>
+      String(value || '')
+        .replace(/postgres(?:ql)?:\/\/[^\s'"]+/gi, 'postgres://***')
+        .replace(/password=[^&\s]+/gi, 'password=***')
+        .slice(0, 2000)
+
+    const code = dbError?.code || dbError?.name || 'UNKNOWN'
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Database unavailable',
+        code,
+        hint: 'Check DATABASE_URL and Prisma adapter configuration',
+        details: sanitizeErrorDetails(dbError?.message || dbError),
+      },
+      { status: 503, headers: { 'x-error-code': String(code) } }
+    )
+  }
+
   const { searchParams } = new URL(request.url)
   const classId = searchParams.get('classId')
   const className = searchParams.get('class')
