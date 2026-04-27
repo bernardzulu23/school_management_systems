@@ -9,6 +9,9 @@ WORKDIR /app
 
 # 2. Copy dependency files first (for better caching)
 COPY package*.json ./
+COPY prisma ./prisma
+
+RUN node -e "const fs=require('fs');const p='prisma/schema.prisma';const b=fs.readFileSync(p);if(b[0]===0xEF&&b[1]===0xBB&&b[2]===0xBF){fs.writeFileSync(p,b.slice(3));}"
 
 # 3. Use install instead of ci to handle the React 19 / Radix peer conflicts
 # This will ignore the lockfile sync issues that were crashing your build
