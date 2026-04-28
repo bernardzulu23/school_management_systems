@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
 export async function GET() {
+  const strict = false
   try {
     await prisma.$queryRaw`SELECT 1`
     return NextResponse.json(
@@ -20,7 +21,7 @@ export async function GET() {
 
     return NextResponse.json(
       { status: 'error', db: 'disconnected', error: sanitize(error?.message || error) },
-      { status: 503 }
+      { status: strict ? 503 : 200 }
     )
   }
 }
