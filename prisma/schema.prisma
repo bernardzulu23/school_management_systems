@@ -1,7 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x", "linux-musl"]
-  engineType = "library"
 }
 
 datasource db {
@@ -1293,6 +1292,7 @@ model Feedback {
   message   String
   category  String?
   rating    Int?
+  isPublic  Boolean  @default(false)
   createdAt DateTime @default(now())
   @@index([schoolId])
   @@index([userId])
