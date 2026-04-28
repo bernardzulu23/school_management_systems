@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'

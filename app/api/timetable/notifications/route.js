@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 // app/api/timetable/notifications/route.js
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
