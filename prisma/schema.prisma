@@ -1,4 +1,4 @@
-﻿generator client {
+generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x", "linux-musl"]
   engineType    = "client"
@@ -372,7 +372,6 @@ model Subject {
   timetableEntries TimetableEntry[]
   schedulingRecipes SchedulingRecipe[]
   allocations       TeacherAllocation[]
-  attendances       Attendance[]
   
   createdAt   DateTime @default(now()) 
   updatedAt   DateTime @updatedAt
@@ -1189,34 +1188,22 @@ model StudentGame {
 }
 
 model Attendance {
-  id                String   @id @default(cuid())
-  schoolId          String
-  studentId         String
-  subjectId         String
-  classId           String
-  timetableEntryId  String?
-  teacherId         String
-  date              DateTime @db.Date
-  status            AttendanceStatus
-  markedViaApp      Boolean  @default(false)
-  notes             String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id        String   @id @default(cuid())
+  studentId String
+  schoolId  String
+  date      DateTime
+  status    String
+  remarks   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  school    School    @relation(fields: [schoolId], references: [id])
-  student   Student   @relation(fields: [studentId], references: [id])
-  subject   Subject   @relation(fields: [subjectId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
+  school  School  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
-  @@unique([studentId, subjectId, date])
-  @@index([schoolId, date])
-  @@index([classId, date])
-}
-
-enum AttendanceStatus {
-  PRESENT
-  ABSENT
-  LATE
-  SICK
+  @@unique([studentId, date])
+  @@index([schoolId])
+  @@index([studentId])
+  @@index([date])
 }
 
 model Assignment {

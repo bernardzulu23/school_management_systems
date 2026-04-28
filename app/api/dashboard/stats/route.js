@@ -94,7 +94,7 @@ export async function GET(request) {
         where: { schoolId, date: { gte: startOfDay, lte: endOfDay } },
       }),
       prisma.attendance.count({
-        where: { schoolId, date: { gte: startOfDay, lte: endOfDay }, status: 'PRESENT' },
+        where: { schoolId, date: { gte: startOfDay, lte: endOfDay }, status: 'present' },
       }),
     ])
 
