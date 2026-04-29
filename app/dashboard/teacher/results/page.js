@@ -254,7 +254,7 @@ export default function ResultEntryPage() {
         score: scores[p.id] === '' ? null : scores[p.id],
         baseUpdatedAt: baseUpdatedAtByPupil[p.id] || null,
       }))
-      .filter((r) => r.score !== undefined)
+      .filter((r) => r.score !== undefined && r.score !== null)
     return { results }
   }
 

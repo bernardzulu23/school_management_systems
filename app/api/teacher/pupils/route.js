@@ -149,13 +149,8 @@ export const GET = withErrorHandler(async function GET(request) {
     where: { schoolId, id: resolvedSubject },
     select: { id: true, name: true },
   })
-
-  const hasSubjectOnClass =
-    classRecord && subjectRecord
-      ? (Array.isArray(classRecord.subjects) ? classRecord.subjects : []).some(
-          (s) => String(s.id) === String(subjectRecord.id)
-        )
-      : false
+  if (!classRecord) throw new ApiError('Class not found for this school', 404)
+  if (!subjectRecord) throw new ApiError('Subject not found for this school', 404)
 
   const yearGroup = String(classRecord?.year_group || '').trim()
   const section = String(classRecord?.section || '').trim()
@@ -178,36 +173,29 @@ export const GET = withErrorHandler(async function GET(request) {
       )
     : []
 
+  const classOr =
+    classRecord && classCandidates.length > 0
+      ? [
+          { classId: classRecord.id },
+          ...classCandidates.map((c) => ({ class: { equals: c, mode: 'insensitive' } })),
+        ]
+      : classRecord
+        ? [
+            { classId: classRecord.id },
+            { class: { equals: classRecord.name, mode: 'insensitive' } },
+          ]
+        : []
+
   const fallbackStudents =
     classRecord && subjectRecord
-      ? (
-          await prisma.student.findMany({
-            where: {
-              schoolId,
-              ...(classCandidates.length > 0
-                ? { OR: [{ classId: classRecord.id }, { class: { in: classCandidates } }] }
-                : { OR: [{ class: classRecord.name }, { class: classRecord.id }] }),
-            },
-            include: { user: true },
-            orderBy: { name: 'asc' },
-            take: 10000,
-          })
-        ).filter((s) => {
-          if (hasSubjectOnClass) return true
-          const selected = Array.isArray(s.selected_subjects) ? s.selected_subjects : []
-          if (selected.length === 0) return true
-          const targetName = String(subjectRecord.name || '')
-            .trim()
-            .toLowerCase()
-          const targetId = String(subjectRecord.id || '')
-            .trim()
-            .toLowerCase()
-          return selected.some((v) => {
-            const norm = String(v || '')
-              .trim()
-              .toLowerCase()
-            return norm === targetName || norm === targetId
-          })
+      ? await prisma.student.findMany({
+          where: {
+            schoolId,
+            ...(classOr.length > 0 ? { OR: classOr } : {}),
+          },
+          include: { user: true },
+          orderBy: { name: 'asc' },
+          take: 10000,
         })
       : []
 

@@ -181,7 +181,13 @@ export function StudentRosterCard({ title = 'Registered Students by Class' }) {
                 disabled={loadingClasses || !selectedYearGroup || classesInYearGroup.length === 0}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={loadingClasses ? 'Loading...' : 'Select'} />
+                  <span className="block truncate">
+                    {selectedClass?.name
+                      ? selectedClass.name
+                      : loadingClasses
+                        ? 'Loading...'
+                        : selectedClassId || 'Select'}
+                  </span>
                 </SelectTrigger>
                 <SelectContent>
                   {classesInYearGroup.map((c) => (

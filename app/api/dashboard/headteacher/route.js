@@ -177,7 +177,14 @@ export async function GET(request) {
 
     const resultWhere = {
       schoolId,
-      ...(termFilter ? { term: termFilter } : {}),
+      ...(termFilter
+        ? {
+            OR: [
+              { term: { equals: termFilter, mode: 'insensitive' } },
+              { term: { startsWith: termFilter } },
+            ],
+          }
+        : {}),
       ...(yearFilter ? { year: yearFilter } : {}),
     }
 

@@ -401,7 +401,8 @@ export const POST = withErrorHandler(async function POST(request) {
           : 'finalized'
 
       if (!studentId || !subjectId || !classId) continue
-      if (score !== null && (Number.isNaN(score) || score < 0 || score > 100)) continue
+      if (score === null) continue
+      if (Number.isNaN(score) || score < 0 || score > 100) continue
 
       const allowed = hasTeachingAssignments
         ? assignmentPairs.has(`${classId}:${subjectId}`)
@@ -467,7 +468,7 @@ export const POST = withErrorHandler(async function POST(request) {
         await tx.result.update({
           where: { id: existing.id },
           data: {
-            score: score ?? 0,
+            score,
             grade,
             enteredByUserId: auth.user.id,
             workflowStatus: normalizedWorkflowStatus,
@@ -479,7 +480,7 @@ export const POST = withErrorHandler(async function POST(request) {
             schoolId,
             studentId,
             subjectId,
-            score: score ?? 0,
+            score,
             grade,
             term,
             year,

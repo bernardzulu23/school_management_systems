@@ -31,6 +31,13 @@ export function HeadteacherAnalytics() {
     passRate: Number(t?.passRate || 0),
     resultsEntered: Number(t?.resultsEntered || 0),
   }))
+  const percentText = (value) => {
+    if (value === null || value === undefined) return '—'
+    if (typeof value === 'string' && value.trim() === '—') return '—'
+    const n = Number(value)
+    if (!Number.isFinite(n)) return '—'
+    return `${n}%`
+  }
   return (
     <div className="space-y-8">
       {/* Comprehensive Analytics Header */}
@@ -128,7 +135,7 @@ export function HeadteacherAnalytics() {
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-royalPurple-text1 font-semibold">{item.name}</span>
                         <span className={`font-bold ${percentTextClass(performance)}`}>
-                          {Number(performance) || 0}%
+                          {percentText(performance)}
                         </span>
                       </div>
                       <div className="w-full bg-royalPurple-muted/60 rounded-full h-2">
@@ -180,7 +187,7 @@ export function HeadteacherAnalytics() {
                   <div
                     className={`text-2xl font-bold ${percentTextClass(seniorResultsAnalysis.averageScore)}`}
                   >
-                    {Number(seniorResultsAnalysis.averageScore) || 0}%
+                    {percentText(seniorResultsAnalysis.averageScore)}
                   </div>
                   <div className="text-royalPurple-text2 text-sm">Average Score</div>
                 </div>
@@ -188,7 +195,7 @@ export function HeadteacherAnalytics() {
                   <div
                     className={`text-2xl font-bold ${percentTextClass(seniorResultsAnalysis.passRate)}`}
                   >
-                    {Number(seniorResultsAnalysis.passRate) || 0}%
+                    {percentText(seniorResultsAnalysis.passRate)}
                   </div>
                   <div className="text-royalPurple-text2 text-sm">Pass Rate</div>
                 </div>
