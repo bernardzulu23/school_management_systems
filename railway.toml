@@ -8,7 +8,7 @@ startCommand = "node server.js"
 preDeployCommand = "sh -lc \"set -ex; npx prisma migrate deploy\""
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
-healthcheckPath = "/api/health"
+healthcheckPath = "/api/ping"
 healthcheckTimeout = 300
 
 [deploy.env]

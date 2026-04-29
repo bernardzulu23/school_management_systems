@@ -8,6 +8,9 @@ export default async function proxy(request) {
   if (pathname === '/api/health') {
     return NextResponse.next()
   }
+  if (pathname === '/api/ping') {
+    return NextResponse.next()
+  }
 
   // 1. Rate Limiting
   const isAuthRoute = pathname.startsWith('/api/auth')
@@ -108,6 +111,7 @@ export default async function proxy(request) {
     '/api/onboarding/lipila/callback',
     '/api/school/current',
     '/api/health',
+    '/api/ping',
     '/login',
     '/register',
     '/manifest.json',
