@@ -5,21 +5,34 @@ import React, { useState } from 'react'
 export interface CardProps {
   children: React.ReactNode
   clickable?: boolean
+  variant?: 'white' | 'glass'
   className?: string
   style?: React.CSSProperties
   onClick?: () => void
 }
 
-export function Card({ children, clickable = false, className, style, onClick }: CardProps) {
+export function Card({
+  children,
+  clickable = false,
+  variant = 'white',
+  className,
+  style,
+  onClick,
+}: CardProps) {
   const [isHovered, setIsHovered] = useState(false)
 
   const baseStyles: React.CSSProperties = { ...style }
+  const baseClass =
+    variant === 'glass'
+      ? 'backdrop-blur-lg bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-3xl shadow-2xl'
+      : 'white-card border border-card shadow-sm'
 
   return (
     <div
       style={baseStyles}
       className={[
-        'white-card border border-card shadow-sm transition-all duration-200',
+        baseClass,
+        'transition-all duration-200',
         clickable ? 'cursor-pointer hover:shadow-md hover:border-brand-primary' : '',
         isHovered && clickable ? 'hover:border-brand-primary' : '',
         className,

@@ -120,10 +120,18 @@ function toTeacher(t: any, subjectsByName: Map<string, { id: string; name: strin
   }
 }
 
-function toClass(c: any, subjects: Array<{ id: string; name: string }>): Class {
+function toClass(c: any, fallbackSubjects: Array<{ id: string; name: string }>): Class {
   const name = String(c?.name || c?.className || 'Class').trim()
   const gradeRaw = String(c?.yearGroup || c?.year_group || c?.grade || '').match(/\d+/)?.[0]
   const grade = (Number(gradeRaw) as any) || 8
+  const subjects = Array.isArray(c?.subjects)
+    ? c.subjects
+        .map((s: any) => ({
+          id: String(s?.id || '').trim(),
+          name: String(s?.name || '').trim(),
+        }))
+        .filter((s: any) => s.id && s.name)
+    : fallbackSubjects
   return {
     id: String(c?.id || name),
     name,
@@ -222,7 +230,7 @@ function HeadteacherTimetablePageContent() {
         const classList = Array.isArray(classesJson?.data) ? classesJson.data : []
 
         const mappedTeachers = teacherList.map((t: any) => toTeacher(t, subjectsByName))
-        const mappedClasses = classList.map((c: any) => toClass(c, subjectRefs.slice(0, 10)))
+        const mappedClasses = classList.map((c: any) => toClass(c, subjectRefs))
 
         setTeachers(mappedTeachers)
         setClasses(mappedClasses)

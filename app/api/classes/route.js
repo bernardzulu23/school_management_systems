@@ -65,10 +65,27 @@ export async function GET(request) {
   const classes = await prisma.class.findMany({
     where: { schoolId },
     orderBy: [{ year_group: 'asc' }, { section: 'asc' }],
-    select: { id: true, name: true, year_group: true, section: true },
+    select: {
+      id: true,
+      name: true,
+      year_group: true,
+      section: true,
+      subjects: { select: { id: true, name: true } },
+      _count: { select: { students: true } },
+    },
   })
 
-  return NextResponse.json({ success: true, data: classes })
+  return NextResponse.json({
+    success: true,
+    data: classes.map((c) => ({
+      id: c.id,
+      name: c.name,
+      year_group: c.year_group,
+      section: c.section,
+      subjects: c.subjects || [],
+      studentCount: c._count?.students ?? 0,
+    })),
+  })
 }
 
 function parseClassInput(rawName) {

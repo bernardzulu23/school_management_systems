@@ -33,6 +33,14 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
       ? dashboardData.performance_trends
       : []
 
+  const percentText = (value) => {
+    if (value === null || value === undefined) return '—'
+    if (typeof value === 'string' && value.trim() === '—') return '—'
+    const n = Number(value)
+    if (!Number.isFinite(n)) return '—'
+    return `${n}%`
+  }
+
   return (
     <div className="space-y-8">
       {/* Critical Alert Banner */}
@@ -89,7 +97,7 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                 <p
                   className={`text-2xl font-bold mt-2 ${percentTextClass(schoolStats.studentAchievement)}`}
                 >
-                  {Number(schoolStats.studentAchievement) || 0}%
+                  {percentText(schoolStats.studentAchievement)}
                 </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">Based on recent results</p>
               </div>
@@ -101,7 +109,7 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                 <p
                   className={`text-2xl font-bold mt-2 ${percentTextClass(schoolStats.teacherEffectiveness)}`}
                 >
-                  {Number(schoolStats.teacherEffectiveness) || 0}%
+                  {percentText(schoolStats.teacherEffectiveness)}
                 </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">Based on student performance</p>
               </div>
@@ -113,7 +121,7 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                 <p
                   className={`text-2xl font-bold mt-2 ${percentTextClass(schoolStats.attendanceRate)}`}
                 >
-                  {Number(schoolStats.attendanceRate) || 0}%
+                  {percentText(schoolStats.attendanceRate)}
                 </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">Current term</p>
               </div>
@@ -123,7 +131,7 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                 </div>
                 <h3 className="text-royalPurple-text1 font-semibold">Pass Rate</h3>
                 <p className={`text-2xl font-bold mt-2 ${percentTextClass(schoolStats.passRate)}`}>
-                  {Number(schoolStats.passRate) || 0}%
+                  {percentText(schoolStats.passRate)}
                 </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">Current term</p>
               </div>

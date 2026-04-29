@@ -195,6 +195,7 @@ export const GET = withErrorHandler(async function GET(request) {
         ).filter((s) => {
           if (hasSubjectOnClass) return true
           const selected = Array.isArray(s.selected_subjects) ? s.selected_subjects : []
+          if (selected.length === 0) return true
           const targetName = String(subjectRecord.name || '')
             .trim()
             .toLowerCase()

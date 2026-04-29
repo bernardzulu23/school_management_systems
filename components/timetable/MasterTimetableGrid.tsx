@@ -179,19 +179,19 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
         key={String(a.id)}
         type="button"
         onClick={() => onCellClick(a)}
-        className="w-full text-left rounded-xl px-3 py-2 border bg-white/70 hover:bg-white/85 transition-colors zsms-hover-raise"
+        className="w-full text-left rounded-xl px-3 py-2 border bg-royalPurple-card/70 hover:bg-royalPurple-card/85 transition-colors zsms-hover-raise"
         style={{
           borderColor: border || b || 'rgba(148, 163, 184, 0.35)',
           background: bg || undefined,
         }}
       >
-        <div className="font-bold text-[13px] text-slate-900 truncate">
+        <div className="font-bold text-[13px] text-royalPurple-text1 truncate">
           {className.get(String(a.classId)) || 'Class'}
         </div>
-        <div className="text-[12px] text-slate-600 truncate">
+        <div className="text-[12px] text-royalPurple-text2 truncate">
           {roomName.get(String(a.classroomId)) || 'Room'}
         </div>
-        <div className="text-[12px] text-slate-600 truncate">
+        <div className="text-[12px] text-royalPurple-text2 truncate">
           {teacherName.get(String(a.teacherId)) || 'Teacher'}
         </div>
         {hasAny ? (

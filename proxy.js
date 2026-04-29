@@ -4,6 +4,8 @@ import { authMiddleware, roleCheck } from './lib/middleware/auth'
 
 export default async function proxy(request) {
   const { pathname } = request.nextUrl
+  const isRscRequest = request.nextUrl.searchParams.has('_rsc')
+  const isNextInternals = pathname.startsWith('/_next')
 
   if (pathname === '/api/health') {
     return NextResponse.next()
@@ -13,18 +15,26 @@ export default async function proxy(request) {
   }
 
   // 1. Rate Limiting
-  const isAuthRoute = pathname.startsWith('/api/auth')
-  const rateLimitOptions = isAuthRoute
-    ? pathname === '/api/auth/login'
-      ? { limit: 20, windowMs: 15 * 60 * 1000, keyPrefix: 'auth_login_ip_' }
-      : pathname === '/api/auth/register'
-        ? { limit: 20, windowMs: 15 * 60 * 1000, keyPrefix: 'auth_register_' }
-        : { limit: 100, windowMs: 15 * 60 * 1000, keyPrefix: 'auth_' }
-    : { limit: 100, windowMs: 15 * 60 * 1000 }
-  const rateLimitResult = rateLimiter(request, rateLimitOptions)
+  const shouldRateLimitApiOnly = pathname.startsWith('/api') && !isRscRequest && !isNextInternals
+  if (shouldRateLimitApiOnly) {
+    const isAuthRoute = pathname.startsWith('/api/auth')
+    const isTimetableRoute = pathname.startsWith('/api/timetable')
 
-  if (rateLimitResult.isLimited) {
-    return rateLimitResult.response
+    const rateLimitOptions = isAuthRoute
+      ? pathname === '/api/auth/login'
+        ? { limit: 20, windowMs: 15 * 60 * 1000, keyPrefix: 'auth_login_ip_' }
+        : pathname === '/api/auth/register'
+          ? { limit: 20, windowMs: 15 * 60 * 1000, keyPrefix: 'auth_register_' }
+          : { limit: 600, windowMs: 15 * 60 * 1000, keyPrefix: 'auth_' }
+      : isTimetableRoute
+        ? { limit: 1500, windowMs: 15 * 60 * 1000, keyPrefix: 'timetable_' }
+        : { limit: 3000, windowMs: 15 * 60 * 1000, keyPrefix: 'api_' }
+
+    const rateLimitResult = rateLimiter(request, rateLimitOptions)
+
+    if (rateLimitResult.isLimited) {
+      return rateLimitResult.response
+    }
   }
 
   // 1.5 CORS Handling
