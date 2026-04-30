@@ -87,6 +87,10 @@ model School {
   timetableNotifications TimetableNotification[]
   timetableConfig        TimetableConfig?
   timetableAllocationEntries TimetableAllocationEntry[]
+
+  departmentAllocations  DepartmentAllocation[]
+  masterTimetableEntries MasterTimetableEntry[]
+  allocationNotifications AllocationNotification[]
   
   // Join Table Relations
   activityParticipants ActivityParticipant[]
@@ -146,6 +150,11 @@ model User {
   teacherAllocations      TeacherAllocation[]     @relation("TeacherAllocations")
   sentTimetableNotifications TimetableNotification[] @relation("NotificationSender")
   receivedTimetableNotifications TimetableNotification[] @relation("NotificationReceiver")
+
+  createdAllocations      DepartmentAllocation[]  @relation("CreatedAllocations")
+  approvedAllocations     DepartmentAllocation[]  @relation("ApprovedAllocations")
+  allocationNotifications AllocationNotification[] @relation("AllocationNotificationAdmin")
+  masterTimetableEntries  MasterTimetableEntry[]  @relation("MasterEntryTeacher")
   
   @@unique([schoolId, email]) // Email must be unique per school
   @@index([schoolId])
@@ -390,6 +399,8 @@ model Department {
 
   teachers  TeacherDepartment[]
   hods      HeadOfDepartment[]
+  departmentAllocations  DepartmentAllocation[]
+  masterTimetableEntries MasterTimetableEntry[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1439,4 +1450,89 @@ model TimetableAllocationEntry {
   @@index([schoolId, teacherId, dayOfWeek])
   @@index([schoolId, classId, dayOfWeek])
   @@index([schoolId, status])
+}
+
+enum AllocationStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+model DepartmentAllocation {
+  id               String   @id @default(uuid())
+  schoolId         String
+  school           School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  departmentId     String
+  department       Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  status           AllocationStatus @default(DRAFT)
+
+  allocationData   Json
+
+  createdByUserId  String
+  createdBy        User     @relation("CreatedAllocations", fields: [createdByUserId], references: [id], onDelete: Cascade)
+
+  approvedByUserId String?
+  approvedBy       User?    @relation("ApprovedAllocations", fields: [approvedByUserId], references: [id], onDelete: SetNull)
+
+  submittedAt      DateTime?
+  approvedAt       DateTime?
+  rejectionReason  String?
+
+  masterEntries    MasterTimetableEntry[]
+  notifications    AllocationNotification[]
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([schoolId, departmentId, status])
+  @@index([createdByUserId])
+  @@index([approvedByUserId])
+}
+
+model MasterTimetableEntry {
+  id                  String   @id @default(uuid())
+  schoolId            String
+  school              School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  departmentId        String
+  department          Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  allocationId        String
+  allocation          DepartmentAllocation @relation(fields: [allocationId], references: [id], onDelete: Cascade)
+
+  teacherId           String
+  teacher             User     @relation("MasterEntryTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+
+  classes             String[]
+  subject             String
+  periodConfiguration String
+
+  insertedAt          DateTime @default(now())
+
+  @@index([schoolId, departmentId])
+  @@index([teacherId])
+  @@index([allocationId])
+}
+
+model AllocationNotification {
+  id            String   @id @default(uuid())
+  schoolId      String
+  school        School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  allocationId  String
+  allocation    DepartmentAllocation @relation(fields: [allocationId], references: [id], onDelete: Cascade)
+
+  adminUserId   String
+  admin         User     @relation("AllocationNotificationAdmin", fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  read          Boolean  @default(false)
+  readAt        DateTime?
+
+  createdAt     DateTime @default(now())
+
+  @@index([schoolId, adminUserId, read])
+  @@index([schoolId, allocationId])
 }
