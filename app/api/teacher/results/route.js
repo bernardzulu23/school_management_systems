@@ -312,7 +312,11 @@ export const POST = withErrorHandler(async function POST(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['TEACHER', 'teacher'])) {
+  const isTeacher = roleCheck(auth.user, ['TEACHER', 'teacher'])
+  const isHod = roleCheck(auth.user, ['HOD', 'hod'])
+  const isAdmin = roleCheck(auth.user, ['ADMIN', 'headteacher'])
+
+  if (!isTeacher && !isHod && !isAdmin) {
     throw new ApiError('Forbidden', 403)
   }
 
@@ -323,28 +327,32 @@ export const POST = withErrorHandler(async function POST(request) {
   const results = Array.isArray(body?.results) ? body.results : null
   if (!results) throw new ApiError('Invalid data format', 400)
 
-  const teacherProfile = await prisma.teacher.findFirst({
-    where: { userId: auth.user.id, schoolId },
-    select: {
-      id: true,
-      assignedSubjects: true,
-      classes: { select: { id: true, name: true } },
-      subjects: { select: { id: true, name: true, classId: true } },
-      teachingAssignments: { where: { schoolId }, select: { classId: true, subjectId: true } },
-    },
-  })
-  if (!teacherProfile) throw new ApiError('Teacher profile not found', 404)
+  const teacherProfile = isAdmin
+    ? null
+    : await prisma.teacher.findFirst({
+        where: { userId: auth.user.id, schoolId },
+        select: {
+          id: true,
+          assignedSubjects: true,
+          classes: { select: { id: true, name: true } },
+          subjects: { select: { id: true, name: true, classId: true } },
+          teachingAssignments: { where: { schoolId }, select: { classId: true, subjectId: true } },
+        },
+      })
+
+  const isStaffEntry = isAdmin || (isHod && !teacherProfile)
+  if (!isStaffEntry && !teacherProfile) throw new ApiError('Teacher profile not found', 404)
 
   const assignmentPairs = new Set(
-    (teacherProfile.teachingAssignments || [])
+    (teacherProfile?.teachingAssignments || [])
       .filter((a) => a?.classId && a?.subjectId)
       .map((a) => `${a.classId}:${a.subjectId}`)
   )
   const hasTeachingAssignments = assignmentPairs.size > 0
-  const allowedClassIds = new Set((teacherProfile.classes || []).map((c) => String(c.id)))
-  const allowedSubjectIds = new Set((teacherProfile.subjects || []).map((s) => String(s.id)))
+  const allowedClassIds = new Set((teacherProfile?.classes || []).map((c) => String(c.id)))
+  const allowedSubjectIds = new Set((teacherProfile?.subjects || []).map((s) => String(s.id)))
   const assignedSubjectTokens = new Set(
-    (Array.isArray(teacherProfile.assignedSubjects) ? teacherProfile.assignedSubjects : [])
+    (Array.isArray(teacherProfile?.assignedSubjects) ? teacherProfile.assignedSubjects : [])
       .map((v) =>
         String(v || '')
           .trim()
@@ -353,18 +361,21 @@ export const POST = withErrorHandler(async function POST(request) {
       .filter(Boolean)
   )
 
-  const subjectIdsInPayload = Array.from(
-    new Set(results.map((r) => String(r.subjectId || '').trim()).filter(Boolean))
-  )
-  const subjectsInPayload =
-    subjectIdsInPayload.length > 0
-      ? await prisma.subject.findMany({
-          where: { schoolId, id: { in: subjectIdsInPayload } },
-          select: { id: true, name: true },
-          take: 50000,
-        })
-      : []
-  const subjectNameById = new Map(subjectsInPayload.map((s) => [String(s.id), s.name]))
+  const subjectNameById = new Map()
+  if (!isStaffEntry) {
+    const subjectIdsInPayload = Array.from(
+      new Set(results.map((r) => String(r.subjectId || '').trim()).filter(Boolean))
+    )
+    const subjectsInPayload =
+      subjectIdsInPayload.length > 0
+        ? await prisma.subject.findMany({
+            where: { schoolId, id: { in: subjectIdsInPayload } },
+            select: { id: true, name: true },
+            take: 50000,
+          })
+        : []
+    for (const s of subjectsInPayload) subjectNameById.set(String(s.id), s.name)
+  }
 
   const conflicts = []
   let applied = 0
@@ -385,6 +396,34 @@ export const POST = withErrorHandler(async function POST(request) {
       c,
     ])
   )
+
+  const enrollmentKeys = new Set()
+  if (isStaffEntry) {
+    const studentIds = Array.from(
+      new Set(results.map((r) => String(r.studentId || r.pupilId || '').trim()).filter(Boolean))
+    )
+    const subjectIds = Array.from(
+      new Set(results.map((r) => String(r.subjectId || '').trim()).filter(Boolean))
+    )
+
+    const enrollments =
+      studentIds.length > 0 && classIds.length > 0 && subjectIds.length > 0
+        ? await prisma.pupilSubjectEnrollment.findMany({
+            where: {
+              schoolId,
+              classId: { in: classIds },
+              subjectId: { in: subjectIds },
+              pupilId: { in: studentIds },
+            },
+            select: { pupilId: true, classId: true, subjectId: true },
+            take: 50000,
+          })
+        : []
+
+    for (const e of enrollments) {
+      enrollmentKeys.add(`${e.pupilId}:${e.classId}:${e.subjectId}`)
+    }
+  }
 
   await prisma.$transaction(async (tx) => {
     for (const r of results) {
@@ -411,7 +450,7 @@ export const POST = withErrorHandler(async function POST(request) {
       const classRecord = classMap.get(classId)
       const isAssignedToClass =
         allowedClassIds.has(classId) ||
-        String(classRecord?.teacherId || '') === String(teacherProfile.id)
+        String(classRecord?.teacherId || '') === String(teacherProfile?.id || '')
 
       const subjectName = String(subjectNameById.get(subjectId) || '')
         .trim()
@@ -421,9 +460,11 @@ export const POST = withErrorHandler(async function POST(request) {
         assignedSubjectTokens.has(subjectId.toLowerCase()) ||
         (subjectName ? assignedSubjectTokens.has(subjectName) : false)
 
-      const allowed = hasTeachingAssignments
-        ? assignmentPairs.has(`${classId}:${subjectId}`)
-        : isAssignedToClass && isAssignedToSubject
+      const allowed = isStaffEntry
+        ? enrollmentKeys.has(`${studentId}:${classId}:${subjectId}`)
+        : hasTeachingAssignments
+          ? assignmentPairs.has(`${classId}:${subjectId}`)
+          : isAssignedToClass && isAssignedToSubject
 
       if (!allowed) {
         skippedNotAssigned += 1
@@ -533,7 +574,11 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['TEACHER', 'teacher'])) {
+  const isTeacher = roleCheck(auth.user, ['TEACHER', 'teacher'])
+  const isHod = roleCheck(auth.user, ['HOD', 'hod'])
+  const isAdmin = roleCheck(auth.user, ['ADMIN', 'headteacher'])
+
+  if (!isTeacher && !isHod && !isAdmin) {
     throw new ApiError('Forbidden', 403)
   }
 
@@ -543,6 +588,17 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
   const { searchParams } = new URL(request.url)
   const id = String(searchParams.get('id') || '').trim()
   if (!id) throw new ApiError('Result id is required', 400)
+
+  if (isAdmin) {
+    const result = await prisma.result.findFirst({
+      where: { id, schoolId },
+      select: { id: true },
+    })
+    if (!result) throw new ApiError('Result not found', 404)
+
+    await prisma.result.delete({ where: { id: result.id } })
+    return NextResponse.json({ success: true })
+  }
 
   const teacher = await prisma.teacher.findFirst({
     where: { userId: auth.user.id, schoolId },
