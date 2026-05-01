@@ -1,22 +1,36 @@
-import 'dotenv/config'
 import { defineConfig } from 'prisma/config'
 
-// Use process.env directly to avoid throwing if DATABASE_URL is missing during Docker build
-const databaseUrl = process.env.DATABASE_URL || 'postgresql://dummy:password@localhost:5432/db'
-const directUrl = process.env.DIRECT_URL || databaseUrl
+function loadEnvFile(filePath) {
+  try {
+    const fs = require('fs')
+    if (!fs.existsSync(filePath)) return
+    const raw = String(fs.readFileSync(filePath, 'utf8') || '')
+    for (const line of raw.split(/\r?\n/)) {
+      const trimmed = line.trim()
+      if (!trimmed || trimmed.startsWith('#')) continue
+      const withoutExport = trimmed.startsWith('export ') ? trimmed.slice(7).trim() : trimmed
+      const idx = withoutExport.indexOf('=')
+      if (idx <= 0) continue
+      const key = withoutExport.slice(0, idx).trim()
+      let value = withoutExport.slice(idx + 1).trim()
+      if (!key) continue
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1)
+      }
+      if (process.env[key] === undefined) process.env[key] = value
+    }
+  } catch {}
+}
 
-const usesMigrationsConnection = process.argv.some((arg) =>
-  ['migrate', 'db', 'introspect', 'push', 'deploy', 'reset'].includes(arg)
-)
-
-const prismaCliUrl = usesMigrationsConnection ? directUrl : databaseUrl
+loadEnvFile('.env')
+loadEnvFile('.env.local')
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',
   migrations: {
     seed: 'node prisma/seed.js',
-  },
-  datasource: {
-    url: prismaCliUrl,
   },
 })
