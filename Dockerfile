@@ -13,17 +13,16 @@ COPY prisma ./prisma
 
 RUN node -e "const fs=require('fs');const p='prisma/schema.prisma';const b=fs.readFileSync(p);if(b[0]===0xEF&&b[1]===0xBB&&b[2]===0xBF){fs.writeFileSync(p,b.slice(3));}"
 
-# 3. Use install instead of ci to handle the React 19 / Radix peer conflicts
-# This will ignore the lockfile sync issues that were crashing your build
+# 3. Install dependencies
 RUN npm ci --legacy-peer-deps
 
-# 4. Copy the rest of the source code
+# 4. Generate Prisma Client early (before copying rest of app)
+RUN npx prisma generate
+
+# 5. Copy the rest of the source code
 COPY . .
 
 RUN node -e "const fs=require('fs');const p='prisma/schema.prisma';const b=fs.readFileSync(p);if(b[0]===0xEF&&b[1]===0xBB&&b[2]===0xBF){fs.writeFileSync(p,b.slice(3));}"
-
-# 5. Generate Prisma Client (uses your prisma.config.ts)
-RUN npx prisma generate
 
 # 6. Build the Next.js app
 RUN npm run build
