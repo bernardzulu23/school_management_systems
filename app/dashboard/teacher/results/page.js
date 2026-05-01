@@ -293,40 +293,34 @@ export default function ResultEntryPage() {
 
   const syncOnce = async (payload) => {
     const headers = { 'Content-Type': 'application/json' }
-    const jsonBody = JSON.stringify(payload)
-    let body = jsonBody
-
-    const compressIfPossible = async () => {
-      if (jsonBody.length < 2000) return
-      if (typeof CompressionStream === 'undefined' || typeof TextEncoder === 'undefined') return
-
-      const cs = new CompressionStream('gzip')
-      const writer = cs.writable.getWriter()
-      await writer.write(new TextEncoder().encode(jsonBody))
-      await writer.close()
-      const compressed = await new Response(cs.readable).arrayBuffer()
-      headers['Content-Encoding'] = 'gzip'
-      body = new Uint8Array(compressed)
-    }
-
-    try {
-      await Promise.race([
-        compressIfPossible(),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('compress_timeout')), 1500)),
-      ])
-    } catch {}
+    const body = JSON.stringify(payload)
 
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 20000)
-    let res
-    try {
-      res = await fetch('/api/teacher/results', {
+
+    const postOnce = async () =>
+      fetch('/api/teacher/results', {
         method: 'POST',
         headers,
         body,
         credentials: 'include',
         signal: controller.signal,
       })
+
+    let res
+    try {
+      res = await postOnce()
+
+      if (res.status === 401 || res.status === 403) {
+        const refreshRes = await fetch('/api/auth/refresh', {
+          method: 'POST',
+          credentials: 'include',
+          cache: 'no-store',
+        })
+        if (refreshRes.ok) {
+          res = await postOnce()
+        }
+      }
     } catch (e) {
       if (e?.name === 'AbortError') throw new Error('Request timed out')
       throw e
@@ -341,7 +335,16 @@ export default function ResultEntryPage() {
       throw new Error('conflicts')
     }
 
-    if (!res.ok) throw new Error('Failed to save results')
+    if (!res.ok) {
+      const json = await res.json().catch(() => ({}))
+      throw new Error(
+        json?.message ||
+          json?.error ||
+          (res.status === 401 || res.status === 403
+            ? 'Session expired. Please login again.'
+            : `Failed to save results (${res.status})`)
+      )
+    }
     return res.json()
   }
 
