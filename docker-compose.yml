@@ -3,7 +3,7 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: TBGUIpaIMczwHWzrupsNdkGwiFLRDTTr
       POSTGRES_DB: zsms
     ports:
       - "5432:5432"
@@ -28,7 +28,7 @@ services:
     environment:
       NODE_ENV: production
       #DATABASE_URL: ${DATABASE_URL}
-      DATABASE_URL: "postgresql://postgres:postgres@db:5432/zsms"
+      DATABASE_URL: "postgresql://postgres:TBGUIpaIMczwHWzrupsNdkGwiFLRDTTr@db:5432/zsms"
       JWT_SECRET: ${JWT_SECRET}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
       SOLVER_SERVICE_URL: http://solver:8001

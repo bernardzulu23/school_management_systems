@@ -34,16 +34,24 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     throw new ApiError('Only SUBMITTED allocations can be rejected', 400)
   }
 
-  const updated = await prisma.departmentAllocation.update({
-    where: { id: allocation.id },
-    data: {
-      status: 'REJECTED',
-      rejectionReason,
-      approvedByUserId: auth.user.id,
-      approvedAt: new Date(),
-    },
-    select: { status: true, rejectionReason: true },
-  })
+  const now = new Date()
+
+  const [updated] = await prisma.$transaction([
+    prisma.departmentAllocation.update({
+      where: { id: allocation.id },
+      data: {
+        status: 'REJECTED',
+        rejectionReason,
+        approvedByUserId: auth.user.id,
+        approvedAt: now,
+      },
+      select: { status: true, rejectionReason: true },
+    }),
+    prisma.allocationNotification.updateMany({
+      where: { schoolId, allocationId: allocation.id, adminUserId: auth.user.id, read: false },
+      data: { read: true, readAt: now },
+    }),
+  ])
 
   return NextResponse.json({ status: updated.status, rejectionReason: updated.rejectionReason })
 })

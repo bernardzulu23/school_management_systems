@@ -1,74 +1,105 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useAuth } from '@/lib/auth'
-import { Plus, Trash2, Send, CheckCircle, BookOpen, Users, Clock } from 'lucide-react'
-
-const BLOCK_TYPES = [
-  { id: 'SINGLE', label: 'Singles only', desc: '40 min each', color: '#3b82f6' },
-  { id: 'DOUBLE', label: 'Doubles only', desc: '80 min each (uninterrupted)', color: '#8b5cf6' },
-  { id: 'TRIPLE', label: 'Triples only', desc: '120 min each', color: '#f59e0b' },
-  { id: 'MIXED', label: 'Mixed blocks', desc: 'Specify breakdown below', color: '#10b981' },
-]
+import { Plus, Trash2, Send, Bell, CheckCircle, AlertTriangle } from 'lucide-react'
 
 const TERMS = ['Term 1', 'Term 2', 'Term 3']
 
-function periodDescription(allocation) {
-  if (!allocation.blockType) return ''
-  if (allocation.blockType === 'SINGLE') return `${allocation.periodsPerWeek} × 40 min`
-  if (allocation.blockType === 'DOUBLE') return `${allocation.periodsPerWeek / 2} doubles × 80 min`
-  if (allocation.blockType === 'TRIPLE') return `${allocation.periodsPerWeek / 3} triples × 120 min`
-  if (allocation.blockType === 'MIXED') {
-    const parts = []
-    if (allocation.triplePeriods) parts.push(`${allocation.triplePeriods}×triple(120)`)
-    if (allocation.doublePeriods) parts.push(`${allocation.doublePeriods}×double(80)`)
-    if (allocation.singlePeriods) parts.push(`${allocation.singlePeriods}×single(40)`)
-    return parts.join(' + ')
-  }
-  return ''
+const PERIOD_PRESETS = [
+  {
+    id: 'p6',
+    label: '6 periods (3 doubles)',
+    cfg: { periods: 6, doubles: 3, triples: 0, singles: 0 },
+  },
+  {
+    id: 'p5',
+    label: '5 periods (1 double + 1 triple)',
+    cfg: { periods: 5, doubles: 1, triples: 1, singles: 0 },
+  },
+  {
+    id: 'p4',
+    label: '4 periods (2 doubles + 1 single)',
+    cfg: { periods: 4, doubles: 2, triples: 0, singles: 1 },
+  },
+]
+
+function normalizeString(v) {
+  return String(v || '').trim()
 }
 
-function validateMixed(a) {
-  const total = (a.singlePeriods || 0) * 1 + (a.doublePeriods || 0) * 2 + (a.triplePeriods || 0) * 3
-  return total === a.periodsPerWeek
+function normalizeClasses(v) {
+  if (Array.isArray(v)) return v.map((x) => String(x).trim()).filter(Boolean)
+  const raw = String(v || '').trim()
+  if (!raw) return []
+  return raw
+    .split(',')
+    .map((x) => x.trim())
+    .filter(Boolean)
+}
+
+function stringifyPeriodConfig(periodConfig) {
+  if (!periodConfig) return ''
+  if (typeof periodConfig === 'string') return periodConfig
+  const preset = normalizeString(periodConfig?.preset)
+  if (preset && preset !== 'custom') return preset
+  const singles = Number(periodConfig?.singles || 0)
+  const doubles = Number(periodConfig?.doubles || 0)
+  const triples = Number(periodConfig?.triples || 0)
+  const total = singles + doubles * 2 + triples * 3
+  const parts = []
+  if (triples) parts.push(`${triples} triple`)
+  if (doubles) parts.push(`${doubles} double`)
+  if (singles) parts.push(`${singles} single`)
+  return `${total} periods (${parts.join(' + ') || 'custom'})`
+}
+
+function statusBadge(status) {
+  const s = String(status || '').toUpperCase()
+  const map = {
+    DRAFT: { bg: '#261843', fg: '#f59e0b', bd: '#92400e', label: 'DRAFT' },
+    SUBMITTED: { bg: '#1f2937', fg: '#93c5fd', bd: '#1d4ed8', label: 'SUBMITTED' },
+    APPROVED: { bg: '#0f2318', fg: '#86efac', bd: '#166534', label: 'APPROVED' },
+    REJECTED: { bg: '#2a0f18', fg: '#fca5a5', bd: '#b91c1c', label: 'REJECTED' },
+  }
+  return map[s] || { bg: '#261843', fg: '#a78bfa', bd: '#3b2a66', label: s || 'UNKNOWN' }
 }
 
 export default function HODAllocationPage() {
-  const { user } = useAuth()
   const [term, setTerm] = useState('Term 1')
   const [academicYear, setAcademicYear] = useState(new Date().getFullYear().toString())
   const [teachers, setTeachers] = useState([])
+  const [departments, setDepartments] = useState([])
   const [subjects, setSubjects] = useState([])
-  const [classes, setClasses] = useState([])
   const [allocations, setAllocations] = useState([])
   const [loading, setLoading] = useState(true)
-  const [pushing, setPushing] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const [showForm, setShowForm] = useState(false)
+  const [editingId, setEditingId] = useState('')
+  const [showRejections, setShowRejections] = useState(false)
   const [form, setForm] = useState({
+    departmentId: '',
     teacherId: '',
-    subjectId: '',
-    classId: '',
-    periodsPerWeek: 5,
-    blockType: 'DOUBLE',
-    singlePeriods: 0,
-    doublePeriods: 0,
-    triplePeriods: 0,
-    notes: '',
+    classes: '',
+    subject: '',
+    periodPreset: 'p6',
+    customSingles: 0,
+    customDoubles: 0,
+    customTriples: 0,
   })
 
   useEffect(() => {
     loadData()
   }, [term, academicYear])
 
-  async function loadData() {
+  const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const [teachersRes, subjectsRes, classesRes, allocRes] = await Promise.all([
+      const [teachersRes, subjectsRes, departmentsRes, allocRes] = await Promise.all([
         fetch('/api/users?role=teacher'),
         fetch('/api/subjects'),
-        fetch('/api/classes'),
-        fetch(`/api/timetable/allocations?term=${term}&academicYear=${academicYear}`),
+        fetch('/api/departments'),
+        fetch('/api/allocations/my-department', { cache: 'no-store' }),
       ])
       const safeJson = async (res) => {
         try {
@@ -77,10 +108,10 @@ export default function HODAllocationPage() {
           return null
         }
       }
-      const [teachersData, subjectsData, classesData, allocData] = await Promise.all([
+      const [teachersData, subjectsData, departmentsData, allocData] = await Promise.all([
         safeJson(teachersRes),
         safeJson(subjectsRes),
-        safeJson(classesRes),
+        safeJson(departmentsRes),
         safeJson(allocRes),
       ])
 
@@ -95,7 +126,11 @@ export default function HODAllocationPage() {
           status: subjectsRes.status,
           body: subjectsData,
         }) ||
-        (!classesRes.ok && { label: 'Classes', status: classesRes.status, body: classesData }) ||
+        (!departmentsRes.ok && {
+          label: 'Departments',
+          status: departmentsRes.status,
+          body: departmentsData,
+        }) ||
         (!allocRes.ok && { label: 'Allocations', status: allocRes.status, body: allocData }) ||
         null
 
@@ -109,138 +144,160 @@ export default function HODAllocationPage() {
       const ensureArray = (v) => (Array.isArray(v) ? v : [])
       setTeachers(ensureArray(teachersData?.data || teachersData?.users || teachersData))
       setSubjects(ensureArray(subjectsData?.subjects || subjectsData?.data || subjectsData))
-      setClasses(ensureArray(classesData?.classes || classesData?.data || classesData))
+      const deptList = ensureArray(
+        departmentsData?.data || departmentsData?.departments || departmentsData
+      )
+      setDepartments(deptList)
       setAllocations(ensureArray(allocData?.allocations || allocData?.data || allocData))
+
+      if (!form.departmentId && deptList.length) {
+        setForm((f) => ({ ...f, departmentId: String(deptList[0]?.id || '') }))
+      }
     } catch (err) {
       toast.error(err?.message || 'Failed to load data')
     } finally {
       setLoading(false)
     }
-  }
+  }, [academicYear, form.departmentId, term])
 
-  function computeBlockBreakdown(blockType, periodsPerWeek) {
-    if (blockType === 'SINGLE')
-      return { singlePeriods: periodsPerWeek, doublePeriods: 0, triplePeriods: 0 }
-    if (blockType === 'DOUBLE')
-      return { singlePeriods: 0, doublePeriods: periodsPerWeek / 2, triplePeriods: 0 }
-    if (blockType === 'TRIPLE')
-      return { singlePeriods: 0, doublePeriods: 0, triplePeriods: periodsPerWeek / 3 }
-    return {
-      singlePeriods: form.singlePeriods,
-      doublePeriods: form.doublePeriods,
-      triplePeriods: form.triplePeriods,
+  const rejectedAllocations = useMemo(
+    () => allocations.filter((a) => String(a?.status || '').toUpperCase() === 'REJECTED'),
+    [allocations]
+  )
+
+  const statusCounts = useMemo(() => {
+    const counts = { DRAFT: 0, SUBMITTED: 0, APPROVED: 0, REJECTED: 0 }
+    for (const a of allocations) {
+      const s = String(a?.status || '').toUpperCase()
+      if (s in counts) counts[s] += 1
     }
+    return counts
+  }, [allocations])
+
+  function buildPeriodConfig() {
+    if (form.periodPreset === 'custom') {
+      const singles = Number(form.customSingles || 0)
+      const doubles = Number(form.customDoubles || 0)
+      const triples = Number(form.customTriples || 0)
+      const periods = singles + doubles * 2 + triples * 3
+      return { preset: 'custom', singles, doubles, triples, periods }
+    }
+    const preset = PERIOD_PRESETS.find((p) => p.id === form.periodPreset) || PERIOD_PRESETS[0]
+    return { preset: preset.id, label: preset.label, ...preset.cfg }
   }
 
   async function saveAllocation() {
-    if (!form.teacherId || !form.subjectId || !form.classId) {
-      toast.error('Select teacher, subject and class')
-      return
-    }
-    if (form.periodsPerWeek < 1 || form.periodsPerWeek > 20) {
-      toast.error('Periods per week must be between 1 and 20')
-      return
-    }
-    if (form.blockType === 'DOUBLE' && form.periodsPerWeek % 2 !== 0) {
-      toast.error('Doubles need an even number of periods (e.g. 4, 6, 8)')
-      return
-    }
-    if (form.blockType === 'TRIPLE' && form.periodsPerWeek % 3 !== 0) {
-      toast.error('Triples need periods divisible by 3 (e.g. 3, 6, 9)')
-      return
-    }
-    if (form.blockType === 'MIXED' && !validateMixed(form)) {
-      const total = form.singlePeriods * 1 + form.doublePeriods * 2 + form.triplePeriods * 3
-      toast.error(
-        `Period breakdown total (${total}) doesn't match periods per week (${form.periodsPerWeek})`
-      )
-      return
-    }
+    const departmentId = normalizeString(form.departmentId)
+    const teacherId = normalizeString(form.teacherId)
+    const subject = normalizeString(form.subject)
+    const classes = normalizeClasses(form.classes)
+    const periodConfig = buildPeriodConfig()
 
-    const payload = {
-      ...form,
-      term,
-      academicYear,
-      ...computeBlockBreakdown(form.blockType, form.periodsPerWeek),
+    if (!departmentId) return toast.error('Select department')
+    if (!teacherId) return toast.error('Select teacher')
+    if (!subject) return toast.error('Enter subject')
+    if (classes.length === 0) return toast.error('Enter at least one class')
+
+    if (periodConfig.preset === 'custom') {
+      const total = Number(periodConfig?.periods || 0)
+      if (total <= 0) return toast.error('Custom period config must total at least 1 period')
     }
 
     try {
-      const res = await fetch('/api/timetable/allocations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-      const data = await res.json()
-      if (!res.ok) {
-        toast.error(data.error)
-        return
+      if (editingId) {
+        const res = await fetch(`/api/allocations/${editingId}/update`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ teacherId, classes, subject, periodConfig }),
+        })
+        const data = await res.json().catch(() => ({}))
+        if (!res.ok) throw new Error(data?.message || data?.error || 'Failed to update allocation')
+        toast.success('Allocation updated')
+      } else {
+        const res = await fetch('/api/allocations/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ departmentId, teacherId, classes, subject, periodConfig }),
+        })
+        const data = await res.json().catch(() => ({}))
+        if (!res.ok) throw new Error(data?.message || data?.error || 'Failed to create allocation')
+        toast.success('Allocation created')
       }
-      toast.success('Allocation saved')
+
       setShowForm(false)
-      setForm({
+      setEditingId('')
+      setForm((f) => ({
+        ...f,
         teacherId: '',
-        subjectId: '',
-        classId: '',
-        periodsPerWeek: 5,
-        blockType: 'DOUBLE',
-        singlePeriods: 0,
-        doublePeriods: 0,
-        triplePeriods: 0,
-        notes: '',
-      })
+        classes: '',
+        subject: '',
+        periodPreset: 'p6',
+        customSingles: 0,
+        customDoubles: 0,
+        customTriples: 0,
+      }))
       loadData()
-    } catch {
-      toast.error('Failed to save')
+    } catch (e) {
+      toast.error(e?.message || 'Failed to save')
+    }
+  }
+
+  async function submitAllocation(id) {
+    if (!id) return
+    setSubmitting(true)
+    try {
+      const res = await fetch(`/api/allocations/${id}/submit`, { method: 'POST' })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data?.message || data?.error || 'Failed to submit')
+      toast.success('Submitted to admin')
+      loadData()
+    } catch (e) {
+      toast.error(e?.message || 'Failed to submit')
+    } finally {
+      setSubmitting(false)
     }
   }
 
   async function deleteAllocation(id) {
     try {
-      const res = await fetch(`/api/timetable/allocations/${id}`, { method: 'DELETE' })
-      if (res.ok) {
-        toast.success('Deleted')
-        loadData()
-      }
-    } catch {
-      toast.error('Failed to delete')
-    }
-  }
-
-  async function pushToHeadteacher() {
-    const draftCount = allocations.filter((a) => a.status === 'draft').length
-    if (draftCount === 0) {
-      toast.error('No draft allocations to push')
-      return
-    }
-
-    setPushing(true)
-    try {
-      const res = await fetch('/api/timetable/allocations/push', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ term, academicYear }),
-      })
-      const data = await res.json()
-      if (!res.ok) {
-        toast.error(data.error)
-        return
-      }
-      toast.success(`✓ ${data.message}`)
+      const res = await fetch(`/api/allocations/${id}`, { method: 'DELETE' })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data?.message || data?.error || 'Failed to delete')
+      toast.success('Deleted')
       loadData()
-    } catch {
-      toast.error('Failed to push')
-    } finally {
-      setPushing(false)
+    } catch (e) {
+      toast.error(e?.message || 'Failed to delete')
     }
   }
 
-  const draftAllocations = allocations.filter((a) => a.status === 'draft')
-  const pushedAllocations = allocations.filter((a) => a.status === 'pushed')
-  const totalPeriods = allocations.reduce((s, a) => s + a.periodsPerWeek, 0)
+  function startEdit(a) {
+    const status = String(a?.status || '').toUpperCase()
+    if (status !== 'DRAFT' && status !== 'REJECTED') return
+    const data = a?.allocationData && typeof a.allocationData === 'object' ? a.allocationData : {}
+    const teacherId = normalizeString(data?.teacherId)
+    const classes = Array.isArray(data?.classes) ? data.classes.join(', ') : ''
+    const subject = normalizeString(data?.subject)
+    const periodConfig = data?.periodConfig ?? null
+    const periodPreset =
+      typeof periodConfig === 'object' && periodConfig?.preset ? String(periodConfig.preset) : 'p6'
+
+    setEditingId(String(a.id))
+    setShowForm(true)
+    setForm((f) => ({
+      ...f,
+      departmentId: String(a.departmentId || f.departmentId || ''),
+      teacherId,
+      classes,
+      subject,
+      periodPreset: periodPreset === 'custom' ? 'custom' : periodPreset || 'p6',
+      customSingles: Number(periodConfig?.singles || 0),
+      customDoubles: Number(periodConfig?.doubles || 0),
+      customTriples: Number(periodConfig?.triples || 0),
+    }))
+  }
 
   return (
     <div style={{ padding: '1.5rem', background: '#170d28', minHeight: '100vh', color: '#ede9fe' }}>
-      {/* Header */}
       <div
         style={{
           display: 'flex',
@@ -254,10 +311,133 @@ export default function HODAllocationPage() {
         <div>
           <h1 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>Class Allocation</h1>
           <p style={{ color: '#a78bfa', fontSize: 13, margin: '4px 0 0' }}>
-            Assign teachers to subjects and classes with period configurations
+            Create department allocations and submit them for admin approval
           </p>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <div style={{ position: 'relative' }}>
+            <button
+              type="button"
+              onClick={() => setShowRejections((v) => !v)}
+              style={{
+                background: 'none',
+                border: '1px solid #3b2a66',
+                color: '#a78bfa',
+                cursor: 'pointer',
+                position: 'relative',
+                padding: '8px 10px',
+                borderRadius: 8,
+              }}
+            >
+              <Bell size={16} />
+              {rejectedAllocations.length > 0 && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: -6,
+                    right: -6,
+                    background: '#ef4444',
+                    color: '#fff',
+                    fontSize: 10,
+                    fontWeight: 700,
+                    padding: '1px 6px',
+                    borderRadius: 999,
+                    border: '2px solid #170d28',
+                  }}
+                >
+                  {rejectedAllocations.length}
+                </span>
+              )}
+            </button>
+
+            {showRejections && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 8px)',
+                  right: 0,
+                  width: 360,
+                  maxWidth: '85vw',
+                  background: '#2d1f4e',
+                  borderRadius: 12,
+                  border: '1px solid #3b2a66',
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                  zIndex: 50,
+                  overflow: 'hidden',
+                }}
+              >
+                <div
+                  style={{
+                    padding: '10px 12px',
+                    borderBottom: '1px solid #3b2a66',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <span style={{ fontWeight: 800, fontSize: 12 }}>Rejection Feedback</span>
+                  <button
+                    type="button"
+                    onClick={() => setShowRejections(false)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#a78bfa',
+                      cursor: 'pointer',
+                      fontSize: 11,
+                      fontWeight: 700,
+                    }}
+                  >
+                    Close
+                  </button>
+                </div>
+
+                <div style={{ maxHeight: 360, overflowY: 'auto' }}>
+                  {rejectedAllocations.length === 0 ? (
+                    <div style={{ padding: 18, color: '#a78bfa', fontSize: 12 }}>
+                      No rejected allocations
+                    </div>
+                  ) : (
+                    rejectedAllocations.map((a) => (
+                      <button
+                        key={a.id}
+                        type="button"
+                        onClick={() => startEdit(a)}
+                        style={{
+                          width: '100%',
+                          textAlign: 'left',
+                          padding: '12px 12px',
+                          border: 'none',
+                          background: 'transparent',
+                          cursor: 'pointer',
+                          borderBottom: '1px solid #261843',
+                          color: '#ede9fe',
+                        }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
+                          <div style={{ fontWeight: 800, fontSize: 12 }}>
+                            {a.department?.name || 'Department'}
+                          </div>
+                          <div style={{ fontSize: 11, color: '#fca5a5', fontWeight: 800 }}>
+                            REJECTED
+                          </div>
+                        </div>
+                        <div style={{ fontSize: 12, color: '#a78bfa', marginTop: 4 }}>
+                          {String(a.rejectionReason || 'No reason provided')}
+                        </div>
+                        <div
+                          style={{ fontSize: 11, color: '#7c3aed', marginTop: 8, fontWeight: 800 }}
+                        >
+                          Click to edit and resubmit
+                        </div>
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
           <select value={term} onChange={(e) => setTerm(e.target.value)} style={selectStyle}>
             {TERMS.map((t) => (
               <option key={t}>{t}</option>
@@ -272,16 +452,9 @@ export default function HODAllocationPage() {
           <button onClick={() => setShowForm(true)} style={btnStyle('#7c3aed')}>
             <Plus size={14} /> Add Allocation
           </button>
-          {draftAllocations.length > 0 && (
-            <button onClick={pushToHeadteacher} disabled={pushing} style={btnStyle('#16a34a')}>
-              <Send size={14} />{' '}
-              {pushing ? 'Sending...' : `Push ${draftAllocations.length} to Headteacher`}
-            </button>
-          )}
         </div>
       </div>
 
-      {/* Stats row */}
       <div
         style={{
           display: 'grid',
@@ -292,18 +465,14 @@ export default function HODAllocationPage() {
       >
         {[
           {
-            icon: <Users size={16} />,
-            label: 'Teachers assigned',
-            value: [...new Set(allocations.map((a) => a.teacherId))].length,
-          },
-          { icon: <BookOpen size={16} />, label: 'Allocations total', value: allocations.length },
-          { icon: <Clock size={16} />, label: 'Periods per week', value: totalPeriods },
-          {
             icon: <CheckCircle size={16} />,
-            label: 'Pushed to HT',
-            value: pushedAllocations.length,
+            label: 'Approved',
+            value: statusCounts.APPROVED,
             green: true,
           },
+          { icon: <Send size={16} />, label: 'Submitted', value: statusCounts.SUBMITTED },
+          { icon: <AlertTriangle size={16} />, label: 'Rejected', value: statusCounts.REJECTED },
+          { icon: <Plus size={16} />, label: 'Draft', value: statusCounts.DRAFT },
         ].map((s, i) => (
           <div
             key={i}
@@ -333,7 +502,6 @@ export default function HODAllocationPage() {
         ))}
       </div>
 
-      {/* Add allocation modal */}
       {showForm && (
         <div
           style={{
@@ -360,8 +528,23 @@ export default function HODAllocationPage() {
             }}
           >
             <h2 style={{ fontSize: 17, fontWeight: 700, marginBottom: '1rem' }}>
-              New Class Allocation
+              {editingId ? 'Edit Allocation' : 'New Allocation'}
             </h2>
+
+            <FormRow label="Department *">
+              <select
+                value={form.departmentId}
+                onChange={(e) => setForm((f) => ({ ...f, departmentId: e.target.value }))}
+                style={inputStyle}
+              >
+                <option value="">Select department</option>
+                {departments.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.name}
+                  </option>
+                ))}
+              </select>
+            </FormRow>
 
             <FormRow label="Teacher *">
               <select
@@ -372,178 +555,174 @@ export default function HODAllocationPage() {
                 <option value="">Select teacher</option>
                 {teachers.map((t) => (
                   <option key={t.id} value={t.id}>
-                    {t.name}{' '}
-                    {t.teacherProfile?.department ? `(${t.teacherProfile.department})` : ''}
+                    {t.name}
                   </option>
                 ))}
               </select>
+            </FormRow>
+
+            <FormRow label="Classes *">
+              <input
+                value={form.classes}
+                onChange={(e) => setForm((f) => ({ ...f, classes: e.target.value }))}
+                placeholder="e.g. Form 1B, Grade 10"
+                style={inputStyle}
+              />
             </FormRow>
 
             <FormRow label="Subject *">
-              <select
-                value={form.subjectId}
-                onChange={(e) => setForm((f) => ({ ...f, subjectId: e.target.value }))}
-                style={inputStyle}
-              >
-                <option value="">Select subject</option>
-                {subjects.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
-            </FormRow>
-
-            <FormRow label="Class *">
-              <select
-                value={form.classId}
-                onChange={(e) => setForm((f) => ({ ...f, classId: e.target.value }))}
-                style={inputStyle}
-              >
-                <option value="">Select class</option>
-                {classes.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </FormRow>
-
-            <FormRow label="Periods per week *">
               <input
-                type="number"
-                min={1}
-                max={20}
-                value={form.periodsPerWeek}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, periodsPerWeek: parseInt(e.target.value) || 1 }))
-                }
-                style={{ ...inputStyle, width: 80 }}
+                value={form.subject}
+                onChange={(e) => setForm((f) => ({ ...f, subject: e.target.value }))}
+                placeholder="e.g. Mathematics"
+                list="subject-list"
+                style={inputStyle}
               />
-              <span style={{ fontSize: 12, color: '#6d28d9', marginLeft: 8 }}>
-                = {form.periodsPerWeek * 40} minutes/week total
-              </span>
+              <datalist id="subject-list">
+                {subjects.map((s) => (
+                  <option key={s.id} value={String(s.name)} />
+                ))}
+              </datalist>
             </FormRow>
 
-            <FormRow label="Block type *">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
-                {BLOCK_TYPES.map((bt) => (
-                  <button
-                    key={bt.id}
-                    onClick={() => setForm((f) => ({ ...f, blockType: bt.id }))}
+            <FormRow label="Period configuration *">
+              <div style={{ width: '100%' }}>
+                <div style={{ display: 'grid', gap: 8 }}>
+                  {PERIOD_PRESETS.map((p) => (
+                    <label
+                      key={p.id}
+                      style={{
+                        display: 'flex',
+                        gap: 8,
+                        alignItems: 'center',
+                        padding: '10px 12px',
+                        background: form.periodPreset === p.id ? '#170d28' : '#261843',
+                        borderRadius: 10,
+                        border: `1px solid ${form.periodPreset === p.id ? '#7c3aed' : '#3b2a66'}`,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        name="periodPreset"
+                        checked={form.periodPreset === p.id}
+                        onChange={() => setForm((f) => ({ ...f, periodPreset: p.id }))}
+                      />
+                      <span style={{ fontSize: 13, fontWeight: 700 }}>{p.label}</span>
+                    </label>
+                  ))}
+                  <label
                     style={{
-                      padding: '8px 10px',
-                      borderRadius: 8,
-                      border: `1px solid ${form.blockType === bt.id ? bt.color : '#3b2a66'}`,
-                      background: form.blockType === bt.id ? `${bt.color}20` : 'transparent',
-                      color: form.blockType === bt.id ? bt.color : '#a78bfa',
+                      display: 'flex',
+                      gap: 8,
+                      alignItems: 'center',
+                      padding: '10px 12px',
+                      background: form.periodPreset === 'custom' ? '#170d28' : '#261843',
+                      borderRadius: 10,
+                      border: `1px solid ${form.periodPreset === 'custom' ? '#7c3aed' : '#3b2a66'}`,
                       cursor: 'pointer',
-                      textAlign: 'left',
                     }}
                   >
-                    <div style={{ fontWeight: 600, fontSize: 12 }}>{bt.label}</div>
-                    <div style={{ fontSize: 10, opacity: 0.8 }}>{bt.desc}</div>
-                  </button>
-                ))}
-              </div>
-            </FormRow>
-
-            {/* MIXED breakdown */}
-            {form.blockType === 'MIXED' && (
-              <div
-                style={{
-                  background: '#261843',
-                  borderRadius: 8,
-                  padding: '12px',
-                  marginBottom: 12,
-                  border: '1px solid #3b2a66',
-                }}
-              >
-                <p style={{ fontSize: 12, color: '#a78bfa', marginBottom: 8 }}>
-                  Breakdown (must total {form.periodsPerWeek} periods):
-                </p>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
-                  {[
-                    ['Triple periods (×3)', 'triplePeriods', '#f59e0b'],
-                    ['Double periods (×2)', 'doublePeriods', '#8b5cf6'],
-                    ['Single periods (×1)', 'singlePeriods', '#3b82f6'],
-                  ].map(([label, key, color]) => (
-                    <div key={key}>
-                      <label style={{ fontSize: 10, color, display: 'block', marginBottom: 4 }}>
-                        {label}
-                      </label>
-                      <input
-                        type="number"
-                        min={0}
-                        value={form[key]}
-                        onChange={(e) =>
-                          setForm((f) => ({ ...f, [key]: parseInt(e.target.value) || 0 }))
-                        }
-                        style={{ ...inputStyle, color }}
-                      />
-                    </div>
-                  ))}
+                    <input
+                      type="radio"
+                      name="periodPreset"
+                      checked={form.periodPreset === 'custom'}
+                      onChange={() => setForm((f) => ({ ...f, periodPreset: 'custom' }))}
+                    />
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>Custom</span>
+                  </label>
                 </div>
-                {(() => {
-                  const total =
-                    form.singlePeriods * 1 + form.doublePeriods * 2 + form.triplePeriods * 3
-                  const ok = total === form.periodsPerWeek
-                  return (
-                    <p style={{ fontSize: 11, color: ok ? '#86efac' : '#fca5a5', marginTop: 6 }}>
-                      {ok
-                        ? `✓ ${total} periods = ${form.periodsPerWeek}`
-                        : `✗ ${total} ≠ ${form.periodsPerWeek} (adjust breakdown)`}
-                    </p>
-                  )
-                })()}
-              </div>
-            )}
 
-            <FormRow label="Notes">
-              <input
-                value={form.notes}
-                onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
-                placeholder="Optional notes for the headteacher"
-                style={inputStyle}
-              />
+                {form.periodPreset === 'custom' && (
+                  <div
+                    style={{
+                      marginTop: 10,
+                      background: '#261843',
+                      border: '1px solid #3b2a66',
+                      borderRadius: 12,
+                      padding: 12,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+                        gap: 10,
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontSize: 11, fontWeight: 800, color: '#a78bfa' }}>
+                          Singles
+                        </div>
+                        <input
+                          type="number"
+                          min={0}
+                          value={form.customSingles}
+                          onChange={(e) =>
+                            setForm((f) => ({ ...f, customSingles: Number(e.target.value) || 0 }))
+                          }
+                          style={inputStyle}
+                        />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 11, fontWeight: 800, color: '#a78bfa' }}>
+                          Doubles
+                        </div>
+                        <input
+                          type="number"
+                          min={0}
+                          value={form.customDoubles}
+                          onChange={(e) =>
+                            setForm((f) => ({ ...f, customDoubles: Number(e.target.value) || 0 }))
+                          }
+                          style={inputStyle}
+                        />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 11, fontWeight: 800, color: '#a78bfa' }}>
+                          Triples
+                        </div>
+                        <input
+                          type="number"
+                          min={0}
+                          value={form.customTriples}
+                          onChange={(e) =>
+                            setForm((f) => ({ ...f, customTriples: Number(e.target.value) || 0 }))
+                          }
+                          style={inputStyle}
+                        />
+                      </div>
+                    </div>
+
+                    <div style={{ marginTop: 10, fontSize: 12, color: '#a78bfa', fontWeight: 700 }}>
+                      Total periods:{' '}
+                      {Number(form.customSingles || 0) +
+                        Number(form.customDoubles || 0) * 2 +
+                        Number(form.customTriples || 0) * 3}
+                    </div>
+                  </div>
+                )}
+              </div>
             </FormRow>
-
-            {/* Preview */}
-            {form.teacherId && form.subjectId && form.classId && (
-              <div
-                style={{
-                  background: '#170d28',
-                  borderRadius: 8,
-                  padding: '10px 12px',
-                  marginBottom: 12,
-                  border: '1px solid #7c3aed',
-                }}
-              >
-                <p style={{ fontSize: 12, color: '#7c3aed', margin: 0 }}>Preview:</p>
-                <p style={{ fontSize: 13, color: '#ede9fe', margin: '4px 0 0', fontWeight: 600 }}>
-                  {teachers.find((t) => t.id === form.teacherId)?.name} →{' '}
-                  {subjects.find((s) => s.id === form.subjectId)?.name} →{' '}
-                  {classes.find((c) => c.id === form.classId)?.name}
-                </p>
-                <p style={{ fontSize: 12, color: '#a78bfa', margin: '2px 0 0' }}>
-                  {periodDescription(form)} ({form.periodsPerWeek} periods/week)
-                </p>
-              </div>
-            )}
 
             <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 8 }}>
-              <button onClick={() => setShowForm(false)} style={btnStyle('#261843')}>
+              <button
+                onClick={() => {
+                  setShowForm(false)
+                  setEditingId('')
+                }}
+                style={btnStyle('#261843')}
+              >
                 Cancel
               </button>
               <button onClick={saveAllocation} style={btnStyle('#7c3aed')}>
-                Save Allocation
+                {editingId ? 'Update' : 'Save'}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Allocations table */}
       {loading ? (
         <div style={{ textAlign: 'center', padding: '3rem', color: '#6d28d9' }}>
           Loading allocations...
@@ -558,9 +737,7 @@ export default function HODAllocationPage() {
             border: '1px solid #3b2a66',
           }}
         >
-          <p style={{ color: '#6d28d9', marginBottom: 12 }}>
-            No allocations yet for {term} {academicYear}
-          </p>
+          <p style={{ color: '#6d28d9', marginBottom: 12 }}>No allocations yet</p>
           <button onClick={() => setShowForm(true)} style={btnStyle('#7c3aed')}>
             <Plus size={14} /> Add First Allocation
           </button>
@@ -577,76 +754,132 @@ export default function HODAllocationPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ background: '#170d28' }}>
-                {[
-                  'Teacher',
-                  'Subject',
-                  'Class',
-                  'Periods / Block',
-                  'Total min/week',
-                  'Status',
-                  '',
-                ].map((h) => (
-                  <th
-                    key={h}
-                    style={{
-                      padding: '10px 14px',
-                      textAlign: 'left',
-                      fontSize: 11,
-                      color: '#6d28d9',
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.06em',
-                      borderBottom: '1px solid #3b2a66',
-                    }}
-                  >
-                    {h}
-                  </th>
-                ))}
+                {['Department', 'Teacher', 'Classes', 'Subject', 'Period config', 'Status', ''].map(
+                  (h) => (
+                    <th
+                      key={h}
+                      style={{
+                        padding: '10px 14px',
+                        textAlign: 'left',
+                        fontSize: 11,
+                        color: '#6d28d9',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                        borderBottom: '1px solid #3b2a66',
+                      }}
+                    >
+                      {h}
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
             <tbody>
               {allocations.map((a) => (
                 <tr key={a.id} style={{ borderBottom: '1px solid #261843' }}>
-                  <td style={tdStyle}>{a.teacher?.name || '—'}</td>
-                  <td style={tdStyle}>{a.subject?.name || '—'}</td>
-                  <td style={tdStyle}>{a.class?.name || '—'}</td>
+                  <td style={tdStyle}>{a.department?.name || '—'}</td>
                   <td style={tdStyle}>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: '#ede9fe' }}>
-                      {a.periodsPerWeek} periods
-                    </div>
-                    <div style={{ fontSize: 11, color: '#a78bfa' }}>{periodDescription(a)}</div>
-                  </td>
-                  <td style={tdStyle}>{a.periodsPerWeek * 40} min</td>
-                  <td style={tdStyle}>
-                    <span
-                      style={{
-                        fontSize: 11,
-                        padding: '3px 8px',
-                        borderRadius: 99,
-                        fontWeight: 600,
-                        background: a.status === 'pushed' ? '#0f2318' : '#261843',
-                        color: a.status === 'pushed' ? '#86efac' : '#f59e0b',
-                        border: `1px solid ${a.status === 'pushed' ? '#166534' : '#92400e'}`,
-                      }}
-                    >
-                      {a.status === 'pushed' ? '✓ Pushed' : 'Draft'}
-                    </span>
+                    {teachers.find(
+                      (t) => String(t.id) === String(a?.allocationData?.teacherId || '')
+                    )?.name || '—'}
                   </td>
                   <td style={tdStyle}>
-                    {a.status === 'draft' && (
-                      <button
-                        onClick={() => deleteAllocation(a.id)}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: '#fca5a5',
-                          cursor: 'pointer',
-                          padding: 4,
-                        }}
+                    {Array.isArray(a?.allocationData?.classes)
+                      ? a.allocationData.classes.join(', ')
+                      : normalizeString(a?.allocationData?.classes) || '—'}
+                  </td>
+                  <td style={tdStyle}>{normalizeString(a?.allocationData?.subject) || '—'}</td>
+                  <td style={tdStyle}>
+                    {stringifyPeriodConfig(a?.allocationData?.periodConfig) || '—'}
+                  </td>
+                  <td style={tdStyle}>
+                    {(() => {
+                      const b = statusBadge(a.status)
+                      return (
+                        <span
+                          style={{
+                            fontSize: 11,
+                            padding: '3px 8px',
+                            borderRadius: 99,
+                            fontWeight: 800,
+                            background: b.bg,
+                            color: b.fg,
+                            border: `1px solid ${b.bd}`,
+                          }}
+                        >
+                          {b.label}
+                        </span>
+                      )
+                    })()}
+                    {String(a?.status || '').toUpperCase() === 'REJECTED' && a?.rejectionReason ? (
+                      <div
+                        style={{ marginTop: 6, fontSize: 11, color: '#fca5a5', fontWeight: 700 }}
                       >
-                        <Trash2 size={14} />
-                      </button>
-                    )}
+                        {String(a.rejectionReason)}
+                      </div>
+                    ) : null}
+                  </td>
+                  <td style={tdStyle}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+                      {(String(a?.status || '').toUpperCase() === 'DRAFT' ||
+                        String(a?.status || '').toUpperCase() === 'REJECTED') && (
+                        <button
+                          type="button"
+                          onClick={() => startEdit(a)}
+                          style={{
+                            background: 'none',
+                            border: '1px solid #3b2a66',
+                            color: '#a78bfa',
+                            cursor: 'pointer',
+                            padding: '4px 10px',
+                            borderRadius: 8,
+                            fontSize: 12,
+                            fontWeight: 800,
+                          }}
+                        >
+                          Edit
+                        </button>
+                      )}
+
+                      {(String(a?.status || '').toUpperCase() === 'DRAFT' ||
+                        String(a?.status || '').toUpperCase() === 'REJECTED') && (
+                        <button
+                          type="button"
+                          onClick={() => submitAllocation(a.id)}
+                          disabled={submitting}
+                          style={{
+                            background: '#16a34a',
+                            border: 'none',
+                            color: '#fff',
+                            cursor: 'pointer',
+                            padding: '4px 10px',
+                            borderRadius: 8,
+                            fontSize: 12,
+                            fontWeight: 800,
+                            opacity: submitting ? 0.7 : 1,
+                          }}
+                        >
+                          <Send size={14} /> Submit
+                        </button>
+                      )}
+
+                      {String(a?.status || '').toUpperCase() === 'DRAFT' && (
+                        <button
+                          type="button"
+                          onClick={() => deleteAllocation(a.id)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#fca5a5',
+                            cursor: 'pointer',
+                            padding: 4,
+                          }}
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

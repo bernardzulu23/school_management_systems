@@ -41,8 +41,9 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   })
   if (!allocation) throw new ApiError('Not found', 404)
   if (allocation.createdByUserId !== auth.user.id) throw new ApiError('Forbidden', 403)
-  if (allocation.status !== 'DRAFT')
-    throw new ApiError('Only DRAFT allocations can be updated', 400)
+  if (allocation.status !== 'DRAFT' && allocation.status !== 'REJECTED') {
+    throw new ApiError('Only DRAFT or REJECTED allocations can be updated', 400)
+  }
 
   const body = await request.json().catch(() => ({}))
 

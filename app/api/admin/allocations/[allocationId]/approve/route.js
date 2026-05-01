@@ -76,6 +76,11 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       select: { id: true, insertedAt: true },
     })
 
+    await tx.allocationNotification.updateMany({
+      where: { schoolId, allocationId: allocation.id, adminUserId: auth.user.id, read: false },
+      data: { read: true, readAt: now },
+    })
+
     return { updated, masterEntry }
   })
 

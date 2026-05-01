@@ -329,7 +329,7 @@ export const POST = withErrorHandler(async function POST(request) {
       id: true,
       assignedSubjects: true,
       classes: { select: { id: true, name: true } },
-      subjects: { select: { id: true, name: true } },
+      subjects: { select: { id: true, name: true, classId: true } },
       teachingAssignments: { where: { schoolId }, select: { classId: true, subjectId: true } },
     },
   })
@@ -343,6 +343,10 @@ export const POST = withErrorHandler(async function POST(request) {
   const hasTeachingAssignments = assignmentPairs.size > 0
   const allowedClassIds = new Set((teacherProfile.classes || []).map((c) => String(c.id)))
   const allowedSubjectIds = new Set((teacherProfile.subjects || []).map((s) => String(s.id)))
+  const subjectClassIds = new Set(
+    (teacherProfile.subjects || []).map((s) => String(s?.classId || '').trim()).filter(Boolean)
+  )
+  const allowedFallbackClassIds = new Set([...allowedClassIds, ...subjectClassIds])
   const assignedSubjectTokens = new Set(
     (Array.isArray(teacherProfile.assignedSubjects) ? teacherProfile.assignedSubjects : [])
       .map((v) => String(v || '').trim())
@@ -406,7 +410,7 @@ export const POST = withErrorHandler(async function POST(request) {
 
       const allowed = hasTeachingAssignments
         ? assignmentPairs.has(`${classId}:${subjectId}`)
-        : allowedClassIds.has(classId) &&
+        : allowedFallbackClassIds.has(classId) &&
           (allowedSubjectIds.has(subjectId) ||
             assignedSubjectTokens.has(subjectId) ||
             assignedSubjectTokens.has(String(subjectNameById.get(subjectId) || '')))
@@ -500,14 +504,16 @@ export const POST = withErrorHandler(async function POST(request) {
   }
 
   for (const entry of touched.values()) {
-    await evaluateAndNotifyTermResultsComplete({
-      schoolId,
-      studentId: entry.studentId,
-      classId: entry.classId,
-      term: entry.term,
-      year: entry.year,
-      request,
-    })
+    try {
+      await evaluateAndNotifyTermResultsComplete({
+        schoolId,
+        studentId: entry.studentId,
+        classId: entry.classId,
+        term: entry.term,
+        year: entry.year,
+        request,
+      })
+    } catch {}
   }
 
   return NextResponse.json({ success: true, applied, skippedNotAssigned })

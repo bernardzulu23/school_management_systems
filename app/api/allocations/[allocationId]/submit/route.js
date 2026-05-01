@@ -34,15 +34,22 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   })
   if (!allocation) throw new ApiError('Not found', 404)
   if (allocation.createdByUserId !== auth.user.id) throw new ApiError('Forbidden', 403)
-  if (allocation.status !== 'DRAFT')
-    throw new ApiError('Only DRAFT allocations can be submitted', 400)
+  if (allocation.status !== 'DRAFT' && allocation.status !== 'REJECTED') {
+    throw new ApiError('Only DRAFT or REJECTED allocations can be submitted', 400)
+  }
 
   const submittedAt = new Date()
 
   const [updated, admins] = await prisma.$transaction([
     prisma.departmentAllocation.update({
       where: { id: allocation.id },
-      data: { status: 'SUBMITTED', submittedAt },
+      data: {
+        status: 'SUBMITTED',
+        submittedAt,
+        rejectionReason: null,
+        approvedByUserId: null,
+        approvedAt: null,
+      },
       select: { id: true, status: true, submittedAt: true },
     }),
     prisma.user.findMany({

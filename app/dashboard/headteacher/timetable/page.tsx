@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useEffect, useMemo, useState } from 'react'
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { ConflictDisplay } from '@/components/timetable/ConflictDisplay'
@@ -12,8 +12,9 @@ import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
+import { Bell, Check, X } from 'lucide-react'
 
-type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings'
+type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings' | 'allocations'
 
 function genTimeSlots(): TimeSlot[] {
   const days: Array<TimeSlot['dayOfWeek']> = [
@@ -172,6 +173,18 @@ function HeadteacherTimetablePageContent() {
   const [season, setSeason] = useState<'normal' | 'farming' | 'planting'>('normal')
   const [schoolId, setSchoolId] = useState<string>('')
 
+  const [allocationNotifUnread, setAllocationNotifUnread] = useState(0)
+  const [pendingAllocations, setPendingAllocations] = useState<any[]>([])
+  const [reviewOpen, setReviewOpen] = useState(false)
+  const [reviewIndex, setReviewIndex] = useState(0)
+  const [reviewData, setReviewData] = useState<any | null>(null)
+  const [reviewLoading, setReviewLoading] = useState(false)
+  const [reviewSubmitting, setReviewSubmitting] = useState(false)
+  const [rejectionReason, setRejectionReason] = useState('')
+  const [masterEntries, setMasterEntries] = useState<any[]>([])
+  const [departments, setDepartments] = useState<any[]>([])
+  const [allocationsLoading, setAllocationsLoading] = useState(false)
+
   const assignments = useTimetableStore((s) => s.assignments)
   const conflicts = useTimetableStore((s) => s.conflicts)
   const updateAssignment = useTimetableStore((s) => s.updateAssignment)
@@ -184,6 +197,76 @@ function HeadteacherTimetablePageContent() {
   const pendingChanges = useTimetableStore((s) => s.pendingChanges)
   const conflictCount = useTimetableStore((s) => s.getConflictCount)
   const loadFromApi = useTimetableStore((s) => s.loadFromApi)
+
+  const loadAllocationNotifications = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/notifications', {
+        cache: 'no-store',
+        credentials: 'include',
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) return
+      const list = Array.isArray(json?.notifications) ? json.notifications : []
+      setAllocationNotifUnread(list.filter((n: any) => !n.read).length)
+    } catch {}
+  }, [])
+
+  const loadPendingAllocations = useCallback(async () => {
+    const res = await fetch('/api/admin/allocations/pending', {
+      cache: 'no-store',
+      credentials: 'include',
+    })
+    const json = await res.json().catch(() => ({}))
+    if (!res.ok)
+      throw new Error(json?.message || json?.error || 'Failed to load pending allocations')
+    return Array.isArray(json?.allocations) ? json.allocations : []
+  }, [])
+
+  const loadMasterTimetableEntries = useCallback(async () => {
+    const res = await fetch('/api/admin/master-timetable', {
+      cache: 'no-store',
+      credentials: 'include',
+    })
+    const json = await res.json().catch(() => ({}))
+    if (!res.ok)
+      throw new Error(json?.message || json?.error || 'Failed to load master timetable entries')
+    return Array.isArray(json?.entries) ? json.entries : []
+  }, [])
+
+  const loadDepartments = useCallback(async () => {
+    try {
+      const res = await fetch('/api/departments', { cache: 'no-store', credentials: 'include' })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) return []
+      return Array.isArray(json?.data) ? json.data : []
+    } catch {
+      return []
+    }
+  }, [])
+
+  const currentPendingId = pendingAllocations[reviewIndex]?.id
+    ? String(pendingAllocations[reviewIndex].id)
+    : ''
+
+  const loadReview = useCallback(async (allocationId: string) => {
+    if (!allocationId) {
+      setReviewData(null)
+      return
+    }
+    setReviewLoading(true)
+    try {
+      const res = await fetch(`/api/admin/allocations/${encodeURIComponent(allocationId)}/review`, {
+        cache: 'no-store',
+        credentials: 'include',
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok)
+        throw new Error(json?.message || json?.error || 'Failed to load allocation details')
+      setReviewData(json?.data || null)
+    } finally {
+      setReviewLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
     const load = async () => {
@@ -253,6 +336,39 @@ function HeadteacherTimetablePageContent() {
     load()
   }, [])
 
+  useEffect(() => {
+    loadAllocationNotifications()
+    const timer = setInterval(loadAllocationNotifications, 25000)
+    return () => clearInterval(timer)
+  }, [loadAllocationNotifications])
+
+  useEffect(() => {
+    const run = async () => {
+      if (tab !== 'allocations') return
+      setAllocationsLoading(true)
+      try {
+        const [pending, entries, deptList] = await Promise.all([
+          loadPendingAllocations(),
+          loadMasterTimetableEntries(),
+          loadDepartments(),
+        ])
+        setPendingAllocations(pending)
+        setMasterEntries(entries)
+        setDepartments(deptList)
+      } catch (e: any) {
+        toast.error(e?.message || 'Failed to load allocation workflow')
+      } finally {
+        setAllocationsLoading(false)
+      }
+    }
+    run()
+  }, [loadDepartments, loadMasterTimetableEntries, loadPendingAllocations, tab])
+
+  useEffect(() => {
+    if (!reviewOpen) return
+    loadReview(currentPendingId).catch(() => {})
+  }, [currentPendingId, loadReview, reviewOpen])
+
   const stats = useMemo(() => {
     const c = conflictCount()
     return {
@@ -271,6 +387,30 @@ function HeadteacherTimetablePageContent() {
     pendingChanges.length,
     lastPublishedAt,
   ])
+
+  const departmentsComplete = useMemo(() => {
+    const ids = new Set<string>()
+    for (const e of masterEntries)
+      ids.add(String(e?.departmentId || e?.department?.id || '').trim())
+    ids.delete('')
+    return ids
+  }, [masterEntries])
+
+  const departmentProgressLabel = useMemo(() => {
+    const total = departments.length || 0
+    const complete = departmentsComplete.size
+    return `${complete} / ${total || '?'} departments complete`
+  }, [departments.length, departmentsComplete.size])
+
+  const masterByDepartment = useMemo(() => {
+    const groups = new Map<string, any[]>()
+    for (const e of masterEntries) {
+      const name = String(e?.department?.name || 'Department').trim()
+      if (!groups.has(name)) groups.set(name, [])
+      groups.get(name)!.push(e)
+    }
+    return Array.from(groups.entries()).sort((a, b) => a[0].localeCompare(b[0]))
+  }, [masterEntries])
 
   useEffect(() => {
     setTerm(String(searchParams.get('term') || 'Term 1'))
@@ -498,6 +638,23 @@ function HeadteacherTimetablePageContent() {
 
           <div className="flex flex-wrap items-center gap-2">
             <TimetableNotificationBell />
+            <button
+              type="button"
+              onClick={() => {
+                setTab('allocations')
+                setReviewIndex(0)
+                setRejectionReason('')
+                setReviewOpen(true)
+              }}
+              className="relative inline-flex items-center justify-center rounded-full border border-royalPurple-border/40 bg-royalPurple-card/40 px-3 py-2 text-royalPurple-text2 hover:bg-royalPurple-card/60"
+            >
+              <Bell size={18} />
+              {allocationNotifUnread > 0 ? (
+                <span className="absolute -top-1 -right-1 rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-bold text-white">
+                  {allocationNotifUnread}
+                </span>
+              ) : null}
+            </button>
             <Button
               onClick={generateFromAllocations}
               disabled={dbGenerating}
@@ -606,6 +763,7 @@ function HeadteacherTimetablePageContent() {
               { id: 'conflicts', label: 'Conflicts' },
               { id: 'cover', label: 'Daily Cover' },
               { id: 'settings', label: 'Settings' },
+              { id: 'allocations', label: 'Department Allocations' },
             ] as const
           ).map((t) => (
             <button
@@ -622,6 +780,307 @@ function HeadteacherTimetablePageContent() {
             </button>
           ))}
         </div>
+
+        {tab === 'allocations' ? (
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="onboard-card p-5">
+                <div className="text-royalPurple-text1 font-bold text-lg">Pending Allocations</div>
+                <div className="text-royalPurple-text3 text-sm mt-1">
+                  {allocationsLoading
+                    ? 'Loading…'
+                    : `${pendingAllocations.length} pending department allocations`}
+                </div>
+                <div className="mt-3">
+                  <Button
+                    onClick={() => {
+                      setReviewIndex(0)
+                      setRejectionReason('')
+                      setReviewOpen(true)
+                    }}
+                    disabled={allocationsLoading || pendingAllocations.length === 0}
+                    className="zsms-hover-raise"
+                  >
+                    Review now
+                  </Button>
+                </div>
+              </div>
+              <div className="onboard-card p-5">
+                <div className="text-royalPurple-text1 font-bold text-lg">Master Progress</div>
+                <div className="text-royalPurple-text3 text-sm mt-1">{departmentProgressLabel}</div>
+                <div className="mt-3">
+                  <div className="h-2 w-full rounded-full bg-royalPurple-card/40 overflow-hidden">
+                    <div
+                      className="h-2 bg-royalPurple-accent"
+                      style={{
+                        width:
+                          departments.length > 0
+                            ? `${Math.min(
+                                100,
+                                Math.round((departmentsComplete.size / departments.length) * 100)
+                              )}%`
+                            : '0%',
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="onboard-card p-5">
+                <div className="text-royalPurple-text1 font-bold text-lg">Approved Entries</div>
+                <div className="text-royalPurple-text3 text-sm mt-1">
+                  {allocationsLoading ? 'Loading…' : `${masterEntries.length} entries`}
+                </div>
+              </div>
+            </div>
+
+            {masterByDepartment.length === 0 ? (
+              <div className="onboard-card p-5">
+                <div className="text-royalPurple-text2 text-sm">No approved entries yet.</div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {masterByDepartment.map(([deptName, entries]) => (
+                  <div key={deptName} className="onboard-card p-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-royalPurple-text1 font-bold text-lg">{deptName}</div>
+                      <div className="text-xs text-royalPurple-text3 font-semibold">
+                        {entries.length} approved
+                      </div>
+                    </div>
+                    <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {entries.map((e: any) => (
+                        <div
+                          key={String(e.id)}
+                          className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 p-4"
+                        >
+                          <div className="text-sm font-bold text-royalPurple-text1">
+                            {String(e?.teacher?.name || 'Teacher')}
+                          </div>
+                          <div className="text-xs text-royalPurple-text3 mt-1">
+                            <span className="font-semibold text-royalPurple-text2">Classes:</span>{' '}
+                            {Array.isArray(e?.classes)
+                              ? e.classes.join(', ')
+                              : String(e?.classes || '')}
+                          </div>
+                          <div className="text-xs text-royalPurple-text3 mt-1">
+                            <span className="font-semibold text-royalPurple-text2">Subject:</span>{' '}
+                            {String(e?.subject || '')}
+                          </div>
+                          <div className="text-xs text-royalPurple-text3 mt-1">
+                            <span className="font-semibold text-royalPurple-text2">
+                              Period config:
+                            </span>{' '}
+                            {String(e?.periodConfiguration || '')}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {reviewOpen ? (
+              <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70">
+                <div className="w-full max-w-2xl rounded-2xl border border-royalPurple-border/40 bg-royalPurple-card p-5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="text-royalPurple-text1 font-bold text-lg">
+                        Allocation Review
+                      </div>
+                      <div className="text-royalPurple-text3 text-sm mt-1">
+                        {pendingAllocations.length === 0
+                          ? 'No pending allocations'
+                          : `Pending ${reviewIndex + 1} of ${pendingAllocations.length}`}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setReviewOpen(false)}
+                      className="rounded-lg border border-royalPurple-border/40 bg-royalPurple-card/40 px-3 py-2 text-royalPurple-text2 hover:bg-royalPurple-card/60"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+
+                  {pendingAllocations.length === 0 ? (
+                    <div className="mt-4 text-royalPurple-text2 text-sm">Nothing to review.</div>
+                  ) : reviewLoading ? (
+                    <div className="mt-4 text-royalPurple-text2 text-sm">Loading details…</div>
+                  ) : !reviewData ? (
+                    <div className="mt-4 text-royalPurple-text2 text-sm">
+                      Failed to load details.
+                    </div>
+                  ) : (
+                    <div className="mt-4 space-y-3">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 p-4">
+                          <div className="text-xs text-royalPurple-text3">Department</div>
+                          <div className="text-sm font-bold text-royalPurple-text1">
+                            {String(reviewData?.department?.name || '')}
+                          </div>
+                        </div>
+                        <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 p-4">
+                          <div className="text-xs text-royalPurple-text3">Teacher</div>
+                          <div className="text-sm font-bold text-royalPurple-text1">
+                            {teachers.find(
+                              (t) => String(t.id) === String(reviewData?.teacherId || '')
+                            )?.fullName || String(reviewData?.teacherId || '')}
+                          </div>
+                        </div>
+                        <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 p-4">
+                          <div className="text-xs text-royalPurple-text3">Classes</div>
+                          <div className="text-sm font-semibold text-royalPurple-text1">
+                            {Array.isArray(reviewData?.classes)
+                              ? reviewData.classes.join(', ')
+                              : String(reviewData?.classes || '')}
+                          </div>
+                        </div>
+                        <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 p-4">
+                          <div className="text-xs text-royalPurple-text3">Subject</div>
+                          <div className="text-sm font-semibold text-royalPurple-text1">
+                            {String(reviewData?.subject || '')}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 p-4">
+                        <div className="text-xs text-royalPurple-text3">Period config</div>
+                        <div className="text-sm font-semibold text-royalPurple-text1 break-words">
+                          {typeof reviewData?.periodConfig === 'string'
+                            ? reviewData.periodConfig
+                            : JSON.stringify(reviewData?.periodConfig ?? {})}
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 p-4">
+                        <div className="text-xs text-royalPurple-text3">Reject feedback</div>
+                        <textarea
+                          className="zsms-input mt-2 w-full"
+                          rows={3}
+                          value={rejectionReason}
+                          onChange={(e) => setRejectionReason(e.target.value)}
+                          placeholder="Reason for rejection (required to reject)"
+                        />
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 justify-between">
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              setReviewIndex((i) => Math.max(0, i - 1))
+                              setRejectionReason('')
+                            }}
+                            disabled={reviewIndex === 0 || reviewSubmitting}
+                          >
+                            Previous
+                          </Button>
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              setReviewIndex((i) => Math.min(pendingAllocations.length - 1, i + 1))
+                              setRejectionReason('')
+                            }}
+                            disabled={
+                              reviewIndex >= pendingAllocations.length - 1 || reviewSubmitting
+                            }
+                          >
+                            Next
+                          </Button>
+                        </div>
+
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={async () => {
+                              const id = currentPendingId
+                              if (!id) return
+                              setReviewSubmitting(true)
+                              try {
+                                const res = await fetch(
+                                  `/api/admin/allocations/${encodeURIComponent(id)}/approve`,
+                                  { method: 'POST', credentials: 'include' }
+                                )
+                                const json = await res.json().catch(() => ({}))
+                                if (!res.ok)
+                                  throw new Error(json?.message || json?.error || 'Approve failed')
+                                toast.success('Inserted ✓')
+                                const nextPending = pendingAllocations.filter(
+                                  (a) => String(a.id) !== id
+                                )
+                                setPendingAllocations(nextPending)
+                                setReviewIndex((i) =>
+                                  Math.min(i, Math.max(0, nextPending.length - 1))
+                                )
+                                setRejectionReason('')
+                                const nextEntries = await loadMasterTimetableEntries().catch(
+                                  () => []
+                                )
+                                setMasterEntries(nextEntries)
+                                await loadAllocationNotifications()
+                                if (nextPending.length === 0) setReviewOpen(false)
+                              } catch (e: any) {
+                                toast.error(e?.message || 'Approve failed')
+                              } finally {
+                                setReviewSubmitting(false)
+                              }
+                            }}
+                            disabled={reviewSubmitting}
+                            className="zsms-hover-raise"
+                          >
+                            <Check size={16} /> Approve
+                          </Button>
+                          <Button
+                            variant="outline"
+                            onClick={async () => {
+                              const id = currentPendingId
+                              const reason = String(rejectionReason || '').trim()
+                              if (!id) return
+                              if (!reason) return toast.error('Enter rejection feedback')
+                              setReviewSubmitting(true)
+                              try {
+                                const res = await fetch(
+                                  `/api/admin/allocations/${encodeURIComponent(id)}/reject`,
+                                  {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    credentials: 'include',
+                                    body: JSON.stringify({ rejectionReason: reason }),
+                                  }
+                                )
+                                const json = await res.json().catch(() => ({}))
+                                if (!res.ok)
+                                  throw new Error(json?.message || json?.error || 'Reject failed')
+                                toast.success('Rejected')
+                                const nextPending = pendingAllocations.filter(
+                                  (a) => String(a.id) !== id
+                                )
+                                setPendingAllocations(nextPending)
+                                setReviewIndex((i) =>
+                                  Math.min(i, Math.max(0, nextPending.length - 1))
+                                )
+                                setRejectionReason('')
+                                await loadAllocationNotifications()
+                                if (nextPending.length === 0) setReviewOpen(false)
+                              } catch (e: any) {
+                                toast.error(e?.message || 'Reject failed')
+                              } finally {
+                                setReviewSubmitting(false)
+                              }
+                            }}
+                            disabled={reviewSubmitting}
+                            className="zsms-hover-raise"
+                          >
+                            <X size={16} /> Reject
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
 
         {tab === 'overview' ? (
           <MasterTimetableGrid
