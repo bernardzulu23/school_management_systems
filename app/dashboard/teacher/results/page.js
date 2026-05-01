@@ -102,7 +102,10 @@ export default function ResultEntryPage() {
   useEffect(() => {
     const loadAssignments = async () => {
       try {
-        const res = await fetch('/api/teaching-assignments')
+        const res = await fetch('/api/teaching-assignments', {
+          cache: 'no-store',
+          credentials: 'include',
+        })
         if (!res.ok) throw new Error('Failed to load assignments')
         const json = await res.json()
         const data = Array.isArray(json?.data) ? json.data : []
@@ -134,7 +137,8 @@ export default function ResultEntryPage() {
       const { term, year } = parseTermYear(selectedTerm)
 
       const pupilsRes = await fetch(
-        `/api/teacher/pupils?classId=${encodeURIComponent(selectedAssignment.classId)}&subjectId=${encodeURIComponent(selectedAssignment.subjectId)}`
+        `/api/teacher/pupils?classId=${encodeURIComponent(selectedAssignment.classId)}&subjectId=${encodeURIComponent(selectedAssignment.subjectId)}`,
+        { cache: 'no-store', credentials: 'include' }
       )
       if (!pupilsRes.ok) throw new Error('Failed to load pupils')
       const pupilsJson = await pupilsRes.json()
@@ -142,7 +146,8 @@ export default function ResultEntryPage() {
       setPupils(pupilsData)
 
       const resultsRes = await fetch(
-        `/api/teacher/results?subjectId=${encodeURIComponent(selectedAssignment.subjectId)}&term=${encodeURIComponent(term)}&year=${encodeURIComponent(year)}`
+        `/api/teacher/results?subjectId=${encodeURIComponent(selectedAssignment.subjectId)}&term=${encodeURIComponent(term)}&year=${encodeURIComponent(year)}`,
+        { cache: 'no-store', credentials: 'include' }
       )
       const resultsJson = resultsRes.ok ? await resultsRes.json() : { data: [] }
       const results = Array.isArray(resultsJson?.data) ? resultsJson.data : []
