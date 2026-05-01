@@ -232,7 +232,7 @@ export async function GET(request) {
     const passedResults = await prisma.result.count({
       where: { ...resultWhere, score: { gte: 40 } },
     })
-    const passRate = resultsCount > 0 ? Math.round((passedResults / resultsCount) * 100) : null
+    const passRate = resultsCount > 0 ? Math.round((passedResults / resultsCount) * 100) : 0
 
     const scoreAgg = await prisma.result.aggregate({
       where: resultWhere,
@@ -264,7 +264,7 @@ export async function GET(request) {
     const studentAchievement =
       studentsWithResults.length > 0
         ? Math.round((achievedCount / studentsWithResults.length) * 100)
-        : null
+        : 0
 
     const teacherUserIds = await prisma.teacher
       .findMany({ where: { schoolId }, select: { userId: true }, take: 50000 })
@@ -302,7 +302,7 @@ export async function GET(request) {
 
     const teacherEffectiveness = teacherAvgRows.length
       ? Math.round(teacherAvgRows.reduce((s, v) => s + v, 0) / teacherAvgRows.length)
-      : null
+      : 0
 
     const teachersWithAnyResults = new Set(
       teacherAgg

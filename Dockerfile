@@ -39,4 +39,4 @@ ENV PORT=8080
 ENV HOSTNAME=0.0.0.0
 EXPOSE 8080
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node .next/standalone/server.js"]
+CMD ["sh", "-c", "npx prisma db push && node .next/standalone/server.js"]

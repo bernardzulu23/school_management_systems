@@ -25,7 +25,7 @@
     "dev": "npm run copy:excalidraw-fonts && next dev",
     "prisma:generate": "node -e \"const fs=require('fs');const p='prisma/schema.prisma';const b=fs.readFileSync(p);if(b[0]===0xEF&&b[1]===0xBB&&b[2]===0xBF){fs.writeFileSync(p,b.slice(3));}\" && prisma generate",
     "build": "npm run copy:excalidraw-fonts && npm run prisma:generate && node scripts/clean-next-standalone.js && next build && node -e \"const fs=require('fs');const path=require('path');const copyDir=(src,dst)=>{if(!fs.existsSync(src))return;fs.mkdirSync(dst,{recursive:true});for(const e of fs.readdirSync(src,{withFileTypes:true})){const s=path.join(src,e.name);const d=path.join(dst,e.name);if(e.isDirectory())copyDir(s,d);else fs.copyFileSync(s,d);}};copyDir(path.join(process.cwd(),'node_modules','.prisma'),path.join(process.cwd(),'.next','standalone','node_modules','.prisma'));copyDir(path.join(process.cwd(),'.next','static'),path.join(process.cwd(),'.next','standalone','.next','static'));copyDir(path.join(process.cwd(),'public'),path.join(process.cwd(),'.next','standalone','public'));\"",
-    "prestart": "prisma migrate deploy",
+    "prestart": "prisma db push",
     "start": "node server.js",
     "lint": "node ./node_modules/eslint/bin/eslint.js .",
     "test": "jest",

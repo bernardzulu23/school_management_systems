@@ -343,13 +343,13 @@ export const POST = withErrorHandler(async function POST(request) {
   const hasTeachingAssignments = assignmentPairs.size > 0
   const allowedClassIds = new Set((teacherProfile.classes || []).map((c) => String(c.id)))
   const allowedSubjectIds = new Set((teacherProfile.subjects || []).map((s) => String(s.id)))
-  const subjectClassIds = new Set(
-    (teacherProfile.subjects || []).map((s) => String(s?.classId || '').trim()).filter(Boolean)
-  )
-  const allowedFallbackClassIds = new Set([...allowedClassIds, ...subjectClassIds])
   const assignedSubjectTokens = new Set(
     (Array.isArray(teacherProfile.assignedSubjects) ? teacherProfile.assignedSubjects : [])
-      .map((v) => String(v || '').trim())
+      .map((v) =>
+        String(v || '')
+          .trim()
+          .toLowerCase()
+      )
       .filter(Boolean)
   )
 
@@ -408,12 +408,22 @@ export const POST = withErrorHandler(async function POST(request) {
       if (score === null) continue
       if (Number.isNaN(score) || score < 0 || score > 100) continue
 
+      const classRecord = classMap.get(classId)
+      const isAssignedToClass =
+        allowedClassIds.has(classId) ||
+        String(classRecord?.teacherId || '') === String(teacherProfile.id)
+
+      const subjectName = String(subjectNameById.get(subjectId) || '')
+        .trim()
+        .toLowerCase()
+      const isAssignedToSubject =
+        allowedSubjectIds.has(subjectId) ||
+        assignedSubjectTokens.has(subjectId.toLowerCase()) ||
+        (subjectName ? assignedSubjectTokens.has(subjectName) : false)
+
       const allowed = hasTeachingAssignments
         ? assignmentPairs.has(`${classId}:${subjectId}`)
-        : allowedFallbackClassIds.has(classId) &&
-          (allowedSubjectIds.has(subjectId) ||
-            assignedSubjectTokens.has(subjectId) ||
-            assignedSubjectTokens.has(String(subjectNameById.get(subjectId) || '')))
+        : isAssignedToClass && isAssignedToSubject
 
       if (!allowed) {
         skippedNotAssigned += 1
@@ -464,8 +474,8 @@ export const POST = withErrorHandler(async function POST(request) {
         continue
       }
 
-      const classRecord = classMap.get(classId)
-      const gradeLevel = classRecord?.year_group || classRecord?.name || ''
+      const classRecordForGrade = classRecord
+      const gradeLevel = classRecordForGrade?.year_group || classRecordForGrade?.name || ''
       const grade = calculateGrade(score, gradeLevel).grade
 
       if (existing) {
