@@ -15,7 +15,7 @@ RUN node -e "const fs=require('fs');const p='prisma/schema.prisma';const b=fs.re
 
 # 3. Use install instead of ci to handle the React 19 / Radix peer conflicts
 # This will ignore the lockfile sync issues that were crashing your build
-RUN npm install --legacy-peer-deps
+RUN npm ci --legacy-peer-deps
 
 # 4. Copy the rest of the source code
 COPY . .
