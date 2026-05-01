@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
 
 export async function GET(request) {
   const auth = authMiddleware(request)
@@ -22,11 +23,80 @@ export async function GET(request) {
 
   const { searchParams } = new URL(request.url)
   const role = searchParams.get('role')
+  const scope = String(searchParams.get('scope') || '')
+    .trim()
+    .toLowerCase()
   const q = String(searchParams.get('q') || '').trim()
+
+  const wantsTeachers =
+    String(role || '')
+      .trim()
+      .toLowerCase() === 'teacher'
+
+  const shouldScopeToDepartment =
+    wantsTeachers && (scope === 'department' || Boolean(hasHodProfile))
+
+  let teacherUserIds = null
+  if (shouldScopeToDepartment) {
+    const hodProfile = await prisma.headOfDepartment.findFirst({
+      where: { userId: auth.user.id, schoolId },
+      select: { departmentId: true, department: true, departmentRef: { select: { name: true } } },
+    })
+
+    const deptId = hodProfile?.departmentId || null
+    const deptName =
+      hodProfile?.departmentRef?.name || hodProfile?.department || hodProfile?.department || null
+
+    if (!deptId && !deptName) {
+      return NextResponse.json({ error: 'No department assigned' }, { status: 400 })
+    }
+
+    const resolved = await resolveDepartmentScope({
+      prisma,
+      schoolId,
+      departmentId: deptId,
+      departmentName: deptName,
+    })
+    const departmentIds = new Set(resolved.departmentIds.map(String))
+    const departmentNameAliases = resolved.departmentNameAliases
+
+    const teachers = await prisma.teacher.findMany({
+      where: {
+        schoolId,
+        ...(departmentIds.size > 0 || departmentNameAliases.length > 0
+          ? {
+              OR: [
+                ...(departmentIds.size > 0
+                  ? [
+                      {
+                        departments: { some: { departmentId: { in: Array.from(departmentIds) } } },
+                      },
+                    ]
+                  : []),
+                ...(departmentNameAliases.length > 0
+                  ? [
+                      {
+                        OR: departmentNameAliases.map((n) => ({
+                          department: { equals: String(n), mode: 'insensitive' },
+                        })),
+                      },
+                    ]
+                  : []),
+              ],
+            }
+          : {}),
+      },
+      select: { userId: true },
+      take: 50000,
+    })
+
+    teacherUserIds = teachers.map((t) => t.userId).filter(Boolean)
+  }
 
   const where = {
     schoolId,
-    ...(role ? { role: String(role) } : {}),
+    ...(role ? { role: { equals: String(role), mode: 'insensitive' } } : {}),
+    ...(Array.isArray(teacherUserIds) ? { id: { in: teacherUserIds } } : {}),
     ...(q
       ? {
           OR: [

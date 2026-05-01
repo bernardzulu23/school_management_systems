@@ -96,7 +96,10 @@ export default function HODAllocationPage() {
     setLoading(true)
     try {
       const [teachersRes, subjectsRes, departmentsRes, allocRes] = await Promise.all([
-        fetch('/api/users?role=teacher'),
+        fetch('/api/users?role=teacher&scope=department', {
+          cache: 'no-store',
+          credentials: 'include',
+        }),
         fetch('/api/subjects'),
         fetch('/api/departments'),
         fetch('/api/allocations/my-department', { cache: 'no-store' }),
