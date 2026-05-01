@@ -145,11 +145,31 @@ export default function ResultEntryPage() {
       const pupilsData = Array.isArray(pupilsJson?.data) ? pupilsJson.data : []
       setPupils(pupilsData)
 
-      const resultsRes = await fetch(
-        `/api/teacher/results?subjectId=${encodeURIComponent(selectedAssignment.subjectId)}&term=${encodeURIComponent(term)}&year=${encodeURIComponent(year)}`,
-        { cache: 'no-store', credentials: 'include' }
-      )
-      const resultsJson = resultsRes.ok ? await resultsRes.json() : { data: [] }
+      const fetchResultsOnce = async () =>
+        fetch(
+          `/api/teacher/results?classId=${encodeURIComponent(selectedAssignment.classId)}&subjectId=${encodeURIComponent(selectedAssignment.subjectId)}&term=${encodeURIComponent(term)}&year=${encodeURIComponent(year)}`,
+          { cache: 'no-store', credentials: 'include' }
+        )
+
+      let resultsRes = await fetchResultsOnce()
+      if (resultsRes.status === 401 || resultsRes.status === 403) {
+        const refreshRes = await fetch('/api/auth/refresh', {
+          method: 'POST',
+          credentials: 'include',
+          cache: 'no-store',
+        })
+        if (refreshRes.ok) {
+          resultsRes = await fetchResultsOnce()
+        }
+      }
+
+      if (!resultsRes.ok) {
+        const data = await resultsRes.json().catch(() => ({}))
+        toast.error(data?.message || data?.error || 'Failed to load saved results')
+        return
+      }
+
+      const resultsJson = await resultsRes.json()
       const results = Array.isArray(resultsJson?.data) ? resultsJson.data : []
       const byStudent = new Map(results.map((r) => [r.studentId, r]))
 

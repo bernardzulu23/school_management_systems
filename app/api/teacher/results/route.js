@@ -265,6 +265,7 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const { searchParams } = new URL(request.url)
   const studentId = searchParams.get('studentId')
+  const classId = searchParams.get('classId')
   const subjectId = searchParams.get('subjectId')
   const termRaw = searchParams.get('term')
   const yearRaw = searchParams.get('year')
@@ -278,13 +279,92 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const isTeacher = roleCheck(auth.user, ['TEACHER', 'teacher'])
 
+  const resolvedClassId = String(classId || '').trim()
+  const resolvedSubjectId = String(subjectId || '').trim()
+
+  if (resolvedClassId && !resolvedSubjectId) {
+    throw new ApiError('subjectId is required when filtering by classId', 400)
+  }
+
+  if (isTeacher && resolvedClassId && resolvedSubjectId) {
+    const teacherProfile = await prisma.teacher.findFirst({
+      where: { userId: auth.user.id, schoolId },
+      select: {
+        id: true,
+        assignedSubjects: true,
+        classes: { select: { id: true } },
+        subjects: { select: { id: true, name: true } },
+        teachingAssignments: { where: { schoolId }, select: { classId: true, subjectId: true } },
+      },
+    })
+    if (!teacherProfile) throw new ApiError('Teacher profile not found', 404)
+
+    const assignmentPairs = new Set(
+      (teacherProfile.teachingAssignments || [])
+        .filter((a) => a?.classId && a?.subjectId)
+        .map((a) => `${a.classId}:${a.subjectId}`)
+    )
+    const hasTeachingAssignments = assignmentPairs.size > 0
+    const allowedClassIds = new Set((teacherProfile.classes || []).map((c) => String(c.id)))
+    const allowedSubjectIds = new Set((teacherProfile.subjects || []).map((s) => String(s.id)))
+    const assignedSubjectTokens = new Set(
+      (Array.isArray(teacherProfile.assignedSubjects) ? teacherProfile.assignedSubjects : [])
+        .map((v) =>
+          String(v || '')
+            .trim()
+            .toLowerCase()
+        )
+        .filter(Boolean)
+    )
+
+    const classRecord = await prisma.class.findFirst({
+      where: { schoolId, id: resolvedClassId },
+      select: { id: true, teacherId: true },
+    })
+    const isAssignedToClass =
+      allowedClassIds.has(resolvedClassId) ||
+      String(classRecord?.teacherId || '') === String(teacherProfile.id)
+
+    const subjectRecord = await prisma.subject.findFirst({
+      where: { schoolId, id: resolvedSubjectId },
+      select: { id: true, name: true },
+    })
+    const subjectName = String(subjectRecord?.name || '')
+      .trim()
+      .toLowerCase()
+    const isAssignedToSubject =
+      allowedSubjectIds.has(resolvedSubjectId) ||
+      assignedSubjectTokens.has(resolvedSubjectId.toLowerCase()) ||
+      (subjectName ? assignedSubjectTokens.has(subjectName) : false)
+
+    const allowed = hasTeachingAssignments
+      ? assignmentPairs.has(`${resolvedClassId}:${resolvedSubjectId}`)
+      : isAssignedToClass && isAssignedToSubject
+
+    if (!allowed) throw new ApiError('Forbidden', 403)
+  }
+
+  const rosterStudentIds =
+    resolvedClassId && resolvedSubjectId
+      ? (
+          await prisma.pupilSubjectEnrollment.findMany({
+            where: { schoolId, classId: resolvedClassId, subjectId: resolvedSubjectId },
+            select: { pupilId: true },
+            take: 50000,
+          })
+        )
+          .map((e) => String(e.pupilId || '').trim())
+          .filter(Boolean)
+      : null
+
   const where = {
     schoolId,
     ...(studentId ? { studentId } : {}),
     ...(subjectId ? { subjectId } : {}),
     ...(term ? { term } : {}),
     ...(year ? { year } : {}),
-    ...(isTeacher && scope !== 'all' ? { enteredByUserId: auth.user.id } : {}),
+    ...(Array.isArray(rosterStudentIds) ? { studentId: { in: rosterStudentIds } } : {}),
+    ...(isTeacher && scope !== 'all' && !resolvedClassId ? { enteredByUserId: auth.user.id } : {}),
   }
 
   const results = await prisma.result.findMany({
@@ -292,20 +372,23 @@ export const GET = withErrorHandler(async function GET(request) {
     orderBy: { updatedAt: 'desc' },
   })
 
-  return NextResponse.json({
-    success: true,
-    data: results.map((r) => ({
-      id: r.id,
-      studentId: r.studentId,
-      subjectId: r.subjectId,
-      score: r.score,
-      grade: r.grade,
-      term: r.term,
-      year: r.year,
-      comments: r.comments,
-      updatedAt: r.updatedAt,
-    })),
-  })
+  return NextResponse.json(
+    {
+      success: true,
+      data: results.map((r) => ({
+        id: r.id,
+        studentId: r.studentId,
+        subjectId: r.subjectId,
+        score: r.score,
+        grade: r.grade,
+        term: r.term,
+        year: r.year,
+        comments: r.comments,
+        updatedAt: r.updatedAt,
+      })),
+    },
+    { headers: { 'Cache-Control': 'no-store, max-age=0' } }
+  )
 })
 
 export const POST = withErrorHandler(async function POST(request) {
