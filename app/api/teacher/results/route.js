@@ -273,9 +273,9 @@ export const GET = withErrorHandler(async function GET(request) {
     .trim()
     .toLowerCase()
 
-  const { term, year } = yearRaw
-    ? { term: String(termRaw || '').trim(), year: Number(yearRaw) }
-    : parseTermYear(termRaw)
+  const parsedTermYear = parseTermYear(termRaw)
+  const term = parsedTermYear.term
+  const year = yearRaw ? Number(yearRaw) : parsedTermYear.year
 
   const isTeacher = roleCheck(auth.user, ['TEACHER', 'teacher'])
 
@@ -344,7 +344,7 @@ export const GET = withErrorHandler(async function GET(request) {
     if (!allowed) throw new ApiError('Forbidden', 403)
   }
 
-  const rosterStudentIds =
+  let rosterStudentIds =
     resolvedClassId && resolvedSubjectId
       ? (
           await prisma.pupilSubjectEnrollment.findMany({
@@ -356,6 +356,61 @@ export const GET = withErrorHandler(async function GET(request) {
           .map((e) => String(e.pupilId || '').trim())
           .filter(Boolean)
       : null
+
+  if (
+    resolvedClassId &&
+    resolvedSubjectId &&
+    Array.isArray(rosterStudentIds) &&
+    rosterStudentIds.length === 0
+  ) {
+    const classRecord = await prisma.class.findFirst({
+      where: { schoolId, id: resolvedClassId },
+      select: { id: true, name: true, year_group: true, section: true },
+    })
+
+    const yearGroup = String(classRecord?.year_group || '').trim()
+    const section = String(classRecord?.section || '').trim()
+    const compact = `${yearGroup}${section}`.trim()
+    const spaced = `${yearGroup} ${section}`.trim()
+    const classCandidates = classRecord
+      ? Array.from(
+          new Set(
+            [
+              classRecord.name,
+              classRecord.id,
+              yearGroup,
+              compact,
+              spaced,
+              String(classRecord.name || '').replace(/\s+/g, ''),
+            ]
+              .map((v) => String(v || '').trim())
+              .filter(Boolean)
+          )
+        )
+      : []
+
+    const classOr =
+      classRecord && classCandidates.length > 0
+        ? [
+            { classId: classRecord.id },
+            ...classCandidates.map((c) => ({ class: { equals: c, mode: 'insensitive' } })),
+          ]
+        : classRecord
+          ? [
+              { classId: classRecord.id },
+              { class: { equals: classRecord.name, mode: 'insensitive' } },
+            ]
+          : []
+
+    if (classOr.length > 0) {
+      const students = await prisma.student.findMany({
+        where: { schoolId, OR: classOr },
+        select: { id: true },
+        take: 50000,
+      })
+      rosterStudentIds = students.map((s) => String(s.id || '').trim()).filter(Boolean)
+    }
+  }
 
   const where = {
     schoolId,
@@ -407,8 +462,20 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const body = await readJson(request)
-  const results = Array.isArray(body?.results) ? body.results : null
-  if (!results) throw new ApiError('Invalid data format', 400)
+  const results = (() => {
+    if (Array.isArray(body?.results)) return body.results
+    if (Array.isArray(body)) return body
+    if (body && typeof body === 'object') {
+      if (Array.isArray(body?.data)) return body.data
+      if (Array.isArray(body?.entries)) return body.entries
+      const hasSingleEntryFields =
+        (body?.studentId || body?.pupilId) && body?.subjectId && (body?.classId || body?.term)
+      if (hasSingleEntryFields) return [body]
+    }
+    return null
+  })()
+
+  if (!Array.isArray(results)) throw new ApiError('Invalid data format', 400)
 
   const teacherProfile = isAdmin
     ? null

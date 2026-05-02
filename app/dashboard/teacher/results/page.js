@@ -583,6 +583,7 @@ export default function ResultEntryPage() {
                         pupils.map((student) => {
                           const score = scores[student.id]
                           const gradeInfo = getGradeInfo(score)
+                          const scoreInputId = `score-${student.id}`
 
                           return (
                             <tr key={student.id}>
@@ -591,13 +592,20 @@ export default function ResultEntryPage() {
                               </td>
                               <td className="px-4 py-3">{student.name}</td>
                               <td className="px-4 py-3">
+                                <Label htmlFor={scoreInputId} className="sr-only">
+                                  Score for {student.name}
+                                </Label>
                                 <Input
                                   type="number"
+                                  id={scoreInputId}
+                                  name={scoreInputId}
                                   min="0"
                                   max="100"
                                   value={score === undefined ? '' : score}
                                   onChange={(e) => handleScoreChange(student.id, e.target.value)}
                                   className="w-24"
+                                  autoComplete="off"
+                                  inputMode="numeric"
                                 />
                               </td>
                               <td className="px-4 py-3">
