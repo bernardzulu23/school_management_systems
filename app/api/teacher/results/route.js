@@ -548,6 +548,7 @@ export const POST = withErrorHandler(async function POST(request) {
   )
 
   const enrollmentKeys = new Set()
+  const classMembershipKeys = new Set()
   if (isStaffEntry) {
     const studentIds = Array.from(
       new Set(results.map((r) => String(r.studentId || r.pupilId || '').trim()).filter(Boolean))
@@ -572,6 +573,51 @@ export const POST = withErrorHandler(async function POST(request) {
 
     for (const e of enrollments) {
       enrollmentKeys.add(`${e.pupilId}:${e.classId}:${e.subjectId}`)
+    }
+
+    const normalize = (v) =>
+      String(v || '')
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, ' ')
+    const compact = (v) => normalize(v).replace(/\s+/g, '')
+
+    const classCandidateToId = new Map()
+    for (const c of classMap.values()) {
+      const yearGroup = String(c?.year_group || '').trim()
+      const section = String(c?.section || '').trim()
+      const variants = Array.from(
+        new Set(
+          [
+            c?.name,
+            yearGroup,
+            `${yearGroup}${section}`.trim(),
+            `${yearGroup} ${section}`.trim(),
+            String(c?.name || '').replace(/\s+/g, ''),
+          ]
+            .map((x) => String(x || '').trim())
+            .filter(Boolean)
+        )
+      )
+      for (const v of variants) classCandidateToId.set(compact(v), String(c.id))
+    }
+
+    const students =
+      studentIds.length > 0
+        ? await prisma.student.findMany({
+            where: { schoolId, id: { in: studentIds } },
+            select: { id: true, classId: true, class: true },
+            take: 50000,
+          })
+        : []
+
+    for (const s of students) {
+      const sid = String(s?.id || '').trim()
+      if (!sid) continue
+      const cid = String(s?.classId || '').trim()
+      if (cid && classIds.includes(cid)) classMembershipKeys.add(`${sid}:${cid}`)
+      const inferred = classCandidateToId.get(compact(s?.class))
+      if (inferred && classIds.includes(inferred)) classMembershipKeys.add(`${sid}:${inferred}`)
     }
   }
 
@@ -611,7 +657,8 @@ export const POST = withErrorHandler(async function POST(request) {
         (subjectName ? assignedSubjectTokens.has(subjectName) : false)
 
       const allowed = isStaffEntry
-        ? enrollmentKeys.has(`${studentId}:${classId}:${subjectId}`)
+        ? enrollmentKeys.has(`${studentId}:${classId}:${subjectId}`) ||
+          classMembershipKeys.has(`${studentId}:${classId}`)
         : hasTeachingAssignments
           ? assignmentPairs.has(`${classId}:${subjectId}`)
           : isAssignedToClass && isAssignedToSubject

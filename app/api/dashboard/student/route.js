@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { gradeToPoints } from '@/lib/gradingSystem'
 
 export const dynamic = 'force-dynamic'
 
@@ -134,9 +135,20 @@ export async function GET(request) {
       if (!subjectId) continue
       const subjectName = r.subject?.name || 'Unknown'
       if (!subjectAgg.has(subjectId)) {
-        subjectAgg.set(subjectId, { subjectId, subjectName, scores: [] })
+        subjectAgg.set(subjectId, {
+          subjectId,
+          subjectName,
+          scores: [],
+          latestScore: null,
+          latestGrade: null,
+        })
       }
-      subjectAgg.get(subjectId).scores.push(Number(r.score || 0))
+      const entry = subjectAgg.get(subjectId)
+      entry.scores.push(Number(r.score || 0))
+      if (entry.latestScore === null) {
+        entry.latestScore = Number(r.score || 0)
+        entry.latestGrade = r.grade ?? null
+      }
     }
 
     const subjectAverages = Array.from(subjectAgg.values())
@@ -144,6 +156,9 @@ export async function GET(request) {
         subjectId: s.subjectId,
         subjectName: s.subjectName,
         avg: s.scores.length ? s.scores.reduce((a, b) => a + b, 0) / s.scores.length : 0,
+        latestScore: s.latestScore,
+        latestGrade: s.latestGrade,
+        points: gradeToPoints(s.latestGrade),
       }))
       .sort((a, b) => b.avg - a.avg)
 
@@ -168,7 +183,20 @@ export async function GET(request) {
       bestSix.push(s)
     })
 
-    const bestSixPoints = Math.round(bestSix.reduce((sum, s) => sum + (Number(s.avg) || 0), 0))
+    const withPoints = bestSix.map((s) => ({
+      ...s,
+      points: gradeToPoints(s.latestGrade),
+    }))
+
+    const hasFail = withPoints.some((s) => {
+      const g = String(s?.latestGrade || '')
+        .trim()
+        .toUpperCase()
+      return g === '9' || g === 'F' || g === 'FAIL'
+    })
+    const bestSixPoints = hasFail
+      ? 'FAIL'
+      : withPoints.reduce((sum, s) => sum + (Number(s.points) || 0), 0)
 
     // 1. Calculate Stats
     const totalSubjects = subjectNames.length
@@ -370,6 +398,7 @@ export async function GET(request) {
           subjectId: s.subjectId,
           subject: s.subjectName,
           averageScore: Math.round(Number(s.avg) || 0),
+          points: gradeToPoints(s.latestGrade),
         })),
       },
       student: {

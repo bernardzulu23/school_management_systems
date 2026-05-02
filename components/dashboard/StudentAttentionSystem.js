@@ -72,7 +72,7 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
       if (score >= 50) return { grade: '6', status: 'CREDIT', color: 'purple' }
       if (score >= 45) return { grade: '7', status: 'SATISFACTORY', color: 'yellow' }
       if (score >= 40) return { grade: '8', status: 'SATISFACTORY', color: 'yellow' }
-      return { grade: '9', status: 'UNSATISFACTORILY', color: 'red' }
+      return { grade: '9', status: 'FAIL', color: 'red' }
     }
 
     return { grade: 'F', status: 'FAIL', color: 'red' }

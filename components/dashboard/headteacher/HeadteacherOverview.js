@@ -123,7 +123,7 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                 >
                   {percentText(schoolStats.attendanceRate)}
                 </p>
-                <p className="text-royalPurple-text2 text-sm mt-1">Current term</p>
+                <p className="text-royalPurple-text2 text-sm mt-1">Selected period</p>
               </div>
               <div className="bg-royalPurple-card border border-royalPurple-border rounded-xl p-4 text-center">
                 <div className="bg-royalPurple-card2 rounded-lg p-3 w-fit mx-auto mb-4">
@@ -133,7 +133,7 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                 <p className={`text-2xl font-bold mt-2 ${percentTextClass(schoolStats.passRate)}`}>
                   {percentText(schoolStats.passRate)}
                 </p>
-                <p className="text-royalPurple-text2 text-sm mt-1">Current term</p>
+                <p className="text-royalPurple-text2 text-sm mt-1">Selected period</p>
               </div>
             </div>
           </div>

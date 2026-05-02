@@ -74,7 +74,7 @@ function gradeFromAverage(score, gradeLevel) {
     if (score >= 50) return { grade: '6', status: 'CREDIT' }
     if (score >= 45) return { grade: '7', status: 'SATISFACTORY' }
     if (score >= 40) return { grade: '8', status: 'SATISFACTORY' }
-    return { grade: '9', status: 'UNSATISFACTORILY' }
+    return { grade: '9', status: 'FAIL' }
   }
 
   if (score >= 50) return { grade: 'P', status: 'PASS' }
