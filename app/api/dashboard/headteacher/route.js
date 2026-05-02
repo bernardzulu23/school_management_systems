@@ -632,8 +632,37 @@ export async function GET(request) {
       classes_needing_support: strugglingClasses,
     }
 
+    const groupResultsByStudent = (rows) => {
+      const byStudent = new Map()
+      for (const r of rows) {
+        const sid = String(r?.studentId || '').trim()
+        if (!sid) continue
+        const studentName = r?.student?.name || 'Unknown'
+        const studentClass = r?.student?.class || ''
+        const subjectName = r?.subject?.name || 'Unknown'
+        const teacherName =
+          r?.subject?.teacher?.user?.name || r?.subject?.teacher?.user?.email || 'Unknown'
+
+        if (!byStudent.has(sid)) {
+          byStudent.set(sid, {
+            studentId: sid,
+            name: studentName,
+            class: studentClass,
+            subjects: [],
+          })
+        }
+        byStudent.get(sid).subjects.push({
+          name: subjectName,
+          score: Number(r?.score ?? 0),
+          grade: r?.grade ?? null,
+          teacher: teacherName,
+        })
+      }
+      return Array.from(byStudent.values())
+    }
+
     // 5b. Junior Results (scoped by schoolId)
-    const juniorResults = await prisma.result.findMany({
+    const juniorResultRows = await prisma.result.findMany({
       where: {
         ...resultWhere,
         student: {
@@ -645,9 +674,27 @@ export async function GET(request) {
           ],
         },
       },
-      orderBy: { score: 'desc' },
-      take: 5,
+      include: {
+        student: { select: { name: true, class: true } },
+        subject: {
+          include: { teacher: { include: { user: { select: { name: true, email: true } } } } },
+        },
+      },
+      orderBy: { updatedAt: 'desc' },
+      take: 50000,
     })
+    const juniorResultsRaw = juniorResultRows.map((r) => ({
+      id: r.id,
+      studentId: r.studentId,
+      subjectId: r.subjectId,
+      score: r.score,
+      grade: r.grade,
+      term: r.term,
+      year: r.year,
+      student: { name: r.student?.name || null, class: r.student?.class || null },
+      subject: { name: r.subject?.name || null },
+    }))
+    const juniorResults = groupResultsByStudent(juniorResultRows)
 
     const seniorStudents = await prisma.student.findMany({
       where: {
@@ -671,10 +718,29 @@ export async function GET(request) {
       seniorStudentIds.length > 0
         ? await prisma.result.findMany({
             where: { ...resultWhere, studentId: { in: seniorStudentIds } },
-            include: { subject: true },
+            include: {
+              student: { select: { name: true, class: true } },
+              subject: {
+                include: {
+                  teacher: { include: { user: { select: { name: true, email: true } } } },
+                },
+              },
+            },
             take: 50000,
           })
         : []
+    const seniorResultsGrouped = groupResultsByStudent(seniorResults)
+    const seniorResultsRaw = seniorResults.map((r) => ({
+      id: r.id,
+      studentId: r.studentId,
+      subjectId: r.subjectId,
+      score: r.score,
+      grade: r.grade,
+      term: r.term,
+      year: r.year,
+      student: { name: r.student?.name || null, class: r.student?.class || null },
+      subject: { name: r.subject?.name || null },
+    }))
 
     const seniorScores = seniorResults.map((r) => Number(r.score || 0))
     const seniorAverage =
@@ -850,6 +916,9 @@ export async function GET(request) {
       performanceTrends,
       performanceSummary,
       juniorResults,
+      juniorResultsRaw,
+      seniorResults: seniorResultsGrouped,
+      seniorResultsRaw,
       seniorResultsAnalysis,
       junior_gender_by_grade,
       senior_gender_by_grade,
@@ -861,6 +930,9 @@ export async function GET(request) {
       students_requiring_attention: studentsRequiringAttention,
       performance_summary: performanceSummary,
       junior_results: juniorResults,
+      junior_results_raw: juniorResultsRaw,
+      senior_results: seniorResultsGrouped,
+      senior_results_raw: seniorResultsRaw,
       seniorResultsAnalysis,
       juniorGenderByGrade: junior_gender_by_grade,
       seniorGenderByGrade: senior_gender_by_grade,

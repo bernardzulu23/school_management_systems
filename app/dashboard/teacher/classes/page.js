@@ -35,11 +35,16 @@ export default function TeacherClassesPage() {
     return monday.toISOString().slice(0, 10)
   })
   const [lessonPlan, setLessonPlan] = useState('')
+  const [lessonFormat, setLessonFormat] = useState('standard')
 
   const selectedAssignment = assignments.find((a) => a.id === selectedAssignmentId) || null
 
   const lessonKey = useMemo(() => {
     return selectedAssignment ? `lesson_plan_v1:${selectedAssignment.id}:${weekStart}` : null
+  }, [selectedAssignmentId, weekStart])
+
+  const lessonFormatKey = useMemo(() => {
+    return selectedAssignment ? `lesson_plan_format_v1:${selectedAssignment.id}:${weekStart}` : null
   }, [selectedAssignmentId, weekStart])
 
   const seasonLabel = useMemo(() => {
@@ -77,6 +82,16 @@ export default function TeacherClassesPage() {
       setLessonPlan('')
     }
   }, [lessonKey])
+
+  useEffect(() => {
+    if (!lessonFormatKey) return
+    try {
+      const raw = localStorage.getItem(lessonFormatKey)
+      setLessonFormat(raw || 'standard')
+    } catch {
+      setLessonFormat('standard')
+    }
+  }, [lessonFormatKey])
 
   const fetchPupils = async () => {
     if (!selectedAssignment) return
@@ -248,6 +263,24 @@ export default function TeacherClassesPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
+                    <Label>Lesson Plan Format</Label>
+                    <select
+                      value={lessonFormat}
+                      onChange={(e) => setLessonFormat(e.target.value)}
+                      className="w-full h-10 px-3 border rounded-md text-sm bg-transparent"
+                    >
+                      <option value="standard">Standard CBC (All Subjects)</option>
+                      <option value="science">Science Practical Lab Lesson</option>
+                      <option value="language">Language Skills Lesson (LSRW)</option>
+                      <option value="business">Business & Accounts Lesson</option>
+                      <option value="practical">Vocational/Practical Workshop Lesson</option>
+                      <option value="humanities">Humanities & Social Sciences Lesson</option>
+                      <option value="arts">Arts, Music & Creative Lesson</option>
+                      <option value="technology">Technology & ICT Lesson</option>
+                      <option value="mathematics">Mathematics Lesson (Problem-Based)</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
                     <Label>Lesson Plan</Label>
                     <textarea
                       value={lessonPlan}
@@ -261,6 +294,7 @@ export default function TeacherClassesPage() {
                         if (!lessonKey) return
                         try {
                           localStorage.setItem(lessonKey, lessonPlan || '')
+                          if (lessonFormatKey) localStorage.setItem(lessonFormatKey, lessonFormat)
                           toast.success('Lesson plan saved')
                         } catch {
                           toast.error('Failed to save lesson plan')

@@ -58,6 +58,10 @@ const JuniorPerformanceAnalysis = dynamic(
   () => import('@/components/dashboard/JuniorPerformanceAnalysis'),
   { loading: () => <SkeletonLoader /> }
 )
+const SeniorPerformanceAnalysis = dynamic(
+  () => import('@/components/dashboard/SeniorPerformanceAnalysis'),
+  { loading: () => <SkeletonLoader /> }
+)
 const UserManagement = dynamic(() => import('@/components/dashboard/UserManagement'), {
   loading: () => <SkeletonLoader />,
 })
@@ -228,6 +232,12 @@ function HeadteacherDashboardContent() {
         description: 'Analysis of Form 1 and Form 2 results',
       },
       {
+        id: 'senior-analysis',
+        name: 'Senior Performance',
+        icon: Award,
+        description: 'Analysis of Grade 10 to Grade 12 results',
+      },
+      {
         id: 'user-management',
         name: 'User Management',
         icon: UserPlus,
@@ -335,6 +345,18 @@ function HeadteacherDashboardContent() {
               }
             />
             <JuniorPerformanceAnalysis results={dashboardData?.junior_results || []} />
+          </div>
+        )
+      case 'senior-analysis':
+        return (
+          <div className="space-y-6">
+            <GenderByGradeCard
+              title="Boys vs Girls (Grades 10–12)"
+              data={
+                dashboardData?.senior_gender_by_grade || dashboardData?.seniorGenderByGrade || []
+              }
+            />
+            <SeniorPerformanceAnalysis results={dashboardData?.senior_results || []} />
           </div>
         )
       case 'user-management':

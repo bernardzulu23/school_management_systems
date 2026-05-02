@@ -15,49 +15,98 @@ import { prisma } from '@/lib/prisma'
 import { logger } from '@/lib/utils/logger'
 
 const LessonPlannerInputSchema = z.object({
-  grade: z.enum(['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']),
+  grade: z.string().min(1).max(20),
   subject: z.string().min(1).max(100),
   topic: z.string().min(3).max(200),
+  subtopic: z.string().max(200).optional(),
   duration: z.number().int().min(1).max(240),
+  term: z.string().max(20).optional(),
+  learners: z.number().int().min(1).max(200).optional(),
   learningStyle: z.enum(['mixed', 'visual', 'kinesthetic', 'auditory']).default('mixed'),
   priorKnowledge: z.string().max(300).optional(),
+  templateType: z
+    .enum([
+      'standard',
+      'science',
+      'language',
+      'business',
+      'practical',
+      'humanities',
+      'arts',
+      'technology',
+      'mathematics',
+    ])
+    .default('standard'),
+  competenceFocus: z.string().max(300).optional(),
+  additionalInstructions: z.string().max(800).optional(),
 })
 
 type LessonPlannerInput = z.infer<typeof LessonPlannerInputSchema>
 
 function buildPrompt(input: LessonPlannerInput): string {
-  const prior = input.priorKnowledge ? `Prior Knowledge: ${input.priorKnowledge}` : ''
-  return `You are a Zambian curriculum specialist creating lesson plans aligned to the Competency-Based Curriculum (CBC).
+  const prior = input.priorKnowledge ? `Pre-requisite knowledge: ${input.priorKnowledge}` : ''
+  const subtopic = input.subtopic ? input.subtopic : '—'
+  const learners = Number.isFinite(input.learners) ? String(input.learners) : '—'
+  const term = input.term ? String(input.term) : '—'
+  const competenceFocus = input.competenceFocus
+    ? String(input.competenceFocus)
+    : 'Critical Thinking and Problem Solving'
+  const extras = input.additionalInstructions ? String(input.additionalInstructions) : ''
 
-Create a complete, detailed lesson plan with these exact sections:
+  const templatePreambles: Record<string, string> = {
+    standard:
+      "You are an expert Zambian teacher educator. Generate a COMPLETE, detailed Competency-Based Curriculum (CBC) lesson plan following the 2023 Zambia Education Curriculum Framework (ZECF) and Teachers' Curriculum Implementation Guide (TCIG).",
+    science:
+      'You are an expert Zambian science teacher educator. Generate a COMPLETE CBC lesson plan for a PRACTICAL SCIENCE LAB lesson. Include: safety precautions, hypothesis, materials list, experimental procedure, observation table, and a practical skills assessment rubric. Follow the 2023 ZECF.',
+    language:
+      'You are an expert Zambian language teacher educator. Generate a COMPLETE CBC lesson plan for a LANGUAGE SKILLS lesson covering Listening, Speaking, Reading, Writing (LSRW). Include oral activities, text analysis, and writing tasks. Follow 2023 ZECF.',
+    business:
+      'You are an expert Zambian business education teacher. Generate a COMPLETE CBC lesson plan for a BUSINESS subject lesson. Include case studies from Zambian business context, calculations/document completion tasks, and entrepreneurship linkages. Follow 2023 ZECF.',
+    practical:
+      'You are an expert Zambian practical subjects teacher. Generate a COMPLETE CBC lesson plan for a WORKSHOP/PRACTICAL SKILLS lesson. Include: workshop safety rules, tool list, step-by-step practical procedure, safety precautions, product quality assessment rubric. Follow 2023 ZECF.',
+    humanities:
+      'You are an expert Zambian humanities teacher. Generate a COMPLETE CBC lesson plan for a HUMANITIES lesson. Include: source analysis, map work/timeline where relevant, debate/discussion activity, Zambian context, citizenship values. Follow 2023 ZECF.',
+    arts: 'You are an expert Zambian arts teacher. Generate a COMPLETE CBC lesson plan for an ARTS/MUSIC lesson. Include: Zambian cultural context, creative production/performance task, reflection, and portfolio-based assessment. Follow 2023 ZECF.',
+    technology:
+      'You are an expert Zambian ICT/Technology teacher. Generate a COMPLETE CBC lesson plan for a TECHNOLOGY lesson. Include: step-by-step practical task, digital literacy and cybersafety link, ICT tool specification, and project-based assessment. Follow 2023 ZECF.',
+    mathematics:
+      'You are an expert Zambian mathematics teacher educator. Generate a COMPLETE CBC lesson plan for a MATHEMATICS PROBLEM-BASED lesson. Include: real-life Zambian context problems, mental math warm-up, discovery activity, worked examples, differentiated practice (basic/intermediate/challenging). Follow 2023 ZECF.',
+  }
 
-## LESSON INFO
-Subject: ${input.subject}
-Grade: ${input.grade}
-Topic: ${input.topic}
-Duration: ${input.duration} minutes
-Learning Style: ${input.learningStyle}
+  const preamble = templatePreambles[input.templateType] || templatePreambles.standard
+
+  return `${preamble}
+
+Use the EXACT output structure and headings below. Do NOT output HTML. Write in clear English and include Zambian-local examples where relevant.
+
+LESSON PLAN HEADER
+- School Name: [School Name]
+- Subject: ${input.subject}
+- Grade/Form: ${input.grade}
+- Topic: ${input.topic}
+- Sub-topic: ${subtopic}
+- Date: [Date]
+- Duration: ${input.duration} minutes
+- Number of Learners: ${learners}
+- Term: ${term}
+
+1. GENERAL COMPETENCE
+2. SPECIFIC COMPETENCE(S) (aligned to: ${competenceFocus})
+3. LEARNING OUTCOMES (Know-Do-Value)
+4. CORE VALUES ADDRESSED (Personal Excellence, Relationships, Citizenship, Faith in God)
+5. PRE-REQUISITE KNOWLEDGE
+6. TEACHING & LEARNING MATERIALS (TLMs)
+7. CROSS-CUTTING ISSUES
+8. INTRODUCTION (Time + Teacher Activities + Learner Activities)
+9. MAIN LESSON DEVELOPMENT (Step-by-step with timing; include learner-centered activities)
+10. ASSESSMENT (Formative + simple rubric/checklist; SBA ideas)
+11. DIFFERENTIATION / INCLUSION
+12. HOMEWORK / EXTENSION
+13. REFLECTION (Teacher reflection + learner reflection prompt)
+
+Learning style preference: ${input.learningStyle}.
 ${prior}
-
-## LEARNING OBJECTIVES (CBC COMPETENCIES)
-List 3-4 measurable objectives aligned to CBC competencies (critical thinking, creativity, collaboration, communication).
-
-## MATERIALS AND RESOURCES
-Include locally available materials (Zambian context).
-
-## LESSON OUTLINE
-### Introduction / Starter
-### Main Teaching Activities
-### Group Work / Learner Activities
-### Closure / Reflection
-
-## ASSESSMENT (FORMATIVE)
-Observation checklist + quick exit ticket.
-
-## DIFFERENTIATION
-Support for mixed-ability learners.
-
-Write in clear English and include Zambian examples where relevant.`
+${extras ? `Additional instructions: ${extras}` : ''}`
 }
 
 export async function POST(request: Request) {

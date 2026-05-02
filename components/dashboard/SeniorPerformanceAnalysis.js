@@ -9,17 +9,13 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
-  PieChart,
-  Pie,
   Cell,
 } from 'recharts'
-import { TrendingUp, Users, BookOpen, Award, AlertCircle, CheckCircle } from 'lucide-react'
-import { JUNIOR_GRADING_SYSTEM, calculateGrade } from '@/lib/gradingSystem'
+import { TrendingUp, Users, BookOpen, Award } from 'lucide-react'
+import { SENIOR_GRADING_SYSTEM, calculateGrade } from '@/lib/gradingSystem'
 
-export default function JuniorPerformanceAnalysis({ results = [] }) {
-  // Process data for analysis
+export default function SeniorPerformanceAnalysis({ results = [] }) {
   const analysis = useMemo(() => {
     if (!results || results.length === 0) return null
 
@@ -33,39 +29,33 @@ export default function JuniorPerformanceAnalysis({ results = [] }) {
       passingGrades: 0,
     }
 
-    // Initialize grade distribution
-    JUNIOR_GRADING_SYSTEM.grades.forEach((g) => {
+    SENIOR_GRADING_SYSTEM.grades.forEach((g) => {
       stats.gradeDistribution[g.grade] = 0
     })
-    stats.gradeDistribution[JUNIOR_GRADING_SYSTEM.absent.grade] = 0
+    stats.gradeDistribution[SENIOR_GRADING_SYSTEM.absent.grade] = 0
 
     results.forEach((student) => {
-      if (!student.subjects) return
+      if (!student?.subjects) return
       stats.totalStudents++
 
       student.subjects.forEach((subject) => {
         const score = subject.score
-        const gradeInfo = calculateGrade(score, 'form1') // Default to form1 logic as per requirement
+        const gradeInfo = calculateGrade(score, 'grade10')
 
-        // Update grade distribution
         if (stats.gradeDistribution[gradeInfo.grade] !== undefined) {
           stats.gradeDistribution[gradeInfo.grade]++
         }
 
         stats.totalGrades++
-        // Check if passing (Grade 1-4)
-        const isPassing = ['1', '2', '3', '4'].includes(gradeInfo.grade)
-        if (isPassing) {
-          stats.passingGrades++
-        }
+        const isPassing = ['1', '2', '3', '4', '5', '6', '7', '8'].includes(gradeInfo.grade)
+        if (isPassing) stats.passingGrades++
 
-        // Subject Performance
         if (!stats.subjectPerformance[subject.name]) {
           stats.subjectPerformance[subject.name] = {
             name: subject.name,
             total: 0,
             passed: 0,
-            grades: { 1: 0, 2: 0, 3: 0, 4: 0, F: 0, X: 0 },
+            grades: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, X: 0 },
             totalScore: 0,
           }
         }
@@ -74,11 +64,8 @@ export default function JuniorPerformanceAnalysis({ results = [] }) {
         if (stats.subjectPerformance[subject.name].grades[gradeInfo.grade] !== undefined) {
           stats.subjectPerformance[subject.name].grades[gradeInfo.grade]++
         }
-        if (isPassing) {
-          stats.subjectPerformance[subject.name].passed++
-        }
+        if (isPassing) stats.subjectPerformance[subject.name].passed++
 
-        // Teacher Performance (teacher+subject granularity)
         if (subject.teacher) {
           const teacherKey = `${subject.teacher}||${subject.name}`
           if (!stats.teacherPerformance[teacherKey]) {
@@ -92,9 +79,7 @@ export default function JuniorPerformanceAnalysis({ results = [] }) {
           }
           stats.teacherPerformance[teacherKey].total++
           stats.teacherPerformance[teacherKey].totalScore += Number(score) || 0
-          if (isPassing) {
-            stats.teacherPerformance[teacherKey].passed++
-          }
+          if (isPassing) stats.teacherPerformance[teacherKey].passed++
         }
       })
     })
@@ -106,37 +91,22 @@ export default function JuniorPerformanceAnalysis({ results = [] }) {
   }, [results])
 
   if (!analysis) {
-    return (
-      <Card variant="glass" className="w-full">
-        <CardContent className="p-8 text-center">
-          <div className="flex flex-col items-center justify-center">
-            <BookOpen className="h-12 w-12 text-royalPurple-text3 mb-4" />
-            <h3 className="text-xl font-bold text-royalPurple-text1 mb-2">
-              No Junior Results Data Available
-            </h3>
-            <p className="text-royalPurple-text2">
-              Analysis for Form 1 and Form 2 results will appear here once data is available.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    )
+    return null
   }
 
-  // Prepare chart data
   const gradeDistributionData = Object.entries(analysis.gradeDistribution).map(([name, value]) => ({
     name,
     value,
     color:
-      JUNIOR_GRADING_SYSTEM.grades.find((g) => g.grade === name)?.color === 'green'
+      SENIOR_GRADING_SYSTEM.grades.find((g) => g.grade === name)?.color === 'green'
         ? '#10b981'
-        : JUNIOR_GRADING_SYSTEM.grades.find((g) => g.grade === name)?.color === 'blue'
+        : SENIOR_GRADING_SYSTEM.grades.find((g) => g.grade === name)?.color === 'blue'
           ? '#3b82f6'
-          : JUNIOR_GRADING_SYSTEM.grades.find((g) => g.grade === name)?.color === 'purple'
+          : SENIOR_GRADING_SYSTEM.grades.find((g) => g.grade === name)?.color === 'purple'
             ? '#8b5cf6'
-            : JUNIOR_GRADING_SYSTEM.grades.find((g) => g.grade === name)?.color === 'yellow'
+            : SENIOR_GRADING_SYSTEM.grades.find((g) => g.grade === name)?.color === 'yellow'
               ? '#f59e0b'
-              : JUNIOR_GRADING_SYSTEM.grades.find((g) => g.grade === name)?.color === 'red'
+              : SENIOR_GRADING_SYSTEM.grades.find((g) => g.grade === name)?.color === 'red'
                 ? '#ef4444'
                 : '#9ca3af',
   }))
@@ -160,16 +130,14 @@ export default function JuniorPerformanceAnalysis({ results = [] }) {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-royalPurple-text1 flex items-center">
             <Award className="h-6 w-6 mr-2 text-yellow-400" />
-            Junior Academic Performance (Forms 1-2)
+            Senior Academic Performance (Grades 10–12)
           </h2>
           <p className="text-royalPurple-text2 mt-1">
-            Analysis based on grading system: 1 (Distinction), 2 (Merit), 3 (Credit), 4 (Pass), F
-            (Fail)
+            Analysis based on grading system: 1 (Distinction) … 8 (Satisfactory), 9 (Fail)
           </p>
         </div>
         <div className="bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-xl px-6 py-3">
@@ -189,7 +157,6 @@ export default function JuniorPerformanceAnalysis({ results = [] }) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Grade Distribution */}
         <Card variant="glass">
           <CardHeader>
             <CardTitle className="text-royalPurple-text1 flex items-center">
@@ -223,7 +190,6 @@ export default function JuniorPerformanceAnalysis({ results = [] }) {
           </CardContent>
         </Card>
 
-        {/* Subject Performance */}
         <Card variant="glass">
           <CardHeader>
             <CardTitle className="text-royalPurple-text1 flex items-center">
@@ -265,7 +231,6 @@ export default function JuniorPerformanceAnalysis({ results = [] }) {
         </Card>
       </div>
 
-      {/* Teacher Performance */}
       <Card variant="glass">
         <CardHeader>
           <CardTitle className="text-royalPurple-text1 flex items-center">

@@ -48,49 +48,51 @@ export async function GET(request) {
       hodProfile?.departmentRef?.name || hodProfile?.department || hodProfile?.department || null
 
     if (!deptId && !deptName) {
-      return NextResponse.json({ error: 'No department assigned' }, { status: 400 })
-    }
-
-    const resolved = await resolveDepartmentScope({
-      prisma,
-      schoolId,
-      departmentId: deptId,
-      departmentName: deptName,
-    })
-    const departmentIds = new Set(resolved.departmentIds.map(String))
-    const departmentNameAliases = resolved.departmentNameAliases
-
-    const teachers = await prisma.teacher.findMany({
-      where: {
+      teacherUserIds = null
+    } else {
+      const resolved = await resolveDepartmentScope({
+        prisma,
         schoolId,
-        ...(departmentIds.size > 0 || departmentNameAliases.length > 0
-          ? {
-              OR: [
-                ...(departmentIds.size > 0
-                  ? [
-                      {
-                        departments: { some: { departmentId: { in: Array.from(departmentIds) } } },
-                      },
-                    ]
-                  : []),
-                ...(departmentNameAliases.length > 0
-                  ? [
-                      {
-                        OR: departmentNameAliases.map((n) => ({
-                          department: { equals: String(n), mode: 'insensitive' },
-                        })),
-                      },
-                    ]
-                  : []),
-              ],
-            }
-          : {}),
-      },
-      select: { userId: true },
-      take: 50000,
-    })
+        departmentId: deptId,
+        departmentName: deptName,
+      })
+      const departmentIds = new Set(resolved.departmentIds.map(String))
+      const departmentNameAliases = resolved.departmentNameAliases
 
-    teacherUserIds = teachers.map((t) => t.userId).filter(Boolean)
+      const teachers = await prisma.teacher.findMany({
+        where: {
+          schoolId,
+          ...(departmentIds.size > 0 || departmentNameAliases.length > 0
+            ? {
+                OR: [
+                  ...(departmentIds.size > 0
+                    ? [
+                        {
+                          departments: {
+                            some: { departmentId: { in: Array.from(departmentIds) } },
+                          },
+                        },
+                      ]
+                    : []),
+                  ...(departmentNameAliases.length > 0
+                    ? [
+                        {
+                          OR: departmentNameAliases.map((n) => ({
+                            department: { equals: String(n), mode: 'insensitive' },
+                          })),
+                        },
+                      ]
+                    : []),
+                ],
+              }
+            : {}),
+        },
+        select: { userId: true },
+        take: 50000,
+      })
+
+      teacherUserIds = teachers.map((t) => t.userId).filter(Boolean)
+    }
   }
 
   const where = {

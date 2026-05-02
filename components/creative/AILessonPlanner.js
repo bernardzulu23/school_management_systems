@@ -36,6 +36,7 @@ export default function AILessonPlanner() {
     duration: 40,
     learningStyle: 'mixed',
     priorKnowledge: '',
+    templateType: 'standard',
   })
 
   const { text, loading, error, done, start, reset, stop } = useAIStream('/api/ai/lesson-planner')
@@ -85,6 +86,24 @@ export default function AILessonPlanner() {
               value={form.topic}
               onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
             />
+          </div>
+          <div className="space-y-2 md:col-span-2">
+            <Label>Lesson Plan Format</Label>
+            <select
+              className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
+              value={form.templateType}
+              onChange={(e) => setForm((p) => ({ ...p, templateType: e.target.value }))}
+            >
+              <option value="standard">Standard CBC (All Subjects)</option>
+              <option value="science">Science Practical Lab Lesson</option>
+              <option value="language">Language Skills Lesson (LSRW)</option>
+              <option value="business">Business & Accounts Lesson</option>
+              <option value="practical">Vocational/Practical Workshop Lesson</option>
+              <option value="humanities">Humanities & Social Sciences Lesson</option>
+              <option value="arts">Arts, Music & Creative Lesson</option>
+              <option value="technology">Technology & ICT Lesson</option>
+              <option value="mathematics">Mathematics Lesson (Problem-Based)</option>
+            </select>
           </div>
           <div className="space-y-2">
             <Label>Duration (minutes)</Label>
