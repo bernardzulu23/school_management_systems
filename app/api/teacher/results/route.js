@@ -357,12 +357,7 @@ export const GET = withErrorHandler(async function GET(request) {
           .filter(Boolean)
       : null
 
-  if (
-    resolvedClassId &&
-    resolvedSubjectId &&
-    Array.isArray(rosterStudentIds) &&
-    rosterStudentIds.length === 0
-  ) {
+  if (resolvedClassId && resolvedSubjectId && Array.isArray(rosterStudentIds)) {
     const classRecord = await prisma.class.findFirst({
       where: { schoolId, id: resolvedClassId },
       select: { id: true, name: true, year_group: true, section: true },
@@ -402,13 +397,18 @@ export const GET = withErrorHandler(async function GET(request) {
             ]
           : []
 
+    // Always merge class membership with subject enrollments.
+    // This prevents "partial enrollment" data from hiding already-entered student results in the gradebook.
     if (classOr.length > 0) {
-      const students = await prisma.student.findMany({
+      const studentsInClass = await prisma.student.findMany({
         where: { schoolId, OR: classOr },
         select: { id: true },
         take: 50000,
       })
-      rosterStudentIds = students.map((s) => String(s.id || '').trim()).filter(Boolean)
+      const classStudentIds = studentsInClass.map((s) => String(s.id || '').trim()).filter(Boolean)
+      rosterStudentIds = Array.from(
+        new Set([...(rosterStudentIds || []), ...classStudentIds].filter(Boolean))
+      )
     }
   }
 
