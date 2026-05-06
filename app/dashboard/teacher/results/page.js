@@ -38,6 +38,7 @@ export default function ResultEntryPage() {
   const [conflicts, setConflicts] = useState([])
   const [showConflicts, setShowConflicts] = useState(false)
   const [isOnline, setIsOnline] = useState(true)
+  const SAVE_BATCH_SIZE = 60
 
   const terms = (() => {
     const year = new Date().getFullYear()
@@ -283,6 +284,16 @@ export default function ResultEntryPage() {
     return { results }
   }
 
+  const chunkPayload = (payload, size = SAVE_BATCH_SIZE) => {
+    const results = Array.isArray(payload?.results) ? payload.results : []
+    if (results.length <= size) return [payload]
+    const chunks = []
+    for (let i = 0; i < results.length; i += size) {
+      chunks.push({ results: results.slice(i, i + size) })
+    }
+    return chunks
+  }
+
   const enqueueOffline = (payload) => {
     const queue = getQueue()
     queue.push({
@@ -426,12 +437,24 @@ export default function ResultEntryPage() {
         return
       }
 
-      const result = await syncOnce(payload)
-      const applied = Number(result?.applied ?? NaN)
-      if (Number.isFinite(applied) && applied === 0) {
+      const batches = chunkPayload(payload)
+      let totalApplied = 0
+      let totalSkipped = 0
+
+      for (const batch of batches) {
+        const result = await syncOnce(batch)
+        totalApplied += Number(result?.applied || 0)
+        totalSkipped += Number(result?.skippedNotAssigned || 0)
+      }
+
+      if (totalApplied === 0) {
         toast.error('No results were saved. Check class/subject assignment and try again.')
+      } else if (totalSkipped > 0) {
+        toast.success(
+          `Saved ${totalApplied} result(s). Skipped ${totalSkipped} unassigned entries.`
+        )
       } else {
-        toast.success('Results saved successfully')
+        toast.success(`Saved ${totalApplied} result(s) successfully`)
       }
       broadcastResultsUpdated()
       await fetchPupilsAndResults()
