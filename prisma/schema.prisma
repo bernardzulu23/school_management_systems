@@ -90,6 +90,8 @@ model School {
   timetableConfig        TimetableConfig?
   timetableAllocationEntries TimetableAllocationEntry[]
 
+  lessonPlans          LessonPlan[]
+
   departmentAllocations  DepartmentAllocation[]
   masterTimetableEntries MasterTimetableEntry[]
   allocationNotifications AllocationNotification[]
@@ -152,6 +154,9 @@ model User {
   teacherAllocations      TeacherAllocation[]     @relation("TeacherAllocations")
   sentTimetableNotifications TimetableNotification[] @relation("NotificationSender")
   receivedTimetableNotifications TimetableNotification[] @relation("NotificationReceiver")
+
+  lessonPlansCreated LessonPlan[] @relation("LessonPlansCreatedBy")
+  lessonPlansToReview LessonPlan[] @relation("LessonPlansReviewer")
 
   createdAllocations      DepartmentAllocation[]  @relation("CreatedAllocations")
   approvedAllocations     DepartmentAllocation[]  @relation("ApprovedAllocations")
@@ -1459,6 +1464,46 @@ enum AllocationStatus {
   SUBMITTED
   APPROVED
   REJECTED
+}
+
+enum LessonPlanStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+model LessonPlan {
+  id              String          @id @default(uuid())
+  schoolId        String
+  school          School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  createdByUserId String
+  createdBy       User            @relation("LessonPlansCreatedBy", fields: [createdByUserId], references: [id], onDelete: Cascade)
+
+  reviewerUserId  String
+  reviewer        User            @relation("LessonPlansReviewer", fields: [reviewerUserId], references: [id], onDelete: Cascade)
+
+  status          LessonPlanStatus @default(DRAFT)
+
+  grade           String
+  subject         String
+  topic           String
+  templateType    String?
+  content         String
+
+  submittedAt     DateTime?
+  approvedAt      DateTime?
+  rejectedAt      DateTime?
+  rejectionReason String?
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([schoolId])
+  @@index([schoolId, createdByUserId])
+  @@index([schoolId, reviewerUserId])
+  @@index([schoolId, reviewerUserId, status])
 }
 
 model DepartmentAllocation {

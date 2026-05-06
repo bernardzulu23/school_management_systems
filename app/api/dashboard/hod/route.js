@@ -355,6 +355,9 @@ export const GET = withErrorHandler(async function GET(request) {
                 results.reduce((sum, r) => sum + (Number(r.score) || 0), 0) / results.length
               )
             : 0,
+        pendingLessonPlans: await prisma.lessonPlan.count({
+          where: { schoolId, reviewerUserId: userId, status: 'SUBMITTED' },
+        }),
         pendingAssessments: assessments.filter(
           (a) => String(a.status || '').toLowerCase() !== 'completed'
         ).length,

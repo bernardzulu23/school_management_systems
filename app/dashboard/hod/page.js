@@ -111,6 +111,7 @@ export default function HodDashboard() {
     totalSubjects: 0,
     totalClasses: 0,
     averagePerformance: 0,
+    pendingLessonPlans: 0,
     pendingAssessments: 0,
   })
 
@@ -301,6 +302,7 @@ export default function HodDashboard() {
       totalSubjects: data.stats?.totalSubjects || 0,
       totalClasses: data.stats?.totalClasses || 0,
       averagePerformance: data.stats?.averagePerformance || 0,
+      pendingLessonPlans: data.stats?.pendingLessonPlans || 0,
       pendingAssessments: data.stats?.pendingAssessments || 0,
     }))
   }, [dashboardData])
@@ -555,7 +557,7 @@ export default function HodDashboard() {
           <div className="space-y-6">
             {/* Enhanced Stats Cards */}
             <section className="w-full py-3">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-10 gap-y-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-x-10 gap-y-6">
                 <StatsCard
                   title="Teachers"
                   value={dashboardStats.totalTeachers}
@@ -586,6 +588,14 @@ export default function HodDashboard() {
                   icon={Group}
                   color="yellow"
                   description="Classes supervised"
+                  variant="flat"
+                />
+                <StatsCard
+                  title="Lesson Plans"
+                  value={dashboardStats.pendingLessonPlans}
+                  icon={FileText}
+                  color="purple"
+                  description="Pending approval"
                   variant="flat"
                 />
                 <StatsCard
