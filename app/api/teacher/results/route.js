@@ -767,6 +767,168 @@ export const POST = withErrorHandler(async function POST(request) {
   return NextResponse.json({ success: true, applied, skippedNotAssigned })
 })
 
+function buildTeacherAssignmentSets(teacherProfile) {
+  const assignmentPairs = new Set(
+    (teacherProfile?.teachingAssignments || [])
+      .filter((a) => a?.classId && a?.subjectId)
+      .map((a) => `${a.classId}:${a.subjectId}`)
+  )
+  const hasTeachingAssignments = assignmentPairs.size > 0
+  const allowedClassIds = new Set((teacherProfile?.classes || []).map((c) => String(c.id)))
+  const allowedSubjectIds = new Set((teacherProfile?.subjects || []).map((s) => String(s.id)))
+  const assignedSubjectTokens = new Set(
+    (Array.isArray(teacherProfile?.assignedSubjects) ? teacherProfile.assignedSubjects : [])
+      .map((v) =>
+        String(v || '')
+          .trim()
+          .toLowerCase()
+      )
+      .filter(Boolean)
+  )
+  return {
+    assignmentPairs,
+    hasTeachingAssignments,
+    allowedClassIds,
+    allowedSubjectIds,
+    assignedSubjectTokens,
+  }
+}
+
+function teacherMayManageClassSubject(
+  ctx,
+  teacherProfile,
+  classRecord,
+  classId,
+  subjectId,
+  subjectNameLower
+) {
+  const isAssignedToClass =
+    ctx.allowedClassIds.has(classId) ||
+    String(classRecord?.teacherId || '') === String(teacherProfile.id)
+
+  const isAssignedToSubject =
+    ctx.allowedSubjectIds.has(subjectId) ||
+    ctx.assignedSubjectTokens.has(subjectId.toLowerCase()) ||
+    (subjectNameLower ? ctx.assignedSubjectTokens.has(subjectNameLower) : false)
+
+  return ctx.hasTeachingAssignments
+    ? ctx.assignmentPairs.has(`${classId}:${subjectId}`)
+    : isAssignedToClass && isAssignedToSubject
+}
+
+/**
+ * DELETE must use the same assignment rules as POST. Teachers often have Class/Subject
+ * links without TeachingAssignment rows; the previous implementation only checked TeachingAssignment
+ * and returned 403 after successful saves via profile assignment.
+ */
+async function assertMayDeleteResult({
+  schoolId,
+  result,
+  teacherProfile,
+  subjectName,
+  isStaffEntry,
+}) {
+  const subjectNameLower = String(subjectName || '')
+    .trim()
+    .toLowerCase()
+
+  const student = await prisma.student.findFirst({
+    where: { schoolId, id: result.studentId },
+    select: { id: true, classId: true, class: true },
+  })
+
+  const enrollmentRows = await prisma.pupilSubjectEnrollment.findMany({
+    where: { schoolId, pupilId: result.studentId, subjectId: result.subjectId },
+    select: { classId: true },
+    take: 50000,
+  })
+
+  const candidateClassIds = new Set()
+  for (const e of enrollmentRows) {
+    if (e?.classId) candidateClassIds.add(String(e.classId))
+  }
+  if (student?.classId) candidateClassIds.add(String(student.classId))
+
+  const compact = (v) =>
+    String(v || '')
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '')
+
+  const classes = await prisma.class.findMany({
+    where: { schoolId },
+    select: { id: true, name: true, year_group: true, section: true },
+    take: 5000,
+  })
+  const classCandidateToId = new Map()
+  for (const c of classes) {
+    const yearGroup = String(c?.year_group || '').trim()
+    const section = String(c?.section || '').trim()
+    const variants = Array.from(
+      new Set(
+        [
+          c?.name,
+          yearGroup,
+          `${yearGroup}${section}`.trim(),
+          `${yearGroup} ${section}`.trim(),
+          String(c?.name || '').replace(/\s+/g, ''),
+        ]
+          .map((x) => String(x || '').trim())
+          .filter(Boolean)
+      )
+    )
+    for (const v of variants) classCandidateToId.set(compact(v), String(c.id))
+  }
+
+  const inferredClassId = classCandidateToId.get(compact(student?.class))
+  if (inferredClassId) candidateClassIds.add(inferredClassId)
+
+  const classIds = Array.from(candidateClassIds).filter(Boolean)
+
+  if (isStaffEntry) {
+    for (const classId of classIds) {
+      const enrollment = await prisma.pupilSubjectEnrollment.findFirst({
+        where: {
+          schoolId,
+          pupilId: result.studentId,
+          subjectId: result.subjectId,
+          classId,
+        },
+        select: { id: true },
+      })
+      const inStudentClass =
+        String(student?.classId || '') === classId || inferredClassId === classId
+      if (enrollment || inStudentClass) return
+    }
+    throw new ApiError('Forbidden', 403)
+  }
+
+  const ctx = buildTeacherAssignmentSets(teacherProfile)
+
+  for (const classId of classIds) {
+    const classRecord = await prisma.class.findFirst({
+      where: { schoolId, id: classId },
+      select: { id: true, teacherId: true },
+    })
+    if (!classRecord) continue
+
+    if (
+      teacherMayManageClassSubject(
+        ctx,
+        teacherProfile,
+        classRecord,
+        classId,
+        result.subjectId,
+        subjectNameLower
+      )
+    ) {
+      return
+    }
+  }
+
+  throw new ApiError('Forbidden', 403)
+}
+
 export const DELETE = withErrorHandler(async function DELETE(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
@@ -797,11 +959,19 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
     return NextResponse.json({ success: true })
   }
 
-  const teacher = await prisma.teacher.findFirst({
+  const teacherProfile = await prisma.teacher.findFirst({
     where: { userId: auth.user.id, schoolId },
-    select: { id: true },
+    select: {
+      id: true,
+      assignedSubjects: true,
+      classes: { select: { id: true } },
+      subjects: { select: { id: true, name: true } },
+      teachingAssignments: { where: { schoolId }, select: { classId: true, subjectId: true } },
+    },
   })
-  if (!teacher) throw new ApiError('Teacher profile not found', 404)
+
+  const isStaffEntry = isHod && !teacherProfile
+  if (!isStaffEntry && !teacherProfile) throw new ApiError('Teacher profile not found', 404)
 
   const result = await prisma.result.findFirst({
     where: { id, schoolId },
@@ -809,31 +979,18 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
   })
   if (!result) throw new ApiError('Result not found', 404)
 
-  const enrollment = await prisma.pupilSubjectEnrollment.findFirst({
-    where: {
-      schoolId,
-      pupilId: result.studentId,
-      subjectId: result.subjectId,
-    },
-    select: { classId: true },
+  const subjectRecord = await prisma.subject.findFirst({
+    where: { schoolId, id: result.subjectId },
+    select: { name: true },
   })
 
-  const hasAssignment = enrollment?.classId
-    ? await prisma.teachingAssignment.findFirst({
-        where: {
-          schoolId,
-          teacherId: teacher.id,
-          classId: enrollment.classId,
-          subjectId: result.subjectId,
-        },
-        select: { id: true },
-      })
-    : await prisma.teachingAssignment.findFirst({
-        where: { schoolId, teacherId: teacher.id, subjectId: result.subjectId },
-        select: { id: true },
-      })
-
-  if (!hasAssignment) throw new ApiError('Forbidden', 403)
+  await assertMayDeleteResult({
+    schoolId,
+    result,
+    teacherProfile,
+    subjectName: subjectRecord?.name,
+    isStaffEntry,
+  })
 
   await prisma.result.delete({ where: { id: result.id } })
 
