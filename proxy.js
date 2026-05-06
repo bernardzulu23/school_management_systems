@@ -72,6 +72,7 @@ export default function proxy(request) {
       '/api/auth/register',
       '/api/auth/logout',
       '/api/auth/refresh',
+      '/api/auth/me',
       '/api/auth/forgot-password',
       '/api/auth/reset-password',
       '/api/sms/inbound',
@@ -101,6 +102,7 @@ export default function proxy(request) {
     if (isProtected && !isPublic) {
       const hasToken =
         Boolean(request.cookies?.get?.('access_token')?.value) ||
+        Boolean(request.cookies?.get?.('refresh_token')?.value) ||
         Boolean(request.cookies?.get?.('session-token')?.value) ||
         Boolean(request.cookies?.get?.('session')?.value) ||
         Boolean(request.headers.get('authorization'))

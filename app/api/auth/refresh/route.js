@@ -24,8 +24,10 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
     }
 
+    // Backward compatibility: some older refresh tokens may not include schoolId.
+    const decodedSchoolId = String(decoded?.schoolId || '').trim()
     const user = await prisma.user.findFirst({
-      where: { id: decoded.id, schoolId: decoded.schoolId },
+      where: decodedSchoolId ? { id: decoded.id, schoolId: decodedSchoolId } : { id: decoded.id },
       select: { id: true, email: true, role: true, schoolId: true },
     })
 
