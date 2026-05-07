@@ -72,19 +72,24 @@
 
   /* ── Royal Purple → remapped to brutalist ── */
   --rp-page: #efece5;
-  --rp-deep: #111111;
+  --rp-deep: #1c1c1a;
   --rp-card: #ffffff;
   --rp-card2: #f5f2eb;
-  --rp-border: #111111;
-  --rp-border2: rgba(17, 17, 17, 0.2);
-  --rp-text1: #111111;
-  --rp-text2: rgba(17, 17, 17, 0.7);
-  --rp-text3: rgba(17, 17, 17, 0.5);
+  --rp-border: rgba(239, 236, 229, 0.15);
+  --rp-border2: rgba(239, 236, 229, 0.08);
+  --rp-text1: #efece5;
+  --rp-text2: rgba(239, 236, 229, 0.7);
+  --rp-text3: rgba(239, 236, 229, 0.45);
   --rp-accent: #ff3b00;
-  --rp-accentbg: rgba(255, 59, 0, 0.1);
+  --rp-accentbg: rgba(255, 59, 0, 0.15);
   --rp-accenttx: #ffffff;
-  --rp-pill: #111111;
-  --rp-pill-text: #efece5;
+  --rp-pill: #efece5;
+  --rp-pill-text: #111111;
+  --rp-success: #1a4a3a;
+  --rp-successTx: #6eddb8;
+  --rp-danger: #4a1a1a;
+  --rp-dangerTx: #ff8080;
+  --rp-muted: rgba(239, 236, 229, 0.08);
 
   /* ── Page surfaces ── */
   --page-bg: #efece5;
