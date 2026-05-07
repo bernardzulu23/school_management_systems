@@ -44,14 +44,14 @@ export default function RootLayout({ children }) {
                 duration: 3000,
                 iconTheme: {
                   primary: 'var(--color-brand-primary)',
-                  secondary: '#ffffff',
+                  secondary: 'var(--color-white)',
                 },
               },
               error: {
                 duration: 5000,
                 iconTheme: {
                   primary: 'var(--color-kpi-fail)',
-                  secondary: '#ffffff',
+                  secondary: 'var(--color-white)',
                 },
               },
             }}

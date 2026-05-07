@@ -121,7 +121,7 @@ export default function MeetingFilesPage() {
       case 'Professional Development':
         return 'bg-royalPurple-success text-royalPurple-successTx'
       case 'Administrative':
-        return 'bg-orange-100 text-orange-800'
+        return 'bg-accent/20 text-g-800'
       default:
         return 'bg-royalPurple-card2 text-royalPurple-text1'
     }
@@ -215,7 +215,7 @@ export default function MeetingFilesPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <FileText className="h-8 w-8 text-orange-600" />
+                <FileText className="h-8 w-8 text-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Action Items</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -253,13 +253,13 @@ export default function MeetingFilesPage() {
                   <input
                     type="text"
                     placeholder="Search meetings..."
-                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <select
-                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
                 >
@@ -413,12 +413,12 @@ export default function MeetingFilesPage() {
                   </p>
                   <p className="text-xs text-royalPurple-accentTx mt-1">1 day ago</p>
                 </div>
-                <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <h4 className="font-medium text-yellow-800 mb-1">Action Items Due</h4>
-                  <p className="text-sm text-yellow-700">
+                <div className="p-3 bg-warn/10 border border-warn/40 rounded-lg">
+                  <h4 className="font-medium text-g-800 mb-1">Action Items Due</h4>
+                  <p className="text-sm text-g-700">
                     3 action items from last meeting need attention
                   </p>
-                  <p className="text-xs text-yellow-600 mt-1">Due in 2 days</p>
+                  <p className="text-xs text-warn mt-1">Due in 2 days</p>
                 </div>
               </div>
             </CardContent>

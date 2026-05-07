@@ -149,7 +149,7 @@ export default function SubjectsPage() {
                   <div className="text-sm text-royalPurple-text2">Total Students</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-orange-600">
+                  <div className="text-2xl font-bold text-accent">
                     {dashboardData.stats?.avg_performance || '80%'}
                   </div>
                   <div className="text-sm text-royalPurple-text2">Avg. Performance</div>

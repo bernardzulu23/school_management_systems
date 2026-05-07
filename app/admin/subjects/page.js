@@ -194,7 +194,7 @@ export default function SubjectsPage() {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   aria-label="Search subjects"
-                  className="w-full pl-10 pr-4 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-royalPurple-border2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                  className="w-full pl-10 pr-4 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-g-500 focus:border-royalPurple-border2 focus:outline-none focus-visible:ring-2 focus-visible:ring-g-500"
                 />
               </div>
             </div>
@@ -204,7 +204,7 @@ export default function SubjectsPage() {
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 aria-label="Filter by category"
-                className="px-3 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-royalPurple-border2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                className="px-3 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-g-500 focus:border-royalPurple-border2 focus:outline-none focus-visible:ring-2 focus-visible:ring-g-500"
               >
                 <option value="all">All Categories</option>
                 <option value="core">Core Subjects</option>
@@ -244,7 +244,7 @@ export default function SubjectsPage() {
           <div className="text-sm text-royalPurple-text2">Local Languages</div>
         </Card>
         <Card className="p-4 text-center">
-          <div className="text-2xl font-bold text-orange-600" role="status">
+          <div className="text-2xl font-bold text-accent" role="status">
             14
           </div>
           <div className="text-sm text-royalPurple-text2">Teachers</div>
@@ -285,7 +285,7 @@ export default function SubjectsPage() {
                 <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" role="list">
                   {categorySubjects.map((subject) => (
                     <li key={subject.id} role="listitem">
-                      <article className="border border-royalPurple-border rounded-lg p-4 hover:shadow-md transition-shadow focus-within:ring-2 focus-within:ring-blue-500">
+                      <article className="border border-royalPurple-border rounded-lg p-4 hover:shadow-md transition-shadow focus-within:ring-2 focus-within:ring-g-500">
                         <div className="flex justify-between items-start mb-2">
                           <h3 className="font-semibold text-royalPurple-text1">{subject.name}</h3>
                           <span

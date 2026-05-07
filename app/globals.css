@@ -1,75 +1,102 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ============================================
-   ZSMS GLOBAL DESIGN SYSTEM
-   Single source of truth — imported once in layout.tsx
-   ============================================ */
-
 :root {
-  --color-brand-primary: #7c3aed;
-  --color-brand-hover: #6d28d9;
-  --color-brand-light: #ede9fe;
-  --color-brand-accent: #a78bfa;
+  /* ── Brutalist core ── */
+  --color-paper: #efece5;
+  --color-ink: #111111;
+  --color-accent: #ff3b00;
+  --color-white: #ffffff;
 
-  --color-dash-bg: #1a0a2e;
-  --color-dash-card: #2d1b4e;
-  --color-dash-card-alt: #3d2460;
-  --color-dash-border: #4c3575;
-  --color-dash-text: #ffffff;
-  --color-dash-muted: #a78bfa;
-  --color-dash-subtext: #c4b5fd;
+  /* ── Brand (mapped to brutalist) ── */
+  --color-brand-primary: #ff3b00;
+  --color-brand-hover: #cc2f00;
+  --color-brand-light: rgba(255, 59, 0, 0.1);
+  --color-brand-accent: #ff3b00;
 
-  --color-form-bg: #1a0a2e;
-  --color-form-card: #2d1b4e;
-  --color-form-input: #3d2460;
-  --color-form-border: #5b3d8a;
-  --color-form-label: #c4b5fd;
-  --color-form-text: #ffffff;
-  --color-form-placeholder: #7c5cbf;
+  /* ── Dashboard ── */
+  --color-dash-bg: #efece5;
+  --color-dash-card: #ffffff;
+  --color-dash-card-alt: #f5f2eb;
+  --color-dash-border: #111111;
+  --color-dash-text: #111111;
+  --color-dash-muted: rgba(17, 17, 17, 0.6);
+  --color-dash-subtext: rgba(17, 17, 17, 0.7);
 
-  --color-land-bg: #ffffff;
-  --color-land-text: #1e1b4b;
-  --color-land-muted: #6b7280;
+  /* ── Forms ── */
+  --color-form-bg: #efece5;
+  --color-form-card: #ffffff;
+  --color-form-input: #ffffff;
+  --color-form-border: #111111;
+  --color-form-label: #111111;
+  --color-form-text: #111111;
+  --color-form-placeholder: rgba(17, 17, 17, 0.4);
 
-  --color-kpi-zero: #9ca3af;
-  --color-kpi-fail: #f87171;
-  --color-kpi-warn: #fbbf24;
-  --color-kpi-pass: #4ade80;
+  /* ── Landing ── */
+  --color-land-bg: #efece5;
+  --color-land-text: #111111;
+  --color-land-muted: rgba(17, 17, 17, 0.6);
 
-  --color-status-active: #4ade80;
-  --color-status-inactive: #f87171;
-  --color-status-pending: #fbbf24;
+  /* ── KPI ── */
+  --color-kpi-zero: #a8a7a2;
+  --color-kpi-fail: #ff3b00;
+  --color-kpi-warn: #c99a2e;
+  --color-kpi-pass: #1a6b6a;
 
-  --color-nav-bg: #0f0720;
-  --color-nav-text: #ffffff;
-  --color-nav-border: #2d1b4e;
+  /* ── Status ── */
+  --color-status-active: #1a6b6a;
+  --color-status-inactive: #ff3b00;
+  --color-status-pending: #c99a2e;
 
-  --color-table-header: #1e0f35;
+  /* ── Nav ── */
+  --color-nav-bg: #111111;
+  --color-nav-text: #efece5;
+  --color-nav-border: rgba(239, 236, 229, 0.1);
+
+  /* ── Tables ── */
+  --color-table-header: #111111;
   --color-table-row: #ffffff;
-  --color-table-row-alt: #f9f7ff;
-  --color-table-hover: #f3f0ff;
-  --color-table-text: #1e1b4b;
-  --color-table-border: #e5e7eb;
+  --color-table-row-alt: #f5f2eb;
+  --color-table-hover: rgba(255, 59, 0, 0.05);
+  --color-table-text: #111111;
+  --color-table-border: rgba(17, 17, 17, 0.1);
 
-  --color-avatar-bg: #7c3aed;
+  /* ── Avatar / Date ── */
+  --color-avatar-bg: #ff3b00;
   --color-avatar-text: #ffffff;
+  --color-date-bg: #111111;
+  --color-date-text: #efece5;
 
-  --color-date-bg: #7c3aed;
-  --color-date-text: #ffffff;
+  /* ── Royal Purple → remapped to brutalist ── */
+  --rp-page: #efece5;
+  --rp-deep: #111111;
+  --rp-card: #ffffff;
+  --rp-card2: #f5f2eb;
+  --rp-border: #111111;
+  --rp-border2: rgba(17, 17, 17, 0.2);
+  --rp-text1: #111111;
+  --rp-text2: rgba(17, 17, 17, 0.7);
+  --rp-text3: rgba(17, 17, 17, 0.5);
+  --rp-accent: #ff3b00;
+  --rp-accentbg: rgba(255, 59, 0, 0.1);
+  --rp-accenttx: #ffffff;
+  --rp-pill: #111111;
+  --rp-pill-text: #efece5;
 
-  --page-bg: var(--color-land-bg);
-  --surface: var(--color-land-bg);
-  --surface-alt: #f9fafb;
-  --border: rgba(0, 0, 0, 0.09);
-  --border-hover: rgba(0, 0, 0, 0.18);
-  --text-primary: var(--color-land-text);
-  --text-secondary: var(--color-land-muted);
-  --text-muted: var(--color-land-muted);
+  /* ── Page surfaces ── */
+  --page-bg: #efece5;
+  --surface: #ffffff;
+  --surface-alt: #f5f2eb;
+  --border: rgba(17, 17, 17, 0.1);
+  --border-hover: rgba(17, 17, 17, 0.3);
+  --text-primary: #111111;
+  --text-secondary: rgba(17, 17, 17, 0.7);
+  --text-muted: rgba(17, 17, 17, 0.5);
 
+  /* ── Badges ── */
   --badge-up-bg: #e6faf0;
   --badge-up-color: #0d7a4c;
   --badge-dn-bg: #fef2f2;
@@ -78,51 +105,26 @@
   --warn-color: #92400e;
   --danger-bg: #fef2f2;
   --danger-color: #b91c1c;
-
-  --header-gradient: linear-gradient(135deg, #1c1c1a 0%, #333331 55%, #4e4d4a 100%);
-  --radius-card: 14px;
-  --radius-lg: 20px;
-  --radius-sm: 10px;
-
-  --rp-page: var(--color-land-bg);
-  --rp-deep: #f9fafb;
-  --rp-card: #ffffff;
-  --rp-card2: #f9fafb;
-  --rp-border: #e5e7eb;
-  --rp-border2: var(--color-brand-primary);
-  --rp-text1: var(--color-land-text);
-  --rp-text2: var(--color-land-muted);
-  --rp-text3: #6b7280;
-  --rp-accent: var(--color-brand-primary);
-  --rp-accentbg: var(--color-brand-light);
-  --rp-accenttx: #ffffff;
-  --rp-pill: var(--color-brand-light);
-  --rp-pill-text: var(--color-brand-primary);
 }
 
-.dark {
-  --page-bg: var(--color-dash-bg);
-  --surface: var(--color-dash-card);
-  --surface-alt: var(--color-dash-card-alt);
-  --border: rgba(255, 255, 255, 0.09);
-  --text-primary: var(--color-dash-text);
-  --text-secondary: var(--color-dash-muted);
-  --text-muted: var(--color-dash-subtext);
+/* ── Brutalist scrollbar ── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #efece5;
+}
+::-webkit-scrollbar-thumb {
+  background: #111111;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ff3b00;
+}
 
-  --rp-page: var(--color-dash-bg);
-  --rp-deep: var(--color-nav-bg);
-  --rp-card: var(--color-dash-card);
-  --rp-card2: var(--color-dash-card-alt);
-  --rp-border: var(--color-dash-border);
-  --rp-border2: var(--color-brand-primary);
-  --rp-text1: var(--color-dash-text);
-  --rp-text2: var(--color-dash-muted);
-  --rp-text3: var(--color-dash-subtext);
-  --rp-accent: var(--color-brand-primary);
-  --rp-accentbg: var(--color-brand-light);
-  --rp-accenttx: #ffffff;
-  --rp-pill: var(--color-brand-primary);
-  --rp-pill-text: #ffffff;
+/* ── Base body ── */
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
 }
 
 .dash-page {
@@ -180,7 +182,7 @@
 .form-input:focus {
   outline: none;
   border-color: var(--color-brand-primary);
-  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.3);
+  box-shadow: 0 0 0 2px rgba(255, 59, 0, 0.3);
 }
 
 .form-label {
@@ -221,7 +223,7 @@
 }
 
 .btn-ghost:hover {
-  background: rgba(124, 58, 237, 0.1);
+  background: rgba(255, 59, 0, 0.1);
 }
 
 .kpi-zero {
@@ -539,7 +541,7 @@ html:not(.dark) .bg-white .text-royalPurple-text3 {
 
 .provider-pill-active {
   border-color: var(--color-brand-primary);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.16);
+  box-shadow: 0 0 0 3px rgba(255, 59, 0, 0.16);
 }
 
 .provider-dot {
@@ -593,8 +595,8 @@ html:not(.dark) .bg-white .text-royalPurple-text3 {
 
 .plan-tile-active {
   border-color: var(--color-brand-primary);
-  background: rgba(124, 58, 237, 0.06);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.14);
+  background: rgba(255, 59, 0, 0.06);
+  box-shadow: 0 0 0 3px rgba(255, 59, 0, 0.14);
 }
 
 .plan-badge {
@@ -604,7 +606,7 @@ html:not(.dark) .bg-white .text-royalPurple-text3 {
   padding: 6px 10px;
   font-size: 12px;
   font-weight: 800;
-  background: rgba(124, 58, 237, 0.12);
+  background: rgba(255, 59, 0, 0.12);
   color: var(--color-brand-primary);
 }
 
@@ -655,15 +657,6 @@ html:not(.dark) .bg-white .text-royalPurple-text3 {
 
 .payment-status-failed {
   color: var(--color-kpi-fail);
-}
-
-body {
-  background-color: var(--rp-page);
-  color: var(--rp-text1);
-  font-family: 'Inter', sans-serif;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 @layer base {

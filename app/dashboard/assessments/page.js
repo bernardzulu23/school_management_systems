@@ -74,7 +74,7 @@ export default function AssessmentsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <BookOpen className="h-8 w-8 text-orange-600" />
+                <BookOpen className="h-8 w-8 text-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Completed</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">12</p>
@@ -118,7 +118,7 @@ export default function AssessmentsPage() {
                             assessment.status === 'published'
                               ? 'bg-royalPurple-success text-royalPurple-successTx'
                               : assessment.status === 'draft'
-                                ? 'bg-yellow-100 text-yellow-800'
+                                ? 'bg-warn/20 text-g-800'
                                 : 'bg-royalPurple-card2 text-royalPurple-text1'
                           }`}
                         >

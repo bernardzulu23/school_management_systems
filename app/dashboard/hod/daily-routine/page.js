@@ -132,7 +132,7 @@ export default function DailyRoutinePage() {
       case 'in-progress':
         return <Play className="h-4 w-4 text-royalPurple-accentTx" />
       case 'pending':
-        return <Clock className="h-4 w-4 text-yellow-500" />
+        return <Clock className="h-4 w-4 text-warn/100" />
       case 'overdue':
         return <AlertCircle className="h-4 w-4 text-royalPurple-dangerTx" />
       default:
@@ -147,7 +147,7 @@ export default function DailyRoutinePage() {
       case 'in-progress':
         return 'bg-royalPurple-accent text-royalPurple-accentTx'
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800'
+        return 'bg-warn/20 text-g-800'
       case 'overdue':
         return 'bg-royalPurple-danger text-royalPurple-dangerTx'
       default:
@@ -160,7 +160,7 @@ export default function DailyRoutinePage() {
       case 'high':
         return 'bg-royalPurple-danger text-royalPurple-dangerTx border-royalPurple-border'
       case 'medium':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+        return 'bg-warn/20 text-g-800 border-warn/40'
       case 'low':
         return 'bg-royalPurple-success text-royalPurple-successTx border-royalPurple-border'
       default:
@@ -208,7 +208,7 @@ export default function DailyRoutinePage() {
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500"
             />
             <Button variant="outline">
               <Download className="h-4 w-4 mr-2" />
@@ -265,7 +265,7 @@ export default function DailyRoutinePage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <AlertCircle className="h-8 w-8 text-yellow-600" />
+                <AlertCircle className="h-8 w-8 text-warn" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Pending</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -345,7 +345,7 @@ export default function DailyRoutinePage() {
               <div className="flex items-center justify-between">
                 <CardTitle>Today's Tasks</CardTitle>
                 <select
-                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                 >

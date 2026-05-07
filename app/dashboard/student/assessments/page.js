@@ -238,19 +238,19 @@ export default function StudentAssessmentsPage() {
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={performanceData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#3b2a66" />
-                    <XAxis dataKey="assessment" tick={{ fill: '#a78bfa' }} />
-                    <YAxis tick={{ fill: '#a78bfa' }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--rp-border)" />
+                    <XAxis dataKey="assessment" tick={{ fill: 'var(--rp-text2)' }} />
+                    <YAxis tick={{ fill: 'var(--rp-text2)' }} />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: '#1e1033',
-                        border: '1px solid #3b2a66',
-                        color: '#ede9fe',
+                        backgroundColor: 'var(--rp-deep)',
+                        border: '1px solid var(--rp-border)',
+                        color: 'var(--rp-accentbg)',
                       }}
-                      labelStyle={{ color: '#ede9fe' }}
+                      labelStyle={{ color: 'var(--rp-accentbg)' }}
                     />
-                    <Bar dataKey="myScore" fill="#f59e0b" name="My Score" />
-                    <Bar dataKey="classAverage" fill="#7c3aed" name="Class Average" />
+                    <Bar dataKey="myScore" fill="var(--warn-color)" name="My Score" />
+                    <Bar dataKey="classAverage" fill="var(--color-accent)" name="Class Average" />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -263,18 +263,23 @@ export default function StudentAssessmentsPage() {
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={gradeProgressData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#3b2a66" />
-                    <XAxis dataKey="month" tick={{ fill: '#a78bfa' }} />
-                    <YAxis domain={[70, 100]} tick={{ fill: '#a78bfa' }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--rp-border)" />
+                    <XAxis dataKey="month" tick={{ fill: 'var(--rp-text2)' }} />
+                    <YAxis domain={[70, 100]} tick={{ fill: 'var(--rp-text2)' }} />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: '#1e1033',
-                        border: '1px solid #3b2a66',
-                        color: '#ede9fe',
+                        backgroundColor: 'var(--rp-deep)',
+                        border: '1px solid var(--rp-border)',
+                        color: 'var(--rp-accentbg)',
                       }}
-                      labelStyle={{ color: '#ede9fe' }}
+                      labelStyle={{ color: 'var(--rp-accentbg)' }}
                     />
-                    <Line type="monotone" dataKey="grade" stroke="#f59e0b" strokeWidth={2} />
+                    <Line
+                      type="monotone"
+                      dataKey="grade"
+                      stroke="var(--warn-color)"
+                      strokeWidth={2}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -308,13 +313,13 @@ export default function StudentAssessmentsPage() {
                   <input
                     type="text"
                     placeholder="Search assessments..."
-                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <select
-                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                   value={filterSubject}
                   onChange={(e) => setFilterSubject(e.target.value)}
                 >
@@ -461,7 +466,7 @@ export default function StudentAssessmentsPage() {
                             {assessment.grade}
                           </p>
                         </div>
-                        <div className="text-center p-3 bg-orange-50 rounded-lg">
+                        <div className="text-center p-3 bg-accent/10 rounded-lg">
                           <p className="text-sm text-royalPurple-text2">Class Rank</p>
                           <p className="text-lg font-bold text-royalPurple-text1">
                             #{assessment.rank}

@@ -38,7 +38,7 @@ export default function CorrespondencePage() {
   const getStatusIcon = (status) => {
     switch (status) {
       case 'pending':
-        return <Clock className="h-4 w-4 text-yellow-500" />
+        return <Clock className="h-4 w-4 text-warn/100" />
       case 'responded':
         return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
       case 'sent':
@@ -55,7 +55,7 @@ export default function CorrespondencePage() {
       case 'high':
         return 'bg-royalPurple-danger text-royalPurple-dangerTx'
       case 'medium':
-        return 'bg-yellow-100 text-yellow-800'
+        return 'bg-warn/20 text-g-800'
       case 'low':
         return 'bg-royalPurple-success text-royalPurple-successTx'
       default:
@@ -66,7 +66,7 @@ export default function CorrespondencePage() {
   const getStatusColor = (status) => {
     switch (status) {
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800'
+        return 'bg-warn/20 text-g-800'
       case 'responded':
         return 'bg-royalPurple-success text-royalPurple-successTx'
       case 'sent':
@@ -127,7 +127,7 @@ export default function CorrespondencePage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Clock className="h-8 w-8 text-yellow-600" />
+                <Clock className="h-8 w-8 text-warn" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Pending</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">{stats.pending}</p>
@@ -185,13 +185,13 @@ export default function CorrespondencePage() {
                   <input
                     type="text"
                     placeholder="Search correspondence..."
-                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <select
-                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                 >

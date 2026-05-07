@@ -68,7 +68,7 @@ export default function CulturalLearningPage() {
           <Card variant="glass">
             <CardHeader>
               <CardTitle className="flex items-center text-royalPurple-text1">
-                <Music className="mr-2 text-yellow-400" />
+                <Music className="mr-2 text-warn" />
                 Music & Arts
               </CardTitle>
             </CardHeader>
@@ -81,7 +81,7 @@ export default function CulturalLearningPage() {
                 <li>Ceremonial Dances</li>
                 <li>Modern Zambian Music</li>
               </ul>
-              <Button className="w-full bg-yellow-600 hover:bg-yellow-700 text-royalPurple-text1">
+              <Button className="w-full bg-warn hover:bg-g-700 text-royalPurple-text1">
                 Explore Arts
               </Button>
             </CardContent>

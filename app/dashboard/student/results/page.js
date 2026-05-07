@@ -169,7 +169,7 @@ export default function StudentResultsPage() {
             <input
               type="text"
               placeholder="Search subjects..."
-              className="pl-10 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="pl-10 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-g-500"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -177,7 +177,7 @@ export default function StudentResultsPage() {
 
           <div className="flex gap-4 w-full md:w-auto">
             <select
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-royalPurple-card"
+              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-g-500 bg-royalPurple-card"
               value={selectedTerm}
               onChange={(e) => setSelectedTerm(e.target.value)}
             >
@@ -251,7 +251,7 @@ export default function StudentResultsPage() {
                               result.score >= 70
                                 ? 'bg-royalPurple-success text-royalPurple-successTx'
                                 : result.score >= 50
-                                  ? 'bg-yellow-100 text-yellow-800'
+                                  ? 'bg-warn/20 text-g-800'
                                   : 'bg-royalPurple-danger text-royalPurple-dangerTx'
                             }`}
                           >

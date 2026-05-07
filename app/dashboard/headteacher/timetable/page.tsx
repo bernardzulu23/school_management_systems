@@ -650,7 +650,7 @@ function HeadteacherTimetablePageContent() {
             >
               <Bell size={18} />
               {allocationNotifUnread > 0 ? (
-                <span className="absolute -top-1 -right-1 rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-bold text-white">
+                <span className="absolute -top-1 -right-1 rounded-full bg-accent/100 px-2 py-0.5 text-[10px] font-bold text-white">
                   {allocationNotifUnread}
                 </span>
               ) : null}

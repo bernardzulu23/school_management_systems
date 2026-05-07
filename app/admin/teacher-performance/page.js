@@ -254,7 +254,7 @@ export default function TeacherPerformancePage() {
                 aria-controls={`${tab.id}-panel`}
                 id={`${tab.id}-tab`}
                 onClick={() => setActiveView(tab.id)}
-                className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-g-500 ${
                   activeView === tab.id
                     ? 'border-royalPurple-border2 text-royalPurple-accentTx'
                     : 'border-transparent text-royalPurple-text3 hover:text-royalPurple-text2 hover:border-royalPurple-border'
@@ -288,7 +288,7 @@ export default function TeacherPerformancePage() {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       aria-label="Search teachers"
-                      className="w-full pl-10 pr-4 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-royalPurple-border2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                      className="w-full pl-10 pr-4 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-g-500 focus:border-royalPurple-border2 focus:outline-none focus-visible:ring-2 focus-visible:ring-g-500"
                     />
                   </div>
                 </div>
@@ -298,7 +298,7 @@ export default function TeacherPerformancePage() {
                     value={filterDepartment}
                     onChange={(e) => setFilterDepartment(e.target.value)}
                     aria-label="Filter by department"
-                    className="px-3 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-royalPurple-border2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                    className="px-3 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-g-500 focus:border-royalPurple-border2 focus:outline-none focus-visible:ring-2 focus-visible:ring-g-500"
                   >
                     <option value="all">All Departments</option>
                     {departments.map((dept) => (
@@ -328,7 +328,7 @@ export default function TeacherPerformancePage() {
             >
               {filteredTeachers.map((teacher) => (
                 <li key={teacher.id} role="listitem">
-                  <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer group focus-within:ring-2 focus-within:ring-blue-500">
+                  <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer group focus-within:ring-2 focus-within:ring-g-500">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <div

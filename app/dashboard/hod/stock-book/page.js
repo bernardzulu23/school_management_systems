@@ -34,7 +34,7 @@ export default function StockBookPage() {
       case 'in_stock':
         return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
       case 'low_stock':
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />
+        return <AlertTriangle className="h-4 w-4 text-warn/100" />
       case 'critical':
         return <AlertTriangle className="h-4 w-4 text-royalPurple-dangerTx" />
       case 'out_of_stock':
@@ -49,7 +49,7 @@ export default function StockBookPage() {
       case 'in_stock':
         return 'bg-royalPurple-success text-royalPurple-successTx'
       case 'low_stock':
-        return 'bg-yellow-100 text-yellow-800'
+        return 'bg-warn/20 text-g-800'
       case 'critical':
         return 'bg-royalPurple-danger text-royalPurple-dangerTx'
       case 'out_of_stock':
@@ -327,7 +327,7 @@ export default function StockBookPage() {
                       className={`p-3 border rounded-lg ${
                         item.status === 'critical'
                           ? 'bg-royalPurple-danger border-royalPurple-border'
-                          : 'bg-yellow-50 border-yellow-200'
+                          : 'bg-warn/10 border-warn/40'
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -336,7 +336,7 @@ export default function StockBookPage() {
                             className={`font-medium ${
                               item.status === 'critical'
                                 ? 'text-royalPurple-dangerTx'
-                                : 'text-yellow-800'
+                                : 'text-g-800'
                             }`}
                           >
                             {item.itemName}
@@ -345,7 +345,7 @@ export default function StockBookPage() {
                             className={`text-sm ${
                               item.status === 'critical'
                                 ? 'text-royalPurple-dangerTx'
-                                : 'text-yellow-700'
+                                : 'text-g-700'
                             }`}
                           >
                             Current: {item.currentStock} | Minimum: {item.minimumStock}

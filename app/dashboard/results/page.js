@@ -50,10 +50,10 @@ export default function ResultsPage() {
         return 'text-royalPurple-accentTx bg-royalPurple-accent'
       case 'B':
       case 'B-':
-        return 'text-yellow-600 bg-yellow-100'
+        return 'text-warn bg-warn/20'
       case 'C+':
       case 'C':
-        return 'text-orange-600 bg-orange-100'
+        return 'text-accent bg-accent/20'
       default:
         return 'text-royalPurple-dangerTx bg-royalPurple-danger'
     }
@@ -89,7 +89,7 @@ export default function ResultsPage() {
     return (
       <DashboardLayout title={isStudent ? 'My Results' : 'Results & Grading'}>
         <main className="space-y-6">
-          <Card className="focus-within:ring-2 focus-within:ring-blue-500 transition-shadow">
+          <Card className="focus-within:ring-2 focus-within:ring-g-500 transition-shadow">
             <CardContent className="text-center py-12">
               <GraduationCap
                 className="h-16 w-16 text-royalPurple-text3 mx-auto mb-4"
@@ -110,7 +110,7 @@ export default function ResultsPage() {
                     startTopLoading('Refreshing')
                     setTimeout(() => window.location.reload(), 350)
                   }}
-                  className="focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="focus:ring-2 focus:ring-g-500 outline-none"
                   aria-label="Refresh results"
                 >
                   <RefreshCw className="h-4 w-4 mr-2" aria-hidden="true" />
@@ -118,7 +118,7 @@ export default function ResultsPage() {
                 </Button>
                 {!isStudent && (
                   <Button
-                    className="focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="focus:ring-2 focus:ring-g-500 outline-none"
                     aria-label="Add new results"
                   >
                     <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
@@ -153,7 +153,7 @@ export default function ResultsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="focus:ring-2 focus:ring-blue-500 outline-none flex-1 sm:flex-none"
+                className="focus:ring-2 focus:ring-g-500 outline-none flex-1 sm:flex-none"
                 aria-label="Export results to CSV"
               >
                 <Download className="h-4 w-4 mr-2" aria-hidden="true" />
@@ -162,7 +162,7 @@ export default function ResultsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="focus:ring-2 focus:ring-blue-500 outline-none flex-1 sm:flex-none"
+                className="focus:ring-2 focus:ring-g-500 outline-none flex-1 sm:flex-none"
                 aria-label="Open filter options"
               >
                 <Filter className="h-4 w-4 mr-2" aria-hidden="true" />
@@ -177,7 +177,7 @@ export default function ResultsPage() {
           className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
           aria-label="Results Statistics"
         >
-          <Card className="focus-within:ring-2 focus-within:ring-blue-500 transition-shadow">
+          <Card className="focus-within:ring-2 focus-within:ring-g-500 transition-shadow">
             <CardContent className="p-3 sm:p-6">
               <div className="flex flex-col sm:flex-row items-center text-center sm:text-left">
                 {isStudent ? (
@@ -203,7 +203,7 @@ export default function ResultsPage() {
             </CardContent>
           </Card>
 
-          <Card className="focus-within:ring-2 focus-within:ring-green-500 transition-shadow">
+          <Card className="focus-within:ring-2 focus-within:ring-kpi-pass/100 transition-shadow">
             <CardContent className="p-3 sm:p-6">
               <div className="flex flex-col sm:flex-row items-center text-center sm:text-left">
                 <TrendingUp
@@ -222,7 +222,7 @@ export default function ResultsPage() {
             </CardContent>
           </Card>
 
-          <Card className="focus-within:ring-2 focus-within:ring-purple-500 transition-shadow">
+          <Card className="focus-within:ring-2 focus-within:ring-accent/100 transition-shadow">
             <CardContent className="p-3 sm:p-6">
               <div className="flex flex-col sm:flex-row items-center text-center sm:text-left">
                 <Award
@@ -241,11 +241,11 @@ export default function ResultsPage() {
             </CardContent>
           </Card>
 
-          <Card className="focus-within:ring-2 focus-within:ring-orange-500 transition-shadow">
+          <Card className="focus-within:ring-2 focus-within:ring-accent/100 transition-shadow">
             <CardContent className="p-3 sm:p-6">
               <div className="flex flex-col sm:flex-row items-center text-center sm:text-left">
                 <BookOpen
-                  className="h-6 w-6 sm:h-8 sm:w-8 text-orange-600 mb-2 sm:mb-0"
+                  className="h-6 w-6 sm:h-8 sm:w-8 text-accent mb-2 sm:mb-0"
                   aria-hidden="true"
                 />
                 <div className="sm:ml-4">
@@ -281,7 +281,7 @@ export default function ResultsPage() {
                       id="class-filter"
                       value={selectedClass}
                       onChange={(e) => setSelectedClass(e.target.value)}
-                      className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-royalPurple-card"
+                      className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent outline-none bg-royalPurple-card"
                       aria-label="Filter results by class"
                     >
                       <option value="">All Classes</option>
@@ -304,7 +304,7 @@ export default function ResultsPage() {
                       id="subject-filter"
                       value={selectedSubject}
                       onChange={(e) => setSelectedSubject(e.target.value)}
-                      className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-royalPurple-card"
+                      className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent outline-none bg-royalPurple-card"
                       aria-label="Filter results by subject"
                     >
                       <option value="">All Subjects</option>
@@ -325,7 +325,7 @@ export default function ResultsPage() {
                     </label>
                     <select
                       id="assessment-filter"
-                      className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-royalPurple-card"
+                      className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent outline-none bg-royalPurple-card"
                       aria-label="Filter results by assessment type"
                     >
                       <option value="">All Assessments</option>

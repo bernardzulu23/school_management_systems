@@ -77,9 +77,9 @@ export default function TimetablePage() {
       case 'assembly':
         return 'bg-royalPurple-pill border-royalPurple-border2 text-royalPurple-pillTx'
       case 'free':
-        return 'bg-yellow-100 border-yellow-300 text-yellow-800'
+        return 'bg-warn/20 border-warn/70 text-g-800'
       case 'prep':
-        return 'bg-orange-100 border-orange-300 text-orange-800'
+        return 'bg-accent/20 border-accent/60 text-g-800'
       default:
         return 'bg-royalPurple-card2 border-royalPurple-border text-royalPurple-text2'
     }
@@ -140,7 +140,7 @@ export default function TimetablePage() {
                       onClick={() => setSelectedDay(index + 1)}
                       aria-label={`Select ${dayInfo.day}, ${dayInfo.date}/${dayInfo.month}`}
                       aria-pressed={selectedDay === index + 1}
-                      className={`p-2 sm:p-3 rounded-lg border transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 outline-none flex-shrink-0 min-w-[70px] sm:min-w-[80px] ${
+                      className={`p-2 sm:p-3 rounded-lg border transition-colors focus-visible:ring-2 focus-visible:ring-g-500 outline-none flex-shrink-0 min-w-[70px] sm:min-w-[80px] ${
                         dayInfo.isToday
                           ? 'bg-royalPurple-accent text-royalPurple-text1 border-royalPurple-border2 shadow-md scale-105 z-10'
                           : selectedDay === index + 1
@@ -186,7 +186,7 @@ export default function TimetablePage() {
             <CardContent>
               {/* Desktop View: Full Grid */}
               <div
-                className="hidden sm:block overflow-x-auto focus-visible:ring-2 focus-visible:ring-blue-500 rounded-lg outline-none"
+                className="hidden sm:block overflow-x-auto focus-visible:ring-2 focus-visible:ring-g-500 rounded-lg outline-none"
                 tabIndex="0"
                 aria-label="Timetable scrollable area"
               >
@@ -344,7 +344,7 @@ export default function TimetablePage() {
                         key={index}
                         role="listitem"
                         tabIndex="0"
-                        className={`p-4 rounded-lg border-l-4 focus-visible:ring-2 focus-visible:ring-blue-500 outline-none transition-shadow ${
+                        className={`p-4 rounded-lg border-l-4 focus-visible:ring-2 focus-visible:ring-g-500 outline-none transition-shadow ${
                           classInfo.type === 'lesson'
                             ? 'border-royalPurple-border2 bg-royalPurple-accent'
                             : classInfo.type === 'break'

@@ -92,9 +92,9 @@ function defaultClassrooms(count) {
 
 export default function StudentDashboard() {
   useEffect(() => {
-    document.documentElement.style.setProperty('--rp-accent', '#7c3aed')
-    document.documentElement.style.setProperty('--rp-accentbg', '#ede9fe')
-    document.documentElement.style.setProperty('--rp-accenttx', '#ffffff')
+    document.documentElement.style.setProperty('--rp-accent', 'var(--color-accent)')
+    document.documentElement.style.setProperty('--rp-accentbg', 'var(--rp-accentbg)')
+    document.documentElement.style.setProperty('--rp-accenttx', 'var(--color-white)')
     return () => {
       document.documentElement.style.removeProperty('--rp-accent')
       document.documentElement.style.removeProperty('--rp-accentbg')
@@ -219,7 +219,7 @@ export default function StudentDashboard() {
   // Helper function to get achievement icon based on grade
   const getAchievementIcon = (grade) => {
     if (grade === 'A+' || grade === 'A' || grade === 'ONE' || grade === '1' || grade === '2') {
-      return <Trophy className="h-4 w-4 text-yellow-500" />
+      return <Trophy className="h-4 w-4 text-warn/100" />
     }
     return null
   }
@@ -273,13 +273,13 @@ export default function StudentDashboard() {
               </div>
               {currentUser && (
                 <div className="flex items-center space-x-4">
-                  <div className="bg-purple-600 text-white rounded-2xl p-4 text-center shadow-sm border border-royalPurple-border">
+                  <div className="bg-accent text-white rounded-2xl p-4 text-center shadow-sm border border-royalPurple-border">
                     <div className="text-2xl font-bold">{new Date().getDate()}</div>
                     <div className="text-sm opacity-90">
                       {new Date().toLocaleDateString('en-US', { month: 'short' })}
                     </div>
                   </div>
-                  <div className="w-16 h-16 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-sm border border-royalPurple-border">
+                  <div className="w-16 h-16 rounded-full bg-accent flex items-center justify-center text-white font-bold text-xl shadow-sm border border-royalPurple-border">
                     {currentUser.name?.charAt(0) || 'S'}
                   </div>
                 </div>
@@ -329,7 +329,7 @@ export default function StudentDashboard() {
                   <h3 className="text-lg font-semibold text-royalPurple-text1">Games</h3>
                   <p
                     className={`text-3xl font-bold ${
-                      Number(dashboardData?.stats?.gamesPlayed) > 0 ? 'text-white' : 'text-gray-400'
+                      Number(dashboardData?.stats?.gamesPlayed) > 0 ? 'text-white' : 'text-g-400'
                     }`}
                   >
                     {dashboardData?.stats?.gamesPlayed || 0}
@@ -343,9 +343,7 @@ export default function StudentDashboard() {
                   <h3 className="text-lg font-semibold text-royalPurple-text1">Achievements</h3>
                   <p
                     className={`text-3xl font-bold ${
-                      Number(dashboardData?.stats?.achievements) > 0
-                        ? 'text-white'
-                        : 'text-gray-400'
+                      Number(dashboardData?.stats?.achievements) > 0 ? 'text-white' : 'text-g-400'
                     }`}
                   >
                     {dashboardData?.stats?.achievements || 0}
@@ -454,7 +452,7 @@ export default function StudentDashboard() {
                         </div>
                         <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                           <div className="flex items-center mb-2">
-                            <Flag className="h-4 w-4 text-orange-400 mr-2" />
+                            <Flag className="h-4 w-4 text-accent/80 mr-2" />
                             <span className="text-royalPurple-text2 text-sm font-medium">
                               Exam Number
                             </span>
@@ -556,7 +554,7 @@ export default function StudentDashboard() {
                             {Number(dashboardData?.stats?.attendanceRate)}%
                           </p>
                         ) : (
-                          <p className="text-3xl font-bold text-gray-400 mt-2 italic">No data</p>
+                          <p className="text-3xl font-bold text-g-400 mt-2 italic">No data</p>
                         )}
                         <p className="text-royalPurple-text2 text-sm mt-1">This semester</p>
                       </div>
@@ -578,7 +576,7 @@ export default function StudentDashboard() {
                     <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
                       {dashboardData?.my_class ? (
                         <div className="space-y-4">
-                          <div className="p-4 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-royalPurple-border2/30 rounded-xl">
+                          <div className="p-4 bg-gradient-to-r from-ink/20 to-accent/20 border border-royalPurple-border2/30 rounded-xl">
                             <h3 className="font-bold text-xl text-royalPurple-text1">
                               {dashboardData.my_class.name}
                             </h3>
@@ -622,7 +620,7 @@ export default function StudentDashboard() {
                       Upcoming Assessments
                     </CardTitle>
                     <Link href="/dashboard/student/assessments">
-                      <Button className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-royalPurple-text1">
+                      <Button className="bg-gradient-to-r from-kpi-pass to-ink hover:from-g-700 hover:to-g-800 text-royalPurple-text1">
                         View All
                       </Button>
                     </Link>
@@ -689,7 +687,7 @@ export default function StudentDashboard() {
               <Card variant="glass">
                 <CardHeader>
                   <CardTitle className="text-royalPurple-text1 flex items-center">
-                    <Target className="h-6 w-6 mr-3 text-yellow-400" />
+                    <Target className="h-6 w-6 mr-3 text-warn" />
                     My Goals Progress
                   </CardTitle>
                 </CardHeader>
@@ -721,7 +719,7 @@ export default function StudentDashboard() {
                                     goal.progress === 100
                                       ? 'bg-royalPurple-success'
                                       : goal.progress >= 75
-                                        ? 'bg-yellow-500'
+                                        ? 'bg-warn/100'
                                         : 'bg-royalPurple-accent'
                                   }`}
                                   style={{ width: `${goal.progress}%` }}
@@ -752,14 +750,14 @@ export default function StudentDashboard() {
                           Progress Summary
                         </h3>
                         <div className="grid grid-cols-2 gap-4">
-                          <div className="p-4 bg-gradient-to-r from-green-600/20 to-blue-600/20 border border-royalPurple-border/30 rounded-xl text-center">
+                          <div className="p-4 bg-gradient-to-r from-kpi-pass/20 to-ink/20 border border-royalPurple-border/30 rounded-xl text-center">
                             <div className="text-2xl font-bold text-royalPurple-successTx">
                               {dashboardStats.completedGoals}
                             </div>
                             <div className="text-royalPurple-text2 text-sm">Completed</div>
                           </div>
-                          <div className="p-4 bg-gradient-to-r from-yellow-600/20 to-orange-600/20 border border-yellow-400/30 rounded-xl text-center">
-                            <div className="text-2xl font-bold text-yellow-400">
+                          <div className="p-4 bg-gradient-to-r from-warn/20 to-accent/20 border border-warn/30 rounded-xl text-center">
+                            <div className="text-2xl font-bold text-warn">
                               {dashboardStats.totalGoals - dashboardStats.completedGoals}
                             </div>
                             <div className="text-royalPurple-text2 text-sm">In Progress</div>
@@ -809,7 +807,7 @@ export default function StudentDashboard() {
                                       : performance.avgScore >= 80
                                         ? 'bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50'
                                         : performance.avgScore >= 70
-                                          ? 'bg-yellow-600/60 text-yellow-100 border border-yellow-400/50'
+                                          ? 'bg-warn/60 text-warn/20 border border-warn/50'
                                           : 'bg-royalPurple-danger/60 text-royalPurple-dangerTx border border-royalPurple-border/50'
                                   }`}
                                 >
@@ -842,7 +840,7 @@ export default function StudentDashboard() {
                                         : performance.avgScore >= 80
                                           ? 'bg-royalPurple-accent'
                                           : performance.avgScore >= 70
-                                            ? 'bg-yellow-500'
+                                            ? 'bg-warn/100'
                                             : 'bg-royalPurple-danger'
                                     }`}
                                     style={{ width: `${Math.min(performance.avgScore, 100)}%` }}
@@ -872,7 +870,7 @@ export default function StudentDashboard() {
                         <p className="text-royalPurple-text2 mb-4">
                           Contact administrator to get started
                         </p>
-                        <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-royalPurple-text1">
+                        <Button className="bg-gradient-to-r from-accent to-ink hover:from-accent hover:to-g-800 text-royalPurple-text1">
                           Contact Administrator
                         </Button>
                       </div>
@@ -892,7 +890,7 @@ export default function StudentDashboard() {
                     Recent Results
                   </CardTitle>
                   <Link href="/dashboard/student/results">
-                    <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-royalPurple-text1">
+                    <Button className="bg-gradient-to-r from-ink to-kpi-pass hover:from-g-800 hover:to-g-700 text-royalPurple-text1">
                       View All Results
                     </Button>
                   </Link>
@@ -935,7 +933,7 @@ export default function StudentDashboard() {
                                   : result.grade === 'B+' || result.grade === 'B'
                                     ? 'bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50'
                                     : result.grade === 'C+' || result.grade === 'C'
-                                      ? 'bg-yellow-600/60 text-yellow-100 border border-yellow-400/50'
+                                      ? 'bg-warn/60 text-warn/20 border border-warn/50'
                                       : 'bg-royalPurple-danger/60 text-royalPurple-dangerTx border border-royalPurple-border/50'
                               }`}
                             >
@@ -1003,7 +1001,7 @@ export default function StudentDashboard() {
                       </Link>
                       <Link href="/dashboard/student/goals">
                         <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
-                          <div className="backdrop-blur-md bg-yellow-600/60 border border-yellow-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                          <div className="backdrop-blur-md bg-warn/60 border border-warn/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                             <Target className="h-8 w-8 text-royalPurple-text1" />
                           </div>
                           <h3 className="text-royalPurple-text1 font-semibold text-center">
@@ -1029,7 +1027,7 @@ export default function StudentDashboard() {
                       </Link>
                       <Link href="/dashboard/sdg">
                         <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
-                          <div className="backdrop-blur-md bg-gradient-to-r from-blue-600/60 to-green-600/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                          <div className="backdrop-blur-md bg-gradient-to-r from-ink/60 to-kpi-pass/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                             <Globe className="h-8 w-8 text-royalPurple-text1" />
                           </div>
                           <h3 className="text-royalPurple-text1 font-semibold text-center">
@@ -1054,7 +1052,7 @@ export default function StudentDashboard() {
                       <Download className="h-6 w-6 mr-3 text-royalPurple-successTx" />
                       Study Materials
                     </CardTitle>
-                    <Button className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-royalPurple-text1">
+                    <Button className="bg-gradient-to-r from-kpi-pass to-kpi-pass hover:from-g-700 hover:to-g-700 text-royalPurple-text1">
                       View All
                     </Button>
                   </CardHeader>
@@ -1106,7 +1104,7 @@ export default function StudentDashboard() {
                 <Card variant="glass">
                   <CardHeader>
                     <CardTitle className="text-royalPurple-text1 flex items-center">
-                      <ClipboardList className="h-6 w-6 mr-3 text-orange-400" />
+                      <ClipboardList className="h-6 w-6 mr-3 text-accent/80" />
                       Assessment Schedule
                     </CardTitle>
                   </CardHeader>
@@ -1117,31 +1115,31 @@ export default function StudentDashboard() {
                         {(dashboardData?.upcoming_assessments || []).map((assessment) => (
                           <div
                             key={assessment.id}
-                            className="p-4 bg-gradient-to-r from-orange-600/20 to-red-600/20 border border-orange-400/30 rounded-xl"
+                            className="p-4 bg-gradient-to-r from-accent/20 to-accent/20 border border-accent/80/30 rounded-xl"
                           >
                             <div className="flex items-center justify-between mb-3">
                               <div className="flex items-center space-x-3">
-                                <div className="backdrop-blur-md bg-orange-600/60 border border-orange-400/50 rounded-xl p-2">
+                                <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-xl p-2">
                                   <ClipboardList className="h-5 w-5 text-royalPurple-text1" />
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-royalPurple-text1 text-sm">
                                     {assessment.title}
                                   </h4>
-                                  <p className="text-orange-200 text-xs">{assessment.subject}</p>
+                                  <p className="text-accent/40 text-xs">{assessment.subject}</p>
                                 </div>
                               </div>
                               <div className="text-right">
-                                <div className="px-2 py-1 bg-orange-600/60 text-orange-100 border border-orange-400/50 rounded-full text-xs font-medium">
+                                <div className="px-2 py-1 bg-accent/60 text-accent/20 border border-accent/80/50 rounded-full text-xs font-medium">
                                   {assessment.type}
                                 </div>
                               </div>
                             </div>
                             <div className="flex justify-between items-center text-sm">
-                              <span className="text-orange-200">
+                              <span className="text-accent/40">
                                 Due: {new Date(assessment.start_date).toLocaleDateString()}
                               </span>
-                              <span className="text-orange-200">
+                              <span className="text-accent/40">
                                 Duration: {assessment.duration_minutes} mins
                               </span>
                             </div>
@@ -1227,11 +1225,11 @@ export default function StudentDashboard() {
           {/* Advanced Features Tab */}
           {activeTab === 'advanced' && (
             <div className="space-y-6">
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 mb-6">
+              <div className="bg-gradient-to-r from-accent/5 to-ink/5 rounded-lg p-6 mb-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-bold text-royalPurple-text1 flex items-center">
-                      <Zap className="w-6 h-6 text-yellow-500 mr-2" />
+                      <Zap className="w-6 h-6 text-warn/100 mr-2" />
                       Advanced Educational Features
                     </h2>
                     <p className="text-royalPurple-text2 mt-1">
@@ -1280,12 +1278,12 @@ export default function StudentDashboard() {
                       Start Learning
                     </button>
                   </div>
-                  <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                    <h4 className="font-semibold text-yellow-900 mb-2">Goal Setting</h4>
-                    <p className="text-yellow-700 text-sm">Track academic goals</p>
+                  <div className="bg-warn/10 p-4 rounded-lg border border-warn/40">
+                    <h4 className="font-semibold text-g-900 mb-2">Goal Setting</h4>
+                    <p className="text-g-700 text-sm">Track academic goals</p>
                     <Link
                       href="/dashboard/student/goals"
-                      className="mt-2 inline-block text-center bg-yellow-600 text-royalPurple-text1 px-3 py-1 rounded text-sm hover:bg-yellow-700 w-full transition-colors"
+                      className="mt-2 inline-block text-center bg-warn text-royalPurple-text1 px-3 py-1 rounded text-sm hover:bg-g-700 w-full transition-colors"
                     >
                       Set Goals
                     </Link>
@@ -1316,7 +1314,7 @@ export default function StudentDashboard() {
                   </div>
                 </div>
 
-                <div className="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg">
+                <div className="mt-8 bg-gradient-to-r from-accent/5 to-ink/5 p-6 rounded-lg">
                   <h4 className="text-lg font-bold text-royalPurple-text1 mb-4">
                     Recently Implemented Features
                   </h4>
@@ -1378,11 +1376,11 @@ export default function StudentDashboard() {
           {/* Smart Analytics Tab */}
           {activeTab === 'analytics' && (
             <div className="space-y-6">
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 mb-6">
+              <div className="bg-gradient-to-r from-accent/5 to-ink/5 rounded-lg p-6 mb-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-bold text-royalPurple-text1 flex items-center">
-                      <Zap className="w-6 h-6 text-yellow-500 mr-2" />
+                      <Zap className="w-6 h-6 text-warn/100 mr-2" />
                       Smart Analytics Dashboard
                     </h2>
                     <p className="text-royalPurple-text2 mt-1">
@@ -1529,7 +1527,7 @@ export default function StudentDashboard() {
                                       : performance.avgScore >= 80
                                         ? 'bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50'
                                         : performance.avgScore >= 70
-                                          ? 'bg-yellow-600/60 text-yellow-100 border border-yellow-400/50'
+                                          ? 'bg-warn/60 text-warn/20 border border-warn/50'
                                           : 'bg-royalPurple-danger/60 text-royalPurple-dangerTx border border-royalPurple-border/50'
                                   }`}
                                 >
@@ -1560,7 +1558,7 @@ export default function StudentDashboard() {
                                         : performance.avgScore >= 80
                                           ? 'bg-royalPurple-accent'
                                           : performance.avgScore >= 70
-                                            ? 'bg-yellow-500'
+                                            ? 'bg-warn/100'
                                             : 'bg-royalPurple-danger'
                                     }`}
                                     style={{ width: `${Math.min(performance.avgScore, 100)}%` }}
@@ -1590,7 +1588,7 @@ export default function StudentDashboard() {
                         <p className="text-royalPurple-text2 mb-4">
                           Contact administrator to get started
                         </p>
-                        <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-royalPurple-text1">
+                        <Button className="bg-gradient-to-r from-accent to-ink hover:from-accent hover:to-g-800 text-royalPurple-text1">
                           Contact Administrator
                         </Button>
                       </div>

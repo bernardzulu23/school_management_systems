@@ -59,18 +59,36 @@ export default function BudgetPage() {
       allocated: 15000,
       spent: 12000,
       remaining: 3000,
-      color: '#f59e0b',
+      color: 'var(--warn-color)',
     },
-    { name: 'Equipment', allocated: 12000, spent: 8500, remaining: 3500, color: '#7c3aed' },
+    {
+      name: 'Equipment',
+      allocated: 12000,
+      spent: 8500,
+      remaining: 3500,
+      color: 'var(--color-accent)',
+    },
     {
       name: 'Professional Development',
       allocated: 8000,
       spent: 6000,
       remaining: 2000,
-      color: '#a78bfa',
+      color: 'var(--rp-text2)',
     },
-    { name: 'Maintenance', allocated: 7000, spent: 4000, remaining: 3000, color: '#3b2a66' },
-    { name: 'Miscellaneous', allocated: 8000, spent: 2000, remaining: 6000, color: '#6d28d9' },
+    {
+      name: 'Maintenance',
+      allocated: 7000,
+      spent: 4000,
+      remaining: 3000,
+      color: 'var(--rp-border)',
+    },
+    {
+      name: 'Miscellaneous',
+      allocated: 8000,
+      spent: 2000,
+      remaining: 6000,
+      color: 'var(--color-brand-hover)',
+    },
   ]
 
   const monthlySpending = [
@@ -90,7 +108,7 @@ export default function BudgetPage() {
       case 'approved':
         return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
       case 'pending':
-        return <Clock className="h-4 w-4 text-yellow-500" />
+        return <Clock className="h-4 w-4 text-warn/100" />
       case 'completed':
         return <CheckCircle className="h-4 w-4 text-royalPurple-accentTx" />
       default:
@@ -103,7 +121,7 @@ export default function BudgetPage() {
       case 'approved':
         return 'bg-royalPurple-success text-royalPurple-successTx'
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800'
+        return 'bg-warn/20 text-g-800'
       case 'completed':
         return 'bg-royalPurple-accent text-royalPurple-accentTx'
       default:
@@ -114,7 +132,7 @@ export default function BudgetPage() {
   const getBudgetHealth = (spent, allocated) => {
     const percentage = (spent / allocated) * 100
     if (percentage > 90) return { color: 'text-royalPurple-dangerTx', status: 'Critical' }
-    if (percentage > 75) return { color: 'text-yellow-600', status: 'Warning' }
+    if (percentage > 75) return { color: 'text-warn', status: 'Warning' }
     return { color: 'text-royalPurple-successTx', status: 'Healthy' }
   }
 
@@ -140,7 +158,7 @@ export default function BudgetPage() {
           </div>
           <div className="flex items-center space-x-2">
             <select
-              className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500"
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(e.target.value)}
             >
@@ -203,7 +221,7 @@ export default function BudgetPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Clock className="h-8 w-8 text-yellow-600" />
+                <Clock className="h-8 w-8 text-warn" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Pending</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -272,7 +290,7 @@ export default function BudgetPage() {
                     labelLine={false}
                     label={({ name, value }) => `${name}: $${value.toLocaleString()}`}
                     outerRadius={80}
-                    fill="#7c3aed"
+                    fill="var(--color-accent)"
                     dataKey="allocated"
                   >
                     {budgetCategories.map((entry, index) => (
@@ -297,7 +315,7 @@ export default function BudgetPage() {
                   <XAxis dataKey="month" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="amount" fill="#f59e0b" />
+                  <Bar dataKey="amount" fill="var(--warn-color)" />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>

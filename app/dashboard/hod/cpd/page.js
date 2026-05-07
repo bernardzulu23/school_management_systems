@@ -198,7 +198,7 @@ export default function CPDPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <TrendingUp className="h-8 w-8 text-yellow-600" />
+                <TrendingUp className="h-8 w-8 text-warn" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">CPD %</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">{cpdPercent}%</p>
@@ -209,7 +209,7 @@ export default function CPDPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Clock className="h-8 w-8 text-orange-600" />
+                <Clock className="h-8 w-8 text-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Hours</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -228,7 +228,7 @@ export default function CPDPage() {
               <div className="flex items-center gap-2">
                 <Filter className="h-4 w-4 text-royalPurple-text3" />
                 <select
-                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 bg-royalPurple-card text-royalPurple-text1"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 bg-royalPurple-card text-royalPurple-text1"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                 >
@@ -271,7 +271,7 @@ export default function CPDPage() {
                         pct >= 90
                           ? 'bg-royalPurple-success'
                           : pct >= 70
-                            ? 'bg-yellow-500'
+                            ? 'bg-warn/100'
                             : 'bg-royalPurple-danger'
 
                       return (

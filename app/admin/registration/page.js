@@ -270,7 +270,7 @@ function RegistrationContent() {
             {registrationTypes.map((type) => (
               <Card
                 key={type.id}
-                className="p-6 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all"
+                className="p-6 hover:-translate-y-px hover:shadow-lg hover:border-ink/20 transition-all"
               >
                 <div className="text-center mb-6">
                   <div

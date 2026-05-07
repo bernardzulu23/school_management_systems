@@ -129,7 +129,7 @@ export default function TeacherQuizMakerPage() {
                           ))}
                         </ul>
                       ) : null}
-                      <div className="mt-2 text-sm text-emerald-200">Answer: {q.answer}</div>
+                      <div className="mt-2 text-sm text-kpi-pass/30">Answer: {q.answer}</div>
                       {q.explanation ? (
                         <div className="mt-1 text-xs text-royalPurple-text3">{q.explanation}</div>
                       ) : null}

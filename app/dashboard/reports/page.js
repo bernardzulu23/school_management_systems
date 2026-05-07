@@ -153,7 +153,7 @@ export default function ReportsPage() {
       blue: 'bg-royalPurple-accent text-royalPurple-text1',
       green: 'bg-royalPurple-success text-royalPurple-text1',
       purple: 'bg-royalPurple-pill text-royalPurple-text1',
-      orange: 'bg-orange-600 text-royalPurple-text1',
+      orange: 'bg-accent text-royalPurple-text1',
     }
     return colors[color] || 'bg-royalPurple-muted text-royalPurple-text1'
   }
@@ -163,7 +163,7 @@ export default function ReportsPage() {
       case 'Ready':
         return 'bg-royalPurple-success text-royalPurple-successTx'
       case 'Processing':
-        return 'bg-yellow-100 text-yellow-800'
+        return 'bg-warn/20 text-g-800'
       case 'Failed':
         return 'bg-royalPurple-danger text-royalPurple-dangerTx'
       default:
@@ -200,7 +200,7 @@ export default function ReportsPage() {
                 <select
                   value={selectedPeriod}
                   onChange={(e) => setSelectedPeriod(e.target.value)}
-                  className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
+                  className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2"
                 >
                   <option value="current-term">Current Term</option>
                   <option value="last-term">Last Term</option>
@@ -217,7 +217,7 @@ export default function ReportsPage() {
                 <select
                   value={selectedType}
                   onChange={(e) => setSelectedType(e.target.value)}
-                  className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
+                  className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2"
                 >
                   <option value="">All Types</option>
                   <option value="academic">Academic</option>
@@ -231,7 +231,7 @@ export default function ReportsPage() {
                 <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                   Format
                 </label>
-                <select className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2">
+                <select className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2">
                   <option value="pdf">PDF</option>
                   <option value="excel">Excel</option>
                   <option value="csv">CSV</option>

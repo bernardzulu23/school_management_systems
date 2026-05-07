@@ -29,37 +29,37 @@ export default function HomePage() {
     () => [
       {
         icon: FileX,
-        accent: '#7c3aed',
+        accent: 'var(--color-accent)',
         title: 'Paper registers getting lost',
         body: 'Digital attendance records that cannot be destroyed, lost, or altered. Ministry inspectors can verify anytime.',
       },
       {
         icon: BarChart2,
-        accent: '#7c3aed',
+        accent: 'var(--color-accent)',
         title: 'No visibility on student performance',
         body: 'Spot students at risk of failing before it is too late. Track marks across all subjects in real-time.',
       },
       {
         icon: ClipboardList,
-        accent: '#7c3aed',
+        accent: 'var(--color-accent)',
         title: 'Headteacher reporting burden',
         body: 'Generate MOE-ready reports in one click. No more compiling data from each teacher manually before district visits.',
       },
       {
         icon: Users,
-        accent: '#7c3aed',
+        accent: 'var(--color-accent)',
         title: 'HOD coordination challenges',
         body: 'Department heads manage their subjects, teachers, and performance from a dedicated dashboard — no WhatsApp groups needed.',
       },
       {
         icon: AlertTriangle,
-        accent: '#7c3aed',
+        accent: 'var(--color-accent)',
         title: "Girls' dropout tracking",
         body: 'Identify female students with declining attendance early. Especially critical for rural schools where girls face higher dropout risk.',
       },
       {
         icon: Smartphone,
-        accent: '#7c3aed',
+        accent: 'var(--color-accent)',
         title: 'Works on any device',
         body: 'Phone, tablet, or computer — and works offline when internet is slow. Critical for rural and peri-urban schools across Zambia.',
       },
@@ -239,7 +239,7 @@ export default function HomePage() {
         .fade-up-3 { animation-delay: 0.4s; opacity: 0; }
         .fade-up-4 { animation-delay: 0.55s; opacity: 0; }
         .btn-primary {
-          background: #7c3aed; color: #ffffff; border: none;
+          background: var(--color-accent); color: var(--color-white); border: none;
           padding: 12px 20px; border-radius: 8px; font-size: 15px;
           font-weight: 700; cursor: pointer; text-decoration: none;
           display: inline-block; transition: opacity 0.2s, transform 0.15s;
@@ -247,23 +247,23 @@ export default function HomePage() {
         }
         .btn-primary:hover { opacity: 0.9; }
         .btn-secondary {
-          background: #ffffff; color: #1f2937;
-          border: 1px solid #e5e7eb; padding: 12px 20px;
+          background: var(--color-white); color: var(--text-primary);
+          border: 1px solid var(--border); padding: 12px 20px;
           border-radius: 8px; font-size: 15px; font-weight: 600;
           cursor: pointer; text-decoration: none; display: inline-block;
           transition: background 0.2s, border-color 0.2s, color 0.2s;
         }
-        .btn-secondary:hover { background: #f9fafb; border-color: #d1d5db; }
+        .btn-secondary:hover { background: var(--surface-alt); border-color: var(--border-hover); }
         .btn-sm {
           padding: 8px 14px; font-size: 13px; border-radius: 8px;
-          border: 1px solid #e5e7eb; background: #ffffff;
-          color: #1f2937; cursor: pointer; text-decoration: none;
+          border: 1px solid var(--border); background: var(--color-white);
+          color: var(--text-primary); cursor: pointer; text-decoration: none;
           display: inline-block; transition: background 0.2s;
         }
-        .btn-sm:hover { background: #f9fafb; }
+        .btn-sm:hover { background: var(--surface-alt); }
         .card {
-          background: #ffffff;
-          border: 1px solid #e5e7eb;
+          background: var(--color-white);
+          border: 1px solid var(--border);
           border-radius: 12px;
           padding: 1.5rem;
         }
@@ -272,12 +272,12 @@ export default function HomePage() {
           padding: 1.5rem;
           position: relative;
           overflow: hidden;
-          background: #ffffff;
-          border: 1px solid #e5e7eb;
+          background: var(--color-white);
+          border: 1px solid var(--border);
           transition: border-color 0.2s ease, box-shadow 0.2s ease;
           cursor: default;
         }
-        .problem-card:hover { border-color: #7c3aed; box-shadow: 0 4px 6px -2px rgba(0,0,0,0.1); }
+        .problem-card:hover { border-color: var(--color-accent); box-shadow: 0 4px 6px -2px var(--border-hover); }
         .accent-line {
           position: absolute;
           top: 0;
@@ -297,47 +297,47 @@ export default function HomePage() {
           position: relative;
         }
         .section-label {
-          font-size: 11px; color: #7c3aed; text-transform: uppercase;
+          font-size: 11px; color: var(--color-accent); text-transform: uppercase;
           letter-spacing: 0.12em; font-weight: 700; margin-bottom: 0.75rem;
         }
-        .divider { border: none; border-top: 1px solid #e5e7eb; margin: 0; }
+        .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
         .stat-card {
-          background: #ffffff;
-          border: 1px solid #e5e7eb;
+          background: var(--color-white);
+          border: 1px solid var(--border);
           border-radius: 12px;
           padding: 1.25rem;
           text-align: center;
         }
         .tag {
           display: inline-block; font-size: 11px; padding: 4px 12px;
-          border-radius: 999px; border: 1px solid #e5e7eb;
-          color: #4b5563; margin: 3px; background: #f9fafb;
+          border-radius: 999px; border: 1px solid var(--border);
+          color: var(--text-secondary); margin: 3px; background: var(--surface-alt);
         }
         .search-input {
           flex: 1; padding: 12px 16px;
-          border: 1px solid #e5e7eb; border-radius: 10px;
-          background: #ffffff; color: #1f2937; font-size: 14px;
+          border: 1px solid var(--border); border-radius: 10px;
+          background: var(--color-white); color: var(--text-primary); font-size: 14px;
           outline: none; transition: border-color 0.2s;
         }
-        .search-input:focus { border-color: #7c3aed; }
-        .search-input::placeholder { color: #6b7280; }
+        .search-input:focus { border-color: var(--color-accent); }
+        .search-input::placeholder { color: var(--text-muted); }
         .school-row {
           display: flex; align-items: center; justify-content: space-between;
-          padding: 14px 0; border-bottom: 1px solid #e5e7eb;
+          padding: 14px 0; border-bottom: 1px solid var(--border);
         }
         .school-row:last-child { border-bottom: none; }
-        .testimonial-bar { border-left: 3px solid #7c3aed; padding-left: 1.25rem; }
+        .testimonial-bar { border-left: 3px solid var(--color-accent); padding-left: 1.25rem; }
         .pill {
           display: inline-flex; align-items: center; gap: 6px;
-          background: #f9fafb;
-          border: 1px solid #e5e7eb;
+          background: var(--surface-alt);
+          border: 1px solid var(--border);
           border-radius: 999px; padding: 6px 14px; font-size: 13px;
-          color: #4b5563; margin: 3px;
+          color: var(--text-secondary); margin: 3px;
         }
         .alert-box {
-          background: #fef2f2; border: 1px solid #fecaca;
+          background: var(--danger-bg); border: 1px solid var(--danger-color);
           border-radius: 10px; padding: 10px 14px; font-size: 13px;
-          color: #dc2626;
+          color: var(--danger-color);
         }
         nav a { text-decoration: none; }
         @media (max-width: 640px) {
@@ -356,10 +356,10 @@ export default function HomePage() {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '1rem 1.5rem',
-          borderBottom: '1px solid #e5e7eb',
+          borderBottom: '1px solid var(--border)',
           position: 'sticky',
           top: 0,
-          background: '#ffffff',
+          background: 'var(--color-white)',
           zIndex: 100,
         }}
       >
@@ -372,7 +372,7 @@ export default function HomePage() {
               priority
             />
           </div>
-          <span style={{ fontWeight: 700, fontSize: 16, color: '#1f2937' }}>
+          <span style={{ fontWeight: 700, fontSize: 16, color: 'var(--text-primary)' }}>
             {tenantSchool?.name || 'ZSMS'}
           </span>
           <span
@@ -380,9 +380,9 @@ export default function HomePage() {
               fontSize: 11,
               padding: '3px 10px',
               borderRadius: 99,
-              background: '#ecfdf5',
-              color: '#16a34a',
-              border: '1px solid #a7f3d0',
+              background: 'var(--badge-up-bg)',
+              color: 'var(--badge-up-color)',
+              border: '1px solid var(--color-kpi-pass)',
               fontWeight: 600,
             }}
           >
@@ -418,8 +418,8 @@ export default function HomePage() {
       <section
         ref={heroRef}
         style={{
-          background: '#ffffff',
-          borderBottom: '1px solid #e5e7eb',
+          background: 'var(--color-white)',
+          borderBottom: '1px solid var(--border)',
           padding: '5rem 0',
         }}
       >
@@ -436,7 +436,7 @@ export default function HomePage() {
             style={{
               fontSize: 12,
               fontWeight: 700,
-              color: '#7c3aed',
+              color: 'var(--color-accent)',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               marginBottom: 16,
@@ -452,7 +452,7 @@ export default function HomePage() {
               fontWeight: 800,
               lineHeight: 1.15,
               marginBottom: 24,
-              color: '#1f2937',
+              color: 'var(--text-primary)',
             }}
           >
             Built for Zambian schools
@@ -462,7 +462,7 @@ export default function HomePage() {
             className="fade-up fade-up-2"
             style={{
               fontSize: 20,
-              color: '#4b5563',
+              color: 'var(--text-secondary)',
               maxWidth: 720,
               margin: '0 auto 16px',
               lineHeight: 1.75,
@@ -476,7 +476,7 @@ export default function HomePage() {
             className="fade-up fade-up-2"
             style={{
               fontSize: 18,
-              color: '#374151',
+              color: 'var(--text-secondary)',
               maxWidth: 720,
               margin: '0 auto 28px',
               fontWeight: 600,
@@ -504,7 +504,10 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <p className="fade-up fade-up-4" style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>
+          <p
+            className="fade-up fade-up-4"
+            style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0 }}
+          >
             Free 30-day trial · No credit card required · Cancel anytime
           </p>
         </div>
@@ -515,7 +518,7 @@ export default function HomePage() {
       <section
         style={{
           padding: '4rem 1.5rem',
-          background: '#ffffff',
+          background: 'var(--color-white)',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -527,12 +530,19 @@ export default function HomePage() {
               fontSize: 'clamp(22px,3.5vw,30px)',
               fontWeight: 800,
               marginBottom: '0.5rem',
-              color: '#1f2937',
+              color: 'var(--text-primary)',
             }}
           >
             Built around how Zambian schools actually work
           </h2>
-          <p style={{ color: '#4b5563', fontSize: 14, marginBottom: '2.5rem', maxWidth: 520 }}>
+          <p
+            style={{
+              color: 'var(--text-secondary)',
+              fontSize: 14,
+              marginBottom: '2.5rem',
+              maxWidth: 520,
+            }}
+          >
             Every feature exists because a real Zambian headteacher asked for it.
           </p>
           <div
@@ -551,10 +561,15 @@ export default function HomePage() {
                   />
                   <div
                     className="icon-wrap"
-                    style={{ background: '#f3f0ff', border: '1px solid #e5e7eb' }}
+                    style={{ background: 'var(--rp-accentbg)', border: '1px solid var(--border)' }}
                   >
                     {Icon ? (
-                      <Icon size={24} color="#7c3aed" strokeWidth={1.5} aria-hidden="true" />
+                      <Icon
+                        size={24}
+                        color="var(--color-accent)"
+                        strokeWidth={1.5}
+                        aria-hidden="true"
+                      />
                     ) : null}
                   </div>
                   <p
@@ -562,13 +577,15 @@ export default function HomePage() {
                       fontWeight: 700,
                       fontSize: 15,
                       marginBottom: 10,
-                      color: '#1f2937',
+                      color: 'var(--text-primary)',
                       lineHeight: 1.35,
                     }}
                   >
                     {p.title}
                   </p>
-                  <p style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.7 }}>{p.body}</p>
+                  <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+                    {p.body}
+                  </p>
                   <div
                     style={{ marginTop: '1.25rem', display: 'flex', alignItems: 'center', gap: 6 }}
                   >
@@ -598,10 +615,17 @@ export default function HomePage() {
 
       <hr className="divider" />
 
-      <section id="features" style={{ padding: '3.5rem 1.5rem', background: '#ffffff' }}>
+      <section id="features" style={{ padding: '3.5rem 1.5rem', background: 'var(--color-white)' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <div className="section-label">Features built for the Zambian curriculum</div>
-          <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: '2rem', color: '#1f2937' }}>
+          <h2
+            style={{
+              fontSize: 26,
+              fontWeight: 700,
+              marginBottom: '2rem',
+              color: 'var(--text-primary)',
+            }}
+          >
             Attendance, grades, reporting, coordination
           </h2>
           <div
@@ -611,11 +635,25 @@ export default function HomePage() {
             <div>
               {features.map((f, i) => (
                 <div key={i} style={{ marginBottom: '1.75rem' }}>
-                  <p style={{ fontWeight: 700, fontSize: 15, marginBottom: 8, color: '#1f2937' }}>
-                    <span style={{ color: '#7c3aed', marginRight: 8 }}>•</span>
+                  <p
+                    style={{
+                      fontWeight: 700,
+                      fontSize: 15,
+                      marginBottom: 8,
+                      color: 'var(--text-primary)',
+                    }}
+                  >
+                    <span style={{ color: 'var(--color-accent)', marginRight: 8 }}>•</span>
                     {f.title}
                   </p>
-                  <p style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.65, paddingLeft: 22 }}>
+                  <p
+                    style={{
+                      fontSize: 13,
+                      color: 'var(--text-secondary)',
+                      lineHeight: 1.65,
+                      paddingLeft: 22,
+                    }}
+                  >
                     {f.body}
                   </p>
                 </div>
@@ -623,7 +661,7 @@ export default function HomePage() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div className="card">
-                <p style={{ fontSize: 12, color: '#7c3aed', marginBottom: 10 }}>
+                <p style={{ fontSize: 12, color: 'var(--color-accent)', marginBottom: 10 }}>
                   Headteacher dashboard
                 </p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: 12 }}>
@@ -631,15 +669,15 @@ export default function HomePage() {
                   <span className="pill">Performance</span>
                   <span className="pill">HODs</span>
                 </div>
-                <p style={{ fontSize: 12, color: '#4b5563' }}>
+                <p style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
                   Attendance, performance, HODs — all on one screen.
                 </p>
               </div>
               <div className="card">
-                <p style={{ fontSize: 12, color: '#7c3aed', marginBottom: 6 }}>
+                <p style={{ fontSize: 12, color: 'var(--color-accent)', marginBottom: 6 }}>
                   Works on MTN, Airtel &amp; Zamtel networks
                 </p>
-                <p style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.65 }}>
+                <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.65 }}>
                   Designed for Zambian internet speeds. No data-heavy downloads required. Works
                   offline too.
                 </p>
@@ -663,7 +701,14 @@ export default function HomePage() {
         <section style={{ padding: '3.5rem 1.5rem' }}>
           <div style={{ maxWidth: 900, margin: '0 auto' }}>
             <div className="section-label">Recent feedback</div>
-            <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: '2rem', color: '#1f2937' }}>
+            <h2
+              style={{
+                fontSize: 26,
+                fontWeight: 700,
+                marginBottom: '2rem',
+                color: 'var(--text-primary)',
+              }}
+            >
               School administrator feedback
             </h2>
             <div
@@ -677,18 +722,18 @@ export default function HomePage() {
                       style={{
                         fontSize: 15,
                         lineHeight: 1.75,
-                        color: '#4b5563',
+                        color: 'var(--text-secondary)',
                         marginBottom: 12,
                         fontStyle: 'italic',
                       }}
                     >
                       &ldquo;{f.message}&rdquo;
                     </p>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: '#1f2937' }}>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>
                       {formatRoleLabel(f.role)}
                     </p>
                     {f.schoolName ? (
-                      <p style={{ fontSize: 12, color: '#6b7280' }}>{f.schoolName}</p>
+                      <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>{f.schoolName}</p>
                     ) : null}
                   </div>
                 </div>
@@ -702,15 +747,23 @@ export default function HomePage() {
         <>
           <hr className="divider" />
 
-          <section id="find-school" style={{ padding: '3.5rem 1.5rem', background: '#f9fafb' }}>
+          <section
+            id="find-school"
+            style={{ padding: '3.5rem 1.5rem', background: 'var(--surface-alt)' }}
+          >
             <div style={{ maxWidth: 700, margin: '0 auto' }}>
               <div className="section-label">Find your school</div>
               <h2
-                style={{ fontSize: 26, fontWeight: 700, marginBottom: '0.5rem', color: '#1f2937' }}
+                style={{
+                  fontSize: 26,
+                  fontWeight: 700,
+                  marginBottom: '0.5rem',
+                  color: 'var(--text-primary)',
+                }}
               >
                 Already registered? Access your portal
               </h2>
-              <p style={{ color: '#4b5563', fontSize: 14, marginBottom: '1.5rem' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginBottom: '1.5rem' }}>
                 Search by school name or district to go directly to your school&apos;s login page.
               </p>
               <div style={{ display: 'flex', gap: 10, marginBottom: '1.5rem' }}>
@@ -740,13 +793,13 @@ export default function HomePage() {
               <div className="card">
                 {isSchoolDirectoryLoading ? (
                   <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
-                    <p style={{ color: '#4b5563', fontSize: 14, marginBottom: 8 }}>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginBottom: 8 }}>
                       Loading schools…
                     </p>
                   </div>
                 ) : !schoolSearch && schoolsDirectory.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
-                    <p style={{ color: '#4b5563', fontSize: 14, marginBottom: 8 }}>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginBottom: 8 }}>
                       Search for your school to open the portal. If it is not listed, register your
                       school.
                     </p>
@@ -760,7 +813,7 @@ export default function HomePage() {
                   </div>
                 ) : schoolSearch && schoolsDirectory.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
-                    <p style={{ color: '#4b5563', fontSize: 14, marginBottom: 8 }}>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginBottom: 8 }}>
                       School not found in the directory.
                     </p>
                     <Link
@@ -779,7 +832,7 @@ export default function HomePage() {
                           style={{
                             fontSize: 14,
                             fontWeight: 700,
-                            color: '#1f2937',
+                            color: 'var(--text-primary)',
                             marginBottom: 3,
                           }}
                         >
@@ -807,28 +860,62 @@ export default function HomePage() {
 
       <section style={{ padding: '4rem 1.5rem', textAlign: 'center' }}>
         <div style={{ maxWidth: 620, margin: '0 auto' }}>
-          <div className="section-label">Ready to modernise your school?</div>
-          <h2 style={{ fontSize: 30, fontWeight: 800, marginBottom: '1rem', color: '#ffffff' }}>
+          <div
+            className="section-label"
+            style={{
+              color: 'var(--color-accent)',
+              border: '1px solid var(--color-accent)',
+              display: 'inline-block',
+              padding: '6px 12px',
+              marginBottom: 18,
+            }}
+          >
+            Ready to modernise your school?
+          </div>
+          <h2
+            style={{
+              fontSize: 30,
+              fontWeight: 800,
+              marginBottom: '1rem',
+              color: 'var(--color-ink)',
+            }}
+          >
             Launch your school portal
             <br />
-            <span style={{ color: '#ffffff' }}>Setup takes minutes</span>
+            <span style={{ color: 'var(--color-ink)' }}>Setup takes minutes</span>
           </h2>
-          <p style={{ fontSize: 16, color: '#4b5563', marginBottom: '2rem', lineHeight: 1.75 }}>
+          <p
+            style={{
+              fontSize: 16,
+              color: 'var(--text-secondary)',
+              marginBottom: '2rem',
+              lineHeight: 1.75,
+            }}
+          >
             Join schools across Zambia already using ZSMS. Government, private, grant-aided, and
             community schools welcome.
           </p>
           <Link
             href={registerUrl}
-            className="btn-primary"
-            style={{ fontSize: 16, padding: '16px 36px' }}
+            style={{
+              display: 'inline-block',
+              fontSize: 16,
+              padding: '16px 36px',
+              fontWeight: 800,
+              textDecoration: 'none',
+              background: 'var(--color-ink)',
+              color: 'var(--color-paper)',
+              border: '2px solid var(--color-ink)',
+              boxShadow: '4px 4px 0 0 var(--color-accent)',
+            }}
           >
             {tenantSchool ? 'Create account →' : 'Register your school free →'}
           </Link>
-          <p style={{ fontSize: 13, color: '#6b7280', marginTop: '1.5rem' }}>
+          <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: '1.5rem' }}>
             Questions? Call or WhatsApp:{' '}
             <a
               href="tel:0977934996"
-              style={{ color: '#7c3aed', fontWeight: 800, textDecoration: 'none' }}
+              style={{ color: 'var(--color-accent)', fontWeight: 800, textDecoration: 'none' }}
             >
               0977934996
             </a>
@@ -837,12 +924,12 @@ export default function HomePage() {
               href="https://wa.me/260977934996"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: '#7c3aed', fontWeight: 800, textDecoration: 'none' }}
+              style={{ color: 'var(--color-accent)', fontWeight: 800, textDecoration: 'none' }}
             >
               WhatsApp
             </a>
           </p>
-          <p style={{ fontSize: 12, color: '#6b7280', marginTop: '0.5rem' }}>
+          <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: '0.5rem' }}>
             Free trial · No credit card required · Cancel anytime
           </p>
         </div>
@@ -868,19 +955,32 @@ export default function HomePage() {
               className="h-5 w-auto object-contain"
             />
           </div>
-          <p style={{ fontSize: 12, color: '#6b7280' }}>Bluepeack Technologies · Lusaka, Zambia</p>
+          <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+            Bluepeack Technologies · Lusaka, Zambia
+          </p>
         </div>
         <div style={{ display: 'flex', gap: 16 }}>
-          <Link href="/privacy" style={{ fontSize: 12, color: '#6b7280', textDecoration: 'none' }}>
+          <Link
+            href="/privacy"
+            style={{ fontSize: 12, color: 'var(--text-muted)', textDecoration: 'none' }}
+          >
             Privacy
           </Link>
-          <Link href="/terms" style={{ fontSize: 12, color: '#6b7280', textDecoration: 'none' }}>
+          <Link
+            href="/terms"
+            style={{ fontSize: 12, color: 'var(--text-muted)', textDecoration: 'none' }}
+          >
             Terms
           </Link>
           {!tenantSchool && (
             <Link
               href={registerUrl}
-              style={{ fontSize: 12, color: '#7c3aed', textDecoration: 'none', fontWeight: 600 }}
+              style={{
+                fontSize: 12,
+                color: 'var(--color-accent)',
+                textDecoration: 'none',
+                fontWeight: 600,
+              }}
             >
               Register school
             </Link>

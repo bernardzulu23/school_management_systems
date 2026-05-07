@@ -173,11 +173,11 @@ function HeadteacherDashboardContent() {
             <div>
               <p className="font-semibold">{userType} registered successfully!</p>
               <p className="text-sm mt-1">
-                Login password: <code className="bg-gray-100 px-1 rounded">{password}</code>
+                Login password: <code className="bg-g-100 px-1 rounded">{password}</code>
               </p>
               <button
                 onClick={() => navigator.clipboard.writeText(password)}
-                className="text-xs text-blue-600 hover:underline mt-1"
+                className="text-xs text-ink hover:underline mt-1"
               >
                 Copy password
               </button>
@@ -393,7 +393,7 @@ function HeadteacherDashboardContent() {
               variant="outline"
               onClick={() => setShowRegistrationForm(null)}
               aria-label="Cancel and return to dashboard"
-              className="focus-visible:ring-2 focus-visible:ring-gray-500"
+              className="focus-visible:ring-2 focus-visible:ring-g-500"
             >
               Back to Dashboard
             </Button>
@@ -510,7 +510,7 @@ function HeadteacherDashboardContent() {
                     aria-selected={isActive}
                     aria-controls={isActive ? 'active-feature-content' : undefined}
                     tabIndex={0}
-                    className={`transition-all duration-200 cursor-pointer bg-royalPurple-card border border-royalPurple-border hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-royalPurple-border2/60 ${
+                    className={`transition-all duration-200 cursor-pointer bg-royalPurple-card border border-royalPurple-border hover:-translate-y-px hover:shadow-lg hover:border-royalPurple-border2/60 ${
                       isActive
                         ? 'bg-royalPurple-card2 border-royalPurple-border2/60 font-semibold'
                         : ''

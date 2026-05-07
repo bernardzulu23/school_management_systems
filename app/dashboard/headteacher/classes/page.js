@@ -38,7 +38,7 @@ export default function ClassesManagementPage() {
   const getCapacityColor = (current, max) => {
     const percentage = (current / max) * 100
     if (percentage >= 95) return 'text-royalPurple-dangerTx'
-    if (percentage >= 85) return 'text-yellow-600'
+    if (percentage >= 85) return 'text-warn'
     return 'text-royalPurple-successTx'
   }
 
@@ -158,7 +158,7 @@ export default function ClassesManagementPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <UserCheck className="h-8 w-8 text-orange-600" />
+                <UserCheck className="h-8 w-8 text-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Avg Attendance</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -181,13 +181,13 @@ export default function ClassesManagementPage() {
                   <input
                     type="text"
                     placeholder="Search classes or teachers..."
-                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <select
-                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                   value={filterYear}
                   onChange={(e) => setFilterYear(e.target.value)}
                 >

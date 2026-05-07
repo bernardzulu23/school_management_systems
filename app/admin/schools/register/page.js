@@ -126,7 +126,7 @@ export default function SchoolRegistrationPage() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     placeholder="e.g., Zambian High School"
                   />
                 </div>
@@ -143,7 +143,7 @@ export default function SchoolRegistrationPage() {
                       onChange={handleChange}
                       required
                       pattern="[a-z0-9-]+"
-                      className="flex-1 px-4 py-2 border border-royalPurple-border rounded-l-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="flex-1 px-4 py-2 border border-royalPurple-border rounded-l-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                       placeholder="zambian-high-school"
                     />
                     <span className="px-4 py-2 bg-royalPurple-card2 border border-l-0 border-royalPurple-border rounded-r-md text-royalPurple-text2">
@@ -164,7 +164,7 @@ export default function SchoolRegistrationPage() {
                     name="domain"
                     value={formData.domain}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     placeholder="e.g., school.example.com"
                   />
                 </div>
@@ -178,7 +178,7 @@ export default function SchoolRegistrationPage() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     placeholder="info@school.edu"
                   />
                 </div>
@@ -192,7 +192,7 @@ export default function SchoolRegistrationPage() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     placeholder="+260 xxx xxx xxx"
                   />
                 </div>
@@ -206,7 +206,7 @@ export default function SchoolRegistrationPage() {
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     placeholder="City, Country"
                   />
                 </div>
@@ -219,7 +219,7 @@ export default function SchoolRegistrationPage() {
                     name="timezone"
                     value={formData.timezone}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                   >
                     <option value="Africa/Lusaka">Africa/Lusaka</option>
                     <option value="Africa/Nairobi">Africa/Nairobi</option>
@@ -236,7 +236,7 @@ export default function SchoolRegistrationPage() {
                     name="currency"
                     value={formData.currency}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                   >
                     <option value="ZMW">ZMW (Zambian Kwacha)</option>
                     <option value="KES">KES (Kenyan Shilling)</option>
@@ -254,7 +254,7 @@ export default function SchoolRegistrationPage() {
                     name="academicYear"
                     value={formData.academicYear}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     placeholder="e.g., 2024/2025"
                   />
                 </div>
@@ -277,7 +277,7 @@ export default function SchoolRegistrationPage() {
                     value={formData.adminName}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     placeholder="Full Name"
                   />
                 </div>
@@ -292,7 +292,7 @@ export default function SchoolRegistrationPage() {
                     value={formData.adminEmail}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     placeholder="admin@school.edu"
                   />
                 </div>
@@ -334,7 +334,7 @@ export default function SchoolRegistrationPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-royalPurple-accent text-royalPurple-text1 py-3 px-6 rounded-md font-medium hover:bg-royalPurple-accent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-royalPurple-card2 disabled:cursor-not-allowed transition-colors"
+                className="w-full bg-royalPurple-accent text-royalPurple-text1 py-3 px-6 rounded-md font-medium hover:bg-royalPurple-accent focus:outline-none focus:ring-2 focus:ring-g-500 focus:ring-offset-2 disabled:bg-royalPurple-card2 disabled:cursor-not-allowed transition-colors"
               >
                 {loading ? 'Creating School...' : 'Create School'}
               </button>

@@ -643,7 +643,7 @@ export default function ResultEntryPage() {
                                         : gradeInfo.color === 'purple'
                                           ? 'bg-royalPurple-pill text-royalPurple-pillTx'
                                           : gradeInfo.color === 'yellow'
-                                            ? 'bg-yellow-100 text-yellow-800'
+                                            ? 'bg-warn/20 text-g-800'
                                             : 'bg-royalPurple-danger text-royalPurple-dangerTx'
                                   }`}
                                   >

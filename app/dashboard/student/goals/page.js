@@ -189,7 +189,7 @@ export default function StudentGoalsPage() {
       case 'in_progress':
         return <Clock className="h-4 w-4 text-royalPurple-accentTx" />
       case 'pending':
-        return <Target className="h-4 w-4 text-yellow-500" />
+        return <Target className="h-4 w-4 text-warn/100" />
       case 'overdue':
         return <Target className="h-4 w-4 text-royalPurple-dangerTx" />
       default:
@@ -204,7 +204,7 @@ export default function StudentGoalsPage() {
       case 'in_progress':
         return 'bg-royalPurple-accent text-royalPurple-accentTx'
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800'
+        return 'bg-warn/20 text-g-800'
       case 'overdue':
         return 'bg-royalPurple-danger text-royalPurple-dangerTx'
       default:
@@ -217,7 +217,7 @@ export default function StudentGoalsPage() {
       case 'high':
         return 'bg-royalPurple-danger text-royalPurple-dangerTx border-royalPurple-border'
       case 'medium':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+        return 'bg-warn/20 text-g-800 border-warn/40'
       case 'low':
         return 'bg-royalPurple-success text-royalPurple-successTx border-royalPurple-border'
       default:
@@ -321,7 +321,7 @@ export default function StudentGoalsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <TrendingUp className="h-8 w-8 text-orange-600" />
+                <TrendingUp className="h-8 w-8 text-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Avg Progress</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -382,13 +382,13 @@ export default function StudentGoalsPage() {
                   <input
                     type="text"
                     placeholder="Search goals..."
-                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <select
-                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                 >

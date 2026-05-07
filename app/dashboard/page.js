@@ -161,7 +161,7 @@ export default function DashboardPage() {
             onClick={() => (window.location.href = '/dashboard/users')}
             aria-label="Open students"
           >
-            <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
+            <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-lg hover:border-ink/20 transition-all">
               <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
                 <Users className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
               </div>
@@ -180,7 +180,7 @@ export default function DashboardPage() {
             onClick={() => (window.location.href = '/dashboard/users')}
             aria-label="Open teachers"
           >
-            <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
+            <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-lg hover:border-ink/20 transition-all">
               <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
                 <BookOpen className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
               </div>
@@ -199,7 +199,7 @@ export default function DashboardPage() {
             onClick={() => (window.location.href = '/dashboard/classes')}
             aria-label="Open classes"
           >
-            <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
+            <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-lg hover:border-ink/20 transition-all">
               <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
                 <Calendar className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
               </div>
@@ -218,7 +218,7 @@ export default function DashboardPage() {
             onClick={() => (window.location.href = '/dashboard/attendance')}
             aria-label="Open attendance"
           >
-            <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-[0_4px_18px_rgba(0,0,0,0.08)] hover:border-black/[0.18] transition-all">
+            <Card className="p-4 flex items-center gap-3 hover:-translate-y-px hover:shadow-lg hover:border-ink/20 transition-all">
               <div className="bg-g-100 dark:bg-g-900 border border-g-200 dark:border-white/[0.09] rounded-[12px] w-11 h-11 flex items-center justify-center">
                 <TrendingUp className="h-6 w-6 text-g-800 dark:text-g-50" aria-hidden="true" />
               </div>
@@ -313,7 +313,7 @@ export default function DashboardPage() {
             {/* User Management */}
             <li role="listitem">
               <button
-                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-xl transition-shadow"
+                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-g-500 rounded-xl transition-shadow"
                 onClick={() => (window.location.href = '/dashboard/users')}
                 aria-label="Go to User Management"
               >
@@ -340,7 +340,7 @@ export default function DashboardPage() {
             {/* Registration */}
             <li role="listitem">
               <button
-                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 rounded-xl transition-shadow"
+                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-kpi-pass/100 rounded-xl transition-shadow"
                 onClick={() => (window.location.href = '/admin/registration')}
                 aria-label="Go to Registration"
               >
@@ -363,7 +363,7 @@ export default function DashboardPage() {
             {/* Subjects */}
             <li role="listitem">
               <button
-                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 rounded-xl transition-shadow"
+                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/100 rounded-xl transition-shadow"
                 onClick={() => (window.location.href = '/admin/subjects')}
                 aria-label="Go to Subjects Management"
               >
@@ -386,13 +386,13 @@ export default function DashboardPage() {
             {/* Teacher Performance */}
             <li role="listitem">
               <button
-                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-xl transition-shadow"
+                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/100 rounded-xl transition-shadow"
                 onClick={() => (window.location.href = '/dashboard/teacher-performance')}
                 aria-label="Go to Teacher Performance"
               >
-                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-orange-200">
+                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-accent/40">
                   <div className="flex items-center justify-between mb-4">
-                    <TrendingUp className="h-8 w-8 text-orange-600" aria-hidden="true" />
+                    <TrendingUp className="h-8 w-8 text-accent" aria-hidden="true" />
                     <div className="text-right">
                       <p className="text-2xl font-bold text-royalPurple-text1">Live</p>
                       <p className="text-sm text-royalPurple-text3">Tracking</p>
@@ -410,7 +410,7 @@ export default function DashboardPage() {
             {user?.role?.toLowerCase() === 'headteacher' && (
               <li role="listitem">
                 <button
-                  className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-xl transition-shadow"
+                  className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-g-500 rounded-xl transition-shadow"
                   onClick={() => (window.location.href = '/dashboard/headteacher/timetable')}
                   aria-label="Go to Timetable Generator"
                 >
@@ -437,7 +437,7 @@ export default function DashboardPage() {
             {user?.role?.toLowerCase() === 'hod' && (
               <li role="listitem">
                 <button
-                  className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 rounded-xl transition-shadow"
+                  className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/100 rounded-xl transition-shadow"
                   onClick={() => (window.location.href = '/dashboard/hod/allocation')}
                   aria-label="Go to Class Allocation"
                 >
@@ -463,13 +463,13 @@ export default function DashboardPage() {
             {/* Gamification */}
             <li role="listitem">
               <button
-                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 rounded-xl transition-shadow"
+                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-warn/100 rounded-xl transition-shadow"
                 onClick={() => (window.location.href = '/dashboard/gamification')}
                 aria-label="Go to Gamification Dashboard"
               >
-                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-yellow-200">
+                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-warn/40">
                   <div className="flex items-center justify-between mb-4">
-                    <Award className="h-8 w-8 text-yellow-600" aria-hidden="true" />
+                    <Award className="h-8 w-8 text-warn" aria-hidden="true" />
                     <div className="text-right">
                       <p className="text-2xl font-bold text-royalPurple-text1">Play</p>
                       <p className="text-sm text-royalPurple-text3">Learning</p>
@@ -488,13 +488,13 @@ export default function DashboardPage() {
             {/* Smart Reports */}
             <li role="listitem">
               <button
-                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded-xl transition-shadow"
+                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-g-500 rounded-xl transition-shadow"
                 onClick={() => (window.location.href = '/dashboard/reports/smart')}
                 aria-label="Go to Smart Reports"
               >
-                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-cyan-200">
+                <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-g-200">
                   <div className="flex items-center justify-between mb-4">
-                    <BarChart3 className="h-8 w-8 text-cyan-600" aria-hidden="true" />
+                    <BarChart3 className="h-8 w-8 text-g-600" aria-hidden="true" />
                     <div className="text-right">
                       <p className="text-2xl font-bold text-royalPurple-text1">AI</p>
                       <p className="text-sm text-royalPurple-text3">Reports</p>
@@ -514,7 +514,7 @@ export default function DashboardPage() {
             {(user?.role === 'teacher' || user?.role === 'student') && (
               <li role="listitem">
                 <button
-                  className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 rounded-xl transition-shadow"
+                  className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-kpi-pass/100 rounded-xl transition-shadow"
                   onClick={() =>
                     (window.location.href =
                       user?.role === 'teacher'
@@ -551,16 +551,16 @@ export default function DashboardPage() {
             {/* Innovation Hub - Special Feature */}
             <li role="listitem">
               <button
-                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 rounded-xl transition-shadow"
+                className="text-left w-full h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 rounded-xl transition-shadow"
                 onClick={() => (window.location.href = '/dashboard/innovation')}
                 aria-label="Go to Innovation Hub"
               >
-                <Card className="p-6 h-full bg-gradient-to-br from-purple-600 to-blue-600 text-royalPurple-text1 transform group-hover:scale-[1.02] transition-all duration-300 group-hover:shadow-2xl">
+                <Card className="p-6 h-full bg-gradient-to-br from-accent to-ink text-royalPurple-text1 transform group-hover:scale-[1.02] transition-all duration-300 group-hover:shadow-2xl">
                   <div className="flex items-center justify-between mb-4">
                     <div className="relative">
                       <Rocket className="h-8 w-8 text-royalPurple-text1" aria-hidden="true" />
                       <Sparkles
-                        className="h-4 w-4 text-yellow-300 absolute -top-1 -right-1 animate-pulse"
+                        className="h-4 w-4 text-warn/70 absolute -top-1 -right-1 animate-pulse"
                         aria-hidden="true"
                       />
                     </div>

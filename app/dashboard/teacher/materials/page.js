@@ -67,7 +67,7 @@ export default function StudyMaterialsPage() {
       case 'video':
         return 'bg-royalPurple-accent text-royalPurple-accentTx'
       case 'powerpoint':
-        return 'bg-orange-100 text-orange-800'
+        return 'bg-accent/20 text-g-800'
       case 'zip':
         return 'bg-royalPurple-pill text-royalPurple-pillTx'
       case 'image':
@@ -289,13 +289,13 @@ export default function StudyMaterialsPage() {
                   <input
                     type="text"
                     placeholder="Search materials..."
-                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <select
-                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                   value={filterSubject}
                   onChange={(e) => setFilterSubject(e.target.value)}
                 >
@@ -451,7 +451,7 @@ export default function StudyMaterialsPage() {
                   <Label htmlFor="type">Type</Label>
                   <select
                     id="type"
-                    className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     value={form.type}
                     onChange={(e) => setForm((p) => ({ ...p, type: e.target.value }))}
                     required
@@ -499,7 +499,7 @@ export default function StudyMaterialsPage() {
                   <Label htmlFor="description">Description (optional)</Label>
                   <textarea
                     id="description"
-                    className="w-full px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent"
                     rows={3}
                     value={form.description}
                     onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}

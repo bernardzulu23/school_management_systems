@@ -53,7 +53,13 @@ export default function ExamAnalysisPage() {
     },
   })
 
-  const COLORS = ['#8B5CF6', '#F59E0B', '#10B981', '#EF4444', '#3B82F6']
+  const COLORS = [
+    'var(--color-accent)',
+    'var(--warn-color)',
+    'var(--color-kpi-pass)',
+    'var(--danger-color)',
+    'var(--color-ink)',
+  ]
 
   const departmentStats = data?.departmentStats || {
     totalStudents: 0,
@@ -105,7 +111,7 @@ export default function ExamAnalysisPage() {
           </div>
           <div className="flex items-center space-x-3">
             <select
-              className="px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1"
+              className="px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1"
               value={selectedTerm}
               onChange={(e) => setSelectedTerm(e.target.value)}
             >
@@ -114,7 +120,7 @@ export default function ExamAnalysisPage() {
               <option value="Term 3">Term 3</option>
             </select>
             <select
-              className="px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1"
+              className="px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1"
               value={selectedYear}
               onChange={(e) => setSelectedYear(Number(e.target.value))}
             >
@@ -196,7 +202,7 @@ export default function ExamAnalysisPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-r from-orange-500 to-orange-400">
+              <Card className="bg-gradient-to-r from-accent/100 to-accent/80">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -224,21 +230,31 @@ export default function ExamAnalysisPage() {
                     <div className="h-72">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={juniorGenderByGrade}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                          <XAxis dataKey="grade" stroke="#9CA3AF" fontSize={12} />
-                          <YAxis stroke="#9CA3AF" fontSize={12} allowDecimals={false} />
+                          <CartesianGrid strokeDasharray="3 3" stroke="var(--rp-border)" />
+                          <XAxis dataKey="grade" stroke="var(--rp-text3)" fontSize={12} />
+                          <YAxis stroke="var(--rp-text3)" fontSize={12} allowDecimals={false} />
                           <Tooltip
                             contentStyle={{
-                              backgroundColor: '#1F2937',
-                              border: '1px solid #374151',
+                              backgroundColor: 'var(--rp-deep)',
+                              border: '1px solid var(--rp-border)',
                               borderRadius: '8px',
-                              color: '#F9FAFB',
+                              color: 'var(--color-white)',
                             }}
                           />
                           <Legend />
-                          <Bar dataKey="male" stackId="g" fill="#3B82F6" name="Male" />
-                          <Bar dataKey="female" stackId="g" fill="#EC4899" name="Female" />
-                          <Bar dataKey="unknown" stackId="g" fill="#9CA3AF" name="Unknown" />
+                          <Bar dataKey="male" stackId="g" fill="var(--color-ink)" name="Male" />
+                          <Bar
+                            dataKey="female"
+                            stackId="g"
+                            fill="var(--warn-color)"
+                            name="Female"
+                          />
+                          <Bar
+                            dataKey="unknown"
+                            stackId="g"
+                            fill="var(--rp-text3)"
+                            name="Unknown"
+                          />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
@@ -257,21 +273,31 @@ export default function ExamAnalysisPage() {
                     <div className="h-72">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={seniorGenderByGrade}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                          <XAxis dataKey="grade" stroke="#9CA3AF" fontSize={12} />
-                          <YAxis stroke="#9CA3AF" fontSize={12} allowDecimals={false} />
+                          <CartesianGrid strokeDasharray="3 3" stroke="var(--rp-border)" />
+                          <XAxis dataKey="grade" stroke="var(--rp-text3)" fontSize={12} />
+                          <YAxis stroke="var(--rp-text3)" fontSize={12} allowDecimals={false} />
                           <Tooltip
                             contentStyle={{
-                              backgroundColor: '#1F2937',
-                              border: '1px solid #374151',
+                              backgroundColor: 'var(--rp-deep)',
+                              border: '1px solid var(--rp-border)',
                               borderRadius: '8px',
-                              color: '#F9FAFB',
+                              color: 'var(--color-white)',
                             }}
                           />
                           <Legend />
-                          <Bar dataKey="male" stackId="g" fill="#3B82F6" name="Male" />
-                          <Bar dataKey="female" stackId="g" fill="#EC4899" name="Female" />
-                          <Bar dataKey="unknown" stackId="g" fill="#9CA3AF" name="Unknown" />
+                          <Bar dataKey="male" stackId="g" fill="var(--color-ink)" name="Male" />
+                          <Bar
+                            dataKey="female"
+                            stackId="g"
+                            fill="var(--warn-color)"
+                            name="Female"
+                          />
+                          <Bar
+                            dataKey="unknown"
+                            stackId="g"
+                            fill="var(--rp-text3)"
+                            name="Unknown"
+                          />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
@@ -306,19 +332,23 @@ export default function ExamAnalysisPage() {
                     <div className="h-80">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={filteredSubjects}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                          <XAxis dataKey="subject" stroke="#9CA3AF" fontSize={12} />
-                          <YAxis stroke="#9CA3AF" fontSize={12} />
+                          <CartesianGrid strokeDasharray="3 3" stroke="var(--rp-border)" />
+                          <XAxis dataKey="subject" stroke="var(--rp-text3)" fontSize={12} />
+                          <YAxis stroke="var(--rp-text3)" fontSize={12} />
                           <Tooltip
                             contentStyle={{
-                              backgroundColor: '#1F2937',
-                              border: '1px solid #374151',
+                              backgroundColor: 'var(--rp-deep)',
+                              border: '1px solid var(--rp-border)',
                               borderRadius: '8px',
-                              color: '#F9FAFB',
+                              color: 'var(--color-white)',
                             }}
                           />
-                          <Bar dataKey="average" fill="#8B5CF6" name="Average Score %" />
-                          <Bar dataKey="passRate" fill="#10B981" name="Pass Rate %" />
+                          <Bar
+                            dataKey="average"
+                            fill="var(--color-accent)"
+                            name="Average Score %"
+                          />
+                          <Bar dataKey="passRate" fill="var(--color-kpi-pass)" name="Pass Rate %" />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
@@ -344,7 +374,7 @@ export default function ExamAnalysisPage() {
                             labelLine={false}
                             label={({ grade, percentage }) => `${grade}: ${percentage}%`}
                             outerRadius={100}
-                            fill="#8884d8"
+                            fill="var(--rp-text2)"
                             dataKey="count"
                           >
                             {gradeDistribution.map((entry, index) => (
@@ -353,10 +383,10 @@ export default function ExamAnalysisPage() {
                           </Pie>
                           <Tooltip
                             contentStyle={{
-                              backgroundColor: '#1F2937',
-                              border: '1px solid #374151',
+                              backgroundColor: 'var(--rp-deep)',
+                              border: '1px solid var(--rp-border)',
                               borderRadius: '8px',
-                              color: '#F9FAFB',
+                              color: 'var(--color-white)',
                             }}
                           />
                         </PieChart>
@@ -378,28 +408,28 @@ export default function ExamAnalysisPage() {
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={termComparison}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                        <XAxis dataKey="term" stroke="#9CA3AF" fontSize={12} />
-                        <YAxis stroke="#9CA3AF" fontSize={12} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--rp-border)" />
+                        <XAxis dataKey="term" stroke="var(--rp-text3)" fontSize={12} />
+                        <YAxis stroke="var(--rp-text3)" fontSize={12} />
                         <Tooltip
                           contentStyle={{
-                            backgroundColor: '#1F2937',
-                            border: '1px solid #374151',
+                            backgroundColor: 'var(--rp-deep)',
+                            border: '1px solid var(--rp-border)',
                             borderRadius: '8px',
-                            color: '#F9FAFB',
+                            color: 'var(--color-white)',
                           }}
                         />
                         <Line
                           type="monotone"
                           dataKey="average"
-                          stroke="#8B5CF6"
+                          stroke="var(--color-accent)"
                           strokeWidth={3}
                           name="Average Score %"
                         />
                         <Line
                           type="monotone"
                           dataKey="passRate"
-                          stroke="#10B981"
+                          stroke="var(--color-kpi-pass)"
                           strokeWidth={3}
                           name="Pass Rate %"
                         />
@@ -487,7 +517,7 @@ export default function ExamAnalysisPage() {
                                     ? 'bg-royalPurple-success text-royalPurple-successTx'
                                     : subject.passRate >= 75
                                       ? 'bg-royalPurple-accent text-royalPurple-accentTx'
-                                      : 'bg-yellow-50 text-yellow-800'
+                                      : 'bg-warn/10 text-g-800'
                                 }`}
                               >
                                 {subject.passRate >= 85

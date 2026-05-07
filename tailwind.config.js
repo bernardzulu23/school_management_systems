@@ -9,6 +9,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        paper: '#EFECE5',
+        ink: '#111111',
+        accent: '#FF3B00',
         brand: {
           primary: 'var(--color-brand-primary)',
           hover: 'var(--color-brand-hover)',
@@ -68,10 +71,17 @@ module.exports = {
         lg2: '20px',
       },
       backgroundImage: {
-        header: 'linear-gradient(135deg, #1C1C1A 0%, #333331 55%, #4E4D4A 100%)',
+        header: 'linear-gradient(135deg, #111111 0%, #333331 55%, #4E4D4A 100%)',
       },
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
+        tech: ['JetBrains Mono', 'monospace'],
+        statement: ['Montserrat', 'sans-serif'],
+      },
+      boxShadow: {
+        brutal: '4px 4px 0 0 #111111',
+        'brutal-hover': '6px 6px 0 0 #111111',
+        'brutal-accent': '4px 4px 0 0 #FF3B00',
       },
     },
   },

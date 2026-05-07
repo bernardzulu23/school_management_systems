@@ -180,7 +180,7 @@ export default function CreateAssessmentPage() {
                     type="text"
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
-                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
+                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2"
                     placeholder="Enter assessment title"
                   />
                 </div>
@@ -193,7 +193,7 @@ export default function CreateAssessmentPage() {
                     value={formData.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
                     rows={3}
-                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
+                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2"
                     placeholder="Brief description of the assessment"
                   />
                 </div>
@@ -227,7 +227,7 @@ export default function CreateAssessmentPage() {
                   <select
                     value={formData.subject}
                     onChange={(e) => handleInputChange('subject', e.target.value)}
-                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
+                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2"
                   >
                     <option value="">Select Subject</option>
                     {mockSubjects.map((subject) => (
@@ -245,7 +245,7 @@ export default function CreateAssessmentPage() {
                   <select
                     value={formData.class}
                     onChange={(e) => handleInputChange('class', e.target.value)}
-                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
+                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2"
                   >
                     <option value="">Select Class</option>
                     {mockClasses.map((classItem) => (
@@ -272,7 +272,7 @@ export default function CreateAssessmentPage() {
                       type="number"
                       value={formData.totalMarks}
                       onChange={(e) => handleInputChange('totalMarks', parseInt(e.target.value))}
-                      className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
+                      className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2"
                       min="1"
                     />
                   </div>
@@ -285,7 +285,7 @@ export default function CreateAssessmentPage() {
                       type="number"
                       value={formData.duration}
                       onChange={(e) => handleInputChange('duration', parseInt(e.target.value))}
-                      className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
+                      className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2"
                       min="1"
                     />
                   </div>
@@ -300,7 +300,7 @@ export default function CreateAssessmentPage() {
                       type="datetime-local"
                       value={formData.startDate}
                       onChange={(e) => handleInputChange('startDate', e.target.value)}
-                      className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
+                      className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2"
                     />
                   </div>
 
@@ -312,7 +312,7 @@ export default function CreateAssessmentPage() {
                       type="datetime-local"
                       value={formData.endDate}
                       onChange={(e) => handleInputChange('endDate', e.target.value)}
-                      className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
+                      className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2"
                     />
                   </div>
                 </div>
@@ -325,7 +325,7 @@ export default function CreateAssessmentPage() {
                     value={formData.instructions}
                     onChange={(e) => handleInputChange('instructions', e.target.value)}
                     rows={4}
-                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-blue-500 focus:border-royalPurple-border2"
+                    className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2"
                     placeholder="Enter instructions for students taking this assessment..."
                   />
                 </div>

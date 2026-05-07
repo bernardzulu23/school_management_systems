@@ -52,7 +52,7 @@ export default function StudyToolsPage() {
           <Card variant="glass">
             <CardHeader>
               <CardTitle className="flex items-center text-royalPurple-text1">
-                <FileText className="mr-2 text-yellow-400" />
+                <FileText className="mr-2 text-warn" />
                 Flashcard Maker
               </CardTitle>
             </CardHeader>
@@ -60,7 +60,7 @@ export default function StudyToolsPage() {
               <p className="text-royalPurple-text2 mb-4 text-sm">
                 Create and review flashcards for memorization.
               </p>
-              <Button className="w-full bg-yellow-600 hover:bg-yellow-700 text-royalPurple-text1">
+              <Button className="w-full bg-warn hover:bg-g-700 text-royalPurple-text1">
                 Create Flashcards
               </Button>
             </CardContent>

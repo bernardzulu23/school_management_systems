@@ -444,7 +444,7 @@ export default function HodDashboard() {
 
   if (!currentDepartment) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900 to-red-800 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-ink via-g-800 to-g-700 relative overflow-hidden">
         <DashboardLayout title="Head of Department Dashboard">
           <div className="space-y-6">
             <Card variant="glass">
@@ -465,18 +465,18 @@ export default function HodDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900 to-red-800 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-ink via-g-800 to-g-700 relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-orange-600/20 to-red-600/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-red-600/20 to-orange-600/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-40 left-40 w-80 h-80 bg-gradient-to-r from-yellow-600/20 to-orange-600/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-4000"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-accent/20 to-accent/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-accent/20 to-accent/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-80 h-80 bg-gradient-to-r from-warn/20 to-accent/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-4000"></div>
       </div>
 
       <DashboardLayout title="Head of Department Dashboard">
         <div className="space-y-8 relative z-10">
           {/* Enhanced Header */}
-          <div className="backdrop-blur-lg bg-royalPurple-card/60 border border-orange-500/40 rounded-3xl p-8 shadow-2xl">
+          <div className="backdrop-blur-lg bg-royalPurple-card/60 border border-accent/100/40 rounded-3xl p-8 shadow-2xl">
             <div className="flex justify-between items-center">
               <div>
                 <h1 className="text-4xl font-bold text-royalPurple-text1 mb-4">
@@ -488,11 +488,11 @@ export default function HodDashboard() {
                 </p>
               </div>
               <div className="flex items-center space-x-4">
-                <div className="backdrop-blur-md bg-orange-600/60 border border-orange-400/50 rounded-2xl p-4 text-center">
+                <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-2xl p-4 text-center">
                   <div className="text-2xl font-bold text-royalPurple-text1">
                     {new Date().getDate()}
                   </div>
-                  <div className="text-sm text-orange-200">
+                  <div className="text-sm text-accent/40">
                     {new Date().toLocaleDateString('en-US', { month: 'short' })}
                   </div>
                 </div>
@@ -522,7 +522,7 @@ export default function HodDashboard() {
                     </div>
                   </div>
                 </div>
-                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center text-royalPurple-text1 font-bold text-xl">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-accent/100 to-accent flex items-center justify-center text-royalPurple-text1 font-bold text-xl">
                   {currentUser?.name?.charAt(0) || 'H'}
                 </div>
               </div>
@@ -533,7 +533,7 @@ export default function HodDashboard() {
           <Card variant="glass">
             <CardHeader>
               <CardTitle className="text-royalPurple-text1 flex items-center">
-                <Library className="h-6 w-6 mr-3 text-orange-400" />
+                <Library className="h-6 w-6 mr-3 text-accent/80" />
                 Department Subjects
               </CardTitle>
             </CardHeader>
@@ -543,7 +543,7 @@ export default function HodDashboard() {
                   {departmentSubjects.map((subject, index) => (
                     <div
                       key={index}
-                      className="px-4 py-2 bg-orange-600/60 text-orange-100 border border-orange-400/50 rounded-full text-sm font-medium flex items-center"
+                      className="px-4 py-2 bg-accent/60 text-accent/20 border border-accent/80/50 rounded-full text-sm font-medium flex items-center"
                     >
                       <BookOpen className="h-4 w-4 mr-2" />
                       {subject}
@@ -623,7 +623,7 @@ export default function HodDashboard() {
                 <div className="flex items-center gap-2 print:hidden">
                   <Link
                     href="/dashboard/hod/allocation"
-                    className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-orange-600/70 border border-orange-400/50 text-royalPurple-text1 hover:bg-orange-600 transition-colors font-semibold"
+                    className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-accent/70 border border-accent/80/50 text-royalPurple-text1 hover:bg-accent transition-colors font-semibold"
                   >
                     <Plus className="h-4 w-4" />
                     Add/Push Allocations
@@ -631,7 +631,7 @@ export default function HodDashboard() {
                 </div>
               </div>
               <div className="mt-4 p-8 backdrop-blur-md bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-3xl text-center">
-                <BookOpen className="h-12 w-12 text-orange-400 mx-auto mb-4" />
+                <BookOpen className="h-12 w-12 text-accent/80 mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-royalPurple-text1">
                   Manage Department Teaching
                 </h3>
@@ -640,7 +640,7 @@ export default function HodDashboard() {
                   headteacher to generate the master timetable.
                 </p>
                 <Link href="/dashboard/hod/allocation">
-                  <Button className="mt-6 bg-orange-600/60 hover:bg-orange-600/80 text-royalPurple-text1 border border-orange-400/50">
+                  <Button className="mt-6 bg-accent/60 hover:bg-accent/80 text-royalPurple-text1 border border-accent/80/50">
                     Open Allocation Manager
                   </Button>
                 </Link>
@@ -650,7 +650,7 @@ export default function HodDashboard() {
             <Card variant="glass">
               <CardHeader>
                 <CardTitle className="text-royalPurple-text1 flex items-center">
-                  <UserCheck className="h-6 w-6 mr-3 text-orange-400" />
+                  <UserCheck className="h-6 w-6 mr-3 text-accent/80" />
                   Teacher Progress & CPD ({teacherProgressData?.data?.term || 'Term'})
                 </CardTitle>
               </CardHeader>
@@ -795,7 +795,7 @@ export default function HodDashboard() {
 
                   <div className="flex justify-end mt-5">
                     <Button
-                      className="bg-orange-600/60 hover:bg-orange-600/80 text-royalPurple-text1 border border-orange-400/50"
+                      className="bg-accent/60 hover:bg-accent/80 text-royalPurple-text1 border border-accent/80/50"
                       onClick={() => router.push('/dashboard/hod/cpd')}
                     >
                       Open CPD Tracker
@@ -809,7 +809,7 @@ export default function HodDashboard() {
             <Card variant="glass">
               <CardHeader>
                 <CardTitle className="text-royalPurple-text1 flex items-center">
-                  <Zap className="h-6 w-6 mr-3 text-yellow-400" />
+                  <Zap className="h-6 w-6 mr-3 text-warn" />
                   Advanced Department Management Features
                 </CardTitle>
               </CardHeader>
@@ -817,10 +817,10 @@ export default function HodDashboard() {
                 <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                     {/* Department Analytics */}
-                    <div className="bg-gradient-to-br from-orange-600/20 to-red-600/20 border border-orange-400/30 rounded-xl p-4">
+                    <div className="bg-gradient-to-br from-accent/20 to-accent/20 border border-accent/80/30 rounded-xl p-4">
                       <div className="flex items-center mb-3">
-                        <div className="w-10 h-10 bg-orange-500/30 rounded-lg flex items-center justify-center mr-3">
-                          <BarChart3 className="h-5 w-5 text-orange-300" />
+                        <div className="w-10 h-10 bg-accent/100/30 rounded-lg flex items-center justify-center mr-3">
+                          <BarChart3 className="h-5 w-5 text-accent/60" />
                         </div>
                         <h4 className="font-semibold text-royalPurple-text1">
                           Department Analytics
@@ -833,7 +833,7 @@ export default function HodDashboard() {
                         <li>Resource Utilization Reports</li>
                       </ul>
                       <Button
-                        className="w-full mt-3 bg-orange-600/60 hover:bg-orange-600/80 text-royalPurple-text1 border border-orange-400/50"
+                        className="w-full mt-3 bg-accent/60 hover:bg-accent/80 text-royalPurple-text1 border border-accent/80/50"
                         onClick={() => router.push('/dashboard/hod/exam-analysis')}
                       >
                         View Analytics
@@ -841,7 +841,7 @@ export default function HodDashboard() {
                     </div>
 
                     {/* Teacher Development */}
-                    <div className="bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-royalPurple-border2/30 rounded-xl p-4">
+                    <div className="bg-gradient-to-br from-ink/20 to-g-700/20 border border-royalPurple-border2/30 rounded-xl p-4">
                       <div className="flex items-center mb-3">
                         <div className="w-10 h-10 bg-royalPurple-accent/30 rounded-lg flex items-center justify-center mr-3">
                           <Users className="h-5 w-5 text-royalPurple-accentTx" />
@@ -865,7 +865,7 @@ export default function HodDashboard() {
                     </div>
 
                     {/* Curriculum Management */}
-                    <div className="bg-gradient-to-br from-green-600/20 to-teal-600/20 border border-royalPurple-border/30 rounded-xl p-4">
+                    <div className="bg-gradient-to-br from-kpi-pass/20 to-kpi-pass/20 border border-royalPurple-border/30 rounded-xl p-4">
                       <div className="flex items-center mb-3">
                         <div className="w-10 h-10 bg-royalPurple-success/30 rounded-lg flex items-center justify-center mr-3">
                           <BookOpen className="h-5 w-5 text-royalPurple-successTx" />
@@ -890,7 +890,7 @@ export default function HodDashboard() {
                   </div>
 
                   {/* Implementation Status */}
-                  <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-royalPurple-border2/30 rounded-xl p-4">
+                  <div className="bg-gradient-to-r from-accent/20 to-warn/20 border border-royalPurple-border2/30 rounded-xl p-4">
                     <h4 className="font-semibold text-royalPurple-text1 mb-3 flex items-center">
                       <Target className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
                       Advanced Features Implementation Status
@@ -905,7 +905,7 @@ export default function HodDashboard() {
                         </div>
                         <div className="w-full bg-royalPurple-muted rounded-full h-2">
                           <div
-                            className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full"
+                            className="bg-gradient-to-r from-accent to-warn h-2 rounded-full"
                             style={{ width: '80%' }}
                           ></div>
                         </div>
@@ -965,11 +965,11 @@ export default function HodDashboard() {
                       <p className="text-royalPurple-text2 text-sm mt-1">Department average</p>
                     </div>
                     <div className="text-center">
-                      <div className="backdrop-blur-md bg-orange-600/60 border border-orange-400/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                      <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
                         <ClipboardList className="h-10 w-10 text-royalPurple-text1" />
                       </div>
                       <h3 className="font-bold text-royalPurple-text1 text-lg">Assessments</h3>
-                      <p className="text-3xl font-bold text-orange-400 mt-2">
+                      <p className="text-3xl font-bold text-accent/80 mt-2">
                         {dashboardStats.pendingAssessments}
                       </p>
                       <p className="text-royalPurple-text2 text-sm mt-1">Pending review</p>
@@ -1047,7 +1047,7 @@ export default function HodDashboard() {
                               className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
                             >
                               <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-ink to-accent flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
                                   {teacherName.charAt(0)}
                                 </div>
                                 <div>
@@ -1116,7 +1116,7 @@ export default function HodDashboard() {
                               className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
                             >
                               <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-blue-600 flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-kpi-pass/100 to-ink flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
                                   {studentName.charAt(0)}
                                 </div>
                                 <div>
@@ -1267,8 +1267,8 @@ export default function HodDashboard() {
             {renderDutySection(
               'Financial Management',
               financialManagementDuties,
-              'bg-orange-600',
-              'hover:bg-orange-600 hover:text-royalPurple-text1'
+              'bg-accent',
+              'hover:bg-accent hover:text-royalPurple-text1'
             )}
           </div>
 
@@ -1284,7 +1284,7 @@ export default function HodDashboard() {
                   Department Classes
                 </CardTitle>
                 <Link href="/dashboard/classes">
-                  <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-royalPurple-text1">
+                  <Button className="bg-gradient-to-r from-ink to-kpi-pass hover:from-g-800 hover:to-g-700 text-royalPurple-text1">
                     Manage Classes
                   </Button>
                 </Link>
@@ -1353,7 +1353,7 @@ export default function HodDashboard() {
                   Department Subjects
                 </CardTitle>
                 <Link href="/dashboard/hod/subjects">
-                  <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-royalPurple-text1">
+                  <Button className="bg-gradient-to-r from-accent to-ink hover:from-accent hover:to-g-800 text-royalPurple-text1">
                     Manage Subjects
                   </Button>
                 </Link>
@@ -1403,12 +1403,12 @@ export default function HodDashboard() {
           <Card variant="glass">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-royalPurple-text1 flex items-center">
-                <ClipboardList className="h-6 w-6 mr-3 text-orange-400" />
+                <ClipboardList className="h-6 w-6 mr-3 text-accent/80" />
                 Department Assessments
               </CardTitle>
               <div className="flex space-x-2">
                 <Link href="/dashboard/hod/assessments/create">
-                  <Button className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-royalPurple-text1">
+                  <Button className="bg-gradient-to-r from-accent to-accent hover:from-accent hover:to-accent text-royalPurple-text1">
                     <Plus className="h-4 w-4 mr-2" />
                     Create Assessment
                   </Button>
@@ -1430,7 +1430,7 @@ export default function HodDashboard() {
                       className="flex items-center justify-between p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-colors duration-200"
                     >
                       <div className="flex items-center space-x-4">
-                        <div className="backdrop-blur-md bg-orange-600/60 border border-orange-400/50 rounded-xl p-3">
+                        <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-xl p-3">
                           <ClipboardList className="h-6 w-6 text-royalPurple-text1" />
                         </div>
                         <div>
@@ -1451,7 +1451,7 @@ export default function HodDashboard() {
                             assessment.status === 'published'
                               ? 'bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50'
                               : assessment.status === 'draft'
-                                ? 'bg-yellow-600/60 text-yellow-100 border border-yellow-400/50'
+                                ? 'bg-warn/60 text-warn/20 border border-warn/50'
                                 : 'bg-royalPurple-muted/60 text-royalPurple-text1 border border-royalPurple-border/50'
                           }`}
                         >
@@ -1466,12 +1466,12 @@ export default function HodDashboard() {
                   {(!dashboardData?.recent_assessments ||
                     dashboardData.recent_assessments.length === 0) && (
                     <div className="text-center py-8">
-                      <div className="backdrop-blur-md bg-orange-600/60 border border-orange-400/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                      <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
                         <ClipboardList className="h-8 w-8 text-royalPurple-text1" />
                       </div>
                       <p className="text-royalPurple-text2">No assessments in department yet</p>
                       <Link href="/dashboard/hod/assessments/create">
-                        <Button className="mt-4 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-royalPurple-text1">
+                        <Button className="mt-4 bg-gradient-to-r from-accent to-accent hover:from-accent hover:to-accent text-royalPurple-text1">
                           Create Department Assessment
                         </Button>
                       </Link>
@@ -1510,7 +1510,7 @@ export default function HodDashboard() {
                 <Link href="/dashboard/sdg">
                   <Button
                     variant="outline"
-                    className="w-full h-20 flex flex-col bg-gradient-to-r from-blue-50 to-green-50 hover:from-blue-100 hover:to-green-100 border-royalPurple-border2"
+                    className="w-full h-20 flex flex-col bg-gradient-to-r from-accent/5 to-kpi-pass/10 hover:from-accent/10 hover:to-kpi-pass/20 border-royalPurple-border2"
                   >
                     <Globe className="h-6 w-6 mb-2 text-royalPurple-accentTx" />
                     <span className="text-royalPurple-accentTx font-semibold">🇺🇳 UN SDGs</span>
@@ -1623,7 +1623,7 @@ export default function HodDashboard() {
                                       ? 'bg-royalPurple-success'
                                       : performance >= 75
                                         ? 'bg-royalPurple-accent'
-                                        : 'bg-yellow-500'
+                                        : 'bg-warn/100'
                                   }`}
                                   style={{ width: `${performance}%` }}
                                 ></div>
@@ -1644,7 +1644,7 @@ export default function HodDashboard() {
                         {[
                           { grade: 'Distinction', percentage: 25, color: 'bg-royalPurple-success' },
                           { grade: 'Merit', percentage: 30, color: 'bg-royalPurple-accent' },
-                          { grade: 'Credit', percentage: 25, color: 'bg-orange-500' },
+                          { grade: 'Credit', percentage: 25, color: 'bg-accent/100' },
                           {
                             grade: 'Pass/Satisfactory',
                             percentage: 15,
@@ -1679,7 +1679,7 @@ export default function HodDashboard() {
           <Card variant="glass">
             <CardHeader>
               <CardTitle className="text-royalPurple-text1 flex items-center">
-                <Clock className="h-6 w-6 mr-3 text-yellow-400" />
+                <Clock className="h-6 w-6 mr-3 text-warn" />
                 Recent Department Activities
               </CardTitle>
             </CardHeader>
@@ -1689,7 +1689,7 @@ export default function HodDashboard() {
                   {/* Recent Assessments */}
                   <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                     <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
-                      <ClipboardList className="h-5 w-5 mr-2 text-orange-400" />
+                      <ClipboardList className="h-5 w-5 mr-2 text-accent/80" />
                       Recent Assessments
                     </h3>
                     <div className="space-y-3">
@@ -1700,7 +1700,7 @@ export default function HodDashboard() {
                             className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
                           >
                             <div className="flex items-center space-x-3">
-                              <div className="backdrop-blur-md bg-orange-600/60 border border-orange-400/50 rounded-lg p-2">
+                              <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-lg p-2">
                                 <ClipboardList className="h-4 w-4 text-royalPurple-text1" />
                               </div>
                               <div>
@@ -1716,7 +1716,7 @@ export default function HodDashboard() {
                               className={`px-2 py-1 rounded-full text-xs font-medium ${
                                 assessment.status === 'completed'
                                   ? 'bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50'
-                                  : 'bg-yellow-600/60 text-yellow-100 border border-yellow-400/50'
+                                  : 'bg-warn/60 text-warn/20 border border-warn/50'
                               }`}
                             >
                               {assessment.status}
@@ -1779,7 +1779,7 @@ export default function HodDashboard() {
                               className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
                             >
                               <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-blue-600 flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-kpi-pass/100 to-ink flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
                                   {String(gradeLabel).slice(0, 2)}
                                 </div>
                                 <div>

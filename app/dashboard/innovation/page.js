@@ -10,7 +10,7 @@ export default function InnovationPage() {
   // Show loading if not authenticated
   if (!isAuthenticated || !currentUser) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-800">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-ink via-g-800 to-g-700">
         <div className="text-center space-y-4">
           <LoadingSpinner size="xl" color="white" label="Loading Innovation Hub" />
         </div>
@@ -19,12 +19,12 @@ export default function InnovationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-800 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-ink via-g-800 to-g-700 relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-40 left-40 w-80 h-80 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-4000"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-accent/20 to-ink/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-g-700/20 to-accent/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-80 h-80 bg-gradient-to-r from-ink/20 to-g-700/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-4000"></div>
       </div>
 
       <div className="p-6 relative z-10">

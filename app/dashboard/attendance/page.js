@@ -168,7 +168,7 @@ export default function AttendancePage() {
                     id="class-select"
                     value={selectedClass}
                     onChange={(e) => setSelectedClass(e.target.value)}
-                    className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-royalPurple-card"
+                    className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent outline-none bg-royalPurple-card"
                   >
                     <option value="">Choose a class...</option>
                     {dashboardData?.my_classes?.map((classItem) => (
@@ -191,7 +191,7 @@ export default function AttendancePage() {
                     type="date"
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent outline-none"
                   />
                 </div>
               </div>
@@ -205,7 +205,7 @@ export default function AttendancePage() {
             className="grid grid-cols-1 md:grid-cols-4 gap-4"
             aria-label="Attendance Summary"
           >
-            <Card className="focus-within:ring-2 focus-within:ring-blue-500 transition-shadow">
+            <Card className="focus-within:ring-2 focus-within:ring-g-500 transition-shadow">
               <CardContent className="p-4">
                 <div className="flex items-center">
                   <Users className="h-6 w-6 text-royalPurple-accentTx" aria-hidden="true" />
@@ -217,7 +217,7 @@ export default function AttendancePage() {
               </CardContent>
             </Card>
 
-            <Card className="focus-within:ring-2 focus-within:ring-green-500 transition-shadow">
+            <Card className="focus-within:ring-2 focus-within:ring-kpi-pass/100 transition-shadow">
               <CardContent className="p-4">
                 <div className="flex items-center">
                   <Check className="h-6 w-6 text-royalPurple-successTx" aria-hidden="true" />
@@ -231,7 +231,7 @@ export default function AttendancePage() {
               </CardContent>
             </Card>
 
-            <Card className="focus-within:ring-2 focus-within:ring-red-500 transition-shadow">
+            <Card className="focus-within:ring-2 focus-within:ring-accent/100 transition-shadow">
               <CardContent className="p-4">
                 <div className="flex items-center">
                   <X className="h-6 w-6 text-royalPurple-dangerTx" aria-hidden="true" />
@@ -245,10 +245,10 @@ export default function AttendancePage() {
               </CardContent>
             </Card>
 
-            <Card className="focus-within:ring-2 focus-within:ring-yellow-500 transition-shadow">
+            <Card className="focus-within:ring-2 focus-within:ring-warn/100 transition-shadow">
               <CardContent className="p-4">
                 <div className="flex items-center">
-                  <Clock className="h-6 w-6 text-yellow-600" aria-hidden="true" />
+                  <Clock className="h-6 w-6 text-warn" aria-hidden="true" />
                   <div className="ml-3">
                     <p className="text-sm text-royalPurple-text2">Late</p>
                     <p className="text-lg font-semibold">
@@ -269,7 +269,7 @@ export default function AttendancePage() {
                 <CardTitle id="attendance-list-title">Student Attendance</CardTitle>
                 <Button
                   onClick={handleSaveAttendance}
-                  className="bg-royalPurple-success hover:bg-royalPurple-success focus:ring-2 focus:ring-green-500 focus:ring-offset-2 outline-none"
+                  className="bg-royalPurple-success hover:bg-royalPurple-success focus:ring-2 focus:ring-kpi-pass/100 focus:ring-offset-2 outline-none"
                   aria-label="Save current attendance"
                   disabled={attendanceMutation.isLoading}
                 >
@@ -286,7 +286,7 @@ export default function AttendancePage() {
                     students.map((student) => (
                       <article
                         key={student.id}
-                        className="flex items-center justify-between p-4 border rounded-lg focus-within:ring-2 focus-within:ring-blue-500 outline-none transition-shadow"
+                        className="flex items-center justify-between p-4 border rounded-lg focus-within:ring-2 focus-within:ring-g-500 outline-none transition-shadow"
                         role="listitem"
                         tabIndex="0"
                       >
@@ -323,7 +323,7 @@ export default function AttendancePage() {
                             }
                             size="sm"
                             onClick={() => handleAttendanceChange(student.id, 'present')}
-                            className={`${attendance[String(student.id)] === 'present' ? 'bg-royalPurple-success hover:bg-royalPurple-success' : ''} focus:ring-2 focus:ring-green-500`}
+                            className={`${attendance[String(student.id)] === 'present' ? 'bg-royalPurple-success hover:bg-royalPurple-success' : ''} focus:ring-2 focus:ring-kpi-pass/100`}
                             aria-pressed={attendance[String(student.id)] === 'present'}
                           >
                             <Check className="h-4 w-4 mr-1" aria-hidden="true" />
@@ -336,7 +336,7 @@ export default function AttendancePage() {
                             }
                             size="sm"
                             onClick={() => handleAttendanceChange(student.id, 'absent')}
-                            className={`${attendance[String(student.id)] === 'absent' ? 'bg-royalPurple-danger hover:bg-royalPurple-danger' : ''} focus:ring-2 focus:ring-red-500`}
+                            className={`${attendance[String(student.id)] === 'absent' ? 'bg-royalPurple-danger hover:bg-royalPurple-danger' : ''} focus:ring-2 focus:ring-accent/100`}
                             aria-pressed={attendance[String(student.id)] === 'absent'}
                           >
                             <X className="h-4 w-4 mr-1" aria-hidden="true" />
@@ -349,7 +349,7 @@ export default function AttendancePage() {
                             }
                             size="sm"
                             onClick={() => handleAttendanceChange(student.id, 'late')}
-                            className={`${attendance[String(student.id)] === 'late' ? 'bg-yellow-600 hover:bg-yellow-700' : ''} focus:ring-2 focus:ring-yellow-500`}
+                            className={`${attendance[String(student.id)] === 'late' ? 'bg-warn hover:bg-g-700' : ''} focus:ring-2 focus:ring-warn/100`}
                             aria-pressed={attendance[String(student.id)] === 'late'}
                           >
                             <Clock className="h-4 w-4 mr-1" aria-hidden="true" />
