@@ -224,7 +224,11 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          <Button type="submit" className="w-full py-3.5" disabled={isLoading}>
+          <Button
+            type="submit"
+            className="w-full py-3.5 bg-ink text-paper border-2 border-ink shadow-brutal-accent hover:bg-g-900"
+            disabled={isLoading}
+          >
             {isLoading ? `Signing in... ${loginPercent}%` : 'Sign In'}
           </Button>
         </form>

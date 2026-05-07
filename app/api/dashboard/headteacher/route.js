@@ -440,9 +440,12 @@ export async function GET(request) {
       const s = rows[0]?.student
       const avgEntry = studentAveragesMap.get(String(sid))
       const overallAverage = avgEntry?.count ? avgEntry.sum / avgEntry.count : 0
-      const risk_level = overallAverage < 30 ? 'critical' : 'high'
       const gradeLevel = s?.class || ''
       const gradeInfo = gradeFromAverage(overallAverage, gradeLevel)
+      const failedScores = rows
+        .map((x) => Number(x?.score || 0))
+        .filter((score) => Number.isFinite(score) && score < 40)
+      const minFailedScore = failedScores.length > 0 ? Math.min(...failedScores) : 0
       const subjects = rows
         .filter((x) => x?.subject?.name)
         .map((x) => ({
@@ -464,7 +467,8 @@ export async function GET(request) {
         overall_average: Math.round(overallAverage),
         overall_grade: gradeInfo.grade,
         overall_status: gradeInfo.status,
-        risk_level,
+        // Risk for "urgent attention" is based on failed subject marks, not overall average.
+        risk_level: minFailedScore < 30 ? 'critical' : 'high',
         failed_assessments: rows.length,
         low_grades: rows.length,
         subjects: subjectList,
