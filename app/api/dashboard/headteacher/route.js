@@ -392,45 +392,47 @@ export async function GET(request) {
       byStudent.get(sid).push(r)
     }
 
-    const studentsRequiringAttention = Array.from(byStudent.entries()).map(([sid, rows]) => {
-      const s = rows[0]?.student
-      const avgEntry = studentAveragesMap.get(String(sid))
-      const overallAverage = avgEntry?.count ? avgEntry.sum / avgEntry.count : 0
-      const gradeLevel = s?.class || ''
-      const gradeInfo = gradeFromAverage(overallAverage, gradeLevel)
-      const failedScores = rows
-        .map((x) => Number(x?.score || 0))
-        .filter((score) => Number.isFinite(score) && score < 40)
-      const minFailedScore = failedScores.length > 0 ? Math.min(...failedScores) : 0
-      const subjects = rows
-        .filter((x) => x?.subject?.name)
-        .map((x) => ({
-          name: x.subject.name,
-          score: Math.round(Number(x.score || 0)),
-          grade: x.grade || '',
-        }))
-      const uniqueByName = new Map(subjects.map((subj) => [String(subj.name), subj]))
-      const subjectList = Array.from(uniqueByName.values()).sort((a, b) =>
-        a.name.localeCompare(b.name)
-      )
+    const studentsRequiringAttention = Array.from(byStudent.entries())
+      .map(([sid, rows]) => {
+        const s = rows[0]?.student
+        const avgEntry = studentAveragesMap.get(String(sid))
+        const overallAverage = avgEntry?.count ? avgEntry.sum / avgEntry.count : 0
+        const gradeLevel = s?.class || ''
+        const gradeInfo = gradeFromAverage(overallAverage, gradeLevel)
+        const failedScores = rows
+          .map((x) => Number(x?.score || 0))
+          .filter((score) => Number.isFinite(score) && score < 40)
+        const minFailedScore = failedScores.length > 0 ? Math.min(...failedScores) : 0
+        const subjects = rows
+          .filter((x) => x?.subject?.name)
+          .map((x) => ({
+            name: x.subject.name,
+            score: Math.round(Number(x.score || 0)),
+            grade: x.grade || '',
+          }))
+        const uniqueByName = new Map(subjects.map((subj) => [String(subj.name), subj]))
+        const subjectList = Array.from(uniqueByName.values()).sort((a, b) =>
+          a.name.localeCompare(b.name)
+        )
 
-      return {
-        id: sid,
-        name: s?.name || 'Unknown',
-        student_id: s?.exam_number || '',
-        class: s?.class || '',
-        grade_level: gradeLevel,
-        overall_average: Math.round(overallAverage),
-        overall_grade: gradeInfo.grade,
-        overall_status: gradeInfo.status,
-        // Risk for "urgent attention" is based on failed subject marks, not overall average.
-        risk_level: minFailedScore < 30 ? 'critical' : 'high',
-        failed_assessments: rows.length,
-        low_grades: rows.length,
-        subjects: subjectList,
-        parent_contact: s?.parent_father_contact || s?.guardian_contact || 'N/A',
-      }
-    })
+        return {
+          id: sid,
+          name: s?.name || 'Unknown',
+          student_id: s?.exam_number || '',
+          class: s?.class || '',
+          grade_level: gradeLevel,
+          overall_average: Math.round(overallAverage),
+          overall_grade: gradeInfo.grade,
+          overall_status: gradeInfo.status,
+          risk_level: minFailedScore < 30 ? 'critical' : 'high',
+          failed_assessments: rows.length,
+          low_grades: rows.length,
+          subjects: subjectList,
+          parent_contact: s?.parent_father_contact || s?.guardian_contact || 'N/A',
+        }
+      })
+      // Apply strict grading-system filter: only failing overall results (<40) require urgent attention.
+      .filter((student) => Number(student.overall_average || 0) < 40)
 
     // 5. Performance Trends (scoped by schoolId)
     const yearForTrends = yearFilter || new Date().getFullYear()

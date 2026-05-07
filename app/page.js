@@ -861,13 +861,16 @@ export default function HomePage() {
       <section style={{ padding: '4rem 1.5rem', textAlign: 'center' }}>
         <div style={{ maxWidth: 620, margin: '0 auto' }}>
           <div
-            className="section-label"
             style={{
-              color: 'var(--color-accent)',
-              border: '1px solid var(--color-accent)',
+              color: '#FF3B00',
+              border: '1px solid #FF3B00',
               display: 'inline-block',
               padding: '6px 12px',
               marginBottom: 18,
+              fontSize: 11,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              fontWeight: 700,
             }}
           >
             Ready to modernise your school?
@@ -877,12 +880,12 @@ export default function HomePage() {
               fontSize: 30,
               fontWeight: 800,
               marginBottom: '1rem',
-              color: 'var(--color-ink)',
+              color: '#111111',
             }}
           >
             Launch your school portal
             <br />
-            <span style={{ color: 'var(--color-ink)' }}>Setup takes minutes</span>
+            <span style={{ color: '#111111' }}>Setup takes minutes</span>
           </h2>
           <p
             style={{
@@ -903,10 +906,10 @@ export default function HomePage() {
               padding: '16px 36px',
               fontWeight: 800,
               textDecoration: 'none',
-              background: 'var(--color-ink)',
-              color: 'var(--color-paper)',
-              border: '2px solid var(--color-ink)',
-              boxShadow: '4px 4px 0 0 var(--color-accent)',
+              background: '#111111',
+              color: '#EFECE5',
+              border: '2px solid #111111',
+              boxShadow: '6px 6px 0 0 #FF3B00',
             }}
           >
             {tenantSchool ? 'Create account →' : 'Register your school free →'}
@@ -915,7 +918,7 @@ export default function HomePage() {
             Questions? Call or WhatsApp:{' '}
             <a
               href="tel:0977934996"
-              style={{ color: 'var(--color-accent)', fontWeight: 800, textDecoration: 'none' }}
+              style={{ color: '#FF3B00', fontWeight: 800, textDecoration: 'none' }}
             >
               0977934996
             </a>
@@ -924,7 +927,7 @@ export default function HomePage() {
               href="https://wa.me/260977934996"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: 'var(--color-accent)', fontWeight: 800, textDecoration: 'none' }}
+              style={{ color: '#FF3B00', fontWeight: 800, textDecoration: 'none' }}
             >
               WhatsApp
             </a>
@@ -977,7 +980,7 @@ export default function HomePage() {
               href={registerUrl}
               style={{
                 fontSize: 12,
-                color: 'var(--color-accent)',
+                color: '#FF3B00',
                 textDecoration: 'none',
                 fontWeight: 600,
               }}

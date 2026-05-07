@@ -132,17 +132,17 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-royalPurple-page font-sans p-4">
+    <main className="min-h-screen flex items-center justify-center bg-[#EFECE5] font-sans p-4">
       <button
         onClick={() => router.push('/')}
-        className="absolute top-6 left-6 text-royalPurple-text2 hover:text-royalPurple-text1 transition-colors flex items-center gap-2 group"
+        className="absolute top-6 left-6 text-ink/70 hover:text-ink transition-colors flex items-center gap-2 group"
         aria-label="Back to Home"
       >
         <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
         <span>Back to Home</span>
       </button>
 
-      <section className="w-full max-w-md p-8 rounded-2xl bg-royalPurple-card border border-royalPurple-border">
+      <section className="w-full max-w-md p-8 rounded-2xl bg-white border border-ink/20">
         <header className="flex flex-col items-center mb-8">
           {school ? (
             <>
@@ -154,23 +154,21 @@ export default function LoginPage() {
                   priority
                 />
               )}
-              <h2 className="text-2xl font-bold text-center text-royalPurple-text1">
-                {school.name}
-              </h2>
+              <h2 className="text-2xl font-bold text-center text-ink">{school.name}</h2>
             </>
           ) : (
             <>
-              <div className="bg-royalPurple-card2 border border-royalPurple-border rounded-lg p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
-                <GraduationCap className="h-6 w-6 text-royalPurple-text2" />
+              <div className="bg-[#F5F2EB] border border-ink/20 rounded-lg p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                <GraduationCap className="h-6 w-6 text-ink/70" />
               </div>
-              <h1 className="text-2xl font-bold text-royalPurple-text1 mb-2">Welcome Back</h1>
+              <h1 className="text-2xl font-bold text-ink mb-2">Welcome Back</h1>
             </>
           )}
-          <p className="mt-3 text-center text-royalPurple-text2 text-sm">
+          <p className="mt-3 text-center text-ink/70 text-sm">
             Enter your credentials to access the portal
           </p>
           {detectedSubdomain && (
-            <div className="mt-2 px-3 py-1 bg-royalPurple-accentBg rounded-full border border-royalPurple-accent text-xs text-royalPurple-accentTx">
+            <div className="mt-2 px-3 py-1 bg-accent/10 rounded-full border border-accent text-xs text-accent">
               School: {detectedSubdomain}
             </div>
           )}
@@ -209,16 +207,16 @@ export default function LoginPage() {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 rounded border-royalPurple-border bg-royalPurple-card2 text-royalPurple-accent focus:ring-1 focus:ring-royalPurple-border2 focus:ring-offset-0"
+                className="h-4 w-4 rounded border-ink/30 bg-[#F5F2EB] text-accent focus:ring-1 focus:ring-accent focus:ring-offset-0"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-royalPurple-text2">
+              <label htmlFor="remember-me" className="ml-2 block text-ink/70">
                 Remember me
               </label>
             </div>
 
             <Link
               href="/forgot-password"
-              className="font-medium text-royalPurple-text2 hover:text-royalPurple-text1 transition-colors"
+              className="font-medium text-accent hover:text-[#cc2f00] transition-colors"
             >
               Forgot password?
             </Link>
@@ -226,7 +224,13 @@ export default function LoginPage() {
 
           <Button
             type="submit"
-            className="w-full py-3.5 bg-ink text-paper border-2 border-ink shadow-brutal-accent hover:bg-g-900"
+            className="w-full py-3.5"
+            style={{
+              backgroundColor: '#111111',
+              color: '#EFECE5',
+              border: '2px solid #111111',
+              boxShadow: '4px 4px 0 0 #FF3B00',
+            }}
             disabled={isLoading}
           >
             {isLoading ? `Signing in... ${loginPercent}%` : 'Sign In'}
@@ -237,7 +241,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={handleClearCache}
-            className="text-xs text-royalPurple-text3 hover:text-royalPurple-text1 transition-colors underline"
+            className="text-xs text-accent hover:text-[#cc2f00] transition-colors underline"
           >
             Clear Cache & Reset
           </button>
