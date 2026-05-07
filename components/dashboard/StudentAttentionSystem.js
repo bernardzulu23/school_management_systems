@@ -27,6 +27,7 @@ import GenerateReportsModal from './GenerateReportsModal'
 import CreateSupportPlansModal from './CreateSupportPlansModal'
 import ScheduleMeetingsModal from './ScheduleMeetingsModal'
 import { percentTextClass } from '@/lib/utils/percentColor'
+import { calculateGrade } from '@/lib/gradingSystem'
 
 export default function StudentAttentionSystem({ studentsData, performanceSummary }) {
   const [selectedStudent, setSelectedStudent] = useState(null)
@@ -34,49 +35,7 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
   const [activeModal, setActiveModal] = useState(null)
   const [selectedStudents, setSelectedStudents] = useState([])
 
-  // Grading system functions
-  const getGradeInfo = (score, gradeLevel) => {
-    if (score === null || score === undefined)
-      return { grade: 'X', status: 'ABSENT', color: 'gray' }
-
-    // For Forms 1, 2 and Grades 8, 9
-    const normalizedGrade = gradeLevel?.toLowerCase() || ''
-    if (['form1', 'form2', 'grade9', 'grade 8', 'grade 9'].includes(normalizedGrade)) {
-      if (score >= 75) return { grade: 'ONE', status: 'DISTINCTION', color: 'green' }
-      if (score >= 60) return { grade: 'TWO', status: 'MERIT', color: 'blue' }
-      if (score >= 50) return { grade: 'THREE', status: 'CREDIT', color: 'purple' }
-      if (score >= 40) return { grade: 'FOUR', status: 'PASS', color: 'yellow' }
-      return { grade: 'F', status: 'FAIL', color: 'red' }
-    }
-
-    // For Forms 3, 4, 5, 6 and Grades 10, 11, 12
-    if (
-      [
-        'form3',
-        'form4',
-        'form5',
-        'form6',
-        'grade10',
-        'grade11',
-        'grade12',
-        'grade 10',
-        'grade 11',
-        'grade 12',
-      ].includes(normalizedGrade)
-    ) {
-      if (score >= 75) return { grade: '1', status: 'DISTINCTION', color: 'green' }
-      if (score >= 70) return { grade: '2', status: 'DISTINCTION', color: 'green' }
-      if (score >= 65) return { grade: '3', status: 'MERIT', color: 'blue' }
-      if (score >= 60) return { grade: '4', status: 'MERIT', color: 'blue' }
-      if (score >= 55) return { grade: '5', status: 'CREDIT', color: 'purple' }
-      if (score >= 50) return { grade: '6', status: 'CREDIT', color: 'purple' }
-      if (score >= 45) return { grade: '7', status: 'SATISFACTORY', color: 'yellow' }
-      if (score >= 40) return { grade: '8', status: 'SATISFACTORY', color: 'yellow' }
-      return { grade: '9', status: 'FAIL', color: 'red' }
-    }
-
-    return { grade: 'F', status: 'FAIL', color: 'red' }
-  }
+  const getGradeInfo = (score, gradeLevel) => calculateGrade(score, gradeLevel)
 
   const getRiskLevelColor = (riskLevel) => {
     switch (riskLevel) {

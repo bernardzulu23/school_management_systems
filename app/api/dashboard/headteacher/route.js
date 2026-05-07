@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { calculateGrade } from '@/lib/gradingSystem'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -29,56 +30,11 @@ function termSortKey(termLabel) {
 }
 
 function gradeFromAverage(score, gradeLevel) {
-  if (score === null || score === undefined) return { grade: 'X', status: 'ABSENT' }
-  const normalized = String(gradeLevel || '').toLowerCase()
-  const isJunior =
-    normalized.includes('form 1') ||
-    normalized.includes('form 2') ||
-    normalized.includes('grade 8') ||
-    normalized.includes('grade 9') ||
-    normalized === 'form1' ||
-    normalized === 'form2' ||
-    normalized === 'grade8' ||
-    normalized === 'grade9'
-
-  const isSenior =
-    normalized.includes('form 3') ||
-    normalized.includes('form 4') ||
-    normalized.includes('form 5') ||
-    normalized.includes('form 6') ||
-    normalized.includes('grade 10') ||
-    normalized.includes('grade 11') ||
-    normalized.includes('grade 12') ||
-    normalized === 'form3' ||
-    normalized === 'form4' ||
-    normalized === 'form5' ||
-    normalized === 'form6' ||
-    normalized === 'grade10' ||
-    normalized === 'grade11' ||
-    normalized === 'grade12'
-
-  if (isJunior) {
-    if (score >= 75) return { grade: 'ONE', status: 'DISTINCTION' }
-    if (score >= 60) return { grade: 'TWO', status: 'MERIT' }
-    if (score >= 50) return { grade: 'THREE', status: 'CREDIT' }
-    if (score >= 40) return { grade: 'FOUR', status: 'PASS' }
-    return { grade: 'F', status: 'FAIL' }
+  const gradeInfo = calculateGrade(score, gradeLevel)
+  return {
+    grade: gradeInfo?.grade ?? 'X',
+    status: gradeInfo?.status ?? 'ABSENT',
   }
-
-  if (isSenior) {
-    if (score >= 75) return { grade: '1', status: 'DISTINCTION' }
-    if (score >= 70) return { grade: '2', status: 'DISTINCTION' }
-    if (score >= 65) return { grade: '3', status: 'MERIT' }
-    if (score >= 60) return { grade: '4', status: 'MERIT' }
-    if (score >= 55) return { grade: '5', status: 'CREDIT' }
-    if (score >= 50) return { grade: '6', status: 'CREDIT' }
-    if (score >= 45) return { grade: '7', status: 'SATISFACTORY' }
-    if (score >= 40) return { grade: '8', status: 'SATISFACTORY' }
-    return { grade: '9', status: 'FAIL' }
-  }
-
-  if (score >= 50) return { grade: 'P', status: 'PASS' }
-  return { grade: 'F', status: 'FAIL' }
 }
 
 function normalizeGender(value) {
@@ -636,7 +592,27 @@ export async function GET(request) {
       classes_needing_support: strugglingClasses,
     }
 
-    const groupResultsByStudent = (rows) => {
+    const groupResultsByStudent = async (rows) => {
+      const enteredByIds = Array.from(
+        new Set((rows || []).map((r) => String(r?.enteredByUserId || '').trim()).filter(Boolean))
+      )
+      const enteredByUsers =
+        enteredByIds.length > 0
+          ? await prisma.user.findMany({
+              where: { schoolId, id: { in: enteredByIds } },
+              select: { id: true, name: true, email: true },
+              take: 50000,
+            })
+          : []
+      const enteredByNameById = new Map(
+        enteredByUsers.map((u) => [
+          String(u.id),
+          String(u?.name || u?.email || '')
+            .trim()
+            .replace(/\s+/g, ' '),
+        ])
+      )
+
       const byStudent = new Map()
       for (const r of rows) {
         const sid = String(r?.studentId || '').trim()
@@ -645,7 +621,10 @@ export async function GET(request) {
         const studentClass = r?.student?.class || ''
         const subjectName = r?.subject?.name || 'Unknown'
         const teacherName =
-          r?.subject?.teacher?.user?.name || r?.subject?.teacher?.user?.email || 'Unknown'
+          r?.subject?.teacher?.user?.name ||
+          r?.subject?.teacher?.user?.email ||
+          enteredByNameById.get(String(r?.enteredByUserId || '').trim()) ||
+          'Unknown'
 
         if (!byStudent.has(sid)) {
           byStudent.set(sid, {
@@ -698,7 +677,7 @@ export async function GET(request) {
       student: { name: r.student?.name || null, class: r.student?.class || null },
       subject: { name: r.subject?.name || null },
     }))
-    const juniorResults = groupResultsByStudent(juniorResultRows)
+    const juniorResults = await groupResultsByStudent(juniorResultRows)
 
     const seniorStudents = await prisma.student.findMany({
       where: {
@@ -733,7 +712,7 @@ export async function GET(request) {
             take: 50000,
           })
         : []
-    const seniorResultsGrouped = groupResultsByStudent(seniorResults)
+    const seniorResultsGrouped = await groupResultsByStudent(seniorResults)
     const seniorResultsRaw = seniorResults.map((r) => ({
       id: r.id,
       studentId: r.studentId,
