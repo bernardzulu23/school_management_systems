@@ -75,11 +75,11 @@
   --rp-deep: #1c1c1a;
   --rp-card: #ffffff;
   --rp-card2: #f5f2eb;
-  --rp-border: rgba(239, 236, 229, 0.15);
-  --rp-border2: rgba(239, 236, 229, 0.08);
-  --rp-text1: #efece5;
-  --rp-text2: rgba(239, 236, 229, 0.7);
-  --rp-text3: rgba(239, 236, 229, 0.45);
+  --rp-border: rgba(17, 17, 17, 0.12);
+  --rp-border2: rgba(17, 17, 17, 0.24);
+  --rp-text1: #111111;
+  --rp-text2: rgba(17, 17, 17, 0.72);
+  --rp-text3: rgba(17, 17, 17, 0.5);
   --rp-accent: #ff3b00;
   --rp-accentbg: rgba(255, 59, 0, 0.15);
   --rp-accenttx: #ffffff;
@@ -89,7 +89,7 @@
   --rp-successTx: #6eddb8;
   --rp-danger: #4a1a1a;
   --rp-dangerTx: #ff8080;
-  --rp-muted: rgba(239, 236, 229, 0.08);
+  --rp-muted: rgba(17, 17, 17, 0.06);
 
   /* ── Page surfaces ── */
   --page-bg: #efece5;
@@ -527,9 +527,18 @@ html:not(.dark) .bg-white .text-royalPurple-text3 {
 }
 
 .bg-royalPurple-page,
-.bg-royalPurple-deep,
 .bg-royalPurple-card,
 .bg-royalPurple-card2 {
+  color: var(--rp-text1);
+}
+
+/* Dark surface contrast guard */
+.bg-royalPurple-deep {
+  --rp-text1: #efece5;
+  --rp-text2: rgba(239, 236, 229, 0.7);
+  --rp-text3: rgba(239, 236, 229, 0.45);
+  --rp-border: rgba(239, 236, 229, 0.15);
+  --rp-border2: rgba(239, 236, 229, 0.08);
   color: var(--rp-text1);
 }
 
