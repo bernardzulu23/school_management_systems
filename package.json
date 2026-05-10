@@ -22,9 +22,9 @@
   },
   "scripts": {
     "copy:excalidraw-fonts": "node scripts/copy-excalidraw-fonts.js",
-    "dev": "npm run copy:excalidraw-fonts && next dev",
+    "dev": "next dev",
     "prisma:generate": "node -e \"const fs=require('fs');const p='prisma/schema.prisma';const b=fs.readFileSync(p);if(b[0]===0xEF&&b[1]===0xBB&&b[2]===0xBF){fs.writeFileSync(p,b.slice(3));}\" && prisma generate",
-    "build": "npx prisma generate && npx prisma migrate deploy && next build",
+    "build": "prisma generate && prisma migrate deploy && next build",
     "start": "next start",
     "lint": "node ./node_modules/eslint/bin/eslint.js .",
     "test": "jest",
