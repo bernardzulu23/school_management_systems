@@ -38,6 +38,8 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return
 
   const { request } = event
+  const requestUrl = new URL(request.url)
+  if (requestUrl.origin !== self.location.origin) return
   const isNavigation = request.mode === 'navigate'
   const isStaticAsset = ['style', 'script', 'image', 'font'].includes(request.destination)
 

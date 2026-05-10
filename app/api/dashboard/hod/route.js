@@ -241,16 +241,21 @@ export const GET = withErrorHandler(async function GET(request) {
       : []),
   ]
 
-  const results = await prisma.result.findMany({
-    where: {
-      schoolId,
-      ...resultTermWhere,
-      ...(resultOrClauses.length > 0 ? { OR: resultOrClauses } : {}),
-    },
-    include: { student: true, subject: true },
-    orderBy: { updatedAt: 'desc' },
-    take: 50,
-  })
+  let results = []
+  try {
+    results = await prisma.result.findMany({
+      where: {
+        schoolId,
+        ...resultTermWhere,
+        ...(resultOrClauses.length > 0 ? { OR: resultOrClauses } : {}),
+      },
+      include: { student: true, subject: true },
+      orderBy: { updatedAt: 'desc' },
+      take: 50,
+    })
+  } catch (e) {
+    console.error('[HOD Dashboard] Failed loading results:', e?.message)
+  }
 
   const enteredByIds = Array.from(
     new Set(results.map((r) => String(r.enteredByUserId || '')).filter(Boolean))
@@ -270,33 +275,41 @@ export const GET = withErrorHandler(async function GET(request) {
     className: r.student?.class || '',
   }))
 
-  const assessments =
-    effectiveClassNames.length > 0
-      ? await prisma.assessment.findMany({
-          where: {
-            schoolId,
-            class: { in: effectiveClassNames },
-            ...(termRange ? { date: termRange } : {}),
-          },
-          orderBy: { date: 'desc' },
-          take: 50,
-        })
-      : []
+  let assessments = []
+  if (effectiveClassNames.length > 0) {
+    try {
+      assessments = await prisma.assessment.findMany({
+        where: {
+          schoolId,
+          class: { in: effectiveClassNames },
+          ...(termRange ? { date: termRange } : {}),
+        },
+        orderBy: { date: 'desc' },
+        take: 50,
+      })
+    } catch (e) {
+      console.error('[HOD Dashboard] Failed loading assessments:', e?.message)
+    }
+  }
 
-  const teacherAgg =
-    teacherUserIds.length > 0
-      ? await prisma.result.groupBy({
-          by: ['enteredByUserId'],
-          where: {
-            schoolId,
-            enteredByUserId: { in: teacherUserIds },
-            ...(subjectIds.length > 0 ? { subjectId: { in: subjectIds } } : {}),
-            ...resultTermWhere,
-          },
-          _avg: { score: true },
-          _count: { _all: true },
-        })
-      : []
+  let teacherAgg = []
+  if (teacherUserIds.length > 0) {
+    try {
+      teacherAgg = await prisma.result.groupBy({
+        by: ['enteredByUserId'],
+        where: {
+          schoolId,
+          enteredByUserId: { in: teacherUserIds },
+          ...(subjectIds.length > 0 ? { subjectId: { in: subjectIds } } : {}),
+          ...resultTermWhere,
+        },
+        _avg: { score: true },
+        _count: { _all: true },
+      })
+    } catch (e) {
+      console.error('[HOD Dashboard] Failed aggregating teacher results:', e?.message)
+    }
+  }
 
   const aggByUserId = new Map(
     teacherAgg

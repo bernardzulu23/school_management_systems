@@ -25,7 +25,9 @@ export const POST = withErrorHandler(async function POST(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['HOD', 'hod'])) {
+  const isAdminOrHead = roleCheck(auth.user, ['ADMIN', 'headteacher'])
+  const isHod = roleCheck(auth.user, ['HOD', 'hod'])
+  if (!isAdminOrHead && !isHod) {
     throw new ApiError('Forbidden', 403)
   }
 
@@ -36,7 +38,7 @@ export const POST = withErrorHandler(async function POST(request) {
     where: { userId: auth.user.id, schoolId },
     select: { departmentId: true, department: true },
   })
-  if (!hodProfile) throw new ApiError('HOD profile not found', 404)
+  if (!hodProfile && !isAdminOrHead) throw new ApiError('HOD profile not found', 404)
 
   const body = await request.json().catch(() => ({}))
   const departmentId = normalizeString(body?.departmentId)
@@ -50,14 +52,24 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!subject) throw new ApiError('subject is required', 400)
   if (classes.length === 0) throw new ApiError('classes is required', 400)
 
-  const resolved = await resolveDepartmentScope({
-    prisma,
-    schoolId,
-    departmentId: hodProfile.departmentId,
-    departmentName: hodProfile.department,
-  })
-  if (!resolved.departmentIds.includes(departmentId)) {
+  const resolved = hodProfile
+    ? await resolveDepartmentScope({
+        prisma,
+        schoolId,
+        departmentId: hodProfile.departmentId,
+        departmentName: hodProfile.department,
+      })
+    : { departmentIds: [] }
+  const hasScopedDepartments = resolved.departmentIds.length > 0
+  if (!isAdminOrHead && hasScopedDepartments && !resolved.departmentIds.includes(departmentId)) {
     throw new ApiError('You can only create allocations for your department', 403)
+  }
+  if (!hasScopedDepartments) {
+    const selectedDepartment = await prisma.department.findFirst({
+      where: { id: departmentId, schoolId },
+      select: { id: true },
+    })
+    if (!selectedDepartment) throw new ApiError('Invalid department for this school', 400)
   }
 
   const allocation = await prisma.departmentAllocation.create({

@@ -11,6 +11,8 @@ export const GET = withErrorHandler(async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
+  const isAdminOrHead = roleCheck(auth.user, ['ADMIN', 'headteacher'])
+  const isHod = roleCheck(auth.user, ['HOD', 'hod'])
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) throw new ApiError('School context required', 400)
 
@@ -19,9 +21,21 @@ export const GET = withErrorHandler(async function GET(request) {
     select: { departmentId: true, department: true },
   })
 
-  const isAllowedRole = roleCheck(auth.user, ['HOD', 'hod'])
-  if (!isAllowedRole && !hodProfile) {
+  if (!isAdminOrHead && !isHod && !hodProfile) {
     throw new ApiError('Forbidden', 403)
+  }
+
+  if (isAdminOrHead && !hodProfile) {
+    const allocations = await prisma.departmentAllocation.findMany({
+      where: { schoolId },
+      include: {
+        department: { select: { id: true, name: true } },
+        createdBy: { select: { id: true, name: true, email: true, role: true } },
+        approvedBy: { select: { id: true, name: true, email: true, role: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    })
+    return NextResponse.json({ success: true, allocations })
   }
 
   if (!hodProfile) throw new ApiError('HOD profile not found', 404)
@@ -33,7 +47,9 @@ export const GET = withErrorHandler(async function GET(request) {
     departmentName: hodProfile.department,
   })
   const departmentIds = resolved.departmentIds
-  if (departmentIds.length === 0) throw new ApiError('Department not assigned', 400)
+  if (departmentIds.length === 0) {
+    return NextResponse.json({ success: true, allocations: [] })
+  }
 
   const allocations = await prisma.departmentAllocation.findMany({
     where: { schoolId, departmentId: { in: departmentIds } },

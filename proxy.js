@@ -45,7 +45,7 @@ export default function proxy(request) {
       'X-Content-Type-Options': 'nosniff',
       'Referrer-Policy': 'strict-origin-when-cross-origin',
       'Content-Security-Policy':
-        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://images.unsplash.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://*.railway.app http://localhost:*;",
+        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://images.unsplash.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://*.railway.app http://localhost:* https://fonts.googleapis.com https://static.cloudflareinsights.com;",
       'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
       'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
     }
