@@ -170,15 +170,20 @@ export async function POST(request) {
       }
     )
 
-    // Save the initial refresh token to database for rotation tracking
-    await prisma.refreshToken.create({
-      data: {
-        token: newRefreshTokenValue,
-        userId: user.id,
-        schoolId: user.schoolId,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      },
-    })
+    // Save refresh token for rotation tracking.
+    // If migrations are temporarily behind, do not block login.
+    try {
+      await prisma.refreshToken.create({
+        data: {
+          token: newRefreshTokenValue,
+          userId: user.id,
+          schoolId: user.schoolId,
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        },
+      })
+    } catch (refreshTokenError) {
+      console.warn('[Login] Failed to persist refresh token:', refreshTokenError?.message)
+    }
 
     // 5. Sanitize Output
     const sanitizedUser = sanitizeOutput({

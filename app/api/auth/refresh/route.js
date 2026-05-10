@@ -75,7 +75,7 @@ export async function POST(request) {
       const configured = process.env.COOKIE_DOMAIN ? String(process.env.COOKIE_DOMAIN).trim() : ''
       if (!configured) return undefined
       if (!hostName || hostName === 'localhost' || /^[0-9.]+$/.test(hostName)) return undefined
-      const normalized = configured.startsWith('.') ? configured으로 : configured
+      const normalized = configured.startsWith('.') ? configured.slice(1) : configured
       if (!hostName.endsWith(normalized)) return undefined
       return configured.startsWith('.') ? configured : `.${configured}`
     })()

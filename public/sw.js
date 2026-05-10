@@ -1,59 +1,55 @@
-importScripts('https://www.gstatic.com/toolbox/workbox-sw.js')
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js')
 
-if (workbox) {
-  console.log('Workbox is loaded')
+if (self.workbox) {
+  const CACHE_VERSION = 'v2'
+  const STATIC_CACHE = `zsms-static-assets-${CACHE_VERSION}`
+  const PAGES_CACHE = `zsms-pages-cache-${CACHE_VERSION}`
 
-  // Cache names
-  const CACHE_NAME = 'zsms-app-shell-v1'
-  const STATIC_ASSETS = [
-    '/',
-    '/offline.html',
-    '/manifest.json',
-    '/favicon.ico',
-    '/icons/icon-192x192.png',
-    '/icons/icon-512x512.png',
-  ]
+  self.workbox.core.skipWaiting()
+  self.workbox.core.clientsClaim()
 
-  // Pre-cache the app shell and static assets
-  workbox.precaching.preCacheCacheName = CACHE_NAME
-  workbox.precaching.enqueue(STATIC_ASSETS)
+  // Pre-cache shell assets and offline page.
+  self.workbox.precaching.precacheAndRoute([
+    { url: '/offline.html', revision: CACHE_VERSION },
+    { url: '/manifest.json', revision: CACHE_VERSION },
+    { url: '/favicon.ico', revision: CACHE_VERSION },
+    { url: '/icons/icon-192x192.png', revision: CACHE_VERSION },
+    { url: '/icons/icon-512x512.png', revision: CACHE_VERSION },
+  ])
 
-  // Strategy for CSS, JS, and Images: Cache First, then Network
-  workbox.routing.registerRoute(
+  self.workbox.routing.registerRoute(
     ({ request }) =>
       request.destination === 'style' ||
       request.destination === 'script' ||
       request.destination === 'image',
-    new workbox.strategies.CacheFirst({
-      cacheName: 'zsms-static-assets',
+    new self.workbox.strategies.CacheFirst({
+      cacheName: STATIC_CACHE,
       plugins: [
-        new workbox.expiration.ExpirationPlugin({
+        new self.workbox.expiration.ExpirationPlugin({
           maxEntries: 60,
-          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+          maxAgeSeconds: 30 * 24 * 60 * 60,
         }),
       ],
     })
   )
 
-  // Strategy for Pages: StaleWhileRevalidate
-  // This ensures the app loads instantly from cache, then updates in the background
-  workbox.routing.registerRoute(
+  self.workbox.routing.registerRoute(
     ({ request }) => request.mode === 'navigate',
-    new workbox.strategies.StaleWhileRevalidate({
-      cacheName: 'zsms-pages-cache',
+    new self.workbox.strategies.StaleWhileRevalidate({
+      cacheName: PAGES_CACHE,
       plugins: [
-        new workbox.expiration.ExpirationPlugin({
+        new self.workbox.expiration.ExpirationPlugin({
           maxEntries: 50,
-          maxAgeSeconds: 24 * 60 * 60, // 1 Day
+          maxAgeSeconds: 24 * 60 * 60,
         }),
       ],
     })
   )
 
-  // Global Offline Fallback for Navigation Requests
-  workbox.routing.setCatchHandler(({ event }) => {
+  self.workbox.routing.setCatchHandler(async ({ event }) => {
     if (event.request.mode === 'navigate') {
-      return workbox.precaching.getCache().match('/offline.html')
+      const cachedOffline = await caches.match('/offline.html')
+      return cachedOffline || Response.redirect('/offline.html')
     }
     return Response.error()
   })
