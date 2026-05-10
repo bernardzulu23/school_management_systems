@@ -3,8 +3,18 @@ import { NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-export async function GET() {
-  const strict = false
+/**
+ * Liveness: respond immediately so load balancers (Railway, etc.) do not time out
+ * while Prisma/DB warms up. Use GET /api/health?db=1 for a readiness/DB probe.
+ */
+export async function GET(request) {
+  const checkDb = request.nextUrl.searchParams.get('db') === '1'
+  const strict = process.env.HEALTHCHECK_STRICT === 'true'
+
+  if (!checkDb) {
+    return NextResponse.json({ status: 'ok', timestamp: new Date().toISOString() }, { status: 200 })
+  }
+
   try {
     const mod = await import('@/lib/prisma')
     const prisma = mod?.default || mod?.prisma
