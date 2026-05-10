@@ -29,13 +29,13 @@ loadEnvFile('.env')
 loadEnvFile('.env.local')
 
 if (!process.env.DATABASE_URL) {
-  process.env.DATABASE_URL =
+  const fallbackUrl =
     process.env.DATABASE_PUBLIC_URL ||
     process.env.DIRECT_URL ||
     process.env.POSTGRES_PRISMA_URL ||
     process.env.POSTGRES_URL_NON_POOLING ||
-    process.env.POSTGRES_URL ||
-    ''
+    process.env.POSTGRES_URL
+  if (fallbackUrl) process.env.DATABASE_URL = fallbackUrl
 }
 
 export default defineConfig({
