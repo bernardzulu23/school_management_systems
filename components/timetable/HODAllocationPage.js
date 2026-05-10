@@ -118,40 +118,52 @@ export default function HODAllocationPage() {
         safeJson(allocRes),
       ])
 
-      const firstError =
-        (!teachersRes.ok && {
-          label: 'Teachers',
-          status: teachersRes.status,
-          body: teachersData,
-        }) ||
-        (!subjectsRes.ok && {
-          label: 'Subjects',
-          status: subjectsRes.status,
-          body: subjectsData,
-        }) ||
-        (!departmentsRes.ok && {
-          label: 'Departments',
-          status: departmentsRes.status,
-          body: departmentsData,
-        }) ||
-        (!allocRes.ok && { label: 'Allocations', status: allocRes.status, body: allocData }) ||
-        null
+      const ensureArray = (v) => (Array.isArray(v) ? v : [])
+      const errors = []
 
-      if (firstError) {
-        const msg =
-          String(firstError?.body?.error || firstError?.body?.message || '').trim() ||
-          `${firstError.label} failed (${firstError.status})`
-        throw new Error(msg)
+      if (teachersRes.ok) {
+        setTeachers(ensureArray(teachersData?.data || teachersData?.users || teachersData))
+      } else {
+        errors.push(
+          String(teachersData?.message || teachersData?.error || '').trim() ||
+            `Teachers failed (${teachersRes.status})`
+        )
       }
 
-      const ensureArray = (v) => (Array.isArray(v) ? v : [])
-      setTeachers(ensureArray(teachersData?.data || teachersData?.users || teachersData))
-      setSubjects(ensureArray(subjectsData?.subjects || subjectsData?.data || subjectsData))
-      const deptList = ensureArray(
-        departmentsData?.data || departmentsData?.departments || departmentsData
-      )
-      setDepartments(deptList)
-      setAllocations(ensureArray(allocData?.allocations || allocData?.data || allocData))
+      if (subjectsRes.ok) {
+        setSubjects(ensureArray(subjectsData?.subjects || subjectsData?.data || subjectsData))
+      } else {
+        errors.push(
+          String(subjectsData?.message || subjectsData?.error || '').trim() ||
+            `Subjects failed (${subjectsRes.status})`
+        )
+      }
+
+      let deptList = []
+      if (departmentsRes.ok) {
+        deptList = ensureArray(
+          departmentsData?.data || departmentsData?.departments || departmentsData
+        )
+        setDepartments(deptList)
+      } else {
+        errors.push(
+          String(departmentsData?.message || departmentsData?.error || '').trim() ||
+            `Departments failed (${departmentsRes.status})`
+        )
+      }
+
+      if (allocRes.ok) {
+        setAllocations(ensureArray(allocData?.allocations || allocData?.data || allocData))
+      } else {
+        errors.push(
+          String(allocData?.message || allocData?.error || '').trim() ||
+            `Allocations failed (${allocRes.status})`
+        )
+      }
+
+      if (errors.length > 0) {
+        throw new Error(errors[0])
+      }
 
       if (!form.departmentId && deptList.length) {
         setForm((f) => ({ ...f, departmentId: String(deptList[0]?.id || '') }))

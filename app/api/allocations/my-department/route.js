@@ -11,10 +11,6 @@ export const GET = withErrorHandler(async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['HOD', 'hod'])) {
-    throw new ApiError('Forbidden', 403)
-  }
-
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) throw new ApiError('School context required', 400)
 
@@ -22,6 +18,12 @@ export const GET = withErrorHandler(async function GET(request) {
     where: { userId: auth.user.id, schoolId },
     select: { departmentId: true, department: true },
   })
+
+  const isAllowedRole = roleCheck(auth.user, ['HOD', 'hod'])
+  if (!isAllowedRole && !hodProfile) {
+    throw new ApiError('Forbidden', 403)
+  }
+
   if (!hodProfile) throw new ApiError('HOD profile not found', 404)
 
   const resolved = await resolveDepartmentScope({
