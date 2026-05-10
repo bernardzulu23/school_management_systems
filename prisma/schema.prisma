@@ -83,6 +83,8 @@ model School {
   aiRequests           AIRequest[]
   aiUsageLogs          AIUsageLog[]
   schedulingRecipes    SchedulingRecipe[]
+  auditLogs            AuditLog[]
+  refreshTokens        RefreshToken[]
 
   // Timetable System v2
   allocations            TeacherAllocation[]
@@ -164,10 +166,29 @@ model User {
   masterTimetableEntries  MasterTimetableEntry[]  @relation("MasterEntryTeacher")
   
   refreshTokens           RefreshToken[]
+  auditLogs               AuditLog[]
 
   @@unique([schoolId, email]) // Email must be unique per school
   @@index([schoolId])
   @@index([role])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([schoolId])
+  @@index([expiresAt])
+  @@index([revoked])
 }
 
 model AuditLog {
