@@ -8,7 +8,7 @@ import { gunzipSync } from 'node:zlib'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import {
   buildTermResultsCompleteSmsMessage,
-  getBaseUrlFromRequest,
+  getSchoolPortalLoginUrls,
   sendAfricasTalkingSms,
 } from '@/lib/sms'
 
@@ -30,15 +30,6 @@ function parseTermYear(termRaw) {
   return { term: term || 'Term 1', year: new Date().getFullYear() }
 }
 
-function possessiveFromGender(genderRaw) {
-  const g = String(genderRaw || '')
-    .trim()
-    .toLowerCase()
-  if (g === 'male' || g === 'm') return 'his'
-  if (g === 'female' || g === 'f') return 'her'
-  return 'their'
-}
-
 function extractParentContacts(student) {
   const raw = [
     student?.guardian_contact,
@@ -56,10 +47,13 @@ async function evaluateAndNotifyTermResultsComplete({
   year,
   request,
 }) {
-  const baseUrl = getBaseUrlFromRequest(request)
-  const loginUrl = baseUrl ? `${baseUrl.replace(/\/+$/, '')}/login` : ''
-  const resetUrl = baseUrl ? `${baseUrl.replace(/\/+$/, '')}/forgot-password` : ''
   const now = new Date()
+
+  const school = await prisma.school.findFirst({
+    where: { id: schoolId },
+    select: { subdomain: true, domain: true },
+  })
+  const { loginUrl, forgotPasswordUrl: resetUrl } = getSchoolPortalLoginUrls(request, school)
 
   const key = { schoolId, studentId, term, year }
 
@@ -82,7 +76,7 @@ async function evaluateAndNotifyTermResultsComplete({
         guardian_contact: true,
         parent_father_contact: true,
         parent_mother_contact: true,
-        user: { select: { email: true, gender: true } },
+        user: { select: { email: true } },
       },
     })
     if (!student) {
@@ -199,14 +193,12 @@ async function evaluateAndNotifyTermResultsComplete({
     if (lock.count !== 1) return { shouldSend: false }
 
     const contacts = extractParentContacts(student)
-    const username = String(student?.user?.email || '').trim()
-    const possessive = possessiveFromGender(student?.user?.gender)
+    const studentEmail = String(student?.user?.email || '').trim()
 
     return {
       shouldSend: true,
       studentName: student.name,
-      username,
-      possessive,
+      studentEmail,
       contacts,
     }
   })
@@ -228,8 +220,7 @@ async function evaluateAndNotifyTermResultsComplete({
 
   const message = buildTermResultsCompleteSmsMessage({
     studentName: prepared.studentName,
-    username: prepared.username,
-    possessive: prepared.possessive,
+    studentEmail: prepared.studentEmail,
     loginUrl,
     resetUrl,
   })

@@ -614,7 +614,22 @@ function HeadteacherTimetablePageContent() {
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json?.error || 'Solver generation failed')
-      const next = Array.isArray(json?.assignments) ? json.assignments : []
+      const fromUi = Array.isArray(json?.assignmentsForUi) ? json.assignmentsForUi : []
+      const legacy = Array.isArray(json?.assignments) ? json.assignments : []
+      const next = fromUi.length > 0 ? fromUi : legacy
+
+      const rawMap = json?.assignments
+      if (
+        next.length === 0 &&
+        rawMap &&
+        typeof rawMap === 'object' &&
+        !Array.isArray(rawMap) &&
+        Object.keys(rawMap).length > 0
+      ) {
+        throw new Error(
+          'Solver returned slot mappings but no timetable rows could be built. Check time slots and teaching assignments match your school data.'
+        )
+      }
       replaceAssignments(next, { source: 'generate' })
       const score = Number(json?.version?.optimizationScore) || 0
       setSolverDraftVersionId(json?.version?.id ? String(json.version.id) : null)
@@ -998,12 +1013,22 @@ function HeadteacherTimetablePageContent() {
                               try {
                                 const res = await fetch(
                                   `/api/admin/allocations/${encodeURIComponent(id)}/approve`,
-                                  { method: 'POST', credentials: 'include' }
+                                  {
+                                    method: 'POST',
+                                    credentials: 'include',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ term, academicYear }),
+                                  }
                                 )
                                 const json = await res.json().catch(() => ({}))
                                 if (!res.ok)
                                   throw new Error(json?.message || json?.error || 'Approve failed')
-                                toast.success('Inserted ✓')
+                                const synced = Number(json?.timetableAllocationsSynced || 0)
+                                toast.success(
+                                  synced > 0
+                                    ? `Approved — ${synced} teaching allocation row(s) ready for timetable (${term}, ${academicYear})`
+                                    : 'Approved ✓'
+                                )
                                 const nextPending = pendingAllocations.filter(
                                   (a) => String(a.id) !== id
                                 )

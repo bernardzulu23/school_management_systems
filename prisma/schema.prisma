@@ -163,10 +163,36 @@ model User {
   allocationNotifications AllocationNotification[] @relation("AllocationNotificationAdmin")
   masterTimetableEntries  MasterTimetableEntry[]  @relation("MasterEntryTeacher")
   
+  refreshTokens           RefreshToken[]
+
   @@unique([schoolId, email]) // Email must be unique per school
   @@index([schoolId])
   @@index([role])
 }
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  schoolId   String
+  school     School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  action     String   // e.g., 'UPDATE_GRADE', 'DELETE_STUDENT', 'LOGIN'
+  entity     String   // e.g., 'Student', 'Result', 'Teacher'
+  entityId   String   // The ID of the modified record
+  oldValue   Json?    // Previous state of the record
+  newValue   Json?    // New state of the record
+
+  ipAddress  String?
+  userAgent  String?
+
+  createdAt  DateTime @default(now())
+
+  @@index([schoolId])
+  @@index([userId])
+  @@index([entity, entityId])
+}
+
 
 model Student {
   id        String   @id @default(uuid()) // Can be custom ID like STU2025001

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - ZSMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 flex items-center justify-center min-h-screen p-4">
+    <div class="text-center max-w-md p-8 bg-white rounded-2xl shadow-xl border border-purple-100">
+        <div class="mb-6 flex justify-center">
+            <div class="p-4 bg-purple-100 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.806 14.375l-5.562-5.562a1 1 0 00-1.414 0l-5.562 5.562M12 18.375V21m0 0a1 1 0 100-2 1 1 0 000 2z" />
+                </svg>
+            </div>
+        </div>
+        <h1 class="text-2xl font-bold text-slate-800 mb-2">You're Currently Offline</h1>
+        <p class="text-slate-600 mb-8">It looks like your internet connection is unstable. Some features may be limited, but you can still access cached data.</p>
+        <button onclick="window.location.reload()" class="w-full py-3 px-6 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors">
+            Retry Connection
+        </button>
+    </div>
+</body>
+</html>

@@ -135,6 +135,85 @@ async function callAIProvider(payload: any, signal: AbortSignal): Promise<SolveR
   }
 }
 
+function formatHHMM(t: unknown): string {
+  const s = String(t ?? '').trim()
+  if (!s) return '08:00'
+  const m = s.match(/(\d{1,2}):(\d{2})/)
+  if (!m) return '08:00'
+  const hh = String(Number(m[1])).padStart(2, '0')
+  const mm = String(Number(m[2])).padStart(2, '0')
+  return `${hh}:${mm}`
+}
+
+function normalizeDayOfWeek(d: unknown): string {
+  return String(d ?? 'monday')
+    .trim()
+    .toLowerCase()
+}
+
+async function expandSolverAssignmentsToUi(
+  schoolId: string,
+  raw: Record<string, string>,
+  lessons: Array<{ id: string; teacherId: string; classId: string; subjectId: string }>,
+  slots: Array<{
+    id: string
+    dayOfWeek: string
+    period: number
+    startTime: string
+    endTime: string
+    isBreak: boolean
+  }>,
+  teachers: Array<{ id: string; user?: { name: string | null } | null }>,
+  classes: Array<{ id: string; name: string }>,
+  rooms: Array<{ id: string }>
+) {
+  const lessonById = new Map(lessons.map((l) => [l.id, l]))
+  const slotById = new Map(slots.map((s) => [s.id, s]))
+  const teacherById = new Map(teachers.map((t) => [t.id, t]))
+  const classById = new Map(classes.map((c) => [c.id, c]))
+  const defaultRoomId = rooms[0]?.id ?? 'room-unassigned'
+
+  const subjectIds = Array.from(new Set(lessons.map((l) => l.subjectId).filter(Boolean)))
+  const subjects =
+    subjectIds.length > 0
+      ? await prisma.subject.findMany({
+          where: { schoolId, id: { in: subjectIds as string[] } },
+          select: { id: true, name: true },
+        })
+      : []
+  const subjectById = new Map(subjects.map((s) => [s.id, s.name]))
+
+  const out: Record<string, unknown>[] = []
+  for (const [lessonId, slotId] of Object.entries(raw || {})) {
+    const lesson = lessonById.get(lessonId)
+    const slot = slotById.get(slotId)
+    if (!lesson || !slot || slot.isBreak) continue
+
+    const teacher = teacherById.get(lesson.teacherId)
+    const cls = classById.get(lesson.classId)
+
+    out.push({
+      id: lessonId,
+      season: 'normal',
+      dayOfWeek: normalizeDayOfWeek(slot.dayOfWeek),
+      timeSlotId: slot.id,
+      startTime: formatHHMM(slot.startTime),
+      endTime: formatHHMM(slot.endTime),
+      period: Number(slot.period) || 1,
+      isBreak: false,
+      teacherId: lesson.teacherId,
+      teacherName: teacher?.user?.name ?? undefined,
+      classId: lesson.classId,
+      className: cls?.name,
+      subjectId: lesson.subjectId,
+      subjectName: subjectById.get(lesson.subjectId),
+      classroomId: defaultRoomId,
+      source: 'generated',
+    })
+  }
+  return out
+}
+
 async function callLocalPythonSolver(
   solveEndpoint: string,
   payload: any,
@@ -314,8 +393,19 @@ export async function POST(req: NextRequest) {
       result = await callLocalPythonSolver(solveEndpoint, payload, controller.signal)
     }
 
+    const assignmentsForUi = await expandSolverAssignmentsToUi(
+      schoolId,
+      result.assignments || {},
+      lessons,
+      slots,
+      teachers,
+      classes,
+      rooms
+    )
+
     return NextResponse.json({
       assignments: result.assignments,
+      assignmentsForUi,
       version: { id: null, name: versionName, optimizationScore: result.optimizationScore },
       stats: result.stats,
       source: result.source,

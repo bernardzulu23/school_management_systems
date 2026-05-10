@@ -314,7 +314,9 @@ export default function HODAllocationPage() {
         <div>
           <h1 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>Class Allocation</h1>
           <p style={{ color: '#a78bfa', fontSize: 13, margin: '4px 0 0' }}>
-            Create department allocations and submit them for admin approval
+            Assign teachers to classes, submit for the Headteacher to approve. Approved rows sync to
+            the timetable builder as pushed allocations — generate the school timetable from the
+            Master Timetable screen using the same term and year.
           </p>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>

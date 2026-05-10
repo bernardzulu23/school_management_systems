@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { syncDepartmentApprovalToTeacherAllocations } from '@/lib/timetable/departmentApprovalSync'
 
 function unwrapAllocationData(data) {
   const raw = data && typeof data === 'object' ? data : {}
@@ -30,12 +31,22 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) throw new ApiError('School context required', 400)
 
+  const body = await request.json().catch(() => ({}))
+  const term = String(body.term || 'Term 1').trim()
+  const academicYear = String(body.academicYear || new Date().getFullYear()).trim()
+
   const now = new Date()
 
   const result = await prisma.$transaction(async (tx) => {
     const allocation = await tx.departmentAllocation.findFirst({
       where: { id: allocationId, schoolId },
-      select: { id: true, status: true, departmentId: true, allocationData: true },
+      select: {
+        id: true,
+        status: true,
+        departmentId: true,
+        allocationData: true,
+        createdByUserId: true,
+      },
     })
     if (!allocation) throw new ApiError('Not found', 404)
     if (allocation.status !== 'SUBMITTED') {
@@ -81,12 +92,31 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       data: { read: true, readAt: now },
     })
 
-    return { updated, masterEntry }
+    let timetableSync = { count: 0, teacherAllocationIds: [] }
+    try {
+      timetableSync = await syncDepartmentApprovalToTeacherAllocations(tx, {
+        schoolId,
+        departmentAllocationId: allocation.id,
+        allocationData: allocation.allocationData,
+        hodUserId: allocation.createdByUserId,
+        term,
+        academicYear,
+      })
+    } catch (e) {
+      const msg = String(e?.message || e || 'Timetable allocation sync failed')
+      throw new ApiError(msg, 400)
+    }
+
+    return { updated, masterEntry, timetableSync, term, academicYear }
   })
 
   return NextResponse.json({
     status: result.updated.status,
     insertedAt: result.masterEntry.insertedAt,
     masterEntryId: result.masterEntry.id,
+    timetableAllocationsSynced: result.timetableSync.count,
+    teacherAllocationIds: result.timetableSync.teacherAllocationIds,
+    term: result.term,
+    academicYear: result.academicYear,
   })
 })

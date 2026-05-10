@@ -8,6 +8,18 @@ import { SchoolProvider } from '@/lib/context/SchoolContext'
 import { useAuth } from '@/lib/auth'
 import GlobalTopLoadingBar from '@/components/ui/GlobalTopLoadingBar'
 import GlobalBackButton from '@/components/ui/GlobalBackButton'
+import OfflineBanner from '@/components/ui/OfflineBanner'
+
+function PWALoader() {
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .catch((err) => console.error('SW registration failed:', err))
+    }
+  }, [])
+  return null
+}
 
 function DevServiceWorkerReset() {
   useEffect(() => {
@@ -153,11 +165,13 @@ export function Providers({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
       <SchoolProvider>
+        <PWALoader />
         <DevServiceWorkerReset />
         {skipSessionSync ? (
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <GlobalTopLoadingBar />
             <GlobalBackButton />
+            <OfflineBanner />
             {children}
           </ThemeProvider>
         ) : (
