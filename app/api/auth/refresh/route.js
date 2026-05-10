@@ -35,11 +35,21 @@ export async function POST(request) {
     }
 
     // 3. Rotation check: Look up token in database
-    const tokenRecord = await prisma.refreshToken.findUnique({
-      where: { token: refreshToken },
-    })
+    let tokenRecord = null
+    let canUseDbTokenRotation = true
+    try {
+      tokenRecord = await prisma.refreshToken.findUnique({
+        where: { token: refreshToken },
+      })
+    } catch (e) {
+      canUseDbTokenRotation = false
+      console.warn(
+        '[Refresh] Token table unavailable; falling back to stateless refresh:',
+        e?.message
+      )
+    }
 
-    if (!tokenRecord || tokenRecord.revoked) {
+    if (canUseDbTokenRotation && (!tokenRecord || tokenRecord.revoked)) {
       // POTENTIAL ATTACK: If the token was previously valid but now revoked,
       // someone might be trying to reuse an old token.
       // Invalidate all tokens for this user as a safety measure.
@@ -96,20 +106,22 @@ export async function POST(request) {
     )
 
     // 5. Rotate tokens in DB: Revoke old, create new
-    await prisma.$transaction([
-      prisma.refreshToken.update({
-        where: { id: tokenRecord.id },
-        data: { revoked: true },
-      }),
-      prisma.refreshToken.create({
-        data: {
-          token: newRefreshTokenValue,
-          userId: user.id,
-          schoolId: user.schoolId,
-          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        },
-      }),
-    ])
+    if (canUseDbTokenRotation && tokenRecord?.id) {
+      await prisma.$transaction([
+        prisma.refreshToken.update({
+          where: { id: tokenRecord.id },
+          data: { revoked: true },
+        }),
+        prisma.refreshToken.create({
+          data: {
+            token: newRefreshTokenValue,
+            userId: user.id,
+            schoolId: user.schoolId,
+            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          },
+        }),
+      ])
+    }
 
     const response = NextResponse.json({ success: true, accessToken: newAccessToken })
 
