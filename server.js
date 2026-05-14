@@ -1,4 +1,5 @@
-// server.js — entrypoint for Railway (see railway.toml startCommand).
+// server.js — optional entrypoint: Railway (railway.toml), or Render with dockerCommand override.
+// Default Dockerfile CMD runs Next standalone only; set SKIP_STARTUP_MIGRATE=true if you use this file on Render and migrations are managed elsewhere.
 const path = require('path')
 const { spawn } = require('child_process')
 
@@ -31,6 +32,13 @@ async function runMigrationsAtStartup() {
     'POSTGRES_URL_NON_POOLING',
     'POSTGRES_URL'
   )
+
+  if (['1', 'true', 'yes'].includes(String(process.env.SKIP_STARTUP_MIGRATE || '').toLowerCase())) {
+    console.log('Skipping prisma migrate deploy (SKIP_STARTUP_MIGRATE is set).')
+    if (!process.env.DATABASE_URL && dbUrl) process.env.DATABASE_URL = dbUrl
+    return
+  }
+
   if (!dbUrl) {
     console.log('Skipping prisma migrate deploy: no database URL in environment')
     return

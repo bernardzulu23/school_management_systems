@@ -29,6 +29,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**.railway.app',
       },
+      {
+        protocol: 'https',
+        hostname: '**.onrender.com',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
     qualities: [75, 85],
@@ -38,6 +42,7 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_APP_URL:
       process.env.NEXT_PUBLIC_APP_URL ||
+      (process.env.RENDER_EXTERNAL_URL && String(process.env.RENDER_EXTERNAL_URL).trim()) ||
       (process.env.VERCEL_URL
         ? `https://${process.env.VERCEL_URL}`
         : process.env.RAILWAY_PUBLIC_DOMAIN
@@ -110,7 +115,7 @@ const nextConfig = {
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
       "img-src 'self' data: https://images.unsplash.com; " +
       "font-src 'self' https://fonts.gstatic.com data:; " +
-      "connect-src 'self' https://*.railway.app https://*.bluepeacktechnologies.com https://challenges.cloudflare.com http://localhost:*; " +
+      "connect-src 'self' https://*.railway.app https://*.onrender.com https://*.bluepeacktechnologies.com https://challenges.cloudflare.com http://localhost:*; " +
       "frame-src 'self' https://challenges.cloudflare.com; " +
       "object-src 'none'; base-uri 'self'; form-action 'self'"
 
