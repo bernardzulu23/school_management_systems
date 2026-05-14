@@ -43,4 +43,8 @@ export default defineConfig({
   migrations: {
     seed: 'node prisma/seed.js',
   },
+  datasource: {
+    // This forces it to use the Railway variable
+    url: process.env.DATABASE_URL,
+  },
 })
