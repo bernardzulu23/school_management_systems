@@ -32,8 +32,6 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const body = await request.json().catch(() => ({}))
-  const term = String(body.term || 'Term 1').trim()
-  const academicYear = String(body.academicYear || new Date().getFullYear()).trim()
 
   const now = new Date()
 
@@ -54,6 +52,15 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     }
 
     const details = unwrapAllocationData(allocation.allocationData)
+    const dataObj =
+      allocation.allocationData && typeof allocation.allocationData === 'object'
+        ? allocation.allocationData
+        : {}
+    const term = String(body.term || dataObj.term || 'Term 1').trim()
+    const academicYear = String(
+      body.academicYear || dataObj.academicYear || new Date().getFullYear()
+    ).trim()
+
     if (!details.teacherId) throw new ApiError('Allocation missing teacherId', 400)
     if (!details.subject) throw new ApiError('Allocation missing subject', 400)
     if (details.classes.length === 0) throw new ApiError('Allocation missing classes', 400)

@@ -50,6 +50,9 @@ const nextConfig = {
           : 'http://localhost:3000'),
   },
 
+  // Allow phone/LAN devices hitting the dev server (avoids RSC fetch failures from blocked origins)
+  allowedDevOrigins: ['localhost', '127.0.0.1', '192.168.56.1'],
+
   // Performance optimizations
   compress: true,
   poweredByHeader: false,
@@ -89,49 +92,17 @@ const nextConfig = {
     return config
   },
 
-  // API routes configuration
+  // Security headers (also applied in proxy.js); shared source in lib/security/headers.js
   async headers() {
-    const isProd = process.env.NODE_ENV === 'production'
-    const headers = []
+    const { nextConfigSecurityHeaders } = await import('./lib/security/headers.js')
+    const securityHeaders = nextConfigSecurityHeaders()
 
-    // Keep CORS headers only here; security headers are centralized in proxy.js.
-    if (!isProd) {
-      headers.push({
-        source: '/api/:path*',
-        headers: [
-          { key: 'Access-Control-Allow-Origin', value: '*' },
-          { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
-          {
-            key: 'Access-Control-Allow-Headers',
-            value: 'Content-Type, Authorization, X-Requested-With, x-school-id, x-school-subdomain',
-          },
-        ],
-      })
-    }
-
-    const csp =
-      "default-src 'self'; " +
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com https://challenges.cloudflare.com; " +
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-      "img-src 'self' data: https://images.unsplash.com; " +
-      "font-src 'self' https://fonts.gstatic.com data:; " +
-      "connect-src 'self' https://*.railway.app https://*.onrender.com https://*.bluepeacktechnologies.com https://challenges.cloudflare.com http://localhost:*; " +
-      "frame-src 'self' https://challenges.cloudflare.com; " +
-      "object-src 'none'; base-uri 'self'; form-action 'self'"
-
-    headers.push({
-      source: '/:path*',
-      headers: [
-        { key: 'Content-Security-Policy', value: csp },
-        { key: 'X-Frame-Options', value: 'DENY' },
-        { key: 'X-Content-Type-Options', value: 'nosniff' },
-        { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-        { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
-        { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-      ],
-    })
-
-    return headers
+    return [
+      {
+        source: '/:path*',
+        headers: securityHeaders,
+      },
+    ]
   },
 
   // Redirects for better SEO

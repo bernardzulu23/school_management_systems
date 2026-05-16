@@ -13,11 +13,11 @@ const plans = [
     period: '30 days',
     description: 'Test everything risk-free',
     features: [
-      'All AI features (10 requests)',
-      'Attendance tracking',
-      'Student records',
-      'Basic school management',
-      'Email support',
+      'ECZ SBA Hub (full trial)',
+      'Sync 19 ECZ subjects',
+      'Record SBA scores & export CSV',
+      'Attendance & student records',
+      'AI features (10 requests)',
     ],
     highlight: false,
     cta: 'Start free trial',
@@ -28,10 +28,10 @@ const plans = [
     period: '/month',
     description: 'Core management only',
     features: [
-      'Attendance tracking',
-      'Student management',
-      'Grade entry',
-      'Basic reporting',
+      'ECZ SBA Hub',
+      'SBA tasks, rubrics & CSV export',
+      '31 January deadline tracker',
+      'Attendance & student management',
       'No AI features',
     ],
     highlight: false,
@@ -45,9 +45,8 @@ const plans = [
     features: [
       'Everything in Basic, plus:',
       'AI Lesson Planner',
-      'AI Story Weaver',
-      'AI Quiz Maker',
-      'ECZ Practice Papers',
+      'AI Story Weaver & Quiz Maker',
+      'Construct-aligned practice',
       '50 AI requests/month',
     ],
     highlight: true,
@@ -107,11 +106,11 @@ export function Pricing() {
               marginTop: 0,
             }}
           >
-            Plans for every school
+            ECZ SBA on every plan
           </h2>
           <p style={{ ...typography.body, color: colors.gray[600], margin: 0 }}>
-            All plans accept Airtel Money, MTN Mobile Money, or bank transfer. No credit card
-            required. Cancel anytime.
+            All plans include the ECZ SBA Hub. AI teaching tools on Standard and Premium. Pay via
+            Airtel Money, MTN, or bank transfer.
           </p>
         </div>
 

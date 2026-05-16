@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { withSecureApi } from '@/lib/middleware/secureApi'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -7,7 +8,7 @@ export const runtime = 'nodejs'
  * Liveness: respond immediately so load balancers (Railway, etc.) do not time out
  * while Prisma/DB warms up. Use GET /api/health?db=1 for a readiness/DB probe.
  */
-export async function GET(request) {
+export const GET = withSecureApi(async function GET(request) {
   const checkDb = request.nextUrl.searchParams.get('db') === '1'
   const strict = process.env.HEALTHCHECK_STRICT === 'true'
 
@@ -35,4 +36,4 @@ export async function GET(request) {
       { status: strict ? 503 : 200 }
     )
   }
-}
+})

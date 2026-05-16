@@ -16,8 +16,10 @@ export default function TeacherQuizMakerPage() {
   const { data, loading, error, fetch } = useAIFetch('/api/ai/quiz-maker')
   const quiz = data?.quiz || null
 
+  const FORM_LEVELS = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']
+
   const [form, setForm] = useState({
-    grade: 'Grade 9',
+    grade: 'Form 2',
     subject: 'English',
     topic: '',
     questionCount: 10,
@@ -50,11 +52,18 @@ export default function TeacherQuizMakerPage() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Grade</Label>
-                  <Input
+                  <Label>Form level</Label>
+                  <select
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                     value={form.grade}
                     onChange={(e) => setForm((p) => ({ ...p, grade: e.target.value }))}
-                  />
+                  >
+                    {FORM_LEVELS.map((g) => (
+                      <option key={g} value={g}>
+                        {g}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="space-y-2">
                   <Label>Subject</Label>

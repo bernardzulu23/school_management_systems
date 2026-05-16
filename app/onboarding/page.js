@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { Button } from '@/components/ui/Button'
@@ -10,7 +11,16 @@ import { Label } from '@/components/ui/label'
 import ProviderLogos from '@/components/payments/ProviderLogos'
 import { Eye, EyeOff } from 'lucide-react'
 
-export default function OnboardingPage({ searchParams }) {
+function parsePlanParam(searchParams) {
+  const raw = String(searchParams?.get?.('plan') || '')
+    .trim()
+    .toLowerCase()
+  if (raw === 'trial' || raw === 'basic' || raw === 'standard' || raw === 'premium') return raw
+  return 'standard'
+}
+
+function OnboardingPageContent() {
+  const searchParams = useSearchParams()
   const [status, setStatus] = useState(null)
   const [loadingStatus, setLoadingStatus] = useState(true)
 
@@ -21,15 +31,7 @@ export default function OnboardingPage({ searchParams }) {
   const [resendCooldown, setResendCooldown] = useState(0)
   const [resending, setResending] = useState(false)
 
-  const initialPlan = (() => {
-    const raw = String(searchParams?.plan || '')
-      .trim()
-      .toLowerCase()
-    if (raw === 'trial' || raw === 'basic' || raw === 'standard' || raw === 'premium') return raw
-    return 'standard'
-  })()
-
-  const [plan, setPlan] = useState(initialPlan)
+  const [plan, setPlan] = useState(() => parsePlanParam(searchParams))
   const [provider, setProvider] = useState('airtel')
   const [accountNumber, setAccountNumber] = useState('')
   const [months, setMonths] = useState(1)
@@ -42,15 +44,12 @@ export default function OnboardingPage({ searchParams }) {
   const [adminName, setAdminName] = useState('')
   const [saving, setSaving] = useState(false)
   const [completed, setCompleted] = useState(null)
+  const [choosingTrial, setChoosingTrial] = useState(false)
 
   useEffect(() => {
-    const raw = String(searchParams?.plan || '')
-      .trim()
-      .toLowerCase()
-    if (raw === 'trial' || raw === 'basic' || raw === 'standard' || raw === 'premium') {
-      setPlan(raw)
-    }
-  }, [searchParams?.plan])
+    const next = parsePlanParam(searchParams)
+    setPlan(next)
+  }, [searchParams])
 
   const canStart = useMemo(() => email.trim() && password.length >= 6, [email, password])
   const canPay = useMemo(() => accountNumber.trim(), [accountNumber])
@@ -146,7 +145,11 @@ export default function OnboardingPage({ searchParams }) {
       }
 
       if (json.requiresVerification) {
-        toast.success('Check your email for a verification link')
+        toast.success(
+          json.trialIntent
+            ? 'Check your email to verify — then you can start your free trial (no payment).'
+            : 'Check your email for a verification link'
+        )
         setResendCooldown(60)
         return
       }
@@ -254,6 +257,29 @@ export default function OnboardingPage({ searchParams }) {
     }
   }
 
+  const startFreeTrial = async () => {
+    setChoosingTrial(true)
+    try {
+      const res = await fetch('/api/onboarding/select-plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ plan: 'trial' }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        throw new Error(json?.error || 'Could not start free trial')
+      }
+      setPlan('trial')
+      toast.success('Free trial activated — continue to school setup')
+      await refreshStatus()
+    } catch (e) {
+      toast.error(e?.message || 'Could not start free trial')
+    } finally {
+      setChoosingTrial(false)
+    }
+  }
+
   const completeSetup = async () => {
     if (!canSetup) return
     setSaving(true)
@@ -276,7 +302,7 @@ export default function OnboardingPage({ searchParams }) {
   }
 
   const verified = Boolean(status?.registration?.isVerified)
-  const stepParam = String(searchParams?.step || '')
+  const stepParam = String(searchParams.get('step') || '')
     .trim()
     .toLowerCase()
   const forceSetupStep = stepParam === 'setup'
@@ -379,14 +405,17 @@ export default function OnboardingPage({ searchParams }) {
               >
                 {submitting ? 'Sending...' : 'Send Verification Link'}
               </Button>
-              <Button
-                variant="outline"
-                onClick={() => start('trial')}
-                disabled={!canStart || submitting}
-                className="zsms-hover-raise"
-              >
-                {submitting ? 'Sending...' : 'Start Free Trial (Skip payment)'}
-              </Button>
+              <p className="text-sm text-royalPurple-text2">
+                <button
+                  type="button"
+                  onClick={() => setPlan((p) => (p === 'trial' ? 'standard' : 'trial'))}
+                  className="text-royalPurple-accent hover:text-royalPurple-border2 underline"
+                >
+                  {selectedPlanIsTrial
+                    ? 'Switch to paid plans after verification'
+                    : 'I want a free trial after I verify my email (skip payment)'}
+                </button>
+              </p>
               <div className="text-sm text-royalPurple-text2">
                 Didn&apos;t receive it?{' '}
                 <button
@@ -421,6 +450,27 @@ export default function OnboardingPage({ searchParams }) {
               <div className="onboard-subtitle">Select a plan, then pay via mobile money.</div>
             </div>
             <div className="onboard-card-body space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-royalPurple-border/60 bg-royalPurple-deep/40 p-4">
+                <div>
+                  <div className="text-royalPurple-text1 font-medium">Free trial</div>
+                  <p className="text-sm text-royalPurple-text2 mt-1">
+                    30 days, no mobile money payment. Your email is already verified.
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={startFreeTrial}
+                  disabled={choosingTrial || registrationPlanIsTrial}
+                  className="zsms-hover-raise shrink-0"
+                >
+                  {choosingTrial
+                    ? 'Activating...'
+                    : registrationPlanIsTrial
+                      ? 'Free trial selected'
+                      : 'Continue with Free Trial (skip payment)'}
+                </Button>
+              </div>
+
               <div className="plan-grid">
                 <button
                   type="button"
@@ -673,5 +723,19 @@ export default function OnboardingPage({ searchParams }) {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function OnboardingPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="onboard-page min-h-screen flex items-center justify-center p-6">
+          <p className="text-royalPurple-text2">Loading onboarding…</p>
+        </div>
+      }
+    >
+      <OnboardingPageContent />
+    </Suspense>
   )
 }

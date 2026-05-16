@@ -21,6 +21,8 @@ export interface StudentTimetableViewProps {
   teachers?: Teacher[]
   classrooms?: Classroom[]
   mobile?: boolean
+  /** When true, only show subject name (no teacher or room). */
+  subjectOnly?: boolean
 }
 
 function dayOrder(day: string) {
@@ -81,13 +83,17 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
   }, [assignments, effectiveClassId])
 
   const byCell = useMemo(() => {
-    const map = new Map<string, Assignment[]>()
+    const exact = new Map<string, Assignment[]>()
+    const byPeriod = new Map<string, Assignment[]>()
     for (const a of myAssignments) {
-      const k = `${a.dayOfWeek}|${a.period}|${a.startTime}|${a.endTime}`
-      if (!map.has(k)) map.set(k, [])
-      map.get(k)!.push(a)
+      const kExact = `${a.dayOfWeek}|${a.period}|${a.startTime}|${a.endTime}`
+      const kPeriod = `${a.dayOfWeek}|${a.period}`
+      if (!exact.has(kExact)) exact.set(kExact, [])
+      exact.get(kExact)!.push(a)
+      if (!byPeriod.has(kPeriod)) byPeriod.set(kPeriod, [])
+      byPeriod.get(kPeriod)!.push(a)
     }
-    return map
+    return { exact, byPeriod }
   }, [myAssignments])
 
   const teacherName = useMemo(() => {
@@ -99,8 +105,13 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
   const subjectName = useMemo(() => {
     const map = new Map<string, string>()
     for (const s of props.subjects || []) map.set(String(s.id), s.name)
+    for (const a of myAssignments) {
+      if (a.subjectId && (a as any).subjectName) {
+        map.set(String(a.subjectId), String((a as any).subjectName))
+      }
+    }
     return map
-  }, [props.subjects])
+  }, [props.subjects, myAssignments])
 
   const roomName = useMemo(() => {
     const map = new Map<string, string>()
@@ -142,7 +153,9 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
   return (
     <div className="space-y-4">
       <div className="onboard-card p-5">
-        <div className="text-royalPurple-text1 font-bold text-lg">Your Class Timetable</div>
+        <div className="text-royalPurple-text1 font-bold text-lg">
+          {props.subjectOnly ? 'Your subjects timetable' : 'Your Class Timetable'}
+        </div>
         <div className="text-royalPurple-text2 text-sm mt-1">
           {currentClassName} · {summary.total} periods/week · Busiest: {summary.busiest}
         </div>
@@ -150,9 +163,13 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
           <div className="mt-3 onboard-summary">
             <span className="onboard-summary-title">Next class</span>
             <span className="onboard-summary-meta">
-              {nextClass.dayOfWeek} {nextClass.startTime} · {String(nextClass.subjectId)} ·{' '}
-              {roomName.get(String(nextClass.classroomId)) || 'Room'} ·{' '}
-              {teacherName.get(String(nextClass.teacherId)) || 'Teacher'}
+              {nextClass.dayOfWeek} {nextClass.startTime} ·{' '}
+              {subjectName.get(String(nextClass.subjectId)) ||
+                (nextClass as any).subjectName ||
+                'Subject'}
+              {!props.subjectOnly
+                ? ` · ${teacherName.get(String(nextClass.teacherId)) || 'Teacher'}`
+                : ''}
             </span>
           </div>
         ) : null}
@@ -216,7 +233,8 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
               </div>
               {effectiveDays.map((day) => {
                 const key = `${day}|${slot.period}|${slot.startTime}|${slot.endTime}`
-                const list = byCell.get(key) || []
+                const list =
+                  byCell.exact.get(key) || byCell.byPeriod.get(`${day}|${slot.period}`) || []
                 return (
                   <div
                     key={key}
@@ -236,12 +254,16 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
                             className="rounded-xl border border-royalPurple-border/40 bg-white/70 px-3 py-2"
                           >
                             <div className="font-bold text-[13px] text-slate-900 truncate">
-                              {subjectName.get(String(a.subjectId)) || 'Subject'}
+                              {subjectName.get(String(a.subjectId)) ||
+                                (a as any).subjectName ||
+                                'Subject'}
                             </div>
-                            <div className="text-[12px] text-slate-600 truncate">
-                              {teacherName.get(String(a.teacherId)) || 'Teacher'} ·{' '}
-                              {roomName.get(String(a.classroomId)) || 'Room'}
-                            </div>
+                            {!props.subjectOnly ? (
+                              <div className="text-[12px] text-slate-600 truncate">
+                                {teacherName.get(String(a.teacherId)) || 'Teacher'} ·{' '}
+                                {roomName.get(String(a.classroomId)) || 'Room'}
+                              </div>
+                            ) : null}
                           </div>
                         ))}
                       </div>

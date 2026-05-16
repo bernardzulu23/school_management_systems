@@ -11,6 +11,7 @@ import { StudentRosterCard } from '@/components/dashboard/StudentRosterCard'
 import { Button } from '@/components/ui/Button'
 import HodAssignments from '@/components/dashboard/HodAssignments'
 import { DepartmentTimetableView } from '@/components/timetable/DepartmentTimetableView'
+import { useSchoolTimeSlots } from '@/lib/timetable/useSchoolTimeSlots'
 import { api } from '@/lib/api'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import {
@@ -188,7 +189,7 @@ export default function HodDashboard() {
     currentUser?.hodProfile?.department ||
     ''
 
-  const timeSlots = useMemo(() => genTimeSlots(), [])
+  const { timeSlots } = useSchoolTimeSlots()
   const [timetableMobile, setTimetableMobile] = useState(false)
   const timetableTeachers = useMemo(() => {
     const list = Array.isArray(departmentData?.teachers) ? departmentData.teachers : []

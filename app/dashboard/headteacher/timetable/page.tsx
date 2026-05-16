@@ -8,6 +8,9 @@ import { DragDropTimetable } from '@/components/timetable/DragDropTimetable'
 import { MasterTimetableGrid } from '@/components/timetable/MasterTimetableGrid'
 import TeacherPeriodAssignmentUI from '@/components/timetable/TeacherPeriodAssignmentUI'
 import { TimetableNotificationBell } from '@/components/timetable/MasterTimetableGenerator'
+import { AllocationNotificationBell } from '@/components/timetable/AllocationNotificationBell'
+import { SchoolTimetableSettings } from '@/components/timetable/SchoolTimetableSettings'
+import { buildTimeSlotsFromConfig } from '@/lib/timetable/timeSlotsFromConfig'
 import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
@@ -272,33 +275,25 @@ function HeadteacherTimetablePageContent() {
     const load = async () => {
       setLoading(true)
       try {
-        const [teachersRes, classesRes, subjectsRes, schoolRes, timeSlotsRes] = await Promise.all([
+        const [teachersRes, classesRes, subjectsRes, schoolRes, configRes] = await Promise.all([
           fetch('/api/teachers?limit=200', { cache: 'no-store' }),
           fetch('/api/classes?limit=200', { cache: 'no-store' }),
           fetch('/api/subjects?limit=500', { cache: 'no-store' }),
           fetch('/api/school/current', { cache: 'no-store', credentials: 'include' }),
-          fetch('/api/timetable/timeSlots', { cache: 'no-store', credentials: 'include' }),
+          fetch('/api/timetable/config', { cache: 'no-store', credentials: 'include' }),
         ])
 
         const teachersJson = await teachersRes.json().catch(() => ({}))
         const classesJson = await classesRes.json().catch(() => ({}))
         const subjectsJson = await subjectsRes.json().catch(() => ({}))
         const schoolJson = await schoolRes.json().catch(() => ({}))
-        const timeSlotsJson = await timeSlotsRes.json().catch(() => ({}))
+        const configJson = await configRes.json().catch(() => ({}))
 
         if (schoolJson?.school?.id) setSchoolId(String(schoolJson.school.id))
-        if (Array.isArray(timeSlotsJson?.data) && timeSlotsJson.data.length) {
-          setTimeSlots(
-            timeSlotsJson.data.map((s: any) => ({
-              id: String(s.id),
-              dayOfWeek: String(s.dayOfWeek),
-              startTime: String(s.startTime) as any,
-              endTime: String(s.endTime) as any,
-              period: Number(s.period),
-              isBreak: Boolean(s.isBreak),
-              label: s.label ? String(s.label) : s.breakName ? String(s.breakName) : undefined,
-            }))
-          )
+        if (Array.isArray(configJson?.timeSlots) && configJson.timeSlots.length) {
+          setTimeSlots(configJson.timeSlots as TimeSlot[])
+        } else if (configJson?.config) {
+          setTimeSlots(buildTimeSlotsFromConfig(configJson.config) as TimeSlot[])
         }
 
         const subjectList = Array.isArray(subjectsJson?.data) ? subjectsJson.data : []
@@ -652,6 +647,14 @@ function HeadteacherTimetablePageContent() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            <AllocationNotificationBell
+              onOpenAllocations={() => {
+                setTab('allocations')
+                setReviewIndex(0)
+                setRejectionReason('')
+                setReviewOpen(true)
+              }}
+            />
             <TimetableNotificationBell />
             <button
               type="button"
@@ -1189,13 +1192,11 @@ function HeadteacherTimetablePageContent() {
         ) : null}
 
         {tab === 'settings' ? (
-          <div className="onboard-card p-5">
-            <div className="text-royalPurple-text1 font-bold text-lg">Settings</div>
-            <div className="text-royalPurple-text2 text-sm mt-2">
-              Time slots, working days, seasonal settings, and constraints configuration will appear
-              here.
-            </div>
-          </div>
+          <SchoolTimetableSettings
+            onSaved={({ timeSlots: slots }) => {
+              if (slots?.length) setTimeSlots(slots as TimeSlot[])
+            }}
+          />
         ) : null}
 
         {tab === 'cover' ? (

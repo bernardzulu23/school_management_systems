@@ -9,6 +9,12 @@ import { findUserByEmail } from '@/lib/db/queries'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { logAuditAction } from '@/lib/auditLog'
+import {
+  ACCESS_TOKEN_MAX_AGE,
+  REFRESH_TOKEN_MAX_AGE,
+  authCookieOptions,
+} from '@/lib/security/cookies'
+import { withSecureApi } from '@/lib/middleware/secureApi'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
@@ -38,20 +44,8 @@ if (
   console.warn('Warning: JWT secrets are not set in production environment.')
 }
 
-export async function POST(request) {
+export const POST = withSecureApi(async function POST(request) {
   try {
-    const host = request.headers.get('host') || ''
-    const hostName = String(host || '')
-      .split(':')[0]
-      .toLowerCase()
-    const cookieDomain = (() => {
-      const configured = process.env.COOKIE_DOMAIN ? String(process.env.COOKIE_DOMAIN).trim() : ''
-      if (!configured) return undefined
-      if (!hostName || hostName === 'localhost' || /^[0-9.]+$/.test(hostName)) return undefined
-      const normalized = configured.startsWith('.') ? configured.slice(1) : configured
-      if (!hostName.endsWith(normalized)) return undefined
-      return configured.startsWith('.') ? configured : `.${configured}`
-    })()
     let body = await request.json()
     console.log('[Login Debug] Request Body:', { email: body.email }) // Log email only for safety
 
@@ -201,23 +195,17 @@ export async function POST(request) {
       user: sanitizedUser,
     })
 
-    response.cookies.set('access_token', newAccessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 8 * 60 * 60,
-      path: '/',
-      ...(cookieDomain ? { domain: cookieDomain } : {}),
-    })
+    response.cookies.set(
+      'access_token',
+      newAccessToken,
+      authCookieOptions(request, { maxAgeSeconds: ACCESS_TOKEN_MAX_AGE, name: 'access_token' })
+    )
 
-    response.cookies.set('refresh_token', newRefreshTokenValue, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60,
-      path: '/',
-      ...(cookieDomain ? { domain: cookieDomain } : {}),
-    })
+    response.cookies.set(
+      'refresh_token',
+      newRefreshTokenValue,
+      authCookieOptions(request, { maxAgeSeconds: REFRESH_TOKEN_MAX_AGE, name: 'refresh_token' })
+    )
 
     // Audit the login event
     await logAuditAction({
@@ -241,4 +229,4 @@ export async function POST(request) {
       { status: 500 }
     )
   }
-}
+})

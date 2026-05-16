@@ -13,6 +13,7 @@ import GamePlayer from '@/components/games/GamePlayer'
 import AchievementSystem from '@/components/games/AchievementSystem'
 import SmartDashboardIntegration from '@/components/dashboard/SmartDashboardIntegration'
 import { StudentTimetableView } from '@/components/timetable/StudentTimetableView'
+import { useSchoolTimeSlots } from '@/lib/timetable/useSchoolTimeSlots'
 import { api } from '@/lib/api'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import {
@@ -104,7 +105,7 @@ export default function StudentDashboard() {
 
   const [activeTab, setActiveTab] = useState('overview')
   const [currentGame, setCurrentGame] = useState(null)
-  const timeSlots = useMemo(() => genTimeSlots(), [])
+  const { timeSlots } = useSchoolTimeSlots()
   const [timetableClasses, setTimetableClasses] = useState([])
   const [timetableTeachers, setTimetableTeachers] = useState([])
   const [timetableClassrooms, setTimetableClassrooms] = useState([])

@@ -54,7 +54,6 @@ export async function GET(request, { params }) {
     ...(cookieDomain ? { domain: cookieDomain } : {}),
   })
 
-  const baseDomain = process.env.APP_BASE_DOMAIN || 'bluepeacktechnologies.com'
   const plan = String(reg?.plan || '')
     .trim()
     .toLowerCase()
@@ -62,5 +61,11 @@ export async function GET(request, { params }) {
     .trim()
     .toLowerCase()
   const step = plan === 'trial' || paymentStatus === 'paid' ? 'setup' : 'plan'
-  return NextResponse.redirect(`https://${baseDomain}/onboarding?step=${step}`)
+  const host = request.headers.get('host') || ''
+  const isLocal =
+    host.includes('localhost') || host.startsWith('127.0.0.1') || /^[0-9.]+:\d+$/.test(host)
+  const origin = host
+    ? `${isLocal ? 'http' : 'https'}://${host}`
+    : `https://${process.env.APP_BASE_DOMAIN || 'bluepeacktechnologies.com'}`
+  return NextResponse.redirect(`${origin}/onboarding?step=${step}`)
 }

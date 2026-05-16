@@ -373,28 +373,15 @@ export const useTimetableStore = create<TimetableStoreState>()(
             status = 'published',
           } = opts
           try {
-            const url = `/api/timetable/entries?term=${term}&academicYear=${academicYear}${status ? `&status=${status}` : ''}`
-            const res = await fetch(url)
-            if (!res.ok) throw new Error('Failed to fetch timetable entries')
+            const qs = new URLSearchParams({
+              term,
+              academicYear,
+              ...(status ? { status } : {}),
+            })
+            const res = await fetch(`/api/timetable/view?${qs}`, { cache: 'no-store' })
+            if (!res.ok) throw new Error('Failed to fetch timetable')
             const data = await res.json()
-            const entries = data.entries || []
-
-            const assignments = entries.map((e: any) => ({
-              id: e.id,
-              season: 'normal', // Default for v2
-              dayOfWeek: e.dayOfWeek.toLowerCase(),
-              startTime: e.startTime,
-              endTime: e.endTime,
-              period: e.periodNumber,
-              teacherId: e.teacherId,
-              teacherName: e.allocation?.teacher?.name,
-              classId: e.classId,
-              className: e.allocation?.class?.name,
-              subjectId: e.subjectId,
-              subjectName: e.allocation?.subject?.name,
-              classroomId: 'room-1', // Placeholder as v2 doesn't have rooms yet
-              source: 'generated',
-            }))
+            const assignments = Array.isArray(data.assignments) ? data.assignments : []
 
             set({
               assignments,
@@ -402,9 +389,10 @@ export const useTimetableStore = create<TimetableStoreState>()(
               isPublished: status === 'published',
               lastPublishedAt: status === 'published' ? new Date() : null,
             })
+            return data
           } catch (err) {
             console.error('[timetableStore loadFromApi]', err)
-            // Silently fail to not interrupt UI
+            return null
           }
         },
 

@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FEATURE_LOGIN_REDIRECTS } from '@/lib/marketing/featureCatalog'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth'
 import { GraduationCap, Loader2, ArrowLeft } from 'lucide-react'
@@ -12,7 +13,7 @@ import { Button } from '@/components/ui/Button'
 import { setTopLoading, startTopLoading, stopTopLoading } from '@/lib/uiProgress'
 import { SchoolLogo } from '@/components/SchoolLogo'
 
-export default function LoginPage() {
+function LoginPageContent() {
   const { school, isLoading: isSchoolLoading } = useSchool()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -21,6 +22,8 @@ export default function LoginPage() {
   const [detectedSubdomain, setDetectedSubdomain] = useState('')
   const { login, logout } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectFrom = searchParams.get('from')
 
   // Detect subdomain on mount (client-side only)
   useEffect(() => {
@@ -100,7 +103,14 @@ export default function LoginPage() {
       setTopLoading(100)
       stopTopLoading()
 
-      if (['headteacher', 'admin', 'administrator', 'superadmin'].includes(role)) {
+      const featurePath =
+        redirectFrom && FEATURE_LOGIN_REDIRECTS[redirectFrom]
+          ? FEATURE_LOGIN_REDIRECTS[redirectFrom]
+          : null
+
+      if (featurePath) {
+        router.push(featurePath)
+      } else if (['headteacher', 'admin', 'administrator', 'superadmin'].includes(role)) {
         router.push('/dashboard/admin')
       } else if (['hod', 'head of department'].includes(role)) {
         router.push('/dashboard/hod')
@@ -248,5 +258,19 @@ export default function LoginPage() {
         </footer>
       </section>
     </main>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen flex items-center justify-center bg-[#EFECE5]">
+          <Loader2 className="h-8 w-8 animate-spin text-ink/50" />
+        </main>
+      }
+    >
+      <LoginPageContent />
+    </Suspense>
   )
 }

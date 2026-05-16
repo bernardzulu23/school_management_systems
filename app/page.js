@@ -3,17 +3,27 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useAuth } from '@/lib/auth'
+import { useAuth, useAuthHasHydrated } from '@/lib/auth'
 import { useSchool } from '@/lib/context/SchoolContext'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { SchoolLogo } from '@/components/SchoolLogo'
-import { AlertTriangle, BarChart2, ClipboardList, FileX, Smartphone, Users } from 'lucide-react'
+import {
+  AlertTriangle,
+  Calendar,
+  ClipboardCheck,
+  FileSpreadsheet,
+  Smartphone,
+  Users,
+} from 'lucide-react'
+import { EczCompliance } from '@/components/sections/EczCompliance'
 import { AIFeatures } from '@/components/sections/AIFeatures'
+import { CurriculumFeatures } from '@/components/sections/CurriculumFeatures'
 import { TimeSavings } from '@/components/sections/TimeSavings'
 import { Pricing } from '@/components/sections/Pricing'
 
 export default function HomePage() {
   const { isAuthenticated, user } = useAuth()
+  const authHydrated = useAuthHasHydrated()
   const { school, isLoading: isSchoolLoading } = useSchool()
   const router = useRouter()
   const [isHydrated, setIsHydrated] = useState(false)
@@ -28,62 +38,40 @@ export default function HomePage() {
   const problems = useMemo(
     () => [
       {
-        icon: FileX,
+        icon: FileSpreadsheet,
         accent: 'var(--color-accent)',
-        title: 'Paper registers getting lost',
-        body: 'Digital attendance records that cannot be destroyed, lost, or altered. Ministry inspectors can verify anytime.',
+        title: 'SBA marks trapped in exercise books',
+        body: 'Replace scattered class lists with one digital SBA record per learner — Task 1–3, term test, and total out of 100.',
       },
       {
-        icon: BarChart2,
+        icon: Calendar,
         accent: 'var(--color-accent)',
-        title: 'No visibility on student performance',
-        body: 'Spot students at risk of failing before it is too late. Track marks across all subjects in real-time.',
+        title: 'Missing the 31 January ECZ deadline',
+        body: 'See days remaining until SBA submission and export centre-ready CSV before the national cut-off.',
       },
       {
-        icon: ClipboardList,
+        icon: ClipboardCheck,
         accent: 'var(--color-accent)',
-        title: 'Headteacher reporting burden',
-        body: 'Generate MOE-ready reports in one click. No more compiling data from each teacher manually before district visits.',
-      },
-      {
-        icon: Users,
-        accent: 'var(--color-accent)',
-        title: 'HOD coordination challenges',
-        body: 'Department heads manage their subjects, teachers, and performance from a dedicated dashboard — no WhatsApp groups needed.',
+        title: 'Inconsistent rubric scoring',
+        body: 'Use the same four-level analytical rubric (Excellent → Needs Improvement) across every teacher and subject.',
       },
       {
         icon: AlertTriangle,
         accent: 'var(--color-accent)',
-        title: "Girls' dropout tracking",
-        body: 'Identify female students with declining attendance early. Especially critical for rural schools where girls face higher dropout risk.',
+        title: 'Tasks without Zambian context',
+        body: 'The system prompts for real-life Zambian scenarios so SBA tasks meet ECZ construct and context requirements.',
+      },
+      {
+        icon: Users,
+        accent: 'var(--color-accent)',
+        title: 'HOD cannot verify SBA readiness',
+        body: 'Department heads review subject scores and submission exports from one place — ready for ECZ handover.',
       },
       {
         icon: Smartphone,
         accent: 'var(--color-accent)',
         title: 'Works on any device',
-        body: 'Phone, tablet, or computer — and works offline when internet is slow. Critical for rural and peri-urban schools across Zambia.',
-      },
-    ],
-    []
-  )
-
-  const features = useMemo(
-    () => [
-      {
-        title: 'ECZ Exam Tracking',
-        body: 'Record internal assessments, CAs, and mock results. Predict ECZ pass rates before the national examinations.',
-      },
-      {
-        title: 'MOE-aligned reporting',
-        body: 'Generate the exact reports district education offices expect. Makes school inspections and EMIS reporting straightforward.',
-      },
-      {
-        title: 'STEM subject performance monitoring',
-        body: 'Track performance gaps in Mathematics, Science, and ICT — the subjects where Zambian students need the most intervention.',
-      },
-      {
-        title: 'Class management',
-        body: "Built around the Zambian secondary school structure — not imported from another country's curriculum.",
+        body: 'Record SBA scores from phone, tablet, or computer on MTN, Airtel, or Zamtel — built for Zambian connectivity.',
       },
     ],
     []
@@ -183,7 +171,8 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    if (isHydrated && isAuthenticated && user) {
+    if (!isHydrated || !authHydrated) return
+    if (isAuthenticated && user) {
       switch (user.role) {
         case 'headteacher':
           router.push('/dashboard/headteacher')
@@ -201,9 +190,9 @@ export default function HomePage() {
           router.push('/login')
       }
     }
-  }, [isHydrated, isAuthenticated, user, router])
+  }, [isHydrated, authHydrated, isAuthenticated, user, router])
 
-  if (!isHydrated || isSchoolLoading) {
+  if (!isHydrated || !authHydrated || isSchoolLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-royalPurple-page">
         <LoadingSpinner size="xl" color="primary" label="Loading" />
@@ -386,7 +375,7 @@ export default function HomePage() {
               fontWeight: 600,
             }}
           >
-            Zambian-built
+            ECZ-aligned
           </span>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -442,7 +431,7 @@ export default function HomePage() {
               marginBottom: 16,
             }}
           >
-            School Management System
+            ECZ CBA · School Management
           </div>
 
           <h1
@@ -455,7 +444,7 @@ export default function HomePage() {
               color: 'var(--text-primary)',
             }}
           >
-            Built for Zambian schools
+            ECZ-compliant School-Based Assessment for Zambian secondary schools
           </h1>
 
           <p
@@ -468,8 +457,8 @@ export default function HomePage() {
               lineHeight: 1.75,
             }}
           >
-            Manage attendance, track grades, generate reports, and coordinate teachers. AI tools
-            save teachers 14+ hours every month.
+            Record SBA the way ECZ expects: 30/70 weighting, four-level rubrics, Zambian context on
+            every task, 19 subjects with constructs, and CSV export before 31 January.
           </p>
 
           <p
@@ -483,7 +472,8 @@ export default function HomePage() {
               lineHeight: 1.65,
             }}
           >
-            All from one platform. No more paper registers. No more lost records.
+            Plus attendance, HOD dashboards, and AI lesson tools — one platform for teaching and
+            compliance.
           </p>
 
           <div
@@ -499,8 +489,8 @@ export default function HomePage() {
             <Link href={registerUrl} className="btn-primary">
               Start free trial
             </Link>
-            <Link href="#features" className="btn-secondary">
-              View features
+            <Link href="#ecz" className="btn-secondary">
+              ECZ compliance
             </Link>
           </div>
 
@@ -515,6 +505,10 @@ export default function HomePage() {
 
       <hr className="divider" />
 
+      <EczCompliance registerUrl={registerUrl} />
+
+      <hr className="divider" />
+
       <section
         style={{
           padding: '4rem 1.5rem',
@@ -524,7 +518,7 @@ export default function HomePage() {
         }}
       >
         <div style={{ maxWidth: 960, margin: '0 auto', position: 'relative' }}>
-          <div className="section-label">The real problems ZSMS solves</div>
+          <div className="section-label">Why schools switch to ZSMS</div>
           <h2
             style={{
               fontSize: 'clamp(22px,3.5vw,30px)',
@@ -533,17 +527,18 @@ export default function HomePage() {
               color: 'var(--text-primary)',
             }}
           >
-            Built around how Zambian schools actually work
+            Stop losing SBA marks before ECZ submission
           </h2>
           <p
             style={{
               color: 'var(--text-secondary)',
               fontSize: 14,
               marginBottom: '2.5rem',
-              maxWidth: 520,
+              maxWidth: 560,
             }}
           >
-            Every feature exists because a real Zambian headteacher asked for it.
+            Built from ECZ Assessment Guidelines — addressing compliance gaps that paper registers
+            and generic gradebooks cannot fix.
           </p>
           <div
             className="problems-grid"
@@ -611,81 +606,11 @@ export default function HomePage() {
 
       <hr className="divider" />
 
-      <AIFeatures registerUrl={registerUrl} />
+      <CurriculumFeatures loginUrl="/login" />
 
       <hr className="divider" />
 
-      <section id="features" style={{ padding: '3.5rem 1.5rem', background: 'var(--color-white)' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <div className="section-label">Features built for the Zambian curriculum</div>
-          <h2
-            style={{
-              fontSize: 26,
-              fontWeight: 700,
-              marginBottom: '2rem',
-              color: 'var(--text-primary)',
-            }}
-          >
-            Attendance, grades, reporting, coordination
-          </h2>
-          <div
-            className="features-grid"
-            style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}
-          >
-            <div>
-              {features.map((f, i) => (
-                <div key={i} style={{ marginBottom: '1.75rem' }}>
-                  <p
-                    style={{
-                      fontWeight: 700,
-                      fontSize: 15,
-                      marginBottom: 8,
-                      color: 'var(--text-primary)',
-                    }}
-                  >
-                    <span style={{ color: 'var(--color-accent)', marginRight: 8 }}>•</span>
-                    {f.title}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 13,
-                      color: 'var(--text-secondary)',
-                      lineHeight: 1.65,
-                      paddingLeft: 22,
-                    }}
-                  >
-                    {f.body}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div className="card">
-                <p style={{ fontSize: 12, color: 'var(--color-accent)', marginBottom: 10 }}>
-                  Headteacher dashboard
-                </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: 12 }}>
-                  <span className="pill">Attendance</span>
-                  <span className="pill">Performance</span>
-                  <span className="pill">HODs</span>
-                </div>
-                <p style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-                  Attendance, performance, HODs — all on one screen.
-                </p>
-              </div>
-              <div className="card">
-                <p style={{ fontSize: 12, color: 'var(--color-accent)', marginBottom: 6 }}>
-                  Works on MTN, Airtel &amp; Zamtel networks
-                </p>
-                <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.65 }}>
-                  Designed for Zambian internet speeds. No data-heavy downloads required. Works
-                  offline too.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <AIFeatures registerUrl={registerUrl} />
 
       <hr className="divider" />
 
@@ -873,7 +798,7 @@ export default function HomePage() {
               fontWeight: 700,
             }}
           >
-            Ready to modernise your school?
+            ECZ-ready school management
           </div>
           <h2
             style={{
@@ -883,7 +808,7 @@ export default function HomePage() {
               color: '#111111',
             }}
           >
-            Launch your school portal
+            Start recording SBA the ECZ way
             <br />
             <span style={{ color: '#111111' }}>Setup takes minutes</span>
           </h2>
@@ -895,8 +820,8 @@ export default function HomePage() {
               lineHeight: 1.75,
             }}
           >
-            Join schools across Zambia already using ZSMS. Government, private, grant-aided, and
-            community schools welcome.
+            Sync ECZ subjects, create compliant tasks, record rubric scores, and export CSV — plus
+            attendance and HOD tools for the whole school.
           </p>
           <Link
             href={registerUrl}

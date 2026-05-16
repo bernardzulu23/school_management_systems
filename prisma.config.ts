@@ -44,7 +44,7 @@ export default defineConfig({
     seed: 'node prisma/seed.js',
   },
   datasource: {
-    // This forces it to use the Railway variable
+    // Uses DATABASE_URL from .env / Render / Railway dashboard
     url: process.env.DATABASE_URL,
   },
 })

@@ -3,6 +3,10 @@ import { Providers } from './providers'
 import { Toaster } from 'react-hot-toast'
 
 export const metadata = {
+  icons: {
+    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+    shortcut: '/favicon.svg',
+  },
   title: 'School Management System - Zambia',
   description:
     'Complete school management solution built with Next.js for Zambian schools, supporting rural education, health, and nutrition.',

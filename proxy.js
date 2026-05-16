@@ -1,63 +1,79 @@
 import { NextResponse } from 'next/server'
+import {
+  applySecurityHeaders,
+  BLOCKED_HTTP_METHODS,
+  getCorsHeaders,
+  isForbiddenCrossOrigin,
+} from './lib/security/headers'
+import { checkProxyRateLimit } from './lib/security/proxyRateLimit'
+
+const PUBLIC_PATHS = [
+  '/api/auth/login',
+  '/api/auth/register',
+  '/api/auth/logout',
+  '/api/auth/refresh',
+  '/api/auth/me',
+  '/api/auth/forgot-password',
+  '/api/auth/reset-password',
+  '/api/sms/inbound',
+  '/api/sms/delivery',
+  '/api/public',
+  '/api/public/features',
+  '/api/public/platform-stats',
+  '/api/onboarding',
+  '/api/schools/check-subdomain',
+  '/api/schools/register',
+  '/api/schools/verify',
+  '/api/payments/lipila/callback',
+  '/api/onboarding/lipila/callback',
+  '/api/school/current',
+  '/api/health',
+  '/api/ping',
+  '/login',
+  '/register',
+  '/manifest.json',
+  '/sw.js',
+  '/',
+]
+
+function secureResponse(body, init, request) {
+  const response = body === null ? new NextResponse(null, init) : NextResponse.json(body, init)
+  return applySecurityHeaders(response, request)
+}
 
 export default function proxy(request) {
   try {
     const { pathname } = request.nextUrl
+    const method = String(request.method || 'GET').toUpperCase()
 
-    if (pathname === '/api/health') {
-      return NextResponse.next()
-    }
-    if (pathname === '/api/ping') {
-      return NextResponse.next()
+    if (BLOCKED_HTTP_METHODS.has(method)) {
+      return secureResponse({ error: 'Method Not Allowed' }, { status: 405 }, request)
     }
 
-    const origin = request.headers.get('origin')
-    const allowedOrigins = [
-      'https://schoolmanagementsystems-production.up.railway.app',
-      'http://localhost:3000',
-    ]
-
-    let allowOrigin = allowedOrigins.includes(origin) ? origin : ''
-    if (
-      !allowOrigin &&
-      origin &&
-      (origin.endsWith('.bluepeacktechnologies.com') ||
-        origin.endsWith('.railway.app') ||
-        origin.endsWith('.onrender.com'))
-    ) {
-      allowOrigin = origin
+    if (pathname === '/api/health' || pathname === '/api/ping') {
+      const response = NextResponse.next()
+      return applySecurityHeaders(response, request)
     }
 
-    if (request.method === 'OPTIONS') {
-      const headers = new Headers()
-      if (allowOrigin) {
-        headers.set('Access-Control-Allow-Origin', allowOrigin)
-        headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        headers.set(
-          'Access-Control-Allow-Headers',
-          'Content-Type, Authorization, X-School-Subdomain'
-        )
-        headers.set('Access-Control-Allow-Credentials', 'true')
-      }
-      return new NextResponse(null, { status: 200, headers })
+    if (method === 'OPTIONS') {
+      const headers = new Headers(getCorsHeaders(request))
+      return new NextResponse(null, { status: 204, headers })
     }
 
-    const securityHeaders = {
-      'X-Frame-Options': 'DENY',
-      'X-Content-Type-Options': 'nosniff',
-      'Referrer-Policy': 'strict-origin-when-cross-origin',
-      'Content-Security-Policy':
-        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://images.unsplash.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://*.railway.app https://*.onrender.com http://localhost:* https://fonts.googleapis.com https://static.cloudflareinsights.com;",
-      'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
-      'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+    if (pathname.startsWith('/api') && isForbiddenCrossOrigin(request)) {
+      return secureResponse({ error: 'Forbidden origin' }, { status: 403 }, request)
     }
 
-    if (allowOrigin) {
-      securityHeaders['Access-Control-Allow-Origin'] = allowOrigin
-      securityHeaders['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
-      securityHeaders['Access-Control-Allow-Headers'] =
-        'Content-Type, Authorization, X-School-Subdomain'
-      securityHeaders['Access-Control-Allow-Credentials'] = 'true'
+    const rate = checkProxyRateLimit(request, pathname)
+    if (rate.limited) {
+      return secureResponse(
+        { error: 'Too many requests', message: 'Please try again later.' },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(rate.retryAfter) },
+        },
+        request
+      )
     }
 
     const hostname = request.headers.get('host') || ''
@@ -69,35 +85,8 @@ export default function proxy(request) {
     }
 
     const protectedPaths = ['/dashboard', '/api']
-    const publicPaths = [
-      '/api/auth/login',
-      '/api/auth/register',
-      '/api/auth/logout',
-      '/api/auth/refresh',
-      '/api/auth/me',
-      '/api/auth/forgot-password',
-      '/api/auth/reset-password',
-      '/api/sms/inbound',
-      '/api/sms/delivery',
-      '/api/public',
-      '/api/onboarding',
-      '/api/schools/check-subdomain',
-      '/api/schools/register',
-      '/api/schools/verify',
-      '/api/payments/lipila/callback',
-      '/api/onboarding/lipila/callback',
-      '/api/school/current',
-      '/api/health',
-      '/api/ping',
-      '/login',
-      '/register',
-      '/manifest.json',
-      '/sw.js',
-      '/',
-    ]
-
     const isProtected = protectedPaths.some((path) => pathname.startsWith(path))
-    const isPublic = publicPaths.some(
+    const isPublic = PUBLIC_PATHS.some(
       (path) => pathname === path || pathname.startsWith(path + '/')
     )
 
@@ -111,11 +100,12 @@ export default function proxy(request) {
 
       if (!hasToken) {
         if (pathname.startsWith('/api')) {
-          return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+          return secureResponse({ error: 'Unauthorized' }, { status: 401 }, request)
         }
         const loginUrl = new URL('/login', request.url)
         loginUrl.searchParams.set('from', pathname)
-        return NextResponse.redirect(loginUrl)
+        const redirect = NextResponse.redirect(loginUrl)
+        return applySecurityHeaders(redirect, request)
       }
     }
 
@@ -125,9 +115,7 @@ export default function proxy(request) {
       },
     })
 
-    Object.entries(securityHeaders).forEach(([key, value]) => {
-      response.headers.set(key, value)
-    })
+    applySecurityHeaders(response, request)
 
     if (pathname.startsWith('/api/v1/')) {
       response.headers.set('Deprecation', 'true')
@@ -137,7 +125,8 @@ export default function proxy(request) {
 
     return response
   } catch {
-    return NextResponse.next()
+    const response = NextResponse.next()
+    return applySecurityHeaders(response, request)
   }
 }
 

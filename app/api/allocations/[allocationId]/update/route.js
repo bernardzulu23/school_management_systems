@@ -59,12 +59,17 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
       ? allocation.allocationData
       : {}
 
+  const nextTerm = normalizeString(body?.term)
+  const nextYear = normalizeString(body?.academicYear)
+
   const merged = {
     ...current,
     ...(nextTeacherId ? { teacherId: nextTeacherId } : {}),
     ...(nextSubject ? { subject: nextSubject } : {}),
     ...(Array.isArray(nextClasses) ? { classes: nextClasses } : {}),
     ...(nextPeriodConfig !== undefined ? { periodConfig: nextPeriodConfig } : {}),
+    ...(nextTerm ? { term: nextTerm } : {}),
+    ...(nextYear ? { academicYear: nextYear } : {}),
   }
 
   const updated = await prisma.departmentAllocation.update({

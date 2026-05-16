@@ -1,8 +1,10 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+import { authCookieOptions } from '@/lib/security/cookies'
+import { getCorsHeaders } from '@/lib/security/headers'
+import { withSecureApi } from '@/lib/middleware/secureApi'
 
-export async function POST(request) {
+export const POST = withSecureApi(async function POST(request) {
   const host = request?.headers?.get?.('host') || ''
   const hostName = String(host || '')
     .split(':')[0]
@@ -29,34 +31,21 @@ export async function POST(request) {
   })
 
   for (const domain of domains) {
-    response.cookies.set('access_token', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+    const clearOpts = {
+      ...authCookieOptions(request, { maxAgeSeconds: 0, name: 'access_token' }),
       maxAge: 0,
-      path: '/',
       ...(domain ? { domain } : {}),
-    })
-    response.cookies.set('refresh_token', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 0,
-      path: '/',
-      ...(domain ? { domain } : {}),
-    })
+    }
+    response.cookies.set('access_token', '', clearOpts)
+    response.cookies.set('refresh_token', '', clearOpts)
   }
 
   return response
-}
+})
 
-export async function OPTIONS() {
+export const OPTIONS = withSecureApi(async function OPTIONS(request) {
   return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_APP_ORIGIN || 'http://localhost:3000',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    },
+    status: 204,
+    headers: getCorsHeaders(request),
   })
-}
+})

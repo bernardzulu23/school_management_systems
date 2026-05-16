@@ -4,6 +4,39 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
+function mapQuestionBank(item) {
+  const questions = Array.isArray(item.questions) ? item.questions : item.questions?.questions || []
+  return {
+    id: item.id,
+    title: item.title,
+    subject: item.subjectName || item.subject?.name || item.subject,
+    subjectId: item.subjectId,
+    formLevel: item.formLevel,
+    difficulty: item.difficulty,
+    questionCount: questions.length,
+    createdAt: item.createdAt,
+    updatedAt: item.updatedAt,
+    content: { questions, grade: item.grade },
+    source: 'ecz_question_bank',
+  }
+}
+
+function mapLegacyGame(g) {
+  return {
+    id: g.id,
+    title: g.title,
+    subject: g.subject,
+    subjectId: null,
+    formLevel: g.content?.formLevel,
+    difficulty: g.difficulty,
+    questionCount: Array.isArray(g.content?.questions) ? g.content.questions.length : 0,
+    createdAt: g.createdAt,
+    updatedAt: g.updatedAt,
+    content: g.content,
+    source: 'legacy_game',
+  }
+}
+
 export async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
@@ -17,29 +50,34 @@ export async function GET(request) {
 
   const { searchParams } = new URL(request.url)
   const subject = String(searchParams.get('subject') || '').trim()
+  const subjectId = String(searchParams.get('subjectId') || '').trim()
 
-  const items = await prisma.game.findMany({
-    where: {
-      schoolId,
-      type: 'question_bank',
-      ...(subject ? { subject } : {}),
-    },
-    orderBy: { updatedAt: 'desc' },
-  })
+  const [banks, legacy] = await Promise.all([
+    prisma.questionBank.findMany({
+      where: {
+        schoolId,
+        ...(subjectId
+          ? { subjectId }
+          : subject
+            ? { subjectName: { contains: subject, mode: 'insensitive' } }
+            : {}),
+      },
+      include: { subject: { select: { id: true, name: true, code: true } } },
+      orderBy: { updatedAt: 'desc' },
+    }),
+    prisma.game.findMany({
+      where: {
+        schoolId,
+        type: 'question_bank',
+        ...(subject ? { subject: { contains: subject, mode: 'insensitive' } } : {}),
+      },
+      orderBy: { updatedAt: 'desc' },
+    }),
+  ])
 
-  return NextResponse.json({
-    success: true,
-    data: items.map((g) => ({
-      id: g.id,
-      title: g.title,
-      subject: g.subject,
-      difficulty: g.difficulty,
-      questionCount: Array.isArray(g.content?.questions) ? g.content.questions.length : 0,
-      createdAt: g.createdAt,
-      updatedAt: g.updatedAt,
-      content: g.content,
-    })),
-  })
+  const data = [...banks.map(mapQuestionBank), ...legacy.map(mapLegacyGame)]
+
+  return NextResponse.json({ success: true, data })
 }
 
 export async function POST(request) {
@@ -55,40 +93,42 @@ export async function POST(request) {
 
   const body = await request.json().catch(() => ({}))
   const title = String(body?.title || '').trim()
-  const subject = String(body?.subject || '').trim()
+  const subjectName = String(body?.subject || body?.subjectName || '').trim()
+  const subjectId = body?.subjectId ? String(body.subjectId).trim() : null
   const grade = body?.grade ? String(body.grade).trim() : null
+  const formLevel = body?.formLevel ? parseInt(body.formLevel, 10) : null
   const difficulty = String(body?.difficulty || 'medium').trim() || 'medium'
   const questions = Array.isArray(body?.questions) ? body.questions : []
 
-  if (!title || !subject) {
-    return NextResponse.json({ error: 'title and subject required' }, { status: 400 })
+  if (!title || (!subjectName && !subjectId)) {
+    return NextResponse.json(
+      { error: 'title and subject (or subjectId) required' },
+      { status: 400 }
+    )
   }
 
-  const created = await prisma.game.create({
+  let resolvedSubjectName = subjectName
+  if (subjectId) {
+    const subj = await prisma.subject.findFirst({ where: { id: subjectId, schoolId } })
+    if (!subj) return NextResponse.json({ error: 'Subject not found' }, { status: 404 })
+    resolvedSubjectName = subj.name
+  }
+
+  const created = await prisma.questionBank.create({
     data: {
       title,
       description: grade ? `Grade ${grade}` : null,
-      type: 'question_bank',
-      subject,
+      subjectId,
+      subjectName: resolvedSubjectName,
+      formLevel,
+      grade,
       difficulty,
-      content: { grade, questions },
+      questions,
       schoolId,
+      createdBy: auth.user.id,
     },
+    include: { subject: true },
   })
 
-  return NextResponse.json(
-    {
-      success: true,
-      data: {
-        id: created.id,
-        title: created.title,
-        subject: created.subject,
-        difficulty: created.difficulty,
-        content: created.content,
-        createdAt: created.createdAt,
-        updatedAt: created.updatedAt,
-      },
-    },
-    { status: 201 }
-  )
+  return NextResponse.json({ success: true, data: mapQuestionBank(created) }, { status: 201 })
 }

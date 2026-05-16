@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { getClassAttendanceRates } from '@/lib/dashboard/schoolAnalytics'
 
 export async function GET(request) {
   try {
@@ -114,17 +115,19 @@ export async function GET(request) {
       return acc
     }, {})
 
-    // Combine data
+    const classNames = classes.map((c) => c.name)
+    const attendanceByClass = await getClassAttendanceRates(schoolId, classNames, 30)
+
     const classesData = classes.map((cls) => ({
       id: cls.id,
       name: cls.name,
-      yearGroup: cls.level || 'General', // Default if level is missing
+      yearGroup: cls.level || 'General',
       classTeacher: teacherMap[cls.classTeacherId] || 'Unassigned',
       currentEnrollment: enrollmentMap[cls.name] || 0,
       maxCapacity: cls.capacity,
       subjects: subjectsMap[cls.name] ? Array.from(subjectsMap[cls.name]).slice(0, 5) : [],
       averagePerformance: Math.round(performanceMap[cls.name] || 0),
-      attendanceRate: 0, // TODO: Implement Attendance model
+      attendanceRate: attendanceByClass[cls.name] ?? 0,
     }))
 
     return NextResponse.json({ success: true, data: classesData })

@@ -6,8 +6,9 @@ generator client {
 
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL")
 }
 // ============================================
 // MULTI-TENANCY: School Model
@@ -38,6 +39,7 @@ model School {
   email       String?
   phone       String?
   address     String?
+  eczCentreNumber String? // ECZ examination centre number for submissions
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -103,6 +105,11 @@ model School {
   studentBadges        StudentBadge[]
   studentMaterials     StudentMaterial[]
   studentGames         StudentGame[]
+  eczAssessments       EczAssessment[]
+  eczAssessmentScores EczAssessmentScore[]
+  eczSubmissions       EczSubmission[]
+  specialAccommodations SpecialAccommodation[]
+  questionBanks        QuestionBank[]
 
   @@index([subdomain])
   @@index([active])
@@ -191,6 +198,34 @@ model RefreshToken {
   @@index([revoked])
 }
 
+// Pre-provisioning school signup (onboarding flow before School is created)
+model SchoolRegistration {
+  id                     String    @id @default(uuid())
+  email                  String    @unique
+  passwordHash           String
+  isVerified             Boolean   @default(false)
+  verificationToken      String?   @unique
+  verificationExpiry     DateTime?
+  lastVerificationSentAt DateTime?
+
+  plan                   String?
+  subscriptionMonths     Int       @default(1)
+  paymentStatus          String    @default("unpaid")
+  paymentProvider        String?
+  paymentReference       String?
+
+  schoolName             String?
+  subdomain              String?
+  level                  String?
+  adminName              String?
+
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@index([paymentStatus])
+  @@index([verificationToken])
+}
+
 model AuditLog {
   id         String   @id @default(uuid())
   userId     String
@@ -274,6 +309,8 @@ model Student {
   attendance          Attendance[]
   assignmentSubmissions AssignmentSubmission[]
   subjectEnrollments  PupilSubjectEnrollment[]
+  eczAssessmentScores EczAssessmentScore[]
+  specialAccommodations SpecialAccommodation[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -417,6 +454,8 @@ model Subject {
   name        String   // e.g. "Mathematics" 
   code        String?  // e.g. "MATH101" 
   topics      String[] // e.g. ["Algebra", "Geometry"] 
+  construct   String?  // ECZ main competency statement
+  description String?
   
   // Multi-tenancy 
   schoolId    String 
@@ -434,6 +473,10 @@ model Subject {
   timetableEntries TimetableEntry[]
   schedulingRecipes SchedulingRecipe[]
   allocations       TeacherAllocation[]
+  constructElements SubjectConstructElement[]
+  eczAssessments    EczAssessment[]
+  eczSubmissions    EczSubmission[]
+  questionBanks     QuestionBank[]
   
   createdAt   DateTime @default(now()) 
   updatedAt   DateTime @updatedAt
@@ -1629,4 +1672,251 @@ model AllocationNotification {
 
   @@index([schoolId, adminUserId, read])
   @@index([schoolId, allocationId])
+}
+
+// ============================================
+// ECZ ASSESSMENT COMPLIANCE (School-Based Assessment)
+// ============================================
+
+enum EczAssessmentComponent {
+  SBA_TASK
+  FINAL_EXAMINATION
+  PRACTICE_FORMATIVE
+}
+
+enum EczAssessmentStatus {
+  DRAFT
+  PUBLISHED
+  IN_PROGRESS
+  COMPLETED
+  SUBMITTED_TO_ECZ
+  ARCHIVED
+}
+
+enum EczScoreSubmissionStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  SUBMITTED_TO_ECZ
+  ACKNOWLEDGED_BY_ECZ
+  REJECTED_BY_ECZ
+}
+
+enum EczModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  NEEDS_REVISION
+}
+
+model SubjectConstructElement {
+  id            String   @id @default(uuid())
+  subjectId     String
+  subject       Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  elementNumber Int
+  statement     String
+  assessmentItems EczAssessmentItem[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([subjectId, elementNumber])
+  @@index([subjectId])
+}
+
+model EczAssessment {
+  id                  String   @id @default(uuid())
+  subjectId           String
+  subject             Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  schoolId            String
+  school              School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  component           EczAssessmentComponent
+  formLevel           Int
+  title               String
+  description         String?
+  type                String
+  context             String?
+  sbaTaskTemplate     String?
+  materialsProvided   String[]
+  elementLabel        String?
+  maxMarks            Int      @default(20)
+  dueDate             DateTime?
+  submissionDeadline  DateTime?
+  createdBy           String
+  status              EczAssessmentStatus @default(DRAFT)
+
+  rubric              EczRubric?
+  items               EczAssessmentItem[]
+  scores              EczAssessmentScore[]
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([subjectId])
+  @@index([formLevel])
+  @@index([component])
+}
+
+model EczAssessmentItem {
+  id              String   @id @default(uuid())
+  assessmentId    String
+  assessment      EczAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  elementId       String?
+  element         SubjectConstructElement? @relation(fields: [elementId], references: [id], onDelete: SetNull)
+  questionNumber  Int
+  content         String
+  markAllocation  Int
+  commandTerm     String?
+  expectedAnswer  String?
+  markingGuidance String?
+  bloomsLevel     String?
+  zambiContext    Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([assessmentId])
+  @@index([elementId])
+}
+
+model EczRubric {
+  id           String   @id @default(uuid())
+  assessmentId String   @unique
+  assessment   EczAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  criteria     EczRubricCriterion[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model EczRubricCriterion {
+  id        String   @id @default(uuid())
+  rubricId  String
+  rubric    EczRubric @relation(fields: [rubricId], references: [id], onDelete: Cascade)
+  name      String
+  excellent String
+  good      String
+  fair      String
+  needsImpr String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([rubricId])
+}
+
+model EczAssessmentScore {
+  id              String   @id @default(uuid())
+  assessmentId    String
+  assessment      EczAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  studentId       String
+  student         Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  schoolId        String
+  school          School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  task1Score      Int?     @default(0)
+  task2Score      Int?     @default(0)
+  task3Score      Int?     @default(0)
+  termTestScore   Int?     @default(0)
+  totalSBAScore   Int?     @default(0)
+  formLevel       Int
+  academicYear    Int
+  rubricBreakdown Json?
+
+  submissionStatus EczScoreSubmissionStatus @default(DRAFT)
+  submittedAt     DateTime?
+  submittedBy     String?
+  eczReference    String?
+  moderatedAt     DateTime?
+  moderatedBy     String?
+  moderationStatus EczModerationStatus @default(PENDING)
+  moderationNotes String?
+  evidenceFiles   EczEvidenceFile[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([assessmentId, studentId, academicYear])
+  @@index([schoolId])
+  @@index([studentId])
+  @@index([submissionStatus])
+}
+
+model EczEvidenceFile {
+  id         String   @id @default(uuid())
+  scoreId    String
+  score      EczAssessmentScore @relation(fields: [scoreId], references: [id], onDelete: Cascade)
+  fileName   String
+  filePath   String
+  fileType   String
+  fileSize   Int
+  uploadedAt DateTime @default(now())
+  uploadedBy String
+  expiryDate DateTime
+
+  @@index([scoreId])
+  @@index([expiryDate])
+}
+
+model EczSubmission {
+  id               String   @id @default(uuid())
+  schoolId         String
+  school           School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  subjectId        String
+  subject          Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  formLevel        Int
+  academicYear     Int
+  submissionFile   String?
+  status           EczScoreSubmissionStatus @default(DRAFT)
+  totalLearners    Int      @default(0)
+  validationErrors String[]
+  submittedAt      DateTime?
+  submittedBy      String?
+  eczReference     String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([schoolId, subjectId, formLevel, academicYear])
+  @@index([schoolId])
+  @@index([submittedAt])
+}
+
+model SpecialAccommodation {
+  id                String   @id @default(uuid())
+  studentId         String
+  student           Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  schoolId          String
+  school            School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  accommodationType String
+  details           String
+  accommodations    String[]
+  approvedAt        DateTime?
+  approvedBy        String?
+  documentation     String[]
+  appliedForYear    Int
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([studentId])
+}
+
+model QuestionBank {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  subjectId   String?
+  subject     Subject? @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  subjectName String
+  formLevel   Int?
+  grade       String?
+  difficulty  String   @default("medium")
+  questions   Json
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  createdBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([subjectId])
+  @@index([subjectName])
 }

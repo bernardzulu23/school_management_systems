@@ -1,69 +1,82 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BookOpen, FileText, HelpCircle, MessageSquare, Wand2 } from 'lucide-react'
 import { Card } from '@/components/ui/card'
+import Link from 'next/link'
+import { AI_FEATURE_CATALOG } from '@/lib/marketing/featureCatalog'
 
-const aiFeatures = [
-  {
-    icon: BookOpen,
-    title: 'Lesson Planner',
-    description: 'Generate ECZ-aligned lesson plans in 30 seconds',
-    detail: 'Save 1.5 hours per plan',
-    plan: 'Standard, Premium',
-  },
-  {
-    icon: Wand2,
-    title: 'Story Weaver',
-    description: 'Create engaging reading materials on demand',
-    detail: 'Perfect for Grade 1-7 reading lessons',
-    plan: 'Standard, Premium',
-  },
-  {
-    icon: HelpCircle,
-    title: 'Quiz Maker',
-    description: 'Generate instant assessments with answer keys',
-    detail: 'Multiple choice, true/false, short answer',
-    plan: 'Standard, Premium',
-  },
-  {
-    icon: MessageSquare,
-    title: 'Report Comments',
-    description: 'Write personalized student feedback at scale',
-    detail: 'Save 8+ hours per report cycle',
-    plan: 'Premium only',
-  },
-  {
-    icon: FileText,
-    title: 'ECZ Practice Papers',
-    description: 'Generate exam-style practice questions',
-    detail: 'All subjects, all grades',
-    plan: 'Standard, Premium',
-  },
-]
+const ICONS: Record<string, typeof BookOpen> = {
+  'ai-lesson-planner': BookOpen,
+  'ai-story-weaver': Wand2,
+  'ai-quiz-maker': HelpCircle,
+  'ai-report-comments': MessageSquare,
+  'ecz-practice': FileText,
+}
+
+type AiFeature = {
+  id: string
+  title: string
+  description: string
+  detail: string
+  planLabel: string
+  loginHint?: string
+}
 
 export function AIFeatures({ registerUrl }: { registerUrl: string }) {
+  const [features, setFeatures] = useState<AiFeature[]>([])
+  const [stats, setStats] = useState<{
+    activeSchools: number
+    totalResults: number
+  } | null>(null)
+
+  useEffect(() => {
+    let active = true
+    Promise.all([
+      fetch('/api/public/features').then((r) => r.json()),
+      fetch('/api/public/platform-stats').then((r) => r.json()),
+    ])
+      .then(([featRes, statsRes]) => {
+        if (!active) return
+        if (featRes?.aiFeatures) setFeatures(featRes.aiFeatures)
+        if (statsRes?.stats) setStats(statsRes.stats)
+      })
+      .catch(() => {})
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const loginBase = '/login'
+
   return (
     <section className="bg-white py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <div className="text-sm font-semibold text-purple-600 tracking-wide uppercase mb-4">
-            AI-Powered Teaching
-          </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">
-            Five AI tools that save teachers 14+ hours monthly
+          <p className="text-xs font-bold text-[var(--color-accent)] tracking-[0.12em] uppercase mb-4">
+            Teaching assistants
+          </p>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            AI tools that support — not replace — ECZ SBA
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Available on Standard plan and above. Teachers use AI as a starting point, then
-            customize for their classroom.
+            Formal School-Based Assessment lives in the ECZ SBA Hub. AI helps with lesson prep,
+            practice materials, and report comments on Standard plans and above.
           </p>
+          {stats && stats.activeSchools > 0 && (
+            <p className="text-sm text-gray-500 mt-4">
+              Used across {stats.activeSchools.toLocaleString()} active schools ·{' '}
+              {stats.totalResults.toLocaleString()} results tracked platform-wide
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {aiFeatures.map((feature) => {
-            const Icon = feature.icon
+          {(features.length ? features : AI_FEATURE_CATALOG).map((feature) => {
+            const Icon = ICONS[feature.id] || BookOpen
+            const toolHref = `${loginBase}?from=${encodeURIComponent(feature.loginHint || feature.id)}`
             return (
-              <Card key={feature.title}>
+              <Card key={feature.id} className="flex flex-col">
                 <div className="mb-4">
                   <Icon size={40} color="#7c3aed" strokeWidth={1.5} aria-hidden="true" />
                 </div>
@@ -72,10 +85,16 @@ export function AIFeatures({ registerUrl }: { registerUrl: string }) {
 
                 <p className="text-gray-700 mb-3 font-medium">{feature.description}</p>
 
-                <p className="text-sm text-gray-600 mb-4">{feature.detail}</p>
+                <p className="text-sm text-gray-600 mb-4 flex-grow">{feature.detail}</p>
 
-                <div className="pt-4 border-t border-gray-200">
-                  <p className="text-xs text-purple-600 font-semibold">{feature.plan}</p>
+                <div className="pt-4 border-t border-gray-200 mt-auto">
+                  <p className="text-xs text-purple-600 font-semibold mb-3">{feature.planLabel}</p>
+                  <Link
+                    href={toolHref}
+                    className="text-sm font-semibold text-[var(--color-accent)] hover:underline"
+                  >
+                    Sign in to use →
+                  </Link>
                 </div>
               </Card>
             )
@@ -84,13 +103,13 @@ export function AIFeatures({ registerUrl }: { registerUrl: string }) {
 
         <div className="text-center mt-16">
           <p className="text-lg text-gray-700 mb-6">
-            See AI in action. Start your free 30-day trial.
+            ECZ SBA on every plan. AI extras on Standard and Premium.
           </p>
           <a
             href={registerUrl}
             className="inline-flex items-center justify-center bg-royalPurple-accent text-royalPurple-accentTx px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-all"
           >
-            Try all AI features free
+            Start free trial
           </a>
         </div>
       </div>

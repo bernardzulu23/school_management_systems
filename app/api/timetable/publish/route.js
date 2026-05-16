@@ -12,6 +12,14 @@ export async function POST(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
+  const role = String(user.role || '').toLowerCase()
+  if (!['headteacher', 'administrator', 'admin', 'superadmin'].includes(role)) {
+    return NextResponse.json(
+      { error: 'Only school administrators can publish the master timetable' },
+      { status: 403 }
+    )
+  }
+
   const { term, academicYear } = await req.json()
 
   await prisma.$transaction(async (tx) => {

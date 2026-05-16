@@ -9,6 +9,8 @@ services:
     runtime: docker
     healthCheckPath: /api/ping
     dockerfilePath: ./Dockerfile
+    # Applies schema changes (e.g. ECZ tables) using Render's DATABASE_URL before each deploy
+    preDeployCommand: npx prisma db push --skip-generate
     envVars:
       - key: NODE_ENV
         value: production
@@ -27,4 +29,8 @@ services:
       - key: SERVER_ENCRYPTION_KEY
         sync: false
       - key: NEXT_PUBLIC_ENCRYPTION_KEY
+        sync: false
+      - key: ALLOWED_ORIGIN_SUFFIXES
+        value: ".bluepeacktechnologies.com,.onrender.com,.railway.app"
+      - key: ENFORCE_PRODUCTION_SECRETS
         sync: false

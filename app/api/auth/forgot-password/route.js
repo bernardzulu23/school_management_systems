@@ -5,6 +5,7 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import crypto from 'crypto'
 import { sendResetEmail } from '@/config/email'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
+import { withSecureApi } from '@/lib/middleware/secureApi'
 
 function resolveBaseUrl(request) {
   const proto = request.headers.get('x-forwarded-proto') || 'https'
@@ -24,7 +25,7 @@ function resolveBaseUrl(request) {
   return configured || originFromHeaders || 'http://localhost:3000'
 }
 
-export async function POST(request) {
+export const POST = withSecureApi(async function POST(request) {
   try {
     const { email, subdomain } = await request.json()
 
@@ -90,4 +91,4 @@ export async function POST(request) {
     console.error('Forgot password error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
-}
+})

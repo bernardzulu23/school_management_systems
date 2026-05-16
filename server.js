@@ -72,6 +72,16 @@ async function runMigrationsAtStartup() {
     distDir: '.next',
   })
 
+  try {
+    const { validateProductionEnv } = await import('./lib/security/env.js')
+    validateProductionEnv()
+  } catch (err) {
+    console.error('[security]', err?.message || err)
+    if (process.env.ENFORCE_PRODUCTION_SECRETS === 'true') {
+      process.exit(1)
+    }
+  }
+
   await runMigrationsAtStartup()
 
   require(path.join(__dirname, '.next', 'standalone', 'server.js'))

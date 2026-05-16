@@ -673,10 +673,12 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                                     style={{ background: bg }}
                                   >
                                     <div className="font-bold text-[13px] text-slate-900 truncate">
-                                      {String(a.subjectId)}
+                                      {(a as any).subjectName || String(a.subjectId)}
                                     </div>
                                     <div className="text-[12px] text-slate-700 truncate">
-                                      {className.get(String(a.classId)) || String(a.classId)}
+                                      {(a as any).className ||
+                                        className.get(String(a.classId)) ||
+                                        String(a.classId)}
                                     </div>
                                     <div className="text-[12px] text-slate-600 truncate">
                                       {roomName.get(String(a.classroomId)) || String(a.classroomId)}

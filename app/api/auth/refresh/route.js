@@ -4,11 +4,17 @@ import jwt from 'jsonwebtoken'
 import { cookies } from 'next/headers'
 import prisma from '@/lib/prisma'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
+import {
+  ACCESS_TOKEN_MAX_AGE,
+  REFRESH_TOKEN_MAX_AGE,
+  authCookieOptions,
+} from '@/lib/security/cookies'
+import { withSecureApi } from '@/lib/middleware/secureApi'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
 
-export async function POST(request) {
+export const POST = withSecureApi(async function POST(request) {
   try {
     // 1. Rate Limiting
     const rateLimitResult = rateLimiter(request, {
@@ -77,19 +83,6 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
     }
 
-    const host = request?.headers?.get?.('host') || ''
-    const hostName = String(host || '')
-      .split(':')[0]
-      .toLowerCase()
-    const cookieDomain = (() => {
-      const configured = process.env.COOKIE_DOMAIN ? String(process.env.COOKIE_DOMAIN).trim() : ''
-      if (!configured) return undefined
-      if (!hostName || hostName === 'localhost' || /^[0-9.]+$/.test(hostName)) return undefined
-      const normalized = configured.startsWith('.') ? configured.slice(1) : configured
-      if (!hostName.endsWith(normalized)) return undefined
-      return configured.startsWith('.') ? configured : `.${configured}`
-    })()
-
     // 4. Generate new tokens
     const newAccessToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role, schoolId: user.schoolId },
@@ -125,26 +118,20 @@ export async function POST(request) {
 
     const response = NextResponse.json({ success: true, accessToken: newAccessToken })
 
-    response.cookies.set('access_token', newAccessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 8 * 60 * 60,
-      path: '/',
-      ...(cookieDomain ? { domain: cookieDomain } : {}),
-    })
+    response.cookies.set(
+      'access_token',
+      newAccessToken,
+      authCookieOptions(request, { maxAgeSeconds: ACCESS_TOKEN_MAX_AGE, name: 'access_token' })
+    )
 
-    response.cookies.set('refresh_token', newRefreshTokenValue, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60,
-      path: '/',
-      ...(cookieDomain ? { domain: cookieDomain } : {}),
-    })
+    response.cookies.set(
+      'refresh_token',
+      newRefreshTokenValue,
+      authCookieOptions(request, { maxAgeSeconds: REFRESH_TOKEN_MAX_AGE, name: 'refresh_token' })
+    )
 
     return response
   } catch (error) {
     return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
   }
-}
+})

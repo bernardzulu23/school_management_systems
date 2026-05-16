@@ -64,6 +64,13 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Subjects', href: '/admin/subjects', icon: BookOpen },
         { name: 'Teacher Performance', href: '/admin/teacher-performance', icon: Target },
         { name: 'Classes', href: '/dashboard/classes', icon: GraduationCap },
+        {
+          name: 'ECZ Exam Tracking',
+          href: '/dashboard/headteacher/exam-tracking',
+          icon: BarChart3,
+        },
+        { name: 'STEM Monitoring', href: '/dashboard/headteacher/stem-monitoring', icon: Target },
+        { name: 'MOE Reports', href: '/dashboard/headteacher/moe-reports', icon: FileText },
         { name: 'AI Lesson Planner', href: '/dashboard/teacher/lesson-planner', icon: Sparkles },
         { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
         { name: 'AI Report Comments', href: '/dashboard/teacher/report-comments', icon: Sparkles },
@@ -80,6 +87,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       ],
       hod: [
         { name: 'Class Allocation', href: '/dashboard/hod/allocation', icon: BookOpen },
+        { name: 'Department Timetable', href: '/dashboard/hod/timetable', icon: Calendar },
         { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'My Classes', href: '/dashboard/classes', icon: GraduationCap },
         { name: 'Subjects', href: '/admin/subjects', icon: BookOpen },

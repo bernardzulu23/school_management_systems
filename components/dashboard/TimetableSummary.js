@@ -115,9 +115,9 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
     }
 
     if (resolvedRole === 'teacher' || resolvedRole === 'hod') {
-      const teacherId = String(user?.teacherProfile?.id || userId || '').trim()
-      if (!teacherId) return []
-      return bySeason.filter((a) => String(a?.teacherId) === teacherId)
+      const teacherUserId = String(user?.id || userId || '').trim()
+      if (!teacherUserId) return []
+      return bySeason.filter((a) => String(a?.teacherId) === teacherUserId)
     }
 
     return bySeason

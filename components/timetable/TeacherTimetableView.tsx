@@ -53,13 +53,7 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
   const assignments = props.assignments ?? storeAssignments
 
   const effectiveTeacherId =
-    props.teacherId ||
-    String(
-      auth?.user?.teacherProfile?.id ||
-        auth?.user?.teacherProfile?.teacherId ||
-        auth?.user?.id ||
-        ''
-    )
+    props.teacherId || String(auth?.user?.id || auth?.user?.teacherProfile?.userId || '')
 
   const [selectedDay, setSelectedDay] = useState('monday')
 
@@ -85,13 +79,17 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
   }, [assignments, effectiveTeacherId])
 
   const byCell = useMemo(() => {
-    const map = new Map<string, Assignment[]>()
+    const exact = new Map<string, Assignment[]>()
+    const byPeriod = new Map<string, Assignment[]>()
     for (const a of myAssignments) {
-      const k = `${a.dayOfWeek}|${a.period}|${a.startTime}|${a.endTime}`
-      if (!map.has(k)) map.set(k, [])
-      map.get(k)!.push(a)
+      const kExact = `${a.dayOfWeek}|${a.period}|${a.startTime}|${a.endTime}`
+      const kPeriod = `${a.dayOfWeek}|${a.period}`
+      if (!exact.has(kExact)) exact.set(kExact, [])
+      exact.get(kExact)!.push(a)
+      if (!byPeriod.has(kPeriod)) byPeriod.set(kPeriod, [])
+      byPeriod.get(kPeriod)!.push(a)
     }
-    return map
+    return { exact, byPeriod }
   }, [myAssignments])
 
   const className = useMemo(() => {
@@ -103,8 +101,13 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
   const subjectName = useMemo(() => {
     const map = new Map<string, string>()
     for (const s of props.subjects || []) map.set(String(s.id), s.name)
+    for (const a of myAssignments) {
+      if (a.subjectId && (a as any).subjectName) {
+        map.set(String(a.subjectId), String((a as any).subjectName))
+      }
+    }
     return map
-  }, [props.subjects])
+  }, [props.subjects, myAssignments])
 
   const roomName = useMemo(() => {
     const map = new Map<string, string>()
@@ -225,7 +228,8 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
               </div>
               {effectiveDays.map((day) => {
                 const key = `${day}|${slot.period}|${slot.startTime}|${slot.endTime}`
-                const list = byCell.get(key) || []
+                const list =
+                  byCell.exact.get(key) || byCell.byPeriod.get(`${day}|${slot.period}`) || []
                 const isFree = !slot.isBreak && list.length === 0
                 return (
                   <div
@@ -248,11 +252,12 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
                             className="rounded-xl border border-royalPurple-border/40 bg-white/70 px-3 py-2"
                           >
                             <div className="font-bold text-[13px] text-slate-900 truncate">
-                              {className.get(String(a.classId)) || 'Class'} —{' '}
-                              {subjectName.get(String(a.subjectId)) || 'Subject'}
+                              {subjectName.get(String(a.subjectId)) ||
+                                (a as any).subjectName ||
+                                'Subject'}
                             </div>
                             <div className="text-[12px] text-slate-600 truncate">
-                              {roomName.get(String(a.classroomId)) || 'Room'}
+                              {(a as any).className || className.get(String(a.classId)) || 'Class'}
                             </div>
                           </div>
                         ))}

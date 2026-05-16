@@ -157,7 +157,14 @@ export function Providers({ children }) {
   const pathname = usePathname()
   const skipSessionSync =
     typeof pathname === 'string' &&
-    (pathname === '/onboarding' ||
+    (pathname === '/' ||
+      pathname === '/register-school' ||
+      pathname.startsWith('/register-school/') ||
+      pathname === '/forgot-password' ||
+      pathname.startsWith('/forgot-password/') ||
+      pathname === '/reset-password' ||
+      pathname.startsWith('/reset-password/') ||
+      pathname === '/onboarding' ||
       pathname.startsWith('/onboarding/') ||
       pathname === '/login' ||
       pathname.startsWith('/login/'))

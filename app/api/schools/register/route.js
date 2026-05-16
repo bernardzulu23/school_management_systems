@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import crypto from 'crypto'
 import { sendSchoolVerificationEmail } from '@/config/email'
+import { withSecureApi } from '@/lib/middleware/secureApi'
 
 const RESERVED = new Set([
   'www',
@@ -57,7 +58,7 @@ function getBaseDomain(host) {
   return parts.slice(-2).join('.')
 }
 
-export async function POST(request) {
+export const POST = withSecureApi(async function POST(request) {
   if (
     String(process.env.ALLOW_DIRECT_SCHOOL_REGISTRATION || '')
       .trim()
@@ -268,4 +269,4 @@ export async function POST(request) {
     console.error(`Registration error:`, error)
     return NextResponse.json({ success: false, error: 'Registration failed' }, { status: 500 })
   }
-}
+})

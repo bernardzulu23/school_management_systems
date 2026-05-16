@@ -3,8 +3,9 @@ import { NextResponse } from 'next/server'
 import { authMiddleware } from '@/lib/middleware/auth'
 import prisma from '@/lib/prisma'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { withSecureApi } from '@/lib/middleware/secureApi'
 
-export async function GET(request) {
+export const GET = withSecureApi(async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -65,4 +66,4 @@ export async function GET(request) {
       hodProfile: dbUser.hodProfile || undefined,
     },
   })
-}
+})

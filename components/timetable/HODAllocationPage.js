@@ -223,7 +223,14 @@ export default function HODAllocationPage() {
         const res = await fetch(`/api/allocations/${editingId}/update`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ teacherId, classes, subject, periodConfig }),
+          body: JSON.stringify({
+            teacherId,
+            classes,
+            subject,
+            periodConfig,
+            term,
+            academicYear,
+          }),
         })
         const data = await res.json().catch(() => ({}))
         if (!res.ok) throw new Error(data?.message || data?.error || 'Failed to update allocation')
@@ -232,7 +239,15 @@ export default function HODAllocationPage() {
         const res = await fetch('/api/allocations/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ departmentId, teacherId, classes, subject, periodConfig }),
+          body: JSON.stringify({
+            departmentId,
+            teacherId,
+            classes,
+            subject,
+            periodConfig,
+            term,
+            academicYear,
+          }),
         })
         const data = await res.json().catch(() => ({}))
         if (!res.ok) throw new Error(data?.message || data?.error || 'Failed to create allocation')

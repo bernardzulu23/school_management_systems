@@ -19,11 +19,22 @@ export async function PUT(request, { params }) {
   if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
 
   const body = await request.json().catch(() => ({}))
-  const title = body?.title !== undefined ? String(body.title || '').trim() : undefined
-  const subject = body?.subject !== undefined ? String(body.subject || '').trim() : undefined
-  const difficulty =
-    body?.difficulty !== undefined ? String(body.difficulty || '').trim() : undefined
-  const content = body?.content !== undefined ? body.content : undefined
+
+  const bank = await prisma.questionBank.findFirst({ where: { id, schoolId } })
+  if (bank) {
+    const questions = body?.questions ?? body?.content?.questions
+    const updated = await prisma.questionBank.update({
+      where: { id },
+      data: {
+        ...(body?.title !== undefined ? { title: String(body.title).trim() } : {}),
+        ...(body?.subject !== undefined ? { subjectName: String(body.subject).trim() } : {}),
+        ...(body?.difficulty !== undefined ? { difficulty: String(body.difficulty).trim() } : {}),
+        ...(questions !== undefined ? { questions } : {}),
+        ...(body?.formLevel !== undefined ? { formLevel: parseInt(body.formLevel, 10) } : {}),
+      },
+    })
+    return NextResponse.json({ success: true, data: updated })
+  }
 
   const existing = await prisma.game.findFirst({
     where: { id, schoolId, type: 'question_bank' },
@@ -33,25 +44,14 @@ export async function PUT(request, { params }) {
   const updated = await prisma.game.update({
     where: { id },
     data: {
-      ...(title !== undefined ? { title } : {}),
-      ...(subject !== undefined ? { subject } : {}),
-      ...(difficulty !== undefined ? { difficulty } : {}),
-      ...(content !== undefined ? { content } : {}),
+      ...(body?.title !== undefined ? { title: String(body.title).trim() } : {}),
+      ...(body?.subject !== undefined ? { subject: String(body.subject).trim() } : {}),
+      ...(body?.difficulty !== undefined ? { difficulty: String(body.difficulty).trim() } : {}),
+      ...(body?.content !== undefined ? { content: body.content } : {}),
     },
   })
 
-  return NextResponse.json({
-    success: true,
-    data: {
-      id: updated.id,
-      title: updated.title,
-      subject: updated.subject,
-      difficulty: updated.difficulty,
-      content: updated.content,
-      createdAt: updated.createdAt,
-      updatedAt: updated.updatedAt,
-    },
-  })
+  return NextResponse.json({ success: true, data: updated })
 }
 
 export async function DELETE(request, { params }) {
@@ -68,6 +68,15 @@ export async function DELETE(request, { params }) {
 
   const id = String(routeParams?.id || '').trim()
   if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+
+  const bank = await prisma.questionBank.findFirst({
+    where: { id, schoolId },
+    select: { id: true },
+  })
+  if (bank) {
+    await prisma.questionBank.delete({ where: { id } })
+    return NextResponse.json({ success: true })
+  }
 
   const existing = await prisma.game.findFirst({
     where: { id, schoolId, type: 'question_bank' },

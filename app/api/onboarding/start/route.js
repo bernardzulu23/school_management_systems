@@ -135,12 +135,42 @@ export async function POST(request) {
       const verifyUrl = `https://${baseDomain}/api/onboarding/verify/${verificationToken}`
       const sent = await sendOnboardingVerificationEmail({ to: email, verifyUrl })
       if (!sent) {
+        if (process.env.DEV_ONBOARDING_SKIP_EMAIL === 'true') {
+          await prisma.schoolRegistration.update({
+            where: { id: reg.id },
+            data: {
+              isVerified: true,
+              verificationToken: null,
+              verificationExpiry: null,
+            },
+          })
+          const onboardingToken = signOnboardingToken(reg.id)
+          const response = NextResponse.json({
+            success: true,
+            requiresVerification: false,
+            devAutoVerified: true,
+            requiresPayment: !isTrial,
+            nextStep: !isTrial ? 'plan' : 'setup',
+          })
+          response.cookies.set('onboarding_token', onboardingToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax',
+            maxAge: 2 * 24 * 60 * 60,
+            path: '/',
+          })
+          return response
+        }
         return NextResponse.json(
           { error: 'Email service is not configured. Contact support.' },
           { status: 502 }
         )
       }
-      return NextResponse.json({ success: true, requiresVerification: true })
+      return NextResponse.json({
+        success: true,
+        requiresVerification: true,
+        ...(isTrial ? { trialIntent: true } : {}),
+      })
     }
 
     const onboardingToken = signOnboardingToken(reg.id)

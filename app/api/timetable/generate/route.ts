@@ -2,6 +2,13 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
+import {
+  ensureTimetableConfig,
+  normalizeWorkingDays,
+  parseBreakSlots,
+  timeToMin,
+  minToTime,
+} from '@/lib/timetable/timeSlotsFromConfig'
 
 export async function GET(req: NextRequest) {
   const schoolId = await getSchoolIdFromRequest(req as any)
@@ -22,23 +29,20 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const role = String(user.role || '').toLowerCase()
-  if (!['headteacher', 'administrator', 'admin'].includes(role)) {
-    return NextResponse.json({ error: 'Headteacher only' }, { status: 403 })
+  if (!['headteacher', 'administrator', 'admin', 'superadmin'].includes(role)) {
+    return NextResponse.json(
+      { error: 'Only school administrators can generate the master timetable' },
+      { status: 403 }
+    )
   }
 
   const body = await req.json().catch(() => ({}))
-  const term = String((body as any)?.term || '').trim()
-  const academicYear = String((body as any)?.academicYear || '').trim()
+  const term = String((body as any)?.term || 'Term 1').trim()
+  const academicYear = String((body as any)?.academicYear || new Date().getFullYear()).trim()
   const departments = (body as any)?.departments
   const replaceExisting = (body as any)?.replaceExisting !== false
 
-  const config = await prisma.timetableConfig.findUnique({ where: { schoolId } })
-  if (!config) {
-    return NextResponse.json(
-      { error: 'No timetable configuration found. Please set up school hours and breaks first.' },
-      { status: 400 }
-    )
-  }
+  const config = await ensureTimetableConfig(prisma, schoolId)
 
   const allocationWhere: any = {
     schoolId,
@@ -69,16 +73,8 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const breakSlots: any[] = Array.isArray(config.breakSlots)
-    ? (config.breakSlots as any[])
-    : JSON.parse(String((config as any).breakSlots || '[]'))
-  const workingDays: string[] = (config as any).workingDays || [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-  ]
+  const breakSlots = parseBreakSlots((config as any).breakSlots)
+  const workingDays = normalizeWorkingDays((config as any).workingDays)
   const singleMin = Number((config as any).singleDuration || 40)
 
   const daySlots = buildDaySlots(
@@ -153,17 +149,6 @@ export async function POST(req: NextRequest) {
       classes: [...new Set(saved.map((e: any) => e.classId))].length,
     },
   })
-}
-
-function timeToMin(t: string) {
-  const [h, m] = String(t).split(':').map(Number)
-  return h * 60 + m
-}
-
-function minToTime(min: number) {
-  const h = Math.floor(min / 60)
-  const m = min % 60
-  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
 }
 
 function buildDaySlots(

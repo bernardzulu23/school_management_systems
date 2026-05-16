@@ -46,6 +46,8 @@ export const POST = withErrorHandler(async function POST(request) {
   const subject = normalizeString(body?.subject)
   const classes = normalizeClasses(body?.classes)
   const periodConfig = body?.periodConfig ?? null
+  const term = normalizeString(body?.term) || 'Term 1'
+  const academicYear = normalizeString(body?.academicYear) || String(new Date().getFullYear())
 
   if (!departmentId) throw new ApiError('departmentId is required', 400)
   if (!teacherId) throw new ApiError('teacherId is required', 400)
@@ -77,7 +79,7 @@ export const POST = withErrorHandler(async function POST(request) {
       schoolId,
       departmentId,
       status: 'DRAFT',
-      allocationData: { teacherId, classes, subject, periodConfig },
+      allocationData: { teacherId, classes, subject, periodConfig, term, academicYear },
       createdByUserId: auth.user.id,
     },
     select: { id: true, status: true },

@@ -623,6 +623,14 @@ export default function TeacherAssessmentsPage() {
                 </Button>
                 <Button
                   variant="outline"
+                  className="w-full justify-start bg-royalPurple-pill/30 border-royalPurple-primary/30"
+                  onClick={() => router.push('/dashboard/teacher/assessments/ecz')}
+                >
+                  <ClipboardList className="h-4 w-4 mr-2" />
+                  ECZ SBA Hub (Zambia)
+                </Button>
+                <Button
+                  variant="outline"
                   className="w-full justify-start"
                   onClick={() => router.push('/dashboard/teacher/assessments/question-bank')}
                 >

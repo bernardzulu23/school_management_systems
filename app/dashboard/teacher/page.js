@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/Button'
 // import TeacherAssignments from '@/components/dashboard/TeacherAssignments'
 import { api } from '@/lib/api'
 import { TeacherTimetableView } from '@/components/timetable/TeacherTimetableView'
+import { useSchoolTimeSlots } from '@/lib/timetable/useSchoolTimeSlots'
 import {
   Users,
   BookOpen,
@@ -111,7 +112,7 @@ export default function TeacherDashboard() {
   const router = useRouter()
   // Get current user data from auth context
   const { user: currentUser, isAuthenticated, logout, syncSession } = useAuth()
-  const timeSlots = useMemo(() => genTimeSlots(), [])
+  const { timeSlots } = useSchoolTimeSlots()
   const [timetableClasses, setTimetableClasses] = useState([])
   const [timetableClassrooms, setTimetableClassrooms] = useState([])
   const [timetableMobile, setTimetableMobile] = useState(false)
