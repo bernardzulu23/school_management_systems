@@ -12,6 +12,7 @@ import FormField from '@/components/forms/FormField'
 import { Button } from '@/components/ui/Button'
 import { setTopLoading, startTopLoading, stopTopLoading } from '@/lib/uiProgress'
 import { SchoolLogo } from '@/components/SchoolLogo'
+import LocalDevLoginHint from '@/components/dev/LocalDevLoginHint'
 
 function LoginPageContent() {
   const { school, isLoading: isSchoolLoading } = useSchool()
@@ -246,6 +247,8 @@ function LoginPageContent() {
             {isLoading ? `Signing in... ${loginPercent}%` : 'Sign In'}
           </Button>
         </form>
+
+        <LocalDevLoginHint />
 
         <footer className="mt-6 text-center">
           <button

@@ -5,7 +5,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
-import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
+import { getHodProfile, resolveAllocationDepartmentId } from '@/lib/utils/hodDepartmentScope'
 
 function normalizeString(v) {
   return String(v || '').trim()
@@ -34,14 +34,11 @@ export const POST = withErrorHandler(async function POST(request) {
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const hodProfile = await prisma.headOfDepartment.findFirst({
-    where: { userId: auth.user.id, schoolId },
-    select: { departmentId: true, department: true },
-  })
+  const hodProfile = await getHodProfile(prisma, auth.user.id, schoolId)
   if (!hodProfile && !isAdminOrHead) throw new ApiError('HOD profile not found', 404)
 
   const body = await request.json().catch(() => ({}))
-  const departmentId = normalizeString(body?.departmentId)
+  const requestedDepartmentId = normalizeString(body?.departmentId)
   const teacherId = normalizeString(body?.teacherId)
   const subject = normalizeString(body?.subject)
   const classes = normalizeClasses(body?.classes)
@@ -49,30 +46,19 @@ export const POST = withErrorHandler(async function POST(request) {
   const term = normalizeString(body?.term) || 'Term 1'
   const academicYear = normalizeString(body?.academicYear) || String(new Date().getFullYear())
 
-  if (!departmentId) throw new ApiError('departmentId is required', 400)
+  const deptResult = await resolveAllocationDepartmentId({
+    prisma,
+    schoolId,
+    isAdminOrHead,
+    hodProfile,
+    requestedDepartmentId,
+  })
+  if (deptResult.error) throw new ApiError(deptResult.error, deptResult.status || 400)
+  const departmentId = deptResult.departmentId
+
   if (!teacherId) throw new ApiError('teacherId is required', 400)
   if (!subject) throw new ApiError('subject is required', 400)
   if (classes.length === 0) throw new ApiError('classes is required', 400)
-
-  const resolved = hodProfile
-    ? await resolveDepartmentScope({
-        prisma,
-        schoolId,
-        departmentId: hodProfile.departmentId,
-        departmentName: hodProfile.department,
-      })
-    : { departmentIds: [] }
-  const hasScopedDepartments = resolved.departmentIds.length > 0
-  if (!isAdminOrHead && hasScopedDepartments && !resolved.departmentIds.includes(departmentId)) {
-    throw new ApiError('You can only create allocations for your department', 403)
-  }
-  if (!hasScopedDepartments) {
-    const selectedDepartment = await prisma.department.findFirst({
-      where: { id: departmentId, schoolId },
-      select: { id: true },
-    })
-    if (!selectedDepartment) throw new ApiError('Invalid department for this school', 400)
-  }
 
   const allocation = await prisma.departmentAllocation.create({
     data: {

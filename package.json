@@ -36,6 +36,7 @@
     "format": "prettier --write .",
     "prepare": "husky",
     "seed": "node prisma/seed.js",
+    "seed:local": "node prisma/seed-local-dev.js",
     "seed:schools": "node prisma/seed-schools.js",
     "seed:timeslots": "ts-node --transpile-only --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" prisma/seedTimeSlots.ts",
     "seed:schools:docker": "docker compose exec -T web npm run seed:schools",

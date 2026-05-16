@@ -2,6 +2,7 @@ const { PrismaClient } = require('@prisma/client')
 const { Pool } = require('pg')
 const { PrismaPg } = require('@prisma/adapter-pg')
 const { hash } = require('bcryptjs')
+const { getLocalDevPassword } = require('../lib/dev/localTestAccounts')
 
 if (String(process.env.SEED_REMOTE_DB || '').toLowerCase() === 'true') {
   process.env.DATABASE_URL =
@@ -41,7 +42,7 @@ async function main() {
   console.log(`✅ Created school: ${school1.name} (${school1.subdomain})`)
 
   // Create admin user for school 1
-  const hashedPassword = await hash('Admin@123', 12) // Change this password!
+  const hashedPassword = await hash(getLocalDevPassword(), 12)
 
   const admin1 = await prisma.user.upsert({
     where: {
@@ -50,7 +51,7 @@ async function main() {
         email: 'admin@demo-school.edu',
       },
     },
-    update: {},
+    update: { password: hashedPassword },
     create: {
       schoolId: school1.id,
       email: 'admin@demo-school.edu',
@@ -94,7 +95,7 @@ async function main() {
         email: 'admin@zambian-school.edu',
       },
     },
-    update: {},
+    update: { password: hashedPassword },
     create: {
       schoolId: school2.id,
       email: 'admin@zambian-school.edu',
@@ -140,7 +141,7 @@ async function main() {
         email: 'admin@ndakedaysecondaryschool.edu',
       },
     },
-    update: {},
+    update: { password: hashedPassword },
     create: {
       schoolId: school3.id,
       email: 'admin@ndakedaysecondaryschool.edu',
@@ -184,7 +185,7 @@ async function main() {
         email: 'admin@kalambakuwadaysecondaryschool.edu',
       },
     },
-    update: {},
+    update: { password: hashedPassword },
     create: {
       schoolId: school4.id,
       email: 'admin@kalambakuwadaysecondaryschool.edu',
@@ -201,17 +202,19 @@ async function main() {
   console.log('\n📋 Schools created:')
   console.log(`1. ${school1.name}`)
   console.log(`   URL: https://${school1.subdomain}.bluepeacktechnologies.com`)
-  console.log(`   Admin: ${admin1.email} / Admin@123`)
+  console.log(`   Admin: ${admin1.email} / (LOCAL_DEV_PASSWORD)`)
   console.log(`\n2. ${school2.name}`)
   console.log(`   URL: https://${school2.subdomain}.bluepeacktechnologies.com`)
-  console.log(`   Admin: ${admin2.email} / Admin@123`)
+  console.log(`   Admin: ${admin2.email} / (LOCAL_DEV_PASSWORD)`)
   console.log(`\n3. ${school3.name}`)
   console.log(`   URL: https://${school3.subdomain}.bluepeacktechnologies.com`)
-  console.log(`   Admin: ${admin3.email} / Admin@123`)
+  console.log(`   Admin: ${admin3.email} / (LOCAL_DEV_PASSWORD)`)
   console.log(`\n4. ${school4.name}`)
   console.log(`   URL: https://${school4.subdomain}.bluepeacktechnologies.com`)
-  console.log(`   Admin: ${admin4.email} / Admin@123`)
-  console.log('\n⚠️  Remember to change the default passwords!')
+  console.log(`   Admin: ${admin4.email} / (LOCAL_DEV_PASSWORD)`)
+  const { printLocalDevCredentials, getLocalDevPassword } = require('../lib/dev/localTestAccounts')
+  console.log(`\n   Legacy demo admins use password: ${getLocalDevPassword()}`)
+  printLocalDevCredentials()
 }
 
 main()

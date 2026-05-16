@@ -63,9 +63,10 @@ export async function POST(req) {
     where: { id: user.id },
     select: { name: true, email: true },
   })
-  const senderName = String(sender?.name || user?.name || sender?.email || user?.email || 'Staff')
-    .trim()
-    .slice(0, 120)
+  const senderName =
+    [sender?.name, sender?.email, user?.email, user?.name]
+      .map((v) => String(v || '').trim())
+      .find(Boolean) || 'HOD'
 
   const department = allocations[0]?.hod?.hodProfile?.department || senderName
   const totalPeriods = allocations.reduce((s, a) => s + a.periodsPerWeek, 0)

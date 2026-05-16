@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { DEPARTMENTS } from '@/lib/constants'
+import { getHodProfile, resolveHodDepartmentIds } from '@/lib/utils/hodDepartmentScope'
 
 export async function GET(request) {
   const auth = authMiddleware(request)
@@ -26,9 +27,20 @@ export async function GET(request) {
   })
 
   const order = new Map(DEPARTMENTS.map((name, idx) => [name, idx]))
-  const sorted = departments
+  let sorted = departments
     .slice()
     .sort((a, b) => (order.get(a.name) ?? 999) - (order.get(b.name) ?? 999))
+
+  const isAdminOrHead = roleCheck(auth.user, ['ADMIN', 'headteacher'])
+  const isHod = roleCheck(auth.user, ['HOD', 'hod'])
+  if (isHod && !isAdminOrHead) {
+    const hodProfile = await getHodProfile(prisma, auth.user.id, schoolId)
+    const allowedIds = await resolveHodDepartmentIds(prisma, schoolId, hodProfile)
+    if (allowedIds.length > 0) {
+      const allowed = new Set(allowedIds)
+      sorted = sorted.filter((d) => allowed.has(String(d.id)))
+    }
+  }
 
   return NextResponse.json({ success: true, data: sorted })
 }

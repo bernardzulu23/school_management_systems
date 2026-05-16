@@ -100,9 +100,9 @@ export default function HODAllocationPage() {
           cache: 'no-store',
           credentials: 'include',
         }),
-        fetch('/api/subjects'),
-        fetch('/api/departments'),
-        fetch('/api/allocations/my-department', { cache: 'no-store' }),
+        fetch('/api/subjects', { credentials: 'include', cache: 'no-store' }),
+        fetch('/api/departments', { credentials: 'include', cache: 'no-store' }),
+        fetch('/api/allocations/my-department', { cache: 'no-store', credentials: 'include' }),
       ])
       const safeJson = async (res) => {
         try {
@@ -165,8 +165,13 @@ export default function HODAllocationPage() {
         throw new Error(errors[0])
       }
 
-      if (!form.departmentId && deptList.length) {
-        setForm((f) => ({ ...f, departmentId: String(deptList[0]?.id || '') }))
+      if (deptList.length) {
+        setForm((f) => {
+          const current = String(f.departmentId || '')
+          const stillValid = deptList.some((d) => String(d.id) === current)
+          if (stillValid) return f
+          return { ...f, departmentId: String(deptList[0]?.id || '') }
+        })
       }
     } catch (err) {
       toast.error(err?.message || 'Failed to load data')
@@ -223,6 +228,7 @@ export default function HODAllocationPage() {
         const res = await fetch(`/api/allocations/${editingId}/update`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
           body: JSON.stringify({
             teacherId,
             classes,
@@ -239,6 +245,7 @@ export default function HODAllocationPage() {
         const res = await fetch('/api/allocations/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
           body: JSON.stringify({
             departmentId,
             teacherId,
