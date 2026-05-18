@@ -9,9 +9,11 @@ import { Button } from '@/components/ui/Button'
 import { ArrowLeft, ClipboardList, Plus, Save, Trash2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { StaffRouteGuard } from '@/components/auth/StaffRouteGuard'
 
 export default function TeacherQuestionBankPage() {
   const [assignments, setAssignments] = useState([])
+  const [subjectOptions, setSubjectOptions] = useState([])
   const [subject, setSubject] = useState('')
   const [sets, setSets] = useState([])
   const [selectedId, setSelectedId] = useState('')
@@ -45,6 +47,31 @@ export default function TeacherQuestionBankPage() {
     }
     loadAssignments()
   }, [])
+
+  useEffect(() => {
+    async function loadSubjectOptions() {
+      const fromAssignments = [
+        ...new Set(assignments.map((a) => String(a.subjectName || '').trim()).filter(Boolean)),
+      ]
+      if (fromAssignments.length) {
+        setSubjectOptions(fromAssignments)
+        setSubject((prev) => prev || fromAssignments[0])
+        return
+      }
+      try {
+        const res = await fetch('/api/ecz/subjects/seed', { credentials: 'include' })
+        const json = await res.json().catch(() => ({}))
+        const names = (Array.isArray(json?.data) ? json.data : [])
+          .map((s) => String(s.name || '').trim())
+          .filter(Boolean)
+        setSubjectOptions(names)
+        if (names.length) setSubject((prev) => prev || names[0])
+      } catch {
+        setSubjectOptions([])
+      }
+    }
+    loadSubjectOptions()
+  }, [assignments])
 
   useEffect(() => {
     async function loadSets() {
@@ -189,228 +216,234 @@ export default function TeacherQuestionBankPage() {
   }
 
   return (
-    <DashboardLayout userRole="teacher" title="Question Bank">
-      <div className="space-y-6">
-        <Button asChild variant="outline">
-          <Link href="/dashboard/teacher/assessments">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Assessments
-          </Link>
-        </Button>
+    <StaffRouteGuard>
+      <DashboardLayout userRole="teacher" title="Question Bank">
+        <div className="space-y-6">
+          <Button asChild variant="outline">
+            <Link href="/dashboard/teacher/assessments">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Assessments
+            </Link>
+          </Button>
 
-        <Card variant="glass">
-          <CardHeader>
-            <CardTitle className="text-royalPurple-text1 flex items-center gap-2">
-              <ClipboardList className="h-5 w-5" />
-              Question Bank
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label>Subject</Label>
-                <select
-                  className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                >
-                  {assignments.map((a) => (
-                    <option key={a.id} value={a.subjectName}>
-                      {a.subjectName}
-                    </option>
-                  ))}
-                </select>
+          <Card variant="glass">
+            <CardHeader>
+              <CardTitle className="text-royalPurple-text1 flex items-center gap-2">
+                <ClipboardList className="h-5 w-5" />
+                Question Bank
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label>Subject</Label>
+                  <select
+                    className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                  >
+                    {subjectOptions.length === 0 ? (
+                      <option value="">No subjects — sync ECZ subjects or add assignments</option>
+                    ) : (
+                      subjectOptions.map((name) => (
+                        <option key={name} value={name}>
+                          {name}
+                        </option>
+                      ))
+                    )}
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>New Set Title</Label>
+                  <Input value={newSetTitle} onChange={(e) => setNewSetTitle(e.target.value)} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Grade (optional)</Label>
+                  <Input value={newSetGrade} onChange={(e) => setNewSetGrade(e.target.value)} />
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label>New Set Title</Label>
-                <Input value={newSetTitle} onChange={(e) => setNewSetTitle(e.target.value)} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Grade (optional)</Label>
-                <Input value={newSetGrade} onChange={(e) => setNewSetGrade(e.target.value)} />
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Button onClick={createSet} disabled={creating || !newSetTitle.trim() || !subject}>
-                <Plus className="h-4 w-4 mr-2" />
-                {creating ? 'Creating...' : 'Create Set'}
-              </Button>
-              {selectedSet ? (
-                <Button variant="outline" onClick={deleteSet}>
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Delete Set
+              <div className="flex items-center gap-2">
+                <Button onClick={createSet} disabled={creating || !newSetTitle.trim() || !subject}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  {creating ? 'Creating...' : 'Create Set'}
                 </Button>
-              ) : null}
-            </div>
+                {selectedSet ? (
+                  <Button variant="outline" onClick={deleteSet}>
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete Set
+                  </Button>
+                ) : null}
+              </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <Card className="lg:col-span-1">
-                <CardHeader>
-                  <CardTitle className="text-sm">Sets</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {loading ? (
-                    <p className="text-royalPurple-text2 text-sm">Loading...</p>
-                  ) : sets.length === 0 ? (
-                    <p className="text-royalPurple-text2 text-sm">No question sets yet.</p>
-                  ) : (
-                    <div className="space-y-2">
-                      {sets.map((s) => (
-                        <button
-                          key={s.id}
-                          type="button"
-                          onClick={() => setSelectedId(String(s.id))}
-                          className={`w-full text-left p-3 rounded-lg border ${
-                            String(s.id) === String(selectedId)
-                              ? 'border-royalPurple-accent bg-royalPurple-muted/60'
-                              : 'border-royalPurple-border bg-royalPurple-card/60'
-                          }`}
-                        >
-                          <div className="text-royalPurple-text1 font-semibold truncate">
-                            {s.title}
-                          </div>
-                          <div className="text-xs text-royalPurple-text3">
-                            {s.questionCount || 0} questions
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card className="lg:col-span-2">
-                <CardHeader>
-                  <CardTitle className="text-sm">
-                    {selectedSet ? selectedSet.title : 'Select a set'}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {!selectedSet ? (
-                    <p className="text-royalPurple-text2 text-sm">
-                      Create or select a set to manage questions.
-                    </p>
-                  ) : (
-                    <>
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label>Question Type</Label>
-                            <select
-                              className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
-                              value={newQuestion.type}
-                              onChange={(e) =>
-                                setNewQuestion((p) => ({ ...p, type: e.target.value }))
-                              }
-                            >
-                              <option value="mcq">Multiple Choice</option>
-                              <option value="short">Short Answer</option>
-                            </select>
-                          </div>
-                          <div className="space-y-2">
-                            <Label>Marks</Label>
-                            <Input
-                              type="number"
-                              min={1}
-                              value={newQuestion.marks}
-                              onChange={(e) =>
-                                setNewQuestion((p) => ({ ...p, marks: Number(e.target.value) }))
-                              }
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label>Question</Label>
-                          <Input
-                            value={newQuestion.question}
-                            onChange={(e) =>
-                              setNewQuestion((p) => ({ ...p, question: e.target.value }))
-                            }
-                          />
-                        </div>
-
-                        {newQuestion.type === 'mcq' ? (
-                          <div className="space-y-2">
-                            <Label>Options (one per line)</Label>
-                            <textarea
-                              className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1 min-h-[100px]"
-                              value={newQuestion.options}
-                              onChange={(e) =>
-                                setNewQuestion((p) => ({ ...p, options: e.target.value }))
-                              }
-                            />
-                          </div>
-                        ) : null}
-
-                        <div className="space-y-2">
-                          <Label>Answer</Label>
-                          <Input
-                            value={newQuestion.answer}
-                            onChange={(e) =>
-                              setNewQuestion((p) => ({ ...p, answer: e.target.value }))
-                            }
-                          />
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <Button
-                            onClick={addQuestion}
-                            disabled={saving || !newQuestion.question.trim()}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <Card className="lg:col-span-1">
+                  <CardHeader>
+                    <CardTitle className="text-sm">Sets</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {loading ? (
+                      <p className="text-royalPurple-text2 text-sm">Loading...</p>
+                    ) : sets.length === 0 ? (
+                      <p className="text-royalPurple-text2 text-sm">No question sets yet.</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {sets.map((s) => (
+                          <button
+                            key={s.id}
+                            type="button"
+                            onClick={() => setSelectedId(String(s.id))}
+                            className={`w-full text-left p-3 rounded-lg border ${
+                              String(s.id) === String(selectedId)
+                                ? 'border-royalPurple-accent bg-royalPurple-muted/60'
+                                : 'border-royalPurple-border bg-royalPurple-card/60'
+                            }`}
                           >
-                            <Save className="h-4 w-4 mr-2" />
-                            {saving ? 'Saving...' : 'Add Question'}
-                          </Button>
-                        </div>
+                            <div className="text-royalPurple-text1 font-semibold truncate">
+                              {s.title}
+                            </div>
+                            <div className="text-xs text-royalPurple-text3">
+                              {s.questionCount || 0} questions
+                            </div>
+                          </button>
+                        ))}
                       </div>
+                    )}
+                  </CardContent>
+                </Card>
 
-                      <div className="space-y-3">
-                        <div className="text-sm font-semibold text-royalPurple-text1">
-                          Questions
-                        </div>
-                        {selectedQuestions.length === 0 ? (
-                          <p className="text-royalPurple-text2 text-sm">No questions yet.</p>
-                        ) : (
-                          <div className="space-y-2">
-                            {selectedQuestions.map((q, i) => (
-                              <div
-                                key={`${selectedSet.id}:${i}`}
-                                className="p-3 rounded-lg border border-royalPurple-border bg-royalPurple-card/60"
+                <Card className="lg:col-span-2">
+                  <CardHeader>
+                    <CardTitle className="text-sm">
+                      {selectedSet ? selectedSet.title : 'Select a set'}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {!selectedSet ? (
+                      <p className="text-royalPurple-text2 text-sm">
+                        Create or select a set to manage questions.
+                      </p>
+                    ) : (
+                      <>
+                        <div className="space-y-3">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label>Question Type</Label>
+                              <select
+                                className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
+                                value={newQuestion.type}
+                                onChange={(e) =>
+                                  setNewQuestion((p) => ({ ...p, type: e.target.value }))
+                                }
                               >
-                                <div className="flex items-start justify-between gap-3">
-                                  <div className="min-w-0">
-                                    <div className="text-royalPurple-text1 font-medium truncate">
-                                      {i + 1}. {q.question}
-                                    </div>
-                                    <div className="text-xs text-royalPurple-text3">
-                                      {q.type} • {q.marks || 1} marks
-                                    </div>
-                                  </div>
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => removeQuestion(i)}
-                                    disabled={saving}
-                                  >
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </div>
-                              </div>
-                            ))}
+                                <option value="mcq">Multiple Choice</option>
+                                <option value="short">Short Answer</option>
+                              </select>
+                            </div>
+                            <div className="space-y-2">
+                              <Label>Marks</Label>
+                              <Input
+                                type="number"
+                                min={1}
+                                value={newQuestion.marks}
+                                onChange={(e) =>
+                                  setNewQuestion((p) => ({ ...p, marks: Number(e.target.value) }))
+                                }
+                              />
+                            </div>
                           </div>
-                        )}
-                      </div>
-                    </>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </DashboardLayout>
+
+                          <div className="space-y-2">
+                            <Label>Question</Label>
+                            <Input
+                              value={newQuestion.question}
+                              onChange={(e) =>
+                                setNewQuestion((p) => ({ ...p, question: e.target.value }))
+                              }
+                            />
+                          </div>
+
+                          {newQuestion.type === 'mcq' ? (
+                            <div className="space-y-2">
+                              <Label>Options (one per line)</Label>
+                              <textarea
+                                className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1 min-h-[100px]"
+                                value={newQuestion.options}
+                                onChange={(e) =>
+                                  setNewQuestion((p) => ({ ...p, options: e.target.value }))
+                                }
+                              />
+                            </div>
+                          ) : null}
+
+                          <div className="space-y-2">
+                            <Label>Answer</Label>
+                            <Input
+                              value={newQuestion.answer}
+                              onChange={(e) =>
+                                setNewQuestion((p) => ({ ...p, answer: e.target.value }))
+                              }
+                            />
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <Button
+                              onClick={addQuestion}
+                              disabled={saving || !newQuestion.question.trim()}
+                            >
+                              <Save className="h-4 w-4 mr-2" />
+                              {saving ? 'Saving...' : 'Add Question'}
+                            </Button>
+                          </div>
+                        </div>
+
+                        <div className="space-y-3">
+                          <div className="text-sm font-semibold text-royalPurple-text1">
+                            Questions
+                          </div>
+                          {selectedQuestions.length === 0 ? (
+                            <p className="text-royalPurple-text2 text-sm">No questions yet.</p>
+                          ) : (
+                            <div className="space-y-2">
+                              {selectedQuestions.map((q, i) => (
+                                <div
+                                  key={`${selectedSet.id}:${i}`}
+                                  className="p-3 rounded-lg border border-royalPurple-border bg-royalPurple-card/60"
+                                >
+                                  <div className="flex items-start justify-between gap-3">
+                                    <div className="min-w-0">
+                                      <div className="text-royalPurple-text1 font-medium truncate">
+                                        {i + 1}. {q.question}
+                                      </div>
+                                      <div className="text-xs text-royalPurple-text3">
+                                        {q.type} • {q.marks || 1} marks
+                                      </div>
+                                    </div>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => removeQuestion(i)}
+                                      disabled={saving}
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </DashboardLayout>
+    </StaffRouteGuard>
   )
 }

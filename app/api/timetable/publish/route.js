@@ -2,15 +2,15 @@ export const dynamic = 'force-dynamic'
 // app/api/timetable/publish/route.js
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 
 export async function POST(req) {
-  const schoolId = await getSchoolIdFromRequest(req)
-  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
-
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const schoolId = await resolveSchoolId(req, user)
+  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const role = String(user.role || '').toLowerCase()
   if (!['headteacher', 'administrator', 'admin', 'superadmin'].includes(role)) {

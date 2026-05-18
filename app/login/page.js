@@ -250,6 +250,12 @@ function LoginPageContent() {
 
         <LocalDevLoginHint />
 
+        <p className="mt-4 text-center text-xs text-ink/50">
+          <Link href="/platform/login" className="text-accent hover:underline">
+            Developer / platform admin
+          </Link>
+        </p>
+
         <footer className="mt-6 text-center">
           <button
             type="button"

@@ -23,12 +23,20 @@ export default function AssessmentsPage() {
             <h1 className="text-2xl font-bold text-royalPurple-text1">My Assessments</h1>
             <p className="text-royalPurple-text2">Create and manage your assessments and tests</p>
           </div>
-          <Link href="/dashboard/assessments/create">
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Create Assessment
-            </Button>
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <Link href="/dashboard/teacher/assessments/ecz">
+              <Button variant="outline">
+                <ClipboardList className="h-4 w-4 mr-2" />
+                ECZ SBA Hub
+              </Button>
+            </Link>
+            <Link href="/dashboard/assessments/create">
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                Create Assessment
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Assessment Stats */}

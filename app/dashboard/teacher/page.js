@@ -51,7 +51,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { SCHOOL_SUBJECTS, getSubjectsByIds } from '@/data/subjects'
-import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeachingHub'
+import AdvancedTeachingTools from '@/components/teaching/AdvancedTeachingTools'
 import { percentTextClass } from '@/lib/utils/percentColor'
 // Temporarily commented out to isolate error
 // import {
@@ -198,7 +198,6 @@ export default function TeacherDashboard() {
   const [behaviorManagement, setBehaviorManagement] = useState([])
   const [professionalCommunity, setProfessionalCommunity] = useState([])
   const [mentorshipPrograms, setMentorshipPrograms] = useState([])
-  const [activeAdvancedTab, setActiveAdvancedTab] = useState('creative-teaching')
 
   // Enhanced dashboard statistics
   const [dashboardStats, setDashboardStats] = useState({
@@ -370,120 +369,6 @@ export default function TeacherDashboard() {
           .startsWith('m')
       ? 'Mr'
       : ''
-
-  // Placeholder functions for remaining features
-  const renderAssessmentBuilder = () => (
-    <div className="space-y-6">
-      <div className="text-center">
-        <PenTool className="h-12 w-12 mx-auto text-royalPurple-pillTx mb-4" />
-        <h3 className="text-xl font-bold text-royalPurple-text1 mb-2">Assessment Tools</h3>
-        <p className="text-royalPurple-text2">
-          Create assessments, manage questions, and track performance.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Link href="/dashboard/teacher/assessments?create=1" className="block">
-          <Button className="w-full justify-start">
-            <Plus className="h-4 w-4 mr-2" />
-            Create New Assessment
-          </Button>
-        </Link>
-        <Link href="/dashboard/teacher/assessments/question-bank" className="block">
-          <Button variant="outline" className="w-full justify-start">
-            <ClipboardList className="h-4 w-4 mr-2" />
-            Question Bank
-          </Button>
-        </Link>
-        <Link href="/dashboard/teacher/assessments/calendar" className="block">
-          <Button variant="outline" className="w-full justify-start">
-            <Calendar className="h-4 w-4 mr-2" />
-            Assessment Calendar
-          </Button>
-        </Link>
-        <Link href="/dashboard/teacher/assessments" className="block">
-          <Button variant="outline" className="w-full justify-start">
-            <TrendingUp className="h-4 w-4 mr-2" />
-            Analytics Dashboard
-          </Button>
-        </Link>
-      </div>
-    </div>
-  )
-
-  const renderLearningObjectives = () => (
-    <div className="text-center py-12">
-      <Target className="h-12 w-12 mx-auto text-royalPurple-pillTx mb-4" />
-      <h3 className="text-xl font-bold text-royalPurple-text1 mb-2">Learning Objectives Tracker</h3>
-      <p className="text-royalPurple-text2">
-        Track curriculum objectives and standards alignment across all lessons.
-      </p>
-    </div>
-  )
-
-  const renderBehaviorManagement = () => (
-    <div className="text-center py-12">
-      <Eye className="h-12 w-12 mx-auto text-royalPurple-pillTx mb-4" />
-      <h3 className="text-xl font-bold text-royalPurple-text1 mb-2">Behavior Management</h3>
-      <p className="text-royalPurple-text2">
-        Monitor student behavior patterns and implement intervention strategies.
-      </p>
-    </div>
-  )
-
-  const renderProfessionalCommunity = () => (
-    <div className="text-center py-12">
-      <Heart className="h-12 w-12 mx-auto text-royalPurple-pillTx mb-4" />
-      <h3 className="text-xl font-bold text-royalPurple-text1 mb-2">
-        Professional Learning Community
-      </h3>
-      <p className="text-royalPurple-text2">
-        Connect with colleagues, share resources, and participate in professional development.
-      </p>
-    </div>
-  )
-
-  const renderMentorshipProgram = () => (
-    <div className="text-center py-12">
-      <HandshakeIcon className="h-12 w-12 mx-auto text-royalPurple-pillTx mb-4" />
-      <h3 className="text-xl font-bold text-royalPurple-text1 mb-2">Mentorship Program</h3>
-      <p className="text-royalPurple-text2">
-        Manage mentoring relationships and track professional growth initiatives.
-      </p>
-    </div>
-  )
-
-  // Render Advanced Teacher Features based on active tab
-  const renderAdvancedTeacherFeatures = () => {
-    switch (activeAdvancedTab) {
-      case 'creative-teaching':
-        return <CreativeTeachingHub />
-      case 'curriculum-mapping':
-        return <div className="p-4 text-royalPurple-text1">Curriculum Mapping - Coming Soon</div>
-      case 'differentiated-instruction':
-        return (
-          <div className="p-4 text-royalPurple-text1">Differentiated Instruction - Coming Soon</div>
-        )
-      case 'student-portfolios':
-        return <div className="p-4 text-royalPurple-text1">Student Portfolios - Coming Soon</div>
-      case 'lesson-planning':
-        return <div className="p-4 text-royalPurple-text1">Lesson Planning - Coming Soon</div>
-      case 'parent-conferences':
-        return <div className="p-4 text-royalPurple-text1">Parent Conferences - Coming Soon</div>
-      case 'assessment-builder':
-        return renderAssessmentBuilder()
-      case 'learning-objectives':
-        return renderLearningObjectives()
-      case 'behavior-management':
-        return renderBehaviorManagement()
-      case 'professional-community':
-        return renderProfessionalCommunity()
-      case 'mentorship':
-        return renderMentorshipProgram()
-      default:
-        return <div className="p-4 text-royalPurple-text1">Advanced Features - Coming Soon</div>
-    }
-  }
 
   // Show loading if not authenticated
   if (!isAuthenticated || !currentUser) {
@@ -1366,48 +1251,7 @@ export default function TeacherDashboard() {
             </CardHeader>
             <CardContent>
               <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                {/* Advanced Features Navigation */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {[
-                    { id: 'creative-teaching', label: 'Creative Teaching & STEM', icon: Rocket },
-                    { id: 'curriculum-mapping', label: 'Curriculum Mapping', icon: Map },
-                    {
-                      id: 'differentiated-instruction',
-                      label: 'Differentiated Instruction',
-                      icon: Layers,
-                    },
-                    { id: 'student-portfolios', label: 'Student Portfolios', icon: UserCheck },
-                    { id: 'lesson-planning', label: 'Collaborative Lesson Planning', icon: Users },
-                    {
-                      id: 'parent-conferences',
-                      label: 'Parent-Teacher Conferences',
-                      icon: MessageSquare,
-                    },
-                    { id: 'assessment-builder', label: 'Assessment Builder', icon: PenTool },
-                    { id: 'learning-objectives', label: 'Learning Objectives', icon: Target },
-                    { id: 'behavior-management', label: 'Behavior Management', icon: Eye },
-                    { id: 'professional-community', label: 'Professional Community', icon: Heart },
-                    { id: 'mentorship', label: 'Mentorship Program', icon: HandshakeIcon },
-                  ].map((tab) => (
-                    <Button
-                      key={tab.id}
-                      variant={activeAdvancedTab === tab.id ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setActiveAdvancedTab(tab.id)}
-                      className={`${
-                        activeAdvancedTab === tab.id
-                          ? 'bg-gradient-to-r from-accent to-warn text-royalPurple-text1'
-                          : 'text-royalPurple-text2 border-royalPurple-border hover:bg-royalPurple-muted'
-                      }`}
-                    >
-                      <tab.icon className="h-4 w-4 mr-2" />
-                      {tab.label}
-                    </Button>
-                  ))}
-                </div>
-
-                {/* Advanced Features Content */}
-                {renderAdvancedTeacherFeatures()}
+                <AdvancedTeachingTools />
               </div>
             </CardContent>
           </Card>

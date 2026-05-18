@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 // app/api/timetable/entries/route.js
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 
 function normalizeDayOfWeek(day) {
@@ -20,7 +20,8 @@ function normalizeDayOfWeek(day) {
 }
 
 export async function GET(req) {
-  const schoolId = await getSchoolIdFromRequest(req)
+  const user = await getAuthUser(req)
+  const schoolId = await resolveSchoolId(req, user)
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const { searchParams } = new URL(req.url)
@@ -49,11 +50,11 @@ export async function GET(req) {
 }
 
 export async function PATCH(req) {
-  const schoolId = await getSchoolIdFromRequest(req)
-  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
-
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const schoolId = await resolveSchoolId(req, user)
+  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const body = await req.json().catch(() => ({}))
   const id = String(body?.id || '').trim()
@@ -99,11 +100,11 @@ export async function PATCH(req) {
 }
 
 export async function DELETE(req) {
-  const schoolId = await getSchoolIdFromRequest(req)
-  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
-
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const schoolId = await resolveSchoolId(req, user)
+  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const body = await req.json().catch(() => ({}))
   const id = String(body?.id || '').trim()

@@ -226,6 +226,17 @@ model SchoolRegistration {
   @@index([verificationToken])
 }
 
+// Platform developer / super admin (no school tenant — metadata-only access)
+model PlatformAdmin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String   @default("Platform Admin")
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model AuditLog {
   id         String   @id @default(uuid())
   userId     String

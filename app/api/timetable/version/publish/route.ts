@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,6 +9,7 @@ type PublishBody = {
   versionId?: string
 }
 
+/** Legacy TimetableVersion publish (separate from TimetableAllocationEntry publish). */
 export async function POST(req: NextRequest) {
   const auth = authMiddleware(req as any)
   if (!auth.isAuthenticated) return auth.response
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const schoolId = await getSchoolIdFromRequest(req as any)
+  const schoolId = await resolveSchoolId(req as any, auth.user)
   if (!schoolId) {
     return NextResponse.json({ error: 'Missing school context' }, { status: 400 })
   }

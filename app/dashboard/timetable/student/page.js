@@ -4,7 +4,9 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { StudentTimetableView } from '@/components/timetable/StudentTimetableView'
+import { TimetableTermFilters } from '@/components/timetable/TimetableTermFilters'
 import { useAuth } from '@/lib/auth'
+import { getDefaultAcademicYear, getDefaultTerm } from '@/lib/timetable/timetableTermOptions'
 
 export default function StudentTimetablePage() {
   const { user } = useAuth()
@@ -12,13 +14,15 @@ export default function StudentTimetablePage() {
   const [subjects, setSubjects] = useState([])
   const [timeSlots, setTimeSlots] = useState([])
   const [assignments, setAssignments] = useState([])
-  const [term] = useState('Term 1')
-  const [academicYear] = useState(String(new Date().getFullYear()))
+  const [term, setTerm] = useState(getDefaultTerm)
+  const [academicYear, setAcademicYear] = useState(getDefaultAcademicYear)
+  const [loading, setLoading] = useState(true)
 
   const classId = user?.studentProfile?.classId ? String(user.studentProfile.classId) : undefined
 
   useEffect(() => {
     const load = async () => {
+      setLoading(true)
       try {
         const qs = new URLSearchParams({ term, academicYear, status: 'published' })
         const [viewRes, classesRes, subjectsRes] = await Promise.all([
@@ -51,6 +55,10 @@ export default function StudentTimetablePage() {
         setSubjects(sList.map((s) => ({ id: s.id, name: s.name })))
       } catch (e) {
         toast.error(e?.message || 'Failed to load timetable')
+        setAssignments([])
+        setTimeSlots([])
+      } finally {
+        setLoading(false)
       }
     }
     load()
@@ -58,14 +66,23 @@ export default function StudentTimetablePage() {
 
   return (
     <DashboardLayout title="My Timetable">
-      <StudentTimetableView
-        assignments={assignments}
-        timeSlots={timeSlots}
-        classId={classId}
-        classes={classes}
-        subjects={subjects}
-        subjectOnly
-      />
+      <div className="space-y-4">
+        <TimetableTermFilters
+          term={term}
+          academicYear={academicYear}
+          onTermChange={setTerm}
+          onAcademicYearChange={setAcademicYear}
+          loading={loading}
+        />
+        <StudentTimetableView
+          assignments={assignments}
+          timeSlots={timeSlots}
+          classId={classId}
+          classes={classes}
+          subjects={subjects}
+          subjectOnly
+        />
+      </div>
     </DashboardLayout>
   )
 }

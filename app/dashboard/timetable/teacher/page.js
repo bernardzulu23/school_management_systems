@@ -5,7 +5,9 @@ import toast from 'react-hot-toast'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { TeacherTimetableView } from '@/components/timetable/TeacherTimetableView'
 import { TeacherWorkloadSummary } from '@/components/timetable/TeacherWorkloadSummary'
+import { TimetableTermFilters } from '@/components/timetable/TimetableTermFilters'
 import { useAuth } from '@/lib/auth'
+import { getDefaultAcademicYear, getDefaultTerm } from '@/lib/timetable/timetableTermOptions'
 
 export default function TeacherTimetablePage() {
   const { user } = useAuth()
@@ -15,13 +17,16 @@ export default function TeacherTimetablePage() {
   const [timeSlots, setTimeSlots] = useState([])
   const [assignments, setAssignments] = useState([])
   const [summaries, setSummaries] = useState([])
-  const [term] = useState('Term 1')
-  const [academicYear] = useState(String(new Date().getFullYear()))
+  const [term, setTerm] = useState(getDefaultTerm)
+  const [academicYear, setAcademicYear] = useState(getDefaultAcademicYear)
+  const [loading, setLoading] = useState(true)
 
   const teacherUserId = user?.id ? String(user.id) : undefined
 
   useEffect(() => {
     const load = async () => {
+      if (!teacherUserId) return
+      setLoading(true)
       try {
         const qs = new URLSearchParams({ term, academicYear, status: 'published' })
         const [viewRes, classesRes, subjectsRes] = await Promise.all([
@@ -64,14 +69,26 @@ export default function TeacherTimetablePage() {
         )
       } catch (e) {
         toast.error(e?.message || 'Failed to load timetable')
+        setAssignments([])
+        setTimeSlots([])
+        setSummaries([])
+      } finally {
+        setLoading(false)
       }
     }
-    if (teacherUserId) load()
+    load()
   }, [teacherUserId, term, academicYear])
 
   return (
     <DashboardLayout title="My Timetable">
       <div className="space-y-6">
+        <TimetableTermFilters
+          term={term}
+          academicYear={academicYear}
+          onTermChange={setTerm}
+          onAcademicYearChange={setAcademicYear}
+          loading={loading}
+        />
         <TeacherWorkloadSummary summaries={summaries} />
         <TeacherTimetableView
           assignments={assignments}

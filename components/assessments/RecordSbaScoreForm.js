@@ -11,6 +11,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { computeRubricScore, SBA_TASK_MARKS, SBA_TERM_TEST_MARKS } from '@/lib/ecz/ecz-compliance'
+import { EczRubricTable } from '@/components/assessments/EczRubricTable'
+import { ECZ_TERM_WEIGHTS } from '@/lib/ecz/ecz-rubric-builder'
 import { toast } from 'react-hot-toast'
 
 const LEVEL_OPTIONS = [
@@ -258,26 +260,40 @@ export function RecordSbaScoreForm({ sbaTasks = [], onSuccess }) {
       {criteria.length > 0 ? (
         <div className="rounded-lg border border-royalPurple-border p-4 space-y-3 bg-royalPurple-card2/50">
           <p className="text-sm font-medium text-royalPurple-text1">4-level ECZ rubric</p>
-          {criteria.map((c) => (
-            <div key={c.id} className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-center">
-              <span className="text-sm text-royalPurple-text2">{c.name}</span>
-              <Select
-                value={criterionLevels[c.id] || '3'}
-                onValueChange={(v) => setCriterionLevels((prev) => ({ ...prev, [c.id]: v }))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {LEVEL_OPTIONS.map((o) => (
-                    <SelectItem key={o.value} value={o.value}>
-                      {o.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          ))}
+          <p className="text-xs text-royalPurple-text3">
+            Term weighting: Term 1 {ECZ_TERM_WEIGHTS[1].percent}% · Term 2{' '}
+            {ECZ_TERM_WEIGHTS[2].percent}% · Term 3 {ECZ_TERM_WEIGHTS[3].percent}%
+          </p>
+          <EczRubricTable
+            criteria={criteria}
+            interactive
+            selectedLevels={criterionLevels}
+            onLevelChange={(criterionId, level) =>
+              setCriterionLevels((prev) => ({ ...prev, [criterionId]: level }))
+            }
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {criteria.map((c) => (
+              <div key={c.id} className="flex items-center justify-between gap-2 text-sm">
+                <span className="text-royalPurple-text2 truncate">{c.name}</span>
+                <Select
+                  value={criterionLevels[c.id] || '3'}
+                  onValueChange={(v) => setCriterionLevels((prev) => ({ ...prev, [c.id]: v }))}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {LEVEL_OPTIONS.map((o) => (
+                      <SelectItem key={o.value} value={o.value}>
+                        {o.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            ))}
+          </div>
           <p className="text-sm font-semibold text-royalPurple-text1 pt-2 border-t border-royalPurple-border">
             Calculated mark for this component: {rubricPreview.displayScore} /{' '}
             {rubricPreview.maxMarks}

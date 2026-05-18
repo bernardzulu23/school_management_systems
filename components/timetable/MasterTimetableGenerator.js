@@ -268,16 +268,22 @@ export default function MasterTimetableGenerator() {
   const [conflicts, setConflicts] = useState([])
   const [showConfig, setShowConfig] = useState(false)
   const [stats, setStats] = useState(null)
+  const [allocationSummary, setAllocationSummary] = useState(null)
 
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const [configRes, entriesRes] = await Promise.all([
+      const [configRes, entriesRes, allocRes] = await Promise.all([
         fetch('/api/timetable/generate'),
         fetch(`/api/timetable/entries?term=${term}&academicYear=${academicYear}&status=draft`),
+        fetch(
+          `/api/timetable/allocations?term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}&status=pushed`
+        ),
       ])
       const configData = await configRes.json()
       const entriesData = await entriesRes.json()
+      const allocData = allocRes.ok ? await allocRes.json() : { summary: null }
+      setAllocationSummary(allocData.summary || null)
 
       if (configData.config) {
         setConfig({
@@ -347,7 +353,11 @@ export default function MasterTimetableGenerator() {
       const data = await res.json()
       if (!res.ok) {
         if (data.conflicts) setConflicts(data.conflicts)
-        toast.error(data.error || 'Generation failed')
+        const hint =
+          allocationSummary?.pushed === 0
+            ? ' Approve HOD department allocations first (Allocations tab).'
+            : ''
+        toast.error((data.error || 'Generation failed') + hint)
         return
       }
       setEntries(data.entries)
@@ -460,6 +470,24 @@ export default function MasterTimetableGenerator() {
           )}
         </div>
       </div>
+
+      {allocationSummary != null && (
+        <div
+          style={{
+            marginBottom: '1rem',
+            padding: '10px 14px',
+            borderRadius: 10,
+            background: allocationSummary.pushed > 0 ? '#1e3a2f' : '#3b2a1a',
+            border: `1px solid ${allocationSummary.pushed > 0 ? '#166534' : '#92400e'}`,
+            fontSize: 12,
+            color: allocationSummary.pushed > 0 ? '#86efac' : '#fcd34d',
+          }}
+        >
+          {allocationSummary.pushed > 0
+            ? `${allocationSummary.pushed} pushed allocation(s) ready for ${term} ${academicYear} (${allocationSummary.teachers} teachers).`
+            : `No pushed allocations for ${term} ${academicYear}. Headteacher must approve HOD submissions under Allocations first.`}
+        </div>
+      )}
 
       {/* Conflicts box */}
       {conflicts.length > 0 && (

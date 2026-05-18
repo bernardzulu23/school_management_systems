@@ -5,6 +5,8 @@ import toast from 'react-hot-toast'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { DepartmentTimetableView } from '@/components/timetable/DepartmentTimetableView'
 import { TeacherWorkloadSummary } from '@/components/timetable/TeacherWorkloadSummary'
+import { TimetableTermFilters } from '@/components/timetable/TimetableTermFilters'
+import { getDefaultAcademicYear, getDefaultTerm } from '@/lib/timetable/timetableTermOptions'
 
 export default function HodDepartmentTimetablePage() {
   const [timeSlots, setTimeSlots] = useState([])
@@ -12,11 +14,13 @@ export default function HodDepartmentTimetablePage() {
   const [summaries, setSummaries] = useState([])
   const [teachers, setTeachers] = useState([])
   const [classes, setClasses] = useState([])
-  const [term] = useState('Term 1')
-  const [academicYear] = useState(String(new Date().getFullYear()))
+  const [term, setTerm] = useState(getDefaultTerm)
+  const [academicYear, setAcademicYear] = useState(getDefaultAcademicYear)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const load = async () => {
+      setLoading(true)
       try {
         const qs = new URLSearchParams({ term, academicYear, status: 'published' })
         const [viewRes, teachersRes, classesRes] = await Promise.all([
@@ -58,6 +62,11 @@ export default function HodDepartmentTimetablePage() {
         )
       } catch (e) {
         toast.error(e?.message || 'Failed to load timetable')
+        setAssignments([])
+        setTimeSlots([])
+        setSummaries([])
+      } finally {
+        setLoading(false)
       }
     }
     load()
@@ -71,6 +80,13 @@ export default function HodDepartmentTimetablePage() {
   return (
     <DashboardLayout title="Department Timetable">
       <div className="space-y-6">
+        <TimetableTermFilters
+          term={term}
+          academicYear={academicYear}
+          onTermChange={setTerm}
+          onAcademicYearChange={setAcademicYear}
+          loading={loading}
+        />
         <TeacherWorkloadSummary
           summaries={summaries}
           title="Department teachers — subjects & classes"

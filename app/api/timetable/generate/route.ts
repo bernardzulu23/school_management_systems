@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 import {
   ensureTimetableConfig,
@@ -11,22 +11,22 @@ import {
 } from '@/lib/timetable/timeSlotsFromConfig'
 
 export async function GET(req: NextRequest) {
-  const schoolId = await getSchoolIdFromRequest(req as any)
-  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
-
   const user = await getAuthUser(req as any)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const schoolId = await resolveSchoolId(req as any, user)
+  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const config = await prisma.timetableConfig.findUnique({ where: { schoolId } })
   return NextResponse.json({ config })
 }
 
 export async function POST(req: NextRequest) {
-  const schoolId = await getSchoolIdFromRequest(req as any)
-  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
-
   const user = await getAuthUser(req as any)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const schoolId = await resolveSchoolId(req as any, user)
+  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const role = String(user.role || '').toLowerCase()
   if (!['headteacher', 'administrator', 'admin', 'superadmin'].includes(role)) {

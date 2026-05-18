@@ -9,6 +9,8 @@ import { checkProxyRateLimit } from './lib/security/proxyRateLimit'
 
 const PUBLIC_PATHS = [
   '/api/auth/login',
+  '/api/platform/auth/login',
+  '/platform/login',
   '/api/auth/register',
   '/api/auth/logout',
   '/api/auth/refresh',

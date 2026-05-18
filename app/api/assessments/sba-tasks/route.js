@@ -1,21 +1,19 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
+import { staffRoleDeniedMessage } from '@/lib/auth/roles'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
-import {
-  validateFormLevelForSBA,
-  validateZambianContext,
-  DEFAULT_RUBRIC_CRITERIA,
-} from '@/lib/ecz/ecz-compliance'
+import { validateFormLevelForSBA, validateZambianContext } from '@/lib/ecz/ecz-compliance'
+import { generateEczRubricCriteria, criteriaToPrismaCreate } from '@/lib/ecz/ecz-rubric-builder'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
 export const POST = withSecureApi(async function POST(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  if (!roleCheck(auth.user, ROLE_GROUPS.SCHOOL_STAFF)) {
+    return NextResponse.json({ error: staffRoleDeniedMessage(auth.user?.role) }, { status: 403 })
   }
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
@@ -67,10 +65,26 @@ export const POST = withSecureApi(async function POST(request) {
     })
 
     if (body.createDefaultRubric !== false && component === 'SBA_TASK') {
+      let criteriaRows = criteriaToPrismaCreate(
+        generateEczRubricCriteria({
+          subjectName: subject.name,
+          taskType: String(body.type || 'Project'),
+          numCriteria: body.numCriteria ?? 4,
+          title,
+          description: body.description
+            ? String(body.description)
+            : body.context
+              ? String(body.context)
+              : '',
+        })
+      )
+      if (Array.isArray(body.rubricCriteria) && body.rubricCriteria.length > 0) {
+        criteriaRows = criteriaToPrismaCreate(body.rubricCriteria)
+      }
       await prisma.eczRubric.create({
         data: {
           assessmentId: assessment.id,
-          criteria: { create: DEFAULT_RUBRIC_CRITERIA },
+          criteria: { create: criteriaRows },
         },
       })
     }
@@ -110,8 +124,8 @@ export const GET = withSecureApi(async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  if (!roleCheck(auth.user, ROLE_GROUPS.SCHOOL_STAFF)) {
+    return NextResponse.json({ error: staffRoleDeniedMessage(auth.user?.role) }, { status: 403 })
   }
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))

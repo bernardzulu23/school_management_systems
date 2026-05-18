@@ -1,15 +1,22 @@
 // app/api/timetable/allocations/[id]/route.js
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 
 export async function DELETE(req, { params }) {
-  const schoolId = await getSchoolIdFromRequest(req)
   const user = await getAuthUser(req)
-  if (!user || !schoolId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const schoolId = await resolveSchoolId(req, user)
+  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const { id } = await params
-  await prisma.teacherAllocation.delete({ where: { id, schoolId } })
+  const result = await prisma.teacherAllocation.deleteMany({
+    where: { id, schoolId },
+  })
+  if (result.count === 0) {
+    return NextResponse.json({ error: 'Allocation not found' }, { status: 404 })
+  }
   return NextResponse.json({ success: true })
 }

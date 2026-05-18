@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { cookies } from 'next/headers'
 import { loginSchema, validateRequest, sanitizeOutput } from '@/lib/middleware/inputValidation'
 import { findUserByEmail } from '@/lib/db/queries'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
@@ -22,7 +21,7 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-f
 const PILOT_EMAIL_WHITELIST = new Set(
   (
     process.env.PILOT_EMAILS ||
-    'fredith01@gmail.com,admin@ndakedaysecondaryschool.edu,krbmafupa@gmail.com'
+    'fredith01@gmail.com,admin@ndakedaysecondaryschool.edu,krbmafupa@gmail.com,nchimunya001@gmail.com,super-admin@bluepeacktechnologies.com'
   )
     .split(',')
     .map((e) => e.trim().toLowerCase())
@@ -71,6 +70,26 @@ export const POST = withSecureApi(async function POST(request) {
     const normalizedEmail = String(email || '')
       .trim()
       .toLowerCase()
+
+    const platformEmails = new Set(
+      (
+        process.env.PLATFORM_ADMIN_EMAILS ||
+        process.env.PLATFORM_ADMIN_EMAIL ||
+        'super-admin@bluepeacktechnologies.com'
+      )
+        .split(',')
+        .map((e) => e.trim().toLowerCase())
+        .filter(Boolean)
+    )
+    if (platformEmails.has(normalizedEmail)) {
+      return NextResponse.json(
+        {
+          error: 'Use the developer console login at /platform/login for platform admin access.',
+          code: 'PLATFORM_ADMIN',
+        },
+        { status: 403 }
+      )
+    }
     // Note: 'subdomain' is optional in schema, but passed from frontend if available
 
     const isProd = process.env.NODE_ENV === 'production'
@@ -114,8 +133,28 @@ export const POST = withSecureApi(async function POST(request) {
       )
     }
 
-    // 3. Database Lookup (Parameterized via Prisma, scoped by schoolId)
-    const user = await findUserByEmail(schoolId, normalizedEmail)
+    // 3. Database Lookup (scoped by schoolId; fall back to unique email match)
+    let user = await findUserByEmail(schoolId, normalizedEmail)
+
+    if (!user) {
+      const emailMatches = await prisma.user.findMany({
+        where: {
+          email: { equals: normalizedEmail, mode: 'insensitive' },
+          school: { active: true },
+        },
+        include: {
+          studentProfile: true,
+          teacherProfile: true,
+          hodProfile: true,
+        },
+        take: 2,
+      })
+      if (emailMatches.length === 1) {
+        user = emailMatches[0]
+        schoolId = user.schoolId
+        console.log('[Login Debug] Matched user via email fallback, schoolId:', schoolId)
+      }
+    }
 
     if (!user) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
@@ -143,7 +182,19 @@ export const POST = withSecureApi(async function POST(request) {
     }
 
     // 3. Password Verification
-    const isValid = await bcrypt.compare(password, user.password)
+    const storedHash = String(user.password || '')
+    if (!storedHash.startsWith('$2')) {
+      console.error('[Login] User has no valid password hash:', user.id)
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+    }
+
+    let isValid = false
+    try {
+      isValid = await bcrypt.compare(password, storedHash)
+    } catch (compareError) {
+      console.error('[Login] bcrypt.compare failed:', compareError?.message)
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+    }
 
     if (!isValid) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })

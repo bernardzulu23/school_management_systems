@@ -1,7 +1,8 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
+import { staffRoleDeniedMessage } from '@/lib/auth/roles'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 function mapQuestionBank(item) {
@@ -41,8 +42,8 @@ export async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  if (!roleCheck(auth.user, ROLE_GROUPS.SCHOOL_STAFF)) {
+    return NextResponse.json({ error: staffRoleDeniedMessage(auth.user?.role) }, { status: 403 })
   }
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
@@ -84,8 +85,8 @@ export async function POST(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  if (!roleCheck(auth.user, ROLE_GROUPS.SCHOOL_STAFF)) {
+    return NextResponse.json({ error: staffRoleDeniedMessage(auth.user?.role) }, { status: 403 })
   }
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))

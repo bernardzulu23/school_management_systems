@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function GET(request) {
@@ -14,8 +14,12 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url)
   const teacherId = searchParams.get('teacherId')
 
+  if (!roleCheck(auth.user, ROLE_GROUPS.SCHOOL_STAFF)) {
+    return NextResponse.json({ success: true, data: [] })
+  }
+
   let resolvedTeacherId = teacherId
-  if (!resolvedTeacherId && roleCheck(auth.user, ['TEACHER', 'teacher'])) {
+  if (!resolvedTeacherId && roleCheck(auth.user, ROLE_GROUPS.SCHOOL_STAFF)) {
     const teacher = await prisma.teacher.findUnique({
       where: { userId: auth.user.id },
       select: { id: true },
@@ -24,7 +28,7 @@ export async function GET(request) {
   }
 
   if (!resolvedTeacherId) {
-    return NextResponse.json({ error: 'teacherId is required' }, { status: 400 })
+    return NextResponse.json({ error: 'teacherId is required', data: [] }, { status: 400 })
   }
 
   if (

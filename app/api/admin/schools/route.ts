@@ -1,27 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { hash } from 'bcryptjs'
-import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { authMiddleware } from '@/lib/middleware/auth'
+import { requirePlatformAdmin } from '@/lib/middleware/platformAuth'
+import { toPlatformSchoolSummary } from '@/lib/platform/schoolEligibility'
 
 // GET all schools (admin only)
 export async function GET(request: NextRequest) {
   try {
     const auth = authMiddleware(request as any)
     if (!auth.isAuthenticated) return auth.response as any
-    if (!roleCheck(auth.user, ['superadmin'])) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    const gate = requirePlatformAdmin(auth.user)
+    if (!gate.ok) {
+      return NextResponse.json({ error: gate.error }, { status: gate.status })
     }
 
     const schools = await prisma.school.findMany({
+      where: { active: true, emailVerified: true },
       select: {
         id: true,
         name: true,
         subdomain: true,
-        domain: true,
+        plan: true,
+        level: true,
         active: true,
-        email: true,
-        phone: true,
-        address: true,
+        emailVerified: true,
+        planExpiresAt: true,
+        trialEndsAt: true,
         createdAt: true,
         _count: {
           select: {
@@ -36,7 +41,15 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    return NextResponse.json(schools)
+    return NextResponse.json({
+      schools: schools.map((s) =>
+        toPlatformSchoolSummary(s, {
+          users: s._count.users,
+          students: s._count.students,
+          teachers: s._count.teachers,
+        })
+      ),
+    })
   } catch (error) {
     console.error('Error fetching schools:', error)
     return NextResponse.json({ error: 'Failed to fetch schools' }, { status: 500 })
@@ -48,8 +61,9 @@ export async function POST(request: NextRequest) {
   try {
     const auth = authMiddleware(request as any)
     if (!auth.isAuthenticated) return auth.response as any
-    if (!roleCheck(auth.user, ['superadmin'])) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    const gate = requirePlatformAdmin(auth.user)
+    if (!gate.ok) {
+      return NextResponse.json({ error: gate.error }, { status: gate.status })
     }
 
     const body = await request.json()

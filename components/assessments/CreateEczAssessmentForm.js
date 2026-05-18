@@ -12,7 +12,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { AlertTriangle } from 'lucide-react'
-import { SBA_TASK_TYPES } from '@/lib/ecz/ecz-subjects-data'
+import { ECZ_SBA_TASK_TYPES } from '@/lib/ecz/ecz-rubric-builder'
+import { EczRubricBuilderPanel } from '@/components/assessments/EczRubricBuilderPanel'
 import { toast } from 'react-hot-toast'
 
 const textareaClassName =
@@ -30,9 +31,11 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
   const [context, setContext] = useState('')
   const [errors, setErrors] = useState([])
   const [submitting, setSubmitting] = useState(false)
+  const [rubricCriteria, setRubricCriteria] = useState([])
+  const [numCriteria, setNumCriteria] = useState(4)
 
   useEffect(() => {
-    fetch('/api/ecz/subjects/seed', { credentials: 'include' })
+    fetch('/api/ecz/subjects/seed?sync=true', { credentials: 'include' })
       .then((r) => r.json())
       .then((json) => {
         const list = Array.isArray(json?.data) ? json.data : []
@@ -41,6 +44,8 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
       })
       .catch(() => {})
   }, [])
+
+  const selectedSubject = subjects.find((s) => String(s.id) === String(subjectId))
 
   const handleFormLevelChange = (value) => {
     if (value === '4' && component === 'SBA_TASK') {
@@ -88,8 +93,11 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
           subjectId,
           title: title.trim(),
           type,
+          description: context.trim(),
           context: context.trim(),
-          createDefaultRubric: component === 'SBA_TASK',
+          numCriteria: rubricCriteria.length || numCriteria,
+          rubricCriteria: rubricCriteria.length > 0 ? rubricCriteria : undefined,
+          createDefaultRubric: component === 'SBA_TASK' && rubricCriteria.length === 0,
         }),
       })
       const json = await res.json().catch(() => ({}))
@@ -169,9 +177,26 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
         </Select>
         {subjects.length === 0 && (
           <p className="text-xs text-amber-700 mt-1">
-            No ECZ subjects yet. Ask admin to run ECZ subject setup from the ECZ hub.
+            No ECZ subjects yet. Open the ECZ SBA Hub and click Sync ECZ subjects.
           </p>
         )}
+        {selectedSubject?.construct ? (
+          <div className="mt-2 rounded-lg border border-royalPurple-border/50 bg-royalPurple-deep/50 p-3 text-xs text-royalPurple-text2">
+            <p className="font-semibold text-accent mb-1">Construct (ECZ guidelines)</p>
+            <p className="leading-relaxed">{selectedSubject.construct}</p>
+            {Array.isArray(selectedSubject.constructElements) &&
+            selectedSubject.constructElements.length > 0 ? (
+              <ul className="mt-2 space-y-1 list-none">
+                {selectedSubject.constructElements.map((el) => (
+                  <li key={el.id || el.elementNumber}>
+                    <span className="font-medium text-royalPurple-text1">{el.elementNumber}.</span>{' '}
+                    {el.statement}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        ) : null}
       </div>
 
       <div>
@@ -190,9 +215,9 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {SBA_TASK_TYPES.map((t) => (
-              <SelectItem key={t} value={t}>
-                {t}
+            {ECZ_SBA_TASK_TYPES.map((t) => (
+              <SelectItem key={t.value} value={t.value}>
+                {t.label}
               </SelectItem>
             ))}
           </SelectContent>
@@ -200,19 +225,50 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
       </div>
 
       {component === 'SBA_TASK' && (
-        <div>
-          <Label>Zambian context scenario *</Label>
-          <textarea
-            value={context}
-            onChange={(e) => setContext(e.target.value)}
-            placeholder={ZAMBIA_HINTS}
-            rows={3}
-            className={textareaClassName}
-          />
-          <p className="text-xs text-gray-500 mt-1">
-            ECZ requires real-life Zambian contexts (locations, occupations, community settings).
-          </p>
-        </div>
+        <>
+          <div>
+            <Label>Zambian context scenario *</Label>
+            <textarea
+              value={context}
+              onChange={(e) => setContext(e.target.value)}
+              placeholder={ZAMBIA_HINTS}
+              rows={3}
+              className={textareaClassName}
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              ECZ requires real-life Zambian contexts (locations, occupations, community settings).
+            </p>
+          </div>
+          {formLevel !== '4' ? (
+            <div className="rounded-lg border border-royalPurple-border/50 p-4 space-y-3">
+              <p className="text-sm font-semibold text-royalPurple-text1">
+                ECZ rubric builder (4-level descriptors)
+              </p>
+              <p className="text-xs text-royalPurple-text3">
+                Generate criteria before saving, or a default rubric is created from the task type
+                and subject.
+              </p>
+              <EczRubricBuilderPanel
+                embedded
+                subjects={subjects}
+                subjectId={subjectId}
+                onSubjectIdChange={setSubjectId}
+                formLevel={formLevel}
+                onFormLevelChange={handleFormLevelChange}
+                title={title}
+                onTitleChange={setTitle}
+                taskType={type}
+                onTaskTypeChange={setType}
+                description={context}
+                onDescriptionChange={setContext}
+                onCriteriaChange={(list) => {
+                  setRubricCriteria(list)
+                  setNumCriteria(list.length || 4)
+                }}
+              />
+            </div>
+          ) : null}
+        </>
       )}
 
       <div className="flex justify-end gap-2">

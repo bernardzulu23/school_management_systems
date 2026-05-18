@@ -19,7 +19,7 @@ const pillars = [
   },
   {
     icon: BookMarked,
-    title: '19 subjects & constructs',
+    title: '18 ECZ subjects & constructs',
     description:
       'Sync Mathematics I & II, Sciences, Civic Education, and all ECZ guideline subjects with elements of construct.',
   },

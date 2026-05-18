@@ -1,7 +1,7 @@
 'use client'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ThemeProvider } from 'next-themes'
+import { AppThemeProvider } from '@/lib/theme/AppThemeProvider'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { SchoolProvider } from '@/lib/context/SchoolContext'
@@ -175,20 +175,20 @@ export function Providers({ children }) {
         <PWALoader />
         <DevServiceWorkerReset />
         {skipSessionSync ? (
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <AppThemeProvider defaultTheme="system" enableSystem>
             <GlobalTopLoadingBar />
             <GlobalBackButton />
             <OfflineBanner />
             {children}
-          </ThemeProvider>
+          </AppThemeProvider>
         ) : (
           <ActivitySessionKeeper>
             <AuthSessionSync>
-              <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <AppThemeProvider defaultTheme="system" enableSystem>
                 <GlobalTopLoadingBar />
                 <GlobalBackButton />
                 {children}
-              </ThemeProvider>
+              </AppThemeProvider>
             </AuthSessionSync>
           </ActivitySessionKeeper>
         )}
