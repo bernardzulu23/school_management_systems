@@ -25,14 +25,14 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
           type: 'extended_time',
           description: 'Additional time for assignments and tests',
           implementation: 'automatic_extension',
-          timeline: 'immediate'
+          timeline: 'immediate',
         },
         {
           type: 'alternative_format',
           description: 'Materials in large print and audio format',
           implementation: 'content_conversion',
-          timeline: 'immediate'
-        }
+          timeline: 'immediate',
+        },
       ],
       culturalAdaptations: {
         ...UniversalAccessibilitySystem.CULTURAL_ADAPTATIONS,
@@ -41,16 +41,20 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
           secondary: ['es'],
           rtl: false,
           fontFamily: 'OpenDyslexic',
-          characterSet: 'latin'
-        }
+          characterSet: 'latin',
+        },
       },
       emergencyContacts: [
         { name: 'Accessibility Coordinator', phone: '+1-555-0789', relationship: 'coordinator' },
-        { name: 'Parent/Guardian', phone: '+1-555-0123', relationship: 'parent' }
+        { name: 'Parent/Guardian', phone: '+1-555-0123', relationship: 'parent' },
       ],
       medicalConditions: ['visual_impairment', 'dyslexia'],
       preferredModalities: ['auditory', 'tactile'],
-      supportTeam: ['accessibility_coordinator', 'special_education_teacher', 'assistive_technology_specialist']
+      supportTeam: [
+        'accessibility_coordinator',
+        'special_education_teacher',
+        'assistive_technology_specialist',
+      ],
     })
     setAccessibilityProfile(profile)
 
@@ -61,32 +65,32 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
         fontSize: { enabled: true, scale: 1.5 },
         screenReader: { enabled: true, speed: 'normal', voice: 'default' },
         darkMode: { enabled: true, autoSwitch: false },
-        reducedMotion: { enabled: true, level: 'strict' }
+        reducedMotion: { enabled: true, level: 'strict' },
       },
       AUDITORY: {
         captions: { enabled: true, language: 'en', fontSize: 'large' },
         audioDescription: { enabled: true, detail: 'detailed' },
-        visualAlerts: { enabled: true, type: 'flash', intensity: 'high' }
+        visualAlerts: { enabled: true, type: 'flash', intensity: 'high' },
       },
       MOTOR: {
         keyboardNavigation: { enabled: true, shortcuts: 'enhanced', customKeys: {} },
         voiceControl: { enabled: true, commands: 'advanced', sensitivity: 'high' },
         stickyKeys: { enabled: true, modifier: 'shift', timeout: 5000 },
-        touchAssist: { enabled: true, targetSize: 'large', feedback: 'haptic' }
+        touchAssist: { enabled: true, targetSize: 'large', feedback: 'haptic' },
       },
       COGNITIVE: {
         simplifiedInterface: { enabled: true, level: 'intermediate', customization: 'manual' },
         readingAssist: { enabled: true, highlighting: true, pacing: 'user' },
         memoryAids: { enabled: true, reminders: true, visualCues: true },
         focusAssist: { enabled: true, distractionFilter: 'high', timeBlocking: true },
-        timeExtensions: { enabled: true, multiplier: 1.5, automatic: true }
+        timeExtensions: { enabled: true, multiplier: 1.5, automatic: true },
       },
       LEARNING: {
         multiModalContent: { enabled: true, formats: ['text', 'audio', 'visual', 'tactile'] },
         adaptivePacing: { enabled: true, algorithm: 'performance', userControl: true },
         alternativeFormats: { enabled: true, braille: false, largeText: true, audio: true },
-        personalizedLearning: { enabled: true, style: 'visual_auditory', preferences: {} }
-      }
+        personalizedLearning: { enabled: true, style: 'visual_auditory', preferences: {} },
+      },
     })
     setCurrentSettings(settings)
 
@@ -99,7 +103,7 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
         resources: ['timer_system', 'notification_alerts'],
         timeline: 'immediate',
         responsible: 'accessibility_coordinator',
-        monitoring: { frequency: 'weekly', metrics: ['completion_rate', 'stress_level'] }
+        monitoring: { frequency: 'weekly', metrics: ['completion_rate', 'stress_level'] },
       },
       {
         type: 'alternative_formats',
@@ -108,7 +112,7 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
         resources: ['text_to_speech', 'large_print_converter', 'audio_recorder'],
         timeline: 'immediate',
         responsible: 'assistive_technology_specialist',
-        monitoring: { frequency: 'bi_weekly', metrics: ['usage_rate', 'comprehension_level'] }
+        monitoring: { frequency: 'bi_weekly', metrics: ['usage_rate', 'comprehension_level'] },
       },
       {
         type: 'assistive_technology',
@@ -117,8 +121,11 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
         resources: ['screen_reader_software', 'voice_recognition_system', 'training_materials'],
         timeline: 'immediate',
         responsible: 'assistive_technology_specialist',
-        monitoring: { frequency: 'weekly', metrics: ['usage_frequency', 'error_rate', 'efficiency'] }
-      }
+        monitoring: {
+          frequency: 'weekly',
+          metrics: ['usage_frequency', 'error_rate', 'efficiency'],
+        },
+      },
     ])
     setAccommodationPlan(plan)
 
@@ -136,25 +143,28 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
       memory: 'working_memory_issues',
       processing: 'slower_processing',
       learningStyle: 'visual_auditory',
-      processingSpeed: 'below_average'
+      processingSpeed: 'below_average',
     })
     setAssessmentData(assessment)
 
     // Monitor effectiveness
-    const effectiveness = UniversalAccessibilitySystem.monitorAccessibilityEffectiveness(profile.id, '30_days')
+    const effectiveness = UniversalAccessibilitySystem.monitorAccessibilityEffectiveness(
+      profile.id,
+      '30_days'
+    )
     setEffectivenessData(effectiveness)
   }
 
   const updateAccessibilitySetting = (category, feature, value) => {
-    setCurrentSettings(prev => ({
+    setCurrentSettings((prev) => ({
       ...prev,
       settings: {
         ...prev.settings,
         [category]: {
           ...prev.settings[category],
-          [feature]: { ...prev.settings[category][feature], ...value }
-        }
-      }
+          [feature]: { ...prev.settings[category][feature], ...value },
+        },
+      },
     }))
   }
 
@@ -199,7 +209,9 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
               <h4>Accessibility Needs</h4>
               <div className="needs-list">
                 {accessibilityProfile.accessibilityNeeds.map((need, index) => (
-                  <span key={index} className="need-tag">{need.replace('_', ' ')}</span>
+                  <span key={index} className="need-tag">
+                    {need.replace('_', ' ')}
+                  </span>
                 ))}
               </div>
             </div>
@@ -223,18 +235,26 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
               <div className="learning-item">
                 <label>Preferred Modalities:</label>
                 <div className="modalities">
-                  {accessibilityProfile.learningProfile.preferredModalities.map((modality, index) => (
-                    <span key={index} className="modality-tag">{modality}</span>
-                  ))}
+                  {accessibilityProfile.learningProfile.preferredModalities.map(
+                    (modality, index) => (
+                      <span key={index} className="modality-tag">
+                        {modality}
+                      </span>
+                    )
+                  )}
                 </div>
               </div>
               <div className="learning-item">
                 <label>Processing Speed:</label>
-                <span className="processing-speed">{accessibilityProfile.learningProfile.processingSpeed}</span>
+                <span className="processing-speed">
+                  {accessibilityProfile.learningProfile.processingSpeed}
+                </span>
               </div>
               <div className="learning-item">
                 <label>Attention Span:</label>
-                <span className="attention-span">{accessibilityProfile.learningProfile.attentionSpan}</span>
+                <span className="attention-span">
+                  {accessibilityProfile.learningProfile.attentionSpan}
+                </span>
               </div>
             </div>
           </div>
@@ -280,65 +300,84 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
 
       {currentSettings && (
         <div className="settings-content">
-          {Object.entries(UniversalAccessibilitySystem.ACCESSIBILITY_FEATURES).map(([categoryKey, category]) => (
-            <div key={categoryKey} className="settings-category">
-              <h4>{category.name}</h4>
-              <div className="features-grid">
-                {Object.entries(category.features).map(([featureKey, feature]) => {
-                  const currentFeature = currentSettings.settings[categoryKey]?.[featureKey] || feature
-                  return (
-                    <div key={featureKey} className="feature-setting">
-                      <div className="feature-header">
-                        <label className="feature-label">{featureKey.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</label>
-                        <button
-                          className={`toggle-btn ${currentFeature.enabled ? 'enabled' : 'disabled'}`}
-                          onClick={() => toggleFeature(categoryKey, featureKey)}
-                        >
-                          {currentFeature.enabled ? '✓' : '✗'}
-                        </button>
-                      </div>
-                      {currentFeature.enabled && (
-                        <div className="feature-controls">
-                          {Object.entries(currentFeature).map(([controlKey, controlValue]) => {
-                            if (controlKey === 'enabled') return null
-                            return (
-                              <div key={controlKey} className="control-item">
-                                <label>{controlKey.replace(/([A-Z])/g, ' $1')}: </label>
-                                {typeof controlValue === 'boolean' ? (
-                                  <input
-                                    type="checkbox"
-                                    checked={controlValue}
-                                    onChange={(e) => updateAccessibilitySetting(categoryKey, featureKey, { [controlKey]: e.target.checked })}
-                                  />
-                                ) : typeof controlValue === 'number' ? (
-                                  <input
-                                    type="range"
-                                    min="0"
-                                    max="3"
-                                    step="0.1"
-                                    value={controlValue}
-                                    onChange={(e) => updateAccessibilitySetting(categoryKey, featureKey, { [controlKey]: parseFloat(e.target.value) })}
-                                  />
-                                ) : (
-                                  <select
-                                    value={controlValue}
-                                    onChange={(e) => updateAccessibilitySetting(categoryKey, featureKey, { [controlKey]: e.target.value })}
-                                  >
-                                    <option value={controlValue}>{controlValue}</option>
-                                  </select>
-                                )}
-                                <span className="control-value">{controlValue}</span>
-                              </div>
-                            )
-                          })}
+          {Object.entries(UniversalAccessibilitySystem.ACCESSIBILITY_FEATURES).map(
+            ([categoryKey, category]) => (
+              <div key={categoryKey} className="settings-category">
+                <h4>{category.name}</h4>
+                <div className="features-grid">
+                  {Object.entries(category.features).map(([featureKey, feature]) => {
+                    const currentFeature =
+                      currentSettings.settings[categoryKey]?.[featureKey] || feature
+                    return (
+                      <div key={featureKey} className="feature-setting">
+                        <div className="feature-header">
+                          <label className="feature-label">
+                            {featureKey
+                              .replace(/([A-Z])/g, ' $1')
+                              .replace(/^./, (str) => str.toUpperCase())}
+                          </label>
+                          <button
+                            className={`toggle-btn ${currentFeature.enabled ? 'enabled' : 'disabled'}`}
+                            onClick={() => toggleFeature(categoryKey, featureKey)}
+                          >
+                            {currentFeature.enabled ? '✓' : '✗'}
+                          </button>
                         </div>
-                      )}
-                    </div>
-                  )
-                })}
+                        {currentFeature.enabled && (
+                          <div className="feature-controls">
+                            {Object.entries(currentFeature).map(([controlKey, controlValue]) => {
+                              if (controlKey === 'enabled') return null
+                              return (
+                                <div key={controlKey} className="control-item">
+                                  <label>{controlKey.replace(/([A-Z])/g, ' $1')}: </label>
+                                  {typeof controlValue === 'boolean' ? (
+                                    <input
+                                      type="checkbox"
+                                      checked={controlValue}
+                                      onChange={(e) =>
+                                        updateAccessibilitySetting(categoryKey, featureKey, {
+                                          [controlKey]: e.target.checked,
+                                        })
+                                      }
+                                    />
+                                  ) : typeof controlValue === 'number' ? (
+                                    <input
+                                      type="range"
+                                      min="0"
+                                      max="3"
+                                      step="0.1"
+                                      value={controlValue}
+                                      onChange={(e) =>
+                                        updateAccessibilitySetting(categoryKey, featureKey, {
+                                          [controlKey]: parseFloat(e.target.value),
+                                        })
+                                      }
+                                    />
+                                  ) : (
+                                    <select
+                                      value={controlValue}
+                                      onChange={(e) =>
+                                        updateAccessibilitySetting(categoryKey, featureKey, {
+                                          [controlKey]: e.target.value,
+                                        })
+                                      }
+                                    >
+                                      <option value={controlValue}>{controlValue}</option>
+                                    </select>
+                                  )}
+                                  <span className="control-value">{controlValue}</span>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
       )}
     </div>
@@ -357,15 +396,21 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
         <div className="accommodations-content">
           <div className="plan-overview">
             <div className="plan-meta">
-              <span className="created">Created: {accommodationPlan.createdAt.toLocaleDateString()}</span>
-              <span className="review">Next Review: {accommodationPlan.reviewSchedule.nextReview.toLocaleDateString()}</span>
-              <span className="frequency">Review Frequency: {accommodationPlan.reviewSchedule.frequency}</span>
+              <span className="created">
+                Created: {accommodationPlan.createdAt.toLocaleDateString()}
+              </span>
+              <span className="review">
+                Next Review: {accommodationPlan.reviewSchedule.nextReview.toLocaleDateString()}
+              </span>
+              <span className="frequency">
+                Review Frequency: {accommodationPlan.reviewSchedule.frequency}
+              </span>
             </div>
           </div>
 
           <div className="accommodations-list">
             <h4>Active Accommodations</h4>
-            {accommodationPlan.accommodations.map(accommodation => (
+            {accommodationPlan.accommodations.map((accommodation) => (
               <div key={accommodation.id} className="accommodation-item">
                 <div className="accommodation-header">
                   <h5>{accommodation.type.replace('_', ' ')}</h5>
@@ -390,7 +435,9 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
                   <label>Resources:</label>
                   <div className="resources-list">
                     {accommodation.resources.map((resource, index) => (
-                      <span key={index} className="resource-tag">{resource.replace('_', ' ')}</span>
+                      <span key={index} className="resource-tag">
+                        {resource.replace('_', ' ')}
+                      </span>
                     ))}
                   </div>
                 </div>
@@ -439,8 +486,12 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
         <div className="assessment-content">
           <div className="assessment-overview">
             <div className="assessment-meta">
-              <span className="assessor">Assessor: {assessmentData.assessor.replace('_', ' ')}</span>
-              <span className="date">Date: {assessmentData.assessmentDate.toLocaleDateString()}</span>
+              <span className="assessor">
+                Assessor: {assessmentData.assessor.replace('_', ' ')}
+              </span>
+              <span className="date">
+                Date: {assessmentData.assessmentDate.toLocaleDateString()}
+              </span>
               <span className="type">Type: {assessmentData.assessmentType}</span>
               <span className="priority">Priority: {assessmentData.priorityLevel}</span>
             </div>
@@ -451,14 +502,21 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
             <div className="findings-grid">
               {Object.entries(assessmentData.findings).map(([category, findings]) => (
                 <div key={category} className="findings-category">
-                  <h5>{category.replace('Needs', '').replace(/([A-Z])/g, ' $1').trim()}</h5>
+                  <h5>
+                    {category
+                      .replace('Needs', '')
+                      .replace(/([A-Z])/g, ' $1')
+                      .trim()}
+                  </h5>
                   <div className="findings-details">
                     {Object.entries(findings).map(([key, value]) => {
                       if (key === 'recommendations') return null
                       return (
                         <div key={key} className="finding-item">
                           <label>{key.replace(/([A-Z])/g, ' $1')}: </label>
-                          <span className={`finding-value ${value.replace('_', '-')}`}>{value.replace('_', ' ')}</span>
+                          <span className={`finding-value ${value.replace('_', '-')}`}>
+                            {value.replace('_', ' ')}
+                          </span>
                         </div>
                       )
                     })}
@@ -498,13 +556,17 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
                   </div>
                   <div className="phase-actions">
                     {phase.actions.map((action, actionIndex) => (
-                      <span key={actionIndex} className="action-tag">{action.replace('_', ' ')}</span>
+                      <span key={actionIndex} className="action-tag">
+                        {action.replace('_', ' ')}
+                      </span>
                     ))}
                   </div>
                   <div className="phase-resources">
                     <label>Resources:</label>
                     {phase.resources.map((resource, resourceIndex) => (
-                      <span key={resourceIndex} className="resource-tag">{resource.replace('_', ' ')}</span>
+                      <span key={resourceIndex} className="resource-tag">
+                        {resource.replace('_', ' ')}
+                      </span>
                     ))}
                   </div>
                 </div>
@@ -522,7 +584,9 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
         <h3>Effectiveness Monitoring</h3>
         <select className="timeframe-selector">
           <option value="7_days">Last 7 Days</option>
-          <option value="30_days" selected>Last 30 Days</option>
+          <option value="30_days" selected>
+            Last 30 Days
+          </option>
           <option value="90_days">Last 90 Days</option>
         </select>
       </div>
@@ -533,7 +597,9 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
             <div className="metric-card">
               <h4>User Satisfaction</h4>
               <div className="metric-value">
-                <span className="value">{effectivenessData.metrics.userSatisfaction.overallSatisfaction}/10</span>
+                <span className="value">
+                  {effectivenessData.metrics.userSatisfaction.overallSatisfaction}/10
+                </span>
                 <span className="label">Overall Rating</span>
               </div>
             </div>
@@ -541,7 +607,9 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
             <div className="metric-card">
               <h4>Performance Impact</h4>
               <div className="metric-value">
-                <span className="value">{effectivenessData.metrics.performanceImpact.taskCompletionRate}%</span>
+                <span className="value">
+                  {effectivenessData.metrics.performanceImpact.taskCompletionRate}%
+                </span>
                 <span className="label">Task Completion</span>
               </div>
             </div>
@@ -549,7 +617,9 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
             <div className="metric-card">
               <h4>Independence Level</h4>
               <div className="metric-value">
-                <span className="value">{effectivenessData.metrics.performanceImpact.independenceLevel}%</span>
+                <span className="value">
+                  {effectivenessData.metrics.performanceImpact.independenceLevel}%
+                </span>
                 <span className="label">Independence</span>
               </div>
             </div>
@@ -557,7 +627,9 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
             <div className="metric-card">
               <h4>Error Reduction</h4>
               <div className="metric-value">
-                <span className="value">{effectivenessData.metrics.performanceImpact.errorReduction}%</span>
+                <span className="value">
+                  {effectivenessData.metrics.performanceImpact.errorReduction}%
+                </span>
                 <span className="label">Fewer Errors</span>
               </div>
             </div>
@@ -766,7 +838,7 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
 
         .section-header h3 {
           margin: 0;
-          color: #1f2937;
+          color: #111111;
           font-size: 1.5em;
         }
 
@@ -792,7 +864,7 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
 
         .profile-card h4 {
           margin: 0 0 15px 0;
-          color: #1f2937;
+          color: #111111;
           font-size: 1.2em;
           border-bottom: 1px solid #e5e7eb;
           padding-bottom: 10px;
@@ -816,16 +888,18 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
         }
 
         .detail-item span {
-          color: #1f2937;
+          color: #111111;
         }
 
-        .needs-list, .modalities {
+        .needs-list,
+        .modalities {
           display: flex;
           flex-wrap: wrap;
           gap: 8px;
         }
 
-        .need-tag, .modality-tag {
+        .need-tag,
+        .modality-tag {
           padding: 4px 12px;
           background: #ddd6fe;
           color: #5b21b6;
@@ -883,7 +957,8 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
           color: #6b7280;
         }
 
-        .support-team, .emergency-contacts {
+        .support-team,
+        .emergency-contacts {
           background: white;
           border-radius: 12px;
           padding: 20px;
@@ -891,13 +966,15 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
           border: 1px solid #e5e7eb;
         }
 
-        .team-members, .contacts-list {
+        .team-members,
+        .contacts-list {
           display: flex;
           flex-direction: column;
           gap: 10px;
         }
 
-        .team-member, .contact-item {
+        .team-member,
+        .contact-item {
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -915,7 +992,7 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
 
         .contact-name {
           font-weight: 500;
-          color: #1f2937;
+          color: #111111;
         }
 
         .contact-relationship {
@@ -923,7 +1000,10 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
           color: #6b7280;
         }
 
-        .contact-btn, .edit-profile-btn, .reset-settings-btn, .new-assessment-btn {
+        .contact-btn,
+        .edit-profile-btn,
+        .reset-settings-btn,
+        .new-assessment-btn {
           padding: 8px 16px;
           border: 1px solid #8b5cf6;
           background: white;
@@ -934,7 +1014,10 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
           transition: all 0.3s ease;
         }
 
-        .contact-btn:hover, .edit-profile-btn:hover, .reset-settings-btn:hover, .new-assessment-btn:hover {
+        .contact-btn:hover,
+        .edit-profile-btn:hover,
+        .reset-settings-btn:hover,
+        .new-assessment-btn:hover {
           background: #8b5cf6;
           color: white;
         }
@@ -955,7 +1038,7 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
 
         .settings-category h4 {
           margin: 0 0 20px 0;
-          color: #1f2937;
+          color: #111111;
           font-size: 1.3em;
           border-bottom: 2px solid #8b5cf6;
           padding-bottom: 10px;
@@ -983,7 +1066,7 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
 
         .feature-label {
           font-weight: 500;
-          color: #1f2937;
+          color: #111111;
         }
 
         .toggle-btn {
@@ -1027,7 +1110,8 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
           color: #6b7280;
         }
 
-        .control-item input, .control-item select {
+        .control-item input,
+        .control-item select {
           flex: 1;
           padding: 4px 8px;
           border: 1px solid #d1d5db;
@@ -1036,7 +1120,7 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
 
         .control-value {
           min-width: 60px;
-          color: #1f2937;
+          color: #111111;
           font-weight: 500;
         }
 

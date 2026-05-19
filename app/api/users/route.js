@@ -123,5 +123,28 @@ export async function GET(request) {
     },
   })
 
-  return NextResponse.json({ success: true, data: users })
+  let data = users
+  if (wantsTeachers && users.length > 0) {
+    const teacherRows = await prisma.teacher.findMany({
+      where: { schoolId, userId: { in: users.map((u) => u.id) } },
+      select: {
+        id: true,
+        userId: true,
+        assignedSubjects: true,
+        subjects: { select: { name: true } },
+      },
+    })
+    const byUserId = new Map(teacherRows.map((t) => [t.userId, t]))
+    data = users.map((u) => {
+      const t = byUserId.get(u.id)
+      return {
+        ...u,
+        teacherId: t?.id || null,
+        assignedSubjects: t?.assignedSubjects || [],
+        subjectNames: (t?.subjects || []).map((s) => s.name).filter(Boolean),
+      }
+    })
+  }
+
+  return NextResponse.json({ success: true, data })
 }

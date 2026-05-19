@@ -44,7 +44,7 @@ export const CurriculumMapping = () => {
           <Map className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
           Curriculum Mapping System
         </h3>
-        <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-royalPurple-text1">
+        <Button className="bg-accent hover:bg-accent/90 text-white border-2 border-ink">
           <Plus className="h-4 w-4 mr-2" />
           Create New Map
         </Button>
@@ -169,7 +169,7 @@ export const DifferentiatedInstruction = () => {
           <Layers className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
           Differentiated Instruction Tools
         </h3>
-        <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-royalPurple-text1">
+        <Button className="bg-accent hover:bg-accent/90 text-white border-2 border-ink">
           <Plus className="h-4 w-4 mr-2" />
           Create Strategy
         </Button>
@@ -304,7 +304,7 @@ export const StudentPortfolios = () => {
             <Search className="h-4 w-4 mr-2" />
             Search
           </Button>
-          <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-royalPurple-text1">
+          <Button className="bg-accent hover:bg-accent/90 text-white border-2 border-ink">
             <Plus className="h-4 w-4 mr-2" />
             Add Work
           </Button>

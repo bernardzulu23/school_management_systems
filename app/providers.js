@@ -175,7 +175,7 @@ export function Providers({ children }) {
         <PWALoader />
         <DevServiceWorkerReset />
         {skipSessionSync ? (
-          <AppThemeProvider defaultTheme="system" enableSystem>
+          <AppThemeProvider defaultTheme="light" enableSystem={false}>
             <GlobalTopLoadingBar />
             <GlobalBackButton />
             <OfflineBanner />
@@ -184,7 +184,7 @@ export function Providers({ children }) {
         ) : (
           <ActivitySessionKeeper>
             <AuthSessionSync>
-              <AppThemeProvider defaultTheme="system" enableSystem>
+              <AppThemeProvider defaultTheme="light" enableSystem={false}>
                 <GlobalTopLoadingBar />
                 <GlobalBackButton />
                 {children}

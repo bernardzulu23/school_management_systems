@@ -265,7 +265,7 @@ export default function CreativeTeachingHub() {
                             if (feature.component) setActiveFeature(feature.id)
                           }}
                           style={{
-                            background: '#7c3aed',
+                            background: '#FF3B00',
                             color: '#fff',
                             border: 'none',
                             borderRadius: 8,
@@ -281,9 +281,9 @@ export default function CreativeTeachingHub() {
                         <button
                           disabled
                           style={{
-                            background: '#2d1f4e',
-                            color: '#4b3575',
-                            border: '1px solid #3b2a66',
+                            background: '#FFFFFF',
+                            color: '#A8A7A2',
+                            border: '1px solid #111111',
                             borderRadius: 8,
                             padding: '10px 20px',
                             width: '100%',
@@ -336,7 +336,7 @@ export default function CreativeTeachingHub() {
                               if (feature.component) setActiveFeature(feature.id)
                             }}
                             style={{
-                              background: '#7c3aed',
+                              background: '#FF3B00',
                               color: '#fff',
                               border: 'none',
                               borderRadius: 8,
@@ -352,9 +352,9 @@ export default function CreativeTeachingHub() {
                           <button
                             disabled
                             style={{
-                              background: '#2d1f4e',
-                              color: '#4b3575',
-                              border: '1px solid #3b2a66',
+                              background: '#FFFFFF',
+                              color: '#A8A7A2',
+                              border: '1px solid #111111',
                               borderRadius: 8,
                               padding: '10px 20px',
                               width: '100%',
@@ -408,7 +408,7 @@ export default function CreativeTeachingHub() {
                               if (feature.component) setActiveFeature(feature.id)
                             }}
                             style={{
-                              background: '#7c3aed',
+                              background: '#FF3B00',
                               color: '#fff',
                               border: 'none',
                               borderRadius: 8,
@@ -424,9 +424,9 @@ export default function CreativeTeachingHub() {
                           <button
                             disabled
                             style={{
-                              background: '#2d1f4e',
-                              color: '#4b3575',
-                              border: '1px solid #3b2a66',
+                              background: '#FFFFFF',
+                              color: '#A8A7A2',
+                              border: '1px solid #111111',
                               borderRadius: 8,
                               padding: '10px 20px',
                               width: '100%',

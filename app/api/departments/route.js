@@ -32,9 +32,9 @@ export async function GET(request) {
     .sort((a, b) => (order.get(a.name) ?? 999) - (order.get(b.name) ?? 999))
 
   const isAdminOrHead = roleCheck(auth.user, ['ADMIN', 'headteacher'])
-  const isHod = roleCheck(auth.user, ['HOD', 'hod'])
+  const hodProfile = await getHodProfile(prisma, auth.user.id, schoolId)
+  const isHod = roleCheck(auth.user, ['HOD', 'hod']) || Boolean(hodProfile)
   if (isHod && !isAdminOrHead) {
-    const hodProfile = await getHodProfile(prisma, auth.user.id, schoolId)
     const allowedIds = await resolveHodDepartmentIds(prisma, schoolId, hodProfile)
     if (allowedIds.length > 0) {
       const allowed = new Set(allowedIds)

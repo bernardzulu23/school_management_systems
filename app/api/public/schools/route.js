@@ -38,6 +38,8 @@ export async function GET(request) {
       select: {
         id: true,
         name: true,
+        subdomain: true,
+        logo_url: true,
       },
       orderBy: { createdAt: 'desc' },
       take: 10,

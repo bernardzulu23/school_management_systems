@@ -6,10 +6,11 @@
 
 :root {
   /* ── Brutalist core ── */
-  --color-paper: #efece5;
+  --color-paper: #f5f2ed;
   --color-ink: #111111;
   --color-accent: #ff3b00;
   --color-white: #ffffff;
+  --color-muted: #666666;
 
   /* ── Brand (mapped to brutalist) ── */
   --color-brand-primary: #ff3b00;
@@ -18,16 +19,16 @@
   --color-brand-accent: #ff3b00;
 
   /* ── Dashboard ── */
-  --color-dash-bg: #efece5;
+  --color-dash-bg: #f5f2ed;
   --color-dash-card: #ffffff;
   --color-dash-card-alt: #f5f2eb;
   --color-dash-border: #111111;
   --color-dash-text: #111111;
-  --color-dash-muted: rgba(17, 17, 17, 0.6);
-  --color-dash-subtext: rgba(17, 17, 17, 0.7);
+  --color-dash-muted: #666666;
+  --color-dash-subtext: #666666;
 
   /* ── Forms ── */
-  --color-form-bg: #efece5;
+  --color-form-bg: #f5f2ed;
   --color-form-card: #ffffff;
   --color-form-input: #ffffff;
   --color-form-border: #111111;
@@ -36,9 +37,9 @@
   --color-form-placeholder: rgba(17, 17, 17, 0.4);
 
   /* ── Landing ── */
-  --color-land-bg: #efece5;
+  --color-land-bg: #f5f2ed;
   --color-land-text: #111111;
-  --color-land-muted: rgba(17, 17, 17, 0.6);
+  --color-land-muted: #666666;
 
   /* ── KPI ── */
   --color-kpi-zero: #a8a7a2;
@@ -52,8 +53,8 @@
   --color-status-pending: #c99a2e;
 
   /* ── Nav ── */
-  --color-nav-bg: #111111;
-  --color-nav-text: #efece5;
+  --color-nav-bg: #1a1a1a;
+  --color-nav-text: #f5f2ed;
   --color-nav-border: rgba(239, 236, 229, 0.1);
 
   /* ── Tables ── */
@@ -71,15 +72,15 @@
   --color-date-text: #efece5;
 
   /* ── Royal Purple → remapped to brutalist ── */
-  --rp-page: #efece5;
-  --rp-deep: #1c1c1a;
+  --rp-page: #f5f2ed;
+  --rp-deep: #1a1a1a;
   --rp-card: #ffffff;
   --rp-card2: #f5f2eb;
   --rp-border: rgba(17, 17, 17, 0.12);
   --rp-border2: rgba(17, 17, 17, 0.24);
   --rp-text1: #111111;
-  --rp-text2: rgba(17, 17, 17, 0.72);
-  --rp-text3: rgba(17, 17, 17, 0.5);
+  --rp-text2: #666666;
+  --rp-text3: #666666;
   --rp-accent: #ff3b00;
   --rp-accentbg: rgba(255, 59, 0, 0.15);
   --rp-accenttx: #ffffff;
@@ -92,14 +93,14 @@
   --rp-muted: rgba(17, 17, 17, 0.06);
 
   /* ── Page surfaces ── */
-  --page-bg: #efece5;
+  --page-bg: #f5f2ed;
   --surface: #ffffff;
   --surface-alt: #f5f2eb;
   --border: rgba(17, 17, 17, 0.1);
   --border-hover: rgba(17, 17, 17, 0.3);
   --text-primary: #111111;
-  --text-secondary: rgba(17, 17, 17, 0.7);
-  --text-muted: rgba(17, 17, 17, 0.5);
+  --text-secondary: #666666;
+  --text-muted: #666666;
 
   /* ── Badges ── */
   --badge-up-bg: #e6faf0;
@@ -126,10 +127,45 @@
   background: #ff3b00;
 }
 
-/* ── Base body ── */
+/* ── Base body (color.md: paper + ink) ── */
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+}
+
+/* Auth / login — color.md contrast on white cards */
+.auth-card,
+.auth-card label,
+.auth-card h1,
+.auth-card h2,
+.auth-card p {
+  color: var(--color-ink);
+}
+
+.auth-card .text-muted,
+.auth-card label.text-muted {
+  color: var(--color-muted);
+}
+
+/* Never use on-accent (white) text on white auth cards */
+.auth-card .text-royalPurple-accentTx {
+  color: var(--color-accent) !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #111111 !important;
+  caret-color: #111111;
 }
 
 .dash-page {
@@ -288,7 +324,7 @@ body {
 }
 
 .progress-track {
-  background: #3d2460;
+  background: rgba(17, 17, 17, 0.1);
   border-radius: 9999px;
   height: 0.5rem;
 }
@@ -378,12 +414,12 @@ body {
 
 .zsms-hover-raise:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
+  box-shadow: 4px 4px 0 0 rgba(17, 17, 17, 0.15);
 }
 
 .zsms-hover-raise:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
+  box-shadow: 2px 2px 0 0 rgba(17, 17, 17, 0.15);
 }
 
 .onboard-page {
@@ -402,7 +438,7 @@ body {
   background: #ffffff;
   border: 1px solid var(--color-table-border);
   border-radius: 20px;
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  box-shadow: 4px 4px 0 0 rgba(17, 17, 17, 0.08);
 }
 
 .dark .onboard-card {
@@ -481,8 +517,8 @@ body {
   font-weight: 800;
   font-size: 14px;
   border: 1px solid var(--color-table-border);
-  background: #f8fafc;
-  color: #64748b;
+  background: #f5f2eb;
+  color: #666666;
   flex: 0 0 auto;
 }
 
@@ -513,17 +549,10 @@ body {
 }
 
 html:not(.dark) .bg-white {
-  color: #111827;
-  --rp-text1: #111827;
-  --rp-text2: #374151;
-  --rp-text3: #6b7280;
-}
-
-html:not(.dark) .bg-white .text-white,
-html:not(.dark) .bg-white .text-royalPurple-text1,
-html:not(.dark) .bg-white .text-royalPurple-text2,
-html:not(.dark) .bg-white .text-royalPurple-text3 {
-  color: #111827 !important;
+  color: var(--color-ink);
+  --rp-text1: #111111;
+  --rp-text2: #666666;
+  --rp-text3: #666666;
 }
 
 .bg-royalPurple-page,
@@ -534,7 +563,7 @@ html:not(.dark) .bg-white .text-royalPurple-text3 {
 
 /* Dark surface contrast guard */
 .bg-royalPurple-deep {
-  --rp-text1: #efece5;
+  --rp-text1: #f5f2ed;
   --rp-text2: rgba(239, 236, 229, 0.7);
   --rp-text3: rgba(239, 236, 229, 0.45);
   --rp-border: rgba(239, 236, 229, 0.15);
@@ -566,7 +595,7 @@ html:not(.dark) .bg-white .text-royalPurple-text3 {
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  color: #111827;
+  color: #111111;
   flex: 0 0 auto;
 }
 
@@ -577,7 +606,7 @@ html:not(.dark) .bg-white .text-royalPurple-text3 {
 
 .provider-dot-mtn {
   background: #facc15;
-  color: #111827;
+  color: #111111;
 }
 
 .provider-dot-zamtel {
@@ -680,16 +709,16 @@ html:not(.dark) .bg-white .text-royalPurple-text3 {
 
   .white-card {
     background-color: #ffffff;
-    --card-text-primary: 15 23 42;
-    --card-text-secondary: 71 85 105;
-    --card-text-muted: 148 163 184;
-    --card-border: 226 232 240;
+    --card-text-primary: 17 17 17;
+    --card-text-secondary: 102 102 102;
+    --card-text-muted: 102 102 102;
+    --card-border: 17 17 17;
     --rp-card: #ffffff;
-    --rp-card2: #f8fafc;
-    --rp-border: #e2e8f0;
-    --rp-text1: #0f172a;
-    --rp-text2: #475569;
-    --rp-text3: #94a3b8;
+    --rp-card2: #f5f2eb;
+    --rp-border: rgba(17, 17, 17, 0.12);
+    --rp-text1: #111111;
+    --rp-text2: #666666;
+    --rp-text3: #666666;
   }
 
   body {
@@ -757,22 +786,22 @@ html:not(.dark) .bg-white .text-royalPurple-text3 {
   }
 
   .btn-secondary {
-    @apply btn border border-royalPurple-border text-royalPurple-text1 rounded-lg hover:bg-royalPurple-card2 transition-colors px-4 py-2;
-    background: white;
+    @apply btn border-2 border-ink text-ink rounded-lg hover:bg-ink hover:text-paper transition-colors px-4 py-2;
+    background: var(--color-paper);
   }
 
   .input {
-    @apply w-full bg-royalPurple-card border border-royalPurple-border text-royalPurple-text1 placeholder:text-royalPurple-text3 rounded-lg focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2;
+    @apply w-full bg-white border-2 border-ink text-ink placeholder:text-ink/40 rounded-lg focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30;
     padding: 0.75rem 0.875rem;
   }
 
   .textarea {
-    @apply w-full bg-royalPurple-card border border-royalPurple-border text-royalPurple-text1 placeholder:text-royalPurple-text3 rounded-lg focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2;
+    @apply w-full bg-white border-2 border-ink text-ink placeholder:text-ink/40 rounded-lg focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30;
     padding: 0.75rem 0.875rem;
   }
 
   .select {
-    @apply w-full bg-royalPurple-card border border-royalPurple-border text-royalPurple-text1 rounded-lg focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2 appearance-none;
+    @apply w-full bg-white border-2 border-ink text-ink rounded-lg focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 appearance-none;
     padding: 0.75rem 0.875rem;
     color-scheme: light;
   }
@@ -899,4 +928,26 @@ button:has(svg):not(:has(span)) {
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.3);
+}
+
+/* Dark-mode class: keep brutalist palette (color.md) — no legacy purple theme */
+.dark {
+  --color-paper: #f5f2ed;
+  --color-ink: #111111;
+  --color-accent: #ff3b00;
+  --color-muted: #666666;
+  --rp-page: #f5f2ed;
+  --rp-deep: #1a1a1a;
+  --rp-card: #ffffff;
+  --rp-card2: #f5f2eb;
+  --rp-text1: #111111;
+  --rp-text2: #666666;
+  --rp-text3: #666666;
+  --rp-accent: #ff3b00;
+  color-scheme: light;
+}
+
+.dark body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
 }

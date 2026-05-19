@@ -89,17 +89,17 @@ export default function AIStoryWeaver() {
         display: 'grid',
         gridTemplateColumns: '340px 1fr',
         height: '100vh',
-        background: '#170d28',
+        background: '#EFECE5',
       }}
     >
-      <div style={{ borderRight: '1px solid #3b2a66', overflowY: 'auto', padding: '1.5rem' }}>
+      <div style={{ borderRight: '1px solid #111111', overflowY: 'auto', padding: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '1.5rem' }}>
-          <BookOpen size={22} color="#ede9fe" aria-hidden="true" />
+          <BookOpen size={22} color="#111111" aria-hidden="true" />
           <div>
-            <h2 style={{ color: '#ede9fe', fontSize: 17, fontWeight: 700, margin: 0 }}>
+            <h2 style={{ color: '#111111', fontSize: 17, fontWeight: 700, margin: 0 }}>
               AI Story Weaver
             </h2>
-            <p style={{ color: '#6d28d9', fontSize: 12, margin: 0 }}>
+            <p style={{ color: '#666666', fontSize: 12, margin: 0 }}>
               Zambian-context educational stories
             </p>
           </div>
@@ -138,14 +138,14 @@ export default function AIStoryWeaver() {
                 borderRadius: 8,
                 fontSize: 12,
                 cursor: 'pointer',
-                border: `1px solid ${form.storyType === t.id ? '#7c3aed' : '#3b2a66'}`,
-                background: form.storyType === t.id ? '#2d1f4e' : 'transparent',
-                color: form.storyType === t.id ? '#ede9fe' : '#a78bfa',
+                border: `1px solid ${form.storyType === t.id ? '#FF3B00' : '#111111'}`,
+                background: form.storyType === t.id ? '#FFFFFF' : 'transparent',
+                color: form.storyType === t.id ? '#111111' : '#666666',
                 textAlign: 'left',
               }}
             >
               <div style={{ fontWeight: 600 }}>{t.label}</div>
-              <div style={{ fontSize: 10, color: '#6d28d9', marginTop: 2 }}>{t.desc}</div>
+              <div style={{ fontSize: 10, color: '#666666', marginTop: 2 }}>{t.desc}</div>
             </button>
           ))}
         </div>
@@ -168,9 +168,9 @@ export default function AIStoryWeaver() {
                 padding: '7px 0',
                 borderRadius: 8,
                 fontSize: 12,
-                border: `1px solid ${form.length === l ? '#7c3aed' : '#3b2a66'}`,
-                background: form.length === l ? '#7c3aed' : 'transparent',
-                color: form.length === l ? '#fff' : '#a78bfa',
+                border: `1px solid ${form.length === l ? '#FF3B00' : '#111111'}`,
+                background: form.length === l ? '#FF3B00' : 'transparent',
+                color: form.length === l ? '#fff' : '#666666',
                 cursor: 'pointer',
                 fontWeight: 600,
                 textTransform: 'capitalize',
@@ -188,7 +188,7 @@ export default function AIStoryWeaver() {
             checked={form.includeQuestions}
             onChange={(e) => setForm((f) => ({ ...f, includeQuestions: e.target.checked }))}
           />
-          <label htmlFor="questions" style={{ color: '#a78bfa', fontSize: 13 }}>
+          <label htmlFor="questions" style={{ color: '#666666', fontSize: 13 }}>
             Include comprehension questions
           </label>
         </div>
@@ -201,7 +201,7 @@ export default function AIStoryWeaver() {
           style={{
             width: '100%',
             padding: '13px',
-            background: loading ? '#4b3575' : '#7c3aed',
+            background: loading ? '#A8A7A2' : '#FF3B00',
             border: 'none',
             borderRadius: 10,
             color: '#fff',
@@ -242,9 +242,9 @@ export default function AIStoryWeaver() {
               width: '100%',
               padding: '11px',
               background: 'transparent',
-              border: '1px solid #3b2a66',
+              border: '1px solid #111111',
               borderRadius: 10,
-              color: '#a78bfa',
+              color: '#666666',
               fontWeight: 700,
               fontSize: 13,
               cursor: 'pointer',
@@ -264,8 +264,8 @@ export default function AIStoryWeaver() {
               display: 'flex',
               gap: 8,
               padding: '12px 16px',
-              borderBottom: '1px solid #3b2a66',
-              background: '#2d1f4e',
+              borderBottom: '1px solid #111111',
+              background: '#FFFFFF',
             }}
           >
             <button onClick={copyToClipboard} style={actionBtn}>
@@ -297,12 +297,12 @@ export default function AIStoryWeaver() {
           {!story && !loading ? (
             <div style={{ textAlign: 'center', paddingTop: '4rem' }}>
               <div style={{ marginBottom: 16 }}>
-                <BookOpen size={56} color="#ede9fe" aria-hidden="true" />
+                <BookOpen size={56} color="#111111" aria-hidden="true" />
               </div>
-              <h3 style={{ color: '#ede9fe', fontWeight: 600, marginBottom: 8 }}>
+              <h3 style={{ color: '#111111', fontWeight: 600, marginBottom: 8 }}>
                 Your story will appear here
               </h3>
-              <p style={{ color: '#6d28d9', fontSize: 14, maxWidth: 400, margin: '0 auto' }}>
+              <p style={{ color: '#666666', fontSize: 14, maxWidth: 400, margin: '0 auto' }}>
                 Fill in the form and click "Generate Story" to create a Zambian-context educational
                 story for your students
               </p>
@@ -318,9 +318,9 @@ export default function AIStoryWeaver() {
                   animation: 'pulse 1.5s ease-in-out infinite',
                 }}
               >
-                <PenLine size={48} color="#ede9fe" aria-hidden="true" />
+                <PenLine size={48} color="#111111" aria-hidden="true" />
               </div>
-              <p style={{ color: '#a78bfa', fontSize: 15 }}>Writing your story…</p>
+              <p style={{ color: '#666666', fontSize: 15 }}>Writing your story…</p>
               <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
             </div>
           ) : null}
@@ -328,10 +328,10 @@ export default function AIStoryWeaver() {
           {story ? (
             <div
               style={{
-                background: '#2d1f4e',
+                background: '#FFFFFF',
                 borderRadius: 14,
                 padding: '2rem',
-                border: '1px solid #3b2a66',
+                border: '1px solid #111111',
                 maxWidth: 760,
                 margin: '0 auto',
               }}
@@ -348,7 +348,7 @@ export default function AIStoryWeaver() {
                 {form.topic}
               </h2>
               <div
-                style={{ color: '#ede9fe', lineHeight: 1.85, fontSize: 15, whiteSpace: 'pre-wrap' }}
+                style={{ color: '#111111', lineHeight: 1.85, fontSize: 15, whiteSpace: 'pre-wrap' }}
               >
                 {story}
               </div>
@@ -364,7 +364,7 @@ function Label({ children }) {
   return (
     <p
       style={{
-        color: '#a78bfa',
+        color: '#666666',
         fontSize: 12,
         fontWeight: 600,
         marginBottom: 6,
@@ -401,9 +401,9 @@ function Tag({ children }) {
         fontSize: 11,
         padding: '3px 10px',
         borderRadius: 99,
-        background: '#261843',
-        border: '1px solid #3b2a66',
-        color: '#a78bfa',
+        background: '#F5F2EB',
+        border: '1px solid #111111',
+        color: '#666666',
       }}
     >
       {children}
@@ -414,10 +414,10 @@ function Tag({ children }) {
 const inputStyle = {
   width: '100%',
   padding: '10px 12px',
-  background: '#261843',
-  border: '1px solid #3b2a66',
+  background: '#F5F2EB',
+  border: '1px solid #111111',
   borderRadius: 8,
-  color: '#ede9fe',
+  color: '#111111',
   fontSize: 13,
   outline: 'none',
   marginBottom: 4,
@@ -426,10 +426,10 @@ const inputStyle = {
 
 const actionBtn = {
   padding: '7px 14px',
-  background: '#261843',
-  border: '1px solid #3b2a66',
+  background: '#F5F2EB',
+  border: '1px solid #111111',
   borderRadius: 8,
-  color: '#a78bfa',
+  color: '#666666',
   fontSize: 13,
   cursor: 'pointer',
   fontWeight: 500,

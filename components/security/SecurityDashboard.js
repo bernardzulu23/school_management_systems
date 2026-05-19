@@ -345,7 +345,7 @@ export default function SecurityDashboard() {
         </div>
 
         {/* Security Metrics */}
-        <div className="mt-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-royalPurple-text1">
+        <div className="mt-8 bg-ink border-2 border-ink rounded-lg p-6 text-paper shadow-brutal">
           <h3 className="text-xl font-semibold mb-4">🔐 Security Metrics</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">

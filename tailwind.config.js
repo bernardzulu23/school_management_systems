@@ -1,4 +1,35 @@
 /** @type {import('tailwindcss').Config} */
+
+/** Brutalist neutral scale — maps legacy slate/gray usage to color.md */
+const brutalistNeutral = {
+  50: '#F5F2EB',
+  100: '#EFECE5',
+  200: 'rgba(17, 17, 17, 0.08)',
+  300: 'rgba(17, 17, 17, 0.15)',
+  400: '#666666',
+  500: '#666666',
+  600: '#4E4D4A',
+  700: '#333331',
+  800: '#111111',
+  900: '#111111',
+  950: '#111111',
+}
+
+/** Maps legacy violet/purple/indigo UI to accent (color.md) */
+const brutalistAccentScale = {
+  50: 'rgba(255, 59, 0, 0.08)',
+  100: 'rgba(255, 59, 0, 0.12)',
+  200: 'rgba(255, 59, 0, 0.2)',
+  300: '#FF6B33',
+  400: '#FF3B00',
+  500: '#FF3B00',
+  600: '#CC2F00',
+  700: '#991F00',
+  800: '#7A1800',
+  900: '#5C1200',
+  950: '#3D0C00',
+}
+
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -9,9 +40,25 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        paper: '#EFECE5',
+        paper: '#F5F2ED',
         ink: '#111111',
         accent: '#FF3B00',
+        muted: '#666666',
+        /* Remap Tailwind defaults so every route inherits color.md */
+        slate: brutalistNeutral,
+        gray: brutalistNeutral,
+        zinc: brutalistNeutral,
+        neutral: brutalistNeutral,
+        stone: brutalistNeutral,
+        violet: brutalistAccentScale,
+        purple: brutalistAccentScale,
+        indigo: brutalistAccentScale,
+        fuchsia: brutalistAccentScale,
+        pink: {
+          500: '#FF3B00',
+          600: '#CC2F00',
+          700: '#991F00',
+        },
         brand: {
           primary: 'var(--color-brand-primary)',
           hover: 'var(--color-brand-hover)',
@@ -49,7 +96,7 @@ module.exports = {
           successTx: '#16a34a',
           danger: '#fef2f2',
           dangerTx: '#dc2626',
-          muted: '#f3f4f6',
+          muted: '#F5F2EB',
         },
         g: {
           50: '#F8F8F7',

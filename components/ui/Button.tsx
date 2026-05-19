@@ -44,8 +44,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles: Record<string, React.CSSProperties> = {
       primary: {
-        backgroundColor: colors.primary[600],
-        color: 'white',
+        backgroundColor: colors.ink,
+        color: colors.paper,
+        border: `2px solid ${colors.ink}`,
+        boxShadow: `4px 4px 0 0 ${colors.accent}`,
         ...baseStyles,
       },
       secondary: {
@@ -62,7 +64,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       },
       ghost: {
         backgroundColor: 'transparent',
-        color: colors.primary[600],
+        color: colors.accent,
         ...baseStyles,
       },
       destructive: {

@@ -44,7 +44,7 @@ export default defineConfig({
     seed: 'node prisma/seed.js',
   },
   datasource: {
-    // Uses DATABASE_URL from .env / Render / Railway dashboard
-    url: process.env.DATABASE_URL,
+    // Neon: use DIRECT_URL for migrations; fallback to DATABASE_URL for local dev
+    url: process.env.DIRECT_URL || process.env.DATABASE_URL,
   },
 })

@@ -1,5 +1,5 @@
-// server.js — optional entrypoint: Railway (railway.toml), or Render with dockerCommand override.
-// Default Dockerfile CMD runs Next standalone only; set SKIP_STARTUP_MIGRATE=true if you use this file on Render and migrations are managed elsewhere.
+// server.js — optional entrypoint for container hosts (Docker). Prefer Neon + Cloudflare Workers (see docs/doc/NEON_CLOUDFLARE_SETUP.md).
+// Set SKIP_STARTUP_MIGRATE=true if migrations run in CI against Neon DIRECT_URL.
 const path = require('path')
 const { spawn } = require('child_process')
 

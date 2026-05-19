@@ -3,7 +3,6 @@ const nextConfig = {
   // Deployment configuration
   output: 'standalone',
 
-  // Add these for Railway
   experimental: {
     serverActions: {
       bodySizeLimit: '2mb',
@@ -27,11 +26,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**.railway.app',
+        hostname: '**.pages.dev',
       },
       {
         protocol: 'https',
-        hostname: '**.onrender.com',
+        hostname: '**.workers.dev',
       },
     ],
     formats: ['image/webp', 'image/avif'],
@@ -42,12 +41,9 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_APP_URL:
       process.env.NEXT_PUBLIC_APP_URL ||
-      (process.env.RENDER_EXTERNAL_URL && String(process.env.RENDER_EXTERNAL_URL).trim()) ||
-      (process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : process.env.RAILWAY_PUBLIC_DOMAIN
-          ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
-          : 'http://localhost:3000'),
+      process.env.NEXT_PUBLIC_APP_ORIGIN ||
+      (process.env.CF_PAGES_URL ? `https://${process.env.CF_PAGES_URL}` : null) ||
+      'http://localhost:3000',
   },
 
   // Allow phone/LAN devices hitting the dev server (avoids RSC fetch failures from blocked origins)

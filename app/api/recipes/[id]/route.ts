@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { toPrismaJsonValue } from '@/lib/timetable/recipes'
 
 export const dynamic = 'force-dynamic'
 
@@ -224,7 +225,7 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
         placementPriority:
           body.placementPriority != null ? toInt(body.placementPriority, 5) : undefined,
         isValid: validation.isValid,
-        validationErrors: validation.result,
+        validationErrors: toPrismaJsonValue(validation.result),
         validatedAt: new Date(),
       },
     })
@@ -256,7 +257,7 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
             recipeId: id,
             type: c.type,
             priority: toInt(c.priority, 5),
-            config: c.config || {},
+            config: toPrismaJsonValue(c.config || {}),
           })),
         })
       }

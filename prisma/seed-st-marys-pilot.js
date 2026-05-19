@@ -7,11 +7,6 @@ const { Pool } = require('pg')
 const { PrismaPg } = require('@prisma/adapter-pg')
 const { hash } = require('bcryptjs')
 
-if (String(process.env.SEED_REMOTE_DB || '').toLowerCase() === 'true') {
-  process.env.DATABASE_URL =
-    'postgresql://postgres:TBGUIpaIMczwHWzrupsNdkgwiFLRDTTr@ballast.proxy.rlwy.net:17921/railway'
-}
-
 const PILOT = {
   name: "St. Mary's R. Christian Day and Boarding Secondary School",
   subdomain: 'stmaryschristian',

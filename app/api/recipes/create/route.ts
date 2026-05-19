@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { toPrismaJsonValue } from '@/lib/timetable/recipes'
 
 export const dynamic = 'force-dynamic'
 
@@ -226,7 +227,7 @@ export async function POST(req: NextRequest) {
         expectedPeriodsPerWeek: body.expectedPeriodsPerWeek ?? null,
         placementPriority: toInt(body.placementPriority, 5),
         isValid: validation.isValid,
-        validationErrors: validation.result,
+        validationErrors: toPrismaJsonValue(validation.result),
         validatedAt: new Date(),
         createdByUserId: auth.user?.id ? String(auth.user.id) : null,
         blocks: {
@@ -252,7 +253,7 @@ export async function POST(req: NextRequest) {
               create: constraints.map((c) => ({
                 type: c.type,
                 priority: toInt(c.priority, 5),
-                config: c.config || {},
+                config: toPrismaJsonValue(c.config || {}),
               })),
             }
           : undefined,

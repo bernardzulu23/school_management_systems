@@ -1,0 +1,21 @@
+# Cloudflare Workers — deploy with OpenNext after: npm run cf:build && npm run cf:deploy
+# Docs: docs/doc/NEON_CLOUDFLARE_SETUP.md
+
+name = "zsms"
+main = ".open-next/worker.js"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+[vars]
+NODE_ENV = "production"
+
+# Set secrets via: npx wrangler secret put DATABASE_URL
+# npx wrangler secret put JWT_SECRET
+# npx wrangler secret put JWT_REFRESH_SECRET
+
+[observability]
+enabled = true

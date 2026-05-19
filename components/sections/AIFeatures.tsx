@@ -78,7 +78,7 @@ export function AIFeatures({ registerUrl }: { registerUrl: string }) {
             return (
               <Card key={feature.id} className="flex flex-col">
                 <div className="mb-4">
-                  <Icon size={40} color="#7c3aed" strokeWidth={1.5} aria-hidden="true" />
+                  <Icon size={40} color="#FF3B00" strokeWidth={1.5} aria-hidden="true" />
                 </div>
 
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>

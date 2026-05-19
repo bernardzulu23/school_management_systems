@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
 /**
- * Liveness: respond immediately so load balancers (Railway, etc.) do not time out
+ * Liveness: respond immediately so load balancers (Cloudflare, etc.) do not time out
  * while Prisma/DB warms up. Use GET /api/health?db=1 for a readiness/DB probe.
  */
 export const GET = withSecureApi(async function GET(request) {

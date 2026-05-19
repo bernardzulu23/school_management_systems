@@ -2,26 +2,24 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { authMiddleware } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
+import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
+import { canManageDepartmentAllocations, isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  const isAdminOrHead = roleCheck(auth.user, ['ADMIN', 'headteacher'])
-  const isHod = roleCheck(auth.user, ['HOD', 'hod'])
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const hodProfile = await prisma.headOfDepartment.findFirst({
-    where: { userId: auth.user.id, schoolId },
-    select: { departmentId: true, department: true },
-  })
+  const hodProfile = await getHodProfile(prisma, auth.user.id, schoolId)
+  const isAdminOrHead = isSchoolAdminOrHead(auth.user)
 
-  if (!isAdminOrHead && !isHod && !hodProfile) {
+  if (!canManageDepartmentAllocations(auth.user, hodProfile)) {
     throw new ApiError('Forbidden', 403)
   }
 

@@ -24,7 +24,7 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
       emergencyContacts: [
         { name: 'School Counselor', phone: '+1-555-0123', relationship: 'counselor' },
         { name: 'Parent/Guardian', phone: '+1-555-0456', relationship: 'parent' },
-        { name: 'Crisis Hotline', phone: '988', relationship: 'crisis_support' }
+        { name: 'Crisis Hotline', phone: '988', relationship: 'crisis_support' },
       ],
       supportTeam: ['school_counselor', 'mental_health_specialist', 'teacher', 'parent'],
       riskFactors: ['academic_stress', 'social_anxiety'],
@@ -33,14 +33,14 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
         mentalHealthServices: false,
         medications: false,
         hospitalizations: false,
-        traumaHistory: false
+        traumaHistory: false,
       },
       culturalConsiderations: {
         language: 'en',
         culturalBackground: 'diverse',
         religiousBeliefs: 'respectful_approach',
-        familyDynamics: 'supportive'
-      }
+        familyDynamics: 'supportive',
+      },
     })
     setWellbeingProfile(profile)
 
@@ -53,9 +53,9 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
         socialEngagement: 7,
         emotionalWellbeing: 5,
         physicalHealth: 8,
-        behavioralPatterns: 6
+        behavioralPatterns: 6,
       },
-      confidentialityLevel: 'CONFIDENTIAL'
+      confidentialityLevel: 'CONFIDENTIAL',
     })
     setCurrentAssessment(assessment)
 
@@ -71,20 +71,20 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
             description: 'Daily mindfulness and relaxation techniques',
             frequency: 'daily',
             duration: '15_minutes',
-            resources: ['mindfulness_app', 'breathing_exercises', 'guided_meditation']
+            resources: ['mindfulness_app', 'breathing_exercises', 'guided_meditation'],
           },
           {
             type: 'academic_support',
             description: 'Study skills and time management training',
             frequency: 'weekly',
             duration: '1_hour',
-            resources: ['study_planner', 'time_management_tools', 'academic_coach']
-          }
+            resources: ['study_planner', 'time_management_tools', 'academic_coach'],
+          },
         ],
         timeline: 'short_term',
         assignedTo: ['school_counselor', 'academic_support_specialist'],
-        monitoringSchedule: 'weekly'
-      })
+        monitoringSchedule: 'weekly',
+      }),
     ]
     setInterventionPlans(plans)
 
@@ -96,7 +96,7 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
         description: '24/7 crisis support and intervention',
         contact: '988',
         availability: '24/7',
-        type: 'phone'
+        type: 'phone',
       },
       {
         category: 'counseling',
@@ -104,7 +104,7 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
         description: 'Individual and group counseling sessions',
         contact: 'counselor@school.edu',
         availability: 'school_hours',
-        type: 'in_person'
+        type: 'in_person',
       },
       {
         category: 'peer_support',
@@ -112,7 +112,7 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
         description: 'Student-led support groups for various topics',
         contact: 'peer.support@school.edu',
         availability: 'scheduled',
-        type: 'group'
+        type: 'group',
       },
       {
         category: 'family_support',
@@ -120,7 +120,7 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
         description: 'Family therapy and support services',
         contact: 'family.services@school.edu',
         availability: 'by_appointment',
-        type: 'family'
+        type: 'family',
       },
       {
         category: 'online_resources',
@@ -128,8 +128,8 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
         description: 'Curated mental health and wellness apps',
         contact: 'apps.mentalhealth.org',
         availability: '24/7',
-        type: 'digital'
-      }
+        type: 'digital',
+      },
     ])
 
     // Set crisis protocols
@@ -138,32 +138,32 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
         LOW: {
           actions: ['self_care_reminders', 'check_in_scheduling', 'resource_sharing'],
           timeline: 'within_week',
-          personnel: ['teacher', 'peer_support']
+          personnel: ['teacher', 'peer_support'],
         },
         MODERATE: {
           actions: ['counselor_referral', 'parent_notification', 'safety_planning'],
           timeline: 'within_24_hours',
-          personnel: ['school_counselor', 'mental_health_specialist']
+          personnel: ['school_counselor', 'mental_health_specialist'],
         },
         HIGH: {
           actions: ['immediate_intervention', 'crisis_team_activation', 'safety_assessment'],
           timeline: 'immediate',
-          personnel: ['crisis_team', 'mental_health_professional', 'administration']
+          personnel: ['crisis_team', 'mental_health_professional', 'administration'],
         },
         CRITICAL: {
           actions: ['emergency_services', 'hospitalization_assessment', 'family_notification'],
           timeline: 'immediate',
-          personnel: ['emergency_services', 'crisis_team', 'medical_professional']
-        }
+          personnel: ['emergency_services', 'crisis_team', 'medical_professional'],
+        },
       },
       escalationProcedures: [
         'assess_immediate_safety',
         'contact_crisis_team',
         'notify_emergency_contacts',
         'document_incident',
-        'follow_up_planning'
+        'follow_up_planning',
       ],
-      emergencyContacts: profile.emergencyContacts
+      emergencyContacts: profile.emergencyContacts,
     })
 
     // Monitor progress
@@ -175,7 +175,7 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
     toast.error('Emergency protocols activated. Crisis team has been notified.', {
       duration: 10000,
       position: 'top-center',
-      icon: '🚨'
+      icon: '🚨',
     })
   }
 
@@ -210,9 +210,7 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
             <div className="intervention-count">
               {interventionPlans.length} Active Plan{interventionPlans.length !== 1 ? 's' : ''}
             </div>
-            <div className="intervention-progress">
-              Progress: 65%
-            </div>
+            <div className="intervention-progress">Progress: 65%</div>
             <button className="view-plans-btn">View Plans</button>
           </div>
 
@@ -221,59 +219,48 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
             <button className="crisis-btn" onClick={handleEmergencyAlert}>
               🚨 Crisis Support
             </button>
-            <div className="crisis-contact">
-              Crisis Hotline: 988
-            </div>
-            <div className="immediate-help">
-              Available 24/7
-            </div>
+            <div className="crisis-contact">Crisis Hotline: 988</div>
+            <div className="immediate-help">Available 24/7</div>
           </div>
         </div>
 
         <div className="wellbeing-indicators">
           <h3>Wellbeing Indicators</h3>
           <div className="indicators-grid">
-            {currentAssessment?.indicators && Object.entries(currentAssessment.indicators).map(([indicator, data]) => (
-              <div key={indicator} className="indicator-card">
-                <div className="indicator-header">
-                  <span className="indicator-name">{indicator.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</span>
-                  <span className={`indicator-score ${data.level?.toLowerCase()}`}>{data.score}/10</span>
+            {currentAssessment?.indicators &&
+              Object.entries(currentAssessment.indicators).map(([indicator, data]) => (
+                <div key={indicator} className="indicator-card">
+                  <div className="indicator-header">
+                    <span className="indicator-name">
+                      {indicator
+                        .replace(/([A-Z])/g, ' $1')
+                        .replace(/^./, (str) => str.toUpperCase())}
+                    </span>
+                    <span className={`indicator-score ${data.level?.toLowerCase()}`}>
+                      {data.score}/10
+                    </span>
+                  </div>
+                  <div className="indicator-trend">
+                    <span className={`trend ${data.trend}`}>
+                      {data.trend === 'improving' ? '↗️' : data.trend === 'declining' ? '↘️' : '➡️'}
+                      {data.trend}
+                    </span>
+                  </div>
+                  <div className="indicator-notes">{data.notes || 'No additional notes'}</div>
                 </div>
-                <div className="indicator-trend">
-                  <span className={`trend ${data.trend}`}>
-                    {data.trend === 'improving' ? '↗️' : data.trend === 'declining' ? '↘️' : '➡️'}
-                    {data.trend}
-                  </span>
-                </div>
-                <div className="indicator-notes">
-                  {data.notes || 'No additional notes'}
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
 
         <div className="quick-actions">
           <h3>Quick Actions</h3>
           <div className="actions-grid">
-            <button className="action-btn mood-check">
-              😊 Mood Check-in
-            </button>
-            <button className="action-btn stress-relief">
-              🧘 Stress Relief
-            </button>
-            <button className="action-btn peer-support">
-              👥 Peer Support
-            </button>
-            <button className="action-btn counselor-chat">
-              💬 Talk to Counselor
-            </button>
-            <button className="action-btn wellness-tips">
-              💡 Wellness Tips
-            </button>
-            <button className="action-btn progress-review">
-              📊 Progress Review
-            </button>
+            <button className="action-btn mood-check">😊 Mood Check-in</button>
+            <button className="action-btn stress-relief">🧘 Stress Relief</button>
+            <button className="action-btn peer-support">👥 Peer Support</button>
+            <button className="action-btn counselor-chat">💬 Talk to Counselor</button>
+            <button className="action-btn wellness-tips">💡 Wellness Tips</button>
+            <button className="action-btn progress-review">📊 Progress Review</button>
           </div>
         </div>
       </div>
@@ -342,14 +329,14 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
               <span className="type">Type: {currentAssessment.type.replace('_', ' ')}</span>
               <span className="source">Source: {currentAssessment.source}</span>
             </div>
-            
+
             <div className="assessment-scores">
               {Object.entries(currentAssessment.indicators).map(([indicator, data]) => (
                 <div key={indicator} className="score-item">
                   <label>{indicator.replace(/([A-Z])/g, ' $1')}: </label>
                   <div className="score-bar">
-                    <div 
-                      className="score-fill" 
+                    <div
+                      className="score-fill"
                       style={{ width: `${(data.score / 10) * 100}%` }}
                     ></div>
                     <span className="score-text">{data.score}/10</span>
@@ -376,11 +363,13 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
     <div className="interventions-section">
       <div className="section-header">
         <h3>Intervention Plans</h3>
-        <span className="plans-count">{interventionPlans.length} Active Plan{interventionPlans.length !== 1 ? 's' : ''}</span>
+        <span className="plans-count">
+          {interventionPlans.length} Active Plan{interventionPlans.length !== 1 ? 's' : ''}
+        </span>
       </div>
 
       <div className="intervention-plans">
-        {interventionPlans.map(plan => (
+        {interventionPlans.map((plan) => (
           <div key={plan.id} className="intervention-plan">
             <div className="plan-header">
               <h4>{plan.interventionType.replace('_', ' ')} Intervention</h4>
@@ -392,7 +381,9 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
                 <label>Target Areas:</label>
                 <div className="indicators-list">
                   {plan.targetIndicators.map((indicator, index) => (
-                    <span key={index} className="indicator-tag">{indicator.replace('_', ' ')}</span>
+                    <span key={index} className="indicator-tag">
+                      {indicator.replace('_', ' ')}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -406,7 +397,9 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
                 <label>Support Team:</label>
                 <div className="team-list">
                   {plan.assignedTo.map((member, index) => (
-                    <span key={index} className="team-member">{member.replace('_', ' ')}</span>
+                    <span key={index} className="team-member">
+                      {member.replace('_', ' ')}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -425,7 +418,9 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
                     <div className="strategy-resources">
                       <label>Resources:</label>
                       {strategy.resources.map((resource, resourceIndex) => (
-                        <span key={resourceIndex} className="resource-tag">{resource.replace('_', ' ')}</span>
+                        <span key={resourceIndex} className="resource-tag">
+                          {resource.replace('_', ' ')}
+                        </span>
                       ))}
                     </div>
                   </div>
@@ -455,7 +450,9 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
     <div className="resources-section">
       <div className="section-header">
         <h3>Mental Health Resources</h3>
-        <button className="emergency-btn" onClick={handleEmergencyAlert}>🚨 Emergency Help</button>
+        <button className="emergency-btn" onClick={handleEmergencyAlert}>
+          🚨 Emergency Help
+        </button>
       </div>
 
       <div className="resources-grid">
@@ -502,7 +499,9 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
                   <label>Personnel:</label>
                   <div className="personnel-list">
                     {protocol.personnel.map((person, index) => (
-                      <span key={index} className="personnel-tag">{person.replace('_', ' ')}</span>
+                      <span key={index} className="personnel-tag">
+                        {person.replace('_', ' ')}
+                      </span>
                     ))}
                   </div>
                 </div>
@@ -546,7 +545,9 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
         <h3>Progress Monitoring</h3>
         <select className="timeframe-selector">
           <option value="7_days">Last 7 Days</option>
-          <option value="30_days" selected>Last 30 Days</option>
+          <option value="30_days" selected>
+            Last 30 Days
+          </option>
           <option value="90_days">Last 90 Days</option>
         </select>
       </div>
@@ -593,24 +594,25 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
           <div className="progress-indicators">
             <h4>Indicator Progress</h4>
             <div className="indicators-progress">
-              {progressData.indicatorProgress && Object.entries(progressData.indicatorProgress).map(([indicator, progress]) => (
-                <div key={indicator} className="indicator-progress">
-                  <div className="indicator-header">
-                    <span className="indicator-name">{indicator.replace(/([A-Z])/g, ' $1')}</span>
-                    <span className="progress-value">{progress.improvement}% improvement</span>
+              {progressData.indicatorProgress &&
+                Object.entries(progressData.indicatorProgress).map(([indicator, progress]) => (
+                  <div key={indicator} className="indicator-progress">
+                    <div className="indicator-header">
+                      <span className="indicator-name">{indicator.replace(/([A-Z])/g, ' $1')}</span>
+                      <span className="progress-value">{progress.improvement}% improvement</span>
+                    </div>
+                    <div className="progress-bar">
+                      <div
+                        className="progress-fill"
+                        style={{ width: `${Math.abs(progress.improvement)}%` }}
+                      ></div>
+                    </div>
+                    <div className="progress-details">
+                      <span className="baseline">Baseline: {progress.baseline}</span>
+                      <span className="current">Current: {progress.current}</span>
+                    </div>
                   </div>
-                  <div className="progress-bar">
-                    <div
-                      className="progress-fill"
-                      style={{ width: `${Math.abs(progress.improvement)}%` }}
-                    ></div>
-                  </div>
-                  <div className="progress-details">
-                    <span className="baseline">Baseline: {progress.baseline}</span>
-                    <span className="current">Current: {progress.current}</span>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
 
@@ -651,21 +653,30 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
                 <span className="rec-icon">✅</span>
                 <div className="rec-content">
                   <h5>Continue Current Strategies</h5>
-                  <p>Your stress management techniques are working well. Keep practicing daily mindfulness.</p>
+                  <p>
+                    Your stress management techniques are working well. Keep practicing daily
+                    mindfulness.
+                  </p>
                 </div>
               </div>
               <div className="recommendation adjustment">
                 <span className="rec-icon">⚡</span>
                 <div className="rec-content">
                   <h5>Increase Social Activities</h5>
-                  <p>Consider joining one additional extracurricular activity to boost social engagement.</p>
+                  <p>
+                    Consider joining one additional extracurricular activity to boost social
+                    engagement.
+                  </p>
                 </div>
               </div>
               <div className="recommendation new">
                 <span className="rec-icon">🆕</span>
                 <div className="rec-content">
                   <h5>Add Physical Wellness</h5>
-                  <p>Incorporate regular physical exercise to support overall mental health improvement.</p>
+                  <p>
+                    Incorporate regular physical exercise to support overall mental health
+                    improvement.
+                  </p>
                 </div>
               </div>
             </div>
@@ -808,7 +819,7 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
 
         .section-header h3 {
           margin: 0;
-          color: #1f2937;
+          color: #111111;
           font-size: 1.5em;
         }
 
@@ -834,7 +845,7 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
 
         .summary-card h3 {
           margin: 0 0 15px 0;
-          color: #1f2937;
+          color: #111111;
           font-size: 1.1em;
         }
 
@@ -924,7 +935,7 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
 
         .indicator-name {
           font-weight: 500;
-          color: #1f2937;
+          color: #111111;
           font-size: 0.9em;
         }
 
@@ -978,7 +989,8 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
           color: white;
         }
 
-        .new-assessment-btn, .emergency-btn {
+        .new-assessment-btn,
+        .emergency-btn {
           padding: 8px 16px;
           border: 1px solid #10b981;
           background: white;
@@ -989,7 +1001,8 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
           transition: all 0.3s ease;
         }
 
-        .new-assessment-btn:hover, .emergency-btn:hover {
+        .new-assessment-btn:hover,
+        .emergency-btn:hover {
           background: #10b981;
           color: white;
         }

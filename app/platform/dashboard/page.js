@@ -8,10 +8,10 @@ import { Building2, LogOut, RefreshCw, Shield, User } from 'lucide-react'
 
 function statusBadge(status) {
   const map = {
-    active: 'bg-emerald-500/20 text-emerald-300',
-    trial: 'bg-amber-500/20 text-amber-300',
-    expired: 'bg-red-500/20 text-red-300',
-    not_affiliated: 'bg-slate-500/20 text-slate-400',
+    active: 'bg-emerald-100 text-emerald-800 border border-emerald-800/20',
+    trial: 'bg-amber-100 text-amber-900 border border-amber-800/20',
+    expired: 'bg-red-100 text-red-800 border border-red-800/20',
+    not_affiliated: 'bg-paper text-muted border border-ink/20',
   }
   return map[status] || map.not_affiliated
 }
@@ -77,22 +77,22 @@ export default function PlatformDashboardPage() {
 
   return (
     <main className="min-h-screen">
-      <header className="border-b border-slate-800 bg-slate-900/50">
+      <header className="border-b-2 border-ink bg-ink text-paper">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Shield className="text-violet-400" size={22} />
+            <Shield className="text-accent" size={22} />
             <div>
-              <h1 className="font-semibold text-white">Platform schools</h1>
-              <p className="text-xs text-slate-400">
+              <h1 className="font-semibold">Platform schools</h1>
+              <p className="text-xs text-paper/70">
                 Affiliated & paid tenants only — no student or academic data
               </p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            {user && <span className="text-sm text-slate-400 hidden sm:inline">{user.email}</span>}
+            {user && <span className="text-sm text-paper/70 hidden sm:inline">{user.email}</span>}
             <Link
               href="/platform/profile"
-              className="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-sm"
+              className="flex items-center gap-2 px-3 py-2 border-2 border-paper/30 text-paper hover:bg-paper/10 text-sm"
               title="Profile settings"
             >
               <User size={16} /> Profile
@@ -100,7 +100,7 @@ export default function PlatformDashboardPage() {
             <button
               type="button"
               onClick={load}
-              className="p-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800"
+              className="p-2 border-2 border-paper/30 text-paper hover:bg-paper/10"
               title="Refresh"
             >
               <RefreshCw size={16} />
@@ -108,7 +108,7 @@ export default function PlatformDashboardPage() {
             <button
               type="button"
               onClick={logout}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-sm"
+              className="flex items-center gap-2 px-3 py-2 border-2 border-paper/30 text-paper hover:bg-paper/10 text-sm"
             >
               <LogOut size={16} /> Sign out
             </button>
@@ -118,20 +118,20 @@ export default function PlatformDashboardPage() {
 
       <div className="max-w-6xl mx-auto px-6 py-8">
         {loading ? (
-          <p className="text-slate-400">Loading schools…</p>
+          <p className="text-muted">Loading schools…</p>
         ) : schools.length === 0 ? (
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-10 text-center">
-            <Building2 className="mx-auto text-slate-600 mb-3" size={40} />
-            <p className="text-slate-300">No affiliated paid schools yet.</p>
-            <p className="text-sm text-slate-500 mt-2">
+          <div className="border-2 border-ink bg-white p-10 text-center shadow-[4px_4px_0_#111111]">
+            <Building2 className="mx-auto text-muted mb-3" size={40} />
+            <p className="text-ink">No affiliated paid schools yet.</p>
+            <p className="text-sm text-muted mt-2">
               Schools appear here when they are active, email-verified, and have a valid plan or
               trial.
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto rounded-xl border border-slate-800">
+          <div className="overflow-x-auto border-2 border-ink bg-white shadow-[4px_4px_0_#111111]">
             <table className="w-full text-sm">
-              <thead className="bg-slate-900 text-slate-400 text-left">
+              <thead className="bg-ink text-paper text-left">
                 <tr>
                   <th className="px-4 py-3 font-medium">School</th>
                   <th className="px-4 py-3 font-medium">Subdomain</th>
@@ -143,10 +143,10 @@ export default function PlatformDashboardPage() {
               </thead>
               <tbody>
                 {schools.map((s) => (
-                  <tr key={s.id} className="border-t border-slate-800 hover:bg-slate-900/40">
-                    <td className="px-4 py-3 text-white font-medium">{s.name}</td>
-                    <td className="px-4 py-3 text-slate-300">{s.subdomain}</td>
-                    <td className="px-4 py-3 text-slate-300 capitalize">{s.plan}</td>
+                  <tr key={s.id} className="border-t border-ink/10 hover:bg-paper">
+                    <td className="px-4 py-3 text-ink font-medium">{s.name}</td>
+                    <td className="px-4 py-3 text-muted">{s.subdomain}</td>
+                    <td className="px-4 py-3 text-muted capitalize">{s.plan}</td>
                     <td className="px-4 py-3">
                       <span
                         className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${statusBadge(s.subscriptionStatus)}`}
@@ -154,7 +154,7 @@ export default function PlatformDashboardPage() {
                         {s.subscriptionStatus}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-slate-400 text-xs">
+                    <td className="px-4 py-3 text-muted text-xs">
                       {s.counts.users} users · {s.counts.teachers} staff · {s.counts.students}{' '}
                       pupils
                     </td>
@@ -162,7 +162,7 @@ export default function PlatformDashboardPage() {
                       <button
                         type="button"
                         onClick={() => toggleActive(s)}
-                        className="text-xs text-violet-400 hover:underline"
+                        className="text-xs text-accent hover:underline font-medium"
                       >
                         {s.active ? 'Suspend' : 'Activate'}
                       </button>
@@ -174,8 +174,8 @@ export default function PlatformDashboardPage() {
           </div>
         )}
 
-        <p className="mt-8 text-center text-xs text-slate-600">
-          <Link href="/" className="hover:text-slate-400">
+        <p className="mt-8 text-center text-xs text-muted">
+          <Link href="/" className="hover:text-accent">
             Back to marketing site
           </Link>
         </p>

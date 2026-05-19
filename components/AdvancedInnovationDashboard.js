@@ -64,7 +64,7 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
         subject: 'Computer Science',
         status: 'ACTIVE',
         progress: 75,
-        dueDate: '2024-02-15'
+        dueDate: '2024-02-15',
       },
       {
         id: 'assess_2',
@@ -73,8 +73,8 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
         subject: 'Science',
         status: 'PENDING',
         progress: 0,
-        dueDate: '2024-02-20'
-      }
+        dueDate: '2024-02-20',
+      },
     ]
     setAssessments(sampleAssessments)
   }
@@ -88,7 +88,7 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
         type: 'GROWTH_ANALYTICS',
         artifacts: 23,
         reflections: 8,
-        lastUpdated: '2024-01-28'
+        lastUpdated: '2024-01-28',
       },
       {
         id: 'portfolio_2',
@@ -96,8 +96,8 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
         type: 'SHOWCASE_DIGITAL',
         artifacts: 15,
         reflections: 5,
-        lastUpdated: '2024-01-25'
-      }
+        lastUpdated: '2024-01-25',
+      },
     ]
     setPortfolios(samplePortfolios)
   }
@@ -112,7 +112,7 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
         status: 'IN_PROGRESS',
         progress: 60,
         team: ['Alice', 'Bob', 'Charlie'],
-        labType: 'CODING_LAB'
+        labType: 'CODING_LAB',
       },
       {
         id: 'proj_2',
@@ -121,8 +121,8 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
         status: 'PLANNING',
         progress: 20,
         team: ['Diana', 'Eve'],
-        labType: 'MEDIA_STUDIO'
-      }
+        labType: 'MEDIA_STUDIO',
+      },
     ]
     setProjects(sampleProjects)
   }
@@ -137,7 +137,7 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
         status: 'OPEN',
         deadline: '2024-03-01',
         participants: 45,
-        maxParticipants: 100
+        maxParticipants: 100,
       },
       {
         id: 'challenge_2',
@@ -146,8 +146,8 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
         status: 'UPCOMING',
         deadline: '2024-03-15',
         participants: 0,
-        maxParticipants: 50
-      }
+        maxParticipants: 50,
+      },
     ]
     setChallenges(sampleChallenges)
   }
@@ -196,16 +196,15 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
       <div className="active-assessments">
         <h3>Your Assessments</h3>
         <div className="assessment-list">
-          {assessments.map(assessment => (
+          {assessments.map((assessment) => (
             <div key={assessment.id} className="assessment-item">
               <div className="assessment-info">
                 <h4>{assessment.title}</h4>
-                <p>{assessment.subject} • {assessment.type}</p>
+                <p>
+                  {assessment.subject} • {assessment.type}
+                </p>
                 <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${assessment.progress}%` }}
-                  ></div>
+                  <div className="progress-fill" style={{ width: `${assessment.progress}%` }}></div>
                 </div>
               </div>
               <div className="assessment-actions">
@@ -233,9 +232,7 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
           >
             🎤 Voice {voiceEnabled ? 'ON' : 'OFF'}
           </button>
-          <span className={`voice-status ${voiceStatus}`}>
-            {voiceStatus}
-          </span>
+          <span className={`voice-status ${voiceStatus}`}>{voiceStatus}</span>
         </div>
       </div>
 
@@ -245,7 +242,9 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
           <h3>Voice Interface</h3>
           <p>Speech recognition and voice-controlled navigation</p>
           <div className="tech-status">
-            <span className={`status-indicator ${technologies.voiceInterface ? 'supported' : 'unsupported'}`}>
+            <span
+              className={`status-indicator ${technologies.voiceInterface ? 'supported' : 'unsupported'}`}
+            >
               {technologies.voiceInterface ? 'Supported' : 'Not Supported'}
             </span>
           </div>
@@ -277,9 +276,7 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
           <h3>IoT Smart Classroom</h3>
           <p>Connected devices for intelligent learning environments</p>
           <div className="tech-status">
-            <span className="status-indicator supported">
-              Available
-            </span>
+            <span className="status-indicator supported">Available</span>
           </div>
           <div className="tech-features">
             <span className="feature">Environmental Sensors</span>
@@ -293,9 +290,7 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
           <h3>Blockchain Credentials</h3>
           <p>Secure, verifiable digital certificates and achievements</p>
           <div className="tech-status">
-            <span className="status-indicator supported">
-              Ready
-            </span>
+            <span className="status-indicator supported">Ready</span>
           </div>
           <div className="tech-features">
             <span className="feature">Digital Certificates</span>
@@ -311,21 +306,30 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
           <div className="experience-card">
             <h4>Virtual Science Lab</h4>
             <p>Safe experimentation in virtual environments</p>
-            <button className="launch-btn" onClick={() => launchARVRExperience('VIRTUAL_LABORATORY')}>
+            <button
+              className="launch-btn"
+              onClick={() => launchARVRExperience('VIRTUAL_LABORATORY')}
+            >
               Launch Experience
             </button>
           </div>
           <div className="experience-card">
             <h4>Historical Time Travel</h4>
             <p>Immersive historical experiences and exploration</p>
-            <button className="launch-btn" onClick={() => launchARVRExperience('HISTORICAL_IMMERSION')}>
+            <button
+              className="launch-btn"
+              onClick={() => launchARVRExperience('HISTORICAL_IMMERSION')}
+            >
               Launch Experience
             </button>
           </div>
           <div className="experience-card">
             <h4>Language Immersion</h4>
             <p>Practice languages in realistic virtual scenarios</p>
-            <button className="launch-btn" onClick={() => launchARVRExperience('LANGUAGE_IMMERSION')}>
+            <button
+              className="launch-btn"
+              onClick={() => launchARVRExperience('LANGUAGE_IMMERSION')}
+            >
               Launch Experience
             </button>
           </div>
@@ -376,19 +380,16 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
       <div className="active-projects">
         <h3>Your Innovation Projects</h3>
         <div className="project-list">
-          {projects.map(project => (
+          {projects.map((project) => (
             <div key={project.id} className="project-item">
               <div className="project-info">
                 <h4>{project.title}</h4>
-                <p>{project.category} • {project.labType}</p>
-                <div className="team-info">
-                  Team: {project.team.join(', ')}
-                </div>
+                <p>
+                  {project.category} • {project.labType}
+                </p>
+                <div className="team-info">Team: {project.team.join(', ')}</div>
                 <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${project.progress}%` }}
-                  ></div>
+                  <div className="progress-fill" style={{ width: `${project.progress}%` }}></div>
                 </div>
               </div>
               <div className="project-actions">
@@ -405,7 +406,7 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
       <div className="innovation-challenges">
         <h3>Innovation Challenges</h3>
         <div className="challenge-list">
-          {challenges.map(challenge => (
+          {challenges.map((challenge) => (
             <div key={challenge.id} className="challenge-item">
               <div className="challenge-info">
                 <h4>{challenge.title}</h4>
@@ -490,8 +491,12 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
       <style jsx>{`
         .advanced-innovation-dashboard {
           min-height: 100vh;
-          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          background: linear-gradient(135deg, #f5f2eb 0%, rgba(17, 17, 17, 0.12) 100%);
+          font-family:
+            'Inter',
+            -apple-system,
+            BlinkMacSystemFont,
+            sans-serif;
         }
 
         .dashboard-header {
@@ -546,8 +551,13 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
         }
 
         @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
+          0%,
+          100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.5;
+          }
         }
 
         .dashboard-tabs {
@@ -571,13 +581,13 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
 
         .tab-btn:hover {
           color: #1e40af;
-          background: #f8fafc;
+          background: #f5f2eb;
         }
 
         .tab-btn.active {
           color: #1e40af;
           border-bottom-color: #3b82f6;
-          background: #f8fafc;
+          background: #f5f2eb;
         }
 
         .dashboard-content {
@@ -735,7 +745,7 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
         }
 
         .launch-btn {
-          background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+          background: linear-gradient(135deg, #8b5cf6, #ff3b00);
           color: white;
           border: none;
           padding: 8px 16px;
@@ -821,7 +831,7 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
         .project-info h4,
         .challenge-info h4 {
           margin: 0 0 8px 0;
-          color: #1f2937;
+          color: #111111;
         }
 
         .project-info p,
@@ -965,7 +975,7 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
 
         .assessment-info h4 {
           margin: 0 0 8px 0;
-          color: #1f2937;
+          color: #111111;
         }
 
         .assessment-info p {

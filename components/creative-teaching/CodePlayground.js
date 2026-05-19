@@ -154,13 +154,13 @@ export default function CodePlayground() {
           alignItems: 'center',
           gap: 10,
           padding: '10px 16px',
-          background: '#2d1f4e',
-          borderBottom: '1px solid #3b2a66',
+          background: '#FFFFFF',
+          borderBottom: '1px solid #111111',
           flexWrap: 'wrap',
         }}
       >
         <span style={{ fontSize: 18 }}>{'</>'}</span>
-        <span style={{ color: '#ede9fe', fontWeight: 700 }}>Code Playground</span>
+        <span style={{ color: '#111111', fontWeight: 700 }}>Code Playground</span>
 
         <div style={{ display: 'flex', gap: 4, marginLeft: 8, flexWrap: 'wrap' }}>
           {LANGUAGES.map((l) => (
@@ -172,9 +172,9 @@ export default function CodePlayground() {
                 borderRadius: 6,
                 fontSize: 12,
                 cursor: 'pointer',
-                border: `1px solid ${lang.id === l.id ? '#7c3aed' : '#3b2a66'}`,
-                background: lang.id === l.id ? '#7c3aed' : 'transparent',
-                color: lang.id === l.id ? '#fff' : '#a78bfa',
+                border: `1px solid ${lang.id === l.id ? '#FF3B00' : '#111111'}`,
+                background: lang.id === l.id ? '#FF3B00' : 'transparent',
+                color: lang.id === l.id ? '#fff' : '#666666',
                 fontWeight: 600,
               }}
             >
@@ -188,10 +188,10 @@ export default function CodePlayground() {
             onClick={() => setShowChallenges(!showChallenges)}
             style={{
               padding: '7px 14px',
-              background: '#261843',
-              border: '1px solid #3b2a66',
+              background: '#F5F2EB',
+              border: '1px solid #111111',
               borderRadius: 8,
-              color: '#a78bfa',
+              color: '#666666',
               fontSize: 13,
               cursor: 'pointer',
             }}
@@ -203,7 +203,7 @@ export default function CodePlayground() {
             disabled={running}
             style={{
               padding: '7px 20px',
-              background: running ? '#4b3575' : '#22c55e',
+              background: running ? '#A8A7A2' : '#22c55e',
               border: 'none',
               borderRadius: 8,
               color: '#fff',
@@ -239,7 +239,7 @@ export default function CodePlayground() {
 
       {showChallenges ? (
         <div
-          style={{ background: '#2d1f4e', borderBottom: '1px solid #3b2a66', padding: '12px 16px' }}
+          style={{ background: '#FFFFFF', borderBottom: '1px solid #111111', padding: '12px 16px' }}
         >
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {CHALLENGES.map((c, i) => (
@@ -248,15 +248,15 @@ export default function CodePlayground() {
                 onClick={() => applyChallenge(c)}
                 style={{
                   padding: '8px 14px',
-                  background: '#261843',
-                  border: '1px solid #3b2a66',
+                  background: '#F5F2EB',
+                  border: '1px solid #111111',
                   borderRadius: 8,
                   cursor: 'pointer',
                   textAlign: 'left',
                 }}
               >
-                <div style={{ color: '#ede9fe', fontSize: 13, fontWeight: 600 }}>{c.title}</div>
-                <div style={{ color: '#6d28d9', fontSize: 11 }}>{c.desc}</div>
+                <div style={{ color: '#111111', fontSize: 13, fontWeight: 600 }}>{c.title}</div>
+                <div style={{ color: '#666666', fontSize: 11 }}>{c.desc}</div>
               </button>
             ))}
           </div>
@@ -264,15 +264,15 @@ export default function CodePlayground() {
       ) : null}
 
       <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', overflow: 'hidden' }}>
-        <div style={{ borderRight: '1px solid #3b2a66', overflow: 'hidden' }}>
+        <div style={{ borderRight: '1px solid #111111', overflow: 'hidden' }}>
           <div
             style={{
               padding: '6px 14px',
-              background: '#170d28',
-              borderBottom: '1px solid #3b2a66',
+              background: '#EFECE5',
+              borderBottom: '1px solid #111111',
             }}
           >
-            <span style={{ color: '#6d28d9', fontSize: 11, fontWeight: 600 }}>
+            <span style={{ color: '#666666', fontSize: 11, fontWeight: 600 }}>
               EDITOR — {lang.label}
             </span>
           </div>
@@ -299,21 +299,21 @@ export default function CodePlayground() {
           <div
             style={{
               padding: '6px 14px',
-              background: '#170d28',
-              borderBottom: '1px solid #3b2a66',
+              background: '#EFECE5',
+              borderBottom: '1px solid #111111',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}
           >
-            <span style={{ color: '#6d28d9', fontSize: 11, fontWeight: 600 }}>OUTPUT</span>
+            <span style={{ color: '#666666', fontSize: 11, fontWeight: 600 }}>OUTPUT</span>
             {output ? (
               <button
                 onClick={() => setOutput('')}
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#6d28d9',
+                  color: '#666666',
                   cursor: 'pointer',
                   fontSize: 11,
                 }}
@@ -339,7 +339,7 @@ export default function CodePlayground() {
           >
             {running ? 'Running your code...\n' : null}
             {!running && !output ? (
-              <span style={{ color: '#3b2a66' }}>Click Run Code to see output here...</span>
+              <span style={{ color: '#111111' }}>Click Run Code to see output here...</span>
             ) : null}
             {output}
           </pre>

@@ -15,19 +15,37 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
   const initializeNavigation = () => {
     const userIntegration = PhaseIntegrationSystem.initializeIntegration(userId, userRole)
     setIntegration(userIntegration)
-    
+
     const features = PhaseIntegrationSystem.getAvailableFeatures(userRole)
     setAvailableFeatures(features)
-    
+
     loadNotifications()
   }
 
   const loadNotifications = () => {
     // Simulate loading cross-phase notifications
     const sampleNotifications = [
-      { id: 1, phase: 'PHASE_1', type: 'achievement', message: 'New badge earned!', priority: 'medium' },
-      { id: 2, phase: 'PHASE_2', type: 'ai_insight', message: 'Learning recommendation available', priority: 'low' },
-      { id: 3, phase: 'PHASE_4', type: 'wellbeing', message: 'Wellbeing check reminder', priority: 'high' }
+      {
+        id: 1,
+        phase: 'PHASE_1',
+        type: 'achievement',
+        message: 'New badge earned!',
+        priority: 'medium',
+      },
+      {
+        id: 2,
+        phase: 'PHASE_2',
+        type: 'ai_insight',
+        message: 'Learning recommendation available',
+        priority: 'low',
+      },
+      {
+        id: 3,
+        phase: 'PHASE_4',
+        type: 'wellbeing',
+        message: 'Wellbeing check reminder',
+        priority: 'high',
+      },
     ]
     setNotifications(sampleNotifications)
   }
@@ -35,7 +53,7 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
   const getPhaseNavigation = () => {
     const phases = PhaseIntegrationSystem.PHASE_FEATURES
     const userPermissions = PhaseIntegrationSystem.ROLE_PERMISSIONS[userRole]
-    
+
     return Object.entries(phases)
       .filter(([phaseKey]) => userPermissions.phases.includes(phaseKey))
       .map(([phaseKey, phaseData]) => ({
@@ -43,7 +61,7 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
         name: phaseData.name,
         features: userPermissions.features[phaseKey] || [],
         icon: getPhaseIcon(phaseKey),
-        color: getPhaseColor(phaseKey)
+        color: getPhaseColor(phaseKey),
       }))
   }
 
@@ -53,7 +71,7 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
       PHASE_2: '🤖',
       PHASE_3: '💬',
       PHASE_4: '💚',
-      PHASE_5: '🚀'
+      PHASE_5: '🚀',
     }
     return icons[phaseKey] || '📱'
   }
@@ -64,7 +82,7 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
       PHASE_2: '#3b82f6', // Blue for AI
       PHASE_3: '#8b5cf6', // Purple for communication
       PHASE_4: '#f59e0b', // Amber for wellbeing
-      PHASE_5: '#ef4444'  // Red for innovation
+      PHASE_5: '#ef4444', // Red for innovation
     }
     return colors[phaseKey] || '#6b7280'
   }
@@ -72,36 +90,111 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
   const getQuickActions = () => {
     const actions = {
       student: [
-        { name: 'My Portfolio', phase: 'PHASE_5', icon: '📁', action: () => onNavigate('portfolio') },
-        { name: 'Study Groups', phase: 'PHASE_3', icon: '👥', action: () => onNavigate('study-groups') },
+        {
+          name: 'My Portfolio',
+          phase: 'PHASE_5',
+          icon: '📁',
+          action: () => onNavigate('portfolio'),
+        },
+        {
+          name: 'Study Groups',
+          phase: 'PHASE_3',
+          icon: '👥',
+          action: () => onNavigate('study-groups'),
+        },
         { name: 'AI Tutor', phase: 'PHASE_2', icon: '🤖', action: () => onNavigate('ai-tutor') },
-        { name: 'Achievements', phase: 'PHASE_1', icon: '🏆', action: () => onNavigate('achievements') }
+        {
+          name: 'Achievements',
+          phase: 'PHASE_1',
+          icon: '🏆',
+          action: () => onNavigate('achievements'),
+        },
       ],
       teacher: [
-        { name: 'Class Analytics', phase: 'PHASE_1', icon: '📊', action: () => onNavigate('analytics') },
-        { name: 'Assessment Tools', phase: 'PHASE_5', icon: '📝', action: () => onNavigate('assessment') },
-        { name: 'Student Wellbeing', phase: 'PHASE_4', icon: '💚', action: () => onNavigate('wellbeing') },
-        { name: 'Communication', phase: 'PHASE_3', icon: '💬', action: () => onNavigate('communication') }
+        {
+          name: 'Class Analytics',
+          phase: 'PHASE_1',
+          icon: '📊',
+          action: () => onNavigate('analytics'),
+        },
+        {
+          name: 'Assessment Tools',
+          phase: 'PHASE_5',
+          icon: '📝',
+          action: () => onNavigate('assessment'),
+        },
+        {
+          name: 'Student Wellbeing',
+          phase: 'PHASE_4',
+          icon: '💚',
+          action: () => onNavigate('wellbeing'),
+        },
+        {
+          name: 'Communication',
+          phase: 'PHASE_3',
+          icon: '💬',
+          action: () => onNavigate('communication'),
+        },
       ],
       hod: [
-        { name: 'Department Overview', phase: 'PHASE_1', icon: '🏢', action: () => onNavigate('department') },
-        { name: 'Innovation Labs', phase: 'PHASE_5', icon: '🧪', action: () => onNavigate('innovation') },
-        { name: 'Teacher Performance', phase: 'PHASE_2', icon: '👨‍🏫', action: () => onNavigate('performance') },
-        { name: 'Collaboration Hub', phase: 'PHASE_3', icon: '🤝', action: () => onNavigate('collaboration') }
+        {
+          name: 'Department Overview',
+          phase: 'PHASE_1',
+          icon: '🏢',
+          action: () => onNavigate('department'),
+        },
+        {
+          name: 'Innovation Labs',
+          phase: 'PHASE_5',
+          icon: '🧪',
+          action: () => onNavigate('innovation'),
+        },
+        {
+          name: 'Teacher Performance',
+          phase: 'PHASE_2',
+          icon: '👨‍🏫',
+          action: () => onNavigate('performance'),
+        },
+        {
+          name: 'Collaboration Hub',
+          phase: 'PHASE_3',
+          icon: '🤝',
+          action: () => onNavigate('collaboration'),
+        },
       ],
       headteacher: [
-        { name: 'School Dashboard', phase: 'PHASE_1', icon: '🏫', action: () => onNavigate('school-dashboard') },
-        { name: 'Strategic Insights', phase: 'PHASE_2', icon: '🎯', action: () => onNavigate('insights') },
-        { name: 'System Settings', phase: 'PHASE_4', icon: '⚙️', action: () => onNavigate('settings') },
-        { name: 'Innovation Strategy', phase: 'PHASE_5', icon: '🚀', action: () => onNavigate('innovation-strategy') }
-      ]
+        {
+          name: 'School Dashboard',
+          phase: 'PHASE_1',
+          icon: '🏫',
+          action: () => onNavigate('school-dashboard'),
+        },
+        {
+          name: 'Strategic Insights',
+          phase: 'PHASE_2',
+          icon: '🎯',
+          action: () => onNavigate('insights'),
+        },
+        {
+          name: 'System Settings',
+          phase: 'PHASE_4',
+          icon: '⚙️',
+          action: () => onNavigate('settings'),
+        },
+        {
+          name: 'Innovation Strategy',
+          phase: 'PHASE_5',
+          icon: '🚀',
+          action: () => onNavigate('innovation-strategy'),
+        },
+      ],
     }
-    
+
     return actions[userRole] || []
   }
 
   const getNotificationCount = (phase) => {
-    return notifications.filter(n => n.phase === phase).length
+    return notifications.filter((n) => n.phase === phase).length
   }
 
   const getTotalNotifications = () => {
@@ -115,13 +208,13 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
 
   const renderPhaseNavigation = () => {
     const phases = getPhaseNavigation()
-    
+
     return (
       <div className="phase-navigation">
         <h3>System Phases</h3>
         <div className="phase-list">
-          {phases.map(phase => (
-            <div 
+          {phases.map((phase) => (
+            <div
               key={phase.key}
               className={`phase-item ${activePhase === phase.key ? 'active' : ''}`}
               onClick={() => handlePhaseSelect(phase.key)}
@@ -131,14 +224,12 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
                 <span className="phase-icon">{phase.icon}</span>
                 <span className="phase-name">{phase.name}</span>
                 {getNotificationCount(phase.key) > 0 && (
-                  <span className="notification-badge">
-                    {getNotificationCount(phase.key)}
-                  </span>
+                  <span className="notification-badge">{getNotificationCount(phase.key)}</span>
                 )}
               </div>
               {!isCollapsed && (
                 <div className="phase-features">
-                  {phase.features.slice(0, 3).map(feature => (
+                  {phase.features.slice(0, 3).map((feature) => (
                     <span key={feature} className="feature-tag">
                       {feature.replace('_', ' ')}
                     </span>
@@ -157,13 +248,13 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
 
   const renderQuickActions = () => {
     const actions = getQuickActions()
-    
+
     return (
       <div className="quick-actions">
         <h3>Quick Actions</h3>
         <div className="action-grid">
           {actions.map((action, index) => (
-            <button 
+            <button
               key={index}
               className="action-button"
               onClick={action.action}
@@ -187,23 +278,16 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
         </div>
         {!isCollapsed && (
           <div className="notification-list">
-            {notifications.slice(0, 5).map(notification => (
-              <div 
-                key={notification.id} 
-                className={`notification-item ${notification.priority}`}
-              >
+            {notifications.slice(0, 5).map((notification) => (
+              <div key={notification.id} className={`notification-item ${notification.priority}`}>
                 <div className="notification-content">
-                  <span className="notification-phase">
-                    {getPhaseIcon(notification.phase)}
-                  </span>
+                  <span className="notification-phase">{getPhaseIcon(notification.phase)}</span>
                   <span className="notification-message">{notification.message}</span>
                 </div>
               </div>
             ))}
             {notifications.length > 5 && (
-              <button className="view-all-notifications">
-                View All ({notifications.length})
-              </button>
+              <button className="view-all-notifications">View All ({notifications.length})</button>
             )}
           </div>
         )}
@@ -223,10 +307,7 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
             </div>
           )}
         </div>
-        <button 
-          className="collapse-toggle"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        >
+        <button className="collapse-toggle" onClick={() => setIsCollapsed(!isCollapsed)}>
           {isCollapsed ? '→' : '←'}
         </button>
       </div>
@@ -285,7 +366,7 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
 
         .user-role {
           font-weight: 600;
-          color: #1f2937;
+          color: #111111;
           text-transform: capitalize;
         }
 
@@ -323,7 +404,7 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
         .quick-actions h3,
         .notification-center h3 {
           margin: 0 0 16px 0;
-          color: #1f2937;
+          color: #111111;
           font-size: 14px;
           font-weight: 600;
           text-transform: uppercase;
@@ -368,7 +449,7 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
 
         .phase-name {
           font-weight: 500;
-          color: #1f2937;
+          color: #111111;
           flex: 1;
         }
 
@@ -439,7 +520,7 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
         .action-name {
           font-size: 12px;
           font-weight: 500;
-          color: #1f2937;
+          color: #111111;
         }
 
         .notification-header {
@@ -499,7 +580,7 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
 
         .notification-message {
           font-size: 12px;
-          color: #1f2937;
+          color: #111111;
           flex: 1;
         }
 

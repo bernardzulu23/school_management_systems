@@ -54,7 +54,7 @@ export const LessonPlanning = () => {
             <Share2 className="h-4 w-4 mr-2" />
             Share Template
           </Button>
-          <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-royalPurple-text1">
+          <Button className="bg-accent hover:bg-accent/90 text-white border-2 border-ink">
             <Plus className="h-4 w-4 mr-2" />
             New Lesson Plan
           </Button>
@@ -213,7 +213,7 @@ export const ParentConferences = () => {
             <Calendar className="h-4 w-4 mr-2" />
             View Calendar
           </Button>
-          <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-royalPurple-text1">
+          <Button className="bg-accent hover:bg-accent/90 text-white border-2 border-ink">
             <Plus className="h-4 w-4 mr-2" />
             Schedule Conference
           </Button>

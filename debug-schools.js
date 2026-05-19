@@ -1,10 +1,16 @@
+require('dotenv').config()
+
+if (!process.env.DATABASE_URL) {
+  console.error('Set DATABASE_URL (Neon pooled or local Postgres) in .env')
+  process.exit(1)
+}
+
 const { PrismaClient } = require('@prisma/client')
+const { Pool } = require('pg')
+const { PrismaPg } = require('@prisma/adapter-pg')
 
-// Use the public proxy URL
-process.env.DATABASE_URL =
-  'postgresql://postgres:TBGUIpaIMczwHWzrupsNdkgwiFLRDTTr@ballast.proxy.rlwy.net:17921/railway'
-
-const prisma = new PrismaClient()
+const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+const prisma = new PrismaClient({ adapter: new PrismaPg(pool) })
 
 async function checkSchools() {
   try {

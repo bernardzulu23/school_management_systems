@@ -1,25 +1,30 @@
+/** Design tokens aligned with color.md brutalist palette */
 export const colors = {
-  // Primary brand color
+  paper: '#EFECE5',
+  ink: '#111111',
+  accent: '#FF3B00',
+  accentHover: '#CC2F00',
+  white: '#FFFFFF',
+  muted: '#666666',
+  cardAlt: '#F5F2EB',
   primary: {
-    50: '#f3f0ff',
-    100: '#ede9fe',
-    600: '#7c3aed',
-    700: '#6d28d9',
+    50: '#F5F2EB',
+    100: '#EFECE5',
+    600: '#FF3B00',
+    700: '#CC2F00',
   },
-  // Neutral/Grayscale
   gray: {
-    50: '#f9fafb',
-    100: '#f3f4f6',
-    200: '#e5e7eb',
-    300: '#d1d5db',
-    400: '#9ca3af', // Added 400 for disabled state in Button
-    600: '#4b5563',
-    900: '#1f2937',
+    50: '#F5F2EB',
+    100: '#EFECE5',
+    200: 'rgba(17, 17, 17, 0.08)',
+    300: 'rgba(17, 17, 17, 0.15)',
+    400: '#666666',
+    600: '#4E4D4A',
+    900: '#111111',
   },
-  // Status colors (minimal)
-  success: '#16a34a',
-  warning: '#d97706',
-  error: '#dc2626',
+  success: '#1A6B6A',
+  warning: '#C99A2E',
+  error: '#FF3B00',
 }
 
 export const typography = {
@@ -60,8 +65,8 @@ export const spacing = {
 }
 
 export const shadows = {
-  sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
-  md: '0 4px 6px -2px rgba(0, 0, 0, 0.1)',
+  sm: '0 1px 2px rgba(17, 17, 17, 0.05)',
+  md: '4px 4px 0 0 #111111',
 }
 
 export const radius = {

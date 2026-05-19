@@ -12,6 +12,7 @@ import {
   signPlatformToken,
   verifyPlatformAdminCredentials,
   ensurePlatformAdminFromEnv,
+  getPlatformLoginHint,
 } from '@/lib/platform/platformAdminAuth'
 import jwt from 'jsonwebtoken'
 
@@ -42,7 +43,14 @@ export const POST = withSecureApi(async function POST(request) {
 
     const admin = await verifyPlatformAdminCredentials(email, password)
     if (!admin) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+      const hint = await getPlatformLoginHint(email)
+      return NextResponse.json(
+        {
+          error: 'Invalid credentials',
+          hint: process.env.NODE_ENV === 'production' ? hint : `${hint}`,
+        },
+        { status: 401 }
+      )
     }
 
     const accessToken = signPlatformToken(admin)

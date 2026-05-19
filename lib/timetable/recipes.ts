@@ -1,3 +1,10 @@
+import type { Prisma } from '@prisma/client'
+
+/** Prisma JSON columns reject `Record<string, unknown>[]`; round-trip through JSON. */
+export function toPrismaJsonValue(value: unknown): Prisma.InputJsonValue {
+  return JSON.parse(JSON.stringify(value ?? null)) as Prisma.InputJsonValue
+}
+
 export type RecipeStatus = 'DRAFT' | 'ACTIVE' | 'ARCHIVED'
 export type RecipeBlockType = 'SINGLE' | 'DOUBLE' | 'TRIPLE' | 'QUAD'
 export type RecipeConstraintType = 'HARD' | 'SOFT'

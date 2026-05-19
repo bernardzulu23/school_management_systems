@@ -26,15 +26,15 @@ const CommunicationDashboard = ({ userRole, userId }) => {
         description: 'General school communication',
         type: 'CLASS_CHANNEL',
         members: [userId],
-        createdBy: userId
+        createdBy: userId,
       }),
       RealTimeCommunicationHub.createCommunicationChannel({
         name: 'Study Help',
         description: 'Academic support and tutoring',
         type: 'STUDY_GROUP',
         members: [userId],
-        createdBy: userId
-      })
+        createdBy: userId,
+      }),
     ]
     setChannels(defaultChannels)
 
@@ -47,7 +47,7 @@ const CommunicationDashboard = ({ userRole, userId }) => {
         subject: 'Mathematics',
         level: 'intermediate',
         creator: { id: userId, name: 'Current User' },
-        meetingFrequency: 'weekly'
+        meetingFrequency: 'weekly',
       }),
       SocialLearningNetwork.createStudyGroup({
         name: 'Science Research Group',
@@ -56,8 +56,8 @@ const CommunicationDashboard = ({ userRole, userId }) => {
         subject: 'Science',
         level: 'advanced',
         creator: { id: userId, name: 'Current User' },
-        meetingFrequency: 'bi_weekly'
-      })
+        meetingFrequency: 'bi_weekly',
+      }),
     ]
     setStudyGroups(defaultStudyGroups)
 
@@ -70,8 +70,8 @@ const CommunicationDashboard = ({ userRole, userId }) => {
         subject: 'Environmental Science',
         creator: { id: userId, name: 'Current User' },
         startDate: new Date(),
-        primaryObjectives: ['Conduct field research', 'Analyze data', 'Present findings']
-      })
+        primaryObjectives: ['Conduct field research', 'Analyze data', 'Present findings'],
+      }),
     ]
     setProjects(defaultProjects)
 
@@ -80,7 +80,7 @@ const CommunicationDashboard = ({ userRole, userId }) => {
       { id: 'user1', name: 'Alex Johnson', status: 'online', role: 'student' },
       { id: 'user2', name: 'Sarah Chen', status: 'in_class', role: 'student' },
       { id: 'user3', name: 'Dr. Smith', status: 'online', role: 'teacher' },
-      { id: 'user4', name: 'Maria Garcia', status: 'away', role: 'student' }
+      { id: 'user4', name: 'Maria Garcia', status: 'away', role: 'student' },
     ])
   }
 
@@ -94,10 +94,10 @@ const CommunicationDashboard = ({ userRole, userId }) => {
         title: 'New Message',
         message: 'You have a new message in Study Help channel',
         source: 'communication_hub',
-        category: 'social'
+        category: 'social',
       })
-      
-      setNotifications(prev => [newNotification, ...prev.slice(0, 9)]) // Keep last 10
+
+      setNotifications((prev) => [newNotification, ...prev.slice(0, 9)]) // Keep last 10
     }, 30000) // Every 30 seconds
 
     return () => clearInterval(interval)
@@ -111,15 +111,17 @@ const CommunicationDashboard = ({ userRole, userId }) => {
       senderRole: userRole,
       type: 'TEXT',
       content: messageContent,
-      priority: 'MEDIUM'
+      priority: 'MEDIUM',
     })
 
     // Update channel with new message (in production would use WebSocket)
-    setChannels(prev => prev.map(channel => 
-      channel.id === channelId 
-        ? { ...channel, metadata: { ...channel.metadata, lastActivity: new Date() } }
-        : channel
-    ))
+    setChannels((prev) =>
+      prev.map((channel) =>
+        channel.id === channelId
+          ? { ...channel, metadata: { ...channel.metadata, lastActivity: new Date() } }
+          : channel
+      )
+    )
   }
 
   const startVideoCall = (participants) => {
@@ -134,7 +136,7 @@ const CommunicationDashboard = ({ userRole, userId }) => {
       recordingEnabled: false,
       chatEnabled: true,
       screenSharingEnabled: true,
-      whiteboardEnabled: true
+      whiteboardEnabled: true,
     })
 
     setIsVideoCallActive(true)
@@ -149,18 +151,20 @@ const CommunicationDashboard = ({ userRole, userId }) => {
       subject: 'General',
       level: 'beginner',
       creator: { id: userId, name: 'Current User' },
-      meetingFrequency: 'weekly'
+      meetingFrequency: 'weekly',
     })
 
-    setStudyGroups(prev => [...prev, newGroup])
+    setStudyGroups((prev) => [...prev, newGroup])
   }
 
   const joinStudyGroup = (groupId) => {
-    setStudyGroups(prev => prev.map(group => 
-      group.id === groupId 
-        ? { ...group, members: [...group.members, { id: userId, name: 'Current User' }] }
-        : group
-    ))
+    setStudyGroups((prev) =>
+      prev.map((group) =>
+        group.id === groupId
+          ? { ...group, members: [...group.members, { id: userId, name: 'Current User' }] }
+          : group
+      )
+    )
   }
 
   const createNewProject = () => {
@@ -171,19 +175,19 @@ const CommunicationDashboard = ({ userRole, userId }) => {
       subject: 'General Studies',
       creator: { id: userId, name: 'Current User' },
       startDate: new Date(),
-      primaryObjectives: ['Define objectives', 'Plan approach', 'Execute project']
+      primaryObjectives: ['Define objectives', 'Plan approach', 'Execute project'],
     })
 
-    setProjects(prev => [...prev, newProject])
+    setProjects((prev) => [...prev, newProject])
   }
 
   const renderMessagingInterface = () => (
     <div className="messaging-interface">
       <div className="channels-sidebar">
         <h3>Channels</h3>
-        {channels.map(channel => (
-          <div 
-            key={channel.id} 
+        {channels.map((channel) => (
+          <div
+            key={channel.id}
             className={`channel-item ${selectedChannel?.id === channel.id ? 'active' : ''}`}
             onClick={() => setSelectedChannel(channel)}
           >
@@ -193,9 +197,9 @@ const CommunicationDashboard = ({ userRole, userId }) => {
             </div>
           </div>
         ))}
-        
+
         <h3>Direct Messages</h3>
-        {onlineUsers.map(user => (
+        {onlineUsers.map((user) => (
           <div key={user.id} className="user-item">
             <div className={`status-indicator ${user.status}`}></div>
             <span className="user-name">{user.name}</span>
@@ -217,17 +221,17 @@ const CommunicationDashboard = ({ userRole, userId }) => {
                 <button>📁 File Sharing</button>
               </div>
             </div>
-            
+
             <div className="message-area">
               <div className="message-placeholder">
                 <p>Welcome to #{selectedChannel.name}</p>
                 <p>{selectedChannel.description}</p>
               </div>
             </div>
-            
+
             <div className="message-input">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="Type your message..."
                 onKeyPress={(e) => {
                   if (e.key === 'Enter' && e.target.value.trim()) {
@@ -256,9 +260,9 @@ const CommunicationDashboard = ({ userRole, userId }) => {
           + Create New Group
         </button>
       </div>
-      
+
       <div className="groups-grid">
-        {studyGroups.map(group => (
+        {studyGroups.map((group) => (
           <div key={group.id} className="group-card">
             <div className="group-header">
               <h4>{group.name}</h4>
@@ -268,7 +272,9 @@ const CommunicationDashboard = ({ userRole, userId }) => {
             <div className="group-details">
               <span className="subject">📚 {group.subject}</span>
               <span className="level">🎯 {group.level}</span>
-              <span className="members">👥 {group.members.length}/{group.maxMembers}</span>
+              <span className="members">
+                👥 {group.members.length}/{group.maxMembers}
+              </span>
             </div>
             <div className="group-schedule">
               <span>📅 Meets {group.schedule.meetingFrequency}</span>
@@ -291,9 +297,9 @@ const CommunicationDashboard = ({ userRole, userId }) => {
           + Start New Project
         </button>
       </div>
-      
+
       <div className="projects-grid">
-        {projects.map(project => (
+        {projects.map((project) => (
           <div key={project.id} className="project-card">
             <div className="project-header">
               <h4>{project.title}</h4>
@@ -307,8 +313,8 @@ const CommunicationDashboard = ({ userRole, userId }) => {
             </div>
             <div className="project-progress">
               <div className="progress-bar">
-                <div 
-                  className="progress-fill" 
+                <div
+                  className="progress-fill"
                   style={{ width: `${project.progress.overallProgress}%` }}
                 ></div>
               </div>
@@ -329,21 +335,26 @@ const CommunicationDashboard = ({ userRole, userId }) => {
     <div className="notifications-section">
       <h3>Recent Notifications</h3>
       <div className="notifications-list">
-        {notifications.length > 0 ? notifications.map(notification => (
-          <div key={notification.id} className={`notification-item ${notification.priority.toLowerCase()}`}>
-            <div className="notification-content">
-              <h4>{notification.title}</h4>
-              <p>{notification.message}</p>
-              <span className="notification-time">
-                {notification.timestamp.toLocaleTimeString()}
-              </span>
+        {notifications.length > 0 ? (
+          notifications.map((notification) => (
+            <div
+              key={notification.id}
+              className={`notification-item ${notification.priority.toLowerCase()}`}
+            >
+              <div className="notification-content">
+                <h4>{notification.title}</h4>
+                <p>{notification.message}</p>
+                <span className="notification-time">
+                  {notification.timestamp.toLocaleTimeString()}
+                </span>
+              </div>
+              <div className="notification-actions">
+                <button>Mark Read</button>
+                <button>Dismiss</button>
+              </div>
             </div>
-            <div className="notification-actions">
-              <button>Mark Read</button>
-              <button>Dismiss</button>
-            </div>
-          </div>
-        )) : (
+          ))
+        ) : (
           <p className="no-notifications">No new notifications</p>
         )}
       </div>
@@ -368,25 +379,25 @@ const CommunicationDashboard = ({ userRole, userId }) => {
       </div>
 
       <div className="dashboard-tabs">
-        <button 
+        <button
           className={activeTab === 'messages' ? 'active' : ''}
           onClick={() => setActiveTab('messages')}
         >
           💬 Messages
         </button>
-        <button 
+        <button
           className={activeTab === 'study_groups' ? 'active' : ''}
           onClick={() => setActiveTab('study_groups')}
         >
           👥 Study Groups
         </button>
-        <button 
+        <button
           className={activeTab === 'projects' ? 'active' : ''}
           onClick={() => setActiveTab('projects')}
         >
           🚀 Projects
         </button>
-        <button 
+        <button
           className={activeTab === 'notifications' ? 'active' : ''}
           onClick={() => setActiveTab('notifications')}
         >
@@ -491,7 +502,7 @@ const CommunicationDashboard = ({ userRole, userId }) => {
 
         .dashboard-tabs button:hover {
           color: #3b82f6;
-          background: #f8fafc;
+          background: #f5f2eb;
         }
 
         .messaging-interface {
@@ -504,7 +515,7 @@ const CommunicationDashboard = ({ userRole, userId }) => {
 
         .channels-sidebar {
           width: 300px;
-          background: #f8fafc;
+          background: #f5f2eb;
           padding: 20px;
           border-right: 1px solid #e5e7eb;
           overflow-y: auto;
@@ -517,7 +528,8 @@ const CommunicationDashboard = ({ userRole, userId }) => {
           font-weight: 600;
         }
 
-        .channel-item, .user-item {
+        .channel-item,
+        .user-item {
           padding: 12px;
           margin-bottom: 8px;
           border-radius: 8px;
@@ -525,7 +537,8 @@ const CommunicationDashboard = ({ userRole, userId }) => {
           transition: background 0.2s ease;
         }
 
-        .channel-item:hover, .user-item:hover {
+        .channel-item:hover,
+        .user-item:hover {
           background: #e5e7eb;
         }
 
@@ -561,10 +574,18 @@ const CommunicationDashboard = ({ userRole, userId }) => {
           border-radius: 50%;
         }
 
-        .status-indicator.online { background: #10b981; }
-        .status-indicator.away { background: #f59e0b; }
-        .status-indicator.busy { background: #ef4444; }
-        .status-indicator.in_class { background: #3b82f6; }
+        .status-indicator.online {
+          background: #10b981;
+        }
+        .status-indicator.away {
+          background: #f59e0b;
+        }
+        .status-indicator.busy {
+          background: #ef4444;
+        }
+        .status-indicator.in_class {
+          background: #3b82f6;
+        }
 
         .chat-area {
           flex: 1;
@@ -659,13 +680,15 @@ const CommunicationDashboard = ({ userRole, userId }) => {
           background: #059669;
         }
 
-        .groups-grid, .projects-grid {
+        .groups-grid,
+        .projects-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
           gap: 20px;
         }
 
-        .group-card, .project-card {
+        .group-card,
+        .project-card {
           background: white;
           border: 1px solid #e5e7eb;
           border-radius: 12px;
@@ -673,25 +696,29 @@ const CommunicationDashboard = ({ userRole, userId }) => {
           transition: all 0.3s ease;
         }
 
-        .group-card:hover, .project-card:hover {
+        .group-card:hover,
+        .project-card:hover {
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
           transform: translateY(-2px);
         }
 
-        .group-header, .project-header {
+        .group-header,
+        .project-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 10px;
         }
 
-        .group-header h4, .project-header h4 {
+        .group-header h4,
+        .project-header h4 {
           margin: 0;
-          color: #1f2937;
+          color: #111111;
           font-size: 18px;
         }
 
-        .group-type, .project-type {
+        .group-type,
+        .project-type {
           background: #dbeafe;
           color: #1d4ed8;
           padding: 4px 8px;
@@ -700,20 +727,23 @@ const CommunicationDashboard = ({ userRole, userId }) => {
           font-weight: 500;
         }
 
-        .group-description, .project-description {
+        .group-description,
+        .project-description {
           color: #6b7280;
           margin-bottom: 15px;
           line-height: 1.5;
         }
 
-        .group-details, .project-details {
+        .group-details,
+        .project-details {
           display: flex;
           flex-wrap: wrap;
           gap: 10px;
           margin-bottom: 15px;
         }
 
-        .group-details span, .project-details span {
+        .group-details span,
+        .project-details span {
           background: #f3f4f6;
           padding: 4px 8px;
           border-radius: 4px;
@@ -740,12 +770,14 @@ const CommunicationDashboard = ({ userRole, userId }) => {
           transition: width 0.3s ease;
         }
 
-        .group-actions, .project-actions {
+        .group-actions,
+        .project-actions {
           display: flex;
           gap: 10px;
         }
 
-        .group-actions button, .project-actions button {
+        .group-actions button,
+        .project-actions button {
           flex: 1;
           padding: 8px 12px;
           border: 1px solid #d1d5db;
@@ -756,13 +788,15 @@ const CommunicationDashboard = ({ userRole, userId }) => {
           transition: all 0.2s ease;
         }
 
-        .group-actions button:first-child, .project-actions button:first-child {
+        .group-actions button:first-child,
+        .project-actions button:first-child {
           background: #3b82f6;
           color: white;
           border-color: #3b82f6;
         }
 
-        .group-actions button:hover, .project-actions button:hover {
+        .group-actions button:hover,
+        .project-actions button:hover {
           background: #f3f4f6;
         }
 
@@ -794,7 +828,7 @@ const CommunicationDashboard = ({ userRole, userId }) => {
 
         .notification-content h4 {
           margin: 0 0 5px 0;
-          color: #1f2937;
+          color: #111111;
         }
 
         .notification-content p {
@@ -857,7 +891,7 @@ const CommunicationDashboard = ({ userRole, userId }) => {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #1f2937;
+          background: #111111;
           color: white;
         }
 

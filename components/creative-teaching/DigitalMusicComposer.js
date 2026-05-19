@@ -200,22 +200,22 @@ export default function DigitalMusicComposer() {
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
-        background: '#170d28',
+        background: '#EFECE5',
         overflow: 'hidden',
       }}
     >
       <div
         style={{
           padding: '12px 16px',
-          background: '#2d1f4e',
-          borderBottom: '1px solid #3b2a66',
+          background: '#FFFFFF',
+          borderBottom: '1px solid #111111',
           display: 'flex',
           alignItems: 'center',
           gap: 10,
           flexWrap: 'wrap',
         }}
       >
-        <span style={{ color: '#ede9fe', fontWeight: 700, fontSize: 16 }}>
+        <span style={{ color: '#111111', fontWeight: 700, fontSize: 16 }}>
           Digital Music Composer
         </span>
 
@@ -228,15 +228,15 @@ export default function DigitalMusicComposer() {
             flexWrap: 'wrap',
           }}
         >
-          <span style={{ color: '#6d28d9', fontSize: 12 }}>Instrument:</span>
+          <span style={{ color: '#666666', fontSize: 12 }}>Instrument:</span>
           <select
             value={instrument}
             onChange={(e) => changeInstrument(e.target.value)}
             style={{
-              background: '#261843',
-              border: '1px solid #3b2a66',
+              background: '#F5F2EB',
+              border: '1px solid #111111',
               borderRadius: 8,
-              color: '#ede9fe',
+              color: '#111111',
               padding: '6px 10px',
               fontSize: 13,
             }}
@@ -247,7 +247,7 @@ export default function DigitalMusicComposer() {
             <option value="marimba">Marimba</option>
           </select>
 
-          <span style={{ color: '#6d28d9', fontSize: 12 }}>BPM:</span>
+          <span style={{ color: '#666666', fontSize: 12 }}>BPM:</span>
           <input
             type="range"
             min="60"
@@ -257,7 +257,7 @@ export default function DigitalMusicComposer() {
             onChange={(e) => setBpm(Number(e.target.value))}
             style={{ width: 90 }}
           />
-          <span style={{ color: '#a78bfa', fontSize: 13, minWidth: 30 }}>{bpm}</span>
+          <span style={{ color: '#666666', fontSize: 13, minWidth: 30 }}>{bpm}</span>
 
           <button
             onClick={playing ? stop : play}
@@ -295,7 +295,7 @@ export default function DigitalMusicComposer() {
       <div
         style={{ flex: 1, display: 'grid', gridTemplateColumns: '280px 1fr', overflow: 'hidden' }}
       >
-        <div style={{ borderRight: '1px solid #3b2a66', overflowY: 'auto', padding: '1.25rem' }}>
+        <div style={{ borderRight: '1px solid #111111', overflowY: 'auto', padding: '1.25rem' }}>
           <p style={labelStyle}>Presets</p>
           {PRESETS.map((p) => (
             <button
@@ -306,10 +306,10 @@ export default function DigitalMusicComposer() {
                 width: '100%',
                 marginBottom: 6,
                 padding: '8px 12px',
-                background: '#261843',
-                border: '1px solid #3b2a66',
+                background: '#F5F2EB',
+                border: '1px solid #111111',
                 borderRadius: 8,
-                color: '#a78bfa',
+                color: '#666666',
                 cursor: 'pointer',
                 textAlign: 'left',
                 fontSize: 13,
@@ -338,7 +338,7 @@ export default function DigitalMusicComposer() {
                 style={{
                   padding: '8px 4px',
                   borderRadius: 6,
-                  border: `1px solid ${selectedNote === note ? NOTE_COLORS[i] : '#3b2a66'}`,
+                  border: `1px solid ${selectedNote === note ? NOTE_COLORS[i] : '#111111'}`,
                   background: selectedNote === note ? `${NOTE_COLORS[i]}22` : 'transparent',
                   color: NOTE_COLORS[i],
                   fontSize: 12,
@@ -362,9 +362,9 @@ export default function DigitalMusicComposer() {
                   padding: '6px 2px',
                   borderRadius: 6,
                   fontSize: 11,
-                  border: `1px solid ${selectedDuration === d ? '#7c3aed' : '#3b2a66'}`,
-                  background: selectedDuration === d ? '#7c3aed' : 'transparent',
-                  color: selectedDuration === d ? '#fff' : '#a78bfa',
+                  border: `1px solid ${selectedDuration === d ? '#FF3B00' : '#111111'}`,
+                  background: selectedDuration === d ? '#FF3B00' : 'transparent',
+                  color: selectedDuration === d ? '#fff' : '#666666',
                   cursor: 'pointer',
                 }}
               >
@@ -378,7 +378,7 @@ export default function DigitalMusicComposer() {
             style={{
               width: '100%',
               padding: '11px',
-              background: '#7c3aed',
+              background: '#FF3B00',
               border: 'none',
               borderRadius: 10,
               color: '#fff',
@@ -397,10 +397,10 @@ export default function DigitalMusicComposer() {
               style={{
                 width: '100%',
                 padding: '8px',
-                background: '#261843',
-                border: '1px solid #3b2a66',
+                background: '#F5F2EB',
+                border: '1px solid #111111',
                 borderRadius: 8,
-                color: '#a78bfa',
+                color: '#666666',
                 fontSize: 13,
                 cursor: 'pointer',
               }}
@@ -413,10 +413,10 @@ export default function DigitalMusicComposer() {
         <div style={{ overflowY: 'auto', padding: '1.25rem' }}>
           {sequence.length === 0 ? (
             <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
-              <p style={{ color: '#ede9fe', fontWeight: 600, fontSize: 16, marginBottom: 8 }}>
+              <p style={{ color: '#111111', fontWeight: 600, fontSize: 16, marginBottom: 8 }}>
                 Your composition is empty
               </p>
-              <p style={{ color: '#6d28d9', fontSize: 14 }}>
+              <p style={{ color: '#666666', fontSize: 14 }}>
                 Select a note and duration, then click "Add Note"
                 <br />
                 or pick a preset to get started
@@ -432,14 +432,14 @@ export default function DigitalMusicComposer() {
                   justifyContent: 'space-between',
                 }}
               >
-                <span style={{ color: '#a78bfa', fontSize: 13 }}>
+                <span style={{ color: '#666666', fontSize: 13 }}>
                   {sequence.length} notes in composition
                 </span>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                 {sequence.map((item, i) => {
                   const noteIndex = NOTES.indexOf(item.note)
-                  const color = NOTE_COLORS[noteIndex] || '#7c3aed'
+                  const color = NOTE_COLORS[noteIndex] || '#FF3B00'
                   return (
                     <div
                       key={item.id}
@@ -455,7 +455,7 @@ export default function DigitalMusicComposer() {
                     >
                       <div
                         style={{
-                          color: currentStep === i ? '#170d28' : color,
+                          color: currentStep === i ? '#EFECE5' : color,
                           fontWeight: 700,
                           fontSize: 14,
                         }}
@@ -463,7 +463,7 @@ export default function DigitalMusicComposer() {
                         {item.note}
                       </div>
                       <div
-                        style={{ color: currentStep === i ? '#170d28' : '#6d28d9', fontSize: 10 }}
+                        style={{ color: currentStep === i ? '#EFECE5' : '#666666', fontSize: 10 }}
                       >
                         {DURATION_LABELS[item.duration]}
                       </div>
@@ -472,7 +472,7 @@ export default function DigitalMusicComposer() {
                         style={{
                           background: 'none',
                           border: 'none',
-                          color: currentStep === i ? '#170d28' : '#6d28d9',
+                          color: currentStep === i ? '#EFECE5' : '#666666',
                           cursor: 'pointer',
                           fontSize: 10,
                           padding: 0,
@@ -489,15 +489,15 @@ export default function DigitalMusicComposer() {
               <div
                 style={{
                   marginTop: '1.5rem',
-                  background: '#2d1f4e',
+                  background: '#FFFFFF',
                   borderRadius: 12,
                   padding: '1rem',
-                  border: '1px solid #3b2a66',
+                  border: '1px solid #111111',
                 }}
               >
                 <p
                   style={{
-                    color: '#6d28d9',
+                    color: '#666666',
                     fontSize: 11,
                     fontWeight: 600,
                     marginBottom: 8,
@@ -511,7 +511,7 @@ export default function DigitalMusicComposer() {
                   {sequence.map((item, i) => {
                     const noteIndex = NOTES.indexOf(item.note)
                     const height = 20 + (noteIndex / NOTES.length) * 60
-                    const color = NOTE_COLORS[noteIndex] || '#7c3aed'
+                    const color = NOTE_COLORS[noteIndex] || '#FF3B00'
                     const widthMap = { '16n': 12, '8n': 20, '4n': 32, '2n': 52, '1n': 80 }
                     return (
                       <div
@@ -540,7 +540,7 @@ export default function DigitalMusicComposer() {
 }
 
 const labelStyle = {
-  color: '#a78bfa',
+  color: '#666666',
   fontSize: 11,
   fontWeight: 700,
   textTransform: 'uppercase',

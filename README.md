@@ -559,15 +559,21 @@ npm run start
 
 ## Deployment Notes
 
+Production: **Neon** (PostgreSQL) + **Cloudflare Workers** (OpenNext). See [docs/doc/NEON_CLOUDFLARE_SETUP.md](docs/doc/NEON_CLOUDFLARE_SETUP.md).
+
 `next.config.js` sets:
 
-- `output: 'standalone'` (recommended for Railway/containers)
+- `output: 'standalone'` (Docker fallback; Cloudflare uses OpenNext build)
 - global security headers
-- permissive CORS headers for `/api/*` (review before production hardening)
 
-Source:
+Quick deploy:
 
-- [next.config.js](next.config.js)
+```bash
+npm run cf:build
+npm run cf:deploy
+```
+
+Set `DATABASE_URL` (Neon pooled), `DIRECT_URL` (Neon direct), and auth secrets in Wrangler / Cloudflare dashboard.
 
 ---
 

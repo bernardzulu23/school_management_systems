@@ -143,7 +143,7 @@ function LoginPageContent() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[#EFECE5] font-sans p-4">
+    <main className="min-h-screen flex items-center justify-center bg-paper text-ink font-sans p-4 antialiased">
       <button
         onClick={() => router.push('/')}
         className="absolute top-6 left-6 text-ink/70 hover:text-ink transition-colors flex items-center gap-2 group"
@@ -153,7 +153,7 @@ function LoginPageContent() {
         <span>Back to Home</span>
       </button>
 
-      <section className="w-full max-w-md p-8 rounded-2xl bg-white border border-ink/20">
+      <section className="auth-card w-full max-w-md p-8 rounded-2xl bg-white border-2 border-ink shadow-brutal text-ink">
         <header className="flex flex-col items-center mb-8">
           {school ? (
             <>
@@ -169,13 +169,13 @@ function LoginPageContent() {
             </>
           ) : (
             <>
-              <div className="bg-[#F5F2EB] border border-ink/20 rounded-lg p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
+              <div className="bg-paper border-2 border-ink/20 rounded-lg p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
                 <GraduationCap className="h-6 w-6 text-ink/70" />
               </div>
               <h1 className="text-2xl font-bold text-ink mb-2">Welcome Back</h1>
             </>
           )}
-          <p className="mt-3 text-center text-ink/70 text-sm">
+          <p className="mt-3 text-center text-muted text-sm">
             Enter your credentials to access the portal
           </p>
           {detectedSubdomain && (
@@ -218,9 +218,9 @@ function LoginPageContent() {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 rounded border-ink/30 bg-[#F5F2EB] text-accent focus:ring-1 focus:ring-accent focus:ring-offset-0"
+                className="h-4 w-4 rounded border-ink/30 bg-paper text-accent focus:ring-1 focus:ring-accent focus:ring-offset-0"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-ink/70">
+              <label htmlFor="remember-me" className="ml-2 block text-muted">
                 Remember me
               </label>
             </div>
@@ -233,17 +233,7 @@ function LoginPageContent() {
             </Link>
           </div>
 
-          <Button
-            type="submit"
-            className="w-full py-3.5"
-            style={{
-              backgroundColor: '#111111',
-              color: '#EFECE5',
-              border: '2px solid #111111',
-              boxShadow: '4px 4px 0 0 #FF3B00',
-            }}
-            disabled={isLoading}
-          >
+          <Button type="submit" variant="primary" className="w-full py-3.5" disabled={isLoading}>
             {isLoading ? `Signing in... ${loginPercent}%` : 'Sign In'}
           </Button>
         </form>
@@ -274,7 +264,7 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <main className="min-h-screen flex items-center justify-center bg-[#EFECE5]">
+        <main className="min-h-screen flex items-center justify-center bg-paper text-ink">
           <Loader2 className="h-8 w-8 animate-spin text-ink/50" />
         </main>
       }

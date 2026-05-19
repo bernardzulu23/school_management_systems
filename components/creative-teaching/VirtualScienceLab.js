@@ -129,7 +129,7 @@ const LABS = [
     difficulty: 'Advanced',
     duration: '20 mins',
     icon: 'PHYS',
-    color: '#a78bfa',
+    color: '#666666',
     colorBg: 'rgba(167,139,250,0.12)',
     description: 'Explore how light knocks electrons loose from a metal surface.',
     curriculum: 'Zambian Physics Form 5: Photoelectric effect',
@@ -212,7 +212,7 @@ export default function VirtualScienceLab() {
   if (activeLab) {
     return (
       <div
-        style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#170d28' }}
+        style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#EFECE5' }}
       >
         <div
           style={{
@@ -220,8 +220,8 @@ export default function VirtualScienceLab() {
             alignItems: 'center',
             gap: 12,
             padding: '10px 16px',
-            background: '#2d1f4e',
-            borderBottom: '1px solid #3b2a66',
+            background: '#FFFFFF',
+            borderBottom: '1px solid #111111',
             flexWrap: 'wrap',
           }}
         >
@@ -230,9 +230,9 @@ export default function VirtualScienceLab() {
             style={{
               padding: '6px 14px',
               background: 'transparent',
-              border: '1px solid #3b2a66',
+              border: '1px solid #111111',
               borderRadius: 8,
-              color: '#a78bfa',
+              color: '#666666',
               cursor: 'pointer',
               fontSize: 13,
             }}
@@ -241,10 +241,10 @@ export default function VirtualScienceLab() {
           </button>
           <span style={{ fontSize: 20 }}>{activeLab.icon}</span>
           <div>
-            <span style={{ color: '#ede9fe', fontWeight: 700, fontSize: 15 }}>
+            <span style={{ color: '#111111', fontWeight: 700, fontSize: 15 }}>
               {activeLab.name}
             </span>
-            <span style={{ color: '#6d28d9', fontSize: 12, marginLeft: 10 }}>
+            <span style={{ color: '#666666', fontSize: 12, marginLeft: 10 }}>
               {activeLab.grade} · {activeLab.duration}
             </span>
           </div>
@@ -282,28 +282,28 @@ export default function VirtualScienceLab() {
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
-        background: '#170d28',
+        background: '#EFECE5',
         overflow: 'hidden',
       }}
     >
       <div
         style={{
           padding: '1.25rem 1.5rem',
-          background: '#2d1f4e',
-          borderBottom: '1px solid #3b2a66',
+          background: '#FFFFFF',
+          borderBottom: '1px solid #111111',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
           <div>
-            <h2 style={{ color: '#ede9fe', fontWeight: 700, fontSize: 18, margin: 0 }}>
+            <h2 style={{ color: '#111111', fontWeight: 700, fontSize: 18, margin: 0 }}>
               Virtual Science Lab
             </h2>
-            <p style={{ color: '#6d28d9', fontSize: 12, margin: 0 }}>
+            <p style={{ color: '#666666', fontSize: 12, margin: 0 }}>
               PhET interactive simulations · Zambian curriculum aligned · No equipment needed
             </p>
           </div>
           <div style={{ marginLeft: 'auto' }}>
-            <span style={{ color: '#a78bfa', fontSize: 13 }}>{filtered.length} labs available</span>
+            <span style={{ color: '#666666', fontSize: 13 }}>{filtered.length} labs available</span>
           </div>
         </div>
 
@@ -314,10 +314,10 @@ export default function VirtualScienceLab() {
             onChange={(e) => setSearch(e.target.value)}
             style={{
               padding: '7px 12px',
-              background: '#261843',
-              border: '1px solid #3b2a66',
+              background: '#F5F2EB',
+              border: '1px solid #111111',
               borderRadius: 8,
-              color: '#ede9fe',
+              color: '#111111',
               fontSize: 13,
               outline: 'none',
               width: 180,
@@ -334,10 +334,10 @@ export default function VirtualScienceLab() {
               onChange={(e) => f.set(e.target.value)}
               style={{
                 padding: '7px 12px',
-                background: '#261843',
-                border: '1px solid #3b2a66',
+                background: '#F5F2EB',
+                border: '1px solid #111111',
                 borderRadius: 8,
-                color: '#a78bfa',
+                color: '#666666',
                 fontSize: 13,
                 cursor: 'pointer',
               }}
@@ -354,7 +354,7 @@ export default function VirtualScienceLab() {
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '1.25rem 1.5rem' }}>
         {filtered.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '3rem', color: '#6d28d9' }}>
+          <div style={{ textAlign: 'center', padding: '3rem', color: '#666666' }}>
             No labs match your filters. Try adjusting the subject or grade.
           </div>
         ) : (
@@ -369,7 +369,7 @@ export default function VirtualScienceLab() {
               <div
                 key={lab.id}
                 style={{
-                  background: `${lab.colorBg}, #2d1f4e`,
+                  background: `${lab.colorBg}, #FFFFFF`,
                   border: `1px solid ${lab.color}30`,
                   borderRadius: 14,
                   padding: '1.25rem',
@@ -420,7 +420,7 @@ export default function VirtualScienceLab() {
                   <div>
                     <p
                       style={{
-                        color: '#ede9fe',
+                        color: '#111111',
                         fontWeight: 700,
                         fontSize: 14,
                         margin: 0,
@@ -437,7 +437,7 @@ export default function VirtualScienceLab() {
                   </div>
                 </div>
 
-                <p style={{ color: '#a78bfa', fontSize: 12, lineHeight: 1.6, marginBottom: 10 }}>
+                <p style={{ color: '#666666', fontSize: 12, lineHeight: 1.6, marginBottom: 10 }}>
                   {lab.description}
                 </p>
 
@@ -447,9 +447,9 @@ export default function VirtualScienceLab() {
                       fontSize: 11,
                       padding: '2px 8px',
                       borderRadius: 99,
-                      background: '#261843',
-                      color: '#6d28d9',
-                      border: '1px solid #3b2a66',
+                      background: '#F5F2EB',
+                      color: '#666666',
+                      border: '1px solid #111111',
                     }}
                   >
                     {lab.grade}
@@ -459,9 +459,9 @@ export default function VirtualScienceLab() {
                       fontSize: 11,
                       padding: '2px 8px',
                       borderRadius: 99,
-                      background: '#261843',
-                      color: '#6d28d9',
-                      border: '1px solid #3b2a66',
+                      background: '#F5F2EB',
+                      color: '#666666',
+                      border: '1px solid #111111',
                     }}
                   >
                     {lab.difficulty}
@@ -471,16 +471,16 @@ export default function VirtualScienceLab() {
                       fontSize: 11,
                       padding: '2px 8px',
                       borderRadius: 99,
-                      background: '#261843',
-                      color: '#6d28d9',
-                      border: '1px solid #3b2a66',
+                      background: '#F5F2EB',
+                      color: '#666666',
+                      border: '1px solid #111111',
                     }}
                   >
                     {lab.duration}
                   </span>
                 </div>
 
-                <div style={{ fontSize: 11, color: '#4b3575', marginBottom: 12, lineHeight: 1.5 }}>
+                <div style={{ fontSize: 11, color: '#A8A7A2', marginBottom: 12, lineHeight: 1.5 }}>
                   {lab.curriculum}
                 </div>
 
@@ -491,7 +491,7 @@ export default function VirtualScienceLab() {
                     background: lab.color,
                     border: 'none',
                     borderRadius: 8,
-                    color: '#170d28',
+                    color: '#EFECE5',
                     fontWeight: 700,
                     fontSize: 13,
                     cursor: 'pointer',

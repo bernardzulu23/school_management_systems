@@ -2,10 +2,12 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { authMiddleware } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getHodProfile, resolveAllocationDepartmentId } from '@/lib/utils/hodDepartmentScope'
+import { canManageDepartmentAllocations, isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
+import { resolveTeacherRecordId } from '@/lib/utils/resolveTeacherId'
 
 function normalizeString(v) {
   return String(v || '').trim()
@@ -25,21 +27,25 @@ export const POST = withErrorHandler(async function POST(request) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  const isAdminOrHead = roleCheck(auth.user, ['ADMIN', 'headteacher'])
-  const isHod = roleCheck(auth.user, ['HOD', 'hod'])
-  if (!isAdminOrHead && !isHod) {
-    throw new ApiError('Forbidden', 403)
-  }
-
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const hodProfile = await getHodProfile(prisma, auth.user.id, schoolId)
-  if (!hodProfile && !isAdminOrHead) throw new ApiError('HOD profile not found', 404)
+  const isAdminOrHead = isSchoolAdminOrHead(auth.user)
+  if (!canManageDepartmentAllocations(auth.user, hodProfile)) {
+    throw new ApiError(
+      'Only HOD or school admin can create allocations. Ask your admin to link your Head of Department profile.',
+      403
+    )
+  }
+  if (!hodProfile && !isAdminOrHead) {
+    throw new ApiError('HOD profile not found for this school', 404)
+  }
 
   const body = await request.json().catch(() => ({}))
   const requestedDepartmentId = normalizeString(body?.departmentId)
-  const teacherId = normalizeString(body?.teacherId)
+  const teacherIdRaw = normalizeString(body?.teacherId)
+  const teacherId = await resolveTeacherRecordId(prisma, schoolId, teacherIdRaw)
   const subject = normalizeString(body?.subject)
   const classes = normalizeClasses(body?.classes)
   const periodConfig = body?.periodConfig ?? null
@@ -56,7 +62,8 @@ export const POST = withErrorHandler(async function POST(request) {
   if (deptResult.error) throw new ApiError(deptResult.error, deptResult.status || 400)
   const departmentId = deptResult.departmentId
 
-  if (!teacherId) throw new ApiError('teacherId is required', 400)
+  if (!teacherIdRaw) throw new ApiError('teacherId is required', 400)
+  if (!teacherId) throw new ApiError('Teacher record not found for this school', 400)
   if (!subject) throw new ApiError('subject is required', 400)
   if (classes.length === 0) throw new ApiError('classes is required', 400)
 

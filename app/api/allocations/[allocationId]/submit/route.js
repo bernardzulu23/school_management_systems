@@ -2,9 +2,11 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { authMiddleware } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
+import { canManageDepartmentAllocations } from '@/lib/utils/hodAccess'
 
 function adminRoleWhere() {
   const values = ['headteacher', 'admin', 'administrator', 'superadmin']
@@ -21,12 +23,13 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['HOD', 'hod'])) {
-    throw new ApiError('Forbidden', 403)
-  }
-
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const hodProfile = await getHodProfile(prisma, auth.user.id, schoolId)
+  if (!canManageDepartmentAllocations(auth.user, hodProfile)) {
+    throw new ApiError('Forbidden', 403)
+  }
 
   const allocation = await prisma.departmentAllocation.findFirst({
     where: { id: allocationId, schoolId },

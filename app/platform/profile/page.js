@@ -108,27 +108,27 @@ export default function PlatformProfilePage() {
   }
 
   return (
-    <main className="min-h-screen">
-      <header className="border-b border-slate-800 bg-slate-900/50">
+    <main className="min-h-screen bg-paper">
+      <header className="border-b-2 border-ink bg-ink text-paper">
         <div className="max-w-2xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Shield className="text-violet-400" size={22} />
+            <Shield className="text-accent" size={22} />
             <div>
-              <h1 className="font-semibold text-white">My profile</h1>
-              <p className="text-xs text-slate-400">Platform super admin account</p>
+              <h1 className="font-semibold">My profile</h1>
+              <p className="text-xs text-paper/70">Platform super admin account</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <Link
               href="/platform/dashboard"
-              className="flex items-center gap-1 px-3 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-sm"
+              className="flex items-center gap-1 px-3 py-2 border-2 border-paper/30 text-paper hover:bg-paper/10 text-sm"
             >
               <ArrowLeft size={16} /> Schools
             </Link>
             <button
               type="button"
               onClick={logout}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-sm"
+              className="flex items-center gap-2 px-3 py-2 border-2 border-paper/30 text-paper hover:bg-paper/10 text-sm"
             >
               <LogOut size={16} /> Sign out
             </button>
@@ -138,80 +138,80 @@ export default function PlatformProfilePage() {
 
       <div className="max-w-2xl mx-auto px-6 py-8">
         {loading ? (
-          <p className="text-slate-400">Loading profile…</p>
+          <p className="text-muted">Loading profile…</p>
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 space-y-6"
+            className="border-2 border-ink bg-white p-6 space-y-6 shadow-brutal"
           >
-            <div className="flex items-center gap-3 pb-4 border-b border-slate-800">
-              <div className="w-12 h-12 rounded-full bg-violet-600/20 flex items-center justify-center">
-                <User className="text-violet-400" size={24} />
+            <div className="flex items-center gap-3 pb-4 border-b-2 border-ink/10">
+              <div className="w-12 h-12 rounded-full bg-accent/15 flex items-center justify-center">
+                <User className="text-accent" size={24} />
               </div>
               <div>
-                <p className="text-white font-medium">{profile?.name}</p>
-                <p className="text-sm text-slate-400">{profile?.email}</p>
+                <p className="text-ink font-medium">{profile?.name}</p>
+                <p className="text-sm text-muted">{profile?.email}</p>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Display name</label>
+              <label className="block text-sm text-ink mb-1 font-medium">Display name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white"
+                className="input"
                 required
                 minLength={2}
               />
             </div>
 
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Email</label>
+              <label className="block text-sm text-ink mb-1 font-medium">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white"
+                className="input"
                 required
                 autoComplete="username"
               />
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-muted mt-1">
                 Changing email requires your current password below.
               </p>
             </div>
 
-            <div className="pt-2 border-t border-slate-800 space-y-4">
-              <p className="text-sm font-medium text-slate-300">Change password</p>
+            <div className="pt-2 border-t-2 border-ink/10 space-y-4">
+              <p className="text-sm font-medium text-ink">Change password</p>
               <div>
-                <label className="block text-sm text-slate-400 mb-1">Current password</label>
+                <label className="block text-sm text-muted mb-1">Current password</label>
                 <input
                   type="password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white"
+                  className="input"
                   autoComplete="current-password"
                 />
               </div>
               <div>
-                <label className="block text-sm text-slate-400 mb-1">New password</label>
+                <label className="block text-sm text-muted mb-1">New password</label>
                 <input
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white"
+                  className="input"
                   minLength={8}
                   autoComplete="new-password"
                   placeholder="Leave blank to keep current"
                 />
               </div>
               <div>
-                <label className="block text-sm text-slate-400 mb-1">Confirm new password</label>
+                <label className="block text-sm text-muted mb-1">Confirm new password</label>
                 <input
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white"
+                  className="input"
                   autoComplete="new-password"
                 />
               </div>
@@ -220,7 +220,7 @@ export default function PlatformProfilePage() {
             <button
               type="submit"
               disabled={saving}
-              className="w-full rounded-lg bg-violet-600 hover:bg-violet-500 py-2.5 font-medium text-white disabled:opacity-60"
+              className="btn-primary w-full disabled:opacity-60"
             >
               {saving ? 'Saving…' : 'Save changes'}
             </button>

@@ -28,13 +28,13 @@ function WhiteboardLoader() {
         style={{
           width: 40,
           height: 40,
-          border: '3px solid #3b2a66',
-          borderTop: '3px solid #7c3aed',
+          border: '3px solid #111111',
+          borderTop: '3px solid #FF3B00',
           borderRadius: '50%',
           animation: 'spin 1s linear infinite',
         }}
       />
-      <p style={{ color: '#a78bfa', fontSize: 14 }}>Loading whiteboard...</p>
+      <p style={{ color: '#666666', fontSize: 14 }}>Loading whiteboard...</p>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   )
@@ -92,15 +92,15 @@ export default function InteractiveWhiteboard({ user, height = '100vh' }) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height, background: '#170d28' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height, background: '#EFECE5' }}>
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '10px 16px',
-          background: '#2d1f4e',
-          borderBottom: '1px solid #3b2a66',
+          background: '#FFFFFF',
+          borderBottom: '1px solid #111111',
           flexWrap: 'wrap',
           gap: 8,
         }}
@@ -114,10 +114,10 @@ export default function InteractiveWhiteboard({ user, height = '100vh' }) {
               onBlur={() => setShowNameInput(false)}
               onKeyDown={(e) => e.key === 'Enter' && setShowNameInput(false)}
               style={{
-                background: '#261843',
-                border: '1px solid #7c3aed',
+                background: '#F5F2EB',
+                border: '1px solid #FF3B00',
                 borderRadius: 6,
-                color: '#ede9fe',
+                color: '#111111',
                 padding: '4px 10px',
                 fontSize: 14,
                 outline: 'none',
@@ -126,7 +126,7 @@ export default function InteractiveWhiteboard({ user, height = '100vh' }) {
           ) : (
             <span
               onClick={() => setShowNameInput(true)}
-              style={{ color: '#ede9fe', fontWeight: 600, fontSize: 15, cursor: 'text' }}
+              style={{ color: '#111111', fontWeight: 600, fontSize: 15, cursor: 'text' }}
               title="Click to rename"
             >
               {boardName}
@@ -199,9 +199,9 @@ function btnStyle(variant) {
     alignItems: 'center',
     gap: 6,
   }
-  if (variant === 'primary') return { ...base, background: '#7c3aed', color: '#fff' }
+  if (variant === 'primary') return { ...base, background: '#FF3B00', color: '#fff' }
   if (variant === 'secondary')
-    return { ...base, background: '#261843', color: '#a78bfa', border: '1px solid #3b2a66' }
+    return { ...base, background: '#F5F2EB', color: '#666666', border: '1px solid #111111' }
   if (variant === 'danger')
     return { ...base, background: '#3b0a0a', color: '#fca5a5', border: '1px solid #7f1d1d' }
   return base

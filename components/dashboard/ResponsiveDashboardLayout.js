@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { Sidebar } from './Sidebar'
 import { Menu, Bell, Search, User } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
 import { useSchool } from '@/lib/context/SchoolContext'
 import { TimetableNotificationBell } from '@/components/timetable/MasterTimetableGenerator'
@@ -27,37 +26,37 @@ export default function ResponsiveDashboardLayout({ children }) {
     plan === 'trial' && typeof daysLeft === 'number' && daysLeft >= 0 && daysLeft <= 7
 
   return (
-    <div className="flex h-screen bg-royalPurple-page overflow-hidden">
-      {/* Main Content */}
+    <div className="flex h-screen bg-paper text-ink overflow-hidden">
+      <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top Header */}
-        <header className="bg-royalPurple-deep border-b border-royalPurple-border h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 flex-shrink-0">
+        <header className="bg-white border-b-2 border-ink/10 h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 flex-shrink-0">
           <div className="flex items-center lg:hidden">
             <button
               onClick={() => setMobileOpen(true)}
-              className="p-2 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 focus:outline-none"
+              className="p-2 rounded-lg text-muted hover:bg-paper hover:text-ink focus:outline-none"
               aria-label="Open menu"
             >
               <Menu className="h-6 w-6" />
             </button>
             {school ? (
-              <span className="ml-4 font-bold text-lg text-royalPurple-text1 truncate max-w-[200px]">
+              <span className="ml-4 font-bold text-lg text-ink truncate max-w-[200px]">
                 {school.name}
               </span>
             ) : (
-              <span className="ml-4 font-bold text-lg text-royalPurple-text1">EduZambia</span>
+              <span className="ml-4 font-bold text-lg text-ink">EduZambia</span>
             )}
           </div>
 
           <div className="hidden lg:flex flex-1 max-w-md">
             <div className="relative w-full">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-royalPurple-text3" />
+                <Search className="h-4 w-4 text-muted" />
               </div>
               <input
                 type="text"
                 placeholder="Search..."
-                className="block w-full pl-10 pr-3 py-2 bg-royalPurple-card2 border border-royalPurple-border text-royalPurple-text1 placeholder:text-royalPurple-muted rounded-lg focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2 sm:text-sm transition-colors"
+                className="block w-full pl-10 pr-3 py-2 bg-white border-2 border-ink/10 text-ink placeholder:text-muted rounded-lg focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 sm:text-sm transition-colors"
               />
             </div>
           </div>
@@ -69,41 +68,37 @@ export default function ResponsiveDashboardLayout({ children }) {
                 .toLowerCase()
             ) && <TimetableNotificationBell />}
             <button
-              className="p-2 rounded-full text-royalPurple-text2 hover:bg-royalPurple-card2 relative"
+              className="p-2 rounded-full text-muted hover:bg-paper relative"
               aria-label="Notifications"
             >
               <Bell className="h-5 w-5" />
-              <span className="absolute top-1.5 right-1.5 block h-2 w-2 rounded-full bg-royalPurple-accent ring-2 ring-royalPurple-deep" />
+              <span className="absolute top-1.5 right-1.5 block h-2 w-2 rounded-full bg-accent ring-2 ring-white" />
             </button>
 
-            <div className="h-8 w-px bg-royalPurple-border mx-2 hidden sm:block" />
+            <div className="h-8 w-px bg-ink/10 mx-2 hidden sm:block" />
 
             <div className="flex items-center gap-3">
               <div className="text-right hidden sm:block">
-                <p className="text-sm font-medium text-royalPurple-text1">{user?.name}</p>
-                <p className="text-xs text-royalPurple-text2 capitalize">{user?.role}</p>
+                <p className="text-sm font-medium text-ink">{user?.name}</p>
+                <p className="text-xs text-muted capitalize">{user?.role}</p>
               </div>
-              <div className="h-9 w-9 rounded-full bg-royalPurple-accentBg text-royalPurple-accentTx flex items-center justify-center font-semibold border border-royalPurple-border">
+              <div className="h-9 w-9 rounded-full bg-accent text-white flex items-center justify-center font-semibold border-2 border-ink">
                 {user?.name?.charAt(0) || <User className="h-5 w-5" />}
               </div>
             </div>
           </div>
         </header>
 
-        {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-royalPurple-page p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto bg-paper p-4 sm:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto space-y-4">
             {shouldWarn && expiresAt ? (
-              <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4">
+              <div className="rounded-xl border-2 border-amber-600/40 bg-amber-50 p-4">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
-                  <div className="text-sm text-amber-500 font-semibold">
+                  <div className="text-sm text-amber-900 font-semibold">
                     Free trial ends in {daysLeft} day{daysLeft === 1 ? '' : 's'} (
                     {expiresAt.toLocaleDateString()})
                   </div>
-                  <a
-                    href="/dashboard/billing"
-                    className="text-sm font-bold text-amber-500 underline"
-                  >
+                  <a href="/dashboard/billing" className="text-sm font-bold text-accent underline">
                     Upgrade now
                   </a>
                 </div>
@@ -111,14 +106,14 @@ export default function ResponsiveDashboardLayout({ children }) {
             ) : null}
 
             {isExpired && expiresAt ? (
-              <div className="rounded-xl border border-red-500/40 bg-red-500/10 p-6">
-                <div className="text-red-400 font-bold">Your access has expired</div>
-                <div className="text-sm text-royalPurple-text2 mt-1">
+              <div className="rounded-xl border-2 border-red-500/40 bg-red-50 p-6">
+                <div className="text-red-800 font-bold">Your access has expired</div>
+                <div className="text-sm text-muted mt-1">
                   Your {plan === 'trial' ? 'free trial' : 'subscription'} expired on{' '}
                   {expiresAt.toLocaleDateString()}. Upgrade to restore access.
                 </div>
                 <div className="mt-4">
-                  <a href="/dashboard/billing" className="text-sm font-bold text-red-300 underline">
+                  <a href="/dashboard/billing" className="text-sm font-bold text-accent underline">
                     Go to Billing
                   </a>
                 </div>

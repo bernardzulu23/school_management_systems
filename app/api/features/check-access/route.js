@@ -40,11 +40,15 @@ export async function POST(request) {
     const plan = String(school.plan || 'trial').toLowerCase()
     const level = String(school.level || 'combined').toLowerCase()
 
+    const onTrial = Boolean(
+      school.trialEndsAt && new Date(school.trialEndsAt).getTime() > now.getTime()
+    )
     const isTrialExpired =
       plan === 'trial' &&
       school.trialEndsAt &&
       new Date(school.trialEndsAt).getTime() < now.getTime()
     const isPlanExpired =
+      !onTrial &&
       plan !== 'trial' &&
       school.planExpiresAt &&
       new Date(school.planExpiresAt).getTime() < now.getTime()
@@ -62,7 +66,7 @@ export async function POST(request) {
       )
     }
 
-    if (!planIncludes(plan, featureId)) {
+    if (!planIncludes(plan, featureId, school)) {
       return NextResponse.json(
         {
           allowed: false,

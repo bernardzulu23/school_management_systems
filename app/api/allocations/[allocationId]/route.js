@@ -2,23 +2,21 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { authMiddleware } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
+import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
+import { canManageDepartmentAllocations, isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
 
 async function assertCanAccessAllocation({ schoolId, user, allocation }) {
-  if (roleCheck(user, ['ADMIN', 'headteacher'])) return
+  if (isSchoolAdminOrHead(user)) return
   if (allocation.createdByUserId === user.id) return
 
-  if (!roleCheck(user, ['HOD', 'hod'])) {
+  const hodProfile = await getHodProfile(prisma, user.id, schoolId)
+  if (!canManageDepartmentAllocations(user, hodProfile)) {
     throw new ApiError('Forbidden', 403)
   }
-
-  const hodProfile = await prisma.headOfDepartment.findFirst({
-    where: { userId: user.id, schoolId },
-    select: { departmentId: true, department: true },
-  })
   if (!hodProfile) throw new ApiError('Forbidden', 403)
 
   const resolved = await resolveDepartmentScope({

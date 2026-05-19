@@ -49,7 +49,7 @@ export default function InnovationHub() {
       name: '🚀 AI-Powered Learning Tools',
       icon: Brain,
       description: 'Intelligent tutoring, personalized learning paths, and automated assessment',
-      color: 'from-blue-600 to-purple-600',
+      color: 'from-ink to-accent',
       status: 'beta',
       features: [
         'Smart Tutoring System',
@@ -159,7 +159,7 @@ export default function InnovationHub() {
           <div className="text-center">
             <Button
               onClick={() => setSelectedDemo(feature.id)}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+              className="bg-accent hover:bg-accent/90 text-white border-2 border-ink"
             >
               <Play className="h-4 w-4 mr-2" />
               Try Interactive Demo

@@ -113,12 +113,10 @@ This project aligns with multiple RootLab focus areas:
 
 ## Deployment
 
-### Railway + Cloudflare (Recommended)
+### Neon + Cloudflare (Recommended)
 
-This project is configured for deployment on **Railway** with **Cloudflare** for DNS and security.
+This project is configured for **Neon** PostgreSQL and **Cloudflare Workers** (OpenNext) with **Cloudflare** DNS.
 
-See the detailed guide: [Railway + Cloudflare Setup Guide](RAILWAY_CLOUDFLARE_SETUP.md)
+See: [Neon + Cloudflare Setup Guide](NEON_CLOUDFLARE_SETUP.md)
 
-### Vercel
-
-See [Vercel Deployment Guide](../VERCEL_DEPLOYMENT.md).
+(Legacy Railway/Render guide: [RAILWAY_CLOUDFLARE_SETUP.md](RAILWAY_CLOUDFLARE_SETUP.md) — deprecated.)

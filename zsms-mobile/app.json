@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "ZSMS Teacher",
+    "slug": "zsms-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "zsms",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#EFECE5"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bluepeack.zsms.teacher"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#111111"
+      },
+      "package": "com.bluepeack.zsms.teacher"
+    },
+    "plugins": ["expo-router", "expo-secure-store"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

@@ -27,7 +27,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         location: 'Main Auditorium',
         maxAttendees: 200,
         registrationRequired: true,
-        tags: ['science', 'research', 'competition']
+        tags: ['science', 'research', 'competition'],
       }),
       RealTimeCommunicationHub.createCommunityEvent({
         title: 'Math Olympiad Training',
@@ -39,7 +39,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         location: 'Room 201',
         maxAttendees: 30,
         registrationRequired: true,
-        tags: ['mathematics', 'competition', 'training']
+        tags: ['mathematics', 'competition', 'training'],
       }),
       RealTimeCommunicationHub.createCommunityEvent({
         title: 'Cultural Exchange Day',
@@ -51,8 +51,8 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         location: 'School Courtyard',
         maxAttendees: 500,
         registrationRequired: false,
-        tags: ['culture', 'diversity', 'community']
-      })
+        tags: ['culture', 'diversity', 'community'],
+      }),
     ]
     setCommunityEvents(events)
 
@@ -64,7 +64,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         category: 'academic',
         subject: 'General',
         moderators: ['teacher_1', 'teacher_2'],
-        createdBy: 'admin'
+        createdBy: 'admin',
       }),
       RealTimeCommunicationHub.createDiscussionForum({
         title: 'Career Guidance Corner',
@@ -72,7 +72,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         category: 'general',
         subject: 'Career Development',
         moderators: ['counselor_1'],
-        createdBy: 'admin'
+        createdBy: 'admin',
       }),
       RealTimeCommunicationHub.createDiscussionForum({
         title: 'Student Innovation Lab',
@@ -80,8 +80,8 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         category: 'academic',
         subject: 'Innovation',
         moderators: ['teacher_3'],
-        createdBy: 'admin'
-      })
+        createdBy: 'admin',
+      }),
     ]
     setDiscussionForums(forums)
 
@@ -94,7 +94,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         subject: 'Mathematics',
         mentor: { id: 'student_senior_1', name: 'Alex Chen' },
         mentee: { id: userId, name: 'Current User' },
-        goals: ['Improve problem-solving skills', 'Prepare for competitions', 'Build confidence']
+        goals: ['Improve problem-solving skills', 'Prepare for competitions', 'Build confidence'],
       }),
       SocialLearningNetwork.createMentorshipProgram({
         title: 'Career Exploration Program',
@@ -103,8 +103,8 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         subject: 'Computer Science',
         mentor: { id: 'professional_1', name: 'Dr. Sarah Wilson' },
         mentee: { id: userId, name: 'Current User' },
-        goals: ['Explore tech careers', 'Build professional network', 'Develop industry skills']
-      })
+        goals: ['Explore tech careers', 'Build professional network', 'Develop industry skills'],
+      }),
     ]
     setMentorshipPrograms(mentorships)
 
@@ -119,7 +119,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         creator: { id: userId, name: 'Current User' },
         timeCommitment: 2,
         duration: '3_months',
-        format: 'online'
+        format: 'online',
       }),
       SocialLearningNetwork.createKnowledgeExchange({
         title: 'Coding Bootcamp Buddy',
@@ -130,8 +130,8 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         creator: { id: 'student_2', name: 'Jordan Smith' },
         timeCommitment: 3,
         duration: '6_months',
-        format: 'hybrid'
-      })
+        format: 'hybrid',
+      }),
     ]
     setKnowledgeExchanges(exchanges)
 
@@ -143,7 +143,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         category: 'academic',
         subject: 'STEM',
         members: [userId, 'student_1', 'student_2', 'student_3'],
-        moderators: ['teacher_1']
+        moderators: ['teacher_1'],
       }),
       SocialLearningNetwork.createPeerLearningNetwork({
         name: 'Creative Arts Collective',
@@ -151,50 +151,57 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         category: 'personal',
         subject: 'Arts',
         members: [userId, 'student_4', 'student_5'],
-        moderators: ['teacher_4']
-      })
+        moderators: ['teacher_4'],
+      }),
     ]
     setPeerNetworks(networks)
   }
 
   const registerForEvent = (eventId) => {
-    setCommunityEvents(prev => prev.map(event =>
-      event.id === eventId
-        ? { ...event, attendees: [...event.attendees, { id: userId, name: 'Current User' }] }
-        : event
-    ))
+    setCommunityEvents((prev) =>
+      prev.map((event) =>
+        event.id === eventId
+          ? { ...event, attendees: [...event.attendees, { id: userId, name: 'Current User' }] }
+          : event
+      )
+    )
   }
 
   const joinForum = (forumId) => {
-    setDiscussionForums(prev => prev.map(forum =>
-      forum.id === forumId
-        ? { ...forum, participants: [...forum.participants, userId] }
-        : forum
-    ))
+    setDiscussionForums((prev) =>
+      prev.map((forum) =>
+        forum.id === forumId ? { ...forum, participants: [...forum.participants, userId] } : forum
+      )
+    )
   }
 
   const applyForMentorship = (mentorshipId) => {
-    setMentorshipPrograms(prev => prev.map(program =>
-      program.id === mentorshipId
-        ? { ...program, status: 'applied' }
-        : program
-    ))
+    setMentorshipPrograms((prev) =>
+      prev.map((program) =>
+        program.id === mentorshipId ? { ...program, status: 'applied' } : program
+      )
+    )
   }
 
   const joinKnowledgeExchange = (exchangeId) => {
-    setKnowledgeExchanges(prev => prev.map(exchange =>
-      exchange.id === exchangeId
-        ? { ...exchange, participants: [...exchange.participants, { id: userId, name: 'Current User' }] }
-        : exchange
-    ))
+    setKnowledgeExchanges((prev) =>
+      prev.map((exchange) =>
+        exchange.id === exchangeId
+          ? {
+              ...exchange,
+              participants: [...exchange.participants, { id: userId, name: 'Current User' }],
+            }
+          : exchange
+      )
+    )
   }
 
   const joinPeerNetwork = (networkId) => {
-    setPeerNetworks(prev => prev.map(network =>
-      network.id === networkId
-        ? { ...network, members: [...network.members, userId] }
-        : network
-    ))
+    setPeerNetworks((prev) =>
+      prev.map((network) =>
+        network.id === networkId ? { ...network, members: [...network.members, userId] } : network
+      )
+    )
   }
 
   const renderCommunityEvents = () => (
@@ -205,7 +212,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
       </div>
 
       <div className="events-grid">
-        {communityEvents.map(event => (
+        {communityEvents.map((event) => (
           <div key={event.id} className="event-card">
             <div className="event-header">
               <h4>{event.title}</h4>
@@ -215,7 +222,8 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
             <div className="event-details">
               <div className="event-info">
                 <span className="event-date">
-                  📅 {event.startTime.toLocaleDateString()} at {event.startTime.toLocaleTimeString()}
+                  📅 {event.startTime.toLocaleDateString()} at{' '}
+                  {event.startTime.toLocaleTimeString()}
                 </span>
                 <span className="event-location">📍 {event.location}</span>
                 <span className="event-organizer">👤 {event.organizer.name}</span>
@@ -230,17 +238,19 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
               </div>
             </div>
             <div className="event-tags">
-              {event.tags.map(tag => (
-                <span key={tag} className="tag">#{tag}</span>
+              {event.tags.map((tag) => (
+                <span key={tag} className="tag">
+                  #{tag}
+                </span>
               ))}
             </div>
             <div className="event-actions">
               <button
                 onClick={() => registerForEvent(event.id)}
                 className="register-button"
-                disabled={event.attendees.some(a => a.id === userId)}
+                disabled={event.attendees.some((a) => a.id === userId)}
               >
-                {event.attendees.some(a => a.id === userId) ? 'Registered' : 'Register'}
+                {event.attendees.some((a) => a.id === userId) ? 'Registered' : 'Register'}
               </button>
               <button>View Details</button>
               <button>Share</button>
@@ -259,7 +269,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
       </div>
 
       <div className="forums-grid">
-        {discussionForums.map(forum => (
+        {discussionForums.map((forum) => (
           <div key={forum.id} className="forum-card">
             <div className="forum-header">
               <h4>{forum.title}</h4>
@@ -299,11 +309,13 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
       </div>
 
       <div className="mentorship-grid">
-        {mentorshipPrograms.map(program => (
+        {mentorshipPrograms.map((program) => (
           <div key={program.id} className="mentorship-card">
             <div className="mentorship-header">
               <h4>{program.title}</h4>
-              <span className={`mentorship-type ${program.type.toLowerCase()}`}>{program.type}</span>
+              <span className={`mentorship-type ${program.type.toLowerCase()}`}>
+                {program.type}
+              </span>
             </div>
             <p className="mentorship-description">{program.description}</p>
             <div className="mentorship-details">
@@ -356,7 +368,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
       </div>
 
       <div className="exchange-grid">
-        {knowledgeExchanges.map(exchange => (
+        {knowledgeExchanges.map((exchange) => (
           <div key={exchange.id} className="exchange-card">
             <div className="exchange-header">
               <h4>{exchange.title}</h4>
@@ -367,16 +379,20 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
               <div className="offered-skills">
                 <h5>Offering:</h5>
                 <div className="skills-list">
-                  {exchange.offeredSkills.map(skill => (
-                    <span key={skill} className="skill offered">{skill}</span>
+                  {exchange.offeredSkills.map((skill) => (
+                    <span key={skill} className="skill offered">
+                      {skill}
+                    </span>
                   ))}
                 </div>
               </div>
               <div className="requested-skills">
                 <h5>Looking for:</h5>
                 <div className="skills-list">
-                  {exchange.requestedSkills.map(skill => (
-                    <span key={skill} className="skill requested">{skill}</span>
+                  {exchange.requestedSkills.map((skill) => (
+                    <span key={skill} className="skill requested">
+                      {skill}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -390,9 +406,9 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
               <button
                 onClick={() => joinKnowledgeExchange(exchange.id)}
                 className="join-button"
-                disabled={exchange.participants.some(p => p.id === userId)}
+                disabled={exchange.participants.some((p) => p.id === userId)}
               >
-                {exchange.participants.some(p => p.id === userId) ? 'Joined' : 'Join Exchange'}
+                {exchange.participants.some((p) => p.id === userId) ? 'Joined' : 'Join Exchange'}
               </button>
               <button>Contact Creator</button>
               <button>View Details</button>
@@ -411,7 +427,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
       </div>
 
       <div className="networks-grid">
-        {peerNetworks.map(network => (
+        {peerNetworks.map((network) => (
           <div key={network.id} className="network-card">
             <div className="network-header">
               <h4>{network.name}</h4>
@@ -426,8 +442,13 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
             <div className="network-features">
               <h5>Features:</h5>
               <div className="features-list">
-                {Object.entries(network.features).map(([feature, enabled]) =>
-                  enabled && <span key={feature} className="feature">{feature.replace(/([A-Z])/g, ' $1').toLowerCase()}</span>
+                {Object.entries(network.features).map(
+                  ([feature, enabled]) =>
+                    enabled && (
+                      <span key={feature} className="feature">
+                        {feature.replace(/([A-Z])/g, ' $1').toLowerCase()}
+                      </span>
+                    )
                 )}
               </div>
             </div>
@@ -554,7 +575,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         }
 
         .platform-tabs button:hover:not(.active) {
-          background: #f8fafc;
+          background: #f5f2eb;
           border-color: #3b82f6;
           color: #3b82f6;
         }
@@ -569,7 +590,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         .section-header h3 {
           margin: 0;
           font-size: 24px;
-          color: #1f2937;
+          color: #111111;
           font-weight: 600;
         }
 
@@ -591,13 +612,21 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
           box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
         }
 
-        .events-grid, .forums-grid, .mentorship-grid, .exchange-grid, .networks-grid {
+        .events-grid,
+        .forums-grid,
+        .mentorship-grid,
+        .exchange-grid,
+        .networks-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
           gap: 24px;
         }
 
-        .event-card, .forum-card, .mentorship-card, .exchange-card, .network-card {
+        .event-card,
+        .forum-card,
+        .mentorship-card,
+        .exchange-card,
+        .network-card {
           background: white;
           border: 1px solid #e5e7eb;
           border-radius: 16px;
@@ -606,27 +635,43 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        .event-card:hover, .forum-card:hover, .mentorship-card:hover, .exchange-card:hover, .network-card:hover {
+        .event-card:hover,
+        .forum-card:hover,
+        .mentorship-card:hover,
+        .exchange-card:hover,
+        .network-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
           border-color: #3b82f6;
         }
 
-        .event-header, .forum-header, .mentorship-header, .exchange-header, .network-header {
+        .event-header,
+        .forum-header,
+        .mentorship-header,
+        .exchange-header,
+        .network-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 12px;
         }
 
-        .event-header h4, .forum-header h4, .mentorship-header h4, .exchange-header h4, .network-header h4 {
+        .event-header h4,
+        .forum-header h4,
+        .mentorship-header h4,
+        .exchange-header h4,
+        .network-header h4 {
           margin: 0;
-          color: #1f2937;
+          color: #111111;
           font-size: 20px;
           font-weight: 600;
         }
 
-        .event-type, .forum-category, .mentorship-type, .exchange-type, .network-category {
+        .event-type,
+        .forum-category,
+        .mentorship-type,
+        .exchange-type,
+        .network-category {
           padding: 4px 12px;
           border-radius: 20px;
           font-size: 12px;
@@ -634,19 +679,22 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
           text-transform: uppercase;
         }
 
-        .event-type.academic, .forum-category.academic, .mentorship-type.academic {
+        .event-type.academic,
+        .forum-category.academic,
+        .mentorship-type.academic {
           background: #dbeafe;
           color: #1d4ed8;
         }
 
-        .event-type.social, .forum-category.general {
+        .event-type.social,
+        .forum-category.general {
           background: #fef3c7;
           color: #d97706;
         }
 
         .event-type.cultural {
           background: #f3e8ff;
-          color: #7c3aed;
+          color: #ff3b00;
         }
 
         .event-type.sports {
@@ -674,21 +722,35 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
           color: #be185d;
         }
 
-        .event-description, .forum-description, .mentorship-description, .exchange-description, .network-description {
+        .event-description,
+        .forum-description,
+        .mentorship-description,
+        .exchange-description,
+        .network-description {
           color: #6b7280;
           margin-bottom: 16px;
           line-height: 1.6;
         }
 
-        .event-details, .forum-stats, .mentorship-details, .exchange-details, .network-details {
+        .event-details,
+        .forum-stats,
+        .mentorship-details,
+        .exchange-details,
+        .network-details {
           margin-bottom: 16px;
         }
 
-        .event-info, .event-stats {
+        .event-info,
+        .event-stats {
           margin-bottom: 8px;
         }
 
-        .event-info span, .event-stats span, .forum-stats span, .mentorship-details span, .exchange-details span, .network-details span {
+        .event-info span,
+        .event-stats span,
+        .forum-stats span,
+        .mentorship-details span,
+        .exchange-details span,
+        .network-details span {
           display: inline-block;
           margin-right: 16px;
           margin-bottom: 4px;
@@ -715,21 +777,25 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
           margin-bottom: 16px;
         }
 
-        .exchange-skills h5, .network-features h5, .mentorship-goals h5 {
+        .exchange-skills h5,
+        .network-features h5,
+        .mentorship-goals h5 {
           margin: 0 0 8px 0;
           font-size: 14px;
           color: #374151;
           font-weight: 600;
         }
 
-        .skills-list, .features-list {
+        .skills-list,
+        .features-list {
           display: flex;
           flex-wrap: wrap;
           gap: 6px;
           margin-bottom: 12px;
         }
 
-        .skill, .feature {
+        .skill,
+        .feature {
           padding: 4px 8px;
           border-radius: 12px;
           font-size: 12px;
@@ -761,7 +827,8 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
           margin-bottom: 4px;
         }
 
-        .mentorship-progress, .progress-bar {
+        .mentorship-progress,
+        .progress-bar {
           margin-bottom: 16px;
         }
 
@@ -780,13 +847,21 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
           transition: width 0.3s ease;
         }
 
-        .event-actions, .forum-actions, .mentorship-actions, .exchange-actions, .network-actions {
+        .event-actions,
+        .forum-actions,
+        .mentorship-actions,
+        .exchange-actions,
+        .network-actions {
           display: flex;
           gap: 8px;
           flex-wrap: wrap;
         }
 
-        .event-actions button, .forum-actions button, .mentorship-actions button, .exchange-actions button, .network-actions button {
+        .event-actions button,
+        .forum-actions button,
+        .mentorship-actions button,
+        .exchange-actions button,
+        .network-actions button {
           flex: 1;
           min-width: 100px;
           padding: 10px 16px;
@@ -799,26 +874,36 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
           transition: all 0.2s ease;
         }
 
-        .register-button, .join-button, .apply-button {
+        .register-button,
+        .join-button,
+        .apply-button {
           background: #3b82f6 !important;
           color: white !important;
           border-color: #3b82f6 !important;
         }
 
-        .register-button:hover, .join-button:hover, .apply-button:hover {
+        .register-button:hover,
+        .join-button:hover,
+        .apply-button:hover {
           background: #2563eb !important;
           transform: translateY(-1px);
         }
 
-        .register-button:disabled, .join-button:disabled, .apply-button:disabled {
+        .register-button:disabled,
+        .join-button:disabled,
+        .apply-button:disabled {
           background: #9ca3af !important;
           border-color: #9ca3af !important;
           cursor: not-allowed;
           transform: none;
         }
 
-        .event-actions button:hover, .forum-actions button:hover, .mentorship-actions button:hover, .exchange-actions button:hover, .network-actions button:hover {
-          background: #f8fafc;
+        .event-actions button:hover,
+        .forum-actions button:hover,
+        .mentorship-actions button:hover,
+        .exchange-actions button:hover,
+        .network-actions button:hover {
+          background: #f5f2eb;
           border-color: #3b82f6;
           color: #3b82f6;
         }
@@ -835,7 +920,11 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
         }
 
         @media (max-width: 768px) {
-          .events-grid, .forums-grid, .mentorship-grid, .exchange-grid, .networks-grid {
+          .events-grid,
+          .forums-grid,
+          .mentorship-grid,
+          .exchange-grid,
+          .networks-grid {
             grid-template-columns: 1fr;
           }
 

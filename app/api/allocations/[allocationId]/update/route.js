@@ -2,9 +2,12 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { authMiddleware } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
+import { canManageDepartmentAllocations } from '@/lib/utils/hodAccess'
+import { resolveTeacherRecordId } from '@/lib/utils/resolveTeacherId'
 
 function normalizeString(v) {
   return String(v || '').trim()
@@ -28,12 +31,13 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const auth = authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['HOD', 'hod'])) {
-    throw new ApiError('Forbidden', 403)
-  }
-
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const hodProfile = await getHodProfile(prisma, auth.user.id, schoolId)
+  if (!canManageDepartmentAllocations(auth.user, hodProfile)) {
+    throw new ApiError('Forbidden', 403)
+  }
 
   const allocation = await prisma.departmentAllocation.findFirst({
     where: { id: allocationId, schoolId },
@@ -47,7 +51,12 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
 
   const body = await request.json().catch(() => ({}))
 
-  const nextTeacherId = normalizeString(body?.teacherId)
+  const nextTeacherIdRaw = normalizeString(body?.teacherId)
+  let nextTeacherId = ''
+  if (nextTeacherIdRaw) {
+    nextTeacherId = (await resolveTeacherRecordId(prisma, schoolId, nextTeacherIdRaw)) || ''
+    if (!nextTeacherId) throw new ApiError('Teacher record not found for this school', 400)
+  }
   const nextSubject = normalizeString(body?.subject)
   const nextClasses = normalizeClasses(body?.classes)
   const nextPeriodConfig = Object.prototype.hasOwnProperty.call(body || {}, 'periodConfig')

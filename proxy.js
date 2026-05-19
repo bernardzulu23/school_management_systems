@@ -9,6 +9,9 @@ import { checkProxyRateLimit } from './lib/security/proxyRateLimit'
 
 const PUBLIC_PATHS = [
   '/api/auth/login',
+  '/api/mobile/auth/login',
+  '/api/mobile/auth/refresh',
+  '/api/mobile/school/lookup',
   '/api/platform/auth/login',
   '/platform/login',
   '/api/auth/register',
@@ -137,9 +140,8 @@ function getSubdomain(hostname) {
     !hostname ||
     hostname === 'localhost:3000' ||
     hostname === 'localhost' ||
-    hostname.includes('healthcheck.railway.app') ||
-    hostname.includes('railway.app') ||
-    hostname.includes('onrender.com')
+    hostname.endsWith('.pages.dev') ||
+    hostname.endsWith('.workers.dev')
   )
     return null
   const parts = hostname.split('.')

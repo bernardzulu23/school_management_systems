@@ -23,11 +23,11 @@ const WellbeingDashboard = ({ userRole, userId }) => {
       parentalConsent: userRole === 'student',
       emergencyContacts: [
         { name: 'Parent/Guardian', phone: '+1-555-0123', relationship: 'parent' },
-        { name: 'School Counselor', phone: '+1-555-0456', relationship: 'counselor' }
+        { name: 'School Counselor', phone: '+1-555-0456', relationship: 'counselor' },
       ],
       communicationMethod: 'in_person',
       supportType: 'counseling',
-      anonymousReporting: true
+      anonymousReporting: true,
     })
     setWellbeingProfile(profile)
 
@@ -55,9 +55,9 @@ const WellbeingDashboard = ({ userRole, userId }) => {
         attendance: 85,
         punctuality: 90,
         participation: 75,
-        behavioral_changes: 40
+        behavioral_changes: 40,
       },
-      confidentialityLevel: 'CONFIDENTIAL'
+      confidentialityLevel: 'CONFIDENTIAL',
     })
     setCurrentAssessment(assessment)
 
@@ -85,7 +85,7 @@ const WellbeingDashboard = ({ userRole, userId }) => {
         recommendedActions: ['schedule_counseling', 'stress_management_workshop'],
         assignedTo: ['school_counselor'],
         escalationLevel: 2,
-        privacyLevel: 'CONFIDENTIAL'
+        privacyLevel: 'CONFIDENTIAL',
       }),
       WellbeingMonitoringSystem.createWellnessAlert({
         profileId: profile.id,
@@ -96,8 +96,8 @@ const WellbeingDashboard = ({ userRole, userId }) => {
         recommendedActions: ['continue_current_activities'],
         assignedTo: ['wellbeing_coordinator'],
         escalationLevel: 1,
-        privacyLevel: 'CONFIDENTIAL'
-      })
+        privacyLevel: 'CONFIDENTIAL',
+      }),
     ]
     setAlerts(sampleAlerts)
 
@@ -106,7 +106,7 @@ const WellbeingDashboard = ({ userRole, userId }) => {
       { date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), score: 58, riskLevel: 'MODERATE' },
       { date: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), score: 62, riskLevel: 'MODERATE' },
       { date: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000), score: 55, riskLevel: 'MODERATE' },
-      { date: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000), score: 60, riskLevel: 'MODERATE' }
+      { date: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000), score: 60, riskLevel: 'MODERATE' },
     ])
   }
 
@@ -135,15 +135,15 @@ const WellbeingDashboard = ({ userRole, userId }) => {
         attendance: Math.floor(Math.random() * 100),
         punctuality: Math.floor(Math.random() * 100),
         participation: Math.floor(Math.random() * 100),
-        behavioral_changes: Math.floor(Math.random() * 100)
-      }
+        behavioral_changes: Math.floor(Math.random() * 100),
+      },
     })
     setCurrentAssessment(newAssessment)
 
     // Update history
-    setAssessmentHistory(prev => [
+    setAssessmentHistory((prev) => [
       { date: new Date(), score: newAssessment.overallScore, riskLevel: newAssessment.riskLevel },
-      ...prev.slice(0, 9)
+      ...prev.slice(0, 9),
     ])
   }
 
@@ -174,7 +174,9 @@ const WellbeingDashboard = ({ userRole, userId }) => {
             </div>
             <div className="score-trend">
               <span className="trend-indicator">📈 Stable</span>
-              <span className="last-updated">Last updated: {currentAssessment?.timestamp?.toLocaleDateString()}</span>
+              <span className="last-updated">
+                Last updated: {currentAssessment?.timestamp?.toLocaleDateString()}
+              </span>
             </div>
           </div>
         </div>
@@ -191,16 +193,14 @@ const WellbeingDashboard = ({ userRole, userId }) => {
             <button onClick={() => contactSupport('peer')} className="action-btn">
               👥 Peer Support
             </button>
-            <button className="action-btn">
-              📚 Wellness Resources
-            </button>
+            <button className="action-btn">📚 Wellness Resources</button>
           </div>
         </div>
 
         <div className="wellbeing-card alerts-summary">
           <h3>Recent Alerts</h3>
           <div className="alerts-list">
-            {alerts.slice(0, 3).map(alert => (
+            {alerts.slice(0, 3).map((alert) => (
               <div key={alert.id} className={`alert-item ${alert.severity.toLowerCase()}`}>
                 <div className="alert-content">
                   <span className="alert-type">{alert.type.replace('_', ' ')}</span>
@@ -224,22 +224,25 @@ const WellbeingDashboard = ({ userRole, userId }) => {
             </div>
             <div className="indicator-progress">
               <div className="progress-bar">
-                <div
-                  className="progress-fill"
-                  style={{ width: `${indicator.score}%` }}
-                ></div>
+                <div className="progress-fill" style={{ width: `${indicator.score}%` }}></div>
               </div>
             </div>
             <div className="indicator-trend">
               <span className={`trend ${indicator.trend}`}>
-                {indicator.trend === 'improving' ? '📈' : indicator.trend === 'declining' ? '📉' : '➡️'}
+                {indicator.trend === 'improving'
+                  ? '📈'
+                  : indicator.trend === 'declining'
+                    ? '📉'
+                    : '➡️'}
                 {indicator.trend}
               </span>
             </div>
             {indicator.alerts?.length > 0 && (
               <div className="indicator-alerts">
                 {indicator.alerts.map((alert, index) => (
-                  <span key={index} className="alert-badge">{alert.type}</span>
+                  <span key={index} className="alert-badge">
+                    {alert.type}
+                  </span>
                 ))}
               </div>
             )}
@@ -290,7 +293,10 @@ const WellbeingDashboard = ({ userRole, userId }) => {
               {currentAssessment.recommendations.length > 0 ? (
                 <div className="recommendations-list">
                   {currentAssessment.recommendations.map((rec, index) => (
-                    <div key={index} className={`recommendation-item ${rec.priority.toLowerCase()}`}>
+                    <div
+                      key={index}
+                      className={`recommendation-item ${rec.priority.toLowerCase()}`}
+                    >
                       <div className="recommendation-content">
                         <span className="recommendation-type">{rec.type.replace('_', ' ')}</span>
                         <p className="recommendation-description">{rec.description}</p>
@@ -309,13 +315,18 @@ const WellbeingDashboard = ({ userRole, userId }) => {
                   ))}
                 </div>
               ) : (
-                <p className="no-recommendations">No specific recommendations at this time. Continue with regular wellness practices.</p>
+                <p className="no-recommendations">
+                  No specific recommendations at this time. Continue with regular wellness
+                  practices.
+                </p>
               )}
             </div>
           </div>
         ) : (
           <div className="no-assessment">
-            <p>No assessment data available. Take your first wellbeing assessment to get started.</p>
+            <p>
+              No assessment data available. Take your first wellbeing assessment to get started.
+            </p>
             <button onClick={takeNewAssessment} className="start-assessment-btn">
               Start Assessment
             </button>
@@ -333,7 +344,7 @@ const WellbeingDashboard = ({ userRole, userId }) => {
                   className="point"
                   style={{
                     height: `${assessment.score}%`,
-                    backgroundColor: this.getRiskColor(assessment.riskLevel)
+                    backgroundColor: this.getRiskColor(assessment.riskLevel),
                   }}
                 ></div>
                 <span className="date">{assessment.date.toLocaleDateString()}</span>
@@ -360,14 +371,18 @@ const WellbeingDashboard = ({ userRole, userId }) => {
           <div className="plan-overview">
             <div className="plan-meta">
               <span className="priority">Priority: {interventionPlan.priority}</span>
-              <span className="created">Created: {interventionPlan.createdAt.toLocaleDateString()}</span>
-              <span className="review">Next Review: {interventionPlan.reviewSchedule.nextReview.toLocaleDateString()}</span>
+              <span className="created">
+                Created: {interventionPlan.createdAt.toLocaleDateString()}
+              </span>
+              <span className="review">
+                Next Review: {interventionPlan.reviewSchedule.nextReview.toLocaleDateString()}
+              </span>
             </div>
           </div>
 
           <div className="interventions-list">
             <h4>Active Interventions</h4>
-            {interventionPlan.interventions.map(intervention => (
+            {interventionPlan.interventions.map((intervention) => (
               <div key={intervention.id} className="intervention-item">
                 <div className="intervention-header">
                   <h5>{intervention.type.replace('_', ' ')}</h5>
@@ -382,7 +397,9 @@ const WellbeingDashboard = ({ userRole, userId }) => {
                 </div>
                 <div className="intervention-progress">
                   <div className="progress-info">
-                    <span>Progress: {intervention.progress.started ? 'Started' : 'Not Started'}</span>
+                    <span>
+                      Progress: {intervention.progress.started ? 'Started' : 'Not Started'}
+                    </span>
                     {intervention.progress.effectiveness && (
                       <span>Effectiveness: {intervention.progress.effectiveness}/10</span>
                     )}
@@ -413,10 +430,11 @@ const WellbeingDashboard = ({ userRole, userId }) => {
         </div>
       ) : (
         <div className="no-intervention-plan">
-          <p>No active intervention plan. Based on your current wellbeing assessment, you may not need specific interventions at this time.</p>
-          <button onClick={() => contactSupport('counselor')}>
-            Speak with Counselor
-          </button>
+          <p>
+            No active intervention plan. Based on your current wellbeing assessment, you may not
+            need specific interventions at this time.
+          </p>
+          <button onClick={() => contactSupport('counselor')}>Speak with Counselor</button>
         </div>
       )}
     </div>
@@ -428,7 +446,9 @@ const WellbeingDashboard = ({ userRole, userId }) => {
         <h3>Progress Monitoring</h3>
         <select className="timeframe-selector">
           <option value="7_days">Last 7 Days</option>
-          <option value="30_days" selected>Last 30 Days</option>
+          <option value="30_days" selected>
+            Last 30 Days
+          </option>
           <option value="90_days">Last 90 Days</option>
         </select>
       </div>
@@ -439,25 +459,38 @@ const WellbeingDashboard = ({ userRole, userId }) => {
             <div className="metric-card">
               <h4>Overall Improvement</h4>
               <div className="metric-value">
-                <span className="value">{progressData.progressMetrics.overallImprovement.overallChange}%</span>
-                <span className="trend">{progressData.progressMetrics.overallImprovement.trendDirection}</span>
+                <span className="value">
+                  {progressData.progressMetrics.overallImprovement.overallChange}%
+                </span>
+                <span className="trend">
+                  {progressData.progressMetrics.overallImprovement.trendDirection}
+                </span>
               </div>
             </div>
 
             <div className="metric-card">
               <h4>Risk Level Changes</h4>
               <div className="metric-value">
-                <span className="from">{progressData.progressMetrics.riskLevelChanges.initialRisk}</span>
+                <span className="from">
+                  {progressData.progressMetrics.riskLevelChanges.initialRisk}
+                </span>
                 <span className="arrow">→</span>
-                <span className="to">{progressData.progressMetrics.riskLevelChanges.currentRisk}</span>
+                <span className="to">
+                  {progressData.progressMetrics.riskLevelChanges.currentRisk}
+                </span>
               </div>
             </div>
 
             <div className="metric-card">
               <h4>Intervention Effectiveness</h4>
               <div className="metric-value">
-                <span className="value">{progressData.progressMetrics.interventionEffectiveness.effectivenessRate}%</span>
-                <span className="completed">{progressData.progressMetrics.interventionEffectiveness.completedInterventions} completed</span>
+                <span className="value">
+                  {progressData.progressMetrics.interventionEffectiveness.effectivenessRate}%
+                </span>
+                <span className="completed">
+                  {progressData.progressMetrics.interventionEffectiveness.completedInterventions}{' '}
+                  completed
+                </span>
               </div>
             </div>
           </div>
@@ -467,7 +500,9 @@ const WellbeingDashboard = ({ userRole, userId }) => {
               <h4>Positive Factors</h4>
               <div className="factors-list">
                 {progressData.insights.positiveFactors.map((factor, index) => (
-                  <span key={index} className="factor positive">{factor.replace('_', ' ')}</span>
+                  <span key={index} className="factor positive">
+                    {factor.replace('_', ' ')}
+                  </span>
                 ))}
               </div>
             </div>
@@ -476,7 +511,9 @@ const WellbeingDashboard = ({ userRole, userId }) => {
               <h4>Areas of Concern</h4>
               <div className="factors-list">
                 {progressData.insights.concernAreas.map((area, index) => (
-                  <span key={index} className="factor concern">{area.replace('_', ' ')}</span>
+                  <span key={index} className="factor concern">
+                    {area.replace('_', ' ')}
+                  </span>
                 ))}
               </div>
             </div>
@@ -641,10 +678,10 @@ const WellbeingDashboard = ({ userRole, userId }) => {
 
   const getRiskColor = (riskLevel) => {
     const colors = {
-      'LOW': '#10b981',
-      'MODERATE': '#f59e0b',
-      'HIGH': '#ef4444',
-      'CRITICAL': '#dc2626'
+      LOW: '#10b981',
+      MODERATE: '#f59e0b',
+      HIGH: '#ef4444',
+      CRITICAL: '#dc2626',
     }
     return colors[riskLevel] || '#6b7280'
   }
@@ -776,7 +813,7 @@ const WellbeingDashboard = ({ userRole, userId }) => {
 
         .wellbeing-card h3 {
           margin: 0 0 15px 0;
-          color: #1f2937;
+          color: #111111;
           font-size: 1.2em;
         }
 
@@ -963,7 +1000,7 @@ const WellbeingDashboard = ({ userRole, userId }) => {
 
         .indicator-header h4 {
           margin: 0;
-          color: #1f2937;
+          color: #111111;
           font-size: 1em;
         }
 

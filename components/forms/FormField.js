@@ -59,15 +59,11 @@ const FormField = ({
           htmlFor={name}
           className={cn(
             'text-sm font-medium transition-colors duration-200',
-            displayError
-              ? 'text-royalPurple-dangerTx'
-              : isFocused
-                ? 'text-royalPurple-accentTx'
-                : 'text-royalPurple-text2'
+            displayError ? 'text-red-600' : isFocused ? 'text-accent' : 'text-ink'
           )}
         >
           {label}
-          {required && <span className="text-royalPurple-dangerTx ml-1">*</span>}
+          {required && <span className="text-accent ml-1">*</span>}
         </label>
       )}
 
@@ -77,11 +73,7 @@ const FormField = ({
             <Icon
               className={cn(
                 'h-5 w-5 transition-colors duration-200',
-                displayError
-                  ? 'text-royalPurple-dangerTx'
-                  : isFocused
-                    ? 'text-royalPurple-text2'
-                    : 'text-royalPurple-text3'
+                displayError ? 'text-red-600' : isFocused ? 'text-accent' : 'text-muted'
               )}
             />
           </div>
@@ -99,14 +91,14 @@ const FormField = ({
             onBlur={() => setIsFocused(false)}
             rows={props.rows || 3}
             className={cn(
-              'w-full px-4 py-2.5 rounded-lg bg-royalPurple-card2 border border-royalPurple-border text-royalPurple-text1 placeholder:text-royalPurple-muted transition-colors duration-200 outline-none resize-none',
+              'w-full px-4 py-2.5 rounded-lg bg-white border-2 border-ink/20 text-ink placeholder:text-muted transition-colors duration-200 outline-none resize-none',
               Icon && 'pl-10',
               'disabled:opacity-50 disabled:cursor-not-allowed',
               displayError
-                ? 'border-royalPurple-dangerTx focus:ring-1 focus:ring-royalPurple-border2'
+                ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/30'
                 : showSuccess
-                  ? 'border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2'
-                  : 'focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2',
+                  ? 'border-ink/40 focus:border-accent focus:ring-1 focus:ring-accent/30'
+                  : 'focus:border-accent focus:ring-1 focus:ring-accent/30',
               className
             )}
             aria-invalid={!!displayError}
@@ -123,14 +115,14 @@ const FormField = ({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             className={cn(
-              'w-full px-4 py-2.5 rounded-lg bg-royalPurple-card2 border border-royalPurple-border text-royalPurple-text1 placeholder:text-royalPurple-muted transition-colors duration-200 outline-none appearance-none',
+              'w-full px-4 py-2.5 rounded-lg bg-white border-2 border-ink/20 text-ink placeholder:text-muted transition-colors duration-200 outline-none appearance-none',
               Icon && 'pl-10',
               'disabled:opacity-50 disabled:cursor-not-allowed',
               displayError
-                ? 'border-royalPurple-dangerTx focus:ring-1 focus:ring-royalPurple-border2'
+                ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/30'
                 : showSuccess
-                  ? 'border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2'
-                  : 'focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2',
+                  ? 'border-ink/40 focus:border-accent focus:ring-1 focus:ring-accent/30'
+                  : 'focus:border-accent focus:ring-1 focus:ring-accent/30',
               className
             )}
             aria-invalid={!!displayError}
@@ -151,15 +143,15 @@ const FormField = ({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             className={cn(
-              'w-full px-4 py-2.5 rounded-lg bg-royalPurple-card2 border border-royalPurple-border text-royalPurple-text1 placeholder:text-royalPurple-muted transition-colors duration-200 outline-none',
+              'w-full px-4 py-2.5 rounded-lg bg-white border-2 border-ink/20 text-ink placeholder:text-muted transition-colors duration-200 outline-none',
               Icon && 'pl-10',
               isPasswordField && 'pr-11',
               'disabled:opacity-50 disabled:cursor-not-allowed',
               displayError
-                ? 'border-royalPurple-dangerTx focus:ring-1 focus:ring-royalPurple-border2'
+                ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/30'
                 : showSuccess
-                  ? 'border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2'
-                  : 'focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2',
+                  ? 'border-ink/40 focus:border-accent focus:ring-1 focus:ring-accent/30'
+                  : 'focus:border-accent focus:ring-1 focus:ring-accent/30',
               className
             )}
             aria-invalid={!!displayError}
@@ -173,24 +165,20 @@ const FormField = ({
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              className="text-royalPurple-text3 hover:text-royalPurple-text1 transition-colors"
+              className="text-muted hover:text-ink transition-colors"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
           )}
           {isDebouncing && (
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-royalPurple-border border-t-royalPurple-accent" />
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-ink/20 border-t-accent" />
           )}
-          {showSuccess && (
-            <Check className="h-5 w-5 text-royalPurple-successTx" aria-hidden="true" />
-          )}
-          {displayError && (
-            <AlertCircle className="h-5 w-5 text-royalPurple-dangerTx" aria-hidden="true" />
-          )}
+          {showSuccess && <Check className="h-5 w-5 text-green-700" aria-hidden="true" />}
+          {displayError && <AlertCircle className="h-5 w-5 text-red-600" aria-hidden="true" />}
           {type === 'select' && (
             <svg
-              className="h-5 w-5 text-royalPurple-text3"
+              className="h-5 w-5 text-muted"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -207,13 +195,13 @@ const FormField = ({
       </div>
 
       {description && !displayError && (
-        <p id={`${name}-description`} className="text-xs text-royalPurple-text2">
+        <p id={`${name}-description`} className="text-xs text-muted">
           {description}
         </p>
       )}
 
       {displayError && (
-        <p className="text-xs font-medium text-royalPurple-dangerTx animate-in fade-in slide-in-from-top-1">
+        <p className="text-xs font-medium text-red-600 animate-in fade-in slide-in-from-top-1">
           {displayError}
         </p>
       )}

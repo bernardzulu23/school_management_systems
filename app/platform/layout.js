@@ -3,5 +3,5 @@
 }
 
 export default function PlatformLayout({ children }) {
-  return <div className="min-h-screen bg-slate-950 text-slate-100">{children}</div>
+  return <div className="min-h-screen bg-paper text-ink">{children}</div>
 }

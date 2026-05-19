@@ -4,12 +4,7 @@ const { PrismaPg } = require('@prisma/adapter-pg')
 const { hash } = require('bcryptjs')
 const { getLocalDevPassword } = require('../lib/dev/localTestAccounts')
 
-if (String(process.env.SEED_REMOTE_DB || '').toLowerCase() === 'true') {
-  process.env.DATABASE_URL =
-    'postgresql://postgres:TBGUIpaIMczwHWzrupsNdkgwiFLRDTTr@ballast.proxy.rlwy.net:17921/railway'
-}
-
-const connectionString = process.env.DATABASE_URL
+const connectionString = process.env.DATABASE_URL || process.env.DIRECT_URL
 const pool = new Pool({ connectionString })
 const adapter = new PrismaPg(pool)
 const prisma = new PrismaClient({ adapter })

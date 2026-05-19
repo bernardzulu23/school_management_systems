@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { toPrismaJsonValue } from '@/lib/timetable/recipes'
 
 export const dynamic = 'force-dynamic'
 
@@ -150,7 +151,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     where: { id: recipe.id },
     data: {
       isValid,
-      validationErrors: result,
+      validationErrors: toPrismaJsonValue(result),
       validatedAt: new Date(),
     },
   })

@@ -57,12 +57,12 @@ function stringifyPeriodConfig(periodConfig) {
 function statusBadge(status) {
   const s = String(status || '').toUpperCase()
   const map = {
-    DRAFT: { bg: '#261843', fg: '#f59e0b', bd: '#92400e', label: 'DRAFT' },
-    SUBMITTED: { bg: '#1f2937', fg: '#93c5fd', bd: '#1d4ed8', label: 'SUBMITTED' },
+    DRAFT: { bg: '#F5F2EB', fg: '#f59e0b', bd: '#92400e', label: 'DRAFT' },
+    SUBMITTED: { bg: '#111111', fg: '#93c5fd', bd: '#1d4ed8', label: 'SUBMITTED' },
     APPROVED: { bg: '#0f2318', fg: '#86efac', bd: '#166534', label: 'APPROVED' },
     REJECTED: { bg: '#2a0f18', fg: '#fca5a5', bd: '#b91c1c', label: 'REJECTED' },
   }
-  return map[s] || { bg: '#261843', fg: '#a78bfa', bd: '#3b2a66', label: s || 'UNKNOWN' }
+  return map[s] || { bg: '#F5F2EB', fg: '#666666', bd: '#111111', label: s || 'UNKNOWN' }
 }
 
 export default function HODAllocationPage() {
@@ -74,6 +74,8 @@ export default function HODAllocationPage() {
   const [allocations, setAllocations] = useState([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
+  const [savingAllocation, setSavingAllocation] = useState(false)
+  const [departmentSubjects, setDepartmentSubjects] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState('')
   const [showRejections, setShowRejections] = useState(false)
@@ -178,7 +180,39 @@ export default function HODAllocationPage() {
     } finally {
       setLoading(false)
     }
-  }, [academicYear, form.departmentId, term])
+  }, [term, academicYear])
+
+  const loadSubjectsForTeacher = useCallback(async (departmentId, teacherUserId) => {
+    if (!departmentId || !teacherUserId) {
+      setDepartmentSubjects([])
+      return
+    }
+    try {
+      const res = await fetch(
+        `/api/allocations/department-subjects?departmentId=${encodeURIComponent(departmentId)}&teacherUserId=${encodeURIComponent(teacherUserId)}`,
+        { credentials: 'include', cache: 'no-store' }
+      )
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setDepartmentSubjects([])
+        return
+      }
+      const list = Array.isArray(data.subjects) ? data.subjects : []
+      setDepartmentSubjects(list)
+      if (data.autoSubject) {
+        setForm((f) => ({ ...f, subject: data.autoSubject }))
+      } else if (list.length === 1) {
+        setForm((f) => ({ ...f, subject: list[0] }))
+      } else {
+        setForm((f) => ({
+          ...f,
+          subject: list.includes(f.subject) ? f.subject : '',
+        }))
+      }
+    } catch {
+      setDepartmentSubjects([])
+    }
+  }, [])
 
   const rejectedAllocations = useMemo(
     () => allocations.filter((a) => String(a?.status || '').toUpperCase() === 'REJECTED'),
@@ -207,6 +241,8 @@ export default function HODAllocationPage() {
   }
 
   async function saveAllocation() {
+    if (savingAllocation) return
+
     const departmentId = normalizeString(form.departmentId)
     const teacherId = normalizeString(form.teacherId)
     const subject = normalizeString(form.subject)
@@ -215,7 +251,7 @@ export default function HODAllocationPage() {
 
     if (!departmentId) return toast.error('Select department')
     if (!teacherId) return toast.error('Select teacher')
-    if (!subject) return toast.error('Enter subject')
+    if (!subject) return toast.error('Select or enter subject')
     if (classes.length === 0) return toast.error('Enter at least one class')
 
     if (periodConfig.preset === 'custom') {
@@ -223,6 +259,7 @@ export default function HODAllocationPage() {
       if (total <= 0) return toast.error('Custom period config must total at least 1 period')
     }
 
+    setSavingAllocation(true)
     try {
       if (editingId) {
         const res = await fetch(`/api/allocations/${editingId}/update`, {
@@ -257,7 +294,10 @@ export default function HODAllocationPage() {
           }),
         })
         const data = await res.json().catch(() => ({}))
-        if (!res.ok) throw new Error(data?.message || data?.error || 'Failed to create allocation')
+        if (!res.ok) {
+          const msg = data?.message || data?.error || `Failed to create allocation (${res.status})`
+          throw new Error(msg)
+        }
         toast.success('Allocation created')
       }
 
@@ -273,9 +313,12 @@ export default function HODAllocationPage() {
         customDoubles: 0,
         customTriples: 0,
       }))
+      setDepartmentSubjects([])
       loadData()
     } catch (e) {
       toast.error(e?.message || 'Failed to save')
+    } finally {
+      setSavingAllocation(false)
     }
   }
 
@@ -311,7 +354,11 @@ export default function HODAllocationPage() {
     const status = String(a?.status || '').toUpperCase()
     if (status !== 'DRAFT' && status !== 'REJECTED') return
     const data = a?.allocationData && typeof a.allocationData === 'object' ? a.allocationData : {}
-    const teacherId = normalizeString(data?.teacherId)
+    const storedTeacherId = normalizeString(data?.teacherId)
+    const teacherRow = teachers.find(
+      (t) => String(t.teacherId || '') === storedTeacherId || String(t.id || '') === storedTeacherId
+    )
+    const teacherId = teacherRow?.id || storedTeacherId
     const classes = Array.isArray(data?.classes) ? data.classes.join(', ') : ''
     const subject = normalizeString(data?.subject)
     const periodConfig = data?.periodConfig ?? null
@@ -320,9 +367,10 @@ export default function HODAllocationPage() {
 
     setEditingId(String(a.id))
     setShowForm(true)
+    const departmentId = String(a.departmentId || '')
     setForm((f) => ({
       ...f,
-      departmentId: String(a.departmentId || f.departmentId || ''),
+      departmentId: departmentId || f.departmentId || '',
       teacherId,
       classes,
       subject,
@@ -331,10 +379,13 @@ export default function HODAllocationPage() {
       customDoubles: Number(periodConfig?.doubles || 0),
       customTriples: Number(periodConfig?.triples || 0),
     }))
+    if (departmentId && teacherId) {
+      loadSubjectsForTeacher(departmentId, teacherId)
+    }
   }
 
   return (
-    <div style={{ padding: '1.5rem', background: '#170d28', minHeight: '100vh', color: '#ede9fe' }}>
+    <div className="text-ink">
       <div
         style={{
           display: 'flex',
@@ -347,7 +398,7 @@ export default function HODAllocationPage() {
       >
         <div>
           <h1 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>Class Allocation</h1>
-          <p style={{ color: '#a78bfa', fontSize: 13, margin: '4px 0 0' }}>
+          <p style={{ color: '#666666', fontSize: 13, margin: '4px 0 0' }}>
             Assign teachers to classes, submit for the Headteacher to approve. Approved rows sync to
             the timetable builder as pushed allocations — generate the school timetable from the
             Master Timetable screen using the same term and year.
@@ -360,8 +411,8 @@ export default function HODAllocationPage() {
               onClick={() => setShowRejections((v) => !v)}
               style={{
                 background: 'none',
-                border: '1px solid #3b2a66',
-                color: '#a78bfa',
+                border: '1px solid #111111',
+                color: '#666666',
                 cursor: 'pointer',
                 position: 'relative',
                 padding: '8px 10px',
@@ -381,7 +432,7 @@ export default function HODAllocationPage() {
                     fontWeight: 700,
                     padding: '1px 6px',
                     borderRadius: 999,
-                    border: '2px solid #170d28',
+                    border: '2px solid #EFECE5',
                   }}
                 >
                   {rejectedAllocations.length}
@@ -397,9 +448,9 @@ export default function HODAllocationPage() {
                   right: 0,
                   width: 360,
                   maxWidth: '85vw',
-                  background: '#2d1f4e',
+                  background: '#FFFFFF',
                   borderRadius: 12,
-                  border: '1px solid #3b2a66',
+                  border: '1px solid #111111',
                   boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
                   zIndex: 50,
                   overflow: 'hidden',
@@ -408,7 +459,7 @@ export default function HODAllocationPage() {
                 <div
                   style={{
                     padding: '10px 12px',
-                    borderBottom: '1px solid #3b2a66',
+                    borderBottom: '1px solid #111111',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
@@ -421,7 +472,7 @@ export default function HODAllocationPage() {
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: '#a78bfa',
+                      color: '#666666',
                       cursor: 'pointer',
                       fontSize: 11,
                       fontWeight: 700,
@@ -433,7 +484,7 @@ export default function HODAllocationPage() {
 
                 <div style={{ maxHeight: 360, overflowY: 'auto' }}>
                   {rejectedAllocations.length === 0 ? (
-                    <div style={{ padding: 18, color: '#a78bfa', fontSize: 12 }}>
+                    <div style={{ padding: 18, color: '#666666', fontSize: 12 }}>
                       No rejected allocations
                     </div>
                   ) : (
@@ -449,8 +500,8 @@ export default function HODAllocationPage() {
                           border: 'none',
                           background: 'transparent',
                           cursor: 'pointer',
-                          borderBottom: '1px solid #261843',
-                          color: '#ede9fe',
+                          borderBottom: '1px solid #F5F2EB',
+                          color: '#111111',
                         }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
@@ -461,11 +512,11 @@ export default function HODAllocationPage() {
                             REJECTED
                           </div>
                         </div>
-                        <div style={{ fontSize: 12, color: '#a78bfa', marginTop: 4 }}>
+                        <div style={{ fontSize: 12, color: '#666666', marginTop: 4 }}>
                           {String(a.rejectionReason || 'No reason provided')}
                         </div>
                         <div
-                          style={{ fontSize: 11, color: '#7c3aed', marginTop: 8, fontWeight: 800 }}
+                          style={{ fontSize: 11, color: '#FF3B00', marginTop: 8, fontWeight: 800 }}
                         >
                           Click to edit and resubmit
                         </div>
@@ -488,7 +539,7 @@ export default function HODAllocationPage() {
             style={{ ...selectStyle, width: 90 }}
             placeholder="Year"
           />
-          <button onClick={() => setShowForm(true)} style={btnStyle('#7c3aed')}>
+          <button onClick={() => setShowForm(true)} style={btnStyle('#FF3B00')}>
             <Plus size={14} /> Add Allocation
           </button>
         </div>
@@ -516,10 +567,10 @@ export default function HODAllocationPage() {
           <div
             key={i}
             style={{
-              background: '#2d1f4e',
+              background: '#FFFFFF',
               borderRadius: 10,
               padding: '12px 16px',
-              border: '1px solid #3b2a66',
+              border: '1px solid #111111',
             }}
           >
             <div
@@ -527,16 +578,16 @@ export default function HODAllocationPage() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: 6,
-                color: '#a78bfa',
+                color: '#666666',
                 marginBottom: 4,
               }}
             >
               {s.icon}
             </div>
-            <div style={{ fontSize: 22, fontWeight: 700, color: s.green ? '#86efac' : '#ede9fe' }}>
+            <div style={{ fontSize: 22, fontWeight: 700, color: s.green ? '#86efac' : '#111111' }}>
               {s.value}
             </div>
-            <div style={{ fontSize: 11, color: '#6d28d9' }}>{s.label}</div>
+            <div style={{ fontSize: 11, color: '#666666' }}>{s.label}</div>
           </div>
         ))}
       </div>
@@ -556,12 +607,12 @@ export default function HODAllocationPage() {
         >
           <div
             style={{
-              background: '#2d1f4e',
+              background: '#FFFFFF',
               borderRadius: 16,
               padding: '1.5rem',
               width: '100%',
               maxWidth: 560,
-              border: '1px solid #3b2a66',
+              border: '1px solid #111111',
               maxHeight: '90vh',
               overflowY: 'auto',
             }}
@@ -573,7 +624,16 @@ export default function HODAllocationPage() {
             <FormRow label="Department *">
               <select
                 value={form.departmentId}
-                onChange={(e) => setForm((f) => ({ ...f, departmentId: e.target.value }))}
+                onChange={(e) => {
+                  const departmentId = e.target.value
+                  setForm((f) => ({
+                    ...f,
+                    departmentId,
+                    teacherId: '',
+                    subject: '',
+                  }))
+                  setDepartmentSubjects([])
+                }}
                 style={inputStyle}
               >
                 <option value="">Select department</option>
@@ -588,7 +648,11 @@ export default function HODAllocationPage() {
             <FormRow label="Teacher *">
               <select
                 value={form.teacherId}
-                onChange={(e) => setForm((f) => ({ ...f, teacherId: e.target.value }))}
+                onChange={(e) => {
+                  const teacherUserId = e.target.value
+                  setForm((f) => ({ ...f, teacherId: teacherUserId, subject: '' }))
+                  loadSubjectsForTeacher(form.departmentId, teacherUserId)
+                }}
                 style={inputStyle}
               >
                 <option value="">Select teacher</option>
@@ -610,17 +674,42 @@ export default function HODAllocationPage() {
             </FormRow>
 
             <FormRow label="Subject *">
-              <input
-                value={form.subject}
-                onChange={(e) => setForm((f) => ({ ...f, subject: e.target.value }))}
-                placeholder="e.g. Mathematics"
-                list="subject-list"
-                style={inputStyle}
-              />
+              {departmentSubjects.length > 1 ? (
+                <select
+                  value={form.subject}
+                  onChange={(e) => setForm((f) => ({ ...f, subject: e.target.value }))}
+                  style={inputStyle}
+                >
+                  <option value="">Select subject</option>
+                  {departmentSubjects.map((name) => (
+                    <option key={name} value={name}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  value={form.subject}
+                  onChange={(e) => setForm((f) => ({ ...f, subject: e.target.value }))}
+                  placeholder={
+                    departmentSubjects.length === 1
+                      ? departmentSubjects[0]
+                      : 'Select a teacher first'
+                  }
+                  readOnly={departmentSubjects.length === 1}
+                  list="subject-list"
+                  style={{
+                    ...inputStyle,
+                    ...(departmentSubjects.length === 1 ? { opacity: 0.85 } : {}),
+                  }}
+                />
+              )}
               <datalist id="subject-list">
-                {subjects.map((s) => (
-                  <option key={s.id} value={String(s.name)} />
-                ))}
+                {(departmentSubjects.length > 0 ? departmentSubjects : subjects.map((s) => s.name))
+                  .filter(Boolean)
+                  .map((name) => (
+                    <option key={name} value={String(name)} />
+                  ))}
               </datalist>
             </FormRow>
 
@@ -635,9 +724,9 @@ export default function HODAllocationPage() {
                         gap: 8,
                         alignItems: 'center',
                         padding: '10px 12px',
-                        background: form.periodPreset === p.id ? '#170d28' : '#261843',
+                        background: form.periodPreset === p.id ? '#EFECE5' : '#F5F2EB',
                         borderRadius: 10,
-                        border: `1px solid ${form.periodPreset === p.id ? '#7c3aed' : '#3b2a66'}`,
+                        border: `1px solid ${form.periodPreset === p.id ? '#FF3B00' : '#111111'}`,
                         cursor: 'pointer',
                       }}
                     >
@@ -656,9 +745,9 @@ export default function HODAllocationPage() {
                       gap: 8,
                       alignItems: 'center',
                       padding: '10px 12px',
-                      background: form.periodPreset === 'custom' ? '#170d28' : '#261843',
+                      background: form.periodPreset === 'custom' ? '#EFECE5' : '#F5F2EB',
                       borderRadius: 10,
-                      border: `1px solid ${form.periodPreset === 'custom' ? '#7c3aed' : '#3b2a66'}`,
+                      border: `1px solid ${form.periodPreset === 'custom' ? '#FF3B00' : '#111111'}`,
                       cursor: 'pointer',
                     }}
                   >
@@ -676,8 +765,8 @@ export default function HODAllocationPage() {
                   <div
                     style={{
                       marginTop: 10,
-                      background: '#261843',
-                      border: '1px solid #3b2a66',
+                      background: '#F5F2EB',
+                      border: '1px solid #111111',
                       borderRadius: 12,
                       padding: 12,
                     }}
@@ -690,7 +779,7 @@ export default function HODAllocationPage() {
                       }}
                     >
                       <div>
-                        <div style={{ fontSize: 11, fontWeight: 800, color: '#a78bfa' }}>
+                        <div style={{ fontSize: 11, fontWeight: 800, color: '#666666' }}>
                           Singles
                         </div>
                         <input
@@ -704,7 +793,7 @@ export default function HODAllocationPage() {
                         />
                       </div>
                       <div>
-                        <div style={{ fontSize: 11, fontWeight: 800, color: '#a78bfa' }}>
+                        <div style={{ fontSize: 11, fontWeight: 800, color: '#666666' }}>
                           Doubles
                         </div>
                         <input
@@ -718,7 +807,7 @@ export default function HODAllocationPage() {
                         />
                       </div>
                       <div>
-                        <div style={{ fontSize: 11, fontWeight: 800, color: '#a78bfa' }}>
+                        <div style={{ fontSize: 11, fontWeight: 800, color: '#666666' }}>
                           Triples
                         </div>
                         <input
@@ -733,7 +822,7 @@ export default function HODAllocationPage() {
                       </div>
                     </div>
 
-                    <div style={{ marginTop: 10, fontSize: 12, color: '#a78bfa', fontWeight: 700 }}>
+                    <div style={{ marginTop: 10, fontSize: 12, color: '#666666', fontWeight: 700 }}>
                       Total periods:{' '}
                       {Number(form.customSingles || 0) +
                         Number(form.customDoubles || 0) * 2 +
@@ -750,12 +839,16 @@ export default function HODAllocationPage() {
                   setShowForm(false)
                   setEditingId('')
                 }}
-                style={btnStyle('#261843')}
+                style={btnStyle('#F5F2EB')}
               >
                 Cancel
               </button>
-              <button onClick={saveAllocation} style={btnStyle('#7c3aed')}>
-                {editingId ? 'Update' : 'Save'}
+              <button
+                onClick={saveAllocation}
+                disabled={savingAllocation}
+                style={{ ...btnStyle('#FF3B00'), opacity: savingAllocation ? 0.7 : 1 }}
+              >
+                {savingAllocation ? 'Saving…' : editingId ? 'Update' : 'Save'}
               </button>
             </div>
           </div>
@@ -763,7 +856,7 @@ export default function HODAllocationPage() {
       )}
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: '#6d28d9' }}>
+        <div style={{ textAlign: 'center', padding: '3rem', color: '#666666' }}>
           Loading allocations...
         </div>
       ) : allocations.length === 0 ? (
@@ -771,28 +864,28 @@ export default function HODAllocationPage() {
           style={{
             textAlign: 'center',
             padding: '3rem',
-            background: '#2d1f4e',
+            background: '#FFFFFF',
             borderRadius: 14,
-            border: '1px solid #3b2a66',
+            border: '1px solid #111111',
           }}
         >
-          <p style={{ color: '#6d28d9', marginBottom: 12 }}>No allocations yet</p>
-          <button onClick={() => setShowForm(true)} style={btnStyle('#7c3aed')}>
+          <p style={{ color: '#666666', marginBottom: 12 }}>No allocations yet</p>
+          <button onClick={() => setShowForm(true)} style={btnStyle('#FF3B00')}>
             <Plus size={14} /> Add First Allocation
           </button>
         </div>
       ) : (
         <div
           style={{
-            background: '#2d1f4e',
+            background: '#FFFFFF',
             borderRadius: 14,
-            border: '1px solid #3b2a66',
+            border: '1px solid #111111',
             overflow: 'hidden',
           }}
         >
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr style={{ background: '#170d28' }}>
+              <tr style={{ background: '#EFECE5' }}>
                 {['Department', 'Teacher', 'Classes', 'Subject', 'Period config', 'Status', ''].map(
                   (h) => (
                     <th
@@ -801,11 +894,11 @@ export default function HODAllocationPage() {
                         padding: '10px 14px',
                         textAlign: 'left',
                         fontSize: 11,
-                        color: '#6d28d9',
+                        color: '#666666',
                         fontWeight: 700,
                         textTransform: 'uppercase',
                         letterSpacing: '0.06em',
-                        borderBottom: '1px solid #3b2a66',
+                        borderBottom: '1px solid #111111',
                       }}
                     >
                       {h}
@@ -816,11 +909,13 @@ export default function HODAllocationPage() {
             </thead>
             <tbody>
               {allocations.map((a) => (
-                <tr key={a.id} style={{ borderBottom: '1px solid #261843' }}>
+                <tr key={a.id} style={{ borderBottom: '1px solid #F5F2EB' }}>
                   <td style={tdStyle}>{a.department?.name || '—'}</td>
                   <td style={tdStyle}>
                     {teachers.find(
-                      (t) => String(t.id) === String(a?.allocationData?.teacherId || '')
+                      (t) =>
+                        String(t.teacherId || '') === String(a?.allocationData?.teacherId || '') ||
+                        String(t.id) === String(a?.allocationData?.teacherId || '')
                     )?.name || '—'}
                   </td>
                   <td style={tdStyle}>
@@ -868,8 +963,8 @@ export default function HODAllocationPage() {
                           onClick={() => startEdit(a)}
                           style={{
                             background: 'none',
-                            border: '1px solid #3b2a66',
-                            color: '#a78bfa',
+                            border: '1px solid #111111',
+                            color: '#666666',
                             cursor: 'pointer',
                             padding: '4px 10px',
                             borderRadius: 8,
@@ -937,7 +1032,7 @@ function FormRow({ label, children }) {
         style={{
           display: 'block',
           fontSize: 12,
-          color: '#a78bfa',
+          color: '#666666',
           fontWeight: 600,
           marginBottom: 5,
         }}
@@ -954,24 +1049,24 @@ function FormRow({ label, children }) {
 const inputStyle = {
   width: '100%',
   padding: '9px 11px',
-  background: '#170d28',
-  border: '1px solid #3b2a66',
+  background: '#EFECE5',
+  border: '1px solid #111111',
   borderRadius: 8,
-  color: '#ede9fe',
+  color: '#111111',
   fontSize: 13,
   outline: 'none',
   boxSizing: 'border-box',
 }
 const selectStyle = {
   padding: '8px 12px',
-  background: '#261843',
-  border: '1px solid #3b2a66',
+  background: '#F5F2EB',
+  border: '1px solid #111111',
   borderRadius: 8,
-  color: '#a78bfa',
+  color: '#666666',
   fontSize: 13,
   cursor: 'pointer',
 }
-const tdStyle = { padding: '10px 14px', fontSize: 13, color: '#ede9fe' }
+const tdStyle = { padding: '10px 14px', fontSize: 13, color: '#111111' }
 const btnStyle = (bg) => ({
   display: 'inline-flex',
   alignItems: 'center',

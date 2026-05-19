@@ -29,29 +29,28 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
   const initializeIntegratedSystem = async () => {
     setLoading(true)
     setError(null)
-    
+
     try {
       console.log(`Initializing integrated system for ${userRole} ${userId}`)
-      
+
       // Initialize phase integration system
       const userIntegration = PhaseIntegrationSystem.initializeIntegration(userId, userRole)
       setIntegration(userIntegration)
-      
+
       // Load all phase data
       await loadAllPhaseData(userIntegration)
-      
+
       // Load user settings
       await loadUserSettings()
-      
+
       // Setup cross-phase notifications
       await setupNotifications(userIntegration)
-      
+
       // Sync cross-phase data
       PhaseIntegrationSystem.syncCrossPhaseData(userId)
-      
+
       setLoading(false)
       console.log('Integrated system initialized successfully')
-      
     } catch (error) {
       console.error('Failed to initialize integrated system:', error)
       setError(error.message)
@@ -61,32 +60,32 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
 
   const loadAllPhaseData = async (userIntegration) => {
     const data = {}
-    
+
     // Load Phase 1: Gamification & Analytics
     if (userIntegration.enabledPhases.includes('PHASE_1')) {
       data.phase1 = await loadPhase1Data()
     }
-    
+
     // Load Phase 2: AI-Powered Features
     if (userIntegration.enabledPhases.includes('PHASE_2')) {
       data.phase2 = await loadPhase2Data()
     }
-    
+
     // Load Phase 3: Communication & Collaboration
     if (userIntegration.enabledPhases.includes('PHASE_3')) {
       data.phase3 = await loadPhase3Data()
     }
-    
+
     // Load Phase 4: Wellbeing & Accessibility
     if (userIntegration.enabledPhases.includes('PHASE_4')) {
       data.phase4 = await loadPhase4Data()
     }
-    
+
     // Load Phase 5: Advanced Assessment & Innovation
     if (userIntegration.enabledPhases.includes('PHASE_5')) {
       data.phase5 = await loadPhase5Data()
     }
-    
+
     setPhaseData(data)
   }
 
@@ -98,14 +97,14 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
         points: 1250,
         achievements: ['First Assignment', 'Perfect Attendance', 'Team Player'],
         streaks: { daily_login: 15, assignment_completion: 7 },
-        leaderboard_position: 12
+        leaderboard_position: 12,
       },
       analytics: {
         performance_trend: 'improving',
         subject_strengths: ['Mathematics', 'Science'],
         areas_for_improvement: ['Writing', 'Time Management'],
-        predicted_grades: { math: 'A', science: 'A-', english: 'B+' }
-      }
+        predicted_grades: { math: 'A', science: 'A-', english: 'B+' },
+      },
     }
   }
 
@@ -116,14 +115,14 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
         active_sessions: 3,
         recommendations: ['Review algebra concepts', 'Practice essay writing'],
         learning_style: 'Visual',
-        adaptation_level: 'Intermediate'
+        adaptation_level: 'Intermediate',
       },
       personalized_paths: {
         current_path: 'Advanced Mathematics',
         progress: 65,
         next_milestone: 'Calculus Fundamentals',
-        estimated_completion: '2024-03-15'
-      }
+        estimated_completion: '2024-03-15',
+      },
     }
   }
 
@@ -134,14 +133,14 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
         unread_messages: 5,
         active_groups: 8,
         recent_activity: ['New message in Study Group', 'Project update'],
-        online_friends: 12
+        online_friends: 12,
       },
       collaboration: {
         active_projects: 3,
         team_invitations: 1,
         shared_resources: 15,
-        peer_reviews_pending: 2
-      }
+        peer_reviews_pending: 2,
+      },
     }
   }
 
@@ -153,13 +152,13 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
         risk_level: 'LOW',
         last_assessment: '2024-01-28',
         intervention_plans: [],
-        support_resources: 5
+        support_resources: 5,
       },
       accessibility: {
         active_accommodations: ['Large Text', 'High Contrast'],
         assistive_tech: ['Screen Reader Support'],
-        customizations: { font_size: 'large', theme: 'high_contrast' }
-      }
+        customizations: { font_size: 'large', theme: 'high_contrast' },
+      },
     }
   }
 
@@ -170,14 +169,14 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
         digital_portfolios: 2,
         competency_assessments: 5,
         peer_reviews: 3,
-        blockchain_certificates: 1
+        blockchain_certificates: 1,
       },
       innovation: {
         lab_projects: 2,
         ar_vr_experiences: 4,
         voice_interactions: 15,
-        iot_connections: 3
-      }
+        iot_connections: 3,
+      },
     }
   }
 
@@ -188,19 +187,19 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
       accessibility: {
         high_contrast: false,
         large_text: true,
-        voice_interface: true
+        voice_interface: true,
       },
       notifications: {
         email: true,
         push: true,
-        in_app: true
+        in_app: true,
       },
       privacy: {
         data_sharing: 'limited',
-        public_profile: false
-      }
+        public_profile: false,
+      },
     }
-    
+
     setUserSettings(settings)
   }
 
@@ -213,7 +212,7 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
         type: 'achievement',
         message: 'New badge earned: Collaboration Master!',
         priority: 'medium',
-        timestamp: new Date()
+        timestamp: new Date(),
       },
       {
         id: 2,
@@ -221,7 +220,7 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
         type: 'wellbeing',
         message: 'Weekly wellbeing check-in reminder',
         priority: 'high',
-        timestamp: new Date()
+        timestamp: new Date(),
       },
       {
         id: 3,
@@ -229,10 +228,10 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
         type: 'innovation',
         message: 'New AR experience available: Virtual Chemistry Lab',
         priority: 'low',
-        timestamp: new Date()
-      }
+        timestamp: new Date(),
+      },
     ]
-    
+
     setNotifications(crossPhaseNotifications)
   }
 
@@ -252,12 +251,12 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
       // Apply to all phase components
       console.log('Applying accessibility settings across all phases')
     }
-    
+
     // Apply theme settings
     if (settings.theme) {
       document.documentElement.setAttribute('data-theme', settings.theme)
     }
-    
+
     // Apply notification preferences
     if (settings.notifications) {
       console.log('Updating notification preferences across all phases')
@@ -288,7 +287,7 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
     switch (currentView) {
       case 'dashboard':
         return (
-          <EnhancedDashboardIntegration 
+          <EnhancedDashboardIntegration
             userRole={userRole}
             userId={userId}
             userName={userName}
@@ -298,43 +297,23 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
         )
       case 'settings':
         return (
-          <ComprehensiveSettingsPanel 
+          <ComprehensiveSettingsPanel
             userRole={userRole}
             userId={userId}
             onSettingsChange={handleSettingsChange}
           />
         )
       case 'innovation':
-        return (
-          <AdvancedInnovationDashboard 
-            userRole={userRole}
-            userId={userId}
-          />
-        )
+        return <AdvancedInnovationDashboard userRole={userRole} userId={userId} />
       case 'wellbeing':
-        return (
-          <MentalHealthSupportInterface 
-            userId={userId}
-            userRole={userRole}
-          />
-        )
+        return <MentalHealthSupportInterface userId={userId} userRole={userRole} />
       case 'communication':
-        return (
-          <CommunicationDashboard 
-            userRole={userRole}
-            userId={userId}
-          />
-        )
+        return <CommunicationDashboard userRole={userRole} userId={userId} />
       case 'accessibility':
-        return (
-          <AccessibilityDashboard 
-            userRole={userRole}
-            userId={userId}
-          />
-        )
+        return <AccessibilityDashboard userRole={userRole} userId={userId} />
       default:
         return (
-          <EnhancedDashboardIntegration 
+          <EnhancedDashboardIntegration
             userRole={userRole}
             userId={userId}
             userName={userName}
@@ -348,15 +327,20 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
   return (
     <div className="integrated-dashboard-wrapper">
       {renderCurrentView()}
-      
+
       <style jsx>{`
         .integrated-dashboard-wrapper {
           min-height: 100vh;
-          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          background: linear-gradient(135deg, #f5f2eb 0%, rgba(17, 17, 17, 0.12) 100%);
+          font-family:
+            'Inter',
+            -apple-system,
+            BlinkMacSystemFont,
+            sans-serif;
         }
-        
-        .loading-container, .error-container {
+
+        .loading-container,
+        .error-container {
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -365,7 +349,7 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
           text-align: center;
           padding: 32px;
         }
-        
+
         .loading-spinner {
           width: 60px;
           height: 60px;
@@ -375,25 +359,31 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
           animation: spin 1s linear infinite;
           margin-bottom: 24px;
         }
-        
+
         @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
-        
-        .loading-container h2, .error-container h2 {
+
+        .loading-container h2,
+        .error-container h2 {
           color: #1e40af;
           margin: 0 0 12px 0;
           font-size: 24px;
           font-weight: 600;
         }
-        
-        .loading-container p, .error-container p {
+
+        .loading-container p,
+        .error-container p {
           color: #6b7280;
           margin: 0 0 24px 0;
           font-size: 16px;
         }
-        
+
         .error-container button {
           background: linear-gradient(135deg, #3b82f6, #1e40af);
           color: white;
@@ -404,27 +394,27 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
           cursor: pointer;
           transition: transform 0.2s;
         }
-        
+
         .error-container button:hover {
           transform: translateY(-2px);
         }
-        
+
         /* Global theme variables */
-        :global([data-theme="blue_white"]) {
+        :global([data-theme='blue_white']) {
           --primary-color: #3b82f6;
           --secondary-color: #1e40af;
           --background-color: #ffffff;
-          --text-color: #1f2937;
+          --text-color: #111111;
         }
-        
-        :global([data-theme="dark"]) {
+
+        :global([data-theme='dark']) {
           --primary-color: #60a5fa;
           --secondary-color: #3b82f6;
-          --background-color: #1f2937;
+          --background-color: #111111;
           --text-color: #f9fafb;
         }
-        
-        :global([data-theme="high_contrast"]) {
+
+        :global([data-theme='high_contrast']) {
           --primary-color: #000000;
           --secondary-color: #ffffff;
           --background-color: #ffffff;

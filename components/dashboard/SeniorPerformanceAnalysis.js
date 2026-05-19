@@ -174,7 +174,7 @@ export default function SeniorPerformanceAnalysis({ results = [] }) {
                   <Tooltip
                     contentStyle={{
                       backgroundColor: '#1e293b',
-                      borderColor: '#334155',
+                      borderColor: '#666666',
                       color: '#fff',
                     }}
                     itemStyle={{ color: '#fff' }}

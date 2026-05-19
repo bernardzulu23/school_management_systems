@@ -83,7 +83,7 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
   return (
     <div className="space-y-8">
       {/* Student Progress Header */}
-      <Card className="dashboard-card bg-gradient-to-r from-blue-600 to-purple-600 text-royalPurple-text1">
+      <Card className="dashboard-card bg-ink border-2 border-ink text-paper shadow-brutal">
         <CardContent className="p-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">

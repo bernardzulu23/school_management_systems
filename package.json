@@ -7,7 +7,7 @@
     "education",
     "school-management",
     "pwa",
-    "railway",
+    "neon",
     "cloudflare",
     "zambia",
     "rural-schools",
@@ -40,10 +40,14 @@
     "seed:schools": "node prisma/seed-schools.js",
     "seed:st-marys": "node prisma/seed-st-marys-pilot.js",
     "seed:platform-admin": "node prisma/seed-platform-admin.js",
+    "seed:ndake-premium-trial": "node prisma/seed-ndake-premium-trial.js",
     "seed:timeslots": "ts-node --transpile-only --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" prisma/seedTimeSlots.ts",
     "seed:schools:docker": "docker compose exec -T web npm run seed:schools",
     "seed:timeslots:docker": "docker compose exec -T web npm run seed:timeslots",
-    "export:users": "node scripts/export-users-excel.js"
+    "export:users": "node scripts/export-users-excel.js",
+    "cf:build": "npx @opennextjs/cloudflare build",
+    "cf:deploy": "npx wrangler deploy",
+    "cf:preview": "npx wrangler dev"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -60,6 +64,8 @@
     "@excalidraw/excalidraw": "^0.17.6",
     "@headlessui/react": "^2.2.10",
     "@monaco-editor/react": "^4.7.0",
+    "@neondatabase/serverless": "^0.10.4",
+    "@prisma/adapter-neon": "6.19.3",
     "@prisma/adapter-pg": "6.19.3",
     "@prisma/client": "6.19.3",
     "@react-email/components": "^1.0.12",
@@ -123,7 +129,8 @@
     "prisma": "6.19.3",
     "ts-node": "^10.9.2",
     "typescript": "^5",
-    "workbox-webpack-plugin": "^7.0.0"
+    "workbox-webpack-plugin": "^7.0.0",
+    "ws": "^8.18.0"
   },
   "engines": {
     "node": ">=18.0.0",

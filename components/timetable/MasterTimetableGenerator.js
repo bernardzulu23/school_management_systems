@@ -88,7 +88,7 @@ export function TimetableNotificationBell() {
         style={{
           background: 'none',
           border: 'none',
-          color: '#a78bfa',
+          color: '#666666',
           cursor: 'pointer',
           position: 'relative',
           padding: 8,
@@ -108,7 +108,7 @@ export function TimetableNotificationBell() {
               fontWeight: 700,
               padding: '1px 4px',
               borderRadius: 10,
-              border: '2px solid #170d28',
+              border: '2px solid #EFECE5',
             }}
           >
             {unreadCount}
@@ -123,9 +123,9 @@ export function TimetableNotificationBell() {
             top: '100%',
             right: 0,
             width: 320,
-            background: '#2d1f4e',
+            background: '#FFFFFF',
             borderRadius: 12,
-            border: '1px solid #3b2a66',
+            border: '1px solid #111111',
             boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
             zIndex: 10000,
             marginTop: 8,
@@ -135,7 +135,7 @@ export function TimetableNotificationBell() {
           <div
             style={{
               padding: '12px 16px',
-              borderBottom: '1px solid #3b2a66',
+              borderBottom: '1px solid #111111',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
@@ -147,7 +147,7 @@ export function TimetableNotificationBell() {
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#6d28d9',
+                color: '#666666',
                 cursor: 'pointer',
                 fontSize: 11,
               }}
@@ -157,7 +157,7 @@ export function TimetableNotificationBell() {
           </div>
           <div style={{ maxHeight: 360, overflowY: 'auto' }}>
             {notifications.length === 0 ? (
-              <div style={{ padding: 32, textAlign: 'center', color: '#6d28d9', fontSize: 12 }}>
+              <div style={{ padding: 32, textAlign: 'center', color: '#666666', fontSize: 12 }}>
                 No new alerts
               </div>
             ) : (
@@ -168,13 +168,13 @@ export function TimetableNotificationBell() {
                   onClick={() => openNotification(n)}
                   style={{
                     padding: '12px 16px',
-                    borderBottom: '1px solid #261843',
+                    borderBottom: '1px solid #F5F2EB',
                     cursor: 'pointer',
-                    background: n.read ? 'transparent' : '#7c3aed10',
+                    background: n.read ? 'transparent' : '#FF3B0010',
                     width: '100%',
                     textAlign: 'left',
                     border: 'none',
-                    color: '#ede9fe',
+                    color: '#111111',
                     display: 'block',
                   }}
                 >
@@ -185,18 +185,18 @@ export function TimetableNotificationBell() {
                       style={{
                         fontSize: 11,
                         fontWeight: 700,
-                        color: n.read ? '#a78bfa' : '#ede9fe',
+                        color: n.read ? '#666666' : '#111111',
                       }}
                     >
                       {n.title}
                     </span>
                     {!n.read && (
                       <div
-                        style={{ width: 6, height: 6, background: '#7c3aed', borderRadius: 10 }}
+                        style={{ width: 6, height: 6, background: '#FF3B00', borderRadius: 10 }}
                       />
                     )}
                   </div>
-                  <p style={{ fontSize: 11, color: '#a78bfa', margin: 0, lineHeight: 1.4 }}>
+                  <p style={{ fontSize: 11, color: '#666666', margin: 0, lineHeight: 1.4 }}>
                     {n.message}
                   </p>
                   <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
@@ -208,7 +208,7 @@ export function TimetableNotificationBell() {
                       }}
                       style={{
                         fontSize: 10,
-                        color: '#7c3aed',
+                        color: '#FF3B00',
                         fontWeight: 700,
                         textDecoration: 'none',
                         display: 'flex',
@@ -438,7 +438,7 @@ export default function MasterTimetableGenerator() {
   const timeSlots = [...new Set(entries.map((e) => e.startTime))].sort()
 
   return (
-    <div style={{ padding: '1.5rem', background: '#170d28', minHeight: '100vh', color: '#ede9fe' }}>
+    <div style={{ padding: '1.5rem', background: '#EFECE5', minHeight: '100vh', color: '#111111' }}>
       {/* Header */}
       <div
         style={{
@@ -452,7 +452,7 @@ export default function MasterTimetableGenerator() {
       >
         <div>
           <h1 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>Master Timetable</h1>
-          <p style={{ color: '#a78bfa', fontSize: 13, margin: '4px 0 0' }}>
+          <p style={{ color: '#666666', fontSize: 13, margin: '4px 0 0' }}>
             Generate and manage school schedule from HOD allocations
           </p>
         </div>
@@ -460,7 +460,7 @@ export default function MasterTimetableGenerator() {
           <button onClick={() => setShowConfig(true)} style={outlineBtn}>
             <Settings size={14} /> Configure Breaks & Times
           </button>
-          <button onClick={generate} disabled={generating} style={btnStyle('#7c3aed')}>
+          <button onClick={generate} disabled={generating} style={btnStyle('#FF3B00')}>
             <Play size={14} /> {generating ? 'Generating...' : 'Generate Master Timetable'}
           </button>
           {entries.length > 0 && (
@@ -541,7 +541,7 @@ export default function MasterTimetableGenerator() {
 
       {/* Grid view */}
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '5rem', color: '#6d28d9' }}>
+        <div style={{ textAlign: 'center', padding: '5rem', color: '#666666' }}>
           Loading timetable engine...
         </div>
       ) : entries.length === 0 ? (
@@ -549,18 +549,18 @@ export default function MasterTimetableGenerator() {
           style={{
             textAlign: 'center',
             padding: '5rem',
-            background: '#2d1f4e',
+            background: '#FFFFFF',
             borderRadius: 16,
-            border: '1px solid #3b2a66',
+            border: '1px solid #111111',
           }}
         >
-          <Calendar size={48} style={{ color: '#3b2a66', marginBottom: 16 }} />
+          <Calendar size={48} style={{ color: '#111111', marginBottom: 16 }} />
           <h3 style={{ margin: 0, fontSize: 18 }}>No Draft Timetable</h3>
-          <p style={{ color: '#a78bfa', fontSize: 13, maxWidth: 400, margin: '8px auto 20px' }}>
+          <p style={{ color: '#666666', fontSize: 13, maxWidth: 400, margin: '8px auto 20px' }}>
             Set your school hours and click Generate. The system will pull all "pushed" allocations
             from HODs and build the best possible schedule.
           </p>
-          <button onClick={generate} style={btnStyle('#7c3aed')}>
+          <button onClick={generate} style={btnStyle('#FF3B00')}>
             Start Generation
           </button>
         </div>
@@ -568,9 +568,9 @@ export default function MasterTimetableGenerator() {
         <div
           style={{
             overflowX: 'auto',
-            background: '#2d1f4e',
+            background: '#FFFFFF',
             borderRadius: 16,
-            border: '1px solid #3b2a66',
+            border: '1px solid #111111',
           }}
         >
           <table
@@ -582,7 +582,7 @@ export default function MasterTimetableGenerator() {
             }}
           >
             <thead>
-              <tr style={{ background: '#170d28' }}>
+              <tr style={{ background: '#EFECE5' }}>
                 <th style={thStyle}>Time</th>
                 {config.workingDays.map((d) => (
                   <th key={d} style={thStyle}>
@@ -593,8 +593,8 @@ export default function MasterTimetableGenerator() {
             </thead>
             <tbody>
               {timeSlots.map((time) => (
-                <tr key={time} style={{ borderBottom: '1px solid #261843' }}>
-                  <td style={{ ...tdStyle, fontWeight: 700, color: '#a78bfa', width: 80 }}>
+                <tr key={time} style={{ borderBottom: '1px solid #F5F2EB' }}>
+                  <td style={{ ...tdStyle, fontWeight: 700, color: '#666666', width: 80 }}>
                     {time}
                   </td>
                   {config.workingDays.map((day) => {
@@ -620,7 +620,7 @@ export default function MasterTimetableGenerator() {
                             <div style={{ fontWeight: 700, fontSize: 11 }}>
                               {e.allocation?.subject?.name}
                             </div>
-                            <div style={{ fontSize: 10, color: '#a78bfa' }}>
+                            <div style={{ fontSize: 10, color: '#666666' }}>
                               {e.allocation?.class?.name} • {e.allocation?.teacher?.name}
                             </div>
                             <div
@@ -663,9 +663,9 @@ export default function MasterTimetableGenerator() {
         >
           <div
             style={{
-              background: '#2d1f4e',
+              background: '#FFFFFF',
               borderRadius: 20,
-              border: '1px solid #3b2a66',
+              border: '1px solid #111111',
               width: '100%',
               maxWidth: 600,
               maxHeight: '90vh',
@@ -733,9 +733,9 @@ export default function MasterTimetableGenerator() {
                 <button
                   onClick={addBreak}
                   style={{
-                    background: '#7c3aed10',
-                    border: '1px solid #7c3aed',
-                    color: '#7c3aed',
+                    background: '#FF3B0010',
+                    border: '1px solid #FF3B00',
+                    color: '#FF3B00',
                     padding: '4px 10px',
                     borderRadius: 6,
                     fontSize: 11,
@@ -753,7 +753,7 @@ export default function MasterTimetableGenerator() {
                 <div
                   key={i}
                   style={{
-                    background: '#170d28',
+                    background: '#EFECE5',
                     borderRadius: 12,
                     padding: 12,
                     marginBottom: 8,
@@ -802,7 +802,7 @@ export default function MasterTimetableGenerator() {
               <button onClick={() => setShowConfig(false)} style={outlineBtn}>
                 Cancel
               </button>
-              <button onClick={saveConfig} style={btnStyle('#7c3aed')}>
+              <button onClick={saveConfig} style={btnStyle('#FF3B00')}>
                 <Save size={14} /> Save Configuration
               </button>
             </div>
@@ -817,27 +817,27 @@ const thStyle = {
   padding: '12px 16px',
   textAlign: 'left',
   fontSize: 11,
-  color: '#6d28d9',
+  color: '#666666',
   fontWeight: 700,
   textTransform: 'uppercase',
   letterSpacing: '0.05em',
-  borderBottom: '1px solid #3b2a66',
+  borderBottom: '1px solid #111111',
 }
 const tdStyle = { padding: '12px 16px', fontSize: 12, verticalAlign: 'top' }
 const labelStyle = {
   display: 'block',
   fontSize: 12,
-  color: '#a78bfa',
+  color: '#666666',
   fontWeight: 600,
   marginBottom: 6,
 }
 const inputStyle = {
   width: '100%',
   padding: '10px 12px',
-  background: '#170d28',
-  border: '1px solid #3b2a66',
+  background: '#EFECE5',
+  border: '1px solid #111111',
   borderRadius: 10,
-  color: '#ede9fe',
+  color: '#111111',
   fontSize: 13,
   outline: 'none',
   boxSizing: 'border-box',
@@ -862,9 +862,9 @@ const outlineBtn = {
   gap: 6,
   padding: '8px 16px',
   background: 'transparent',
-  border: '1px solid #3b2a66',
+  border: '1px solid #111111',
   borderRadius: 8,
-  color: '#a78bfa',
+  color: '#666666',
   fontWeight: 600,
   fontSize: 13,
   cursor: 'pointer',

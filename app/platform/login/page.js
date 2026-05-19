@@ -20,11 +20,15 @@ export default function PlatformLoginPage() {
       const res = await fetch('/api/platform/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          password,
+        }),
       })
       const data = await res.json()
       if (!res.ok) {
-        toast.error(data.error || 'Login failed')
+        toast.error(data.hint || data.error || 'Login failed')
         return
       }
       toast.success('Signed in as platform admin')
@@ -37,35 +41,35 @@ export default function PlatformLoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-6">
-      <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900/80 p-8 shadow-xl">
+    <main className="min-h-screen flex items-center justify-center p-6 bg-paper">
+      <div className="w-full max-w-md border-2 border-ink bg-white p-8 shadow-[4px_4px_0_#111111]">
         <div className="flex items-center gap-3 mb-6">
-          <Shield className="text-violet-400" size={28} />
+          <Shield className="text-accent" size={28} />
           <div>
-            <h1 className="text-xl font-semibold text-white">Developer console</h1>
-            <p className="text-sm text-slate-400">Platform super admin — schools metadata only</p>
+            <h1 className="text-xl font-semibold text-ink">Developer console</h1>
+            <p className="text-sm text-muted">Platform super admin — schools metadata only</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-slate-300 mb-1">Email</label>
+            <label className="block text-sm text-ink mb-1 font-medium">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white"
+              className="input"
               required
               autoComplete="username"
             />
           </div>
           <div>
-            <label className="block text-sm text-slate-300 mb-1">Password</label>
+            <label className="block text-sm text-ink mb-1 font-medium">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white"
+              className="input"
               required
               autoComplete="current-password"
             />
@@ -73,14 +77,14 @@ export default function PlatformLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-violet-600 hover:bg-violet-500 py-2.5 font-medium text-white disabled:opacity-60"
+            className="btn-primary w-full disabled:opacity-60"
           >
             {loading ? 'Signing in…' : 'Sign in'}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-500">
-          <Link href="/login" className="text-violet-400 hover:underline">
+        <p className="mt-6 text-center text-sm text-muted">
+          <Link href="/login" className="text-accent hover:underline font-medium">
             School staff login
           </Link>
         </p>
