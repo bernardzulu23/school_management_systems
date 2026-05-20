@@ -88,7 +88,7 @@ const nextConfig = {
     return config
   },
 
-  // Security headers (also applied in proxy.js); shared source in lib/security/headers.js
+  // Security headers (also applied in middleware.js); shared source in lib/security/headers.js
   async headers() {
     const { nextConfigSecurityHeaders } = await import('./lib/security/headers.js')
     const securityHeaders = nextConfigSecurityHeaders()
@@ -120,3 +120,10 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
+
+try {
+  const { initOpenNextCloudflareForDev } = require('@opennextjs/cloudflare')
+  initOpenNextCloudflareForDev()
+} catch {
+  // @opennextjs/cloudflare not installed yet — run npm install
+}

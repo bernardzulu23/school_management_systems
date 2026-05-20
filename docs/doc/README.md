@@ -113,10 +113,8 @@ This project aligns with multiple RootLab focus areas:
 
 ## Deployment
 
-### Neon + Cloudflare (Recommended)
+### Cloudflare Workers (Recommended)
 
-This project is configured for **Neon** PostgreSQL and **Cloudflare Workers** (OpenNext) with **Cloudflare** DNS.
+This project deploys to **Cloudflare Workers** via OpenNext. PostgreSQL can be local Docker or any hosted provider.
 
-See: [Neon + Cloudflare Setup Guide](NEON_CLOUDFLARE_SETUP.md)
-
-(Legacy Railway/Render guide: [RAILWAY_CLOUDFLARE_SETUP.md](RAILWAY_CLOUDFLARE_SETUP.md) — deprecated.)
+See: [Cloudflare deployment guide](CLOUDFLARE_DEPLOY.md)

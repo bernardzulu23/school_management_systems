@@ -7,7 +7,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 
 // GET — fetch all allocations for this school (HOD sees own dept, headteacher sees all)
 export async function GET(req) {
-  const auth = authMiddleware(req)
+  const auth = await authMiddleware(req)
   if (!auth.isAuthenticated) return auth.response
 
   const user = auth.user
@@ -95,7 +95,7 @@ export async function GET(req) {
 
 // POST — create a new allocation (HOD only)
 export async function POST(req) {
-  const auth = authMiddleware(req)
+  const auth = await authMiddleware(req)
   if (!auth.isAuthenticated) return auth.response
 
   const user = auth.user

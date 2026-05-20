@@ -16,7 +16,7 @@ function parseTerm(termRaw) {
 }
 
 export async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
@@ -177,7 +177,7 @@ export async function GET(request) {
 }
 
 export async function PATCH(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))

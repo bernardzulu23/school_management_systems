@@ -5,7 +5,6 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { calculateGrade } from '@/lib/gradingSystem'
 
 export const dynamic = 'force-dynamic'
-export const runtime = 'nodejs'
 
 function toTermLabel(termParam) {
   const raw = String(termParam || '').trim()
@@ -93,7 +92,7 @@ function buildGenderByGrade({ rows, allowedYearGroups }) {
 
 export async function GET(request) {
   try {
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
 
     if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
@@ -962,7 +961,7 @@ export async function GET(request) {
         .replace(/password=[^&\s]+/gi, 'password=***')
         .slice(0, 2000)
 
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     const isPrivileged =
       auth?.isAuthenticated && roleCheck(auth.user, ['ADMIN', 'headteacher', 'HEADTEACHER'])
     const canExpose = process.env.NODE_ENV === 'development' || isPrivileged

@@ -1,9 +1,9 @@
-# Cloudflare Workers — deploy with OpenNext after: npm run cf:build && npm run cf:deploy
-# Docs: docs/doc/NEON_CLOUDFLARE_SETUP.md
+# Cloudflare Workers — deploy: npm run deploy
+# Docs: docs/doc/CLOUDFLARE_DEPLOY.md
 
-name = "zsms"
+name = "school-management-system"
 main = ".open-next/worker.js"
-compatibility_date = "2024-12-01"
+compatibility_date = "2024-12-30"
 compatibility_flags = ["nodejs_compat"]
 
 [assets]
@@ -11,9 +11,14 @@ directory = ".open-next/assets"
 binding = "ASSETS"
 
 [vars]
+NEXT_PUBLIC_APP_NAME = "Zambian School Management System"
+NEXT_PUBLIC_APP_VERSION = "2.0.0"
+NEXT_PUBLIC_PWA_ENABLED = "true"
+NEXT_PUBLIC_OFFLINE_MODE = "true"
 NODE_ENV = "production"
 
-# Set secrets via: npx wrangler secret put DATABASE_URL
+# Secrets: npx wrangler secret put DATABASE_URL
+# npx wrangler secret put DIRECT_URL
 # npx wrangler secret put JWT_SECRET
 # npx wrangler secret put JWT_REFRESH_SECRET
 

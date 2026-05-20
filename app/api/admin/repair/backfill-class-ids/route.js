@@ -17,7 +17,7 @@ function isTruthyString(value) {
 }
 
 export const POST = withErrorHandler(async function POST(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {

@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server'
 import path from 'path'
 import { readFile } from 'fs/promises'
 
-export const runtime = 'nodejs'
-
 const TYPE_BY_EXT = {
   jpg: 'image/jpeg',
   jpeg: 'image/jpeg',

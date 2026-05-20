@@ -1,6 +1,10 @@
 import { defineConfig } from 'prisma/config'
+import { fileURLToPath } from 'node:url'
+import path from 'node:path'
 
-function loadEnvFile(filePath) {
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+function loadEnvFile(filePath: string) {
   try {
     const fs = require('fs')
     if (!fs.existsSync(filePath)) return
@@ -25,8 +29,8 @@ function loadEnvFile(filePath) {
   } catch {}
 }
 
-loadEnvFile('.env')
-loadEnvFile('.env.local')
+loadEnvFile(path.join(__dirname, '.env'))
+loadEnvFile(path.join(__dirname, '.env.local'))
 
 if (!process.env.DATABASE_URL) {
   const fallbackUrl =
@@ -44,7 +48,6 @@ export default defineConfig({
     seed: 'node prisma/seed.js',
   },
   datasource: {
-    // Neon: use DIRECT_URL for migrations; fallback to DATABASE_URL for local dev
     url: process.env.DIRECT_URL || process.env.DATABASE_URL,
   },
 })

@@ -9,7 +9,7 @@ import { withSecureApi } from '@/lib/middleware/secureApi'
 const CAN_ACCESS = ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
 
 export const GET = withSecureApi(async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, CAN_ACCESS)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })

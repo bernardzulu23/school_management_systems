@@ -20,7 +20,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const allocationId = String(routeParams?.allocationId || '').trim()
   if (!allocationId) throw new ApiError('allocationId is required', 400)
 
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {

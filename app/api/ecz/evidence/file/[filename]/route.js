@@ -1,5 +1,4 @@
 export const dynamic = 'force-dynamic'
-export const runtime = 'nodejs'
 import { NextResponse } from 'next/server'
 import path from 'path'
 import { readFile } from 'fs/promises'
@@ -10,7 +9,7 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 const CAN_ACCESS = ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
 
 export async function GET(request, { params }) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }

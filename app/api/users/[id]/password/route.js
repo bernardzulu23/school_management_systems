@@ -6,7 +6,7 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function POST(request, { params }) {
   const routeParams = await params
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {

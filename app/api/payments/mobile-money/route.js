@@ -3,9 +3,6 @@ import { NextResponse } from 'next/server'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
-import crypto from 'crypto'
-
-export const runtime = 'nodejs'
 
 const PAYMENT_OPTION_BY_PROVIDER = {
   airtel: { label: 'Airtel Zambia', paymentType: 'AirtelMoney' },
@@ -25,7 +22,7 @@ function normalizeZambiaMsisdn(value) {
 }
 
 export async function POST(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod', 'TEACHER', 'teacher'])) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
@@ -66,7 +63,7 @@ export async function POST(request) {
   const providerKey = providerRaw.replace(/\s+/g, '_')
   const selectedOption = providerKey ? PAYMENT_OPTION_BY_PROVIDER[providerKey] : null
 
-  const referenceId = String(body?.referenceId || crypto.randomUUID()).trim()
+  const referenceId = String(body?.referenceId || globalThis.crypto.randomUUID()).trim()
 
   const origin = request.headers.get('origin') || new URL(request.url).origin
   const callbackUrl = String(body?.callbackUrl || `${origin}/api/payments/lipila/callback`).trim()

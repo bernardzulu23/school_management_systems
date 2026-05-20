@@ -7,7 +7,7 @@ import { SCHOOL_SUBJECTS } from '@/data/subjects'
 
 export async function GET(request) {
   try {
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
 
     const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))

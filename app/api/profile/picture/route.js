@@ -6,8 +6,6 @@ import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
-export const runtime = 'nodejs'
-
 const MAX_BYTES = 10 * 1024 * 1024
 const ALLOWED = {
   'image/jpeg': 'jpg',
@@ -16,7 +14,7 @@ const ALLOWED = {
 }
 
 export async function PUT(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))

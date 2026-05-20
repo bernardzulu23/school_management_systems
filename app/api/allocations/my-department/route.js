@@ -10,7 +10,7 @@ import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
 import { canManageDepartmentAllocations, isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
 
 export const GET = withErrorHandler(async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))

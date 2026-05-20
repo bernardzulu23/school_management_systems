@@ -14,7 +14,7 @@ const parseClassNameParts = (className) => {
 
 export async function GET(request, { params }) {
   const routeParams = await params
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
@@ -65,7 +65,7 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
   const routeParams = await params
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
@@ -207,7 +207,7 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
   const routeParams = await params
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))

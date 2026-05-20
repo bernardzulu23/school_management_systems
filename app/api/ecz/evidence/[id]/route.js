@@ -1,5 +1,4 @@
 export const dynamic = 'force-dynamic'
-export const runtime = 'nodejs'
 import { NextResponse } from 'next/server'
 import path from 'path'
 import { unlink } from 'fs/promises'
@@ -12,7 +11,7 @@ const CAN_MANAGE = ['HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
 const CAN_DELETE = ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
 
 export const DELETE = withSecureApi(async function DELETE(request, { params }) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const canDelete = roleCheck(auth.user, CAN_DELETE) && (roleCheck(auth.user, CAN_MANAGE) || true)

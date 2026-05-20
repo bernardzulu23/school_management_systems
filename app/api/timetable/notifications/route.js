@@ -7,7 +7,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 
 // GET — fetch all timetable notifications for the logged-in user
 export async function GET(req) {
-  const auth = authMiddleware(req)
+  const auth = await authMiddleware(req)
   if (!auth.isAuthenticated) return auth.response
 
   const user = auth.user
@@ -46,7 +46,7 @@ export async function GET(req) {
 
 // POST — mark notification as read
 export async function POST(req) {
-  const auth = authMiddleware(req)
+  const auth = await authMiddleware(req)
   if (!auth.isAuthenticated) return auth.response
 
   const user = auth.user

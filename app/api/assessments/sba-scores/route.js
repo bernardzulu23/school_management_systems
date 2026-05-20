@@ -12,7 +12,7 @@ import {
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
 export const POST = withSecureApi(async function POST(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher'])) {
@@ -123,7 +123,7 @@ export const POST = withSecureApi(async function POST(request) {
 })
 
 export const GET = withSecureApi(async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher'])) {

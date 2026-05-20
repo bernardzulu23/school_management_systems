@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
 export const dynamic = 'force-dynamic'
-export const runtime = 'nodejs'
 
 /**
  * Liveness: respond immediately so load balancers (Cloudflare, etc.) do not time out

@@ -7,7 +7,7 @@ import { deleteUserCascade } from '@/lib/db/deleteCascade'
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
   const routeParams = await params
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
@@ -63,7 +63,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
 
 export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const routeParams = await params
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
@@ -118,7 +118,7 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
 
 export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
   const routeParams = await params
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))

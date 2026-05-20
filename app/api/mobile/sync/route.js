@@ -16,7 +16,7 @@ const STAFF_ROLES = ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher',
 const VALID_ATTENDANCE = ['present', 'absent', 'late', 'excused']
 
 export const POST = withSecureApi(async function POST(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, STAFF_ROLES)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })

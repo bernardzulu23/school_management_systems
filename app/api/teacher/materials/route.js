@@ -16,7 +16,7 @@ function normalizeTags(tags) {
 }
 
 export const GET = withErrorHandler(async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
@@ -63,7 +63,7 @@ export const GET = withErrorHandler(async function GET(request) {
 })
 
 export const POST = withErrorHandler(async function POST(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {

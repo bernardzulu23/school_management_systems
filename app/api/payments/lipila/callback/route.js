@@ -2,8 +2,6 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
-export const runtime = 'nodejs'
-
 export async function POST(request) {
   try {
     const payload = await request.json().catch(() => ({}))

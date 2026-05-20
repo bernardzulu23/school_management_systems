@@ -7,8 +7,6 @@ import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { sendOnboardingVerificationEmail } from '@/config/email'
 import { signOnboardingToken } from '@/lib/middleware/onboardingAuth'
 
-export const runtime = 'nodejs'
-
 function isValidEmail(value) {
   const email = String(value || '')
     .trim()

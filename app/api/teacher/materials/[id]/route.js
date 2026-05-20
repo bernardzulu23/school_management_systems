@@ -16,7 +16,7 @@ function normalizeTags(tags) {
 
 export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const routeParams = await params
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
@@ -80,7 +80,7 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
 
 export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
   const routeParams = await params
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {

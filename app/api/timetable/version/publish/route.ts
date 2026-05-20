@@ -11,7 +11,7 @@ type PublishBody = {
 
 /** Legacy TimetableVersion publish (separate from TimetableAllocationEntry publish). */
 export async function POST(req: NextRequest) {
-  const auth = authMiddleware(req as any)
+  const auth = await authMiddleware(req as any)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, ['ADMIN'])) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })

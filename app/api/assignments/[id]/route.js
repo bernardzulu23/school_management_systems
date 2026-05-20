@@ -5,7 +5,7 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function GET(request, { params }) {
   const routeParams = await params
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
@@ -39,7 +39,7 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
   const routeParams = await params
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
@@ -86,7 +86,7 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
   const routeParams = await params
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {

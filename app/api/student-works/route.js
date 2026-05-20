@@ -18,7 +18,7 @@ export async function GET(request) {
   }
 
   try {
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
     if (
       !roleCheck(auth.user, [
@@ -78,7 +78,7 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
     if (!roleCheck(auth.user, ['STUDENT', 'student', 'TEACHER', 'teacher'])) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })

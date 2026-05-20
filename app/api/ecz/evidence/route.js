@@ -1,5 +1,4 @@
 export const dynamic = 'force-dynamic'
-export const runtime = 'nodejs'
 import { NextResponse } from 'next/server'
 import path from 'path'
 import { mkdir, writeFile } from 'fs/promises'
@@ -41,7 +40,7 @@ function mapEvidenceRow(f, schoolId) {
 }
 
 export const GET = withSecureApi(async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, CAN_ACCESS)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
@@ -91,7 +90,7 @@ export const GET = withSecureApi(async function GET(request) {
 })
 
 export const POST = withSecureApi(async function POST(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, CAN_ACCESS)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })

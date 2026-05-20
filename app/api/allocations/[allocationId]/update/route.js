@@ -28,7 +28,7 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const allocationId = String(routeParams?.allocationId || '').trim()
   if (!allocationId) throw new ApiError('allocationId is required', 400)
 
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))

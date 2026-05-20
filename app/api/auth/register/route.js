@@ -16,7 +16,7 @@ import {
 } from '@/lib/services/registrationHelpers'
 
 export const POST = withErrorHandler(async (request) => {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {

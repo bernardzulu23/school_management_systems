@@ -6,7 +6,7 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function GET(request) {
   try {
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
     if (!roleCheck(auth.user, ['STUDENT', 'student'])) {
       return NextResponse.json({ error: 'Forbidden: Student access only' }, { status: 403 })
@@ -85,7 +85,7 @@ function formatGoal(goal) {
 export async function POST(request) {
   try {
     const body = await request.json()
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
     if (!roleCheck(auth.user, ['STUDENT', 'student'])) {
       return NextResponse.json({ error: 'Forbidden: Student access only' }, { status: 403 })
@@ -136,7 +136,7 @@ export async function POST(request) {
 export async function PUT(request) {
   try {
     const body = await request.json()
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
     if (!roleCheck(auth.user, ['STUDENT', 'student'])) {
       return NextResponse.json({ error: 'Forbidden: Student access only' }, { status: 403 })
@@ -204,7 +204,7 @@ export async function PUT(request) {
 
 export async function DELETE(request) {
   try {
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
     if (!roleCheck(auth.user, ['STUDENT', 'student'])) {
       return NextResponse.json({ error: 'Forbidden: Student access only' }, { status: 403 })

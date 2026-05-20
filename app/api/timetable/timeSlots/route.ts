@@ -4,7 +4,6 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export const dynamic = 'force-dynamic'
-export const runtime = 'nodejs'
 
 function dayNumber(day: string) {
   const d = String(day || '').toLowerCase()
@@ -18,7 +17,7 @@ function dayNumber(day: string) {
 
 export async function GET(req: NextRequest) {
   try {
-    const auth = authMiddleware(req as any)
+    const auth = await authMiddleware(req as any)
     if (!auth.isAuthenticated) return auth.response
     if (!roleCheck(auth.user, ['ADMIN', 'HOD'])) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })

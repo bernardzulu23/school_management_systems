@@ -4,7 +4,6 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export const dynamic = 'force-dynamic'
-export const runtime = 'nodejs'
 
 function isMissingTableError(error) {
   const raw = String(error?.message || '')
@@ -28,7 +27,7 @@ function isDbUnreachableError(error) {
 
 export async function GET(request) {
   try {
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
 
     const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
@@ -188,7 +187,7 @@ export async function GET(request) {
         .replace(/password=[^&\s]+/gi, 'password=***')
         .slice(0, 2000)
 
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     const isPrivileged =
       auth?.isAuthenticated && roleCheck(auth.user, ['ADMIN', 'headteacher', 'HEADTEACHER'])
     const canExpose = process.env.NODE_ENV === 'development' || isPrivileged

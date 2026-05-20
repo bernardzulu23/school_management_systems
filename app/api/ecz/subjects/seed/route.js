@@ -10,7 +10,7 @@ const STAFF_ROLES = ['ADMIN', 'headteacher', 'HOD', 'hod', 'TEACHER', 'teacher']
 
 /** Seed ECZ subjects and construct elements for the current school. */
 export async function POST(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, STAFF_ROLES)) {
@@ -31,7 +31,7 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))

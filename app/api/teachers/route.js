@@ -8,7 +8,7 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 
 export const GET = withErrorHandler(async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod'])) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
@@ -35,7 +35,7 @@ export const GET = withErrorHandler(async function GET(request) {
 })
 
 export const PUT = withErrorHandler(async function PUT(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
@@ -105,7 +105,7 @@ export const PUT = withErrorHandler(async function PUT(request) {
 })
 
 export const DELETE = withErrorHandler(async function DELETE(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })

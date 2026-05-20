@@ -7,7 +7,7 @@ import { requireRole } from '@/lib/middleware/requireRole'
 const ALLOWED_ROLES = ['headteacher', 'HOD', 'hod']
 
 export async function GET(request) {
-  const auth = requireRole(request, ALLOWED_ROLES)
+  const auth = await requireRole(request, ALLOWED_ROLES)
   if (!auth.isAuthenticated) return auth.response
   if (auth.denied) return auth.response
 
@@ -35,7 +35,7 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const auth = requireRole(request, ALLOWED_ROLES)
+  const auth = await requireRole(request, ALLOWED_ROLES)
   if (!auth.isAuthenticated) return auth.response
   if (auth.denied) return auth.response
 

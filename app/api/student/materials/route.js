@@ -6,7 +6,7 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 
 export const GET = withErrorHandler(async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['STUDENT', 'student', 'ADMIN', 'headteacher'])) {
@@ -81,7 +81,7 @@ export const GET = withErrorHandler(async function GET(request) {
 })
 
 export const POST = withErrorHandler(async function POST(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['STUDENT', 'student'])) {

@@ -6,7 +6,7 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { parseDateInput } from '@/lib/utils/formHelpers'
 
 export async function PUT(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))

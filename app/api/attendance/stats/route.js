@@ -90,7 +90,7 @@ async function getHodScopedClassIds(schoolId, userId) {
 }
 
 export const GET = withErrorHandler(async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))

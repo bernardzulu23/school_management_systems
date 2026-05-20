@@ -6,7 +6,7 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function GET(request) {
   try {
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
 
     if (!roleCheck(auth.user, ['STUDENT', 'student'])) {

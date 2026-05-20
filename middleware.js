@@ -46,7 +46,8 @@ function secureResponse(body, init, request) {
   return applySecurityHeaders(response, request)
 }
 
-export default function proxy(request) {
+/** Edge middleware (OpenNext Cloudflare requires middleware.js, not proxy.js). */
+export default function middleware(request) {
   try {
     const { pathname } = request.nextUrl
     const method = String(request.method || 'GET').toUpperCase()

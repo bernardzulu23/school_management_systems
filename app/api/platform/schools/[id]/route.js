@@ -9,7 +9,7 @@ import { withSecureApi } from '@/lib/middleware/secureApi'
 
 /** Patch tenant billing flags only — never expose or modify academic data. */
 export const PATCH = withSecureApi(async function PATCH(request, { params }) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const gate = requirePlatformAdmin(auth.user)

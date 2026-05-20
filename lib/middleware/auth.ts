@@ -1,39 +1,61 @@
-import jwt from 'jsonwebtoken'
+import * as jose from 'jose'
+import type { JWTPayload } from 'jose'
 import { secureJson } from '@/lib/security/api'
 
+export interface AppUser extends JWTPayload {
+  id: string
+  userId?: string
+  schoolId: string
+  role: string
+  email: string
+  name?: string
+  subdomain?: string
+}
+
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
-if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET && !process.env.NEXT_PHASE) {
+
+if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
   console.warn('Warning: JWT_SECRET is not set in production environment.')
 }
 
-export function authMiddleware(request) {
+function getSecretKey() {
+  return new TextEncoder().encode(JWT_SECRET)
+}
+
+export async function authMiddleware(request: Request) {
+  const req = request as any
   const token =
-    request.cookies.get('access_token')?.value ||
+    req.cookies?.get?.('access_token')?.value ||
     request.headers.get('Authorization')?.replace('Bearer ', '')
 
   if (!token) {
     return {
-      isAuthenticated: false,
+      isAuthenticated: false as const,
+      user: undefined,
       response: secureJson({ error: 'Unauthorized: No token provided' }, { status: 401 }, request),
     }
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET)
+    const { payload } = await jose.jwtVerify(token, getSecretKey())
+    const user = payload as AppUser
+    return { isAuthenticated: true as const, user }
+  } catch {
     return {
-      isAuthenticated: true,
-      user: decoded,
-    }
-  } catch (error) {
-    return {
-      isAuthenticated: false,
+      isAuthenticated: false as const,
+      user: undefined,
       response: secureJson({ error: 'Unauthorized: Invalid token' }, { status: 401 }, request),
     }
   }
 }
 
-/** Role aliases: schema uses lowercase (headteacher, hod, teacher, student) */
-export const ROLE_ALIASES = {
+export async function getAuthUser(request: Request): Promise<AppUser | null> {
+  const auth = await authMiddleware(request)
+  if (!auth.isAuthenticated) return null
+  return auth.user ?? null
+}
+
+export const ROLE_ALIASES: Record<string, string[]> = {
   ADMIN: [
     'headteacher',
     'admin',
@@ -60,17 +82,17 @@ export const ROLE_GROUPS = {
   ALL_AUTHENTICATED: ['ADMIN', 'HOD', 'TEACHER', 'STUDENT'],
 }
 
-export function normalizeRole(role) {
+export function normalizeRole(role: string): string {
   return String(role || '')
     .trim()
     .toLowerCase()
 }
 
-function normalizeRoleKey(role) {
+function normalizeRoleKey(role: string): string {
   return normalizeRole(role).replace(/[^a-z0-9]+/g, '')
 }
 
-export function roleCheck(user, allowedRoles) {
+export function roleCheck(user: AppUser | undefined, allowedRoles: string[]): boolean {
   if (!user || !user.role) return false
   const role = normalizeRole(user.role)
   const roleKey = normalizeRoleKey(user.role)
@@ -78,14 +100,7 @@ export function roleCheck(user, allowedRoles) {
     const aliases = ROLE_ALIASES[allowed] || [normalizeRole(allowed)]
     const lowerAliases = aliases.map((a) => normalizeRole(a))
     if (lowerAliases.includes(role)) return true
-
     const aliasKeys = aliases.map((a) => normalizeRoleKey(a))
     return aliasKeys.includes(roleKey)
   })
-}
-
-export async function getAuthUser(request) {
-  const auth = authMiddleware(request)
-  if (!auth.isAuthenticated) return null
-  return auth.user || null
 }

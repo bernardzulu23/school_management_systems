@@ -8,7 +8,7 @@ import { getHodTeacherPerformance } from '@/lib/analytics/hodTeacherPerformance'
 export const dynamic = 'force-dynamic'
 
 export const GET = withErrorHandler(async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['HOD', 'hod', 'ADMIN', 'headteacher'])) {

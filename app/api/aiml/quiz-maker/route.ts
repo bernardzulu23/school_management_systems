@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { generateQuiz } from '@/lib/aiml/tools/quiz-maker'
 
-export const runtime = 'nodejs'
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}))

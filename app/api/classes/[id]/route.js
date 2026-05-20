@@ -5,7 +5,7 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export async function GET(request, { params }) {
   try {
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
     if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher'])) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
@@ -32,7 +32,7 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
   try {
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
     if (!roleCheck(auth.user, ['HOD', 'hod', 'ADMIN', 'headteacher'])) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
@@ -78,7 +78,7 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
   try {
-    const auth = authMiddleware(request)
+    const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
     if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })

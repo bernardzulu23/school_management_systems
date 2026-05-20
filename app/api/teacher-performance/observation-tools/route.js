@@ -4,7 +4,7 @@ import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 
 export const GET = withErrorHandler(async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ROLE_GROUPS.SCHOOL_STAFF)) {

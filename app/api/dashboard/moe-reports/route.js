@@ -19,7 +19,7 @@ function toCsv(rows) {
 }
 
 export const GET = withSecureApi(async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {

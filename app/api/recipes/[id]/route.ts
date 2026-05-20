@@ -165,7 +165,7 @@ function validateRecipeAgainstSlots(params: {
 }
 
 export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const auth = authMiddleware(req as any)
+  const auth = await authMiddleware(req as any)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, ['ADMIN']))
     return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 })

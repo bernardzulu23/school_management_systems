@@ -6,7 +6,7 @@ import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 /** GET /api/feedback — List feedback (admin/headteacher only) */
 export async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
@@ -37,7 +37,7 @@ export async function GET(request) {
 
 /** POST /api/feedback — Submit feedback (users only, NOT admin) */
 export async function POST(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
@@ -87,7 +87,7 @@ export async function POST(request) {
 
 /** PATCH /api/feedback — Mark feedback public/private (admin/headteacher only) */
 export async function PATCH(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {

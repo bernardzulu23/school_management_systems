@@ -11,7 +11,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   const notificationId = String(routeParams?.notificationId || '').trim()
   if (!notificationId) throw new ApiError('notificationId is required', 400)
 
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {

@@ -7,7 +7,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 
 // POST — HOD pushes department allocations to the headteacher
 export async function POST(req) {
-  const auth = authMiddleware(req)
+  const auth = await authMiddleware(req)
   if (!auth.isAuthenticated) return auth.response
 
   const user = auth.user

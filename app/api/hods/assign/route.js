@@ -6,7 +6,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export const POST = withErrorHandler(async function POST(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
@@ -70,7 +70,7 @@ export const POST = withErrorHandler(async function POST(request) {
 })
 
 export const DELETE = withErrorHandler(async function DELETE(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const isAdminOrHead = roleCheck(auth.user, ['ADMIN', 'headteacher'])

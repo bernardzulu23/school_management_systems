@@ -1,5 +1,5 @@
-// server.js — optional entrypoint for container hosts (Docker). Prefer Neon + Cloudflare Workers (see docs/doc/NEON_CLOUDFLARE_SETUP.md).
-// Set SKIP_STARTUP_MIGRATE=true if migrations run in CI against Neon DIRECT_URL.
+// server.js — optional entrypoint for container hosts (Docker). Production: Cloudflare Workers (see docs/doc/CLOUDFLARE_DEPLOY.md).
+// Set SKIP_STARTUP_MIGRATE=true if migrations run in CI against DIRECT_URL.
 const path = require('path')
 const { spawn } = require('child_process')
 

@@ -4,7 +4,6 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { calculateGrade } from '@/lib/gradingSystem'
-import { gunzipSync } from 'node:zlib'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import {
   buildTermResultsCompleteSmsMessage,
@@ -12,13 +11,24 @@ import {
   sendAfricasTalkingSms,
 } from '@/lib/sms'
 
-export const runtime = 'nodejs'
+async function gunzipAsync(data) {
+  const ds = new DecompressionStream('gzip')
+  const writer = ds.writable.getWriter()
+  await writer.write(data)
+  await writer.close()
+  const output = []
+  const reader = ds.readable.getReader()
+  let done, value
+  while ((({ done, value } = await reader.read()), !done)) output.push(value)
+  return Buffer.concat(output)
+}
 
 async function readJson(request) {
   const encoding = request.headers.get('content-encoding') || ''
   if (encoding.toLowerCase().includes('gzip')) {
-    const buf = Buffer.from(await request.arrayBuffer())
-    return JSON.parse(gunzipSync(buf).toString('utf-8'))
+    const buf = new Uint8Array(await request.arrayBuffer())
+    const decompressed = await gunzipAsync(buf)
+    return JSON.parse(decompressed.toString('utf-8'))
   }
   return request.json()
 }
@@ -244,7 +254,7 @@ async function evaluateAndNotifyTermResultsComplete({
 }
 
 export const GET = withErrorHandler(async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
@@ -438,7 +448,7 @@ export const GET = withErrorHandler(async function GET(request) {
 })
 
 export const POST = withErrorHandler(async function POST(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const isTeacher = roleCheck(auth.user, ['TEACHER', 'teacher'])
@@ -921,7 +931,7 @@ async function assertMayDeleteResult({
 }
 
 export const DELETE = withErrorHandler(async function DELETE(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const isTeacher = roleCheck(auth.user, ['TEACHER', 'teacher'])

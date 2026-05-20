@@ -8,7 +8,7 @@ import { withSecureApi } from '@/lib/middleware/secureApi'
 const CAN_MANAGE = ['HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
 
 export const PATCH = withSecureApi(async function PATCH(request, { params }) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, CAN_MANAGE)) {
     return NextResponse.json({ error: 'Only HOD or headteacher can approve' }, { status: 403 })
@@ -49,7 +49,7 @@ export const PATCH = withSecureApi(async function PATCH(request, { params }) {
 })
 
 export const DELETE = withSecureApi(async function DELETE(request, { params }) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, CAN_MANAGE)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })

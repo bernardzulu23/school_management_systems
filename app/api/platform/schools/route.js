@@ -29,7 +29,7 @@ const SCHOOL_META_SELECT = {
 
 /** List affiliated, paid schools — metadata and counts only (no school records). */
 export const GET = withSecureApi(async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const gate = requirePlatformAdmin(auth.user)

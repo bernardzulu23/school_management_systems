@@ -7,7 +7,7 @@ import { getTeacherPerformance } from '@/lib/analytics/teacherPerformance'
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
   const routeParams = await params
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ROLE_GROUPS.SCHOOL_STAFF)) {

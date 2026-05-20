@@ -6,7 +6,7 @@ import { sendAfricasTalkingSms, pushSmsLog } from '@/lib/sms'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
 export const POST = withErrorHandler(async function POST(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))

@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 
 export async function POST(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (

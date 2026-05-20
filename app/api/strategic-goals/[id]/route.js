@@ -22,7 +22,7 @@ function clampProgress(value) {
 
 export async function PUT(request, { params }) {
   const routeParams = await params
-  const auth = requireRole(request, ALLOWED_ROLES)
+  const auth = await requireRole(request, ALLOWED_ROLES)
   if (!auth.isAuthenticated) return auth.response
   if (auth.denied) return auth.response
 
@@ -80,7 +80,7 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
   const routeParams = await params
-  const auth = requireRole(request, ALLOWED_ROLES)
+  const auth = await requireRole(request, ALLOWED_ROLES)
   if (!auth.isAuthenticated) return auth.response
   if (auth.denied) return auth.response
 

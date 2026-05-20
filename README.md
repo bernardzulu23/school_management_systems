@@ -559,7 +559,7 @@ npm run start
 
 ## Deployment Notes
 
-Production: **Neon** (PostgreSQL) + **Cloudflare Workers** (OpenNext). See [docs/doc/NEON_CLOUDFLARE_SETUP.md](docs/doc/NEON_CLOUDFLARE_SETUP.md).
+Production: **PostgreSQL** + **Cloudflare Workers** (OpenNext). See [docs/doc/CLOUDFLARE_DEPLOY.md](docs/doc/CLOUDFLARE_DEPLOY.md).
 
 `next.config.js` sets:
 
@@ -569,11 +569,10 @@ Production: **Neon** (PostgreSQL) + **Cloudflare Workers** (OpenNext). See [docs
 Quick deploy:
 
 ```bash
-npm run cf:build
-npm run cf:deploy
+npm run deploy
 ```
 
-Set `DATABASE_URL` (Neon pooled), `DIRECT_URL` (Neon direct), and auth secrets in Wrangler / Cloudflare dashboard.
+Set `DATABASE_URL`, `DIRECT_URL`, and auth secrets via `wrangler secret put` or the Cloudflare dashboard.
 
 ---
 

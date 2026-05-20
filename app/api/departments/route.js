@@ -7,7 +7,7 @@ import { DEPARTMENTS } from '@/lib/constants'
 import { getHodProfile, resolveHodDepartmentIds } from '@/lib/utils/hodDepartmentScope'
 
 export async function GET(request) {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod', 'TEACHER', 'teacher'])) {

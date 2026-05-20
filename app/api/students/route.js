@@ -12,8 +12,6 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { studentSchema, validateRequest, sanitizeOutput } from '@/lib/middleware/inputValidation'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 
-export const runtime = 'nodejs'
-
 const normalizeYearGroup = (yearGroupRaw) => {
   const raw = String(yearGroupRaw || '').trim()
   if (!raw) return ''
@@ -67,7 +65,7 @@ const parseYearGroupSectionFromClassName = (className) => {
 }
 
 export const GET = withErrorHandler(async (request) => {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   try {
@@ -182,7 +180,7 @@ export const GET = withErrorHandler(async (request) => {
 })
 
 export const POST = withErrorHandler(async (request) => {
-  const auth = authMiddleware(request)
+  const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   // Authorization: Only Admin and HOD can create students

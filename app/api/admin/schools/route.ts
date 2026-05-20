@@ -8,7 +8,7 @@ import { toPlatformSchoolSummary } from '@/lib/platform/schoolEligibility'
 // GET all schools (admin only)
 export async function GET(request: NextRequest) {
   try {
-    const auth = authMiddleware(request as any)
+    const auth = await authMiddleware(request as any)
     if (!auth.isAuthenticated) return auth.response as any
     const gate = requirePlatformAdmin(auth.user)
     if (!gate.ok) {
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
 // POST - Create new school
 export async function POST(request: NextRequest) {
   try {
-    const auth = authMiddleware(request as any)
+    const auth = await authMiddleware(request as any)
     if (!auth.isAuthenticated) return auth.response as any
     const gate = requirePlatformAdmin(auth.user)
     if (!gate.ok) {
