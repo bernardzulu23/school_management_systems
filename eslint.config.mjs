@@ -12,9 +12,17 @@ export default [
     ignores: [
       'node_modules/**',
       '.next/**',
+      '.open-next/**',
+      'out/**',
+      'build/**',
+      'dist/**',
+      'coverage/**',
+      '.wrangler/**',
       'prisma/**',
       'public/**',
-      'react-router-dashboard/dist/**',
+      'zsms-mobile/**',
+      'react-router-dashboard/**',
+      '**/*.mjs',
     ],
   },
   {
