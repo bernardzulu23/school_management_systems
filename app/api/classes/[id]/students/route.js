@@ -11,7 +11,7 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const { id } = params
+    const { id } = await params
     // In this route structure, the 'id' parameter corresponds to the class name
     // when accessing /api/classes/[className]/students
     const className = id

@@ -17,7 +17,7 @@ export async function POST(request, { params }) {
     return NextResponse.json({ error: 'School context required' }, { status: 400 })
   }
 
-  const { id: studentId } = params
+  const { id: studentId } = await params
   const body = await request.json().catch(() => ({}))
   const { embedding } = body
 

@@ -153,10 +153,11 @@ npm run preview
 
 ## Troubleshooting
 
-| Issue                              | Fix                                                                            |
-| ---------------------------------- | ------------------------------------------------------------------------------ |
-| Prisma migrate fails               | Use `DIRECT_URL` (non-pooled) for migrations; pooled `DATABASE_URL` at runtime |
-| Build fails on CF                  | Run `npm run preview` locally first; fix TypeScript errors                     |
-| npm SSL on Windows                 | See project `.npmrc` / use `legacy-peer-deps`                                  |
-| Wrangler OAuth SSL error           | Use `CLOUDFLARE_API_TOKEN` (see §4) or deploy via Cloudflare Git integration   |
-| `Node.js middleware not supported` | Use `middleware.js`, not `proxy.js`                                            |
+| Issue                                                  | Fix                                                                                                                                                                                                 |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prisma migrate fails                                   | Use `DIRECT_URL` (non-pooled) for migrations; pooled `DATABASE_URL` at runtime                                                                                                                      |
+| Build fails on CF                                      | Run `npm run preview` locally first; fix TypeScript errors                                                                                                                                          |
+| npm SSL on Windows                                     | See project `.npmrc` / use `legacy-peer-deps`                                                                                                                                                       |
+| Wrangler OAuth SSL error                               | Use `CLOUDFLARE_API_TOKEN` (see §4) or deploy via Cloudflare Git integration                                                                                                                        |
+| `Node.js middleware not supported`                     | Use `middleware.js`, not `proxy.js`                                                                                                                                                                 |
+| `Callback returned incorrect type; expected 'Promise'` | Await Next.js 15+ dynamic APIs: `await params`, `await cookies()`, `await headers()`, `await searchParams` in server components and route handlers (sync access works locally but fails on Workers) |

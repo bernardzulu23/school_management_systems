@@ -11,7 +11,7 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const { id } = params
+    const { id } = await params
 
     const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
@@ -38,7 +38,7 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const { id } = params
+    const { id } = await params
     const data = await request.json()
 
     const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
@@ -84,7 +84,7 @@ export async function DELETE(request, { params }) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const { id } = params
+    const { id } = await params
 
     const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
