@@ -119,6 +119,26 @@ npx opennextjs-cloudflare build
 
 Or connect the GitHub repo in **Workers & Pages** with build command `opennextjs-cloudflare build` and deploy via Wrangler / Workers CI (avoids local SSL issues).
 
+### GitHub Actions (Linux build — recommended on Windows dev machines)
+
+Workflow: `.github/workflows/deploy.yml` — runs on push to `main`.
+
+Add these **repository secrets** (Settings → Secrets and variables → Actions):
+
+| Secret                  | Required | Notes                                         |
+| ----------------------- | -------- | --------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`  | Yes      | API token with **Workers Scripts Edit**       |
+| `CLOUDFLARE_ACCOUNT_ID` | Yes\*    | Account ID from Cloudflare dashboard URL      |
+| `DATABASE_URL`          | Yes      | Neon pooled URL (for `prisma generate` in CI) |
+
+\* Wrangler may infer the account from the token; set `CLOUDFLARE_ACCOUNT_ID` if deploy fails with “account” errors.
+
+Runtime secrets (`JWT_SECRET`, `DIRECT_URL`, etc.) are **not** in the workflow — set once on the Worker:
+
+```bash
+npx wrangler secret put JWT_SECRET
+```
+
 ---
 
 ## 6. Local OpenNext preview
