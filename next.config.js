@@ -66,7 +66,7 @@ const nextConfig = {
     return config
   },
 
-  // Security headers (also applied in middleware.js); shared source in lib/security/headers.js
+  // Security headers (also applied in proxy.js); shared source in lib/security/headers.js
   async headers() {
     const { nextConfigSecurityHeaders } = require('./lib/security/headers.js')
     const securityHeaders = nextConfigSecurityHeaders()

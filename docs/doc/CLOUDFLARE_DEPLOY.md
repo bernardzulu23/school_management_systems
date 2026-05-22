@@ -49,13 +49,9 @@ npm install
 
 ---
 
-## 3. Middleware (Next.js 16 + OpenNext)
+## 3. Middleware / proxy (historical)
 
-Use **`middleware.js`** at the project root (not `proxy.js`). OpenNext Cloudflare bundles Edge middleware; Node.js `proxy.js` fails with:
-
-`ERROR Node.js middleware is not currently supported`
-
-Next.js 16 may warn that `middleware` is deprecated in favor of `proxy` — keep `middleware.js` until OpenNext adds full `proxy.js` support.
+This project now uses **`proxy.js`** on Vercel (Next.js 16). The old Cloudflare + `middleware.js` guidance below is obsolete.
 
 ---
 

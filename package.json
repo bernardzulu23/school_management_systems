@@ -32,7 +32,7 @@
     "build": "node scripts/vercel-build.js",
     "start:with-migrate": "npm run prisma:migrate:deploy:soft && next start",
     "start": "next start",
-    "lint": "node ./node_modules/eslint/bin/eslint.js app components lib middleware.js",
+    "lint": "node ./node_modules/eslint/bin/eslint.js app components lib proxy.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "format": "prettier --write .",

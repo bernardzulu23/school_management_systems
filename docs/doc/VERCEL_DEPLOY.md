@@ -115,12 +115,18 @@ Mobile app (`zsms-mobile`): set `EXPO_PUBLIC_API_BASE_URL` to your Vercel URL or
 
 **Git push (recommended):** connect repo in Vercel; every push to `main` deploys production.
 
-**CLI:**
+Confirm the deployment commit is **not** an old hash (e.g. `2f68430`). In Vercel → Deployments, the latest build should match `git log -1` on `main`.
+
+**CLI (optional):**
 
 ```bash
 npx vercel          # preview
 npx vercel --prod   # production
 ```
+
+If the CLI fails on Windows with `unable to verify the first certificate`, use **Git-connected auto-deploy** instead, or fix your machine’s TLS/CA store (corporate antivirus often causes this). Do not rely on disabling TLS verification in production scripts.
+
+**Next.js 16:** use root `proxy.js` (not `middleware.js`). The build runs `next build --webpack` via `scripts/vercel-build.js`.
 
 ---
 
