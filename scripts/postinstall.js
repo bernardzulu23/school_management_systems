@@ -5,4 +5,4 @@ if (!process.env.DIRECT_URL && process.env.DATABASE_URL) {
   process.env.DIRECT_URL = process.env.DATABASE_URL
 }
 
-execSync('prisma generate', { stdio: 'inherit' })
+execSync('npx prisma generate', { stdio: 'inherit' })
