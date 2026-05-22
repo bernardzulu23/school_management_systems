@@ -777,5 +777,391 @@ AfricasTalking supports Zambia for both Airtel and SMS termination, and Airtel i
 
 ---
 
+## Section 13: Core Product Integration — Web + `@zsms-mobile` + Headteacher Dashboard
+
+This section maps the **product requirements** (mobile attendance with face recognition, auto-absent, parent SMS, chronic reporting) onto the **same PostgreSQL database** as the main Next.js school management system. It is the implementation blueprint; Sections 1–12 above add Zambia-specific context on top.
+
+**Companion spec:** [`mobile-app.md`](./mobile-app.md) (auth, API routes, offline queue).
+
+### 13.1 Single source of truth (multi-tenant by subdomain)
+
+| Requirement                     | How it works                                                                                                                                                 |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Same database                   | `@zsms-mobile` calls Next.js APIs only; all writes go to `DATABASE_URL` via Prisma (`lib/prisma.ts`). No separate mobile DB.                                 |
+| Same school                     | Teacher enters **subdomain** at login → `POST /api/mobile/auth/login` resolves `schoolId` → JWT carries `schoolId`. Header `x-school-subdomain` is a backup. |
+| Same students                   | Roster from `GET /api/mobile/class-roster` uses `Student`, `Class`, `PupilSubjectEnrollment` — same records as the web app.                                  |
+| Same teachers / HODs / subjects | `GET /api/mobile/session-context` returns **teaching assignments** (class + subject) from the same allocation tables the web timetable uses.                 |
+| Headteacher visibility          | Web dashboard reads the same `Attendance` / session tables the mobile app writes (see §16).                                                                  |
+
+```mermaid
+sequenceDiagram
+  participant T as Teacher phone (zsms-mobile)
+  participant API as Next.js API (subdomain school)
+  participant DB as PostgreSQL
+  participant HT as Headteacher dashboard (web)
+  participant P as Parent phone (SMS)
+
+  T->>API: Login + subdomain
+  API->>DB: Validate user, schoolId, assignments
+  T->>API: Start lesson session (class + subject + period)
+  T->>T: Students scan face → PRESENT / LATE
+  T->>API: POST marks (online or queued)
+  API->>DB: Upsert per-lesson attendance
+  API->>P: SMS present (subject + time)
+  T->>API: End session
+  API->>DB: Mark unscanned students ABSENT
+  API->>P: SMS absent (optional policy)
+  API->>HT: Feed + chronic job updates dashboard
+```
+
+### 13.2 Critical schema gap (must fix before per-period attendance)
+
+**Today:** `Attendance` has `@@unique([studentId, date])` — **one row per learner per calendar day**, no `subjectId`, `period`, or `teacherId`.
+
+**Target:** Per-**lesson session** marks so the Headteacher sees “who was in Mathematics Period 2” and chronic rules count **misses per subject per term**.
+
+**Migration direction:**
+
+```prisma
+model AttendanceSession {
+  id            String   @id @default(cuid())
+  schoolId      String
+  teacherId     String   // User.id of teacher running session
+  classId       String
+  subjectId     String
+  term          Int
+  academicYear  String
+  periodLabel   String?  // e.g. "Period 2", slot from timetable
+  shift         SchoolShift @default(SINGLE)
+  startedAt     DateTime @default(now())
+  endedAt       DateTime?
+  status        SessionStatus @default(OPEN) // OPEN | CLOSED
+  verificationMethod VerificationMethod @default(FACE)
+
+  school   School  @relation(fields: [schoolId], references: [id])
+  marks    AttendanceMark[]
+
+  @@index([schoolId, startedAt])
+  @@index([teacherId, status])
+}
+
+model AttendanceMark {
+  id          String   @id @default(cuid())
+  sessionId   String
+  studentId   String
+  schoolId    String
+  status      AttendanceStatus // PRESENT | LATE | ABSENT | EXCUSED
+  markedAt    DateTime @default(now())
+  method      VerificationMethod // FACE | FINGERPRINT | MANUAL | TWIN_OVERRIDE
+  faceMatchScore Float?
+  remarks     String?
+
+  session AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  student Student @relation(fields: [studentId], references: [id])
+
+  @@unique([sessionId, studentId])
+  @@index([schoolId, studentId])
+}
+
+enum SessionStatus { OPEN CLOSED }
+enum AttendanceStatus { PRESENT LATE ABSENT EXCUSED }
+enum VerificationMethod { FACE FINGERPRINT MANUAL TWIN_OVERRIDE COMMUNITY_TAP }
+```
+
+Keep the legacy `Attendance` model temporarily for daily registers / DEBO exports, or migrate reports to aggregate from `AttendanceMark`.
+
+### 13.3 Teacher mobile flow (end-to-end)
+
+| Step | Actor       | Behaviour                                                                                                              |
+| ---- | ----------- | ---------------------------------------------------------------------------------------------------------------------- |
+| 1    | Teacher     | Opens `@zsms-mobile`, selects school subdomain, logs in.                                                               |
+| 2    | Teacher     | Picks **assigned class + subject** (only their allocations from `session-context`).                                    |
+| 3    | System      | Loads roster: learners enrolled in that subject for that class (`class-roster` + `includeFaceData=true`).              |
+| 4    | Teacher     | Starts **session** → `POST /api/mobile/attendance/sessions` → `OPEN`.                                                  |
+| 5    | Learners    | Each pupil scans face on teacher’s phone; app compares embedding to `Student.faceEmbedding` (on-device ML Kit).        |
+| 6    | System      | Match → `PRESENT`; after grace window → `LATE`; store `faceMatchScore`.                                                |
+| 7    | Twins       | If `Student.twinGroupId` set: first twin present blocks second until **fingerprint** (or PIN) confirms identity (§15). |
+| 8    | Teacher     | Taps **End session** → server marks all roster pupils without a mark as `ABSENT` (§14).                                |
+| 9    | API         | Persists marks, closes session, triggers parent SMS (present already sent on scan; absent on close if policy says so). |
+| 10   | Headteacher | Web dashboard shows session summary and chronic alerts (§16).                                                          |
+
+**Offline:** Queue session + marks in AsyncStorage; flush via `POST /api/mobile/sync` (extend payload to include `sessions` + `marks`, not only legacy daily records).
+
+### 13.4 API surface to add (Next.js)
+
+| Method  | Route                                           | Purpose                                                |
+| ------- | ----------------------------------------------- | ------------------------------------------------------ |
+| `POST`  | `/api/mobile/attendance/sessions`               | Open session (classId, subjectId, period, shift)       |
+| `PATCH` | `/api/mobile/attendance/sessions/[id]/close`    | End session → auto-absent + SMS batch                  |
+| `POST`  | `/api/mobile/attendance/sessions/[id]/marks`    | Single mark (face verify result)                       |
+| `POST`  | `/api/mobile/attendance/verify-face`            | Optional server-side re-verify (high-security schools) |
+| `GET`   | `/api/dashboard/headteacher/attendance/live`    | Today’s sessions, rates by period/class                |
+| `GET`   | `/api/dashboard/headteacher/attendance/chronic` | Pupils with ≥5 subject absences in term                |
+| `GET`   | `/api/dashboard/teacher/attendance/chronic`     | Same filter scoped to logged-in teacher’s subjects     |
+
+Existing routes to **keep using**:
+
+- `POST /api/students/[id]/face-enrollment` — admin/headteacher enrolls embedding at registration.
+- `GET /api/mobile/class-roster?includeFaceData=true` — mobile downloads embeddings once per session (cache encrypted locally).
+- `POST /api/attendance` — legacy daily register (web); deprecate for lesson flow once session model ships.
+
+**SMS:** Reuse `lib/sms.js` (`buildAttendanceSmsMessage`, AfricasTalking). Call from **session mark** and **session close** handlers. Extend `POST /api/mobile/sync` to invoke the same SMS helpers (today SMS only runs on web `POST /api/attendance`).
+
+Parent phone fields (already on `Student`): `parent_mother_contact`, `parent_father_contact`, `guardian_contact` — normalize with existing `normalizePhoneNumbers`.
+
+---
+
+## Section 14: Session lifecycle — Present, Late, Auto-Absent
+
+### 14.1 Timing rules
+
+```typescript
+interface SessionConfig {
+  lateAfterMinutes: number // e.g. 10 after session start
+  presentSmsOnScan: boolean // default true
+  absentSmsOnClose: boolean // default true for premium schools
+}
+
+async function closeAttendanceSession(sessionId: string) {
+  const session = await prisma.attendanceSession.findUnique({
+    where: { id: sessionId },
+    include: { marks: true },
+  })
+  const roster = await getSubjectRoster(session.classId, session.subjectId, session.schoolId)
+  const markedIds = new Set(session.marks.map((m) => m.studentId))
+
+  const absentPupils = roster.filter((s) => !markedIds.has(s.id))
+  await prisma.$transaction([
+    ...absentPupils.map((s) =>
+      prisma.attendanceMark.create({
+        data: {
+          sessionId,
+          studentId: s.id,
+          schoolId: session.schoolId,
+          status: 'ABSENT',
+          method: 'MANUAL', // system-closed
+        },
+      })
+    ),
+    prisma.attendanceSession.update({
+      where: { id: sessionId },
+      data: { status: 'CLOSED', endedAt: new Date() },
+    }),
+  ])
+
+  await notifyHeadteacherSessionClosed(session)
+  await sendAbsentSmsBatch(absentPupils, session)
+}
+```
+
+### 14.2 `@zsms-mobile` behaviour changes
+
+| Current behaviour                                                     | Required behaviour                                                    |
+| --------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Manual chips only; no camera                                          | **Face scan screen** after session start                              |
+| `attendanceStore` defaults missing pupils to **present** on save      | Only explicit scans = present/late; **end session** = absent          |
+| `loadExistingAttendance` reads wrong JSON shape (`records` vs `data`) | Fix parser; load marks for **sessionId** not only daily date          |
+| No `src/storage/secure.ts`                                            | Add expo-secure-store for tokens + cached embeddings                  |
+| Offline queue sends daily records only                                | Queue `session` + `marks`; sync endpoint merges into `AttendanceMark` |
+
+### 14.3 Present / late SMS (parent notification)
+
+Template (English baseline; plug in §4 languages via `StudentGuardian.preferredLanguage` when that model exists):
+
+```
+ZSMS: {studentName} is in class. Subject: {subjectName} at {time}. Reply HELP to contact school.
+```
+
+Send on **successful face verify** (`PRESENT` or `LATE`), gated by school plan (same check as `app/api/attendance/route.js` today).
+
+---
+
+## Section 15: Face recognition and identical-twin safeguards
+
+### 15.1 Enrollment (web / admin)
+
+1. Headteacher or admin registers pupil → capture **3–5 face angles** → average embedding → `Student.faceEmbedding` (JSON float array).
+2. If registrar flags **identical twin**: set `twinGroupId` (shared UUID on both siblings) and `requiresSecondaryAuth: true`.
+
+```prisma
+// Extend Student
+twinGroupId              String?
+requiresSecondaryAuth    Boolean @default(false)
+secondaryAuthMethod      SecondaryAuthMethod? // FINGERPRINT | PIN | NONE
+fingerprintTemplateRef   String?  // opaque id in secure vault, not raw image in DB
+pinHash                  String?  // bcrypt of parent-set PIN for twin disambiguation
+
+enum SecondaryAuthMethod { FINGERPRINT PIN NONE }
+```
+
+### 15.2 Lesson-time logic
+
+```typescript
+async function markAttendanceByFace(
+  sessionId: string,
+  scannedStudentId: string,
+  matchScore: number,
+  secondaryAuth?: { method: 'FINGERPRINT' | 'PIN'; verified: boolean }
+) {
+  const student = await prisma.student.findUnique({ where: { id: scannedStudentId } })
+  if (matchScore < FACE_THRESHOLD) throw new Error('Face not recognised')
+
+  if (student.twinGroupId) {
+    const twinPresent = await prisma.attendanceMark.findFirst({
+      where: {
+        sessionId,
+        student: { twinGroupId: student.twinGroupId },
+        status: { in: ['PRESENT', 'LATE'] },
+        studentId: { not: scannedStudentId },
+      },
+    })
+    if (twinPresent && !secondaryAuth?.verified) {
+      // Block: mark scanned twin ABSENT until fingerprint/PIN proves identity
+      throw new Error('TWIN_SECONDARY_AUTH_REQUIRED')
+    }
+  }
+
+  const status = isLate(sessionId) ? 'LATE' : 'PRESENT'
+  await createMark({
+    sessionId,
+    studentId: scannedStudentId,
+    status,
+    method: 'FACE',
+    faceMatchScore: matchScore,
+  })
+  await sendPresentSms(student, session)
+}
+```
+
+**Product rule:** When one twin is marked present without secondary auth, the **other twin in the same session must remain absent** until they complete their own scan + fingerprint/PIN.
+
+### 15.3 Mobile implementation notes
+
+- Use **on-device** matching (ML Kit / Expo) so face data does not leave the phone except the enrolled template already stored server-side.
+- Fingerprint: `expo-local-authentication` or dedicated USB scanner schools provide — store only template reference server-side.
+- Community schools (`schoolType = COMMUNITY`): skip face; use §7 manual tap mode.
+
+---
+
+## Section 16: Headteacher dashboard — live feed and chronic (5+ misses)
+
+### 16.1 Live attendance panel (web)
+
+**Route:** `GET /api/dashboard/headteacher/attendance/live`
+
+Returns for **today**:
+
+- Sessions grouped by class / subject / period / teacher name
+- Counts: present, late, absent, still open
+- Last 20 marks (student, status, time) for activity feed
+
+**UI placement:** New card on `app/dashboard/headteacher/page.js` (alongside existing aggregate rate from `app/api/dashboard/headteacher/route.js`).
+
+```typescript
+// Example response shape
+{
+  date: '2026-05-21',
+  sessions: [
+    {
+      sessionId: '...',
+      className: 'Form 3A',
+      subjectName: 'Mathematics',
+      teacherName: 'Mr Banda',
+      status: 'CLOSED',
+      present: 42,
+      late: 3,
+      absent: 5,
+      startedAt: '2026-05-21T08:05:00Z',
+      endedAt: '2026-05-21T08:55:00Z',
+    },
+  ],
+  schoolWideRate: 0.91,
+}
+```
+
+### 16.2 Chronic absenteeism — more than 5 misses per subject per term
+
+**Rule:** Count `AttendanceMark` where `status = ABSENT` for `(studentId, subjectId, term, academicYear)`. Threshold default **5** (ECZ cohorts: use §9 Panel C threshold 4).
+
+**Notify:**
+
+| Audience        | Channel                                       |
+| --------------- | --------------------------------------------- |
+| Headteacher     | Dashboard panel + optional email              |
+| Subject teacher | Dashboard banner on teacher home              |
+| Parents         | SMS `chronic` template (§4) when count hits 5 |
+
+**Route:** `GET /api/dashboard/headteacher/attendance/chronic?term=1&year=2025/2026`
+
+```typescript
+const chronic = await prisma.attendanceMark.groupBy({
+  by: ['studentId'],
+  where: {
+    schoolId,
+    status: 'ABSENT',
+    session: { subjectId, term, academicYear },
+  },
+  _count: { _all: true },
+  having: { _count: { _all: { gte: 5 } } },
+})
+```
+
+Include: student name, class, subject, absence count, safeguarding flag (§10), seasonal tag (§1.3).
+
+### 16.3 Teacher view
+
+Same query filtered by `session.teacherId = currentUser.id` so each teacher sees **their** pupils crossing the threshold.
+
+---
+
+## Section 17: Implementation roadmap
+
+| Phase                      | Deliverable                                                                            | Owner            | Depends on |
+| -------------------------- | -------------------------------------------------------------------------------------- | ---------------- | ---------- |
+| **0 — Unblock mobile**     | Add `zsms-mobile/src/storage/secure.ts`; fix `loadExistingAttendance` response parsing | Mobile           | —          |
+| **1 — Schema**             | `AttendanceSession`, `AttendanceMark`, twin fields on `Student`; migration             | Backend          | —          |
+| **2 — Session API**        | Open / mark / close session routes; auto-absent on close                               | Backend          | Phase 1    |
+| **3 — Mobile session UI**  | Start session → roster → face scan → end session                                       | Mobile           | Phase 0, 2 |
+| **4 — SMS on mobile path** | Present on scan + absent on close via shared `lib/sms.js`; sync route sends SMS        | Backend          | Phase 2    |
+| **5 — Headteacher live**   | Live feed API + dashboard card                                                         | Web              | Phase 2    |
+| **6 — Chronic reports**    | 5+ miss aggregation + HT/teacher panels + chronic SMS                                  | Backend + Web    | Phase 1    |
+| **7 — Twin + fingerprint** | `twinGroupId`, secondary auth flow on mobile                                           | Mobile + Backend | Phase 3    |
+| **8 — Zambia extras**      | Term calendar, shift, DEBO export, USSD (§1–12)                                        | Backend          | Phase 5–6  |
+
+### 17.1 What already exists (do not rebuild)
+
+| Area                        | Location                                                       |
+| --------------------------- | -------------------------------------------------------------- |
+| Mobile JWT auth + subdomain | `app/api/mobile/auth/login`, `zsms-mobile` auth screens        |
+| Teaching assignments        | `app/api/mobile/session-context`                               |
+| Class roster                | `app/api/mobile/class-roster`                                  |
+| Face embedding storage      | `Student.faceEmbedding`, `POST .../face-enrollment`            |
+| Parent SMS (web POST)       | `app/api/attendance/route.js`, `lib/sms.js`                    |
+| Headteacher aggregate rate  | `app/api/dashboard/headteacher/route.js`                       |
+| Offline queue skeleton      | `zsms-mobile/src/store/offlineQueue.ts`, `app/api/mobile/sync` |
+
+### 17.2 Android / iOS
+
+`@zsms-mobile` is **Expo** (React Native) — one codebase builds **Android and iOS**. No separate native apps required; face module uses Expo-compatible native modules (ML Kit / camera permissions in `app.json`).
+
+---
+
+## Section 18: Requirement traceability matrix
+
+| User requirement (Gemini / product)        | Section | Status in codebase                        |
+| ------------------------------------------ | ------- | ----------------------------------------- |
+| Mobile + web share same DB                 | §13.1   | **Done** (API architecture)               |
+| Subdomain → same school data               | §13.1   | **Done**                                  |
+| Teacher sees assigned class/subject roster | §13.3   | **Done** (manual roster)                  |
+| Face recognition present/late              | §14–15  | **Partial** (enrollment only; no scan UI) |
+| Auto-absent when session ends              | §14     | **Not built**                             |
+| Headteacher sees period attendance         | §16.1   | **Not built** (daily rate only)           |
+| 5+ misses per subject → HT + teacher       | §16.2   | **Not built**                             |
+| Identical twins need fingerprint/PIN       | §15     | **Not built**                             |
+| Parent SMS on present in subject           | §14.3   | **Partial** (web daily POST only)         |
+| Zambia calendar, DEBO, USSD, etc.          | §1–12   | **Documented**; mostly **not in schema**  |
+
+---
+
 _Document prepared by: ZSMS Architecture Team, Bluepeack Technologies, Lusaka, Zambia_
-_Last updated: May 2025 | For ZSMS v2.x — Mobile Attendance Module_
+_Last updated: May 2026 | For ZSMS v2.x — Mobile Attendance Module (Web + zsms-mobile integration)_

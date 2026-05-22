@@ -1,3 +1,0 @@
-NEXTJS_ENV=development
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/zsms?schema=public
-DIRECT_URL=postgresql://postgres:postgres@localhost:5432/zsms?schema=public

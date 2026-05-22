@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "installCommand": "npm ci --ignore-scripts",
+  "regions": ["fra1"],
+  "build": {
+    "env": {
+      "HUSKY": "0",
+      "NEXT_TELEMETRY_DISABLED": "1"
+    }
+  }
+}

@@ -1,4 +1,4 @@
-// server.js — optional entrypoint for container hosts (Docker). Production: Cloudflare Workers (see docs/doc/CLOUDFLARE_DEPLOY.md).
+// server.js — optional entrypoint for Docker/local container hosts. Production: Vercel (see docs/doc/VERCEL_DEPLOY.md).
 // Set SKIP_STARTUP_MIGRATE=true if migrations run in CI against DIRECT_URL.
 const path = require('path')
 const { spawn } = require('child_process')

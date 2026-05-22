@@ -113,8 +113,8 @@ This project aligns with multiple RootLab focus areas:
 
 ## Deployment
 
-### Cloudflare Workers (Recommended)
+### Vercel + Neon (Recommended)
 
-This project deploys to **Cloudflare Workers** via OpenNext. PostgreSQL can be local Docker or any hosted provider.
+This project deploys to **Vercel** with **Neon** PostgreSQL.
 
-See: [Cloudflare deployment guide](CLOUDFLARE_DEPLOY.md)
+See: [Vercel deployment guide](VERCEL_DEPLOY.md)

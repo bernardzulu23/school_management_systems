@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Deployment configuration
-  output: 'standalone',
+  // Keep dev-only formatters out of the server bundle if a dependency imports them
+  serverExternalPackages: ['prettier'],
 
   experimental: {
     serverActions: {
@@ -9,12 +9,9 @@ const nextConfig = {
     },
   },
 
-  // Skip heavy checks during CI/Cloudflare builds; run `npm run lint` and `tsc` locally.
+  // Skip typecheck during Vercel builds; run `npm run lint` and `tsc` locally.
   typescript: {
     ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
 
   images: {
@@ -29,11 +26,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**.pages.dev',
+        hostname: '**.vercel.app',
       },
       {
         protocol: 'https',
-        hostname: '**.workers.dev',
+        hostname: '**.bluepeacktechnologies.com',
       },
     ],
     formats: ['image/webp', 'image/avif'],
@@ -45,7 +42,7 @@ const nextConfig = {
     NEXT_PUBLIC_APP_URL:
       process.env.NEXT_PUBLIC_APP_URL ||
       process.env.NEXT_PUBLIC_APP_ORIGIN ||
-      (process.env.CF_PAGES_URL ? `https://${process.env.CF_PAGES_URL}` : null) ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
       'http://localhost:3000',
   },
 
@@ -57,10 +54,7 @@ const nextConfig = {
   poweredByHeader: false,
   generateEtags: true,
 
-  // Fix Turbopack and webpack conflict
-  turbopack: {},
-
-  // Fix ES Module and webpack issues
+  // Fix ES Module and webpack issues (production build uses --webpack on Vercel)
   webpack: (config) => {
     config.externals = [
       ...(config.externals || []),
@@ -69,31 +63,12 @@ const nextConfig = {
       'bufferutil',
       'utf-8-validate',
     ]
-
-    // Split vendor bundles for better caching and smaller initial load
-    config.optimization.splitChunks = {
-      chunks: 'all',
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          priority: 10,
-        },
-        common: {
-          name: 'common',
-          minChunks: 2,
-          priority: 5,
-          reuseExistingChunk: true,
-        },
-      },
-    }
-
     return config
   },
 
   // Security headers (also applied in middleware.js); shared source in lib/security/headers.js
   async headers() {
-    const { nextConfigSecurityHeaders } = await import('./lib/security/headers.js')
+    const { nextConfigSecurityHeaders } = require('./lib/security/headers.js')
     const securityHeaders = nextConfigSecurityHeaders()
 
     return [
@@ -123,10 +98,3 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
-
-try {
-  const { initOpenNextCloudflareForDev } = require('@opennextjs/cloudflare')
-  initOpenNextCloudflareForDev()
-} catch {
-  // @opennextjs/cloudflare not installed yet — run npm install
-}

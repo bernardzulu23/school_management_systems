@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare Workers
+name: Deploy (Vercel + Neon)
 
 on:
   push:
@@ -6,11 +6,12 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: cloudflare-deploy-${{ github.ref }}
+  group: vercel-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  migrate:
+    name: Prisma migrate (Neon)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,10 +26,47 @@ jobs:
         env:
           HUSKY: '0'
 
-      - name: Deploy to Cloudflare
-        run: npm run deploy
+      - name: Prisma migrate deploy
+        run: npm run prisma:migrate:deploy
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # Used by `prisma generate` during build (no DB connection required)
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+
+  build:
+    name: Verify production build
+    runs-on: ubuntu-latest
+    needs: migrate
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+        env:
+          HUSKY: '0'
+
+      - name: Build
+        run: npm run build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+
+  # Optional: uncomment after adding VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
+  # vercel:
+  #   name: Deploy to Vercel
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: amondnet/vercel-action@v25
+  #       with:
+  #         vercel-token: ${{ secrets.VERCEL_TOKEN }}
+  #         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+  #         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+  #         vercel-args: '--prod'

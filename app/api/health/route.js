@@ -4,7 +4,7 @@ import { withSecureApi } from '@/lib/middleware/secureApi'
 export const dynamic = 'force-dynamic'
 
 /**
- * Liveness: respond immediately so load balancers (Cloudflare, etc.) do not time out
+ * Liveness: respond immediately so load balancers (Vercel, etc.) do not time out
  * while Prisma/DB warms up. Use GET /api/health?db=1 for a readiness/DB probe.
  */
 export const GET = withSecureApi(async function GET(request) {

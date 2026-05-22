@@ -559,20 +559,17 @@ npm run start
 
 ## Deployment Notes
 
-Production: **PostgreSQL** + **Cloudflare Workers** (OpenNext). See [docs/doc/CLOUDFLARE_DEPLOY.md](docs/doc/CLOUDFLARE_DEPLOY.md).
+Production: **Neon PostgreSQL** + **Vercel**. See [docs/doc/VERCEL_DEPLOY.md](docs/doc/VERCEL_DEPLOY.md).
 
-`next.config.js` sets:
-
-- `output: 'standalone'` (Docker fallback; Cloudflare uses OpenNext build)
-- global security headers
-
-Quick deploy:
+- Runtime DB: pooled `DATABASE_URL` via `@prisma/adapter-neon` (`lib/prisma.ts`)
+- Migrations: `DIRECT_URL` (Neon direct / non-pooler host)
+- Connect the GitHub repo in Vercel, or run `npx vercel --prod`
+- Set secrets in Vercel **Environment Variables** (or Neon ↔ Vercel integration)
 
 ```bash
-npm run deploy
+npm run build
+npm run prisma:migrate:deploy
 ```
-
-Set `DATABASE_URL`, `DIRECT_URL`, and auth secrets via `wrangler secret put` or the Cloudflare dashboard.
 
 ---
 

@@ -7,7 +7,8 @@
     "education",
     "school-management",
     "pwa",
-    "cloudflare",
+    "vercel",
+    "neon",
     "zambia",
     "rural-schools",
     "offline-first"
@@ -27,17 +28,15 @@
     "prisma:migrate:deploy": "node -e \"const {execSync}=require('child_process');const pick=(...keys)=>keys.map((k)=>process.env[k]).find((v)=>typeof v==='string'&&v.trim().length>0);const dbUrl=pick('DATABASE_URL','DATABASE_PUBLIC_URL','DIRECT_URL','POSTGRES_PRISMA_URL','POSTGRES_URL_NON_POOLING','POSTGRES_URL');if(!dbUrl){console.log('Skipping prisma migrate deploy: no database URL in environment');process.exit(0);}if(!process.env.DATABASE_URL)process.env.DATABASE_URL=dbUrl;execSync('prisma migrate deploy',{stdio:'inherit'});\"",
     "prisma:schema:deploy": "node -e \"const {execSync}=require('child_process');const pick=(...keys)=>keys.map((k)=>process.env[k]).find((v)=>typeof v==='string'&&v.trim().length>0);const dbUrl=pick('DATABASE_URL','DATABASE_PUBLIC_URL','DIRECT_URL','POSTGRES_PRISMA_URL','POSTGRES_URL_NON_POOLING','POSTGRES_URL');if(!dbUrl){console.log('Skipping schema deploy: no database URL in environment');process.exit(0);}if(!process.env.DATABASE_URL)process.env.DATABASE_URL=dbUrl;let out='';try{out=execSync('prisma migrate deploy',{stdio:['inherit','pipe','pipe']}).toString();if(out.trim())console.log(out);}catch(e){const msg=((e&&e.stdout&&e.stdout.toString())||'')+((e&&e.stderr&&e.stderr.toString())||'');if(/No migration found in prisma\\/migrations/i.test(msg)){console.warn('No migrations found. Falling back to prisma db push.');execSync('prisma db push --skip-generate',{stdio:'inherit'});}else{throw e;}}if(/No migration found in prisma\\/migrations/i.test(out)){console.warn('No migrations found. Falling back to prisma db push.');execSync('prisma db push --skip-generate',{stdio:'inherit'});}\"",
     "prisma:migrate:deploy:soft": "node -e \"const {execSync}=require('child_process');try{execSync('npm run prisma:migrate:deploy',{stdio:'inherit'});}catch(e){console.warn('Startup migration failed; continuing app boot.', e?.message||e);}\"",
-    "build": "prisma generate && next build",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "deploy:upload": "opennextjs-cloudflare deploy",
+    "postinstall": "node scripts/postinstall.js",
+    "build": "node scripts/vercel-build.js",
     "start:with-migrate": "npm run prisma:migrate:deploy:soft && next start",
     "start": "next start",
     "lint": "node ./node_modules/eslint/bin/eslint.js app components lib middleware.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "format": "prettier --write .",
-    "prepare": "husky",
+    "prepare": "node scripts/prepare.js",
     "seed": "node prisma/seed.js",
     "seed:local": "node prisma/seed-local-dev.js",
     "seed:schools": "node prisma/seed-schools.js",
@@ -47,10 +46,7 @@
     "seed:timeslots": "ts-node --transpile-only --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" prisma/seedTimeSlots.ts",
     "seed:schools:docker": "docker compose exec -T web npm run seed:schools",
     "seed:timeslots:docker": "docker compose exec -T web npm run seed:timeslots",
-    "export:users": "node scripts/export-users-excel.js",
-    "cf:build": "opennextjs-cloudflare build",
-    "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview"
+    "export:users": "node scripts/export-users-excel.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -70,7 +66,6 @@
     "@prisma/adapter-neon": "^6.19.3",
     "@prisma/adapter-pg": "6.19.3",
     "@prisma/client": "6.19.3",
-    "@react-email/components": "^1.0.12",
     "@sentry/nextjs": "^10.53.1",
     "@tanstack/react-query": "^4.35.0",
     "autoprefixer": "^10.0.1",
@@ -110,10 +105,8 @@
     "zustand": "^4.4.1"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.16",
     "@eslint/eslintrc": "^3.3.5",
     "@next/eslint-plugin-next": "16.2.4",
-    "@opennextjs/cloudflare": "^1.19.11",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -135,11 +128,10 @@
     "ts-node": "^10.9.2",
     "typescript": "^5",
     "workbox-webpack-plugin": "^7.0.0",
-    "wrangler": "^4.86.0",
     "ws": "^8.18.0"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": "20.x",
     "npm": ">=9.0.0"
   },
   "browserslist": {

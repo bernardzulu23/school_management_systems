@@ -46,7 +46,7 @@ function secureResponse(body, init, request) {
   return applySecurityHeaders(response, request)
 }
 
-/** Edge middleware (OpenNext Cloudflare requires middleware.js, not proxy.js). */
+/** Edge middleware — multi-tenant subdomain routing and API security. */
 export default function middleware(request) {
   try {
     const { pathname } = request.nextUrl
@@ -141,8 +141,7 @@ function getSubdomain(hostname) {
     !hostname ||
     hostname === 'localhost:3000' ||
     hostname === 'localhost' ||
-    hostname.endsWith('.pages.dev') ||
-    hostname.endsWith('.workers.dev')
+    hostname.endsWith('.vercel.app')
   )
     return null
   const parts = hostname.split('.')
