@@ -47,7 +47,7 @@ function secureResponse(body, init, request) {
 }
 
 /** Next.js 16 proxy — multi-tenant subdomain routing and API security. */
-export function proxy(request) {
+export default function proxy(request) {
   try {
     const { pathname } = request.nextUrl
     const method = String(request.method || 'GET').toUpperCase()
