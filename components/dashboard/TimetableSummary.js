@@ -8,6 +8,8 @@ import SkeletonLoader from '@/components/SkeletonLoader'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/lib/auth'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
+import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
+import { generateCardColor } from '@/lib/timetable/cardColors'
 import { Calendar, Clock, MapPin, User, ChevronRight, AlertCircle } from 'lucide-react'
 
 const DAYS = [
@@ -16,12 +18,6 @@ const DAYS = [
   { key: 'wednesday', label: 'WED' },
   { key: 'thursday', label: 'THU' },
   { key: 'friday', label: 'FRI' },
-]
-
-const PREVIEW_SLOTS = [
-  { startTime: '08:00', endTime: '08:40' },
-  { startTime: '08:45', endTime: '09:25' },
-  { startTime: '09:30', endTime: '10:10' },
 ]
 
 function dayKeyFromDate(d) {
@@ -45,23 +41,6 @@ function hhmmToMinutes(v) {
     .map((x) => Number(x))
   if (!Number.isFinite(h) || !Number.isFinite(m)) return 0
   return h * 60 + m
-}
-
-function pastelBgFor(id) {
-  const palette = [
-    '#dbeafe',
-    '#dcfce7',
-    '#fef9c3',
-    '#ffe4e6',
-    '#e0e7ff',
-    '#fae8ff',
-    '#cffafe',
-    '#ffedd5',
-  ]
-  const s = String(id || '')
-  let hash = 0
-  for (let i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0
-  return palette[hash % palette.length]
 }
 
 function seasonFromMode(mode) {
@@ -95,11 +74,24 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
   const seasonMode = useTimetableStore((s) => s.currentSeason)
   const publish = useTimetableStore((s) => s.publish)
   const loadFromApi = useTimetableStore((s) => s.loadFromApi)
+  const loadBellSchedule = useTimetableStore((s) => s.loadBellSchedule)
+  const storeTimeSlots = useTimetableStore((s) => s.timeSlots)
 
   useEffect(() => {
     setMounted(true)
-    loadFromApi() // Initial load from database
-  }, [loadFromApi])
+    loadFromApi()
+    loadBellSchedule()
+  }, [loadFromApi, loadBellSchedule])
+
+  const bellRows = useMemo(() => {
+    const rows = uniqueBellRows(storeTimeSlots || [])
+    if (rows.length) return rows
+    return [
+      { startTime: '08:00', endTime: '08:40', isBreak: false, period: 1 },
+      { startTime: '08:45', endTime: '09:25', isBreak: false, period: 2 },
+      { startTime: '09:30', endTime: '10:10', isBreak: false, period: 3 },
+    ]
+  }, [storeTimeSlots])
 
   const resolvedRole = String(userRole || user?.role || '').toLowerCase()
   const activeSeason = seasonFromMode(seasonMode)
@@ -274,43 +266,66 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {PREVIEW_SLOTS.map((slot) => (
-                    <tr key={slot.startTime} className="border-t border-royalPurple-border/40">
-                      <td className="px-3 py-3 text-royalPurple-text2 whitespace-nowrap">
-                        {slot.startTime}-{slot.endTime}
-                      </td>
-                      {DAYS.map((d) => {
-                        const a = filteredAssignments.find(
-                          (x) =>
-                            String(x?.dayOfWeek) === d.key &&
-                            String(x?.startTime) === slot.startTime &&
-                            !x?.isBreak
-                        )
-                        if (!a)
+                  {bellRows.map((slot) => {
+                    if (slot.isBreak) {
+                      return (
+                        <tr
+                          key={`break-${slot.startTime}`}
+                          className="border-t border-royalPurple-border/40 bg-royalPurple-deep/10"
+                        >
+                          <td className="px-3 py-3 text-royalPurple-text2 whitespace-nowrap">
+                            {slot.startTime}-{slot.endTime}
+                          </td>
+                          <td
+                            colSpan={DAYS.length}
+                            className="px-3 py-3 text-center text-royalPurple-text3 font-medium uppercase tracking-widest text-xs"
+                          >
+                            {slot.label || 'Break / Lunch'}
+                          </td>
+                        </tr>
+                      )
+                    }
+                    return (
+                      <tr key={slot.startTime} className="border-t border-royalPurple-border/40">
+                        <td className="px-3 py-3 text-royalPurple-text2 whitespace-nowrap">
+                          {slot.startTime}-{slot.endTime}
+                        </td>
+                        {DAYS.map((d) => {
+                          const a = filteredAssignments.find(
+                            (x) =>
+                              String(x?.dayOfWeek) === d.key &&
+                              String(x?.startTime) === slot.startTime &&
+                              !x?.isBreak
+                          )
+                          if (!a)
+                            return (
+                              <td key={d.key} className="px-3 py-3 text-royalPurple-text3">
+                                —
+                              </td>
+                            )
+                          const colors = generateCardColor(a.subjectId, a.teacherId)
                           return (
-                            <td key={d.key} className="px-3 py-3 text-royalPurple-text3">
-                              —
+                            <td key={d.key} className="px-3 py-3 align-top">
+                              <div
+                                className="rounded-lg border p-2"
+                                style={{
+                                  backgroundColor: colors.bg,
+                                  borderColor: colors.border,
+                                }}
+                              >
+                                <div className="font-bold text-slate-900 truncate">
+                                  {a.subjectName || a.subjectId}
+                                </div>
+                                <div className="text-[11px] text-slate-600 truncate mt-1">
+                                  {a.className || a.classId} · {a.teacherName || a.teacherId}
+                                </div>
+                              </div>
                             </td>
                           )
-                        const bg = pastelBgFor(a.subjectId)
-                        return (
-                          <td key={d.key} className="px-3 py-3 align-top">
-                            <div
-                              className="rounded-lg border border-royalPurple-border/50 p-2"
-                              style={{ backgroundColor: bg }}
-                            >
-                              <div className="font-bold text-slate-900 truncate">
-                                {a.subjectName || a.subjectId}
-                              </div>
-                              <div className="text-[11px] text-slate-600 truncate mt-1">
-                                {a.className || a.classId} · {a.teacherName || a.teacherId}
-                              </div>
-                            </div>
-                          </td>
-                        )
-                      })}
-                    </tr>
-                  ))}
+                        })}
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
             </div>

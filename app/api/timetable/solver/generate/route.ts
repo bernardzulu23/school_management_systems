@@ -7,8 +7,8 @@ import { prisma } from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import {
-  greedySolve,
   resolveLessonsForSolver,
+  solveTimetable,
   type SolverPayload,
 } from '@/lib/timetable/greedySolver'
 import { syncTimeSlotsFromConfig } from '@/lib/timetable/syncTimeSlots'
@@ -300,7 +300,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const result = greedySolve(payload)
+    const result = solveTimetable(payload)
 
     if (!result.stats.success) {
       console.warn(

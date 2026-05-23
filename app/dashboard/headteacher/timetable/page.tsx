@@ -185,6 +185,7 @@ function HeadteacherTimetablePageContent() {
   const pendingChanges = useTimetableStore((s) => s.pendingChanges)
   const conflictCount = useTimetableStore((s) => s.getConflictCount)
   const loadFromApi = useTimetableStore((s) => s.loadFromApi)
+  const setStoreTimeSlots = useTimetableStore((s) => s.setTimeSlots)
 
   const loadAllocationNotifications = useCallback(async () => {
     try {
@@ -275,9 +276,13 @@ function HeadteacherTimetablePageContent() {
 
         if (schoolJson?.school?.id) setSchoolId(String(schoolJson.school.id))
         if (Array.isArray(configJson?.timeSlots) && configJson.timeSlots.length) {
-          setTimeSlots(configJson.timeSlots as TimeSlot[])
+          const slots = configJson.timeSlots as TimeSlot[]
+          setTimeSlots(slots)
+          setStoreTimeSlots(slots as any)
         } else if (configJson?.config) {
-          setTimeSlots(buildTimeSlotsFromConfig(configJson.config) as TimeSlot[])
+          const slots = buildTimeSlotsFromConfig(configJson.config) as TimeSlot[]
+          setTimeSlots(slots)
+          setStoreTimeSlots(slots as any)
         }
 
         const subjectList = Array.isArray(subjectsJson?.data) ? subjectsJson.data : []

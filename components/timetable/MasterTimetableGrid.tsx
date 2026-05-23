@@ -11,6 +11,8 @@ import type {
   TimeSlot,
 } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
+import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
+import { generateCardColor } from '@/lib/timetable/cardColors'
 import Modal from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 
@@ -74,6 +76,7 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
   const storeAssignments = useTimetableStore((s) => s.assignments)
   const storeConflicts = useTimetableStore((s) => s.conflicts)
   const storeSeasonMode = useTimetableStore((s) => s.currentSeason)
+  const storeTimeSlots = useTimetableStore((s) => s.timeSlots)
 
   const assignments = props.assignments ?? storeAssignments
   const showConflicts = props.showConflicts !== false
@@ -120,14 +123,12 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
   }, [props.timeSlots, assignments])
 
   const baseSlots = useMemo(() => {
-    const src = props.timeSlots || []
-    const map = new Map<string, TimeSlot>()
-    for (const s of src) {
-      const k = slotKey(s)
-      if (!map.has(k)) map.set(k, { ...s, dayOfWeek: 'monday' })
-    }
-    return Array.from(map.values()).sort((a, b) => a.period - b.period)
-  }, [props.timeSlots])
+    const src = (props.timeSlots?.length ? props.timeSlots : storeTimeSlots) as TimeSlot[]
+    return uniqueBellRows(src).map((s) => ({
+      ...s,
+      dayOfWeek: 'monday' as TimeSlot['dayOfWeek'],
+    }))
+  }, [props.timeSlots, storeTimeSlots])
 
   const filteredAssignments = useMemo(() => {
     return (assignments || []).filter((a) => a && a.season === season)
@@ -175,8 +176,8 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
     const hasCritical = conflicts.some((c) => c.severity === 'critical')
     const hasAny = conflicts.length > 0
     const border = hasCritical ? '#ef4444' : hasAny ? '#f59e0b' : undefined
-    const bg = resolveBg(classColor.get(String(a.classId)))
-    const b = resolveBorder(classColor.get(String(a.classId)))
+    const cardColors = generateCardColor(a.subjectId, a.teacherId)
+    const classBg = resolveBg(classColor.get(String(a.classId)))
 
     return (
       <button
@@ -185,8 +186,8 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
         onClick={() => onCellClick(a)}
         className="w-full text-left rounded-xl px-3 py-2 border bg-royalPurple-card/70 hover:bg-royalPurple-card/85 transition-colors zsms-hover-raise"
         style={{
-          borderColor: border || b || 'rgba(148, 163, 184, 0.35)',
-          background: bg || undefined,
+          borderColor: border || cardColors.border,
+          background: classBg || cardColors.bg,
         }}
       >
         <div className="font-bold text-[13px] text-royalPurple-text1 truncate">
@@ -285,33 +286,28 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
                     </div>
                   </div>
 
-                  {effectiveDays.map((day) => {
-                    const key = `${day}|${slot.startTime}|${slot.endTime}|${slot.period}`
-                    const list = cellAssignments.get(key) || []
-                    return (
-                      <div
-                        key={key}
-                        className={`px-3 py-3 border-l border-royalPurple-border/20 ${
-                          isBreak
-                            ? 'flex items-center justify-center text-xs font-bold text-slate-500'
-                            : ''
-                        }`}
-                      >
-                        {isBreak ? (
-                          <div className="text-center">
-                            <div>BREAK</div>
-                            <div className="font-normal text-[11px]">
-                              {slot.startTime}–{slot.endTime}
-                            </div>
-                          </div>
-                        ) : list.length ? (
-                          <div className="space-y-2">{list.map(renderAssignment)}</div>
-                        ) : (
-                          <div className="text-xs text-royalPurple-text3">—</div>
-                        )}
-                      </div>
-                    )
-                  })}
+                  {isBreak ? (
+                    <div
+                      className="px-3 py-3 border-l border-royalPurple-border/20 flex items-center justify-center text-xs font-semibold text-royalPurple-text3 uppercase tracking-widest"
+                      style={{ gridColumn: `2 / span ${effectiveDays.length}` }}
+                    >
+                      {slot.label || 'Break / Lunch'}
+                    </div>
+                  ) : (
+                    effectiveDays.map((day) => {
+                      const key = `${day}|${slot.startTime}|${slot.endTime}|${slot.period}`
+                      const list = cellAssignments.get(key) || []
+                      return (
+                        <div key={key} className="px-3 py-3 border-l border-royalPurple-border/20">
+                          {list.length ? (
+                            <div className="space-y-2">{list.map(renderAssignment)}</div>
+                          ) : (
+                            <div className="text-xs text-royalPurple-text3">—</div>
+                          )}
+                        </div>
+                      )
+                    })
+                  )}
                 </div>
               )
             })}

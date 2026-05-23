@@ -1,7 +1,9 @@
 /**
- * Greedy timetable solver — Vercel + Neon, no external services.
+ * Timetable solver — backtracking with greedy fallback, Vercel + Neon.
  * Expands weekly period counts (e.g. 6 periods = 3×80min doubles) across days.
  */
+
+const DEFAULT_MAX_EXECUTION_MS = 8000
 
 import {
   expandRecipeToUnits,
@@ -59,6 +61,8 @@ export interface SolverPayload {
   recipes: RecipeInput[]
   teacherAllocations?: AllocationLike[]
   rooms?: unknown[]
+  /** Serverless safety limit for backtracking (ms). */
+  maxExecutionMs?: number
 }
 
 export interface RecipeInput extends RecipeLike {
@@ -189,9 +193,12 @@ function unitPriority(lesson: Lesson): number {
 }
 
 /**
- * Greedy scheduling: spread across days; doubles/triples use consecutive slots on one day.
+ * Backtracking scheduler: undoes placements that block later lessons.
  */
-export function greedySolve(payload: SolverPayload): SolverResult {
+export function solveTimetable(payload: SolverPayload): SolverResult {
+  const START_TIME = Date.now()
+  const MAX_MS = Math.max(1000, Number(payload.maxExecutionMs) || DEFAULT_MAX_EXECUTION_MS)
+
   const lessons = resolveLessonsForSolver(payload)
   const { slots, lockedAssignments } = payload
 
@@ -223,12 +230,8 @@ export function greedySolve(payload: SolverPayload): SolverResult {
     return a.subjectId.localeCompare(b.subjectId)
   })
 
-  const maxAssign = Math.max(
-    1,
-    Math.min(sortedLessons.length, Number(payload.maxSolutions) || sortedLessons.length)
-  )
-
   let assignedCount = 0
+  let timedOut = false
 
   const isBusy = (lesson: Lesson, slotIds: string[]) =>
     slotIds.some(
@@ -237,69 +240,137 @@ export function greedySolve(payload: SolverPayload): SolverResult {
         (classSlots.get(lesson.classId)?.has(sid) ?? false)
     )
 
-  const markBusy = (lesson: Lesson, slotIds: string[]) => {
+  const markBusy = (lesson: Lesson, slotIds: string[], day: string) => {
     for (const sid of slotIds) {
       teacherSlots.get(lesson.teacherId)?.add(sid)
       classSlots.get(lesson.classId)?.add(sid)
     }
-    const day = normalizeDay(teachingSlots.find((s) => s.id === slotIds[0])?.dayOfWeek || 'monday')
     const key = `${lesson.teacherId}|${day}`
     teacherDayLoad.set(key, (teacherDayLoad.get(key) || 0) + 1)
+  }
+
+  const unmarkBusy = (lesson: Lesson, slotIds: string[], day: string) => {
+    for (const sid of slotIds) {
+      teacherSlots.get(lesson.teacherId)?.delete(sid)
+      classSlots.get(lesson.classId)?.delete(sid)
+    }
+    const key = `${lesson.teacherId}|${day}`
+    const cur = teacherDayLoad.get(key) || 0
+    if (cur <= 1) teacherDayLoad.delete(key)
+    else teacherDayLoad.set(key, cur - 1)
   }
 
   const dayOrder = Array.from(byDay.keys()).sort(
     (a, b) => (DAY_ORDER[a] ?? 99) - (DAY_ORDER[b] ?? 99)
   )
 
-  for (const lesson of sortedLessons) {
-    if (assignedCount >= maxAssign) break
+  function solveDepthFirst(lessonIndex: number): boolean {
+    if (Date.now() - START_TIME > MAX_MS) {
+      timedOut = true
+      return false
+    }
 
+    if (lessonIndex >= sortedLessons.length) return true
+
+    const lesson = sortedLessons[lessonIndex]
     const size = Math.max(1, Number(lesson.consecutivePeriods) || 1)
 
-    // Prefer days where this teacher already has fewer blocks (spread across week)
     const daysSorted = [...dayOrder].sort((da, db) => {
       const la = teacherDayLoad.get(`${lesson.teacherId}|${da}`) || 0
       const lb = teacherDayLoad.get(`${lesson.teacherId}|${db}`) || 0
       return la - lb
     })
 
-    let placed: { primaryId: string; allIds: string[] } | null = null
-
     for (const day of daysSorted) {
       const daySlots = byDay.get(day) || []
       for (let i = 0; i <= daySlots.length - size; i++) {
+        if (Date.now() - START_TIME > MAX_MS) {
+          timedOut = true
+          return false
+        }
+
         const run = findConsecutiveRun(daySlots, i, size)
         if (!run) continue
         const ids = run.map((s) => s.id)
         if (isBusy(lesson, ids)) continue
-        placed = { primaryId: ids[0], allIds: ids }
-        break
+
+        assignments[lesson.id] = ids[0]
+        slotSpans[lesson.id] = ids
+        markBusy(lesson, ids, day)
+        assignedCount += 1
+
+        if (solveDepthFirst(lessonIndex + 1)) return true
+
+        delete assignments[lesson.id]
+        delete slotSpans[lesson.id]
+        unmarkBusy(lesson, ids, day)
+        assignedCount -= 1
       }
-      if (placed) break
     }
 
-    if (!placed) continue
+    return false
+  }
 
-    assignments[lesson.id] = placed.primaryId
-    slotSpans[lesson.id] = placed.allIds
-    markBusy(lesson, placed.allIds)
-    assignedCount += 1
+  const completeSuccess = solveDepthFirst(0)
+
+  if (!completeSuccess && assignedCount < sortedLessons.length) {
+    greedyFillRemaining()
+  }
+
+  function greedyFillRemaining() {
+    for (let li = 0; li < sortedLessons.length; li++) {
+      const lesson = sortedLessons[li]
+      if (assignments[lesson.id]) continue
+
+      const size = Math.max(1, Number(lesson.consecutivePeriods) || 1)
+      const daysSorted = [...dayOrder].sort((da, db) => {
+        const la = teacherDayLoad.get(`${lesson.teacherId}|${da}`) || 0
+        const lb = teacherDayLoad.get(`${lesson.teacherId}|${db}`) || 0
+        return la - lb
+      })
+
+      for (const day of daysSorted) {
+        const daySlots = byDay.get(day) || []
+        for (let i = 0; i <= daySlots.length - size; i++) {
+          const run = findConsecutiveRun(daySlots, i, size)
+          if (!run) continue
+          const ids = run.map((s) => s.id)
+          if (isBusy(lesson, ids)) continue
+          assignments[lesson.id] = ids[0]
+          slotSpans[lesson.id] = ids
+          markBusy(lesson, ids, day)
+          assignedCount += 1
+          break
+        }
+        if (assignments[lesson.id]) break
+      }
+    }
   }
 
   const total = lessons.length
   const score = total > 0 ? Math.round((assignedCount / total) * 100) : 100
-  const success = assignedCount === total && total > 0
+  const success = assignedCount === total && total > 0 && completeSuccess
+
+  const solverName = completeSuccess
+    ? 'backtracking'
+    : timedOut
+      ? 'backtracking+partial'
+      : 'backtracking+greedy'
 
   const result: SolverResult = {
     assignments,
     slotSpans,
     optimizationScore: score,
     stats: {
-      solver: 'greedy',
+      solver: solverName,
       assigned: assignedCount,
       total,
       success,
-      notes: `Greedy algorithm assigned ${assignedCount}/${total} teaching blocks (${score}% coverage). Period counts are weekly totals spread across days, not slot number 6.`,
+      notes: completeSuccess
+        ? `Successfully generated timetable (${assignedCount}/${total} blocks).`
+        : timedOut
+          ? `Timed out after ${MAX_MS}ms. Placed ${assignedCount}/${total} teaching blocks.`
+          : `Partial schedule: ${assignedCount}/${total} blocks (${score}% coverage).`,
       timestamp: new Date().toISOString(),
     },
   }
@@ -310,6 +381,11 @@ export function greedySolve(payload: SolverPayload): SolverResult {
   }
 
   return result
+}
+
+/** @alias solveTimetable */
+export function greedySolve(payload: SolverPayload): SolverResult {
+  return solveTimetable(payload)
 }
 
 export function validateResult(

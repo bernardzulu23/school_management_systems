@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
+import { generateCardColor } from '@/lib/timetable/cardColors'
+import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
 import { useAuth } from '@/lib/auth'
 import Modal from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
@@ -42,23 +44,6 @@ function toMinutes(t: string) {
   const mm = Number(m)
   if (!Number.isFinite(hh) || !Number.isFinite(mm)) return 0
   return hh * 60 + mm
-}
-
-function pastelBgFor(id: unknown) {
-  const palette = [
-    '#dbeafe',
-    '#dcfce7',
-    '#fef9c3',
-    '#ffe4e6',
-    '#e0e7ff',
-    '#fae8ff',
-    '#cffafe',
-    '#ffedd5',
-  ]
-  const s = String(id || '')
-  let hash = 0
-  for (let i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0
-  return palette[hash % palette.length]
 }
 
 function downloadCsv(filename: string, rows: string[][]) {
@@ -104,14 +89,12 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
     return list.sort((a, b) => dayOrder(a) - dayOrder(b))
   }, [props.timeSlots])
 
+  const storeTimeSlots = useTimetableStore((s) => s.timeSlots)
+
   const baseSlots = useMemo(() => {
-    const map = new Map<string, TimeSlot>()
-    for (const s of props.timeSlots || []) {
-      const k = slotKey(s)
-      if (!map.has(k)) map.set(k, { ...s, dayOfWeek: 'monday' })
-    }
-    return Array.from(map.values()).sort((a, b) => a.period - b.period)
-  }, [props.timeSlots])
+    const src = (props.timeSlots?.length ? props.timeSlots : storeTimeSlots) as TimeSlot[]
+    return uniqueBellRows(src).map((s) => ({ ...s, dayOfWeek: 'monday' as TimeSlot['dayOfWeek'] }))
+  }, [props.timeSlots, storeTimeSlots])
 
   const effectiveDepartmentId =
     props.departmentId ||
@@ -670,7 +653,8 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                               {list.map((a) => {
                                 const conflicts = storeConflicts.get(String(a.id)) || []
                                 const hasConflict = conflicts.length > 0
-                                const bg = pastelBgFor(a.subjectId)
+                                const cardColors = generateCardColor(a.subjectId, a.teacherId)
+                                const bg = cardColors.bg
                                 return (
                                   <button
                                     type="button"

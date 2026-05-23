@@ -3,6 +3,9 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import type { Assignment, Conflict, TravelingTeacherRoute } from './types'
 import { CollisionDetector } from './collisionDetector'
 import { SuggestionEngine, type Suggestion } from './suggestionEngine'
+import type { BellScheduleSlot } from './bellSchedule'
+import { normalizeApiTimeSlots } from './bellSchedule'
+import { canPublishTimetable, validateTimetable } from './validateTimetable'
 
 export type TimetableVersion = 'normal' | 'farming' | 'emergency'
 export type TimetableSeasonMode = 'normal' | 'planting' | 'harvest'
@@ -33,6 +36,8 @@ export interface TimetableSnapshot {
 
 export interface TimetableStoreState {
   assignments: Assignment[]
+  /** School bell schedule (periods + breaks) from config / TimeSlot table. */
+  timeSlots: BellScheduleSlot[]
   conflicts: Map<string, Conflict[]>
   timetableVersion: TimetableVersion
   isPublished: boolean
@@ -64,8 +69,13 @@ export interface TimetableStoreState {
   addTravelingTeacherRoute: (route: TravelingTeacherRoute) => void
   optimizeWorkload: () => void
   loadFromApi: (opts?: { term?: string; academicYear?: string; status?: string }) => Promise<void>
+  loadBellSchedule: () => Promise<BellScheduleSlot[]>
+  setTimeSlots: (slots: BellScheduleSlot[]) => void
+  validateAll: () => ReturnType<typeof validateTimetable>
+  canPublish: () => boolean
 
   getConflictCount: () => number
+  getHardConflictCount: () => number
   getAssignmentsByTeacher: (teacherId: Assignment['teacherId']) => Assignment[]
   getAssignmentsByClass: (classId: Assignment['classId']) => Assignment[]
   getAssignmentsByDay: (dayOfWeek: Assignment['dayOfWeek']) => Assignment[]
@@ -168,6 +178,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
 
       return {
         assignments: [],
+        timeSlots: [],
         conflicts: new Map(),
         timetableVersion: 'normal',
         isPublished: false,
@@ -312,15 +323,48 @@ export const useTimetableStore = create<TimetableStoreState>()(
         },
 
         publish: () => {
+          const s = get()
+          if (!canPublishTimetable(s.assignments)) {
+            throw new Error(
+              'Cannot publish: fix all teacher and class double-booking conflicts first.'
+            )
+          }
           pushSnapshot()
-          set((s) => ({
+          set((cur) => ({
             isPublished: true,
             lastPublishedAt: new Date(),
             pendingChanges: [],
-            conflicts: detect(s.assignments),
+            conflicts: detect(cur.assignments),
           }))
           trackChange({ id: genId(), kind: 'publish', at: nowIso() })
         },
+
+        loadBellSchedule: async () => {
+          try {
+            const res = await fetch('/api/timetable/config', {
+              cache: 'no-store',
+              credentials: 'include',
+            })
+            if (!res.ok) return get().timeSlots
+            const data = await res.json()
+            const slots = normalizeApiTimeSlots(
+              Array.isArray(data?.timeSlots) ? data.timeSlots : []
+            )
+            set({ timeSlots: slots })
+            return slots
+          } catch (err) {
+            console.error('[timetableStore loadBellSchedule]', err)
+            return get().timeSlots
+          }
+        },
+
+        setTimeSlots: (slots) => {
+          set({ timeSlots: normalizeApiTimeSlots(slots) })
+        },
+
+        validateAll: () => validateTimetable(get().assignments),
+
+        canPublish: () => canPublishTimetable(get().assignments),
 
         generateFromScratch: (opts) => {
           pushSnapshot()
@@ -383,8 +427,12 @@ export const useTimetableStore = create<TimetableStoreState>()(
             const data = await res.json()
             const assignments = Array.isArray(data.assignments) ? data.assignments : []
 
+            const slots = normalizeApiTimeSlots(
+              Array.isArray(data?.timeSlots) ? data.timeSlots : []
+            )
             set({
               assignments,
+              timeSlots: slots.length ? slots : get().timeSlots,
               conflicts: detect(assignments),
               isPublished: status === 'published',
               lastPublishedAt: status === 'published' ? new Date() : null,
@@ -401,6 +449,10 @@ export const useTimetableStore = create<TimetableStoreState>()(
           let total = 0
           for (const v of m.values()) total += v.length
           return total
+        },
+
+        getHardConflictCount: () => {
+          return validateTimetable(get().assignments).filter((c) => c.severity === 'hard').length
         },
 
         getAssignmentsByTeacher: (teacherId) => {
@@ -450,6 +502,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
       }),
       partialize: (state) => ({
         assignments: state.assignments,
+        timeSlots: state.timeSlots,
         conflicts: serializeConflicts(state.conflicts),
         timetableVersion: state.timetableVersion,
         isPublished: state.isPublished,
@@ -465,6 +518,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
         return {
           ...current,
           assignments: normalizeAssignments(p.assignments),
+          timeSlots: normalizeApiTimeSlots(safeArray(p.timeSlots)),
           conflicts: deserializeConflicts(p.conflicts),
           timetableVersion: (p.timetableVersion as TimetableVersion) || current.timetableVersion,
           isPublished: Boolean(p.isPublished),
