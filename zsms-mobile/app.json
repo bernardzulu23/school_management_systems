@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "backgroundColor": "#EFECE5"
+      "backgroundColor": "#F5F2ED"
     },
     "ios": {
       "supportsTablet": true,
@@ -20,7 +20,24 @@
       },
       "package": "com.bluepeack.zsms.teacher"
     },
-    "plugins": ["expo-router", "expo-secure-store"],
+    "plugins": [
+      "expo-router",
+      "expo-dev-client",
+      "expo-face-detection",
+      "expo-secure-store",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow ZSMS to use the camera for pupil face attendance."
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow ZSMS to verify twin pupils with Face ID."
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     }

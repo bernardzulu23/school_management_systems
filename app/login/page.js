@@ -14,10 +14,13 @@ import { setTopLoading, startTopLoading, stopTopLoading } from '@/lib/uiProgress
 import { SchoolLogo } from '@/components/SchoolLogo'
 import LocalDevLoginHint from '@/components/dev/LocalDevLoginHint'
 
+const REMEMBER_EMAIL_KEY = 'zsms_remember_email'
+
 function LoginPageContent() {
   const { school, isLoading: isSchoolLoading } = useSchool()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [loginPercent, setLoginPercent] = useState(0)
   const [detectedSubdomain, setDetectedSubdomain] = useState('')
@@ -36,6 +39,19 @@ function LoginPageContent() {
         setDetectedSubdomain(sub)
         console.log('Detected Subdomain:', sub)
       }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    try {
+      const saved = localStorage.getItem(REMEMBER_EMAIL_KEY)
+      if (saved) {
+        setEmail(saved)
+        setRememberMe(true)
+      }
+    } catch {
+      /* ignore */
     }
   }, [])
 
@@ -95,7 +111,18 @@ function LoginPageContent() {
         }
       }
 
-      const result = await login({ email, password, subdomain })
+      const result = await login({ email, password, subdomain, rememberMe })
+      if (typeof window !== 'undefined') {
+        try {
+          if (rememberMe) {
+            localStorage.setItem(REMEMBER_EMAIL_KEY, email.trim().toLowerCase())
+          } else {
+            localStorage.removeItem(REMEMBER_EMAIL_KEY)
+          }
+        } catch {
+          /* ignore */
+        }
+      }
       toast.success('Login successful!')
       const role = String(result?.user?.role || '')
         .trim()
@@ -218,6 +245,8 @@ function LoginPageContent() {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
                 className="h-4 w-4 rounded border-ink/30 bg-paper text-accent focus:ring-1 focus:ring-accent focus:ring-offset-0"
               />
               <label htmlFor="remember-me" className="ml-2 block text-muted">

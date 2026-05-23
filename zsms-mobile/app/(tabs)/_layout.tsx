@@ -8,11 +8,17 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarStyle: { backgroundColor: ZsmsTheme.navBg },
-        tabBarActiveTintColor: ZsmsTheme.accent,
-        tabBarInactiveTintColor: ZsmsTheme.navText,
+        tabBarStyle: {
+          backgroundColor: ZsmsTheme.navBg,
+          borderTopWidth: 2,
+          borderTopColor: ZsmsTheme.border,
+        },
+        tabBarActiveTintColor: ZsmsTheme.navActiveText,
+        tabBarActiveBackgroundColor: ZsmsTheme.navActiveBg,
+        tabBarInactiveTintColor: ZsmsTheme.navInactiveText,
         headerStyle: { backgroundColor: ZsmsTheme.paper },
         headerTintColor: ZsmsTheme.ink,
+        headerTitleStyle: { fontWeight: '800' },
       }}
     >
       <Tabs.Screen name="index" options={{ title: 'Home', tabBarLabel: 'Home' }} />

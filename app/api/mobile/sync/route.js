@@ -11,6 +11,7 @@ import {
   SBA_TERM_TEST_MARKS,
 } from '@/lib/ecz/ecz-compliance'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+import { recordAttendanceMark, closeAttendanceSession } from '@/lib/attendance/sessions'
 
 const STAFF_ROLES = ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
 const VALID_ATTENDANCE = ['present', 'absent', 'late', 'excused']
@@ -30,9 +31,11 @@ export const POST = withSecureApi(async function POST(request) {
   const body = await request.json().catch(() => ({}))
   const attendanceBatches = Array.isArray(body?.attendance) ? body.attendance : []
   const scoreItems = Array.isArray(body?.scores) ? body.scores : []
+  const lessonSessions = Array.isArray(body?.lessonSessions) ? body.lessonSessions : []
 
   const attendanceResult = { synced: 0, failed: [] }
   const scoresResult = { synced: 0, failed: [] }
+  const lessonSessionsResult = { synced: 0, failed: [] }
 
   for (let i = 0; i < attendanceBatches.length; i++) {
     const batch = attendanceBatches[i]
@@ -82,6 +85,41 @@ export const POST = withSecureApi(async function POST(request) {
       attendanceResult.synced += 1
     } catch (e) {
       attendanceResult.failed.push({ index: i, error: String(e?.message || e) })
+    }
+  }
+
+  for (let i = 0; i < lessonSessions.length; i++) {
+    const item = lessonSessions[i]
+    try {
+      const sessionId = String(item?.sessionId || '').trim()
+      if (!sessionId) throw new Error('sessionId required')
+
+      const marks = Array.isArray(item?.marks) ? item.marks : []
+      for (const m of marks) {
+        const studentId = String(m?.studentId || '').trim()
+        if (!studentId) continue
+        await recordAttendanceMark({
+          sessionId,
+          schoolId,
+          studentId,
+          method: m.method || 'MANUAL',
+          faceMatchScore: m.faceMatchScore,
+          secondaryVerified: Boolean(m.secondaryVerified),
+          statusOverride: m.status ? String(m.status).toUpperCase() : undefined,
+        })
+      }
+
+      if (item.close) {
+        await closeAttendanceSession({
+          sessionId,
+          schoolId,
+          sendAbsentSms: item.sendAbsentSms !== false,
+        })
+      }
+
+      lessonSessionsResult.synced += 1
+    } catch (e) {
+      lessonSessionsResult.failed.push({ index: i, error: String(e?.message || e) })
     }
   }
 
@@ -170,5 +208,6 @@ export const POST = withSecureApi(async function POST(request) {
     success: true,
     attendance: attendanceResult,
     scores: scoresResult,
+    lessonSessions: lessonSessionsResult,
   })
 })

@@ -12,12 +12,22 @@ import { globalStyles } from '@/theme/styles'
 export default function ProfileScreen() {
   const { user, school, logout } = useAuthStore()
   const { context } = useSessionStore()
-  const { getPendingCount, clearOfflineQueue } = useOfflineQueue()
+  const { items, getPendingCount, clearOfflineQueue, flushOfflineQueue, syncing, hydrate } =
+    useOfflineQueue()
   const [health, setHealth] = useState<string>('—')
 
   useEffect(() => {
+    hydrate()
     checkAppVersion().then((h) => setHealth(h.ok ? h.version || 'OK' : 'Offline'))
-  }, [])
+  }, [hydrate])
+
+  async function onSyncNow() {
+    const { synced, failed } = await flushOfflineQueue()
+    Alert.alert(
+      failed > 0 ? 'Sync partly failed' : 'Sync complete',
+      `${synced} batch(es) synced${failed > 0 ? `, ${failed} failed` : ''}.`
+    )
+  }
 
   async function onLogout() {
     await logout()
@@ -31,14 +41,18 @@ export default function ProfileScreen() {
   }
 
   function onClearQueue() {
-    Alert.alert('Clear offline queue?', 'Removes unsynced attendance and scores.', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Clear',
-        style: 'destructive',
-        onPress: () => clearOfflineQueue(),
-      },
-    ])
+    Alert.alert(
+      'Clear offline queue?',
+      'Removes unsynced attendance, lesson sessions, and scores.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Clear',
+          style: 'destructive',
+          onPress: () => clearOfflineQueue(),
+        },
+      ]
+    )
   }
 
   return (
@@ -52,7 +66,18 @@ export default function ProfileScreen() {
         <Text style={globalStyles.subtitle}>Subdomain: {school?.subdomain}</Text>
         <Text style={globalStyles.subtitle}>API: {health}</Text>
         <Text style={globalStyles.subtitle}>Pending sync: {getPendingCount()}</Text>
+        {items.some((i) => i.type === 'lessonSession') ? (
+          <Text style={globalStyles.subtitle}>Includes lesson session marks</Text>
+        ) : null}
       </View>
+      {getPendingCount() > 0 ? (
+        <BrutalButton
+          title="Sync now"
+          onPress={onSyncNow}
+          loading={syncing}
+          style={{ marginBottom: 12 }}
+        />
+      ) : null}
       <BrutalButton title="Change school" variant="secondary" onPress={changeSchool} />
       <BrutalButton title="Sign out" onPress={onLogout} style={{ marginTop: 12 }} />
       <BrutalButton

@@ -1,7 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { create } from 'zustand'
 import { flushOfflineQueue } from '@/api/sync'
-import type { AttendanceBatch, OfflineQueueItem, SbaScoreSubmit } from '@/types'
+import type {
+  AttendanceBatch,
+  LessonSessionSyncPayload,
+  OfflineQueueItem,
+  SbaScoreSubmit,
+} from '@/types'
 
 const STORAGE_KEY = 'zsms_offline_queue_v1'
 
@@ -29,6 +34,8 @@ interface QueueState {
   hydrate: () => Promise<void>
   enqueueAttendance: (payload: AttendanceBatch) => Promise<void>
   enqueueScore: (payload: SbaScoreSubmit) => Promise<void>
+  enqueueLessonSession: (payload: LessonSessionSyncPayload) => Promise<void>
+  mergeLessonSession: (sessionId: string, patch: Partial<LessonSessionSyncPayload>) => Promise<void>
   getPendingCount: () => number
   flushOfflineQueue: () => Promise<{ synced: number; failed: number }>
   retryFailedItems: () => Promise<void>
@@ -68,6 +75,47 @@ export const useOfflineQueue = create<QueueState>((set, get) => ({
     set({ items })
   },
 
+  enqueueLessonSession: async (payload) => {
+    const item: OfflineQueueItem = {
+      type: 'lessonSession',
+      id: newId(),
+      createdAt: new Date().toISOString(),
+      payload,
+    }
+    const items = [...get().items, item]
+    await writeQueue(items)
+    set({ items })
+  },
+
+  mergeLessonSession: async (sessionId, patch) => {
+    const items = get().items
+    const idx = items.findIndex(
+      (i) => i.type === 'lessonSession' && i.payload.sessionId === sessionId
+    )
+    if (idx >= 0) {
+      const existing = items[idx]
+      if (existing.type !== 'lessonSession') return
+      const merged: LessonSessionSyncPayload = {
+        ...existing.payload,
+        ...patch,
+        marks: patch.marks ?? existing.payload.marks,
+      }
+      const next = [...items]
+      next[idx] = { ...existing, payload: merged }
+      await writeQueue(next)
+      set({ items: next })
+      return
+    }
+    await get().enqueueLessonSession({
+      sessionId,
+      classId: patch.classId || '',
+      subjectId: patch.subjectId || '',
+      marks: patch.marks || [],
+      close: patch.close,
+      sendAbsentSms: patch.sendAbsentSms,
+    })
+  },
+
   getPendingCount: () => get().items.length,
 
   flushOfflineQueue: async () => {
@@ -77,8 +125,13 @@ export const useOfflineQueue = create<QueueState>((set, get) => ({
     try {
       const result = await flushOfflineQueue(pending)
       const failedCount =
-        (result.attendance?.failed?.length || 0) + (result.scores?.failed?.length || 0)
-      const synced = (result.attendance?.synced || 0) + (result.scores?.synced || 0)
+        (result.attendance?.failed?.length || 0) +
+        (result.scores?.failed?.length || 0) +
+        (result.lessonSessions?.failed?.length || 0)
+      const synced =
+        (result.attendance?.synced || 0) +
+        (result.scores?.synced || 0) +
+        (result.lessonSessions?.synced || 0)
       if (failedCount === 0) {
         await writeQueue([])
         set({ items: [] })

@@ -4,18 +4,30 @@
   "private": true,
   "main": "expo-router/entry",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "expo start --dev-client",
+    "android:setup": "powershell -ExecutionPolicy Bypass -File scripts/install-gradle.ps1 && node scripts/patch-rn-gradle.js",
+    "android": "npm run android:setup && expo run:android",
+    "android:device": "powershell -ExecutionPolicy Bypass -File scripts/run-android-device.ps1",
+    "ios": "expo run:ios",
+    "prebuild": "node scripts/ensure-expo-template.js && expo prebuild --template node_modules/expo-template-bare-minimum/expo-template-bare-minimum-52.0.79.tgz",
+    "prebuild:android": "node scripts/ensure-expo-template.js && expo prebuild --platform android --no-install --template node_modules/expo-template-bare-minimum/expo-template-bare-minimum-52.0.79.tgz",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.23.1",
     "expo": "~52.0.46",
+    "expo-asset": "~11.0.5",
+    "expo-camera": "~16.0.18",
     "expo-constants": "~17.0.8",
+    "expo-dev-client": "~5.0.20",
+    "expo-face-detection": "^1.0.24",
+    "expo-file-system": "~18.0.12",
+    "expo-font": "~13.0.4",
     "expo-linking": "~7.0.5",
+    "expo-local-authentication": "~15.0.2",
     "expo-router": "~4.0.21",
     "expo-secure-store": "~14.0.1",
+    "expo-splash-screen": "~0.29.24",
     "expo-status-bar": "~2.0.1",
     "react": "18.3.1",
     "react-native": "0.76.9",
@@ -27,6 +39,7 @@
     "@babel/core": "^7.26.0",
     "@types/react": "~18.3.12",
     "babel-plugin-module-resolver": "^5.0.2",
+    "expo-template-bare-minimum": "^52.0.79",
     "typescript": "~5.3.3"
   }
 }

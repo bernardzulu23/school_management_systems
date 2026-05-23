@@ -11,6 +11,8 @@ import { logAuditAction } from '@/lib/auditLog'
 import {
   ACCESS_TOKEN_MAX_AGE,
   REFRESH_TOKEN_MAX_AGE,
+  REMEMBER_ACCESS_TOKEN_MAX_AGE,
+  REMEMBER_REFRESH_TOKEN_MAX_AGE,
   authCookieOptions,
 } from '@/lib/security/cookies'
 import { withSecureApi } from '@/lib/middleware/secureApi'
@@ -66,7 +68,7 @@ export const POST = withSecureApi(async function POST(request) {
       )
     }
 
-    const { email, password, subdomain } = validation.data
+    const { email, password, subdomain, rememberMe } = validation.data
     const normalizedEmail = String(email || '')
       .trim()
       .toLowerCase()
@@ -201,17 +203,23 @@ export const POST = withSecureApi(async function POST(request) {
     }
 
     // 4. Token Generation & Cookie Setting (include schoolId for multi-tenant isolation)
+    const remember = Boolean(rememberMe)
+    const accessMaxAge = remember ? REMEMBER_ACCESS_TOKEN_MAX_AGE : ACCESS_TOKEN_MAX_AGE
+    const refreshMaxAge = remember ? REMEMBER_REFRESH_TOKEN_MAX_AGE : REFRESH_TOKEN_MAX_AGE
+    const accessExpiresIn = remember ? '30d' : '8h'
+    const refreshExpiresIn = remember ? '90d' : '7d'
+
     const newAccessToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role, schoolId: user.schoolId },
       JWT_SECRET,
-      { expiresIn: '8h' }
+      { expiresIn: accessExpiresIn }
     )
 
     const newRefreshTokenValue = jwt.sign(
       { id: user.id, schoolId: user.schoolId },
       JWT_REFRESH_SECRET,
       {
-        expiresIn: '7d',
+        expiresIn: refreshExpiresIn,
       }
     )
 
@@ -223,7 +231,7 @@ export const POST = withSecureApi(async function POST(request) {
           token: newRefreshTokenValue,
           userId: user.id,
           schoolId: user.schoolId,
-          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          expiresAt: new Date(Date.now() + refreshMaxAge * 1000),
         },
       })
     } catch (refreshTokenError) {
@@ -249,13 +257,13 @@ export const POST = withSecureApi(async function POST(request) {
     response.cookies.set(
       'access_token',
       newAccessToken,
-      authCookieOptions(request, { maxAgeSeconds: ACCESS_TOKEN_MAX_AGE, name: 'access_token' })
+      authCookieOptions(request, { maxAgeSeconds: accessMaxAge, name: 'access_token' })
     )
 
     response.cookies.set(
       'refresh_token',
       newRefreshTokenValue,
-      authCookieOptions(request, { maxAgeSeconds: REFRESH_TOKEN_MAX_AGE, name: 'refresh_token' })
+      authCookieOptions(request, { maxAgeSeconds: refreshMaxAge, name: 'refresh_token' })
     )
 
     // Audit the login event

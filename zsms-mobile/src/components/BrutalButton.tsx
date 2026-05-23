@@ -32,7 +32,7 @@ export function BrutalButton({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={isPrimary ? ZsmsTheme.white : ZsmsTheme.ink} />
+        <ActivityIndicator color={isPrimary ? ZsmsTheme.ink : ZsmsTheme.ink} />
       ) : (
         <Text style={[styles.text, isPrimary ? styles.textPrimary : styles.textInk]}>{title}</Text>
       )}
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   primary: { backgroundColor: ZsmsTheme.accent },
-  secondary: { backgroundColor: ZsmsTheme.white },
+  secondary: { backgroundColor: ZsmsTheme.paper },
   ghost: { backgroundColor: 'transparent', shadowOpacity: 0, elevation: 0 },
   pressed: {
     transform: [{ translateX: 2 }, { translateY: 2 }],
@@ -63,6 +63,6 @@ const styles = StyleSheet.create({
   },
   disabled: { opacity: 0.5 },
   text: { fontSize: 16, fontWeight: '700' },
-  textPrimary: { color: ZsmsTheme.white },
+  textPrimary: { color: ZsmsTheme.ink },
   textInk: { color: ZsmsTheme.ink },
 })

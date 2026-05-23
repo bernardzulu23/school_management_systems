@@ -77,6 +77,9 @@ export async function GET(request) {
     class: s.class,
     qrCode: s.exam_number || null, // Using exam_number as QR code if available
     faceEmbedding: includeFaceData ? s.faceEmbedding : null,
+    twinGroupId: s.twinGroupId || null,
+    requiresSecondaryAuth: Boolean(s.requiresSecondaryAuth),
+    secondaryAuthMethod: s.secondaryAuthMethod || null,
   }))
 
   return NextResponse.json(responseData)

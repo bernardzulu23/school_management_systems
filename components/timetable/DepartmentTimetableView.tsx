@@ -183,6 +183,22 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
     return map
   }, [props.classes])
 
+  const subjectLabel = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const a of assignments) {
+      if (a.subjectId) {
+        const name = String((a as any).subjectName || '').trim()
+        if (name) map.set(String(a.subjectId), name)
+      }
+    }
+    for (const t of departmentTeachers as any[]) {
+      for (const s of t?.subjects || []) {
+        if (s?.id && s?.name) map.set(String(s.id), String(s.name))
+      }
+    }
+    return map
+  }, [assignments, departmentTeachers])
+
   const roomName = useMemo(() => {
     const map = new Map<string, string>()
     for (const r of props.classrooms || []) map.set(String(r.id), r.name)
@@ -527,7 +543,9 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                 key={row.subjectId}
                 className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-deep/40 px-3 py-2"
               >
-                <div className="text-sm font-semibold text-royalPurple-text1">{row.subjectId}</div>
+                <div className="text-sm font-semibold text-royalPurple-text1">
+                  {subjectLabel.get(row.subjectId) || row.subjectId}
+                </div>
                 <div className="text-xs text-royalPurple-text3">
                   Coverage:{' '}
                   {row.teacherIds.map((id) => teacherName.get(String(id)) || 'Teacher').join(', ')}
@@ -673,7 +691,9 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                                     style={{ background: bg }}
                                   >
                                     <div className="font-bold text-[13px] text-slate-900 truncate">
-                                      {(a as any).subjectName || String(a.subjectId)}
+                                      {subjectLabel.get(String(a.subjectId)) ||
+                                        (a as any).subjectName ||
+                                        'Subject'}
                                     </div>
                                     <div className="text-[12px] text-slate-700 truncate">
                                       {(a as any).className ||

@@ -10,6 +10,7 @@ import {
   normalizeTimetableConfig,
   validateTimetableConfig,
 } from '@/lib/timetable/timeSlotsFromConfig'
+import { syncTimeSlotsFromConfig } from '@/lib/timetable/syncTimeSlots'
 
 function configResponse(config) {
   const normalized = normalizeTimetableConfig(config)
@@ -27,6 +28,9 @@ export async function GET(req) {
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const config = await ensureTimetableConfig(prisma, schoolId)
+  await syncTimeSlotsFromConfig(prisma, schoolId).catch((err) => {
+    console.warn('[timetable/config] syncTimeSlotsFromConfig:', err?.message)
+  })
   return configResponse(config)
 }
 
@@ -69,6 +73,8 @@ export async function POST(req) {
       breakSlots: normalized.breakSlots,
     },
   })
+
+  await syncTimeSlotsFromConfig(prisma, schoolId)
 
   return configResponse(config)
 }

@@ -1,6 +1,14 @@
 import { StyleSheet } from 'react-native'
 import { ZsmsSpacing, ZsmsTheme } from './colors'
 
+const brutalShadow = {
+  shadowColor: ZsmsTheme.ink,
+  shadowOffset: { width: 4, height: 4 },
+  shadowOpacity: 1,
+  shadowRadius: 0,
+  elevation: 4,
+}
+
 export const globalStyles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -25,15 +33,16 @@ export const globalStyles = StyleSheet.create({
   card: {
     backgroundColor: ZsmsTheme.card,
     borderRadius: ZsmsSpacing.cardRadius,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: ZsmsTheme.border,
     padding: 16,
     marginBottom: 12,
+    ...brutalShadow,
   },
   input: {
     backgroundColor: ZsmsTheme.white,
     borderWidth: 2,
-    borderColor: ZsmsTheme.ink,
+    borderColor: ZsmsTheme.border,
     borderRadius: ZsmsSpacing.buttonRadius,
     paddingHorizontal: 14,
     paddingVertical: 12,
@@ -48,8 +57,22 @@ export const globalStyles = StyleSheet.create({
     marginBottom: 6,
   },
   errorText: {
-    color: ZsmsTheme.danger,
+    color: ZsmsTheme.accent,
     fontSize: 13,
     marginBottom: 8,
+    backgroundColor: ZsmsTheme.dangerBg,
+    padding: 8,
+    borderWidth: 2,
+    borderColor: ZsmsTheme.accent,
+    borderRadius: ZsmsSpacing.buttonRadius,
+  },
+  headerDark: {
+    backgroundColor: ZsmsTheme.ink,
+    padding: 16,
+  },
+  headerDarkText: {
+    color: ZsmsTheme.paperAlt,
+    fontWeight: '800',
+    fontSize: 18,
   },
 })

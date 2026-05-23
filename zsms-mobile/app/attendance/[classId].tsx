@@ -35,7 +35,7 @@ export default function AttendanceRegisterScreen() {
       student: s,
       record: draft.records.find((r) => r.studentId === s.id) || {
         studentId: s.id,
-        status: 'present' as AttendanceStatus,
+        status: 'absent' as AttendanceStatus,
       },
     }))
   }, [draft, search])

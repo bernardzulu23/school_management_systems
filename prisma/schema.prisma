@@ -73,6 +73,8 @@ model School {
   assessments          Assessment[]
   games                Game[]
   attendances          Attendance[]
+  attendanceSessions   AttendanceSession[]
+  attendanceMarks      AttendanceMark[]
   assignments          Assignment[]
   assignmentSubmissions AssignmentSubmission[]
   fieldTrips           FieldTrip[]
@@ -172,6 +174,7 @@ model User {
   
   refreshTokens           RefreshToken[]
   auditLogs               AuditLog[]
+  attendanceSessionsLed   AttendanceSession[]
 
   @@unique([schoolId, email]) // Email must be unique per school
   @@index([schoolId])
@@ -279,6 +282,10 @@ model Student {
   grade_average Float?
   selected_subjects String[] // Array of subject names selected
   faceEmbedding String?   // JSON-serialised FloatArray from ML Kit face recognition
+  twinGroupId              String?
+  requiresSecondaryAuth    Boolean @default(false)
+  secondaryAuthMethod      String?  // FINGERPRINT | PIN | NONE
+  pinHash                  String?  // bcrypt hash for twin disambiguation PIN
 
   // Parent/Guardian Info
   parent_father_name    String?
@@ -316,6 +323,7 @@ model Student {
   gamificationProfile GamificationProfile?
   playedGames         StudentGame[]
   attendance          Attendance[]
+  attendanceMarks     AttendanceMark[]
   assignmentSubmissions AssignmentSubmission[]
   subjectEnrollments  PupilSubjectEnrollment[]
   eczAssessmentScores EczAssessmentScore[]
@@ -449,6 +457,7 @@ model Class {
   timetableEntries TimetableEntry[]
   schedulingRecipes SchedulingRecipe[]
   allocations       TeacherAllocation[]
+  attendanceSessions AttendanceSession[]
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -486,6 +495,7 @@ model Subject {
   eczAssessments    EczAssessment[]
   eczSubmissions    EczSubmission[]
   questionBanks     QuestionBank[]
+  attendanceSessions AttendanceSession[]
   
   createdAt   DateTime @default(now()) 
   updatedAt   DateTime @updatedAt
@@ -1320,6 +1330,73 @@ model Attendance {
   @@index([schoolId])
   @@index([studentId])
   @@index([date])
+}
+
+enum AttendanceSessionStatus {
+  OPEN
+  CLOSED
+}
+
+enum AttendanceMarkStatus {
+  PRESENT
+  LATE
+  ABSENT
+  EXCUSED
+}
+
+enum AttendanceVerificationMethod {
+  FACE
+  FINGERPRINT
+  MANUAL
+  TWIN_OVERRIDE
+  COMMUNITY_TAP
+}
+
+model AttendanceSession {
+  id                 String                     @id @default(cuid())
+  schoolId           String
+  teacherId          String
+  classId            String
+  subjectId          String
+  term               Int?
+  academicYear       String?
+  periodLabel        String?
+  shift              String                     @default("SINGLE")
+  startedAt          DateTime                   @default(now())
+  endedAt            DateTime?
+  status             AttendanceSessionStatus    @default(OPEN)
+  verificationMethod AttendanceVerificationMethod @default(MANUAL)
+  lateAfterMinutes   Int                        @default(10)
+
+  school  School  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  teacher User    @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  class   Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  marks   AttendanceMark[]
+
+  @@index([schoolId, startedAt])
+  @@index([teacherId, status])
+  @@index([classId, subjectId])
+}
+
+model AttendanceMark {
+  id             String                     @id @default(cuid())
+  sessionId      String
+  studentId      String
+  schoolId       String
+  status         AttendanceMarkStatus
+  markedAt       DateTime                   @default(now())
+  method         AttendanceVerificationMethod @default(MANUAL)
+  faceMatchScore Float?
+  remarks        String?
+
+  session AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  student Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  school  School            @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, studentId])
+  @@index([schoolId, studentId])
+  @@index([sessionId, status])
 }
 
 model Assignment {

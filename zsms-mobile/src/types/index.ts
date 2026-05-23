@@ -43,6 +43,27 @@ export interface RosterStudent {
   name: string
   class: string | null
   qrCode: string | null
+  faceEmbedding?: string | null
+  twinGroupId?: string | null
+  requiresSecondaryAuth?: boolean
+  secondaryAuthMethod?: string | null
+}
+
+export interface LessonSessionMark {
+  studentId: string
+  status?: AttendanceStatus
+  method?: 'MANUAL' | 'FACE' | 'FINGERPRINT'
+  faceMatchScore?: number
+  secondaryVerified?: boolean
+}
+
+export interface LessonSessionSyncPayload {
+  sessionId: string
+  classId: string
+  subjectId: string
+  marks: LessonSessionMark[]
+  close?: boolean
+  sendAbsentSms?: boolean
 }
 
 export interface AttendanceRecord {
@@ -84,9 +105,11 @@ export interface SbaScoreSubmit {
 export type OfflineQueueItem =
   | { type: 'attendance'; id: string; createdAt: string; payload: AttendanceBatch }
   | { type: 'score'; id: string; createdAt: string; payload: SbaScoreSubmit }
+  | { type: 'lessonSession'; id: string; createdAt: string; payload: LessonSessionSyncPayload }
 
 export interface SyncResult {
   success: boolean
   attendance: { synced: number; failed: Array<{ index: number; error: string }> }
   scores: { synced: number; failed: Array<{ index: number; error: string }> }
+  lessonSessions?: { synced: number; failed: Array<{ index: number; error: string }> }
 }

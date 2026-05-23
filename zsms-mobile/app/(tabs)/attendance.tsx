@@ -20,7 +20,9 @@ export default function AttendanceClassPickerScreen() {
   return (
     <View style={globalStyles.container}>
       <Text style={globalStyles.title}>Attendance</Text>
-      <Text style={globalStyles.subtitle}>Pick a class to mark today&apos;s register.</Text>
+      <Text style={globalStyles.subtitle}>
+        Pick a class for a lesson session (per subject) or daily register.
+      </Text>
       <FlatList
         data={assignments}
         keyExtractor={(item) => item.id}
@@ -33,17 +35,19 @@ export default function AttendanceClassPickerScreen() {
           <AssignmentCard
             assignment={item}
             subtitle={`Date: ${todayIsoDate()}`}
-            onPress={() =>
-              router.push({
-                pathname: '/attendance/[classId]',
-                params: {
-                  classId: item.classId,
-                  subjectId: item.subjectId,
-                  className: item.className || '',
-                  subjectName: item.subjectName || '',
-                },
-              })
-            }
+            onPress={() => {
+              const params = {
+                classId: item.classId,
+                subjectId: item.subjectId,
+                className: item.className || '',
+                subjectName: item.subjectName || '',
+              }
+              if (item.subjectId) {
+                router.push({ pathname: '/attendance/session/[classId]', params })
+              } else {
+                router.push({ pathname: '/attendance/[classId]', params })
+              }
+            }}
           />
         )}
       />

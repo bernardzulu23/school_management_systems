@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZSMS (EduZambia) — Color Scheme Reference</title>
+  
+  <!-- Import the specific brand fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* CSS Variables based on the core palette */
+    :root {
+      --color-paper: #EFECE5;
+      --color-ink: #111111;
+      --color-accent: #FF3B00;
+      --color-white: #FFFFFF;
+    }
+
+    /* Global Brutalist Styles */
+    body {
+      background-color: var(--color-paper);
+      color: var(--color-ink);
+      font-family: 'Montserrat', sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 3rem 2rem;
+      background-image: radial-gradient(var(--color-ink) 1px, transparent 1px);
+      background-size: 24px 24px;
+      background-position: -12px -12px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background-color: var(--color-paper);
+      padding: 2rem 3rem;
+      border: 2px solid var(--color-ink);
+      box-shadow: 8px 8px 0px var(--color-ink);
+    }
+
+    /* Typography */
+    h1, h2 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      line-height: 1.1;
+      border-bottom: 4px solid var(--color-ink);
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      margin-top: 3.5rem;
+      border-bottom: 2px solid var(--color-ink);
+      padding-bottom: 0.5rem;
+    }
+
+    h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-top: 2.5rem;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+    }
+
+    strong {
+      font-weight: 700;
+    }
+
+    /* Code styling */
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background-color: rgba(17, 17, 17, 0.08);
+      padding: 0.2rem 0.4rem;
+      font-size: 0.9em;
+      border-radius: 2px;
+      color: var(--color-accent);
+    }
+
+    /* Tables - Brutalist style */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      background-color: var(--color-white);
+      border: 2px solid var(--color-ink);
+      box-shadow: 4px 4px 0px var(--color-ink);
+    }
+
+    th, td {
+      border: 2px solid var(--color-ink);
+      padding: 1rem;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background-color: var(--color-ink);
+      color: var(--color-paper);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 400;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Color Swatch Helper */
+    .swatch {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--color-ink);
+      vertical-align: middle;
+      margin-right: 12px;
+      box-shadow: 2px 2px 0px var(--color-ink);
+    }
+
+    /* Selection */
+    ::selection {
+      background-color: var(--color-accent);
+      color: var(--color-white);
+    }
+
+    /* Dividers */
+    hr {
+      border: none;
+      border-top: 4px dashed var(--color-ink);
+      margin: 4rem 0;
+      opacity: 0.5;
+    }
+
+    /* Scrollbar for webkit */
+    ::-webkit-scrollbar {
+      width: 12px;
+      background: var(--color-paper);
+      border-left: 2px solid var(--color-ink);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-ink);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-accent);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>ZSMS (EduZambia) — Color Scheme Reference</h1>
+
+  <p>This document lists every color used in the school management system, where it is defined, how it is applied, and how the system fits together. The palette matches the brutalist reference: cream paper, black ink, orange accent.</p>
+
+  <hr>
+
+  <h2>How colors work in this project</h2>
+  <p>The app uses a <strong>brutalist, high-contrast</strong> palette: warm off-white surfaces, near-black ink, and a single loud accent (orange-red). Colors arrive through four mechanisms:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Mechanism</th>
+        <th>Location</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Hard-coded hex in Tailwind</strong></td>
+        <td><code>className="bg-paper"</code>, <code>text-ink</code>, <code>text-accent</code></td>
+        <td>Primary UI (dashboard, admin, auth)</td>
+      </tr>
+      <tr>
+        <td><strong>CSS variables (<code>:root</code>)</strong></td>
+        <td><code>app/globals.css</code></td>
+        <td>Single source: <code>--color-paper</code>, <code>--color-ink</code>, <code>--color-accent</code>, <code>--text-secondary</code></td>
+      </tr>
+      <tr>
+        <td><strong><code>lib/theme/brutalistColors.js</code></strong></td>
+        <td>JS constants</td>
+        <td>Shared hex for inline styles</td>
+      </tr>
+      <tr>
+        <td><strong><code>lib/design-tokens.ts</code></strong></td>
+        <td>TypeScript tokens</td>
+        <td>Charts, legacy components</td>
+      </tr>
+      <tr>
+        <td><strong>Tailwind palette remap</strong></td>
+        <td><code>tailwind.config.js</code></td>
+        <td><code>slate</code>, <code>gray</code>, <code>violet</code>, <code>purple</code>, <code>indigo</code> &rarr; brutalist (all routes)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Legacy <code>slate-*</code>, <code>violet-*</code>, and <code>purple-*</code> class names still work but resolve to <strong>paper / ink / accent / muted</strong> via Tailwind config — no route should show the old purple dashboard theme.</p>
+
+  <hr>
+
+  <h2>Core palette (brand / structural)</h2>
+  <p>These four colors drive almost the entire student and admin experience.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Swatches & Hex</th>
+        <th>Names</th>
+        <th>Typical role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="swatch" style="background-color: #EFECE5;"></span> <code>#EFECE5</code></td>
+        <td>Paper, cream</td>
+        <td>Page background, light panels, inverted text on dark blocks</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background-color: #111111;"></span> <code>#111111</code></td>
+        <td>Black, charcoal, ink</td>
+        <td>Body text, borders (2px), dark headers, active nav, shadows</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background-color: #FF3B00;"></span> <code>#FF3B00</code></td>
+        <td>Orange-red, signal</td>
+        <td>CTAs, errors, highlights, selection, progress bars, hover emphasis</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background-color: #FFFFFF;"></span> <code>#FFFFFF</code> / <code>white</code></td>
+        <td>Pure white</td>
+        <td>Cards, inputs, table cells, icon tiles</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Shorthand in code:</strong> <code>#111</code> appears in dot-grid backgrounds (<code>radial-gradient(#111 1px, …)</code>). Scrollbar CSS uses <code>#111</code> and <code>#EFECE5</code> (same as above).</p>
+
+  <h3>Opacity modifiers (same hues)</h3>
+  <p>Used everywhere for subtle UI without new hex values:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Pattern</th>
+        <th>Example</th>
+        <th>Effect</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/10</code></td>
+        <td><code>bg-[#111111]/10</code>, <code>bg-[#FF3B00]/10</code></td>
+        <td>Tinted fills (errors, progress track)</td>
+      </tr>
+      <tr>
+        <td><code>/20</code></td>
+        <td><code>divide-[#111111]/10</code>, <code>border-[#EFECE5]/20</code></td>
+        <td>Dividers, dashed placeholders</td>
+      </tr>
+      <tr>
+        <td><code>/30</code></td>
+        <td><code>placeholder:text-[#111111]/30</code></td>
+        <td>Input placeholders</td>
+      </tr>
+      <tr>
+        <td><code>/40</code>–<code>/60</code></td>
+        <td><code>opacity-40</code>, <code>text-[#EFECE5]/60</code></td>
+        <td>Muted labels, secondary copy</td>
+      </tr>
+      <tr>
+        <td><code>black/5</code></td>
+        <td><code>hover:bg-black/5</code></td>
+        <td>Light hover on cream (&approx;5% black)</td>
+      </tr>
+      <tr>
+        <td><code>white/10</code></td>
+        <td><code>bg-white/10</code></td>
+        <td>Skill tags on dark profile block</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Semantic usage of core colors</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Colors</th>
+        <th>Where</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Surface (light)</strong></td>
+        <td><code>#EFECE5</code></td>
+        <td><code>App.tsx</code> shell, home, discovery tiles, payment layout, admin page bg</td>
+      </tr>
+      <tr>
+        <td><strong>Surface (dark)</strong></td>
+        <td><code>#111111</code> + <code>#EFECE5</code> text</td>
+        <td>Auth left panel, verify screens, splash loader, discovery header, onboarding</td>
+      </tr>
+      <tr>
+        <td><strong>Borders</strong></td>
+        <td><code>#111111</code> 2px</td>
+        <td>All brutalist boxes, nav, forms, tables</td>
+      </tr>
+      <tr>
+        <td><strong>Primary CTA</strong></td>
+        <td><code>#FF3B00</code> bg + <code>#111111</code> text</td>
+        <td>Submit, pay, onboarding continue</td>
+      </tr>
+      <tr>
+        <td><strong>CTA hover (inverted)</strong></td>
+        <td><code>#111111</code> bg + <code>#EFECE5</code> text</td>
+        <td>Buttons, sidebar items, job rows</td>
+      </tr>
+      <tr>
+        <td><strong>Focus</strong></td>
+        <td><code>focus:border-[#FF3B00]</code></td>
+        <td>Inputs across auth, admin editors, profile</td>
+      </tr>
+      <tr>
+        <td><strong>Alerts / errors</strong></td>
+        <td><code>#FF3B00</code> border + <code>bg-[#FF3B00]/10</code></td>
+        <td>Auth errors, payment errors, CMS warnings</td>
+      </tr>
+      <tr>
+        <td><strong>Text selection</strong></td>
+        <td><code>selection:bg-[#FF3B00] selection:text-white</code></td>
+        <td><code>App.tsx</code> root</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <h2>Global CSS (<code>apps/web/src/index.css</code>)</h2>
+
+  <h3><code>@theme</code> — RIASEC & cluster tokens</h3>
+  <p>Registered for Tailwind v4 as <code>--color-*</code> (usable as <code>bg-riasec-r</code>, <code>text-riasec-i</code>, etc., if referenced):</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Token & Hex</th>
+        <th>Holland type / cluster alias</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="swatch" style="background-color: #C2653C;"></span> <code>--color-riasec-r</code> (<code>#C2653C</code>)</td>
+        <td>Realistic / Engineering cluster accent</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background-color: #1A6B6A;"></span> <code>--color-riasec-i</code> (<code>#1A6B6A</code>)</td>
+        <td>Investigative / Land & resources</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background-color: #8B3A8B;"></span> <code>--color-riasec-a</code> (<code>#8B3A8B</code>)</td>
+        <td>Artistic / Policy & governance</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background-color: #3A8B8B;"></span> <code>--color-riasec-s</code> (<code>#3A8B8B</code>)</td>
+        <td>Social</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background-color: #C99A2E;"></span> <code>--color-riasec-e</code> (<code>#C99A2E</code>)</td>
+        <td>Enterprising / Business & finance</td>
+      </tr>
+      <tr>
+        <td><span class="swatch" style="background-color: #5A6B7E;"></span> <code>--color-riasec-c</code> (<code>#5A6B7E</code>)</td>
+        <td>Conventional</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Wiring:</strong> <code>src/data/riasec-types.json</code> sets <code>"color": "var(--color-riasec-r)"</code> (etc.). <code>RiasecCard.tsx</code> applies <code>type.color</code> to SVG hexagon fills, strokes, and score bars when a type is matched/revealed; unmatched segments use <code>#111111</code>.</p>
+
+  <h3>Utility classes</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Class</th>
+        <th>Colors</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>.brutal-shadow</code></td>
+        <td>Shadow <code>#111111</code> 4&times;4px</td>
+        <td>Card depth</td>
+      </tr>
+      <tr>
+        <td><code>.brutal-shadow-hover</code></td>
+        <td>Shadow <code>#111111</code> 6&times;6px</td>
+        <td>Hover lift</td>
+      </tr>
+      <tr>
+        <td><code>.brutal-shadow-active</code></td>
+        <td>Shadow cleared</td>
+        <td>Pressed state</td>
+      </tr>
+      <tr>
+        <td><code>.noise-bg</code></td>
+        <td>SVG noise, <code>opacity: 0.04</code></td>
+        <td>Full-screen texture overlay (<code>App.tsx</code>)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <h2>Design intent (how it should feel)</h2>
+  <ul>
+    <li><strong>Read like print:</strong> cream paper, black rules, monospace labels.</li>
+    <li><strong>One scream color:</strong> <code>#FF3B00</code> for action and urgency, not decoration.</li>
+    <li><strong>Data carries color:</strong> clusters and RIASEC types get distinct hues from JSON/CSS vars.</li>
+    <li><strong>Motion via inversion:</strong> hover often swaps light/dark or cream/orange rather than new colors.</li>
+  </ul>
+</div>
+
+</body>
+</html>

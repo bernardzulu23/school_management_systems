@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import OpenAI from 'openai'
+import { syncTimeSlotsFromConfig } from '@/lib/timetable/syncTimeSlots'
 
 export const dynamic = 'force-dynamic'
 
@@ -205,7 +206,7 @@ async function expandSolverAssignmentsToUi(
       classId: lesson.classId,
       className: cls?.name,
       subjectId: lesson.subjectId,
-      subjectName: subjectById.get(lesson.subjectId),
+      subjectName: subjectById.get(lesson.subjectId) || 'Subject',
       classroomId: defaultRoomId,
       source: 'generated',
     })
@@ -257,25 +258,34 @@ export async function POST(req: NextRequest) {
   const timeoutMs = Math.max(1000, Math.min(120_000, safeNumber(body.timeoutMs, 15_000)))
   const versionName = safeString(body.name) || 'Draft (Solver)'
 
-  const [teachers, rooms, classes, slots, lessons, constraints, lockedPeriodAssignments, recipes] =
-    await Promise.all([
-      prisma.teacher.findMany({
-        where: { schoolId },
-        select: {
-          id: true,
-          assignedSubjects: true,
-          user: { select: { name: true } },
-        },
-      }),
-      prisma.classroom.findMany({
-        where: { schoolId },
-        select: { id: true, name: true },
-      }),
-      prisma.class.findMany({
-        where: { schoolId },
-        select: { id: true, name: true },
-      }),
-      prisma.timeSlot.findMany({
+  const [
+    teachers,
+    rooms,
+    classes,
+    slotsAfterSync,
+    lessons,
+    constraints,
+    lockedPeriodAssignments,
+    recipes,
+  ] = await Promise.all([
+    prisma.teacher.findMany({
+      where: { schoolId },
+      select: {
+        id: true,
+        assignedSubjects: true,
+        user: { select: { name: true } },
+      },
+    }),
+    prisma.classroom.findMany({
+      where: { schoolId },
+      select: { id: true, name: true },
+    }),
+    prisma.class.findMany({
+      where: { schoolId },
+      select: { id: true, name: true },
+    }),
+    (async () => {
+      let slots = await prisma.timeSlot.findMany({
         where: { schoolId },
         select: {
           id: true,
@@ -286,53 +296,72 @@ export async function POST(req: NextRequest) {
           isBreak: true,
         },
         orderBy: [{ dayOfWeek: 'asc' }, { period: 'asc' }],
-      }),
-      prisma.teachingAssignment.findMany({
-        where: { schoolId },
-        select: { id: true, teacherId: true, classId: true, subjectId: true },
-      }),
-      prisma.constraint.findMany({
-        where: { schoolId, active: true },
-        select: { id: true, type: true, scope: true, targetId: true, priority: true, config: true },
-      }),
-      prisma.teacherPeriodAssignment.findMany({
-        where: { schoolId, lockedForGeneration: true },
-        select: { teacherId: true, timeSlotId: true },
-      }),
-      prisma.schedulingRecipe.findMany({
-        where: { schoolId, isValid: true, status: { not: 'ARCHIVED' } },
-        select: {
-          id: true,
-          teachingAssignmentId: true,
-          teacherId: true,
-          classId: true,
-          subjectId: true,
-          expectedPeriodsPerWeek: true,
-          blocks: {
-            select: {
-              id: true,
-              size: true,
-              quantity: true,
-              placementPriority: true,
-              preferredDays: true,
-              preferredPeriods: true,
-              forbiddenDays: true,
-              forbiddenPeriods: true,
-              allowSplitAcrossBreaks: true,
-              isLocked: true,
-            },
+      })
+      if (!slots.length) {
+        await syncTimeSlotsFromConfig(prisma, schoolId)
+        slots = await prisma.timeSlot.findMany({
+          where: { schoolId },
+          select: {
+            id: true,
+            dayOfWeek: true,
+            period: true,
+            startTime: true,
+            endTime: true,
+            isBreak: true,
           },
-          constraints: {
-            select: {
-              id: true,
-              type: true,
-              priority: true,
-              config: true,
-            },
+          orderBy: [{ dayOfWeek: 'asc' }, { period: 'asc' }],
+        })
+      }
+      return slots
+    })(),
+    prisma.teachingAssignment.findMany({
+      where: { schoolId },
+      select: { id: true, teacherId: true, classId: true, subjectId: true },
+    }),
+    prisma.constraint.findMany({
+      where: { schoolId, active: true },
+      select: { id: true, type: true, scope: true, targetId: true, priority: true, config: true },
+    }),
+    prisma.teacherPeriodAssignment.findMany({
+      where: { schoolId, lockedForGeneration: true },
+      select: { teacherId: true, timeSlotId: true },
+    }),
+    prisma.schedulingRecipe.findMany({
+      where: { schoolId, isValid: true, status: { not: 'ARCHIVED' } },
+      select: {
+        id: true,
+        teachingAssignmentId: true,
+        teacherId: true,
+        classId: true,
+        subjectId: true,
+        expectedPeriodsPerWeek: true,
+        blocks: {
+          select: {
+            id: true,
+            size: true,
+            quantity: true,
+            placementPriority: true,
+            preferredDays: true,
+            preferredPeriods: true,
+            forbiddenDays: true,
+            forbiddenPeriods: true,
+            allowSplitAcrossBreaks: true,
+            isLocked: true,
           },
         },
-      }),
-    ])
+        constraints: {
+          select: {
+            id: true,
+            type: true,
+            priority: true,
+            config: true,
+          },
+        },
+      },
+    }),
+  ])
+
+  const slots = slotsAfterSync
 
   if (!slots.length) {
     return NextResponse.json(

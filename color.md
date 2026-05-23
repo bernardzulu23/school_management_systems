@@ -260,3 +260,9 @@ Tailwind step colors: `blue-600`, `green-600`, `amber-600`, `purple-600`, `red-6
 5. **Consistency gap:** admin + student flows use the brutalist hex set; `Navbar` / `JobBoard` / `AuthModal` use a different token naming scheme that is not wired in `index.css`.
 
 For changes, prefer adding tokens to `@theme` in `index.css` and replacing `bg-[#…]` duplicates rather than introducing a fifth accent color.
+
+---
+
+## Mobile teacher app (`zsms-mobile`)
+
+The React Native app mirrors this palette in `zsms-mobile/src/theme/colors.ts` (synced with `lib/mobile/theme.js`). It calls the same API and Postgres database as the web app; it does **not** use legacy `royalPurple` dashboard classes.

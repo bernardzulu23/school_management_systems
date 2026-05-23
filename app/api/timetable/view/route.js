@@ -173,7 +173,29 @@ export async function GET(req) {
     orderBy: [{ dayOfWeek: 'asc' }, { periodNumber: 'asc' }],
   })
 
-  const assignments = mapDbEntriesToAssignments(entries)
+  let assignments = mapDbEntriesToAssignments(entries)
+
+  const missingSubjectIds = [
+    ...new Set(
+      assignments
+        .filter((a) => a.subjectId && !String(a.subjectName || '').trim())
+        .map((a) => String(a.subjectId))
+    ),
+  ]
+  if (missingSubjectIds.length) {
+    const subjects = await prisma.subject.findMany({
+      where: { schoolId, id: { in: missingSubjectIds } },
+      select: { id: true, name: true, code: true },
+    })
+    const subjectNameById = new Map(
+      subjects.map((s) => [String(s.id), s.name || s.code || 'Subject'])
+    )
+    assignments = assignments.map((a) => ({
+      ...a,
+      subjectName:
+        String(a.subjectName || '').trim() || subjectNameById.get(String(a.subjectId)) || 'Subject',
+    }))
+  }
   const configSlots = buildTimeSlotsFromConfig(config)
   const entrySlots = buildTimeSlotsFromEntries(assignments)
   const timeSlots = mergeTimeSlotGrids(configSlots, entrySlots)

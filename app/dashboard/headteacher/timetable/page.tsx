@@ -7,7 +7,6 @@ import { ConflictDisplay } from '@/components/timetable/ConflictDisplay'
 import { DragDropTimetable } from '@/components/timetable/DragDropTimetable'
 import { MasterTimetableGrid } from '@/components/timetable/MasterTimetableGrid'
 import TeacherPeriodAssignmentUI from '@/components/timetable/TeacherPeriodAssignmentUI'
-import { TimetableNotificationBell } from '@/components/timetable/MasterTimetableGenerator'
 import { AllocationNotificationBell } from '@/components/timetable/AllocationNotificationBell'
 import { SchoolTimetableSettings } from '@/components/timetable/SchoolTimetableSettings'
 import { buildTimeSlotsFromConfig } from '@/lib/timetable/timeSlotsFromConfig'
@@ -15,7 +14,7 @@ import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
-import { Bell, Check, X } from 'lucide-react'
+import { Check, X } from 'lucide-react'
 
 type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings' | 'allocations'
 
@@ -176,7 +175,6 @@ function HeadteacherTimetablePageContent() {
   const [season, setSeason] = useState<'normal' | 'farming' | 'planting'>('normal')
   const [schoolId, setSchoolId] = useState<string>('')
 
-  const [allocationNotifUnread, setAllocationNotifUnread] = useState(0)
   const [pendingAllocations, setPendingAllocations] = useState<any[]>([])
   const [reviewOpen, setReviewOpen] = useState(false)
   const [reviewIndex, setReviewIndex] = useState(0)
@@ -209,8 +207,7 @@ function HeadteacherTimetablePageContent() {
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) return
-      const list = Array.isArray(json?.notifications) ? json.notifications : []
-      setAllocationNotifUnread(list.filter((n: any) => !n.read).length)
+      /* AllocationNotificationBell fetches its own count */
     } catch {}
   }, [])
 
@@ -655,24 +652,6 @@ function HeadteacherTimetablePageContent() {
                 setReviewOpen(true)
               }}
             />
-            <TimetableNotificationBell />
-            <button
-              type="button"
-              onClick={() => {
-                setTab('allocations')
-                setReviewIndex(0)
-                setRejectionReason('')
-                setReviewOpen(true)
-              }}
-              className="relative inline-flex items-center justify-center rounded-full border border-royalPurple-border/40 bg-royalPurple-card/40 px-3 py-2 text-royalPurple-text2 hover:bg-royalPurple-card/60"
-            >
-              <Bell size={18} />
-              {allocationNotifUnread > 0 ? (
-                <span className="absolute -top-1 -right-1 rounded-full bg-accent/100 px-2 py-0.5 text-[10px] font-bold text-white">
-                  {allocationNotifUnread}
-                </span>
-              ) : null}
-            </button>
             <Button
               onClick={generateFromAllocations}
               disabled={dbGenerating}

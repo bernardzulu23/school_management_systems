@@ -6,6 +6,7 @@ import prisma from '@/lib/prisma'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { sendOnboardingVerificationEmail } from '@/config/email'
 import { signOnboardingToken } from '@/lib/middleware/onboardingAuth'
+import { getOnboardingVerifyUrl } from '@/lib/onboarding/emailLinks'
 
 function isValidEmail(value) {
   const email = String(value || '')
@@ -129,8 +130,7 @@ export async function POST(request) {
     })
 
     if (!existing?.isVerified) {
-      const baseDomain = process.env.APP_BASE_DOMAIN || 'bluepeacktechnologies.com'
-      const verifyUrl = `https://${baseDomain}/api/onboarding/verify/${verificationToken}`
+      const verifyUrl = getOnboardingVerifyUrl(request, verificationToken)
       const sent = await sendOnboardingVerificationEmail({ to: email, verifyUrl })
       if (!sent) {
         if (process.env.DEV_ONBOARDING_SKIP_EMAIL === 'true') {
@@ -160,7 +160,11 @@ export async function POST(request) {
           return response
         }
         return NextResponse.json(
-          { error: 'Email service is not configured. Contact support.' },
+          {
+            error:
+              'We could not send the verification email. Check that RESEND_API_KEY and EMAIL_FROM are set, or use Resend to verify your domain.',
+            code: 'EMAIL_NOT_SENT',
+          },
           { status: 502 }
         )
       }

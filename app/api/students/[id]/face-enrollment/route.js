@@ -8,8 +8,8 @@ export async function POST(request, { params }) {
   if (!auth.isAuthenticated) return auth.response
 
   // Only admin and headteacher roles may call it
-  if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
-    return NextResponse.json({ error: 'Forbidden: Admin or Headteacher only' }, { status: 403 })
+  if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'TEACHER', 'teacher', 'HOD', 'hod'])) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
   const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
@@ -19,10 +19,14 @@ export async function POST(request, { params }) {
 
   const { id: studentId } = await params
   const body = await request.json().catch(() => ({}))
-  const { embedding } = body
+  let { embedding } = body
 
   if (!embedding) {
     return NextResponse.json({ error: 'embedding is required' }, { status: 400 })
+  }
+
+  if (Array.isArray(embedding)) {
+    embedding = JSON.stringify(embedding)
   }
 
   try {

@@ -4,6 +4,7 @@ import crypto from 'crypto'
 import prisma from '@/lib/prisma'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { sendOnboardingVerificationEmail } from '@/config/email'
+import { getOnboardingVerifyUrl } from '@/lib/onboarding/emailLinks'
 
 function isValidEmail(value) {
   const email = String(value || '')
@@ -66,9 +67,18 @@ export async function POST(request) {
     },
   })
 
-  const baseDomain = process.env.APP_BASE_DOMAIN || 'bluepeacktechnologies.com'
-  const verifyUrl = `https://${baseDomain}/api/onboarding/verify/${verificationToken}`
-  await sendOnboardingVerificationEmail({ to: email, verifyUrl })
+  const verifyUrl = getOnboardingVerifyUrl(request, verificationToken)
+  const sent = await sendOnboardingVerificationEmail({ to: email, verifyUrl })
+  if (!sent) {
+    return NextResponse.json(
+      {
+        error:
+          'Verification email could not be sent. Ensure RESEND_API_KEY and EMAIL_FROM are configured.',
+        code: 'EMAIL_NOT_SENT',
+      },
+      { status: 502 }
+    )
+  }
 
   return NextResponse.json({ success: true }, { status: 200 })
 }

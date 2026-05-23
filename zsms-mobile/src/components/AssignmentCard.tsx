@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { ZsmsTheme } from '@/theme/colors'
+import { ZsmsSpacing, ZsmsTheme } from '@/theme/colors'
 import type { TeachingAssignment } from '@/types'
 
 type Props = {
@@ -11,9 +11,19 @@ type Props = {
 export function AssignmentCard({ assignment, onPress, subtitle }: Props) {
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [styles.card, pressed && styles.pressed]}>
-      <Text style={styles.className}>{assignment.className || 'Class'}</Text>
-      <Text style={styles.subject}>{assignment.subjectName || 'Subject'}</Text>
-      {subtitle ? <Text style={styles.sub}>{subtitle}</Text> : null}
+      {({ pressed }) => (
+        <>
+          <Text style={[styles.className, pressed && styles.pressedText]}>
+            {assignment.className || 'Class'}
+          </Text>
+          <Text style={[styles.subject, pressed && styles.pressedText]}>
+            {assignment.subjectName || 'Subject'}
+          </Text>
+          {subtitle ? (
+            <Text style={[styles.sub, pressed && styles.pressedSub]}>{subtitle}</Text>
+          ) : null}
+        </>
+      )}
     </Pressable>
   )
 }
@@ -21,14 +31,23 @@ export function AssignmentCard({ assignment, onPress, subtitle }: Props) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: ZsmsTheme.card,
-    borderRadius: 14,
-    borderWidth: 1,
+    borderRadius: ZsmsSpacing.cardRadius,
+    borderWidth: 2,
     borderColor: ZsmsTheme.border,
     padding: 16,
     marginBottom: 12,
+    shadowColor: ZsmsTheme.ink,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
   },
-  pressed: { opacity: 0.9 },
+  pressed: {
+    backgroundColor: ZsmsTheme.ink,
+  },
   className: { fontSize: 18, fontWeight: '800', color: ZsmsTheme.ink },
   subject: { fontSize: 14, color: ZsmsTheme.textSecondary, marginTop: 4 },
   sub: { fontSize: 12, color: ZsmsTheme.textMuted, marginTop: 8 },
+  pressedText: { color: ZsmsTheme.paperAlt },
+  pressedSub: { color: ZsmsTheme.paperAlt, opacity: 0.8 },
 })

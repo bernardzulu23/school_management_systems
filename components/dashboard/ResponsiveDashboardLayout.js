@@ -67,15 +67,6 @@ export default function ResponsiveDashboardLayout({ children }) {
                 .trim()
                 .toLowerCase()
             ) && <TimetableNotificationBell />}
-            <button
-              className="p-2 rounded-full text-muted hover:bg-paper relative"
-              aria-label="Notifications"
-            >
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-1.5 right-1.5 block h-2 w-2 rounded-full bg-accent ring-2 ring-white" />
-            </button>
-
-            <div className="h-8 w-px bg-ink/10 mx-2 hidden sm:block" />
 
             <div className="flex items-center gap-3">
               <div className="text-right hidden sm:block">

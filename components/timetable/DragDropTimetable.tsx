@@ -123,6 +123,16 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
     return map
   }, [classrooms])
 
+  const subjectName = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const a of assignments) {
+      if (a.subjectId && (a as any).subjectName) {
+        map.set(String(a.subjectId), String((a as any).subjectName))
+      }
+    }
+    return map
+  }, [assignments])
+
   const cellAssignments = useMemo(() => {
     const map = new Map<string, Assignment[]>()
     for (const a of assignments) {
@@ -358,9 +368,14 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
                             >
                               <div className="flex items-center justify-between gap-2">
                                 <div className="text-sm font-semibold text-royalPurple-text1 truncate">
+                                  {subjectName.get(String(a.subjectId)) ||
+                                    (a as any).subjectName ||
+                                    className.get(String(a.classId)) ||
+                                    'Lesson'}
+                                </div>
+                                <div className="text-xs text-royalPurple-text3 truncate">
                                   {className.get(String(a.classId)) || 'Class'}
                                 </div>
-                                <div className="text-xs text-royalPurple-text3">{a.subjectId}</div>
                               </div>
                               <div className="text-xs text-royalPurple-text2 mt-1 truncate">
                                 {teacherName.get(String(a.teacherId)) || 'Teacher'} •{' '}

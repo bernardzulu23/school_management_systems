@@ -32,10 +32,13 @@ async function refreshAccessToken(): Promise<string | null> {
 export class ApiError extends Error {
   status: number
   details?: unknown
+  code?: string
   constructor(message: string, status: number, details?: unknown) {
     super(message)
     this.status = status
     this.details = details
+    const d = details as { code?: string } | undefined
+    this.code = d?.code
   }
 }
 
