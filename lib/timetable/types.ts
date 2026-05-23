@@ -256,12 +256,11 @@ export interface Class {
   color?: ColorRef
   students: number | StudentRef[]
   subjects: SubjectRef[]
-  /** Optional preferred room for home-room teaching. */
-  homeRoomId?: Classroom['id']
 }
 
 /**
- * Assignment links a class, teacher, subject and classroom to a concrete time slot.
+ * Assignment links a class (grade/form), teacher, and subject to a time slot.
+ * Zambian schools schedule by class — not by physical room.
  */
 export interface Assignment {
   id: UUID | string
@@ -275,7 +274,8 @@ export interface Assignment {
   teacherId: Teacher['id']
   classId: Class['id']
   subjectId: SubjectRef['id']
-  classroomId: Classroom['id']
+  /** Legacy field — not used in class-centric (Zambian) timetables. */
+  classroomId?: Classroom['id']
   /** Optional extra metadata for UI and audits. */
   notes?: string
   /** Whether this assignment is user-edited (manual override) vs auto-generated. */

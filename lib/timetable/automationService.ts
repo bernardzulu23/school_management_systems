@@ -7,6 +7,7 @@ import type {
   TravelingTeacherRoute,
 } from './types'
 import { CollisionDetector } from './collisionDetector'
+import { TIMETABLE_CLASS_CENTRIC } from './classCentric'
 
 export type AutomationQuality = 'fast' | 'balanced' | 'perfect'
 
@@ -108,7 +109,7 @@ function validateSchoolData(data: TimetableSchoolData) {
     throw new Error('timeSlots are required')
   if (!Array.isArray(data.teachers) || data.teachers.length === 0)
     throw new Error('teachers are required')
-  if (!Array.isArray(data.classrooms) || data.classrooms.length === 0)
+  if (!TIMETABLE_CLASS_CENTRIC && (!Array.isArray(data.classrooms) || data.classrooms.length === 0))
     throw new Error('classrooms are required')
   if (!Array.isArray(data.classes) || data.classes.length === 0)
     throw new Error('classes are required')
@@ -140,7 +141,6 @@ function makeAssignmentBase(
   data: TimetableSchoolData,
   req: TimetableRequirement,
   teacherId: Teacher['id'],
-  classroomId: Classroom['id'],
   slot: TimeSlot
 ): Assignment {
   const season = seasonToAssignmentSeason(data.seasonMode)
@@ -156,29 +156,25 @@ function makeAssignmentBase(
     teacherId,
     classId: req.classId,
     subjectId: req.subjectId,
-    classroomId,
     source: 'generated',
   }
 }
 
 function buildHardIndexes(assignments: Assignment[]) {
   const teacher = new Set<string>()
-  const room = new Set<string>()
   const cls = new Set<string>()
   const key = (a: Assignment) => `${a.season}|${a.dayOfWeek}|${a.startTime}|${a.endTime}`
   for (const a of assignments) {
     const k = key(a)
     teacher.add(`${a.teacherId}|${k}`)
-    room.add(`${a.classroomId}|${k}`)
     cls.add(`${a.classId}|${k}`)
   }
-  return { teacher, room, cls, key }
+  return { teacher, cls, key }
 }
 
 function hasHardCollision(index: ReturnType<typeof buildHardIndexes>, a: Assignment) {
   const k = index.key(a)
   if (index.teacher.has(`${a.teacherId}|${k}`)) return true
-  if (index.room.has(`${a.classroomId}|${k}`)) return true
   if (index.cls.has(`${a.classId}|${k}`)) return true
   return false
 }
@@ -186,7 +182,6 @@ function hasHardCollision(index: ReturnType<typeof buildHardIndexes>, a: Assignm
 function addToIndexes(index: ReturnType<typeof buildHardIndexes>, a: Assignment) {
   const k = index.key(a)
   index.teacher.add(`${a.teacherId}|${k}`)
-  index.room.add(`${a.classroomId}|${k}`)
   index.cls.add(`${a.classId}|${k}`)
 }
 
@@ -382,7 +377,6 @@ export class AutomationService {
     const season = seasonToAssignmentSeason(data.seasonMode)
     const slots = data.timeSlots.filter((s) => !s.isBreak)
     const teachers = data.teachers
-    const rooms = data.classrooms
 
     const assignments: Assignment[] = []
     const index = buildHardIndexes(assignments)
@@ -395,8 +389,6 @@ export class AutomationService {
         teacherBySubject.get(k)!.push(t)
       }
     }
-
-    const roomCandidates = rooms.length ? rooms : []
 
     const expanded: TimetableRequirement[] = []
     for (const r of requirements) {
@@ -414,18 +406,13 @@ export class AutomationService {
         : teacherBySubject.get(String(req.subjectId)) || []
       const teacherPool = teacherPoolBase.length ? teacherPoolBase : teachers
 
-      const roomPool = req.preferredClassroomIds?.length
-        ? rooms.filter((r) => req.preferredClassroomIds!.some((id) => String(id) === String(r.id)))
-        : roomCandidates
-
       const teacher = choose(rng, teacherPool)
-      const room = choose(rng, roomPool)
-      if (!teacher || !room) continue
+      if (!teacher) continue
 
       let placed = false
       const slotOrder = [...slots].sort(() => rng() - 0.5)
       for (const slot of slotOrder) {
-        const a = makeAssignmentBase(data, req, teacher.id, room.id, slot)
+        const a = makeAssignmentBase(data, req, teacher.id, slot)
         a.season = season
         if (hasHardCollision(index, a)) continue
         const detector = new CollisionDetector({

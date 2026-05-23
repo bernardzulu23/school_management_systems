@@ -49,7 +49,14 @@ function normalizeDayOfWeek(d: unknown): string {
 async function expandSolverAssignmentsToUi(
   schoolId: string,
   raw: Record<string, string>,
-  lessons: Array<{ id: string; teacherId: string; classId: string; subjectId: string }>,
+  slotSpans: Record<string, string[]>,
+  lessons: Array<{
+    id: string
+    teacherId: string
+    classId: string
+    subjectId: string
+    consecutivePeriods?: number
+  }>,
   slots: Array<{
     id: string
     dayOfWeek: string
@@ -59,15 +66,12 @@ async function expandSolverAssignmentsToUi(
     isBreak: boolean
   }>,
   teachers: Array<{ id: string; user?: { name: string | null } | null }>,
-  classes: Array<{ id: string; name: string }>,
-  _rooms: Array<{ id: string }>
+  classes: Array<{ id: string; name: string }>
 ) {
   const lessonById = new Map(lessons.map((l) => [l.id, l]))
   const slotById = new Map(slots.map((s) => [s.id, s]))
   const teacherById = new Map(teachers.map((t) => [t.id, t]))
   const classById = new Map(classes.map((c) => [c.id, c]))
-  const defaultRoomId = 'room-unassigned'
-
   const subjectIds = Array.from(new Set(lessons.map((l) => l.subjectId).filter(Boolean)))
   const subjects =
     subjectIds.length > 0
@@ -81,7 +85,9 @@ async function expandSolverAssignmentsToUi(
   const out: Record<string, unknown>[] = []
   for (const [lessonId, slotId] of Object.entries(raw || {})) {
     const lesson = lessonById.get(lessonId)
+    const spanIds = slotSpans?.[lessonId]?.length ? slotSpans[lessonId] : [slotId]
     const slot = slotById.get(slotId)
+    const lastSlot = slotById.get(spanIds[spanIds.length - 1] || slotId)
     if (!lesson || !slot || slot.isBreak) continue
 
     const teacher = teacherById.get(lesson.teacherId)
@@ -93,7 +99,7 @@ async function expandSolverAssignmentsToUi(
       dayOfWeek: normalizeDayOfWeek(slot.dayOfWeek),
       timeSlotId: slot.id,
       startTime: formatHHMM(slot.startTime),
-      endTime: formatHHMM(slot.endTime),
+      endTime: formatHHMM(lastSlot?.endTime || slot.endTime),
       period: Number(slot.period) || 1,
       isBreak: false,
       teacherId: lesson.teacherId,
@@ -102,7 +108,7 @@ async function expandSolverAssignmentsToUi(
       className: cls?.name,
       subjectId: lesson.subjectId,
       subjectName: subjectById.get(lesson.subjectId) || 'Subject',
-      classroomId: defaultRoomId,
+      consecutivePeriods: lesson.consecutivePeriods || spanIds.length,
       source: 'generated',
     })
   }
@@ -128,25 +134,22 @@ export async function POST(req: NextRequest) {
   try {
     const [
       teachers,
-      rooms,
       classes,
       slotsAfterSync,
       lessons,
       constraints,
       lockedPeriodAssignments,
       recipes,
+      teacherAllocations,
     ] = await Promise.all([
       prisma.teacher.findMany({
         where: { schoolId },
         select: {
           id: true,
+          userId: true,
           assignedSubjects: true,
           user: { select: { name: true } },
         },
-      }),
-      prisma.classroom.findMany({
-        where: { schoolId },
-        select: { id: true, name: true },
       }),
       prisma.class.findMany({
         where: { schoolId },
@@ -227,6 +230,20 @@ export async function POST(req: NextRequest) {
           },
         },
       }),
+      prisma.teacherAllocation.findMany({
+        where: { schoolId, status: 'pushed' },
+        select: {
+          id: true,
+          teacherId: true,
+          classId: true,
+          subjectId: true,
+          periodsPerWeek: true,
+          blockType: true,
+          singlePeriods: true,
+          doublePeriods: true,
+          triplePeriods: true,
+        },
+      }),
     ])
 
     const slots = slotsAfterSync
@@ -249,11 +266,18 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    const teacherIdByUserId = new Map(
+      teachers.map((t) => [String((t as { userId?: string }).userId || ''), String(t.id)])
+    )
+    const mappedAllocations = teacherAllocations.map((a) => ({
+      ...a,
+      teacherId: teacherIdByUserId.get(String(a.teacherId)) || String(a.teacherId),
+    }))
+
     const payload: SolverPayload = {
       name: versionName,
       maxSolutions,
       teachers,
-      rooms,
       classes,
       slots,
       lessons,
@@ -263,6 +287,7 @@ export async function POST(req: NextRequest) {
         slotId: x.timeSlotId,
       })),
       recipes,
+      teacherAllocations: mappedAllocations,
     }
 
     const effectiveLessons = resolveLessonsForSolver(payload)
@@ -286,11 +311,11 @@ export async function POST(req: NextRequest) {
     const assignmentsForUi = await expandSolverAssignmentsToUi(
       schoolId,
       result.assignments || {},
+      result.slotSpans || {},
       effectiveLessons,
       slots,
       teachers,
-      classes,
-      rooms
+      classes
     )
 
     return NextResponse.json({

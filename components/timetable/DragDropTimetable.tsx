@@ -11,7 +11,7 @@ export interface DragDropTimetableProps {
   assignments: Assignment[]
   timeSlots: TimeSlot[]
   teachers: Teacher[]
-  classrooms: Classroom[]
+  classrooms?: Classroom[]
   studentClasses: Class[]
   onAssignmentChange: (assignment: Assignment) => void
   onConflictDetected: (conflicts: Map<string, import('@/lib/timetable/types').Conflict[]>) => void
@@ -62,7 +62,7 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
     assignments,
     timeSlots,
     teachers,
-    classrooms,
+    classrooms = [],
     studentClasses,
     onAssignmentChange,
     onConflictDetected,
@@ -116,12 +116,6 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
     for (const c of studentClasses) map.set(String(c.id), c.name)
     return map
   }, [studentClasses])
-
-  const roomName = useMemo(() => {
-    const map = new Map<string, string>()
-    for (const r of classrooms) map.set(String(r.id), r.name)
-    return map
-  }, [classrooms])
 
   const subjectName = useMemo(() => {
     const map = new Map<string, string>()
@@ -364,7 +358,7 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
                               className={`rounded-xl border ${border} bg-royalPurple-deep/60 px-3 py-2 cursor-grab active:cursor-grabbing zsms-hover-raise`}
                               title={`${className.get(String(a.classId)) || 'Class'} • ${
                                 teacherName.get(String(a.teacherId)) || 'Teacher'
-                              } • ${roomName.get(String(a.classroomId)) || 'Room'}`}
+                              } • ${subjectName.get(String(a.subjectId)) || (a as any).subjectName || 'Subject'}`}
                             >
                               <div className="flex items-center justify-between gap-2">
                                 <div className="text-sm font-semibold text-royalPurple-text1 truncate">
@@ -378,8 +372,7 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
                                 </div>
                               </div>
                               <div className="text-xs text-royalPurple-text2 mt-1 truncate">
-                                {teacherName.get(String(a.teacherId)) || 'Teacher'} •{' '}
-                                {roomName.get(String(a.classroomId)) || 'Room'}
+                                {teacherName.get(String(a.teacherId)) || 'Teacher'}
                               </div>
                               {aConflicts.length > 0 ? (
                                 <div className="mt-1 text-[11px] text-amber-300">

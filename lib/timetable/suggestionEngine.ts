@@ -7,6 +7,7 @@ import type {
   TravelingTeacherRoute,
 } from './types'
 import { CollisionDetector, type Suggestion } from './collisionDetector'
+import { TIMETABLE_CLASS_CENTRIC } from './classCentric'
 
 export type { Suggestion } from './collisionDetector'
 
@@ -94,7 +95,7 @@ export class SuggestionEngine {
   }
 
   suggestAlternativeClassrooms(assignment: Assignment): Suggestion[] {
-    if (!this.classrooms.length) return []
+    if (TIMETABLE_CLASS_CENTRIC || !this.classrooms.length) return []
     const out: Suggestion[] = []
     for (const room of this.classrooms) {
       if (String(room.id) === String(assignment.classroomId)) continue

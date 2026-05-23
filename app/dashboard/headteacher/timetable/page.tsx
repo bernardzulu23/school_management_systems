@@ -13,7 +13,7 @@ import { buildTimeSlotsFromConfig } from '@/lib/timetable/timeSlotsFromConfig'
 import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
-import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
+import type { Assignment, Class, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { Check, X } from 'lucide-react'
 
 type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings' | 'allocations'
@@ -55,17 +55,6 @@ function genTimeSlots(): TimeSlot[] {
     }
   }
   return out
-}
-
-function defaultClassrooms(count: number): Classroom[] {
-  const n = Math.max(8, Math.min(60, count))
-  return Array.from({ length: n }).map((_, i) => ({
-    id: `room-${i + 1}`,
-    name: `Rm${String(101 + i)}`,
-    capacity: 50,
-    equipment: ['chalkboard'],
-    accessibility: ['ground-floor'],
-  }))
 }
 
 function toTeacher(t: any, subjectsByName: Map<string, { id: string; name: string }>): Teacher {
@@ -141,7 +130,6 @@ function toClass(c: any, fallbackSubjects: Array<{ id: string; name: string }>):
     grade,
     students: Number(c?.studentCount || 40),
     subjects: subjects.map((s) => ({ id: s.id, name: s.name })),
-    homeRoomId: undefined,
   }
 }
 
@@ -170,7 +158,6 @@ function HeadteacherTimetablePageContent() {
   const [coverPeriod, setCoverPeriod] = useState<number>(1)
   const [teachers, setTeachers] = useState<Teacher[]>([])
   const [classes, setClasses] = useState<Class[]>([])
-  const [classrooms, setClassrooms] = useState<Classroom[]>([])
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>(() => genTimeSlots())
   const [season, setSeason] = useState<'normal' | 'farming' | 'planting'>('normal')
   const [schoolId, setSchoolId] = useState<string>('')
@@ -309,16 +296,6 @@ function HeadteacherTimetablePageContent() {
 
         setTeachers(mappedTeachers)
         setClasses(mappedClasses)
-        setClassrooms([
-          {
-            id: 'room-unassigned',
-            name: 'Unassigned',
-            capacity: 999,
-            equipment: [],
-            accessibility: [],
-          },
-          ...defaultClassrooms(Math.max(mappedClasses.length, mappedTeachers.length)),
-        ])
       } catch (e: any) {
         toast.error(e?.message || 'Failed to load timetable data')
       } finally {
@@ -1095,7 +1072,6 @@ function HeadteacherTimetablePageContent() {
             timeSlots={timeSlots}
             classes={classes}
             teachers={teachers}
-            classrooms={classrooms}
             season={season}
             showConflicts
             editable
@@ -1134,7 +1110,6 @@ function HeadteacherTimetablePageContent() {
                 assignments={assignments.filter((a) => a.season === (season as any))}
                 timeSlots={timeSlots}
                 teachers={teachers}
-                classrooms={classrooms}
                 studentClasses={classes}
                 onAssignmentChange={onAssignmentChange}
                 onConflictDetected={() => setTab('conflicts')}

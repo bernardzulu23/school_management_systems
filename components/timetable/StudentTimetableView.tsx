@@ -113,12 +113,6 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
     return map
   }, [props.subjects, myAssignments])
 
-  const roomName = useMemo(() => {
-    const map = new Map<string, string>()
-    for (const r of props.classrooms || []) map.set(String(r.id), r.name)
-    return map
-  }, [props.classrooms])
-
   const currentClassName = useMemo(() => {
     return props.classes?.find((c) => String(c.id) === String(effectiveClassId))?.name || 'My Class'
   }, [props.classes, effectiveClassId])
@@ -260,8 +254,7 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
                             </div>
                             {!props.subjectOnly ? (
                               <div className="text-[12px] text-slate-600 truncate">
-                                {teacherName.get(String(a.teacherId)) || 'Teacher'} ·{' '}
-                                {roomName.get(String(a.classroomId)) || 'Room'}
+                                {teacherName.get(String(a.teacherId)) || 'Teacher'}
                               </div>
                             ) : null}
                           </div>

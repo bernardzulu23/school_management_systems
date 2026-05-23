@@ -125,6 +125,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
     assignments,
     activeSeason,
     resolvedRole,
+    user?.id,
     user?.studentProfile?.classId,
     user?.teacherProfile?.id,
     userId,
@@ -146,7 +147,6 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
         subject: String(a?.subjectName || a?.subjectId || 'Subject'),
         class: String(a?.className || a?.classId || 'Class'),
         teacher: String(a?.teacherName || a?.teacherId || 'Teacher'),
-        classroom: String(a?.classroomId || 'Room'),
         time: `${a?.startTime || ''}-${a?.endTime || ''}`,
         startTime: a?.startTime,
         period: a?.period,
@@ -409,11 +409,13 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
                       <span className="sr-only">Time: </span>
                       {cls.time} ({cls.period})
                     </div>
-                    <div className="text-xs text-royalPurple-text2 flex items-center">
-                      <MapPin className="h-3 w-3 mr-1" aria-hidden="true" />
-                      <span className="sr-only">Location: </span>
-                      {cls.classroom}
-                    </div>
+                    {resolvedRole !== 'student' ? (
+                      <div className="text-xs text-royalPurple-text2 flex items-center">
+                        <MapPin className="h-3 w-3 mr-1" aria-hidden="true" />
+                        <span className="sr-only">Class: </span>
+                        {cls.class}
+                      </div>
+                    ) : null}
                     {resolvedRole === 'student' && (
                       <div className="text-xs text-royalPurple-text2 flex items-center">
                         <User className="h-3 w-3 mr-1" aria-hidden="true" />

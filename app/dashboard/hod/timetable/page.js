@@ -97,13 +97,6 @@ export default function HodDepartmentTimetablePage() {
           departmentTeacherIds={departmentTeacherIds}
           teachers={teachers}
           classes={classes}
-          classrooms={Array.from({ length: 12 }).map((_, i) => ({
-            id: `room-${i + 1}`,
-            name: `Rm${101 + i}`,
-            capacity: 50,
-            equipment: [],
-            accessibility: [],
-          }))}
         />
       </div>
     </DashboardLayout>

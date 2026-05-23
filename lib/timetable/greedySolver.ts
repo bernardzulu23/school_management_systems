@@ -1,6 +1,17 @@
 /**
  * Greedy timetable solver — Vercel + Neon, no external services.
+ * Expands weekly period counts (e.g. 6 periods = 3×80min doubles) across days.
  */
+
+import {
+  expandRecipeToUnits,
+  normalizeAllocationPeriods,
+  resolveSchedulableUnits,
+  type AllocationLike,
+  type RecipeLike,
+  type SchedulableUnit,
+  type TeachingAssignmentLike,
+} from '@/lib/timetable/periodExpansion'
 
 export interface TimeSlot {
   id: string
@@ -17,6 +28,7 @@ export interface Lesson {
   teacherId: string
   classId: string
   subjectId: string
+  consecutivePeriods?: number
 }
 
 export interface Teacher {
@@ -45,16 +57,11 @@ export interface SolverPayload {
   constraints: unknown[]
   lockedAssignments: LockedAssignment[]
   recipes: RecipeInput[]
+  teacherAllocations?: AllocationLike[]
   rooms?: unknown[]
 }
 
-export interface RecipeInput {
-  id: string
-  teachingAssignmentId?: string | null
-  teacherId: string
-  classId: string
-  subjectId: string
-  expectedPeriodsPerWeek?: number | null
+export interface RecipeInput extends RecipeLike {
   blocks?: Array<{
     id?: string
     size?: number
@@ -71,6 +78,8 @@ export interface RecipeInput {
 
 export interface SolverResult {
   assignments: Record<string, string>
+  /** lessonId -> all slot ids occupied (doubles/triples span multiple slots) */
+  slotSpans: Record<string, string[]>
   optimizationScore: number
   stats: {
     solver: string
@@ -108,60 +117,89 @@ function sortSlots(slots: TimeSlot[]) {
   })
 }
 
-/** Build lesson rows from scheduling recipes when teaching assignments are empty. */
-export function expandLessonsFromRecipes(lessons: Lesson[], recipes: RecipeInput[]): Lesson[] {
-  if (!recipes?.length) return lessons
-
-  const out = [...lessons]
-  const seen = new Set(out.map((l) => l.id))
-
-  for (const recipe of recipes) {
-    const teacherId = String(recipe.teacherId || '')
-    const classId = String(recipe.classId || '')
-    const subjectId = String(recipe.subjectId || '')
-    if (!teacherId || !classId || !subjectId) continue
-
-    let count = Number(recipe.expectedPeriodsPerWeek) || 0
-    if (Array.isArray(recipe.blocks) && recipe.blocks.length) {
-      count = 0
-      for (const block of recipe.blocks) {
-        const size = Math.max(1, Number(block.size) || 1)
-        const qty = Math.max(1, Number(block.quantity) || 1)
-        count += size * qty
-      }
-    }
-    if (!count) count = 1
-
-    const baseId = String(recipe.teachingAssignmentId || recipe.id)
-
-    for (let i = 0; i < count; i++) {
-      const id = `${baseId}-p${i + 1}`
-      if (seen.has(id)) continue
-      seen.add(id)
-      out.push({ id, teacherId, classId, subjectId })
-    }
+function slotsByDay(slots: TimeSlot[]): Map<string, TimeSlot[]> {
+  const map = new Map<string, TimeSlot[]>()
+  for (const s of slots) {
+    const day = normalizeDay(s.dayOfWeek)
+    if (!map.has(day)) map.set(day, [])
+    map.get(day)!.push(s)
   }
-
-  return out
+  for (const [, list] of map) {
+    list.sort((a, b) => (Number(a.period) || 0) - (Number(b.period) || 0))
+  }
+  return map
 }
 
-/** Prefer teaching assignments; fall back to recipe-expanded lessons. */
+function findConsecutiveRun(
+  daySlots: TimeSlot[],
+  startIndex: number,
+  size: number
+): TimeSlot[] | null {
+  if (size <= 1) return daySlots[startIndex] ? [daySlots[startIndex]] : null
+  const run: TimeSlot[] = []
+  for (let i = 0; i < size; i++) {
+    const slot = daySlots[startIndex + i]
+    const prev = daySlots[startIndex + i - 1]
+    if (!slot || slot.isBreak) return null
+    if (i > 0 && Number(slot.period) !== Number(prev.period) + 1) return null
+    run.push(slot)
+  }
+  return run.length === size ? run : null
+}
+
+/** @deprecated Use resolveSchedulableUnits via resolveLessonsForSolver */
+export function expandLessonsFromRecipes(lessons: Lesson[], recipes: RecipeInput[]): Lesson[] {
+  const units = resolveSchedulableUnits({
+    teachingAssignments: [],
+    recipes,
+    allocations: [],
+  })
+  if (!units.length) return lessons
+  return units.map((u) => ({
+    id: u.id,
+    teacherId: u.teacherId,
+    classId: u.classId,
+    subjectId: u.subjectId,
+    consecutivePeriods: u.consecutivePeriods,
+  }))
+}
+
 export function resolveLessonsForSolver(payload: SolverPayload): Lesson[] {
-  const fromDb = payload.lessons || []
-  if (fromDb.length) return fromDb
-  return expandLessonsFromRecipes([], payload.recipes || [])
+  const units = resolveSchedulableUnits({
+    teachingAssignments: (payload.lessons || []) as TeachingAssignmentLike[],
+    recipes: payload.recipes || [],
+    allocations: payload.teacherAllocations || [],
+  })
+
+  if (units.length) {
+    return units.map((u) => ({
+      id: u.id,
+      teacherId: u.teacherId,
+      classId: u.classId,
+      subjectId: u.subjectId,
+      consecutivePeriods: u.consecutivePeriods,
+    }))
+  }
+
+  return payload.lessons || []
+}
+
+function unitPriority(lesson: Lesson): number {
+  return Number(lesson.consecutivePeriods) || 1
 }
 
 /**
- * Greedy scheduling: teacher + class free per slot; locked teacher slots reserved.
+ * Greedy scheduling: spread across days; doubles/triples use consecutive slots on one day.
  */
 export function greedySolve(payload: SolverPayload): SolverResult {
   const lessons = resolveLessonsForSolver(payload)
   const { slots, lockedAssignments } = payload
 
   const assignments: Record<string, string> = {}
+  const slotSpans: Record<string, string[]> = {}
   const teacherSlots = new Map<string, Set<string>>()
   const classSlots = new Map<string, Set<string>>()
+  const teacherDayLoad = new Map<string, number>()
 
   for (const teacher of payload.teachers) {
     teacherSlots.set(teacher.id, new Set())
@@ -174,9 +212,12 @@ export function greedySolve(payload: SolverPayload): SolverResult {
     teacherSlots.get(lock.teacherId)?.add(lock.slotId)
   }
 
-  const availableSlots = sortSlots(slots.filter((s) => !s.isBreak))
+  const teachingSlots = sortSlots(slots.filter((s) => !s.isBreak))
+  const byDay = slotsByDay(teachingSlots)
 
   const sortedLessons = [...lessons].sort((a, b) => {
+    const pa = unitPriority(b) - unitPriority(a)
+    if (pa !== 0) return pa
     if (a.teacherId !== b.teacherId) return a.teacherId.localeCompare(b.teacherId)
     if (a.classId !== b.classId) return a.classId.localeCompare(b.classId)
     return a.subjectId.localeCompare(b.subjectId)
@@ -189,21 +230,59 @@ export function greedySolve(payload: SolverPayload): SolverResult {
 
   let assignedCount = 0
 
+  const isBusy = (lesson: Lesson, slotIds: string[]) =>
+    slotIds.some(
+      (sid) =>
+        (teacherSlots.get(lesson.teacherId)?.has(sid) ?? false) ||
+        (classSlots.get(lesson.classId)?.has(sid) ?? false)
+    )
+
+  const markBusy = (lesson: Lesson, slotIds: string[]) => {
+    for (const sid of slotIds) {
+      teacherSlots.get(lesson.teacherId)?.add(sid)
+      classSlots.get(lesson.classId)?.add(sid)
+    }
+    const day = normalizeDay(teachingSlots.find((s) => s.id === slotIds[0])?.dayOfWeek || 'monday')
+    const key = `${lesson.teacherId}|${day}`
+    teacherDayLoad.set(key, (teacherDayLoad.get(key) || 0) + 1)
+  }
+
+  const dayOrder = Array.from(byDay.keys()).sort(
+    (a, b) => (DAY_ORDER[a] ?? 99) - (DAY_ORDER[b] ?? 99)
+  )
+
   for (const lesson of sortedLessons) {
     if (assignedCount >= maxAssign) break
 
-    const slot =
-      availableSlots.find((s) => {
-        const teacherBusy = teacherSlots.get(lesson.teacherId)?.has(s.id) ?? false
-        const classBusy = classSlots.get(lesson.classId)?.has(s.id) ?? false
-        return !teacherBusy && !classBusy
-      }) ?? null
+    const size = Math.max(1, Number(lesson.consecutivePeriods) || 1)
 
-    if (!slot) continue
+    // Prefer days where this teacher already has fewer blocks (spread across week)
+    const daysSorted = [...dayOrder].sort((da, db) => {
+      const la = teacherDayLoad.get(`${lesson.teacherId}|${da}`) || 0
+      const lb = teacherDayLoad.get(`${lesson.teacherId}|${db}`) || 0
+      return la - lb
+    })
 
-    assignments[lesson.id] = slot.id
-    teacherSlots.get(lesson.teacherId)?.add(slot.id)
-    classSlots.get(lesson.classId)?.add(slot.id)
+    let placed: { primaryId: string; allIds: string[] } | null = null
+
+    for (const day of daysSorted) {
+      const daySlots = byDay.get(day) || []
+      for (let i = 0; i <= daySlots.length - size; i++) {
+        const run = findConsecutiveRun(daySlots, i, size)
+        if (!run) continue
+        const ids = run.map((s) => s.id)
+        if (isBusy(lesson, ids)) continue
+        placed = { primaryId: ids[0], allIds: ids }
+        break
+      }
+      if (placed) break
+    }
+
+    if (!placed) continue
+
+    assignments[lesson.id] = placed.primaryId
+    slotSpans[lesson.id] = placed.allIds
+    markBusy(lesson, placed.allIds)
     assignedCount += 1
   }
 
@@ -213,13 +292,14 @@ export function greedySolve(payload: SolverPayload): SolverResult {
 
   const result: SolverResult = {
     assignments,
+    slotSpans,
     optimizationScore: score,
     stats: {
       solver: 'greedy',
       assigned: assignedCount,
       total,
       success,
-      notes: `Greedy algorithm assigned ${assignedCount}/${total} lessons (${score}% coverage)`,
+      notes: `Greedy algorithm assigned ${assignedCount}/${total} teaching blocks (${score}% coverage). Period counts are weekly totals spread across days, not slot number 6.`,
       timestamp: new Date().toISOString(),
     },
   }
@@ -250,25 +330,31 @@ export function validateResult(
   for (const [lessonId, slotId] of Object.entries(result.assignments)) {
     const lesson = lessons.find((l) => l.id === lessonId)
     if (!lesson) continue
-
-    const key = `${lesson.teacherId}|${slotId}`
-    if (teacherBySlot.has(key)) {
-      errors.push(`Teacher ${lesson.teacherId} double-booked in slot ${slotId}`)
+    const span = result.slotSpans?.[lessonId] || [slotId]
+    for (const sid of span) {
+      const key = `${lesson.teacherId}|${sid}`
+      if (teacherBySlot.has(key)) {
+        errors.push(`Teacher ${lesson.teacherId} double-booked in slot ${sid}`)
+      }
+      teacherBySlot.set(key, lessonId)
     }
-    teacherBySlot.set(key, lessonId)
   }
 
   const classBySlot = new Map<string, string>()
   for (const [lessonId, slotId] of Object.entries(result.assignments)) {
     const lesson = lessons.find((l) => l.id === lessonId)
     if (!lesson) continue
-
-    const key = `${lesson.classId}|${slotId}`
-    if (classBySlot.has(key)) {
-      errors.push(`Class ${lesson.classId} double-booked in slot ${slotId}`)
+    const span = result.slotSpans?.[lessonId] || [slotId]
+    for (const sid of span) {
+      const key = `${lesson.classId}|${sid}`
+      if (classBySlot.has(key)) {
+        errors.push(`Class ${lesson.classId} double-booked in slot ${sid}`)
+      }
+      classBySlot.set(key, lessonId)
     }
-    classBySlot.set(key, lessonId)
   }
 
   return { valid: errors.length === 0, errors }
 }
+
+export { normalizeAllocationPeriods, expandRecipeToUnits, resolveSchedulableUnits }

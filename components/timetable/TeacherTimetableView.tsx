@@ -109,12 +109,6 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
     return map
   }, [props.subjects, myAssignments])
 
-  const roomName = useMemo(() => {
-    const map = new Map<string, string>()
-    for (const r of props.classrooms || []) map.set(String(r.id), r.name)
-    return map
-  }, [props.classrooms])
-
   const summary = useMemo(() => {
     const byDay: Record<string, number> = {}
     for (const a of myAssignments) byDay[a.dayOfWeek] = (byDay[a.dayOfWeek] || 0) + 1
@@ -163,8 +157,7 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
             <span className="onboard-summary-title">Next class</span>
             <span className="onboard-summary-meta">
               {nextClass.dayOfWeek} {nextClass.startTime} ·{' '}
-              {className.get(String(nextClass.classId)) || 'Class'} ·{' '}
-              {roomName.get(String(nextClass.classroomId)) || 'Room'}
+              {className.get(String(nextClass.classId)) || 'Class'}
             </span>
           </div>
         ) : null}

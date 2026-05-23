@@ -146,19 +146,6 @@ export default function AILessonPlanner() {
 
   const generate = async () => {
     if (!canGenerate) return
-    const additionalInstructions = [
-      `CBC core competencies: ${form.coreCompetencies.join(', ')}`,
-      `Cross-cutting themes: ${form.crossCuttingThemes.join(', ')}`,
-      `Learning pathway: ${form.learningPathway}`,
-      `Language of instruction: ${form.languageOfInstruction}`,
-      `Assessment method: ${form.assessmentMethod}`,
-      `Resource level: ${form.resourceLevel}`,
-      `Real-world context: ${form.realWorldContext || 'Zambian local context'}`,
-      `Practical activities: ${form.practicalActivities ? 'Yes' : 'No'}`,
-      `Inclusive strategies: ${form.inclusiveStrategies ? 'Yes' : 'No'}`,
-    ]
-      .join('. ')
-      .slice(0, 780)
 
     await start({
       grade: form.grade,
@@ -166,10 +153,17 @@ export default function AILessonPlanner() {
       topic: form.topic,
       duration: Number(form.duration),
       learningStyle: form.learningStyle,
-      priorKnowledge: form.priorKnowledge,
+      priorKnowledge: form.priorKnowledge || undefined,
       templateType: form.templateType,
-      competenceFocus: form.coreCompetencies.join(', '),
-      additionalInstructions,
+      coreCompetencies: form.coreCompetencies,
+      crossCuttingThemes: form.crossCuttingThemes,
+      learningPathway: form.learningPathway,
+      assessmentMethod: form.assessmentMethod,
+      languageOfInstruction: form.languageOfInstruction,
+      resourceLevel: form.resourceLevel,
+      realWorldContext: form.realWorldContext?.trim() || undefined,
+      includePractical: form.practicalActivities,
+      includeInclusive: form.inclusiveStrategies,
     })
   }
 

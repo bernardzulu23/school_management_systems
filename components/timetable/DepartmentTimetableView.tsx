@@ -199,12 +199,6 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
     return map
   }, [assignments, departmentTeachers])
 
-  const roomName = useMemo(() => {
-    const map = new Map<string, string>()
-    for (const r of props.classrooms || []) map.set(String(r.id), r.name)
-    return map
-  }, [props.classrooms])
-
   useEffect(() => {
     if (typeof props.mobile === 'boolean') {
       setIsMobile(props.mobile)
@@ -446,7 +440,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
               variant="outline"
               onClick={() => {
                 const rows: string[][] = [
-                  ['Day', 'Start', 'End', 'Teacher', 'Subject', 'Class', 'Room'],
+                  ['Day', 'Start', 'End', 'Teacher', 'Subject', 'Class'],
                   ...deptAssignments
                     .slice()
                     .sort(
@@ -461,7 +455,6 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                       teacherName.get(String(a.teacherId)) || String(a.teacherId),
                       String(a.subjectId),
                       className.get(String(a.classId)) || String(a.classId),
-                      roomName.get(String(a.classroomId)) || String(a.classroomId),
                     ]),
                 ]
                 downloadCsv('department_timetable.csv', rows)
@@ -701,7 +694,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                                         String(a.classId)}
                                     </div>
                                     <div className="text-[12px] text-slate-600 truncate">
-                                      {roomName.get(String(a.classroomId)) || String(a.classroomId)}
+                                      {teacherName.get(String(a.teacherId)) || 'Teacher'}
                                       {hasConflict ? ' · Conflict' : ''}
                                     </div>
                                   </button>
@@ -735,10 +728,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
               </div>
               <div className="text-sm text-royalPurple-text2">
                 {className.get(String(activeAssignment.classId)) ||
-                  String(activeAssignment.classId)}{' '}
-                ·{' '}
-                {roomName.get(String(activeAssignment.classroomId)) ||
-                  String(activeAssignment.classroomId)}
+                  String(activeAssignment.classId)}
               </div>
             </div>
           ) : (

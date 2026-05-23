@@ -95,11 +95,15 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
     return map
   }, [props.classes])
 
-  const roomName = useMemo(() => {
+  const subjectLabel = useMemo(() => {
     const map = new Map<string, string>()
-    for (const r of props.classrooms || []) map.set(String(r.id), r.name)
+    for (const a of assignments || []) {
+      if (a.subjectId && (a as any).subjectName) {
+        map.set(String(a.subjectId), String((a as any).subjectName))
+      }
+    }
     return map
-  }, [props.classrooms])
+  }, [assignments])
 
   const classColor = useMemo(() => {
     const map = new Map<string, ColorRef | undefined>()
@@ -189,7 +193,7 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
           {className.get(String(a.classId)) || 'Class'}
         </div>
         <div className="text-[12px] text-royalPurple-text2 truncate">
-          {roomName.get(String(a.classroomId)) || 'Room'}
+          {subjectLabel.get(String(a.subjectId)) || (a as any).subjectName || 'Subject'}
         </div>
         <div className="text-[12px] text-royalPurple-text2 truncate">
           {teacherName.get(String(a.teacherId)) || 'Teacher'}
@@ -350,9 +354,11 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
               </span>
             </div>
             <div className="onboard-summary">
-              <span className="onboard-summary-title">Room</span>
+              <span className="onboard-summary-title">Subject</span>
               <span className="onboard-summary-meta">
-                {roomName.get(String(selectedAssignment.classroomId)) || '—'}
+                {subjectLabel.get(String(selectedAssignment.subjectId)) ||
+                  (selectedAssignment as any).subjectName ||
+                  '—'}
               </span>
             </div>
             <div className="onboard-summary">

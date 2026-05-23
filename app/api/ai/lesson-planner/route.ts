@@ -42,7 +42,18 @@ const LessonPlannerInputSchema = z.object({
       'mathematics',
     ])
     .default('standard'),
+  /** @deprecated prefer coreCompetencies */
   competenceFocus: z.string().max(300).optional(),
+  coreCompetencies: z.array(z.string().max(120)).max(10).optional(),
+  crossCuttingThemes: z.array(z.string().max(120)).max(10).optional(),
+  learningPathway: z.string().max(80).optional(),
+  assessmentMethod: z.string().max(120).optional(),
+  realWorldContext: z.string().max(500).optional(),
+  zambiContext: z.string().max(500).optional(),
+  includePractical: z.boolean().optional(),
+  includeInclusive: z.boolean().optional(),
+  languageOfInstruction: z.string().max(120).optional(),
+  resourceLevel: z.string().max(200).optional(),
   additionalInstructions: z.string().max(800).optional(),
 })
 
@@ -59,6 +70,17 @@ function buildPrompt(input: LessonPlannerInput): string {
     learners: input.learners,
     term: input.term,
     competenceFocus: input.competenceFocus,
+    coreCompetencies: input.coreCompetencies,
+    crossCuttingThemes: input.crossCuttingThemes,
+    learningPathway: input.learningPathway,
+    assessmentMethod: input.assessmentMethod,
+    realWorldContext: input.realWorldContext || input.zambiContext,
+    includePractical: input.includePractical,
+    includeInclusive: input.includeInclusive,
+    languageOfInstruction: input.languageOfInstruction,
+    resourceLevel: input.resourceLevel,
+    learningStyle: input.learningStyle,
+    priorKnowledge: input.priorKnowledge,
     additionalInstructions: input.additionalInstructions,
   })
 }
@@ -122,7 +144,7 @@ export async function POST(request: Request) {
 
     const stream = createGroqTextEventStream({
       prompt,
-      maxTokens: 2000,
+      maxTokens: 4500,
       temperature: 0.7,
       onErrorMessage: 'Failed to generate lesson plan',
       onComplete: async (responseText) => {

@@ -65,6 +65,11 @@ type LessonPlanStructureInput = {
   learners?: string | number
   term?: string
   competences?: string
+  crossCuttingThemes?: string
+  assessmentMethod?: string
+  learningPathway?: string
+  includePractical?: boolean
+  includeInclusive?: boolean
 }
 
 const safe = (v: unknown) => String(v ?? '').trim()
@@ -78,6 +83,15 @@ export function buildLessonPlanStructure(input: LessonPlanStructureInput): strin
   const learners = safe(input.learners) || 'Not specified'
   const term = safe(input.term) || 'Term 1'
   const competences = safe(input.competences) || 'Critical Thinking and Problem Solving'
+  const themes = safe(input.crossCuttingThemes) || 'Sustainability & Environmental Care'
+  const assessment = safe(input.assessmentMethod) || 'Continuous Formative Assessment'
+  const pathway = safe(input.learningPathway) || 'Academic'
+  const practicalNote =
+    input.includePractical === false ? 'Theory-focused.' : 'Include practical/hands-on activities.'
+  const inclusiveNote =
+    input.includeInclusive === false
+      ? 'Brief differentiation only.'
+      : 'Full differentiation and inclusive education required.'
 
   return `The lesson plan MUST include ALL of the following sections, clearly labelled:
 
@@ -96,7 +110,7 @@ LESSON PLAN HEADER
    State the broad competence from the Zambia CBC syllabus.
 
 2. SPECIFIC COMPETENCE(S)
-   State precise, measurable competence(s) targeted in this lesson — aligned to the focus: ${competences}
+   State precise, measurable competence(s) targeted in this lesson — ONLY these (do not add others): ${competences}
 
 3. LEARNING OUTCOMES (Know-Do-Value)
    - KNOW: what learners will know/understand
@@ -111,10 +125,11 @@ LESSON PLAN HEADER
    What learners already know before this lesson.
 
 6. TEACHING & LEARNING MATERIALS (TLMs)
-   List all materials — must include at least one hands-on/practical resource for CBC compliance.
+   List all materials. ${practicalNote}
 
 7. CROSS-CUTTING ISSUES
-   Identify at least 2 relevant cross-cutting issues with brief explanation of how each is integrated.
+   Integrate ONLY these themes (do not add others): ${themes}
+   For each selected theme, explain briefly how it is integrated in the lesson.
 
 8. LESSON PROCEDURE (Learner-Centred — 5 Phases)
    For each phase show: Teacher Activity | Learner Activity | Competence Developed | Time
@@ -131,21 +146,23 @@ LESSON PLAN HEADER
    List which levels are addressed (Apply, Analyse, Evaluate, Create preferred — higher order).
 
 10. SCHOOL-BASED ASSESSMENT (SBA)
+    Use this assessment approach: ${assessment}
     - Formative assessment strategy used DURING the lesson
-    - SBA task description (project/portfolio/practical that contributes to final grade)
+    - SBA task description aligned to the method above
     - Assessment criteria/rubric with at least 3 performance levels
     - How evidence of competence is gathered
 
 11. DIFFERENTIATION / INCLUSIVE EDUCATION
+    ${inclusiveNote}
     - How the lesson caters for learners with Special Educational Needs
     - Stretch activities for gifted learners
     - Support strategies for struggling learners
 
 12. ICT INTEGRATION
-    State specifically how ICT is used or could be used in this lesson.
+    Include ICT/digital integration ONLY if "Digital" or "ICT" appears in the selected core competencies; otherwise state "Not a focus for this lesson" or optional enrichment.
 
 13. CAREER PATHWAY LINK
-    Link this lesson to either Academic or Vocational pathway and name a relevant career.
+    Link this lesson to the ${pathway} pathway and name a relevant career.
 
 14. VISION 2030 ALIGNMENT
     One sentence linking this lesson to Zambia's Vision 2030.
@@ -159,7 +176,23 @@ LESSON PLAN HEADER
     Provide guiding questions for the teacher to reflect on.`
 }
 
-type LessonPlanPromptInput = {
+export type LessonPlanFrameworkOptions = {
+  coreCompetencies?: string[]
+  crossCuttingThemes?: string[]
+  learningPathway?: string
+  assessmentMethod?: string
+  /** @deprecated use realWorldContext */
+  zambiContext?: string
+  realWorldContext?: string
+  includePractical?: boolean
+  includeInclusive?: boolean
+  languageOfInstruction?: string
+  resourceLevel?: string
+  learningStyle?: string
+  priorKnowledge?: string
+}
+
+type LessonPlanPromptInput = LessonPlanFrameworkOptions & {
   templateType?: LessonPlanTemplateType | string
   subject: string
   grade: string
@@ -168,14 +201,115 @@ type LessonPlanPromptInput = {
   duration: number | string
   learners?: number
   term?: string
+  /** Legacy comma-separated competencies; superseded by coreCompetencies */
   competenceFocus?: string
   additionalInstructions?: string
+}
+
+function normalizeStringList(items: unknown): string[] {
+  if (!Array.isArray(items)) return []
+  return items.map((x) => String(x || '').trim()).filter(Boolean)
+}
+
+/** Reproducible block shown at top of output + strict rules for the model. */
+export function buildFrameworkElementsBlock(opts: LessonPlanFrameworkOptions): string {
+  const competencies = normalizeStringList(opts.coreCompetencies)
+  const themes = normalizeStringList(opts.crossCuttingThemes)
+  const zambi =
+    safe(opts.realWorldContext) || safe(opts.zambiContext) || 'General Zambian local context'
+  const practical = opts.includePractical !== false
+  const inclusive = opts.includeInclusive !== false
+  const pathway = safe(opts.learningPathway) || 'Academic'
+  const assessment = safe(opts.assessmentMethod) || 'Continuous Formative Assessment'
+  const ictSelected = competencies.some((c) => /digital|ict/i.test(c))
+
+  const competencyList =
+    competencies.length > 0
+      ? competencies.map((c) => `✅ ${c}`).join('\n')
+      : '✅ Critical Thinking & Problem Solving (default)'
+
+  const themeList =
+    themes.length > 0
+      ? themes.map((t) => `✅ ${t}`).join('\n')
+      : '✅ Sustainability & Environmental Care (default)'
+
+  const excludedCompetencyNote =
+    competencies.length > 0
+      ? `Do NOT develop, label, or assess these unless listed above: Collaboration & Communication; Digital & ICT Literacy; or any other CBC competency not in the selected list.`
+      : ''
+
+  const excludedThemeNote =
+    themes.length > 0 ? `Do NOT integrate cross-cutting themes that are not listed above.` : ''
+
+  return `## FRAMEWORK ELEMENTS (FROM TEACHER FORM — MANDATORY)
+
+Reproduce this exact block at the beginning of your lesson plan output, then continue with sections 1–16.
+
+### Selected Core Competencies
+${competencyList}
+
+### Selected Cross-Cutting Themes
+${themeList}
+
+### Learning Pathway
+${pathway}
+
+### Assessment Method
+${assessment}
+
+### Language of Instruction
+${safe(opts.languageOfInstruction) || 'English'}
+
+### Resource Level
+${safe(opts.resourceLevel) || 'Moderate (textbooks, chalkboard, some printed materials)'}
+
+### Learning Style Preference
+${safe(opts.learningStyle) || 'Mixed'}
+
+### Prior Knowledge
+${safe(opts.priorKnowledge) || 'Not specified'}
+
+### Real-World Zambian Context
+${zambi}
+
+### Special Requirements
+${practical ? '✅ Include practical / hands-on activities' : '⛔ Theory-focused — no mandatory practical activities'}
+${inclusive ? '✅ Include inclusive / differentiated strategies (Section 11)' : '⛔ Brief differentiation only (2–3 lines in Section 11)'}
+
+---
+
+STRICT RULES (must follow):
+1. Sections 2 (Specific Competence), 8 (Lesson Procedure), and 9 (Bloom's): address ONLY the Selected Core Competencies listed above.
+2. ${excludedCompetencyNote}
+3. Section 7 (Cross-Cutting Issues): integrate ONLY the Selected Cross-Cutting Themes listed above.
+4. ${excludedThemeNote}
+5. Section 10 (SBA): use the Selected Assessment Method: "${assessment}".
+6. Section 14 (Career Pathway Link): align with "${pathway}" pathway.
+7. ${practical ? 'Include at least one hands-on/practical activity in TLMs (Section 6) and in Phases 2–4.' : 'Do not require lab, workshop, or hands-on practical activities.'}
+8. ${inclusive ? 'Section 11 must include support for struggling learners, extension for gifted learners, and SEN adaptations.' : 'Keep Section 11 minimal.'}
+9. Section 12 (ICT Integration): ${ictSelected ? 'REQUIRED — integrate ICT/digital skills as a selected competency.' : 'Optional only if naturally relevant; do NOT add Digital & ICT Literacy as a core competency unless it appears in Selected Core Competencies.'}`
 }
 
 export function buildLessonPlanPrompt(input: LessonPlanPromptInput): string {
   const preamble = getLessonPlanTemplatePreamble(input.templateType)
   const durationText =
     typeof input.duration === 'number' ? `${input.duration} minutes` : safe(input.duration)
+
+  const coreCompetencies =
+    normalizeStringList(input.coreCompetencies).length > 0
+      ? normalizeStringList(input.coreCompetencies)
+      : input.competenceFocus
+        ? input.competenceFocus
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : ['Critical Thinking & Problem Solving']
+
+  const frameworkBlock = buildFrameworkElementsBlock({
+    ...input,
+    coreCompetencies,
+  })
+
   const structure = buildLessonPlanStructure({
     subject: input.subject,
     grade: input.grade,
@@ -184,7 +318,12 @@ export function buildLessonPlanPrompt(input: LessonPlanPromptInput): string {
     duration: durationText || 'Not specified',
     learners: Number.isFinite(input.learners) ? String(input.learners) : 'Not specified',
     term: input.term,
-    competences: input.competenceFocus,
+    competences: coreCompetencies.join('; '),
+    crossCuttingThemes: normalizeStringList(input.crossCuttingThemes).join('; '),
+    assessmentMethod: input.assessmentMethod,
+    learningPathway: input.learningPathway,
+    includePractical: input.includePractical,
+    includeInclusive: input.includeInclusive,
   })
 
   const extras = safe(input.additionalInstructions)
@@ -192,7 +331,19 @@ export function buildLessonPlanPrompt(input: LessonPlanPromptInput): string {
   const subjectBlock = `SUBJECT-SPECIFIC PEDAGOGY (${canonicalSubject} — apply in every section, especially examples, TLMs, and assessment):
 ${getSubjectGuidelines(canonicalSubject)}`
 
-  return `${preamble}\n\n${subjectBlock}\n\n${structure}\n\nAdditional instructions from teacher: ${
-    extras || 'None'
-  }\n\nGenerate the complete, detailed, ready-to-use CBC lesson plan now. Be thorough, practical, and ensure all 16 sections are fully developed. Use Zambian local examples and contexts throughout. Tailor all content to ${canonicalSubject}.`
+  return `${preamble}
+
+${frameworkBlock}
+
+${subjectBlock}
+
+${structure}
+
+Additional instructions from teacher: ${extras || 'None'}
+
+Generate the complete, detailed, ready-to-use CBC lesson plan now.
+- Start by copying the "## FRAMEWORK ELEMENTS (FROM TEACHER FORM — MANDATORY)" block exactly as specified above.
+- Then write all 16 sections fully.
+- Obey STRICT RULES: only selected competencies and themes; do not add unchecked CBC items.
+Use Zambian local examples throughout. Tailor all content to ${canonicalSubject}.`
 }

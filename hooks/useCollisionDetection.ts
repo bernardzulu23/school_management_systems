@@ -14,7 +14,7 @@ import { SuggestionEngine, type Suggestion } from '@/lib/timetable/suggestionEng
 export interface UseCollisionDetectionProps {
   assignments: Assignment[]
   allTeachers: Teacher[]
-  allClassrooms: Classroom[]
+  allClassrooms?: Classroom[]
   allClasses: Class[]
   onConflictChange?: (conflicts: ConflictReport) => void
   season?: 'normal' | 'planting' | 'harvest'
@@ -77,7 +77,7 @@ export function useCollisionDetection(props: UseCollisionDetectionProps) {
   const {
     assignments,
     allTeachers,
-    allClassrooms,
+    allClassrooms = [],
     allClasses,
     onConflictChange,
     season = 'normal',

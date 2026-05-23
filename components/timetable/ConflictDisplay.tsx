@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import type { Assignment, Conflict, ConflictSeverity } from '@/lib/timetable/types'
 import type { Suggestion } from '@/lib/timetable/suggestionEngine'
+import { filterClassCentricConflicts } from '@/lib/timetable/classCentric'
 import { Button } from '@/components/ui/Button'
 
 export interface ConflictDisplayProps {
@@ -50,7 +51,8 @@ export function ConflictDisplay(props: ConflictDisplayProps) {
   const rows = useMemo<ConflictRow[]>(() => {
     const out: ConflictRow[] = []
     for (const [assignmentId, list] of conflicts.entries()) {
-      for (const c of list) out.push({ key: `${assignmentId}:${c.id}`, assignmentId, conflict: c })
+      for (const c of filterClassCentricConflicts(list))
+        out.push({ key: `${assignmentId}:${c.id}`, assignmentId, conflict: c })
     }
     return out.sort((a, b) => {
       const s = severityOrder(a.conflict.severity) - severityOrder(b.conflict.severity)

@@ -13,6 +13,7 @@ import type {
   TimeSlot,
   TravelingTeacherRoute,
 } from './types'
+import { TIMETABLE_CLASS_CENTRIC } from './classCentric'
 
 export interface WorkloadStatus {
   status: 'ok' | 'warning' | 'overload'
@@ -56,6 +57,14 @@ function toMinutes(time: LocalTimeHHMM) {
   return hh * 60 + mm
 }
 
+const PLACEHOLDER_ROOM_PREFIXES = ['room-unassigned', 'room-1', 'class-']
+
+function isPlaceholderClassroom(roomId: string) {
+  if (TIMETABLE_CLASS_CENTRIC) return true
+  const id = String(roomId || '')
+  return PLACEHOLDER_ROOM_PREFIXES.some((p) => id === p || id.startsWith(p))
+}
+
 function normalizeSeasonMode(mode: CollisionDetectorOptions['seasonMode']): Assignment['season'] {
   if (mode === 'planting') return 'planting'
   if (mode === 'harvest') return 'farming'
@@ -96,13 +105,17 @@ export class CollisionDetector {
       if (!a || a.season !== this.season) continue
       const tid = String(a.teacherId)
       const cid = String(a.classId)
-      const rid = String(a.classroomId)
       if (!this.byTeacher.has(tid)) this.byTeacher.set(tid, [])
       if (!this.byClass.has(cid)) this.byClass.set(cid, [])
-      if (!this.byClassroom.has(rid)) this.byClassroom.set(rid, [])
+      if (!TIMETABLE_CLASS_CENTRIC) {
+        const rid = String(a.classroomId || '')
+        if (rid) {
+          if (!this.byClassroom.has(rid)) this.byClassroom.set(rid, [])
+          this.byClassroom.get(rid)!.push(a)
+        }
+      }
       this.byTeacher.get(tid)!.push(a)
       this.byClass.get(cid)!.push(a)
-      this.byClassroom.get(rid)!.push(a)
     }
   }
 
@@ -171,7 +184,11 @@ export class CollisionDetector {
     timeSlot: TimeSlot,
     detailed?: true
   ): boolean | Conflict[] {
+    if (TIMETABLE_CLASS_CENTRIC) return detailed ? [] : false
     const roomId = String(classroom?.id)
+    if (isPlaceholderClassroom(roomId)) {
+      return detailed ? [] : false
+    }
     const list = this.byClassroom.get(roomId) || []
     const conflicts: Conflict[] = []
     for (const a of list) {
@@ -258,6 +275,7 @@ export class CollisionDetector {
     studentCount: number,
     detailed?: true
   ): boolean | Conflict[] {
+    if (TIMETABLE_CLASS_CENTRIC) return detailed ? [] : true
     const cap = Number(classroom?.capacity || 0)
     const n = Number(studentCount || 0)
     const ok = cap <= 0 ? true : n <= cap
@@ -312,19 +330,24 @@ export class CollisionDetector {
       break
     }
 
-    const listRoom = this.byClassroom.get(String(assignment.classroomId)) || []
-    for (const a of listRoom) {
-      if (a.id === assignment.id) continue
-      if (a.season !== assignment.season) continue
-      if (a.dayOfWeek !== assignment.dayOfWeek) continue
-      if (!this.timeSlotsOverlap(a, assignment)) continue
-      conflicts.push(
-        this.makeConflict('RoomDoubleBooked', 'critical', 'Classroom is double-booked', {
-          assignmentIds: [assignment.id, a.id],
-          classroomIds: [String(assignment.classroomId)],
-        })
-      )
-      break
+    if (!TIMETABLE_CLASS_CENTRIC) {
+      const roomId = String(assignment.classroomId || '')
+      if (roomId && !isPlaceholderClassroom(roomId)) {
+        const listRoom = this.byClassroom.get(roomId) || []
+        for (const a of listRoom) {
+          if (a.id === assignment.id) continue
+          if (a.season !== assignment.season) continue
+          if (a.dayOfWeek !== assignment.dayOfWeek) continue
+          if (!this.timeSlotsOverlap(a, assignment)) continue
+          conflicts.push(
+            this.makeConflict('RoomDoubleBooked', 'critical', 'Classroom is double-booked', {
+              assignmentIds: [assignment.id, a.id],
+              classroomIds: [roomId],
+            })
+          )
+          break
+        }
+      }
     }
 
     const listClass = this.byClass.get(String(assignment.classId)) || []
@@ -355,12 +378,14 @@ export class CollisionDetector {
     }
 
     const studentClass = this.findClass(String(assignment.classId))
-    const room = this.findClassroom(String(assignment.classroomId))
-    if (studentClass && room) {
-      const count = Array.isArray(studentClass.students)
-        ? studentClass.students.length
-        : Number(studentClass.students)
-      conflicts.push(...(this.checkClassroomCapacity(room, count, true) as Conflict[]))
+    if (!TIMETABLE_CLASS_CENTRIC) {
+      const room = this.findClassroom(String(assignment.classroomId))
+      if (studentClass && room) {
+        const count = Array.isArray(studentClass.students)
+          ? studentClass.students.length
+          : Number(studentClass.students)
+        conflicts.push(...(this.checkClassroomCapacity(room, count, true) as Conflict[]))
+      }
     }
 
     conflicts.push(...this.validateTravelingTeacherAssignment(assignment))
@@ -411,8 +436,10 @@ export class CollisionDetector {
     const swap = this.suggestSwap(base)
     if (swap) suggestions.push(swap)
 
-    const changeRoom = this.suggestAlternativeRoom(base)
-    if (changeRoom) suggestions.push(changeRoom)
+    if (!TIMETABLE_CLASS_CENTRIC) {
+      const changeRoom = this.suggestAlternativeRoom(base)
+      if (changeRoom) suggestions.push(changeRoom)
+    }
 
     return suggestions.slice(0, 3)
   }
@@ -448,7 +475,6 @@ export class CollisionDetector {
     const list = this.assignments.filter((a) => a && a.season === this.season && !a.isBreak)
     for (const a of list) {
       const tid = String(a.teacherId)
-      const rid = String(a.classroomId)
       const cid = String(a.classId)
 
       for (const prev of teacherIndex.get(tid) || []) {
@@ -462,15 +488,25 @@ export class CollisionDetector {
         push(String(a.id), c)
       }
 
-      for (const prev of roomIndex.get(rid) || []) {
-        if (prev.dayOfWeek !== a.dayOfWeek) continue
-        if (!this.timeSlotsOverlap(prev, a)) continue
-        const c = this.makeConflict('RoomDoubleBooked', 'critical', 'Classroom is double-booked', {
-          assignmentIds: [prev.id, a.id],
-          classroomIds: [rid],
-        })
-        push(String(prev.id), c)
-        push(String(a.id), c)
+      if (!TIMETABLE_CLASS_CENTRIC) {
+        const rid = String(a.classroomId || '')
+        if (rid && !isPlaceholderClassroom(rid)) {
+          for (const prev of roomIndex.get(rid) || []) {
+            if (prev.dayOfWeek !== a.dayOfWeek) continue
+            if (!this.timeSlotsOverlap(prev, a)) continue
+            const c = this.makeConflict(
+              'RoomDoubleBooked',
+              'critical',
+              'Classroom is double-booked',
+              {
+                assignmentIds: [prev.id, a.id],
+                classroomIds: [rid],
+              }
+            )
+            push(String(prev.id), c)
+            push(String(a.id), c)
+          }
+        }
       }
 
       for (const prev of classIndex.get(cid) || []) {
@@ -488,11 +524,16 @@ export class CollisionDetector {
       for (const c of this.validateAgriculturalRisk(a)) push(String(a.id), c)
 
       if (!teacherIndex.has(tid)) teacherIndex.set(tid, [])
-      if (!roomIndex.has(rid)) roomIndex.set(rid, [])
       if (!classIndex.has(cid)) classIndex.set(cid, [])
       teacherIndex.get(tid)!.push(a)
-      roomIndex.get(rid)!.push(a)
       classIndex.get(cid)!.push(a)
+      if (!TIMETABLE_CLASS_CENTRIC) {
+        const rid = String(a.classroomId || '')
+        if (rid) {
+          if (!roomIndex.has(rid)) roomIndex.set(rid, [])
+          roomIndex.get(rid)!.push(a)
+        }
+      }
     }
 
     return out
@@ -636,6 +677,7 @@ export class CollisionDetector {
   }
 
   private suggestAlternativeRoom(base: Assignment): Suggestion | null {
+    if (TIMETABLE_CLASS_CENTRIC) return null
     if (!Array.isArray(this.classrooms) || this.classrooms.length === 0) return null
     const candidates = this.classrooms.filter((r) => String(r.id) !== String(base.classroomId))
     const room = candidates.find((r) => {

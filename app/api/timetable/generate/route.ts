@@ -9,6 +9,7 @@ import {
   timeToMin,
   minToTime,
 } from '@/lib/timetable/timeSlotsFromConfig'
+import { normalizeAllocationPeriods } from '@/lib/timetable/periodExpansion'
 
 export async function GET(req: NextRequest) {
   const user = await getAuthUser(req as any)
@@ -311,9 +312,21 @@ function generateTimetable(allocations: any[], daySlots: Record<string, any[]>, 
     const DOUBLE = singleMin * 2
     const TRIPLE = singleMin * 3
 
+    const breakdown = normalizeAllocationPeriods({
+      id: allocation.id,
+      teacherId: allocation.teacherId,
+      classId: allocation.classId,
+      subjectId: allocation.subjectId,
+      periodsPerWeek: allocation.periodsPerWeek,
+      blockType: allocation.blockType,
+      singlePeriods: allocation.singlePeriods,
+      doublePeriods: allocation.doublePeriods,
+      triplePeriods: allocation.triplePeriods,
+    })
+
     let placed = 0
 
-    for (let t = 0; t < Number(allocation.triplePeriods || 0); t++) {
+    for (let t = 0; t < breakdown.triples; t++) {
       const entry = tryPlace(allocation, 'TRIPLE', TRIPLE)
       if (entry) {
         entries.push(entry)
@@ -327,7 +340,7 @@ function generateTimetable(allocations: any[], daySlots: Record<string, any[]>, 
       }
     }
 
-    for (let d = 0; d < Number(allocation.doublePeriods || 0); d++) {
+    for (let d = 0; d < breakdown.doubles; d++) {
       const entry = tryPlace(allocation, 'DOUBLE', DOUBLE)
       if (entry) {
         entries.push(entry)
@@ -341,7 +354,7 @@ function generateTimetable(allocations: any[], daySlots: Record<string, any[]>, 
       }
     }
 
-    for (let s = 0; s < Number(allocation.singlePeriods || 0); s++) {
+    for (let s = 0; s < breakdown.singles; s++) {
       const entry = tryPlace(allocation, 'SINGLE', singleMin)
       if (entry) {
         entries.push(entry)
