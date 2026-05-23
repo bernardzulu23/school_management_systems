@@ -28,19 +28,26 @@ function LoginPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectFrom = searchParams.get('from')
+  const subdomainFromQuery = String(searchParams.get('subdomain') || '')
+    .trim()
+    .toLowerCase()
 
-  // Detect subdomain on mount (client-side only)
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const hostname = window.location.hostname
-      const parts = hostname.split('.')
-      if (parts.length >= 3) {
-        const sub = parts[0] === 'www' && parts.length >= 4 ? parts[1] : parts[0]
-        setDetectedSubdomain(sub)
-        console.log('Detected Subdomain:', sub)
-      }
+  function resolveSubdomainFromHost() {
+    if (typeof window === 'undefined') return ''
+    const hostname = window.location.hostname
+    const parts = hostname.split('.')
+    if (parts.length >= 3) {
+      return parts[0] === 'www' && parts.length >= 4 ? parts[1] : parts[0]
     }
-  }, [])
+    return ''
+  }
+
+  // Subdomain: hostname (school.ndake.com) or ?subdomain= on apex / Vercel preview
+  useEffect(() => {
+    const fromHost = resolveSubdomainFromHost()
+    const sub = fromHost || subdomainFromQuery
+    if (sub) setDetectedSubdomain(sub)
+  }, [subdomainFromQuery])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -101,14 +108,16 @@ function LoginPageContent() {
         })
       }, 220)
 
-      // Extract subdomain from current URL
-      let subdomain = ''
-      if (typeof window !== 'undefined') {
-        const hostname = window.location.hostname
-        const parts = hostname.split('.')
-        if (parts.length >= 3) {
-          subdomain = parts[0] === 'www' && parts.length >= 4 ? parts[1] : parts[0]
-        }
+      const subdomain = resolveSubdomainFromHost() || subdomainFromQuery || detectedSubdomain || ''
+
+      if (!subdomain) {
+        toast.error(
+          'School portal not detected. Open your school link (e.g. schoolname.bluepeacktechnologies.com) or add ?subdomain=your-school to the login URL.'
+        )
+        stopTopLoading()
+        setIsLoading(false)
+        if (interval) clearInterval(interval)
+        return
       }
 
       const result = await login({ email, password, subdomain, rememberMe })
