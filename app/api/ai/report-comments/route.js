@@ -9,11 +9,13 @@ import {
   getSchoolPlanForUsage,
   trackAIUsage,
 } from '@/lib/middleware/aiUsageTracker'
-import Anthropic from '@anthropic-ai/sdk'
 import crypto from 'crypto'
 import prisma from '@/lib/prisma'
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+import {
+  assertGroqConfigured,
+  createGroqTextEventStream,
+  GROQ_SSE_HEADERS,
+} from '@/lib/ai/groq-client'
 
 export async function POST(request) {
   const user = await getAuthUser(request)
@@ -42,6 +44,12 @@ export async function POST(request) {
 
   const limitBlock = await checkAILimit(schoolId)
   if (limitBlock) return limitBlock
+
+  try {
+    assertGroqConfigured()
+  } catch {
+    return NextResponse.json({ error: 'Service not configured' }, { status: 500 })
+  }
 
   const body = await request.json().catch(() => ({}))
   const studentName = String(body?.studentName || '').trim()
@@ -84,55 +92,25 @@ Write a personalized, encouraging comment:
 - Reference CBC competencies where relevant
 - Do NOT include marks or percentages.`
 
-  const encoder = new TextEncoder()
-  const stream = new ReadableStream({
-    async start(controller) {
-      let responseText = ''
-      try {
-        const claudeStream = await client.messages.stream({
-          model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6',
-          max_tokens: 500,
-          messages: [{ role: 'user', content: prompt }],
-        })
-
-        for await (const event of claudeStream) {
-          if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta') {
-            const chunk = String(event.delta.text || '')
-            responseText += chunk
-            const data = JSON.stringify({ text: chunk })
-            controller.enqueue(encoder.encode(`data: ${data}\n\n`))
-          }
-        }
-
-        await trackAIUsage(schoolId, 'ai-report-comments')
-        await prisma.aIRequest.create({
-          data: {
-            id: crypto.randomUUID(),
-            schoolId,
-            feature: 'ai-report-comments',
-            prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
-            response: responseText.length > 20000 ? responseText.slice(0, 20000) : responseText,
-            tokens: 0,
-          },
-        })
-        controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-        controller.close()
-      } catch (err) {
-        controller.enqueue(
-          encoder.encode(
-            `data: ${JSON.stringify({ error: err?.message || 'Failed to generate comment' })}\n\n`
-          )
-        )
-        controller.close()
-      }
+  const stream = createGroqTextEventStream({
+    prompt,
+    maxTokens: 500,
+    temperature: 0.6,
+    onErrorMessage: 'Failed to generate comment',
+    onComplete: async (responseText) => {
+      await trackAIUsage(schoolId, 'ai-report-comments')
+      await prisma.aIRequest.create({
+        data: {
+          id: crypto.randomUUID(),
+          schoolId,
+          feature: 'ai-report-comments',
+          prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
+          response: responseText.length > 20000 ? responseText.slice(0, 20000) : responseText,
+          tokens: 0,
+        },
+      })
     },
   })
 
-  return new Response(stream, {
-    headers: {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      Connection: 'keep-alive',
-    },
-  })
+  return new Response(stream, { headers: GROQ_SSE_HEADERS })
 }

@@ -665,7 +665,7 @@ function HeadteacherTimetablePageContent() {
               disabled={solverGenerating}
               className="zsms-hover-raise"
             >
-              {solverGenerating ? 'Generating…' : 'Generate (Solver Engine)'}
+              {solverGenerating ? 'Generating…' : 'Generate (Greedy)'}
             </Button>
             <Button
               onClick={() => {

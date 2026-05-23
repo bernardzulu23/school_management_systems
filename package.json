@@ -58,7 +58,6 @@
     ]
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.40.1",
     "@eslint/object-schema": "^2.1.7",
     "@excalidraw/excalidraw": "^0.17.6",
     "@headlessui/react": "^2.2.10",
@@ -80,6 +79,7 @@
     "effect": "^3.21.1",
     "exceljs": "^3.4.0",
     "fast-check": "^4.7.0",
+    "groq-sdk": "^1.2.0",
     "jose": "^6.2.3",
     "jsonwebtoken": "^9.0.3",
     "jspdf": "^4.1.0",

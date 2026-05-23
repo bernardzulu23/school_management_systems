@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
 import crypto from 'crypto'
 import { z } from 'zod'
 import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
@@ -14,6 +13,11 @@ import {
 import { prisma } from '@/lib/prisma'
 import { logger } from '@/lib/utils/logger'
 import { buildLessonPlanPrompt } from '@/lib/lessonPlanTemplate'
+import {
+  assertGroqConfigured,
+  createGroqTextEventStream,
+  GROQ_SSE_HEADERS,
+} from '@/lib/ai/groq-client'
 
 const LessonPlannerInputSchema = z.object({
   grade: z.string().min(1).max(20),
@@ -92,8 +96,10 @@ export async function POST(request: Request) {
     const limitBlock = await checkAILimit(schoolId)
     if (limitBlock) return limitBlock as any
 
-    if (!process.env.ANTHROPIC_API_KEY) {
-      logger.error('ai.lesson-planner.misconfigured', new Error('Missing ANTHROPIC_API_KEY'), {
+    try {
+      assertGroqConfigured()
+    } catch {
+      logger.error('ai.lesson-planner.misconfigured', new Error('Missing GROQ_API_KEY'), {
         requestId,
         schoolId,
       })
@@ -112,73 +118,35 @@ export async function POST(request: Request) {
     })
 
     const prompt = buildPrompt(input)
-    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+    const startTime = Date.now()
 
-    const encoder = new TextEncoder()
-    const stream = new ReadableStream({
-      async start(controller) {
-        let responseText = ''
-        const startTime = Date.now()
-
-        try {
-          const claudeStream = await client.messages.stream({
-            model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6',
-            max_tokens: 2000,
-            messages: [{ role: 'user', content: prompt }],
-          })
-
-          for await (const event of claudeStream) {
-            if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta') {
-              const chunk = String(event.delta.text || '')
-              responseText += chunk
-              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`))
-            }
-          }
-
-          await trackAIUsage(schoolId, 'ai-lesson-planner')
-          await prisma.aIRequest.create({
-            data: {
-              id: crypto.randomUUID(),
-              schoolId,
-              feature: 'ai-lesson-planner',
-              prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
-              response: responseText.length > 20000 ? responseText.slice(0, 20000) : responseText,
-              tokens: 0,
-            },
-          })
-
-          logger.info('ai.lesson-planner.completed', {
-            requestId,
+    const stream = createGroqTextEventStream({
+      prompt,
+      maxTokens: 2000,
+      temperature: 0.7,
+      onErrorMessage: 'Failed to generate lesson plan',
+      onComplete: async (responseText) => {
+        await trackAIUsage(schoolId, 'ai-lesson-planner')
+        await prisma.aIRequest.create({
+          data: {
+            id: crypto.randomUUID(),
             schoolId,
-            userId: user.id,
-            durationMs: Date.now() - startTime,
-          })
-
-          controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-          controller.close()
-        } catch (error) {
-          logger.error('ai.lesson-planner.stream-error', error, {
-            requestId,
-            schoolId,
-            userId: user.id,
-          })
-          controller.enqueue(
-            encoder.encode(
-              `data: ${JSON.stringify({ error: 'Failed to generate lesson plan' })}\n\n`
-            )
-          )
-          controller.close()
-        }
+            feature: 'ai-lesson-planner',
+            prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
+            response: responseText.length > 20000 ? responseText.slice(0, 20000) : responseText,
+            tokens: 0,
+          },
+        })
+        logger.info('ai.lesson-planner.completed', {
+          requestId,
+          schoolId,
+          userId: user.id,
+          durationMs: Date.now() - startTime,
+        })
       },
     })
 
-    return new Response(stream, {
-      headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        Connection: 'keep-alive',
-      },
-    })
+    return new Response(stream, { headers: GROQ_SSE_HEADERS })
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: 'Invalid input', issues: error.issues }, { status: 400 })

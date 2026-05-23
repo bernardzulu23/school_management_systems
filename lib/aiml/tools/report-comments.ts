@@ -1,15 +1,4 @@
-import OpenAI from 'openai'
-
-function getClient() {
-  const apiKey = String(process.env.AIML_API_KEY || '').trim()
-  const baseRaw = String(process.env.AIML_API_BASE || '')
-    .trim()
-    .replace(/\/+$/, '')
-  const baseURL = baseRaw ? (baseRaw.endsWith('/v1') ? baseRaw : `${baseRaw}/v1`) : undefined
-  if (!apiKey) throw new Error('Missing AIML_API_KEY')
-  if (!baseURL) throw new Error('Missing AIML_API_BASE')
-  return new OpenAI({ apiKey, baseURL })
-}
+import { extractJSONObject, groqChatCompletion } from '@/lib/aiml/tools/_groq'
 
 export interface StudentPerformance {
   name: string
@@ -23,7 +12,7 @@ export interface StudentPerformance {
 }
 
 export async function generateReportComment(student: StudentPerformance) {
-  const prompt = `Generate a personalized report comment for a student:
+  const prompt = `Generate a personalized report comment for a Zambian student:
 
 Name: ${student.name}
 Subject: ${student.subject}
@@ -34,37 +23,22 @@ Participation: ${student.participation}
 Strengths: ${student.strengths.join(', ')}
 Areas to improve: ${student.areasOfImprovement.join(', ')}
 
-Write a professional, encouraging report comment (150-200 words) that:
-- Acknowledges their strengths
-- Addresses areas for improvement constructively
-- Provides specific recommendations
-- Remains encouraging and positive
-- Is appropriate for parents/guardians
+Write a professional, encouraging comment (150-200 words) for parents/guardians.
+Use simple English. Reference CBC competencies where relevant.
 
-Format:
+Format as JSON:
 {
   "comment": "The actual comment",
   "recommendation": "Recommendation for next term"
 }`
 
-  try {
-    const client = getClient()
-    const response = await client.chat.completions.create({
-      model: 'claude-sonnet-4-6',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.6,
-      max_tokens: 500,
-    })
+  const { content } = await groqChatCompletion({
+    prompt,
+    temperature: 0.6,
+    maxTokens: 500,
+  })
 
-    const content = response.choices[0]?.message?.content
-    if (!content) throw new Error('No response from API')
-
-    const jsonMatch = content.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) throw new Error('Could not parse comment')
-
-    return JSON.parse(jsonMatch[0])
-  } catch (error) {
-    console.error('Report Comments Error:', error)
-    throw error
-  }
+  const parsed = extractJSONObject(content)
+  if (!parsed) throw new Error('Could not parse comment')
+  return parsed
 }

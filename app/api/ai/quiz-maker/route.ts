@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
 import crypto from 'crypto'
 import { z } from 'zod'
 import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
@@ -13,6 +12,7 @@ import {
 } from '@/lib/middleware/aiUsageTracker'
 import { prisma } from '@/lib/prisma'
 import { logger } from '@/lib/utils/logger'
+import { assertGroqConfigured, extractJSONObject, groqChatCompletion } from '@/lib/ai/groq-client'
 
 const QuizMakerInputSchema = z.object({
   grade: z.enum(['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']),
@@ -23,35 +23,6 @@ const QuizMakerInputSchema = z.object({
 })
 
 type QuizMakerInput = z.infer<typeof QuizMakerInputSchema>
-
-function extractTextFromClaudeMessage(message: any): string {
-  const blocks = Array.isArray(message?.content) ? message.content : []
-  return blocks
-    .map((b) => {
-      if (b && typeof b === 'object' && b.type === 'text' && typeof b.text === 'string')
-        return b.text
-      return ''
-    })
-    .join('')
-}
-
-function extractJSONObject(text: string) {
-  const s = String(text || '').trim()
-  if (!s) return null
-
-  const fenced = s.match(/```json\s*([\s\S]*?)\s*```/i) || s.match(/```\s*([\s\S]*?)\s*```/i)
-  const candidate = fenced ? fenced[1] : s
-
-  const first = candidate.indexOf('{')
-  const last = candidate.lastIndexOf('}')
-  if (first === -1 || last === -1 || last <= first) return null
-  const jsonText = candidate.slice(first, last + 1)
-  try {
-    return JSON.parse(jsonText)
-  } catch {
-    return null
-  }
-}
 
 function buildPrompt(input: QuizMakerInput): string {
   return `Create a formative quiz for Zambian students and return ONLY valid JSON.
@@ -124,8 +95,10 @@ export async function POST(request: Request) {
     const limitBlock = await checkAILimit(schoolId)
     if (limitBlock) return limitBlock as any
 
-    if (!process.env.ANTHROPIC_API_KEY) {
-      logger.error('ai.quiz-maker.misconfigured', new Error('Missing ANTHROPIC_API_KEY'), {
+    try {
+      assertGroqConfigured()
+    } catch {
+      logger.error('ai.quiz-maker.misconfigured', new Error('Missing GROQ_API_KEY'), {
         requestId,
         schoolId,
       })
@@ -144,18 +117,16 @@ export async function POST(request: Request) {
     })
 
     const prompt = buildPrompt(input)
-    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-
     const startTime = Date.now()
-    const message = await client.messages.create({
-      model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6',
-      max_tokens: 2500,
-      messages: [{ role: 'user', content: prompt }],
+
+    const { content, usage } = await groqChatCompletion({
+      prompt,
+      maxTokens: 2500,
+      temperature: 0.5,
     })
 
-    const text = extractTextFromClaudeMessage(message)
-    const quiz = extractJSONObject(text)
-    if (!quiz || !Array.isArray(quiz.questions)) {
+    const quiz = extractJSONObject(content)
+    if (!quiz || !Array.isArray((quiz as { questions?: unknown }).questions)) {
       logger.warn('ai.quiz-maker.invalid-json', { requestId, schoolId, userId: user.id })
       return NextResponse.json({ error: 'AI returned invalid quiz JSON' }, { status: 502 })
     }
@@ -167,8 +138,8 @@ export async function POST(request: Request) {
         schoolId,
         feature: 'ai-quiz-maker',
         prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
-        response: text.length > 20000 ? text.slice(0, 20000) : text,
-        tokens: Number((message as any)?.usage?.output_tokens || 0),
+        response: content.length > 20000 ? content.slice(0, 20000) : content,
+        tokens: usage.completionTokens,
       },
     })
 

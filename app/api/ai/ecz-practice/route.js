@@ -1,6 +1,5 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
 import crypto from 'crypto'
 import prisma from '@/lib/prisma'
 import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
@@ -12,25 +11,7 @@ import {
   getSchoolPlanForUsage,
   trackAIUsage,
 } from '@/lib/middleware/aiUsageTracker'
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-
-function extractJSONObject(text) {
-  const s = String(text || '').trim()
-  if (!s) return null
-
-  const fenced = s.match(/```json\s*([\s\S]*?)\s*```/i) || s.match(/```\s*([\s\S]*?)\s*```/i)
-  const candidate = fenced ? fenced[1] : s
-  const first = candidate.indexOf('{')
-  const last = candidate.lastIndexOf('}')
-  if (first === -1 || last === -1 || last <= first) return null
-  const jsonText = candidate.slice(first, last + 1)
-  try {
-    return JSON.parse(jsonText)
-  } catch {
-    return null
-  }
-}
+import { assertGroqConfigured, extractJSONObject, groqChatCompletion } from '@/lib/ai/groq-client'
 
 export async function POST(request) {
   const user = await getAuthUser(request)
@@ -71,6 +52,12 @@ export async function POST(request) {
   const limitBlock = await checkAILimit(schoolId)
   if (limitBlock) return limitBlock
 
+  try {
+    assertGroqConfigured()
+  } catch {
+    return NextResponse.json({ error: 'Service not configured' }, { status: 500 })
+  }
+
   const body = await request.json().catch(() => ({}))
   const subject = String(body?.subject || '').trim()
   const examLevel = String(body?.examLevel || body?.level || '').trim() || 'grade9'
@@ -83,7 +70,7 @@ export async function POST(request) {
 
   const count =
     Number.isFinite(questionCount) && questionCount > 0 ? Math.min(20, questionCount) : 5
-  const prompt = `Create ECZ-style practice questions and return ONLY valid JSON.
+  const prompt = `Create ECZ-style practice questions for Zambian students and return ONLY valid JSON.
 
 Subject: ${subject}
 Exam Level: ${examLevel} (grade9 or grade12)
@@ -120,13 +107,13 @@ Rules:
 - Do not include markdown, code fences, or any extra text.`
 
   try {
-    const message = await client.messages.create({
-      model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6',
-      max_tokens: 2500,
-      messages: [{ role: 'user', content: prompt }],
+    const { content, usage } = await groqChatCompletion({
+      prompt,
+      maxTokens: 2500,
+      temperature: 0.4,
     })
-    const text = String(message?.content?.[0]?.text || '')
-    const parsed = extractJSONObject(text)
+
+    const parsed = extractJSONObject(content)
     const paper = parsed?.paper
     if (!paper || !Array.isArray(paper.questions)) {
       return NextResponse.json({ error: 'AI returned invalid ECZ JSON' }, { status: 502 })
@@ -139,8 +126,8 @@ Rules:
         schoolId,
         feature: 'ecz-practice',
         prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
-        response: text.length > 20000 ? text.slice(0, 20000) : text,
-        tokens: Number(message?.usage?.output_tokens || 0),
+        response: content.length > 20000 ? content.slice(0, 20000) : content,
+        tokens: usage.completionTokens,
       },
     })
 

@@ -1,15 +1,4 @@
-import OpenAI from 'openai'
-
-function getClient() {
-  const apiKey = String(process.env.AIML_API_KEY || '').trim()
-  const baseRaw = String(process.env.AIML_API_BASE || '')
-    .trim()
-    .replace(/\/+$/, '')
-  const baseURL = baseRaw ? (baseRaw.endsWith('/v1') ? baseRaw : `${baseRaw}/v1`) : undefined
-  if (!apiKey) throw new Error('Missing AIML_API_KEY')
-  if (!baseURL) throw new Error('Missing AIML_API_BASE')
-  return new OpenAI({ apiKey, baseURL })
-}
+import { extractJSONObject, groqChatCompletion } from '@/lib/aiml/tools/_groq'
 
 export interface LessonPlanRequest {
   subject: string
@@ -20,13 +9,14 @@ export interface LessonPlanRequest {
 }
 
 export async function generateLessonPlan(request: LessonPlanRequest) {
-  const prompt = `Generate an ECZ-aligned lesson plan for:
+  const prompt = `Generate an ECZ-aligned lesson plan for Zambian Grade ${request.grade} students.
 
 Subject: ${request.subject}
-Grade: ${request.grade}
 Topic: ${request.topic}
 Duration: ${request.duration} minutes
 Learning Outcomes: ${request.learningOutcomes?.join(', ') || 'Auto-generate'}
+
+Use accessible English for students with varying proficiency. Include local Zambian examples where relevant.
 
 Format as JSON:
 {
@@ -47,24 +37,13 @@ Format as JSON:
   }
 }`
 
-  try {
-    const client = getClient()
-    const response = await client.chat.completions.create({
-      model: 'claude-sonnet-4-6',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.7,
-      max_tokens: 2000,
-    })
+  const { content } = await groqChatCompletion({
+    prompt,
+    temperature: 0.7,
+    maxTokens: 2000,
+  })
 
-    const content = response.choices[0]?.message?.content
-    if (!content) throw new Error('No response from API')
-
-    const jsonMatch = content.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) throw new Error('Could not parse lesson plan')
-
-    return JSON.parse(jsonMatch[0])
-  } catch (error) {
-    console.error('Lesson Planner Error:', error)
-    throw error
-  }
+  const parsed = extractJSONObject(content)
+  if (!parsed) throw new Error('Could not parse lesson plan')
+  return parsed
 }
