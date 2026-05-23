@@ -12,6 +12,7 @@ import {
   trackAIUsage,
 } from '@/lib/middleware/aiUsageTracker'
 import { assertGroqConfigured, extractJSONObject, groqChatCompletion } from '@/lib/ai/groq-client'
+import { buildEczPracticePrompt } from '@/lib/ai/subject-adaptive-prompts'
 
 export async function POST(request) {
   const user = await getAuthUser(request)
@@ -70,41 +71,12 @@ export async function POST(request) {
 
   const count =
     Number.isFinite(questionCount) && questionCount > 0 ? Math.min(20, questionCount) : 5
-  const prompt = `Create ECZ-style practice questions for Zambian students and return ONLY valid JSON.
-
-Subject: ${subject}
-Exam Level: ${examLevel} (grade9 or grade12)
-Topic: ${topic}
-Question Count: ${count}
-
-Return JSON with this shape:
-{
-  "paper": {
-    "examInfo": {
-      "subject": "string",
-      "level": "string",
-      "topic": "string",
-      "totalMarks": number,
-      "timeAllowed": "string"
-    },
-    "questions": [
-      {
-        "id": "q1",
-        "type": "mcq|short|structured",
-        "question": "string",
-        "options": ["string"] (only for mcq),
-        "marks": number,
-        "answer": "string",
-        "explanation": "string"
-      }
-    ]
-  }
-}
-
-Rules:
-- Match ECZ tone and difficulty for the level
-- Include marking guidance in 'answer' and 'explanation'
-- Do not include markdown, code fences, or any extra text.`
+  const prompt = buildEczPracticePrompt({
+    subject,
+    examLevel,
+    topic,
+    questionCount: count,
+  })
 
   try {
     const { content, usage } = await groqChatCompletion({

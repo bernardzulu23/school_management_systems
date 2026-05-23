@@ -1,29 +1,26 @@
 import { extractJSONObject, groqChatCompletion } from '@/lib/aiml/tools/_groq'
+import { buildStoryPrompt, estimateWordCountFromLength } from '@/lib/ai/subject-adaptive-prompts'
 
 export interface StoryRequest {
   title: string
-  grade: number
+  grade: number | string
   theme: string
+  subject?: string
   length: 'short' | 'medium' | 'long'
   vocabulary?: 'simple' | 'intermediate' | 'advanced'
 }
 
 export async function generateStory(request: StoryRequest) {
-  const wordCount = { short: 100, medium: 500, long: 1000 }[request.length]
+  const wordCount = { short: 300, medium: 500, long: 1000 }[request.length]
 
-  const prompt = `Create an engaging story for Grade ${request.grade} students in a Zambian school context.
-
-Title: ${request.title}
-Theme: ${request.theme}
-Word Count: ~${wordCount} words
-Vocabulary Level: ${request.vocabulary || 'intermediate'}
-
-Requirements:
-- Use age-appropriate vocabulary
-- Include dialogue
-- Have clear beginning, middle, end
-- Include comprehension questions at the end (5 questions)
-- Use authentic Zambian names and settings where natural
+  const prompt = `${buildStoryPrompt({
+    subject: request.subject || 'English (Core)',
+    grade: String(request.grade),
+    theme: request.theme || request.title,
+    wordCount: wordCount || estimateWordCountFromLength(request.length),
+    storyType: 'story',
+    includeQuestions: true,
+  })}
 
 Format as JSON:
 {

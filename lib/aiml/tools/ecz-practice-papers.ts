@@ -1,44 +1,29 @@
 import { extractJSONObject, groqChatCompletion } from '@/lib/aiml/tools/_groq'
+import { buildEczPracticePrompt } from '@/lib/ai/subject-adaptive-prompts'
 
 export interface PracticeRequest {
   subject: string
-  grade: number
-  examLevel: 'JC' | 'SC' | 'GCE'
+  grade: number | string
+  examLevel: 'JC' | 'SC' | 'GCE' | string
+  topic?: string
   questionCount: number
   timeLimit: number
 }
 
 export async function generateECZPractice(request: PracticeRequest) {
-  const prompt = `Generate ECZ-aligned practice exam questions for Zambian students:
+  const examLevel =
+    request.examLevel === 'JC'
+      ? 'grade9'
+      : request.examLevel === 'SC' || request.examLevel === 'GCE'
+        ? 'grade12'
+        : String(request.examLevel)
 
-Subject: ${request.subject}
-Grade: ${request.grade}
-Exam Level: ${request.examLevel}
-Number of questions: ${request.questionCount}
-Time Limit: ${request.timeLimit} minutes
-
-Return JSON only:
-{
-  "examTitle": "Practice Paper Title",
-  "subject": "${request.subject}",
-  "grade": ${request.grade},
-  "timeLimit": ${request.timeLimit},
-  "instructions": ["Instruction 1"],
-  "sections": [
-    {
-      "sectionName": "Section A",
-      "questions": [
-        {
-          "number": 1,
-          "question": "The question text?",
-          "marks": 5,
-          "answerGuide": "Model answer"
-        }
-      ]
-    }
-  ],
-  "totalMarks": 100
-}`
+  const prompt = buildEczPracticePrompt({
+    subject: request.subject,
+    examLevel,
+    topic: request.topic || request.subject,
+    questionCount: request.questionCount,
+  })
 
   const { content } = await groqChatCompletion({
     prompt,

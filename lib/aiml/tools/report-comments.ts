@@ -1,10 +1,15 @@
 import { extractJSONObject, groqChatCompletion } from '@/lib/aiml/tools/_groq'
+import {
+  buildReportCommentPrompt,
+  performanceLevelFromPercentage,
+} from '@/lib/ai/subject-adaptive-prompts'
 
 export interface StudentPerformance {
   name: string
   subject: string
-  grade: number
+  grade: number | string
   marks: number
+  maxMarks?: number
   attendance: number
   participation: 'excellent' | 'good' | 'average' | 'poor'
   strengths: string[]
@@ -12,19 +17,19 @@ export interface StudentPerformance {
 }
 
 export async function generateReportComment(student: StudentPerformance) {
-  const prompt = `Generate a personalized report comment for a Zambian student:
+  const maxMarks = Number(student.maxMarks || 100)
+  const pct = maxMarks > 0 ? (Number(student.marks) / maxMarks) * 100 : 0
 
-Name: ${student.name}
-Subject: ${student.subject}
-Grade: ${student.grade}
-Marks: ${student.marks}/100
-Attendance: ${student.attendance}%
-Participation: ${student.participation}
-Strengths: ${student.strengths.join(', ')}
-Areas to improve: ${student.areasOfImprovement.join(', ')}
-
-Write a professional, encouraging comment (150-200 words) for parents/guardians.
-Use simple English. Reference CBC competencies where relevant.
+  const prompt = `${buildReportCommentPrompt({
+    subject: student.subject,
+    studentName: student.name,
+    grade: String(student.grade),
+    performanceLevel: performanceLevelFromPercentage(pct),
+    attendance: `${student.attendance}%`,
+    behavior: student.participation,
+    strengths: student.strengths,
+    areasForImprovement: student.areasOfImprovement,
+  })}
 
 Format as JSON:
 {

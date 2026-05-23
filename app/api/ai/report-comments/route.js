@@ -16,6 +16,10 @@ import {
   createGroqTextEventStream,
   GROQ_SSE_HEADERS,
 } from '@/lib/ai/groq-client'
+import {
+  buildReportCommentPrompt,
+  performanceLevelFromPercentage,
+} from '@/lib/ai/subject-adaptive-prompts'
 
 export async function POST(request) {
   const user = await getAuthUser(request)
@@ -71,26 +75,18 @@ export async function POST(request) {
     )
   }
 
-  const percentage =
-    Number(maxMarks) > 0 ? ((Number(marks) / Number(maxMarks)) * 100).toFixed(1) : '0.0'
+  const pct = Number(maxMarks) > 0 ? (Number(marks) / Number(maxMarks)) * 100 : 0
 
-  const prompt = `Generate a meaningful report comment for a Zambian student.
-
-Student: ${studentName}
-Grade: ${grade}
-Subject: ${subject}
-Performance: ${marks}/${maxMarks} (${percentage}%)
-Behavior: ${behavior}
-Attendance: ${attendance}
-Strengths: ${(strengths || []).join(', ')}
-Areas for Improvement: ${(areasForImprovement || []).join(', ')}
-
-Write a personalized, encouraging comment:
-- 3-4 sentences
-- Simple English (teachers/parents will read it)
-- Positive even if marks are low
-- Reference CBC competencies where relevant
-- Do NOT include marks or percentages.`
+  const prompt = buildReportCommentPrompt({
+    subject,
+    studentName,
+    grade,
+    performanceLevel: performanceLevelFromPercentage(pct),
+    behavior,
+    attendance,
+    strengths,
+    areasForImprovement,
+  })
 
   const stream = createGroqTextEventStream({
     prompt,

@@ -13,6 +13,7 @@ import {
 import { prisma } from '@/lib/prisma'
 import { logger } from '@/lib/utils/logger'
 import { assertGroqConfigured, extractJSONObject, groqChatCompletion } from '@/lib/ai/groq-client'
+import { buildQuizPrompt } from '@/lib/ai/subject-adaptive-prompts'
 
 const QuizMakerInputSchema = z.object({
   grade: z.enum(['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']),
@@ -25,41 +26,13 @@ const QuizMakerInputSchema = z.object({
 type QuizMakerInput = z.infer<typeof QuizMakerInputSchema>
 
 function buildPrompt(input: QuizMakerInput): string {
-  return `Create a formative quiz for Zambian students and return ONLY valid JSON.
-
-Grade: ${input.grade}
-Subject: ${input.subject}
-Topic: ${input.topic}
-Difficulty: ${input.difficulty}
-Question Count: ${input.questionCount}
-Curriculum: CBC (Competency-Based)
-
-Return JSON with this shape:
-{
-  "title": "string",
-  "grade": "string",
-  "subject": "string",
-  "topic": "string",
-  "totalMarks": number,
-  "questions": [
-    {
-      "id": "q1",
-      "type": "mcq|short|true_false",
-      "question": "string",
-      "options": ["string"] (only for mcq),
-      "answer": "string",
-      "marks": number,
-      "competencies": ["string"],
-      "explanation": "string"
-    }
-  ]
-}
-
-Rules:
-- Keep language age-appropriate for ${input.grade}
-- Include at least 2 critical-thinking questions
-- Reference Zambian context where appropriate
-- Do not include markdown, code fences, or any extra text.`
+  return buildQuizPrompt({
+    subject: input.subject,
+    grade: input.grade,
+    topic: input.topic,
+    numQuestions: input.questionCount,
+    difficulty: input.difficulty,
+  })
 }
 
 export async function POST(request: Request) {

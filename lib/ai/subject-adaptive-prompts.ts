@@ -1,0 +1,711 @@
+/**
+ * Subject-adaptive prompts for Groq — Zambian curriculum (36 subjects).
+ * Resolves UI subject names to canonical keys and tailors pedagogy per subject.
+ */
+
+export const SUBJECT_GUIDELINES: Record<string, string> = {
+  'Mathematics (Core)': `
+    - Include 3-5 worked examples with step-by-step solutions
+    - Use mathematical notation and formulas (e.g., ax² + bx + c = 0)
+    - Include practice problems for learners to solve
+    - Reference real-world Zambian applications (surveying, commerce, construction, banking)
+    - Emphasize problem-solving strategies and critical thinking
+    - Show multiple solution methods where applicable
+  `,
+  'English (Core)': `
+    - Include literature examples and quotations from English and African authors
+    - Focus on comprehension, grammar, writing, and communication skills
+    - Use diverse examples from published texts
+    - Emphasize critical analysis and interpretation
+    - Reference cultural contexts and values
+    - Include vocabulary development and language conventions
+  `,
+  'Additional Mathematics (Core)': `
+    - Include advanced mathematical concepts with detailed explanations
+    - Use calculus, complex algebra, and advanced statistics where appropriate
+    - Provide worked examples with multiple solution methods
+    - Reference higher-level applications (engineering, economics, finance)
+    - Emphasize proof and mathematical reasoning
+    - Include challenging practice problems for extension
+  `,
+  'Science (Science)': `
+    - Include practical experiments or investigations with full instructions
+    - Use scientific vocabulary and correct terminology
+    - Reference Zambian natural resources, wildlife, environment, and climate
+    - Include safety considerations for practical activities
+    - Use hypotheses, predictions, observations, and conclusions
+    - Connect to real-world applications and sustainability
+  `,
+  'Biology (Science)': `
+    - Include diagrams of biological structures and systems
+    - Use correct scientific nomenclature (Latin names where appropriate)
+    - Reference Zambian fauna, flora, and ecosystems
+    - Include experimental procedures for investigations
+    - Focus on cell biology, genetics, ecology, and human body systems
+    - Link to health, disease prevention, and conservation of Zambian biodiversity
+  `,
+  'Chemistry (Science)': `
+    - Include chemical formulas, equations, and reactions
+    - Reference industrial applications in Zambia (mining, agriculture, manufacturing)
+    - Include safety procedures and hazard symbols for experiments
+    - Use atomic structure, bonding, and reaction concepts
+    - Provide balanced equations and stoichiometry problems
+    - Connect to everyday applications and sustainability
+  `,
+  'Physics (Science)': `
+    - Include formulas, calculations, and SI units
+    - Use diagrams showing forces, motion, energy, waves
+    - Reference real-world Zambian examples (electricity, transport, construction)
+    - Include experiment descriptions and data analysis
+    - Emphasize cause-and-effect relationships
+    - Connect to technology and innovation
+  `,
+  'Agriculture Science (Science)': `
+    - Reference Zambian farming practices, crops, and livestock
+    - Include practical farm activities and seasonal planning
+    - Discuss soil science, climate, water management
+    - Include sustainable farming methods and conservation
+    - Link to food security and rural development
+    - Emphasize traditional knowledge and modern techniques
+  `,
+  'Geography (Humanities)': `
+    - Include maps, coordinates, and geographical data
+    - Reference Zambian provinces, cities, landmarks, and regions
+    - Discuss climate patterns, vegetation zones, water bodies
+    - Include case studies of Zambian geographical features
+    - Link to environmental conservation and sustainability
+    - Use correct geographical terminology and concepts
+  `,
+  'History (Humanities)': `
+    - Include key dates, events, and historical figures
+    - Reference Zambian history: pre-colonial, colonial, independence, post-colonial periods
+    - Discuss multiple perspectives and use primary sources
+    - Connect historical events to present-day Zambia
+    - Encourage critical analysis and historical thinking
+    - Link to heritage, cultural identity, and nation-building
+  `,
+  'Civic Education (Humanities)': `
+    - Reference Zambian Constitution, laws, and governance structures
+    - Discuss rights and responsibilities of Zambian citizens
+    - Include examples from local and national governance
+    - Emphasize democratic values and civic participation
+    - Connect to Vision 2030 and development goals
+    - Encourage active citizenship and social responsibility
+  `,
+  'Social Studies (Humanities)': `
+    - Integrate geography, history, and social science concepts
+    - Reference Zambian society, culture, and communities
+    - Discuss social issues affecting Zambia
+    - Include cultural diversity and respect for traditions
+    - Connect to nation-building and sustainable development
+    - Emphasize critical thinking about social phenomena
+  `,
+  'Religious Education 2046 (Humanities)': `
+    - Reference diverse religious traditions and practices
+    - Discuss ethical and moral values from various perspectives
+    - Include Zambian religious contexts and practices
+    - Encourage respectful exploration of beliefs
+    - Connect to personal development and community values
+    - Emphasize interfaith understanding and tolerance
+  `,
+  'Literature in English (Languages)': `
+    - Include quotes and excerpts from published literature
+    - Reference African, Zambian, and international authors
+    - Analyze literary devices, themes, and characters
+    - Discuss cultural contexts and historical periods
+    - Encourage critical interpretation and analysis
+    - Include poetry, drama, and prose examples
+  `,
+  'French (Languages)': `
+    - Use authentic French language examples and dialogues
+    - Include French cultural contexts and Francophone countries
+    - Focus on vocabulary, grammar, pronunciation
+    - Reference French-speaking African nations
+    - Include practical communication scenarios
+    - Emphasize cultural understanding
+  `,
+  'Bemba (Languages)': `
+    - Use authentic Bemba language examples and expressions
+    - Reference Bemba cultural traditions and communities in Zambia
+    - Include vocabulary, grammar, and pronunciation
+    - Discuss cultural contexts and oral traditions
+    - Emphasize preservation of Zambian languages
+    - Include proverbs and traditional sayings
+  `,
+  'Chichewa (Languages)': `
+    - Use authentic Chichewa language examples
+    - Reference Chichewa-speaking communities in Zambia
+    - Include vocabulary, grammar, and linguistic features
+    - Discuss cultural contexts and traditions
+    - Emphasize language preservation
+    - Include cultural proverbs and stories
+  `,
+  'Chitonga (Languages)': `
+    - Use authentic Chitonga language examples
+    - Reference Chitonga-speaking communities in Southern Zambia
+    - Include vocabulary, grammar, and speech patterns
+    - Discuss cultural heritage and traditions
+    - Emphasize language conservation
+    - Include traditional expressions and wisdom
+  `,
+  'Kikaonde (Languages)': `
+    - Use authentic Kikaonde language examples
+    - Reference Kaonde-speaking communities in North-Western Zambia
+    - Include vocabulary and linguistic patterns
+    - Discuss cultural contexts and traditions
+    - Emphasize preservation of minority languages
+    - Include cultural narratives
+  `,
+  'Lunda (Languages)': `
+    - Use authentic Lunda language examples
+    - Reference Lunda-speaking communities in Northern Zambia
+    - Include vocabulary and language structures
+    - Discuss cultural traditions and heritage
+    - Emphasize language preservation efforts
+    - Include traditional knowledge
+  `,
+  'Luvale (Languages)': `
+    - Use authentic Luvale language examples
+    - Reference Luvale-speaking communities in Zambia
+    - Include vocabulary, phonetics, and grammar
+    - Discuss cultural practices and traditions
+    - Emphasize language conservation
+    - Include cultural wisdom and proverbs
+  `,
+  'Silozi (Languages)': `
+    - Use authentic Silozi language examples
+    - Reference Lozi-speaking communities in Western Province
+    - Include vocabulary, grammar, and pronunciation
+    - Discuss Lozi cultural heritage and traditions
+    - Emphasize preservation of languages
+    - Include traditional stories and expressions
+  `,
+  'Chinese (Languages)': `
+    - Use authentic Chinese language examples
+    - Include Mandarin Chinese vocabulary and characters
+    - Focus on cultural contexts of Chinese-speaking regions
+    - Include practical communication scenarios
+    - Emphasize cross-cultural understanding
+    - Reference China-Zambia relationships
+  `,
+  'Principles of Accounts (Business)': `
+    - Include accounting principles and concepts
+    - Use real-world examples from Zambian businesses
+    - Show journal entries, ledgers, and financial statements
+    - Include practice problems with solutions
+    - Reference International Financial Reporting Standards (IFRS)
+    - Emphasize accuracy and ethical practices
+  `,
+  'Commerce (Business)': `
+    - Discuss commercial activities and trade
+    - Reference Zambian commerce and business practices
+    - Include types of businesses and entrepreneurship
+    - Discuss markets, trade, and economic activities
+    - Link to national economic development
+    - Emphasize business ethics and sustainability
+  `,
+  'Business Studies (Business)': `
+    - Include business management principles and practices
+    - Reference Zambian businesses and entrepreneurs
+    - Discuss organizational structures and functions
+    - Include case studies of successful Zambian businesses
+    - Focus on leadership, marketing, operations
+    - Link to economic growth and employment
+  `,
+  'Computer Studies (Technology)': `
+    - Include programming concepts and algorithms
+    - Use practical coding examples in relevant languages (Python, Java, etc.)
+    - Reference Zambian technology sector and digital initiatives
+    - Include computer hardware, software, and networking concepts
+    - Emphasize digital literacy and cybersecurity
+    - Link to future technology careers
+  `,
+  'Information Technology (Technology)': `
+    - Include IT systems, networks, and data management
+    - Reference Zambian digital transformation initiatives
+    - Discuss database design, data security, and privacy
+    - Include practical IT scenarios and problem-solving
+    - Emphasize digital skills and technical literacy
+    - Connect to modern workplace IT requirements
+  `,
+  'Design and Technology (Technology)': `
+    - Include design principles and processes
+    - Reference Zambian manufacturing and production
+    - Discuss materials, tools, and manufacturing methods
+    - Include design thinking and problem-solving approaches
+    - Emphasize innovation and creativity
+    - Link to engineering and industrial development
+  `,
+  'Home Management (Practical)': `
+    - Include practical demonstrations and household management
+    - Reference Zambian home life and family structures
+    - Focus on nutrition, health, hygiene, budgeting
+    - Include family relationships and child development
+    - Emphasize practical life skills for home management
+    - Connect to family welfare and sustainable living
+  `,
+  'Food and Nutrition (Practical)': `
+    - Include recipes, meal planning, and food preparation
+    - Reference Zambian traditional foods and cooking methods
+    - Focus on nutrition science and dietary requirements
+    - Discuss food safety, hygiene, and storage
+    - Include nutrition for different age groups
+    - Emphasize health, food security, and sustainable agriculture
+  `,
+  'Fashion and Fabrics (Practical)': `
+    - Include sewing techniques, pattern-making, and garment construction
+    - Reference Zambian traditional textiles and fashion
+    - Discuss fabric types, properties, and care
+    - Include design principles and fashion trends
+    - Emphasize clothing care, modification, and creativity
+    - Link to entrepreneurship and self-employment
+  `,
+  'Metalwork (Practical)': `
+    - Include metalworking techniques and safety procedures
+    - Reference Zambian metalwork traditions and craftsmanship
+    - Discuss tools, materials, and joining methods
+    - Include design, measurement, and finishing techniques
+    - Emphasize precision and craftsmanship
+    - Link to vocational skills and entrepreneurship
+  `,
+  'Woodwork (Practical)': `
+    - Include woodworking techniques and safety procedures
+    - Reference Zambian wood types and traditional carpentry
+    - Discuss tools, joints, and finishing methods
+    - Include design, measurement, and construction
+    - Emphasize precision, creativity, and craftsmanship
+    - Link to vocational skills and furniture-making entrepreneurship
+  `,
+  'Physical Education (Practical)': `
+    - Include exercise techniques, sports rules, and athletic training
+    - Reference Zambian sports and sporting achievements
+    - Discuss fitness, health, and wellness concepts
+    - Include sports skill development and game strategies
+    - Emphasize teamwork, discipline, and healthy living
+    - Connect to physical development and competitive sports
+  `,
+  'Music (Arts)': `
+    - Include musical notation, theory, and composition
+    - Reference Zambian traditional music and instruments
+    - Discuss music genres, styles, and cultural contexts
+    - Include performance techniques and musical appreciation
+    - Emphasize creativity and cultural expression
+    - Connect to Zambian musical heritage and contemporary music
+  `,
+}
+
+/** Maps common UI / database subject names to canonical guideline keys. */
+const SUBJECT_ALIASES: Record<string, string> = {
+  mathematics: 'Mathematics (Core)',
+  math: 'Mathematics (Core)',
+  'mathematics (core)': 'Mathematics (Core)',
+  english: 'English (Core)',
+  'english language': 'English (Core)',
+  'english (core)': 'English (Core)',
+  'additional mathematics': 'Additional Mathematics (Core)',
+  'additional math': 'Additional Mathematics (Core)',
+  science: 'Science (Science)',
+  'integrated science': 'Science (Science)',
+  biology: 'Biology (Science)',
+  chemistry: 'Chemistry (Science)',
+  physics: 'Physics (Science)',
+  'agriculture science': 'Agriculture Science (Science)',
+  agriculture: 'Agriculture Science (Science)',
+  geography: 'Geography (Humanities)',
+  history: 'History (Humanities)',
+  'civic education': 'Civic Education (Humanities)',
+  'social studies': 'Social Studies (Humanities)',
+  'religious education': 'Religious Education 2046 (Humanities)',
+  'religious education 2046': 'Religious Education 2046 (Humanities)',
+  'literature in english': 'Literature in English (Languages)',
+  french: 'French (Languages)',
+  bemba: 'Bemba (Languages)',
+  chichewa: 'Chichewa (Languages)',
+  nyanja: 'Chichewa (Languages)',
+  chitonga: 'Chitonga (Languages)',
+  tonga: 'Chitonga (Languages)',
+  kikaonde: 'Kikaonde (Languages)',
+  kaonde: 'Kikaonde (Languages)',
+  lunda: 'Lunda (Languages)',
+  luvale: 'Luvale (Languages)',
+  silozi: 'Silozi (Languages)',
+  lozi: 'Silozi (Languages)',
+  chinese: 'Chinese (Languages)',
+  'principles of accounts': 'Principles of Accounts (Business)',
+  accounts: 'Principles of Accounts (Business)',
+  commerce: 'Commerce (Business)',
+  'business studies': 'Business Studies (Business)',
+  'computer studies': 'Computer Studies (Technology)',
+  'computer studies / ict': 'Computer Studies (Technology)',
+  ict: 'Information Technology (Technology)',
+  'information technology': 'Information Technology (Technology)',
+  'design and technology': 'Design and Technology (Technology)',
+  'home management': 'Home Management (Practical)',
+  'home economics': 'Home Management (Practical)',
+  'food and nutrition': 'Food and Nutrition (Practical)',
+  'food & nutrition': 'Food and Nutrition (Practical)',
+  'food & nutrition technology': 'Food and Nutrition (Practical)',
+  'fashion and fabrics': 'Fashion and Fabrics (Practical)',
+  'fashion & fabrics': 'Fashion and Fabrics (Practical)',
+  metalwork: 'Metalwork (Practical)',
+  woodwork: 'Woodwork (Practical)',
+  'physical education': 'Physical Education (Practical)',
+  pe: 'Physical Education (Practical)',
+  music: 'Music (Arts)',
+  'art & design': 'Music (Arts)',
+  'art and design': 'Music (Arts)',
+}
+
+export const CANONICAL_SUBJECTS = Object.keys(SUBJECT_GUIDELINES)
+
+export function resolveCanonicalSubject(subject: string): string {
+  const raw = String(subject || '').trim()
+  if (!raw) return 'English (Core)'
+  if (SUBJECT_GUIDELINES[raw]) return raw
+
+  const lower = raw.toLowerCase()
+  if (SUBJECT_ALIASES[lower]) return SUBJECT_ALIASES[lower]
+
+  for (const key of CANONICAL_SUBJECTS) {
+    if (key.toLowerCase() === lower) return key
+    const base = key
+      .replace(/\s*\([^)]+\)\s*$/, '')
+      .trim()
+      .toLowerCase()
+    if (base === lower || lower.startsWith(base) || base.startsWith(lower)) return key
+  }
+
+  return raw
+}
+
+export function getSubjectGuidelines(subject: string): string {
+  const canonical = resolveCanonicalSubject(subject)
+  return (SUBJECT_GUIDELINES[canonical] || SUBJECT_GUIDELINES['English (Core)']).trim()
+}
+
+export type StoryTypeLabel = 'Narrative Story' | 'Fable' | 'Dialogue' | 'Poem'
+
+const STORY_SUBJECT_CONTEXT: Record<string, string> = {
+  'Mathematics (Core)':
+    'Weave in mathematical concepts, problem-solving, and real-world math applications. Characters use math to solve challenges.',
+  'English (Core)':
+    'Showcase strong writing, character development, dialogue, and literary devices. Focus on language and communication.',
+  'Science (Science)':
+    'Demonstrate scientific concepts, experiments, or discoveries. Include curiosity about how things work in nature.',
+  'History (Humanities)':
+    'Reference historical events, figures, or periods in Zambian history with accurate context.',
+  'Geography (Humanities)':
+    'Feature Zambian locations, geographical features, and climate. Characters explore and learn about places.',
+  'Biology (Science)':
+    'Highlight living organisms, ecosystems, or biological processes and observations of Zambian nature.',
+  'Chemistry (Science)':
+    'Feature chemical reactions or properties in practical, everyday Zambian contexts.',
+  'Physics (Science)':
+    'Demonstrate forces, motion, energy, or physics principles with real-world applications.',
+  'Agriculture Science (Science)':
+    'Showcase farming practices, crop growth, or sustainable agriculture in Zambian communities.',
+  'Music (Arts)': 'Celebrate music, expression, and Zambian musical heritage and instruments.',
+  'Physical Education (Practical)':
+    'Feature sports, teamwork, athletic achievement, and healthy living in Zambia.',
+  'Computer Studies (Technology)':
+    'Demonstrate coding, digital innovation, or technology solving real problems.',
+  'Business Studies (Business)':
+    'Feature entrepreneurship, business creation, or problem-solving; highlight Zambian entrepreneurs.',
+  'Civic Education (Humanities)':
+    'Demonstrate rights, responsibilities, citizenship, and community participation.',
+  'Home Management (Practical)':
+    'Showcase practical life skills, nutrition, family values, and household management.',
+}
+
+export function mapStoryTypeToLabel(storyType: string): StoryTypeLabel {
+  const map: Record<string, StoryTypeLabel> = {
+    story: 'Narrative Story',
+    narrative: 'Narrative Story',
+    fable: 'Fable',
+    dialogue: 'Dialogue',
+    poem: 'Poem',
+  }
+  return map[String(storyType || 'story').toLowerCase()] || 'Narrative Story'
+}
+
+export function estimateWordCountFromLength(length: string): number {
+  const s = String(length || '').toLowerCase()
+  if (s.includes('short') || s.includes('2-3')) return 300
+  if (s.includes('long') || s.includes('6-8')) return 1000
+  if (/\d+/.test(s)) {
+    const n = parseInt(s.match(/\d+/)?.[0] || '400', 10)
+    return Math.min(1200, Math.max(200, n * 80))
+  }
+  return 450
+}
+
+export function performanceLevelFromPercentage(
+  percentage: number
+): 'Excellent' | 'Good' | 'Satisfactory' | 'Needs Improvement' {
+  if (percentage >= 80) return 'Excellent'
+  if (percentage >= 65) return 'Good'
+  if (percentage >= 50) return 'Satisfactory'
+  return 'Needs Improvement'
+}
+
+export function buildLessonPlanPrompt(params: {
+  subject: string
+  grade: string
+  topic: string
+  duration: number
+  schoolName?: string
+  subtopic?: string
+  competenceFocus?: string
+  additionalInstructions?: string
+}): string {
+  const canonical = resolveCanonicalSubject(params.subject)
+  const subjectGuidelines = getSubjectGuidelines(canonical)
+  const subtopic = params.subtopic?.trim() || 'Not specified'
+  const extras = params.additionalInstructions?.trim() || 'None'
+  const competences = params.competenceFocus?.trim() || 'Critical Thinking and Problem Solving'
+
+  return `You are an experienced Zambian teacher creating a Competency-Based Curriculum (CBC) lesson plan aligned with the 2023 ZECF.
+
+LESSON DETAILS:
+- Subject: ${canonical} (requested as: ${params.subject})
+- Grade/Form: ${params.grade}
+- Topic: ${params.topic}
+- Sub-topic: ${subtopic}
+- Duration: ${params.duration} minutes
+- School: ${params.schoolName || 'A Zambian school'}
+- Competence focus: ${competences}
+
+SUBJECT-SPECIFIC GUIDANCE for ${canonical}:
+${subjectGuidelines}
+
+CREATE A LESSON PLAN WITH:
+
+1. **LEARNING OUTCOMES** (Know-Do-Value):
+   - KNOW: What concepts should learners understand?
+   - DO: What practical skills can they demonstrate?
+   - VALUE: What attitudes/appreciation should they develop?
+
+2. **LESSON PROCEDURE** (5 Phases — Learner-Centred; times proportional to ${params.duration} minutes):
+   - Phase 1: INTRODUCTION (10%) — Hook with real-life Zambian context
+   - Phase 2: DEVELOPMENT (20%) — Exploration and investigation
+   - Phase 3: EXPLANATION (20%) — Teacher explains key concepts
+   - Phase 4: APPLICATION (30%) — Apply to new scenarios
+   - Phase 5: ASSESSMENT (20%) — Demonstrate competence
+
+3. **TEACHING & LEARNING MATERIALS (TLMs)**:
+   - List specific materials for ${canonical}
+   - Include low-cost / local Zambian resources where possible
+
+4. **SUBJECT-SPECIFIC EXAMPLES**:
+   - Include 3-5 concrete examples for ${canonical}
+   - Use correct terminology; worked solutions where applicable
+
+5. **DIFFERENTIATION**:
+   - Support for struggling learners; extension for gifted learners; inclusive education adaptations
+
+6. **ASSESSMENT**:
+   - Formative strategies during the lesson
+   - Rubric for ${canonical} competences
+
+7. **ZAMBIAN CONTEXT**:
+   - Local culture, geography, environment; Vision 2030 where relevant
+
+Additional teacher instructions: ${extras}
+
+Format as a clear, structured plan a Zambian teacher can implement immediately.`
+}
+
+export function buildStoryPrompt(params: {
+  subject: string
+  grade: string
+  theme: string
+  wordCount: number
+  storyType?: string
+  setting?: string
+  includeQuestions?: boolean
+}): string {
+  const canonical = resolveCanonicalSubject(params.subject)
+  const storyType = mapStoryTypeToLabel(params.storyType || 'story')
+  const context =
+    STORY_SUBJECT_CONTEXT[canonical] ||
+    'The story should be educational and engaging for learners in Zambia, integrating the subject naturally.'
+
+  const setting = params.setting?.trim() || 'Zambia'
+  const questions = params.includeQuestions
+    ? `
+
+After the story, add:
+---
+COMPREHENSION QUESTIONS:
+1. [Recall]
+2. [Understanding/inference]
+3. [Critical thinking]
+4. [Connection to life in Zambia]
+5. [Subject-specific application for ${canonical}]`
+    : ''
+
+  return `Write a ${storyType.toLowerCase()} for ${params.grade} Zambian students (approximately ${params.wordCount} words).
+
+THEME / TOPIC: ${params.theme}
+SUBJECT: ${canonical}
+SETTING: ${setting}
+
+REQUIREMENTS:
+1. Subject integration: ${context}
+2. Zambian context: Zambian characters, places, culture (authentic names e.g. Chanda, Mwamba, Bwalya)
+3. Educational value: Teach ${canonical} concepts through the narrative
+4. Age-appropriate vocabulary for ${params.grade}
+5. Engaging plot with clear beginning, middle, and end
+6. Learning outcome: Readers understand the subject concept by the end${questions}
+
+Write the ${storyType.toLowerCase()} now.`
+}
+
+export function buildQuizPrompt(params: {
+  subject: string
+  grade: string
+  topic: string
+  numQuestions: number
+  difficulty?: string
+}): string {
+  const canonical = resolveCanonicalSubject(params.subject)
+  const subjectGuidelines = getSubjectGuidelines(canonical)
+  const difficulty = params.difficulty || 'medium'
+
+  return `Create a formative quiz for ${params.grade} ${canonical} learners and return ONLY valid JSON.
+
+TOPIC: ${params.topic}
+DIFFICULTY: ${difficulty}
+QUESTION COUNT: ${params.numQuestions}
+CURRICULUM: Zambian CBC
+
+SUBJECT-SPECIFIC APPROACH for ${canonical}:
+${subjectGuidelines}
+
+REQUIREMENTS:
+1. Progressively increase difficulty
+2. Include 1-2 application/analysis questions (not only recall)
+3. Use correct ${canonical} terminology
+4. Reference Zambian examples where relevant
+5. Provide correct answer and brief explanation per question
+6. Avoid trick questions
+
+Return JSON:
+{
+  "title": "string",
+  "grade": "${params.grade}",
+  "subject": "${canonical}",
+  "topic": "${params.topic}",
+  "totalMarks": number,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq|short|true_false",
+      "question": "string",
+      "options": ["A", "B", "C", "D"],
+      "answer": "string",
+      "marks": number,
+      "competencies": ["string"],
+      "explanation": "string"
+    }
+  ]
+}
+
+Do not include markdown, code fences, or extra text.`
+}
+
+export function buildReportCommentPrompt(params: {
+  subject: string
+  studentName: string
+  grade: string
+  performanceLevel: 'Excellent' | 'Good' | 'Satisfactory' | 'Needs Improvement'
+  behavior?: string
+  attendance?: string
+  strengths?: string[]
+  areasForImprovement?: string[]
+}): string {
+  const canonical = resolveCanonicalSubject(params.subject)
+  const subjectGuidelines = getSubjectGuidelines(canonical)
+
+  const performanceGuidance: Record<string, string> = {
+    Excellent: 'Celebrate strengths and encourage continued excellence.',
+    Good: 'Acknowledge good performance and suggest minor improvements.',
+    Satisfactory: 'Recognize satisfactory work and identify specific development areas.',
+    'Needs Improvement': 'Be constructive, identify specific challenges, and offer encouragement.',
+  }
+
+  const strengths = (params.strengths || []).filter(Boolean).join(', ') || 'Not specified'
+  const areas = (params.areasForImprovement || []).filter(Boolean).join(', ') || 'Not specified'
+
+  return `Write a professional report comment for ${params.studentName} in ${canonical} (Grade ${params.grade}).
+
+PERFORMANCE LEVEL: ${params.performanceLevel}
+TONE: ${performanceGuidance[params.performanceLevel]}
+BEHAVIOR: ${params.behavior || 'Good'}
+ATTENDANCE: ${params.attendance || 'Regular'}
+STRENGTHS: ${strengths}
+AREAS FOR IMPROVEMENT: ${areas}
+
+SUBJECT-SPECIFIC FOCUS (${canonical}):
+${subjectGuidelines}
+
+The comment should:
+1. Be specific to ${canonical} skills and knowledge
+2. Be constructive and encouraging (2-4 sentences)
+3. Suggest next steps
+4. Reference CBC competences (Critical Thinking, Collaboration, Communication, Creativity, Citizenship)
+5. Suit Zambian schools; simple English for parents
+6. Do NOT include marks or percentages
+
+Write the comment only (plain text, no JSON).`
+}
+
+export function buildEczPracticePrompt(params: {
+  subject: string
+  examLevel: string
+  topic: string
+  questionCount: number
+}): string {
+  const canonical = resolveCanonicalSubject(params.subject)
+  const subjectGuidelines = getSubjectGuidelines(canonical)
+
+  return `Create ECZ-style practice questions for Zambian students and return ONLY valid JSON.
+
+Subject: ${canonical}
+Exam Level: ${params.examLevel} (grade9 or grade12)
+Topic: ${params.topic}
+Question Count: ${params.questionCount}
+
+SUBJECT-SPECIFIC APPROACH for ${canonical}:
+${subjectGuidelines}
+
+Return JSON:
+{
+  "paper": {
+    "examInfo": {
+      "subject": "${canonical}",
+      "level": "${params.examLevel}",
+      "topic": "${params.topic}",
+      "totalMarks": number,
+      "timeAllowed": "string"
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq|short|structured",
+        "question": "string",
+        "options": ["string"],
+        "marks": number,
+        "answer": "string",
+        "explanation": "string"
+      }
+    ]
+  }
+}
+
+Rules:
+- Match ECZ tone and difficulty for the level
+- Use ${canonical} conventions (notation, terminology, practical focus as appropriate)
+- Include marking guidance in answer and explanation
+- No markdown or code fences.`
+}

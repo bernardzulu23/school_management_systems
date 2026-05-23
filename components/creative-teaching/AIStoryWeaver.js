@@ -4,18 +4,10 @@ import { useState } from 'react'
 import UpgradePrompt from '@/components/shared/UpgradePrompt'
 import { useAIStream } from '@/hooks/useAIStream'
 import { BookOpen, Check, Copy, PenLine, Printer, Sparkles, Trash2 } from 'lucide-react'
+import { CANONICAL_SUBJECTS } from '@/lib/ai/subject-adaptive-prompts'
 
 const GRADES = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']
-const SUBJECTS = [
-  'English',
-  'Science',
-  'Social Studies',
-  'Mathematics',
-  'History',
-  'Geography',
-  'Biology',
-  'Civic Education',
-]
+const SUBJECTS = CANONICAL_SUBJECTS
 const STORY_TYPES = [
   { id: 'story', label: 'Narrative Story', desc: 'Engaging story with characters' },
   { id: 'fable', label: 'Fable', desc: 'Animal story with a moral lesson' },
@@ -36,7 +28,7 @@ const ZAMBIAN_SETTINGS = [
 export default function AIStoryWeaver() {
   const [form, setForm] = useState({
     grade: 'Form 3',
-    subject: 'English',
+    subject: 'English (Core)',
     topic: '',
     storyType: 'story',
     setting: 'Eastern Province',

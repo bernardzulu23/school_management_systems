@@ -1,28 +1,32 @@
 import { extractJSONObject, groqChatCompletion } from '@/lib/aiml/tools/_groq'
+import { buildLessonPlanPrompt } from '@/lib/ai/subject-adaptive-prompts'
 
 export interface LessonPlanRequest {
   subject: string
-  grade: number
+  grade: number | string
   topic: string
   duration: number
   learningOutcomes?: string[]
+  schoolName?: string
 }
 
 export async function generateLessonPlan(request: LessonPlanRequest) {
-  const prompt = `Generate an ECZ-aligned lesson plan for Zambian Grade ${request.grade} students.
+  const prompt = `${buildLessonPlanPrompt({
+    subject: request.subject,
+    grade: String(request.grade),
+    topic: request.topic,
+    duration: request.duration,
+    schoolName: request.schoolName,
+    additionalInstructions: request.learningOutcomes?.length
+      ? `Learning outcomes: ${request.learningOutcomes.join(', ')}`
+      : undefined,
+  })}
 
-Subject: ${request.subject}
-Topic: ${request.topic}
-Duration: ${request.duration} minutes
-Learning Outcomes: ${request.learningOutcomes?.join(', ') || 'Auto-generate'}
-
-Use accessible English for students with varying proficiency. Include local Zambian examples where relevant.
-
-Format as JSON:
+Return the lesson plan as JSON:
 {
   "title": "Lesson title",
   "objectives": ["objective 1", "objective 2"],
-  "introduction": "5 min introduction",
+  "introduction": "introduction activity",
   "mainActivity": "Main teaching activity",
   "practice": "Student practice activities",
   "assessment": "Assessment method",

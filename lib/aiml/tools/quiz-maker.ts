@@ -1,34 +1,23 @@
 import { extractJSONObject, groqChatCompletion } from '@/lib/aiml/tools/_groq'
+import { buildQuizPrompt } from '@/lib/ai/subject-adaptive-prompts'
 
 export interface QuizRequest {
   topic: string
-  grade: number
+  subject?: string
+  grade: number | string
   questionCount: number
   questionTypes: ('multipleChoice' | 'trueFalse' | 'shortAnswer')[]
 }
 
 export async function generateQuiz(request: QuizRequest) {
-  const prompt = `Generate a quiz for Zambian Grade ${request.grade} students about: ${request.topic}
+  const prompt = `${buildQuizPrompt({
+    subject: request.subject || 'English (Core)',
+    grade: String(request.grade),
+    topic: request.topic,
+    numQuestions: request.questionCount,
+  })}
 
-Number of questions: ${request.questionCount}
-Question types: ${request.questionTypes.join(', ')}
-
-Return JSON only:
-{
-  "title": "Quiz title",
-  "topic": "${request.topic}",
-  "questions": [
-    {
-      "id": 1,
-      "type": "multipleChoice",
-      "question": "The question?",
-      "options": ["A) Option 1", "B) Option 2"],
-      "correctAnswer": "B) Option 2",
-      "explanation": "Why this is correct"
-    }
-  ],
-  "totalPoints": 100
-}`
+Question types to include: ${request.questionTypes.join(', ')}.`
 
   const { content } = await groqChatCompletion({
     prompt,

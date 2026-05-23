@@ -1,3 +1,5 @@
+import { getSubjectGuidelines, resolveCanonicalSubject } from '@/lib/ai/subject-adaptive-prompts'
+
 export type LessonPlanTemplateType =
   | 'standard'
   | 'science'
@@ -186,7 +188,11 @@ export function buildLessonPlanPrompt(input: LessonPlanPromptInput): string {
   })
 
   const extras = safe(input.additionalInstructions)
-  return `${preamble}\n\n${structure}\n\nAdditional instructions from teacher: ${
+  const canonicalSubject = resolveCanonicalSubject(input.subject)
+  const subjectBlock = `SUBJECT-SPECIFIC PEDAGOGY (${canonicalSubject} — apply in every section, especially examples, TLMs, and assessment):
+${getSubjectGuidelines(canonicalSubject)}`
+
+  return `${preamble}\n\n${subjectBlock}\n\n${structure}\n\nAdditional instructions from teacher: ${
     extras || 'None'
-  }\n\nGenerate the complete, detailed, ready-to-use CBC lesson plan now. Be thorough, practical, and ensure all 16 sections are fully developed. Use Zambian local examples and contexts throughout.`
+  }\n\nGenerate the complete, detailed, ready-to-use CBC lesson plan now. Be thorough, practical, and ensure all 16 sections are fully developed. Use Zambian local examples and contexts throughout. Tailor all content to ${canonicalSubject}.`
 }

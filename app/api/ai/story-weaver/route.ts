@@ -17,6 +17,7 @@ import {
   createGroqTextEventStream,
   GROQ_SSE_HEADERS,
 } from '@/lib/ai/groq-client'
+import { buildStoryPrompt, estimateWordCountFromLength } from '@/lib/ai/subject-adaptive-prompts'
 
 const StoryWeaverInputSchema = z.object({
   grade: z.enum(['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']).optional(),
@@ -31,48 +32,18 @@ const StoryWeaverInputSchema = z.object({
 type StoryWeaverInput = z.infer<typeof StoryWeaverInputSchema>
 
 function buildPrompt(input: StoryWeaverInput): string {
-  const typeInstructions: Record<string, string> = {
-    story:
-      'Write an engaging narrative story with named Zambian characters, a clear plot, and a moral or educational lesson.',
-    fable:
-      'Write a fable using animals native to Zambia (elephant, crocodile, eagle, lion, etc.) that teaches the concept through their actions.',
-    dialogue:
-      'Write a realistic conversation between 2-3 Zambian students or community members that explores and explains the topic naturally.',
-    poem: 'Write an educational poem with rhyme and rhythm that teaches the concept in a memorable way.',
-  }
+  const gradeLabel = input.grade || 'Form 3'
+  const subjectLabel = input.subject || 'English (Core)'
 
-  const gradeLabel = input.grade || 'secondary'
-  const subjectLabel = input.subject || 'the subject'
-  const settingLabel = input.setting || 'Zambia'
-
-  const questions = input.includeQuestions
-    ? `
-
-After the story, add:
----
-COMPREHENSION QUESTIONS:
-1. [A recall question]
-2. [An inference/understanding question]
-3. [A discussion/critical thinking question]
-4. [A question connecting to real life in Zambia]`
-    : ''
-
-  return `You are an educational content writer for Zambian secondary schools.
-
-Create a ${input.storyType} for ${gradeLabel} students studying ${subjectLabel}.
-Topic: ${input.topic}
-Setting: ${settingLabel}
-Length: ${input.length}
-
-Instructions:
-- ${typeInstructions[input.storyType] || typeInstructions.story}
-- Use authentic Zambian names (e.g., Chanda, Mwamba, Nalumino, Bwalya, Thandiwe, Mutale)
-- Reference real Zambian places, foods, customs, and culture where relevant
-- Make the educational content accurate and aligned with the Zambian curriculum
-- Write in clear, accessible English appropriate for ${gradeLabel} students
-- The story should naturally teach or reinforce the topic without being preachy${questions}
-
-Write the ${input.storyType} now:`
+  return buildStoryPrompt({
+    subject: subjectLabel,
+    grade: gradeLabel,
+    theme: input.topic,
+    wordCount: estimateWordCountFromLength(input.length),
+    storyType: input.storyType,
+    setting: input.setting || 'Zambia',
+    includeQuestions: input.includeQuestions,
+  })
 }
 
 export async function POST(request: Request) {
