@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveTeacherUserId } from '@/lib/utils/resolveTeacherId'
 
 function unwrapAllocationData(data) {
