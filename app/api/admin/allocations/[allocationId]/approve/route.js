@@ -6,6 +6,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { syncDepartmentApprovalToTeacherAllocations } from '@/lib/timetable/departmentApprovalSync'
+import { resolveTeacherUserId } from '@/lib/utils/resolveTeacherId'
 
 function unwrapAllocationData(data) {
   const raw = data && typeof data === 'object' ? data : {}
@@ -65,6 +66,15 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     if (!details.subject) throw new ApiError('Allocation missing subject', 400)
     if (details.classes.length === 0) throw new ApiError('Allocation missing classes', 400)
 
+    const teacherUser = await resolveTeacherUserId(tx, schoolId, details.teacherId)
+    if (!teacherUser?.id) {
+      throw new ApiError(
+        `Teacher not found in this school (id: ${details.teacherId}). Open Class Allocation, re-select the teacher, and resubmit.`,
+        400
+      )
+    }
+    const teacherUserId = teacherUser.id
+
     const periodConfiguration =
       typeof details.periodConfig === 'string'
         ? details.periodConfig
@@ -86,7 +96,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
         schoolId,
         departmentId: allocation.departmentId,
         allocationId: allocation.id,
-        teacherId: details.teacherId,
+        teacherId: teacherUserId,
         classes: details.classes,
         subject: details.subject,
         periodConfiguration,
@@ -105,6 +115,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
         schoolId,
         departmentAllocationId: allocation.id,
         allocationData: allocation.allocationData,
+        teacherUserId,
         hodUserId: allocation.createdByUserId,
         term,
         academicYear,

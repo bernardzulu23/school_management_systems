@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
-import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { resolveTeacherUserId } from '@/lib/utils/resolveTeacherId'
 
 function unwrapAllocationData(data) {
   const raw = data && typeof data === 'object' ? data : {}
@@ -42,6 +42,8 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
 
   const details = unwrapAllocationData(allocation.allocationData)
 
+  const teacherUser = await resolveTeacherUserId(prisma, schoolId, details.teacherId)
+
   return NextResponse.json({
     success: true,
     data: {
@@ -50,6 +52,8 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
       department: allocation.department,
       status: allocation.status,
       teacherId: details.teacherId,
+      teacherUserId: teacherUser?.id || null,
+      teacherName: teacherUser?.name || null,
       classes: details.classes,
       subject: details.subject,
       periodConfig: details.periodConfig,

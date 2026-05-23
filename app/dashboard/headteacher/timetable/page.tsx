@@ -902,9 +902,16 @@ function HeadteacherTimetablePageContent() {
                         <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 p-4">
                           <div className="text-xs text-royalPurple-text3">Teacher</div>
                           <div className="text-sm font-bold text-royalPurple-text1">
-                            {teachers.find(
-                              (t) => String(t.id) === String(reviewData?.teacherId || '')
-                            )?.fullName || String(reviewData?.teacherId || '')}
+                            {String(
+                              reviewData?.teacherName ||
+                                teachers.find(
+                                  (t) =>
+                                    String(t.id) === String(reviewData?.teacherUserId || '') ||
+                                    String(t.id) === String(reviewData?.teacherId || '')
+                                )?.fullName ||
+                                reviewData?.teacherId ||
+                                ''
+                            )}
                           </div>
                         </div>
                         <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 p-4">
