@@ -11,6 +11,10 @@ import UpgradePrompt from '@/components/shared/UpgradePrompt'
 import { useAIFetch } from '@/hooks/useAIStream'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  ECZ_PRACTICE_EXAM_LEVEL_GROUPS,
+  formatEczExamLevelLabel,
+} from '@/lib/ecz/ecz-practice-levels'
 
 export default function StudentECZPracticePage() {
   const { data, loading, error, fetch } = useAIFetch('/api/ai/ecz-practice')
@@ -58,12 +62,19 @@ export default function StudentECZPracticePage() {
                 <div className="space-y-2">
                   <Label>Exam Level</Label>
                   <select
-                    className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
+                    className="w-full zsms-select"
                     value={form.examLevel}
                     onChange={(e) => setForm((p) => ({ ...p, examLevel: e.target.value }))}
                   >
-                    <option value="grade9">Grade 9</option>
-                    <option value="grade12">Grade 12</option>
+                    {ECZ_PRACTICE_EXAM_LEVEL_GROUPS.map((group) => (
+                      <optgroup key={group.label} label={group.label}>
+                        {group.levels.map((level) => (
+                          <option key={level.value} value={level.value}>
+                            {level.label}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))}
                   </select>
                 </div>
                 <div className="space-y-2 md:col-span-2">
@@ -99,7 +110,7 @@ export default function StudentECZPracticePage() {
             <Card variant="glass">
               <CardHeader>
                 <CardTitle className="text-royalPurple-text1">
-                  {paper?.examInfo?.subject} • {paper?.examInfo?.level}
+                  {paper?.examInfo?.subject} • {formatEczExamLevelLabel(paper?.examInfo?.level)}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">

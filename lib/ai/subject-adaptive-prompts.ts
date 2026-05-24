@@ -813,13 +813,16 @@ export function buildEczPracticePrompt(params: {
 }): string {
   const canonical = resolveCanonicalSubject(params.subject)
   const subjectGuidelines = getSubjectGuidelines(canonical)
+  const levelLabel = String(params.examLevel || 'grade9').trim()
 
   return `Create ECZ-style practice questions for Zambian students and return ONLY valid JSON.
 
 Subject: ${canonical}
-Exam Level: ${params.examLevel} (grade9 or grade12)
+Exam Level: ${levelLabel} (primary Grades 1–7, junior Grades 8–9, senior Grades 10–12, or CBC Forms 1–6)
 Topic: ${params.topic}
 Question Count: ${params.questionCount}
+
+Adapt question difficulty, vocabulary, and ECZ exam format to match ${levelLabel} exactly.
 
 SUBJECT-SPECIFIC APPROACH for ${canonical}:
 ${subjectGuidelines}
@@ -829,7 +832,7 @@ Return JSON:
   "paper": {
     "examInfo": {
       "subject": "${canonical}",
-      "level": "${params.examLevel}",
+      "level": "${levelLabel}",
       "topic": "${params.topic}",
       "totalMarks": number,
       "timeAllowed": "string"

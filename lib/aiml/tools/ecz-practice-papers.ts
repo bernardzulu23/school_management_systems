@@ -1,5 +1,6 @@
 import { extractJSONObject, groqChatCompletion } from '@/lib/aiml/tools/_groq'
 import { buildEczPracticePrompt } from '@/lib/ai/subject-adaptive-prompts'
+import { normalizeEczExamLevel } from '@/lib/ecz/ecz-practice-levels'
 
 export interface PracticeRequest {
   subject: string
@@ -16,7 +17,7 @@ export async function generateECZPractice(request: PracticeRequest) {
       ? 'grade9'
       : request.examLevel === 'SC' || request.examLevel === 'GCE'
         ? 'grade12'
-        : String(request.examLevel)
+        : normalizeEczExamLevel(String(request.examLevel || request.grade || 'grade9'))
 
   const prompt = buildEczPracticePrompt({
     subject: request.subject,

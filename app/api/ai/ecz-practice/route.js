@@ -13,6 +13,7 @@ import {
 } from '@/lib/middleware/aiUsageTracker'
 import { assertGroqConfigured, extractJSONObject, groqChatCompletion } from '@/lib/ai/groq-client'
 import { buildEczPracticePrompt } from '@/lib/ai/subject-adaptive-prompts'
+import { isValidEczExamLevel, normalizeEczExamLevel } from '@/lib/ecz/ecz-practice-levels'
 
 export async function POST(request) {
   const user = await getAuthUser(request)
@@ -61,12 +62,17 @@ export async function POST(request) {
 
   const body = await request.json().catch(() => ({}))
   const subject = String(body?.subject || '').trim()
-  const examLevel = String(body?.examLevel || body?.level || '').trim() || 'grade9'
+  const examLevelRaw = String(body?.examLevel || body?.level || '').trim() || 'grade9'
+  const examLevel = normalizeEczExamLevel(examLevelRaw)
   const topic = String(body?.topic || '').trim()
   const questionCount = Number(body?.questionCount ?? 5)
 
   if (!subject || !topic) {
     return NextResponse.json({ error: 'subject and topic required' }, { status: 400 })
+  }
+
+  if (!isValidEczExamLevel(examLevel)) {
+    return NextResponse.json({ error: 'Invalid exam level' }, { status: 400 })
   }
 
   const count =
