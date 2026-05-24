@@ -4,6 +4,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { resolveReviewerUserId } from '@/lib/lesson-plans/reviewer'
+import { sanitizeText } from '@/lib/lesson-plans/text'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,7 +29,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   if (!id) throw new ApiError('id is required', 400)
 
   const body = await request.json().catch(() => ({}))
-  const content = body?.content != null ? String(body.content) : null
+  const content = body?.content != null ? sanitizeText(String(body.content)) : null
 
   const existing = await prisma.lessonPlan.findFirst({
     where: { id, schoolId },

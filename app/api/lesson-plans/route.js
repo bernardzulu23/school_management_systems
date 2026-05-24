@@ -4,6 +4,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { resolveReviewerUserId } from '@/lib/lesson-plans/reviewer'
+import { sanitizeText } from '@/lib/lesson-plans/text'
 
 export const dynamic = 'force-dynamic'
 
@@ -88,7 +89,7 @@ export const POST = withErrorHandler(async function POST(request) {
   const grade = normalize(body?.grade)
   const subject = normalize(body?.subject)
   const topic = normalize(body?.topic)
-  const content = normalize(body?.content)
+  const content = sanitizeText(normalize(body?.content))
   const subTopic = normalize(body?.subTopic || body?.subtopic) || null
   const term = normalize(body?.term) || null
   const duration =

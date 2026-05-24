@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { sanitizeText } from '@/lib/lesson-plans/text'
 
 export const dynamic = 'force-dynamic'
 
@@ -76,7 +77,7 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
 
   const id = normalize(routeParams?.id)
   const body = await request.json().catch(() => ({}))
-  const content = body?.content != null ? String(body.content) : null
+  const content = body?.content != null ? sanitizeText(String(body.content)) : null
 
   if (!content?.trim()) throw new ApiError('content is required', 400)
 

@@ -9,7 +9,10 @@ import { useAIStream } from '@/hooks/useAIStream'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { LESSON_PLAN_TEMPLATE_OPTIONS } from '@/lib/lessonPlanTemplate'
+import { buildFrameworkElementsBlock, LESSON_PLAN_TEMPLATE_OPTIONS } from '@/lib/lessonPlanTemplate'
+import { composeLessonPlanDisplay } from '@/lib/lesson-plans/text'
+import { LessonPlanDownloadButton } from '@/components/lesson-plans/LessonPlanViewer'
+import { Download, FileText, Printer } from 'lucide-react'
 
 const GRADE_GROUPS = [
   {
@@ -148,7 +151,42 @@ export default function AILessonPlanner() {
 
   const activeSubject = useCustomSubject ? form.customSubject : form.subject
   const isProfessional = form.templateType === 'professional'
-  const displayContent = isProfessional ? professionalContent : text
+  const rawContent = isProfessional ? professionalContent : text
+
+  const frameworkBlock = useMemo(() => {
+    if (isProfessional) return null
+    return buildFrameworkElementsBlock({
+      coreCompetencies: form.coreCompetencies,
+      crossCuttingThemes: form.crossCuttingThemes,
+      learningPathway: form.learningPathway,
+      assessmentMethod: form.assessmentMethod,
+      languageOfInstruction: form.languageOfInstruction,
+      resourceLevel: form.resourceLevel,
+      learningStyle: form.learningStyle,
+      priorKnowledge: form.priorKnowledge,
+      realWorldContext: form.realWorldContext,
+      includePractical: form.practicalActivities,
+      includeInclusive: form.inclusiveStrategies,
+    })
+  }, [
+    isProfessional,
+    form.coreCompetencies,
+    form.crossCuttingThemes,
+    form.learningPathway,
+    form.assessmentMethod,
+    form.languageOfInstruction,
+    form.resourceLevel,
+    form.learningStyle,
+    form.priorKnowledge,
+    form.realWorldContext,
+    form.practicalActivities,
+    form.inclusiveStrategies,
+  ])
+
+  const displayContent = useMemo(
+    () => composeLessonPlanDisplay(rawContent, frameworkBlock),
+    [rawContent, frameworkBlock]
+  )
 
   const canGenerate = useMemo(
     () => form.topic.trim() && activeSubject.trim() && form.coreCompetencies.length > 0,
@@ -157,6 +195,7 @@ export default function AILessonPlanner() {
 
   const generate = async () => {
     if (!canGenerate) return
+    setSavedPlanId(null)
 
     await start({
       grade: form.grade,
@@ -180,6 +219,117 @@ export default function AILessonPlanner() {
 
   const copy = async () => {
     await navigator.clipboard.writeText(displayContent || '')
+  }
+
+  const ensureSavedPlan = async () => {
+    const content = String(displayContent || '').trim()
+    if (!content) {
+      toast.error('Generate a lesson plan first')
+      return null
+    }
+    if (savedPlanId) return savedPlanId
+
+    const res = await fetch('/api/lesson-plans', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        grade: form.grade,
+        subject: activeSubject,
+        topic: form.topic,
+        subTopic: form.subTopic || form.topic,
+        duration: Number(form.duration),
+        term: form.term,
+        templateType: form.templateType,
+        content,
+        submit: false,
+      }),
+    })
+    const json = await res.json().catch(() => ({}))
+    if (!res.ok || !json?.success) {
+      toast.error(json?.message || 'Failed to save before export')
+      return null
+    }
+    setSavedPlanId(json.data.id)
+    return json.data.id
+  }
+
+  const downloadWordDoc = async () => {
+    setSaving(true)
+    try {
+      const planId = await ensureSavedPlan()
+      if (!planId) return
+      const response = await fetch(`/api/lesson-plans/${planId}/export?format=word`, {
+        credentials: 'include',
+      })
+      if (!response.ok) throw new Error('Download failed')
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${activeSubject}_${form.grade}_${form.topic.replace(/\s+/g, '_')}.docx`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
+      toast.success('Downloaded as Word document')
+    } catch {
+      toast.error('Failed to download Word document')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const downloadAsText = async () => {
+    const planId = await ensureSavedPlan()
+    if (!planId) return
+    try {
+      const response = await fetch(`/api/lesson-plans/${planId}/export?format=clean-text`, {
+        credentials: 'include',
+      })
+      if (!response.ok) throw new Error('Download failed')
+      const data = await response.json()
+      const element = document.createElement('a')
+      element.setAttribute(
+        'href',
+        'data:text/plain;charset=utf-8,' + encodeURIComponent(data.content || '')
+      )
+      element.setAttribute('download', data.filename || 'lesson-plan.txt')
+      element.style.display = 'none'
+      document.body.appendChild(element)
+      element.click()
+      document.body.removeChild(element)
+      toast.success('Downloaded as text')
+    } catch {
+      toast.error('Failed to download text file')
+    }
+  }
+
+  const handlePrint = () => {
+    const clean = displayContent
+    if (!clean) return
+    const printWindow = window.open('', '', 'width=900,height=700')
+    if (!printWindow) return
+    printWindow.document.write(`<!DOCTYPE html>
+<html>
+  <head>
+    <title>${activeSubject} - ${form.topic}</title>
+    <style>
+      body { font-family: Georgia, 'Times New Roman', serif; margin: 24px; line-height: 1.6; color: #111; }
+      h1 { color: #1F4788; border-bottom: 2px solid #1F4788; padding-bottom: 8px; }
+      pre { white-space: pre-wrap; font-size: 14px; }
+      @media print { body { margin: 12mm; } }
+    </style>
+  </head>
+  <body>
+    <h1>${activeSubject} — ${form.topic}</h1>
+    <p><strong>Grade:</strong> ${form.grade}</p>
+    <pre>${clean.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+  </body>
+</html>`)
+    printWindow.document.close()
+    printWindow.focus()
+    printWindow.print()
   }
 
   const generateProfessional = async () => {
@@ -678,11 +828,34 @@ export default function AILessonPlanner() {
               <Button variant="outline" onClick={saveDraft} disabled={saving}>
                 Save Draft
               </Button>
+              {savedPlanId ? (
+                <LessonPlanDownloadButton
+                  planId={savedPlanId}
+                  subject={activeSubject}
+                  form={form.grade}
+                  topic={form.topic}
+                  label="Download Word"
+                />
+              ) : (
+                <Button variant="outline" disabled={saving} onClick={downloadWordDoc}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Save &amp; Download Word
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                onClick={downloadAsText}
+                disabled={saving || !displayContent}
+              >
+                <FileText className="h-4 w-4 mr-2" />
+                Text
+              </Button>
+              <Button variant="outline" onClick={handlePrint}>
+                <Printer className="h-4 w-4 mr-2" />
+                Print
+              </Button>
               <Button onClick={submitToHod} disabled={saving}>
                 Submit to HOD
-              </Button>
-              <Button variant="outline" onClick={() => window.print()}>
-                Print
               </Button>
             </>
           ) : null}

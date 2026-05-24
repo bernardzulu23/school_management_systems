@@ -41,13 +41,20 @@ export function normalizeLessonPlanTemplateType(value: unknown): LessonPlanTempl
   ) as LessonPlanTemplateType
 }
 
+const PLAIN_TEXT_OUTPUT_RULES = `CRITICAL OUTPUT FORMAT — PLAIN TEXT ONLY:
+- Do NOT use #, ##, ### or any markdown headings
+- Do NOT use asterisks (*) or underscores (_) for bold or italic
+- Do NOT use backticks or code fences
+- Use ALL CAPS for major section titles (e.g. FRAMEWORK ELEMENTS, LESSON PROCEDURE)
+- Use numbered lists (1. 2. 3.) for steps and plain lines for subsections`
+
 export function getLessonPlanTemplatePreamble(templateType: unknown): string {
   const t = normalizeLessonPlanTemplateType(templateType)
   const map: Record<LessonPlanTemplateType, string> = {
     professional:
-      'You are an expert Zambian teacher educator creating a Ministry of Education professional lesson plan (Bernard Tito / Mr Banda format). Use PLAIN TEXT ONLY — no markdown, asterisks, or hash headers. Use ALL CAPS section headers and numbered lists.',
+      'You are an expert Zambian teacher educator creating a Ministry of Education professional lesson plan (Bernard Tito / Mr Banda format).',
     standard:
-      "You are an expert Zambian teacher educator. Generate a COMPLETE, detailed Competency-Based Curriculum (CBC) lesson plan following the 2023 Zambia Education Curriculum Framework (ZECF) and Teachers' Curriculum Implementation Guide (TCIG). Use the exact sections below with clear headings.",
+      "You are an expert Zambian teacher educator. Generate a COMPLETE, detailed Competency-Based Curriculum (CBC) lesson plan following the 2023 Zambia Education Curriculum Framework (ZECF) and Teachers' Curriculum Implementation Guide (TCIG). Use clear plain-text section labels — no markdown.",
     science:
       'You are an expert Zambian science teacher educator. Generate a COMPLETE CBC lesson plan for a PRACTICAL SCIENCE LAB lesson. Include: safety precautions, hypothesis, materials list, experimental procedure, observation table, and a practical skills assessment rubric. Follow the 2023 ZECF.',
     language:
@@ -64,7 +71,7 @@ export function getLessonPlanTemplatePreamble(templateType: unknown): string {
     mathematics:
       'You are an expert Zambian mathematics teacher educator. Generate a COMPLETE CBC lesson plan for a MATHEMATICS PROBLEM-BASED lesson. Include: real-life Zambian context problems, mental math warm-up, discovery activity, worked examples, differentiated practice exercises (basic/intermediate/challenging). Follow 2023 ZECF.',
   }
-  return map[t]
+  return map[t] + '\n\n' + PLAIN_TEXT_OUTPUT_RULES
 }
 
 type LessonPlanStructureInput = {
@@ -252,42 +259,40 @@ export function buildFrameworkElementsBlock(opts: LessonPlanFrameworkOptions): s
   const excludedThemeNote =
     themes.length > 0 ? `Do NOT integrate cross-cutting themes that are not listed above.` : ''
 
-  return `## FRAMEWORK ELEMENTS (FROM TEACHER FORM — MANDATORY)
+  return `FRAMEWORK ELEMENTS (FROM TEACHER FORM — MANDATORY)
 
 Reproduce this exact block at the beginning of your lesson plan output, then continue with sections 1–16.
 
-### Selected Core Competencies
+SELECTED CORE COMPETENCIES
 ${competencyList}
 
-### Selected Cross-Cutting Themes
+SELECTED CROSS-CUTTING THEMES
 ${themeList}
 
-### Learning Pathway
+LEARNING PATHWAY
 ${pathway}
 
-### Assessment Method
+ASSESSMENT METHOD
 ${assessment}
 
-### Language of Instruction
+LANGUAGE OF INSTRUCTION
 ${safe(opts.languageOfInstruction) || 'English'}
 
-### Resource Level
+RESOURCE LEVEL
 ${safe(opts.resourceLevel) || 'Moderate (textbooks, chalkboard, some printed materials)'}
 
-### Learning Style Preference
+LEARNING STYLE PREFERENCE
 ${safe(opts.learningStyle) || 'Mixed'}
 
-### Prior Knowledge
+PRIOR KNOWLEDGE
 ${safe(opts.priorKnowledge) || 'Not specified'}
 
-### Real-World Zambian Context
+REAL-WORLD ZAMBIAN CONTEXT
 ${zambi}
 
-### Special Requirements
-${practical ? '✅ Include practical / hands-on activities' : '⛔ Theory-focused — no mandatory practical activities'}
-${inclusive ? '✅ Include inclusive / differentiated strategies (Section 11)' : '⛔ Brief differentiation only (2–3 lines in Section 11)'}
-
----
+SPECIAL REQUIREMENTS
+${practical ? 'Include practical / hands-on activities' : 'Theory-focused — no mandatory practical activities'}
+${inclusive ? 'Include inclusive / differentiated strategies (Section 11)' : 'Brief differentiation only (2–3 lines in Section 11)'}
 
 STRICT RULES (must follow):
 1. Sections 2 (Specific Competence), 8 (Lesson Procedure), and 9 (Bloom's): address ONLY the Selected Core Competencies listed above.
@@ -364,8 +369,8 @@ ${structure}
 Additional instructions from teacher: ${extras || 'None'}
 
 Generate the complete, detailed, ready-to-use CBC lesson plan now.
-- Start by copying the "## FRAMEWORK ELEMENTS (FROM TEACHER FORM — MANDATORY)" block exactly as specified above.
+- Start by copying the "FRAMEWORK ELEMENTS (FROM TEACHER FORM — MANDATORY)" block exactly as specified above (plain text, no hash symbols).
 - Then write all 16 sections fully — Section 8 (Lesson Procedure) MUST embed the worked examples and practice exercises from the CRITICAL REQUIREMENTS block.
 - Obey STRICT RULES: only selected competencies and themes; do not add unchecked CBC items.
-Use Zambian local examples throughout. Tailor all content to ${canonicalSubject}.`
+Use Zambian local examples throughout. Tailor all content to ${canonicalSubject}. Output plain text only.`
 }
