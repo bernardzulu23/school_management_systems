@@ -387,6 +387,18 @@ select:-webkit-autofill {
   color: var(--color-dash-text);
 }
 
+/* Custom Select dropdown — isolate from parent .bg-royalPurple-deep CSS variable overrides */
+.zsms-select-menu {
+  --rp-text1: #111111;
+  --rp-text2: #666666;
+  --rp-text3: #666666;
+  --rp-card: #ffffff;
+  --rp-card2: #f5f2eb;
+  --rp-accentbg: rgba(255, 59, 0, 0.15);
+  --rp-accenttx: #ffffff;
+  color: #111111;
+}
+
 .result-failing {
   border-left: 4px solid var(--color-kpi-fail);
 }
@@ -733,6 +745,15 @@ html:not(.dark) .bg-white {
   select optgroup {
     background-color: var(--rp-card2);
     color: var(--rp-text1);
+  }
+
+  /* Dark-styled native selects: keep light text on closed control, dark text in open list */
+  select[class*='bg-royalPurple-deep'] option,
+  select[class*='bg-royalPurple-deep'] optgroup,
+  .bg-royalPurple-deep select option,
+  .bg-royalPurple-deep select optgroup {
+    background-color: #ffffff;
+    color: #111111;
   }
 
   html {

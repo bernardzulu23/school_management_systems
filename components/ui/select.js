@@ -63,7 +63,7 @@ export const SelectContent = ({ children, className = '' }) => {
   return (
     <div
       ref={ref}
-      className={`absolute z-50 min-w-[8rem] overflow-hidden rounded-xl border border-royalPurple-border bg-royalPurple-card text-royalPurple-text1 shadow-none animate-in fade-in-80 w-full mt-1 ${className}`}
+      className={`zsms-select-menu absolute z-50 min-w-[8rem] overflow-hidden rounded-xl border border-royalPurple-border bg-white text-royalPurple-text1 shadow-none animate-in fade-in-80 w-full mt-1 ${className}`}
     >
       <div className="p-1">{children}</div>
     </div>
@@ -92,7 +92,7 @@ export const SelectItem = ({ children, value, className = '' }) => {
         onValueChange(value)
         setOpen(false)
       }}
-      className={`relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-2 text-sm outline-none text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 ${isSelected ? 'font-semibold bg-royalPurple-accentBg text-royalPurple-accentTx' : ''} ${className}`}
+      className={`relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-2 text-sm outline-none text-ink/80 hover:bg-royalPurple-card2 hover:text-ink data-[disabled]:pointer-events-none data-[disabled]:opacity-50 ${isSelected ? 'font-semibold bg-royalPurple-accentBg text-royalPurple-accentTx' : ''} ${className}`}
     >
       {isSelected && (
         <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
