@@ -44,6 +44,8 @@ export function normalizeLessonPlanTemplateType(value: unknown): LessonPlanTempl
 export function getLessonPlanTemplatePreamble(templateType: unknown): string {
   const t = normalizeLessonPlanTemplateType(templateType)
   const map: Record<LessonPlanTemplateType, string> = {
+    professional:
+      'You are an expert Zambian teacher educator creating a Ministry of Education professional lesson plan (Bernard Tito / Mr Banda format). Use PLAIN TEXT ONLY — no markdown, asterisks, or hash headers. Use ALL CAPS section headers and numbered lists.',
     standard:
       "You are an expert Zambian teacher educator. Generate a COMPLETE, detailed Competency-Based Curriculum (CBC) lesson plan following the 2023 Zambia Education Curriculum Framework (ZECF) and Teachers' Curriculum Implementation Guide (TCIG). Use the exact sections below with clear headings.",
     science:

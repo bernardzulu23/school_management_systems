@@ -3,13 +3,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import { jsPDF } from 'jspdf'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
+import LessonPlanViewer from '@/components/lesson-plans/LessonPlanViewer'
 import { useAuth } from '@/lib/auth'
 import toast from 'react-hot-toast'
-import { ArrowLeft, CheckCircle, Download, FileText, Printer, XCircle } from 'lucide-react'
+import { ArrowLeft, CheckCircle, FileText, XCircle } from 'lucide-react'
 
 function fmtDate(v) {
   try {
@@ -19,47 +19,6 @@ function fmtDate(v) {
   } catch {
     return ''
   }
-}
-
-function renderPdf({ title, metaLines, content }) {
-  const doc = new jsPDF({ unit: 'pt', format: 'a4' })
-  const pageWidth = doc.internal.pageSize.getWidth()
-  const pageHeight = doc.internal.pageSize.getHeight()
-  const margin = 48
-  const maxWidth = pageWidth - margin * 2
-
-  doc.setFont('times', 'bold')
-  doc.setFontSize(16)
-  doc.text(title, margin, margin)
-
-  let y = margin + 18
-  doc.setFont('times', 'normal')
-  doc.setFontSize(10)
-  for (const line of metaLines) {
-    const wrapped = doc.splitTextToSize(String(line || ''), maxWidth)
-    for (const w of wrapped) {
-      if (y > pageHeight - margin) {
-        doc.addPage()
-        y = margin
-      }
-      doc.text(w, margin, y)
-      y += 14
-    }
-  }
-
-  y += 10
-  doc.setFontSize(11)
-  const lines = doc.splitTextToSize(String(content || ''), maxWidth)
-  for (const line of lines) {
-    if (y > pageHeight - margin) {
-      doc.addPage()
-      y = margin
-    }
-    doc.text(line, margin, y)
-    y += 14
-  }
-
-  return doc
 }
 
 export default function HodLessonPlanDetailPage() {
@@ -117,14 +76,6 @@ export default function HodLessonPlanDetailPage() {
     ].filter(Boolean)
   }, [plan])
 
-  const downloadPdf = () => {
-    if (!plan) return
-    const title = `${plan.subject} Lesson Plan`
-    const doc = renderPdf({ title, metaLines, content: plan.content })
-    const filename = `lesson-plan_${String(plan.grade || '').replaceAll(' ', '-')}_${String(plan.subject || '').replaceAll(' ', '-')}.pdf`
-    doc.save(filename)
-  }
-
   const approve = async () => {
     if (!plan) return
     setSaving(true)
@@ -133,7 +84,7 @@ export default function HodLessonPlanDetailPage() {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ action: 'approve' }),
+        body: JSON.stringify({ action: 'approve', approvalNotes }),
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok || !json?.success) {
@@ -211,21 +162,9 @@ export default function HodLessonPlanDetailPage() {
 
         <Card variant="glass">
           <CardHeader>
-            <CardTitle className="text-royalPurple-text1 flex items-center justify-between">
-              <span className="flex items-center">
-                <FileText className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
-                {plan ? `${plan.subject} • ${plan.grade}` : 'Lesson Plan'}
-              </span>
-              <div className="flex items-center gap-2 print:hidden">
-                <Button variant="outline" onClick={() => window.print()} disabled={!plan}>
-                  <Printer className="h-4 w-4 mr-2" />
-                  Print
-                </Button>
-                <Button variant="outline" onClick={downloadPdf} disabled={!plan}>
-                  <Download className="h-4 w-4 mr-2" />
-                  PDF
-                </Button>
-              </div>
+            <CardTitle className="text-royalPurple-text1 flex items-center">
+              <FileText className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+              {plan ? `${plan.subject} • ${plan.grade}` : 'Lesson Plan'}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -234,27 +173,13 @@ export default function HodLessonPlanDetailPage() {
             ) : !plan ? (
               <div className="text-royalPurple-text2">Not found.</div>
             ) : (
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-4">
                     <div className="text-sm text-royalPurple-text3">Teacher</div>
                     <div className="text-royalPurple-text1 font-semibold">
                       {plan?.createdBy?.name || plan?.createdBy?.email || 'Teacher'}
                     </div>
-                    <div className="mt-3 text-sm text-royalPurple-text3">Topic</div>
-                    <div className="text-royalPurple-text2">{plan.topic}</div>
-                  </div>
-                  <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-4">
-                    <div className="text-sm text-royalPurple-text3">Status</div>
-                    <div className="text-royalPurple-text1 font-semibold">
-                      {String(plan.status || '').toUpperCase()}
-                    </div>
-                    {plan.approvalNotes ? (
-                      <>
-                        <div className="mt-3 text-sm text-royalPurple-text3">Approval notes</div>
-                        <div className="text-royalPurple-text2">{plan.approvalNotes}</div>
-                      </>
-                    ) : null}
                     {plan.rejectionReason ? (
                       <>
                         <div className="mt-3 text-sm text-royalPurple-text3">
@@ -268,51 +193,57 @@ export default function HodLessonPlanDetailPage() {
                   </div>
                 </div>
 
-                <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-4">
-                  <div className="text-sm text-royalPurple-text3 mb-2">Lesson plan</div>
-                  <div className="whitespace-pre-wrap text-sm text-royalPurple-text2 leading-relaxed">
-                    {plan.content}
-                  </div>
-                </div>
-
-                {String(plan.status || '').toUpperCase() === 'SUBMITTED' ? (
-                  <div className="space-y-3 print:hidden">
-                    <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-4">
-                      <div className="text-sm text-royalPurple-text3 mb-2">
-                        Approval notes (optional)
+                <LessonPlanViewer
+                  planId={plan.id}
+                  subject={plan.subject}
+                  form={plan.grade}
+                  topic={plan.topic}
+                  status={plan.status}
+                  approvalStatus={plan.status}
+                  approvalNotes={plan.approvalNotes}
+                  lessonContent={plan.content}
+                  metaLines={metaLines}
+                  actions={
+                    String(plan.status || '').toUpperCase() === 'SUBMITTED' ? (
+                      <div className="space-y-3">
+                        <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-4">
+                          <div className="text-sm text-royalPurple-text3 mb-2">
+                            Approval notes (optional)
+                          </div>
+                          <textarea
+                            value={approvalNotes}
+                            onChange={(e) => setApprovalNotes(e.target.value)}
+                            className="w-full min-h-[70px] p-3 rounded-lg bg-transparent border border-royalPurple-border text-royalPurple-text1 text-sm mb-4"
+                            placeholder="Well done — good use of Zambian contexts…"
+                          />
+                          <div className="text-sm text-royalPurple-text3 mb-2">
+                            Feedback / rejection / revision reason
+                          </div>
+                          <textarea
+                            value={rejectReason}
+                            onChange={(e) => setRejectReason(e.target.value)}
+                            className="w-full min-h-[90px] p-3 rounded-lg bg-transparent border border-royalPurple-border text-royalPurple-text1 text-sm"
+                            placeholder="Explain what needs to be corrected…"
+                          />
+                          <div className="flex flex-wrap gap-2 mt-3">
+                            <Button onClick={approve} disabled={saving}>
+                              <CheckCircle className="h-4 w-4 mr-2" />
+                              Approve
+                            </Button>
+                            <Button variant="outline" onClick={requestRevision} disabled={saving}>
+                              Request revision
+                            </Button>
+                            <Button variant="outline" onClick={reject} disabled={saving}>
+                              <XCircle className="h-4 w-4 mr-2" />
+                              Reject
+                            </Button>
+                          </div>
+                        </div>
                       </div>
-                      <textarea
-                        value={approvalNotes}
-                        onChange={(e) => setApprovalNotes(e.target.value)}
-                        className="w-full min-h-[70px] p-3 rounded-lg bg-transparent border border-royalPurple-border text-royalPurple-text1 text-sm mb-4"
-                        placeholder="Well done — good use of Zambian contexts…"
-                      />
-                      <div className="text-sm text-royalPurple-text3 mb-2">
-                        Feedback / rejection / revision reason
-                      </div>
-                      <textarea
-                        value={rejectReason}
-                        onChange={(e) => setRejectReason(e.target.value)}
-                        className="w-full min-h-[90px] p-3 rounded-lg bg-transparent border border-royalPurple-border text-royalPurple-text1 text-sm"
-                        placeholder="Explain what needs to be corrected…"
-                      />
-                      <div className="flex flex-wrap gap-2 mt-3">
-                        <Button onClick={approve} disabled={saving}>
-                          <CheckCircle className="h-4 w-4 mr-2" />
-                          Approve
-                        </Button>
-                        <Button variant="outline" onClick={requestRevision} disabled={saving}>
-                          Request revision
-                        </Button>
-                        <Button variant="outline" onClick={reject} disabled={saving}>
-                          <XCircle className="h-4 w-4 mr-2" />
-                          Reject
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ) : null}
-              </div>
+                    ) : null
+                  }
+                />
+              </>
             )}
           </CardContent>
         </Card>

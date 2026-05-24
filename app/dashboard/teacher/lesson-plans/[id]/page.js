@@ -3,12 +3,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import { jsPDF } from 'jspdf'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
+import LessonPlanViewer from '@/components/lesson-plans/LessonPlanViewer'
 import toast from 'react-hot-toast'
-import { ArrowLeft, Download, FileText, Printer, Send } from 'lucide-react'
+import { ArrowLeft, FileText, Send } from 'lucide-react'
 
 function fmtDate(v) {
   try {
@@ -28,47 +28,6 @@ function statusLabel(status) {
   if (s === 'REJECTED') return 'Rejected'
   if (s === 'REVISION_REQUESTED') return 'Revisions requested'
   return s
-}
-
-function renderPdf({ title, metaLines, content }) {
-  const doc = new jsPDF({ unit: 'pt', format: 'a4' })
-  const pageWidth = doc.internal.pageSize.getWidth()
-  const pageHeight = doc.internal.pageSize.getHeight()
-  const margin = 48
-  const maxWidth = pageWidth - margin * 2
-
-  doc.setFont('times', 'bold')
-  doc.setFontSize(16)
-  doc.text(title, margin, margin)
-
-  let y = margin + 18
-  doc.setFont('times', 'normal')
-  doc.setFontSize(10)
-  for (const line of metaLines) {
-    const wrapped = doc.splitTextToSize(String(line || ''), maxWidth)
-    for (const w of wrapped) {
-      if (y > pageHeight - margin) {
-        doc.addPage()
-        y = margin
-      }
-      doc.text(w, margin, y)
-      y += 14
-    }
-  }
-
-  y += 10
-  doc.setFontSize(11)
-  const lines = doc.splitTextToSize(String(content || ''), maxWidth)
-  for (const line of lines) {
-    if (y > pageHeight - margin) {
-      doc.addPage()
-      y = margin
-    }
-    doc.text(line, margin, y)
-    y += 14
-  }
-
-  return doc
 }
 
 const EDITABLE = new Set(['DRAFT', 'REJECTED', 'REVISION_REQUESTED'])
@@ -124,15 +83,6 @@ export default function TeacherLessonPlanDetailPage() {
 
   const canEdit = plan && EDITABLE.has(String(plan.status || '').toUpperCase())
   const canSubmit = canEdit
-  const canPdf = plan && String(plan.status).toUpperCase() === 'APPROVED'
-
-  const downloadPdf = () => {
-    if (!plan) return
-    const title = `${plan.subject} Lesson Plan`
-    const doc = renderPdf({ title, metaLines, content: plan.content })
-    const filename = `lesson-plan_${String(plan.grade || '').replaceAll(' ', '-')}_${String(plan.subject || '').replaceAll(' ', '-')}.pdf`
-    doc.save(filename)
-  }
 
   const saveContent = async () => {
     if (!plan) return
@@ -199,23 +149,9 @@ export default function TeacherLessonPlanDetailPage() {
 
         <Card variant="glass">
           <CardHeader>
-            <CardTitle className="text-royalPurple-text1 flex items-center justify-between">
-              <span className="flex items-center">
-                <FileText className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
-                {plan ? `${plan.subject} • ${plan.grade}` : 'Lesson Plan'}
-              </span>
-              <div className="flex items-center gap-2 print:hidden">
-                {canPdf ? (
-                  <Button variant="outline" onClick={downloadPdf}>
-                    <Download className="h-4 w-4 mr-2" />
-                    PDF
-                  </Button>
-                ) : null}
-                <Button variant="outline" onClick={() => window.print()} disabled={!plan}>
-                  <Printer className="h-4 w-4 mr-2" />
-                  Print
-                </Button>
-              </div>
+            <CardTitle className="text-royalPurple-text1 flex items-center">
+              <FileText className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+              {plan ? `${plan.subject} • ${plan.grade}` : 'Lesson Plan'}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -224,48 +160,22 @@ export default function TeacherLessonPlanDetailPage() {
             ) : !plan ? (
               <div className="text-royalPurple-text2">Not found.</div>
             ) : (
-              <div className="space-y-4">
-                <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-4">
-                  <div className="text-sm text-royalPurple-text3">Status</div>
-                  <div className="text-royalPurple-text1 font-semibold">
-                    {statusLabel(plan.status)}
-                  </div>
-                  {plan.approvalNotes ? (
-                    <>
-                      <div className="mt-3 text-sm text-royalPurple-text3">HOD notes</div>
-                      <div className="text-royalPurple-text2">{plan.approvalNotes}</div>
-                    </>
-                  ) : null}
-                  {plan.rejectionReason ? (
-                    <>
-                      <div className="mt-3 text-sm text-royalPurple-text3">
-                        {String(plan.status) === 'REVISION_REQUESTED'
-                          ? 'Revisions needed'
-                          : 'Rejection reason'}
-                      </div>
-                      <div className="text-royalPurple-text2">{plan.rejectionReason}</div>
-                    </>
-                  ) : null}
-                </div>
-
-                <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-4">
-                  <div className="text-sm text-royalPurple-text3 mb-2">Lesson plan</div>
-                  {canEdit ? (
-                    <textarea
-                      value={content}
-                      onChange={(e) => setContent(e.target.value)}
-                      className="w-full min-h-[320px] p-3 rounded-lg bg-transparent border border-royalPurple-border text-royalPurple-text1 text-sm font-mono leading-relaxed"
-                    />
-                  ) : (
-                    <div className="whitespace-pre-wrap text-sm text-royalPurple-text2 leading-relaxed">
-                      {plan.content}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-wrap gap-2 print:hidden">
-                  {canEdit ? (
-                    <>
+              <LessonPlanViewer
+                planId={plan.id}
+                subject={plan.subject}
+                form={plan.grade}
+                topic={plan.topic}
+                status={plan.status}
+                approvalStatus={plan.status}
+                approvalNotes={plan.approvalNotes}
+                lessonContent={plan.content}
+                metaLines={metaLines}
+                editable={canEdit}
+                contentValue={content}
+                onContentChange={setContent}
+                actions={
+                  canEdit ? (
+                    <div className="flex flex-wrap gap-2">
                       <Button variant="outline" onClick={saveContent} disabled={saving}>
                         Save changes
                       </Button>
@@ -275,10 +185,10 @@ export default function TeacherLessonPlanDetailPage() {
                           {String(plan.status) === 'DRAFT' ? 'Submit to HOD' : 'Resubmit to HOD'}
                         </Button>
                       ) : null}
-                    </>
-                  ) : null}
-                </div>
-              </div>
+                    </div>
+                  ) : null
+                }
+              />
             )}
           </CardContent>
         </Card>

@@ -1,6 +1,6 @@
 /**
- * Ministry of Education Zambia — professional lesson plan generator (Bernard Tito / Mr Banda format).
- * Uses Groq (same stack as the rest of ZSMS) — not Anthropic.
+ * Ministry of Education Zambia — professional lesson plan generator.
+ * Plain-text output only (no markdown) for clean printing and Word export.
  */
 
 import { groqChatCompletion } from '@/lib/ai/groq-client'
@@ -9,6 +9,13 @@ import {
   getSubjectExampleRequirements,
   resolveCanonicalSubject,
 } from '@/lib/ai/subject-adaptive-prompts'
+import {
+  formatLessonPlanForDisplay,
+  parseLessonPlanContent,
+  sanitizeText,
+} from '@/lib/lesson-plans/text'
+
+export { formatLessonPlanForDisplay, parseLessonPlanContent, sanitizeText }
 
 const ZAMBIAN_PLACES = [
   'Lusaka',
@@ -61,7 +68,19 @@ export function buildProfessionalLessonPlanPrompt(input: ProfessionalLessonPlanI
   const synthesis = stageMinutes(duration, 0.2)
   const conclusion = duration - intro - development - explanation - synthesis
 
-  return `You are creating a PROFESSIONAL lesson plan matching Ministry of Education Zambia standards (Bernard Tito / Mr Banda format).
+  return `You are creating a PROFESSIONAL lesson plan matching Ministry of Education Zambia standards.
+
+CRITICAL: Use PLAIN TEXT ONLY. NO markdown formatting:
+- Do NOT use asterisks (*) for bold or italic
+- Do NOT use # for headers
+- Do NOT use ** for emphasis
+- Do NOT use underscores for formatting
+- Do NOT use backticks for code
+
+Instead:
+- Use ALL CAPS for section headers: LESSON GOAL:, TEACHING MATERIALS:, etc.
+- Use numbers for lists: 1. 2. 3.
+- Use clear spacing between sections
 
 LESSON DETAILS:
 - Subject: ${canonical}
@@ -75,74 +94,106 @@ LESSON DETAILS:
 
 ${mandatoryBlock}
 
-OUTPUT FORMAT — use this exact structure (markdown):
+OUTPUT FORMAT — use this exact structure (PLAIN TEXT, no markdown):
 
-# MINISTRY OF EDUCATION
-# LESSON PLAN
+MINISTRY OF EDUCATION
+LESSON PLAN
 
-## SCHOOL: _________________ DATE: ________________ TIME: ___________
-## TEACHER: ________________ FORM: ${input.form}
-## SUBJECT: ${canonical}
-## TOPIC: ${input.topic}
-## SUB-TOPIC: ${subTopic}
-## DURATION: ${duration} minutes
-## TOTAL PUPILS: ${input.totalPupils ?? '______'} BOYS: ${input.boys ?? '______'} GIRLS: ${input.girls ?? '______'}
+SCHOOL: _________________ DATE: ________________ TIME: ___________
+TEACHER: ________________ FORM: ${input.form}
+SUBJECT: ${canonical}
+TOPIC: ${input.topic}
+SUB-TOPIC: ${subTopic}
+DURATION: ${duration} minutes
+TOTAL PUPILS: ${input.totalPupils ?? '______'} BOYS: ${input.boys ?? '______'} GIRLS: ${input.girls ?? '______'}
 
-## LESSON GOAL (SMART)
+LESSON GOAL (SMART):
 [One specific, measurable objective for ${subTopic}]
 
-## GENERAL COMPETENCES
-- Analytical / Critical Thinking
-- Collaboration
-- Communication
+GENERAL COMPETENCES:
+1. Analytical / Critical Thinking
+2. Collaboration
+3. Communication
 
-## SPECIFIC COMPETENCES
-- [Competence specific to ${subTopic}]
+SPECIFIC COMPETENCES:
+[Competence specific to ${subTopic}]
 
-## PRIOR KNOWLEDGE
+PRIOR KNOWLEDGE:
 [What Form ${input.form} learners should already know]
 
-## LEARNING ENVIRONMENT
-- Physical: Classroom
-- Technological: Chalkboard [add ICT if relevant]
+LEARNING ENVIRONMENT:
+Physical: Classroom
+Technological: Chalkboard [add ICT if relevant]
 
-## TEACHING & LEARNING MATERIALS
+TEACHING AND LEARNING MATERIALS:
 [List 5+ specific, low-cost Zambian resources — NOT generic "textbook only"]
 
-## EXPECTED STANDARD
+EXPECTED STANDARD:
 [Clear outcome learners must demonstrate]
 
-## LESSON PROGRESSION
+LESSON PROGRESSION:
 
-| STAGE | TIME | TEACHER ROLE | LEARNER ROLE | ASSESSMENT |
-|-------|------|--------------|--------------|------------|
-| INTRODUCTION | ${intro} min | Hook with real ${place} scenario | Listen, respond | Identify key ideas |
-| DEVELOPMENT | ${development} min | Explain with examples | Copy notes, discuss in pairs | Correct responses |
-| EXPLANATION | ${explanation} min | Worked examples on board | Attempt problems | Accuracy of steps |
-| SYNTHESIS | ${synthesis} min | Supervise practice | Solve similar problems | Correct answers |
-| CONCLUSION | ${conclusion} min | Recap, assign homework | Summarise learning | Quick check |
+STAGE 1: INTRODUCTION (${intro} minutes)
+Teacher Activities:
+1. [Hook with real ${place} scenario]
+Learner Activities:
+1. [Listen, respond]
+Assessment Criteria:
+[Identify key ideas]
 
-## WORKED EXAMPLES (${reqs.workedExamples} minimum)
-[Number each: Example 1, Example 2… Each with Zambian name, place, EVERY calculation step, Answer: …]
+STAGE 2: DEVELOPMENT (${development} minutes)
+Teacher Activities:
+1. [Explain with examples]
+Learner Activities:
+1. [Copy notes, discuss in pairs]
+Assessment Criteria:
+[Correct responses]
 
-## PRACTICE EXERCISES (${reqs.practiceProblems} minimum)
+STAGE 3: EXPLANATION (${explanation} minutes)
+Teacher Activities:
+1. [Worked examples on board]
+Learner Activities:
+1. [Attempt problems]
+Assessment Criteria:
+[Accuracy of steps]
+
+STAGE 4: SYNTHESIS (${synthesis} minutes)
+Teacher Activities:
+1. [Supervise practice]
+Learner Activities:
+1. [Solve similar problems]
+Assessment Criteria:
+[Correct answers]
+
+STAGE 5: CONCLUSION (${conclusion} minutes)
+Teacher Activities:
+1. [Recap, assign homework]
+Learner Activities:
+1. [Summarise learning]
+Assessment Criteria:
+[Quick check]
+
+WORKED EXAMPLES (${reqs.workedExamples} minimum):
+[Number each: EXAMPLE 1, EXAMPLE 2… Each with Zambian name, place, EVERY calculation step, Answer: …]
+
+PRACTICE EXERCISES (${reqs.practiceProblems} minimum):
 [Each with Expected Answer and hint steps]
 
-## HOMEWORK (4 questions minimum)
+HOMEWORK (4 questions minimum):
 [Each with expected answer]
 
-## ASSESSMENT STRATEGIES
+ASSESSMENT STRATEGIES:
 Formative: observation, discussion, quizzes, peer review
 Summative: written test, practical task
 
-## LESSON EVALUATION
+LESSON EVALUATION:
 [Space for teacher reflection after teaching]
 
-## COMPETENCE CONTINUITY
+COMPETENCE CONTINUITY:
 [Link to next lesson on ${input.topic}]
 
 FORBIDDEN: generic phrases like "students will learn concepts" without worked solutions.
-Write the COMPLETE lesson plan now.`
+Write the COMPLETE lesson plan now in plain text only.`
 }
 
 export async function generateProfessionalLessonPlan(
@@ -154,9 +205,5 @@ export async function generateProfessionalLessonPlan(
     maxTokens: 6000,
     temperature: 0.65,
   })
-  return { content, tokensUsed: usage.completionTokens }
-}
-
-export function formatLessonPlanForDisplay(content: string): string {
-  return String(content || '').trim()
+  return { content: sanitizeText(content), tokensUsed: usage.completionTokens }
 }
