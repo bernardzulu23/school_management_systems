@@ -167,6 +167,7 @@ model User {
 
   lessonPlansCreated LessonPlan[] @relation("LessonPlansCreatedBy")
   lessonPlansToReview LessonPlan[] @relation("LessonPlansReviewer")
+  lessonPlanComments LessonPlanComment[] @relation("LessonPlanComments")
 
   createdAllocations      DepartmentAllocation[]  @relation("CreatedAllocations")
   approvedAllocations     DepartmentAllocation[]  @relation("ApprovedAllocations")
@@ -1673,6 +1674,7 @@ enum LessonPlanStatus {
   SUBMITTED
   APPROVED
   REJECTED
+  REVISION_REQUESTED
 }
 
 model LessonPlan {
@@ -1683,29 +1685,50 @@ model LessonPlan {
   createdByUserId String
   createdBy       User            @relation("LessonPlansCreatedBy", fields: [createdByUserId], references: [id], onDelete: Cascade)
 
-  reviewerUserId  String
-  reviewer        User            @relation("LessonPlansReviewer", fields: [reviewerUserId], references: [id], onDelete: Cascade)
+  reviewerUserId  String?
+  reviewer        User?           @relation("LessonPlansReviewer", fields: [reviewerUserId], references: [id], onDelete: SetNull)
 
   status          LessonPlanStatus @default(DRAFT)
 
   grade           String
   subject         String
   topic           String
+  subTopic        String?
+  duration        Int?
+  term            String?
   templateType    String?
-  content         String
+  content         String          @db.Text
+  approvalNotes   String?         @db.Text
+  version         Int             @default(1)
 
   submittedAt     DateTime?
   approvedAt      DateTime?
   rejectedAt      DateTime?
-  rejectionReason String?
+  rejectionReason String?         @db.Text
 
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
+
+  comments        LessonPlanComment[]
 
   @@index([schoolId])
   @@index([schoolId, createdByUserId])
   @@index([schoolId, reviewerUserId])
   @@index([schoolId, reviewerUserId, status])
+  @@index([schoolId, status])
+}
+
+model LessonPlanComment {
+  id                 String     @id @default(uuid())
+  lessonPlanId       String
+  lessonPlan         LessonPlan @relation(fields: [lessonPlanId], references: [id], onDelete: Cascade)
+  commentedByUserId  String
+  commentedBy        User       @relation("LessonPlanComments", fields: [commentedByUserId], references: [id], onDelete: Cascade)
+  comment            String     @db.Text
+  sectionReference   String?
+  createdAt          DateTime   @default(now())
+
+  @@index([lessonPlanId])
 }
 
 model DepartmentAllocation {

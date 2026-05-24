@@ -21,7 +21,9 @@ function pill(status) {
   const s = String(status || '').toUpperCase()
   if (s === 'APPROVED') return 'bg-royalPurple-success/20 text-royalPurple-successTx'
   if (s === 'REJECTED') return 'bg-royalPurple-danger/20 text-royalPurple-dangerTx'
+  if (s === 'REVISION_REQUESTED') return 'bg-orange-500/20 text-orange-200'
   if (s === 'SUBMITTED') return 'bg-royalPurple-accent/20 text-royalPurple-accentTx'
+  if (s === 'DRAFT') return 'bg-royalPurple-card2 text-royalPurple-text2'
   return 'bg-royalPurple-card2 text-royalPurple-text2'
 }
 
@@ -61,7 +63,7 @@ export default function TeacherLessonPlansPage() {
           <CardHeader>
             <CardTitle className="text-royalPurple-text1 flex items-center">
               <FileText className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
-              Submitted lesson plans
+              My lesson plans
             </CardTitle>
           </CardHeader>
           <CardContent>

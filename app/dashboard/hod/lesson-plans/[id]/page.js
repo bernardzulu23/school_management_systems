@@ -72,6 +72,7 @@ export default function HodLessonPlanDetailPage() {
   const [saving, setSaving] = useState(false)
   const [plan, setPlan] = useState(null)
   const [rejectReason, setRejectReason] = useState('')
+  const [approvalNotes, setApprovalNotes] = useState('')
 
   useEffect(() => {
     const role = String(user?.role || '').toLowerCase()
@@ -141,6 +142,32 @@ export default function HodLessonPlanDetailPage() {
       }
       setPlan((p) => ({ ...(p || {}), ...json.data }))
       toast.success('Approved')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const requestRevision = async () => {
+    if (!plan) return
+    if (!String(rejectReason || '').trim()) {
+      toast.error('Enter what needs to be revised')
+      return
+    }
+    setSaving(true)
+    try {
+      const res = await fetch(`/api/lesson-plans/${encodeURIComponent(plan.id)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ action: 'request_revision', reason: rejectReason }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok || !json?.success) {
+        toast.error(json?.message || 'Failed to request revisions')
+        return
+      }
+      setPlan((p) => ({ ...(p || {}), ...json.data }))
+      toast.success('Sent back for revision')
     } finally {
       setSaving(false)
     }
@@ -222,9 +249,19 @@ export default function HodLessonPlanDetailPage() {
                     <div className="text-royalPurple-text1 font-semibold">
                       {String(plan.status || '').toUpperCase()}
                     </div>
+                    {plan.approvalNotes ? (
+                      <>
+                        <div className="mt-3 text-sm text-royalPurple-text3">Approval notes</div>
+                        <div className="text-royalPurple-text2">{plan.approvalNotes}</div>
+                      </>
+                    ) : null}
                     {plan.rejectionReason ? (
                       <>
-                        <div className="mt-3 text-sm text-royalPurple-text3">Rejection reason</div>
+                        <div className="mt-3 text-sm text-royalPurple-text3">
+                          {String(plan.status) === 'REVISION_REQUESTED'
+                            ? 'Revisions requested'
+                            : 'Rejection reason'}
+                        </div>
                         <div className="text-royalPurple-text2">{plan.rejectionReason}</div>
                       </>
                     ) : null}
@@ -241,7 +278,18 @@ export default function HodLessonPlanDetailPage() {
                 {String(plan.status || '').toUpperCase() === 'SUBMITTED' ? (
                   <div className="space-y-3 print:hidden">
                     <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-4">
-                      <div className="text-sm text-royalPurple-text3 mb-2">Reject reason</div>
+                      <div className="text-sm text-royalPurple-text3 mb-2">
+                        Approval notes (optional)
+                      </div>
+                      <textarea
+                        value={approvalNotes}
+                        onChange={(e) => setApprovalNotes(e.target.value)}
+                        className="w-full min-h-[70px] p-3 rounded-lg bg-transparent border border-royalPurple-border text-royalPurple-text1 text-sm mb-4"
+                        placeholder="Well done — good use of Zambian contexts…"
+                      />
+                      <div className="text-sm text-royalPurple-text3 mb-2">
+                        Feedback / rejection / revision reason
+                      </div>
                       <textarea
                         value={rejectReason}
                         onChange={(e) => setRejectReason(e.target.value)}
@@ -252,6 +300,9 @@ export default function HodLessonPlanDetailPage() {
                         <Button onClick={approve} disabled={saving}>
                           <CheckCircle className="h-4 w-4 mr-2" />
                           Approve
+                        </Button>
+                        <Button variant="outline" onClick={requestRevision} disabled={saving}>
+                          Request revision
                         </Button>
                         <Button variant="outline" onClick={reject} disabled={saving}>
                           <XCircle className="h-4 w-4 mr-2" />

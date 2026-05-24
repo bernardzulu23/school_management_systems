@@ -1,6 +1,9 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 import UpgradePrompt from '@/components/shared/UpgradePrompt'
 import { useAIStream } from '@/hooks/useAIStream'
 import { Button } from '@/components/ui/Button'
@@ -111,13 +114,19 @@ const RESOURCE_LEVELS = [
 ]
 
 export default function AILessonPlanner() {
+  const router = useRouter()
   const [useCustomSubject, setUseCustomSubject] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [savedPlanId, setSavedPlanId] = useState(null)
+  const [professionalContent, setProfessionalContent] = useState('')
 
   const [form, setForm] = useState({
     grade: 'Grade 5',
     subject: 'English Language',
     customSubject: '',
     topic: '',
+    subTopic: '',
+    term: 'Term 1',
     duration: 40,
     learningStyle: 'mixed',
     priorKnowledge: '',
@@ -138,6 +147,8 @@ export default function AILessonPlanner() {
   const { text, loading, error, done, start, reset, stop } = useAIStream('/api/ai/lesson-planner')
 
   const activeSubject = useCustomSubject ? form.customSubject : form.subject
+  const isProfessional = form.templateType === 'professional'
+  const displayContent = isProfessional ? professionalContent : text
 
   const canGenerate = useMemo(
     () => form.topic.trim() && activeSubject.trim() && form.coreCompetencies.length > 0,
@@ -168,7 +179,159 @@ export default function AILessonPlanner() {
   }
 
   const copy = async () => {
-    await navigator.clipboard.writeText(text || '')
+    await navigator.clipboard.writeText(displayContent || '')
+  }
+
+  const generateProfessional = async () => {
+    if (!canGenerate) return
+    setSaving(true)
+    setProfessionalContent('')
+    setSavedPlanId(null)
+    try {
+      const res = await fetch('/api/lesson-plans/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          grade: form.grade,
+          form: form.grade,
+          subject: activeSubject,
+          topic: form.topic,
+          subTopic: form.subTopic?.trim() || form.topic,
+          duration: Number(form.duration),
+          term: form.term,
+          templateType: 'professional',
+        }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok || !json?.success) {
+        toast.error(json?.message || json?.error || 'Failed to generate lesson plan')
+        return
+      }
+      const detail = await fetch(`/api/lesson-plans/${encodeURIComponent(json.data.id)}`, {
+        credentials: 'include',
+      })
+      const detailJson = await detail.json().catch(() => ({}))
+      if (detailJson?.data?.content) {
+        setProfessionalContent(detailJson.data.content)
+      }
+      setSavedPlanId(json.data.id)
+      toast.success(json.message || 'Professional lesson plan saved as draft')
+    } catch (e) {
+      console.error(e)
+      toast.error('Generation failed')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const saveDraft = async () => {
+    const content = String(displayContent || '').trim()
+    if (!content) {
+      toast.error('Generate a lesson plan first')
+      return
+    }
+    setSaving(true)
+    try {
+      if (savedPlanId) {
+        const res = await fetch(`/api/lesson-plans/${encodeURIComponent(savedPlanId)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            content,
+            topic: form.topic,
+            subTopic: form.subTopic || form.topic,
+            grade: form.grade,
+            subject: activeSubject,
+          }),
+        })
+        const json = await res.json().catch(() => ({}))
+        if (!res.ok || !json?.success) {
+          toast.error(json?.message || 'Failed to save draft')
+          return
+        }
+        toast.success('Draft updated')
+        return
+      }
+      const res = await fetch('/api/lesson-plans', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          grade: form.grade,
+          subject: activeSubject,
+          topic: form.topic,
+          subTopic: form.subTopic || form.topic,
+          duration: Number(form.duration),
+          term: form.term,
+          templateType: form.templateType,
+          content,
+          submit: false,
+        }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok || !json?.success) {
+        toast.error(json?.message || 'Failed to save draft')
+        return
+      }
+      setSavedPlanId(json.data.id)
+      toast.success('Saved as draft')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const submitToHod = async () => {
+    const content = String(displayContent || '').trim()
+    if (!content) {
+      toast.error('Generate a lesson plan first')
+      return
+    }
+    setSaving(true)
+    try {
+      let planId = savedPlanId
+      if (!planId) {
+        const createRes = await fetch('/api/lesson-plans', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            grade: form.grade,
+            subject: activeSubject,
+            topic: form.topic,
+            subTopic: form.subTopic || form.topic,
+            duration: Number(form.duration),
+            term: form.term,
+            templateType: form.templateType,
+            content,
+            submit: false,
+          }),
+        })
+        const createJson = await createRes.json().catch(() => ({}))
+        if (!createRes.ok || !createJson?.success) {
+          toast.error(createJson?.message || 'Failed to save before submit')
+          return
+        }
+        planId = createJson.data.id
+        setSavedPlanId(planId)
+      }
+      const res = await fetch(`/api/lesson-plans/${encodeURIComponent(planId)}/submit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ content }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok || !json?.success) {
+        toast.error(json?.message || 'Failed to submit to HOD')
+        return
+      }
+      toast.success(json.message || 'Submitted for HOD approval')
+      router.push(`/dashboard/teacher/lesson-plans/${planId}`)
+    } finally {
+      setSaving(false)
+    }
   }
 
   const toggleMultiSelect = (field, value) => {
@@ -282,6 +445,30 @@ export default function AILessonPlanner() {
               onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
               placeholder="e.g., Water Resources Management, Budgeting for Household Needs"
             />
+          </div>
+
+          <div className="space-y-2 md:col-span-2">
+            <Label>
+              Sub-Topic <span className="font-normal opacity-60">(Ministry format — optional)</span>
+            </Label>
+            <Input
+              value={form.subTopic}
+              onChange={(e) => setForm((p) => ({ ...p, subTopic: e.target.value }))}
+              placeholder="e.g., 1.5.1 Algebraic Expressions"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Term</Label>
+            <select
+              className={selectClass}
+              value={form.term}
+              onChange={(e) => setForm((p) => ({ ...p, term: e.target.value }))}
+            >
+              <option value="Term 1">Term 1</option>
+              <option value="Term 2">Term 2</option>
+              <option value="Term 3">Term 3</option>
+            </select>
           </div>
 
           <div className="space-y-2">
@@ -464,24 +651,45 @@ export default function AILessonPlanner() {
         ) : null}
 
         <div className="flex flex-wrap gap-2 mt-6">
-          <Button onClick={generate} disabled={loading || !canGenerate}>
-            {loading ? 'Generating…' : 'Generate CBC Lesson Plan'}
-          </Button>
-          {loading ? (
-            <Button variant="outline" onClick={stop}>
-              Stop
+          {isProfessional ? (
+            <Button onClick={generateProfessional} disabled={saving || !canGenerate}>
+              {saving ? 'Generating…' : 'Generate Ministry Lesson Plan'}
             </Button>
-          ) : null}
-          <Button variant="outline" onClick={reset} disabled={loading}>
+          ) : (
+            <>
+              <Button onClick={generate} disabled={loading || !canGenerate}>
+                {loading ? 'Generating…' : 'Generate CBC Lesson Plan'}
+              </Button>
+              {loading ? (
+                <Button variant="outline" onClick={stop}>
+                  Stop
+                </Button>
+              ) : null}
+            </>
+          )}
+          <Button variant="outline" onClick={reset} disabled={loading || saving}>
             Reset
           </Button>
-          <Button variant="outline" onClick={copy} disabled={!text}>
+          <Button variant="outline" onClick={copy} disabled={!displayContent}>
             Copy
           </Button>
-          {done && text ? (
-            <Button variant="outline" onClick={() => window.print()}>
-              Print
-            </Button>
+          {displayContent ? (
+            <>
+              <Button variant="outline" onClick={saveDraft} disabled={saving}>
+                Save Draft
+              </Button>
+              <Button onClick={submitToHod} disabled={saving}>
+                Submit to HOD
+              </Button>
+              <Button variant="outline" onClick={() => window.print()}>
+                Print
+              </Button>
+            </>
+          ) : null}
+          {savedPlanId ? (
+            <Link href={`/dashboard/teacher/lesson-plans/${savedPlanId}`}>
+              <Button variant="outline">View saved plan</Button>
+            </Link>
           ) : null}
         </div>
       </div>
@@ -491,8 +699,10 @@ export default function AILessonPlanner() {
           Competency-Based Lesson Plan
         </div>
         <div className="whitespace-pre-wrap text-sm text-royalPurple-text2">
-          {text ||
-            'No output yet. Fill in the form above and click "Generate CBC Lesson Plan" to create a lesson aligned with Zambia\'s 2023 Competency-Based Curriculum Framework.'}
+          {displayContent ||
+            (isProfessional
+              ? 'Select Ministry Format above, then click "Generate Ministry Lesson Plan" for a full Bernard Tito / Mr Banda style plan with worked examples and HOD workflow.'
+              : 'No output yet. Fill in the form above and click "Generate CBC Lesson Plan" to create a lesson aligned with Zambia\'s 2023 Competency-Based Curriculum Framework.')}
         </div>
       </div>
 

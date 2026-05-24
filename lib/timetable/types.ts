@@ -60,6 +60,10 @@ export interface TimeSlot {
   period: number
   /** Whether this slot is a break/lunch/assembly slot. */
   isBreak: boolean
+  /** When true, this period spans two consecutive teachable rows (double period). */
+  isDouble?: boolean
+  /** Duration in minutes (from DB TimeSlot). */
+  duration?: number
   /** Optional label for UI (e.g. "Period 1", "Break"). */
   label?: string
 }

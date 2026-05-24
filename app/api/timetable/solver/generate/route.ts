@@ -46,6 +46,41 @@ function normalizeDayOfWeek(d: unknown): string {
     .toLowerCase()
 }
 
+type DbTimeSlotRow = {
+  id: string
+  dayOfWeek: string
+  period: number
+  startTime: string
+  endTime: string
+  isBreak: boolean
+  isDouble: boolean
+  duration: number | null
+}
+
+async function loadSchoolTimeSlots(schoolId: string): Promise<DbTimeSlotRow[]> {
+  let rows = await prisma.timeSlot.findMany({
+    where: { schoolId },
+    orderBy: [{ dayOfWeek: 'asc' }, { period: 'asc' }],
+  })
+  if (!rows.length) {
+    await syncTimeSlotsFromConfig(prisma, schoolId)
+    rows = await prisma.timeSlot.findMany({
+      where: { schoolId },
+      orderBy: [{ dayOfWeek: 'asc' }, { period: 'asc' }],
+    })
+  }
+  return rows.map((s) => ({
+    id: s.id,
+    dayOfWeek: s.dayOfWeek,
+    period: s.period,
+    startTime: s.startTime,
+    endTime: s.endTime,
+    isBreak: s.isBreak,
+    isDouble: Boolean((s as { isDouble?: boolean }).isDouble),
+    duration: (s as { duration?: number | null }).duration ?? null,
+  }))
+}
+
 async function expandSolverAssignmentsToUi(
   schoolId: string,
   raw: Record<string, string>,
@@ -67,7 +102,7 @@ async function expandSolverAssignmentsToUi(
     isDouble?: boolean
     duration?: number | null
   }>,
-  teachers: Array<{ id: string; user?: { name: string | null } | null }>,
+  teachers: Array<{ id: string; userId?: string | null; user?: { name: string | null } | null }>,
   classes: Array<{ id: string; name: string }>
 ) {
   const lessonById = new Map(lessons.map((l) => [l.id, l]))
@@ -94,6 +129,7 @@ async function expandSolverAssignmentsToUi(
 
     const teacher = teacherById.get(lesson.teacherId)
     const cls = classById.get(lesson.classId)
+    const teacherUserId = String(teacher?.userId || lesson.teacherId)
 
     const cp = Math.max(1, Number(lesson.consecutivePeriods) || spanIds.length)
     const isDoublePeriod = cp >= 2 || Boolean(slot.isDouble)
@@ -107,7 +143,7 @@ async function expandSolverAssignmentsToUi(
       endTime: formatHHMM(lastSlot?.endTime || slot.endTime),
       period: Number(slot.period) || 1,
       isBreak: false,
-      teacherId: lesson.teacherId,
+      teacherId: teacherUserId,
       teacherName: teacher?.user?.name ?? undefined,
       classId: lesson.classId,
       className: cls?.name,
@@ -161,40 +197,7 @@ export async function POST(req: NextRequest) {
         where: { schoolId },
         select: { id: true, name: true },
       }),
-      (async () => {
-        let slots = await prisma.timeSlot.findMany({
-          where: { schoolId },
-          select: {
-            id: true,
-            dayOfWeek: true,
-            period: true,
-            startTime: true,
-            endTime: true,
-            isBreak: true,
-            isDouble: true,
-            duration: true,
-          },
-          orderBy: [{ dayOfWeek: 'asc' }, { period: 'asc' }],
-        })
-        if (!slots.length) {
-          await syncTimeSlotsFromConfig(prisma, schoolId)
-          slots = await prisma.timeSlot.findMany({
-            where: { schoolId },
-            select: {
-              id: true,
-              dayOfWeek: true,
-              period: true,
-              startTime: true,
-              endTime: true,
-              isBreak: true,
-              isDouble: true,
-              duration: true,
-            },
-            orderBy: [{ dayOfWeek: 'asc' }, { period: 'asc' }],
-          })
-        }
-        return slots
-      })(),
+      (async () => loadSchoolTimeSlots(schoolId))(),
       prisma.teachingAssignment.findMany({
         where: { schoolId },
         select: { id: true, teacherId: true, classId: true, subjectId: true },

@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
-import { generateCardColor, resolveCardColor } from '@/lib/timetable/cardColors'
-import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
+import { resolveCardColor } from '@/lib/timetable/cardColors'
+import { uniqueBellRows, type BellScheduleSlot } from '@/lib/timetable/bellSchedule'
 import {
   assignmentOverlapsSlot,
   isPrimarySlotForAssignment,
@@ -41,7 +41,7 @@ function dayOrder(day: string) {
   return map[String(day).toLowerCase()] || 99
 }
 
-function slotKey(slot: Pick<TimeSlot, 'period' | 'startTime' | 'endTime' | 'isBreak'>) {
+function slotKey(slot: Pick<BellScheduleSlot, 'period' | 'startTime' | 'endTime' | 'isBreak'>) {
   return `${slot.period}|${slot.startTime}|${slot.endTime}|${slot.isBreak ? 1 : 0}`
 }
 
@@ -99,10 +99,15 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
   const storeTimeSlots = useTimetableStore((s) => s.timeSlots)
   const teacherColors = useTimetableStore((s) => s.teacherColors)
 
-  const baseSlots = useMemo(() => {
-    const src = (props.timeSlots?.length ? props.timeSlots : storeTimeSlots) as TimeSlot[]
-    return uniqueBellRows(src).map((s) => ({ ...s, dayOfWeek: 'monday' as TimeSlot['dayOfWeek'] }))
+  const baseSlots = useMemo((): BellScheduleSlot[] => {
+    const src = props.timeSlots?.length ? props.timeSlots : storeTimeSlots
+    return uniqueBellRows(src as BellScheduleSlot[]).map((s) => ({
+      ...s,
+      dayOfWeek: 'monday',
+    }))
   }, [props.timeSlots, storeTimeSlots])
+
+  const hasTimeSlots = baseSlots.length > 0
 
   const effectiveDepartmentId =
     props.departmentId ||
@@ -271,7 +276,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
 
   const commonFreeSlots = useMemo(() => {
     if (!baseSlots.length || !days.length || !departmentTeachers.length) return []
-    const slots: Array<{ day: string; slot: TimeSlot }> = []
+    const slots: Array<{ day: string; slot: BellScheduleSlot }> = []
     for (const day of days) {
       for (const slot of baseSlots) {
         if (slot.isBreak) continue
@@ -464,7 +469,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
       </div>
 
       {workload.overloads.length ? (
-        <div className="rounded-2xl border border-royalPurple-border/40 bg-royalPurple-card/60 p-4">
+        <div className="rounded-2xl border border-royalPurple-border/40 bg-royalPurple-card/60 p-4 print:hidden">
           <div className="text-sm font-bold text-royalPurple-dangerTx">Overloaded teachers</div>
           <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
             {workload.overloads.slice(0, 6).map((o) => (
@@ -485,7 +490,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
       ) : null}
 
       {rebalanceSuggestions.length ? (
-        <div className="rounded-2xl border border-royalPurple-border/40 bg-royalPurple-card/60 p-4">
+        <div className="rounded-2xl border border-royalPurple-border/40 bg-royalPurple-card/60 p-4 print:hidden">
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="text-sm font-bold text-royalPurple-text1">Suggested rebalancing</div>
@@ -524,7 +529,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
       ) : null}
 
       {subjectCoverage.length ? (
-        <div className="rounded-2xl border border-royalPurple-border/40 bg-royalPurple-card/60 p-4">
+        <div className="rounded-2xl border border-royalPurple-border/40 bg-royalPurple-card/60 p-4 print:hidden">
           <div className="text-sm font-bold text-royalPurple-text1">Subject coverage</div>
           <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
             {subjectCoverage.map((row) => (
@@ -546,7 +551,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
       ) : null}
 
       {isMobile ? (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 print:hidden">
           {(departmentTeachers as any[]).slice(0, 12).map((t) => {
             const tid = String(t.id)
             const hours = (workload.perTeacherMinutes.get(tid) || 0) / 60
@@ -572,16 +577,16 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
         </div>
       ) : null}
 
-      {(!props.timeSlots || !props.timeSlots.length) && (
+      {!hasTimeSlots && (
         <div className="onboard-card p-5">
           <div className="text-royalPurple-text1 font-bold text-lg">No time slots</div>
           <div className="text-royalPurple-text2 text-sm mt-1">
-            Provide timeSlots to render the department grid.
+            Configure school hours in Timetable Settings, or wait for the bell schedule to load.
           </div>
         </div>
       )}
 
-      {props.timeSlots?.length ? (
+      {hasTimeSlots ? (
         <div className="timetable-container border border-royalPurple-border/40 rounded-2xl overflow-auto bg-royalPurple-card/60">
           <div className="min-w-[980px]">
             <div

@@ -5,6 +5,7 @@ import {
 } from '@/lib/ai/subject-adaptive-prompts'
 
 export type LessonPlanTemplateType =
+  | 'professional'
   | 'standard'
   | 'science'
   | 'language'
@@ -16,6 +17,10 @@ export type LessonPlanTemplateType =
   | 'mathematics'
 
 export const LESSON_PLAN_TEMPLATE_OPTIONS: { value: LessonPlanTemplateType; label: string }[] = [
+  {
+    value: 'professional',
+    label: 'Ministry Format (Bernard Tito / Mr Banda — HOD approval)',
+  },
   { value: 'standard', label: 'Standard CBC (All Subjects)' },
   { value: 'science', label: 'Science Practical Lab Lesson' },
   { value: 'language', label: 'Language Skills Lesson (LSRW)' },

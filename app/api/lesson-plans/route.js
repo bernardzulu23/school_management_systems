@@ -3,87 +3,12 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveReviewerUserId } from '@/lib/lesson-plans/reviewer'
 
 export const dynamic = 'force-dynamic'
 
 function normalize(v) {
   return String(v || '').trim()
-}
-
-function parseGradeCategory(grade) {
-  const raw = String(grade || '')
-    .trim()
-    .toLowerCase()
-  const m = raw.match(/grade\s*(\d{1,2})/)
-  if (m) {
-    const n = Number(m[1])
-    if (n >= 1 && n <= 7) return 'primary'
-    return 'secondary'
-  }
-  if (raw.startsWith('form')) return 'secondary'
-  return 'secondary'
-}
-
-async function resolveReviewerUserId({ schoolId, teacherUserId, grade }) {
-  const category = parseGradeCategory(grade)
-
-  if (category === 'primary') {
-    const primaryHod = await prisma.headOfDepartment.findFirst({
-      where: {
-        schoolId,
-        OR: [
-          { department: { contains: 'primary', mode: 'insensitive' } },
-          { department: { contains: 'lower', mode: 'insensitive' } },
-          { department: { contains: 'basic', mode: 'insensitive' } },
-          { departmentRef: { name: { contains: 'primary', mode: 'insensitive' } } },
-          { departmentRef: { name: { contains: 'lower', mode: 'insensitive' } } },
-          { departmentRef: { name: { contains: 'basic', mode: 'insensitive' } } },
-        ],
-      },
-      select: { userId: true },
-    })
-    if (primaryHod?.userId) return primaryHod.userId
-  }
-
-  const teacher = await prisma.teacher.findFirst({
-    where: { schoolId, userId: teacherUserId },
-    select: {
-      department: true,
-      departments: { select: { departmentId: true, department: { select: { name: true } } } },
-    },
-  })
-
-  const deptId = teacher?.departments?.[0]?.departmentId || null
-  const deptName = teacher?.departments?.[0]?.department?.name || teacher?.department || null
-
-  const hod = await prisma.headOfDepartment.findFirst({
-    where: {
-      schoolId,
-      OR: [
-        ...(deptId ? [{ departmentId: deptId }] : []),
-        ...(deptName
-          ? [
-              { department: { equals: String(deptName), mode: 'insensitive' } },
-              { departmentRef: { name: { equals: String(deptName), mode: 'insensitive' } } },
-              { department: { contains: String(deptName), mode: 'insensitive' } },
-              { departmentRef: { name: { contains: String(deptName), mode: 'insensitive' } } },
-            ]
-          : []),
-      ],
-    },
-    select: { userId: true },
-  })
-  if (hod?.userId) return hod.userId
-
-  const head = await prisma.user.findFirst({
-    where: {
-      schoolId,
-      role: { in: ['headteacher', 'HEADTEACHER', 'admin', 'ADMIN'] },
-    },
-    select: { id: true },
-    orderBy: { createdAt: 'asc' },
-  })
-  return head?.id || null
 }
 
 export const GET = withErrorHandler(async function GET(request) {
@@ -126,12 +51,17 @@ export const GET = withErrorHandler(async function GET(request) {
       grade: true,
       subject: true,
       topic: true,
+      subTopic: true,
+      duration: true,
+      term: true,
       templateType: true,
       createdAt: true,
       submittedAt: true,
       approvedAt: true,
       rejectedAt: true,
       rejectionReason: true,
+      approvalNotes: true,
+      version: true,
       createdBy: { select: { id: true, name: true, email: true } },
       reviewer: { select: { id: true, name: true, email: true } },
     },
@@ -159,31 +89,50 @@ export const POST = withErrorHandler(async function POST(request) {
   const subject = normalize(body?.subject)
   const topic = normalize(body?.topic)
   const content = normalize(body?.content)
-  const templateType = normalize(body?.templateType) || null
+  const subTopic = normalize(body?.subTopic || body?.subtopic) || null
+  const term = normalize(body?.term) || null
+  const duration =
+    body?.duration != null && Number.isFinite(Number(body.duration)) ? Number(body.duration) : null
+  const templateType = normalize(body?.templateType) || 'professional'
+  const submitNow = body?.submit === true || body?.status === 'SUBMITTED'
 
   if (!grade || !subject || !topic || !content) {
     throw new ApiError('grade, subject, topic and content are required', 400)
   }
 
-  const reviewerUserId = await resolveReviewerUserId({ schoolId, teacherUserId: userId, grade })
-  if (!reviewerUserId) {
-    throw new ApiError('No reviewer found for this lesson plan', 400)
-  }
+  let reviewerUserId = null
+  let status = 'DRAFT'
+  let submittedAt = null
 
-  const now = new Date()
+  if (submitNow) {
+    reviewerUserId = await resolveReviewerUserId({
+      schoolId,
+      teacherUserId: userId,
+      grade,
+      subject,
+    })
+    if (!reviewerUserId) {
+      throw new ApiError('No reviewer found for this lesson plan', 400)
+    }
+    status = 'SUBMITTED'
+    submittedAt = new Date()
+  }
 
   const plan = await prisma.lessonPlan.create({
     data: {
       schoolId,
       createdByUserId: userId,
       reviewerUserId,
-      status: 'SUBMITTED',
+      status,
       grade,
       subject,
       topic,
+      subTopic,
+      duration,
+      term,
       templateType,
       content,
-      submittedAt: now,
+      submittedAt,
     },
     select: {
       id: true,
@@ -197,17 +146,24 @@ export const POST = withErrorHandler(async function POST(request) {
     },
   })
 
-  await prisma.timetableNotification.create({
-    data: {
-      schoolId,
-      fromUserId: userId,
-      toUserId: reviewerUserId,
-      type: 'lesson_plan',
-      title: 'New Lesson Plan Submitted',
-      message: `${plan.subject} • ${plan.grade} • ${plan.topic}`,
-      meta: { lessonPlanId: plan.id, grade: plan.grade, subject: plan.subject, topic: plan.topic },
-    },
-  })
+  if (submitNow && reviewerUserId) {
+    await prisma.timetableNotification.create({
+      data: {
+        schoolId,
+        fromUserId: userId,
+        toUserId: reviewerUserId,
+        type: 'lesson_plan',
+        title: 'New Lesson Plan Submitted',
+        message: `${plan.subject} • ${plan.grade} • ${plan.topic}`,
+        meta: {
+          lessonPlanId: plan.id,
+          grade: plan.grade,
+          subject: plan.subject,
+          topic: plan.topic,
+        },
+      },
+    })
+  }
 
   return NextResponse.json({ success: true, data: plan })
 })
