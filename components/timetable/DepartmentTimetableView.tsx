@@ -5,6 +5,12 @@ import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/time
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { generateCardColor } from '@/lib/timetable/cardColors'
 import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
+import {
+  assignmentOverlapsSlot,
+  isPrimarySlotForAssignment,
+  isTeacherContinuationSlot,
+  rowSpanForAssignment,
+} from '@/lib/timetable/gridHelpers'
 import { useAuth } from '@/lib/auth'
 import Modal from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
@@ -146,12 +152,17 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
   const byTeacherAndSlot = useMemo(() => {
     const map = new Map<string, Assignment[]>()
     for (const a of deptAssignments) {
-      const k = `${a.teacherId}|${a.dayOfWeek}|${a.period}|${a.startTime}|${a.endTime}`
-      if (!map.has(k)) map.set(k, [])
-      map.get(k)!.push(a)
+      const day = a.dayOfWeek
+      for (const slot of baseSlots) {
+        if (slot.isBreak) continue
+        if (!assignmentOverlapsSlot(a, day, slot) || !isPrimarySlotForAssignment(a, slot)) continue
+        const k = `${a.teacherId}|${day}|${slot.period}|${slot.startTime}|${slot.endTime}`
+        if (!map.has(k)) map.set(k, [])
+        map.get(k)!.push(a)
+      }
     }
     return map
-  }, [deptAssignments])
+  }, [deptAssignments, baseSlots])
 
   const teacherName = useMemo(() => {
     const map = new Map<string, string>()
@@ -627,6 +638,22 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                     {visibleTeachers.map((t: any) => {
                       const tid = String(t.id)
                       const cellK = `${tid}|${day}|${slot.period}|${slot.startTime}|${slot.endTime}`
+                      const continued = isTeacherContinuationSlot(
+                        day,
+                        slot,
+                        tid,
+                        deptAssignments,
+                        baseSlots
+                      )
+                      if (continued) {
+                        return (
+                          <div
+                            key={cellK}
+                            className="px-3 py-3 border-l border-royalPurple-border/20"
+                            aria-hidden
+                          />
+                        )
+                      }
                       const list = byTeacherAndSlot.get(cellK) || []
                       const isFree = !slot.isBreak && list.length === 0
                       const border = list.some(
@@ -654,7 +681,8 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                                 const conflicts = storeConflicts.get(String(a.id)) || []
                                 const hasConflict = conflicts.length > 0
                                 const cardColors = generateCardColor(a.subjectId, a.teacherId)
-                                const bg = cardColors.bg
+                                const span = rowSpanForAssignment(a, baseSlots)
+                                const rowH = 88
                                 return (
                                   <button
                                     type="button"
@@ -664,8 +692,14 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                                       setNextTeacherId(String(a.teacherId))
                                       setOpen(true)
                                     }}
-                                    className={`w-full text-left rounded-xl border px-3 py-2 ${hasConflict ? 'border-red-500' : 'border-royalPurple-border/40'} bg-white/70 hover:bg-white transition-colors`}
-                                    style={{ background: bg }}
+                                    className={`w-full text-left rounded-xl border px-3 py-2 hover:opacity-95 transition-colors relative z-[1] ${hasConflict ? 'border-red-500' : 'border-royalPurple-border/40'}`}
+                                    style={{
+                                      background: cardColors.bg,
+                                      borderColor: hasConflict ? undefined : cardColors.border,
+                                      minHeight: span > 1 ? `${span * rowH - 12}px` : undefined,
+                                      marginBottom:
+                                        span > 1 ? `-${(span - 1) * rowH}px` : undefined,
+                                    }}
                                   >
                                     <div className="font-bold text-[13px] text-slate-900 truncate">
                                       {subjectLabel.get(String(a.subjectId)) ||

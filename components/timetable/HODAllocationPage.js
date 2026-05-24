@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Plus, Trash2, Send, Bell, CheckCircle, AlertTriangle } from 'lucide-react'
+import { formatPeriodConfigLabel } from '@/lib/timetable/formatPeriodConfig'
 
 const TERMS = ['Term 1', 'Term 2', 'Term 3']
 
@@ -39,19 +40,7 @@ function normalizeClasses(v) {
 }
 
 function stringifyPeriodConfig(periodConfig) {
-  if (!periodConfig) return ''
-  if (typeof periodConfig === 'string') return periodConfig
-  const preset = normalizeString(periodConfig?.preset)
-  if (preset && preset !== 'custom') return preset
-  const singles = Number(periodConfig?.singles || 0)
-  const doubles = Number(periodConfig?.doubles || 0)
-  const triples = Number(periodConfig?.triples || 0)
-  const total = singles + doubles * 2 + triples * 3
-  const parts = []
-  if (triples) parts.push(`${triples} triple`)
-  if (doubles) parts.push(`${doubles} double`)
-  if (singles) parts.push(`${singles} single`)
-  return `${total} periods (${parts.join(' + ') || 'custom'})`
+  return formatPeriodConfigLabel(periodConfig)
 }
 
 function statusBadge(status) {
@@ -76,6 +65,8 @@ export default function HODAllocationPage() {
   const [submitting, setSubmitting] = useState(false)
   const [savingAllocation, setSavingAllocation] = useState(false)
   const [departmentSubjects, setDepartmentSubjects] = useState([])
+  const [departmentClasses, setDepartmentClasses] = useState([])
+  const [selectedClasses, setSelectedClasses] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState('')
   const [showRejections, setShowRejections] = useState(false)
@@ -214,6 +205,32 @@ export default function HODAllocationPage() {
     }
   }, [])
 
+  const loadClassesForDepartment = useCallback(async (departmentId) => {
+    if (!departmentId) {
+      setDepartmentClasses([])
+      return
+    }
+    try {
+      const res = await fetch(
+        `/api/allocations/department-classes?departmentId=${encodeURIComponent(departmentId)}`,
+        { credentials: 'include', cache: 'no-store' }
+      )
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setDepartmentClasses([])
+        return
+      }
+      setDepartmentClasses(Array.isArray(data?.data) ? data.data : [])
+    } catch {
+      setDepartmentClasses([])
+    }
+  }, [])
+
+  useEffect(() => {
+    if (form.departmentId) loadClassesForDepartment(form.departmentId)
+    else setDepartmentClasses([])
+  }, [form.departmentId, loadClassesForDepartment])
+
   const rejectedAllocations = useMemo(
     () => allocations.filter((a) => String(a?.status || '').toUpperCase() === 'REJECTED'),
     [allocations]
@@ -234,7 +251,15 @@ export default function HODAllocationPage() {
       const doubles = Number(form.customDoubles || 0)
       const triples = Number(form.customTriples || 0)
       const periods = singles + doubles * 2 + triples * 3
-      return { preset: 'custom', singles, doubles, triples, periods }
+      const parts = []
+      if (doubles) parts.push(`${doubles} double${doubles === 1 ? '' : 's'}`)
+      if (triples) parts.push(`${triples} triple${triples === 1 ? '' : 's'}`)
+      if (singles) parts.push(`${singles} single${singles === 1 ? '' : 's'}`)
+      const label =
+        parts.length > 0
+          ? `${periods} periods per week (${parts.join(', ')})`
+          : `${periods} periods per week`
+      return { preset: 'custom', singles, doubles, triples, periods, label }
     }
     const preset = PERIOD_PRESETS.find((p) => p.id === form.periodPreset) || PERIOD_PRESETS[0]
     return { preset: preset.id, label: preset.label, ...preset.cfg }
@@ -246,13 +271,13 @@ export default function HODAllocationPage() {
     const departmentId = normalizeString(form.departmentId)
     const teacherId = normalizeString(form.teacherId)
     const subject = normalizeString(form.subject)
-    const classes = normalizeClasses(form.classes)
+    const classes = selectedClasses.length ? selectedClasses : normalizeClasses(form.classes)
     const periodConfig = buildPeriodConfig()
 
     if (!departmentId) return toast.error('Select department')
     if (!teacherId) return toast.error('Select teacher')
     if (!subject) return toast.error('Select or enter subject')
-    if (classes.length === 0) return toast.error('Enter at least one class')
+    if (classes.length === 0) return toast.error('Select at least one class')
 
     if (periodConfig.preset === 'custom') {
       const total = Number(periodConfig?.periods || 0)
@@ -359,26 +384,28 @@ export default function HODAllocationPage() {
       (t) => String(t.teacherId || '') === storedTeacherId || String(t.id || '') === storedTeacherId
     )
     const teacherId = teacherRow?.id || storedTeacherId
-    const classes = Array.isArray(data?.classes) ? data.classes.join(', ') : ''
+    const classNames = Array.isArray(data?.classes) ? data.classes : normalizeClasses(data?.classes)
     const subject = normalizeString(data?.subject)
     const periodConfig = data?.periodConfig ?? null
     const periodPreset =
       typeof periodConfig === 'object' && periodConfig?.preset ? String(periodConfig.preset) : 'p6'
+    const departmentId = String(a.departmentId || '')
 
     setEditingId(String(a.id))
     setShowForm(true)
-    const departmentId = String(a.departmentId || '')
+    setSelectedClasses(classNames)
     setForm((f) => ({
       ...f,
       departmentId: departmentId || f.departmentId || '',
       teacherId,
-      classes,
+      classes: classNames.join(', '),
       subject,
       periodPreset: periodPreset === 'custom' ? 'custom' : periodPreset || 'p6',
       customSingles: Number(periodConfig?.singles || 0),
       customDoubles: Number(periodConfig?.doubles || 0),
       customTriples: Number(periodConfig?.triples || 0),
     }))
+    if (departmentId) loadClassesForDepartment(departmentId)
     if (departmentId && teacherId) {
       loadSubjectsForTeacher(departmentId, teacherId)
     }
@@ -539,7 +566,14 @@ export default function HODAllocationPage() {
             style={{ ...selectStyle, width: 90 }}
             placeholder="Year"
           />
-          <button onClick={() => setShowForm(true)} style={btnStyle('#FF3B00')}>
+          <button
+            onClick={() => {
+              setEditingId('')
+              setSelectedClasses([])
+              setShowForm(true)
+            }}
+            style={btnStyle('#FF3B00')}
+          >
             <Plus size={14} /> Add Allocation
           </button>
         </div>
@@ -631,8 +665,11 @@ export default function HODAllocationPage() {
                     departmentId,
                     teacherId: '',
                     subject: '',
+                    classes: '',
                   }))
                   setDepartmentSubjects([])
+                  setSelectedClasses([])
+                  loadClassesForDepartment(departmentId)
                 }}
                 style={inputStyle}
               >
@@ -665,12 +702,58 @@ export default function HODAllocationPage() {
             </FormRow>
 
             <FormRow label="Classes *">
-              <input
-                value={form.classes}
-                onChange={(e) => setForm((f) => ({ ...f, classes: e.target.value }))}
-                placeholder="e.g. Form 1B, Grade 10"
-                style={inputStyle}
-              />
+              {departmentClasses.length === 0 ? (
+                <div style={{ fontSize: 13, color: '#666666' }}>
+                  {form.departmentId
+                    ? 'No classes linked to this department yet. Assign teachers to classes first.'
+                    : 'Select a department to see its classes.'}
+                </div>
+              ) : (
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
+                    gap: 8,
+                    maxHeight: 160,
+                    overflowY: 'auto',
+                    padding: 8,
+                    border: '1px solid #111111',
+                    borderRadius: 8,
+                  }}
+                >
+                  {departmentClasses.map((c) => {
+                    const name = String(c.label || c.name || '')
+                    const checked = selectedClasses.includes(name)
+                    return (
+                      <label
+                        key={c.id || name}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 6,
+                          fontSize: 13,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => {
+                            setSelectedClasses((prev) => {
+                              const next = checked
+                                ? prev.filter((x) => x !== name)
+                                : [...prev, name]
+                              setForm((f) => ({ ...f, classes: next.join(', ') }))
+                              return next
+                            })
+                          }}
+                        />
+                        {name}
+                      </label>
+                    )
+                  })}
+                </div>
+              )}
             </FormRow>
 
             <FormRow label="Subject *">
@@ -870,7 +953,14 @@ export default function HODAllocationPage() {
           }}
         >
           <p style={{ color: '#666666', marginBottom: 12 }}>No allocations yet</p>
-          <button onClick={() => setShowForm(true)} style={btnStyle('#FF3B00')}>
+          <button
+            onClick={() => {
+              setEditingId('')
+              setSelectedClasses([])
+              setShowForm(true)
+            }}
+            style={btnStyle('#FF3B00')}
+          >
             <Plus size={14} /> Add First Allocation
           </button>
         </div>

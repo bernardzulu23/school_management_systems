@@ -10,6 +10,7 @@ import TeacherPeriodAssignmentUI from '@/components/timetable/TeacherPeriodAssig
 import { AllocationNotificationBell } from '@/components/timetable/AllocationNotificationBell'
 import { SchoolTimetableSettings } from '@/components/timetable/SchoolTimetableSettings'
 import { buildTimeSlotsFromConfig } from '@/lib/timetable/timeSlotsFromConfig'
+import { formatPeriodConfigLabel } from '@/lib/timetable/formatPeriodConfig'
 import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
@@ -18,43 +19,8 @@ import { Check, X } from 'lucide-react'
 
 type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings' | 'allocations'
 
-function genTimeSlots(): TimeSlot[] {
-  const days: Array<TimeSlot['dayOfWeek']> = [
-    'monday',
-    'tuesday',
-    'wednesday',
-    'thursday',
-    'friday',
-  ]
-  const periods = [
-    { label: 'Period 1', start: '08:00', end: '08:40', period: 1, isBreak: false },
-    { label: 'Period 2', start: '08:45', end: '09:25', period: 2, isBreak: false },
-    { label: 'Period 3', start: '09:30', end: '10:10', period: 3, isBreak: false },
-    { label: 'Break', start: '10:10', end: '10:30', period: 4, isBreak: true },
-    { label: 'Period 4', start: '10:30', end: '11:10', period: 5, isBreak: false },
-    { label: 'Period 5', start: '11:15', end: '11:55', period: 6, isBreak: false },
-    { label: 'Lunch', start: '12:00', end: '12:40', period: 7, isBreak: true },
-    { label: 'Period 6', start: '12:40', end: '13:20', period: 8, isBreak: false },
-    { label: 'Period 7', start: '13:25', end: '14:05', period: 9, isBreak: false },
-    { label: 'Period 8', start: '14:10', end: '14:50', period: 10, isBreak: false },
-    { label: 'Period 9', start: '14:55', end: '15:35', period: 11, isBreak: false },
-  ] as const
-
-  const out: TimeSlot[] = []
-  for (const d of days) {
-    for (const p of periods) {
-      out.push({
-        id: `${d}-${p.period}`,
-        dayOfWeek: d,
-        startTime: p.start as any,
-        endTime: p.end as any,
-        period: p.period,
-        isBreak: p.isBreak,
-        label: p.label,
-      })
-    }
-  }
-  return out
+function formatPeriodDisplay(value: unknown): string {
+  return formatPeriodConfigLabel(value as any) || String(value || '')
 }
 
 function toTeacher(t: any, subjectsByName: Map<string, { id: string; name: string }>): Teacher {
@@ -158,7 +124,7 @@ function HeadteacherTimetablePageContent() {
   const [coverPeriod, setCoverPeriod] = useState<number>(1)
   const [teachers, setTeachers] = useState<Teacher[]>([])
   const [classes, setClasses] = useState<Class[]>([])
-  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>(() => genTimeSlots())
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
   const [season, setSeason] = useState<'normal' | 'farming' | 'planting'>('normal')
   const [schoolId, setSchoolId] = useState<string>('')
 
@@ -849,7 +815,7 @@ function HeadteacherTimetablePageContent() {
                             <span className="font-semibold text-royalPurple-text2">
                               Period config:
                             </span>{' '}
-                            {String(e?.periodConfiguration || '')}
+                            {formatPeriodDisplay(e?.periodConfiguration)}
                           </div>
                         </div>
                       ))}
@@ -932,9 +898,7 @@ function HeadteacherTimetablePageContent() {
                       <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 p-4">
                         <div className="text-xs text-royalPurple-text3">Period config</div>
                         <div className="text-sm font-semibold text-royalPurple-text1 break-words">
-                          {typeof reviewData?.periodConfig === 'string'
-                            ? reviewData.periodConfig
-                            : JSON.stringify(reviewData?.periodConfig ?? {})}
+                          {formatPeriodDisplay(reviewData?.periodConfig)}
                         </div>
                       </div>
 

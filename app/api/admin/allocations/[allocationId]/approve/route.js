@@ -6,6 +6,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { syncDepartmentApprovalToTeacherAllocations } from '@/lib/timetable/departmentApprovalSync'
+import { formatPeriodConfigLabel } from '@/lib/timetable/formatPeriodConfig'
 import { resolveTeacherUserId } from '@/lib/utils/resolveTeacherId'
 
 function unwrapAllocationData(data) {
@@ -75,10 +76,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     }
     const teacherUserId = teacherUser.id
 
-    const periodConfiguration =
-      typeof details.periodConfig === 'string'
-        ? details.periodConfig
-        : JSON.stringify(details.periodConfig ?? {})
+    const periodConfiguration = formatPeriodConfigLabel(details.periodConfig)
 
     const updated = await tx.departmentAllocation.update({
       where: { id: allocation.id },

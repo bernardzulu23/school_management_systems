@@ -13,6 +13,11 @@ import type {
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
 import { generateCardColor } from '@/lib/timetable/cardColors'
+import {
+  assignmentsForPrimaryCell,
+  isContinuationSlot,
+  rowSpanForAssignment,
+} from '@/lib/timetable/gridHelpers'
 import Modal from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 
@@ -137,12 +142,16 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
   const cellAssignments = useMemo(() => {
     const map = new Map<string, Assignment[]>()
     for (const a of filteredAssignments) {
-      const key = `${a.dayOfWeek}|${a.startTime}|${a.endTime}|${a.period}`
-      if (!map.has(key)) map.set(key, [])
-      map.get(key)!.push(a)
+      for (const slot of baseSlots) {
+        if (slot.isBreak) continue
+        if (!assignmentsForPrimaryCell(String(a.dayOfWeek), slot, [a]).length) continue
+        const key = `${a.dayOfWeek}|${slot.startTime}|${slot.endTime}|${slot.period}`
+        if (!map.has(key)) map.set(key, [])
+        map.get(key)!.push(a)
+      }
     }
     return map
-  }, [filteredAssignments])
+  }, [filteredAssignments, baseSlots])
 
   const totalConflicts = useMemo(() => {
     let n = 0
@@ -171,23 +180,25 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
     setSelectedAssignment(a)
   }
 
-  const renderAssignment = (a: Assignment) => {
+  const renderAssignment = (a: Assignment, slotRowSpan = 1) => {
     const conflicts = showConflicts ? storeConflicts.get(String(a.id)) || [] : []
     const hasCritical = conflicts.some((c) => c.severity === 'critical')
     const hasAny = conflicts.length > 0
     const border = hasCritical ? '#ef4444' : hasAny ? '#f59e0b' : undefined
     const cardColors = generateCardColor(a.subjectId, a.teacherId)
-    const classBg = resolveBg(classColor.get(String(a.classId)))
+    const span = slotRowSpan > 1 ? slotRowSpan : rowSpanForAssignment(a, baseSlots)
 
     return (
       <button
         key={String(a.id)}
         type="button"
         onClick={() => onCellClick(a)}
-        className="w-full text-left rounded-xl px-3 py-2 border bg-royalPurple-card/70 hover:bg-royalPurple-card/85 transition-colors zsms-hover-raise"
+        className="w-full text-left rounded-xl px-3 py-2 border hover:opacity-95 transition-colors zsms-hover-raise relative z-[1]"
         style={{
           borderColor: border || cardColors.border,
-          background: classBg || cardColors.bg,
+          background: cardColors.bg,
+          minHeight: span > 1 ? `${span * rowH - 16}px` : undefined,
+          marginBottom: span > 1 ? `-${(span - 1) * rowH}px` : undefined,
         }}
       >
         <div className="font-bold text-[13px] text-royalPurple-text1 truncate">
@@ -296,11 +307,33 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
                   ) : (
                     effectiveDays.map((day) => {
                       const key = `${day}|${slot.startTime}|${slot.endTime}|${slot.period}`
+                      const continued = isContinuationSlot(
+                        day,
+                        slot,
+                        filteredAssignments,
+                        baseSlots
+                      )
+                      if (continued) {
+                        return (
+                          <div
+                            key={key}
+                            className="px-3 py-3 border-l border-royalPurple-border/20"
+                            aria-hidden
+                          />
+                        )
+                      }
                       const list = cellAssignments.get(key) || []
                       return (
-                        <div key={key} className="px-3 py-3 border-l border-royalPurple-border/20">
+                        <div
+                          key={key}
+                          className="px-3 py-3 border-l border-royalPurple-border/20 relative overflow-visible"
+                        >
                           {list.length ? (
-                            <div className="space-y-2">{list.map(renderAssignment)}</div>
+                            <div className="space-y-2">
+                              {list.map((a) =>
+                                renderAssignment(a, rowSpanForAssignment(a, baseSlots))
+                              )}
+                            </div>
                           ) : (
                             <div className="text-xs text-royalPurple-text3">—</div>
                           )}

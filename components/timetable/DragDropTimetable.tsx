@@ -4,6 +4,14 @@ import { useMemo, useState } from 'react'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useCollisionDetection } from '@/hooks/useCollisionDetection'
 import { CollisionDetector } from '@/lib/timetable/collisionDetector'
+import { generateCardColor } from '@/lib/timetable/cardColors'
+import {
+  assignmentOverlapsSlot,
+  isContinuationSlot,
+  isPrimarySlotForAssignment,
+  rowSpanForAssignment,
+} from '@/lib/timetable/gridHelpers'
+import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
 import Modal from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 
@@ -90,14 +98,28 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
     return list.sort((a, b) => dayOrder(a) - dayOrder(b))
   }, [timeSlots, assignments])
 
-  const gridSlots = useMemo(() => {
-    const map = new Map<string, TimeSlot>()
-    for (const s of timeSlots) {
-      const k = slotKey(s)
-      if (!map.has(k)) map.set(k, { ...s })
-    }
-    return Array.from(map.values()).sort((a, b) => a.period - b.period)
+  const bellRows = useMemo(() => {
+    const src = timeSlots || []
+    return uniqueBellRows(src).map((s) => ({
+      ...s,
+      dayOfWeek: 'monday' as TimeSlot['dayOfWeek'],
+    }))
   }, [timeSlots])
+
+  const cellAssignments = useMemo(() => {
+    const map = new Map<string, Assignment[]>()
+    for (const a of assignments) {
+      for (const slot of bellRows) {
+        if (slot.isBreak) continue
+        if (!assignmentOverlapsSlot(a, a.dayOfWeek, slot) || !isPrimarySlotForAssignment(a, slot))
+          continue
+        const k = `${a.dayOfWeek}|${slot.period}|${slot.startTime}|${slot.endTime}`
+        if (!map.has(k)) map.set(k, [])
+        map.get(k)!.push(a)
+      }
+    }
+    return map
+  }, [assignments, bellRows])
 
   const assignmentById = useMemo(() => {
     const map = new Map<string, Assignment>()
@@ -123,16 +145,6 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
       if (a.subjectId && (a as any).subjectName) {
         map.set(String(a.subjectId), String((a as any).subjectName))
       }
-    }
-    return map
-  }, [assignments])
-
-  const cellAssignments = useMemo(() => {
-    const map = new Map<string, Assignment[]>()
-    for (const a of assignments) {
-      const k = `${a.dayOfWeek}|${a.period}|${a.startTime}|${a.endTime}`
-      if (!map.has(k)) map.set(k, [])
-      map.get(k)!.push(a)
     }
     return map
   }, [assignments])
@@ -288,7 +300,7 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
           </div>
 
           <div>
-            {gridSlots.map((slot) => (
+            {bellRows.map((slot) => (
               <div
                 key={slotKey(slot)}
                 className={`grid border-b border-royalPurple-border/20 ${
@@ -307,6 +319,16 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
 
                 {days.map((day) => {
                   const key = `${day}|${slot.period}|${slot.startTime}|${slot.endTime}`
+                  const continued = isContinuationSlot(day, slot, assignments, bellRows)
+                  if (continued) {
+                    return (
+                      <div
+                        key={key}
+                        className="px-3 py-3 min-h-[88px] border-l border-royalPurple-border/20"
+                        aria-hidden
+                      />
+                    )
+                  }
                   const list = cellAssignments.get(key) || []
                   const validation = computeCellValidity(day, slot)
                   const isHover = hoverCell?.dayOfWeek === day && hoverCell?.key === key
@@ -345,6 +367,9 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
                             : hasAny
                               ? 'border-amber-500/60'
                               : 'border-emerald-500/40'
+                          const cardColors = generateCardColor(a.subjectId, a.teacherId)
+                          const span = rowSpanForAssignment(a, bellRows)
+                          const rowH = 88
 
                           return (
                             <div
@@ -355,7 +380,13 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
                                 onDragStart(a.id)
                               }}
                               onDragEnd={onDragEnd}
-                              className={`rounded-xl border ${border} bg-royalPurple-deep/60 px-3 py-2 cursor-grab active:cursor-grabbing zsms-hover-raise`}
+                              className={`rounded-xl border ${border} px-3 py-2 cursor-grab active:cursor-grabbing zsms-hover-raise relative z-[1]`}
+                              style={{
+                                background: cardColors.bg,
+                                borderColor: hasAny || hasCritical ? undefined : cardColors.border,
+                                minHeight: span > 1 ? `${span * rowH - 12}px` : undefined,
+                                marginBottom: span > 1 ? `-${(span - 1) * rowH}px` : undefined,
+                              }}
                               title={`${className.get(String(a.classId)) || 'Class'} • ${
                                 teacherName.get(String(a.teacherId)) || 'Teacher'
                               } • ${subjectName.get(String(a.subjectId)) || (a as any).subjectName || 'Subject'}`}
