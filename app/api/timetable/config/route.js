@@ -4,21 +4,45 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
+import { syncTimeSlotsFromConfig } from '@/lib/timetable/syncTimeSlots'
 import {
   buildTimeSlotsFromConfig,
   ensureTimetableConfig,
   normalizeTimetableConfig,
   validateTimetableConfig,
 } from '@/lib/timetable/timeSlotsFromConfig'
-import { syncTimeSlotsFromConfig } from '@/lib/timetable/syncTimeSlots'
 
-function configResponse(config) {
+function mapDbSlot(s) {
+  return {
+    id: s.id,
+    dayOfWeek: String(s.dayOfWeek || 'monday').toLowerCase(),
+    startTime: s.startTime,
+    endTime: s.endTime,
+    period: Number(s.period) || 0,
+    isBreak: Boolean(s.isBreak),
+    isDouble: Boolean(s.isDouble),
+    duration: s.duration != null ? Number(s.duration) : null,
+    label: s.label || (s.isBreak ? s.breakName || 'Break' : `Period ${s.period}`),
+  }
+}
+
+async function loadTimeSlotsFromDb(prisma, schoolId, normalized) {
+  const dbSlots = await prisma.timeSlot.findMany({
+    where: { schoolId },
+    orderBy: [{ dayOfWeek: 'asc' }, { period: 'asc' }],
+  })
+  if (dbSlots.length) return dbSlots.map(mapDbSlot)
+  return buildTimeSlotsFromConfig(normalized)
+}
+
+function configResponse(config, timeSlots) {
   const normalized = normalizeTimetableConfig(config)
-  const timeSlots = buildTimeSlotsFromConfig(normalized)
+  const slots =
+    Array.isArray(timeSlots) && timeSlots.length ? timeSlots : buildTimeSlotsFromConfig(normalized)
   return NextResponse.json({
     config: normalized,
-    timeSlots,
-    periodsPerDay: timeSlots.filter((s) => s.dayOfWeek === 'monday' && !s.isBreak).length,
+    timeSlots: slots,
+    periodsPerDay: slots.filter((s) => s.dayOfWeek === 'monday' && !s.isBreak).length,
   })
 }
 
@@ -31,7 +55,9 @@ export async function GET(req) {
   await syncTimeSlotsFromConfig(prisma, schoolId).catch((err) => {
     console.warn('[timetable/config] syncTimeSlotsFromConfig:', err?.message)
   })
-  return configResponse(config)
+  const normalized = normalizeTimetableConfig(config)
+  const timeSlots = await loadTimeSlotsFromDb(prisma, schoolId, normalized)
+  return configResponse(config, timeSlots)
 }
 
 export async function POST(req) {
@@ -61,6 +87,7 @@ export async function POST(req) {
       startTime: normalized.startTime,
       endTime: normalized.endTime,
       singleDuration: normalized.singleDuration,
+      doublePeriodDuration: normalized.doublePeriodDuration,
       workingDays: normalized.workingDays,
       breakSlots: normalized.breakSlots,
     },
@@ -69,6 +96,7 @@ export async function POST(req) {
       startTime: normalized.startTime,
       endTime: normalized.endTime,
       singleDuration: normalized.singleDuration,
+      doublePeriodDuration: normalized.doublePeriodDuration,
       workingDays: normalized.workingDays,
       breakSlots: normalized.breakSlots,
     },
@@ -76,5 +104,6 @@ export async function POST(req) {
 
   await syncTimeSlotsFromConfig(prisma, schoolId)
 
-  return configResponse(config)
+  const timeSlots = await loadTimeSlotsFromDb(prisma, schoolId, normalized)
+  return configResponse(config, timeSlots)
 }

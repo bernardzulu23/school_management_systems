@@ -93,6 +93,7 @@ model School {
   timetableNotifications TimetableNotification[]
   timetableConfig        TimetableConfig?
   timetableAllocationEntries TimetableAllocationEntry[]
+  teacherColors          TeacherColor[]
 
   lessonPlans          LessonPlan[]
 
@@ -406,6 +407,7 @@ model Teacher {
   periodAssignments     TeacherPeriodAssignment[]
   timetableEntries      TimetableEntry[]
   schedulingRecipes     SchedulingRecipe[]
+  teacherColors         TeacherColor[]
   
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt 
@@ -448,6 +450,9 @@ model Class {
   teacherId   String? 
   teacher     Teacher? @relation(fields: [teacherId], references: [id]) 
   
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  
   students    Student[]
   assessments Assessment[]
   assignments Assignment[]
@@ -464,6 +469,7 @@ model Class {
   
   @@index([schoolId])
   @@index([year_group])
+  @@index([departmentId])
   @@unique([schoolId, name])
 } 
 
@@ -509,10 +515,12 @@ model Subject {
 model Department {
   id        String   @id @default(uuid())
   name      String
+  code      String?
 
   schoolId  String
   school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
+  classes   Class[]
   teachers  TeacherDepartment[]
   hods      HeadOfDepartment[]
   departmentAllocations  DepartmentAllocation[]
@@ -646,6 +654,8 @@ model TimeSlot {
   label     String?
   breakName String?
   breakDuration Int?
+  isDouble  Boolean  @default(false)
+  duration  Int?
 
   periodAssignments TeacherPeriodAssignment[]
   timetableEntries TimetableEntry[]
@@ -1600,12 +1610,28 @@ model TimetableConfig {
   startTime      String   @default("07:00")
   endTime        String   @default("18:00")
   singleDuration Int      @default(40)
+  doublePeriodDuration Int?
   term           String   @default("Term 1")
   academicYear   String   @default("2025")
   workingDays    String[] @default([])
   breakSlots     Json
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model TeacherColor {
+  id          String   @id @default(uuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  teacherId   String
+  teacher     Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  colorHex    String
+  colorName   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([schoolId, teacherId])
+  @@index([schoolId])
 }
 
 model TimetableAllocationEntry {

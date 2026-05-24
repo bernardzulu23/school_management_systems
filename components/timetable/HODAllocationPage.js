@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Plus, Trash2, Send, Bell, CheckCircle, AlertTriangle } from 'lucide-react'
 import { formatPeriodConfigLabel } from '@/lib/timetable/formatPeriodConfig'
+import { DepartmentFilteredClassDropdown } from '@/components/timetable/DepartmentFilteredClassDropdown'
 
 const TERMS = ['Term 1', 'Term 2', 'Term 3']
 
@@ -702,58 +703,14 @@ export default function HODAllocationPage() {
             </FormRow>
 
             <FormRow label="Classes *">
-              {departmentClasses.length === 0 ? (
-                <div style={{ fontSize: 13, color: '#666666' }}>
-                  {form.departmentId
-                    ? 'No classes linked to this department yet. Assign teachers to classes first.'
-                    : 'Select a department to see its classes.'}
-                </div>
-              ) : (
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-                    gap: 8,
-                    maxHeight: 160,
-                    overflowY: 'auto',
-                    padding: 8,
-                    border: '1px solid #111111',
-                    borderRadius: 8,
-                  }}
-                >
-                  {departmentClasses.map((c) => {
-                    const name = String(c.label || c.name || '')
-                    const checked = selectedClasses.includes(name)
-                    return (
-                      <label
-                        key={c.id || name}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 6,
-                          fontSize: 13,
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={checked}
-                          onChange={() => {
-                            setSelectedClasses((prev) => {
-                              const next = checked
-                                ? prev.filter((x) => x !== name)
-                                : [...prev, name]
-                              setForm((f) => ({ ...f, classes: next.join(', ') }))
-                              return next
-                            })
-                          }}
-                        />
-                        {name}
-                      </label>
-                    )
-                  })}
-                </div>
-              )}
+              <DepartmentFilteredClassDropdown
+                departmentId={form.departmentId}
+                selectedClassNames={selectedClasses}
+                onChange={({ names }) => {
+                  setSelectedClasses(names)
+                  setForm((f) => ({ ...f, classes: names.join(', ') }))
+                }}
+              />
             </FormRow>
 
             <FormRow label="Subject *">

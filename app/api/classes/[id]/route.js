@@ -59,6 +59,21 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ error: 'Invalid capacity' }, { status: 400 })
     }
 
+    const departmentId =
+      data?.departmentId !== undefined
+        ? data.departmentId
+          ? String(data.departmentId).trim()
+          : null
+        : undefined
+
+    if (departmentId) {
+      const dept = await prisma.department.findFirst({
+        where: { id: departmentId, schoolId },
+        select: { id: true },
+      })
+      if (!dept) return NextResponse.json({ error: 'Department not found' }, { status: 400 })
+    }
+
     const updatedClass = await prisma.class.update({
       where: { id },
       data: {
@@ -67,6 +82,7 @@ export async function PUT(request, { params }) {
         ...(data?.level !== undefined ? { level: data.level } : {}),
         ...(data?.stream !== undefined ? { stream: data.stream } : {}),
         ...(data?.classTeacherId !== undefined ? { classTeacherId: data.classTeacherId } : {}),
+        ...(departmentId !== undefined ? { departmentId } : {}),
       },
     })
 

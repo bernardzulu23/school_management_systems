@@ -16,6 +16,7 @@ import {
   mapDbEntriesToAssignments,
   buildTeacherWorkloadSummary,
 } from '@/lib/timetable/mapEntriesToAssignments'
+import { loadTeacherColorMap, teacherColorMapToJson } from '@/lib/timetable/teacherColors'
 
 function roleKey(role) {
   return String(role || '').toLowerCase()
@@ -219,6 +220,7 @@ export async function GET(req) {
         : []
 
   const normalizedConfig = normalizeTimetableConfig(config)
+  const teacherColorMap = await loadTeacherColorMap(prisma, schoolId)
 
   return NextResponse.json({
     entries,
@@ -226,6 +228,7 @@ export async function GET(req) {
     timeSlots,
     teacherSummaries,
     config: normalizedConfig,
+    teacherColors: teacherColorMapToJson(teacherColorMap),
     term,
     academicYear,
     status,

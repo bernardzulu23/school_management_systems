@@ -21,6 +21,9 @@ export async function GET(request) {
     const classes = await prisma.class.findMany({
       where: { schoolId },
       orderBy: { name: 'asc' },
+      include: {
+        department: { select: { id: true, name: true } },
+      },
     })
 
     // Fetch related data
@@ -122,6 +125,8 @@ export async function GET(request) {
       id: cls.id,
       name: cls.name,
       yearGroup: cls.level || 'General',
+      departmentId: cls.departmentId || null,
+      departmentName: cls.department?.name || null,
       classTeacher: teacherMap[cls.classTeacherId] || 'Unassigned',
       currentEnrollment: enrollmentMap[cls.name] || 0,
       maxCapacity: cls.capacity,

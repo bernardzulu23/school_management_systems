@@ -22,6 +22,8 @@ export interface TimeSlot {
   startTime: string
   endTime: string
   isBreak: boolean
+  isDouble?: boolean
+  duration?: number | null
   label?: string
 }
 
@@ -139,7 +141,17 @@ function findConsecutiveRun(
   startIndex: number,
   size: number
 ): TimeSlot[] | null {
-  if (size <= 1) return daySlots[startIndex] ? [daySlots[startIndex]] : null
+  const start = daySlots[startIndex]
+  if (!start || start.isBreak) return null
+  if (size <= 1) return [start]
+
+  if (size === 2 && start.isDouble) {
+    const next = daySlots[startIndex + 1]
+    if (next && !next.isBreak && Number(next.period) === Number(start.period) + 1) {
+      return [start, next]
+    }
+  }
+
   const run: TimeSlot[] = []
   for (let i = 0; i < size; i++) {
     const slot = daySlots[startIndex + i]

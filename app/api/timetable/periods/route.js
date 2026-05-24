@@ -1,0 +1,64 @@
+export const dynamic = 'force-dynamic'
+
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
+import { getAuthUser } from '@/lib/middleware/auth'
+import {
+  ensureTimetableConfig,
+  buildTimeSlotsFromConfig,
+} from '@/lib/timetable/timeSlotsFromConfig'
+import { syncTimeSlotsFromConfig } from '@/lib/timetable/syncTimeSlots'
+
+function normalizeDay(day) {
+  const s = String(day || 'monday')
+    .trim()
+    .toLowerCase()
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+export async function GET(req) {
+  const user = await getAuthUser(req)
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const schoolId = await resolveSchoolId(req, user)
+  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
+
+  const { searchParams } = new URL(req.url)
+  const dayParam = searchParams.get('day') || 'monday'
+  const dayKey = String(dayParam).trim().toLowerCase()
+  const includeBreaks = searchParams.get('includeBreaks') === 'true'
+
+  await syncTimeSlotsFromConfig(prisma, schoolId).catch(() => {})
+
+  const dbSlots = await prisma.timeSlot.findMany({
+    where: { schoolId, dayOfWeek: dayKey },
+    orderBy: [{ period: 'asc' }, { startTime: 'asc' }],
+  })
+
+  let periods = dbSlots
+  if (!periods.length) {
+    const config = await ensureTimetableConfig(prisma, schoolId)
+    const built = buildTimeSlotsFromConfig(config)
+    periods = built.filter((s) => s.dayOfWeek === dayKey)
+  }
+
+  const filtered = includeBreaks ? periods : periods.filter((p) => !p.isBreak)
+
+  return NextResponse.json({
+    day: dayKey,
+    dayLabel: normalizeDay(dayKey),
+    periods: filtered.map((p) => ({
+      id: p.id,
+      dayOfWeek: p.dayOfWeek,
+      periodNumber: p.period,
+      periodName: p.label || (p.isBreak ? p.breakName || 'Break' : `Period ${p.period}`),
+      startTime: p.startTime,
+      endTime: p.endTime,
+      duration: p.duration || null,
+      isDouble: Boolean(p.isDouble),
+      breakTime: Boolean(p.isBreak),
+      breakName: p.breakName || null,
+    })),
+  })
+}

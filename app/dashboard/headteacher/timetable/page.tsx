@@ -9,6 +9,8 @@ import { MasterTimetableGrid } from '@/components/timetable/MasterTimetableGrid'
 import TeacherPeriodAssignmentUI from '@/components/timetable/TeacherPeriodAssignmentUI'
 import { AllocationNotificationBell } from '@/components/timetable/AllocationNotificationBell'
 import { SchoolTimetableSettings } from '@/components/timetable/SchoolTimetableSettings'
+import { TeacherColorAssignment } from '@/components/timetable/TeacherColorAssignment'
+import { TimePeriodManager } from '@/components/timetable/TimePeriodManager'
 import { buildTimeSlotsFromConfig } from '@/lib/timetable/timeSlotsFromConfig'
 import { formatPeriodConfigLabel } from '@/lib/timetable/formatPeriodConfig'
 import { Button } from '@/components/ui/Button'
@@ -152,6 +154,7 @@ function HeadteacherTimetablePageContent() {
   const conflictCount = useTimetableStore((s) => s.getConflictCount)
   const loadFromApi = useTimetableStore((s) => s.loadFromApi)
   const setStoreTimeSlots = useTimetableStore((s) => s.setTimeSlots)
+  const setTeacherColors = useTimetableStore((s) => s.setTeacherColors)
 
   const loadAllocationNotifications = useCallback(async () => {
     try {
@@ -1122,11 +1125,18 @@ function HeadteacherTimetablePageContent() {
         ) : null}
 
         {tab === 'settings' ? (
-          <SchoolTimetableSettings
-            onSaved={({ timeSlots: slots }) => {
-              if (slots?.length) setTimeSlots(slots as TimeSlot[])
-            }}
-          />
+          <div className="space-y-6">
+            <SchoolTimetableSettings
+              onSaved={({ timeSlots: slots }) => {
+                if (slots?.length) {
+                  setTimeSlots(slots as TimeSlot[])
+                  setStoreTimeSlots(slots as any)
+                }
+              }}
+            />
+            <TimePeriodManager />
+            <TeacherColorAssignment />
+          </div>
         ) : null}
 
         {tab === 'cover' ? (

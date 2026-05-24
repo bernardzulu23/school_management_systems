@@ -9,6 +9,8 @@ export type BellScheduleSlot = {
   startTime: string
   endTime: string
   isBreak: boolean
+  isDouble?: boolean
+  duration?: number
   label?: string
 }
 
@@ -37,6 +39,8 @@ export function uniqueBellRows(slots: BellScheduleSlot[]): BellScheduleSlot[] {
         startTime: String(s.startTime || '08:00'),
         endTime: String(s.endTime || '08:40'),
         isBreak: Boolean(s.isBreak),
+        isDouble: Boolean(s.isDouble),
+        duration: s.duration != null ? Number(s.duration) : undefined,
         label: s.label,
       })
     }
@@ -57,6 +61,8 @@ export function normalizeApiTimeSlots(raw: unknown[]): BellScheduleSlot[] {
     startTime: String(s?.startTime || '08:00'),
     endTime: String(s?.endTime || '08:40'),
     isBreak: Boolean(s?.isBreak),
+    isDouble: Boolean(s?.isDouble),
+    duration: s?.duration != null ? Number(s.duration) : undefined,
     label: s?.label || s?.breakName || undefined,
   }))
 }

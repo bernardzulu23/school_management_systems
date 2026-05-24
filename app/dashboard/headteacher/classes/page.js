@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -24,16 +24,40 @@ import {
 import Link from 'next/link'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import { api } from '@/lib/api'
+import toast from 'react-hot-toast'
 
 export default function ClassesManagementPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterYear, setFilterYear] = useState('all')
   const [showAddDialog, setShowAddDialog] = useState(false)
+  const [savingDeptId, setSavingDeptId] = useState(null)
+  const queryClient = useQueryClient()
 
   const { data: classesData = [], isLoading } = useQuery({
     queryKey: ['headteacher-classes'],
     queryFn: () => api.getHeadteacherClasses().then((res) => res.data),
   })
+
+  const { data: departments = [] } = useQuery({
+    queryKey: ['departments'],
+    queryFn: () =>
+      fetch('/api/departments', { credentials: 'include' })
+        .then((r) => r.json())
+        .then((j) => (Array.isArray(j?.data) ? j.data : [])),
+  })
+
+  const handleDepartmentChange = async (classId, departmentId) => {
+    setSavingDeptId(classId)
+    try {
+      await api.updateClass(classId, { departmentId: departmentId || null })
+      await queryClient.invalidateQueries({ queryKey: ['headteacher-classes'] })
+      toast.success('Department updated')
+    } catch (e) {
+      toast.error(e?.message || 'Failed to update department')
+    } finally {
+      setSavingDeptId(null)
+    }
+  }
 
   const getCapacityColor = (current, max) => {
     const percentage = (current / max) * 100
@@ -208,6 +232,7 @@ export default function ClassesManagementPage() {
                   <tr>
                     <th className="text-left py-3 px-4">Class Name</th>
                     <th className="text-left py-3 px-4">Year Group</th>
+                    <th className="text-left py-3 px-4">Department</th>
                     <th className="text-left py-3 px-4">Class Teacher</th>
                     <th className="text-left py-3 px-4">Enrollment</th>
                     <th className="text-left py-3 px-4">Subjects</th>
@@ -219,7 +244,7 @@ export default function ClassesManagementPage() {
                 <tbody>
                   {filteredClasses.length === 0 ? (
                     <tr>
-                      <td colSpan="8" className="text-center py-8 text-royalPurple-text3">
+                      <td colSpan="9" className="text-center py-8 text-royalPurple-text3">
                         <div className="max-w-md mx-auto">
                           <div className="text-royalPurple-text1 font-semibold mb-2">
                             No classes yet
@@ -241,6 +266,24 @@ export default function ClassesManagementPage() {
                         <td className="py-3 px-4 font-medium">{classItem.name}</td>
                         <td className="py-3 px-4">
                           <span className="badge-brand">{classItem.yearGroup}</span>
+                        </td>
+                        <td className="py-3 px-4">
+                          <select
+                            className="w-full max-w-[200px] rounded-md border border-royalPurple-border bg-royalPurple-card px-2 py-1.5 text-sm text-royalPurple-text1"
+                            value={classItem.departmentId || ''}
+                            disabled={savingDeptId === classItem.id}
+                            onChange={(e) =>
+                              handleDepartmentChange(classItem.id, e.target.value || null)
+                            }
+                            aria-label={`Department for ${classItem.name}`}
+                          >
+                            <option value="">Unassigned</option>
+                            {departments.map((dept) => (
+                              <option key={dept.id} value={dept.id}>
+                                {dept.name}
+                              </option>
+                            ))}
+                          </select>
                         </td>
                         <td className="py-3 px-4">{classItem.classTeacher}</td>
                         <td className="py-3 px-4">

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
-import { generateCardColor } from '@/lib/timetable/cardColors'
+import { generateCardColor, resolveCardColor } from '@/lib/timetable/cardColors'
 import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
 import {
   assignmentOverlapsSlot,
@@ -96,6 +96,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
   }, [props.timeSlots])
 
   const storeTimeSlots = useTimetableStore((s) => s.timeSlots)
+  const teacherColors = useTimetableStore((s) => s.teacherColors)
 
   const baseSlots = useMemo(() => {
     const src = (props.timeSlots?.length ? props.timeSlots : storeTimeSlots) as TimeSlot[]
@@ -680,7 +681,11 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                               {list.map((a) => {
                                 const conflicts = storeConflicts.get(String(a.id)) || []
                                 const hasConflict = conflicts.length > 0
-                                const cardColors = generateCardColor(a.subjectId, a.teacherId)
+                                const cardColors = resolveCardColor(
+                                  a.subjectId,
+                                  a.teacherId,
+                                  teacherColors[String(a.teacherId || '')]?.colorHex
+                                )
                                 const span = rowSpanForAssignment(a, baseSlots)
                                 const rowH = 88
                                 return (

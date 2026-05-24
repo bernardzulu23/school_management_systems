@@ -9,7 +9,12 @@ import toast from 'react-hot-toast'
 import { useAuth } from '@/lib/auth'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
-import { generateCardColor } from '@/lib/timetable/cardColors'
+import { resolveCardColor, pastelBgForSubject } from '@/lib/timetable/cardColors'
+import {
+  assignmentsForPrimaryCell,
+  isContinuationSlot,
+  rowSpanForAssignment,
+} from '@/lib/timetable/gridHelpers'
 import { Calendar, Clock, MapPin, User, ChevronRight, AlertCircle } from 'lucide-react'
 
 const DAYS = [
@@ -76,22 +81,17 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
   const loadFromApi = useTimetableStore((s) => s.loadFromApi)
   const loadBellSchedule = useTimetableStore((s) => s.loadBellSchedule)
   const storeTimeSlots = useTimetableStore((s) => s.timeSlots)
+  const getTeacherColorHex = useTimetableStore((s) => s.getTeacherColorHex)
+  const [bellLoading, setBellLoading] = useState(true)
 
   useEffect(() => {
     setMounted(true)
     loadFromApi()
-    loadBellSchedule()
+    setBellLoading(true)
+    loadBellSchedule().finally(() => setBellLoading(false))
   }, [loadFromApi, loadBellSchedule])
 
-  const bellRows = useMemo(() => {
-    const rows = uniqueBellRows(storeTimeSlots || [])
-    if (rows.length) return rows
-    return [
-      { startTime: '08:00', endTime: '08:40', isBreak: false, period: 1 },
-      { startTime: '08:45', endTime: '09:25', isBreak: false, period: 2 },
-      { startTime: '09:30', endTime: '10:10', isBreak: false, period: 3 },
-    ]
-  }, [storeTimeSlots])
+  const bellRows = useMemo(() => uniqueBellRows(storeTimeSlots || []), [storeTimeSlots])
 
   const resolvedRole = String(userRole || user?.role || '').toLowerCase()
   const activeSeason = seasonFromMode(seasonMode)
@@ -247,6 +247,24 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
                 </Link>
               </div>
             </div>
+          ) : bellLoading ? (
+            <div className="rounded-xl border border-royalPurple-border bg-royalPurple-card/40 p-8 text-center text-sm text-royalPurple-text3">
+              Loading school bell schedule…
+            </div>
+          ) : bellRows.length === 0 ? (
+            <div className="rounded-xl border border-royalPurple-border bg-royalPurple-card/40 p-8 text-center">
+              <div className="text-royalPurple-text1 font-semibold">
+                No bell schedule configured
+              </div>
+              <div className="mt-1 text-sm text-royalPurple-text3">
+                Set school hours in Timetable Settings to display the grid.
+              </div>
+              <div className="mt-5 flex items-center justify-center gap-2">
+                <Link href={href} className="inline-flex">
+                  <Button className="zsms-hover-raise">Open Timetable Settings</Button>
+                </Link>
+              </div>
+            </div>
           ) : (
             <div className="overflow-x-auto rounded-xl border border-royalPurple-border bg-royalPurple-card/40">
               <table className="min-w-[720px] w-full text-sm">
@@ -291,23 +309,35 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
                           {slot.startTime}-{slot.endTime}
                         </td>
                         {DAYS.map((d) => {
-                          const a = filteredAssignments.find(
-                            (x) =>
-                              String(x?.dayOfWeek) === d.key &&
-                              String(x?.startTime) === slot.startTime &&
-                              !x?.isBreak
+                          if (isContinuationSlot(d.key, slot, filteredAssignments, bellRows)) {
+                            return null
+                          }
+                          const primary = assignmentsForPrimaryCell(
+                            d.key,
+                            slot,
+                            filteredAssignments
                           )
+                          const a = primary[0]
                           if (!a)
                             return (
                               <td key={d.key} className="px-3 py-3 text-royalPurple-text3">
                                 —
                               </td>
                             )
-                          const colors = generateCardColor(a.subjectId, a.teacherId)
+                          const span = rowSpanForAssignment(a, bellRows)
+                          const colors = resolveCardColor(
+                            a.subjectId,
+                            a.teacherId,
+                            getTeacherColorHex(a.teacherId)
+                          )
                           return (
-                            <td key={d.key} className="px-3 py-3 align-top">
+                            <td
+                              key={d.key}
+                              rowSpan={span > 1 ? span : undefined}
+                              className="px-3 py-3 align-top"
+                            >
                               <div
-                                className="rounded-lg border p-2"
+                                className="rounded-lg border p-2 h-full"
                                 style={{
                                   backgroundColor: colors.bg,
                                   borderColor: colors.border,
@@ -412,7 +442,10 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
               <li key={index}>
                 <article
                   className="flex items-center p-3 rounded-lg border focus-within:ring-2 focus-within:ring-blue-500 outline-none transition-shadow"
-                  style={{ borderLeftColor: pastelBgFor(cls.subject), borderLeftWidth: '4px' }}
+                  style={{
+                    borderLeftColor: pastelBgForSubject(cls.subject),
+                    borderLeftWidth: '4px',
+                  }}
                   tabIndex="0"
                 >
                   <div className="flex-1">

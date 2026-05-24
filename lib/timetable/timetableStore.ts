@@ -38,6 +38,8 @@ export interface TimetableStoreState {
   assignments: Assignment[]
   /** School bell schedule (periods + breaks) from config / TimeSlot table. */
   timeSlots: BellScheduleSlot[]
+  /** Teacher colours keyed by User.id (assignment.teacherId). */
+  teacherColors: Record<string, { colorHex: string; colorName?: string }>
   conflicts: Map<string, Conflict[]>
   timetableVersion: TimetableVersion
   isPublished: boolean
@@ -71,6 +73,8 @@ export interface TimetableStoreState {
   loadFromApi: (opts?: { term?: string; academicYear?: string; status?: string }) => Promise<void>
   loadBellSchedule: () => Promise<BellScheduleSlot[]>
   setTimeSlots: (slots: BellScheduleSlot[]) => void
+  setTeacherColors: (colors: Record<string, { colorHex: string; colorName?: string }>) => void
+  getTeacherColorHex: (teacherUserId: string) => string | undefined
   validateAll: () => ReturnType<typeof validateTimetable>
   canPublish: () => boolean
 
@@ -179,6 +183,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
       return {
         assignments: [],
         timeSlots: [],
+        teacherColors: {},
         conflicts: new Map(),
         timetableVersion: 'normal',
         isPublished: false,
@@ -362,6 +367,15 @@ export const useTimetableStore = create<TimetableStoreState>()(
           set({ timeSlots: normalizeApiTimeSlots(slots) })
         },
 
+        setTeacherColors: (colors) => {
+          set({ teacherColors: colors || {} })
+        },
+
+        getTeacherColorHex: (teacherUserId) => {
+          const row = get().teacherColors[String(teacherUserId || '')]
+          return row?.colorHex
+        },
+
         validateAll: () => validateTimetable(get().assignments),
 
         canPublish: () => canPublishTimetable(get().assignments),
@@ -433,6 +447,10 @@ export const useTimetableStore = create<TimetableStoreState>()(
             set({
               assignments,
               timeSlots: slots.length ? slots : get().timeSlots,
+              teacherColors:
+                data?.teacherColors && typeof data.teacherColors === 'object'
+                  ? data.teacherColors
+                  : get().teacherColors,
               conflicts: detect(assignments),
               isPublished: status === 'published',
               lastPublishedAt: status === 'published' ? new Date() : null,

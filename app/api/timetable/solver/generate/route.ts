@@ -64,6 +64,8 @@ async function expandSolverAssignmentsToUi(
     startTime: string
     endTime: string
     isBreak: boolean
+    isDouble?: boolean
+    duration?: number | null
   }>,
   teachers: Array<{ id: string; user?: { name: string | null } | null }>,
   classes: Array<{ id: string; name: string }>
@@ -93,6 +95,9 @@ async function expandSolverAssignmentsToUi(
     const teacher = teacherById.get(lesson.teacherId)
     const cls = classById.get(lesson.classId)
 
+    const cp = Math.max(1, Number(lesson.consecutivePeriods) || spanIds.length)
+    const isDoublePeriod = cp >= 2 || Boolean(slot.isDouble)
+
     out.push({
       id: lessonId,
       season: 'normal',
@@ -108,7 +113,8 @@ async function expandSolverAssignmentsToUi(
       className: cls?.name,
       subjectId: lesson.subjectId,
       subjectName: subjectById.get(lesson.subjectId) || 'Subject',
-      consecutivePeriods: lesson.consecutivePeriods || spanIds.length,
+      consecutivePeriods: isDoublePeriod ? Math.max(2, cp) : cp,
+      isDoublePeriod,
       source: 'generated',
     })
   }
@@ -165,6 +171,8 @@ export async function POST(req: NextRequest) {
             startTime: true,
             endTime: true,
             isBreak: true,
+            isDouble: true,
+            duration: true,
           },
           orderBy: [{ dayOfWeek: 'asc' }, { period: 'asc' }],
         })
@@ -179,6 +187,8 @@ export async function POST(req: NextRequest) {
               startTime: true,
               endTime: true,
               isBreak: true,
+              isDouble: true,
+              duration: true,
             },
             orderBy: [{ dayOfWeek: 'asc' }, { period: 'asc' }],
           })

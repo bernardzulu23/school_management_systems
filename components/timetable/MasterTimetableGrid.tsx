@@ -12,7 +12,7 @@ import type {
 } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
-import { generateCardColor } from '@/lib/timetable/cardColors'
+import { generateCardColor, resolveCardColor } from '@/lib/timetable/cardColors'
 import {
   assignmentsForPrimaryCell,
   isContinuationSlot,
@@ -82,6 +82,7 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
   const storeConflicts = useTimetableStore((s) => s.conflicts)
   const storeSeasonMode = useTimetableStore((s) => s.currentSeason)
   const storeTimeSlots = useTimetableStore((s) => s.timeSlots)
+  const teacherColors = useTimetableStore((s) => s.teacherColors)
 
   const assignments = props.assignments ?? storeAssignments
   const showConflicts = props.showConflicts !== false
@@ -185,7 +186,11 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
     const hasCritical = conflicts.some((c) => c.severity === 'critical')
     const hasAny = conflicts.length > 0
     const border = hasCritical ? '#ef4444' : hasAny ? '#f59e0b' : undefined
-    const cardColors = generateCardColor(a.subjectId, a.teacherId)
+    const cardColors = resolveCardColor(
+      a.subjectId,
+      a.teacherId,
+      teacherColors[String(a.teacherId || '')]?.colorHex
+    )
     const span = slotRowSpan > 1 ? slotRowSpan : rowSpanForAssignment(a, baseSlots)
 
     return (

@@ -4,7 +4,8 @@ import { useMemo, useState } from 'react'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useCollisionDetection } from '@/hooks/useCollisionDetection'
 import { CollisionDetector } from '@/lib/timetable/collisionDetector'
-import { generateCardColor } from '@/lib/timetable/cardColors'
+import { generateCardColor, resolveCardColor } from '@/lib/timetable/cardColors'
+import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import {
   assignmentOverlapsSlot,
   isContinuationSlot,
@@ -80,6 +81,7 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
   const [drag, setDrag] = useState<DragState>({ active: false })
   const [hoverCell, setHoverCell] = useState<{ dayOfWeek: string; key: string } | null>(null)
   const [swap, setSwap] = useState<SwapState>({ open: false })
+  const teacherColors = useTimetableStore((s) => s.teacherColors)
 
   const { conflicts, validateAssignment, getConflictCount, getCriticalConflictCount } =
     useCollisionDetection({
@@ -367,7 +369,11 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
                             : hasAny
                               ? 'border-amber-500/60'
                               : 'border-emerald-500/40'
-                          const cardColors = generateCardColor(a.subjectId, a.teacherId)
+                          const cardColors = resolveCardColor(
+                            a.subjectId,
+                            a.teacherId,
+                            teacherColors[String(a.teacherId || '')]?.colorHex
+                          )
                           const span = rowSpanForAssignment(a, bellRows)
                           const rowH = 88
 

@@ -22,6 +22,31 @@ export function generateCardColor(
   return PALETTE[hash % PALETTE.length]
 }
 
+/** Convert stored hex (aSc-style) to card bg/border pair. */
+export function hexToCardColor(hex: string): CardColor {
+  const raw = String(hex || '').trim()
+  const h = raw.startsWith('#') ? raw : `#${raw}`
+  if (!/^#[0-9a-fA-F]{6}$/.test(h)) {
+    return PALETTE[0]
+  }
+  const r = parseInt(h.slice(1, 3), 16)
+  const g = parseInt(h.slice(3, 5), 16)
+  const b = parseInt(h.slice(5, 7), 16)
+  return {
+    bg: `rgba(${r}, ${g}, ${b}, 0.22)`,
+    border: h,
+  }
+}
+
+export function resolveCardColor(
+  subjectId: string | undefined | null,
+  teacherId: string | undefined | null,
+  dbHex?: string | null
+): CardColor {
+  if (dbHex) return hexToCardColor(dbHex)
+  return generateCardColor(subjectId, teacherId)
+}
+
 /** @deprecated Use generateCardColor(subjectId, teacherId) */
 export function pastelBgForSubject(subjectId: unknown): string {
   return generateCardColor(String(subjectId || ''), '').bg
