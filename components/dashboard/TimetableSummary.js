@@ -266,7 +266,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
               </div>
             </div>
           ) : (
-            <div className="overflow-x-auto rounded-xl border border-royalPurple-border bg-royalPurple-card/40">
+            <div className="timetable-container overflow-x-auto rounded-xl border border-royalPurple-border bg-royalPurple-card/40">
               <table className="min-w-[720px] w-full text-sm">
                 <thead>
                   <tr className="bg-royalPurple-deep/40">

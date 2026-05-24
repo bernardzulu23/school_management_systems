@@ -12,6 +12,7 @@ import {
   rowSpanForAssignment,
 } from '@/lib/timetable/gridHelpers'
 import { useAuth } from '@/lib/auth'
+import { printTimetable } from '@/lib/timetable/printTimetable'
 import Modal from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 
@@ -405,7 +406,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
 
   return (
     <div className="space-y-4">
-      <div className="onboard-card p-5">
+      <div className="onboard-card p-5 print:hidden">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="text-royalPurple-text1 font-bold text-lg">Department Timetable</div>
@@ -428,7 +429,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
             ) : null}
           </div>
           <div className="flex items-center gap-2 print:hidden">
-            <Button variant="outline" onClick={() => window.print()} className="zsms-hover-raise">
+            <Button variant="outline" onClick={() => printTimetable()} className="zsms-hover-raise">
               Print
             </Button>
             <Button
@@ -581,7 +582,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
       )}
 
       {props.timeSlots?.length ? (
-        <div className="border border-royalPurple-border/40 rounded-2xl overflow-auto bg-royalPurple-card/60">
+        <div className="timetable-container border border-royalPurple-border/40 rounded-2xl overflow-auto bg-royalPurple-card/60">
           <div className="min-w-[980px]">
             <div
               className="grid sticky top-0 z-10 bg-royalPurple-deep/95 backdrop-blur border-b border-royalPurple-border/40"

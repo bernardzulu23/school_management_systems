@@ -146,7 +146,7 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
 
   return (
     <div className="space-y-4">
-      <div className="onboard-card p-5">
+      <div className="onboard-card p-5 print:hidden">
         <div className="text-royalPurple-text1 font-bold text-lg">
           {props.subjectOnly ? 'Your subjects timetable' : 'Your Class Timetable'}
         </div>
@@ -188,7 +188,7 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
         </div>
       ) : null}
 
-      <div className="border border-royalPurple-border/40 rounded-2xl overflow-auto bg-royalPurple-card/60">
+      <div className="timetable-container border border-royalPurple-border/40 rounded-2xl overflow-auto bg-royalPurple-card/60 print:bg-white">
         <div className="min-w-[900px]">
           <div
             className="grid sticky top-0 z-10 bg-royalPurple-deep/95 backdrop-blur border-b border-royalPurple-border/40"

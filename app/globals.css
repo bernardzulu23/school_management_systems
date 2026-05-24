@@ -951,3 +951,51 @@ button:has(svg):not(:has(span)) {
   background-color: var(--color-paper);
   color: var(--color-ink);
 }
+
+/* Timetable-only printing */
+@media print {
+  .print\:hidden {
+    display: none !important;
+  }
+
+  body.print-timetable * {
+    visibility: hidden;
+  }
+
+  body.print-timetable .timetable-container,
+  body.print-timetable .timetable-container * {
+    visibility: visible;
+  }
+
+  body.print-timetable .timetable-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-height: none !important;
+    overflow: visible !important;
+    margin: 0;
+    padding: 10px;
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  body.print-timetable .timetable-container table {
+    border-collapse: collapse;
+    width: 100%;
+    page-break-inside: auto;
+  }
+
+  body.print-timetable .timetable-container th,
+  body.print-timetable .timetable-container td {
+    border: 1px solid #000 !important;
+    padding: 6px !important;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  @page {
+    size: landscape;
+    margin: 10mm;
+  }
+}

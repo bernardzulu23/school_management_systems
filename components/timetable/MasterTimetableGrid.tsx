@@ -226,7 +226,7 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
 
   return (
     <div className="w-full">
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4 print:hidden">
         <div>
           <div className="text-royalPurple-text1 font-bold text-xl">Master Timetable</div>
           <div className="text-royalPurple-text3 text-sm">
@@ -256,7 +256,7 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
       </div>
 
       <div
-        className="border border-royalPurple-border/40 rounded-2xl overflow-auto bg-royalPurple-card/60 print:bg-white"
+        className="timetable-container border border-royalPurple-border/40 rounded-2xl overflow-auto bg-royalPurple-card/60 print:bg-white"
         onScroll={(e) => setScrollTop((e.target as HTMLDivElement).scrollTop)}
         style={{ maxHeight: useVirtual ? `${viewportH}px` : undefined }}
       >

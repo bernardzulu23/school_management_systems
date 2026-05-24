@@ -448,6 +448,166 @@ export function performanceLevelFromPercentage(
   return 'Needs Improvement'
 }
 
+type SubjectExampleRequirements = {
+  workedExamples: number
+  practiceProblems: number
+  format: string
+}
+
+const SUBJECT_EXAMPLE_REQUIREMENTS: Record<string, SubjectExampleRequirements> = {
+  'Mathematics (Core)': {
+    workedExamples: 5,
+    practiceProblems: 4,
+    format: `Each worked example MUST show:
+1. Real Zambian scenario (name a person and place: Soweto Market Lusaka, Nkana Kitwe, etc.)
+2. What is known (identify given values)
+3. What formula/method to use (define every variable)
+4. Step-by-step calculation (show ALL arithmetic)
+5. Final answer clearly marked in context (use K for Kwacha)
+
+Example format:
+"Example 1: Bupe buys pens at K150 each.
+Question: If she buys 5 pens, what is the total cost?
+Given: cost per pen = K150, quantity = 5
+Formula: Total cost = K150 × quantity
+Step 1: Substitute: Total cost = K150 × 5
+Step 2: Calculate: Total cost = K750
+Answer: K750"`,
+  },
+  'Additional Mathematics (Core)': {
+    workedExamples: 5,
+    practiceProblems: 4,
+    format: `Each worked example MUST show advanced notation, full algebraic steps, and a Zambian application (engineering, finance, or surveying). Define all variables and show every calculation step.`,
+  },
+  'Physics (Science)': {
+    workedExamples: 4,
+    practiceProblems: 4,
+    format: `Each example MUST show:
+1. Physical scenario in Zambian context (electricity, transport, construction)
+2. Physics principle involved
+3. Formula with ALL variables defined and SI units
+4. Substitution with units shown
+5. Calculation with every step
+6. Final answer with correct units
+Include at least 1 diagram description (e.g. "Draw a force diagram showing...").`,
+  },
+  'Chemistry (Science)': {
+    workedExamples: 4,
+    practiceProblems: 4,
+    format: `Each example MUST show:
+1. Chemical substance or reaction (Zambian context: mining, water treatment, cooking)
+2. Balanced chemical equation
+3. Step-by-step numerical calculation if applicable
+4. Safety notes for any practical work
+5. Real-world application explained`,
+  },
+  'Biology (Science)': {
+    workedExamples: 3,
+    practiceProblems: 3,
+    format: `Each example MUST show:
+1. Biological concept with diagram description ("Draw a diagram showing...")
+2. Zambian organism or health context where applicable
+3. Observable characteristics or processes step-by-step
+4. Connection to learner's daily life in Zambia
+Include at least 1 field observation activity.`,
+  },
+  'Science (Science)': {
+    workedExamples: 3,
+    practiceProblems: 4,
+    format: `Include practical investigation steps, observations, and conclusions. Use Zambian environmental examples.`,
+  },
+}
+
+const DEFAULT_EXAMPLE_REQUIREMENTS: SubjectExampleRequirements = {
+  workedExamples: 3,
+  practiceProblems: 3,
+  format:
+    'Include real-world Zambian examples with step-by-step explanations and clearly marked answers.',
+}
+
+export function getSubjectExampleRequirements(subject: string): SubjectExampleRequirements {
+  const canonical = resolveCanonicalSubject(subject)
+  return SUBJECT_EXAMPLE_REQUIREMENTS[canonical] || DEFAULT_EXAMPLE_REQUIREMENTS
+}
+
+export function getSubjectSpecificRequirements(subject: string): string {
+  const canonical = resolveCanonicalSubject(subject)
+  const requirements: Record<string, string> = {
+    'Mathematics (Core)': `
+- Include formulas with variables clearly defined
+- Show all arithmetic steps — never skip calculations
+- Use K (Kwacha) for currency examples
+- Include at least 1 real-world problem from: market pricing, wages, farm production, or school budgets`,
+    'Additional Mathematics (Core)': `
+- Include calculus/algebra notation with full working
+- Show proof steps or derivation where relevant
+- Use Zambian engineering, economics, or finance contexts`,
+    'Physics (Science)': `
+- Include formulas: F=ma, v=u+at, P=IV, etc. as appropriate to the topic
+- Show unit conversions (m/s, m, N, J, W)
+- Include at least 1 practical experiment with observations
+- Real-world examples: electricity load shedding, vehicle motion, construction`,
+    'Chemistry (Science)': `
+- Include balanced chemical equations
+- Show atomic mass / mole calculations with steps
+- Include at least 1 practical experiment with safety notes
+- Real-world examples: Zambian mining, water treatment, food chemistry`,
+    'Biology (Science)': `
+- Include diagram descriptions ("Draw a diagram showing...")
+- Describe cellular structures and processes step-by-step
+- Include at least 1 field observation activity
+- Real-world examples: Zambian flora/fauna, malaria prevention, nutrition`,
+    'Science (Science)': `
+- Combine biology, chemistry, and physics concepts as the topic requires
+- Include hypothesis, method, observations, conclusion for investigations`,
+  }
+
+  return (requirements[canonical] || getSubjectGuidelines(canonical)).trim()
+}
+
+/** Mandatory worked-examples block — shared by CBC template and adaptive prompts. */
+export function buildMandatoryWorkedExamplesBlock(params: {
+  subject: string
+  grade: string
+  topic: string
+  duration: number
+}): string {
+  const canonical = resolveCanonicalSubject(params.subject)
+  const reqs = getSubjectExampleRequirements(canonical)
+  const subjectSpecific = getSubjectSpecificRequirements(canonical)
+
+  return `
+CRITICAL REQUIREMENTS (NON-NEGOTIABLE — do NOT skip):
+
+### SECTION A: WORKED EXAMPLES (${reqs.workedExamples} minimum, numbered Example 1, Example 2, …)
+${reqs.format}
+
+For EACH worked example you MUST:
+- Use a real Zambian person's name (e.g. Chanda, Bwalya, Mwila, Nalubamba)
+- Use a real Zambian place (e.g. Soweto Market Lusaka, Cairo Road, Nkana Kitwe, Chipata)
+- Show EVERY calculation step — never write "students will learn" without solving a problem
+- Mark the final answer clearly (Answer: …)
+
+### SECTION B: PRACTICE EXERCISES (${reqs.practiceProblems} minimum)
+For EACH practice exercise you MUST include:
+1. Problem statement (clearly written)
+2. Expected answer (with working or key steps)
+3. Hint or solution outline
+
+### SECTION C: FORBIDDEN CONTENT
+Do NOT include:
+- Generic statements like "students will learn algebraic expressions using Zambian context"
+- Explanations without at least ${reqs.workedExamples} fully worked examples
+- Practice exercises without answers
+- Vague activities without concrete problems and solutions
+
+### SECTION D: SUBJECT-SPECIFIC RULES FOR ${canonical}
+${subjectSpecific}
+
+Topic focus: "${params.topic}" for ${params.grade} (${params.duration} minutes).
+Every sentence must be specific to ${canonical} — use correct terminology, formulas, or procedures.`
+}
+
 export function buildLessonPlanPrompt(params: {
   subject: string
   grade: string
@@ -459,60 +619,45 @@ export function buildLessonPlanPrompt(params: {
   additionalInstructions?: string
 }): string {
   const canonical = resolveCanonicalSubject(params.subject)
-  const subjectGuidelines = getSubjectGuidelines(canonical)
+  const reqs = getSubjectExampleRequirements(canonical)
   const subtopic = params.subtopic?.trim() || 'Not specified'
   const extras = params.additionalInstructions?.trim() || 'None'
   const competences = params.competenceFocus?.trim() || 'Critical Thinking and Problem Solving'
+  const mandatoryBlock = buildMandatoryWorkedExamplesBlock({
+    subject: canonical,
+    grade: params.grade,
+    topic: params.topic,
+    duration: params.duration,
+  })
 
   return `You are an experienced Zambian teacher creating a Competency-Based Curriculum (CBC) lesson plan aligned with the 2023 ZECF.
 
-LESSON DETAILS:
-- Subject: ${canonical} (requested as: ${params.subject})
-- Grade/Form: ${params.grade}
-- Topic: ${params.topic}
-- Sub-topic: ${subtopic}
-- Duration: ${params.duration} minutes
-- School: ${params.schoolName || 'A Zambian school'}
-- Competence focus: ${competences}
+CREATE A LESSON PLAN FOR ${canonical}, ${params.grade}
+Topic: ${params.topic}
+Sub-topic: ${subtopic}
+Duration: ${params.duration} minutes
+School: ${params.schoolName || 'A Zambian school'}
+Competence focus: ${competences}
 
-SUBJECT-SPECIFIC GUIDANCE for ${canonical}:
-${subjectGuidelines}
+${mandatoryBlock}
 
-CREATE A LESSON PLAN WITH:
+LESSON STRUCTURE (include all sections):
+1. Introduction — hook with a real Zambian scenario related to "${params.topic}"
+2. Worked Examples — ${reqs.workedExamples} full examples as specified in Section A above
+3. Learner Activity — students solve similar problems in pairs/groups
+4. Practice Exercises — ${reqs.practiceProblems} problems WITH answers (Section B)
+5. Formative Assessment — quick check using one practice-style question
+6. Conclusion — recap key formula/method and real-world link
 
-1. **LEARNING OUTCOMES** (Know-Do-Value):
-   - KNOW: What concepts should learners understand?
-   - DO: What practical skills can they demonstrate?
-   - VALUE: What attitudes/appreciation should they develop?
-
-2. **LESSON PROCEDURE** (5 Phases — Learner-Centred; times proportional to ${params.duration} minutes):
-   - Phase 1: INTRODUCTION (10%) — Hook with real-life Zambian context
-   - Phase 2: DEVELOPMENT (20%) — Exploration and investigation
-   - Phase 3: EXPLANATION (20%) — Teacher explains key concepts
-   - Phase 4: APPLICATION (30%) — Apply to new scenarios
-   - Phase 5: ASSESSMENT (20%) — Demonstrate competence
-
-3. **TEACHING & LEARNING MATERIALS (TLMs)**:
-   - List specific materials for ${canonical}
-   - Include low-cost / local Zambian resources where possible
-
-4. **SUBJECT-SPECIFIC EXAMPLES**:
-   - Include 3-5 concrete examples for ${canonical}
-   - Use correct terminology; worked solutions where applicable
-
-5. **DIFFERENTIATION**:
-   - Support for struggling learners; extension for gifted learners; inclusive education adaptations
-
-6. **ASSESSMENT**:
-   - Formative strategies during the lesson
-   - Rubric for ${canonical} competences
-
-7. **ZAMBIAN CONTEXT**:
-   - Local culture, geography, environment; Vision 2030 where relevant
+Also include:
+- LEARNING OUTCOMES (Know-Do-Value) specific to ${canonical}
+- TEACHING & LEARNING MATERIALS (low-cost / local Zambian resources)
+- DIFFERENTIATION (support + extension)
+- ASSESSMENT rubric aligned to ${canonical}
 
 Additional teacher instructions: ${extras}
 
-Format as a clear, structured plan a Zambian teacher can implement immediately.`
+Write the complete lesson plan now. Start with Worked Examples — they are the most important section.`
 }
 
 export function buildStoryPrompt(params: {

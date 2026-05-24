@@ -31,6 +31,9 @@ export default function ClassesManagementPage() {
   const [filterYear, setFilterYear] = useState('all')
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [savingDeptId, setSavingDeptId] = useState(null)
+  const [bulkDeptId, setBulkDeptId] = useState('')
+  const [bulkSelected, setBulkSelected] = useState([])
+  const [bulkSaving, setBulkSaving] = useState(false)
   const queryClient = useQueryClient()
 
   const { data: classesData = [], isLoading } = useQuery({
@@ -57,6 +60,37 @@ export default function ClassesManagementPage() {
     } finally {
       setSavingDeptId(null)
     }
+  }
+
+  const handleBulkAssign = async () => {
+    if (!bulkDeptId || bulkSelected.length === 0) {
+      toast.error('Select a department and at least one class')
+      return
+    }
+    setBulkSaving(true)
+    try {
+      const res = await fetch('/api/classes/bulk-assign-department', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ departmentId: bulkDeptId, classIds: bulkSelected }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data?.error || 'Bulk assign failed')
+      await queryClient.invalidateQueries({ queryKey: ['headteacher-classes'] })
+      toast.success(`Assigned ${data.updated} class(es) to department`)
+      setBulkSelected([])
+    } catch (e) {
+      toast.error(e?.message || 'Failed to bulk assign')
+    } finally {
+      setBulkSaving(false)
+    }
+  }
+
+  const toggleBulkClass = (classId) => {
+    setBulkSelected((prev) =>
+      prev.includes(classId) ? prev.filter((id) => id !== classId) : [...prev, classId]
+    )
   }
 
   const getCapacityColor = (current, max) => {
@@ -193,6 +227,63 @@ export default function ClassesManagementPage() {
             </CardContent>
           </Card>
         </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Bulk assign classes to departments</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-royalPurple-text2">
+              Assign multiple classes at once so HOD timetable and allocation forms only show
+              department-scoped classes.
+            </p>
+            <div className="flex flex-wrap items-end gap-4">
+              <div>
+                <label className="block text-xs font-medium text-royalPurple-text2 mb-1">
+                  Department
+                </label>
+                <select
+                  className="rounded-md border border-royalPurple-border bg-royalPurple-card px-3 py-2 text-sm min-w-[220px]"
+                  value={bulkDeptId}
+                  onChange={(e) => setBulkDeptId(e.target.value)}
+                >
+                  <option value="">Select department…</option>
+                  {departments.map((dept) => (
+                    <option key={dept.id} value={dept.id}>
+                      {dept.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <Button
+                onClick={handleBulkAssign}
+                disabled={bulkSaving || !bulkDeptId || bulkSelected.length === 0}
+              >
+                {bulkSaving ? 'Assigning…' : `Assign ${bulkSelected.length} class(es)`}
+              </Button>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 max-h-48 overflow-y-auto border border-royalPurple-border rounded-lg p-3">
+              {classesData.map((cls) => (
+                <label
+                  key={cls.id}
+                  className="flex items-center gap-2 text-sm text-royalPurple-text1 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={bulkSelected.includes(cls.id)}
+                    onChange={() => toggleBulkClass(cls.id)}
+                  />
+                  <span className="truncate">{cls.name}</span>
+                  {cls.departmentName ? (
+                    <span className="text-xs text-royalPurple-text3 truncate">
+                      ({cls.departmentName})
+                    </span>
+                  ) : null}
+                </label>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Filters and Search */}
         <Card>

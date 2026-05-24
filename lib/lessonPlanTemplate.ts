@@ -1,4 +1,8 @@
-import { getSubjectGuidelines, resolveCanonicalSubject } from '@/lib/ai/subject-adaptive-prompts'
+import {
+  getSubjectGuidelines,
+  resolveCanonicalSubject,
+  buildMandatoryWorkedExamplesBlock,
+} from '@/lib/ai/subject-adaptive-prompts'
 
 export type LessonPlanTemplateType =
   | 'standard'
@@ -331,11 +335,22 @@ export function buildLessonPlanPrompt(input: LessonPlanPromptInput): string {
   const subjectBlock = `SUBJECT-SPECIFIC PEDAGOGY (${canonicalSubject} — apply in every section, especially examples, TLMs, and assessment):
 ${getSubjectGuidelines(canonicalSubject)}`
 
+  const durationMin =
+    typeof input.duration === 'number' ? input.duration : parseInt(String(input.duration), 10) || 40
+  const mandatoryExamplesBlock = buildMandatoryWorkedExamplesBlock({
+    subject: canonicalSubject,
+    grade: input.grade,
+    topic: input.topic,
+    duration: durationMin,
+  })
+
   return `${preamble}
 
 ${frameworkBlock}
 
 ${subjectBlock}
+
+${mandatoryExamplesBlock}
 
 ${structure}
 
@@ -343,7 +358,7 @@ Additional instructions from teacher: ${extras || 'None'}
 
 Generate the complete, detailed, ready-to-use CBC lesson plan now.
 - Start by copying the "## FRAMEWORK ELEMENTS (FROM TEACHER FORM — MANDATORY)" block exactly as specified above.
-- Then write all 16 sections fully.
+- Then write all 16 sections fully — Section 8 (Lesson Procedure) MUST embed the worked examples and practice exercises from the CRITICAL REQUIREMENTS block.
 - Obey STRICT RULES: only selected competencies and themes; do not add unchecked CBC items.
 Use Zambian local examples throughout. Tailor all content to ${canonicalSubject}.`
 }

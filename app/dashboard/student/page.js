@@ -14,6 +14,7 @@ import AchievementSystem from '@/components/games/AchievementSystem'
 import SmartDashboardIntegration from '@/components/dashboard/SmartDashboardIntegration'
 import { StudentTimetableView } from '@/components/timetable/StudentTimetableView'
 import { useSchoolTimeSlots } from '@/lib/timetable/useSchoolTimeSlots'
+import { printTimetable } from '@/lib/timetable/printTimetable'
 import { api } from '@/lib/api'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import {
@@ -352,7 +353,7 @@ export default function StudentDashboard() {
                 </Link>
                 <Button
                   variant="outline"
-                  onClick={() => window.print()}
+                  onClick={() => printTimetable()}
                   className="zsms-hover-raise"
                 >
                   Print

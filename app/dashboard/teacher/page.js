@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/Button'
 import { api } from '@/lib/api'
 import { TeacherTimetableView } from '@/components/timetable/TeacherTimetableView'
 import { useSchoolTimeSlots } from '@/lib/timetable/useSchoolTimeSlots'
+import { printTimetable } from '@/lib/timetable/printTimetable'
 import {
   Users,
   BookOpen,
@@ -366,7 +367,7 @@ export default function TeacherDashboard() {
                 </Link>
                 <Button
                   variant="outline"
-                  onClick={() => window.print()}
+                  onClick={() => printTimetable()}
                   className="zsms-hover-raise"
                 >
                   Print
