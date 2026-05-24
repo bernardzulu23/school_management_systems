@@ -9,6 +9,7 @@ import type {
   TravelingTeacherRoute,
 } from '@/lib/timetable/types'
 import { CollisionDetector } from '@/lib/timetable/collisionDetector'
+import { countUniqueConflicts, dedupeConflictsFromMap } from '@/lib/timetable/conflictDedupe'
 import { SuggestionEngine, type Suggestion } from '@/lib/timetable/suggestionEngine'
 
 export interface UseCollisionDetectionProps {
@@ -158,17 +159,10 @@ export function useCollisionDetection(props: UseCollisionDetectionProps) {
 
   const isAssignmentValid = (assignment: Assignment) => validateAssignment(assignment).length === 0
 
-  const getConflictCount = () => {
-    let total = 0
-    for (const v of conflicts.values()) total += v.length
-    return total
-  }
+  const getConflictCount = () => countUniqueConflicts(conflicts)
 
-  const getCriticalConflictCount = () => {
-    let total = 0
-    for (const v of conflicts.values()) total += v.filter((c) => c.severity === 'critical').length
-    return total
-  }
+  const getCriticalConflictCount = () =>
+    dedupeConflictsFromMap(conflicts).filter((c) => c.severity === 'critical').length
 
   return {
     conflicts,

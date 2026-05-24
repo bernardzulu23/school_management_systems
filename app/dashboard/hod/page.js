@@ -512,7 +512,7 @@ export default function HodDashboard() {
                   {departmentSubjects.map((subject, index) => (
                     <div
                       key={index}
-                      className="px-4 py-2 bg-accent/60 text-accent/20 border border-accent/80/50 rounded-full text-sm font-medium flex items-center"
+                      className="px-4 py-2 bg-accent text-white border border-accent rounded-full text-sm font-medium flex items-center"
                     >
                       <BookOpen className="h-4 w-4 mr-2" />
                       {subject}

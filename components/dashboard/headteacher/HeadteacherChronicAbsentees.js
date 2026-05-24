@@ -54,7 +54,7 @@ export function HeadteacherChronicAbsentees() {
         </CardTitle>
         <div className="flex items-center gap-2 flex-wrap">
           <select
-            className="rounded-lg border border-royalPurple-border bg-royalPurple-card px-3 py-2 text-sm text-royalPurple-text1"
+            className="rounded-lg border border-royalPurple-border bg-white px-3 py-2 text-sm text-ink"
             value={term}
             onChange={(e) => setTerm(e.target.value)}
             aria-label="Filter by term"

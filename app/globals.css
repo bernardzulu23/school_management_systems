@@ -569,7 +569,11 @@ html:not(.dark) .bg-white {
 
 .bg-royalPurple-page,
 .bg-royalPurple-card,
-.bg-royalPurple-card2 {
+.bg-royalPurple-card2,
+.onboard-card {
+  --rp-text1: #111111;
+  --rp-text2: #666666;
+  --rp-text3: #666666;
   color: var(--rp-text1);
 }
 

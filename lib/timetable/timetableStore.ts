@@ -6,6 +6,7 @@ import { SuggestionEngine, type Suggestion } from './suggestionEngine'
 import type { BellScheduleSlot } from './bellSchedule'
 import { normalizeApiTimeSlots } from './bellSchedule'
 import { canPublishTimetable, validateTimetable } from './validateTimetable'
+import { countUniqueConflicts } from './conflictDedupe'
 
 export type TimetableVersion = 'normal' | 'farming' | 'emergency'
 export type TimetableSeasonMode = 'normal' | 'planting' | 'harvest'
@@ -462,12 +463,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
           }
         },
 
-        getConflictCount: () => {
-          const m = get().conflicts
-          let total = 0
-          for (const v of m.values()) total += v.length
-          return total
-        },
+        getConflictCount: () => countUniqueConflicts(get().conflicts),
 
         getHardConflictCount: () => {
           return validateTimetable(get().assignments).filter((c) => c.severity === 'hard').length

@@ -4,6 +4,11 @@ import { useMemo, useState } from 'react'
 import type { Assignment, Conflict, ConflictSeverity } from '@/lib/timetable/types'
 import type { Suggestion } from '@/lib/timetable/suggestionEngine'
 import { filterClassCentricConflicts } from '@/lib/timetable/classCentric'
+import {
+  affectedAssignmentCount,
+  conflictDedupeKey,
+  primaryAssignmentId,
+} from '@/lib/timetable/conflictDedupe'
 import { Button } from '@/components/ui/Button'
 
 export interface ConflictDisplayProps {
@@ -30,10 +35,10 @@ function severityOrder(sev: ConflictSeverity) {
 }
 
 function sevClass(sev: ConflictSeverity) {
-  if (sev === 'critical') return 'text-red-400'
-  if (sev === 'high') return 'text-amber-400'
-  if (sev === 'medium') return 'text-yellow-300'
-  return 'text-blue-300'
+  if (sev === 'critical') return 'text-red-700'
+  if (sev === 'high') return 'text-amber-700'
+  if (sev === 'medium') return 'text-yellow-700'
+  return 'text-blue-700'
 }
 
 export function ConflictDisplay(props: ConflictDisplayProps) {
@@ -49,10 +54,19 @@ export function ConflictDisplay(props: ConflictDisplayProps) {
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set())
 
   const rows = useMemo<ConflictRow[]>(() => {
+    const seen = new Set<string>()
     const out: ConflictRow[] = []
     for (const [assignmentId, list] of conflicts.entries()) {
-      for (const c of filterClassCentricConflicts(list))
-        out.push({ key: `${assignmentId}:${c.id}`, assignmentId, conflict: c })
+      for (const c of filterClassCentricConflicts(list)) {
+        const dedupeKey = conflictDedupeKey(c)
+        if (seen.has(dedupeKey)) continue
+        seen.add(dedupeKey)
+        out.push({
+          key: dedupeKey,
+          assignmentId: primaryAssignmentId(c, assignmentId),
+          conflict: c,
+        })
+      }
     }
     return out.sort((a, b) => {
       const s = severityOrder(a.conflict.severity) - severityOrder(b.conflict.severity)
@@ -103,7 +117,7 @@ export function ConflictDisplay(props: ConflictDisplayProps) {
   const padBottom = useVirtual ? (rows.length - end) * rowH : 0
 
   return (
-    <div className="bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-5">
+    <div className="bg-white border border-royalPurple-border/40 rounded-2xl p-5 shadow-sm">
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
@@ -205,7 +219,7 @@ function ConflictRowItem(props: {
 
   return (
     <div
-      className="bg-royalPurple-deep/50 border border-royalPurple-border/40 rounded-xl px-4 py-3"
+      className="bg-white border border-royalPurple-border/40 rounded-xl px-4 py-3 shadow-sm"
       onMouseEnter={() => onHoverAssignmentId?.(row.assignmentId)}
       onMouseLeave={() => onHoverAssignmentId?.(null)}
     >
@@ -229,7 +243,7 @@ function ConflictRowItem(props: {
             </div>
             <div className="text-royalPurple-text1 font-semibold mt-1">{row.conflict.message}</div>
             <div className="text-royalPurple-text3 text-xs mt-1">
-              {row.conflict.related?.assignmentIds?.length || 1} assignment(s) affected
+              {affectedAssignmentCount(row.conflict)} assignment(s) affected
             </div>
           </div>
           <div className="text-royalPurple-text3 text-xs">{isOpen ? 'Hide' : 'Show'}</div>

@@ -1100,7 +1100,7 @@ export default function StudentDashboard() {
                                 </div>
                               </div>
                               <div className="text-right">
-                                <div className="px-2 py-1 bg-accent/60 text-accent/20 border border-accent/80/50 rounded-full text-xs font-medium">
+                                <div className="px-2 py-1 bg-accent text-white border border-accent rounded-full text-xs font-medium">
                                   {assessment.type}
                                 </div>
                               </div>

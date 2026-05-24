@@ -12,6 +12,7 @@ import type {
 } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
+import { countUniqueConflicts } from '@/lib/timetable/conflictDedupe'
 import { generateCardColor, resolveCardColor } from '@/lib/timetable/cardColors'
 import {
   assignmentsForPrimaryCell,
@@ -155,10 +156,8 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
   }, [filteredAssignments, baseSlots])
 
   const totalConflicts = useMemo(() => {
-    let n = 0
     if (!showConflicts) return 0
-    for (const v of storeConflicts.values()) n += v.length
-    return n
+    return countUniqueConflicts(storeConflicts)
   }, [storeConflicts, showConflicts])
 
   const isMobile = props.mobile || false
