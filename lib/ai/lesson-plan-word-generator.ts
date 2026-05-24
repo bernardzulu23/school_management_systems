@@ -21,6 +21,8 @@ import { sanitizeText } from '@/lib/lesson-plans/text'
 export type LessonPlanDocParams = {
   schoolName: string
   teacherName: string
+  teacherGender?: string | null
+  departmentName?: string | null
   date: string
   subject: string
   form: string
@@ -86,41 +88,65 @@ export async function generateLessonPlanWordDoc(params: LessonPlanDocParams): Pr
 
   const clean = sanitizeText(lessonContent)
   const children: FileChild[] = []
+  const usesMogeHeader = /^MINISTRY OF GENERAL EDUCATION\b/im.test(clean)
 
-  children.push(
-    new Paragraph({
-      alignment: AlignmentType.CENTER,
-      spacing: { after: 120 },
-      children: [
-        new TextRun({ text: 'MINISTRY OF EDUCATION', bold: true, size: 24, color: '1F4788' }),
+  if (!usesMogeHeader) {
+    children.push(
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 120 },
+        children: [
+          new TextRun({
+            text: 'MINISTRY OF GENERAL EDUCATION',
+            bold: true,
+            size: 24,
+            color: '1F4788',
+          }),
+        ],
+      }),
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 240 },
+        children: [
+          new TextRun({
+            text: params.departmentName
+              ? `DEPARTMENT OF ${params.departmentName.toUpperCase()} LESSON PLAN`
+              : "TEACHER'S LESSON PLAN",
+            bold: true,
+            size: 22,
+            color: '1F4788',
+          }),
+        ],
+      })
+    )
+
+    const headerTable = new Table({
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      rows: [
+        new TableRow({
+          children: [headerCell('School:'), valueCell(schoolName || '[School Name]')],
+        }),
+        new TableRow({
+          children: [
+            headerCell('Teacher:'),
+            valueCell(
+              `${teacherName || '[Teacher Name]'}${params.teacherGender ? ` (${params.teacherGender})` : ''}`
+            ),
+          ],
+        }),
+        new TableRow({
+          children: [headerCell('Date:'), valueCell(date || new Date().toLocaleDateString())],
+        }),
+        new TableRow({ children: [headerCell('Subject:'), valueCell(subject)] }),
+        new TableRow({ children: [headerCell('Form/Class:'), valueCell(form)] }),
+        new TableRow({ children: [headerCell('Topic:'), valueCell(topic)] }),
+        new TableRow({ children: [headerCell('Sub-Topic:'), valueCell(subTopic || 'N/A')] }),
+        new TableRow({ children: [headerCell('Duration:'), valueCell(`${duration} minutes`)] }),
       ],
-    }),
-    new Paragraph({
-      alignment: AlignmentType.CENTER,
-      spacing: { after: 240 },
-      children: [new TextRun({ text: 'LESSON PLAN', bold: true, size: 22, color: '1F4788' })],
     })
-  )
 
-  const headerTable = new Table({
-    width: { size: 100, type: WidthType.PERCENTAGE },
-    rows: [
-      new TableRow({ children: [headerCell('School:'), valueCell(schoolName || '[School Name]')] }),
-      new TableRow({
-        children: [headerCell('Teacher:'), valueCell(teacherName || '[Teacher Name]')],
-      }),
-      new TableRow({
-        children: [headerCell('Date:'), valueCell(date || new Date().toLocaleDateString())],
-      }),
-      new TableRow({ children: [headerCell('Subject:'), valueCell(subject)] }),
-      new TableRow({ children: [headerCell('Form:'), valueCell(form)] }),
-      new TableRow({ children: [headerCell('Topic:'), valueCell(topic)] }),
-      new TableRow({ children: [headerCell('Sub-Topic:'), valueCell(subTopic || 'N/A')] }),
-      new TableRow({ children: [headerCell('Duration:'), valueCell(`${duration} minutes`)] }),
-    ],
-  })
-
-  children.push(headerTable)
+    children.push(headerTable)
+  }
 
   if (approvalStatus) {
     const statusColor: Record<string, string> = {

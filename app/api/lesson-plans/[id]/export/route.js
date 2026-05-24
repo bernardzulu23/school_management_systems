@@ -4,6 +4,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { sanitizeText } from '@/lib/lesson-plans/text'
+import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
 import {
   generateLessonPlanFilename,
   generateLessonPlanWordDoc,
@@ -57,10 +58,13 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   }
 
   if (format === 'word') {
+    const ctx = await getLessonPlanTeacherContext(plan.createdByUserId, schoolId, plan.subject)
     const buffer = await generateLessonPlanWordDoc({
-      schoolName: plan.school?.name || '',
-      teacherName: plan.createdBy?.name || plan.createdBy?.email || 'Teacher',
-      date: plan.createdAt.toLocaleDateString(),
+      schoolName: ctx.schoolName || plan.school?.name || '',
+      teacherName: ctx.teacherName || plan.createdBy?.name || 'Teacher',
+      teacherGender: ctx.teacherGender,
+      departmentName: ctx.department,
+      date: plan.createdAt.toLocaleDateString('en-GB'),
       subject: plan.subject,
       form: plan.grade,
       topic: plan.topic,

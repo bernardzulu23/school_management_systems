@@ -4,6 +4,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
 import { sanitizeText } from '@/lib/lesson-plans/text'
+import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
 
 export const dynamic = 'force-dynamic'
 
@@ -59,7 +60,19 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const isAdmin = roleCheck(auth.user, ['ADMIN', 'headteacher'])
   if (!isOwner && !isReviewer && !isAdmin) throw new ApiError('Forbidden', 403)
 
-  return NextResponse.json({ success: true, data: plan })
+  const teacherContext = await getLessonPlanTeacherContext(
+    plan.createdByUserId,
+    schoolId,
+    plan.subject
+  )
+
+  return NextResponse.json({
+    success: true,
+    data: {
+      ...plan,
+      teacherContext,
+    },
+  })
 })
 
 const EDITABLE_STATUSES = new Set(['DRAFT', 'REJECTED', 'REVISION_REQUESTED'])

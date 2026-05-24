@@ -7,6 +7,9 @@ import { generateProfessionalLessonPlan } from '@/lib/ai/professional-lesson-pla
 import { assertGroqConfigured } from '@/lib/ai/groq-client'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
 import { checkAILimit, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
+import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
+import { buildLessonPlanHeaderBlock } from '@/lib/lesson-plans/header-block'
+import { composeLessonPlanDisplay } from '@/lib/lesson-plans/text'
 
 export const dynamic = 'force-dynamic'
 
@@ -53,7 +56,7 @@ export const POST = withErrorHandler(async function POST(request) {
     throw new ApiError('grade, subject, and topic are required', 400)
   }
 
-  const { content, tokensUsed } = await generateProfessionalLessonPlan({
+  const { content: generatedContent, tokensUsed } = await generateProfessionalLessonPlan({
     subject,
     form: grade,
     topic,
@@ -61,9 +64,29 @@ export const POST = withErrorHandler(async function POST(request) {
     duration,
     term,
     totalPupils: body?.totalPupils,
-    boys: body?.boys,
-    girls: body?.girls,
+    boys: body?.boys ?? body?.numberOfBoys,
+    girls: body?.girls ?? body?.numberOfGirls,
   })
+
+  const ctx = await getLessonPlanTeacherContext(userId, schoolId, subject)
+  const headerBlock = buildLessonPlanHeaderBlock({
+    teacherContext: ctx,
+    subject,
+    grade,
+    topic,
+    subTopic,
+    duration,
+    term,
+    planDate: normalize(body?.planDate) || undefined,
+    numberOfBoys: body?.numberOfBoys,
+    numberOfGirls: body?.numberOfGirls,
+    references: normalize(body?.references) || undefined,
+    teachingAids: normalize(body?.teachingAids) || undefined,
+    lessonNumber: body?.lessonNumber,
+    totalLessonsInUnit: body?.totalLessonsInUnit,
+  })
+
+  const content = composeLessonPlanDisplay(generatedContent, { headerBlock })
 
   await trackAIUsage(schoolId, 'ai-lesson-planner')
 

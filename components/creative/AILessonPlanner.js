@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { buildFrameworkElementsBlock, LESSON_PLAN_TEMPLATE_OPTIONS } from '@/lib/lessonPlanTemplate'
+import { buildLessonPlanHeaderBlock } from '@/lib/lesson-plans/header-block'
 import { composeLessonPlanDisplay } from '@/lib/lesson-plans/text'
 import { LessonPlanDownloadButton } from '@/components/lesson-plans/LessonPlanViewer'
 import { Download, FileText, Printer } from 'lucide-react'
@@ -122,6 +123,8 @@ export default function AILessonPlanner() {
   const [saving, setSaving] = useState(false)
   const [savedPlanId, setSavedPlanId] = useState(null)
   const [professionalContent, setProfessionalContent] = useState('')
+  const [teacherContext, setTeacherContext] = useState(null)
+  const [contextLoading, setContextLoading] = useState(true)
 
   const [form, setForm] = useState({
     grade: 'Grade 5',
@@ -131,6 +134,13 @@ export default function AILessonPlanner() {
     subTopic: '',
     term: 'Term 1',
     duration: 40,
+    planDate: new Date().toISOString().slice(0, 10),
+    numberOfBoys: '',
+    numberOfGirls: '',
+    references: '',
+    teachingAids: '',
+    lessonNumber: '',
+    totalLessonsInUnit: '',
     learningStyle: 'mixed',
     priorKnowledge: '',
     templateType: 'standard',
@@ -152,6 +162,64 @@ export default function AILessonPlanner() {
   const activeSubject = useCustomSubject ? form.customSubject : form.subject
   const isProfessional = form.templateType === 'professional'
   const rawContent = isProfessional ? professionalContent : text
+
+  useEffect(() => {
+    let cancelled = false
+    const loadContext = async () => {
+      setContextLoading(true)
+      try {
+        const qs = activeSubject.trim()
+          ? `?subject=${encodeURIComponent(activeSubject.trim())}`
+          : ''
+        const res = await fetch(`/api/lesson-plans/context${qs}`, { credentials: 'include' })
+        const json = await res.json().catch(() => ({}))
+        if (!cancelled && res.ok && json?.success) {
+          setTeacherContext(json.data)
+        }
+      } finally {
+        if (!cancelled) setContextLoading(false)
+      }
+    }
+    loadContext()
+    return () => {
+      cancelled = true
+    }
+  }, [activeSubject])
+
+  const headerBlock = useMemo(() => {
+    if (!teacherContext) return null
+    return buildLessonPlanHeaderBlock({
+      teacherContext,
+      subject: activeSubject,
+      grade: form.grade,
+      topic: form.topic || 'Lesson Topic',
+      subTopic: form.subTopic || form.topic,
+      duration: form.duration,
+      term: form.term,
+      planDate: form.planDate,
+      numberOfBoys: form.numberOfBoys,
+      numberOfGirls: form.numberOfGirls,
+      references: form.references,
+      teachingAids: form.teachingAids || undefined,
+      lessonNumber: form.lessonNumber,
+      totalLessonsInUnit: form.totalLessonsInUnit,
+    })
+  }, [
+    teacherContext,
+    activeSubject,
+    form.grade,
+    form.topic,
+    form.subTopic,
+    form.duration,
+    form.term,
+    form.planDate,
+    form.numberOfBoys,
+    form.numberOfGirls,
+    form.references,
+    form.teachingAids,
+    form.lessonNumber,
+    form.totalLessonsInUnit,
+  ])
 
   const frameworkBlock = useMemo(() => {
     if (isProfessional) return null
@@ -183,10 +251,13 @@ export default function AILessonPlanner() {
     form.inclusiveStrategies,
   ])
 
-  const displayContent = useMemo(
-    () => composeLessonPlanDisplay(rawContent, frameworkBlock),
-    [rawContent, frameworkBlock]
-  )
+  const displayContent = useMemo(() => {
+    if (!String(rawContent || '').trim()) return ''
+    return composeLessonPlanDisplay(rawContent, {
+      headerBlock,
+      frameworkBlock: isProfessional ? null : frameworkBlock,
+    })
+  }, [rawContent, headerBlock, frameworkBlock, isProfessional])
 
   const canGenerate = useMemo(
     () => form.topic.trim() && activeSubject.trim() && form.coreCompetencies.length > 0,
@@ -201,6 +272,7 @@ export default function AILessonPlanner() {
       grade: form.grade,
       subject: activeSubject,
       topic: form.topic,
+      subtopic: form.subTopic || undefined,
       duration: Number(form.duration),
       learningStyle: form.learningStyle,
       priorKnowledge: form.priorKnowledge || undefined,
@@ -214,6 +286,17 @@ export default function AILessonPlanner() {
       realWorldContext: form.realWorldContext?.trim() || undefined,
       includePractical: form.practicalActivities,
       includeInclusive: form.inclusiveStrategies,
+      references: form.references?.trim() || undefined,
+      teachingAids: form.teachingAids?.trim() || undefined,
+      lessonNumber: form.lessonNumber ? Number(form.lessonNumber) : undefined,
+      totalLessonsInUnit: form.totalLessonsInUnit ? Number(form.totalLessonsInUnit) : undefined,
+      numberOfBoys: form.numberOfBoys !== '' ? Number(form.numberOfBoys) : undefined,
+      numberOfGirls: form.numberOfGirls !== '' ? Number(form.numberOfGirls) : undefined,
+      planDate: form.planDate || undefined,
+      learners:
+        form.numberOfBoys !== '' || form.numberOfGirls !== ''
+          ? Number(form.numberOfBoys || 0) + Number(form.numberOfGirls || 0)
+          : undefined,
     })
   }
 
@@ -351,6 +434,13 @@ export default function AILessonPlanner() {
           duration: Number(form.duration),
           term: form.term,
           templateType: 'professional',
+          planDate: form.planDate || undefined,
+          numberOfBoys: form.numberOfBoys !== '' ? Number(form.numberOfBoys) : undefined,
+          numberOfGirls: form.numberOfGirls !== '' ? Number(form.numberOfGirls) : undefined,
+          references: form.references?.trim() || undefined,
+          teachingAids: form.teachingAids?.trim() || undefined,
+          lessonNumber: form.lessonNumber ? Number(form.lessonNumber) : undefined,
+          totalLessonsInUnit: form.totalLessonsInUnit ? Number(form.totalLessonsInUnit) : undefined,
         }),
       })
       const json = await res.json().catch(() => ({}))
@@ -503,8 +593,61 @@ export default function AILessonPlanner() {
           Zambia CBC Lesson Plan Generator
         </h2>
         <p className="text-xs text-royalPurple-text2 mb-6">
-          Aligned with the 2023 Zambia Competency-Based Curriculum Framework · Implementation 2025
+          Aligned with the 2023 Zambia Competency-Based Curriculum Framework · MoGE lesson plan
+          format · Implementation 2025
         </p>
+
+        <div className="mb-6 rounded-lg border border-royalPurple-border/50 bg-royalPurple-deep/40 p-4">
+          <div className="text-sm font-semibold text-royalPurple-text1 mb-2">
+            Teacher &amp; School (from your profile)
+          </div>
+          {contextLoading ? (
+            <p className="text-xs text-royalPurple-text2">Loading profile…</p>
+          ) : teacherContext ? (
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm text-royalPurple-text2">
+              <div>
+                <dt className="text-royalPurple-text2/70">Teacher</dt>
+                <dd className="text-royalPurple-text1 font-medium">
+                  {teacherContext.teacherName}
+                  {teacherContext.teacherGender ? ` (${teacherContext.teacherGender})` : ''}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-royalPurple-text2/70">School</dt>
+                <dd className="text-royalPurple-text1 font-medium">{teacherContext.schoolName}</dd>
+              </div>
+              <div>
+                <dt className="text-royalPurple-text2/70">Department</dt>
+                <dd className="text-royalPurple-text1 font-medium">
+                  {teacherContext.department || '—'}
+                </dd>
+              </div>
+              {teacherContext.employeeId ? (
+                <div>
+                  <dt className="text-royalPurple-text2/70">Employee ID</dt>
+                  <dd className="text-royalPurple-text1 font-medium">
+                    {teacherContext.employeeId}
+                  </dd>
+                </div>
+              ) : null}
+              {teacherContext.academicYear ? (
+                <div>
+                  <dt className="text-royalPurple-text2/70">Academic Year</dt>
+                  <dd className="text-royalPurple-text1 font-medium">
+                    {teacherContext.academicYear}
+                  </dd>
+                </div>
+              ) : null}
+            </dl>
+          ) : (
+            <p className="text-xs text-amber-200/90">
+              Could not load your profile. Name and school will appear after you sign in again.
+            </p>
+          )}
+          <p className="text-xs text-royalPurple-text2/60 mt-3">
+            Phone numbers and date of birth are never shown on lesson plans.
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-2 pt-1">
@@ -629,6 +772,85 @@ export default function AILessonPlanner() {
               max={240}
               value={form.duration}
               onChange={(e) => setForm((p) => ({ ...p, duration: Number(e.target.value) }))}
+            />
+          </div>
+
+          <div className="md:col-span-2 pt-2">
+            <SectionHeading>MoGE Header Details</SectionHeading>
+            <p className="text-xs text-royalPurple-text2/70 mb-2">
+              Matches the Ministry of General Education lesson plan format — teacher and school come
+              from your profile automatically.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Lesson Date</Label>
+            <Input
+              type="date"
+              value={form.planDate}
+              onChange={(e) => setForm((p) => ({ ...p, planDate: e.target.value }))}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Number of Boys</Label>
+            <Input
+              type="number"
+              min={0}
+              value={form.numberOfBoys}
+              onChange={(e) => setForm((p) => ({ ...p, numberOfBoys: e.target.value }))}
+              placeholder="e.g., 18"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Number of Girls</Label>
+            <Input
+              type="number"
+              min={0}
+              value={form.numberOfGirls}
+              onChange={(e) => setForm((p) => ({ ...p, numberOfGirls: e.target.value }))}
+              placeholder="e.g., 22"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Lesson Number in Unit</Label>
+            <Input
+              type="number"
+              min={1}
+              value={form.lessonNumber}
+              onChange={(e) => setForm((p) => ({ ...p, lessonNumber: e.target.value }))}
+              placeholder="e.g., 4"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Total Lessons in Unit</Label>
+            <Input
+              type="number"
+              min={1}
+              value={form.totalLessonsInUnit}
+              onChange={(e) => setForm((p) => ({ ...p, totalLessonsInUnit: e.target.value }))}
+              placeholder="e.g., 6"
+            />
+          </div>
+
+          <div className="space-y-2 md:col-span-2">
+            <Label>References</Label>
+            <Input
+              value={form.references}
+              onChange={(e) => setForm((p) => ({ ...p, references: e.target.value }))}
+              placeholder="e.g., Learner handbook, teacher notes, syllabus page…"
+            />
+          </div>
+
+          <div className="space-y-2 md:col-span-2">
+            <Label>Teaching / Learning Aids</Label>
+            <Input
+              value={form.teachingAids}
+              onChange={(e) => setForm((p) => ({ ...p, teachingAids: e.target.value }))}
+              placeholder="e.g., Learner book, chalkboard, charts, practical materials…"
             />
           </div>
 
@@ -868,9 +1090,7 @@ export default function AILessonPlanner() {
       </div>
 
       <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card p-6">
-        <div className="text-royalPurple-text1 font-semibold mb-3">
-          Competency-Based Lesson Plan
-        </div>
+        <div className="text-royalPurple-text1 font-semibold mb-3">Lesson Plan Preview</div>
         <div className="whitespace-pre-wrap text-sm text-royalPurple-text2">
           {displayContent ||
             (isProfessional

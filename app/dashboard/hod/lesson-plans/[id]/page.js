@@ -63,10 +63,13 @@ export default function HodLessonPlanDetailPage() {
 
   const metaLines = useMemo(() => {
     if (!plan) return []
-    const teacher = plan?.createdBy?.name || plan?.createdBy?.email || 'Teacher'
+    const ctx = plan?.teacherContext
+    const teacher = ctx?.teacherName || plan?.createdBy?.name || plan?.createdBy?.email || 'Teacher'
     const reviewer = plan?.reviewer?.name || plan?.reviewer?.email || 'Reviewer'
     return [
-      `Teacher: ${teacher}`,
+      `Teacher: ${teacher}${ctx?.teacherGender ? ` (${ctx.teacherGender})` : ''}`,
+      ctx?.schoolName ? `School: ${ctx.schoolName}` : '',
+      ctx?.department ? `Department: ${ctx.department}` : '',
       `Reviewer: ${reviewer}`,
       `Subject: ${plan.subject}`,
       `Grade/Form: ${plan.grade}`,

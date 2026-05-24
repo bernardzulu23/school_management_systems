@@ -13,6 +13,7 @@ import {
 import { prisma } from '@/lib/prisma'
 import { logger } from '@/lib/utils/logger'
 import { buildLessonPlanPrompt } from '@/lib/lessonPlanTemplate'
+import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
 import {
   assertGroqConfigured,
   createGroqTextEventStream,
@@ -55,34 +56,54 @@ const LessonPlannerInputSchema = z.object({
   languageOfInstruction: z.string().max(120).optional(),
   resourceLevel: z.string().max(200).optional(),
   additionalInstructions: z.string().max(800).optional(),
+  references: z.string().max(500).optional(),
+  teachingAids: z.string().max(500).optional(),
+  lessonNumber: z.number().int().min(1).max(200).optional(),
+  totalLessonsInUnit: z.number().int().min(1).max(200).optional(),
+  numberOfBoys: z.number().int().min(0).max(500).optional(),
+  numberOfGirls: z.number().int().min(0).max(500).optional(),
+  planDate: z.string().max(30).optional(),
 })
 
 type LessonPlannerInput = z.infer<typeof LessonPlannerInputSchema>
 
-function buildPrompt(input: LessonPlannerInput): string {
-  return buildLessonPlanPrompt({
-    templateType: input.templateType,
-    subject: input.subject,
-    grade: input.grade,
-    topic: input.topic,
-    subtopic: input.subtopic,
-    duration: input.duration,
-    learners: input.learners,
-    term: input.term,
-    competenceFocus: input.competenceFocus,
-    coreCompetencies: input.coreCompetencies,
-    crossCuttingThemes: input.crossCuttingThemes,
-    learningPathway: input.learningPathway,
-    assessmentMethod: input.assessmentMethod,
-    realWorldContext: input.realWorldContext || input.zambiContext,
-    includePractical: input.includePractical,
-    includeInclusive: input.includeInclusive,
-    languageOfInstruction: input.languageOfInstruction,
-    resourceLevel: input.resourceLevel,
-    learningStyle: input.learningStyle,
-    priorKnowledge: input.priorKnowledge,
-    additionalInstructions: input.additionalInstructions,
-  })
+function buildPrompt(input: LessonPlannerInput, userId: string, schoolId: string): Promise<string> {
+  return getLessonPlanTeacherContext(userId, schoolId, input.subject).then((ctx) =>
+    buildLessonPlanPrompt({
+      templateType: input.templateType,
+      subject: input.subject,
+      grade: input.grade,
+      topic: input.topic,
+      subtopic: input.subtopic,
+      duration: input.duration,
+      learners: input.learners,
+      term: input.term,
+      competenceFocus: input.competenceFocus,
+      coreCompetencies: input.coreCompetencies,
+      crossCuttingThemes: input.crossCuttingThemes,
+      learningPathway: input.learningPathway,
+      assessmentMethod: input.assessmentMethod,
+      realWorldContext: input.realWorldContext || input.zambiContext,
+      includePractical: input.includePractical,
+      includeInclusive: input.includeInclusive,
+      languageOfInstruction: input.languageOfInstruction,
+      resourceLevel: input.resourceLevel,
+      learningStyle: input.learningStyle,
+      priorKnowledge: input.priorKnowledge,
+      additionalInstructions: input.additionalInstructions,
+      references: input.references,
+      teachingAids: input.teachingAids,
+      lessonNumber: input.lessonNumber,
+      totalLessonsInUnit: input.totalLessonsInUnit,
+      numberOfBoys: input.numberOfBoys,
+      numberOfGirls: input.numberOfGirls,
+      planDate: input.planDate,
+      teacherName: ctx.teacherName,
+      schoolName: ctx.schoolName,
+      teacherGender: ctx.teacherGender || undefined,
+      departmentName: ctx.department || undefined,
+    })
+  )
 }
 
 export async function POST(request: Request) {
@@ -139,7 +160,7 @@ export async function POST(request: Request) {
       subject: input.subject,
     })
 
-    const prompt = buildPrompt(input)
+    const prompt = await buildPrompt(input, String(user.id), schoolId)
     const startTime = Date.now()
 
     const stream = createGroqTextEventStream({

@@ -88,6 +88,14 @@ type LessonPlanStructureInput = {
   learningPathway?: string
   includePractical?: boolean
   includeInclusive?: boolean
+  references?: string
+  teachingAids?: string
+  lessonNumber?: number | string
+  totalLessonsInUnit?: number | string
+  teacherName?: string
+  schoolName?: string
+  teacherGender?: string
+  departmentName?: string
 }
 
 const safe = (v: unknown) => String(v ?? '').trim()
@@ -110,88 +118,69 @@ export function buildLessonPlanStructure(input: LessonPlanStructureInput): strin
     input.includeInclusive === false
       ? 'Brief differentiation only.'
       : 'Full differentiation and inclusive education required.'
+  const references =
+    safe(input.references) ||
+    'Learner handbook, teacher notes, syllabus reference, and other approved sources.'
+  const teachingAids =
+    safe(input.teachingAids) ||
+    "Learner's book, teacher's notes, chalkboard, and other relevant TLMs."
+  const lessonPos =
+    input.lessonNumber && input.totalLessonsInUnit
+      ? `This is lesson ${safe(input.lessonNumber)} out of ${safe(input.totalLessonsInUnit)} lessons in this unit/topic sequence.`
+      : 'State the lesson position in the unit/topic sequence.'
 
-  return `The lesson plan MUST include ALL of the following sections, clearly labelled:
+  return `Generate the lesson body using the Ministry of General Education (MoGE) format below.
+Do NOT repeat the header (teacher name, school, subject table) — it is added automatically.
 
-LESSON PLAN HEADER
-- School Name: [School Name]
-- Subject: ${subject}
-- Grade/Form: ${grade}
-- Topic: ${topic}
-- Sub-topic: ${subtopic}
-- Date: [Date]
-- Duration: ${duration}
-- Number of Learners: ${learners}
-- Term: ${term}
+Teacher context for tailoring examples (do not print as a separate block): ${safe(input.teacherName) || 'Teacher'} at ${safe(input.schoolName) || 'School'}${input.teacherGender ? ` (${input.teacherGender})` : ''}, Department: ${safe(input.departmentName) || 'General Education'}.
 
-1. GENERAL COMPETENCE
-   State the broad competence from the Zambia CBC syllabus.
+The lesson plan MUST include ALL of the following sections, clearly labelled in plain text:
 
-2. SPECIFIC COMPETENCE(S)
-   State precise, measurable competence(s) targeted in this lesson — ONLY these (do not add others): ${competences}
+RATIONALE:
+(i) Content: This lesson is on ${subtopic} within the topic ${topic} (${subject}, ${grade}).
+(ii) Value/content: Explain the values and competences developed — ONLY these CBC competencies: ${competences}. Cross-cutting themes to integrate: ${themes}.
+(iii) Teaching Method: Teacher exposition, question and answer, group/class discussion, and other methods suited to ${subject}. ${practicalNote}
+(iv) Location of the lesson: ${lessonPos}
 
-3. LEARNING OUTCOMES (Know-Do-Value)
-   - KNOW: what learners will know/understand
-   - DO: what learners will be able to demonstrate/perform
-   - VALUE: what attitudes/values learners will develop
+LEARNING OUTCOMES: L.S.B.A.T
+List 3–5 measurable outcomes learners will achieve by the end of the lesson.
 
-4. CORE VALUES ADDRESSED
-   From the four CBC value categories: Personal Excellence, Relationships, Citizenship, Faith in God
-   Name at least 2 specific values with brief explanation of how they are developed.
+PREREQUISITE KNOWLEDGE:
+What ${grade} learners already know before this lesson.
 
-5. PRE-REQUISITE KNOWLEDGE
-   What learners already know before this lesson.
+LESSON INTRODUCTION:
+Use brainstorming or revision questions to introduce ${topic} / ${subtopic} and link to prior learning.
 
-6. TEACHING & LEARNING MATERIALS (TLMs)
-   List all materials. ${practicalNote}
+LESSON DEVELOPMENT
+Present as plain-text rows using these column labels:
+STAGE/TIME | TEACHER'S ACTIVITY | PUPIL'S ACTIVITY | METHODS
 
-7. CROSS-CUTTING ISSUES
-   Integrate ONLY these themes (do not add others): ${themes}
-   For each selected theme, explain briefly how it is integrated in the lesson.
+Divide the ${duration} lesson into logical stages/sub-topics for ${subject}. For each stage include:
+- Stage title and estimated time
+- Teacher activities (detailed, subject-specific)
+- Pupil/learner activities (learner-centred — more time than teacher talk)
+- Teaching methods used
+- Competence(s) from: ${competences}
+${inclusiveNote}
 
-8. LESSON PROCEDURE (Learner-Centred — 5 Phases)
-   For each phase show: Teacher Activity | Learner Activity | Competence Developed | Time
+LESSON CONCLUSION:
+Revise key points with learners; support remedial learners.
 
-   Phase 1: INTRODUCTION/ENGAGEMENT (Hook — real-life Zambian context)
-   Phase 2: DEVELOPMENT/EXPLORATION (Discovery, group investigation)
-   Phase 3: EXPLANATION/CONSOLIDATION (Teacher guides, deepens understanding)
-   Phase 4: APPLICATION/ELABORATION (Apply to new real-life context)
-   Phase 5: ASSESSMENT/EVALUATION (Competence demonstration)
+HOMEWORK/CLASS EXERCISE:
+Provide 3–5 questions or tasks aligned to ${subtopic}. Include expected answers or marking guidance.
 
-   NOTE: Learner activities must take MORE time and depth than teacher activities — CBC is learner-centred.
+LEARNER'S EVALUATION:
+Leave lined space (use dotted lines) for the teacher to record learner performance after the lesson.
 
-9. BLOOM'S TAXONOMY LEVELS TARGETED
-   List which levels are addressed (Apply, Analyse, Evaluate, Create preferred — higher order).
+TEACHER'S EVALUATION:
+Leave lined space (use dotted lines) for the teacher's self-reflection after the lesson.
 
-10. SCHOOL-BASED ASSESSMENT (SBA)
-    Use this assessment approach: ${assessment}
-    - Formative assessment strategy used DURING the lesson
-    - SBA task description aligned to the method above
-    - Assessment criteria/rubric with at least 3 performance levels
-    - How evidence of competence is gathered
-
-11. DIFFERENTIATION / INCLUSIVE EDUCATION
-    ${inclusiveNote}
-    - How the lesson caters for learners with Special Educational Needs
-    - Stretch activities for gifted learners
-    - Support strategies for struggling learners
-
-12. ICT INTEGRATION
-    Include ICT/digital integration ONLY if "Digital" or "ICT" appears in the selected core competencies; otherwise state "Not a focus for this lesson" or optional enrichment.
-
-13. CAREER PATHWAY LINK
-    Link this lesson to the ${pathway} pathway and name a relevant career.
-
-14. VISION 2030 ALIGNMENT
-    One sentence linking this lesson to Zambia's Vision 2030.
-
-15. REFERENCES
-    - Syllabus page/section reference
-    - Textbook(s)
-    - ZECF 2023 reference
-
-16. TEACHER'S SELF-REFLECTION (to be completed after lesson)
-    Provide guiding questions for the teacher to reflect on.`
+CBC ALIGNMENT (brief footer — 4–6 lines):
+- Assessment method: ${assessment}
+- Career pathway link (${pathway})
+- Vision 2030 link (one sentence)
+- References used: ${references}
+- Teaching/learning aids used: ${teachingAids}`
 }
 
 export type LessonPlanFrameworkOptions = {
@@ -222,6 +211,17 @@ type LessonPlanPromptInput = LessonPlanFrameworkOptions & {
   /** Legacy comma-separated competencies; superseded by coreCompetencies */
   competenceFocus?: string
   additionalInstructions?: string
+  references?: string
+  teachingAids?: string
+  lessonNumber?: number | string
+  totalLessonsInUnit?: number | string
+  teacherName?: string
+  schoolName?: string
+  teacherGender?: string
+  departmentName?: string
+  numberOfBoys?: number | string
+  numberOfGirls?: number | string
+  planDate?: string
 }
 
 function normalizeStringList(items: unknown): string[] {
@@ -340,6 +340,14 @@ export function buildLessonPlanPrompt(input: LessonPlanPromptInput): string {
     learningPathway: input.learningPathway,
     includePractical: input.includePractical,
     includeInclusive: input.includeInclusive,
+    references: input.references,
+    teachingAids: input.teachingAids,
+    lessonNumber: input.lessonNumber,
+    totalLessonsInUnit: input.totalLessonsInUnit,
+    teacherName: input.teacherName,
+    schoolName: input.schoolName,
+    teacherGender: input.teacherGender,
+    departmentName: input.departmentName,
   })
 
   const extras = safe(input.additionalInstructions)
@@ -368,9 +376,10 @@ ${structure}
 
 Additional instructions from teacher: ${extras || 'None'}
 
-Generate the complete, detailed, ready-to-use CBC lesson plan now.
-- Start by copying the "FRAMEWORK ELEMENTS (FROM TEACHER FORM — MANDATORY)" block exactly as specified above (plain text, no hash symbols).
-- Then write all 16 sections fully — Section 8 (Lesson Procedure) MUST embed the worked examples and practice exercises from the CRITICAL REQUIREMENTS block.
+Generate the complete, detailed, ready-to-use MoGE lesson plan now.
+- Do NOT generate the Ministry header (teacher name, school, date, boys/girls table) — it is injected automatically.
+- Start with the "FRAMEWORK ELEMENTS (FROM TEACHER FORM — MANDATORY)" block exactly as specified above (plain text, no hash symbols).
+- Then write all MoGE body sections starting at RATIONALE — embed worked examples and practice exercises from the CRITICAL REQUIREMENTS block in LESSON DEVELOPMENT.
 - Obey STRICT RULES: only selected competencies and themes; do not add unchecked CBC items.
 Use Zambian local examples throughout. Tailor all content to ${canonicalSubject}. Output plain text only.`
 }

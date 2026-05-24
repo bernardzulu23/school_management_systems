@@ -1,5 +1,7 @@
 /** Shared plain-text cleanup for lesson plan display, export, and generation. */
 
+import { stripLessonPlanHeaderBlock } from '@/lib/lesson-plans/header-block'
+
 export function sanitizeText(text: string): string {
   if (!text) return ''
 
@@ -23,7 +25,9 @@ export function stripAiFrameworkSection(text: string): string {
   if (!text) return ''
 
   const cleaned = sanitizeText(text)
-  const sectionStart = cleaned.search(/\n\s*(?:1\.\s+GENERAL COMPETENCE|LESSON PLAN HEADER)\b/i)
+  const sectionStart = cleaned.search(
+    /\n\s*(?:RATIONALE:|LEARNING OUTCOMES|1\.\s+GENERAL COMPETENCE|LESSON PLAN HEADER)\b/i
+  )
 
   if (sectionStart >= 0) {
     return cleaned.slice(sectionStart).trim()
@@ -36,16 +40,24 @@ export function stripAiFrameworkSection(text: string): string {
   return cleaned
 }
 
+export type ComposeLessonPlanOptions = {
+  headerBlock?: string | null
+  frameworkBlock?: string | null
+}
+
 export function composeLessonPlanDisplay(
   rawContent: string,
-  frameworkBlock: string | null | undefined
+  options?: ComposeLessonPlanOptions | string | null
 ): string {
-  const cleaned = sanitizeText(rawContent)
-  if (!frameworkBlock?.trim()) return cleaned
+  const opts: ComposeLessonPlanOptions =
+    typeof options === 'string' || options == null ? { frameworkBlock: options } : options
 
-  const body = stripAiFrameworkSection(cleaned)
-  if (!body) return frameworkBlock.trim()
-  return `${frameworkBlock.trim()}\n\n${body}`.trim()
+  let body = sanitizeText(rawContent)
+  body = stripLessonPlanHeaderBlock(body)
+  body = stripAiFrameworkSection(body)
+
+  const parts = [opts.headerBlock, opts.frameworkBlock, body].filter((p) => String(p || '').trim())
+  return parts.join('\n\n').trim()
 }
 
 export function formatLessonPlanForDisplay(content: string): string {

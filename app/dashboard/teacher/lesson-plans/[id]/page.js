@@ -67,7 +67,15 @@ export default function TeacherLessonPlanDetailPage() {
   const metaLines = useMemo(() => {
     if (!plan) return []
     const reviewer = plan?.reviewer?.name || plan?.reviewer?.email
+    const ctx = plan?.teacherContext
     return [
+      ctx?.teacherName
+        ? `Teacher: ${ctx.teacherName}${ctx.teacherGender ? ` (${ctx.teacherGender})` : ''}`
+        : plan?.createdBy?.name
+          ? `Teacher: ${plan.createdBy.name}`
+          : '',
+      ctx?.schoolName ? `School: ${ctx.schoolName}` : '',
+      ctx?.department ? `Department: ${ctx.department}` : '',
       `Subject: ${plan.subject}`,
       `Grade/Form: ${plan.grade}`,
       `Topic: ${plan.topic}`,
