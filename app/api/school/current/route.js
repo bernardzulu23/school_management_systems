@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { getSubscriptionState } from '@/lib/billing/subscription'
 
 export async function GET(request) {
   try {
@@ -36,7 +37,12 @@ export async function GET(request) {
       },
     })
 
-    return NextResponse.json({ school })
+    return NextResponse.json({
+      school: {
+        ...school,
+        subscription: getSubscriptionState(school),
+      },
+    })
   } catch (error) {
     console.error('Error fetching current school:', error)
     return NextResponse.json({ school: null })

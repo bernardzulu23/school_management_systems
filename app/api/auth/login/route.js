@@ -16,6 +16,7 @@ import {
   authCookieOptions,
 } from '@/lib/security/cookies'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+import { getSubscriptionState } from '@/lib/billing/subscription'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
@@ -180,6 +181,22 @@ export const POST = withSecureApi(async function POST(request) {
       return NextResponse.json(
         { error: 'Please verify your email address first.', code: 'EMAIL_NOT_VERIFIED' },
         { status: 403 }
+      )
+    }
+
+    const subscription = getSubscriptionState(school)
+    if (subscription.expired && !isPilotEmail(user.email)) {
+      return NextResponse.json(
+        {
+          error: 'Subscription required',
+          message: subscription.isTrialExpired
+            ? `Your ${subscription.trialDaysTotal}-day free trial has ended. Please upgrade to continue.`
+            : 'Your school subscription has expired. Please renew to continue.',
+          code: 'SUBSCRIPTION_EXPIRED',
+          billingUrl: '/dashboard/billing',
+          expiryDate: subscription.expiresAt,
+        },
+        { status: 402 }
       )
     }
 

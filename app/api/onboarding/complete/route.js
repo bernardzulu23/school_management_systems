@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import crypto from 'crypto'
 import { verifyOnboardingToken } from '@/lib/middleware/onboardingAuth'
-import { sendWelcomeEmail } from '@/config/email'
+import { sendSchoolPortalLinkEmail } from '@/config/email'
+import { trialEndsAtFromStart } from '@/lib/billing/subscription'
 import {
   buildWelcomeSmsMessage,
   normalizePhoneNumbers,
@@ -50,7 +51,7 @@ function planToExpiresAt(plan, months) {
 }
 
 function trialEndsAt() {
-  return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+  return trialEndsAtFromStart()
 }
 
 export async function POST(request) {
@@ -155,11 +156,12 @@ export async function POST(request) {
     return school
   })
 
-  await sendWelcomeEmail({
+  await sendSchoolPortalLinkEmail({
     to: reg.email,
     schoolName: created.name,
     subdomain: created.subdomain,
     loginUrl,
+    adminName,
   })
 
   try {

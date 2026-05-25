@@ -6,6 +6,7 @@ import { Menu, Bell, Search, User } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { useSchool } from '@/lib/context/SchoolContext'
 import { TimetableNotificationBell } from '@/components/timetable/MasterTimetableGenerator'
+import SubscriptionBanner from '@/components/billing/SubscriptionBanner'
 
 export default function ResponsiveDashboardLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -20,10 +21,7 @@ export default function ResponsiveDashboardLayout({ children }) {
   const now = new Date()
   const expiresAt = plan === 'trial' ? trialEndsAt : planExpiresAt
   const msLeft = expiresAt ? expiresAt.getTime() - now.getTime() : null
-  const daysLeft = typeof msLeft === 'number' ? Math.ceil(msLeft / (24 * 60 * 60 * 1000)) : null
   const isExpired = typeof msLeft === 'number' ? msLeft < 0 : false
-  const shouldWarn =
-    plan === 'trial' && typeof daysLeft === 'number' && daysLeft >= 0 && daysLeft <= 7
 
   return (
     <div className="flex h-screen bg-paper text-ink overflow-hidden">
@@ -82,36 +80,8 @@ export default function ResponsiveDashboardLayout({ children }) {
 
         <main className="flex-1 overflow-y-auto bg-paper p-4 sm:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto space-y-4">
-            {shouldWarn && expiresAt ? (
-              <div className="rounded-xl border-2 border-amber-600/40 bg-amber-50 p-4">
-                <div className="flex items-center justify-between gap-3 flex-wrap">
-                  <div className="text-sm text-amber-900 font-semibold">
-                    Free trial ends in {daysLeft} day{daysLeft === 1 ? '' : 's'} (
-                    {expiresAt.toLocaleDateString()})
-                  </div>
-                  <a href="/dashboard/billing" className="text-sm font-bold text-accent underline">
-                    Upgrade now
-                  </a>
-                </div>
-              </div>
-            ) : null}
-
-            {isExpired && expiresAt ? (
-              <div className="rounded-xl border-2 border-red-500/40 bg-red-50 p-6">
-                <div className="text-red-800 font-bold">Your access has expired</div>
-                <div className="text-sm text-muted mt-1">
-                  Your {plan === 'trial' ? 'free trial' : 'subscription'} expired on{' '}
-                  {expiresAt.toLocaleDateString()}. Upgrade to restore access.
-                </div>
-                <div className="mt-4">
-                  <a href="/dashboard/billing" className="text-sm font-bold text-accent underline">
-                    Go to Billing
-                  </a>
-                </div>
-              </div>
-            ) : (
-              children
-            )}
+            <SubscriptionBanner />
+            {!isExpired ? children : null}
           </div>
         </main>
       </div>

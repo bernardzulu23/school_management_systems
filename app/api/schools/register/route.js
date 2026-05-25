@@ -6,6 +6,7 @@ import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import crypto from 'crypto'
 import { sendSchoolVerificationEmail } from '@/config/email'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+import { trialEndsAtFromStart } from '@/lib/billing/subscription'
 
 const RESERVED = new Set([
   'www',
@@ -223,7 +224,7 @@ export const POST = withSecureApi(async function POST(request) {
           address: [address, province].filter(Boolean).join(', ') || null,
           level,
           plan: 'trial',
-          trialEndsAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          trialEndsAt: trialEndsAtFromStart(),
           active: false,
           emailVerified: false,
           verificationToken,

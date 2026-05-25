@@ -246,7 +246,9 @@ function OnboardingPageContent() {
       const json = await res.json().catch(() => ({}))
       setStatus(json)
       if (String(json?.registration?.paymentStatus || '').toLowerCase() === 'paid') {
-        toast.success('Payment confirmed')
+        toast.success('Payment confirmed — create your school portal next')
+        window.location.href = '/onboarding?step=setup'
+        return
       } else {
         toast.error('Payment is still pending. Click Refresh Status or try again.')
       }
@@ -293,7 +295,7 @@ function OnboardingPageContent() {
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json?.error || 'Failed to complete setup')
       setCompleted(json)
-      toast.success('School portal created')
+      toast.success('School portal created — check your email for the portal link to share')
     } catch (e) {
       toast.error(e?.message || 'Failed to complete setup')
     } finally {
@@ -696,6 +698,11 @@ function OnboardingPageContent() {
                     placeholder="Headteacher Full Name"
                   />
                 </div>
+              </div>
+
+              <div className="text-xs text-royalPurple-text3">
+                After you create the portal, we email your verified address with the school login
+                link to share with teachers and learners.
               </div>
 
               <div className="flex flex-wrap gap-2">
