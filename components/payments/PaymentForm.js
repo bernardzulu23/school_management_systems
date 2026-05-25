@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import ProviderLogos from '@/components/payments/ProviderLogos'
+import ProviderLogos, { ProviderLogoImage } from '@/components/payments/ProviderLogos'
 import {
   Phone,
   CreditCard,
@@ -175,17 +175,7 @@ export default function PaymentForm({ onSuccess, schoolId, userRole }) {
                       form.provider === p.value ? 'provider-pill-active' : ''
                     }`}
                   >
-                    <span
-                      className={`provider-dot ${
-                        p.value === 'mtn'
-                          ? 'provider-dot-mtn'
-                          : p.value === 'zamtel'
-                            ? 'provider-dot-zamtel'
-                            : 'provider-dot-airtel'
-                      }`}
-                    >
-                      {p.label.charAt(0)}
-                    </span>
+                    <ProviderLogoImage providerKey={p.value} size={28} />
                     <span className="step-label">{p.label}</span>
                   </button>
                 ))}
@@ -329,12 +319,6 @@ export function PaymentHistory({ transactions = [] }) {
             const status = PAYMENT_STATUS[tx.status] || PAYMENT_STATUS.pending
             const StatusIcon = status.icon
             const provider = PROVIDERS.find((p) => p.value === tx.provider) || PROVIDERS[0]
-            const providerBadge =
-              tx.provider === 'mtn'
-                ? 'provider-dot-mtn'
-                : tx.provider === 'zamtel'
-                  ? 'provider-dot-zamtel'
-                  : 'provider-dot-airtel'
 
             return (
               <div
@@ -342,7 +326,7 @@ export function PaymentHistory({ transactions = [] }) {
                 className="flex items-center justify-between p-3 bg-royalPurple-deep rounded-lg border border-royalPurple-border/40 zsms-hover-raise"
               >
                 <div className="flex items-center gap-3">
-                  <div className={`provider-dot ${providerBadge}`}>{provider.label.charAt(0)}</div>
+                  <ProviderLogoImage providerKey={tx.provider || provider.value} size={32} />
                   <div>
                     <p className="font-medium text-royalPurple-text1">
                       K{tx.amount?.toFixed(2)} - {tx.type || 'Payment'}

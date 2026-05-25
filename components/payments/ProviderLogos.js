@@ -1,23 +1,74 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
+import {
+  getPaymentProviderLogoSrc,
+  getPaymentProvidersWithLogos,
+  isAllowedPaymentLogoUrl,
+} from '@/lib/payments/provider-logos'
 
-const PROVIDERS = [
-  { key: 'mtn', name: 'MTN Zambia', src: '/payments/mtn.svg' },
-  { key: 'airtel', name: 'Airtel Zambia', src: '/payments/airtel.svg' },
-  { key: 'zamtel', name: 'Zamtel', src: '/payments/zamtel.svg' },
-]
+function isRemoteSrc(src) {
+  return /^https?:\/\//i.test(String(src || ''))
+}
 
-export default function ProviderLogos({ size = 44 }) {
-  const s = Number(size) || 44
+export function ProviderLogoImage({ providerKey, size = 32, className = '' }) {
+  const [src, setSrc] = useState(() => getPaymentProviderLogoSrc(providerKey))
+  const providers = getPaymentProvidersWithLogos()
+  const p = providers.find((x) => x.key === providerKey) || providers[0]
+  const displaySrc = src || p?.src
+  if (!displaySrc) return null
+
+  const s = Number(size) || 32
+  const alt = `${p?.name || providerKey} logo`
+  const wrapClass = `rounded-lg overflow-hidden bg-white flex-shrink-0 ${className}`.trim()
+
+  const tryFallback = () => {
+    const svg = `/payments/${providerKey}.svg`
+    if (displaySrc !== svg && isAllowedPaymentLogoUrl(svg)) setSrc(svg)
+  }
+
+  if (isRemoteSrc(displaySrc)) {
+    return (
+      <div className={wrapClass} style={{ width: s, height: s }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={displaySrc}
+          alt={alt}
+          width={s}
+          height={s}
+          className="object-contain w-full h-full"
+          loading="lazy"
+          onError={tryFallback}
+        />
+      </div>
+    )
+  }
+
   return (
-    <div className="flex items-center gap-3">
-      {PROVIDERS.map((p) => (
+    <div className={wrapClass}>
+      <Image
+        src={displaySrc}
+        alt={alt}
+        width={s}
+        height={s}
+        className="object-contain"
+        onError={tryFallback}
+      />
+    </div>
+  )
+}
+
+export default function ProviderLogos({ size = 44, showLabels = true }) {
+  const providers = getPaymentProvidersWithLogos()
+  const s = Number(size) || 44
+
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      {providers.map((p) => (
         <div key={p.key} className="flex items-center gap-2">
-          <div className="rounded-lg overflow-hidden bg-white">
-            <Image src={p.src} alt={`${p.name} logo`} width={s} height={s} />
-          </div>
-          <div className="text-sm text-royalPurple-text2">{p.name}</div>
+          <ProviderLogoImage providerKey={p.key} size={s} />
+          {showLabels ? <div className="text-sm text-royalPurple-text2">{p.name}</div> : null}
         </div>
       ))}
     </div>

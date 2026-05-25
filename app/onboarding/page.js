@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import ProviderLogos from '@/components/payments/ProviderLogos'
+import ProviderLogos, { ProviderLogoImage } from '@/components/payments/ProviderLogos'
 import { Eye, EyeOff } from 'lucide-react'
 
 function parsePlanParam(searchParams) {
@@ -522,7 +522,7 @@ function OnboardingPageContent() {
                     onClick={() => setProvider('mtn')}
                     className={`provider-pill zsms-hover-raise ${provider === 'mtn' ? 'provider-pill-active' : ''}`}
                   >
-                    <span className="provider-dot provider-dot-mtn">M</span>
+                    <ProviderLogoImage providerKey="mtn" size={28} />
                     <span className="step-label">MTN Zambia</span>
                   </button>
                   <button
@@ -530,7 +530,7 @@ function OnboardingPageContent() {
                     onClick={() => setProvider('airtel')}
                     className={`provider-pill zsms-hover-raise ${provider === 'airtel' ? 'provider-pill-active' : ''}`}
                   >
-                    <span className="provider-dot provider-dot-airtel">A</span>
+                    <ProviderLogoImage providerKey="airtel" size={28} />
                     <span className="step-label">Airtel Zambia</span>
                   </button>
                   <button
@@ -538,7 +538,7 @@ function OnboardingPageContent() {
                     onClick={() => setProvider('zamtel')}
                     className={`provider-pill zsms-hover-raise ${provider === 'zamtel' ? 'provider-pill-active' : ''}`}
                   >
-                    <span className="provider-dot provider-dot-zamtel">Z</span>
+                    <ProviderLogoImage providerKey="zamtel" size={28} />
                     <span className="step-label">Zamtel</span>
                   </button>
                 </div>
