@@ -4,17 +4,17 @@ import crypto from 'crypto'
 import prisma from '@/lib/prisma'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { verifyOnboardingToken } from '@/lib/middleware/onboardingAuth'
+import {
+  extractGatewayReferenceId,
+  getLipilaConfig,
+  LIPILA_PROVIDER_PAYMENT_TYPES,
+  lipilaCreateMobileMoneyCollection,
+} from '@/lib/payments/lipila'
 
 const PLAN_PRICING = {
   basic: 500,
   standard: 800,
   premium: 1200,
-}
-
-const PAYMENT_OPTION_BY_PROVIDER = {
-  airtel: { label: 'Airtel Zambia', paymentType: 'AirtelMoney' },
-  mtn: { label: 'MTN Zambia', paymentType: 'MTNMoney' },
-  zamtel: { label: 'Zamtel', paymentType: 'ZamtelMoney' },
 }
 
 function normalizeZambiaMsisdn(value) {
@@ -24,22 +24,6 @@ function normalizeZambiaMsisdn(value) {
   if (digits.length === 9) return `260${digits}`
   if (digits.length === 10 && digits.startsWith('0')) return `260${digits.slice(1)}`
   return digits
-}
-
-function extractGatewayReferenceId(payload) {
-  const p = payload || {}
-  const v = String(
-    p.referenceId ||
-      p.reference_id ||
-      p?.data?.referenceId ||
-      p?.data?.reference_id ||
-      p?.transactionId ||
-      p?.transaction_id ||
-      p?.data?.transactionId ||
-      p?.data?.transaction_id ||
-      ''
-  ).trim()
-  return v || null
 }
 
 export async function POST(request) {
@@ -57,13 +41,16 @@ export async function POST(request) {
 
   const reg = await prisma.schoolRegistration.findUnique({
     where: { id: registrationId },
-    select: { id: true, email: true, isVerified: true, plan: true },
+    select: { id: true, email: true, isVerified: true, plan: true, paymentStatus: true },
   })
   if (!reg) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   if (!reg.isVerified)
     return NextResponse.json({ error: 'Verify your email first' }, { status: 401 })
   if (String(reg.plan || '').toLowerCase() === 'trial') {
     return NextResponse.json({ error: 'Payment is not required for free trial' }, { status: 400 })
+  }
+  if (String(reg.paymentStatus || '').toLowerCase() === 'paid') {
+    return NextResponse.json({ error: 'Payment already completed' }, { status: 400 })
   }
 
   const body = await request.json().catch(() => ({}))
@@ -78,12 +65,23 @@ export async function POST(request) {
   const months = Number.isFinite(monthsRaw) ? Math.trunc(monthsRaw) : 1
 
   if (!PLAN_PRICING[plan]) return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
-  if (!PAYMENT_OPTION_BY_PROVIDER[provider]) {
+  if (!LIPILA_PROVIDER_PAYMENT_TYPES[provider]) {
     return NextResponse.json({ error: 'Invalid provider' }, { status: 400 })
   }
   if (!accountNumber) return NextResponse.json({ error: 'Invalid accountNumber' }, { status: 400 })
   if (months < 1 || months > 12) {
     return NextResponse.json({ error: 'Invalid months (1-12)' }, { status: 400 })
+  }
+
+  const { apiKey } = getLipilaConfig()
+  if (!apiKey) {
+    return NextResponse.json(
+      {
+        error:
+          'Mobile money payments are not configured. Set LIPILA_API_KEY in server environment.',
+      },
+      { status: 503 }
+    )
   }
 
   const amount = PLAN_PRICING[plan] * months
@@ -107,38 +105,9 @@ export async function POST(request) {
     accountNumber,
     currency: 'ZMW',
     backUrl: `${origin}/onboarding?step=plan`,
-    redirectUrl: `${origin}/onboarding?step=setup`,
+    redirectUrl: `${origin}/onboarding?step=plan&paymentReturn=1`,
     email: reg.email,
-    paymentType: PAYMENT_OPTION_BY_PROVIDER[provider].paymentType,
-  }
-
-  const apiKey = String(process.env.LIPILA_API_KEY || process.env.LIPILA_SECRET_KEY || '').trim()
-  const baseUrl = String(
-    process.env.LIPILA_BASE_URL ||
-      (process.env.NODE_ENV === 'production' ? 'https://blz.lipila.io' : 'https://api.lipila.dev')
-  ).trim()
-  const url = `${baseUrl.replace(/\/+$/, '')}/api/v1/collections/mobile-money`
-
-  if (!apiKey) {
-    await prisma.schoolRegistration.update({
-      where: { id: reg.id },
-      data: {
-        plan,
-        paymentStatus: 'paid',
-        paymentProvider: provider,
-        paymentReference: referenceId,
-      },
-    })
-    return NextResponse.json(
-      {
-        success: true,
-        provider: 'lipila',
-        referenceId,
-        placeholder: true,
-        data: { status: 'Paid', amount, accountNumber, currency: 'ZMW' },
-      },
-      { status: 200 }
-    )
+    paymentType: LIPILA_PROVIDER_PAYMENT_TYPES[provider],
   }
 
   await prisma.schoolRegistration.update({
@@ -155,62 +124,32 @@ export async function POST(request) {
   try {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 25_000)
-    const response = await fetch(url, {
-      method: 'POST',
+    const result = await lipilaCreateMobileMoneyCollection(lipilaPayload, {
       signal: controller.signal,
-      headers: {
-        accept: 'application/json',
-        'x-api-key': apiKey,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(lipilaPayload),
     })
     clearTimeout(timeout)
-    const contentType = String(response.headers.get('content-type') || '')
-    const raw = await response.text().catch(() => '')
-    let data = {}
-    if (raw && contentType.includes('application/json')) {
-      data = JSON.parse(raw)
-    } else if (raw) {
-      try {
-        data = JSON.parse(raw)
-      } catch {
-        data = { raw }
-      }
-    }
-    if (!response.ok) {
+
+    if (!result.ok) {
       await prisma.schoolRegistration.update({
         where: { id: reg.id },
         data: { paymentStatus: 'unpaid' },
       })
-      const rawMessage =
-        typeof data?.message === 'string'
-          ? data.message
-          : typeof data?.error === 'string'
-            ? data.error
-            : typeof data?.raw === 'string'
-              ? data.raw
-              : ''
-
+      const rawMessage = String(result.error || '')
       const looksLikeBotGate =
-        typeof rawMessage === 'string' &&
-        (rawMessage.includes('Performing security verification') ||
-          rawMessage.includes('Just a moment') ||
-          rawMessage.includes('<html') ||
-          rawMessage.includes('<!doctype html'))
-
+        rawMessage.includes('Performing security verification') ||
+        rawMessage.includes('Just a moment') ||
+        rawMessage.includes('<html') ||
+        rawMessage.includes('<!doctype html')
       const msg = looksLikeBotGate
         ? 'Payment gateway is blocked by security verification. Disable bot protection for the gateway endpoint or whitelist server-to-server requests.'
-        : typeof rawMessage === 'string' && rawMessage.trim()
-          ? rawMessage.trim()
-          : 'Payment request failed'
-
+        : rawMessage.trim() || 'Payment request failed'
       return NextResponse.json(
-        { error: msg, upstreamStatus: response.status, upstreamContentType: contentType },
-        { status: 502 }
+        { error: msg, upstreamStatus: result.status || 502 },
+        { status: result.status === 0 ? 502 : 502 }
       )
     }
 
+    const data = result.data || {}
     const gatewayReferenceId = extractGatewayReferenceId(data)
     if (gatewayReferenceId && gatewayReferenceId !== referenceId) {
       await prisma.schoolRegistration.update({
@@ -219,8 +158,19 @@ export async function POST(request) {
       })
     }
 
+    const lipilaStatus = String(data?.status || '').trim()
     return NextResponse.json(
-      { success: true, provider: 'lipila', referenceId: gatewayReferenceId || referenceId, data },
+      {
+        success: true,
+        provider: 'lipila',
+        referenceId: gatewayReferenceId || referenceId,
+        lipilaStatus,
+        message:
+          lipilaStatus.toLowerCase() === 'pending'
+            ? 'Check your phone and enter your mobile money PIN to approve the payment.'
+            : data?.message || 'Payment request sent',
+        data,
+      },
       { status: 200 }
     )
   } catch (error) {

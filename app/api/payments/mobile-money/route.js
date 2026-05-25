@@ -4,12 +4,14 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 
+import { LIPILA_PROVIDER_PAYMENT_TYPES } from '@/lib/payments/lipila'
+
 const PAYMENT_OPTION_BY_PROVIDER = {
-  airtel: { label: 'Airtel Zambia', paymentType: 'AirtelMoney' },
-  airtel_zambia: { label: 'Airtel Zambia', paymentType: 'AirtelMoney' },
-  mtn: { label: 'MTN_Zambia', paymentType: 'MTNMoney' },
-  mtn_zambia: { label: 'MTN_Zambia', paymentType: 'MTNMoney' },
-  zamtel: { label: 'Zamtel', paymentType: 'ZamtelMoney' },
+  airtel: { label: 'Airtel Zambia', paymentType: LIPILA_PROVIDER_PAYMENT_TYPES.airtel },
+  airtel_zambia: { label: 'Airtel Zambia', paymentType: LIPILA_PROVIDER_PAYMENT_TYPES.airtel },
+  mtn: { label: 'MTN Zambia', paymentType: LIPILA_PROVIDER_PAYMENT_TYPES.mtn },
+  mtn_zambia: { label: 'MTN Zambia', paymentType: LIPILA_PROVIDER_PAYMENT_TYPES.mtn },
+  zamtel: { label: 'Zamtel', paymentType: LIPILA_PROVIDER_PAYMENT_TYPES.zamtel },
 }
 
 function normalizeZambiaMsisdn(value) {

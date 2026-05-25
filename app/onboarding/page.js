@@ -36,7 +36,7 @@ function OnboardingPageContent() {
   const [accountNumber, setAccountNumber] = useState('')
   const [months, setMonths] = useState(1)
   const [paying, setPaying] = useState(false)
-  const [claimReferenceId, setClaimReferenceId] = useState('')
+  const [paymentAwaitingPin, setPaymentAwaitingPin] = useState(false)
 
   const [schoolName, setSchoolName] = useState('')
   const [subdomain, setSubdomain] = useState('')
@@ -58,17 +58,16 @@ function OnboardingPageContent() {
     [schoolName, subdomain, adminName]
   )
 
-  const refreshStatus = async () => {
+  const refreshStatus = async ({ syncPayment = false } = {}) => {
     setLoadingStatus(true)
     try {
-      const res = await fetch('/api/onboarding/status', {
+      const qs = syncPayment ? '?syncPayment=1' : ''
+      const res = await fetch(`/api/onboarding/status${qs}`, {
         credentials: 'include',
         cache: 'no-store',
       })
       const json = await res.json().catch(() => ({}))
       setStatus(json)
-      const currentReference = String(json?.registration?.paymentReference || '').trim()
-      if (currentReference) setClaimReferenceId((s) => (s ? s : currentReference))
       const currentPlan = String(json?.registration?.plan || '')
         .trim()
         .toLowerCase()
@@ -86,7 +85,8 @@ function OnboardingPageContent() {
   }
 
   useEffect(() => {
-    refreshStatus()
+    const paymentReturn = searchParams.get('paymentReturn') === '1'
+    refreshStatus({ syncPayment: paymentReturn })
   }, [])
 
   useEffect(() => {
@@ -220,42 +220,16 @@ function OnboardingPageContent() {
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json?.error || 'Payment request failed')
-      const ref = String(json?.referenceId || '').trim()
-      if (ref) setClaimReferenceId(ref)
-      toast.success('Payment initiated')
-      await refreshStatus()
+      setPaymentAwaitingPin(true)
+      toast.success(
+        json?.message || 'Check your phone and enter your mobile money PIN to approve the payment.'
+      )
+      await refreshStatus({ syncPayment: true })
     } catch (e) {
       toast.error(e?.message || 'Payment request failed')
+      setPaymentAwaitingPin(false)
     } finally {
       setPaying(false)
-    }
-  }
-
-  const confirmPayment = async () => {
-    const ref = String(claimReferenceId || '').trim()
-    if (!ref) {
-      toast.error('Enter the payment reference ID from the SMS')
-      return
-    }
-    setLoadingStatus(true)
-    try {
-      const res = await fetch(
-        `/api/onboarding/status?claimReferenceId=${encodeURIComponent(ref)}&claimStatus=paid`,
-        { credentials: 'include', cache: 'no-store' }
-      )
-      const json = await res.json().catch(() => ({}))
-      setStatus(json)
-      if (String(json?.registration?.paymentStatus || '').toLowerCase() === 'paid') {
-        toast.success('Payment confirmed — create your school portal next')
-        window.location.href = '/onboarding?step=setup'
-        return
-      } else {
-        toast.error('Payment is still pending. Click Refresh Status or try again.')
-      }
-    } catch (e) {
-      toast.error(e?.message || 'Failed to confirm payment')
-    } finally {
-      setLoadingStatus(false)
     }
   }
 
@@ -284,6 +258,12 @@ function OnboardingPageContent() {
 
   const completeSetup = async () => {
     if (!canSetup) return
+    if (!paid) {
+      toast.error(
+        'Confirm payment via mobile money PIN, or choose the free trial, before creating your portal.'
+      )
+      return
+    }
     setSaving(true)
     try {
       const res = await fetch('/api/onboarding/complete', {
@@ -304,10 +284,6 @@ function OnboardingPageContent() {
   }
 
   const verified = Boolean(status?.registration?.isVerified)
-  const stepParam = String(searchParams.get('step') || '')
-    .trim()
-    .toLowerCase()
-  const forceSetupStep = stepParam === 'setup'
   const selectedPlanIsTrial =
     String(plan || '')
       .trim()
@@ -316,11 +292,25 @@ function OnboardingPageContent() {
     String(status?.registration?.plan || '')
       .trim()
       .toLowerCase() === 'trial'
+  const paymentStatus = String(status?.registration?.paymentStatus || '').toLowerCase()
   const paid =
-    forceSetupStep ||
+    Boolean(status?.canCompleteSetup) ||
     (verified && registrationPlanIsTrial) ||
-    String(status?.registration?.paymentStatus || '').toLowerCase() === 'paid'
+    paymentStatus === 'paid'
+  const paymentPending = paymentStatus === 'pending' && !registrationPlanIsTrial
   const monthlyPrice = plan === 'basic' ? 500 : plan === 'premium' ? 1200 : 800
+
+  useEffect(() => {
+    if (!verified || registrationPlanIsTrial) return
+    if (paymentStatus !== 'pending') {
+      if (paymentStatus === 'paid') setPaymentAwaitingPin(false)
+      return
+    }
+    const interval = setInterval(() => {
+      refreshStatus({ syncPayment: true })
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [verified, registrationPlanIsTrial, paymentStatus, status?.registration?.paymentReference])
   const totalAmount = monthlyPrice * (Number(months) || 1)
 
   return (
@@ -598,41 +588,49 @@ function OnboardingPageContent() {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  <Button onClick={pay} disabled={!canPay || paying} className="zsms-hover-raise">
-                    {paying ? 'Processing...' : 'Pay Now'}
+                  <Button
+                    onClick={pay}
+                    disabled={!canPay || paying || paymentPending}
+                    className="zsms-hover-raise"
+                  >
+                    {paying
+                      ? 'Sending prompt...'
+                      : paymentPending
+                        ? 'Awaiting PIN on phone'
+                        : 'Pay Now'}
                   </Button>
-                  <Button variant="outline" onClick={refreshStatus} className="zsms-hover-raise">
-                    Refresh Status
+                  <Button
+                    variant="outline"
+                    onClick={() => refreshStatus({ syncPayment: true })}
+                    className="zsms-hover-raise"
+                  >
+                    Check payment status
                   </Button>
                 </div>
 
-                {String(status?.registration?.paymentStatus || '').toLowerCase() === 'pending' ? (
-                  <div className="space-y-3">
-                    <div className="onboard-subtitle">
-                      Payment is pending. If you received the success SMS but it still shows
-                      pending, paste the Reference ID and confirm.
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div className="space-y-2">
-                        <Label>Payment Reference ID</Label>
-                        <Input
-                          value={claimReferenceId}
-                          onChange={(e) => setClaimReferenceId(e.target.value)}
-                          placeholder="e.g. LPLXC-20260421-..."
-                        />
-                      </div>
-                      <div className="flex items-end">
-                        <Button
-                          variant="outline"
-                          onClick={confirmPayment}
-                          disabled={loadingStatus || !String(claimReferenceId || '').trim()}
-                          className="zsms-hover-raise"
-                        >
-                          Confirm Payment
-                        </Button>
-                      </div>
-                    </div>
+                {paymentPending || paymentAwaitingPin ? (
+                  <div className="rounded-xl border border-royalPurple-border/60 bg-royalPurple-deep/40 p-4 space-y-2">
+                    <p className="text-sm text-royalPurple-text1 font-medium">
+                      Approve payment on your phone
+                    </p>
+                    <p className="text-sm text-royalPurple-text2">
+                      A mobile money prompt was sent to {accountNumber || 'your number'}. Enter your
+                      PIN on the phone to confirm. This page updates automatically once Lipila
+                      confirms payment — you cannot create your portal until then.
+                    </p>
+                    {status?.registration?.paymentReference ? (
+                      <p className="text-xs text-royalPurple-text3">
+                        Reference: {status.registration.paymentReference}
+                      </p>
+                    ) : null}
                   </div>
+                ) : null}
+
+                {paymentStatus === 'failed' ? (
+                  <p className="text-sm text-red-400">
+                    Payment failed or was cancelled. Try Pay Now again with the correct number and
+                    PIN.
+                  </p>
                 ) : null}
               </div>
             </div>
