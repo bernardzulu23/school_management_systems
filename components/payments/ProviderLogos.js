@@ -3,9 +3,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import {
-  getPaymentProviderLogoSrc,
+  getPaymentProviderLogoCandidates,
   getPaymentProvidersWithLogos,
-  isAllowedPaymentLogoUrl,
 } from '@/lib/payments/provider-logos'
 
 function isRemoteSrc(src) {
@@ -13,19 +12,21 @@ function isRemoteSrc(src) {
 }
 
 export function ProviderLogoImage({ providerKey, size = 32, className = '' }) {
-  const [src, setSrc] = useState(() => getPaymentProviderLogoSrc(providerKey))
+  const candidates = getPaymentProviderLogoCandidates(providerKey)
+  const [candidateIndex, setCandidateIndex] = useState(0)
   const providers = getPaymentProvidersWithLogos()
   const p = providers.find((x) => x.key === providerKey) || providers[0]
-  const displaySrc = src || p?.src
+  const displaySrc = candidates[candidateIndex]
   if (!displaySrc) return null
 
   const s = Number(size) || 32
-  const alt = `${p?.name || providerKey} logo`
+  const alt = p?.name || providerKey
   const wrapClass = `rounded-lg overflow-hidden bg-white flex-shrink-0 ${className}`.trim()
 
   const tryFallback = () => {
-    const svg = `/payments/${providerKey}.svg`
-    if (displaySrc !== svg && isAllowedPaymentLogoUrl(svg)) setSrc(svg)
+    if (candidateIndex < candidates.length - 1) {
+      setCandidateIndex((i) => i + 1)
+    }
   }
 
   if (isRemoteSrc(displaySrc)) {
@@ -48,6 +49,7 @@ export function ProviderLogoImage({ providerKey, size = 32, className = '' }) {
   return (
     <div className={wrapClass}>
       <Image
+        key={displaySrc}
         src={displaySrc}
         alt={alt}
         width={s}

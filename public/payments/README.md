@@ -14,7 +14,7 @@ Use the provider key as the filename:
 
 **Recommended:** PNG or JPEG with a transparent or white background, at least **128×128 px**.
 
-The app prefers `.png` first, then falls back to `.svg` if PNG is missing.
+The app tries extensions in order: **png → jpg → jpeg → webp → svg** (first file that loads wins). Your current files (`mtn.jpg`, `airtel.jpg`, `zamtel.png`) work without renaming.
 
 ## Optional: logo URLs in `.env`
 
