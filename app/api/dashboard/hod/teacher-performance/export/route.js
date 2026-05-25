@@ -3,7 +3,7 @@ import ExcelJS from 'exceljs'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { getHodTeacherPerformance } from '@/lib/analytics/hodTeacherPerformance'
 
 function safeString(v) {
@@ -20,7 +20,9 @@ export const GET = withErrorHandler(async function GET(request) {
     throw new ApiError('Forbidden', 403)
   }
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const userId = String(auth.user?.id || '').trim()

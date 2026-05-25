@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
 import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
@@ -38,7 +38,9 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const allocation = await prisma.departmentAllocation.findFirst({
@@ -64,7 +66,9 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const allocation = await prisma.departmentAllocation.findFirst({

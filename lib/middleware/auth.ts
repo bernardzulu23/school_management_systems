@@ -39,6 +39,32 @@ export async function authMiddleware(request: Request) {
   try {
     const { payload } = await jose.jwtVerify(token, getSecretKey())
     const user = payload as AppUser
+
+    if (!user?.id || !user?.schoolId) {
+      return {
+        isAuthenticated: false as const,
+        user: undefined,
+        response: secureJson(
+          { error: 'Unauthorized: invalid session', code: 'INVALID_SESSION' },
+          { status: 401 },
+          request
+        ),
+      }
+    }
+
+    const headerSchoolId = request.headers.get('x-school-id')
+    if (headerSchoolId && String(headerSchoolId) !== String(user.schoolId)) {
+      return {
+        isAuthenticated: false as const,
+        user: undefined,
+        response: secureJson(
+          { error: 'Forbidden: school context mismatch', code: 'TENANT_HEADER_MISMATCH' },
+          { status: 403 },
+          request
+        ),
+      }
+    }
+
     return { isAuthenticated: true as const, user }
   } catch {
     return {

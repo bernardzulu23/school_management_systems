@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 
 const ADMIN_ROLES = new Set(['headteacher', 'administrator', 'admin', 'superadmin'])
@@ -28,11 +28,13 @@ function normalizeRole(value) {
 }
 
 export async function GET(request) {
-  const schoolId = await getSchoolIdFromRequest(request)
-  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
-
   const user = await getAuthUser(request)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const tenant = await resolveAuthenticatedSchoolId(request, user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const userRole = normalizeRole(user.role)
 

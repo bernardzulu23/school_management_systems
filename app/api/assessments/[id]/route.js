@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
@@ -9,7 +9,9 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const assessment = await prisma.assessment.findFirst({
@@ -30,7 +32,9 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
     throw new ApiError('Forbidden', 403)
   }
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const data = await request.json().catch(() => ({}))
@@ -83,7 +87,9 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
     throw new ApiError('Forbidden', 403)
   }
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const deleted = await prisma.assessment.deleteMany({

@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 
 export const GET = withErrorHandler(async function GET(request) {
@@ -14,7 +14,9 @@ export const GET = withErrorHandler(async function GET(request) {
     throw new ApiError('Forbidden', 403)
   }
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const notifications = await prisma.allocationNotification.findMany({

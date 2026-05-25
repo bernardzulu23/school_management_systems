@@ -11,6 +11,7 @@ import {
   pushSmsLog,
   sendAfricasTalkingSms,
 } from '@/lib/sms'
+import { clearAuthSessionCookies } from '@/lib/security/cookies'
 
 const RESERVED = new Set([
   'www',
@@ -185,5 +186,6 @@ export async function POST(request) {
     loginUrl,
   })
   response.cookies.set('onboarding_token', '', { maxAge: 0, path: '/' })
+  clearAuthSessionCookies(response, request)
   return response
 }

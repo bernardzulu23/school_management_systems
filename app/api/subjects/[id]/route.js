@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 
 export async function GET(request, { params }) {
   try {
@@ -13,7 +13,9 @@ export async function GET(request, { params }) {
 
     const { id } = await params
 
-    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+    if (!tenant.ok) return tenant.response
+    const schoolId = tenant.schoolId
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
     const subject = await prisma.subject.findFirst({
@@ -41,7 +43,9 @@ export async function PUT(request, { params }) {
     const { id } = await params
     const data = await request.json()
 
-    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+    if (!tenant.ok) return tenant.response
+    const schoolId = tenant.schoolId
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
     const exists = await prisma.subject.findFirst({ where: { id, schoolId }, select: { id: true } })
@@ -80,7 +84,9 @@ export async function DELETE(request, { params }) {
 
     const { id } = await params
 
-    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+    if (!tenant.ok) return tenant.response
+    const schoolId = tenant.schoolId
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
     const deleted = await prisma.subject.deleteMany({

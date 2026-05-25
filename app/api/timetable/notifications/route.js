@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 // app/api/timetable/notifications/route.js
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 
 // GET — fetch all timetable notifications for the logged-in user
@@ -11,7 +11,9 @@ export async function GET(req) {
   if (!auth.isAuthenticated) return auth.response
 
   const user = auth.user
-  const schoolId = user.schoolId || (await getSchoolIdFromRequest(req))
+  const tenant = await resolveAuthenticatedSchoolId(req, user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const isAdmin = roleCheck(user, ['ADMIN'])
@@ -50,7 +52,9 @@ export async function POST(req) {
   if (!auth.isAuthenticated) return auth.response
 
   const user = auth.user
-  const schoolId = user.schoolId || (await getSchoolIdFromRequest(req))
+  const tenant = await resolveAuthenticatedSchoolId(req, user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const { id, all = false } = await req.json()

@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
 import { staffRoleDeniedMessage } from '@/lib/auth/roles'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { validateFormLevelForSBA, validateZambianContext } from '@/lib/ecz/ecz-compliance'
 import { generateEczRubricCriteria, criteriaToPrismaCreate } from '@/lib/ecz/ecz-rubric-builder'
 import { withSecureApi } from '@/lib/middleware/secureApi'
@@ -16,7 +16,9 @@ export const POST = withSecureApi(async function POST(request) {
     return NextResponse.json({ error: staffRoleDeniedMessage(auth.user?.role) }, { status: 403 })
   }
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const body = await request.json().catch(() => ({}))
@@ -128,7 +130,9 @@ export const GET = withSecureApi(async function GET(request) {
     return NextResponse.json({ error: staffRoleDeniedMessage(auth.user?.role) }, { status: 403 })
   }
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const { searchParams } = new URL(request.url)

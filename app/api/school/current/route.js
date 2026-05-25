@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolvePublicSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { getSubscriptionState } from '@/lib/billing/subscription'
 
 export async function GET(request) {
@@ -11,7 +11,7 @@ export async function GET(request) {
 
     let schoolId = null
     try {
-      schoolId = await getSchoolIdFromRequest(request, explicitSubdomain)
+      schoolId = await resolvePublicSchoolId(request, explicitSubdomain)
     } catch {
       return NextResponse.json({ school: null })
     }

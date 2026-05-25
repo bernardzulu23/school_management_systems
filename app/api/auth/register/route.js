@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 import { registerSchema, validateRequest, sanitizeOutput } from '@/lib/middleware/inputValidation'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { parseDateInput } from '@/lib/utils/formHelpers'
 import {
   isPilotEmail,
@@ -46,7 +46,9 @@ export const POST = withErrorHandler(async (request) => {
     .toLowerCase()
 
   // 2. Resolve schoolId
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
 
   console.log(`[REGISTER] email: ${email}, role: ${role}, resolvedSchoolId: ${schoolId}`)
 

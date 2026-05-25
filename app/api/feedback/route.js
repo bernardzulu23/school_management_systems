@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 
 /** GET /api/feedback — List feedback (admin/headteacher only) */
 export async function GET(request) {
@@ -13,7 +13,9 @@ export async function GET(request) {
     return NextResponse.json({ error: 'Only administrators can view feedback' }, { status: 403 })
   }
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) {
     return NextResponse.json({ error: 'School context could not be determined' }, { status: 400 })
   }
@@ -40,7 +42,9 @@ export async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) {
     return NextResponse.json({ error: 'School context could not be determined' }, { status: 400 })
   }
@@ -97,7 +101,9 @@ export async function PATCH(request) {
     )
   }
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) {
     return NextResponse.json({ error: 'School context could not be determined' }, { status: 400 })
   }

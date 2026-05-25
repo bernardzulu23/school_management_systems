@@ -4,7 +4,7 @@ import path from 'path'
 import { mkdir, writeFile } from 'fs/promises'
 import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 
 const MAX_BYTES = 10 * 1024 * 1024
 const ALLOWED = {
@@ -17,7 +17,9 @@ export async function PUT(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const formData = await request.formData()

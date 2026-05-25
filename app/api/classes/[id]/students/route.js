@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 
 export async function GET(request, { params }) {
@@ -22,7 +22,9 @@ export async function GET(request, { params }) {
     const { searchParams } = new URL(request.url)
     const subject = searchParams.get('subject')
 
-    const schoolId = await getSchoolIdFromRequest(request)
+    const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+    if (!tenant.ok) return tenant.response
+    const schoolId = tenant.schoolId
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
     if (subject) {

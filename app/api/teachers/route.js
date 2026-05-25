@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma'
 import { findTeachersByDepartment } from '@/lib/db/queries'
 import bcrypt from 'bcryptjs'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 
 export const GET = withErrorHandler(async function GET(request) {
@@ -19,7 +19,9 @@ export const GET = withErrorHandler(async function GET(request) {
   const page = parseInt(searchParams.get('page')) || 1
   const limit = parseInt(searchParams.get('limit')) || 20
 
-  const schoolId = await getSchoolIdFromRequest(request)
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   const { teachers, total } = await findTeachersByDepartment(schoolId, department, page, limit)
 
   return NextResponse.json({
@@ -41,7 +43,9 @@ export const PUT = withErrorHandler(async function PUT(request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const schoolId = await getSchoolIdFromRequest(request)
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const data = await request.json()
@@ -111,7 +115,9 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const schoolId = await getSchoolIdFromRequest(request)
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const { searchParams } = new URL(request.url)

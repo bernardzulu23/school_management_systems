@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolvePublicSchoolId } from '@/lib/tenant/resolveSchoolId'
 import {
   buildPasswordResetConfirmationSmsMessage,
   getBaseUrlFromRequest,
@@ -36,7 +36,7 @@ export async function POST(request, { params }) {
       return NextResponse.json({ error: 'Password must be at least 6 characters' }, { status: 400 })
     }
 
-    const schoolId = await getSchoolIdFromRequest(request)
+    const schoolId = await resolvePublicSchoolId(request)
 
     const resetTokenHash = crypto.createHash('sha256').update(token).digest('hex')
 

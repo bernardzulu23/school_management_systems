@@ -10,7 +10,7 @@ import bcrypt from 'bcryptjs'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { studentSchema, validateRequest, sanitizeOutput } from '@/lib/middleware/inputValidation'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 
 const normalizeYearGroup = (yearGroupRaw) => {
   const raw = String(yearGroupRaw || '').trim()
@@ -107,7 +107,9 @@ export const GET = withErrorHandler(async (request) => {
     throw new ApiError('Forbidden: Insufficient permissions', 403)
   }
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
   let resolvedClassName = className ? String(className) : null

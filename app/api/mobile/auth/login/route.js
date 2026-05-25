@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 import prisma from '@/lib/prisma'
 import { loginSchema, validateRequest, sanitizeOutput } from '@/lib/middleware/inputValidation'
 import { findUserByEmail } from '@/lib/db/queries'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolvePublicSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
@@ -46,7 +46,7 @@ export const POST = withSecureApi(async function POST(request) {
     })
     if (rateLimitResult.isLimited) return rateLimitResult.response
 
-    let schoolId = await getSchoolIdFromRequest(request, subdomain)
+    let schoolId = await resolvePublicSchoolId(request, subdomain)
     if (!schoolId) {
       const matches = await prisma.user.findMany({
         where: {

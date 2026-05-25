@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { loginSchema, validateRequest, sanitizeOutput } from '@/lib/middleware/inputValidation'
 import { findUserByEmail } from '@/lib/db/queries'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolvePublicSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { logAuditAction } from '@/lib/auditLog'
 import {
@@ -105,7 +105,7 @@ export const POST = withSecureApi(async function POST(request) {
     if (rateLimitResult.isLimited) return rateLimitResult.response
 
     // 2. Resolve school for multi-tenant lookup
-    let schoolId = await getSchoolIdFromRequest(request, subdomain)
+    let schoolId = await resolvePublicSchoolId(request, subdomain)
     console.log('[Login Debug] Resolved School ID:', schoolId)
 
     if (!schoolId) {

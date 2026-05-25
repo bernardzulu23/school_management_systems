@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,7 +20,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(req as any))
+  const tenant = await resolveAuthenticatedSchoolId(req as any, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) {
     return NextResponse.json({ error: 'Missing school context' }, { status: 400 })
   }

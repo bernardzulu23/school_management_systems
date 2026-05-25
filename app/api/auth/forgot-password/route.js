@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolvePublicSchoolId } from '@/lib/tenant/resolveSchoolId'
 import crypto from 'crypto'
 import { sendResetEmail } from '@/config/email'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
@@ -43,7 +43,7 @@ export const POST = withSecureApi(async function POST(request) {
     if (rl.isLimited) return rl.response
 
     // Resolve School
-    const schoolId = await getSchoolIdFromRequest(request, subdomain)
+    const schoolId = await resolvePublicSchoolId(request, subdomain)
     if (!schoolId) {
       return NextResponse.json({ error: 'School context required' }, { status: 400 })
     }

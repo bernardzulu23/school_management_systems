@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { deleteStudentCascade, deleteUserCascade } from '@/lib/db/deleteCascade'
 
 export async function GET(request, { params }) {
@@ -28,7 +28,9 @@ export async function GET(request, { params }) {
     const id = String(routeParams?.id || '').trim()
     if (!id) return NextResponse.json({ error: 'Student id is required' }, { status: 400 })
 
-    const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+    const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+    if (!tenant.ok) return tenant.response
+    const schoolId = tenant.schoolId
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
     const student = await prisma.student.findFirst({
@@ -82,7 +84,9 @@ export async function PUT(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod', 'TEACHER', 'teacher'])) {
@@ -230,7 +234,9 @@ export async function DELETE(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {

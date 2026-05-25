@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
-import { getSchoolIdFromRequest } from '@/lib/utils/getSchoolId'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { validateSubmissionDeadline, getDeadlineStatus } from '@/lib/ecz/ecz-compliance'
 import { generateECZCSV } from '@/lib/ecz/ecz-csv'
 import { withSecureApi } from '@/lib/middleware/secureApi'
@@ -15,7 +15,9 @@ export const POST = withSecureApi(async function POST(request) {
     return NextResponse.json({ error: 'Only Admin/HOD can submit to ECZ' }, { status: 403 })
   }
 
-  const schoolId = auth.user?.schoolId || (await getSchoolIdFromRequest(request))
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const body = await request.json().catch(() => ({}))
