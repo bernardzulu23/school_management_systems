@@ -332,7 +332,7 @@ function RegistrationContent() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-royalPurple-text2">Headteacher:</span>
-                  <span className="font-semibold">Brian B. Zulu</span>
+                  <span className="font-semibold">{user?.name || '—'}</span>
                 </div>
               </div>
             </Card>
