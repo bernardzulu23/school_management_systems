@@ -2,6 +2,41 @@
 
 All notable changes to the Zambian School Management System during the audit and optimization phases.
 
+## [Unreleased]
+
+### Added (PRD Task 8 — Documentation system)
+
+- **`docs/README.md`** — documentation index for all guides.
+- **`docs/SETUP.md`** — 15-minute local setup (Next.js 16, Prisma, seeds).
+- **`docs/API_ROUTES.md`** — auto-generated API reference (`npm run docs:api-routes`).
+- **`docs/PHASE1_CHECKLIST.md`** — gate before Phase 2.
+- **`docs/PHASE2_ROADMAP.md`** — Phase 2 priorities and task order.
+- **`scripts/generate-api-routes-doc.js`** — scans `app/api/**/route.*` for methods and paths.
+
+### Changed (PRD Task 8)
+
+- **`docs/DEVELOPER_GUIDE.md`** — expanded: architecture, API/AI/SMS templates, migrations, common bugs, deployment.
+- **`package.json`** — `docs:api-routes` script.
+
+### Added (post–Task 7 fixes)
+
+- **Billing upgrade flow** — clickable plan cards with prices, `SubscriptionUpgradePanel`, `POST /api/billing/subscription-payment`, `SchoolPlanPayment` model.
+- **AI model fallback** — `GROQ_FALLBACK_MODELS` in `lib/ai/client.js`.
+- **CSP `worker-src`** — blob workers allowed for ECZ/guidelines UI.
+
+### Fixed
+
+- **Next.js version** — `package.json` pinned to `next@16.2.4` (was incorrectly resolving to 9.x).
+- **Lesson plan Word export** — clearer errors; binary response handling.
+- **ECZ/SBA 500** — schema-missing hints; improved seed fetch errors.
+- **ESLint pre-commit** — `@babel/parser` dev dependency for husky/lint-staged.
+
+### Security
+
+- Plan payments activate school `plan` + `planExpiresAt` only via Lipila callback (`lib/billing/activate-plan-payment.js`).
+
+---
+
 ## [2.2.0] - 2026-05-25
 
 ### Added (PRD Task 7 — QR attendance)

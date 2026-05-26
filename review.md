@@ -296,24 +296,31 @@ See `docs/TESTING.md`, `CODE_QUALITY.md`, `PERFORMANCE.md`, `SECURITY_AUDIT.md`.
 
 ## 11. Documentation map
 
-| Document                                  | Purpose                                                 |
-| ----------------------------------------- | ------------------------------------------------------- |
-| `README.md`                               | Primary technical reference, API/page catalogs          |
-| `review.md`                               | **This file** — holistic project review                 |
-| `CAPABILITIES.md`                         | Feature marketing-style capability list                 |
-| `CHANGELOG.md`                            | Release notes (through 2.2.0 PRD tasks)                 |
-| `docs/TESTING.md`                         | Vitest/Jest commands, mocks, coverage targets           |
-| `docs/AI_GUIDE.md`                        | Groq AI layer, schemas, adding features                 |
-| `docs/ECZ_COMPLIANCE.md`                  | ECZ SBA rules, model mapping, seed data                 |
-| `docs/SMS_GUIDE.md`                       | Africa's Talking setup, templates, phone formats        |
-| `docs/QR_ATTENDANCE.md`                   | QR attendance flow, JWT security, teacher/student steps |
-| `API_DOCS.md`                             | API reference                                           |
-| `docs/doc/COMPLETE_FEATURES_OUTLINE.md`   | Role-by-role feature inventory                          |
-| `docs/doc/DEPLOY.md` / `VERCEL_DEPLOY.md` | Deployment                                              |
-| `docs/doc/SETUP_GUIDE.md`                 | Local setup                                             |
-| `TODO.md`                                 | Completed troubleshooting notes                         |
-| `memory/PRD.md`                           | Product context and backlog                             |
-| `public/payments/README.md`               | Mobile money logo assets                                |
+| Document                                  | Purpose                                                  |
+| ----------------------------------------- | -------------------------------------------------------- |
+| `docs/README.md`                          | **Documentation index** (start here)                     |
+| `docs/SETUP.md`                           | Local dev setup (~15 min)                                |
+| `docs/DEVELOPER_GUIDE.md`                 | Architecture, add API/AI/SMS, deploy                     |
+| `docs/ENVIRONMENT.md`                     | All environment variables                                |
+| `docs/API_ROUTES.md`                      | Auto-generated API reference (`npm run docs:api-routes`) |
+| `docs/PHASE1_CHECKLIST.md`                | Gate before Phase 2                                      |
+| `docs/PHASE2_ROADMAP.md`                  | Phase 2 priorities                                       |
+| `README.md`                               | Primary technical reference, API/page catalogs           |
+| `review.md`                               | **This file** — holistic project review                  |
+| `CAPABILITIES.md`                         | Feature marketing-style capability list                  |
+| `CHANGELOG.md`                            | Release notes (Tasks 1–8 + Unreleased)                   |
+| `docs/TESTING.md`                         | Vitest/Jest commands, mocks, coverage targets            |
+| `docs/AI_GUIDE.md`                        | Groq AI layer, schemas, adding features                  |
+| `docs/ECZ_COMPLIANCE.md`                  | ECZ SBA rules, model mapping, seed data                  |
+| `docs/SMS_GUIDE.md`                       | Africa's Talking setup, templates, phone formats         |
+| `docs/QR_ATTENDANCE.md`                   | QR attendance flow, JWT security, teacher/student steps  |
+| `API_DOCS.md`                             | Legacy API reference (prefer `docs/API_ROUTES.md`)       |
+| `docs/doc/COMPLETE_FEATURES_OUTLINE.md`   | Role-by-role feature inventory                           |
+| `docs/doc/DEPLOY.md` / `VERCEL_DEPLOY.md` | Deployment                                               |
+| `docs/doc/SETUP_GUIDE.md`                 | Legacy setup (prefer `docs/SETUP.md`)                    |
+| `TODO.md`                                 | Completed troubleshooting notes                          |
+| `memory/PRD.md`                           | Product context and backlog                              |
+| `public/payments/README.md`               | Mobile money logo assets                                 |
 
 **Stale docs warning:** `docs/doc/PROJECT_STRUCTURE.md` and parts of `docs/doc/README.md` still mention Laravel or Cloudflare-first deploys. Prefer this review and root `README.md` for current architecture.
 

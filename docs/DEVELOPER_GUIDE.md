@@ -1,146 +1,251 @@
 # ZSMS Developer Guide
 
-Practical notes for working on the Zambian School Management System codebase.
+Practical guide for contributing to the Zambian School Management System.
+
+---
+
+## Quick start (15 minutes)
+
+1. Clone the repo
+2. Copy `.env.example` → `.env.local` and fill required values ([ENVIRONMENT.md](./ENVIRONMENT.md))
+3. `npm install`
+4. `npx prisma generate && npx prisma db push`
+5. `npm run seed:ecz`
+6. `npm run dev` → [http://localhost:3000](http://localhost:3000)
+
+Full steps: [SETUP.md](./SETUP.md).
+
+---
+
+## Architecture overview
+
+### Multi-tenant subdomains
+
+- Each school has a **subdomain** (e.g. `ndake.bluepeacktechnologies.com`) or custom domain.
+- `proxy.js` / middleware resolves the host → `schoolId`.
+- Almost every API route must scope data with **`schoolId`** from `resolveAuthenticatedSchoolId()`.
+
+### Request flow (typical API route)
+
+```
+Browser → Next.js route handler
+       → authMiddleware (JWT cookie)
+       → resolveAuthenticatedSchoolId (tenant)
+       → requireFeature / subscriptionGate (plan)
+       → Prisma query (always filter by schoolId)
+       → NextResponse.json
+```
+
+### Auth
+
+- **JWT** in httpOnly cookie; secret `JWT_SECRET` (≥ 32 chars).
+- Refresh tokens use `JWT_REFRESH_SECRET` in production.
+- Roles: `teacher`, `HOD`, `headteacher`, `ADMIN`, `student`, platform admin (separate).
+
+### AI layer
+
+- **Groq only** via Vercel AI SDK (`ai` + `@ai-sdk/groq`).
+- Entry points: `lib/ai/client.js`, `lib/ai/groq-client.ts`.
+- Structured outputs: Zod schemas in `lib/ai/schemas.js` → `generateAIObject()`.
+- Streaming lesson plans: `createGroqTextEventStream()` → SSE for `useAIStream`.
+
+See [AI_GUIDE.md](./AI_GUIDE.md).
+
+### Payments & billing
+
+- **Lipila** mobile money: onboarding (`/api/onboarding/pay`) and school upgrades (`/api/billing/subscription-payment`).
+- Callback: `/api/payments/lipila/callback` → `lib/billing/activate-plan-payment.js`.
+- Plan prices: `lib/billing/plan-pricing.js`.
+
+---
+
+## Adding a new API route
+
+1. Create `app/api/your-feature/route.js` (or `[id]/route.js` for dynamic segments).
+2. Export HTTP handlers: `export const GET = ...`, `export const POST = ...`.
+3. Use `export const dynamic = 'force-dynamic'` for routes that touch DB/auth.
+4. Wrap with `withErrorHandler` and/or `withSecureApi` from `lib/middleware/`.
+
+### Template
+
+```javascript
+export const dynamic = 'force-dynamic'
+import { NextResponse } from 'next/server'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import prisma from '@/lib/prisma'
+import { logger, captureError } from '@/lib/utils/logger'
+
+export const POST = withErrorHandler(async function POST(request) {
+  const route = '/api/your-feature'
+  const start = Date.now()
+  const log = logger({ route })
+  log.request(request)
+
+  const auth = await authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+
+  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher'])) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) {
+    return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  }
+
+  const body = await request.json().catch(() => ({}))
+  // validate input...
+
+  try {
+    const result = await prisma.yourModel.create({
+      data: { schoolId /* ... */ },
+    })
+    log.response(201, Date.now() - start)
+    return NextResponse.json({ success: true, data: result }, { status: 201 })
+  } catch (error) {
+    captureError(error, { route, schoolId, userId: auth.user?.id })
+    log.response(500, Date.now() - start)
+    throw error
+  }
+})
+```
+
+### Checklist
+
+- [ ] Auth + role check
+- [ ] `schoolId` on every Prisma query
+- [ ] Input validation (Zod or explicit checks)
+- [ ] No secrets in logs
+- [ ] Regenerate [API_ROUTES.md](./API_ROUTES.md): `npm run docs:api-routes`
+
+---
+
+## Adding a new AI feature
+
+1. Define a **Zod schema** in `lib/ai/schemas.js`.
+2. Write **system + user prompts** (Zambian context, plain text if stored in DB).
+3. Call `generateAIObject(schema, system, userPrompt)` or `generateAIText` / `streamAIText`.
+4. Enforce plan + quota: `requireFeature(schoolId, 'feature-id')`, `checkAILimit(schoolId)`.
+5. Track usage: `trackAIUsage(schoolId, 'feature-id')`.
+6. Document in [AI_GUIDE.md](./AI_GUIDE.md).
+
+Model fallback is automatic in `lib/ai/client.js` (`GROQ_FALLBACK_MODELS`).
+
+---
+
+## Adding a new SMS template
+
+1. Add template string in `lib/sms/africastalking.js` → `SMS_TEMPLATES`.
+2. Send via `sendSMS({ to, template, vars })` or `sendAfricasTalkingSms` from `lib/sms.js`.
+3. Log with `pushSmsLog({ schoolId, event, ... })` where applicable.
+4. Document in [SMS_GUIDE.md](./SMS_GUIDE.md).
+
+---
+
+## Database migrations
+
+1. Edit `prisma/schema.prisma`.
+2. Local: `npx prisma db push` (prototyping) or `npx prisma migrate dev --name describe_change`.
+3. Production: `npx prisma migrate deploy` (Vercel build runs generate + migrate via `scripts/vercel-build.js`).
+4. Add seed data in `prisma/seeds/` and wire `package.json` script if needed.
+
+**School billing upgrades** use `SchoolPlanPayment` — ensure migrations are applied before `/api/billing/subscription-payment`.
+
+---
+
+## ECZ compliance rules
+
+All SBA/ECZ logic must follow [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md):
+
+- Form 4: **no SBA** — enforce in `lib/middleware/ecz-validation.js`.
+- Zambian context required for SBA tasks.
+- Term weights, 31 January submission deadline.
+- Reference data: `npm run seed:ecz`.
 
 ---
 
 ## How to add logging to a new API route
 
-Use the structured logger so production logs are JSON (searchable in Vercel) and errors reach Sentry with `schoolId` / `userId` context.
+See the structured logger template in the previous version of this guide — use `logger({ route, schoolId, userId })` and `captureError()` from `@/lib/utils/logger`.
 
-### Copy-paste template
+### Sentry
 
-```javascript
-import { NextResponse } from 'next/server'
-import { logger, captureError } from '@/lib/utils/logger'
-// ... your other imports
+**Project:** `zinks-0m` / `javascript-nextjs` (EU)
 
-export const dynamic = 'force-dynamic'
-
-export async function POST(request) {
-  const route = '/api/your-route'
-  const start = Date.now()
-  const log = logger({ route })
-  log.request(request)
-
-  let schoolId
-  let userId
-
-  try {
-    // 1. Auth & tenant (adjust to your route)
-    const auth = await authMiddleware(request)
-    if (!auth.isAuthenticated) return auth.response
-
-    const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
-    if (!tenant.ok) return tenant.response
-    schoolId = tenant.schoolId
-    userId = auth.user?.id
-
-    const scopedLog = logger({ route, schoolId, userId })
-    // ... business logic ...
-
-    scopedLog.response(200, Date.now() - start)
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    captureError(error, { route, schoolId, userId })
-    log.response(500, Date.now() - start)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
-  }
-}
-```
-
-### Rules
-
-1. **Never log passwords, tokens, or cookies** — `captureError` strips common sensitive keys.
-2. Call `log.request(request)` once at the start.
-3. Call `log.response(status, Date.now() - start)` before each return (or on success + catch).
-4. Use `captureError(error, { route, schoolId, userId })` in `catch` blocks instead of `console.error` alone.
-5. For routes wrapped in `withErrorHandler`, you can still add scoped logging; the handler also calls `captureError` on thrown errors.
-
-### Legacy logger (existing code)
-
-```javascript
-import { logger } from '@/lib/utils/logger'
-
-logger.info('Something happened', { count: 3 })
-logger.error('Operation failed', err, { schoolId })
-```
+- Server: `sentry.server.config.ts`, `instrumentation.js`
+- Client: `instrumentation-client.js`
+- Test page: `/sentry-example-page` (production + DSN)
 
 ---
 
-## Sentry (error monitoring)
+## Common bugs and fixes
 
-**Project:** `zinks-0m` / `javascript-nextjs` (EU region)
+| Symptom                                   | Cause                              | Fix                                           |
+| ----------------------------------------- | ---------------------------------- | --------------------------------------------- |
+| `JWT_SECRET is not set` in production     | Missing Vercel env                 | Set `JWT_SECRET` ≥ 32 chars                   |
+| ECZ / SBA 500                             | DB schema not deployed             | `npx prisma db push`, `npm run seed:ecz`      |
+| Billing upgrade 503                       | `SchoolPlanPayment` table missing  | Run migrations / db push                      |
+| Lesson plan download fails                | Empty content or Word export error | Generate & save first; check API error body   |
+| AI shows "Upgrade" for model errors       | Wrong error UI                     | Use plan-gated errors only for `PLAN_*` codes |
+| CSP blocks blob worker                    | Missing `worker-src`               | See `lib/security/headers.js`                 |
+| Pre-commit ESLint fails `conf`            | Broken `node_modules`              | `npm install @babel/parser --save-dev`        |
+| `npm run build` fails `conf` / wrong Next | Wrong Next version                 | `package.json` should have `next@16.x`        |
+| QR mark duplicate                         | Expected                           | 409 — student already marked                  |
+| Lipila payment pending forever            | Callback URL / keys                | Check `LIPILA_API_KEY`, callback route logs   |
 
-Configured in:
-
-- `instrumentation-client.js` — browser (Session Replay in production)
-- `sentry.server.config.ts` — Node API routes
-- `sentry.edge.config.ts` — edge runtime
-- `instrumentation.js` — Next.js server bootstrap
-- `lib/sentry/options.js` — shared DSN / sampling options
-- `app/global-error.tsx` — root error boundary
-
-**Enable in production** (`.env.local` / Vercel):
-
-```env
-SENTRY_DSN=https://...@....ingest.de.sentry.io/...
-NEXT_PUBLIC_SENTRY_DSN=https://...@....ingest.de.sentry.io/...
-SENTRY_ORG=zinks-0m
-SENTRY_PROJECT=javascript-nextjs
-# SENTRY_AUTH_TOKEN=...   # source maps (or use Vercel Sentry integration)
-```
-
-Sentry runs only when `NODE_ENV=production` and a DSN is set. Test locally: `/sentry-example-page`.
-
-### Sentry MCP in Cursor
-
-The repo includes [`.cursor/mcp.json`](../.cursor/mcp.json):
-
-```json
-{
-  "mcpServers": {
-    "Sentry": {
-      "url": "https://mcp.sentry.dev/mcp/zinks-0m/javascript-nextjs"
-    }
-  }
-}
-```
-
-1. Open **Cursor Settings → MCP** and ensure the **Sentry** server is enabled.
-2. Complete OAuth when prompted (links Cursor to your Sentry org).
-3. In chat, you can ask things like: “What are the latest unresolved issues?” or “Show errors from production in the last 24 hours.”
-
-The MCP does not replace in-app `captureError()` — it helps you investigate issues from the IDE.
+Add new rows here when you fix production issues.
 
 ---
 
-## Environment validation
+## Deployment
 
-See [ENVIRONMENT.md](./ENVIRONMENT.md). Startup checks run from `app/layout.js` via `lib/config/env.js`.
+### Vercel
 
----
+1. Connect repo; set **Node 20**.
+2. Add all required env vars from [ENVIRONMENT.md](./ENVIRONMENT.md).
+3. Build command: `npm run build` (runs Prisma generate + `next build`).
+4. Set `DATABASE_URL`, `DIRECT_URL`, `JWT_SECRET`, `GROQ_API_KEY`, `RESEND_API_KEY`, etc.
 
-## AI features (Groq + Vercel AI SDK)
+See [doc/VERCEL_DEPLOY.md](./doc/VERCEL_DEPLOY.md).
 
-All AI calls go through `@/lib/ai/client.js`. Structured outputs use Zod schemas in `@/lib/ai/schemas.js`.
+### Post-deploy
 
-- **Streaming prose:** `createGroqTextEventStream` from `@/lib/ai/groq-client`
-- **Structured JSON:** `generateAIObject(schema, systemPrompt, userPrompt)`
-
-Full guide: [AI_GUIDE.md](./AI_GUIDE.md).
+```bash
+npx prisma migrate deploy   # if using migrations
+npm run seed:ecz              # once per environment (idempotent upsert)
+```
 
 ---
 
 ## Related docs
 
-| Doc                                        | Topic                                |
-| ------------------------------------------ | ------------------------------------ |
-| [ENVIRONMENT.md](./ENVIRONMENT.md)         | Env variables                        |
-| [AI_GUIDE.md](./AI_GUIDE.md)               | AI features, schemas, debugging      |
-| [SMS_GUIDE.md](./SMS_GUIDE.md)             | Africa's Talking setup and templates |
-| [QR_ATTENDANCE.md](./QR_ATTENDANCE.md)     | QR session flow, APIs, security      |
-| [TESTING.md](./TESTING.md)                 | Vitest / mocks                       |
-| [doc/SETUP_GUIDE.md](./doc/SETUP_GUIDE.md) | Local setup                          |
-| [../README.md](../README.md)               | API & architecture                   |
-| [../CHANGELOG.md](../CHANGELOG.md)         | Release notes                        |
+| Doc                                          | Topic               |
+| -------------------------------------------- | ------------------- |
+| [README.md](./README.md)                     | Documentation index |
+| [SETUP.md](./SETUP.md)                       | Local setup         |
+| [ENVIRONMENT.md](./ENVIRONMENT.md)           | Env variables       |
+| [TESTING.md](./TESTING.md)                   | Vitest              |
+| [AI_GUIDE.md](./AI_GUIDE.md)                 | AI features         |
+| [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md)     | ECZ rules           |
+| [SMS_GUIDE.md](./SMS_GUIDE.md)               | SMS                 |
+| [QR_ATTENDANCE.md](./QR_ATTENDANCE.md)       | QR attendance       |
+| [API_ROUTES.md](./API_ROUTES.md)             | Route reference     |
+| [PHASE1_CHECKLIST.md](./PHASE1_CHECKLIST.md) | Phase 1 gate        |
+| [PHASE2_ROADMAP.md](./PHASE2_ROADMAP.md)     | Phase 2 scope       |
+| [../CHANGELOG.md](../CHANGELOG.md)           | Release notes       |
+
+---
+
+## Notes for future developers
+
+**Groq vs OpenAI/Anthropic:** Groq free tier (~14,400 req/day) fits pilot schools. AI runtime uses `@ai-sdk/groq` only; do not add paid AI SDKs to production paths.
+
+**Vercel AI SDK vs raw fetch:** Typed Zod outputs map to Prisma/ECZ models; markdown blobs are harder to validate.
+
+**Africa's Talking vs Twilio:** AT supports MTN/Airtel/Zamtel in Zambia natively.
+
+**QR before face recognition:** QR works on 2G and any camera app; face needs lighting, models, and device power.

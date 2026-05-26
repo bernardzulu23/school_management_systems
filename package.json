@@ -50,7 +50,8 @@
     "seed:timeslots": "ts-node --transpile-only --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" prisma/seedTimeSlots.ts",
     "seed:schools:docker": "docker compose exec -T web npm run seed:schools",
     "seed:timeslots:docker": "docker compose exec -T web npm run seed:timeslots",
-    "export:users": "node scripts/export-users-excel.js"
+    "export:users": "node scripts/export-users-excel.js",
+    "docs:api-routes": "node scripts/generate-api-routes-doc.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
