@@ -48,13 +48,23 @@ export async function GET(request) {
     await syncEczSubjects(prisma, schoolId)
   }
 
-  const subjects = await fetchEczSubjects(prisma, schoolId)
+  try {
+    const subjects = await fetchEczSubjects(prisma, schoolId)
 
-  return NextResponse.json({
-    success: true,
-    data: subjects,
-    synced: subjects.length,
-    guidelinesCount: ECZ_GUIDELINES_SUBJECT_COUNT,
-    needsSync: subjects.length < ECZ_GUIDELINES_SUBJECT_COUNT,
-  })
+    return NextResponse.json({
+      success: true,
+      data: subjects,
+      synced: subjects.length,
+      guidelinesCount: ECZ_GUIDELINES_SUBJECT_COUNT,
+      needsSync: subjects.length < ECZ_GUIDELINES_SUBJECT_COUNT,
+    })
+  } catch (error) {
+    console.error('ECZ subjects fetch failed:', error)
+    const code = String(error?.code || '')
+    const hint =
+      code === 'P2021' || /does not exist/i.test(String(error?.message))
+        ? 'Database schema is out of date. Run: npx prisma db push'
+        : 'Failed to load ECZ subjects'
+    return NextResponse.json({ error: hint, code: code || undefined }, { status: 500 })
+  }
 }

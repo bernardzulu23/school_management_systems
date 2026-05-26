@@ -93,9 +93,11 @@ export function createGroqTextEventStream(options: GroqStreamOptions): ReadableS
     async start(controller) {
       let responseText = ''
       try {
-        const result = await streamAIText(options.system, options.prompt, {
+        const { streamAITextWithFallback } = await import('@/lib/ai/client')
+        const { result, model } = await streamAITextWithFallback(options.system, options.prompt, {
           maxTokens: options.maxTokens,
           temperature: options.temperature,
+          model: options.model,
         })
 
         for await (const chunk of result.textStream) {
@@ -112,7 +114,7 @@ export function createGroqTextEventStream(options: GroqStreamOptions): ReadableS
           : { promptTokens: 0, completionTokens: 0 }
 
         if (options.onComplete) {
-          await options.onComplete(responseText, usage)
+          await options.onComplete(responseText, usage, model)
         }
 
         controller.enqueue(encoder.encode('data: [DONE]\n\n'))

@@ -172,7 +172,14 @@ export function AvailableFeaturesList({ schoolPlan, schoolLevel }) {
   )
 }
 
-export function PlanComparisonCard({ plan, schoolLevel = 'combined' }) {
+export function PlanComparisonCard({
+  plan,
+  schoolLevel = 'combined',
+  selected = false,
+  onSelect,
+  showPrice = false,
+  monthlyPrice,
+}) {
   const planKey = String(plan || 'basic').toLowerCase()
   const features = PLAN_FEATURES[planKey] || []
   const level = String(schoolLevel || 'combined').toLowerCase()
@@ -180,15 +187,29 @@ export function PlanComparisonCard({ plan, schoolLevel = 'combined' }) {
     level === 'secondary' ? features.filter((f) => !PRIMARY_ONLY_FEATURES[f]) : features
 
   const primaryOnlyCount = level === 'primary' ? Object.keys(PRIMARY_ONLY_FEATURES).length : 0
+  const interactive = typeof onSelect === 'function'
 
-  return (
-    <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card p-6">
+  const className = `rounded-xl border p-6 text-left w-full transition-all ${
+    selected
+      ? 'border-royalPurple-accent bg-royalPurple-accent/10 ring-2 ring-royalPurple-accent'
+      : 'border-royalPurple-border/40 bg-royalPurple-card'
+  } ${interactive ? 'cursor-pointer hover:border-royalPurple-accent/60' : ''}`
+
+  const inner = (
+    <>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-bold text-royalPurple-text1 capitalize">{planKey} Plan</h3>
         <span className="text-sm text-royalPurple-text2">
           {display.length + primaryOnlyCount} features
         </span>
       </div>
+
+      {showPrice && monthlyPrice != null ? (
+        <p className="text-2xl font-bold text-royalPurple-accent mb-3">
+          K{monthlyPrice}
+          <span className="text-sm font-normal text-royalPurple-text2"> / month</span>
+        </p>
+      ) : null}
 
       <ul className="space-y-2">
         {display.slice(0, 6).map((f) => (
@@ -201,6 +222,22 @@ export function PlanComparisonCard({ plan, schoolLevel = 'combined' }) {
           <li className="text-sm text-royalPurple-text3 italic">+ {display.length - 6} more</li>
         ) : null}
       </ul>
-    </div>
+
+      {interactive ? (
+        <p className="text-xs text-royalPurple-accent mt-4 font-medium">
+          {selected ? 'Selected — enter phone number below' : 'Tap to select this plan'}
+        </p>
+      ) : null}
+    </>
   )
+
+  if (interactive) {
+    return (
+      <button type="button" className={className} onClick={() => onSelect(planKey)}>
+        {inner}
+      </button>
+    )
+  }
+
+  return <div className={className}>{inner}</div>
 }

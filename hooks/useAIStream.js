@@ -50,7 +50,11 @@ export function useAIStream(endpoint) {
 
         if (!res.ok) {
           const json = await res.json().catch(() => ({}))
-          setError(json || { error: json?.error || 'Request failed', status: res.status })
+          setError({
+            error: json?.error || json?.message || 'Request failed',
+            code: json?.code,
+            status: res.status,
+          })
           setLoading(false)
           return
         }

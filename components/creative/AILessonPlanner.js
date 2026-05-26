@@ -345,7 +345,10 @@ export default function AILessonPlanner() {
       const response = await fetch(`/api/lesson-plans/${planId}/export?format=word`, {
         credentials: 'include',
       })
-      if (!response.ok) throw new Error('Download failed')
+      if (!response.ok) {
+        const errJson = await response.json().catch(() => ({}))
+        throw new Error(errJson?.error || errJson?.message || 'Download failed')
+      }
       const blob = await response.blob()
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
@@ -1017,8 +1020,30 @@ export default function AILessonPlanner() {
         </div>
 
         {error ? (
-          <div className="mt-4">
-            <UpgradePrompt error={error} onDismiss={reset} />
+          <div className="mt-4 rounded-xl border border-red-300/50 bg-red-950/30 p-4">
+            {[
+              'PLAN_EXPIRED',
+              'PLAN_UPGRADE_REQUIRED',
+              'UPGRADE_REQUIRED',
+              'AI_LIMIT_REACHED',
+              'AI_QUOTA_EXCEEDED',
+            ].includes(String(error?.code || '').toUpperCase()) ? (
+              <UpgradePrompt error={error} onDismiss={reset} />
+            ) : (
+              <>
+                <p className="font-semibold text-red-200">AI generation failed</p>
+                <p className="text-sm text-red-100/90 mt-1">
+                  {typeof error === 'string'
+                    ? error
+                    : error?.error ||
+                      error?.message ||
+                      'The AI service could not complete your request. Try again in a moment.'}
+                </p>
+                <Button variant="outline" className="mt-3" onClick={reset}>
+                  Dismiss
+                </Button>
+              </>
+            )}
           </div>
         ) : null}
 

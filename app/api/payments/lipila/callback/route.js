@@ -1,55 +1,54 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { activatePlanPayment } from '@/lib/billing/activate-plan-payment'
+import { isFailedLipilaStatus, isPaidLipilaStatus } from '@/lib/payments/lipila'
+
+function getIdentifier(payload) {
+  const p = payload || {}
+  return (
+    String(
+      p.identifier ||
+        p.internalId ||
+        p.internal_id ||
+        p?.data?.identifier ||
+        p?.data?.internalId ||
+        ''
+    ).trim() || null
+  )
+}
+
+function getReferenceId(payload) {
+  const p = payload || {}
+  return (
+    String(
+      p.referenceId || p.reference_id || p?.data?.referenceId || p?.data?.reference_id || ''
+    ).trim() || null
+  )
+}
+
+function getStatus(payload) {
+  return String(payload?.status || payload?.data?.status || '').trim()
+}
 
 export async function POST(request) {
   try {
     const payload = await request.json().catch(() => ({}))
+    const identifier = getIdentifier(payload)
+    const referenceId = getReferenceId(payload)
+    const status = getStatus(payload)
 
-    const { referenceId, status, amount, provider, accountNumber } = payload
-
-    if (!referenceId) {
-      return NextResponse.json({ error: 'Missing referenceId' }, { status: 400 })
+    if (!identifier && !referenceId) {
+      return NextResponse.json({ success: true }, { status: 200 })
     }
 
-    const paymentStatus = String(status || '').toLowerCase()
-
-    if (paymentStatus === 'completed' || paymentStatus === 'success') {
-      await prisma.schoolRegistration.updateMany({
-        where: { paymentReference: referenceId },
-        data: {
-          paymentStatus: 'paid',
-          paymentProvider: provider,
-          planExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-        },
-      })
-
-      return NextResponse.json({
-        success: true,
-        message: 'Payment confirmed and plan activated',
-        referenceId,
-      })
-    }
-
-    if (paymentStatus === 'failed' || paymentStatus === 'rejected') {
-      await prisma.schoolRegistration.updateMany({
-        where: { paymentReference: referenceId },
-        data: {
-          paymentStatus: 'failed',
-        },
-      })
-
-      return NextResponse.json({
-        success: false,
-        message: 'Payment failed',
-        referenceId,
-      })
+    if (isPaidLipilaStatus(status) || isFailedLipilaStatus(status)) {
+      await activatePlanPayment({ identifier, referenceId, status })
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Payment status received',
-      status: paymentStatus,
+      message: 'Payment status processed',
+      referenceId,
     })
   } catch (error) {
     console.error('Payment callback error:', error)
@@ -61,29 +60,33 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
-  const referenceId = request.nextUrl.searchParams.get('referenceId')
-  const status = request.nextUrl.searchParams.get('status')
+  const referenceId = String(request.nextUrl.searchParams.get('referenceId') || '').trim()
+  const identifier = String(request.nextUrl.searchParams.get('identifier') || '').trim()
+  const status = String(request.nextUrl.searchParams.get('status') || '').trim()
+  const origin = new URL(request.url).origin
 
-  if (referenceId && status) {
-    const paymentStatus = String(status).toLowerCase()
-
-    if (paymentStatus === 'completed' || paymentStatus === 'success') {
-      await prisma.schoolRegistration.updateMany({
-        where: { paymentReference: referenceId },
-        data: {
-          paymentStatus: 'paid',
-          planExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-        },
+  if (referenceId || identifier) {
+    if (isPaidLipilaStatus(status) || isFailedLipilaStatus(status)) {
+      const result = await activatePlanPayment({
+        identifier: identifier || null,
+        referenceId,
+        status,
       })
-
-      return NextResponse.redirect(
-        new URL(`/onboarding?payment=success&reference=${referenceId}`, request.url)
-      )
+      if (result.type === 'school_plan_payment') {
+        const params = new URLSearchParams({
+          paymentReturn: '1',
+          payment: isPaidLipilaStatus(status) ? 'success' : 'failed',
+        })
+        if (referenceId) params.set('referenceId', referenceId)
+        return NextResponse.redirect(`${origin}/dashboard/billing?${params.toString()}`)
+      }
     }
 
-    return NextResponse.redirect(
-      new URL(`/onboarding?payment=failed&reference=${referenceId}`, request.url)
-    )
+    const params = new URLSearchParams({
+      payment: isPaidLipilaStatus(status) ? 'success' : 'failed',
+    })
+    if (referenceId) params.set('reference', referenceId)
+    return NextResponse.redirect(`${origin}/onboarding?${params.toString()}`)
   }
 
   return NextResponse.json({ success: true, message: 'Payment callback endpoint active' })

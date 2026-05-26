@@ -1,10 +1,14 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PlanComparisonCard } from '@/components/FeatureGate'
 import ProviderLogos from '@/components/payments/ProviderLogos'
+import SubscriptionUpgradePanel from '@/components/billing/SubscriptionUpgradePanel'
+import { getPlanMonthlyPrice, PLAN_PRICING } from '@/lib/billing/plan-pricing'
+import toast from 'react-hot-toast'
 
 function formatDate(value) {
   if (!value) return null
@@ -19,9 +23,20 @@ function formatDate(value) {
   }
 }
 
-export default function BillingPage() {
+function BillingPageContent() {
+  const searchParams = useSearchParams()
   const [school, setSchool] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [selectedPlan, setSelectedPlan] = useState('standard')
+
+  useEffect(() => {
+    const payment = searchParams.get('payment')
+    if (payment === 'success') {
+      toast.success('Payment received. Your plan will update shortly.')
+    } else if (payment === 'failed') {
+      toast.error('Payment was not completed. Try again or contact support.')
+    }
+  }, [searchParams])
 
   useEffect(() => {
     let active = true
@@ -33,7 +48,12 @@ export default function BillingPage() {
           credentials: 'include',
         })
         const json = await res.json().catch(() => ({}))
-        if (active) setSchool(json?.school || null)
+        if (active) {
+          const s = json?.school || null
+          setSchool(s)
+          const p = String(s?.plan || 'standard').toLowerCase()
+          if (PLAN_PRICING[p]) setSelectedPlan(p)
+        }
       } finally {
         if (active) setLoading(false)
       }
@@ -50,6 +70,10 @@ export default function BillingPage() {
     () => school?.planExpiresAt || school?.trialEndsAt || null,
     [school?.planExpiresAt, school?.trialEndsAt]
   )
+
+  const scrollToPayment = () => {
+    document.getElementById('upgrade-payment')?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   return (
     <DashboardLayout title="Billing">
@@ -98,12 +122,58 @@ export default function BillingPage() {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <PlanComparisonCard plan="basic" schoolLevel={level} />
-          <PlanComparisonCard plan="standard" schoolLevel={level} />
-          <PlanComparisonCard plan="premium" schoolLevel={level} />
+        <div>
+          <h2 className="text-lg font-semibold text-royalPurple-text1 mb-3">Subscription plans</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {Object.keys(PLAN_PRICING).map((planKey) => (
+              <PlanComparisonCard
+                key={planKey}
+                plan={planKey}
+                schoolLevel={level}
+                showPrice
+                monthlyPrice={getPlanMonthlyPrice(planKey)}
+                selected={selectedPlan === planKey}
+                onSelect={(p) => {
+                  setSelectedPlan(p)
+                  scrollToPayment()
+                }}
+              />
+            ))}
+          </div>
         </div>
+
+        <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
+          <CardContent className="pt-6">
+            <SubscriptionUpgradePanel
+              selectedPlan={selectedPlan}
+              onPlanChange={setSelectedPlan}
+              currentPlan={plan}
+              onPaymentStarted={() => {
+                setTimeout(() => {
+                  fetch('/api/school/current', { credentials: 'include', cache: 'no-store' })
+                    .then((r) => r.json())
+                    .then((j) => j?.school && setSchool(j.school))
+                    .catch(() => {})
+                }, 3000)
+              }}
+            />
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
+  )
+}
+
+export default function BillingPage() {
+  return (
+    <Suspense
+      fallback={
+        <DashboardLayout title="Billing">
+          <p className="p-6">Loading…</p>
+        </DashboardLayout>
+      }
+    >
+      <BillingPageContent />
+    </Suspense>
   )
 }

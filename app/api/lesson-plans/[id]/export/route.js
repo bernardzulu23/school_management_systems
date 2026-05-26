@@ -60,32 +60,38 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   }
 
   if (format === 'word') {
-    const ctx = await getLessonPlanTeacherContext(plan.createdByUserId, schoolId, plan.subject)
-    const buffer = await generateLessonPlanWordDoc({
-      schoolName: ctx.schoolName || plan.school?.name || '',
-      teacherName: ctx.teacherName || plan.createdBy?.name || 'Teacher',
-      teacherGender: ctx.teacherGender,
-      departmentName: ctx.department,
-      date: plan.createdAt.toLocaleDateString('en-GB'),
-      subject: plan.subject,
-      form: plan.grade,
-      topic: plan.topic,
-      subTopic: plan.subTopic || plan.topic,
-      duration: plan.duration || 40,
-      lessonContent: plan.content,
-      approvalStatus: String(plan.status || 'DRAFT').toUpperCase(),
-      approvalNotes: plan.approvalNotes || undefined,
-    })
+    try {
+      const ctx = await getLessonPlanTeacherContext(plan.createdByUserId, schoolId, plan.subject)
+      const buffer = await generateLessonPlanWordDoc({
+        schoolName: ctx.schoolName || plan.school?.name || '',
+        teacherName: ctx.teacherName || plan.createdBy?.name || 'Teacher',
+        teacherGender: ctx.teacherGender,
+        departmentName: ctx.department,
+        date: plan.createdAt.toLocaleDateString('en-GB'),
+        subject: plan.subject,
+        form: plan.grade,
+        topic: plan.topic,
+        subTopic: plan.subTopic || plan.topic,
+        duration: plan.duration || 40,
+        lessonContent: plan.content,
+        approvalStatus: String(plan.status || 'DRAFT').toUpperCase(),
+        approvalNotes: plan.approvalNotes || undefined,
+      })
 
-    const filename = generateLessonPlanFilename(plan.subject, plan.grade, plan.topic)
+      const filename = generateLessonPlanFilename(plan.subject, plan.grade, plan.topic)
+      const body = Buffer.isBuffer(buffer) ? new Uint8Array(buffer) : buffer
 
-    return new Response(buffer, {
-      headers: {
-        'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'Content-Disposition': `attachment; filename="${filename}"`,
-        'Content-Length': String(buffer.length),
-      },
-    })
+      return new Response(body, {
+        headers: {
+          'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'Content-Disposition': `attachment; filename="${filename}"`,
+          'Content-Length': String(body.byteLength || body.length || 0),
+        },
+      })
+    } catch (exportError) {
+      console.error('Lesson plan Word export failed:', exportError)
+      throw new ApiError(exportError?.message || 'Failed to generate Word document', 500)
+    }
   }
 
   throw new ApiError('Invalid format. Use ?format=word or ?format=clean-text', 400)

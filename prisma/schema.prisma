@@ -111,6 +111,7 @@ model School {
   eczSubmissions       EczSubmission[]
   specialAccommodations SpecialAccommodation[]
   questionBanks        QuestionBank[]
+  planPayments         SchoolPlanPayment[]
 
   @@index([subdomain])
   @@index([active])
@@ -199,6 +200,24 @@ model RefreshToken {
   @@index([schoolId])
   @@index([expiresAt])
   @@index([revoked])
+}
+
+/** Pending or completed subscription upgrade via Lipila (existing schools). */
+model SchoolPlanPayment {
+  id          String   @id @default(uuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  plan        String
+  months      Int      @default(1)
+  amount      Int
+  provider    String?
+  referenceId String   @unique
+  status      String   @default("pending")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([status])
 }
 
 // Pre-provisioning school signup (onboarding flow before School is created)

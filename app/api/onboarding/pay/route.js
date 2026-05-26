@@ -11,11 +11,7 @@ import {
   lipilaCreateMobileMoneyCollection,
 } from '@/lib/payments/lipila'
 
-const PLAN_PRICING = {
-  basic: 500,
-  standard: 800,
-  premium: 1200,
-}
+import { PLAN_PRICING } from '@/lib/billing/plan-pricing'
 
 function normalizeZambiaMsisdn(value) {
   const digits = String(value || '').replace(/\D/g, '')

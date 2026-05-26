@@ -172,6 +172,18 @@ export const GET = withSecureApi(async function GET(request) {
     return NextResponse.json({ success: true, data: tasks })
   } catch (error) {
     console.error('Error fetching ECZ assessments:', error)
-    return NextResponse.json({ error: 'Failed to fetch assessments' }, { status: 500 })
+    const code = String(error?.code || '')
+    const hint =
+      code === 'P2021' || /does not exist/i.test(String(error?.message))
+        ? 'Database schema is out of date. Run: npx prisma db push'
+        : null
+    return NextResponse.json(
+      {
+        error: hint || 'Failed to fetch assessments',
+        code: code || undefined,
+        details: process.env.NODE_ENV === 'development' ? error?.message : undefined,
+      },
+      { status: 500 }
+    )
   }
 })
