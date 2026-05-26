@@ -12,8 +12,13 @@ import {
 } from '@/lib/middleware/aiUsageTracker'
 import { prisma } from '@/lib/prisma'
 import { logger } from '@/lib/utils/logger'
-import { assertGroqConfigured, extractJSONObject, groqChatCompletion } from '@/lib/ai/groq-client'
+import { assertGroqConfigured } from '@/lib/ai/groq-client'
+import { generateAIObject } from '@/lib/ai/client'
+import { QuizSchema } from '@/lib/ai/schemas'
 import { buildQuizPrompt } from '@/lib/ai/subject-adaptive-prompts'
+
+const QUIZ_SYSTEM =
+  'You are a Zambian CBC assessment expert. Return only valid quiz data matching the schema. Use Zambian context where appropriate.'
 
 const QuizMakerInputSchema = z.object({
   grade: z.enum(['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']),
@@ -92,14 +97,12 @@ export async function POST(request: Request) {
     const prompt = buildPrompt(input)
     const startTime = Date.now()
 
-    const { content, usage } = await groqChatCompletion({
-      prompt,
+    const { object: quiz, usage } = await generateAIObject(QuizSchema, QUIZ_SYSTEM, prompt, {
       maxTokens: 2500,
       temperature: 0.5,
     })
 
-    const quiz = extractJSONObject(content)
-    if (!quiz || !Array.isArray((quiz as { questions?: unknown }).questions)) {
+    if (!quiz?.questions?.length) {
       logger.warn('ai.quiz-maker.invalid-json', { requestId, schoolId, userId: user.id })
       return NextResponse.json({ error: 'AI returned invalid quiz JSON' }, { status: 502 })
     }
@@ -111,8 +114,11 @@ export async function POST(request: Request) {
         schoolId,
         feature: 'ai-quiz-maker',
         prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
-        response: content.length > 20000 ? content.slice(0, 20000) : content,
-        tokens: usage.completionTokens,
+        response:
+          JSON.stringify(quiz).length > 20000
+            ? JSON.stringify(quiz).slice(0, 20000)
+            : JSON.stringify(quiz),
+        tokens: usage.outputTokens,
       },
     })
 

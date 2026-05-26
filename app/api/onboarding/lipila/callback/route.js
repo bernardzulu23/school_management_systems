@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { isFailedLipilaStatus, isPaidLipilaStatus } from '@/lib/payments/lipila'
+import { logger, captureError } from '@/lib/utils/logger'
 
 function getIdentifier(payload) {
   const p = payload || {}
@@ -59,43 +60,73 @@ async function markRegistrationFailed({ identifier, referenceId }) {
 }
 
 export async function POST(request) {
-  const payload = await request.json().catch(() => ({}))
-  const identifier = getIdentifier(payload)
-  const referenceId = getReferenceId(payload)
-  if (!identifier && !referenceId) return NextResponse.json({ success: true }, { status: 200 })
+  const route = '/api/onboarding/lipila/callback'
+  const start = Date.now()
+  const log = logger({ route })
+  log.request(request)
 
-  const status = getStatus(payload)
-  if (isPaidLipilaStatus(status)) {
-    await markRegistrationPaid({ identifier, referenceId })
-  } else if (isFailedLipilaStatus(status)) {
-    await markRegistrationFailed({ identifier, referenceId })
+  try {
+    const payload = await request.json().catch(() => ({}))
+    const identifier = getIdentifier(payload)
+    const referenceId = getReferenceId(payload)
+    if (!identifier && !referenceId) {
+      log.response(200, Date.now() - start)
+      return NextResponse.json({ success: true }, { status: 200 })
+    }
+
+    const status = getStatus(payload)
+    const ctx = logger({ route, registrationId: identifier || undefined })
+    if (isPaidLipilaStatus(status)) {
+      await markRegistrationPaid({ identifier, referenceId })
+      ctx.info('Payment marked paid', { referenceId, status })
+    } else if (isFailedLipilaStatus(status)) {
+      await markRegistrationFailed({ identifier, referenceId })
+      ctx.warn('Payment marked failed', { referenceId, status })
+    }
+
+    log.response(200, Date.now() - start)
+    return NextResponse.json({ success: true }, { status: 200 })
+  } catch (error) {
+    captureError(error, { route })
+    log.response(500, Date.now() - start)
+    return NextResponse.json({ success: false }, { status: 500 })
   }
-
-  return NextResponse.json({ success: true }, { status: 200 })
 }
 
 export async function GET(request) {
-  const { searchParams } = new URL(request.url)
-  const referenceId = String(searchParams.get('referenceId') || '').trim()
-  const identifier = String(searchParams.get('identifier') || '').trim()
-  const status = String(searchParams.get('status') || '').trim()
+  const route = '/api/onboarding/lipila/callback'
+  const start = Date.now()
+  const log = logger({ route })
+  log.request(request)
 
-  if (referenceId || identifier) {
-    if (isPaidLipilaStatus(status)) {
-      await markRegistrationPaid({
-        identifier: identifier || null,
-        referenceId: referenceId || null,
-      })
-    } else if (isFailedLipilaStatus(status)) {
-      await markRegistrationFailed({
-        identifier: identifier || null,
-        referenceId: referenceId || null,
-      })
+  try {
+    const { searchParams } = new URL(request.url)
+    const referenceId = String(searchParams.get('referenceId') || '').trim()
+    const identifier = String(searchParams.get('identifier') || '').trim()
+    const status = String(searchParams.get('status') || '').trim()
+
+    if (referenceId || identifier) {
+      if (isPaidLipilaStatus(status)) {
+        await markRegistrationPaid({
+          identifier: identifier || null,
+          referenceId: referenceId || null,
+        })
+      } else if (isFailedLipilaStatus(status)) {
+        await markRegistrationFailed({
+          identifier: identifier || null,
+          referenceId: referenceId || null,
+        })
+      }
     }
-  }
 
-  const origin = new URL(request.url).origin
-  const params = new URLSearchParams({ step: 'plan', paymentReturn: '1' })
-  if (referenceId) params.set('referenceId', referenceId)
-  return NextResponse.redirect(`${origin}/onboarding?${params.toString()}`)
+    log.response(302, Date.now() - start)
+    const origin = new URL(request.url).origin
+    const params = new URLSearchParams({ step: 'plan', paymentReturn: '1' })
+    if (referenceId) params.set('referenceId', referenceId)
+    return NextResponse.redirect(`${origin}/onboarding?${params.toString()}`)
+  } catch (error) {
+    captureError(error, { route })
+    log.response(500, Date.now() - start)
+    return NextResponse.json({ success: false }, { status: 500 })
+  }
 }

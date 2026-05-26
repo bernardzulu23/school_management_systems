@@ -3,7 +3,12 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
-import { validateSubmissionDeadline, getDeadlineStatus } from '@/lib/ecz/ecz-compliance'
+import {
+  validateSubmissionDeadline,
+  getDeadlineStatus,
+  getSBASubmissionDeadline,
+  canCreateSBATask,
+} from '@/lib/middleware/ecz-validation'
 import { generateECZCSV } from '@/lib/ecz/ecz-csv'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
@@ -25,11 +30,9 @@ export const POST = withSecureApi(async function POST(request) {
   const year = Number(academicYear) || new Date().getFullYear()
   const level = Number(formLevel)
 
-  if (level === 4) {
-    return NextResponse.json(
-      { error: 'Form 4 uses Final Examination only — no SBA submission' },
-      { status: 400 }
-    )
+  const formGate = canCreateSBATask(level)
+  if (!formGate.allowed) {
+    return NextResponse.json({ error: formGate.reason }, { status: 400 })
   }
 
   const deadlineCheck = validateSubmissionDeadline(year)
@@ -85,6 +88,7 @@ export const POST = withSecureApi(async function POST(request) {
   })
 
   const fileName = `ecz_submission_${subjectId}_f${level}_${year}.csv`
+  const deadline = getSBASubmissionDeadline(year)
 
   const submission = await prisma.eczSubmission.upsert({
     where: {
@@ -108,6 +112,7 @@ export const POST = withSecureApi(async function POST(request) {
       validationErrors: [],
     },
     update: {
+      deadline,
       totalLearners: rows.length,
       status: 'SUBMITTED_TO_ECZ',
       submittedAt: new Date(),

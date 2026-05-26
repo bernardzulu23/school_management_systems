@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { generateStructuredLessonPlan } from '@/lib/ai/structured-lesson-plan'
 import { generateProfessionalLessonPlan } from '@/lib/ai/professional-lesson-plan'
 import { assertGroqConfigured } from '@/lib/ai/groq-client'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
@@ -10,6 +11,7 @@ import { checkAILimit, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
 import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
 import { buildLessonPlanHeaderBlock } from '@/lib/lesson-plans/header-block'
 import { composeLessonPlanDisplay } from '@/lib/lesson-plans/text'
+import { logger, captureError } from '@/lib/utils/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,6 +20,9 @@ function normalize(v) {
 }
 
 export const POST = withErrorHandler(async function POST(request) {
+  const route = '/api/lesson-plans/generate'
+  const start = Date.now()
+
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -29,6 +34,10 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const userId = String(auth.user?.id || '').trim()
+  const log = logger({ schoolId, userId, route })
+  log.request(request)
 
   const blocked = await requireFeature(schoolId, 'ai-lesson-planner')
   if (blocked) return blocked
@@ -42,7 +51,6 @@ export const POST = withErrorHandler(async function POST(request) {
     throw new ApiError('AI service not configured', 500)
   }
 
-  const userId = String(auth.user?.id || '').trim()
   if (!userId) throw new ApiError('Unauthorized', 401)
 
   const body = await request.json().catch(() => ({}))
@@ -53,22 +61,47 @@ export const POST = withErrorHandler(async function POST(request) {
   const duration = Math.max(20, Math.min(120, Number(body?.duration) || 40))
   const term = normalize(body?.term) || 'Term 1'
   const templateType = normalize(body?.templateType) || 'professional'
+  const useMinistryFormat = body?.format === 'ministry' || body?.useMinistryFormat === true
 
   if (!grade || !subject || !topic) {
     throw new ApiError('grade, subject, and topic are required', 400)
   }
 
-  const { content: generatedContent, tokensUsed } = await generateProfessionalLessonPlan({
-    subject,
-    form: grade,
-    topic,
-    subTopic,
-    duration,
-    term,
-    totalPupils: body?.totalPupils,
-    boys: body?.boys ?? body?.numberOfBoys,
-    girls: body?.girls ?? body?.numberOfGirls,
-  })
+  let generatedContent
+  let structuredContent = null
+  let tokensUsed = 0
+  let aiModel = null
+  let generatedAt = null
+
+  if (useMinistryFormat) {
+    const result = await generateProfessionalLessonPlan({
+      subject,
+      form: grade,
+      topic,
+      subTopic,
+      duration,
+      term,
+      totalPupils: body?.totalPupils,
+      boys: body?.boys ?? body?.numberOfBoys,
+      girls: body?.girls ?? body?.numberOfGirls,
+    })
+    generatedContent = result.content
+    tokensUsed = result.tokensUsed
+  } else {
+    const result = await generateStructuredLessonPlan({
+      subject,
+      form: grade,
+      topic,
+      subTopic,
+      duration,
+      term,
+    })
+    generatedContent = result.content
+    structuredContent = result.structuredContent
+    tokensUsed = result.tokensUsed
+    aiModel = result.aiModel
+    generatedAt = new Date()
+  }
 
   const ctx = await getLessonPlanTeacherContext(userId, schoolId, subject)
   const headerBlock = buildLessonPlanHeaderBlock({
@@ -106,6 +139,9 @@ export const POST = withErrorHandler(async function POST(request) {
       term,
       templateType,
       content,
+      structuredContent: structuredContent ?? undefined,
+      generatedAt,
+      aiModel,
       version: 1,
     },
     select: {
@@ -121,6 +157,7 @@ export const POST = withErrorHandler(async function POST(request) {
     },
   })
 
+  log.response(200, Date.now() - start)
   return NextResponse.json({
     success: true,
     data: plan,

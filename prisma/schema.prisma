@@ -1698,6 +1698,9 @@ model LessonPlan {
   term            String?
   templateType    String?
   content         String          @db.Text
+  structuredContent Json?
+  generatedAt     DateTime?
+  aiModel         String?
   approvalNotes   String?         @db.Text
   version         Int             @default(1)
 
@@ -1813,6 +1816,28 @@ model AllocationNotification {
 // ECZ ASSESSMENT COMPLIANCE (School-Based Assessment)
 // ============================================
 
+/// System-level ECZ competencies (2023 ZECF) — seeded via npm run seed:ecz
+model EczCompetency {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  descriptor  String   @db.Text
+  category    String   // Cognitive | Social | Applied
+  assessments EczAssessmentCompetency[]
+  createdAt   DateTime @default(now())
+}
+
+/// Official CBC subject construct + elements (16 subjects) — global reference data
+model EczSubjectConstruct {
+  id                  String   @id @default(cuid())
+  subjectName         String   @unique
+  construct           String   @db.Text
+  elementsOfConstruct Json
+  sbaWeight           Int      @default(30)
+  examWeight          Int      @default(70)
+  hasMultipleChoice   Boolean  @default(false)
+  createdAt           DateTime @default(now())
+}
+
 enum EczAssessmentComponent {
   SBA_TASK
   FINAL_EXAMINATION
@@ -1880,9 +1905,18 @@ model EczAssessment {
   createdBy           String
   status              EczAssessmentStatus @default(DRAFT)
 
+  term                Int?
+  academicYear        String?
+  termWeight          Int?
+  generatedByAI       Boolean  @default(false)
+  aiModel             String?
+  instructions        String?  @db.Text
+  demonstration       String?  @db.Text
+
   rubric              EczRubric?
   items               EczAssessmentItem[]
   scores              EczAssessmentScore[]
+  competencies        EczAssessmentCompetency[]
 
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
@@ -1891,6 +1925,16 @@ model EczAssessment {
   @@index([subjectId])
   @@index([formLevel])
   @@index([component])
+  @@index([schoolId, formLevel, term])
+}
+
+model EczAssessmentCompetency {
+  assessmentId String
+  competencyId   String
+  assessment     EczAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  competency     EczCompetency @relation(fields: [competencyId], references: [id], onDelete: Cascade)
+
+  @@id([assessmentId, competencyId])
 }
 
 model EczAssessmentItem {
@@ -1999,6 +2043,7 @@ model EczSubmission {
   subject          Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
   formLevel        Int
   academicYear     Int
+  deadline         DateTime?
   submissionFile   String?
   status           EczScoreSubmissionStatus @default(DRAFT)
   totalLearners    Int      @default(0)

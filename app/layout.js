@@ -1,6 +1,12 @@
+import { validateEnv } from '@/lib/config/env'
 import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'react-hot-toast'
+
+// Validate on server startup — throws if required vars are missing
+if (typeof window === 'undefined') {
+  validateEnv()
+}
 
 export const metadata = {
   icons: {

@@ -11,8 +11,13 @@ import {
   getSchoolPlanForUsage,
   trackAIUsage,
 } from '@/lib/middleware/aiUsageTracker'
-import { assertGroqConfigured, extractJSONObject, groqChatCompletion } from '@/lib/ai/groq-client'
+import { assertGroqConfigured } from '@/lib/ai/groq-client'
+import { generateAIObject } from '@/lib/ai/client'
+import { ECZPracticePaperSchema } from '@/lib/ai/schemas'
 import { buildEczPracticePrompt } from '@/lib/ai/subject-adaptive-prompts'
+
+const ECZ_PRACTICE_SYSTEM =
+  'You are an ECZ examination specialist for Zambian schools. Create valid practice papers with Zambian context. Match the requested exam level exactly.'
 import { isValidEczExamLevel, normalizeEczExamLevel } from '@/lib/ecz/ecz-practice-levels'
 
 export async function POST(request) {
@@ -85,13 +90,13 @@ export async function POST(request) {
   })
 
   try {
-    const { content, usage } = await groqChatCompletion({
+    const { object: parsed, usage } = await generateAIObject(
+      ECZPracticePaperSchema,
+      ECZ_PRACTICE_SYSTEM,
       prompt,
-      maxTokens: 2500,
-      temperature: 0.4,
-    })
+      { maxTokens: 2500, temperature: 0.4 }
+    )
 
-    const parsed = extractJSONObject(content)
     const paper = parsed?.paper
     if (!paper || !Array.isArray(paper.questions)) {
       return NextResponse.json({ error: 'AI returned invalid ECZ JSON' }, { status: 502 })
@@ -104,8 +109,11 @@ export async function POST(request) {
         schoolId,
         feature: 'ecz-practice',
         prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
-        response: content.length > 20000 ? content.slice(0, 20000) : content,
-        tokens: usage.completionTokens,
+        response:
+          JSON.stringify(parsed).length > 20000
+            ? JSON.stringify(parsed).slice(0, 20000)
+            : JSON.stringify(parsed),
+        tokens: usage.outputTokens,
       },
     })
 

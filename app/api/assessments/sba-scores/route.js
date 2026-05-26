@@ -3,12 +3,13 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { computeRubricScore } from '@/lib/ecz/ecz-compliance'
 import {
-  validateFormLevelForSBA,
-  computeRubricScore,
+  canCreateSBATask,
+  validateSBAScore,
   computeTotalSBAScore,
   SBA_TERM_TEST_MARKS,
-} from '@/lib/ecz/ecz-compliance'
+} from '@/lib/middleware/ecz-validation'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
 export const POST = withSecureApi(async function POST(request) {
@@ -26,8 +27,8 @@ export const POST = withSecureApi(async function POST(request) {
 
   const body = await request.json().catch(() => ({}))
   const formLevel = Number(body.formLevel)
-  const formCheck = validateFormLevelForSBA(formLevel)
-  if (!formCheck.valid) return NextResponse.json({ error: formCheck.error }, { status: 400 })
+  const formCheck = canCreateSBATask(formLevel)
+  if (!formCheck.allowed) return NextResponse.json({ error: formCheck.reason }, { status: 400 })
 
   const assessment = await prisma.eczAssessment.findFirst({
     where: { id: String(body.assessmentId || ''), schoolId },
@@ -75,7 +76,13 @@ export const POST = withSecureApi(async function POST(request) {
     termTestScore: existing?.termTestScore ?? 0,
     ...patch,
   }
-  patch.totalSBAScore = computeTotalSBAScore(merged)
+
+  const scoreValidation = validateSBAScore(merged)
+  if (!scoreValidation.valid) {
+    return NextResponse.json({ error: scoreValidation.errors.join('; ') }, { status: 400 })
+  }
+
+  patch.totalSBAScore = scoreValidation.total
   patch.submissionStatus = 'COMPLETED'
   patch.rubricBreakdown = body.rubricBreakdown || {
     excellentCount: body.excellentCount,

@@ -1,28 +1,25 @@
 /**
- * Groq API client for ZSMS AI features (lesson plans, stories, quizzes, etc.).
- * Set GROQ_API_KEY and optional GROQ_MODEL in .env / Vercel.
+ * Groq helpers for ZSMS — backed by Vercel AI SDK (@/lib/ai/client).
+ * Keeps the legacy API used by routes and lib/aiml tools.
  */
-import Groq from 'groq-sdk'
+import {
+  assertGroqConfigured,
+  generateAIText,
+  GROQ_MODEL,
+  groqModel,
+  streamAIText,
+} from '@/lib/ai/client'
 
-let groqSingleton: Groq | null = null
+export { assertGroqConfigured, GROQ_MODEL, groqModel }
 
-export function assertGroqConfigured(): void {
-  if (!String(process.env.GROQ_API_KEY || '').trim()) {
-    throw new Error('Missing GROQ_API_KEY')
-  }
-}
-
-export function getGroqClient(): Groq {
-  assertGroqConfigured()
-  if (!groqSingleton) {
-    groqSingleton = new Groq({ apiKey: String(process.env.GROQ_API_KEY).trim() })
-  }
-  return groqSingleton
-}
-
-/** Default: fast, capable model on Groq. Override with GROQ_MODEL (e.g. mixtral-8x7b-32768). */
 export function getGroqModel(): string {
-  return String(process.env.GROQ_MODEL || 'llama-3.3-70b-versatile').trim()
+  return GROQ_MODEL
+}
+
+/** @deprecated use getGroqModel — kept for aiml tools */
+export function getGroqClient(): { configured: true } {
+  assertGroqConfigured()
+  return { configured: true }
 }
 
 export type GroqChatOptions = {
@@ -30,6 +27,7 @@ export type GroqChatOptions = {
   maxTokens?: number
   temperature?: number
   model?: string
+  system?: string
 }
 
 export type GroqChatResult = {
@@ -39,28 +37,19 @@ export type GroqChatResult = {
 }
 
 export async function groqChatCompletion(options: GroqChatOptions): Promise<GroqChatResult> {
-  const groq = getGroqClient()
-  const model = options.model || getGroqModel()
-
-  const completion = await groq.chat.completions.create({
-    model,
-    messages: [{ role: 'user', content: options.prompt }],
-    temperature: options.temperature ?? 0.7,
-    max_tokens: options.maxTokens ?? 2000,
+  const { text, usage, model } = await generateAIText(options.prompt, {
+    system: options.system,
+    maxTokens: options.maxTokens,
+    temperature: options.temperature,
   })
-
-  const content = String(completion.choices[0]?.message?.content || '')
-  const promptTokens = Number(completion.usage?.prompt_tokens || 0)
-  const completionTokens = Number(completion.usage?.completion_tokens || 0)
-
   return {
-    content,
+    content: text,
     usage: {
-      promptTokens,
-      completionTokens,
-      totalTokens: promptTokens + completionTokens,
+      promptTokens: usage.inputTokens,
+      completionTokens: usage.outputTokens,
+      totalTokens: usage.totalTokens,
     },
-    model,
+    model: options.model || model,
   }
 }
 
@@ -104,26 +93,26 @@ export function createGroqTextEventStream(options: GroqStreamOptions): ReadableS
     async start(controller) {
       let responseText = ''
       try {
-        const groq = getGroqClient()
-        const model = options.model || getGroqModel()
-
-        const stream = await groq.chat.completions.create({
-          model,
-          messages: [{ role: 'user', content: options.prompt }],
-          temperature: options.temperature ?? 0.7,
-          max_tokens: options.maxTokens ?? 2000,
-          stream: true,
+        const result = await streamAIText(options.system, options.prompt, {
+          maxTokens: options.maxTokens,
+          temperature: options.temperature,
         })
 
-        for await (const chunk of stream) {
-          const text = chunk.choices[0]?.delta?.content || ''
-          if (!text) continue
-          responseText += text
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text })}\n\n`))
+        for await (const chunk of result.textStream) {
+          if (!chunk) continue
+          responseText += chunk
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`))
         }
 
+        const usage = result.usage
+          ? {
+              promptTokens: Number(result.usage.inputTokens ?? 0),
+              completionTokens: Number(result.usage.outputTokens ?? 0),
+            }
+          : { promptTokens: 0, completionTokens: 0 }
+
         if (options.onComplete) {
-          await options.onComplete(responseText, { promptTokens: 0, completionTokens: 0 })
+          await options.onComplete(responseText, usage)
         }
 
         controller.enqueue(encoder.encode('data: [DONE]\n\n'))

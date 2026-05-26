@@ -1,5 +1,9 @@
-import { extractJSONObject, groqChatCompletion } from '@/lib/aiml/tools/_groq'
+import { generateAIObject } from '@/lib/ai/client'
+import { ECZPracticePaperSchema } from '@/lib/ai/schemas'
 import { buildEczPracticePrompt } from '@/lib/ai/subject-adaptive-prompts'
+
+const ECZ_SYSTEM =
+  'You are an ECZ examination specialist for Zambian schools. Create valid practice papers with Zambian context.'
 import { normalizeEczExamLevel } from '@/lib/ecz/ecz-practice-levels'
 
 export interface PracticeRequest {
@@ -26,13 +30,9 @@ export async function generateECZPractice(request: PracticeRequest) {
     questionCount: request.questionCount,
   })
 
-  const { content } = await groqChatCompletion({
-    prompt,
+  const { object } = await generateAIObject(ECZPracticePaperSchema, ECZ_SYSTEM, prompt, {
     temperature: 0.4,
     maxTokens: 4000,
   })
-
-  const parsed = extractJSONObject(content)
-  if (!parsed) throw new Error('Could not parse practice paper')
-  return parsed
+  return object
 }

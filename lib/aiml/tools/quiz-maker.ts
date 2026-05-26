@@ -1,5 +1,9 @@
-import { extractJSONObject, groqChatCompletion } from '@/lib/aiml/tools/_groq'
+import { generateAIObject } from '@/lib/ai/client'
+import { QuizSchema } from '@/lib/ai/schemas'
 import { buildQuizPrompt } from '@/lib/ai/subject-adaptive-prompts'
+
+const QUIZ_SYSTEM =
+  'You are a Zambian CBC assessment expert. Return only valid quiz data matching the schema.'
 
 export interface QuizRequest {
   topic: string
@@ -19,13 +23,9 @@ export async function generateQuiz(request: QuizRequest) {
 
 Question types to include: ${request.questionTypes.join(', ')}.`
 
-  const { content } = await groqChatCompletion({
-    prompt,
+  const { object } = await generateAIObject(QuizSchema, QUIZ_SYSTEM, prompt, {
     temperature: 0.5,
     maxTokens: 3000,
   })
-
-  const parsed = extractJSONObject(content)
-  if (!parsed) throw new Error('Could not parse quiz')
-  return parsed
+  return object
 }

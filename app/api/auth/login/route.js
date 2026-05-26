@@ -17,6 +17,7 @@ import {
 } from '@/lib/security/cookies'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { getSubscriptionState } from '@/lib/billing/subscription'
+import { logger, captureError } from '@/lib/utils/logger'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
@@ -47,9 +48,13 @@ if (
 }
 
 export const POST = withSecureApi(async function POST(request) {
+  const route = '/api/auth/login'
+  const start = Date.now()
+  const log = logger({ route })
+  log.request(request)
+
   try {
     let body = await request.json()
-    console.log('[Login Debug] Request Body:', { email: body.email }) // Log email only for safety
 
     const { subdomain: subdomainFromBody } = body
     // If subdomain is in the body, set x-school-subdomain header so getSchoolIdFromRequest finds it
@@ -62,7 +67,7 @@ export const POST = withSecureApi(async function POST(request) {
     // 1. Input Validation
     const validation = await validateRequest(loginSchema, body)
     if (!validation.success) {
-      console.log('[Login Debug] Validation Failed:', validation.errors)
+      log.response(400, Date.now() - start)
       return NextResponse.json(
         { error: 'Validation failed', details: validation.errors },
         { status: 400 }
@@ -294,10 +299,11 @@ export const POST = withSecureApi(async function POST(request) {
       request,
     })
 
+    logger({ route, schoolId: user.schoolId, userId: user.id }).response(200, Date.now() - start)
     return response
   } catch (error) {
-    // 6. Secure Error Handling
-    console.error('Login error:', error)
+    captureError(error, { route })
+    log.response(500, Date.now() - start)
     return NextResponse.json(
       {
         error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',

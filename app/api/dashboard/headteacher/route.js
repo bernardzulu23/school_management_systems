@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { calculateGrade } from '@/lib/gradingSystem'
+import { logger, captureError } from '@/lib/utils/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -91,6 +92,10 @@ function buildGenderByGrade({ rows, allowedYearGroups }) {
 }
 
 export async function GET(request) {
+  const route = '/api/dashboard/headteacher'
+  const start = Date.now()
+  let log = logger({ route })
+
   try {
     const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
@@ -105,6 +110,9 @@ export async function GET(request) {
     if (!schoolId) {
       return NextResponse.json({ error: 'School context required' }, { status: 403 })
     }
+
+    log = logger({ route, schoolId, userId: auth.user?.id })
+    log.request(request)
 
     try {
       await prisma.$queryRaw`SELECT 1`
@@ -932,9 +940,11 @@ export async function GET(request) {
       subject_performance_rows: subjectPerformanceRows,
     }
 
+    log.response(200, Date.now() - start)
     return NextResponse.json(data)
   } catch (error) {
-    console.error('Headteacher Dashboard Error:', error)
+    captureError(error, { route })
+    log.response(500, Date.now() - start)
     const isMissingTableError = (err) => {
       const raw = String(err?.message || '')
       const code = String(err?.code || '')

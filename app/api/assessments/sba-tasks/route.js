@@ -4,7 +4,11 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
 import { staffRoleDeniedMessage } from '@/lib/auth/roles'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
-import { validateFormLevelForSBA, validateZambianContext } from '@/lib/ecz/ecz-compliance'
+import {
+  canCreateSBATask,
+  validateZambianContext,
+  getTermWeight,
+} from '@/lib/middleware/ecz-validation'
 import { generateEczRubricCriteria, criteriaToPrismaCreate } from '@/lib/ecz/ecz-rubric-builder'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
@@ -26,8 +30,8 @@ export const POST = withSecureApi(async function POST(request) {
   const component = body.component === 'FINAL_EXAMINATION' ? 'FINAL_EXAMINATION' : 'SBA_TASK'
 
   if (component === 'SBA_TASK') {
-    const formCheck = validateFormLevelForSBA(formLevel)
-    if (!formCheck.valid) return NextResponse.json({ error: formCheck.error }, { status: 400 })
+    const formCheck = canCreateSBATask(formLevel)
+    if (!formCheck.allowed) return NextResponse.json({ error: formCheck.reason }, { status: 400 })
 
     const contextCheck = validateZambianContext(body.context)
     if (!contextCheck.valid)
@@ -62,6 +66,13 @@ export const POST = withSecureApi(async function POST(request) {
         submissionDeadline: body.submissionDeadline ? new Date(body.submissionDeadline) : null,
         createdBy: auth.user.id,
         status: 'DRAFT',
+        term: body.term != null ? Number(body.term) : null,
+        academicYear: body.academicYear != null ? String(body.academicYear) : null,
+        termWeight: body.term != null ? getTermWeight(Number(body.term)) : null,
+        instructions: body.instructions ? String(body.instructions) : null,
+        demonstration: body.demonstration ? String(body.demonstration) : null,
+        generatedByAI: Boolean(body.generatedByAI),
+        aiModel: body.aiModel ? String(body.aiModel) : null,
       },
       include: { subject: true },
     })
