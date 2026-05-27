@@ -15,6 +15,7 @@ import {
   REMEMBER_REFRESH_TOKEN_MAX_AGE,
   authCookieOptions,
 } from '@/lib/security/cookies'
+import { setCsrfCookie } from '@/lib/security/csrf'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { getSubscriptionState } from '@/lib/billing/subscription'
 import { logger, captureError } from '@/lib/utils/logger'
@@ -102,8 +103,8 @@ export const POST = withSecureApi(async function POST(request) {
 
     const isProd = process.env.NODE_ENV === 'production'
     const rateLimitResult = rateLimiter(request, {
-      limit: isProd ? 12 : 60,
-      windowMs: 5 * 60 * 1000,
+      limit: isProd ? 5 : 20,
+      windowMs: 15 * 60 * 1000,
       keyPrefix: 'auth_login_',
       keyGenerator: ({ ip }) => `${ip}-${normalizedEmail}`,
     })
@@ -287,6 +288,7 @@ export const POST = withSecureApi(async function POST(request) {
       newRefreshTokenValue,
       authCookieOptions(request, { maxAgeSeconds: refreshMaxAge, name: 'refresh_token' })
     )
+    setCsrfCookie(response, request)
 
     // Audit the login event
     await logAuditAction({

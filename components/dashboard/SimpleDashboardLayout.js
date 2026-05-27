@@ -11,6 +11,7 @@ import ProfilePictureDisplay from '@/components/ui/ProfilePictureDisplay'
 import { TimetableNotificationBell } from '@/components/timetable/MasterTimetableGenerator'
 import toast from 'react-hot-toast'
 import SubscriptionBanner from '@/components/billing/SubscriptionBanner'
+import ServerSessionGuard from '@/components/auth/ServerSessionGuard'
 
 export function DashboardLayout({ children, title }) {
   const { user, logout } = useAuth()
@@ -168,10 +169,12 @@ export function DashboardLayout({ children, title }) {
       </header>
       {/* Main content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0 space-y-4">
-          <SubscriptionBanner />
-          {!isExpired ? children : null}
-        </div>
+        <ServerSessionGuard>
+          <div className="px-4 py-6 sm:px-0 space-y-4">
+            <SubscriptionBanner />
+            {!isExpired ? children : null}
+          </div>
+        </ServerSessionGuard>
       </main>
 
       {showFeedback && (

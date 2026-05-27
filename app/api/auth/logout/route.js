@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { authCookieOptions } from '@/lib/security/cookies'
+import { csrfCookieOptions } from '@/lib/security/csrf'
 import { getCorsHeaders } from '@/lib/security/headers'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
@@ -38,6 +39,11 @@ export const POST = withSecureApi(async function POST(request) {
     }
     response.cookies.set('access_token', '', clearOpts)
     response.cookies.set('refresh_token', '', clearOpts)
+    response.cookies.set('csrf_token', '', {
+      ...csrfCookieOptions(request),
+      maxAge: 0,
+      ...(domain ? { domain } : {}),
+    })
   }
 
   return response

@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/auth'
 import { useSchool } from '@/lib/context/SchoolContext'
 import { TimetableNotificationBell } from '@/components/timetable/MasterTimetableGenerator'
 import SubscriptionBanner from '@/components/billing/SubscriptionBanner'
+import ServerSessionGuard from '@/components/auth/ServerSessionGuard'
 
 export default function ResponsiveDashboardLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -79,10 +80,12 @@ export default function ResponsiveDashboardLayout({ children }) {
         </header>
 
         <main className="flex-1 overflow-y-auto bg-paper p-4 sm:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto space-y-4">
-            <SubscriptionBanner />
-            {!isExpired ? children : null}
-          </div>
+          <ServerSessionGuard>
+            <div className="max-w-7xl mx-auto space-y-4">
+              <SubscriptionBanner />
+              {!isExpired ? children : null}
+            </div>
+          </ServerSessionGuard>
         </main>
       </div>
     </div>

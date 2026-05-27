@@ -305,6 +305,7 @@ See `docs/TESTING.md`, `CODE_QUALITY.md`, `PERFORMANCE.md`, `SECURITY_AUDIT.md`.
 | `docs/API_ROUTES.md`                      | Auto-generated API reference (`npm run docs:api-routes`) |
 | `docs/PHASE1_CHECKLIST.md`                | Gate before Phase 2                                      |
 | `docs/PHASE2_ROADMAP.md`                  | Phase 2 priorities                                       |
+| `docs/doc/Zsms phase2 cursor prompt.md`   | Phase 2 agent tasks (9–15) + HOTFIX                      |
 | `README.md`                               | Primary technical reference, API/page catalogs           |
 | `review.md`                               | **This file** — holistic project review                  |
 | `CAPABILITIES.md`                         | Feature marketing-style capability list                  |

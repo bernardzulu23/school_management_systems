@@ -569,6 +569,7 @@ Production: **Neon PostgreSQL** + **Vercel**. See [docs/doc/VERCEL_DEPLOY.md](do
 ```bash
 npm run build
 npm run prisma:migrate:deploy
+npm run docs:api-routes
 ```
 
 ---

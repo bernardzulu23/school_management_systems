@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import * as jose from 'jose'
 import {
   applySecurityHeaders,
   BLOCKED_HTTP_METHODS,
@@ -6,6 +7,7 @@ import {
   isForbiddenCrossOrigin,
 } from './lib/security/headers'
 import { checkProxyRateLimit } from './lib/security/proxyRateLimit'
+import { verifyCsrfRequest } from './lib/security/csrf'
 
 const PUBLIC_PATHS = [
   '/api/auth/login',
@@ -20,6 +22,7 @@ const PUBLIC_PATHS = [
   '/api/auth/me',
   '/api/auth/forgot-password',
   '/api/auth/reset-password',
+  '/api/csrf-token',
   '/api/sms/inbound',
   '/api/sms/delivery',
   '/api/public',
@@ -41,13 +44,29 @@ const PUBLIC_PATHS = [
   '/',
 ]
 
+const CSRF_EXEMPT_PATHS = [
+  '/api/auth/login',
+  '/api/auth/register',
+  '/api/auth/refresh',
+  '/api/auth/logout',
+  '/api/auth/forgot-password',
+  '/api/auth/reset-password',
+  '/api/onboarding',
+  '/api/payments/lipila/callback',
+  '/api/onboarding/lipila/callback',
+  '/api/sms/inbound',
+  '/api/sms/delivery',
+  '/api/health',
+  '/api/ping',
+]
+
 function secureResponse(body, init, request) {
   const response = body === null ? new NextResponse(null, init) : NextResponse.json(body, init)
   return applySecurityHeaders(response, request)
 }
 
 /** Next.js 16 proxy — multi-tenant subdomain routing and API security. */
-export default function proxy(request) {
+export async function handleSecurityProxy(request) {
   try {
     const { pathname } = request.nextUrl
     const method = String(request.method || 'GET').toUpperCase()
@@ -68,6 +87,21 @@ export default function proxy(request) {
 
     if (pathname.startsWith('/api') && isForbiddenCrossOrigin(request)) {
       return secureResponse({ error: 'Forbidden origin' }, { status: 403 }, request)
+    }
+
+    if (
+      pathname.startsWith('/api') &&
+      ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method) &&
+      !CSRF_EXEMPT_PATHS.some((path) => pathname === path || pathname.startsWith(path + '/'))
+    ) {
+      const csrf = verifyCsrfRequest(request)
+      if (!csrf.ok) {
+        return secureResponse(
+          { error: csrf.error || 'Invalid CSRF token' },
+          { status: 403 },
+          request
+        )
+      }
     }
 
     const rate = checkProxyRateLimit(request, pathname)
@@ -115,6 +149,15 @@ export default function proxy(request) {
       }
     }
 
+    // Uniform server-side role gate for all admin-prefixed APIs.
+    if (pathname.startsWith('/api/admin')) {
+      const payload = await decodeAccessToken(request)
+      const rk = roleKey(payload?.role)
+      if (!payload?.id || !ADMIN_ROLE_KEYS.has(rk)) {
+        return secureResponse({ error: 'Forbidden' }, { status: 403 }, request)
+      }
+    }
+
     const response = NextResponse.next({
       request: {
         headers: requestHeaders,
@@ -133,6 +176,44 @@ export default function proxy(request) {
   } catch {
     const response = NextResponse.next()
     return applySecurityHeaders(response, request)
+  }
+}
+
+export default handleSecurityProxy
+
+const ADMIN_ROLE_KEYS = new Set([
+  'admin',
+  'administrator',
+  'headteacher',
+  'schooladministrator',
+  'schooladmin',
+  'principal',
+  'headmaster',
+  'superadmin',
+])
+
+function roleKey(role) {
+  return String(role || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '')
+}
+
+async function decodeAccessToken(request) {
+  const bearer = String(request.headers.get('authorization') || '')
+  const token =
+    request.cookies?.get?.('access_token')?.value ||
+    (bearer.startsWith('Bearer ') ? bearer.slice(7).trim() : '')
+  if (!token) return null
+
+  const secret = String(process.env.JWT_SECRET || '').trim()
+  if (!secret) return null
+
+  try {
+    const { payload } = await jose.jwtVerify(token, new TextEncoder().encode(secret))
+    return payload || null
+  } catch {
+    return null
   }
 }
 

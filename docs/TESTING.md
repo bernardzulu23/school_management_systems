@@ -1,6 +1,6 @@
 # ZSMS Testing Guide
 
-This project uses **Vitest** for API and unit tests, and **Jest** for legacy React component tests.
+This project uses **Vitest** for API and unit tests, **Playwright** for E2E browser tests, and **Jest** for legacy React component tests.
 
 ## Quick start
 
@@ -130,3 +130,89 @@ Run coverage: `npm run test:coverage` — HTML report under `coverage/`.
 ```
 
 Fail the pipeline if any critical path test fails. Keep `test:jest` separate until legacy suites are migrated to Vitest.
+
+---
+
+## End-to-end tests (Playwright) — Phase 2 Task 9
+
+### Quick start
+
+```bash
+# One-time: install browser
+npx playwright install chromium
+
+# Seed local users (for login E2E later)
+npm run seed:local
+
+# Run E2E (starts dev server automatically unless one is already running)
+npm run test:e2e
+npm run test:e2e:ui       # interactive debugger
+npm run test:e2e:debug    # headed + pause on failure
+npm run test:all          # Vitest + Playwright
+```
+
+Requires `.env.local` with `DATABASE_URL`, `JWT_SECRET`, and other required vars (see [ENVIRONMENT.md](./ENVIRONMENT.md)).
+
+### Where to put E2E tests
+
+| Location                 | Purpose                       |
+| ------------------------ | ----------------------------- |
+| `__tests__/e2e/`         | Browser journey tests         |
+| `__tests__/e2e/helpers/` | Shared helpers (`auth.js`)    |
+| `playwright.config.js`   | Base URL, projects, webServer |
+
+### Current E2E suites
+
+1. **`health.spec.js`** — `/api/health`, home page loads
+2. **`auth.spec.js`** — login page, wrong password (no 500)
+3. **`qr-attendance.spec.js`** — public `/attend` page
+
+### When to write E2E vs unit test
+
+| Use **Vitest** (unit/API)               | Use **Playwright** (E2E)       |
+| --------------------------------------- | ------------------------------ |
+| Validation logic, ECZ rules, score caps | Full page load in real browser |
+| Auth middleware, Prisma mocks           | Login → dashboard redirect     |
+| Error status codes                      | QR scan landing page UX        |
+| Fast CI (no browser)                    | Pre-deploy smoke (with DB)     |
+
+**Rule of thumb:** logic in Vitest; user journeys in Playwright.
+
+### Debugging a failing E2E test
+
+1. Run `npm run test:e2e:debug` to replay step-by-step.
+2. Open `playwright-report/` after a failed run (HTML reporter).
+3. Check `test-results/` for screenshots (captured on failure).
+4. Set `PLAYWRIGHT_BASE_URL` if testing against a deployed preview.
+
+### CI note
+
+E2E needs a database and env vars. Run `npm test` (Vitest only) on every PR; run `npm run test:e2e` on staging or nightly unless CI provides Neon + secrets.
+
+### `Timed out waiting for config.webServer`
+
+Next.js first compile on Windows (especially on slow or network drives) can exceed 2 minutes.
+
+**Fastest approach (recommended):**
+
+```powershell
+# Terminal 1 — wait until you see "Ready"
+npm run dev
+
+# Terminal 2
+npm run test:e2e:attach
+```
+
+**Or** increase the wait (5 minutes default now):
+
+```powershell
+$env:PLAYWRIGHT_WEB_SERVER_TIMEOUT="600000"
+npm run test:e2e
+```
+
+**Tips:**
+
+- Use `127.0.0.1` (default in `dev:e2e`) instead of `localhost`.
+- Move the project off a network drive if you see Next.js "Slow filesystem" warnings.
+- Readiness checks `/api/health?live=1` (no database) so the server can report ready sooner.
+- Optional mobile project: `$env:PLAYWRIGHT_MOBILE="1"; npm run test:e2e`

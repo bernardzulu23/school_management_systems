@@ -9,6 +9,7 @@ import {
   REFRESH_TOKEN_MAX_AGE,
   authCookieOptions,
 } from '@/lib/security/cookies'
+import { setCsrfCookie } from '@/lib/security/csrf'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
@@ -129,6 +130,7 @@ export const POST = withSecureApi(async function POST(request) {
       newRefreshTokenValue,
       authCookieOptions(request, { maxAgeSeconds: REFRESH_TOKEN_MAX_AGE, name: 'refresh_token' })
     )
+    setCsrfCookie(response, request)
 
     return response
   } catch (error) {

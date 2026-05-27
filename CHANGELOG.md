@@ -4,6 +4,31 @@ All notable changes to the Zambian School Management System during the audit and
 
 ## [Unreleased]
 
+### Security
+
+- Session auth cookies now use `SameSite=Strict` by default.
+- Added centralized CSRF defense (`lib/security/csrf.js`) with `/api/csrf-token` and proxy-level validation for state-changing API requests.
+- Added uniform server-side role enforcement for all `/api/admin/*` routes in `proxy.js` (blocks non-admin users before route handler execution).
+- Tightened login rate limiter to `5` attempts per `15` minutes in production.
+
+### Fixed (Phase 2 HOTFIX — Groq structured output)
+
+- **`generateAIObject`** now uses `mode: 'json'` with `providerOptions.groq.structuredOutputs: false` so free-tier models (e.g. `llama-3.3-70b-versatile`) do not receive unsupported `json_schema` requests.
+- Exported **`GROQ_STREAM_MODEL`** and **`GROQ_STRUCTURED_MODEL`** in `lib/ai/client.js`.
+
+### Changed (Phase 2 Task 9 — Playwright E2E reliability)
+
+- Playwright `webServer` waits on `/api/health?live=1` with **5 min** timeout (was 2 min on `/`).
+- Added `npm run test:e2e:attach` when dev server is already running; `npm run dev:e2e` binds `127.0.0.1:3000`.
+- Mobile E2E project optional via `PLAYWRIGHT_MOBILE=1`.
+
+### Added (Phase 2 Task 9 — Playwright E2E)
+
+- **`@playwright/test`** + `playwright.config.js` — desktop + mobile Chromium projects, auto dev server.
+- **E2E suites:** `__tests__/e2e/health.spec.js`, `auth.spec.js`, `qr-attendance.spec.js`, `helpers/auth.js`.
+- **Scripts:** `test:e2e`, `test:e2e:ui`, `test:e2e:debug`, `test:all`.
+- **`docs/TESTING.md`** — E2E section (when to use E2E vs Vitest, debugging).
+
 ### Added (PRD Task 8 — Documentation system)
 
 - **`docs/README.md`** — documentation index for all guides.

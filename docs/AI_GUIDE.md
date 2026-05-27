@@ -27,6 +27,15 @@ lib/ai/schemas.js    ← Zod validation (structured outputs)
 
 Legacy code may still import `@/lib/ai/groq-client` — it delegates to `client.js`.
 
+### Structured JSON (`generateAIObject`)
+
+Free-tier Groq models such as `llama-3.3-70b-versatile` do **not** support API-level `json_schema`. The client sets:
+
+- `mode: 'json'` (json_object)
+- `providerOptions.groq.structuredOutputs: false`
+
+Zod still validates the parsed object on our side. If you see a `json_schema` error in production, redeploy with the latest `lib/ai/client.js`.
+
 ## AI features
 
 | Feature                  | Route / module                    | Mode                 | Schema                   |

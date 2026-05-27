@@ -19,7 +19,11 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     setupFiles: ['__tests__/setup.js'],
-    include: ['__tests__/api/**/*.test.js', '__tests__/unit/**/*.test.js'],
+    include: [
+      '__tests__/api/**/*.test.js',
+      '__tests__/unit/**/*.test.js',
+      'test/security/**/*.test.js',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
