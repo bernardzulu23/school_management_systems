@@ -15,10 +15,12 @@ import {
   ECZ_PRACTICE_EXAM_LEVEL_GROUPS,
   formatEczExamLevelLabel,
 } from '@/lib/ecz/ecz-practice-levels'
+import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
 
 export default function StudentECZPracticePage() {
   const { data, loading, error, fetch } = useAIFetch('/api/ai/ecz-practice')
   const paper = data?.paper || null
+  const ragReferences = Array.isArray(data?.ragReferences) ? data.ragReferences : []
 
   const [form, setForm] = useState({
     subject: 'English Language',
@@ -118,6 +120,7 @@ export default function StudentECZPracticePage() {
                   {paper?.examInfo?.topic} • Total marks: {paper?.examInfo?.totalMarks} • Time:{' '}
                   {paper?.examInfo?.timeAllowed}
                 </div>
+                <RagReferencesPanel references={ragReferences} />
                 <div className="space-y-3">
                   {(paper.questions || []).map((q, idx) => (
                     <div

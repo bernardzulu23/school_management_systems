@@ -15,6 +15,7 @@ import { assertGroqConfigured } from '@/lib/ai/groq-client'
 import { generateAIObject } from '@/lib/ai/client'
 import { ECZPracticePaperSchema } from '@/lib/ai/schemas'
 import { buildEczPracticePrompt } from '@/lib/ai/subject-adaptive-prompts'
+import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
 
 const ECZ_PRACTICE_SYSTEM =
   'You are an ECZ examination specialist for Zambian schools. Create valid practice papers with Zambian context. Match the requested exam level exactly.'
@@ -82,17 +83,27 @@ export async function POST(request) {
 
   const count =
     Number.isFinite(questionCount) && questionCount > 0 ? Math.min(20, questionCount) : 5
-  const prompt = buildEczPracticePrompt({
+  let prompt = buildEczPracticePrompt({
     subject,
     examLevel,
     topic,
     questionCount: count,
   })
 
+  const rag = await buildRagContextForQuery({
+    query: `${subject} ${examLevel} ${topic} ECZ examination practice`,
+    schoolId,
+    schoolPlan: school.plan,
+    subject,
+  })
+  if (rag.block) {
+    prompt = `${prompt}\n\n---\nSchool reference materials (cite textbook refs as [Ref N]):\n${rag.block}`
+  }
+
   try {
     const { object: parsed, usage } = await generateAIObject(
       ECZPracticePaperSchema,
-      ECZ_PRACTICE_SYSTEM,
+      rag.block ? appendRagToSystemPrompt(ECZ_PRACTICE_SYSTEM, rag.block) : ECZ_PRACTICE_SYSTEM,
       prompt,
       { maxTokens: 2500, temperature: 0.4 }
     )
@@ -117,7 +128,11 @@ export async function POST(request) {
       },
     })
 
-    return NextResponse.json({ success: true, paper })
+    return NextResponse.json({
+      success: true,
+      paper,
+      ragReferences: rag.refs?.length ? rag.refs : undefined,
+    })
   } catch (err) {
     return NextResponse.json(
       { error: err?.message || 'Failed to generate practice paper' },

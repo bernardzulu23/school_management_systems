@@ -9,12 +9,14 @@ import Link from 'next/link'
 import UpgradePrompt from '@/components/shared/UpgradePrompt'
 import { useAIFetch } from '@/hooks/useAIStream'
 import { FeatureGate } from '@/components/FeatureGate'
+import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 export default function TeacherQuizMakerPage() {
   const { data, loading, error, fetch } = useAIFetch('/api/ai/quiz-maker')
   const quiz = data?.quiz || null
+  const ragReferences = Array.isArray(data?.ragReferences) ? data.ragReferences : []
 
   const FORM_LEVELS = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']
 
@@ -122,6 +124,7 @@ export default function TeacherQuizMakerPage() {
                 <div className="text-sm text-royalPurple-text2">
                   {quiz.grade} • {quiz.subject} • {quiz.topic} • Total marks: {quiz.totalMarks}
                 </div>
+                <RagReferencesPanel references={ragReferences} />
                 <div className="space-y-3">
                   {(quiz.questions || []).map((q, idx) => (
                     <div

@@ -19,6 +19,7 @@ import {
   createGroqTextEventStream,
   GROQ_SSE_HEADERS,
 } from '@/lib/ai/groq-client'
+import { buildRagContextForQuery } from '@/lib/ai/rag-context'
 
 const LessonPlannerInputSchema = z.object({
   grade: z.string().min(1).max(20),
@@ -160,13 +161,23 @@ export async function POST(request: Request) {
       subject: input.subject,
     })
 
-    const prompt = await buildPrompt(input, String(user.id), schoolId)
+    let prompt = await buildPrompt(input, String(user.id), schoolId)
+    const rag = await buildRagContextForQuery({
+      query: `${input.subject} ${input.grade} ${input.topic} lesson plan`,
+      schoolId,
+      schoolPlan: school.plan,
+      subject: input.subject,
+    })
+    if (rag.block) {
+      prompt = `${prompt}\n\n---\nSchool reference materials (cite as [Ref N]):\n${rag.block}`
+    }
     const startTime = Date.now()
 
     const stream = createGroqTextEventStream({
       prompt,
       maxTokens: 4500,
       temperature: 0.7,
+      meta: rag.refs?.length ? { ragReferences: rag.refs } : undefined,
       onErrorMessage: 'Failed to generate lesson plan',
       onComplete: async (responseText) => {
         await trackAIUsage(schoolId, 'ai-lesson-planner')

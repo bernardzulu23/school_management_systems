@@ -13,6 +13,7 @@ import { buildFrameworkElementsBlock, LESSON_PLAN_TEMPLATE_OPTIONS } from '@/lib
 import { buildLessonPlanHeaderBlock } from '@/lib/lesson-plans/header-block'
 import { composeLessonPlanDisplay } from '@/lib/lesson-plans/text'
 import { LessonPlanDownloadButton } from '@/components/lesson-plans/LessonPlanViewer'
+import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
 import { Download, FileText, Printer } from 'lucide-react'
 
 const GRADE_GROUPS = [
@@ -123,6 +124,7 @@ export default function AILessonPlanner() {
   const [saving, setSaving] = useState(false)
   const [savedPlanId, setSavedPlanId] = useState(null)
   const [professionalContent, setProfessionalContent] = useState('')
+  const [professionalRagReferences, setProfessionalRagReferences] = useState([])
   const [teacherContext, setTeacherContext] = useState(null)
   const [contextLoading, setContextLoading] = useState(true)
 
@@ -157,11 +159,20 @@ export default function AILessonPlanner() {
     resourceLevel: 'Moderate (textbooks, chalkboard, some printed materials)',
   })
 
-  const { text, loading, error, done, start, reset, stop } = useAIStream('/api/ai/lesson-planner')
+  const { text, loading, error, done, ragReferences, start, reset, stop } =
+    useAIStream('/api/ai/lesson-planner')
 
   const activeSubject = useCustomSubject ? form.customSubject : form.subject
   const isProfessional = form.templateType === 'professional'
   const rawContent = isProfessional ? professionalContent : text
+  const activeRagReferences = isProfessional ? professionalRagReferences : ragReferences
+
+  const handleReset = () => {
+    reset()
+    setProfessionalContent('')
+    setProfessionalRagReferences([])
+    setSavedPlanId(null)
+  }
 
   useEffect(() => {
     let cancelled = false
@@ -422,6 +433,7 @@ export default function AILessonPlanner() {
     if (!canGenerate) return
     setSaving(true)
     setProfessionalContent('')
+    setProfessionalRagReferences([])
     setSavedPlanId(null)
     try {
       const res = await fetch('/api/lesson-plans/generate', {
@@ -451,6 +463,7 @@ export default function AILessonPlanner() {
         toast.error(json?.message || json?.error || 'Failed to generate lesson plan')
         return
       }
+      setProfessionalRagReferences(Array.isArray(json?.ragReferences) ? json.ragReferences : [])
       const detail = await fetch(`/api/lesson-plans/${encodeURIComponent(json.data.id)}`, {
         credentials: 'include',
       })
@@ -1039,7 +1052,7 @@ export default function AILessonPlanner() {
                       error?.message ||
                       'The AI service could not complete your request. Try again in a moment.'}
                 </p>
-                <Button variant="outline" className="mt-3" onClick={reset}>
+                <Button variant="outline" className="mt-3" onClick={handleReset}>
                   Dismiss
                 </Button>
               </>
@@ -1064,7 +1077,7 @@ export default function AILessonPlanner() {
               ) : null}
             </>
           )}
-          <Button variant="outline" onClick={reset} disabled={loading || saving}>
+          <Button variant="outline" onClick={handleReset} disabled={loading || saving}>
             Reset
           </Button>
           <Button variant="outline" onClick={copy} disabled={!displayContent}>
@@ -1113,6 +1126,8 @@ export default function AILessonPlanner() {
           ) : null}
         </div>
       </div>
+
+      <RagReferencesPanel references={activeRagReferences} className="mb-4" />
 
       <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card p-6">
         <div className="text-royalPurple-text1 font-semibold mb-3">Lesson Plan Preview</div>

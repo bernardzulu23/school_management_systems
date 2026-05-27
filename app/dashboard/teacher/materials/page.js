@@ -235,8 +235,14 @@ export default function StudyMaterialsPage() {
                 Study Materials Management
               </h1>
               <p className="text-royalPurple-text2">
-                Upload, organize, and share educational resources
+                Upload, organize, and share educational resources with students
               </p>
+              <Link
+                href="/dashboard/teacher/ai-materials"
+                className="text-sm text-accent hover:underline mt-1 inline-block"
+              >
+                Upload notes for AI (lesson plans, quizzes) →
+              </Link>
             </div>
           </div>
           <div className="flex items-center space-x-2">

@@ -12,6 +12,8 @@ import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
 import { buildLessonPlanHeaderBlock } from '@/lib/lesson-plans/header-block'
 import { composeLessonPlanDisplay } from '@/lib/lesson-plans/text'
 import { logger, captureError } from '@/lib/utils/logger'
+import { buildRagContextForQuery } from '@/lib/ai/rag-context'
+import { getSchoolPlanForUsage } from '@/lib/middleware/aiUsageTracker'
 
 export const dynamic = 'force-dynamic'
 
@@ -67,6 +69,14 @@ export const POST = withErrorHandler(async function POST(request) {
     throw new ApiError('grade, subject, and topic are required', 400)
   }
 
+  const school = await getSchoolPlanForUsage(schoolId)
+  const rag = await buildRagContextForQuery({
+    query: `${subject} ${grade} ${topic} lesson plan`,
+    schoolId,
+    schoolPlan: school?.plan,
+    subject,
+  })
+
   let generatedContent
   let structuredContent = null
   let tokensUsed = 0
@@ -74,28 +84,34 @@ export const POST = withErrorHandler(async function POST(request) {
   let generatedAt = null
 
   if (useMinistryFormat) {
-    const result = await generateProfessionalLessonPlan({
-      subject,
-      form: grade,
-      topic,
-      subTopic,
-      duration,
-      term,
-      totalPupils: body?.totalPupils,
-      boys: body?.boys ?? body?.numberOfBoys,
-      girls: body?.girls ?? body?.numberOfGirls,
-    })
+    const result = await generateProfessionalLessonPlan(
+      {
+        subject,
+        form: grade,
+        topic,
+        subTopic,
+        duration,
+        term,
+        totalPupils: body?.totalPupils,
+        boys: body?.boys ?? body?.numberOfBoys,
+        girls: body?.girls ?? body?.numberOfGirls,
+      },
+      { ragBlock: rag.block }
+    )
     generatedContent = result.content
     tokensUsed = result.tokensUsed
   } else {
-    const result = await generateStructuredLessonPlan({
-      subject,
-      form: grade,
-      topic,
-      subTopic,
-      duration,
-      term,
-    })
+    const result = await generateStructuredLessonPlan(
+      {
+        subject,
+        form: grade,
+        topic,
+        subTopic,
+        duration,
+        term,
+      },
+      { ragBlock: rag.block }
+    )
     generatedContent = result.content
     structuredContent = result.structuredContent
     tokensUsed = result.tokensUsed
@@ -163,5 +179,6 @@ export const POST = withErrorHandler(async function POST(request) {
     data: plan,
     message: 'Professional lesson plan generated. Review, edit if needed, then submit to your HOD.',
     tokensUsed,
+    ragReferences: rag.refs?.length ? rag.refs : undefined,
   })
 })

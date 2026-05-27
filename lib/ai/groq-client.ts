@@ -83,6 +83,8 @@ export type GroqStreamOptions = GroqChatOptions & {
     usage: { promptTokens: number; completionTokens: number }
   ) => Promise<void>
   onErrorMessage?: string
+  /** Sent as the first SSE event before text chunks (e.g. ragReferences). */
+  meta?: Record<string, unknown>
 }
 
 /** SSE stream compatible with useAIStream (`data: {"text":"..."}` + `[DONE]`). */
@@ -93,6 +95,10 @@ export function createGroqTextEventStream(options: GroqStreamOptions): ReadableS
     async start(controller) {
       let responseText = ''
       try {
+        if (options.meta && Object.keys(options.meta).length > 0) {
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(options.meta)}\n\n`))
+        }
+
         const { streamAITextWithFallback } = await import('@/lib/ai/client')
         const { result, model } = await streamAITextWithFallback(options.system, options.prompt, {
           maxTokens: options.maxTokens,

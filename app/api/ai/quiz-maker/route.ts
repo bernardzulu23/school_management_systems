@@ -16,6 +16,7 @@ import { assertGroqConfigured } from '@/lib/ai/groq-client'
 import { generateAIObject } from '@/lib/ai/client'
 import { QuizSchema } from '@/lib/ai/schemas'
 import { buildQuizPrompt } from '@/lib/ai/subject-adaptive-prompts'
+import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
 
 const QUIZ_SYSTEM =
   'You are a Zambian CBC assessment expert. Return only valid quiz data matching the schema. Use Zambian context where appropriate.'
@@ -94,13 +95,27 @@ export async function POST(request: Request) {
       subject: input.subject,
     })
 
-    const prompt = buildPrompt(input)
+    let prompt = buildPrompt(input)
+    const rag = await buildRagContextForQuery({
+      query: `${input.subject} ${input.grade} ${input.topic} quiz assessment`,
+      schoolId,
+      schoolPlan: school.plan,
+      subject: input.subject,
+    })
+    if (rag.block) {
+      prompt = `${prompt}\n\n---\nSchool reference materials:\n${rag.block}`
+    }
     const startTime = Date.now()
 
-    const { object: quiz, usage } = await generateAIObject(QuizSchema, QUIZ_SYSTEM, prompt, {
-      maxTokens: 2500,
-      temperature: 0.5,
-    })
+    const { object: quiz, usage } = await generateAIObject(
+      QuizSchema,
+      rag.block ? appendRagToSystemPrompt(QUIZ_SYSTEM, rag.block) : QUIZ_SYSTEM,
+      prompt,
+      {
+        maxTokens: 2500,
+        temperature: 0.5,
+      }
+    )
 
     if (!quiz?.questions?.length) {
       logger.warn('ai.quiz-maker.invalid-json', { requestId, schoolId, userId: user.id })
@@ -129,7 +144,11 @@ export async function POST(request: Request) {
       durationMs: Date.now() - startTime,
     })
 
-    return NextResponse.json({ success: true, quiz })
+    return NextResponse.json({
+      success: true,
+      quiz,
+      ragReferences: rag.refs?.length ? rag.refs : undefined,
+    })
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: 'Invalid input', issues: error.issues }, { status: 400 })

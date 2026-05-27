@@ -119,6 +119,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'My Classes', href: '/dashboard/classes', icon: GraduationCap },
         { name: 'My Subjects', href: '/dashboard/subjects', icon: BookOpen },
         { name: 'Materials', href: '/dashboard/teacher/materials', icon: Upload },
+        {
+          name: 'AI Reference Materials',
+          href: '/dashboard/teacher/ai-materials',
+          icon: Upload,
+        },
         { name: 'My Timetable', href: '/dashboard/timetable/teacher', icon: Calendar },
         { name: 'Games', href: '/dashboard/teacher/games', icon: GamepadIcon },
         { name: 'AI Lesson Planner', href: '/dashboard/teacher/lesson-planner', icon: Sparkles },

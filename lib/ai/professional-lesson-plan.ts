@@ -48,7 +48,10 @@ function stageMinutes(duration: number, fraction: number) {
   return Math.max(1, Math.round(duration * fraction))
 }
 
-export function buildProfessionalLessonPlanPrompt(input: ProfessionalLessonPlanInput): string {
+export function buildProfessionalLessonPlanPrompt(
+  input: ProfessionalLessonPlanInput,
+  ragBlock = ''
+): string {
   const canonical = resolveCanonicalSubject(input.subject)
   const duration = Number(input.duration) || 40
   const subTopic = String(input.subTopic || input.topic).trim()
@@ -68,7 +71,12 @@ export function buildProfessionalLessonPlanPrompt(input: ProfessionalLessonPlanI
   const synthesis = stageMinutes(duration, 0.2)
   const conclusion = duration - intro - development - explanation - synthesis
 
+  const ragSection = String(ragBlock || '').trim()
+    ? `\n\nSchool reference materials (cite as [Ref N] when used):\n${String(ragBlock).trim()}\n`
+    : ''
+
   return `You are creating a PROFESSIONAL lesson plan matching Ministry of Education Zambia standards.
+${ragSection}
 
 CRITICAL: Use PLAIN TEXT ONLY. NO markdown formatting:
 - Do NOT use asterisks (*) for bold or italic
@@ -197,9 +205,10 @@ Write the COMPLETE lesson plan now in plain text only.`
 }
 
 export async function generateProfessionalLessonPlan(
-  input: ProfessionalLessonPlanInput
+  input: ProfessionalLessonPlanInput,
+  options: { ragBlock?: string } = {}
 ): Promise<{ content: string; tokensUsed: number }> {
-  const prompt = buildProfessionalLessonPlanPrompt(input)
+  const prompt = buildProfessionalLessonPlanPrompt(input, options.ragBlock || '')
   const { content, usage } = await groqChatCompletion({
     prompt,
     maxTokens: 6000,

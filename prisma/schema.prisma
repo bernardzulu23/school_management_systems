@@ -67,6 +67,7 @@ model School {
   bookLoans            BookLoan[]
   activities           Activity[]
   studyMaterials       StudyMaterial[]
+  schoolMaterials      SchoolMaterial[]
   gamificationProfiles GamificationProfile[]
   badges               Badge[]
   creativeFeatures     CreativeFeature[]
@@ -400,6 +401,37 @@ model StudyMaterial {
   
   @@index([schoolId])
   @@index([subject])
+}
+
+/// RAG source materials (PDF/DOCX/TXT) — chunked + embedded for AI grounding
+model SchoolMaterial {
+  id          String   @id @default(cuid())
+  schoolId    String
+  title       String
+  subject     String?
+  gradeLevel  String?
+  fileUrl     String
+  fileType    String   // pdf | docx | txt
+  uploadedBy  String
+  createdAt   DateTime @default(now())
+  chunks      MaterialChunk[]
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId])
+  @@index([subject])
+}
+
+model MaterialChunk {
+  id         String         @id @default(cuid())
+  schoolId   String
+  materialId String
+  chunkIndex Int
+  content    String         @db.Text
+  embedding  Unsupported("vector(384)")
+  material   SchoolMaterial @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId])
+  @@index([materialId])
 }
 
 model Teacher {

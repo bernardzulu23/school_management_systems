@@ -20,6 +20,7 @@ export function useAIStream(endpoint) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [done, setDone] = useState(false)
+  const [ragReferences, setRagReferences] = useState([])
   const abortRef = useRef(null)
 
   const reset = useCallback(() => {
@@ -27,6 +28,7 @@ export function useAIStream(endpoint) {
     setError(null)
     setDone(false)
     setLoading(false)
+    setRagReferences([])
   }, [])
 
   const start = useCallback(
@@ -37,6 +39,7 @@ export function useAIStream(endpoint) {
       setText('')
       setError(null)
       setDone(false)
+      setRagReferences([])
       setLoading(true)
 
       try {
@@ -87,6 +90,8 @@ export function useAIStream(endpoint) {
             }
             if (parsedEvent?.error) {
               setError(parsedEvent)
+            } else if (Array.isArray(parsedEvent?.ragReferences)) {
+              setRagReferences(parsedEvent.ragReferences)
             } else if (typeof parsedEvent?.text === 'string') {
               setText((prev) => prev + parsedEvent.text)
             }
@@ -108,7 +113,7 @@ export function useAIStream(endpoint) {
     setLoading(false)
   }, [])
 
-  return { text, loading, error, done, start, reset, stop }
+  return { text, loading, error, done, ragReferences, start, reset, stop }
 }
 
 export function useAIFetch(endpoint) {
