@@ -73,6 +73,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'MOE Reports', href: '/dashboard/headteacher/moe-reports', icon: FileText },
         { name: 'AI Lesson Planner', href: '/dashboard/teacher/lesson-planner', icon: Sparkles },
         { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
+        {
+          name: 'AI Reference Materials',
+          href: '/dashboard/teacher/ai-materials',
+          icon: Upload,
+        },
         { name: 'AI Report Comments', href: '/dashboard/teacher/report-comments', icon: Sparkles },
         { name: 'AI Story Weaver', href: '/dashboard/teacher/story-weaver', icon: Sparkles },
         { name: 'Attendance Returns', href: '/dashboard/attendance/returns', icon: UserCheck },
@@ -99,6 +104,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Games', href: '/dashboard/hod/games', icon: GamepadIcon },
         { name: 'AI Lesson Planner', href: '/dashboard/teacher/lesson-planner', icon: Sparkles },
         { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
+        {
+          name: 'AI Reference Materials',
+          href: '/dashboard/teacher/ai-materials',
+          icon: Upload,
+        },
         { name: 'AI Report Comments', href: '/dashboard/teacher/report-comments', icon: Sparkles },
         { name: 'AI Story Weaver', href: '/dashboard/teacher/story-weaver', icon: Sparkles },
         { name: 'Teacher Performance', href: '/admin/teacher-performance', icon: Target },
