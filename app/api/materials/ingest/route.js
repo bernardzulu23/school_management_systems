@@ -14,6 +14,35 @@ function normalize(v) {
   return String(v || '').trim()
 }
 
+function toApiError(error) {
+  const message = String(error?.message || 'Ingestion failed')
+  const lower = message.toLowerCase()
+
+  if (
+    lower.includes('api_key is required') ||
+    lower.includes('embedding failed') ||
+    lower.includes('huggingface') ||
+    lower.includes('voyage') ||
+    lower.includes('openai')
+  ) {
+    return new ApiError(`RAG embedding provider is not configured: ${message}`, 503)
+  }
+
+  if (
+    lower.includes('unsupported file type') ||
+    lower.includes('no text content to index') ||
+    lower.includes('filetype')
+  ) {
+    return new ApiError(message, 400)
+  }
+
+  if (lower.includes('rag is not enabled')) {
+    return new ApiError(message, 403)
+  }
+
+  return new ApiError(message, 500)
+}
+
 /**
  * POST /api/materials/ingest
  * Body JSON: { materialId, text? } OR multipart: file + metadata fields.
@@ -103,12 +132,17 @@ export const POST = withErrorHandler(async function POST(request) {
     materialId = created.id
   }
 
-  const result = await ingestMaterialText({
-    schoolId,
-    materialId,
-    text,
-    schoolPlan: school.plan,
-  })
+  let result
+  try {
+    result = await ingestMaterialText({
+      schoolId,
+      materialId,
+      text,
+      schoolPlan: school.plan,
+    })
+  } catch (error) {
+    throw toApiError(error)
+  }
 
   return NextResponse.json({
     success: true,

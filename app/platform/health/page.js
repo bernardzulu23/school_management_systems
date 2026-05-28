@@ -23,6 +23,7 @@ function StatusPill({ status }) {
 export default function PlatformHealthPage() {
   const [checks, setChecks] = useState([])
   const [summary, setSummary] = useState(null)
+  const [ragHealth, setRagHealth] = useState(null)
   const [loading, setLoading] = useState(true)
 
   const load = useCallback(async () => {
@@ -33,6 +34,10 @@ export default function PlatformHealthPage() {
       if (!res.ok) throw new Error(json.error || 'Failed to load')
       setChecks(json.checks || [])
       setSummary(json.summary)
+
+      const ragRes = await fetch('/api/platform/health/rag', { cache: 'no-store' })
+      const ragJson = await ragRes.json().catch(() => ({}))
+      if (ragRes.ok) setRagHealth(ragJson)
     } catch (e) {
       toast.error(e.message)
     } finally {
@@ -54,6 +59,19 @@ export default function PlatformHealthPage() {
             <p className="text-sm text-muted">
               {summary.ok} ok · {summary.warn} warnings · {summary.fail} failures
             </p>
+          ) : null}
+          {ragHealth ? (
+            <div className="border-2 border-ink bg-white p-4 shadow-[2px_2px_0_#111111]">
+              <p className="font-medium text-ink">RAG embeddings provider health</p>
+              <p className="text-sm text-muted mt-1">
+                {ragHealth.ragEmbeddingsConfigured
+                  ? `Configured: ${ragHealth.configuredProviders.join(', ')}`
+                  : 'Not configured'}
+              </p>
+              {ragHealth.recommendation ? (
+                <p className="text-xs text-muted mt-1">{ragHealth.recommendation}</p>
+              ) : null}
+            </div>
           ) : null}
           <ul className="space-y-3">
             {checks.map((c) => (
