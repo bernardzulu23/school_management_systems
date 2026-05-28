@@ -40,10 +40,13 @@ import {
   Rocket,
   TrendingUp as LearningPathIcon,
   Globe,
+  Code,
 } from 'lucide-react'
 import Link from 'next/link'
 import LearningPathPage from './learning-path/page'
 import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeachingHub'
+import { LearningAnalyticsPanel } from '@/components/analytics/LearningAnalyticsPanel'
+import { StudyAssistant } from '@/components/student/StudyAssistant'
 import { SCHOOL_SUBJECTS, getSubjectsByIds } from '@/data/subjects'
 import toast from 'react-hot-toast'
 
@@ -375,6 +378,8 @@ export default function StudentDashboard() {
           {/* Tab Content */}
           {activeTab === 'overview' && (
             <div className="space-y-8">
+              <LearningAnalyticsPanel role="student" />
+
               {/* Student Information Card */}
               {currentUser && (
                 <Card variant="glass">
@@ -1008,6 +1013,19 @@ export default function StudentDashboard() {
                           </p>
                         </div>
                       </Link>
+                      <Link href="/dashboard/student/code-playground">
+                        <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
+                          <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <Code className="h-8 w-8 text-royalPurple-text1" />
+                          </div>
+                          <h3 className="text-royalPurple-text1 font-semibold text-center">
+                            Code Playground
+                          </h3>
+                          <p className="text-royalPurple-text2 text-sm text-center mt-2">
+                            Run Python &amp; more on your phone
+                          </p>
+                        </div>
+                      </Link>
                     </div>
                   </div>
                 </CardContent>
@@ -1188,6 +1206,26 @@ export default function StudentDashboard() {
           {/* Creative Teaching & STEM Tab */}
           {activeTab === 'creative-teaching' && (
             <div className="space-y-6">
+              <StudyAssistant />
+              <Card variant="glass">
+                <CardContent className="pt-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-royalPurple-text1 flex items-center gap-2">
+                        <Code className="h-5 w-5 text-royalPurple-pillTx" />
+                        Code Playground
+                      </h3>
+                      <p className="text-sm text-royalPurple-text2 mt-1">
+                        Write and run Python, JavaScript, and more from your phone — same tool your
+                        ICT teacher uses in class.
+                      </p>
+                    </div>
+                    <Link href="/dashboard/student/code-playground">
+                      <Button className="w-full sm:w-auto">Open playground</Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
               <CreativeTeachingHub />
             </div>
           )}

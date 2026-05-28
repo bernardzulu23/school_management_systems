@@ -84,7 +84,7 @@ Payment provider logos: place files in `public/payments/` (`mtn.jpg`, `airtel.jp
 | `LOCAL_DEV_PASSWORD`                               | Password for seeded local accounts             |
 | `DEV_ONBOARDING_SKIP_EMAIL`                        | Skip Resend and auto-verify email (local only) |
 | `NEXT_PUBLIC_SHOW_DEV_LOGIN_HINT`                  | Show dev login hints on login page             |
-| `PLATFORM_ADMIN_EMAIL` / `PLATFORM_ADMIN_PASSWORD` | Platform console at `/platform/login`          |
+| `PLATFORM_ADMIN_EMAIL` / `PLATFORM_ADMIN_PASSWORD` | Platform super-admin at `/login` (apex URL)    |
 
 ---
 

@@ -29,6 +29,10 @@ Vitest does **not** connect to a real database. Prisma and external services are
 2. **`__tests__/api/onboarding.test.js`** — Payment gate + Lipila callback
 3. **`__tests__/api/sba.test.js`** — Form 4 blocked, score caps, deadline helpers
 4. **`__tests__/api/ecz.test.js`** — PE 40% vs 30% weight, submission deadline, CSV export gate
+5. **`__tests__/unit/offline-attendance.test.js`** — Dexie queue + sync grouping
+6. **`__tests__/api/attendance-live.test.js`** — Headteacher-only live summary API
+7. **`__tests__/unit/ecz-export-validator.test.js`** — Pre-export validation rules
+8. **`__tests__/api/teaching-assignments.test.js`** — Student vs HOD access
 
 ## Writing a new API route test
 

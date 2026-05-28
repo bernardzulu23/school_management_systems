@@ -6,6 +6,15 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { ConflictDisplay } from '@/components/timetable/ConflictDisplay'
 import { DragDropTimetable } from '@/components/timetable/DragDropTimetable'
 import { MasterTimetableGrid } from '@/components/timetable/MasterTimetableGrid'
+import {
+  TimetableControlBar,
+  type TimetableGridMode,
+} from '@/components/timetable/TimetableControlBar'
+import { TimetableEntityView } from '@/components/timetable/TimetableEntityView'
+import {
+  filterAssignmentsForUiSeason,
+  uiSeasonToDetectorSeason,
+} from '@/lib/timetable/seasonFilter'
 import TeacherPeriodAssignmentUI from '@/components/timetable/TeacherPeriodAssignmentUI'
 import { AllocationNotificationBell } from '@/components/timetable/AllocationNotificationBell'
 import { SchoolTimetableSettings } from '@/components/timetable/SchoolTimetableSettings'
@@ -140,6 +149,8 @@ function HeadteacherTimetablePageContent() {
   const [masterEntries, setMasterEntries] = useState<any[]>([])
   const [departments, setDepartments] = useState<any[]>([])
   const [allocationsLoading, setAllocationsLoading] = useState(false)
+  const [gridMode, setGridMode] = useState<TimetableGridMode>('master')
+  const [reloadingTimetable, setReloadingTimetable] = useState(false)
 
   const assignments = useTimetableStore((s) => s.assignments)
   const conflicts = useTimetableStore((s) => s.conflicts)
@@ -147,6 +158,9 @@ function HeadteacherTimetablePageContent() {
   const removeAssignment = useTimetableStore((s) => s.removeAssignment)
   const replaceAssignments = useTimetableStore((s) => s.replaceAssignments)
   const undo = useTimetableStore((s) => s.undo)
+  const redo = useTimetableStore((s) => s.redo)
+  const undoStack = useTimetableStore((s) => s.undoStack)
+  const redoStack = useTimetableStore((s) => s.redoStack)
   const publish = useTimetableStore((s) => s.publish)
   const isPublished = useTimetableStore((s) => s.isPublished)
   const lastPublishedAt = useTimetableStore((s) => s.lastPublishedAt)
@@ -312,6 +326,11 @@ function HeadteacherTimetablePageContent() {
     loadReview(currentPendingId).catch(() => {})
   }, [currentPendingId, loadReview, reviewOpen])
 
+  const seasonAssignments = useMemo(
+    () => filterAssignmentsForUiSeason(assignments, season),
+    [assignments, season]
+  )
+
   const stats = useMemo(() => {
     const c = conflictCount()
     return {
@@ -369,6 +388,36 @@ function HeadteacherTimetablePageContent() {
     }
     run()
   }, [term, academicYear, loadFromApi])
+
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await fetch('/api/timetable/teacher-colors', { cache: 'no-store' })
+        const data = await res.json().catch(() => ({}))
+        if (!res.ok || cancelled) return
+        if (data.map) setTeacherColors(data.map)
+        const missing = (Array.isArray(data.colors) ? data.colors : []).filter(
+          (c: { fromDatabase?: boolean }) => !c.fromDatabase
+        )
+        if (missing.length > 0 && !cancelled) {
+          await fetch('/api/timetable/teacher-colors', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ autoAssign: true }),
+          })
+          const res2 = await fetch('/api/timetable/teacher-colors', { cache: 'no-store' })
+          const data2 = await res2.json().catch(() => ({}))
+          if (!cancelled && data2.map) setTeacherColors(data2.map)
+        }
+      } catch {
+        /* colours are optional; grid still uses hash fallback */
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [setTeacherColors])
 
   const onAssignmentChange = async (a: Assignment) => {
     updateAssignment(a.id, {
@@ -482,7 +531,6 @@ function HeadteacherTimetablePageContent() {
     const teacherById = new Map<string, Teacher>()
     for (const t of teachers) teacherById.set(String(t.id), t)
 
-    const seasonAssignments = assignments.filter((a) => a.season === (season as any))
     const absent = seasonAssignments.filter(
       (a) =>
         String(a.teacherId) === String(coverTeacherId) &&
@@ -523,7 +571,48 @@ function HeadteacherTimetablePageContent() {
 
     const absentTeacher = teacherById.get(String(coverTeacherId))
     return { absentTeacher, suggestions }
-  }, [assignments, teachers, coverTeacherId, coverDay, coverPeriod, season])
+  }, [seasonAssignments, teachers, coverTeacherId, coverDay, coverPeriod])
+
+  const reloadTimetable = async () => {
+    setReloadingTimetable(true)
+    try {
+      await loadFromApi({ term, academicYear, status: 'draft' })
+      if (useTimetableStore.getState().assignments.length === 0) {
+        await loadFromApi({ term, academicYear, status: 'published' })
+      }
+      toast.success('Timetable reloaded')
+    } catch (e: any) {
+      toast.error(e?.message || 'Reload failed')
+    } finally {
+      setReloadingTimetable(false)
+    }
+  }
+
+  const saveSolverDraftToDb = async () => {
+    if (!assignments.length) {
+      toast.error('Generate a timetable first')
+      return
+    }
+    try {
+      const res = await fetch('/api/timetable/entries/sync-draft', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          term,
+          academicYear,
+          assignments,
+          replaceExisting: true,
+        }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || 'Failed to save draft')
+      toast.success(`Saved ${json.saved ?? 0} periods to database`)
+      await loadFromApi({ term, academicYear, status: 'draft' })
+    } catch (e: any) {
+      toast.error(e?.message || 'Save failed')
+    }
+  }
 
   const generateFromAllocations = async () => {
     setDbGenerating(true)
@@ -576,7 +665,7 @@ function HeadteacherTimetablePageContent() {
       replaceAssignments(next, { source: 'generate' })
       const score = Number(json?.version?.optimizationScore) || 0
       setSolverDraftVersionId(json?.version?.id ? String(json.version.id) : null)
-      toast.success(`Solver draft generated (score ${score}/100)`)
+      toast.success(`Solver draft generated (score ${score}/100). Save to database when ready.`)
       setTab('edit')
     } catch (e: any) {
       toast.error(e?.message || 'Solver generation failed')
@@ -590,8 +679,10 @@ function HeadteacherTimetablePageContent() {
       <div className="space-y-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <div className="text-2xl font-bold text-royalPurple-text1">Master Timetable</div>
-            <div className="text-sm text-royalPurple-text3">Dashboard → Timetable</div>
+            <div className="text-2xl font-bold text-royalPurple-text1">ZSMS Timetable Studio</div>
+            <div className="text-sm text-royalPurple-text3">
+              aSc-style scheduling — school grid, teacher cards, class cards, drag-drop, conflicts
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
@@ -617,6 +708,9 @@ function HeadteacherTimetablePageContent() {
               className="zsms-hover-raise"
             >
               {solverGenerating ? 'Generating…' : 'Generate (Greedy)'}
+            </Button>
+            <Button variant="outline" onClick={saveSolverDraftToDb} className="zsms-hover-raise">
+              Save draft to DB
             </Button>
             <Button
               onClick={() => {
@@ -701,6 +795,19 @@ function HeadteacherTimetablePageContent() {
             <div className="text-xl font-bold text-royalPurple-text1">{stats.pending}</div>
           </div>
         </div>
+
+        <TimetableControlBar
+          gridMode={gridMode}
+          onGridModeChange={setGridMode}
+          onUndo={undo}
+          onRedo={redo}
+          canUndo={undoStack.length > 0}
+          canRedo={redoStack.length > 0}
+          onReload={reloadTimetable}
+          reloading={reloadingTimetable}
+          conflictCount={stats.conflicts}
+          isPublished={stats.published}
+        />
 
         <div className="flex flex-wrap items-center gap-2 border-b border-royalPurple-border/30 pb-2">
           {(
@@ -1046,16 +1153,28 @@ function HeadteacherTimetablePageContent() {
         ) : null}
 
         {tab === 'overview' ? (
-          <MasterTimetableGrid
-            assignments={assignments}
-            timeSlots={timeSlots}
-            classes={classes}
-            teachers={teachers}
-            season={season}
-            showConflicts
-            editable
-            onDeleteAssignment={onDeleteAssignment}
-          />
+          <div className="space-y-4">
+            {gridMode === 'master' ? (
+              <MasterTimetableGrid
+                assignments={seasonAssignments}
+                timeSlots={timeSlots}
+                classes={classes}
+                teachers={teachers}
+                season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
+                showConflicts
+                editable
+                onDeleteAssignment={onDeleteAssignment}
+              />
+            ) : (
+              <TimetableEntityView
+                mode={gridMode}
+                assignments={seasonAssignments}
+                timeSlots={timeSlots}
+                teachers={teachers}
+                classes={classes}
+              />
+            )}
+          </div>
         ) : null}
 
         {tab === 'assignment' ? (
@@ -1086,19 +1205,20 @@ function HeadteacherTimetablePageContent() {
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <div className="xl:col-span-2">
               <DragDropTimetable
-                assignments={assignments.filter((a) => a.season === (season as any))}
+                assignments={seasonAssignments}
                 timeSlots={timeSlots}
                 teachers={teachers}
                 studentClasses={classes}
                 onAssignmentChange={onAssignmentChange}
                 onConflictDetected={() => setTab('conflicts')}
-                season={
-                  season === 'farming' ? 'harvest' : season === 'planting' ? 'planting' : 'normal'
-                }
+                season={uiSeasonToDetectorSeason(season)}
               />
               <div className="mt-4 flex flex-wrap gap-2">
                 <Button variant="outline" onClick={undo} className="zsms-hover-raise">
                   Undo
+                </Button>
+                <Button variant="outline" onClick={redo} className="zsms-hover-raise">
+                  Redo
                 </Button>
               </div>
             </div>
@@ -1216,7 +1336,8 @@ function HeadteacherTimetablePageContent() {
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
                           <div className="text-sm font-semibold text-royalPurple-text1">
-                            {String(lesson.subjectId)} · Class {String(lesson.classId)}
+                            {(lesson as any).subjectName || 'Subject'} ·{' '}
+                            {(lesson as any).className || `Class ${lesson.classId}`}
                           </div>
                           <div className="text-xs text-royalPurple-text3">
                             {String(lesson.dayOfWeek)} P{lesson.period} ({lesson.startTime}-
@@ -1242,9 +1363,29 @@ function HeadteacherTimetablePageContent() {
                               </div>
                               <Button
                                 variant="outline"
-                                onClick={() => {
+                                onClick={async () => {
                                   updateAssignment(lesson.id, { teacherId: c.teacher.id })
-                                  toast.success('Cover applied to draft')
+                                  try {
+                                    const res = await fetch('/api/timetable/entries', {
+                                      method: 'PATCH',
+                                      headers: { 'Content-Type': 'application/json' },
+                                      credentials: 'include',
+                                      body: JSON.stringify({
+                                        id: lesson.id,
+                                        teacherId: c.teacher.id,
+                                        term,
+                                        academicYear,
+                                      }),
+                                    })
+                                    const json = await res.json().catch(() => ({}))
+                                    if (!res.ok) {
+                                      throw new Error(json?.error || 'Failed to save cover')
+                                    }
+                                    toast.success('Cover teacher saved to draft')
+                                  } catch (err: any) {
+                                    toast.error(err?.message || 'Cover save failed')
+                                    await loadFromApi({ term, academicYear, status: 'draft' })
+                                  }
                                 }}
                                 className="zsms-hover-raise"
                               >

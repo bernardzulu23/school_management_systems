@@ -19,6 +19,12 @@ import { setCsrfCookie } from '@/lib/security/csrf'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { getSubscriptionState } from '@/lib/billing/subscription'
 import { logger, captureError } from '@/lib/utils/logger'
+import {
+  verifyPlatformAdminCredentials,
+  ensurePlatformAdminFromEnv,
+  getPlatformLoginHint,
+} from '@/lib/platform/platformAdminAuth'
+import { buildPlatformLoginResponse } from '@/lib/platform/completePlatformLogin'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
@@ -80,6 +86,23 @@ export const POST = withSecureApi(async function POST(request) {
       .trim()
       .toLowerCase()
 
+    const isProd = process.env.NODE_ENV === 'production'
+    const rateLimitResult = rateLimiter(request, {
+      limit: isProd ? 5 : 20,
+      windowMs: 15 * 60 * 1000,
+      keyPrefix: 'auth_login_',
+      keyGenerator: ({ ip }) => `${ip}-${normalizedEmail}`,
+    })
+    if (rateLimitResult.isLimited) return rateLimitResult.response
+
+    // Platform super-admin: same /login endpoint (apex URL, no school subdomain)
+    await ensurePlatformAdminFromEnv()
+    const platformAdmin = await verifyPlatformAdminCredentials(normalizedEmail, password)
+    if (platformAdmin) {
+      log.response(200, Date.now() - start)
+      return buildPlatformLoginResponse(request, platformAdmin)
+    }
+
     const platformEmails = new Set(
       (
         process.env.PLATFORM_ADMIN_EMAILS ||
@@ -91,24 +114,15 @@ export const POST = withSecureApi(async function POST(request) {
         .filter(Boolean)
     )
     if (platformEmails.has(normalizedEmail)) {
+      const hint = await getPlatformLoginHint(normalizedEmail)
       return NextResponse.json(
         {
-          error: 'Use the developer console login at /platform/login for platform admin access.',
-          code: 'PLATFORM_ADMIN',
+          error: 'Invalid credentials',
+          hint: process.env.NODE_ENV === 'production' ? hint : hint,
         },
-        { status: 403 }
+        { status: 401 }
       )
     }
-    // Note: 'subdomain' is optional in schema, but passed from frontend if available
-
-    const isProd = process.env.NODE_ENV === 'production'
-    const rateLimitResult = rateLimiter(request, {
-      limit: isProd ? 5 : 20,
-      windowMs: 15 * 60 * 1000,
-      keyPrefix: 'auth_login_',
-      keyGenerator: ({ ip }) => `${ip}-${normalizedEmail}`,
-    })
-    if (rateLimitResult.isLimited) return rateLimitResult.response
 
     // 2. Resolve school for multi-tenant lookup
     let schoolId = await resolvePublicSchoolId(request, subdomain)

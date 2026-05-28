@@ -11,6 +11,7 @@ import {
 } from '@/lib/security/cookies'
 import { setCsrfCookie } from '@/lib/security/csrf'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+import { signPlatformToken } from '@/lib/platform/platformAdminAuth'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
@@ -39,6 +40,38 @@ export const POST = withSecureApi(async function POST(request) {
       decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET)
     } catch (error) {
       return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
+    }
+
+    if (decoded.isPlatform) {
+      const admin = {
+        id: decoded.id,
+        email: decoded.email,
+        name: decoded.name || 'Platform Super Admin',
+      }
+      if (!admin.id || !admin.email) {
+        return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
+      }
+
+      const newAccessToken = signPlatformToken(admin)
+      const newRefreshTokenValue = jwt.sign(
+        { id: admin.id, email: admin.email, name: admin.name, isPlatform: true },
+        JWT_REFRESH_SECRET,
+        { expiresIn: '7d' }
+      )
+
+      const response = NextResponse.json({ success: true, accessToken: newAccessToken })
+      response.cookies.set(
+        'access_token',
+        newAccessToken,
+        authCookieOptions(request, { maxAgeSeconds: ACCESS_TOKEN_MAX_AGE, name: 'access_token' })
+      )
+      response.cookies.set(
+        'refresh_token',
+        newRefreshTokenValue,
+        authCookieOptions(request, { maxAgeSeconds: REFRESH_TOKEN_MAX_AGE, name: 'refresh_token' })
+      )
+      setCsrfCookie(response, request)
+      return response
     }
 
     // 3. Rotation check: Look up token in database

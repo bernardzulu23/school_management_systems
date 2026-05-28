@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { resolveCardColor } from '@/lib/timetable/cardColors'
+import { teacherDisplayName } from '@/lib/timetable/teacherDisplay'
 import { uniqueBellRows, type BellScheduleSlot } from '@/lib/timetable/bellSchedule'
 import {
   assignmentOverlapsSlot,
@@ -722,8 +723,14 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                                         className.get(String(a.classId)) ||
                                         String(a.classId)}
                                     </div>
-                                    <div className="text-[12px] text-slate-600 truncate">
-                                      {teacherName.get(String(a.teacherId)) || 'Teacher'}
+                                    <div
+                                      className="text-[12px] font-bold text-slate-600 truncate"
+                                      title={teacherName.get(String(a.teacherId)) || 'Teacher'}
+                                    >
+                                      {teacherDisplayName(
+                                        teacherName.get(String(a.teacherId)),
+                                        'initials'
+                                      )}
                                       {hasConflict ? ' · Conflict' : ''}
                                     </div>
                                   </button>

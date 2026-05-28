@@ -14,6 +14,7 @@ import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
 import { countUniqueConflicts } from '@/lib/timetable/conflictDedupe'
 import { generateCardColor, resolveCardColor } from '@/lib/timetable/cardColors'
+import { teacherDisplayName } from '@/lib/timetable/teacherDisplay'
 import {
   assignmentsForPrimaryCell,
   isContinuationSlot,
@@ -211,8 +212,11 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
         <div className="text-[12px] text-royalPurple-text2 truncate">
           {subjectLabel.get(String(a.subjectId)) || (a as any).subjectName || 'Subject'}
         </div>
-        <div className="text-[12px] text-royalPurple-text2 truncate">
-          {teacherName.get(String(a.teacherId)) || 'Teacher'}
+        <div
+          className="text-[12px] font-bold text-royalPurple-text2 truncate"
+          title={teacherName.get(String(a.teacherId)) || 'Teacher'}
+        >
+          {teacherDisplayName(teacherName.get(String(a.teacherId)), 'initials')}
         </div>
         {hasAny ? (
           <div className="text-[11px] mt-1" style={{ color: border }}>

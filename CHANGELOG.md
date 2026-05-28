@@ -4,6 +4,45 @@ All notable changes to the Zambian School Management System during the audit and
 
 ## [Unreleased]
 
+### Added (Province, district & reporting streams)
+
+- **Required province + district** on onboarding and school registration with district dropdowns per province.
+- **`reportingStreamKey`** on `School` and `SchoolRegistration` — segments schools for monitoring and future province/district admins.
+- **Platform:** `/platform/streams`, `/platform/districts`, APIs `stats/streams` and `stats/districts`.
+
+### Added (Platform super-admin & Code Playground)
+
+- **Platform console:** `/platform/overview`, `/platform/provinces`, `/platform/billing`, `/platform/health` with `PlatformShell`; aggregation APIs (no enrollment counts).
+- **School province/district** on `School` model for geographic reporting.
+- **Code Playground:** C++, C#, HTML (live preview), CSS (demo page preview); CSP `connect-src` for Piston (`emkc.org`).
+- **`docs/PLATFORM_ADMIN.md`** — scope and privacy boundaries for platform operators.
+
+### Added (Phase 3 — Intelligence & analytics)
+
+- **P3.1 RLS:** `lib/db/school-context.js`, migration `20260528120000_enable_rls`, `docs/RLS.md`.
+- **P3.2 Learning analytics:** `lib/analytics/learning-analytics.js`, `GET /api/dashboard/analytics/learning`, `LearningAnalyticsPanel` on headteacher, HOD, and student dashboards.
+- **P3.3 OR-Tools:** `services/timetable-solver/` (CP-SAT + HTTP server), `POST /api/timetable/solver/ortools`, `docs/ORTOOLS_SOLVER.md`.
+- **P3.4 Term reports:** Prisma `TermReport`, `lib/ai/term-report-service.js`, `/api/ai/term-reports`, HOD/teacher review UI.
+- **P3.5 USSD:** `lib/ussd/parent-portal.js`, `POST /api/ussd`, `docs/USSD_GUIDE.md`.
+- **P3.6 Study assistant:** `POST /api/ai/study-assistant`, student page + Creative Teaching tab embed.
+
+### Added (Phase 2 Tasks 11–15)
+
+- **Task 11:** `GET /api/dashboard/attendance-live`, `lib/attendance/live-summary.js`, `LiveAttendanceSummary` on headteacher dashboard (2 min refresh).
+- **Task 12:** `lib/ecz/export-validator.js`, `/dashboard/teacher/ecz/submit`, `/api/cron/ecz-reminder`, Vercel cron 15 Jan.
+- **Task 13:** `SubscriptionWarningBanner`, `getDaysUntilExpiry`, Lipila `checkPaymentStatusWithRetry`, onboarding payment polling UX.
+- **Task 14:** Proxy rate limits (login 10/15m, forgot-password 3/h, onboarding/start 5/h); teaching-assignments role tests.
+- **Task 15:** `docs/PHASE3_ROADMAP.md`, doc updates, expanded Vitest coverage.
+
+### Added (Phase 2 Task 10 — Offline-first attendance)
+
+- **`lib/offline/attendance-store.js`** — Dexie IndexedDB queue for class attendance; roster cache; sync to `POST /api/attendance`.
+- **`lib/offline/use-sync.js`** — React hook for online/offline state, auto-sync on reconnect, 30s polling.
+- **`components/attendance/SyncStatusBadge.js`** — Header badge on teacher attendance page.
+- **`app/dashboard/attendance/page.js`** — Queue marks on each tap; offline roster fallback; fire-and-forget save + sync.
+- **`docs/OFFLINE_GUIDE.md`** — Architecture, schema, sync, limitations.
+- **`__tests__/unit/offline-attendance.test.js`** — Grouping, queue dedupe, sync mock tests.
+
 ### Security
 
 - Session auth cookies now use `SameSite=Strict` by default.

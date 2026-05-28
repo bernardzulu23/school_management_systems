@@ -75,16 +75,20 @@ export function TeacherColorAssignment() {
     }
   }
 
-  async function autoAssign() {
+  async function autoAssign(force = false) {
     try {
       const res = await fetch('/api/timetable/teacher-colors', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ autoAssign: true }),
+        body: JSON.stringify({ autoAssign: true, force }),
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data?.error || 'Auto-assign failed')
-      toast.success(`Assigned colours to ${data.assigned || 0} teachers`)
+      toast.success(
+        force
+          ? `Reassigned unique colours to ${data.assigned || 0} teachers`
+          : `Assigned colours to ${data.assigned || 0} teachers`
+      )
       await load()
     } catch (e: any) {
       toast.error(e?.message || 'Auto-assign failed')
@@ -107,14 +111,19 @@ export function TeacherColorAssignment() {
           <div>
             <h2 className="text-lg font-bold text-royalPurple-text1">Teacher colour codes</h2>
             <p className="text-sm text-royalPurple-text2 mt-1">
-              Assign a colour to each teacher so timetable cards are easy to distinguish (aSc
-              style). Colours are stored in the database and used on every timetable view.
+              Each teacher gets a unique colour on timetable cards (aSc style). Grid cells show
+              initials only; hover for full name.
             </p>
           </div>
         </div>
-        <Button variant="outline" onClick={autoAssign} className="zsms-hover-raise">
-          Auto-assign palette
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" onClick={() => autoAssign(false)} className="zsms-hover-raise">
+            Fill missing colours
+          </Button>
+          <Button variant="outline" onClick={() => autoAssign(true)} className="zsms-hover-raise">
+            Reassign all unique
+          </Button>
+        </div>
       </div>
 
       <div className="space-y-3 max-h-[420px] overflow-y-auto">

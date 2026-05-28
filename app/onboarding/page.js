@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import ProviderLogos, { ProviderLogoImage } from '@/components/payments/ProviderLogos'
 import { Eye, EyeOff } from 'lucide-react'
+import { ProvinceDistrictFields } from '@/components/onboarding/ProvinceDistrictFields'
 
 function parsePlanParam(searchParams) {
   const raw = String(searchParams?.get?.('plan') || '')
@@ -37,11 +38,16 @@ function OnboardingPageContent() {
   const [months, setMonths] = useState(1)
   const [paying, setPaying] = useState(false)
   const [paymentAwaitingPin, setPaymentAwaitingPin] = useState(false)
+  const [paymentPollSeconds, setPaymentPollSeconds] = useState(10)
+  const [paymentStartedAt, setPaymentStartedAt] = useState(null)
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState(false)
 
   const [schoolName, setSchoolName] = useState('')
   const [subdomain, setSubdomain] = useState('')
   const [level, setLevel] = useState('combined')
   const [adminName, setAdminName] = useState('')
+  const [province, setProvince] = useState('')
+  const [district, setDistrict] = useState('')
   const [saving, setSaving] = useState(false)
   const [completed, setCompleted] = useState(null)
   const [choosingTrial, setChoosingTrial] = useState(false)
@@ -54,8 +60,13 @@ function OnboardingPageContent() {
   const canStart = useMemo(() => email.trim() && password.length >= 6, [email, password])
   const canPay = useMemo(() => accountNumber.trim(), [accountNumber])
   const canSetup = useMemo(
-    () => schoolName.trim() && subdomain.trim().length >= 3 && adminName.trim().length >= 2,
-    [schoolName, subdomain, adminName]
+    () =>
+      schoolName.trim() &&
+      subdomain.trim().length >= 3 &&
+      adminName.trim().length >= 2 &&
+      province.trim() &&
+      district.trim(),
+    [schoolName, subdomain, adminName, province, district]
   )
 
   const refreshStatus = async ({ syncPayment = false } = {}) => {
@@ -270,7 +281,7 @@ function OnboardingPageContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ schoolName, subdomain, level, adminName }),
+        body: JSON.stringify({ schoolName, subdomain, level, adminName, province, district }),
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json?.error || 'Failed to complete setup')
@@ -301,16 +312,38 @@ function OnboardingPageContent() {
   const monthlyPrice = plan === 'basic' ? 500 : plan === 'premium' ? 1200 : 800
 
   useEffect(() => {
+    if (paymentStatus === 'paid' && paymentAwaitingPin) {
+      setShowPaymentSuccess(true)
+      setPaymentAwaitingPin(false)
+    }
+  }, [paymentStatus, paymentAwaitingPin])
+
+  useEffect(() => {
     if (!verified || registrationPlanIsTrial) return
     if (paymentStatus !== 'pending') {
       if (paymentStatus === 'paid') setPaymentAwaitingPin(false)
       return
     }
+    setPaymentPollSeconds(10)
     const interval = setInterval(() => {
-      refreshStatus({ syncPayment: true })
-    }, 5000)
+      setPaymentPollSeconds((s) => {
+        if (s <= 1) {
+          refreshStatus({ syncPayment: true })
+          return 10
+        }
+        return s - 1
+      })
+    }, 1000)
     return () => clearInterval(interval)
   }, [verified, registrationPlanIsTrial, paymentStatus, status?.registration?.paymentReference])
+
+  const paymentElapsedMin =
+    paymentStartedAt && paymentPending ? Math.floor((Date.now() - paymentStartedAt) / 60_000) : 0
+  const providerLabel = provider === 'mtn' ? 'MTN' : provider === 'zamtel' ? 'Zamtel' : 'Airtel'
+  const whatsappHelp = `https://wa.me/260977000000?text=${encodeURIComponent(
+    'Hi ZSMS — I need help with school onboarding payment. Reference: ' +
+      (status?.registration?.paymentReference || 'pending')
+  )}`
   const totalAmount = monthlyPrice * (Number(months) || 1)
 
   return (
@@ -608,29 +641,63 @@ function OnboardingPageContent() {
                   </Button>
                 </div>
 
+                {showPaymentSuccess ? (
+                  <div className="rounded-xl border border-green-500/50 bg-green-950/30 p-4 text-center animate-pulse">
+                    <p className="text-lg font-bold text-green-300">Payment confirmed!</p>
+                    <p className="text-sm text-green-200/80 mt-1">
+                      Redirecting you to school setup…
+                    </p>
+                  </div>
+                ) : null}
+
                 {paymentPending || paymentAwaitingPin ? (
                   <div className="rounded-xl border border-royalPurple-border/60 bg-royalPurple-deep/40 p-4 space-y-2">
                     <p className="text-sm text-royalPurple-text1 font-medium">
-                      Approve payment on your phone
+                      Approve payment on your phone ({providerLabel})
                     </p>
                     <p className="text-sm text-royalPurple-text2">
                       A mobile money prompt was sent to {accountNumber || 'your number'}. Enter your
-                      PIN on the phone to confirm. This page updates automatically once Lipila
-                      confirms payment — you cannot create your portal until then.
+                      PIN on the phone to confirm. Checking payment status… (next check in{' '}
+                      {paymentPollSeconds}s)
                     </p>
+                    {paymentElapsedMin >= 3 ? (
+                      <p className="text-sm text-amber-300">
+                        Payment is taking longer than expected. Tap &quot;Check payment status&quot;
+                        or try a different network.
+                      </p>
+                    ) : null}
                     {status?.registration?.paymentReference ? (
                       <p className="text-xs text-royalPurple-text3">
                         Reference: {status.registration.paymentReference}
                       </p>
                     ) : null}
+                    <a
+                      href={whatsappHelp}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-royalPurple-accent underline"
+                    >
+                      Need help? Chat on WhatsApp
+                    </a>
                   </div>
                 ) : null}
 
                 {paymentStatus === 'failed' ? (
-                  <p className="text-sm text-red-400">
-                    Payment failed or was cancelled. Try Pay Now again with the correct number and
-                    PIN.
-                  </p>
+                  <div className="space-y-2">
+                    <p className="text-sm text-red-400">
+                      {providerLabel} payment failed or was cancelled. Try Pay Now again or choose
+                      another network (MTN / Airtel / Zamtel).
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setProvider(provider === 'mtn' ? 'airtel' : 'mtn')
+                      }}
+                    >
+                      Try a different network
+                    </Button>
+                  </div>
                 ) : null}
               </div>
             </div>
@@ -696,6 +763,13 @@ function OnboardingPageContent() {
                     placeholder="Headteacher Full Name"
                   />
                 </div>
+                <ProvinceDistrictFields
+                  province={province}
+                  district={district}
+                  onProvinceChange={setProvince}
+                  onDistrictChange={setDistrict}
+                  labelClassName="text-royalPurple-text2 text-sm font-medium"
+                />
               </div>
 
               <div className="text-xs text-royalPurple-text3">

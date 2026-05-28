@@ -2,7 +2,14 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { verifyOnboardingToken } from '@/lib/middleware/onboardingAuth'
-import { syncOnboardingPaymentFromLipila } from '@/lib/payments/lipila'
+import {
+  syncOnboardingPaymentFromLipila,
+  checkPaymentStatusWithRetry,
+  isPaidLipilaStatus,
+  isFailedLipilaStatus,
+  extractLipilaStatus,
+  lipilaCheckCollectionStatus,
+} from '@/lib/payments/lipila'
 
 export async function GET(request) {
   const token = request.cookies.get('onboarding_token')?.value || ''
@@ -44,7 +51,23 @@ export async function GET(request) {
     Boolean(reg.paymentReference)
 
   if (shouldSync) {
-    await syncOnboardingPaymentFromLipila(reg)
+    const deepSync = searchParams.get('deepSync') === '1'
+    if (deepSync && reg.paymentReference) {
+      const outcome = await checkPaymentStatusWithRetry(reg.paymentReference)
+      if (outcome === 'paid' || outcome === 'failed') {
+        await syncOnboardingPaymentFromLipila(reg)
+      } else if (outcome === 'pending') {
+        const quick = await lipilaCheckCollectionStatus(reg.paymentReference)
+        if (quick.ok) {
+          const st = extractLipilaStatus(quick.data)
+          if (isPaidLipilaStatus(st) || isFailedLipilaStatus(st)) {
+            await syncOnboardingPaymentFromLipila(reg)
+          }
+        }
+      }
+    } else {
+      await syncOnboardingPaymentFromLipila(reg)
+    }
     reg = await prisma.schoolRegistration.findUnique({
       where: { id: registrationId },
       select: {

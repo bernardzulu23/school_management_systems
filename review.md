@@ -176,13 +176,25 @@ Documented in `docs/doc/COMPLETE_FEATURES_OUTLINE.md` (April 2026):
 ### 5.6 Attendance
 
 - Web attendance stats
+- **Offline-first class register** (Dexie, `SyncStatusBadge`, `docs/OFFLINE_GUIDE.md`)
 - **Mobile-first sessions**: open/close, marks, face verification, twin-pin (`zsms-mobile` + `app/api/mobile/attendance/*`)
+- Headteacher **live attendance** dashboard (`/api/dashboard/attendance-live`, `LiveAttendanceSummary`)
 - Headteacher chronic absentee tracking
+
+### Phase 2 achievements (Tasks 9–15)
+
+- Playwright E2E: health, auth, QR attendance (`npm run test:e2e`)
+- Offline attendance queue + sync (Task 10)
+- Live headteacher attendance + ECZ export validator + cron reminder (Tasks 11–12)
+- Subscription warning banners, Lipila retry polling (Task 13)
+- Security: CSRF, proxy rate limits, security headers (Task 14)
+- `docs/PHASE3_ROADMAP.md` and expanded Vitest suite (Task 15)
 
 ### 5.7 Communications and billing
 
 - SMS send + inbound/delivery webhooks
 - School billing page, Lipila mobile money for in-app payments
+- Subscription expiry banners (7-day amber, expired red) for staff only
 - Welcome SMS on onboarding complete (optional)
 - MOE reports, STEM monitoring, exam tracking (headteacher)
 

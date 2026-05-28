@@ -34,10 +34,24 @@ New in Task 5:
 | PE SBA weight 40%, others 30%                 | `getSBAWeight()` / `EczSubjectConstruct.sbaWeight`                                                          |
 | Term weights 20% / 30% / 50%                  | `getTermWeight()` — stored on `EczAssessment.termWeight`                                                    |
 
+### Export validation (Phase 2 Task 12)
+
+Before submitting SBA to ECZ, use **`lib/ecz/export-validator.js`**:
+
+- `validateECZExport()` — errors (blocking) and warnings (review)
+- `formatForECZSubmission()` — CSV-ready rows with integer scores
+
+Teachers review at **`/dashboard/teacher/ecz/submit`**.
+
+**Deadline reminder cron:** `GET /api/cron/ecz-reminder` (Vercel cron 15 January, `CRON_SECRET` required). Sends SMS to staff when draft `EczSubmission` rows exist.
+
+**Missed 31 January deadline:** `validateSubmissionDeadline()` blocks API submission; contact ECZ for late acceptance — do not bypass validation in production.
+
 ### Source files
 
 - **`lib/middleware/ecz-validation.js`** — API-level gate (import this in routes)
 - **`lib/ecz/ecz-compliance.js`** — Shared calculations, deadlines, rubric scoring
+- **`lib/ecz/export-validator.js`** — Pre-export checklist for teachers
 - **`lib/ecz/ecz-rubric-builder.js`** — 4-level ECZ rubric templates
 - **`lib/ecz/ecz-csv.js`** — ECZ CSV export format
 

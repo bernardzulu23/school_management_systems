@@ -395,6 +395,9 @@ function EczAssessmentHubContent() {
                     <Download className="h-4 w-4 mr-1" />
                     Download CSV
                   </Button>
+                  <Link href="/dashboard/teacher/ecz/submit">
+                    <Button>Review &amp; submit to ECZ</Button>
+                  </Link>
                 </CardContent>
               </Card>
 

@@ -30,6 +30,8 @@ import {
   User as UserIcon,
   CreditCard,
   Sparkles,
+  Code,
+  MessageCircle,
 } from 'lucide-react'
 
 export function Sidebar({ className, mobileOpen, setMobileOpen }) {
@@ -123,6 +125,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
         { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
         { name: 'Attendance Returns', href: '/dashboard/attendance/returns', icon: UserCheck },
+        { name: 'Term reports', href: '/dashboard/hod/term-reports', icon: FileText },
       ],
       teacher: [
         { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
@@ -151,6 +154,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
         { name: 'Attendance', href: '/dashboard/teacher/attendance', icon: UserCheck },
         { name: 'Payments', href: '/dashboard/payments', icon: CreditCard },
+        { name: 'Term reports', href: '/dashboard/teacher/term-reports', icon: FileText },
       ],
       student: [
         { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
@@ -161,6 +165,12 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Assessments', href: '/dashboard/student/assessments', icon: ClipboardList },
         { name: 'Results', href: '/dashboard/student/results', icon: BarChart3 },
         { name: 'ECZ Practice', href: '/dashboard/student/ecz-practice', icon: Target },
+        {
+          name: 'Study assistant',
+          href: '/dashboard/student/study-assistant',
+          icon: MessageCircle,
+        },
+        { name: 'Code Playground', href: '/dashboard/student/code-playground', icon: Code },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
       ],

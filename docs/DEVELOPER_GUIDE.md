@@ -221,6 +221,42 @@ npm run seed:ecz              # once per environment (idempotent upsert)
 
 ---
 
+## Offline attendance (Phase 2)
+
+Teachers queue marks in IndexedDB before sync:
+
+```javascript
+import { attendanceStore } from '@/lib/offline/attendance-store'
+await attendanceStore.queueMark({ studentId, classId, date, status: 'present' })
+await attendanceStore.syncPending() // POST /api/attendance
+```
+
+See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md). UI: `SyncStatusBadge` on `/dashboard/attendance`.
+
+## Vercel Cron jobs
+
+1. Add route under `app/api/cron/<name>/route.js`.
+2. Verify `Authorization: Bearer ${CRON_SECRET}` or `x-cron-secret` header.
+3. Register in `vercel.json` `crons` array.
+4. Set `CRON_SECRET` in Vercel env.
+
+Example: `/api/cron/ecz-reminder` on 15 January — `lib/cron/ecz-deadline-reminder.js`.
+
+## Lipila / onboarding payments (local)
+
+- Sandbox: `LIPILA_BASE_URL=https://api.lipila.dev`
+- Status polling: `checkPaymentStatusWithRetry()` in `lib/payments/lipila.js`
+- Onboarding page polls every 10s while `paymentStatus=pending`
+
+## Security checklist for new API routes
+
+1. `authMiddleware` + `roleCheck` / `resolveAuthenticatedSchoolId`
+2. State-changing routes: CSRF via `proxy.js` (cookie + `x-csrf-token`)
+3. Sensitive paths: confirm listed in `lib/security/proxyRateLimit.js`
+4. No secrets in client bundles; validate school tenancy on every query
+
+---
+
 ## Related docs
 
 | Doc                                          | Topic               |
@@ -236,6 +272,8 @@ npm run seed:ecz              # once per environment (idempotent upsert)
 | [API_ROUTES.md](./API_ROUTES.md)             | Route reference     |
 | [PHASE1_CHECKLIST.md](./PHASE1_CHECKLIST.md) | Phase 1 gate        |
 | [PHASE2_ROADMAP.md](./PHASE2_ROADMAP.md)     | Phase 2 scope       |
+| [PHASE3_ROADMAP.md](./PHASE3_ROADMAP.md)     | Phase 3 plan        |
+| [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md)       | Offline attendance  |
 | [../CHANGELOG.md](../CHANGELOG.md)           | Release notes       |
 
 ---

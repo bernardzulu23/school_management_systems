@@ -11,6 +11,7 @@ import type {
 } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { useAuth } from '@/lib/auth'
+import { teacherDisplayName } from '@/lib/timetable/teacherDisplay'
 
 export interface StudentTimetableViewProps {
   assignments?: Assignment[]
@@ -161,9 +162,14 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
               {subjectName.get(String(nextClass.subjectId)) ||
                 (nextClass as any).subjectName ||
                 'Subject'}
-              {!props.subjectOnly
-                ? ` · ${teacherName.get(String(nextClass.teacherId)) || 'Teacher'}`
-                : ''}
+              {!props.subjectOnly ? (
+                <>
+                  {' · '}
+                  <span title={teacherName.get(String(nextClass.teacherId)) || 'Teacher'}>
+                    {teacherDisplayName(teacherName.get(String(nextClass.teacherId)), 'initials')}
+                  </span>
+                </>
+              ) : null}
             </span>
           </div>
         ) : null}
@@ -253,8 +259,14 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
                                 'Subject'}
                             </div>
                             {!props.subjectOnly ? (
-                              <div className="text-[12px] text-slate-600 truncate">
-                                {teacherName.get(String(a.teacherId)) || 'Teacher'}
+                              <div
+                                className="text-[12px] font-bold text-slate-600 truncate"
+                                title={teacherName.get(String(a.teacherId)) || 'Teacher'}
+                              >
+                                {teacherDisplayName(
+                                  teacherName.get(String(a.teacherId)),
+                                  'initials'
+                                )}
                               </div>
                             ) : null}
                           </div>

@@ -110,17 +110,12 @@ function LoginPageContent() {
 
       const subdomain = resolveSubdomainFromHost() || subdomainFromQuery || detectedSubdomain || ''
 
-      if (!subdomain) {
-        toast.error(
-          'School portal not detected. Open your school link (e.g. schoolname.bluepeacktechnologies.com) or add ?subdomain=your-school to the login URL.'
-        )
-        stopTopLoading()
-        setIsLoading(false)
-        if (interval) clearInterval(interval)
-        return
-      }
-
-      const result = await login({ email, password, subdomain, rememberMe })
+      const result = await login({
+        email,
+        password,
+        ...(subdomain ? { subdomain } : {}),
+        rememberMe,
+      })
       if (typeof window !== 'undefined') {
         try {
           if (rememberMe) {
@@ -145,7 +140,9 @@ function LoginPageContent() {
           ? FEATURE_LOGIN_REDIRECTS[redirectFrom]
           : null
 
-      if (featurePath) {
+      if (result?.user?.isPlatform) {
+        router.push('/platform/overview')
+      } else if (featurePath) {
         router.push(featurePath)
       } else if (['headteacher', 'admin', 'administrator', 'superadmin'].includes(role)) {
         router.push('/dashboard/admin')
@@ -277,12 +274,6 @@ function LoginPageContent() {
         </form>
 
         <LocalDevLoginHint />
-
-        <p className="mt-4 text-center text-xs text-ink/50">
-          <Link href="/platform/login" className="text-accent hover:underline">
-            Developer / platform admin
-          </Link>
-        </p>
 
         <footer className="mt-6 text-center">
           <button

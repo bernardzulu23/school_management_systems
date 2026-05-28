@@ -1,10 +1,10 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { Suspense, useCallback, useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { Building2, LogOut, RefreshCw, Shield, User } from 'lucide-react'
+import { PlatformShell } from '@/components/platform/PlatformShell'
+import { ZAMBIA_PROVINCES } from '@/lib/platform/zambiaProvinces'
 
 function statusBadge(status) {
   const map = {
@@ -16,24 +16,33 @@ function statusBadge(status) {
   return map[status] || map.not_affiliated
 }
 
-export default function PlatformDashboardPage() {
+function PlatformDashboardContent() {
   const router = useRouter()
-  const [user, setUser] = useState(null)
+  const searchParams = useSearchParams()
+  const provinceFilter = searchParams?.get('province') || ''
+  const districtFilter = searchParams?.get('district') || ''
+  const streamFilter = searchParams?.get('stream') || ''
+
   const [schools, setSchools] = useState([])
   const [loading, setLoading] = useState(true)
+  const [includeUnpaid, setIncludeUnpaid] = useState(true)
+  const [editingId, setEditingId] = useState(null)
+  const [editProvince, setEditProvince] = useState('')
+  const [editDistrict, setEditDistrict] = useState('')
 
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const meRes = await fetch('/api/platform/auth/me', { cache: 'no-store' })
-      if (!meRes.ok) {
-        router.replace('/platform/login')
+      const qs = new URLSearchParams()
+      if (includeUnpaid) qs.set('includeUnpaid', '1')
+      if (provinceFilter) qs.set('province', provinceFilter)
+      if (districtFilter) qs.set('district', districtFilter)
+      if (streamFilter) qs.set('stream', streamFilter)
+      const schoolsRes = await fetch(`/api/platform/schools?${qs}`, { cache: 'no-store' })
+      if (schoolsRes.status === 401) {
+        router.replace('/login')
         return
       }
-      const me = await meRes.json()
-      setUser(me.user)
-
-      const schoolsRes = await fetch('/api/platform/schools', { cache: 'no-store' })
       const schoolsData = await schoolsRes.json()
       if (!schoolsRes.ok) {
         toast.error(schoolsData.error || 'Failed to load schools')
@@ -45,16 +54,11 @@ export default function PlatformDashboardPage() {
     } finally {
       setLoading(false)
     }
-  }, [router])
+  }, [router, includeUnpaid, provinceFilter, districtFilter, streamFilter])
 
   useEffect(() => {
     load()
   }, [load])
-
-  async function logout() {
-    await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
-    router.push('/platform/login')
-  }
 
   async function toggleActive(school) {
     try {
@@ -75,111 +79,182 @@ export default function PlatformDashboardPage() {
     }
   }
 
+  async function saveProvince(school) {
+    try {
+      const res = await fetch(`/api/platform/schools/${school.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ province: editProvince, district: editDistrict }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        toast.error(data.error || 'Update failed')
+        return
+      }
+      toast.success('Location updated')
+      setEditingId(null)
+      load()
+    } catch {
+      toast.error('Update failed')
+    }
+  }
+
   return (
-    <main className="min-h-screen">
-      <header className="border-b-2 border-ink bg-ink text-paper">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Shield className="text-accent" size={22} />
-            <div>
-              <h1 className="font-semibold">Platform schools</h1>
-              <p className="text-xs text-paper/70">
-                Affiliated & paid tenants only — no student or academic data
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            {user && <span className="text-sm text-paper/70 hidden sm:inline">{user.email}</span>}
-            <Link
-              href="/platform/profile"
-              className="flex items-center gap-2 px-3 py-2 border-2 border-paper/30 text-paper hover:bg-paper/10 text-sm"
-              title="Profile settings"
-            >
-              <User size={16} /> Profile
-            </Link>
-            <button
-              type="button"
-              onClick={load}
-              className="p-2 border-2 border-paper/30 text-paper hover:bg-paper/10"
-              title="Refresh"
-            >
-              <RefreshCw size={16} />
-            </button>
-            <button
-              type="button"
-              onClick={logout}
-              className="flex items-center gap-2 px-3 py-2 border-2 border-paper/30 text-paper hover:bg-paper/10 text-sm"
-            >
-              <LogOut size={16} /> Sign out
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        {loading ? (
-          <p className="text-muted">Loading schools…</p>
-        ) : schools.length === 0 ? (
-          <div className="border-2 border-ink bg-white p-10 text-center shadow-[4px_4px_0_#111111]">
-            <Building2 className="mx-auto text-muted mb-3" size={40} />
-            <p className="text-ink">No affiliated paid schools yet.</p>
-            <p className="text-sm text-muted mt-2">
-              Schools appear here when they are active, email-verified, and have a valid plan or
-              trial.
-            </p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto border-2 border-ink bg-white shadow-[4px_4px_0_#111111]">
-            <table className="w-full text-sm">
-              <thead className="bg-ink text-paper text-left">
-                <tr>
-                  <th className="px-4 py-3 font-medium">School</th>
-                  <th className="px-4 py-3 font-medium">Subdomain</th>
-                  <th className="px-4 py-3 font-medium">Plan</th>
-                  <th className="px-4 py-3 font-medium">Status</th>
-                  <th className="px-4 py-3 font-medium">Counts</th>
-                  <th className="px-4 py-3 font-medium">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {schools.map((s) => (
-                  <tr key={s.id} className="border-t border-ink/10 hover:bg-paper">
-                    <td className="px-4 py-3 text-ink font-medium">{s.name}</td>
-                    <td className="px-4 py-3 text-muted">{s.subdomain}</td>
-                    <td className="px-4 py-3 text-muted capitalize">{s.plan}</td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${statusBadge(s.subscriptionStatus)}`}
-                      >
-                        {s.subscriptionStatus}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-muted text-xs">
-                      {s.counts.users} users · {s.counts.teachers} staff · {s.counts.students}{' '}
-                      pupils
-                    </td>
-                    <td className="px-4 py-3">
-                      <button
-                        type="button"
-                        onClick={() => toggleActive(s)}
-                        className="text-xs text-accent hover:underline font-medium"
-                      >
-                        {s.active ? 'Suspend' : 'Activate'}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        <p className="mt-8 text-center text-xs text-muted">
-          <Link href="/" className="hover:text-accent">
-            Back to marketing site
-          </Link>
-        </p>
+    <PlatformShell
+      title={
+        streamFilter
+          ? 'Schools — reporting stream'
+          : districtFilter
+            ? `Schools — ${provinceFilter || '?'}, ${districtFilter}`
+            : provinceFilter
+              ? `Schools — ${provinceFilter}`
+              : 'Schools'
+      }
+    >
+      <div className="mb-4 flex flex-wrap items-center gap-4">
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={includeUnpaid}
+            onChange={(e) => setIncludeUnpaid(e.target.checked)}
+          />
+          Include unpaid / inactive
+        </label>
+        {provinceFilter || districtFilter || streamFilter ? (
+          <button
+            type="button"
+            onClick={() => router.push('/platform/dashboard')}
+            className="text-sm text-accent hover:underline"
+          >
+            Clear filters
+          </button>
+        ) : null}
       </div>
-    </main>
+
+      {loading ? (
+        <p className="text-muted">Loading schools…</p>
+      ) : schools.length === 0 ? (
+        <div className="border-2 border-ink bg-white p-10 text-center shadow-[4px_4px_0_#111111]">
+          <p className="text-ink">No schools match this filter.</p>
+        </div>
+      ) : (
+        <div className="overflow-x-auto border-2 border-ink bg-white shadow-[4px_4px_0_#111111]">
+          <table className="w-full text-sm">
+            <thead className="bg-ink text-paper text-left">
+              <tr>
+                <th className="px-4 py-3 font-medium">School</th>
+                <th className="px-4 py-3 font-medium">Subdomain</th>
+                <th className="px-4 py-3 font-medium">Location</th>
+                <th className="px-4 py-3 font-medium">Plan</th>
+                <th className="px-4 py-3 font-medium">Status</th>
+                <th className="px-4 py-3 font-medium">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {schools.map((s) => (
+                <tr key={s.id} className="border-t border-ink/10 hover:bg-paper align-top">
+                  <td className="px-4 py-3 text-ink font-medium">{s.name}</td>
+                  <td className="px-4 py-3 text-muted">{s.subdomain}</td>
+                  <td className="px-4 py-3">
+                    {editingId === s.id ? (
+                      <div className="space-y-1">
+                        <select
+                          className="border border-ink/30 rounded px-2 py-1 text-xs w-full"
+                          value={editProvince}
+                          onChange={(e) => setEditProvince(e.target.value)}
+                        >
+                          <option value="">— Province —</option>
+                          {ZAMBIA_PROVINCES.map((p) => (
+                            <option key={p} value={p}>
+                              {p}
+                            </option>
+                          ))}
+                        </select>
+                        <input
+                          className="border border-ink/30 rounded px-2 py-1 text-xs w-full"
+                          placeholder="District"
+                          value={editDistrict}
+                          onChange={(e) => setEditDistrict(e.target.value)}
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => saveProvince(s)}
+                            className="text-xs text-accent font-medium"
+                          >
+                            Save
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setEditingId(null)}
+                            className="text-xs text-muted"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <span>{s.province || '—'}</span>
+                        {s.district ? (
+                          <span className="block text-xs text-muted">{s.district}</span>
+                        ) : null}
+                        {s.reportingStreamKey ? (
+                          <span className="block text-xs text-muted font-mono truncate max-w-[140px]">
+                            {s.reportingStreamKey}
+                          </span>
+                        ) : null}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingId(s.id)
+                            setEditProvince(s.province || '')
+                            setEditDistrict(s.district || '')
+                          }}
+                          className="block text-xs text-accent hover:underline mt-1"
+                        >
+                          Edit
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-muted capitalize">{s.plan}</td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${statusBadge(s.subscriptionStatus)}`}
+                    >
+                      {s.subscriptionStatus}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <button
+                      type="button"
+                      onClick={() => toggleActive(s)}
+                      className="text-xs text-accent hover:underline font-medium"
+                    >
+                      {s.active ? 'Suspend' : 'Activate'}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </PlatformShell>
+  )
+}
+
+export default function PlatformDashboardPage() {
+  return (
+    <Suspense
+      fallback={
+        <PlatformShell title="Schools">
+          <p className="text-muted">Loading…</p>
+        </PlatformShell>
+      }
+    >
+      <PlatformDashboardContent />
+    </Suspense>
   )
 }

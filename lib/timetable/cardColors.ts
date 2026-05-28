@@ -44,7 +44,8 @@ export function resolveCardColor(
   dbHex?: string | null
 ): CardColor {
   if (dbHex) return hexToCardColor(dbHex)
-  return generateCardColor(subjectId, teacherId)
+  // One colour per teacher (aSc-style), not per subject+teacher pair
+  return generateCardColor('', teacherId)
 }
 
 /** @deprecated Use generateCardColor(subjectId, teacherId) */

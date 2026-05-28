@@ -23,7 +23,7 @@ export default function PlatformProfilePage() {
       const res = await fetch('/api/platform/auth/profile', { cache: 'no-store' })
       const data = await res.json()
       if (res.status === 401 || res.status === 403) {
-        router.replace('/platform/login')
+        router.replace('/login')
         return
       }
       if (!res.ok) {
@@ -104,7 +104,7 @@ export default function PlatformProfilePage() {
 
   async function logout() {
     await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
-    router.push('/platform/login')
+    router.push('/login')
   }
 
   return (

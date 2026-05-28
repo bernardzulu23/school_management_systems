@@ -5,6 +5,7 @@ import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/time
 import { useCollisionDetection } from '@/hooks/useCollisionDetection'
 import { CollisionDetector } from '@/lib/timetable/collisionDetector'
 import { generateCardColor, resolveCardColor } from '@/lib/timetable/cardColors'
+import { teacherDisplayName } from '@/lib/timetable/teacherDisplay'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import {
   assignmentOverlapsSlot,
@@ -408,8 +409,14 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
                                   {className.get(String(a.classId)) || 'Class'}
                                 </div>
                               </div>
-                              <div className="text-xs text-royalPurple-text2 mt-1 truncate">
-                                {teacherName.get(String(a.teacherId)) || 'Teacher'}
+                              <div
+                                className="text-xs font-bold text-royalPurple-text2 mt-1 truncate"
+                                title={teacherName.get(String(a.teacherId)) || 'Teacher'}
+                              >
+                                {teacherDisplayName(
+                                  teacherName.get(String(a.teacherId)),
+                                  'initials'
+                                )}
                               </div>
                               {aConflicts.length > 0 ? (
                                 <div className="mt-1 text-[11px] text-amber-300">

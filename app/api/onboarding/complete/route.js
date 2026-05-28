@@ -13,6 +13,7 @@ import {
 } from '@/lib/sms'
 import { clearAuthSessionCookies } from '@/lib/security/cookies'
 import { logger, captureError } from '@/lib/utils/logger'
+import { validateSchoolLocation } from '@/lib/platform/reportingStream'
 
 const RESERVED = new Set([
   'www',
@@ -106,6 +107,14 @@ export async function POST(request) {
     const level = normalizeLevel(body?.level)
     const adminName = String(body?.adminName || '').trim()
     const adminPhone = body?.adminPhone ?? body?.phone ?? null
+    const location = validateSchoolLocation({
+      province: body?.province,
+      district: body?.district,
+    })
+    if (!location.ok) {
+      return NextResponse.json({ error: location.error }, { status: 400 })
+    }
+    const { province, district, reportingStreamKey } = location
 
     if (!schoolName || schoolName.length < 2) {
       return NextResponse.json({ error: 'School name is required' }, { status: 400 })
@@ -151,6 +160,9 @@ export async function POST(request) {
           planExpiresAt: isTrial ? null : planToExpiresAt(plan, reg.subscriptionMonths),
           trialEndsAt: isTrial ? trialEndsAt() : null,
           level,
+          province,
+          district,
+          reportingStreamKey,
           active: true,
           emailVerified: true,
         },
@@ -171,7 +183,7 @@ export async function POST(request) {
 
       await tx.schoolRegistration.update({
         where: { id: reg.id },
-        data: { schoolName, subdomain, level, adminName },
+        data: { schoolName, subdomain, level, adminName, province, district, reportingStreamKey },
       })
 
       return school

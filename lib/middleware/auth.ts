@@ -5,11 +5,16 @@ import { secureJson } from '@/lib/security/api'
 export interface AppUser extends JWTPayload {
   id: string
   userId?: string
-  schoolId: string
+  schoolId?: string | null
   role: string
   email: string
   name?: string
   subdomain?: string
+  isPlatform?: boolean
+}
+
+export function isPlatformSession(user: AppUser | undefined): boolean {
+  return Boolean(user?.isPlatform) && normalizeRole(user?.role || '') === 'superadmin'
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
@@ -40,7 +45,23 @@ export async function authMiddleware(request: Request) {
     const { payload } = await jose.jwtVerify(token, getSecretKey())
     const user = payload as AppUser
 
-    if (!user?.id || !user?.schoolId) {
+    if (!user?.id) {
+      return {
+        isAuthenticated: false as const,
+        user: undefined,
+        response: secureJson(
+          { error: 'Unauthorized: invalid session', code: 'INVALID_SESSION' },
+          { status: 401 },
+          request
+        ),
+      }
+    }
+
+    if (isPlatformSession(user)) {
+      return { isAuthenticated: true as const, user }
+    }
+
+    if (!user?.schoolId) {
       return {
         isAuthenticated: false as const,
         user: undefined,

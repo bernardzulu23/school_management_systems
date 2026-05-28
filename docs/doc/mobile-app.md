@@ -166,13 +166,13 @@ Returns user, school branding, and **teaching assignments** (class + subject lis
 
 ## 6. Role access
 
-| Role                    | Mobile app                                               |
-| ----------------------- | -------------------------------------------------------- |
-| `teacher`               | Full attendance + scores                                 |
-| `hod`                   | Same (department teachers’ classes if assignments allow) |
-| `headteacher` / `admin` | Allowed but UI can warn “use web for admin tasks”        |
-| `student`               | **Block** — show “Staff only”                            |
-| Platform super admin    | **Block** — use `/platform/login` on web                 |
+| Role                    | Mobile app                                                       |
+| ----------------------- | ---------------------------------------------------------------- |
+| `teacher`               | Full attendance + scores                                         |
+| `hod`                   | Same (department teachers’ classes if assignments allow)         |
+| `headteacher` / `admin` | Allowed but UI can warn “use web for admin tasks”                |
+| `student`               | **Block** — show “Staff only”                                    |
+| Platform super admin    | **Block** — use `https://bluepeacktechnologies.com/login` on web |
 
 ---
 

@@ -2,22 +2,15 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
-import {
-  ACCESS_TOKEN_MAX_AGE,
-  REFRESH_TOKEN_MAX_AGE,
-  authCookieOptions,
-} from '@/lib/security/cookies'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import {
-  signPlatformToken,
   verifyPlatformAdminCredentials,
   ensurePlatformAdminFromEnv,
   getPlatformLoginHint,
 } from '@/lib/platform/platformAdminAuth'
-import jwt from 'jsonwebtoken'
+import { buildPlatformLoginResponse } from '@/lib/platform/completePlatformLogin'
 
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
-
+/** @deprecated Use POST /api/auth/login — kept for backward-compatible clients. */
 export const POST = withSecureApi(async function POST(request) {
   try {
     const body = await request.json()
@@ -53,34 +46,7 @@ export const POST = withSecureApi(async function POST(request) {
       )
     }
 
-    const accessToken = signPlatformToken(admin)
-    const refreshToken = jwt.sign({ id: admin.id, isPlatform: true }, JWT_REFRESH_SECRET, {
-      expiresIn: '7d',
-    })
-
-    const response = NextResponse.json({
-      success: true,
-      user: {
-        id: admin.id,
-        email: admin.email,
-        name: admin.name,
-        role: 'superadmin',
-        isPlatform: true,
-      },
-    })
-
-    response.cookies.set(
-      'access_token',
-      accessToken,
-      authCookieOptions(request, { maxAgeSeconds: ACCESS_TOKEN_MAX_AGE, name: 'access_token' })
-    )
-    response.cookies.set(
-      'refresh_token',
-      refreshToken,
-      authCookieOptions(request, { maxAgeSeconds: REFRESH_TOKEN_MAX_AGE, name: 'refresh_token' })
-    )
-
-    return response
+    return buildPlatformLoginResponse(request, admin)
   } catch (error) {
     console.error('[platform login]', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

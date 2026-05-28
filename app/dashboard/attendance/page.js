@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useCallback } from 'react'
 import toast from 'react-hot-toast'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
@@ -8,11 +8,20 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { api } from '@/lib/api'
 import { Users, Calendar, Check, X, Clock, Loader2, AlertTriangle } from 'lucide-react'
+import { SyncStatusBadge } from '@/components/attendance/SyncStatusBadge'
+import { attendanceStore } from '@/lib/offline/attendance-store'
+import { useOfflineSync } from '@/lib/offline/use-sync'
+import { useAuth } from '@/lib/auth'
 
 export default function AttendancePage() {
   const [selectedClass, setSelectedClass] = useState('')
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
+  const [usingCachedRoster, setUsingCachedRoster] = useState(false)
   const queryClient = useQueryClient()
+  const { user } = useAuth()
+  const { isOnline, refreshPendingCount, syncNow } = useOfflineSync()
+
+  const schoolId = String(user?.schoolId || user?.school_id || '')
 
   const {
     data: dashboardData,
@@ -23,6 +32,32 @@ export default function AttendancePage() {
     queryFn: () => api.getTeacherDashboard().then((res) => res.data),
   })
 
+  const loadStudents = useCallback(async () => {
+    if (!selectedClass) return []
+    try {
+      const res = await fetch(
+        `/api/classes/students?classId=${encodeURIComponent(selectedClass)}`,
+        {
+          credentials: 'include',
+        }
+      )
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'Failed to load students')
+      const list = Array.isArray(json?.data) ? json.data : []
+      await attendanceStore.cacheRoster(selectedClass, schoolId, list)
+      setUsingCachedRoster(false)
+      return list
+    } catch (err) {
+      const cached = await attendanceStore.getCachedRoster(selectedClass)
+      if (cached?.students?.length) {
+        setUsingCachedRoster(true)
+        toast('Showing saved class list (offline)', { icon: '📴' })
+        return cached.students
+      }
+      throw err
+    }
+  }, [selectedClass, schoolId])
+
   const {
     data: studentsData,
     isLoading: studentsLoading,
@@ -30,12 +65,7 @@ export default function AttendancePage() {
   } = useQuery({
     queryKey: ['class-students', selectedClass],
     enabled: Boolean(selectedClass),
-    queryFn: async () => {
-      const res = await fetch(`/api/classes/students?classId=${encodeURIComponent(selectedClass)}`)
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json.error || 'Failed to load students')
-      return Array.isArray(json?.data) ? json.data : []
-    },
+    queryFn: loadStudents,
   })
 
   const students = useMemo(() => (Array.isArray(studentsData) ? studentsData : []), [studentsData])
@@ -54,6 +84,7 @@ export default function AttendancePage() {
       if (!res.ok) throw new Error(json.error || 'Failed to load attendance')
       return Array.isArray(json?.data) ? json.data : []
     },
+    retry: isOnline ? 1 : 0,
   })
 
   useEffect(() => {
@@ -78,33 +109,66 @@ export default function AttendancePage() {
     })
   }, [selectedClass, selectedDate, students, savedRecords])
 
-  const handleAttendanceChange = (studentId, status) => {
+  const handleAttendanceChange = async (studentId, status) => {
+    const sid = String(studentId)
     setAttendance((prev) => ({
       ...prev,
-      [studentId]: status,
+      [sid]: status,
     }))
+
+    if (!selectedClass || !selectedDate) return
+
+    await attendanceStore.queueMark({
+      studentId: sid,
+      classId: selectedClass,
+      schoolId,
+      date: selectedDate,
+      status,
+    })
+    await refreshPendingCount()
   }
 
   const attendanceMutation = useMutation({
-    mutationFn: (records) =>
-      fetch('/api/attendance', {
+    mutationFn: async (records) => {
+      await attendanceStore.queueBulk({
+        classId: selectedClass,
+        schoolId,
+        date: selectedDate,
+        records,
+      })
+
+      if (!navigator.onLine) {
+        return { offline: true }
+      }
+
+      const res = await fetch('/api/attendance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ date: selectedDate, records }),
-      }).then(async (r) => {
-        const json = await r.json().catch(() => ({}))
-        if (!r.ok) throw new Error(json.error || 'Failed to save attendance')
-        return json
-      }),
-    onSuccess: () => {
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'Failed to save attendance')
+      await syncNow()
+      return json
+    },
+    onSuccess: (result) => {
       queryClient.invalidateQueries(['teacher-dashboard'])
       queryClient.invalidateQueries(['class-students', selectedClass])
       queryClient.invalidateQueries(['attendance-records', selectedClass, selectedDate])
-      toast.success('Attendance saved successfully!')
+      refreshPendingCount()
+      if (result?.offline) {
+        toast.success('Attendance saved on this device — will sync when online')
+      } else {
+        toast.success('Attendance saved successfully!')
+      }
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to save attendance')
+      refreshPendingCount()
+      toast.error(
+        error.message ||
+          'Could not reach server — your marks are saved locally and will sync when online'
+      )
     },
   })
 
@@ -141,15 +205,16 @@ export default function AttendancePage() {
   return (
     <DashboardLayout title="Take Attendance">
       <main className="space-y-6">
-        {/* Header */}
-        <header className="flex justify-between items-center">
+        <header className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
           <div>
             <h1 className="text-2xl font-bold text-royalPurple-text1">Take Attendance</h1>
-            <p className="text-royalPurple-text2">Mark student attendance for your classes</p>
+            <p className="text-royalPurple-text2">
+              Mark student attendance for your classes — works offline on this device
+            </p>
           </div>
+          <SyncStatusBadge />
         </header>
 
-        {/* Class and Date Selection */}
         <section aria-labelledby="selection-title">
           <Card>
             <CardHeader>
@@ -199,7 +264,6 @@ export default function AttendancePage() {
           </Card>
         </section>
 
-        {/* Attendance Summary */}
         {selectedClass && (
           <section
             className="grid grid-cols-1 md:grid-cols-4 gap-4"
@@ -261,25 +325,34 @@ export default function AttendancePage() {
           </section>
         )}
 
-        {/* Student Attendance List */}
         {selectedClass && (
           <section aria-labelledby="attendance-list-title">
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle id="attendance-list-title">Student Attendance</CardTitle>
+              <CardHeader className="flex flex-row items-center justify-between gap-3 flex-wrap">
+                <div>
+                  <CardTitle id="attendance-list-title">Student Attendance</CardTitle>
+                  {usingCachedRoster ? (
+                    <p className="text-xs text-amber-700 mt-1">Using offline class list</p>
+                  ) : null}
+                </div>
                 <Button
                   onClick={handleSaveAttendance}
                   className="bg-royalPurple-success hover:bg-royalPurple-success focus:ring-2 focus:ring-kpi-pass/100 focus:ring-offset-2 outline-none"
                   aria-label="Save current attendance"
-                  disabled={attendanceMutation.isLoading}
+                  disabled={attendanceMutation.isPending}
                 >
-                  Save Attendance
+                  {attendanceMutation.isPending ? 'Saving…' : 'Save Attendance'}
                 </Button>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3" role="list">
                   {studentsLoading ? (
                     <div className="text-royalPurple-text2">Loading students...</div>
+                  ) : studentsError && students.length === 0 ? (
+                    <div className="text-royalPurple-text2">
+                      Could not load students. Connect to the internet or pick a class you opened
+                      before while online.
+                    </div>
                   ) : students.length === 0 ? (
                     <div className="text-royalPurple-text2">No students found for this class.</div>
                   ) : (
@@ -313,7 +386,7 @@ export default function AttendancePage() {
                         </div>
 
                         <div
-                          className="flex space-x-2"
+                          className="flex flex-wrap gap-2 justify-end"
                           role="group"
                           aria-label={`Attendance status for ${student.name}`}
                         >
@@ -365,7 +438,6 @@ export default function AttendancePage() {
           </section>
         )}
 
-        {/* Empty State */}
         {!selectedClass && (
           <section aria-label="No class selected">
             <Card>

@@ -60,16 +60,19 @@ export async function PATCH(req) {
   const id = String(body?.id || '').trim()
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
 
-  const dayOfWeek = normalizeDayOfWeek(body?.dayOfWeek)
-  const startTime = String(body?.startTime || '').trim()
-  const endTime = String(body?.endTime || '').trim()
-  const periodNumber = Number(body?.periodNumber)
+  const dayOfWeek = body?.dayOfWeek !== undefined ? normalizeDayOfWeek(body?.dayOfWeek) : ''
+  const startTime = body?.startTime !== undefined ? String(body?.startTime || '').trim() : ''
+  const endTime = body?.endTime !== undefined ? String(body?.endTime || '').trim() : ''
+  const periodNumber = body?.periodNumber !== undefined ? Number(body?.periodNumber) : Number.NaN
+  const teacherId = body?.teacherId !== undefined ? String(body?.teacherId || '').trim() : undefined
 
-  if (!dayOfWeek) return NextResponse.json({ error: 'Invalid dayOfWeek' }, { status: 400 })
-  if (!startTime || !endTime) {
+  if (body?.dayOfWeek !== undefined && !dayOfWeek) {
+    return NextResponse.json({ error: 'Invalid dayOfWeek' }, { status: 400 })
+  }
+  if ((body?.startTime !== undefined || body?.endTime !== undefined) && (!startTime || !endTime)) {
     return NextResponse.json({ error: 'startTime and endTime required' }, { status: 400 })
   }
-  if (!Number.isFinite(periodNumber) || periodNumber < 1) {
+  if (body?.periodNumber !== undefined && (!Number.isFinite(periodNumber) || periodNumber < 1)) {
     return NextResponse.json({ error: 'Invalid periodNumber' }, { status: 400 })
   }
 
@@ -82,9 +85,20 @@ export async function PATCH(req) {
     )
   }
 
+  const data = {}
+  if (dayOfWeek) data.dayOfWeek = dayOfWeek
+  if (startTime) data.startTime = startTime
+  if (endTime) data.endTime = endTime
+  if (Number.isFinite(periodNumber)) data.periodNumber = periodNumber
+  if (teacherId) data.teacherId = teacherId
+
+  if (!Object.keys(data).length) {
+    return NextResponse.json({ error: 'No fields to update' }, { status: 400 })
+  }
+
   const updated = await prisma.timetableAllocationEntry.update({
     where: { id },
-    data: { dayOfWeek, startTime, endTime, periodNumber },
+    data,
     include: {
       allocation: {
         include: {

@@ -24,6 +24,7 @@ Central documentation for the **Zambian School Management System** (Next.js 16, 
 | [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md) | SBA rules, competencies, scoring, deadlines        |
 | [SMS_GUIDE.md](./SMS_GUIDE.md)           | Africa's Talking, templates, Zambia numbers        |
 | [QR_ATTENDANCE.md](./QR_ATTENDANCE.md)   | QR session flow, security, APIs                    |
+| [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md)   | Offline class attendance (Dexie, sync badge)       |
 
 ---
 
@@ -35,6 +36,7 @@ Central documentation for the **Zambian School Management System** (Next.js 16, 
 | [doc/VERCEL_DEPLOY.md](./doc/VERCEL_DEPLOY.md)                         | Vercel + Neon deployment                              |
 | [doc/COMPLETE_FEATURES_OUTLINE.md](./doc/COMPLETE_FEATURES_OUTLINE.md) | Full product inventory by role                        |
 | [PHASE2_ROADMAP.md](./PHASE2_ROADMAP.md)                               | What comes after Phase 1                              |
+| [PHASE3_ROADMAP.md](./PHASE3_ROADMAP.md)                               | Phase 3 — analytics, RLS, USSD                        |
 
 ---
 

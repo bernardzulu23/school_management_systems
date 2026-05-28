@@ -47,7 +47,7 @@ async function main() {
     },
   })
 
-  const loginPath = '/platform/login'
+  const loginPath = '/login'
   const base =
     process.env.NEXT_PUBLIC_APP_ORIGIN ||
     process.env.NEXTAUTH_URL ||

@@ -5,9 +5,10 @@ import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { requirePlatformAdmin } from '@/lib/middleware/platformAuth'
 import { toPlatformSchoolSummary } from '@/lib/platform/schoolEligibility'
+import { validateSchoolLocation } from '@/lib/platform/reportingStream'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
-/** Patch tenant billing flags only — never expose or modify academic data. */
+/** Patch tenant billing flags and location metadata only. */
 export const PATCH = withSecureApi(async function PATCH(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
@@ -19,6 +20,12 @@ export const PATCH = withSecureApi(async function PATCH(request, { params }) {
 
   const id = String((await params)?.id || '').trim()
   if (!id) return NextResponse.json({ error: 'School id required' }, { status: 400 })
+
+  const existing = await prisma.school.findUnique({
+    where: { id },
+    select: { province: true, district: true },
+  })
+  if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const body = await request.json().catch(() => ({}))
   const data = {}
@@ -38,6 +45,22 @@ export const PATCH = withSecureApi(async function PATCH(request, { params }) {
     data.trialEndsAt = body.trialEndsAt ? new Date(body.trialEndsAt) : null
   }
 
+  const nextProvince = body.province !== undefined ? body.province : existing.province
+  const nextDistrict = body.district !== undefined ? body.district : existing.district
+
+  if (body.province !== undefined || body.district !== undefined) {
+    const location = validateSchoolLocation({
+      province: nextProvince,
+      district: nextDistrict,
+    })
+    if (!location.ok) {
+      return NextResponse.json({ error: location.error }, { status: 400 })
+    }
+    data.province = location.province
+    data.district = location.district
+    data.reportingStreamKey = location.reportingStreamKey
+  }
+
   if (!Object.keys(data).length) {
     return NextResponse.json({ error: 'No allowed fields to update' }, { status: 400 })
   }
@@ -53,18 +76,16 @@ export const PATCH = withSecureApi(async function PATCH(request, { params }) {
       level: true,
       active: true,
       emailVerified: true,
+      province: true,
+      district: true,
+      reportingStreamKey: true,
       planExpiresAt: true,
       trialEndsAt: true,
       createdAt: true,
-      _count: { select: { users: true, students: true, teachers: true } },
     },
   })
 
   return NextResponse.json({
-    school: toPlatformSchoolSummary(school, {
-      users: school._count.users,
-      students: school._count.students,
-      teachers: school._count.teachers,
-    }),
+    school: toPlatformSchoolSummary(school),
   })
 })

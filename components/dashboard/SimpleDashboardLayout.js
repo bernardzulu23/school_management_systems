@@ -11,6 +11,7 @@ import ProfilePictureDisplay from '@/components/ui/ProfilePictureDisplay'
 import { TimetableNotificationBell } from '@/components/timetable/MasterTimetableGenerator'
 import toast from 'react-hot-toast'
 import SubscriptionBanner from '@/components/billing/SubscriptionBanner'
+import { SubscriptionWarningBanner } from '@/components/billing/SubscriptionWarningBanner'
 import ServerSessionGuard from '@/components/auth/ServerSessionGuard'
 
 export function DashboardLayout({ children, title }) {
@@ -172,6 +173,7 @@ export function DashboardLayout({ children, title }) {
         <ServerSessionGuard>
           <div className="px-4 py-6 sm:px-0 space-y-4">
             <SubscriptionBanner />
+            <SubscriptionWarningBanner />
             {!isExpired ? children : null}
           </div>
         </ServerSessionGuard>

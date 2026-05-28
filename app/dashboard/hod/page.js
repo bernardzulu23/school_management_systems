@@ -47,6 +47,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeachingHub'
+import { LearningAnalyticsPanel } from '@/components/analytics/LearningAnalyticsPanel'
 
 function defaultClassrooms(count) {
   const n = Math.max(8, Math.min(60, count))
@@ -585,6 +586,8 @@ export default function HodDashboard() {
                 />
               </div>
             </section>
+
+            <LearningAnalyticsPanel role="hod" department={currentDepartment || ''} />
 
             <section className="max-w-none">
               <div className="flex items-center justify-between gap-3 flex-wrap">

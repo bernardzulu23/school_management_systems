@@ -9,6 +9,7 @@ import {
   PREDEFINED_TEACHER_COLORS,
   teacherColorMapToJson,
 } from '@/lib/timetable/teacherColors'
+import { distinctTeacherHex } from '@/lib/timetable/teacherDisplay'
 
 export async function GET(req) {
   const user = await getAuthUser(req)
@@ -24,16 +25,18 @@ export async function GET(req) {
     orderBy: { user: { name: 'asc' } },
   })
 
+  const total = teachers.length
   const data = teachers.map((t, idx) => {
     const userId = String(t.userId)
     const existing = colorMap.get(userId)
+    const distinctHex = distinctTeacherHex(idx, total)
     const fallback = PREDEFINED_TEACHER_COLORS[idx % PREDEFINED_TEACHER_COLORS.length]
     return {
       teacherId: t.id,
       teacherUserId: userId,
       teacherName: t.user?.name || 'Teacher',
-      colorHex: existing?.colorHex || fallback.hex,
-      colorName: existing?.colorName || fallback.name,
+      colorHex: existing?.colorHex || distinctHex || fallback.hex,
+      colorName: existing?.colorName || `Teacher ${idx + 1}`,
       fromDatabase: Boolean(existing),
     }
   })
@@ -59,6 +62,7 @@ export async function POST(req) {
 
   const body = await req.json().catch(() => ({}))
   const autoAssign = body?.autoAssign === true
+  const forceReassign = body?.force === true
 
   if (!autoAssign) {
     return NextResponse.json(
@@ -69,27 +73,31 @@ export async function POST(req) {
 
   const teachers = await prisma.teacher.findMany({
     where: { schoolId },
-    select: { id: true },
-    orderBy: { createdAt: 'asc' },
+    orderBy: { user: { name: 'asc' } },
+    include: { user: { select: { name: true } } },
   })
 
+  const total = teachers.length
   let count = 0
   for (let i = 0; i < teachers.length; i++) {
-    const preset = PREDEFINED_TEACHER_COLORS[i % PREDEFINED_TEACHER_COLORS.length]
+    const hex = distinctTeacherHex(i, total)
     const existing = await prisma.teacherColor.findUnique({
       where: { schoolId_teacherId: { schoolId, teacherId: teachers[i].id } },
     })
-    if (existing) continue
-    await prisma.teacherColor.create({
-      data: {
+    if (existing && !forceReassign) continue
+
+    await prisma.teacherColor.upsert({
+      where: { schoolId_teacherId: { schoolId, teacherId: teachers[i].id } },
+      create: {
         schoolId,
         teacherId: teachers[i].id,
-        colorHex: preset.hex,
-        colorName: preset.name,
+        colorHex: hex,
+        colorName: `Teacher ${i + 1}`,
       },
+      update: forceReassign ? { colorHex: hex, colorName: `Teacher ${i + 1}` } : { colorHex: hex },
     })
     count += 1
   }
 
-  return NextResponse.json({ success: true, assigned: count })
+  return NextResponse.json({ success: true, assigned: count, distinct: true })
 }

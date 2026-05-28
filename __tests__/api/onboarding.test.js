@@ -27,6 +27,8 @@ const baseRegistration = {
   subscriptionMonths: 1,
 }
 
+const locationBody = { province: 'Lusaka', district: 'Lusaka' }
+
 describe('Onboarding payment gate', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -60,6 +62,7 @@ describe('Onboarding payment gate', () => {
           subdomain: 'newschool',
           level: 'secondary',
           adminName: 'Head Teacher',
+          ...locationBody,
         },
       })
     )
@@ -138,6 +141,8 @@ describe('Onboarding payment gate', () => {
           subdomain: 'trialschool',
           level: 'primary',
           adminName: 'Trial Admin',
+          province: 'Eastern',
+          district: 'Chipata',
         },
       })
     )

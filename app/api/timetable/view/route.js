@@ -176,6 +176,21 @@ export async function GET(req) {
 
   let assignments = mapDbEntriesToAssignments(entries)
 
+  const teacherUserIds = [
+    ...new Set(assignments.map((a) => String(a.teacherId || '').trim()).filter(Boolean)),
+  ]
+  if (teacherUserIds.length) {
+    const teacherUsers = await prisma.user.findMany({
+      where: { schoolId, id: { in: teacherUserIds } },
+      select: { id: true, name: true },
+    })
+    const teacherNameById = new Map(teacherUsers.map((u) => [String(u.id), u.name || 'Teacher']))
+    assignments = assignments.map((a) => ({
+      ...a,
+      teacherName: teacherNameById.get(String(a.teacherId)) || a.teacherName || 'Teacher',
+    }))
+  }
+
   const missingSubjectIds = [
     ...new Set(
       assignments

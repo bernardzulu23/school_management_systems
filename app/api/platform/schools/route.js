@@ -15,19 +15,15 @@ const SCHOOL_META_SELECT = {
   level: true,
   active: true,
   emailVerified: true,
+  province: true,
+  district: true,
+  reportingStreamKey: true,
   planExpiresAt: true,
   trialEndsAt: true,
   createdAt: true,
-  _count: {
-    select: {
-      users: true,
-      students: true,
-      teachers: true,
-    },
-  },
 }
 
-/** List affiliated, paid schools — metadata and counts only (no school records). */
+/** List affiliated, paid schools — metadata only (no enrollment counts). */
 export const GET = withSecureApi(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
@@ -39,23 +35,26 @@ export const GET = withSecureApi(async function GET(request) {
 
   const { searchParams } = new URL(request.url)
   const includeUnpaid = searchParams.get('includeUnpaid') === '1'
+  const province = String(searchParams.get('province') || '').trim()
+  const district = String(searchParams.get('district') || '').trim()
+  const stream = String(searchParams.get('stream') || '').trim()
 
   const schools = await prisma.school.findMany({
-    where: { active: true, emailVerified: true },
+    where: {
+      ...(province ? { province: { equals: province, mode: 'insensitive' } } : {}),
+      ...(district ? { district: { equals: district, mode: 'insensitive' } } : {}),
+      ...(stream ? { reportingStreamKey: stream } : {}),
+    },
     select: SCHOOL_META_SELECT,
     orderBy: { createdAt: 'desc' },
   })
 
-  const filtered = includeUnpaid ? schools : schools.filter(isAffiliatedPaidSchool)
+  const filtered = (includeUnpaid ? schools : schools.filter(isAffiliatedPaidSchool)).filter(
+    (s) => s.active || includeUnpaid
+  )
 
   return NextResponse.json({
-    schools: filtered.map((s) =>
-      toPlatformSchoolSummary(s, {
-        users: s._count.users,
-        students: s._count.students,
-        teachers: s._count.teachers,
-      })
-    ),
+    schools: filtered.map((s) => toPlatformSchoolSummary(s)),
     total: filtered.length,
   })
 })

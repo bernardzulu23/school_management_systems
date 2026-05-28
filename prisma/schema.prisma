@@ -37,6 +37,10 @@ model School {
   email       String?
   phone       String?
   address     String?
+  province    String?  // Zambian province (e.g. Lusaka, Copperbelt)
+  district    String?
+  /** Stable key: province + district segment for monitoring / future province & district admins */
+  reportingStreamKey String?
   eczCentreNumber String? // ECZ examination centre number for submissions
   
   createdAt   DateTime @default(now())
@@ -97,6 +101,7 @@ model School {
   teacherColors          TeacherColor[]
 
   lessonPlans          LessonPlan[]
+  termReports          TermReport[]
 
   departmentAllocations  DepartmentAllocation[]
   masterTimetableEntries MasterTimetableEntry[]
@@ -117,6 +122,9 @@ model School {
   @@index([subdomain])
   @@index([active])
   @@index([isPubliclyListed])
+  @@index([province])
+  @@index([district])
+  @@index([reportingStreamKey])
 }
 
 model User {
@@ -241,12 +249,16 @@ model SchoolRegistration {
   subdomain              String?
   level                  String?
   adminName              String?
+  province               String?
+  district               String?
+  reportingStreamKey     String?
 
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
 
   @@index([paymentStatus])
   @@index([verificationToken])
+  @@index([reportingStreamKey])
 }
 
 // Platform developer / super admin (no school tenant — metadata-only access)
@@ -350,6 +362,7 @@ model Student {
   subjectEnrollments  PupilSubjectEnrollment[]
   eczAssessmentScores EczAssessmentScore[]
   specialAccommodations SpecialAccommodation[]
+  termReports         TermReport[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1770,6 +1783,40 @@ model LessonPlan {
   @@index([schoolId, reviewerUserId])
   @@index([schoolId, reviewerUserId, status])
   @@index([schoolId, status])
+}
+
+enum TermReportStatus {
+  DRAFT
+  PENDING_HOD_REVIEW
+  APPROVED
+  PUBLISHED
+}
+
+/// AI-generated end-of-term report; HOD approves before printing.
+model TermReport {
+  id              String           @id @default(uuid())
+  schoolId        String
+  school          School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  studentId       String
+  student         Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  term            Int
+  academicYear    Int
+  classId         String?
+  content         Json
+  narrative       String?          @db.Text
+  attendancePct   Float?
+  sbaAverage      Float?
+  status          TermReportStatus @default(DRAFT)
+  generatedById   String?
+  reviewedById    String?
+  reviewedAt      DateTime?
+  publishedAt     DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@unique([schoolId, studentId, term, academicYear])
+  @@index([schoolId, status])
+  @@index([schoolId, term, academicYear])
 }
 
 model LessonPlanComment {

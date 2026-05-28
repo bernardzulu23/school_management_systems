@@ -7,6 +7,7 @@ import crypto from 'crypto'
 import { sendSchoolVerificationEmail } from '@/config/email'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { trialEndsAtFromStart } from '@/lib/billing/subscription'
+import { validateSchoolLocation } from '@/lib/platform/reportingStream'
 
 const RESERVED = new Set([
   'www',
@@ -115,7 +116,14 @@ export const POST = withSecureApi(async function POST(request) {
     const phoneRaw = String(body.phone || '').trim()
     const phone = phoneRaw || null
     const address = String(body.address || '').trim() || null
-    const province = String(body.province || '').trim() || null
+    const location = validateSchoolLocation({
+      province: body.province,
+      district: body.district,
+    })
+    if (!location.ok) {
+      return NextResponse.json({ success: false, error: location.error }, { status: 400 })
+    }
+    const { province, district, reportingStreamKey } = location
     const email = String(body.schoolEmail || body.email || '').trim() || null
     const levelRaw = String(
       body.level || body.schoolLevel || body.schoolLevelSelection || ''
@@ -221,7 +229,10 @@ export const POST = withSecureApi(async function POST(request) {
           domain: `${subdomain}.${baseDomain}`,
           email,
           phone,
-          address: [address, province].filter(Boolean).join(', ') || null,
+          address: address || null,
+          province,
+          district,
+          reportingStreamKey,
           level,
           plan: 'trial',
           trialEndsAt: trialEndsAtFromStart(),

@@ -21,7 +21,8 @@ import { HeadteacherStats } from './HeadteacherStats'
 import { useHeadteacher } from '@/lib/context/HeadteacherContext'
 import { StudentRosterCard } from '@/components/dashboard/StudentRosterCard'
 import { TimetableSummary } from '@/components/dashboard/TimetableSummary'
-import { HeadteacherLiveAttendance } from './HeadteacherLiveAttendance'
+import { LiveAttendanceSummary } from '@/components/headteacher/LiveAttendanceSummary'
+import { LearningAnalyticsPanel } from '@/components/analytics/LearningAnalyticsPanel'
 import { HeadteacherChronicAbsentees } from './HeadteacherChronicAbsentees'
 import { percentTextClass } from '@/lib/utils/percentColor'
 
@@ -80,7 +81,9 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
 
       <TimetableSummary userRole="headteacher" className="max-w-none" />
 
-      <HeadteacherLiveAttendance />
+      <LiveAttendanceSummary />
+
+      <LearningAnalyticsPanel role="headteacher" />
 
       <HeadteacherChronicAbsentees />
 

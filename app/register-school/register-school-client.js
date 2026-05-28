@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Eye, EyeOff } from 'lucide-react'
+import { ProvinceDistrictFields } from '@/components/onboarding/ProvinceDistrictFields'
 
 function normalizeSubdomain(input) {
   const raw = String(input || '')
@@ -72,6 +73,7 @@ export default function RegisterSchoolClient() {
     phone: '',
     address: '',
     province: '',
+    district: '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -183,6 +185,11 @@ export default function RegisterSchoolClient() {
       const pwdScore = getPasswordStrength(form.adminPassword)
       if (pwdScore < 3) {
         setError('Password is too weak (use uppercase, lowercase, number)')
+        setLoading(false)
+        return
+      }
+      if (!form.province.trim() || !form.district.trim()) {
+        setError('Province and district are required')
         setLoading(false)
         return
       }
@@ -351,13 +358,17 @@ export default function RegisterSchoolClient() {
                 <p className="text-royalPurple-dangerTx text-xs mt-1">{phoneError}</p>
               ) : null}
             </div>
-            <div>
-              <label className="form-label">Province</label>
-              <input
-                className="form-input mt-1"
-                placeholder="Eastern"
-                value={form.province}
-                onChange={(e) => setForm((prev) => ({ ...prev, province: e.target.value }))}
+            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+              <ProvinceDistrictFields
+                province={form.province}
+                district={form.district}
+                onProvinceChange={(v) =>
+                  setForm((prev) => ({ ...prev, province: v, district: '' }))
+                }
+                onDistrictChange={(v) => setForm((prev) => ({ ...prev, district: v }))}
+                provinceClassName="zsms-select mt-1 w-full"
+                districtClassName="zsms-select mt-1 w-full"
+                labelClassName="form-label"
               />
             </div>
             <div className="md:col-span-2">
@@ -380,7 +391,9 @@ export default function RegisterSchoolClient() {
               subdomainAvailable === false ||
               Boolean(subdomainError) ||
               Boolean(phoneError) ||
-              passwordStrength < 3
+              passwordStrength < 3 ||
+              !form.province.trim() ||
+              !form.district.trim()
             }
             className="btn-primary w-full py-3 disabled:opacity-50"
           >

@@ -18,7 +18,7 @@ export default function StudentCodePlaygroundPage() {
             </Button>
           </Link>
         </div>
-        <CodePlayground />
+        <CodePlayground embedded />
       </div>
     </DashboardLayout>
   )

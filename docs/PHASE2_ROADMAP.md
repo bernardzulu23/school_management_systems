@@ -45,11 +45,11 @@ Phase 2 focuses on **advanced product features**, mobile depth, and operational 
 ## Suggested Phase 2 task order
 
 | #   | Task                                 | Depends on        |
-| --- | ------------------------------------ | ----------------- |
-| 1   | Playwright E2E (login, ECZ, billing) | Phase 1 checklist |
-| 2   | Mobile attendance offline sync       | QR + sessions API |
-| 3   | Headteacher live attendance UI       | Live API          |
-| 4   | ECZ export PDF + validation report   | ECZ models        |
+| --- | ------------------------------------ | ----------------- | ------------------------------ |
+| 1   | Playwright E2E (login, ECZ, billing) | Phase 1 checklist | Done                           |
+| 2   | Mobile attendance offline sync       | QR + sessions API | Done (web Dexie)               |
+| 3   | Headteacher live attendance UI       | Live API          | Done                           |
+| 4   | ECZ export PDF + validation report   | ECZ models        | Done (validator + submit page) |
 | 5   | Parent SMS portal (read-only)        | SMS guide         |
 | 6   | Face recognition pilot (1 school)    | Hardware          |
 
