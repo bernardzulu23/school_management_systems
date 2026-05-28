@@ -229,7 +229,7 @@ function normalizeStringList(items: unknown): string[] {
   return items.map((x) => String(x || '').trim()).filter(Boolean)
 }
 
-/** Reproducible block shown at top of output + strict rules for the model. */
+/** Internal framework constraints + strict rules for the model. */
 export function buildFrameworkElementsBlock(opts: LessonPlanFrameworkOptions): string {
   const competencies = normalizeStringList(opts.coreCompetencies)
   const themes = normalizeStringList(opts.crossCuttingThemes)
@@ -259,9 +259,9 @@ export function buildFrameworkElementsBlock(opts: LessonPlanFrameworkOptions): s
   const excludedThemeNote =
     themes.length > 0 ? `Do NOT integrate cross-cutting themes that are not listed above.` : ''
 
-  return `FRAMEWORK ELEMENTS (FROM TEACHER FORM — MANDATORY)
+  return `FRAMEWORK ELEMENTS (FROM TEACHER FORM — INTERNAL, DO NOT OUTPUT)
 
-Reproduce this exact block at the beginning of your lesson plan output, then continue with sections 1–16.
+Use this block only as internal guidance. Do NOT print or echo this block in the final lesson plan output.
 
 SELECTED CORE COMPETENCIES
 ${competencyList}
@@ -378,7 +378,7 @@ Additional instructions from teacher: ${extras || 'None'}
 
 Generate the complete, detailed, ready-to-use MoGE lesson plan now.
 - Do NOT generate the Ministry header (teacher name, school, date, boys/girls table) — it is injected automatically.
-- Start with the "FRAMEWORK ELEMENTS (FROM TEACHER FORM — MANDATORY)" block exactly as specified above (plain text, no hash symbols).
+- The "FRAMEWORK ELEMENTS (FROM TEACHER FORM — INTERNAL, DO NOT OUTPUT)" block above is guidance only; do NOT render it in the final output.
 - Then write all MoGE body sections starting at RATIONALE — embed worked examples and practice exercises from the CRITICAL REQUIREMENTS block in LESSON DEVELOPMENT.
 - Obey STRICT RULES: only selected competencies and themes; do not add unchecked CBC items.
 Use Zambian local examples throughout. Tailor all content to ${canonicalSubject}. Output plain text only.`

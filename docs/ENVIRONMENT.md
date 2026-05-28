@@ -23,7 +23,7 @@ Validation runs automatically on server startup via `lib/config/env.js` (importe
    curl http://localhost:3000/api/ping
    ```
 
-For full local setup (database, seeds), see [docs/doc/SETUP_GUIDE.md](doc/SETUP_GUIDE.md).
+For full local setup (database, seeds), see [docs/SETUP.md](./SETUP.md).
 
 ---
 
@@ -136,7 +136,7 @@ Example response (`/api/health`):
    `https://{your-domain}/api/onboarding/lipila/callback`
 5. Deploy; confirm `GET https://{your-domain}/api/health` returns `"status": "healthy"`.
 
-See also [docs/doc/VERCEL_DEPLOY.md](doc/VERCEL_DEPLOY.md) and [docs/doc/DEPLOY.md](doc/DEPLOY.md).
+See also [docs/doc/VERCEL_DEPLOY.md](./doc/VERCEL_DEPLOY.md) and [docs/doc/LEGACY_MISC_ARCHIVE.md](./doc/LEGACY_MISC_ARCHIVE.md).
 
 ---
 

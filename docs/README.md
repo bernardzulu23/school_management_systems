@@ -35,6 +35,8 @@ Central documentation for the **Zambian School Management System** (Next.js 16, 
 | [API_ROUTES.md](./API_ROUTES.md)                                       | Auto-generated route list (`npm run docs:api-routes`) |
 | [doc/VERCEL_DEPLOY.md](./doc/VERCEL_DEPLOY.md)                         | Vercel + Neon deployment                              |
 | [doc/COMPLETE_FEATURES_OUTLINE.md](./doc/COMPLETE_FEATURES_OUTLINE.md) | Full product inventory by role                        |
+| [doc/LEGACY_PHASE_ARCHIVE.md](./doc/LEGACY_PHASE_ARCHIVE.md)           | Archived phase prompts and legacy AI packs            |
+| [doc/LEGACY_MISC_ARCHIVE.md](./doc/LEGACY_MISC_ARCHIVE.md)             | Archived legacy setup/deploy/misc docs                |
 | [PHASE2_ROADMAP.md](./PHASE2_ROADMAP.md)                               | What comes after Phase 1                              |
 | [PHASE3_ROADMAP.md](./PHASE3_ROADMAP.md)                               | Phase 3 — analytics, RLS, USSD                        |
 

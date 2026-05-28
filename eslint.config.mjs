@@ -21,7 +21,6 @@ export default [
       'prisma/**',
       'public/**',
       'zsms-mobile/**',
-      'react-router-dashboard/**',
       '**/*.mjs',
     ],
   },

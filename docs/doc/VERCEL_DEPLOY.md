@@ -158,4 +158,4 @@ If the CLI fails on Windows with `unable to verify the first certificate`, use *
 
 ## 8. Deprecated: Cloudflare Workers
 
-OpenNext / Wrangler deployment is **no longer supported** for this project. See archived notes in [CLOUDFLARE_DEPLOY.md](./CLOUDFLARE_DEPLOY.md).
+OpenNext / Wrangler deployment is **no longer supported** for this project. See archived notes in [LEGACY_MISC_ARCHIVE.md](./LEGACY_MISC_ARCHIVE.md).
