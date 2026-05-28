@@ -203,6 +203,21 @@ export const GET = withErrorHandler(async function GET(request) {
     })
   })
 
+  const submission = await prisma.auditLog.findFirst({
+    where: {
+      schoolId,
+      action: 'ATTENDANCE_MONTHLY_RETURN_SUBMITTED',
+      entity: 'AttendanceReturn',
+      entityId: month.key,
+    },
+    orderBy: { createdAt: 'desc' },
+    select: {
+      createdAt: true,
+      user: { select: { id: true, name: true, email: true } },
+      newValue: true,
+    },
+  })
+
   if (format === 'csv') {
     const header = 'month,class,gender,enrolled,present,absent,late,excused,totalRecords\n'
     const lines = []
@@ -239,6 +254,19 @@ export const GET = withErrorHandler(async function GET(request) {
       monthKey: month.key,
       classes: outputClasses,
       totals,
+      submission: submission
+        ? {
+            submittedAt: submission.createdAt,
+            submittedBy: submission.user
+              ? {
+                  id: submission.user.id,
+                  name: submission.user.name,
+                  email: submission.user.email,
+                }
+              : null,
+            details: submission.newValue || null,
+          }
+        : null,
     },
   })
 })

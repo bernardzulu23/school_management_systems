@@ -172,7 +172,7 @@ export default function SubjectsPage() {
                   Create Assessment
                 </Button>
               </Link>
-              <Link href="/dashboard/materials">
+              <Link href="/dashboard/teacher/materials">
                 <Button variant="outline" className="w-full h-16 flex flex-col">
                   <BookOpen className="h-5 w-5 mb-1" />
                   Teaching Materials

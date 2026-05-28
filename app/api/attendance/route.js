@@ -4,12 +4,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
-import {
-  buildAttendanceSmsMessage,
-  normalizePhoneNumbers,
-  pushSmsLog,
-  sendAfricasTalkingSms,
-} from '@/lib/sms'
+import { sendAttendanceStatusSmsBatch } from '@/lib/attendance/attendanceSms'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -130,88 +125,7 @@ export const POST = withErrorHandler(async function POST(request) {
     )
   )
 
-  const notifyWrites = finalWrites.filter((r) => ['present', 'absent', 'late'].includes(r.status))
-  let smsSummary = { attempted: 0, sent: 0, skipped: 0, failed: 0 }
-
-  if (notifyWrites.length > 0) {
-    const school = await prisma.school.findUnique({
-      where: { id: schoolId },
-      select: { name: true, plan: true },
-    })
-    const plan = String(school?.plan || '')
-      .trim()
-      .toLowerCase()
-    const smsAllowed = plan === 'standard' || plan === 'premium'
-    if (!smsAllowed) {
-      smsSummary.skipped += notifyWrites.length
-      return NextResponse.json({ success: true, sms: smsSummary })
-    }
-
-    const studentIds = Array.from(new Set(notifyWrites.map((r) => r.studentId)))
-
-    const students = await prisma.student.findMany({
-      where: { schoolId, id: { in: studentIds } },
-      select: {
-        id: true,
-        name: true,
-        parent_father_contact: true,
-        parent_mother_contact: true,
-        guardian_contact: true,
-      },
-    })
-
-    const schoolName = school?.name || 'School'
-    const studentById = new Map(students.map((s) => [s.id, s]))
-
-    const results = await Promise.allSettled(
-      notifyWrites.map(async (r) => {
-        smsSummary.attempted += 1
-
-        const student = studentById.get(r.studentId)
-        if (!student) {
-          smsSummary.skipped += 1
-          return
-        }
-
-        const recipients = normalizePhoneNumbers([
-          student.parent_father_contact,
-          student.parent_mother_contact,
-          student.guardian_contact,
-        ])
-
-        if (recipients.length === 0) {
-          smsSummary.skipped += 1
-          return
-        }
-
-        const message = buildAttendanceSmsMessage({
-          schoolName,
-          studentName: student.name,
-          status: r.status,
-          dateIso: r.date.toISOString(),
-        })
-
-        const sent = await sendAfricasTalkingSms({ to: recipients, message })
-
-        pushSmsLog({
-          direction: 'out',
-          schoolId,
-          to: sent.recipients,
-          message,
-          event: 'attendance_status',
-          studentId: student.id,
-          status: r.status,
-          date: r.date.toISOString(),
-        })
-
-        smsSummary.sent += 1
-      })
-    )
-
-    for (const r of results) {
-      if (r.status === 'rejected') smsSummary.failed += 1
-    }
-  }
+  const smsSummary = await sendAttendanceStatusSmsBatch({ schoolId, writes: finalWrites })
 
   return NextResponse.json({ success: true, sms: smsSummary })
 })

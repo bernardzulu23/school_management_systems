@@ -3,6 +3,7 @@
 import { useAuth } from '@/lib/auth'
 import PrivacyDashboard from '@/components/privacy/PrivacyDashboard'
 import LoadingSpinner from '@/components/LoadingSpinner'
+import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 
 export default function PrivacyPage() {
   const { user: currentUser, isAuthenticated } = useAuth()
@@ -19,10 +20,10 @@ export default function PrivacyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-royalPurple-page">
+    <DashboardLayout title="Privacy">
       <div className="p-6">
         <PrivacyDashboard />
       </div>
-    </div>
+    </DashboardLayout>
   )
 }

@@ -589,14 +589,14 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
 
       {hasTimeSlots ? (
         <div className="timetable-container border border-royalPurple-border/40 rounded-2xl overflow-auto bg-royalPurple-card/60">
-          <div className="min-w-[980px]">
+          <div className="min-w-[780px]">
             <div
               className="grid sticky top-0 z-10 bg-royalPurple-deep/95 backdrop-blur border-b border-royalPurple-border/40"
               style={{
-                gridTemplateColumns: `220px repeat(${visibleTeachers.length}, minmax(260px, 1fr))`,
+                gridTemplateColumns: `160px repeat(${visibleTeachers.length}, minmax(170px, 1fr))`,
               }}
             >
-              <div className="px-4 py-3 text-xs font-semibold text-royalPurple-text3 uppercase">
+              <div className="px-3 py-2 text-[11px] font-semibold text-royalPurple-text3 uppercase">
                 Time
               </div>
               {visibleTeachers.map((t: any) => {
@@ -606,7 +606,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                 const max = workload.perTeacherMaxHours.get(tid) || 25
                 const overloaded = hours > max
                 return (
-                  <div key={tid} className="px-4 py-3">
+                  <div key={tid} className="px-3 py-2">
                     <div className="flex items-center justify-between gap-2">
                       <div className="text-xs font-semibold text-royalPurple-text2 uppercase truncate">
                         {String(t.fullName || 'Teacher')}
@@ -632,14 +632,14 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                     key={`${day}|${slotKey(slot)}`}
                     className={`grid border-b border-royalPurple-border/20 ${slot.isBreak ? 'bg-slate-100/70' : ''}`}
                     style={{
-                      gridTemplateColumns: `220px repeat(${visibleTeachers.length}, minmax(260px, 1fr))`,
+                      gridTemplateColumns: `160px repeat(${visibleTeachers.length}, minmax(170px, 1fr))`,
                     }}
                   >
-                    <div className="px-4 py-3">
-                      <div className="font-semibold text-royalPurple-text1 text-sm">
+                    <div className="px-3 py-2">
+                      <div className="font-semibold text-royalPurple-text1 text-xs">
                         {slot.label || (slot.isBreak ? 'BREAK' : `Period ${slot.period}`)}
                       </div>
-                      <div className="text-xs text-royalPurple-text3">
+                      <div className="text-[11px] text-royalPurple-text3">
                         {slot.startTime}–{slot.endTime}
                       </div>
                     </div>
@@ -657,7 +657,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                         return (
                           <div
                             key={cellK}
-                            className="px-3 py-3 border-l border-royalPurple-border/20"
+                            className="px-2 py-2 border-l border-royalPurple-border/20"
                             aria-hidden
                           />
                         )
@@ -673,7 +673,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                       return (
                         <div
                           key={cellK}
-                          className={`px-3 py-3 border-l border-royalPurple-border/20 ${
+                          className={`px-2 py-2 border-l border-royalPurple-border/20 ${
                             slot.isBreak
                               ? 'flex items-center justify-center text-xs font-bold text-slate-500'
                               : isFree
@@ -694,7 +694,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                                   teacherColors[String(a.teacherId || '')]?.colorHex
                                 )
                                 const span = rowSpanForAssignment(a, baseSlots)
-                                const rowH = 88
+                                const rowH = 66
                                 return (
                                   <button
                                     type="button"
@@ -704,7 +704,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                                       setNextTeacherId(String(a.teacherId))
                                       setOpen(true)
                                     }}
-                                    className={`w-full text-left rounded-xl border px-3 py-2 hover:opacity-95 transition-colors relative z-[1] ${hasConflict ? 'border-red-500' : 'border-royalPurple-border/40'}`}
+                                    className={`w-full text-left rounded-lg border px-2 py-1.5 hover:opacity-95 transition-colors relative z-[1] ${hasConflict ? 'border-red-500' : 'border-royalPurple-border/40'}`}
                                     style={{
                                       background: cardColors.bg,
                                       borderColor: hasConflict ? undefined : cardColors.border,
@@ -713,18 +713,18 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                                         span > 1 ? `-${(span - 1) * rowH}px` : undefined,
                                     }}
                                   >
-                                    <div className="font-bold text-[13px] text-slate-900 truncate">
+                                    <div className="font-bold text-[12px] text-slate-900 truncate">
                                       {subjectLabel.get(String(a.subjectId)) ||
                                         (a as any).subjectName ||
                                         'Subject'}
                                     </div>
-                                    <div className="text-[12px] text-slate-700 truncate">
+                                    <div className="text-[11px] text-slate-700 truncate">
                                       {(a as any).className ||
                                         className.get(String(a.classId)) ||
                                         String(a.classId)}
                                     </div>
                                     <div
-                                      className="text-[12px] font-bold text-slate-600 truncate"
+                                      className="text-[11px] font-bold text-slate-600 truncate"
                                       title={teacherName.get(String(a.teacherId)) || 'Teacher'}
                                     >
                                       {teacherDisplayName(

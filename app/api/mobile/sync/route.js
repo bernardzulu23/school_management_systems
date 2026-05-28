@@ -12,6 +12,7 @@ import {
 } from '@/lib/ecz/ecz-compliance'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { recordAttendanceMark, closeAttendanceSession } from '@/lib/attendance/sessions'
+import { sendAttendanceStatusSmsBatch } from '@/lib/attendance/attendanceSms'
 
 const STAFF_ROLES = ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
 const VALID_ATTENDANCE = ['present', 'absent', 'late', 'excused']
@@ -69,6 +70,18 @@ export const POST = withSecureApi(async function POST(request) {
 
       if (!writes.length) throw new Error('No valid attendance records')
 
+      const existingRows = await prisma.attendance.findMany({
+        where: {
+          schoolId,
+          date: normalized,
+          studentId: { in: writes.map((w) => w.studentId) },
+        },
+        select: { studentId: true, status: true },
+      })
+      const existingByStudent = new Map(
+        existingRows.map((r) => [String(r.studentId), String(r.status || '')])
+      )
+
       await prisma.$transaction(
         writes.map((r) =>
           prisma.attendance.upsert({
@@ -84,6 +97,14 @@ export const POST = withSecureApi(async function POST(request) {
           })
         )
       )
+
+      // Send parent SMS for new/changed attendance statuses synced from mobile app.
+      const changedWrites = writes.filter(
+        (w) =>
+          String(existingByStudent.get(String(w.studentId)) || '').toLowerCase() !==
+          String(w.status)
+      )
+      await sendAttendanceStatusSmsBatch({ schoolId, writes: changedWrites })
       attendanceResult.synced += 1
     } catch (e) {
       attendanceResult.failed.push({ index: i, error: String(e?.message || e) })

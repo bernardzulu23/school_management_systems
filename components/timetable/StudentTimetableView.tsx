@@ -195,20 +195,20 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
       ) : null}
 
       <div className="timetable-container border border-royalPurple-border/40 rounded-2xl overflow-auto bg-royalPurple-card/60 print:bg-white">
-        <div className="min-w-[900px]">
+        <div className="min-w-[720px]">
           <div
             className="grid sticky top-0 z-10 bg-royalPurple-deep/95 backdrop-blur border-b border-royalPurple-border/40"
             style={{
-              gridTemplateColumns: `200px repeat(${effectiveDays.length}, minmax(220px, 1fr))`,
+              gridTemplateColumns: `150px repeat(${effectiveDays.length}, minmax(140px, 1fr))`,
             }}
           >
-            <div className="px-4 py-3 text-xs font-semibold text-royalPurple-text3 uppercase">
+            <div className="px-3 py-2 text-[11px] font-semibold text-royalPurple-text3 uppercase">
               Time
             </div>
             {effectiveDays.map((d) => (
               <div
                 key={d}
-                className="px-4 py-3 text-xs font-semibold text-royalPurple-text2 uppercase"
+                className="px-3 py-2 text-[11px] font-semibold text-royalPurple-text2 uppercase"
               >
                 {d.slice(0, 3)}
               </div>
@@ -220,14 +220,14 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
               key={slotKey(slot)}
               className={`grid border-b border-royalPurple-border/20 ${slot.isBreak ? 'bg-slate-100/70' : ''}`}
               style={{
-                gridTemplateColumns: `200px repeat(${effectiveDays.length}, minmax(220px, 1fr))`,
+                gridTemplateColumns: `150px repeat(${effectiveDays.length}, minmax(140px, 1fr))`,
               }}
             >
-              <div className="px-4 py-3">
-                <div className="font-semibold text-royalPurple-text1 text-sm">
+              <div className="px-3 py-2">
+                <div className="font-semibold text-royalPurple-text1 text-xs">
                   {slot.label || (slot.isBreak ? 'BREAK' : `Period ${slot.period}`)}
                 </div>
-                <div className="text-xs text-royalPurple-text3">
+                <div className="text-[11px] text-royalPurple-text3">
                   {slot.startTime}–{slot.endTime}
                 </div>
               </div>
@@ -238,7 +238,7 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
                 return (
                   <div
                     key={key}
-                    className={`px-3 py-3 border-l border-royalPurple-border/20 ${
+                    className={`px-2 py-2 border-l border-royalPurple-border/20 ${
                       slot.isBreak
                         ? 'flex items-center justify-center text-xs font-bold text-slate-500'
                         : ''
@@ -251,16 +251,16 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
                         {list.map((a) => (
                           <div
                             key={String(a.id)}
-                            className="rounded-xl border border-royalPurple-border/40 bg-white/70 px-3 py-2"
+                            className="rounded-lg border border-royalPurple-border/40 bg-white/70 px-2 py-1.5"
                           >
-                            <div className="font-bold text-[13px] text-slate-900 truncate">
+                            <div className="font-bold text-[12px] text-slate-900 truncate">
                               {subjectName.get(String(a.subjectId)) ||
                                 (a as any).subjectName ||
                                 'Subject'}
                             </div>
                             {!props.subjectOnly ? (
                               <div
-                                className="text-[12px] font-bold text-slate-600 truncate"
+                                className="text-[11px] font-bold text-slate-600 truncate"
                                 title={teacherName.get(String(a.teacherId)) || 'Teacher'}
                               >
                                 {teacherDisplayName(

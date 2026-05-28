@@ -5,7 +5,8 @@ import { useQuery } from '@tanstack/react-query'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { Download } from 'lucide-react'
+import { Download, Send } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 function currentMonthKey() {
   const d = new Date()
@@ -20,6 +21,7 @@ function formatCell(value) {
 
 export default function AttendanceReturnsPage() {
   const [month, setMonth] = useState(currentMonthKey())
+  const [submitting, setSubmitting] = useState(false)
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['attendance-returns', month],
@@ -42,6 +44,27 @@ export default function AttendanceReturnsPage() {
     params.set('month', month)
     params.set('format', 'csv')
     window.open(`/api/attendance/stats?${params.toString()}`, '_blank')
+  }
+
+  const submitMonthlyReturn = async () => {
+    if (submitting) return
+    setSubmitting(true)
+    try {
+      const res = await fetch('/api/attendance/returns/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ month }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || 'Failed to submit return')
+      toast.success(`Monthly return submitted for ${month}`)
+      window.location.reload()
+    } catch (e) {
+      toast.error(e?.message || 'Failed to submit return')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -69,8 +92,43 @@ export default function AttendanceReturnsPage() {
               <Download className="h-4 w-4 mr-2" />
               Export CSV
             </Button>
+            <Button
+              onClick={submitMonthlyReturn}
+              disabled={submitting}
+              variant="outline"
+              className="border-royalPurple-accent text-royalPurple-accent"
+            >
+              <Send className="h-4 w-4 mr-2" />
+              {submitting ? 'Submitting…' : 'Mark Submitted to Higher Office'}
+            </Button>
           </CardContent>
         </Card>
+
+        {data?.submission ? (
+          <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
+            <CardHeader>
+              <CardTitle className="text-royalPurple-text1">Submission Status</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-royalPurple-text2">
+              Submitted on {new Date(data.submission.submittedAt).toLocaleString()} by{' '}
+              <span className="font-semibold text-royalPurple-text1">
+                {data.submission.submittedBy?.name ||
+                  data.submission.submittedBy?.email ||
+                  'Unknown'}
+              </span>
+              .
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="bg-amber-50 border-amber-200">
+            <CardHeader>
+              <CardTitle className="text-amber-900">Submission Status</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-amber-800">
+              This month has not yet been marked as submitted to the higher office.
+            </CardContent>
+          </Card>
+        )}
 
         <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
           <CardHeader>

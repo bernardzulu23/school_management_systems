@@ -5,7 +5,7 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useAuth } from '@/lib/auth'
 import { useSchool } from '@/lib/context/SchoolContext'
 import { Button } from '@/components/ui/Button'
-import { LogOut, MessageSquare, User as UserIcon, X } from 'lucide-react'
+import { LogOut, MessageSquare, User as UserIcon, X, Menu } from 'lucide-react'
 import Link from 'next/link'
 import ProfilePictureDisplay from '@/components/ui/ProfilePictureDisplay'
 import { TimetableNotificationBell } from '@/components/timetable/MasterTimetableGenerator'
@@ -13,11 +13,13 @@ import toast from 'react-hot-toast'
 import SubscriptionBanner from '@/components/billing/SubscriptionBanner'
 import { SubscriptionWarningBanner } from '@/components/billing/SubscriptionWarningBanner'
 import ServerSessionGuard from '@/components/auth/ServerSessionGuard'
+import { Sidebar } from '@/components/dashboard/Sidebar'
 
 export function DashboardLayout({ children, title }) {
   const { user, logout } = useAuth()
   const { school } = useSchool()
   const [showFeedback, setShowFeedback] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const [feedbackForm, setFeedbackForm] = useState({
     category: 'general',
     rating: '',
@@ -92,199 +94,212 @@ export function DashboardLayout({ children, title }) {
   }
 
   return (
-    <div className="min-h-screen bg-royalPurple-page transition-colors duration-200">
-      <header className="bg-royalPurple-deep border-b border-royalPurple-border transition-colors duration-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-semibold text-royalPurple-text1">
-                Zambian School Management System
-              </h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-royalPurple-text2 font-medium">{roleLabel}</span>
-              {title && String(title).trim() !== String(roleLabel).trim() && (
-                <span className="text-sm text-royalPurple-text3">| {title}</span>
-              )}
-              {['headteacher', 'admin', 'administrator', 'superadmin'].includes(
-                String(user?.role || '')
-                  .trim()
-                  .toLowerCase()
-              ) && <TimetableNotificationBell />}
-              <button
-                type="button"
-                onClick={() => setShowFeedback(true)}
-                className="inline-flex items-center gap-2 h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
-                aria-label="Open feedback"
-              >
-                <MessageSquare className="h-4 w-4" />
-                <span className="hidden sm:inline">Feedback</span>
-              </button>
-              {(user?.teacherProfile || String(user?.role || '').toLowerCase() === 'teacher') && (
-                <Link
-                  href="/dashboard/teacher"
-                  className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
+    <div className="min-h-screen bg-royalPurple-page transition-colors duration-200 flex">
+      <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+      <div className="flex-1 flex flex-col min-w-0">
+        <header className="bg-royalPurple-deep border-b border-royalPurple-border transition-colors duration-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16">
+              <div className="flex items-center lg:hidden mr-3">
+                <button
+                  onClick={() => setMobileOpen(true)}
+                  className="p-2 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1"
+                  aria-label="Open menu"
                 >
-                  Teacher Dashboard
-                </Link>
-              )}
-              {(user?.hodProfile || String(user?.role || '').toLowerCase() === 'hod') && (
-                <Link
-                  href="/dashboard/hod"
-                  className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
-                >
-                  HOD Dashboard
-                </Link>
-              )}
-              <Link
-                href="/dashboard/profile"
-                className="inline-flex items-center gap-2 h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors"
-                aria-label="Open profile"
-              >
-                {user?.profile_picture_url || user?.name ? (
-                  <ProfilePictureDisplay
-                    src={user?.profile_picture_url}
-                    alt={user?.name || 'Profile picture'}
-                    name={user?.name || ''}
-                    role={String(user?.role || 'student').toLowerCase()}
-                    size="sm"
-                  />
-                ) : (
-                  <UserIcon className="h-5 w-5" />
+                  <Menu className="h-6 w-6" />
+                </button>
+              </div>
+              <div className="flex items-center">
+                <h1 className="text-xl font-semibold text-royalPurple-text1">
+                  Zambian School Management System
+                </h1>
+              </div>
+              <div className="flex items-center space-x-4">
+                <span className="text-royalPurple-text2 font-medium">{roleLabel}</span>
+                {title && String(title).trim() !== String(roleLabel).trim() && (
+                  <span className="text-sm text-royalPurple-text3">| {title}</span>
                 )}
-                <span className="hidden sm:inline font-medium">Profile</span>
-              </Link>
-              <ThemeToggle />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={logout}
-                className="text-royalPurple-dangerTx hover:bg-royalPurple-card2"
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-      {/* Main content */}
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <ServerSessionGuard>
-          <div className="px-4 py-6 sm:px-0 space-y-4">
-            <SubscriptionBanner />
-            <SubscriptionWarningBanner />
-            {!isExpired ? children : null}
-          </div>
-        </ServerSessionGuard>
-      </main>
-
-      {showFeedback && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <div
-            className="absolute inset-0 bg-black/60"
-            onClick={() => (!submittingFeedback ? setShowFeedback(false) : null)}
-          />
-          <div className="relative w-full max-w-lg rounded-2xl border border-royalPurple-border bg-royalPurple-deep shadow-2xl">
-            <div className="flex items-center justify-between p-5 border-b border-royalPurple-border">
-              <div>
-                <h2 className="text-lg font-semibold text-royalPurple-text1">Send feedback</h2>
-                <p className="text-sm text-royalPurple-text3">Help us improve the system.</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => (!submittingFeedback ? setShowFeedback(false) : null)}
-                className="h-10 w-10 inline-flex items-center justify-center rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors"
-                aria-label="Close feedback"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="p-5 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm text-royalPurple-text2 mb-1">Category</label>
-                  <select
-                    className="w-full input"
-                    value={feedbackForm.category}
-                    disabled={submittingFeedback}
-                    onChange={(e) => setFeedbackForm((p) => ({ ...p, category: e.target.value }))}
+                {['headteacher', 'admin', 'administrator', 'superadmin'].includes(
+                  String(user?.role || '')
+                    .trim()
+                    .toLowerCase()
+                ) && <TimetableNotificationBell />}
+                <button
+                  type="button"
+                  onClick={() => setShowFeedback(true)}
+                  className="inline-flex items-center gap-2 h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
+                  aria-label="Open feedback"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  <span className="hidden sm:inline">Feedback</span>
+                </button>
+                {(user?.teacherProfile || String(user?.role || '').toLowerCase() === 'teacher') && (
+                  <Link
+                    href="/dashboard/teacher"
+                    className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
                   >
-                    {feedbackCategories.map((c) => (
-                      <option key={c.value} value={c.value}>
-                        {c.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm text-royalPurple-text2 mb-1">
-                    Rating (optional)
-                  </label>
-                  <select
-                    className="w-full input"
-                    value={feedbackForm.rating}
-                    disabled={submittingFeedback}
-                    onChange={(e) => setFeedbackForm((p) => ({ ...p, rating: e.target.value }))}
+                    Teacher Dashboard
+                  </Link>
+                )}
+                {(user?.hodProfile || String(user?.role || '').toLowerCase() === 'hod') && (
+                  <Link
+                    href="/dashboard/hod"
+                    className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
                   >
-                    <option value="">No rating</option>
-                    <option value="5">5</option>
-                    <option value="4">4</option>
-                    <option value="3">3</option>
-                    <option value="2">2</option>
-                    <option value="1">1</option>
-                  </select>
+                    HOD Dashboard
+                  </Link>
+                )}
+                <Link
+                  href="/dashboard/profile"
+                  className="inline-flex items-center gap-2 h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors"
+                  aria-label="Open profile"
+                >
+                  {user?.profile_picture_url || user?.name ? (
+                    <ProfilePictureDisplay
+                      src={user?.profile_picture_url}
+                      alt={user?.name || 'Profile picture'}
+                      name={user?.name || ''}
+                      role={String(user?.role || 'student').toLowerCase()}
+                      size="sm"
+                    />
+                  ) : (
+                    <UserIcon className="h-5 w-5" />
+                  )}
+                  <span className="hidden sm:inline font-medium">Profile</span>
+                </Link>
+                <ThemeToggle />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={logout}
+                  className="text-royalPurple-dangerTx hover:bg-royalPurple-card2"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
+              </div>
+            </div>
+          </div>
+        </header>
+        {/* Main content */}
+        <main className="max-w-7xl w-full mx-auto py-6 sm:px-6 lg:px-8">
+          <ServerSessionGuard>
+            <div className="px-4 py-6 sm:px-0 space-y-4">
+              <SubscriptionBanner />
+              <SubscriptionWarningBanner />
+              {!isExpired ? children : null}
+            </div>
+          </ServerSessionGuard>
+        </main>
+
+        {showFeedback && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <div
+              className="absolute inset-0 bg-black/60"
+              onClick={() => (!submittingFeedback ? setShowFeedback(false) : null)}
+            />
+            <div className="relative w-full max-w-lg rounded-2xl border border-royalPurple-border bg-royalPurple-deep shadow-2xl">
+              <div className="flex items-center justify-between p-5 border-b border-royalPurple-border">
+                <div>
+                  <h2 className="text-lg font-semibold text-royalPurple-text1">Send feedback</h2>
+                  <p className="text-sm text-royalPurple-text3">Help us improve the system.</p>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => (!submittingFeedback ? setShowFeedback(false) : null)}
+                  className="h-10 w-10 inline-flex items-center justify-center rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors"
+                  aria-label="Close feedback"
+                >
+                  <X className="h-5 w-5" />
+                </button>
               </div>
 
-              <div>
-                <label className="block text-sm text-royalPurple-text2 mb-1">Message</label>
-                <textarea
-                  className="w-full input min-h-[120px]"
-                  value={feedbackForm.message}
-                  disabled={submittingFeedback}
-                  onChange={(e) => setFeedbackForm((p) => ({ ...p, message: e.target.value }))}
-                  placeholder="Write your feedback…"
-                />
+              <div className="p-5 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm text-royalPurple-text2 mb-1">Category</label>
+                    <select
+                      className="w-full input"
+                      value={feedbackForm.category}
+                      disabled={submittingFeedback}
+                      onChange={(e) => setFeedbackForm((p) => ({ ...p, category: e.target.value }))}
+                    >
+                      {feedbackCategories.map((c) => (
+                        <option key={c.value} value={c.value}>
+                          {c.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm text-royalPurple-text2 mb-1">
+                      Rating (optional)
+                    </label>
+                    <select
+                      className="w-full input"
+                      value={feedbackForm.rating}
+                      disabled={submittingFeedback}
+                      onChange={(e) => setFeedbackForm((p) => ({ ...p, rating: e.target.value }))}
+                    >
+                      <option value="">No rating</option>
+                      <option value="5">5</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm text-royalPurple-text2 mb-1">Message</label>
+                  <textarea
+                    className="w-full input min-h-[120px]"
+                    value={feedbackForm.message}
+                    disabled={submittingFeedback}
+                    onChange={(e) => setFeedbackForm((p) => ({ ...p, message: e.target.value }))}
+                    placeholder="Write your feedback…"
+                  />
+                </div>
+
+                <label className="flex items-center gap-2 text-sm text-royalPurple-text2">
+                  <input
+                    type="checkbox"
+                    checked={feedbackForm.isPublic}
+                    disabled={submittingFeedback}
+                    onChange={(e) => setFeedbackForm((p) => ({ ...p, isPublic: e.target.checked }))}
+                  />
+                  Allow this feedback to appear on the public landing page
+                </label>
               </div>
 
-              <label className="flex items-center gap-2 text-sm text-royalPurple-text2">
-                <input
-                  type="checkbox"
-                  checked={feedbackForm.isPublic}
+              <div className="flex items-center justify-end gap-3 p-5 border-t border-royalPurple-border">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowFeedback(false)}
                   disabled={submittingFeedback}
-                  onChange={(e) => setFeedbackForm((p) => ({ ...p, isPublic: e.target.checked }))}
-                />
-                Allow this feedback to appear on the public landing page
-              </label>
-            </div>
-
-            <div className="flex items-center justify-end gap-3 p-5 border-t border-royalPurple-border">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setShowFeedback(false)}
-                disabled={submittingFeedback}
-              >
-                Cancel
-              </Button>
-              <Button type="button" onClick={submitFeedback} disabled={submittingFeedback}>
-                {submittingFeedback ? 'Sending…' : 'Send feedback'}
-              </Button>
+                >
+                  Cancel
+                </Button>
+                <Button type="button" onClick={submitFeedback} disabled={submittingFeedback}>
+                  {submittingFeedback ? 'Sending…' : 'Send feedback'}
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Simple footer */}
-      <footer className="bg-royalPurple-deep border-t border-royalPurple-border mt-auto transition-colors duration-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-4 text-center text-sm text-royalPurple-text2">
-            {new Date().getFullYear()} Zambian School Management System - Empowering Rural Education
+        {/* Simple footer */}
+        <footer className="bg-royalPurple-deep border-t border-royalPurple-border mt-auto transition-colors duration-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="py-4 text-center text-sm text-royalPurple-text2">
+              {new Date().getFullYear()} Zambian School Management System - Empowering Rural
+              Education
+            </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </div>
   )
 }

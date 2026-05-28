@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { api } from '@/lib/api'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { RefreshCw } from 'lucide-react'
+import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 
 export default function SmsLogPage() {
   const [logs, setLogs] = useState([])
@@ -13,29 +13,16 @@ export default function SmsLogPage() {
   const fetchSmsLogs = async () => {
     setLoading(true)
     try {
-      // This is a placeholder for a real API endpoint to fetch SMS logs
-      // const response = await api.get('/sms/logs');
-      // setLogs(response.data);
-      setLogs([
-        {
-          id: 1,
-          from: '+1234567890',
-          to: '+0987654321',
-          text: 'GRADES 12345',
-          direction: 'in',
-          created_at: '2024-01-01 10:00:00',
-        },
-        {
-          id: 2,
-          from: '+0987654321',
-          to: '+1234567890',
-          text: 'Latest grades for John Doe: Math: 85/100, Science: 92/100',
-          direction: 'out',
-          created_at: '2024-01-01 10:00:05',
-        },
-      ])
+      const res = await fetch('/api/sms/logs?limit=300', {
+        cache: 'no-store',
+        credentials: 'include',
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || json?.message || 'Failed to load SMS logs')
+      setLogs(Array.isArray(json?.data) ? json.data : [])
     } catch (error) {
       console.error('Error fetching SMS logs:', error)
+      setLogs([])
     } finally {
       setLoading(false)
     }
@@ -46,7 +33,7 @@ export default function SmsLogPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-royalPurple-page">
+    <DashboardLayout title="SMS Interaction Logs">
       <div className="bg-royalPurple-card shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
@@ -104,27 +91,51 @@ export default function SmsLogPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-royalPurple-card divide-y divide-royalPurple-border">
-                  {logs.map((log) => (
-                    <tr key={log.id}>
+                  {logs.map((log, idx) => (
+                    <tr key={String(log.id || `${log.createdAt || ''}-${idx}`)}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
-                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${log.direction === 'in' ? 'bg-royalPurple-accent text-royalPurple-accentTx' : 'bg-royalPurple-success text-royalPurple-successTx'}`}
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            log.direction === 'in'
+                              ? 'bg-royalPurple-accent text-royalPurple-accentTx'
+                              : log.direction === 'dlr'
+                                ? 'bg-amber-500/20 text-amber-700'
+                                : 'bg-royalPurple-success text-royalPurple-successTx'
+                          }`}
                         >
                           {log.direction}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">{log.from}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{log.to}</td>
-                      <td className="px-6 py-4 whitespace-pre-wrap">{log.text}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{log.created_at}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {log.from || log.phoneNumber || '—'}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {Array.isArray(log.to) ? log.to.join(', ') : (log.to ?? '—')}
+                      </td>
+                      <td className="px-6 py-4 whitespace-pre-wrap">
+                        {log.text || log.message || log.status || '—'}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {log.createdAt ? new Date(log.createdAt).toLocaleString() : '—'}
+                      </td>
                     </tr>
                   ))}
+                  {!logs.length && !loading ? (
+                    <tr>
+                      <td
+                        colSpan={5}
+                        className="px-6 py-8 text-center text-sm text-royalPurple-text3"
+                      >
+                        No SMS logs found for this school yet.
+                      </td>
+                    </tr>
+                  ) : null}
                 </tbody>
               </table>
             )}
           </div>
         </Card>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }
