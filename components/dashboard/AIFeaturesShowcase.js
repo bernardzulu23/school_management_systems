@@ -8,12 +8,24 @@ import {
   FileText,
   Target,
   ChevronRight,
+  Upload,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth'
 
 const AI_FEATURES = [
+  {
+    id: 'ai-reference-materials',
+    name: 'AI Reference Materials',
+    description:
+      'Upload PDFs and notes so lesson plans, quizzes, and the study assistant use your content',
+    icon: Upload,
+    href: '/dashboard/teacher/ai-materials',
+    color: 'text-indigo-500',
+    bgColor: 'bg-indigo-500/10',
+    roles: ['teacher', 'hod', 'headteacher', 'administrator', 'admin'],
+  },
   {
     id: 'lesson-planner',
     name: 'AI Lesson Planner',

@@ -239,9 +239,10 @@ export default function StudyMaterialsPage() {
               </p>
               <Link
                 href="/dashboard/teacher/ai-materials"
-                className="text-sm text-accent hover:underline mt-1 inline-block"
+                className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-lg bg-indigo-600/20 border border-indigo-400/40 text-indigo-200 hover:bg-indigo-600/30 font-medium text-sm"
               >
-                Upload notes for AI (lesson plans, quizzes) →
+                <Upload className="h-4 w-4" />
+                Upload documents for AI (RAG) — lesson plans, quizzes, study assistant
               </Link>
             </div>
           </div>

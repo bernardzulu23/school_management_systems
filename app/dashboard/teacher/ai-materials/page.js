@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import ResponsiveDashboardLayout from '@/components/dashboard/ResponsiveDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
@@ -157,7 +157,7 @@ export default function AiMaterialsPage() {
   }
 
   return (
-    <DashboardLayout title="AI Reference Materials">
+    <ResponsiveDashboardLayout>
       <div className="space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-4">
@@ -344,6 +344,6 @@ export default function AiMaterialsPage() {
           </div>
         )}
       </div>
-    </DashboardLayout>
+    </ResponsiveDashboardLayout>
   )
 }

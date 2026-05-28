@@ -5,7 +5,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
 import LoadingSpinner from '@/components/LoadingSpinner'
-import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import ResponsiveDashboardLayout from '@/components/dashboard/ResponsiveDashboardLayout'
+import AIFeaturesShowcase from '@/components/dashboard/AIFeaturesShowcase'
 import { StatsCard } from '@/components/dashboard/StatsCard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -44,6 +45,7 @@ import {
   PenTool,
   Eye,
   Brain,
+  Upload,
   Heart,
   Users as HandshakeIcon,
   Rocket,
@@ -351,7 +353,7 @@ export default function TeacherDashboard() {
   }
 
   return (
-    <DashboardLayout title="Teacher Dashboard">
+    <ResponsiveDashboardLayout>
       <div className="space-y-8">
         <div className="space-y-8">
           <section className="max-w-none">
@@ -493,7 +495,7 @@ export default function TeacherDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                 <Link href="/dashboard/teacher/results" className="block">
                   <div className="p-6 bg-royalPurple-card/60 dark:bg-royalPurple-card/60 border border-royalPurple-border2 dark:border-royalPurple-border2/40 hover:border-royalPurple-border2 hover:bg-royalPurple-page dark:hover:bg-royalPurple-muted/80 rounded-2xl transition-all duration-300 group cursor-pointer h-full shadow-sm hover:shadow-md">
                     <div
@@ -541,9 +543,26 @@ export default function TeacherDashboard() {
                     </p>
                   </div>
                 </Link>
+
+                <Link href="/dashboard/teacher/ai-materials" className="block">
+                  <div className="p-6 bg-royalPurple-card/60 dark:bg-royalPurple-card/60 border border-indigo-500/30 hover:border-indigo-400 hover:bg-royalPurple-page dark:hover:bg-royalPurple-muted/80 rounded-2xl transition-all duration-300 group cursor-pointer h-full shadow-sm hover:shadow-md">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl mb-4 group-hover:scale-110 transition-transform bg-indigo-500/10">
+                      <Upload className="h-6 w-6 text-indigo-400" />
+                    </div>
+                    <h3 className="text-xl font-bold text-royalPurple-text1 dark:text-royalPurple-text1 mb-2">
+                      AI Reference Materials
+                    </h3>
+                    <p className="text-royalPurple-text3 dark:text-royalPurple-text3 text-sm">
+                      Upload PDFs and notes for RAG — powers lesson plans, quizzes, and the study
+                      assistant.
+                    </p>
+                  </div>
+                </Link>
               </div>
             </CardContent>
           </Card>
+
+          <AIFeaturesShowcase />
 
           {/* Enhanced Stats Cards */}
           <section className="w-full py-3">
@@ -1059,6 +1078,19 @@ export default function TeacherDashboard() {
                       </h3>
                       <p className="text-royalPurple-text2 text-sm text-center mt-2">
                         Global Impact
+                      </p>
+                    </div>
+                  </Link>
+                  <Link href="/dashboard/teacher/ai-materials">
+                    <div className="group p-6 bg-royalPurple-muted/60 border border-indigo-500/30 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
+                      <div className="backdrop-blur-md bg-indigo-500/20 border border-indigo-400/40 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <Upload className="h-8 w-8 text-indigo-300" />
+                      </div>
+                      <h3 className="text-royalPurple-text1 font-semibold text-center">
+                        Upload for AI (RAG)
+                      </h3>
+                      <p className="text-royalPurple-text2 text-sm text-center mt-2">
+                        Index syllabi &amp; notes for AI tools
                       </p>
                     </div>
                   </Link>
@@ -1615,6 +1647,6 @@ export default function TeacherDashboard() {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+    </ResponsiveDashboardLayout>
   )
 }
