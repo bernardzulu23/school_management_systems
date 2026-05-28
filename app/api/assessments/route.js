@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { buildAssessmentInteractiveDescription } from '@/lib/assessments/assessmentInteractive'
 
 export async function GET(request) {
   try {
@@ -91,6 +92,14 @@ export async function POST(request) {
           })
         : null
 
+    const questions = Array.isArray(data.questions) ? data.questions : []
+    const description =
+      questions.length > 0
+        ? buildAssessmentInteractiveDescription({ questions, publishedAssignmentId: null })
+        : data.description
+          ? String(data.description)
+          : null
+
     const newAssessment = await prisma.assessment.create({
       data: {
         title: data.title,
@@ -100,7 +109,7 @@ export async function POST(request) {
         class: classRecord?.name || className,
         date: new Date(data.date),
         duration_minutes: parseInt(data.duration_minutes) || 60,
-        description: data.description ? String(data.description) : null,
+        description,
         schoolId,
       },
     })

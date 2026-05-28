@@ -7,7 +7,17 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { api } from '@/lib/api'
-import { Users, Calendar, Check, X, Clock, Loader2, AlertTriangle } from 'lucide-react'
+import {
+  Users,
+  Calendar,
+  Check,
+  X,
+  Clock,
+  Loader2,
+  AlertTriangle,
+  Smartphone,
+  Monitor,
+} from 'lucide-react'
 import { SyncStatusBadge } from '@/components/attendance/SyncStatusBadge'
 import { attendanceStore } from '@/lib/offline/attendance-store'
 import { useOfflineSync } from '@/lib/offline/use-sync'
@@ -15,13 +25,42 @@ import { useAuth } from '@/lib/auth'
 
 export default function AttendancePage() {
   const [selectedClass, setSelectedClass] = useState('')
+  const [selectedSubjectId, setSelectedSubjectId] = useState('')
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
   const [usingCachedRoster, setUsingCachedRoster] = useState(false)
+  const [sessionSummary, setSessionSummary] = useState([])
+  const [attendanceMeta, setAttendanceMeta] = useState(null)
+  const [recordSources, setRecordSources] = useState({})
+  const [teachingAssignments, setTeachingAssignments] = useState([])
   const queryClient = useQueryClient()
   const { user } = useAuth()
   const { isOnline, refreshPendingCount, syncNow } = useOfflineSync()
 
   const schoolId = String(user?.schoolId || user?.school_id || '')
+
+  useEffect(() => {
+    const loadAssignments = async () => {
+      try {
+        const res = await fetch('/api/teaching-assignments', { credentials: 'include' })
+        const json = await res.json().catch(() => ({}))
+        setTeachingAssignments(Array.isArray(json?.data) ? json.data : [])
+      } catch {
+        setTeachingAssignments([])
+      }
+    }
+    loadAssignments()
+  }, [])
+
+  const subjectsForClass = useMemo(() => {
+    if (!selectedClass) return []
+    const seen = new Map()
+    for (const a of teachingAssignments) {
+      if (String(a.classId) !== String(selectedClass)) continue
+      if (!a.subjectId) continue
+      seen.set(String(a.subjectId), a.subjectName || 'Subject')
+    }
+    return [...seen.entries()].map(([id, name]) => ({ id, name }))
+  }, [teachingAssignments, selectedClass])
 
   const {
     data: dashboardData,
@@ -73,15 +112,23 @@ export default function AttendancePage() {
   const [attendance, setAttendance] = useState({})
 
   const { data: savedRecords } = useQuery({
-    queryKey: ['attendance-records', selectedClass, selectedDate],
+    queryKey: ['attendance-records', selectedClass, selectedDate, selectedSubjectId],
     enabled: Boolean(selectedClass && selectedDate),
     queryFn: async () => {
       const params = new URLSearchParams()
       params.set('classId', selectedClass)
       params.set('date', selectedDate)
+      if (selectedSubjectId) params.set('subjectId', selectedSubjectId)
       const res = await fetch(`/api/attendance?${params.toString()}`, { credentials: 'include' })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json.error || 'Failed to load attendance')
+      setSessionSummary(Array.isArray(json?.sessions) ? json.sessions : [])
+      setAttendanceMeta(json?.meta || null)
+      const sources = {}
+      for (const row of json?.data || []) {
+        sources[String(row.studentId)] = row.source || 'daily'
+      }
+      setRecordSources(sources)
       return Array.isArray(json?.data) ? json.data : []
     },
     retry: isOnline ? 1 : 0,
@@ -155,7 +202,12 @@ export default function AttendancePage() {
     onSuccess: (result) => {
       queryClient.invalidateQueries(['teacher-dashboard'])
       queryClient.invalidateQueries(['class-students', selectedClass])
-      queryClient.invalidateQueries(['attendance-records', selectedClass, selectedDate])
+      queryClient.invalidateQueries([
+        'attendance-records',
+        selectedClass,
+        selectedDate,
+        selectedSubjectId,
+      ])
       refreshPendingCount()
       if (result?.offline) {
         toast.success('Attendance saved on this device — will sync when online')
@@ -209,7 +261,7 @@ export default function AttendancePage() {
           <div>
             <h1 className="text-2xl font-bold text-royalPurple-text1">Take Attendance</h1>
             <p className="text-royalPurple-text2">
-              Mark student attendance for your classes — works offline on this device
+              Class register synced with ZSMS Mobile lesson sessions — same school database
             </p>
           </div>
           <SyncStatusBadge />
@@ -221,7 +273,7 @@ export default function AttendancePage() {
               <CardTitle id="selection-title">Select Class and Date</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label
                     htmlFor="class-select"
@@ -232,13 +284,39 @@ export default function AttendancePage() {
                   <select
                     id="class-select"
                     value={selectedClass}
-                    onChange={(e) => setSelectedClass(e.target.value)}
+                    onChange={(e) => {
+                      setSelectedClass(e.target.value)
+                      setSelectedSubjectId('')
+                    }}
                     className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent outline-none bg-royalPurple-card"
                   >
                     <option value="">Choose a class...</option>
                     {dashboardData?.my_classes?.map((classItem) => (
                       <option key={classItem.id} value={classItem.id}>
                         {classItem.name} ({classItem.student_count} students)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="subject-select"
+                    className="block text-sm font-medium text-royalPurple-text2 mb-2"
+                  >
+                    Subject (mobile lesson view)
+                  </label>
+                  <select
+                    id="subject-select"
+                    value={selectedSubjectId}
+                    onChange={(e) => setSelectedSubjectId(e.target.value)}
+                    className="w-full p-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent outline-none bg-royalPurple-card"
+                    disabled={!selectedClass || subjectsForClass.length === 0}
+                  >
+                    <option value="">All — daily register + sessions</option>
+                    {subjectsForClass.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.name}
                       </option>
                     ))}
                   </select>
@@ -263,6 +341,46 @@ export default function AttendancePage() {
             </CardContent>
           </Card>
         </section>
+
+        {selectedClass && sessionSummary.length > 0 ? (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Smartphone className="h-4 w-4" />
+                Mobile lesson sessions on this date
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {sessionSummary.map((s) => (
+                <div
+                  key={s.id}
+                  className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-lg border border-royalPurple-border text-sm"
+                >
+                  <div>
+                    <span className="font-medium text-royalPurple-text1">
+                      {s.subjectName || 'Lesson'}
+                    </span>
+                    {s.periodLabel ? (
+                      <span className="text-royalPurple-text3"> · {s.periodLabel}</span>
+                    ) : null}
+                    <div className="text-royalPurple-text2 text-xs mt-0.5">
+                      {s.teacherName || 'Teacher'} · {s.verificationMethod || 'MANUAL'} · {s.status}
+                    </div>
+                  </div>
+                  <div className="text-xs text-royalPurple-text2">
+                    P {s.present} · L {s.late} · A {s.absent} · {s.markCount} marked
+                  </div>
+                </div>
+              ))}
+              {attendanceMeta ? (
+                <p className="text-xs text-royalPurple-text3">
+                  {attendanceMeta.sessionCount} session(s), {attendanceMeta.sessionMarkCount} pupil
+                  marks merged with {attendanceMeta.dailyCount} daily register row(s).
+                </p>
+              ) : null}
+            </CardContent>
+          </Card>
+        ) : null}
 
         {selectedClass && (
           <section
@@ -376,7 +494,20 @@ export default function AttendancePage() {
                             </span>
                           </div>
                           <div>
-                            <p className="font-medium text-royalPurple-text1">{student.name}</p>
+                            <p className="font-medium text-royalPurple-text1 flex items-center gap-2 flex-wrap">
+                              {student.name}
+                              {recordSources[String(student.id)] === 'session' ? (
+                                <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-royalPurple-accent text-royalPurple-accentTx">
+                                  <Smartphone className="h-3 w-3" />
+                                  Mobile
+                                </span>
+                              ) : recordSources[String(student.id)] === 'daily' ? (
+                                <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-royalPurple-card2 text-royalPurple-text2">
+                                  <Monitor className="h-3 w-3" />
+                                  Web
+                                </span>
+                              ) : null}
+                            </p>
                             <p className="text-sm text-royalPurple-text3">
                               {student.exam_number
                                 ? `Exam: ${student.exam_number}`

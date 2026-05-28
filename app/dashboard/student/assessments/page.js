@@ -402,7 +402,14 @@ export default function StudentAssessmentsPage() {
                       <Button size="sm" variant="outline">
                         <Eye className="h-4 w-4" />
                       </Button>
-                      {activeTab === 'upcoming' && <Button size="sm">Prepare</Button>}
+                      {activeTab === 'upcoming' &&
+                        (assessment.assignmentId ? (
+                          <Link href={`/dashboard/student/assessments/${assessment.assignmentId}`}>
+                            <Button size="sm">Start Attempt</Button>
+                          </Link>
+                        ) : (
+                          <Button size="sm">Prepare</Button>
+                        ))}
                     </div>
                   </div>
 

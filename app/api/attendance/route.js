@@ -5,6 +5,7 @@ import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { sendAttendanceStatusSmsBatch } from '@/lib/attendance/attendanceSms'
+import { mergeAttendanceRegister } from '@/lib/attendance/unified-register'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -18,6 +19,9 @@ export const GET = withErrorHandler(async function GET(request) {
   const { searchParams } = new URL(request.url)
   const classId = String(searchParams.get('classId') || '').trim()
   const dateStr = String(searchParams.get('date') || '').trim()
+  const subjectId = String(searchParams.get('subjectId') || '').trim() || undefined
+  const legacyOnly = searchParams.get('legacyOnly') === '1'
+
   if (!classId || !dateStr) {
     return NextResponse.json({ error: 'classId and date are required' }, { status: 400 })
   }
@@ -27,23 +31,31 @@ export const GET = withErrorHandler(async function GET(request) {
     return NextResponse.json({ error: 'Invalid date' }, { status: 400 })
   }
 
-  const normalized = new Date(
-    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
-  )
+  if (legacyOnly) {
+    const normalized = new Date(
+      Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+    )
+    const students = await prisma.student.findMany({
+      where: { schoolId, classId },
+      select: { id: true },
+    })
+    const ids = students.map((s) => s.id)
+    if (ids.length === 0) return NextResponse.json({ success: true, data: [] })
+    const records = await prisma.attendance.findMany({
+      where: { schoolId, date: normalized, studentId: { in: ids } },
+      select: { studentId: true, status: true, remarks: true },
+    })
+    return NextResponse.json({ success: true, data: records })
+  }
 
-  const students = await prisma.student.findMany({
-    where: { schoolId, classId },
-    select: { id: true },
+  const merged = await mergeAttendanceRegister({ schoolId, classId, dateStr, subjectId })
+
+  return NextResponse.json({
+    success: true,
+    data: merged.records,
+    sessions: merged.sessions,
+    meta: merged.meta,
   })
-  const ids = students.map((s) => s.id)
-  if (ids.length === 0) return NextResponse.json({ success: true, data: [] })
-
-  const records = await prisma.attendance.findMany({
-    where: { schoolId, date: normalized, studentId: { in: ids } },
-    select: { studentId: true, status: true, remarks: true },
-  })
-
-  return NextResponse.json({ success: true, data: records })
 })
 
 export const POST = withErrorHandler(async function POST(request) {

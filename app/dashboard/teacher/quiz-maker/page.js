@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -12,9 +12,11 @@ import { FeatureGate } from '@/components/FeatureGate'
 import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { toast } from 'react-hot-toast'
+import { buildInteractiveQuizPayload } from '@/lib/assessments/interactiveQuiz'
 
 export default function TeacherQuizMakerPage() {
-  const { data, loading, error, fetch } = useAIFetch('/api/ai/quiz-maker')
+  const { data, loading, error, fetch: fetchQuiz } = useAIFetch('/api/ai/quiz-maker')
   const quiz = data?.quiz || null
   const ragReferences = Array.isArray(data?.ragReferences) ? data.ragReferences : []
 
@@ -27,6 +29,126 @@ export default function TeacherQuizMakerPage() {
     questionCount: 10,
     difficulty: 'medium',
   })
+  const [teachingAssignments, setTeachingAssignments] = useState([])
+  const [targetAssignmentId, setTargetAssignmentId] = useState('')
+  const [publishType, setPublishType] = useState('quiz')
+  const [publishing, setPublishing] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [publishedAssignmentId, setPublishedAssignmentId] = useState('')
+  const [submissionStats, setSubmissionStats] = useState(null)
+
+  const selectedTeachingAssignment =
+    teachingAssignments.find((a) => a.id === targetAssignmentId) || teachingAssignments[0] || null
+
+  useEffect(() => {
+    const loadAssignments = async () => {
+      try {
+        const res = await fetch('/api/teaching-assignments')
+        const json = await res.json().catch(() => ({}))
+        const items = Array.isArray(json?.data) ? json.data : []
+        setTeachingAssignments(items)
+        if (items.length > 0) setTargetAssignmentId(items[0].id)
+      } catch {
+        setTeachingAssignments([])
+      }
+    }
+    loadAssignments()
+  }, [])
+
+  const loadSubmissionStats = async (assignmentId) => {
+    if (!assignmentId) return
+    try {
+      const res = await fetch(`/api/assignments/${assignmentId}/submissions`)
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || 'Failed to load attempts')
+      setSubmissionStats(json?.data || null)
+    } catch {
+      setSubmissionStats(null)
+    }
+  }
+
+  const handleSaveToQuestionBank = async () => {
+    if (!quiz) return
+    setSaving(true)
+    try {
+      const questions = Array.isArray(quiz.questions) ? quiz.questions : []
+      const response = await fetch('/api/question-bank', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: quiz.title || `${form.subject} ${form.topic} Quiz`,
+          subject: form.subject,
+          subjectId: selectedTeachingAssignment?.subjectId || undefined,
+          grade: form.grade,
+          formLevel: parseInt(String(form.grade || '').replace(/\D/g, ''), 10) || null,
+          difficulty: form.difficulty,
+          questions,
+        }),
+      })
+      if (!response.ok) throw new Error('Failed to save question bank')
+      toast.success('Quiz saved to Question Bank')
+    } catch (error) {
+      toast.error(error?.message || 'Failed to save quiz')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handlePublish = async () => {
+    if (!quiz || !selectedTeachingAssignment) {
+      toast.error('Select class + subject target first')
+      return
+    }
+    setPublishing(true)
+    try {
+      const payload = buildInteractiveQuizPayload(quiz, {
+        grade: form.grade,
+        topic: form.topic,
+        difficulty: form.difficulty,
+      })
+      const dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+      const res = await fetch('/api/assignments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: quiz.title || `${form.subject} ${form.topic} ${publishType}`,
+          subject: selectedTeachingAssignment.subjectName || form.subject,
+          classId: selectedTeachingAssignment.classId,
+          class: selectedTeachingAssignment.className,
+          dueDate,
+          description: JSON.stringify(payload),
+        }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || 'Failed to publish')
+      const assignmentId = json?.data?.id
+      setPublishedAssignmentId(assignmentId)
+      toast.success('Published to students successfully')
+      await loadSubmissionStats(assignmentId)
+    } catch (error) {
+      toast.error(error?.message || 'Failed to publish quiz')
+    } finally {
+      setPublishing(false)
+    }
+  }
+
+  const handleSubmitToHod = async () => {
+    if (!publishedAssignmentId) {
+      toast.error('Publish first before submitting to HOD')
+      return
+    }
+    try {
+      const res = await fetch(`/api/assignments/${publishedAssignmentId}/submit-hod`, {
+        method: 'POST',
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || 'Failed to submit to HOD')
+      toast.success('Submitted to HOD')
+      await loadSubmissionStats(publishedAssignmentId)
+    } catch (error) {
+      toast.error(error?.message || 'Failed to submit')
+    }
+  }
 
   const canGenerate = useMemo(
     () => form.topic.trim() && form.subject.trim(),
@@ -53,6 +175,24 @@ export default function TeacherQuizMakerPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2 md:col-span-2">
+                  <Label>Target class & subject (for publish)</Label>
+                  <select
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={targetAssignmentId}
+                    onChange={(e) => setTargetAssignmentId(e.target.value)}
+                  >
+                    {teachingAssignments.length === 0 ? (
+                      <option value="">No teaching assignments found</option>
+                    ) : (
+                      teachingAssignments.map((a) => (
+                        <option key={a.id} value={a.id}>
+                          {a.className} - {a.subjectName}
+                        </option>
+                      ))
+                    )}
+                  </select>
+                </div>
                 <div className="space-y-2">
                   <Label>Form level</Label>
                   <select
@@ -105,11 +245,23 @@ export default function TeacherQuizMakerPage() {
                     <option value="hard">Hard</option>
                   </select>
                 </div>
+                <div className="space-y-2">
+                  <Label>Publish as</Label>
+                  <select
+                    className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
+                    value={publishType}
+                    onChange={(e) => setPublishType(e.target.value)}
+                  >
+                    <option value="quiz">Quiz</option>
+                    <option value="assessment">Assessment</option>
+                    <option value="test">Test</option>
+                  </select>
+                </div>
               </div>
 
               {error ? <UpgradePrompt error={error} /> : null}
 
-              <Button onClick={() => fetch(form)} disabled={loading || !canGenerate}>
+              <Button onClick={() => fetchQuiz(form)} disabled={loading || !canGenerate}>
                 {loading ? 'Generating...' : 'Create Quiz'}
               </Button>
             </CardContent>
@@ -148,6 +300,38 @@ export default function TeacherQuizMakerPage() {
                     </div>
                   ))}
                 </div>
+                <div className="flex flex-wrap gap-2 pt-2 border-t border-royalPurple-border">
+                  <Button variant="outline" onClick={handleSaveToQuestionBank} disabled={saving}>
+                    {saving ? 'Saving...' : 'Save'}
+                  </Button>
+                  <Button
+                    onClick={handlePublish}
+                    disabled={publishing || !selectedTeachingAssignment}
+                  >
+                    {publishing ? 'Publishing...' : 'Publish to Students'}
+                  </Button>
+                  <Button variant="outline" onClick={() => window.print()}>
+                    Print / Save PDF
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleSubmitToHod}
+                    disabled={!publishedAssignmentId}
+                  >
+                    Submit to HOD
+                  </Button>
+                </div>
+                {publishedAssignmentId ? (
+                  <div className="text-xs text-royalPurple-text2">
+                    Published assignment ID: {publishedAssignmentId}
+                  </div>
+                ) : null}
+                {submissionStats ? (
+                  <div className="p-3 rounded-lg border border-royalPurple-border bg-royalPurple-card/60 text-sm">
+                    Student Attempts: {submissionStats.totalSubmissions} • Class Average:{' '}
+                    {submissionStats.averagePercentage}%
+                  </div>
+                ) : null}
               </CardContent>
             </Card>
           ) : null}

@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calculator, PenTool, Calendar, Timer, FileText, Search } from 'lucide-react'
@@ -60,9 +61,11 @@ export default function StudyToolsPage() {
               <p className="text-royalPurple-text2 mb-4 text-sm">
                 Create and review flashcards for memorization.
               </p>
-              <Button className="w-full bg-warn hover:bg-g-700 text-royalPurple-text1">
-                Create Flashcards
-              </Button>
+              <Link href="/dashboard/student/flashcards">
+                <Button className="w-full bg-warn hover:bg-g-700 text-royalPurple-text1">
+                  Create Flashcards
+                </Button>
+              </Link>
             </CardContent>
           </Card>
 

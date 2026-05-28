@@ -163,6 +163,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Materials', href: '/dashboard/student/materials', icon: Upload },
         { name: 'My Timetable', href: '/dashboard/timetable/student', icon: Calendar },
         { name: 'Assessments', href: '/dashboard/student/assessments', icon: ClipboardList },
+        { name: 'Flashcards', href: '/dashboard/student/flashcards', icon: BookOpen },
         { name: 'Results', href: '/dashboard/student/results', icon: BarChart3 },
         { name: 'ECZ Practice', href: '/dashboard/student/ecz-practice', icon: Target },
         {

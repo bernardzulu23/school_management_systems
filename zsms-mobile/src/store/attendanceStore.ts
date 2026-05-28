@@ -52,7 +52,7 @@ export const useAttendanceStore = create<AttendanceState>((set, get) => ({
     try {
       const [students, existing] = await Promise.all([
         loadRoster(classId, subjectId),
-        loadExistingAttendance(classId, date).catch(() => []),
+        loadExistingAttendance(classId, date, subjectId).catch(() => []),
       ])
       const records = buildDefaultRecords(students, existing)
       set({

@@ -82,6 +82,7 @@ model School {
   attendanceMarks      AttendanceMark[]
   assignments          Assignment[]
   assignmentSubmissions AssignmentSubmission[]
+  flashcardDecks       StudentFlashcardDeck[]
   fieldTrips           FieldTrip[]
   feedbacks            Feedback[]
   strategicGoals       StrategicGoal[]
@@ -359,6 +360,7 @@ model Student {
   attendance          Attendance[]
   attendanceMarks     AttendanceMark[]
   assignmentSubmissions AssignmentSubmission[]
+  flashcardDecks      StudentFlashcardDeck[]
   subjectEnrollments  PupilSubjectEnrollment[]
   eczAssessmentScores EczAssessmentScore[]
   specialAccommodations SpecialAccommodation[]
@@ -1472,6 +1474,25 @@ model AttendanceMark {
   @@unique([sessionId, studentId])
   @@index([schoolId, studentId])
   @@index([sessionId, status])
+}
+
+model StudentFlashcardDeck {
+  id          String   @id @default(uuid())
+  studentId   String
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  subjectId   String?
+  subjectName String
+  deckDate    DateTime @db.Date
+  title       String?
+  cards       Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([studentId, subjectName, deckDate])
+  @@index([schoolId, studentId, deckDate])
+  @@index([studentId, deckDate])
 }
 
 model Assignment {

@@ -557,13 +557,17 @@ export default function TeacherAssessmentsPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Button size="sm" variant="outline">
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button size="sm" variant="outline">
-                        <Edit className="h-4 w-4" />
-                      </Button>
+                    <div className="flex items-center space-x-2 flex-wrap">
+                      <Link href={`/dashboard/teacher/assessments/${assessment.id}`}>
+                        <Button size="sm">Questions & Publish</Button>
+                      </Link>
+                      <Link
+                        href={`/dashboard/teacher/assessments/${assessment.id}#assessment-attempts`}
+                      >
+                        <Button size="sm" variant="outline">
+                          Student attempts
+                        </Button>
+                      </Link>
                       {assessment.status === 'completed' && <Button size="sm">View Results</Button>}
                     </div>
                   </div>

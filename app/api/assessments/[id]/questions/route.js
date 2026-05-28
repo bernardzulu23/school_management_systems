@@ -1,0 +1,81 @@
+export const dynamic = 'force-dynamic'
+import { NextResponse } from 'next/server'
+import prisma from '@/lib/prisma'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import {
+  buildAssessmentInteractiveDescription,
+  parseAssessmentInteractive,
+} from '@/lib/assessments/assessmentInteractive'
+
+export const GET = withErrorHandler(async function GET(request, { params }) {
+  const routeParams = await params
+  const auth = await authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) throw new ApiError('School context required', 400)
+
+  const assessment = await prisma.assessment.findFirst({
+    where: { id: routeParams.id, schoolId },
+  })
+  if (!assessment) throw new ApiError('Assessment not found', 404)
+
+  const interactive = parseAssessmentInteractive(assessment.description)
+
+  return NextResponse.json({
+    success: true,
+    data: {
+      assessmentId: assessment.id,
+      title: assessment.title,
+      subject: assessment.subject,
+      class: assessment.class,
+      questions: interactive?.questions || [],
+      publishedAssignmentId: interactive?.publishedAssignmentId || null,
+      publishedAt: interactive?.publishedAt || null,
+    },
+  })
+})
+
+export const PUT = withErrorHandler(async function PUT(request, { params }) {
+  const routeParams = await params
+  const auth = await authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+
+  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
+    throw new ApiError('Forbidden', 403)
+  }
+
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) throw new ApiError('School context required', 400)
+
+  const assessment = await prisma.assessment.findFirst({
+    where: { id: routeParams.id, schoolId },
+  })
+  if (!assessment) throw new ApiError('Assessment not found', 404)
+
+  const body = await request.json().catch(() => ({}))
+  const questions = Array.isArray(body.questions) ? body.questions : []
+  const existing = parseAssessmentInteractive(assessment.description)
+
+  await prisma.assessment.update({
+    where: { id: assessment.id },
+    data: {
+      description: buildAssessmentInteractiveDescription({
+        questions,
+        publishedAssignmentId: existing?.publishedAssignmentId || null,
+        publishedAt: existing?.publishedAt || null,
+      }),
+    },
+  })
+
+  return NextResponse.json({
+    success: true,
+    data: { assessmentId: assessment.id, questionCount: questions.length },
+  })
+})

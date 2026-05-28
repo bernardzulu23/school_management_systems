@@ -9,9 +9,11 @@ export async function loadRoster(classId: string, subjectId?: string): Promise<R
 
 export async function loadExistingAttendance(
   classId: string,
-  date: string
+  date: string,
+  subjectId?: string
 ): Promise<AttendanceRecord[]> {
   const params = new URLSearchParams({ classId, date })
+  if (subjectId) params.set('subjectId', subjectId)
   const data = await api<{
     success?: boolean
     data?: Array<{ studentId: string; status: string; remarks?: string | null }>
