@@ -49,13 +49,36 @@ export async function GET(request) {
       where: { userId: auth.user.id, schoolId },
       include: {
         user: true,
-        gamificationProfile: true,
+        gamificationProfile: {
+          include: {
+            badges: {
+              include: { badge: true },
+              orderBy: { awardedAt: 'desc' },
+            },
+          },
+        },
       },
     })
 
     if (!student) {
       return NextResponse.json({ error: 'Student profile not found' }, { status: 404 })
     }
+
+    // Gamification: read the real profile, badges and games-played count so the
+    // dashboard widgets reflect what is stored in the database.
+    const gamification = student.gamificationProfile || null
+    const earnedBadges = Array.isArray(gamification?.badges) ? gamification.badges : []
+    const gamesPlayedCount = await prisma.studentGame.count({
+      where: { schoolId, studentId: student.id },
+    })
+    const achievementsList = earnedBadges.map((sb) => ({
+      id: sb.badge?.id || sb.badgeId,
+      name: sb.badge?.name || 'Badge',
+      description: sb.badge?.description || '',
+      icon: sb.badge?.icon || null,
+      rarity: sb.badge?.rarity || 'common',
+      awardedAt: sb.awardedAt,
+    }))
 
     const enrollments = await prisma.pupilSubjectEnrollment.findMany({
       where: { schoolId, pupilId: student.id },
@@ -391,9 +414,12 @@ export async function GET(request) {
         completedGoals: 0, // Placeholder
         totalGoals: 0, // Placeholder
         recentMaterials: 0, // Placeholder
-        gamesPlayed: 0,
-        achievements: 0,
-        level: 1,
+        gamesPlayed: gamesPlayedCount,
+        achievements: achievementsList.length,
+        level: gamification?.level || 1,
+        xp: gamification?.xp || 0,
+        nextLevelXp: gamification?.nextLevelXp || 100,
+        gamificationPoints: gamification?.points || 0,
         points: bestSixPoints,
         attendanceRate: `${Math.round(attendancePercentage)}%`,
         bestSixSubjects: bestSix.map((s) => ({
@@ -428,6 +454,7 @@ export async function GET(request) {
       upcoming_assessments: upcomingAssessments,
       recent_results: recentResults,
       class_info: myClass,
+      achievements_list: achievementsList,
     }
 
     return NextResponse.json({ data: dashboardData })

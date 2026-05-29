@@ -52,6 +52,7 @@
     "seed:schools": "node prisma/seed-schools.js",
     "seed:st-marys": "node prisma/seed-st-marys-pilot.js",
     "seed:platform-admin": "node prisma/seed-platform-admin.js",
+    "seed:gamification": "node prisma/seed-gamification.js",
     "seed:ndake-premium-trial": "node prisma/seed-ndake-premium-trial.js",
     "seed:timeslots": "ts-node --transpile-only --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" prisma/seedTimeSlots.ts",
     "seed:schools:docker": "docker compose exec -T web npm run seed:schools",

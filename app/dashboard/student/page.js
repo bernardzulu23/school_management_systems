@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@/lib/auth'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { StatsCard } from '@/components/dashboard/StatsCard'
@@ -75,6 +75,7 @@ export default function StudentDashboard() {
     }
   }, [])
 
+  const queryClient = useQueryClient()
   const [activeTab, setActiveTab] = useState('overview')
   const [currentGame, setCurrentGame] = useState(null)
   const { timeSlots } = useSchoolTimeSlots()
@@ -209,11 +210,30 @@ export default function StudentDashboard() {
   }
 
   // Game handlers
-  const handleGameComplete = (results) => {
-    console.log('Game completed with results:', results)
-    // Here you would typically save the results to the backend
-    setCurrentGame(null)
-    setActiveTab('games') // Return to games tab
+  const handleGameComplete = async (results) => {
+    try {
+      if (currentGame?.id) {
+        const res = await api.completeStudentGame({
+          gameId: currentGame.id,
+          percentage: results?.percentage ?? 0,
+          score: results?.score ?? 0,
+        })
+        const data = res?.data?.data
+        if (data?.leveledUp) {
+          toast.success(`Level up! You reached level ${data.profile.level}`)
+        } else if (data?.pointsEarned) {
+          toast.success(`+${data.pointsEarned} points earned!`)
+        }
+        // Refresh gamification widgets with the new data.
+        queryClient.invalidateQueries({ queryKey: ['student-dashboard'] })
+        queryClient.invalidateQueries({ queryKey: ['student-game-dashboard'] })
+      }
+    } catch (e) {
+      toast.error('Could not save your game result')
+    } finally {
+      setCurrentGame(null)
+      setActiveTab('games')
+    }
   }
 
   const handleExitGame = () => {

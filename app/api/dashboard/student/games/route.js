@@ -133,6 +133,8 @@ export async function GET(request) {
         difficulty: g.difficulty,
         pointsReward: g.content?.pointsReward || 10,
         timeLimit: g.content?.timeLimit || 0,
+        // GamePlayer reads game.content.questions to render and grade the quiz.
+        content: g.content || { questions: [] },
         playCount: g.playCount,
         averageScore: g.averageScore,
       })),
