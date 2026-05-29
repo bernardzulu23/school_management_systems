@@ -113,3 +113,102 @@ export interface SyncResult {
   scores: { synced: number; failed: Array<{ index: number; error: string }> }
   lessonSessions?: { synced: number; failed: Array<{ index: number; error: string }> }
 }
+
+// --- Student feature screens (Task 31) ---
+
+export interface TimetableAssignment {
+  id: string
+  dayOfWeek: string
+  period: number
+  startTime?: string | null
+  endTime?: string | null
+  subjectId?: string
+  subjectName?: string
+  className?: string
+  teacherName?: string
+}
+
+export interface TimetableTimeSlot {
+  period: number
+  startTime?: string | null
+  endTime?: string | null
+  label?: string | null
+}
+
+export interface TimetableView {
+  assignments: TimetableAssignment[]
+  timeSlots: TimetableTimeSlot[]
+  term: string
+  academicYear: string
+  status: string
+  message?: string
+}
+
+export interface StudentResult {
+  id: string
+  subject: string
+  subjectCode: string
+  score: number | null
+  grade: string | null
+  term: string | null
+  year: number | null
+  comments: string | null
+  date: string
+}
+
+export interface EczQuestion {
+  id: string
+  type: 'mcq' | 'short' | 'structured'
+  question: string
+  options?: string[]
+  marks: number
+  answer: string
+  explanation?: string
+}
+
+export interface EczPaper {
+  examInfo: {
+    subject: string
+    level: string
+    topic: string
+    totalMarks: number
+    timeAllowed: string
+  }
+  questions: EczQuestion[]
+}
+
+export interface EczGenerateInput {
+  subject: string
+  topic: string
+  examLevel?: string
+  questionCount?: number
+}
+
+export interface Notice {
+  id: string
+  title: string
+  description: string
+  date: string
+  location: string
+  type: string
+  organizer: string | null
+  upcoming: boolean
+}
+
+export interface LessonPlanSummary {
+  id: string
+  status: string
+  grade: string
+  subject: string
+  topic: string
+  subTopic?: string | null
+  duration?: number | null
+  term?: string | null
+  templateType?: string | null
+  createdAt: string
+  version?: number
+}
+
+export interface LessonPlanDetail extends LessonPlanSummary {
+  content: string
+}

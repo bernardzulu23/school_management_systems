@@ -4,6 +4,129 @@ All notable changes to the Zambian School Management System during the audit and
 
 ## [Unreleased]
 
+### Features (Phase 4 — Track B)
+
+- **Task 32 — National Assessment Platform (ECZ mock examinations).** Structured
+  timed mock exams for students: AI + RAG paper generation, in-exam timer,
+  auto-scoring (`lib/assessment/auto-scorer.js`), teacher-review flag for open
+  responses, and anonymised national percentile (`GET /api/analytics/national-percentile`).
+  New Prisma model `MockExamAttempt` (migration `20260529200000_mock_exam`, RLS).
+  API: `POST /api/student/mock-exam/start`, `GET /api/student/mock-exam`,
+  `GET /api/student/mock-exam/[id]`, `POST /api/student/mock-exam/[id]/submit`.
+  UI: `/dashboard/student/mock-exam`. Tests: `__tests__/unit/auto-scorer.test.js`,
+  `__tests__/unit/mock-exam-helpers.test.js`, `__tests__/api/mock-exam.test.js`.
+  Full suite green (150 tests).
+
+- **Task 31 — Expo mobile feature expansion (`zsms-mobile/`).** Student screens:
+  timetable (`/student/timetable`), results, ECZ practice, notices; teacher
+  offline lesson-plan cache (AsyncStorage). Push notifications via
+  `expo-notifications` + `POST /api/mobile/push/register` (Expo token on `User`).
+  Web API: `GET /api/student/notices` (school Activity feed). Role-aware home
+  navigation. Mobile `npm run lint` (tsc) clean.
+
+- **Task 29 — Teaching Materials Marketplace.** Teachers can share approved
+  lesson plans cross-school and download others' into their own library.
+  New Prisma models `SharedMaterial` + `MaterialRating` (migration
+  `20260529180000_marketplace`). API: `GET /api/marketplace` (public,
+  approved-only, paginated search), `GET /api/marketplace/[id]` (preview +
+  ratings), `POST /api/marketplace/submit` (copies the teacher's own lesson
+  plan, status `pending`, notifies an HOD), `POST /api/marketplace/[id]/review`
+  (HOD/admin approve/reject — tenant-isolated to their own school),
+  `POST /api/marketplace/[id]/download` (copies into the downloader's school as
+  a DRAFT plan, increments downloads), `POST /api/marketplace/[id]/rate`
+  (1–5, one per teacher, cached average), and `GET /api/marketplace/mine`
+  (own submissions / HOD review queue). **Privacy:** listings never expose the
+  source `schoolId` or author identity — only province, and the author's name
+  only when they opt in. UI: `/marketplace` (browse), `/marketplace/[id]`
+  (preview + download + rate), `/dashboard/teacher/marketplace/my-submissions`
+  (share + track status). Zod-validated, marketplace browse allow-listed in the
+  proxy. New tests `__tests__/api/marketplace.test.js` (8 cases). Full suite
+  green (139 tests).
+
+### Documentation (Phase 4 — Task 33)
+
+- **`docs/PENETRATION_TEST_PLAN.md`** — manual security scenarios + ZAP guidance.
+- **`docs/PHASE5_ROADMAP.md`** — national scale, MOE/DEBS, CompreFace, revenue targets.
+- **`docs/SECURITY.md`** and **`docs/SECRET_ROTATION.md`** (Tasks 27–28) remain the
+  master security references.
+
+### Out of scope (Phase 4)
+
+- **Task 30 — In-app parent school fees** — cancelled; ZSMS bills **school
+  subscriptions** only, not parent fee collection.
+
+### Security (Phase 4 — Track A)
+
+- **Task 28 — Secrets management + token hardening.** Pinned **HS256** on every
+  JWT sign/verify across the auth surface (`lib/middleware/auth.ts`, web + mobile
+  login/refresh, platform tokens, onboarding tokens, attendance QR) — closing the
+  algorithm-confusion / `alg:none` vector. Added an `aud: zsms-api` audience claim
+  to access tokens with a **transition-safe** verifier (rejects a wrong audience,
+  still accepts legacy tokens). Added **`JWT_SECRET_PREVIOUS`** dual-secret
+  verification for **zero-downtime `JWT_SECRET` rotation**. Confirmed all auth
+  cookies are `HttpOnly + Secure + SameSite=Strict`, and that refresh-token
+  rotation with reuse detection was already in place. Added `docs/SECRET_ROTATION.md`
+  runbook and `JWT_SECRET_PREVIOUS` to `.env.example`. New
+  `__tests__/security/jwt-hardening.test.js` (7 cases). Full suite green (131 tests).
+  Access-token lifetime left at 8h (not reduced to 15m) — deliberate, given the
+  offline-first/rural-connectivity target; flagged as a product decision.
+
+- **Task 27 — Multi-tenant penetration hardening.** Added
+  `lib/middleware/verify-tenant.js` (`verifyTenant`, `getVerifiedSchoolId`,
+  `assertSameTenant`, `isPlatformSession`) — defence-in-depth helpers that reject
+  cross-tenant access and refuse to trust a `schoolId` from the request body/query,
+  with the platform bypass scoped strictly to `isPlatform + superadmin`. Added
+  `__tests__/security/tenant-isolation.test.js` (20 cases: cross-tenant denial,
+  forged-schoolId rejection, `x-school-id` spoof, JWT/DB mismatch, inactive school,
+  controlled platform bypass). Documented the isolation model and audited all 224
+  API routes (143 tenant-scoped via `resolveAuthenticatedSchoolId`, 13 platform via
+  `platformAuth`, remainder public-by-design) in `docs/SECURITY.md`. Full security
+  suite green (37 tests).
+
+- **Task 26 — Dependency audit + automated scanning.** Resolved all flagged
+  vulnerabilities (was 8 → **0** at `npm audit`). Bumped `next`/`tmp` via
+  `npm audit fix`; raised the direct `postcss` dep to `^8.5.15`; pinned patched
+  transitive versions via `overrides` (`serialize-javascript ^7.0.5`,
+  `uuid ^11.1.1`, `lodash ^4.18.1`, and `axios "$axios"` forcing africastalking's
+  nested copy to the patched root `axios ^1.16.1`) — avoiding the breaking
+  downgrades (`next@9`, `africastalking@0.7.4`) npm proposed. Added scripts
+  `audit:security`, `audit:full`, `audit:fix`, `check:deps`. Added
+  `.github/dependabot.yml` (npm root + mobile, pip solver dirs, github-actions)
+  and `.github/workflows/security.yml` (audit + tests + TruffleHog secret scan).
+  Full suite green (104 tests).
+
+- **Task 25 — CSP + security headers.** Confirmed the central CSP/headers
+  (`lib/security/headers.js`) are applied both at the edge (`proxy.js`) and via
+  `next.config.js` `headers()`. Added an explicit `/api/:path*` no-cache header
+  block (`Cache-Control: no-store…`, `Pragma`, `Expires`) so per-tenant API
+  responses are never cached by browsers/proxies. Header stripping (25.2) was
+  delivered in Task 23. New tests in `__tests__/security/csp.test.js` assert the
+  CSP locks `object-src`/`base-uri`/`frame-ancestors` and that responses carry
+  CSP + nosniff + frame protection. (Nonce-based `strict-dynamic` CSP — removing
+  `'unsafe-inline'` from `script-src` — is deferred pending browser verification;
+  see review.md.)
+
+- **Task 24 — Input validation layer.** Added `lib/middleware/validate-request.js`
+  (`validateBody`/`validateQuery` returning a ready 400 Response, plus
+  `parseBodyOrThrow` for `withErrorHandler` routes) and a central schema registry
+  `lib/schemas/index.js`. Schemas never accept `role`/`schoolId` from the body
+  (unknown keys are stripped, blocking escalation) and bound every string to
+  prevent DoS payloads. Wired into the first high-risk batch: `POST /api/sms/send`
+  (now also role-gated to staff), `POST /api/subjects`, `POST /api/student/goals`,
+  `POST /api/dashboard/student/games/complete`, and `POST /api/student/flashcards`.
+  New tests in `__tests__/security/input-validation.test.js`. Remaining mutation
+  routes will be migrated in follow-up batches using the same pattern.
+
+- **Task 23 — CVE-2025-29927 / middleware-bypass hardening.** Next.js is already
+  on v16 (CVE fixed upstream from 15.2.3). Added defence-in-depth at the proxy:
+  `stripInternalRequestHeaders()` removes spoofable internal headers
+  (`x-middleware-subrequest`, `x-middleware-invoke`, `x-invoke-*`,
+  `x-next-intl-locale`, `x-platform-admin-override`) and a client-supplied
+  `x-school-subdomain` before any routing/auth decision. The verified tenant
+  subdomain is re-set from the hostname only. Authoritative auth continues to run
+  inside route handlers via `authMiddleware`/`roleCheck` (middleware is not a
+  security boundary). New tests in `__tests__/security/auth-bypass.test.js`.
+
 ### Added (Province, district & reporting streams)
 
 - **Required province + district** on onboarding and school registration with district dropdowns per province.

@@ -76,6 +76,17 @@ const nextConfig = {
         source: '/:path*',
         headers: securityHeaders,
       },
+      {
+        // API responses must never be cached by browsers/proxies — they carry
+        // per-user, per-tenant data. (Route handlers also set no-store, this is
+        // defence-in-depth at the edge.)
+        source: '/api/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, max-age=0' },
+          { key: 'Pragma', value: 'no-cache' },
+          { key: 'Expires', value: '0' },
+        ],
+      },
     ]
   },
 

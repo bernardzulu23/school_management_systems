@@ -4,6 +4,8 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
+import { validateBody } from '@/lib/middleware/validate-request'
+import { CreateSubjectSchema } from '@/lib/schemas'
 
 export async function GET(request) {
   const auth = await authMiddleware(request)
@@ -67,17 +69,12 @@ export async function POST(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  let body = {}
-  try {
-    body = await request.json()
-  } catch {
-    body = {}
-  }
+  const { data: body, error: validationError } = await validateBody(request, CreateSubjectSchema)
+  if (validationError) return validationError
 
-  const name = String(body?.name || '').trim()
-  const code = body?.code ? String(body.code).trim() : null
-  const description = body?.description ? String(body.description).trim() : null
-  if (!name) return NextResponse.json({ error: 'Subject name is required' }, { status: 400 })
+  const name = body.name
+  const code = body.code ? String(body.code).trim() : null
+  const description = body.description ? String(body.description).trim() : null
 
   try {
     const subject = await prisma.subject.upsert({

@@ -1,0 +1,69 @@
+# Dependabot configuration for ZSMS.
+#
+# Opens PRs when dependencies have updates/security advisories. Security
+# updates are never auto-merged — a developer reviews each PR (see Phase 4
+# critical note #5). Non-security minor/patch updates are grouped to cut noise.
+version: 2
+updates:
+  # Next.js web app (root)
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '08:00'
+      timezone: 'Africa/Lusaka'
+    open-pull-requests-limit: 10
+    labels:
+      - 'dependencies'
+      - 'security'
+    groups:
+      non-security-updates:
+        update-types:
+          - 'minor'
+          - 'patch'
+
+  # Expo mobile app
+  - package-ecosystem: 'npm'
+    directory: '/zsms-mobile'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependencies'
+      - 'mobile'
+    groups:
+      non-security-updates:
+        update-types:
+          - 'minor'
+          - 'patch'
+
+  # Python OR-Tools timetable solver
+  - package-ecosystem: 'pip'
+    directory: '/services/timetable-solver'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    labels:
+      - 'dependencies'
+      - 'solver-service'
+
+  - package-ecosystem: 'pip'
+    directory: '/solver-service'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    labels:
+      - 'dependencies'
+      - 'solver-service'
+
+  # GitHub Actions workflow pinning
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    labels:
+      - 'dependencies'
+      - 'ci'

@@ -23,6 +23,11 @@ declare module 'expo-router' {
         | { pathname: `${'/(tabs)'}` | `/`; params?: Router.UnknownInputParams }
         | { pathname: `${'/(tabs)'}/profile` | `/profile`; params?: Router.UnknownInputParams }
         | { pathname: `${'/(tabs)'}/scores` | `/scores`; params?: Router.UnknownInputParams }
+        | { pathname: `/lesson-plans` | `/lesson-plans/`; params?: Router.UnknownInputParams }
+        | { pathname: `/student/timetable`; params?: Router.UnknownInputParams }
+        | { pathname: `/student/results`; params?: Router.UnknownInputParams }
+        | { pathname: `/student/ecz-practice`; params?: Router.UnknownInputParams }
+        | { pathname: `/student/notices`; params?: Router.UnknownInputParams }
         | { pathname: `/attendance/history`; params?: Router.UnknownInputParams }
         | {
             pathname: `/attendance/[classId]`
@@ -39,6 +44,10 @@ declare module 'expo-router' {
         | {
             pathname: `/scores/student/[studentId]`
             params: Router.UnknownInputParams & { studentId: string | number }
+          }
+        | {
+            pathname: `/lesson-plans/[id]`
+            params: Router.UnknownInputParams & { id: string | number }
           }
       hrefOutputParams:
         | { pathname: Router.RelativePathString; params?: Router.UnknownOutputParams }
@@ -57,6 +66,11 @@ declare module 'expo-router' {
         | { pathname: `${'/(tabs)'}` | `/`; params?: Router.UnknownOutputParams }
         | { pathname: `${'/(tabs)'}/profile` | `/profile`; params?: Router.UnknownOutputParams }
         | { pathname: `${'/(tabs)'}/scores` | `/scores`; params?: Router.UnknownOutputParams }
+        | { pathname: `/lesson-plans` | `/lesson-plans/`; params?: Router.UnknownOutputParams }
+        | { pathname: `/student/timetable`; params?: Router.UnknownOutputParams }
+        | { pathname: `/student/results`; params?: Router.UnknownOutputParams }
+        | { pathname: `/student/ecz-practice`; params?: Router.UnknownOutputParams }
+        | { pathname: `/student/notices`; params?: Router.UnknownOutputParams }
         | { pathname: `/attendance/history`; params?: Router.UnknownOutputParams }
         | {
             pathname: `/attendance/[classId]`
@@ -73,6 +87,10 @@ declare module 'expo-router' {
         | {
             pathname: `/scores/student/[studentId]`
             params: Router.UnknownOutputParams & { studentId: string }
+          }
+        | {
+            pathname: `/lesson-plans/[id]`
+            params: Router.UnknownOutputParams & { id: string }
           }
       href:
         | Router.RelativePathString
@@ -91,6 +109,11 @@ declare module 'expo-router' {
         | `/profile${`?${string}` | `#${string}` | ''}`
         | `${'/(tabs)'}/scores${`?${string}` | `#${string}` | ''}`
         | `/scores${`?${string}` | `#${string}` | ''}`
+        | `/lesson-plans${`?${string}` | `#${string}` | ''}`
+        | `/student/timetable${`?${string}` | `#${string}` | ''}`
+        | `/student/results${`?${string}` | `#${string}` | ''}`
+        | `/student/ecz-practice${`?${string}` | `#${string}` | ''}`
+        | `/student/notices${`?${string}` | `#${string}` | ''}`
         | `/attendance/history${`?${string}` | `#${string}` | ''}`
         | { pathname: Router.RelativePathString; params?: Router.UnknownInputParams }
         | { pathname: Router.ExternalPathString; params?: Router.UnknownInputParams }
@@ -108,11 +131,17 @@ declare module 'expo-router' {
         | { pathname: `${'/(tabs)'}` | `/`; params?: Router.UnknownInputParams }
         | { pathname: `${'/(tabs)'}/profile` | `/profile`; params?: Router.UnknownInputParams }
         | { pathname: `${'/(tabs)'}/scores` | `/scores`; params?: Router.UnknownInputParams }
+        | { pathname: `/lesson-plans` | `/lesson-plans/`; params?: Router.UnknownInputParams }
+        | { pathname: `/student/timetable`; params?: Router.UnknownInputParams }
+        | { pathname: `/student/results`; params?: Router.UnknownInputParams }
+        | { pathname: `/student/ecz-practice`; params?: Router.UnknownInputParams }
+        | { pathname: `/student/notices`; params?: Router.UnknownInputParams }
         | { pathname: `/attendance/history`; params?: Router.UnknownInputParams }
         | `/attendance/${Router.SingleRoutePart<T>}`
         | `/attendance/session/${Router.SingleRoutePart<T>}`
         | `/scores/${Router.SingleRoutePart<T>}`
         | `/scores/student/${Router.SingleRoutePart<T>}`
+        | `/lesson-plans/${Router.SingleRoutePart<T>}`
         | {
             pathname: `/attendance/[classId]`
             params: Router.UnknownInputParams & { classId: string | number }
@@ -128,6 +157,10 @@ declare module 'expo-router' {
         | {
             pathname: `/scores/student/[studentId]`
             params: Router.UnknownInputParams & { studentId: string | number }
+          }
+        | {
+            pathname: `/lesson-plans/[id]`
+            params: Router.UnknownInputParams & { id: string | number }
           }
     }
   }

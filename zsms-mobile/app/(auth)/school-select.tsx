@@ -19,7 +19,7 @@ export default function SchoolSelectScreen() {
     setLoading(true)
     try {
       const school = await validateSubdomain(subdomain)
-      await setSchoolContext(school.subdomain, school.name, school.logoUrl)
+      await setSchoolContext(school.subdomain, school.name, school.logoUrl ?? null)
       router.push({ pathname: '/(auth)/login', params: { subdomain: school.subdomain } })
     } catch (e) {
       setError(e instanceof Error ? e.message : 'School not found')
@@ -40,7 +40,7 @@ export default function SchoolSelectScreen() {
 
   async function pickSchool(school: SchoolSummary) {
     setSubdomain(school.subdomain)
-    await setSchoolContext(school.subdomain, school.name, school.logoUrl)
+    await setSchoolContext(school.subdomain, school.name, school.logoUrl ?? null)
     router.push({ pathname: '/(auth)/login', params: { subdomain: school.subdomain } })
   }
 

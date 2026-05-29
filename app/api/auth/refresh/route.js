@@ -11,6 +11,7 @@ import {
 } from '@/lib/security/cookies'
 import { setCsrfCookie } from '@/lib/security/csrf'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+import { JWT_AUDIENCE } from '@/lib/middleware/auth'
 import { signPlatformToken } from '@/lib/platform/platformAdminAuth'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
@@ -37,7 +38,7 @@ export const POST = withSecureApi(async function POST(request) {
     // 2. Verify refresh token
     let decoded
     try {
-      decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET)
+      decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET, { algorithms: ['HS256'] })
     } catch (error) {
       return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
     }
@@ -56,7 +57,7 @@ export const POST = withSecureApi(async function POST(request) {
       const newRefreshTokenValue = jwt.sign(
         { id: admin.id, email: admin.email, name: admin.name, isPlatform: true },
         JWT_REFRESH_SECRET,
-        { expiresIn: '7d' }
+        { algorithm: 'HS256', expiresIn: '7d' }
       )
 
       const response = NextResponse.json({ success: true, accessToken: newAccessToken })
@@ -121,13 +122,14 @@ export const POST = withSecureApi(async function POST(request) {
     const newAccessToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role, schoolId: user.schoolId },
       JWT_SECRET,
-      { expiresIn: '8h' }
+      { algorithm: 'HS256', expiresIn: '8h', audience: JWT_AUDIENCE }
     )
 
     const newRefreshTokenValue = jwt.sign(
       { id: user.id, schoolId: user.schoolId },
       JWT_REFRESH_SECRET,
       {
+        algorithm: 'HS256',
         expiresIn: '7d',
       }
     )

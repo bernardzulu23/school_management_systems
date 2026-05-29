@@ -17,6 +17,8 @@ import { buildRagContextForQuery, appendRagToSystemPrompt } from '@/lib/ai/rag-c
 import { getSchoolPlanForUsage, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
 import { assertGroqConfigured } from '@/lib/ai/client'
 import { logger } from '@/lib/utils/logger'
+import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
+import { GenerateFlashcardsSchema } from '@/lib/schemas'
 
 const FLASHCARD_SYSTEM =
   'You are a Zambian CBC study coach. Create concise self-quiz flashcards. Each card has a clear question, 3-4 plausible options, exactly one correct answer matching an option, and a one-line explanation. Use the subject language where natural (e.g. Cinyanja for Cinyanja).'
@@ -94,7 +96,7 @@ export const POST = withErrorHandler(async function POST(request) {
   })
   if (!student) throw new ApiError('Student profile not found', 404)
 
-  const body = await request.json().catch(() => ({}))
+  const body = await parseBodyOrThrow(request, GenerateFlashcardsSchema)
   const subjectName = await assertStudentSubjectAllowed(
     student.id,
     schoolId,

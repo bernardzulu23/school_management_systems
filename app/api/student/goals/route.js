@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { validateBody } from '@/lib/middleware/validate-request'
+import { CreateStudentGoalSchema } from '@/lib/schemas'
 
 export async function GET(request) {
   try {
@@ -86,12 +88,17 @@ function formatGoal(goal) {
 
 export async function POST(request) {
   try {
-    const body = await request.json()
     const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
     if (!roleCheck(auth.user, ['STUDENT', 'student'])) {
       return NextResponse.json({ error: 'Forbidden: Student access only' }, { status: 403 })
     }
+
+    const { data: body, error: validationError } = await validateBody(
+      request,
+      CreateStudentGoalSchema
+    )
+    if (validationError) return validationError
 
     const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
     if (!tenant.ok) return tenant.response
@@ -104,15 +111,10 @@ export async function POST(request) {
     })
     if (!student) return NextResponse.json({ error: 'Student not found' }, { status: 404 })
 
-    const title = String(body?.title || '').trim()
-    if (!title) return NextResponse.json({ error: 'Title is required' }, { status: 400 })
-
-    const type = String(body?.type || 'academic')
-      .trim()
-      .toLowerCase()
-    const category = type === 'personal' ? 'personal' : 'academic'
-    const description = body?.description ? String(body.description) : null
-    const deadline = body?.targetDate ? new Date(body.targetDate) : null
+    const title = body.title
+    const category = body.type === 'personal' ? 'personal' : 'academic'
+    const description = body.description ? String(body.description) : null
+    const deadline = body.targetDate ? new Date(body.targetDate) : null
     if (deadline && Number.isNaN(deadline.getTime())) {
       return NextResponse.json({ error: 'Invalid targetDate' }, { status: 400 })
     }

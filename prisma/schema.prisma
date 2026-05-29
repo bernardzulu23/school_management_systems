@@ -103,6 +103,8 @@ model School {
 
   lessonPlans          LessonPlan[]
   termReports          TermReport[]
+  sharedMaterials      SharedMaterial[]
+  mockExamAttempts     MockExamAttempt[]
 
   departmentAllocations  DepartmentAllocation[]
   masterTimetableEntries MasterTimetableEntry[]
@@ -151,6 +153,10 @@ model User {
   resetToken        String?
   resetTokenExpiry  DateTime?
 
+  // Mobile push notifications (Expo)
+  expoPushToken     String?
+  expoPushTokenAt   DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
@@ -188,6 +194,9 @@ model User {
   refreshTokens           RefreshToken[]
   auditLogs               AuditLog[]
   attendanceSessionsLed   AttendanceSession[]
+
+  sharedMaterials         SharedMaterial[]
+  materialRatings         MaterialRating[]
 
   @@unique([schoolId, email]) // Email must be unique per school
   @@index([schoolId])
@@ -365,6 +374,7 @@ model Student {
   eczAssessmentScores EczAssessmentScore[]
   specialAccommodations SpecialAccommodation[]
   termReports         TermReport[]
+  mockExamAttempts    MockExamAttempt[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1851,6 +1861,126 @@ model LessonPlanComment {
   createdAt          DateTime   @default(now())
 
   @@index([lessonPlanId])
+}
+
+/**
+ * SharedMaterial — a lesson plan, SBA task, rubric, or exam question shared to
+ * the cross-school marketplace.
+ *
+ * APPROVAL FLOW: teacher submits -> school HOD/admin approves -> visible in marketplace.
+ * PRIVACY: the source schoolId is never exposed in marketplace listings — only
+ * the province is shown. The author's name is shown only if they opt in.
+ */
+model SharedMaterial {
+  id              String    @id @default(uuid())
+
+  // Source (never exposed publicly)
+  schoolId        String
+  school          School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  teacherId       String
+  teacher         User      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  // Optional link back to the originating lesson plan (for re-sync / dedupe).
+  sourceLessonPlanId String?
+
+  // Content
+  type            String    // "lesson_plan" | "sba_task" | "rubric" | "exam_question"
+  title           String
+  subject         String
+  form            String
+  topic           String
+  content         Json      // Full structured content copied at submission time.
+
+  // Metadata
+  cbcCompetencies Json?     // string[]
+  resourceLevel   String    @default("moderate") // "low" | "moderate" | "well-resourced"
+  tags            Json?     // string[]
+
+  // Attribution (privacy-preserving)
+  showAuthorName  Boolean   @default(false)
+  province        String?
+
+  // Approval
+  status          String    @default("pending") // pending | approved | rejected
+  approvedBy      String?   // HOD/admin user id
+  approvedAt      DateTime?
+  rejectionReason String?
+
+  // Engagement
+  downloadCount   Int       @default(0)
+  rating          Float?    // cached average of MaterialRating.score
+  ratingCount     Int       @default(0)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  ratings         MaterialRating[]
+
+  @@index([status, subject, form, type])
+  @@index([schoolId])
+  @@index([teacherId])
+  @@index([status, createdAt])
+}
+
+model MaterialRating {
+  id          String         @id @default(uuid())
+  materialId  String
+  material    SharedMaterial @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  teacherId   String
+  teacher     User           @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  score       Int            // 1-5
+  comment     String?        @db.Text
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@unique([materialId, teacherId]) // one rating per teacher per material
+  @@index([materialId])
+}
+
+// National Assessment Platform — ECZ-style mock examinations (Task 32).
+// Each attempt stores the AI-generated paper plus the student's answers and
+// auto-scoring outcome. Aggregated (anonymised) across schools for national
+// percentile tracking.
+model MockExamAttempt {
+  id            String    @id @default(uuid())
+
+  // Multi-tenancy
+  schoolId      String
+  school        School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  studentId     String
+  student       Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  // Exam definition
+  subject       String
+  examLevel     String    // grade7 | grade9 | grade12 | form1..form4
+  topic         String
+  durationMinutes Int     @default(120)
+
+  // Generated paper (questions WITH answers/explanations) — never exposed
+  // to the student until the attempt is submitted.
+  paper         Json
+
+  // Student responses keyed by question id.
+  answers       Json?
+
+  // Scoring
+  totalMarks    Int       @default(0)
+  awardedMarks  Float     @default(0)
+  percentage    Float     @default(0)
+  scoreBucket   Int?      // 0,10,20,...,90 for anonymised percentile buckets
+  needsReview   Boolean   @default(false) // has questions awaiting teacher marking
+  status        String    @default("in_progress") // in_progress | submitted | graded | needs_review
+
+  startedAt     DateTime  @default(now())
+  submittedAt   DateTime?
+  gradedAt      DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([schoolId])
+  @@index([studentId])
+  @@index([subject, examLevel, status])
+  @@index([subject, examLevel, percentage])
 }
 
 model DepartmentAllocation {

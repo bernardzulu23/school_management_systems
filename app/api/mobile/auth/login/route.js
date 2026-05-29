@@ -9,6 +9,7 @@ import { findUserByEmail } from '@/lib/db/queries'
 import { resolvePublicSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+import { JWT_AUDIENCE } from '@/lib/middleware/auth'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
@@ -122,10 +123,11 @@ export const POST = withSecureApi(async function POST(request) {
     const accessToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role, schoolId: user.schoolId },
       JWT_SECRET,
-      { expiresIn: '8h' }
+      { algorithm: 'HS256', expiresIn: '8h', audience: JWT_AUDIENCE }
     )
 
     const refreshToken = jwt.sign({ id: user.id, schoolId: user.schoolId }, JWT_REFRESH_SECRET, {
+      algorithm: 'HS256',
       expiresIn: '7d',
     })
 

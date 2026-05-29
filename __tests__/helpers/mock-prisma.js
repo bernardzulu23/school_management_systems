@@ -58,7 +58,38 @@ export function createMockPrisma() {
     refreshToken: {
       create: vi.fn(),
     },
-    $queryRaw: vi.fn().mockResolvedValue([{ '?column?': 1 }]),
+    lessonPlan: {
+      findFirst: vi.fn(),
+      findUnique: vi.fn(),
+      findMany: vi.fn(),
+      create: vi.fn(),
+    },
+    sharedMaterial: {
+      findFirst: vi.fn(),
+      findUnique: vi.fn(),
+      findMany: vi.fn(),
+      count: vi.fn(),
+      create: vi.fn(),
+      update: vi.fn(),
+    },
+    materialRating: {
+      findUnique: vi.fn(),
+      aggregate: vi.fn(),
+      upsert: vi.fn(),
+    },
+    timetableNotification: {
+      create: vi.fn(),
+    },
+    mockExamAttempt: {
+      findFirst: vi.fn(),
+      findMany: vi.fn(),
+      create: vi.fn(),
+      update: vi.fn(),
+    },
+    aIRequest: {
+      create: vi.fn(),
+    },
+    $queryRaw: vi.fn().mockResolvedValue([]),
     $transaction: vi.fn(async (fn) => fn(mock)),
   }
   return mock

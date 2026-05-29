@@ -10,7 +10,18 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
-  if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod'])) {
+  if (
+    !roleCheck(auth.user, [
+      'ADMIN',
+      'headteacher',
+      'HOD',
+      'hod',
+      'TEACHER',
+      'teacher',
+      'STUDENT',
+      'student',
+    ])
+  ) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -24,9 +35,26 @@ export const GET = withErrorHandler(async function GET(request) {
   const schoolId = tenant.schoolId
   const { teachers, total } = await findTeachersByDepartment(schoolId, department, page, limit)
 
+  // Students may read the teacher roster (needed to render timetable teacher
+  // names) but must not receive staff contact details.
+  const isStudent = roleCheck(auth.user, ['STUDENT', 'student'])
+  const data = isStudent
+    ? teachers.map((t) => ({
+        id: t.id,
+        department: t.department || null,
+        user: t.user
+          ? {
+              id: t.user.id,
+              name: t.user.name,
+              profile_picture_url: t.user.profile_picture_url || null,
+            }
+          : null,
+      }))
+    : teachers
+
   return NextResponse.json({
     success: true,
-    data: teachers,
+    data,
     pagination: {
       total,
       page,

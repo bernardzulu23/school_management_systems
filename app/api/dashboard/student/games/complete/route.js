@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { validateBody } from '@/lib/middleware/validate-request'
+import { CompleteGameSchema } from '@/lib/schemas'
 
 /**
  * POST /api/dashboard/student/games/complete
@@ -29,13 +31,11 @@ export async function POST(request) {
     })
     if (!student) return NextResponse.json({ error: 'Student not found' }, { status: 404 })
 
-    const body = await request.json().catch(() => ({}))
-    const gameId = String(body.gameId || '').trim()
-    const percentage = Math.max(0, Math.min(100, Math.round(Number(body.percentage) || 0)))
+    const { data: body, error: validationError } = await validateBody(request, CompleteGameSchema)
+    if (validationError) return validationError
 
-    if (!gameId) {
-      return NextResponse.json({ error: 'gameId is required' }, { status: 400 })
-    }
+    const gameId = body.gameId
+    const percentage = Math.max(0, Math.min(100, Math.round(body.percentage)))
 
     const game = await prisma.game.findFirst({
       where: { id: gameId, schoolId },

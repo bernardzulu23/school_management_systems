@@ -22,6 +22,7 @@ export default defineConfig({
     include: [
       '__tests__/api/**/*.test.js',
       '__tests__/unit/**/*.test.js',
+      '__tests__/security/**/*.test.js',
       'test/security/**/*.test.js',
     ],
     coverage: {

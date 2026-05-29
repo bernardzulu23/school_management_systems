@@ -36,6 +36,12 @@
         {
           "faceIDPermission": "Allow ZSMS to verify twin pupils with Face ID."
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#FF3B00"
+        }
       ]
     ],
     "experiments": {

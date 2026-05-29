@@ -5,6 +5,7 @@ import {
   BLOCKED_HTTP_METHODS,
   getCorsHeaders,
   isForbiddenCrossOrigin,
+  stripInternalRequestHeaders,
 } from './lib/security/headers'
 import { checkProxyRateLimit } from './lib/security/proxyRateLimit'
 import { verifyCsrfRequest } from './lib/security/csrf'
@@ -28,6 +29,9 @@ const PUBLIC_PATHS = [
   '/api/public',
   '/api/public/features',
   '/api/public/platform-stats',
+  // Marketplace browsing is public (browse before signup). The mutating
+  // sub-routes (submit/review/rate/download/mine) enforce auth internally.
+  '/api/marketplace',
   '/api/onboarding',
   '/api/schools/check-subdomain',
   '/api/schools/register',
@@ -71,12 +75,17 @@ export async function handleSecurityProxy(request) {
     const { pathname } = request.nextUrl
     const method = String(request.method || 'GET').toUpperCase()
 
+    // SECURITY (CVE-2025-29927 + tenant spoofing): strip internal/spoofable
+    // headers from the forwarded request BEFORE any routing or auth decision.
+    // This is the authoritative copy forwarded downstream via NextResponse.next.
+    const requestHeaders = stripInternalRequestHeaders(new Headers(request.headers))
+
     if (BLOCKED_HTTP_METHODS.has(method)) {
       return secureResponse({ error: 'Method Not Allowed' }, { status: 405 }, request)
     }
 
     if (pathname === '/api/health' || pathname === '/api/ping') {
-      const response = NextResponse.next()
+      const response = NextResponse.next({ request: { headers: requestHeaders } })
       return applySecurityHeaders(response, request)
     }
 
@@ -119,7 +128,8 @@ export async function handleSecurityProxy(request) {
     const hostname = request.headers.get('host') || ''
     const subdomain = getSubdomain(hostname)
 
-    const requestHeaders = new Headers(request.headers)
+    // Re-set the tenant subdomain ONLY from the verified hostname (the
+    // client-supplied value was already stripped above).
     if (subdomain && subdomain !== 'www') {
       requestHeaders.set('x-school-subdomain', subdomain)
     }

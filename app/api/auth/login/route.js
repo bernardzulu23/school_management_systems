@@ -17,6 +17,7 @@ import {
 } from '@/lib/security/cookies'
 import { setCsrfCookie } from '@/lib/security/csrf'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+import { JWT_AUDIENCE } from '@/lib/middleware/auth'
 import { getSubscriptionState } from '@/lib/billing/subscription'
 import { logger, captureError } from '@/lib/utils/logger'
 import {
@@ -249,13 +250,14 @@ export const POST = withSecureApi(async function POST(request) {
     const newAccessToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role, schoolId: user.schoolId },
       JWT_SECRET,
-      { expiresIn: accessExpiresIn }
+      { algorithm: 'HS256', expiresIn: accessExpiresIn, audience: JWT_AUDIENCE }
     )
 
     const newRefreshTokenValue = jwt.sign(
       { id: user.id, schoolId: user.schoolId },
       JWT_REFRESH_SECRET,
       {
+        algorithm: 'HS256',
         expiresIn: refreshExpiresIn,
       }
     )
