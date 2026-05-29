@@ -15,6 +15,8 @@ import { generateAIObject } from '@/lib/ai/client'
 import { FlashcardDeckSchema } from '@/lib/ai/schemas'
 import { buildRagContextForQuery, appendRagToSystemPrompt } from '@/lib/ai/rag-context'
 import { getSchoolPlanForUsage, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
+import { assertGroqConfigured } from '@/lib/ai/client'
+import { logger } from '@/lib/utils/logger'
 
 const FLASHCARD_SYSTEM =
   'You are a Zambian CBC study coach. Create concise self-quiz flashcards. Each card has a clear question, 3-4 plausible options, exactly one correct answer matching an option, and a one-line explanation. Use the subject language where natural (e.g. Cinyanja for Cinyanja).'
@@ -120,15 +122,32 @@ export const POST = withErrorHandler(async function POST(request) {
     )
   }
 
+  // Fail fast with a clear message if the AI provider is not configured.
+  try {
+    assertGroqConfigured()
+  } catch {
+    throw new ApiError(
+      'AI is not configured on the server (missing GROQ_API_KEY). Contact your administrator.',
+      503
+    )
+  }
+
   // Generate the flashcards with AI (RAG-grounded on school materials when available).
   const school = await getSchoolPlanForUsage(schoolId)
-  const rag = await buildRagContextForQuery({
-    query: `${subjectName} ${topic} revision flashcards`,
-    schoolId,
-    schoolPlan: school?.plan,
-    subject: subjectName,
-  })
-  const system = rag.block ? appendRagToSystemPrompt(FLASHCARD_SYSTEM, rag.block) : FLASHCARD_SYSTEM
+  let ragBlock = ''
+  try {
+    const rag = await buildRagContextForQuery({
+      query: `${subjectName} ${topic} revision flashcards`,
+      schoolId,
+      schoolPlan: school?.plan,
+      subject: subjectName,
+    })
+    ragBlock = rag?.block || ''
+  } catch (e) {
+    // RAG is an optional enhancement — never let it block generation.
+    logger.warn?.('flashcards.rag-failed', { message: e?.message })
+  }
+  const system = ragBlock ? appendRagToSystemPrompt(FLASHCARD_SYSTEM, ragBlock) : FLASHCARD_SYSTEM
 
   let generated
   try {
@@ -139,8 +158,9 @@ export const POST = withErrorHandler(async function POST(request) {
       { maxTokens: 2000, temperature: 0.5 }
     )
     generated = object
-  } catch {
-    throw new ApiError('Could not generate flashcards right now. Please try again.', 503)
+  } catch (e) {
+    logger.error?.('flashcards.generation-failed', e, { schoolId, subjectName })
+    throw new ApiError(`Could not generate flashcards right now: ${e?.message || 'AI error'}`, 503)
   }
 
   const validated = validateFlashcards(generated?.cards)
