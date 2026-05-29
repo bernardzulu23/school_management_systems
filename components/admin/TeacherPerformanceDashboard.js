@@ -169,8 +169,11 @@ export default function TeacherPerformanceDashboard({
             onChange={(e) => setSelectedYear(e.target.value)}
             className="px-3 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-royalPurple-border2"
           >
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
+            {Array.from({ length: 12 }, (_, i) => new Date().getFullYear() + 1 - i).map((y) => (
+              <option key={y} value={String(y)}>
+                {y}
+              </option>
+            ))}
           </select>
 
           <Button onClick={onNewObservation} className="flex items-center gap-2">

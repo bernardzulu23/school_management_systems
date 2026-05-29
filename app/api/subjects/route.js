@@ -76,6 +76,7 @@ export async function POST(request) {
 
   const name = String(body?.name || '').trim()
   const code = body?.code ? String(body.code).trim() : null
+  const description = body?.description ? String(body.description).trim() : null
   if (!name) return NextResponse.json({ error: 'Subject name is required' }, { status: 400 })
 
   try {
@@ -85,12 +86,14 @@ export async function POST(request) {
         schoolId,
         name,
         code: code || null,
+        description: description || null,
         topics: [],
       },
       update: {
         code: code || undefined,
+        description: description || undefined,
       },
-      select: { id: true, name: true, code: true },
+      select: { id: true, name: true, code: true, description: true },
     })
     return NextResponse.json({ success: true, data: subject }, { status: 201 })
   } catch (error) {

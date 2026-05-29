@@ -28,6 +28,9 @@ export default function SubjectsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [viewMode, setViewMode] = useState('category') // 'category' or 'list'
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [newSubject, setNewSubject] = useState({ name: '', code: '', description: '' })
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     loadSubjects()
@@ -37,15 +40,15 @@ export default function SubjectsPage() {
     try {
       setLoading(true)
 
-      // Load all subjects
-      const subjectsResponse = await fetch('/api/v1/subjects')
+      // Load all subjects (school-scoped, requires auth cookies)
+      const subjectsResponse = await fetch('/api/subjects', { credentials: 'include' })
       if (subjectsResponse.ok) {
         const subjectsData = await subjectsResponse.json()
         setSubjects(subjectsData.data || [])
       }
 
-      // Load subjects by category
-      const categoryResponse = await fetch('/api/v1/subjects/by-category')
+      // Load subjects by category (static catalog)
+      const categoryResponse = await fetch('/api/subjects/by-category', { credentials: 'include' })
       if (categoryResponse.ok) {
         const categoryData = await categoryResponse.json()
         setSubjectsByCategory(categoryData.data || {})
@@ -55,6 +58,38 @@ export default function SubjectsPage() {
       toast.error('Error loading subjects')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleAddSubject = async (e) => {
+    e?.preventDefault?.()
+    const name = newSubject.name.trim()
+    if (!name) {
+      toast.error('Subject name is required')
+      return
+    }
+    setSaving(true)
+    try {
+      const res = await fetch('/api/subjects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          name,
+          code: newSubject.code.trim() || undefined,
+          description: newSubject.description.trim() || undefined,
+        }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'Could not add subject')
+      toast.success(`Subject "${name}" added`)
+      setShowAddModal(false)
+      setNewSubject({ name: '', code: '', description: '' })
+      await loadSubjects()
+    } catch (err) {
+      toast.error(err.message || 'Failed to add subject')
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -170,7 +205,11 @@ export default function SubjectsPage() {
             >
               List View
             </Button>
-            <Button className="flex items-center gap-2" aria-label="Add new subject">
+            <Button
+              className="flex items-center gap-2"
+              aria-label="Add new subject"
+              onClick={() => setShowAddModal(true)}
+            >
               <Plus className="w-4 h-4" aria-hidden="true" />
               Add Subject
             </Button>
@@ -438,6 +477,76 @@ export default function SubjectsPage() {
           </Card>
         )}
       </section>
+
+      {/* Add Subject Modal */}
+      {showAddModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Add subject"
+          onClick={() => !saving && setShowAddModal(false)}
+        >
+          <Card className="w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-xl font-semibold text-royalPurple-text1 mb-4 flex items-center gap-2">
+              <Plus className="w-5 h-5 text-royalPurple-accentTx" aria-hidden="true" />
+              Add Subject
+            </h2>
+            <form onSubmit={handleAddSubject} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-royalPurple-text2 mb-1">
+                  Subject name <span className="text-royalPurple-dangerTx">*</span>
+                </label>
+                <input
+                  type="text"
+                  autoFocus
+                  value={newSubject.name}
+                  onChange={(e) => setNewSubject((p) => ({ ...p, name: e.target.value }))}
+                  placeholder="e.g. Additional Mathematics"
+                  className="w-full px-3 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-g-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-royalPurple-text2 mb-1">
+                  Subject code
+                </label>
+                <input
+                  type="text"
+                  value={newSubject.code}
+                  onChange={(e) => setNewSubject((p) => ({ ...p, code: e.target.value }))}
+                  placeholder="e.g. 4030"
+                  className="w-full px-3 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-g-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-royalPurple-text2 mb-1">
+                  Description
+                </label>
+                <textarea
+                  rows={3}
+                  value={newSubject.description}
+                  onChange={(e) => setNewSubject((p) => ({ ...p, description: e.target.value }))}
+                  placeholder="Optional short description"
+                  className="w-full px-3 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-g-500 focus:outline-none"
+                />
+              </div>
+              <div className="flex justify-end gap-3 pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowAddModal(false)}
+                  disabled={saving}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={saving}>
+                  {saving ? 'Saving…' : 'Add Subject'}
+                </Button>
+              </div>
+            </form>
+          </Card>
+        </div>
+      )}
     </main>
   )
 }

@@ -4,7 +4,12 @@ import { SCHOOL_SUBJECTS, SUBJECT_CATEGORIES } from '@/data/subjects'
 
 export async function GET() {
   try {
-    const categories = SUBJECT_CATEGORIES || [...new Set(SCHOOL_SUBJECTS.map((s) => s.category))]
+    // SUBJECT_CATEGORIES entries are objects ({ id, name }), so use the id as
+    // both the group key and the match value — using the object directly would
+    // produce "[object Object]" keys and never match s.category.
+    const categories = (
+      SUBJECT_CATEGORIES || [...new Set(SCHOOL_SUBJECTS.map((s) => s.category))]
+    ).map((c) => (typeof c === 'string' ? c : c.id))
 
     const grouped = categories.reduce((acc, category) => {
       acc[category] = SCHOOL_SUBJECTS.filter((s) => s.category === category)

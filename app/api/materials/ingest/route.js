@@ -105,6 +105,32 @@ export const POST = withErrorHandler(async function POST(request) {
     gradeLevel = normalize(body?.gradeLevel || body?.grade)
     fileUrl = normalize(body?.fileUrl)
     fileType = normalize(body?.fileType)
+
+    // When the client uploaded directly to blob storage it sends only the URL.
+    // Fetch the bytes server-side (this does not count against the request-body
+    // limit) and extract text here.
+    if (!text && /^https?:\/\//i.test(fileUrl)) {
+      const inferred = inferFileTypeFromName(fileUrl) || fileType
+      if (!inferred) throw new ApiError('fileType must be pdf, docx, or txt', 400)
+      fileType = inferred
+      let res
+      try {
+        res = await fetch(fileUrl)
+      } catch {
+        throw new ApiError('Could not download the uploaded file from storage', 502)
+      }
+      if (!res.ok) {
+        throw new ApiError(`Could not download the uploaded file (status ${res.status})`, 502)
+      }
+      const MAX_FETCH_BYTES = 60 * 1024 * 1024
+      const arrayBuffer = await res.arrayBuffer()
+      if (arrayBuffer.byteLength > MAX_FETCH_BYTES) {
+        throw new ApiError('Uploaded file exceeds the maximum size for indexing', 413)
+      }
+      const buffer = Buffer.from(arrayBuffer)
+      text = await extractTextFromBuffer(buffer, fileType)
+      if (!title) title = fileUrl.split('/').pop() || 'Uploaded material'
+    }
   }
 
   if (!text) {

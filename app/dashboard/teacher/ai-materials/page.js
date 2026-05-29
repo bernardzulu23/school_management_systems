@@ -18,9 +18,26 @@ import {
   Trash2,
   Upload,
 } from 'lucide-react'
+import { upload } from '@vercel/blob/client'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
 
 const GRADE_OPTIONS = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5', 'Grade 7', 'Grade 9']
+
+// Direct multipart upload goes through the serverless function, whose request
+// body is capped (Vercel ~4.5 MB). When blob storage is configured the browser
+// uploads straight to storage and we allow much larger files.
+const MAX_DIRECT_MB = 4
+const MAX_DIRECT_BYTES = MAX_DIRECT_MB * 1024 * 1024
+const MAX_BLOB_MB = 50
+const MAX_BLOB_BYTES = MAX_BLOB_MB * 1024 * 1024
+
+function inferFileType(fileName) {
+  const lower = String(fileName || '').toLowerCase()
+  if (lower.endsWith('.pdf')) return 'pdf'
+  if (lower.endsWith('.docx')) return 'docx'
+  if (lower.endsWith('.txt')) return 'txt'
+  return ''
+}
 
 async function getCsrfToken() {
   const fromCookie = document.cookie
@@ -45,6 +62,23 @@ export default function AiMaterialsPage() {
     gradeLevel: '',
     file: null,
   })
+  // Whether direct-to-blob upload is available (set from the server).
+  const [blobEnabled, setBlobEnabled] = useState(false)
+  const maxBytes = blobEnabled ? MAX_BLOB_BYTES : MAX_DIRECT_BYTES
+  const maxMb = blobEnabled ? MAX_BLOB_MB : MAX_DIRECT_MB
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/materials/blob-upload', { credentials: 'include' })
+      .then((r) => r.json())
+      .then((j) => {
+        if (!cancelled) setBlobEnabled(Boolean(j?.enabled))
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const loadMaterials = useCallback(async () => {
     setLoading(true)
@@ -88,6 +122,15 @@ export default function AiMaterialsPage() {
 
   const onFileChange = (e) => {
     const file = e.target.files?.[0] || null
+    if (file && file.size > maxBytes) {
+      toast.error(
+        `"${file.name}" is ${(file.size / (1024 * 1024)).toFixed(1)} MB. The limit is ${maxMb} MB${
+          blobEnabled ? '.' : ' — split the document or paste its text instead.'
+        }`
+      )
+      e.target.value = ''
+      return
+    }
     setForm((prev) => ({
       ...prev,
       file,
@@ -105,25 +148,67 @@ export default function AiMaterialsPage() {
       toast.error('Title is required')
       return
     }
+    if (form.file.size > maxBytes) {
+      toast.error(
+        `File is too large (limit ${maxMb} MB)${
+          blobEnabled ? '.' : '. Split the document or paste its text instead.'
+        }`
+      )
+      return
+    }
 
     setUploading(true)
     try {
       const csrf = await getCsrfToken()
-      const body = new FormData()
-      body.append('file', form.file)
-      body.append('title', form.title.trim())
-      if (form.subject) body.append('subject', form.subject)
-      if (form.gradeLevel) body.append('gradeLevel', form.gradeLevel)
-      body.append('fileUrl', form.file.name)
+      let json
 
-      const res = await fetch('/api/materials/ingest', {
-        method: 'POST',
-        credentials: 'include',
-        headers: csrf ? { 'x-csrf-token': csrf } : {},
-        body,
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.message || json?.error || 'Upload failed')
+      if (blobEnabled) {
+        // Upload the file straight to blob storage (bypasses the request-body
+        // limit), then ask the server to ingest it by URL.
+        const blob = await upload(form.file.name, form.file, {
+          access: 'public',
+          handleUploadUrl: '/api/materials/blob-upload',
+        })
+        const res = await fetch('/api/materials/ingest', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(csrf ? { 'x-csrf-token': csrf } : {}),
+          },
+          body: JSON.stringify({
+            fileUrl: blob.url,
+            fileType: inferFileType(form.file.name),
+            title: form.title.trim(),
+            subject: form.subject || undefined,
+            gradeLevel: form.gradeLevel || undefined,
+          }),
+        })
+        json = await res.json().catch(() => ({}))
+        if (!res.ok) throw new Error(json?.message || json?.error || 'Indexing failed')
+      } else {
+        // Small files: send directly through the serverless function.
+        const body = new FormData()
+        body.append('file', form.file)
+        body.append('title', form.title.trim())
+        if (form.subject) body.append('subject', form.subject)
+        if (form.gradeLevel) body.append('gradeLevel', form.gradeLevel)
+        body.append('fileUrl', form.file.name)
+
+        const res = await fetch('/api/materials/ingest', {
+          method: 'POST',
+          credentials: 'include',
+          headers: csrf ? { 'x-csrf-token': csrf } : {},
+          body,
+        })
+        if (res.status === 413) {
+          throw new Error(
+            `File too large for the server to accept (limit ~${MAX_DIRECT_MB} MB). Split the document into smaller files or paste its text.`
+          )
+        }
+        json = await res.json().catch(() => ({}))
+        if (!res.ok) throw new Error(json?.message || json?.error || 'Upload failed')
+      }
 
       toast.success(
         `Indexed ${json.chunksIndexed ?? 0} chunks${json.materialTitle ? ` for "${json.materialTitle}"` : ''}`
@@ -245,7 +330,7 @@ export default function AiMaterialsPage() {
                   </select>
                 </div>
                 <div>
-                  <Label htmlFor="rag-file">File (PDF, DOCX, or TXT)</Label>
+                  <Label htmlFor="rag-file">File (PDF, DOCX, or TXT — max {maxMb} MB)</Label>
                   <Input
                     id="rag-file"
                     type="file"
@@ -253,6 +338,11 @@ export default function AiMaterialsPage() {
                     onChange={onFileChange}
                     required
                   />
+                  <p className="mt-1 text-xs text-royalPurple-text3">
+                    {blobEnabled
+                      ? `Large documents upload directly to secure storage (up to ${maxMb} MB).`
+                      : `Larger documents: split them into parts under ${maxMb} MB and upload each.`}
+                  </p>
                 </div>
                 <div className="flex gap-2">
                   <Button type="submit" disabled={uploading}>
