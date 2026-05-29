@@ -8,23 +8,19 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Plus, Trash2, BookOpen } from 'lucide-react'
+import { BookOpen, Sparkles } from 'lucide-react'
 import { deckDateKey } from '@/lib/flashcards/limits'
 
 const MAX_CARDS = 10
-
-function emptyCard(idx) {
-  return { id: `card_${idx}`, front: '', back: '' }
-}
 
 export default function StudentFlashcardsPage() {
   const [subjects, setSubjects] = useState([])
   const [todayDecks, setTodayDecks] = useState([])
   const [subjectName, setSubjectName] = useState('')
-  const [title, setTitle] = useState('')
-  const [cards, setCards] = useState([emptyCard(1)])
+  const [topic, setTopic] = useState('')
+  const [count, setCount] = useState(MAX_CARDS)
   const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
+  const [generating, setGenerating] = useState(false)
 
   const today = deckDateKey()
   const usedSubjects = new Set(todayDecks.map((d) => d.subjectName.toLowerCase()))
@@ -52,47 +48,30 @@ export default function StudentFlashcardsPage() {
     load()
   }, [])
 
-  const patchCard = (idx, field, value) => {
-    setCards((prev) => prev.map((c, i) => (i === idx ? { ...c, [field]: value } : c)))
-  }
-
-  const addCard = () => {
-    if (cards.length >= MAX_CARDS) {
-      toast.error(`Maximum ${MAX_CARDS} cards per deck`)
-      return
-    }
-    setCards((prev) => [...prev, emptyCard(prev.length + 1)])
-  }
-
-  const removeCard = (idx) => {
-    if (cards.length <= 1) return
-    setCards((prev) => prev.filter((_, i) => i !== idx))
-  }
-
-  const createDeck = async () => {
+  const generateDeck = async () => {
     if (!subjectName) {
       toast.error('Select a subject')
       return
     }
-    setSaving(true)
+    setGenerating(true)
     try {
       const res = await fetch('/api/student/flashcards', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ subjectName, title, cards, date: today }),
+        body: JSON.stringify({ subjectName, topic, count, date: today }),
       })
       const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json.error || 'Could not create deck')
-      toast.success('Flashcard deck created!')
+      if (!res.ok) throw new Error(json.error || 'Could not generate deck')
+      toast.success('AI flashcards generated!')
       setSubjectName('')
-      setTitle('')
-      setCards([emptyCard(1)])
+      setTopic('')
+      setCount(MAX_CARDS)
       await load()
     } catch (e) {
-      toast.error(e.message || 'Create failed')
+      toast.error(e.message || 'Generation failed')
     } finally {
-      setSaving(false)
+      setGenerating(false)
     }
   }
 
@@ -102,10 +81,11 @@ export default function StudentFlashcardsPage() {
         <div>
           <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center gap-2">
             <BookOpen className="h-6 w-6" />
-            Daily Flashcards
+            AI Daily Flashcards
           </h1>
           <p className="text-royalPurple-text2 text-sm mt-1">
-            One deck per subject per day · up to {MAX_CARDS} cards each · {today}
+            One AI deck per subject per day · up to {MAX_CARDS} questions · answers stay hidden
+            until you choose · {today}
           </p>
         </div>
 
@@ -118,7 +98,7 @@ export default function StudentFlashcardsPage() {
               <p className="text-sm text-royalPurple-text2">Loading…</p>
             ) : todayDecks.length === 0 ? (
               <p className="text-sm text-royalPurple-text2">
-                No decks yet today. Create one below.
+                No decks yet today. Generate one below.
               </p>
             ) : (
               todayDecks.map((d) => (
@@ -129,7 +109,7 @@ export default function StudentFlashcardsPage() {
                   <div>
                     <div className="font-medium text-royalPurple-text1">{d.subjectName}</div>
                     <div className="text-xs text-royalPurple-text3">
-                      {d.cardCount} cards · {d.title}
+                      {d.cardCount} questions · {d.title}
                     </div>
                   </div>
                   <Link href={`/dashboard/student/flashcards/${d.id}`}>
@@ -143,16 +123,19 @@ export default function StudentFlashcardsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Create today&apos;s deck</CardTitle>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Sparkles className="h-4 w-4" />
+              Generate today&apos;s AI deck
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {availableSubjects.length === 0 && !loading ? (
               <p className="text-sm text-royalPurple-text2">
-                You have created a deck for every subject today, or you have no subjects enrolled.
+                You have generated a deck for every subject today, or you have no subjects enrolled.
               </p>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label>Subject</Label>
                     <select
@@ -169,57 +152,30 @@ export default function StudentFlashcardsPage() {
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <Label>Deck title (optional)</Label>
+                    <Label>Topic (optional)</Label>
                     <Input
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      placeholder="e.g. Cell structure"
+                      value={topic}
+                      onChange={(e) => setTopic(e.target.value)}
+                      placeholder="e.g. Photosynthesis"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Number of questions (max {MAX_CARDS})</Label>
+                    <Input
+                      type="number"
+                      min={1}
+                      max={MAX_CARDS}
+                      value={count}
+                      onChange={(e) =>
+                        setCount(Math.min(MAX_CARDS, Math.max(1, Number(e.target.value) || 1)))
+                      }
                     />
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  {cards.map((c, idx) => (
-                    <div
-                      key={c.id}
-                      className="p-3 rounded-lg border border-royalPurple-border space-y-2"
-                    >
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium">Card {idx + 1}</span>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => removeCard(idx)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      <Input
-                        placeholder="Front (question / term)"
-                        value={c.front}
-                        onChange={(e) => patchCard(idx, 'front', e.target.value)}
-                      />
-                      <Input
-                        placeholder="Back (answer / definition)"
-                        value={c.back}
-                        onChange={(e) => patchCard(idx, 'back', e.target.value)}
-                      />
-                    </div>
-                  ))}
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={addCard}
-                    disabled={cards.length >= MAX_CARDS}
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add card ({cards.length}/{MAX_CARDS})
-                  </Button>
-                </div>
-
-                <Button onClick={createDeck} disabled={saving}>
-                  {saving ? 'Saving…' : 'Save deck for today'}
+                <Button onClick={generateDeck} disabled={generating}>
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  {generating ? 'Generating…' : 'Generate AI flashcards'}
                 </Button>
               </>
             )}

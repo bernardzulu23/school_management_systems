@@ -11,6 +11,23 @@ import {
   MAX_CARDS_PER_DECK,
 } from '@/lib/flashcards/limits'
 import { assertStudentSubjectAllowed } from '@/lib/flashcards/studentSubjects'
+import { generateAIObject } from '@/lib/ai/client'
+import { FlashcardDeckSchema } from '@/lib/ai/schemas'
+import { buildRagContextForQuery, appendRagToSystemPrompt } from '@/lib/ai/rag-context'
+import { getSchoolPlanForUsage, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
+
+const FLASHCARD_SYSTEM =
+  'You are a Zambian CBC study coach. Create concise self-quiz flashcards. Each card has a clear question, 3-4 plausible options, exactly one correct answer matching an option, and a one-line explanation. Use the subject language where natural (e.g. Cinyanja for Cinyanja).'
+
+function buildFlashcardPrompt({ subjectName, topic, count }) {
+  return `Create ${count} multiple-choice study flashcards for the subject "${subjectName}"${
+    topic ? ` focused on the topic "${topic}"` : ''
+  }.
+Rules:
+- Exactly ${count} cards (never more than ${MAX_CARDS_PER_DECK}).
+- Each card: a question (front), 3-4 options, one correct answer matching an option exactly, and a short explanation.
+- Age-appropriate for Zambian secondary learners. Use local context where helpful.`
+}
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -81,6 +98,12 @@ export const POST = withErrorHandler(async function POST(request) {
     schoolId,
     body.subjectName || body.subject
   )
+  const topic = String(body.topic || '').trim()
+  const requestedCount = Number(body.count)
+  const count = Math.min(
+    MAX_CARDS_PER_DECK,
+    Math.max(1, Number.isFinite(requestedCount) ? requestedCount : MAX_CARDS_PER_DECK)
+  )
   const day = deckDateUtc(new Date(body.date || deckDateKey()))
 
   const existing = await prisma.studentFlashcardDeck.findFirst({
@@ -92,13 +115,36 @@ export const POST = withErrorHandler(async function POST(request) {
   })
   if (existing) {
     throw new ApiError(
-      `You already created a flashcard deck for ${subjectName} today. One deck per subject per day.`,
+      `You already have a flashcard deck for ${subjectName} today. One AI deck per subject per day.`,
       409
     )
   }
 
-  const validated = validateFlashcards(body.cards)
-  if (!validated.ok) throw new ApiError(validated.error, 400)
+  // Generate the flashcards with AI (RAG-grounded on school materials when available).
+  const school = await getSchoolPlanForUsage(schoolId)
+  const rag = await buildRagContextForQuery({
+    query: `${subjectName} ${topic} revision flashcards`,
+    schoolId,
+    schoolPlan: school?.plan,
+    subject: subjectName,
+  })
+  const system = rag.block ? appendRagToSystemPrompt(FLASHCARD_SYSTEM, rag.block) : FLASHCARD_SYSTEM
+
+  let generated
+  try {
+    const { object } = await generateAIObject(
+      FlashcardDeckSchema,
+      system,
+      buildFlashcardPrompt({ subjectName, topic, count }),
+      { maxTokens: 2000, temperature: 0.5 }
+    )
+    generated = object
+  } catch {
+    throw new ApiError('Could not generate flashcards right now. Please try again.', 503)
+  }
+
+  const validated = validateFlashcards(generated?.cards)
+  if (!validated.ok) throw new ApiError(validated.error, 502)
   const cards = validated.cards
 
   const subject = await prisma.subject.findFirst({
@@ -113,10 +159,14 @@ export const POST = withErrorHandler(async function POST(request) {
       subjectId: subject?.id || body.subjectId || null,
       subjectName,
       deckDate: day,
-      title: body.title ? String(body.title).trim() : `${subjectName} — ${deckDateKey(day)}`,
+      title:
+        String(generated?.title || '').trim() ||
+        (topic ? `${subjectName} — ${topic}` : `${subjectName} — ${deckDateKey(day)}`),
       cards,
     },
   })
+
+  await trackAIUsage(schoolId, 'student-flashcards').catch(() => {})
 
   return NextResponse.json(
     {
@@ -124,6 +174,7 @@ export const POST = withErrorHandler(async function POST(request) {
       data: {
         id: deck.id,
         subjectName: deck.subjectName,
+        title: deck.title,
         cardCount: cards.length,
         cards: deck.cards,
       },
