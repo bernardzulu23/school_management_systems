@@ -62,7 +62,9 @@ export default function StudentFlashcardsPage() {
         body: JSON.stringify({ subjectName, topic, count, date: today }),
       })
       const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json.error || 'Could not generate deck')
+      if (!res.ok) {
+        throw new Error(json.message || json.error || 'Could not generate deck')
+      }
       toast.success('AI flashcards generated!')
       setSubjectName('')
       setTopic('')

@@ -20,27 +20,51 @@ export async function POST(req) {
     )
   }
 
-  const { term, academicYear } = await req.json()
+  const body = await req.json().catch(() => ({}))
+  const term = String(body?.term || 'Term 1').trim()
+  const academicYear = String(body?.academicYear || new Date().getFullYear()).trim()
 
-  await prisma.$transaction(async (tx) => {
-    // 1. Mark entries as published
-    await tx.timetableAllocationEntry.updateMany({
+  const draftCount = await prisma.timetableAllocationEntry.count({
+    where: { schoolId, term, academicYear, status: 'draft' },
+  })
+
+  if (draftCount === 0) {
+    return NextResponse.json(
+      {
+        error:
+          'No draft timetable to publish. Generate a timetable and save the draft to the database first.',
+      },
+      { status: 400 }
+    )
+  }
+
+  const result = await prisma.$transaction(async (tx) => {
+    const updated = await tx.timetableAllocationEntry.updateMany({
       where: { schoolId, term, academicYear, status: 'draft' },
       data: { status: 'published', publishedAt: new Date() },
     })
 
-    // 2. Mark allocations as scheduled
     const entries = await tx.timetableAllocationEntry.findMany({
       where: { schoolId, term, academicYear, status: 'published' },
       select: { allocationId: true },
     })
     const allocationIds = [...new Set(entries.map((e) => e.allocationId))]
 
-    await tx.teacherAllocation.updateMany({
-      where: { id: { in: allocationIds } },
-      data: { status: 'scheduled' },
-    })
+    if (allocationIds.length) {
+      await tx.teacherAllocation.updateMany({
+        where: { id: { in: allocationIds } },
+        data: { status: 'scheduled' },
+      })
+    }
+
+    return updated.count
   })
 
-  return NextResponse.json({ success: true, message: 'Timetable published' })
+  return NextResponse.json({
+    success: true,
+    message: 'Timetable published',
+    published: result,
+    term,
+    academicYear,
+  })
 }

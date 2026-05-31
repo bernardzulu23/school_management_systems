@@ -714,29 +714,43 @@ function HeadteacherTimetablePageContent() {
               Save draft to DB
             </Button>
             <Button
-              onClick={() => {
+              onClick={async () => {
                 if (!canPublish) return
                 setDbPublishing(true)
-                fetch('/api/timetable/publish', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  credentials: 'include',
-                  body: JSON.stringify({ term, academicYear }),
-                })
-                  .then((r) =>
-                    r
-                      .json()
-                      .catch(() => ({}))
-                      .then((j) => ({ ok: r.ok, j }))
-                  )
-                  .then(async ({ ok, j }) => {
-                    if (!ok) throw new Error(j?.error || 'Failed to publish to database')
-                    publish()
-                    toast.success('Published')
-                    await loadFromApi({ term, academicYear, status: 'published' })
+                try {
+                  if (assignments.length) {
+                    const syncRes = await fetch('/api/timetable/entries/sync-draft', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      credentials: 'include',
+                      body: JSON.stringify({
+                        term,
+                        academicYear,
+                        assignments,
+                        replaceExisting: true,
+                      }),
+                    })
+                    const syncJson = await syncRes.json().catch(() => ({}))
+                    if (!syncRes.ok) {
+                      throw new Error(syncJson?.error || 'Save draft to database before publishing')
+                    }
+                  }
+                  const r = await fetch('/api/timetable/publish', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ term, academicYear }),
                   })
-                  .catch((e) => toast.error(e?.message || 'Failed to publish to database'))
-                  .finally(() => setDbPublishing(false))
+                  const j = await r.json().catch(() => ({}))
+                  if (!r.ok) throw new Error(j?.message || j?.error || 'Failed to publish')
+                  publish()
+                  toast.success(`Published ${j.published ?? 0} periods`)
+                  await loadFromApi({ term, academicYear, status: 'published' })
+                } catch (e: any) {
+                  toast.error(e?.message || 'Failed to publish to database')
+                } finally {
+                  setDbPublishing(false)
+                }
               }}
               disabled={!canPublish || dbPublishing}
               className="zsms-hover-raise"

@@ -30,13 +30,14 @@ export default function TeacherTimetablePage() {
       try {
         const qs = new URLSearchParams({ term, academicYear, status: 'published' })
         const [viewRes, classesRes, subjectsRes] = await Promise.all([
-          fetch(`/api/timetable/view?${qs}`, { cache: 'no-store' }),
-          fetch('/api/classes?limit=200', { cache: 'no-store' }),
-          fetch('/api/subjects?limit=200', { cache: 'no-store' }),
+          fetch(`/api/timetable/view?${qs}`, { cache: 'no-store', credentials: 'include' }),
+          fetch('/api/classes?limit=200', { cache: 'no-store', credentials: 'include' }),
+          fetch('/api/subjects?limit=200', { cache: 'no-store', credentials: 'include' }),
         ])
 
         const viewJson = await viewRes.json().catch(() => ({}))
-        if (!viewRes.ok) throw new Error(viewJson?.error || 'Failed to load timetable')
+        if (!viewRes.ok)
+          throw new Error(viewJson?.message || viewJson?.error || 'Failed to load timetable')
 
         setAssignments(Array.isArray(viewJson.assignments) ? viewJson.assignments : [])
         setTimeSlots(Array.isArray(viewJson.timeSlots) ? viewJson.timeSlots : [])

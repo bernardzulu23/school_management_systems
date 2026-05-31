@@ -36,12 +36,25 @@ async function resolveStudentSubjectIds(prisma, schoolId, student) {
   for (const e of enrollments) ids.add(e.subjectId)
 
   const selected = Array.isArray(student.selected_subjects) ? student.selected_subjects : []
-  if (selected.length) {
+  const nameCandidates = new Set(selected.map((n) => String(n).trim()).filter(Boolean))
+
+  if (student.classId) {
+    const cls = await prisma.class.findFirst({
+      where: { id: student.classId, schoolId },
+      include: { subjects: { select: { id: true, name: true } } },
+    })
+    for (const s of cls?.subjects || []) {
+      if (s?.id) ids.add(s.id)
+      if (s?.name) nameCandidates.add(String(s.name).trim())
+    }
+  }
+
+  if (nameCandidates.size) {
     const subjects = await prisma.subject.findMany({
       where: { schoolId },
       select: { id: true, name: true },
     })
-    for (const name of selected) {
+    for (const name of nameCandidates) {
       const match = subjects.find(
         (s) => String(s.name).toLowerCase() === String(name).toLowerCase()
       )

@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { getStudentSubjectNames } from '@/lib/flashcards/studentSubjects'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -25,25 +26,25 @@ export const GET = withErrorHandler(async function GET(request) {
 
   if (!student) throw new ApiError('Student profile not found', 404)
 
-  const enrollments = await prisma.pupilSubjectEnrollment.findMany({
-    where: { schoolId, pupilId: student.id },
-    include: {
-      subject: { include: { teacher: { include: { user: true } } } },
-      class: true,
-    },
-    take: 50000,
+  const names = await getStudentSubjectNames(student.id, schoolId)
+  const subjects = await prisma.subject.findMany({
+    where: { schoolId, name: { in: names, mode: 'insensitive' } },
+    include: { teacher: { include: { user: true } } },
+    take: 500,
   })
 
-  const subjects = enrollments
-    .map((e) => e.subject)
-    .filter(Boolean)
-    .map((s) => ({
-      id: s.id,
-      name: s.name,
-      code: s.code || null,
-      teacher: s.teacher?.user?.name || null,
-      classId: s.classId || null,
-    }))
+  const byName = new Map(subjects.map((s) => [String(s.name).toLowerCase(), s]))
 
-  return NextResponse.json({ success: true, data: subjects })
+  const data = names.map((name) => {
+    const s = byName.get(name.toLowerCase())
+    return {
+      id: s?.id || name,
+      name,
+      code: s?.code || null,
+      teacher: s?.teacher?.user?.name || null,
+      classId: s?.classId || null,
+    }
+  })
+
+  return NextResponse.json({ success: true, data })
 })
