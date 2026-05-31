@@ -291,7 +291,7 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
               return (
                 <div
                   key={slotKey(slot)}
-                  className={`grid border-b border-royalPurple-border/20 ${isBreak ? 'bg-slate-100/70' : ''}`}
+                  className={`grid border-b ${isBreak ? 'border-royalPurple-border/40 bg-slate-100/70' : 'border-royalPurple-border/10'}`}
                   style={{
                     gridTemplateColumns: `200px repeat(${effectiveDays.length}, minmax(210px, 1fr))`,
                   }}

@@ -55,7 +55,7 @@ const nextConfig = {
   generateEtags: true,
 
   // Fix ES Module and webpack issues (production build uses --webpack on Vercel)
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.externals = [
       ...(config.externals || []),
       'jsdom',
@@ -63,6 +63,14 @@ const nextConfig = {
       'bufferutil',
       'utf-8-validate',
     ]
+
+    if (!isServer) {
+      config.module.rules.push({
+        test: /\.ttf$/,
+        type: 'asset/resource',
+      })
+    }
+
     return config
   },
 

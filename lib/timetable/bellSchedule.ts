@@ -25,6 +25,21 @@ function slotRowKey(s: Pick<BellScheduleSlot, 'period' | 'startTime' | 'endTime'
   return `${s.period}|${s.startTime}|${s.endTime}|${s.isBreak ? 1 : 0}`
 }
 
+/** Sort bell rows in chronological order (breaks use period 0 — must not sort before P1). */
+export function compareBellRows(
+  a: Pick<BellScheduleSlot, 'startTime' | 'endTime' | 'period' | 'isBreak'>,
+  b: Pick<BellScheduleSlot, 'startTime' | 'endTime' | 'period' | 'isBreak'>
+) {
+  const ta = timeToMin(a.startTime)
+  const tb = timeToMin(b.startTime)
+  if (ta !== tb) return ta - tb
+  const ea = timeToMin(a.endTime)
+  const eb = timeToMin(b.endTime)
+  if (ea !== eb) return ea - eb
+  if (Boolean(a.isBreak) !== Boolean(b.isBreak)) return a.isBreak ? 1 : -1
+  return (Number(a.period) || 0) - (Number(b.period) || 0)
+}
+
 /** Unique period/break rows sorted by start time (for table body). */
 export function uniqueBellRows(slots: BellScheduleSlot[]): BellScheduleSlot[] {
   const map = new Map<string, BellScheduleSlot>()
@@ -45,12 +60,7 @@ export function uniqueBellRows(slots: BellScheduleSlot[]): BellScheduleSlot[] {
       })
     }
   }
-  return Array.from(map.values()).sort((a, b) => {
-    const pa = Number(a.period) || 0
-    const pb = Number(b.period) || 0
-    if (pa !== pb) return pa - pb
-    return timeToMin(a.startTime) - timeToMin(b.startTime)
-  })
+  return Array.from(map.values()).sort(compareBellRows)
 }
 
 export function normalizeApiTimeSlots(raw: unknown[]): BellScheduleSlot[] {

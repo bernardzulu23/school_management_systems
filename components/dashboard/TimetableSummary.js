@@ -98,7 +98,9 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
 
   const filteredAssignments = useMemo(() => {
     const base = Array.isArray(assignments) ? assignments : []
-    const bySeason = base.filter((a) => String(a?.season) === activeSeason)
+    const bySeason = base.filter(
+      (a) => !a?.season || String(a.season) === activeSeason || activeSeason === 'normal'
+    )
 
     if (resolvedRole === 'student') {
       const classId = String(user?.studentProfile?.classId || '').trim()
@@ -266,17 +268,19 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
               </div>
             </div>
           ) : (
-            <div className="timetable-container overflow-x-auto rounded-xl border border-royalPurple-border bg-royalPurple-card/40">
-              <table className="min-w-[720px] w-full text-sm">
+            <div className="timetable-container overflow-x-auto rounded-lg border border-[#9ca3af] bg-white">
+              <table className="min-w-[640px] w-full border-collapse text-xs">
                 <thead>
-                  <tr className="bg-royalPurple-deep/40">
-                    <th className="px-3 py-2 text-left text-royalPurple-text3 font-semibold">
+                  <tr className="bg-[#e5e7eb]">
+                    <th className="sticky left-0 z-10 bg-[#e5e7eb] px-2 py-1.5 text-left font-semibold text-[#374151] border-b border-[#9ca3af]">
                       Time
                     </th>
-                    {DAYS.map((d) => (
+                    {DAYS.map((d, idx) => (
                       <th
                         key={d.key}
-                        className="px-3 py-2 text-left text-royalPurple-text3 font-semibold"
+                        className={`px-2 py-1.5 text-center font-semibold text-[#374151] border-b border-[#9ca3af] ${
+                          idx > 0 ? 'border-l border-[#9ca3af]' : ''
+                        }`}
                       >
                         {d.label}
                       </th>
@@ -284,31 +288,40 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {bellRows.map((slot) => {
+                  {bellRows.map((slot, rowIdx) => {
+                    const slotKey = `${slot.isBreak ? 'b' : 'p'}-${slot.startTime}-${slot.endTime}`
+                    const nextSlot = bellRows[rowIdx + 1]
+                    const blockEnd =
+                      slot.isBreak ||
+                      (nextSlot && nextSlot.isBreak) ||
+                      rowIdx === bellRows.length - 1
+
                     if (slot.isBreak) {
                       return (
-                        <tr
-                          key={`break-${slot.startTime}`}
-                          className="border-t border-royalPurple-border/40 bg-royalPurple-deep/10"
-                        >
-                          <td className="px-3 py-3 text-royalPurple-text2 whitespace-nowrap">
-                            {slot.startTime}-{slot.endTime}
+                        <tr key={slotKey} className="bg-[#d1d5db]">
+                          <td className="sticky left-0 z-10 bg-[#d1d5db] px-2 py-1 text-[#374151] whitespace-nowrap font-medium border-b border-[#9ca3af]">
+                            {slot.startTime}–{slot.endTime}
                           </td>
                           <td
                             colSpan={DAYS.length}
-                            className="px-3 py-3 text-center text-royalPurple-text3 font-medium uppercase tracking-widest text-xs"
+                            className="px-2 py-1 text-center text-[#4b5563] font-semibold uppercase tracking-widest border-b border-[#9ca3af]"
                           >
-                            {slot.label || 'Break / Lunch'}
+                            {slot.label || 'Break'}
                           </td>
                         </tr>
                       )
                     }
+
                     return (
-                      <tr key={slot.startTime} className="border-t border-royalPurple-border/40">
-                        <td className="px-3 py-3 text-royalPurple-text2 whitespace-nowrap">
-                          {slot.startTime}-{slot.endTime}
+                      <tr key={slotKey}>
+                        <td
+                          className={`sticky left-0 z-10 bg-[#f9fafb] px-2 py-1 text-[#4b5563] whitespace-nowrap border-b ${
+                            blockEnd ? 'border-[#9ca3af]' : 'border-[#e5e7eb]'
+                          }`}
+                        >
+                          {slot.startTime}–{slot.endTime}
                         </td>
-                        {DAYS.map((d) => {
+                        {DAYS.map((d, dayIdx) => {
                           if (isContinuationSlot(d.key, slot, filteredAssignments, bellRows)) {
                             return null
                           }
@@ -318,38 +331,41 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
                             filteredAssignments
                           )
                           const a = primary[0]
-                          if (!a)
-                            return (
-                              <td key={d.key} className="px-3 py-3 text-royalPurple-text3">
-                                —
-                              </td>
-                            )
-                          const span = rowSpanForAssignment(a, bellRows)
-                          const colors = resolveCardColor(
-                            a.subjectId,
-                            a.teacherId,
-                            getTeacherColorHex(a.teacherId)
-                          )
+                          const span = a ? rowSpanForAssignment(a, bellRows) : 1
+                          const colors = a
+                            ? resolveCardColor(
+                                a.subjectId,
+                                a.teacherId,
+                                getTeacherColorHex(a.teacherId)
+                              )
+                            : null
+
                           return (
                             <td
                               key={d.key}
                               rowSpan={span > 1 ? span : undefined}
-                              className="px-3 py-3 align-top"
+                              className={`px-1 py-0.5 align-top border-b ${
+                                blockEnd ? 'border-[#9ca3af]' : 'border-[#e5e7eb]'
+                              } ${dayIdx > 0 ? 'border-l border-[#d1d5db]' : ''}`}
                             >
-                              <div
-                                className="rounded-lg border p-2 h-full"
-                                style={{
-                                  backgroundColor: colors.bg,
-                                  borderColor: colors.border,
-                                }}
-                              >
-                                <div className="font-bold text-slate-900 truncate">
-                                  {a.subjectName || a.subjectId}
+                              {a ? (
+                                <div
+                                  className="rounded px-1.5 py-1 min-h-[36px] border"
+                                  style={{
+                                    backgroundColor: colors.bg,
+                                    borderColor: colors.border,
+                                  }}
+                                >
+                                  <div className="font-bold text-[#111827] truncate text-[11px] leading-tight">
+                                    {a.subjectName || a.subjectId}
+                                  </div>
+                                  <div className="text-[10px] text-[#4b5563] truncate leading-tight">
+                                    {a.className || a.classId} · {a.teacherName || a.teacherId}
+                                  </div>
                                 </div>
-                                <div className="text-[11px] text-slate-600 truncate mt-1">
-                                  {a.className || a.classId} · {a.teacherName || a.teacherId}
-                                </div>
-                              </div>
+                              ) : (
+                                <span className="text-[#d1d5db] select-none">·</span>
+                              )}
                             </td>
                           )
                         })}

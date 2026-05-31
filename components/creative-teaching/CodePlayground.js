@@ -10,7 +10,9 @@ import {
   monacoLanguageFor,
 } from '@/lib/creative-teaching/playgroundLanguages'
 
-const Editor = dynamic(() => import('@monaco-editor/react'), { ssr: false })
+const PlaygroundEditor = dynamic(() => import('@/components/creative-teaching/PlaygroundEditor'), {
+  ssr: false,
+})
 
 const CHALLENGES = [
   {
@@ -238,7 +240,7 @@ export default function CodePlayground({ embedded = false }) {
               EDITOR — {lang.label}
             </span>
           </div>
-          <Editor
+          <PlaygroundEditor
             height={editorHeight}
             language={monacoLanguageFor(lang)}
             value={code}
