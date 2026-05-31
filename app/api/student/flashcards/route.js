@@ -11,10 +11,9 @@ import {
   MAX_CARDS_PER_DECK,
 } from '@/lib/flashcards/limits'
 import { assertStudentSubjectAllowed } from '@/lib/flashcards/studentSubjects'
-import { generateAIObject } from '@/lib/ai/client'
-import { FlashcardDeckSchema } from '@/lib/ai/schemas'
+import { generateFlashcardDeck } from '@/lib/flashcards/generateDeck'
 import { buildRagContextForQuery, appendRagToSystemPrompt } from '@/lib/ai/rag-context'
-import { getSchoolPlanForUsage, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
+import { checkAILimit, getSchoolPlanForUsage, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
 import { assertGroqConfigured } from '@/lib/ai/client'
 import { logger } from '@/lib/utils/logger'
 import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
@@ -134,6 +133,9 @@ export const POST = withErrorHandler(async function POST(request) {
     )
   }
 
+  const limitBlock = await checkAILimit(schoolId)
+  if (limitBlock) return limitBlock
+
   // Generate the flashcards with AI (RAG-grounded on school materials when available).
   const school = await getSchoolPlanForUsage(schoolId)
   let ragBlock = ''
@@ -153,16 +155,20 @@ export const POST = withErrorHandler(async function POST(request) {
 
   let generated
   try {
-    const { object } = await generateAIObject(
-      FlashcardDeckSchema,
+    generated = await generateFlashcardDeck({
       system,
-      buildFlashcardPrompt({ subjectName, topic, count }),
-      { maxTokens: 2000, temperature: 0.5 }
-    )
-    generated = object
+      userPrompt: buildFlashcardPrompt({ subjectName, topic, count }),
+      count,
+    })
   } catch (e) {
+    const msg = String(e?.message || 'AI error')
     logger.error?.('flashcards.generation-failed', e, { schoolId, subjectName })
-    throw new ApiError(`Could not generate flashcards right now: ${e?.message || 'AI error'}`, 503)
+    const friendly = msg.toLowerCase().includes('rate limit')
+      ? 'AI is busy right now — please wait a minute and try again.'
+      : msg.toLowerCase().includes('missing groq')
+        ? 'AI is not configured on the server. Contact your administrator.'
+        : `Could not generate flashcards: ${msg.slice(0, 180)}`
+    throw new ApiError(friendly, 503)
   }
 
   const validated = validateFlashcards(generated?.cards)
