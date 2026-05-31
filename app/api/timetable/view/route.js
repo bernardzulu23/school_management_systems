@@ -7,10 +7,9 @@ import { getAuthUser } from '@/lib/middleware/auth'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
 import {
   buildTimeSlotsFromConfig,
-  buildTimeSlotsFromEntries,
   ensureTimetableConfig,
-  mergeTimeSlotGrids,
   normalizeTimetableConfig,
+  resolveSchoolTimeSlots,
 } from '@/lib/timetable/timeSlotsFromConfig'
 import {
   mapDbEntriesToAssignments,
@@ -212,9 +211,13 @@ export async function GET(req) {
         String(a.subjectName || '').trim() || subjectNameById.get(String(a.subjectId)) || 'Subject',
     }))
   }
-  const configSlots = buildTimeSlotsFromConfig(config)
-  const entrySlots = buildTimeSlotsFromEntries(assignments)
-  const timeSlots = mergeTimeSlotGrids(configSlots, entrySlots)
+  const normalizedConfig = normalizeTimetableConfig(config)
+  const configSlots = buildTimeSlotsFromConfig(normalizedConfig)
+  const dbSlots = await prisma.timeSlot.findMany({
+    where: { schoolId },
+    orderBy: [{ dayOfWeek: 'asc' }, { startTime: 'asc' }],
+  })
+  const timeSlots = resolveSchoolTimeSlots(normalizedConfig, dbSlots.length ? dbSlots : configSlots)
 
   const hideTeacher = role === 'student'
   const safeAssignments = hideTeacher
@@ -234,7 +237,6 @@ export async function GET(req) {
         ? buildTeacherWorkloadSummary(assignments)
         : []
 
-  const normalizedConfig = normalizeTimetableConfig(config)
   const teacherColorMap = await loadTeacherColorMap(prisma, schoolId)
 
   return NextResponse.json({

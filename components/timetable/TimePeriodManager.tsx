@@ -5,6 +5,10 @@ import toast from 'react-hot-toast'
 import { Clock } from 'lucide-react'
 import { TimeSlotEditor, type EditablePeriod } from '@/components/timetable/TimeSlotEditor'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
+import {
+  normalizeTimetableConfig,
+  resolveSchoolTimeSlots,
+} from '@/lib/timetable/timeSlotsFromConfig'
 
 const DAYS = [
   { key: 'monday', label: 'Monday' },
@@ -55,7 +59,12 @@ export function TimePeriodManager() {
   async function refreshBellSchedule() {
     const res = await fetch('/api/timetable/config', { cache: 'no-store' })
     const data = await res.json().catch(() => ({}))
-    if (Array.isArray(data.timeSlots)) setStoreTimeSlots(data.timeSlots)
+    const normalized = normalizeTimetableConfig(data?.config)
+    const slots = resolveSchoolTimeSlots(
+      normalized,
+      Array.isArray(data?.timeSlots) ? data.timeSlots : []
+    )
+    if (slots.length) setStoreTimeSlots(slots)
   }
 
   return (

@@ -3,6 +3,8 @@ const nextConfig = {
   // Keep dev-only formatters out of the server bundle if a dependency imports them
   serverExternalPackages: ['prettier'],
 
+  transpilePackages: ['monaco-editor', '@monaco-editor/react'],
+
   experimental: {
     serverActions: {
       bodySizeLimit: '2mb',

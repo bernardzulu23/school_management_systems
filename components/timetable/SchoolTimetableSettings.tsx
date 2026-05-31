@@ -9,6 +9,7 @@ import {
   buildTimeSlotsFromConfig,
   countPeriodsPerDay,
   normalizeTimetableConfig,
+  suggestNextBreakSlot,
   validateTimetableConfig,
 } from '@/lib/timetable/timeSlotsFromConfig'
 
@@ -98,10 +99,7 @@ export function SchoolTimetableSettings({
   function addBreak() {
     setForm((f) => ({
       ...f,
-      breakSlots: [
-        ...f.breakSlots,
-        { label: 'Break', start: '10:00', end: '10:30', isLunch: false },
-      ],
+      breakSlots: [...f.breakSlots, suggestNextBreakSlot(f)],
     }))
   }
 

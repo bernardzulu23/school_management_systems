@@ -22,7 +22,11 @@ import { AllocationNotificationBell } from '@/components/timetable/AllocationNot
 import { SchoolTimetableSettings } from '@/components/timetable/SchoolTimetableSettings'
 import { TeacherColorAssignment } from '@/components/timetable/TeacherColorAssignment'
 import { TimePeriodManager } from '@/components/timetable/TimePeriodManager'
-import { buildTimeSlotsFromConfig } from '@/lib/timetable/timeSlotsFromConfig'
+import {
+  buildTeacherAvailabilityFromConfig,
+  normalizeTimetableConfig,
+  resolveSchoolTimeSlots,
+} from '@/lib/timetable/timeSlotsFromConfig'
 import { formatPeriodConfigLabel } from '@/lib/timetable/formatPeriodConfig'
 import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
@@ -49,7 +53,11 @@ function parseUnplacedConflict(conflict: any, index: number): UnplacedLesson {
   }
 }
 
-function toTeacher(t: any, subjectsByName: Map<string, { id: string; name: string }>): Teacher {
+function toTeacher(
+  t: any,
+  subjectsByName: Map<string, { id: string; name: string }>,
+  schoolConfig?: ReturnType<typeof normalizeTimetableConfig>
+): Teacher {
   const name = String(t?.user?.name || t?.name || t?.fullName || 'Teacher').trim()
   const assigned = Array.isArray(t?.assignedSubjects) ? t.assignedSubjects : []
   const subjectRefs = assigned
@@ -61,43 +69,7 @@ function toTeacher(t: any, subjectsByName: Map<string, { id: string; name: strin
     id: String(t?.userId || t?.user?.id || t?.id || name),
     fullName: name,
     subjects: subjectRefs,
-    availability: [
-      {
-        season: 'all',
-        dayOfWeek: 'monday',
-        startTime: '07:30' as any,
-        endTime: '16:30' as any,
-        available: true,
-      },
-      {
-        season: 'all',
-        dayOfWeek: 'tuesday',
-        startTime: '07:30' as any,
-        endTime: '16:30' as any,
-        available: true,
-      },
-      {
-        season: 'all',
-        dayOfWeek: 'wednesday',
-        startTime: '07:30' as any,
-        endTime: '16:30' as any,
-        available: true,
-      },
-      {
-        season: 'all',
-        dayOfWeek: 'thursday',
-        startTime: '07:30' as any,
-        endTime: '16:30' as any,
-        available: true,
-      },
-      {
-        season: 'all',
-        dayOfWeek: 'friday',
-        startTime: '07:30' as any,
-        endTime: '16:30' as any,
-        available: true,
-      },
-    ],
+    availability: buildTeacherAvailabilityFromConfig(schoolConfig) as Teacher['availability'],
     maxHours: { perWeek: Number(t?.maxHoursPerWeek || 28) },
     preferences: { minimizeGaps: true, maxTravelLegsPerDay: 1 },
     traveling: { enabled: false, schools: [] },
@@ -151,6 +123,7 @@ function HeadteacherTimetablePageContent() {
   const [teachers, setTeachers] = useState<Teacher[]>([])
   const [classes, setClasses] = useState<Class[]>([])
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
+  const [timetableConfig, setTimetableConfig] = useState(() => normalizeTimetableConfig(null))
   const [season, setSeason] = useState<'normal' | 'farming' | 'planting'>('normal')
   const [schoolId, setSchoolId] = useState<string>('')
 
@@ -274,14 +247,16 @@ function HeadteacherTimetablePageContent() {
         const configJson = await configRes.json().catch(() => ({}))
 
         if (schoolJson?.school?.id) setSchoolId(String(schoolJson.school.id))
-        if (Array.isArray(configJson?.timeSlots) && configJson.timeSlots.length) {
-          const slots = configJson.timeSlots as TimeSlot[]
-          setTimeSlots(slots)
-          setStoreTimeSlots(slots as any)
-        } else if (configJson?.config) {
-          const slots = buildTimeSlotsFromConfig(configJson.config) as TimeSlot[]
-          setTimeSlots(slots)
-          setStoreTimeSlots(slots as any)
+
+        const normalizedConfig = normalizeTimetableConfig(configJson?.config)
+        setTimetableConfig(normalizedConfig)
+        const resolvedSlots = resolveSchoolTimeSlots(
+          normalizedConfig,
+          Array.isArray(configJson?.timeSlots) ? configJson.timeSlots : []
+        ) as TimeSlot[]
+        if (resolvedSlots.length) {
+          setTimeSlots(resolvedSlots)
+          setStoreTimeSlots(resolvedSlots as any)
         }
 
         const subjectList = Array.isArray(subjectsJson?.data) ? subjectsJson.data : []
@@ -295,7 +270,9 @@ function HeadteacherTimetablePageContent() {
         const teacherList = Array.isArray(teachersJson?.data) ? teachersJson.data : []
         const classList = Array.isArray(classesJson?.data) ? classesJson.data : []
 
-        const mappedTeachers = teacherList.map((t: any) => toTeacher(t, subjectsByName))
+        const mappedTeachers = teacherList.map((t: any) =>
+          toTeacher(t, subjectsByName, normalizedConfig)
+        )
         const mappedClasses = classList.map((c: any) => toClass(c, subjectRefs))
 
         setTeachers(mappedTeachers)
@@ -307,7 +284,7 @@ function HeadteacherTimetablePageContent() {
       }
     }
     load()
-  }, [])
+  }, [setStoreTimeSlots])
 
   useEffect(() => {
     loadAllocationNotifications()
@@ -1281,11 +1258,21 @@ function HeadteacherTimetablePageContent() {
         {tab === 'settings' ? (
           <div className="space-y-6">
             <SchoolTimetableSettings
-              onSaved={({ timeSlots: slots }) => {
+              onSaved={({ config, timeSlots: slots }) => {
+                const normalized = normalizeTimetableConfig(config)
+                setTimetableConfig(normalized)
                 if (slots?.length) {
                   setTimeSlots(slots as TimeSlot[])
                   setStoreTimeSlots(slots as any)
                 }
+                setTeachers((prev) =>
+                  prev.map((t) => ({
+                    ...t,
+                    availability: buildTeacherAvailabilityFromConfig(
+                      normalized
+                    ) as Teacher['availability'],
+                  }))
+                )
               }}
             />
             <TimePeriodManager />

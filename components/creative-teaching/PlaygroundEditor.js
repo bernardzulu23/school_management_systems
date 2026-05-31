@@ -1,35 +1,72 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Editor from '@monaco-editor/react'
+import { Component, useEffect, useState } from 'react'
 import { configureMonacoLoader } from '@/lib/creative-teaching/configureMonaco'
 
-function FallbackEditor({ value, onChange, height, language }) {
+function FallbackEditor({ value, onChange, height, language, note }) {
   return (
-    <textarea
-      value={value}
-      onChange={(e) => onChange?.(e.target.value)}
-      spellCheck={false}
-      aria-label={`Code editor (${language})`}
-      style={{
-        width: '100%',
-        height,
-        minHeight: 200,
-        margin: 0,
-        padding: '12px 14px',
-        resize: 'vertical',
-        border: 'none',
-        outline: 'none',
-        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-        fontSize: 14,
-        lineHeight: 1.55,
-        tabSize: 2,
-        color: '#e2e8f0',
-        background: '#1e1e2e',
-        boxSizing: 'border-box',
-      }}
-    />
+    <div>
+      {note ? (
+        <div
+          style={{
+            padding: '4px 10px',
+            fontSize: 11,
+            color: '#94a3b8',
+            background: '#0f172a',
+            borderBottom: '1px solid #334155',
+          }}
+        >
+          {note}
+        </div>
+      ) : null}
+      <textarea
+        value={value}
+        onChange={(e) => onChange?.(e.target.value)}
+        spellCheck={false}
+        aria-label={`Code editor (${language})`}
+        style={{
+          width: '100%',
+          height,
+          minHeight: 200,
+          margin: 0,
+          padding: '12px 14px',
+          resize: 'vertical',
+          border: 'none',
+          outline: 'none',
+          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+          fontSize: 14,
+          lineHeight: 1.55,
+          tabSize: 2,
+          color: '#e2e8f0',
+          background: '#1e1e2e',
+          boxSizing: 'border-box',
+        }}
+      />
+    </div>
   )
+}
+
+class EditorErrorBoundary extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { failed: false }
+  }
+
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+
+  render() {
+    if (this.state.failed) {
+      return (
+        <FallbackEditor
+          {...this.props}
+          note="Simple editor — advanced highlighting unavailable in this browser."
+        />
+      )
+    }
+    return this.props.children
+  }
 }
 
 export default function PlaygroundEditor({
@@ -40,20 +77,16 @@ export default function PlaygroundEditor({
   theme = 'vs-dark',
   options = {},
 }) {
-  const [ready, setReady] = useState(false)
+  const [MonacoEditor, setMonacoEditor] = useState(null)
   const [failed, setFailed] = useState(false)
 
   useEffect(() => {
     let cancelled = false
-    const timeout = setTimeout(() => {
-      if (!cancelled) setFailed(true)
-    }, 12_000)
 
     configureMonacoLoader()
-      .then(() => {
-        if (cancelled) return
-        clearTimeout(timeout)
-        setReady(true)
+      .then(() => import('@monaco-editor/react'))
+      .then((mod) => {
+        if (!cancelled) setMonacoEditor(() => mod.default)
       })
       .catch(() => {
         if (!cancelled) setFailed(true)
@@ -61,57 +94,36 @@ export default function PlaygroundEditor({
 
     return () => {
       cancelled = true
-      clearTimeout(timeout)
     }
   }, [])
 
   if (failed) {
     return (
-      <div>
-        <div
-          style={{
-            padding: '4px 10px',
-            fontSize: 11,
-            color: '#94a3b8',
-            background: '#0f172a',
-            borderBottom: '1px solid #334155',
-          }}
-        >
-          Simple editor (Monaco unavailable — you can still write and run code)
-        </div>
-        <FallbackEditor value={value} onChange={onChange} height={height} language={language} />
-      </div>
+      <FallbackEditor
+        value={value}
+        onChange={onChange}
+        height={height}
+        language={language}
+        note="Simple editor — you can still write and run code."
+      />
     )
   }
 
-  if (!ready) {
-    return (
-      <div
-        style={{
-          height,
-          minHeight: 200,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#94a3b8',
-          fontSize: 13,
-          background: '#1e1e2e',
-        }}
-      >
-        Loading editor…
-      </div>
-    )
+  if (!MonacoEditor) {
+    return <FallbackEditor value={value} onChange={onChange} height={height} language={language} />
   }
 
   return (
-    <Editor
-      height={height}
-      language={language}
-      value={value}
-      onChange={(v) => onChange?.(v || '')}
-      theme={theme}
-      options={options}
-      loading={null}
-    />
+    <EditorErrorBoundary value={value} onChange={onChange} height={height} language={language}>
+      <MonacoEditor
+        height={height}
+        language={language}
+        value={value}
+        onChange={(v) => onChange?.(v || '')}
+        theme={theme}
+        options={options}
+        loading={null}
+      />
+    </EditorErrorBoundary>
   )
 }

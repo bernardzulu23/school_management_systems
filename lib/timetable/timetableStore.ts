@@ -5,6 +5,7 @@ import { CollisionDetector } from './collisionDetector'
 import { SuggestionEngine, type Suggestion } from './suggestionEngine'
 import type { BellScheduleSlot } from './bellSchedule'
 import { normalizeApiTimeSlots } from './bellSchedule'
+import { normalizeTimetableConfig, resolveSchoolTimeSlots } from './timeSlotsFromConfig'
 import { canPublishTimetable, validateTimetable } from './validateTimetable'
 import { countUniqueConflicts } from './conflictDedupe'
 
@@ -353,8 +354,12 @@ export const useTimetableStore = create<TimetableStoreState>()(
             })
             if (!res.ok) return get().timeSlots
             const data = await res.json()
+            const normalized = normalizeTimetableConfig(data?.config)
             const slots = normalizeApiTimeSlots(
-              Array.isArray(data?.timeSlots) ? data.timeSlots : []
+              resolveSchoolTimeSlots(
+                normalized,
+                Array.isArray(data?.timeSlots) ? data.timeSlots : []
+              )
             )
             set({ timeSlots: slots })
             return slots
@@ -442,9 +447,12 @@ export const useTimetableStore = create<TimetableStoreState>()(
             const data = await res.json()
             const assignments = Array.isArray(data.assignments) ? data.assignments : []
 
-            const slots = normalizeApiTimeSlots(
+            const normalized = normalizeTimetableConfig(data?.config)
+            const resolved = resolveSchoolTimeSlots(
+              normalized,
               Array.isArray(data?.timeSlots) ? data.timeSlots : []
             )
+            const slots = normalizeApiTimeSlots(resolved)
             set({
               assignments,
               timeSlots: slots.length ? slots : get().timeSlots,

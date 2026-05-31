@@ -9,6 +9,7 @@ import {
   buildTimeSlotsFromConfig,
   ensureTimetableConfig,
   normalizeTimetableConfig,
+  resolveSchoolTimeSlots,
   validateTimetableConfig,
 } from '@/lib/timetable/timeSlotsFromConfig'
 
@@ -35,10 +36,9 @@ async function loadTimeSlotsFromDb(prisma, schoolId, normalized) {
   return buildTimeSlotsFromConfig(normalized)
 }
 
-function configResponse(config, timeSlots) {
+function configResponse(config, dbSlots) {
   const normalized = normalizeTimetableConfig(config)
-  const slots =
-    Array.isArray(timeSlots) && timeSlots.length ? timeSlots : buildTimeSlotsFromConfig(normalized)
+  const slots = resolveSchoolTimeSlots(normalized, dbSlots)
   return NextResponse.json({
     config: normalized,
     timeSlots: slots,
@@ -56,8 +56,8 @@ export async function GET(req) {
     console.warn('[timetable/config] syncTimeSlotsFromConfig:', err?.message)
   })
   const normalized = normalizeTimetableConfig(config)
-  const timeSlots = await loadTimeSlotsFromDb(prisma, schoolId, normalized)
-  return configResponse(config, timeSlots)
+  const dbSlots = await loadTimeSlotsFromDb(prisma, schoolId, normalized)
+  return configResponse(config, dbSlots)
 }
 
 export async function POST(req) {

@@ -16,6 +16,10 @@ import {
   Plus,
   Save,
 } from 'lucide-react'
+import {
+  DEFAULT_TIMETABLE_CONFIG,
+  normalizeTimetableConfig,
+} from '@/lib/timetable/timeSlotsFromConfig'
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
@@ -243,13 +247,7 @@ export default function MasterTimetableGenerator() {
   ).trim()
   const autoGenerate = String(searchParams.get('autoGenerate') || '').trim() === '1'
 
-  const [config, setConfig] = useState({
-    startTime: '07:00',
-    endTime: '17:00',
-    singleDuration: 40,
-    workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-    breakSlots: [],
-  })
+  const [config, setConfig] = useState(() => normalizeTimetableConfig(DEFAULT_TIMETABLE_CONFIG))
   const [term, setTerm] = useState(desiredTerm || 'Term 1')
   const [academicYear, setAcademicYear] = useState(
     desiredAcademicYear || new Date().getFullYear().toString()
@@ -286,12 +284,7 @@ export default function MasterTimetableGenerator() {
       setAllocationSummary(allocData.summary || null)
 
       if (configData.config) {
-        setConfig({
-          ...configData.config,
-          breakSlots: Array.isArray(configData.config.breakSlots)
-            ? configData.config.breakSlots
-            : JSON.parse(configData.config.breakSlots || '[]'),
-        })
+        setConfig(normalizeTimetableConfig(configData.config))
       }
       setEntries(entriesData.entries || [])
     } catch (err) {
@@ -318,6 +311,7 @@ export default function MasterTimetableGenerator() {
     const current = departments.join(',')
     const next = nextDepartments.join(',')
     if (next && next !== current) setDepartments(nextDepartments)
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- sync URL params once on mount
   }, [desiredTerm, desiredAcademicYear, desiredDepartments])
 
   async function saveConfig() {
@@ -384,6 +378,7 @@ export default function MasterTimetableGenerator() {
     if (loading || generating) return
     autoTriggered.current = true
     generate()
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run auto-generate once when ready
   }, [canAutoGenerate, loading, generating])
 
   async function publish() {
