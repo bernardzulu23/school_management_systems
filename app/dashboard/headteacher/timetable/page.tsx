@@ -6,6 +6,8 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { ConflictDisplay } from '@/components/timetable/ConflictDisplay'
 import { DragDropTimetable } from '@/components/timetable/DragDropTimetable'
 import { MasterTimetableGrid } from '@/components/timetable/MasterTimetableGrid'
+import { AscClassWallGrid } from '@/components/timetable/AscClassWallGrid'
+import type { UnplacedLesson } from '@/components/timetable/UnplacedLessonsTray'
 import {
   TimetableControlBar,
   type TimetableGridMode,
@@ -32,6 +34,19 @@ type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'setting
 
 function formatPeriodDisplay(value: unknown): string {
   return formatPeriodConfigLabel(value as any) || String(value || '')
+}
+
+function parseUnplacedConflict(conflict: any, index: number): UnplacedLesson {
+  const msg = String(conflict?.message || '')
+  const match = msg.match(/Could not place (\w+) for (.+?) — (.+?) \((.+?)\)/)
+  return {
+    id: String(conflict?.blockId || conflict?.allocationId || index),
+    subjectName: match?.[3] || 'Subject',
+    className: match?.[4] || 'Class',
+    teacherName: match?.[2],
+    blockType: String(conflict?.type || match?.[1] || 'single'),
+    message: msg || undefined,
+  }
 }
 
 function toTeacher(t: any, subjectsByName: Map<string, { id: string; name: string }>): Teacher {
@@ -149,7 +164,8 @@ function HeadteacherTimetablePageContent() {
   const [masterEntries, setMasterEntries] = useState<any[]>([])
   const [departments, setDepartments] = useState<any[]>([])
   const [allocationsLoading, setAllocationsLoading] = useState(false)
-  const [gridMode, setGridMode] = useState<TimetableGridMode>('master')
+  const [gridMode, setGridMode] = useState<TimetableGridMode>('wall')
+  const [unplacedLessons, setUnplacedLessons] = useState<UnplacedLesson[]>([])
   const [reloadingTimetable, setReloadingTimetable] = useState(false)
 
   const assignments = useTimetableStore((s) => s.assignments)
@@ -625,9 +641,17 @@ function HeadteacherTimetablePageContent() {
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json?.error || 'Generation failed')
-      toast.success(`Generated ${Number(json?.generated || 0)} periods`)
+      const conflicts = Array.isArray(json?.conflicts) ? json.conflicts : []
+      setUnplacedLessons(conflicts.map(parseUnplacedConflict))
+      const unplaced = Number(json?.summary?.unplaced ?? json?.stats?.unplaced ?? 0)
+      toast.success(
+        unplaced > 0
+          ? `Generated ${Number(json?.generated || 0)} periods — ${unplaced} block(s) still unplaced`
+          : `Generated ${Number(json?.generated || 0)} periods`
+      )
       await loadFromApi({ term, academicYear, status: 'draft' })
-      setTab('edit')
+      setGridMode('wall')
+      setTab('overview')
     } catch (e: any) {
       toast.error(e?.message || 'Generation failed')
     } finally {
@@ -681,7 +705,7 @@ function HeadteacherTimetablePageContent() {
           <div>
             <div className="text-2xl font-bold text-royalPurple-text1">ZSMS Timetable Studio</div>
             <div className="text-sm text-royalPurple-text3">
-              aSc-style scheduling — school grid, teacher cards, class cards, drag-drop, conflicts
+              aSc-style class wall — compact subject blocks, no rooms, teacher + class only
             </div>
           </div>
 
@@ -1154,7 +1178,17 @@ function HeadteacherTimetablePageContent() {
 
         {tab === 'overview' ? (
           <div className="space-y-4">
-            {gridMode === 'master' ? (
+            {gridMode === 'wall' ? (
+              <AscClassWallGrid
+                assignments={seasonAssignments}
+                timeSlots={timeSlots}
+                classes={classes}
+                teachers={teachers}
+                season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
+                showConflicts
+                unplacedLessons={unplacedLessons}
+              />
+            ) : gridMode === 'master' ? (
               <MasterTimetableGrid
                 assignments={seasonAssignments}
                 timeSlots={timeSlots}

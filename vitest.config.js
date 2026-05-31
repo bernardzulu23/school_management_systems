@@ -24,6 +24,7 @@ export default defineConfig({
       '__tests__/unit/**/*.test.js',
       '__tests__/security/**/*.test.js',
       'test/security/**/*.test.js',
+      'lib/timetable/__tests__/**/*.test.ts',
     ],
     coverage: {
       provider: 'v8',

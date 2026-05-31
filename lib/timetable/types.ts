@@ -576,3 +576,36 @@ export interface TimetableSchedule {
   createdAt?: string
   updatedAt?: string
 }
+
+// ─── Scheduler engine (Task: backtracking + bundles) ───────────────────────
+
+/** HOD period bundle: singles + doubles×2 + triples×3 = total periods/week. */
+export interface AllocationBundle {
+  singles: number
+  doubles: number
+  triples: number
+}
+
+/** One schedulable block expanded from an allocation. */
+export interface ScheduleBlock {
+  blockId: string
+  allocationId: string
+  teacherId: string
+  classId: string
+  subjectId: string
+  span: 1 | 2 | 3
+  unitType: 'SINGLE' | 'DOUBLE' | 'TRIPLE'
+}
+
+/** Output row persisted as TimetableAllocationEntry / scheduled lesson. */
+export interface ScheduledLesson {
+  allocationId: string
+  teacherId: string
+  classId: string
+  subjectId: string
+  day: DayOfWeek
+  startPeriod: number
+  span: 1 | 2 | 3
+  startTime: LocalTimeHHMM
+  endTime: LocalTimeHHMM
+}

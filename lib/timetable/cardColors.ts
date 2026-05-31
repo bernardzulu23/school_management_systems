@@ -12,6 +12,37 @@ const PALETTE: CardColor[] = [
   { bg: '#ffedd5', border: '#fed7aa' },
 ]
 
+/** Saturated fills for compact aSc-style wall cells (subject-stable). */
+const ASC_SOLID: string[] = [
+  '#5b9bd5',
+  '#70ad47',
+  '#ffc000',
+  '#ed7d31',
+  '#a5a5a5',
+  '#4472c4',
+  '#264478',
+  '#9e480e',
+  '#636363',
+  '#997300',
+  '#c00000',
+  '#7030a0',
+]
+
+export function solidSubjectFill(subjectId: string | undefined | null): {
+  fill: string
+  text: string
+} {
+  const s = String(subjectId || 'default')
+  let hash = 0
+  for (let i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0
+  const fill = ASC_SOLID[hash % ASC_SOLID.length]
+  const r = parseInt(fill.slice(1, 3), 16)
+  const g = parseInt(fill.slice(3, 5), 16)
+  const b = parseInt(fill.slice(5, 7), 16)
+  const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+  return { fill, text: lum > 0.62 ? '#1e1e1e' : '#ffffff' }
+}
+
 export function generateCardColor(
   subjectId: string | undefined | null,
   teacherId: string | undefined | null

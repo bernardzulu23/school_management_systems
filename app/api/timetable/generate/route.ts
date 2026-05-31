@@ -9,7 +9,12 @@ import {
   timeToMin,
   minToTime,
 } from '@/lib/timetable/timeSlotsFromConfig'
-import { normalizeAllocationPeriods } from '@/lib/timetable/periodExpansion'
+import {
+  generateTimetable as runBacktrackingScheduler,
+  mergePlacements,
+  type DayPeriodSlot,
+} from '@/lib/timetable/scheduler'
+import { resolveConflictsWithLLM } from '@/lib/timetable/llm-resolver'
 
 export async function GET(req: NextRequest) {
   const user = await getAuthUser(req as any)
@@ -42,6 +47,7 @@ export async function POST(req: NextRequest) {
   const academicYear = String((body as any)?.academicYear || new Date().getFullYear()).trim()
   const departments = (body as any)?.departments
   const replaceExisting = (body as any)?.replaceExisting !== false
+  const useLlm = (body as any)?.useLlm !== false
 
   const config = await ensureTimetableConfig(prisma, schoolId)
 
@@ -86,7 +92,41 @@ export async function POST(req: NextRequest) {
     workingDays
   )
 
-  const { entries, conflicts } = generateTimetable(allocations as any[], daySlots, singleMin)
+  let scheduleResult = runBacktrackingScheduler(
+    allocations as any[],
+    daySlots as Record<string, DayPeriodSlot[]>,
+    {
+      singleMin,
+      maxExecutionMs: 12000,
+    }
+  )
+
+  if (scheduleResult.unplacedBlocks.length > 0 && useLlm) {
+    try {
+      const llm = await resolveConflictsWithLLM({
+        daySlots: daySlots as Record<string, DayPeriodSlot[]>,
+        singleMin,
+        placed: scheduleResult.placedBlocks,
+        unplacedBlocks: scheduleResult.unplacedBlocks,
+      })
+      if (llm.placed.length) {
+        scheduleResult = mergePlacements(scheduleResult, llm.placed, singleMin)
+        if (llm.errors.length) {
+          scheduleResult.conflicts.push(
+            ...llm.errors.slice(0, 5).map((msg) => ({
+              allocationId: '',
+              type: 'LLM',
+              message: msg,
+            }))
+          )
+        }
+      }
+    } catch {
+      // LLM is best-effort; keep partial backtracking result
+    }
+  }
+
+  const { entries, conflicts } = scheduleResult
 
   if (conflicts.length > 0 && entries.length === 0) {
     return NextResponse.json(
@@ -140,14 +180,20 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     success: true,
     generated: saved.length,
+    schedule: saved,
     conflicts: conflicts.length > 0 ? conflicts : [],
     entries: saved,
+    stats: scheduleResult.stats,
     summary: {
       days: workingDays.length,
       allocationsScheduled: [...new Set(saved.map((e: any) => e.allocationId))].length,
       totalAllocations: allocations.length,
       teachers: [...new Set(saved.map((e: any) => e.teacherId))].length,
       classes: [...new Set(saved.map((e: any) => e.classId))].length,
+      placed: scheduleResult.stats.placed,
+      unplaced: scheduleResult.stats.unplaced,
+      backtracks: scheduleResult.stats.backtracks,
+      llmUsed: scheduleResult.stats.llmUsed,
     },
   })
 }
@@ -214,184 +260,4 @@ function buildDaySlots(
   }
 
   return daySlots
-}
-
-function generateTimetable(allocations: any[], daySlots: Record<string, any[]>, singleMin: number) {
-  const entries: any[] = []
-  const conflicts: any[] = []
-
-  const teacherBusy = new Map<string, boolean>()
-  const classBusy = new Map<string, boolean>()
-
-  const busyKey = (id: string, day: string, start: number) => `${id}|${day}|${start}`
-
-  function isTeacherBusy(teacherId: string, day: string, startMin: number, durationMin: number) {
-    for (let t = startMin; t < startMin + durationMin; t += singleMin) {
-      if (teacherBusy.has(busyKey(teacherId, day, t))) return true
-    }
-    return false
-  }
-
-  function isClassBusy(classId: string, day: string, startMin: number, durationMin: number) {
-    for (let t = startMin; t < startMin + durationMin; t += singleMin) {
-      if (classBusy.has(busyKey(classId, day, t))) return true
-    }
-    return false
-  }
-
-  function markBusy(
-    teacherId: string,
-    classId: string,
-    day: string,
-    startMin: number,
-    durationMin: number
-  ) {
-    for (let t = startMin; t < startMin + durationMin; t += singleMin) {
-      teacherBusy.set(busyKey(teacherId, day, t), true)
-      classBusy.set(busyKey(classId, day, t), true)
-    }
-  }
-
-  function tryPlace(allocation: any, periodType: string, durationMin: number) {
-    const days = Object.keys(daySlots).sort(() => Math.random() - 0.5)
-
-    for (const day of days) {
-      const slots = daySlots[day].filter((s: any) => s.type === 'period')
-
-      for (let i = 0; i <= slots.length - Math.ceil(durationMin / singleMin); i++) {
-        const slot = slots[i]
-        const startMin = slot.start
-        const endMin = startMin + durationMin
-
-        const blocksNeeded = durationMin / singleMin
-        let consecutive = true
-        for (let b = 0; b < blocksNeeded; b++) {
-          if (!slots[i + b] || slots[i + b].start !== startMin + b * singleMin) {
-            consecutive = false
-            break
-          }
-        }
-        if (!consecutive) continue
-
-        if (
-          !isTeacherBusy(String(allocation.teacherId), day, startMin, durationMin) &&
-          !isClassBusy(String(allocation.classId), day, startMin, durationMin)
-        ) {
-          markBusy(
-            String(allocation.teacherId),
-            String(allocation.classId),
-            day,
-            startMin,
-            durationMin
-          )
-          return {
-            allocationId: allocation.id,
-            teacherId: allocation.teacherId,
-            subjectId: allocation.subjectId,
-            classId: allocation.classId,
-            dayOfWeek: day,
-            startTime: minToTime(startMin),
-            endTime: minToTime(endMin),
-            durationMin,
-            periodType,
-            periodNumber: slot.periodNumber,
-          }
-        }
-      }
-    }
-    return null
-  }
-
-  const sorted = [...allocations].sort((a, b) => {
-    const priority = (x: any) =>
-      (x.triplePeriods || 0) > 0 ? 3 : (x.doublePeriods || 0) > 0 ? 2 : 1
-    return priority(b) - priority(a)
-  })
-
-  for (const allocation of sorted) {
-    const DOUBLE = singleMin * 2
-    const TRIPLE = singleMin * 3
-
-    const breakdown = normalizeAllocationPeriods({
-      id: allocation.id,
-      teacherId: allocation.teacherId,
-      classId: allocation.classId,
-      subjectId: allocation.subjectId,
-      periodsPerWeek: allocation.periodsPerWeek,
-      blockType: allocation.blockType,
-      singlePeriods: allocation.singlePeriods,
-      doublePeriods: allocation.doublePeriods,
-      triplePeriods: allocation.triplePeriods,
-    })
-
-    let placed = 0
-
-    for (let t = 0; t < breakdown.triples; t++) {
-      const entry = tryPlace(allocation, 'TRIPLE', TRIPLE)
-      if (entry) {
-        entries.push(entry)
-        placed += 3
-      } else {
-        conflicts.push({
-          allocationId: allocation.id,
-          type: 'TRIPLE',
-          message: `Could not place triple for ${allocation.teacher?.name} — ${allocation.subject?.name} (${allocation.class?.name})`,
-        })
-      }
-    }
-
-    for (let d = 0; d < breakdown.doubles; d++) {
-      const entry = tryPlace(allocation, 'DOUBLE', DOUBLE)
-      if (entry) {
-        entries.push(entry)
-        placed += 2
-      } else {
-        conflicts.push({
-          allocationId: allocation.id,
-          type: 'DOUBLE',
-          message: `Could not place double for ${allocation.teacher?.name} — ${allocation.subject?.name} (${allocation.class?.name})`,
-        })
-      }
-    }
-
-    for (let s = 0; s < breakdown.singles; s++) {
-      const entry = tryPlace(allocation, 'SINGLE', singleMin)
-      if (entry) {
-        entries.push(entry)
-        placed += 1
-      } else {
-        conflicts.push({
-          allocationId: allocation.id,
-          type: 'SINGLE',
-          message: `Could not place single for ${allocation.teacher?.name} — ${allocation.subject?.name} (${allocation.class?.name})`,
-        })
-      }
-    }
-
-    if (allocation.blockType !== 'MIXED' && placed === 0) {
-      const durMap: Record<string, number> = { SINGLE: singleMin, DOUBLE, TRIPLE }
-      const count: Record<string, number> = {
-        SINGLE: Number(allocation.periodsPerWeek || 0),
-        DOUBLE: Number(allocation.periodsPerWeek || 0) / 2,
-        TRIPLE: Number(allocation.periodsPerWeek || 0) / 3,
-      }
-      const dur = durMap[String(allocation.blockType)] || singleMin
-      const n = Math.floor(
-        count[String(allocation.blockType)] || Number(allocation.periodsPerWeek || 0)
-      )
-      for (let i = 0; i < n; i++) {
-        const entry = tryPlace(allocation, String(allocation.blockType), dur)
-        if (entry) entries.push(entry)
-        else {
-          conflicts.push({
-            allocationId: allocation.id,
-            type: allocation.blockType,
-            message: `Could not schedule ${allocation.subject?.name} for ${allocation.class?.name}`,
-          })
-        }
-      }
-    }
-  }
-
-  return { entries, conflicts }
 }

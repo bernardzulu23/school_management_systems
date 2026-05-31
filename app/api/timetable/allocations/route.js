@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { resolveBundleFromBody } from '@/lib/timetable/bundle-utils'
 
 // GET — fetch all allocations for this school (HOD sees own dept, headteacher sees all)
 export async function GET(req) {
@@ -122,56 +123,31 @@ export async function POST(req) {
     subjectId,
     classId,
     periodsPerWeek,
-    blockType,
-    singlePeriods = 0,
-    doublePeriods = 0,
-    triplePeriods = 0,
+    blockType = 'MIXED',
     term = 'Term 1',
     academicYear = new Date().getFullYear().toString(),
     notes,
   } = body
 
-  // Validate period math
-  const computedTotal = singlePeriods * 1 + doublePeriods * 2 + triplePeriods * 3
-  if (computedTotal !== periodsPerWeek && blockType === 'MIXED') {
+  const ppw = Number(periodsPerWeek)
+  if (!teacherId || !subjectId || !classId || !Number.isFinite(ppw) || ppw <= 0) {
     return NextResponse.json(
-      {
-        error: `Period mismatch: ${singlePeriods} singles + ${doublePeriods} doubles + ${triplePeriods} triples = ${computedTotal} periods, but you specified ${periodsPerWeek}`,
-      },
+      { error: 'teacherId, subjectId, classId and periodsPerWeek are required' },
       { status: 400 }
     )
   }
 
-  // For non-MIXED: auto-compute the breakdown
-  let finalSingle = singlePeriods,
-    finalDouble = doublePeriods,
-    finalTriple = triplePeriods
-  if (blockType === 'SINGLE') {
-    finalSingle = periodsPerWeek
-    finalDouble = 0
-    finalTriple = 0
-  } else if (blockType === 'DOUBLE') {
-    // must be even number
-    if (periodsPerWeek % 2 !== 0) {
-      return NextResponse.json(
-        { error: 'DOUBLE blockType requires an even number of periods' },
-        { status: 400 }
-      )
-    }
-    finalDouble = periodsPerWeek / 2
-    finalSingle = 0
-    finalTriple = 0
-  } else if (blockType === 'TRIPLE') {
-    if (periodsPerWeek % 3 !== 0) {
-      return NextResponse.json(
-        { error: 'TRIPLE blockType requires periods divisible by 3' },
-        { status: 400 }
-      )
-    }
-    finalTriple = periodsPerWeek / 3
-    finalSingle = 0
-    finalDouble = 0
+  const { bundle, error: bundleError } = resolveBundleFromBody(body, ppw)
+  if (bundleError) {
+    return NextResponse.json({ error: bundleError }, { status: 400 })
   }
+
+  const finalSingle = bundle.singles
+  const finalDouble = bundle.doubles
+  const finalTriple = bundle.triples
+  const resolvedBlockType = String(blockType || 'MIXED')
+    .trim()
+    .toUpperCase()
 
   try {
     const allocation = await prisma.teacherAllocation.upsert({
@@ -186,8 +162,8 @@ export async function POST(req) {
         },
       },
       update: {
-        periodsPerWeek,
-        blockType,
+        periodsPerWeek: ppw,
+        blockType: resolvedBlockType,
         singlePeriods: finalSingle,
         doublePeriods: finalDouble,
         triplePeriods: finalTriple,
@@ -201,8 +177,8 @@ export async function POST(req) {
         teacherId,
         subjectId,
         classId,
-        periodsPerWeek,
-        blockType,
+        periodsPerWeek: ppw,
+        blockType: resolvedBlockType,
         singlePeriods: finalSingle,
         doublePeriods: finalDouble,
         triplePeriods: finalTriple,

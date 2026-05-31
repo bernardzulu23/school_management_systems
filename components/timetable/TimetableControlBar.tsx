@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/Button'
 import { printTimetable } from '@/lib/timetable/printTimetable'
 import { LayoutGrid, Printer, Redo2, RefreshCw, Undo2, User, Users } from 'lucide-react'
 
-export type TimetableGridMode = 'master' | 'teacher' | 'class'
+export type TimetableGridMode = 'wall' | 'master' | 'teacher' | 'class'
 
 export function TimetableControlBar({
   gridMode,
@@ -30,9 +30,10 @@ export function TimetableControlBar({
   isPublished: boolean
 }) {
   const modes: { id: TimetableGridMode; label: string; icon: typeof LayoutGrid }[] = [
-    { id: 'master', label: 'School grid', icon: LayoutGrid },
+    { id: 'wall', label: 'Class wall', icon: Users },
+    { id: 'master', label: 'By period', icon: LayoutGrid },
     { id: 'teacher', label: 'Teachers', icon: User },
-    { id: 'class', label: 'Classes', icon: Users },
+    { id: 'class', label: 'One class', icon: Users },
   ]
 
   return (
