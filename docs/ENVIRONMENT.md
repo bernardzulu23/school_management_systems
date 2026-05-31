@@ -66,6 +66,7 @@ When these are unset, related features are disabled (startup still succeeds).
 | `AFRICASTALKING_API_KEY`                              | Outbound SMS                        | Both key and username needed for SMS                                    |
 | `AFRICASTALKING_USERNAME`                             | Africa's Talking account            | Sandbox available for testing                                           |
 | `EMAIL_INFO`                                          | Contact form recipient              | Defaults to info@ address in code                                       |
+| `PILOT_NOTIFY_EMAILS`                                 | Pilot / free-trial join alerts      | Comma-separated; falls back to `PLATFORM_ADMIN_EMAIL` then `EMAIL_INFO` |
 | `ALLOW_DIRECT_SCHOOL_REGISTRATION`                    | Legacy `/api/schools/register`      | Set `true` only for dev; production uses `/onboarding`                  |
 | `SENTRY_DSN`                                          | Server-side Sentry DSN              | [sentry.io](https://sentry.io) → Project → Client Keys                  |
 | `NEXT_PUBLIC_SENTRY_DSN`                              | Browser Sentry DSN (same value)     | Required for client error capture                                       |

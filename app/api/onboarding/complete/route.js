@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import crypto from 'crypto'
 import { verifyOnboardingToken } from '@/lib/middleware/onboardingAuth'
-import { sendSchoolPortalLinkEmail } from '@/config/email'
+import { sendSchoolPortalLinkEmail, sendPilotSchoolJoinedEmail } from '@/config/email'
+import { getPilotNotifyRecipients } from '@/lib/platform/pilotNotifyEmails'
 import { trialEndsAtFromStart } from '@/lib/billing/subscription'
 import {
   buildWelcomeSmsMessage,
@@ -196,6 +197,34 @@ export async function POST(request) {
       loginUrl,
       adminName,
     })
+
+    if (isTrial) {
+      try {
+        const recipients = getPilotNotifyRecipients()
+        if (recipients.length) {
+          const pilotSchoolCount = await prisma.school.count({
+            where: { plan: 'trial', active: true },
+          })
+          await sendPilotSchoolJoinedEmail({
+            recipients,
+            schoolName: created.name,
+            subdomain: created.subdomain,
+            adminName,
+            adminEmail: reg.email,
+            adminPhone: adminPhone ? String(adminPhone).trim() : null,
+            level,
+            province,
+            district,
+            loginUrl,
+            pilotSchoolCount,
+          })
+        } else {
+          log.warn('pilot-notify-skipped', { reason: 'no PILOT_NOTIFY_EMAILS configured' })
+        }
+      } catch (notifyErr) {
+        captureError(notifyErr, { route, schoolId: created.id, event: 'pilot_notify' })
+      }
+    }
 
     try {
       const recipients = normalizePhoneNumbers(adminPhone)

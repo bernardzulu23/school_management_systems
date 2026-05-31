@@ -246,3 +246,79 @@ export async function sendPublicEnquiryEmail({ name, email, message, phone }) {
 
   return sentToStaff
 }
+
+/**
+ * Notify platform operators when a school completes pilot (free trial) onboarding.
+ * @param {object} params
+ * @param {string[]} params.recipients
+ * @param {number} [params.pilotSchoolCount] - active trial schools after this join
+ */
+export async function sendPilotSchoolJoinedEmail({
+  recipients,
+  schoolName,
+  subdomain,
+  adminName,
+  adminEmail,
+  adminPhone,
+  level,
+  province,
+  district,
+  loginUrl,
+  pilotSchoolCount,
+}) {
+  const to = (recipients || []).filter(Boolean)
+  if (!to.length) {
+    console.warn('[email] No PILOT_NOTIFY_EMAILS — pilot join alert skipped')
+    return false
+  }
+
+  const safe = (v) =>
+    String(v || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+
+  const countLine =
+    typeof pilotSchoolCount === 'number'
+      ? `<p style="margin: 16px 0; padding: 12px; background: #fef3c7; border-radius: 8px; font-size: 15px;">
+           <strong>Pilot schools (active trial):</strong> ${pilotSchoolCount}
+         </p>`
+      : ''
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 640px; margin: 0 auto;">
+      <div style="background-color: #2d1b4e; color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <h2 style="margin: 0;">New pilot school joined</h2>
+      </div>
+      <div style="background-color: #f5f5f5; padding: 28px; border-radius: 0 0 10px 10px;">
+        <p style="margin-top: 0;">A school has completed free-trial onboarding on ZSMS.</p>
+        ${countLine}
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+          <tr><td style="padding: 8px 0; color: #64748b; width: 140px;">School</td><td style="padding: 8px 0;"><strong>${safe(schoolName)}</strong></td></tr>
+          <tr><td style="padding: 8px 0; color: #64748b;">Subdomain</td><td style="padding: 8px 0;">${safe(subdomain)}</td></tr>
+          <tr><td style="padding: 8px 0; color: #64748b;">Level</td><td style="padding: 8px 0;">${safe(level)}</td></tr>
+          <tr><td style="padding: 8px 0; color: #64748b;">Location</td><td style="padding: 8px 0;">${safe(province)}${district ? `, ${safe(district)}` : ''}</td></tr>
+          <tr><td style="padding: 8px 0; color: #64748b;">Headteacher</td><td style="padding: 8px 0;">${safe(adminName)}</td></tr>
+          <tr><td style="padding: 8px 0; color: #64748b;">Email</td><td style="padding: 8px 0;"><a href="mailto:${safe(adminEmail)}">${safe(adminEmail)}</a></td></tr>
+          ${adminPhone ? `<tr><td style="padding: 8px 0; color: #64748b;">Phone</td><td style="padding: 8px 0;">${safe(adminPhone)}</td></tr>` : ''}
+          <tr><td style="padding: 8px 0; color: #64748b;">Portal</td><td style="padding: 8px 0;"><a href="${safe(loginUrl)}">${safe(loginUrl)}</a></td></tr>
+        </table>
+        <div style="text-align: center; margin: 24px 0;">
+          <a href="${safe(loginUrl)}" style="background-color: #f59e0b; color: #111; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+            Open school portal
+          </a>
+        </div>
+        <p style="color: #64748b; font-size: 12px; margin-bottom: 0;">
+          View all schools in the <a href="https://${safe(process.env.APP_BASE_DOMAIN || process.env.BASE_DOMAIN || 'bluepeacktechnologies.com')}/platform/dashboard">platform dashboard</a>.
+        </p>
+      </div>
+    </div>
+  `
+
+  return sendEmail({
+    from: getNoreplyFrom(),
+    to,
+    subject: `[ZSMS Pilot] New school: ${schoolName}`,
+    html,
+  })
+}
