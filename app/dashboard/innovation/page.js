@@ -1,6 +1,8 @@
 'use client'
 
 import { useAuth } from '@/lib/auth'
+import { isEnabled } from '@/lib/featureFlags'
+import { ComingSoon } from '@/components/ui/ComingSoon'
 import InnovationHub from '@/components/innovation/InnovationHub'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
@@ -16,6 +18,14 @@ export default function InnovationPage() {
           <LoadingSpinner size="xl" color="white" label="Loading Innovation Hub" />
         </div>
       </div>
+    )
+  }
+
+  if (!isEnabled('INNOVATION_HUB')) {
+    return (
+      <DashboardLayout title="Innovation Hub">
+        <ComingSoon featureName="Innovation Hub" />
+      </DashboardLayout>
     )
   }
 

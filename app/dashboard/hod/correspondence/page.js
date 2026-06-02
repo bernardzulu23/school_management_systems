@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { hodFeatureGate } from '@/lib/hod/gateHodFeature'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -34,6 +35,10 @@ export default function CorrespondencePage() {
     incoming: [],
     outgoing: [],
   })
+  const gated = hodFeatureGate('correspondence')
+  if (gated) {
+    return <DashboardLayout title="Correspondence">{gated}</DashboardLayout>
+  }
 
   const getStatusIcon = (status) => {
     switch (status) {

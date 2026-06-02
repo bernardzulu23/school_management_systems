@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
@@ -17,14 +17,15 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+  const db = getTenantClient(schoolId)
 
-  const student = await prisma.student.findFirst({
+  const student = await db.student.findFirst({
     where: { userId: auth.user.id, schoolId },
     select: { id: true },
   })
   if (!student) throw new ApiError('Student profile not found', 404)
 
-  const materials = await prisma.studyMaterial.findMany({
+  const materials = await db.studyMaterial.findMany({
     where: { schoolId },
     orderBy: { uploadDate: 'desc' },
   })
@@ -32,7 +33,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const ids = materials.map((m) => m.id)
 
   const interactions = ids.length
-    ? await prisma.studentMaterial.findMany({
+    ? await db.studentMaterial.findMany({
         where: { schoolId, studentId: student.id, studyMaterialId: { in: ids } },
         select: {
           studyMaterialId: true,
@@ -46,7 +47,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const interactionByMaterialId = new Map(interactions.map((i) => [String(i.studyMaterialId), i]))
 
   const grouped = ids.length
-    ? await prisma.studentMaterial.groupBy({
+    ? await db.studentMaterial.groupBy({
         by: ['studyMaterialId'],
         where: { schoolId, studyMaterialId: { in: ids } },
         _sum: { downloads: true },
@@ -94,8 +95,9 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+  const db = getTenantClient(schoolId)
 
-  const student = await prisma.student.findFirst({
+  const student = await db.student.findFirst({
     where: { userId: auth.user.id, schoolId },
     select: { id: true },
   })
@@ -109,7 +111,7 @@ export const POST = withErrorHandler(async function POST(request) {
     throw new ApiError('Invalid request', 400)
   }
 
-  const existing = await prisma.studentMaterial.findUnique({
+  const existing = await db.studentMaterial.findUnique({
     where: {
       studentId_studyMaterialId: {
         studentId: student.id,
@@ -120,12 +122,12 @@ export const POST = withErrorHandler(async function POST(request) {
 
   if (act === 'bookmark') {
     if (existing) {
-      await prisma.studentMaterial.update({
+      await db.studentMaterial.update({
         where: { id: existing.id },
         data: { isBookmarked: !existing.isBookmarked, lastAccessed: new Date() },
       })
     } else {
-      await prisma.studentMaterial.create({
+      await db.studentMaterial.create({
         data: {
           schoolId,
           studentId: student.id,
@@ -139,7 +141,7 @@ export const POST = withErrorHandler(async function POST(request) {
 
   if (act === 'download') {
     if (existing) {
-      await prisma.studentMaterial.update({
+      await db.studentMaterial.update({
         where: { id: existing.id },
         data: {
           isDownloaded: true,
@@ -148,7 +150,7 @@ export const POST = withErrorHandler(async function POST(request) {
         },
       })
     } else {
-      await prisma.studentMaterial.create({
+      await db.studentMaterial.create({
         data: {
           schoolId,
           studentId: student.id,

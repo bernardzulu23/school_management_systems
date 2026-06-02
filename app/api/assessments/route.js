@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { buildAssessmentInteractiveDescription } from '@/lib/assessments/assessmentInteractive'
@@ -14,6 +14,7 @@ export async function GET(request) {
     if (!tenant.ok) return tenant.response
     const schoolId = tenant.schoolId
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+    const db = getTenantClient(schoolId)
 
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page')) || 1
@@ -30,13 +31,13 @@ export async function GET(request) {
     }
 
     const [assessments, total] = await Promise.all([
-      prisma.assessment.findMany({
+      db.assessment.findMany({
         where,
         orderBy: { date: 'desc' },
         skip,
         take: limit,
       }),
-      prisma.assessment.count({ where }),
+      db.assessment.count({ where }),
     ])
 
     return NextResponse.json({
@@ -67,6 +68,7 @@ export async function POST(request) {
     if (!tenant.ok) return tenant.response
     const schoolId = tenant.schoolId
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+    const db = getTenantClient(schoolId)
 
     const data = await request.json()
 
@@ -81,12 +83,12 @@ export async function POST(request) {
     }
 
     const classRecord = classId
-      ? await prisma.class.findFirst({
+      ? await db.class.findFirst({
           where: { schoolId, id: classId },
           select: { id: true, name: true },
         })
       : className
-        ? await prisma.class.findFirst({
+        ? await db.class.findFirst({
             where: { schoolId, name: { equals: className, mode: 'insensitive' } },
             select: { id: true, name: true },
           })
@@ -100,7 +102,7 @@ export async function POST(request) {
           ? String(data.description)
           : null
 
-    const newAssessment = await prisma.assessment.create({
+    const newAssessment = await db.assessment.create({
       data: {
         title: data.title,
         type: data.type || 'quiz',

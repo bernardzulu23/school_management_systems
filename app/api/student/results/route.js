@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
@@ -17,9 +17,10 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+  const db = getTenantClient(schoolId)
 
   // Resolve student profile
-  const student = await prisma.student.findFirst({
+  const student = await db.student.findFirst({
     where: { userId: auth.user.id, schoolId },
     select: { id: true },
   })
@@ -34,7 +35,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const skip = (page - 1) * limit
 
   const [results, total] = await Promise.all([
-    prisma.result.findMany({
+    db.result.findMany({
       where: { studentId: student.id, schoolId },
       include: {
         subject: {
@@ -48,7 +49,7 @@ export const GET = withErrorHandler(async function GET(request) {
       skip,
       take: limit,
     }),
-    prisma.result.count({ where: { studentId: student.id, schoolId } }),
+    db.result.count({ where: { studentId: student.id, schoolId } }),
   ])
 
   // Transform results to be more frontend-friendly

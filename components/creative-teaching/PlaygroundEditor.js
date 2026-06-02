@@ -116,6 +116,7 @@ export default function PlaygroundEditor({
   return (
     <EditorErrorBoundary value={value} onChange={onChange} height={height} language={language}>
       <MonacoEditor
+        key={language}
         height={height}
         language={language}
         value={value}
@@ -123,6 +124,9 @@ export default function PlaygroundEditor({
         theme={theme}
         options={options}
         loading={null}
+        beforeMount={(monaco) => {
+          if (monaco?.editor?.setTheme) monaco.editor.setTheme(theme)
+        }}
       />
     </EditorErrorBoundary>
   )

@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { validateBody } from '@/lib/middleware/validate-request'
@@ -18,8 +18,9 @@ export async function GET(request) {
     if (!tenant.ok) return tenant.response
     const schoolId = tenant.schoolId
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+    const db = getTenantClient(schoolId)
 
-    const student = await prisma.student.findFirst({
+    const student = await db.student.findFirst({
       where: { userId: auth.user.id, schoolId },
       select: { id: true, name: true, class: true },
     })
@@ -34,13 +35,13 @@ export async function GET(request) {
     const skip = (page - 1) * limit
 
     const [goals, total] = await Promise.all([
-      prisma.goal.findMany({
+      db.goal.findMany({
         where: { schoolId, studentId: student.id },
         orderBy: { createdAt: 'desc' },
         skip,
         take: limit,
       }),
-      prisma.goal.count({ where: { schoolId, studentId: student.id } }),
+      db.goal.count({ where: { schoolId, studentId: student.id } }),
     ])
 
     // Group goals by type for the frontend
@@ -104,8 +105,9 @@ export async function POST(request) {
     if (!tenant.ok) return tenant.response
     const schoolId = tenant.schoolId
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+    const db = getTenantClient(schoolId)
 
-    const student = await prisma.student.findFirst({
+    const student = await db.student.findFirst({
       where: { userId: auth.user.id, schoolId },
       select: { id: true },
     })
@@ -119,7 +121,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Invalid targetDate' }, { status: 400 })
     }
 
-    const newGoal = await prisma.goal.create({
+    const newGoal = await db.goal.create({
       data: {
         schoolId,
         studentId: student.id,
@@ -152,8 +154,9 @@ export async function PUT(request) {
     if (!tenant.ok) return tenant.response
     const schoolId = tenant.schoolId
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+    const db = getTenantClient(schoolId)
 
-    const student = await prisma.student.findFirst({
+    const student = await db.student.findFirst({
       where: { userId: auth.user.id, schoolId },
       select: { id: true },
     })
@@ -194,13 +197,13 @@ export async function PUT(request) {
       data.progress = Math.round(p)
     }
 
-    const updated = await prisma.goal.updateMany({
+    const updated = await db.goal.updateMany({
       where: { id, schoolId, studentId: student.id },
       data,
     })
     if (updated.count === 0) return NextResponse.json({ error: 'Goal not found' }, { status: 404 })
 
-    const updatedGoal = await prisma.goal.findFirst({
+    const updatedGoal = await db.goal.findFirst({
       where: { id, schoolId, studentId: student.id },
     })
     return NextResponse.json({ success: true, data: formatGoal(updatedGoal) })
@@ -222,8 +225,9 @@ export async function DELETE(request) {
     if (!tenant.ok) return tenant.response
     const schoolId = tenant.schoolId
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+    const db = getTenantClient(schoolId)
 
-    const student = await prisma.student.findFirst({
+    const student = await db.student.findFirst({
       where: { userId: auth.user.id, schoolId },
       select: { id: true },
     })
@@ -234,7 +238,7 @@ export async function DELETE(request) {
 
     if (!id) return NextResponse.json({ error: 'Goal ID required' }, { status: 400 })
 
-    const deleted = await prisma.goal.deleteMany({
+    const deleted = await db.goal.deleteMany({
       where: { id, schoolId, studentId: student.id },
     })
     if (deleted.count === 0) return NextResponse.json({ error: 'Goal not found' }, { status: 404 })

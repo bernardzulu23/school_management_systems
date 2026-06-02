@@ -210,7 +210,7 @@ seedCreativeFeatures(schoolIdArg)
     console.error(e)
     if (String(e?.message || '').includes("Can't reach database server")) {
       console.error(
-        'Tip: run this with Railway env/network via: railway run node seed-creative-features.js'
+        'Tip: run with production env loaded: vercel env pull .env.local && node seed-creative-features.js'
       )
     }
     process.exit(1)

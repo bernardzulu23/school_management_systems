@@ -322,3 +322,24 @@ export async function sendPilotSchoolJoinedEmail({
     html,
   })
 }
+
+export async function sendSmsLowBalanceEmail({ to, schoolName, balance, threshold }) {
+  const list = Array.isArray(to) ? to : [to]
+  const recipients = list.map((e) => String(e).trim()).filter(Boolean)
+  if (!recipients.length) return false
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <div style="background-color: #7c2d12; color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <h2 style="margin: 0;">SMS credits running low</h2>
+      </div>
+      <div style="background-color: #fff7ed; padding: 24px; border-radius: 0 0 10px 10px;">
+        <p><strong>${schoolName}</strong> has <strong>${balance}</strong> SMS credit(s) remaining.</p>
+        <p>Your alert threshold is set to <strong>${threshold}</strong>. Bulk parent messages may stop until credits are topped up.</p>
+        <p style="color: #64748b; font-size: 13px;">Top up via your platform contact or school billing. You can adjust the alert email in SMS settings.</p>
+      </div>
+    </div>
+  `
+
+  return sendNoreplyEmail(recipients, `[ZSMS] Low SMS balance — ${schoolName}`, html)
+}

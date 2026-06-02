@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
@@ -18,8 +18,9 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+  const db = getTenantClient(schoolId)
 
-  const student = await prisma.student.findFirst({
+  const student = await db.student.findFirst({
     where: { userId: auth.user.id, schoolId },
     select: { id: true },
   })
@@ -27,7 +28,7 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!student) throw new ApiError('Student profile not found', 404)
 
   const names = await getStudentSubjectNames(student.id, schoolId)
-  const subjects = await prisma.subject.findMany({
+  const subjects = await db.subject.findMany({
     where: { schoolId, name: { in: names, mode: 'insensitive' } },
     include: { teacher: { include: { user: true } } },
     take: 500,

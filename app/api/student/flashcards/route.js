@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
@@ -43,8 +43,9 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+  const db = getTenantClient(schoolId)
 
-  const student = await prisma.student.findFirst({
+  const student = await db.student.findFirst({
     where: { schoolId, userId: auth.user.id },
     select: { id: true },
   })
@@ -54,7 +55,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const dateKey = searchParams.get('date') || deckDateKey()
 
   const day = deckDateUtc(new Date(dateKey))
-  const decks = await prisma.studentFlashcardDeck.findMany({
+  const decks = await db.studentFlashcardDeck.findMany({
     where: { schoolId, studentId: student.id, deckDate: day },
     orderBy: { subjectName: 'asc' },
   })
@@ -88,8 +89,9 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+  const db = getTenantClient(schoolId)
 
-  const student = await prisma.student.findFirst({
+  const student = await db.student.findFirst({
     where: { schoolId, userId: auth.user.id },
     select: { id: true },
   })
@@ -109,7 +111,7 @@ export const POST = withErrorHandler(async function POST(request) {
   )
   const day = deckDateUtc(new Date(body.date || deckDateKey()))
 
-  const existing = await prisma.studentFlashcardDeck.findFirst({
+  const existing = await db.studentFlashcardDeck.findFirst({
     where: {
       studentId: student.id,
       subjectName,
@@ -133,7 +135,7 @@ export const POST = withErrorHandler(async function POST(request) {
     )
   }
 
-  const limitBlock = await checkAILimit(schoolId)
+  const limitBlock = await checkAILimit(schoolId, String(auth.user?.id || auth.user?.userId || ''))
   if (limitBlock) return limitBlock
 
   // Generate the flashcards with AI (RAG-grounded on school materials when available).
@@ -175,12 +177,12 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!validated.ok) throw new ApiError(validated.error, 502)
   const cards = validated.cards
 
-  const subject = await prisma.subject.findFirst({
+  const subject = await db.subject.findFirst({
     where: { schoolId, name: { equals: subjectName, mode: 'insensitive' } },
     select: { id: true },
   })
 
-  const deck = await prisma.studentFlashcardDeck.create({
+  const deck = await db.studentFlashcardDeck.create({
     data: {
       studentId: student.id,
       schoolId,

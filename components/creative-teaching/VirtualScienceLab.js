@@ -269,7 +269,10 @@ export default function VirtualScienceLab() {
         <iframe
           src={activeLab.url}
           style={{ flex: 1, border: 'none', width: '100%' }}
-          title={activeLab.name}
+          title="PhET Virtual Science Laboratory"
+          sandbox="allow-scripts allow-same-origin"
+          referrerPolicy="no-referrer"
+          loading="lazy"
           allow="accelerometer; camera; microphone"
         />
       </div>

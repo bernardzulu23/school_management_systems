@@ -1,4 +1,5 @@
 export const dynamic = 'force-dynamic'
+import { withAILimits } from '@/lib/middleware/withAILimits'
 import { NextResponse } from 'next/server'
 import crypto from 'crypto'
 import prisma from '@/lib/prisma'
@@ -21,7 +22,7 @@ const ECZ_PRACTICE_SYSTEM =
   'You are an ECZ examination specialist for Zambian schools. Create valid practice papers with Zambian context. Match the requested exam level exactly.'
 import { isValidEczExamLevel, normalizeEczExamLevel } from '@/lib/ecz/ecz-practice-levels'
 
-export async function POST(request) {
+export const POST = withAILimits(async function POST(request) {
   const user = await getAuthUser(request)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   if (
@@ -57,7 +58,7 @@ export async function POST(request) {
   const blocked = await requireFeature(schoolId, 'ecz-practice')
   if (blocked) return blocked
 
-  const limitBlock = await checkAILimit(schoolId)
+  const limitBlock = await checkAILimit(schoolId, String(auth.user?.id || auth.user?.userId || ''))
   if (limitBlock) return limitBlock
 
   try {
@@ -139,4 +140,4 @@ export async function POST(request) {
       { status: 500 }
     )
   }
-}
+})

@@ -40,7 +40,7 @@
 6. The CSP has been updated to include connect-src for API connections:
    ```javascript
    'Content-Security-Policy':
-     "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://images.unsplash.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://*.railway.app http://localhost:*;",
+     "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://images.unsplash.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://*.vercel.app https://*.bluepeacktechnologies.com http://localhost:*;",
    ```
 
 ## Solution Implemented
@@ -53,7 +53,7 @@
 ### For the SES Error:
 
 1. ✅ Modified the Content Security Policy to be less restrictive
-2. ✅ Added connect-src directive to allow API connections to localhost and railway.app domains
+2. ✅ Added connect-src directive to allow API connections to localhost and production domains
 
 ## Future Considerations
 

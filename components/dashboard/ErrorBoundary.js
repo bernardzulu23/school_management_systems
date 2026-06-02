@@ -6,6 +6,25 @@ import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { logger } from '@/lib/utils/logger'
 
+function reportToSentry(error, errorInfo) {
+  if (process.env.NODE_ENV !== 'production' || !process.env.NEXT_PUBLIC_SENTRY_DSN) return
+  import('@sentry/nextjs')
+    .then((Sentry) => {
+      Sentry.captureException(error, { extra: { componentStack: errorInfo?.componentStack } })
+    })
+    .catch(() => {})
+}
+
+function openSentryReportDialog() {
+  import('@sentry/nextjs')
+    .then((Sentry) => {
+      if (typeof Sentry.showReportDialog === 'function') {
+        Sentry.showReportDialog()
+      }
+    })
+    .catch(() => {})
+}
+
 export class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props)
@@ -18,6 +37,7 @@ export class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     logger.error('Dashboard Error Boundary caught an error', error, errorInfo)
+    reportToSentry(error, errorInfo)
   }
 
   render() {
@@ -34,18 +54,25 @@ export class ErrorBoundary extends React.Component {
               Something went wrong
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-royalPurple-dangerTx mb-4">
-              We encountered an error while loading this component.
+          <CardContent className="space-y-3">
+            <p className="text-royalPurple-dangerTx">
+              We encountered an error while loading this page. Our team has been notified.
             </p>
-            <Button
-              variant="outline"
-              onClick={() => this.setState({ hasError: false, error: null })}
-              className="flex items-center"
-            >
-              <RefreshCcw className="h-4 w-4 mr-2" />
-              Try again
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="outline"
+                onClick={() => this.setState({ hasError: false, error: null })}
+                className="flex items-center"
+              >
+                <RefreshCcw className="h-4 w-4 mr-2" />
+                Try again
+              </Button>
+              {process.env.NEXT_PUBLIC_SENTRY_DSN ? (
+                <Button type="button" variant="ghost" onClick={openSentryReportDialog}>
+                  Report feedback
+                </Button>
+              ) : null}
+            </div>
           </CardContent>
         </Card>
       )

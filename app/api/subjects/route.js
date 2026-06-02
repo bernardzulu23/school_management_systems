@@ -1,6 +1,8 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { revalidateTag } from 'next/cache'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
+import { getCachedSubjects } from '@/lib/cache/subjects'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
@@ -19,6 +21,7 @@ export async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  const db = getTenantClient(schoolId)
 
   const usedCodes = new Set()
   const createData = []
@@ -41,17 +44,15 @@ export async function GET(request) {
   }
 
   if (createData.length > 0) {
-    await prisma.subject.createMany({
+    await db.subject.createMany({
       data: createData,
       skipDuplicates: true,
     })
+    revalidateTag(`subjects-${schoolId}`)
+    revalidateTag('subjects')
   }
 
-  const subjects = await prisma.subject.findMany({
-    where: { schoolId },
-    orderBy: { name: 'asc' },
-    select: { id: true, name: true, code: true },
-  })
+  const subjects = await getCachedSubjects(schoolId)
 
   return NextResponse.json({ success: true, data: subjects })
 }
@@ -68,6 +69,7 @@ export async function POST(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  const db = getTenantClient(schoolId)
 
   const { data: body, error: validationError } = await validateBody(request, CreateSubjectSchema)
   if (validationError) return validationError
@@ -77,7 +79,7 @@ export async function POST(request) {
   const description = body.description ? String(body.description).trim() : null
 
   try {
-    const subject = await prisma.subject.upsert({
+    const subject = await db.subject.upsert({
       where: { schoolId_name: { schoolId, name } },
       create: {
         schoolId,
@@ -92,6 +94,8 @@ export async function POST(request) {
       },
       select: { id: true, name: true, code: true, description: true },
     })
+    revalidateTag(`subjects-${schoolId}`)
+    revalidateTag('subjects')
     return NextResponse.json({ success: true, data: subject }, { status: 201 })
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })

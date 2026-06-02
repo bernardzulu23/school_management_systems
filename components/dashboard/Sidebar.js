@@ -152,7 +152,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Results', href: '/dashboard/teacher/results', icon: BarChart3 },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
-        { name: 'Attendance', href: '/dashboard/teacher/attendance', icon: UserCheck },
+        { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
         { name: 'Payments', href: '/dashboard/payments', icon: CreditCard },
         { name: 'Term reports', href: '/dashboard/teacher/term-reports', icon: FileText },
       ],
@@ -211,7 +211,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
                   <GraduationCap className="h-5 w-5 text-royalPurple-text2" />
                 </div>
                 <span className="font-bold text-lg tracking-tight text-royalPurple-text1">
-                  EduZambia
+                  ZSMS
                 </span>
               </>
             )}

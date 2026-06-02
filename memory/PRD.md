@@ -40,7 +40,7 @@ The subjects are not displaying in the Teaching Assignments section of the teach
    - Application uses PostgreSQL (not MongoDB)
    - Emergent only provides managed MongoDB
    - **Options**:
-     - Use external PostgreSQL (Railway already configured in .env)
+     - Use external PostgreSQL (Neon — see `DATABASE_URL` in `.env.example`)
      - Migrate to MongoDB (major refactor)
 
 2. **Supervisor Configuration**

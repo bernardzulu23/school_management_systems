@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { RefreshControl, ScrollView, Text, View } from 'react-native'
 import { router, useFocusEffect } from 'expo-router'
 import { BrutalButton } from '@/components/BrutalButton'
+import { WebAppBanner } from '@/components/WebAppBanner'
 import { useSessionStore } from '@/store/sessionStore'
 import { useOfflineQueue } from '@/store/offlineQueue'
 import { globalStyles } from '@/theme/styles'
@@ -28,6 +29,7 @@ export default function HomeScreen() {
     >
       <Text style={globalStyles.title}>{context?.school?.name || 'ZSMS Teacher'}</Text>
       <Text style={globalStyles.subtitle}>Welcome, {context?.user?.name || 'Teacher'}</Text>
+      <WebAppBanner />
       <View style={globalStyles.card}>
         <Text style={{ fontWeight: '700', color: '#111' }}>Today</Text>
         <Text style={globalStyles.subtitle}>{summary.message}</Text>

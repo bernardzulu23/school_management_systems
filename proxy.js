@@ -26,6 +26,8 @@ const PUBLIC_PATHS = [
   '/api/csrf-token',
   '/api/sms/inbound',
   '/api/sms/delivery',
+  '/api/sms/queue-worker',
+  '/api/sms/broadcast-dispatcher',
   '/api/public',
   '/api/public/features',
   '/api/public/platform-stats',
@@ -60,6 +62,8 @@ const CSRF_EXEMPT_PATHS = [
   '/api/onboarding/lipila/callback',
   '/api/sms/inbound',
   '/api/sms/delivery',
+  '/api/sms/queue-worker',
+  '/api/sms/broadcast-dispatcher',
   '/api/health',
   '/api/ping',
 ]

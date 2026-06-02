@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { getCachedPublishedTimetableEntries } from '@/lib/cache/timetable'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
@@ -172,19 +173,40 @@ export async function GET(req) {
     where.teacherId = { in: teacherUserIds }
   }
 
-  const entries = await prisma.timetableAllocationEntry.findMany({
-    where,
-    include: {
-      allocation: {
-        include: {
-          teacher: { select: { id: true, name: true } },
-          subject: { select: { id: true, name: true, code: true } },
-          class: { select: { id: true, name: true } },
+  let entries
+  if (status === 'published') {
+    const cached = await getCachedPublishedTimetableEntries(schoolId, term, academicYear)
+    entries = cached.filter((row) => {
+      if (where.teacherId && String(row.teacherId) !== String(where.teacherId)) return false
+      if (where.teacherId?.in && !where.teacherId.in.map(String).includes(String(row.teacherId)))
+        return false
+      if (where.classId && String(row.classId) !== String(where.classId)) return false
+      if (where.subjectId?.in) {
+        const allowed = where.subjectId.in.map(String)
+        if (!allowed.includes(String(row.subjectId))) return false
+      }
+      return true
+    })
+    entries.sort((a, b) => {
+      const day = (a.dayOfWeek || 0) - (b.dayOfWeek || 0)
+      if (day !== 0) return day
+      return (a.periodNumber || 0) - (b.periodNumber || 0)
+    })
+  } else {
+    entries = await prisma.timetableAllocationEntry.findMany({
+      where,
+      include: {
+        allocation: {
+          include: {
+            teacher: { select: { id: true, name: true } },
+            subject: { select: { id: true, name: true, code: true } },
+            class: { select: { id: true, name: true } },
+          },
         },
       },
-    },
-    orderBy: [{ dayOfWeek: 'asc' }, { periodNumber: 'asc' }],
-  })
+      orderBy: [{ dayOfWeek: 'asc' }, { periodNumber: 'asc' }],
+    })
+  }
 
   let assignments = mapDbEntriesToAssignments(entries)
 

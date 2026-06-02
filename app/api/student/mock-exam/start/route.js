@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
@@ -25,6 +25,7 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+  const db = getTenantClient(schoolId)
 
   const blocked = await requireFeature(schoolId, 'ecz-practice')
   if (blocked) return blocked
@@ -42,13 +43,13 @@ export const POST = withErrorHandler(async function POST(request) {
   const body = await parseBodyOrThrow(request, StartMockExamSchema)
   const examLevel = normalizeEczExamLevel(body.examLevel || 'grade9')
 
-  const student = await prisma.student.findFirst({
+  const student = await db.student.findFirst({
     where: { schoolId, userId: auth.user.id },
     select: { id: true },
   })
   if (!student) throw new ApiError('Student profile not found', 404)
 
-  const inProgress = await prisma.mockExamAttempt.findFirst({
+  const inProgress = await db.mockExamAttempt.findFirst({
     where: { schoolId, studentId: student.id, status: 'in_progress' },
     select: { id: true },
   })
@@ -75,7 +76,7 @@ export const POST = withErrorHandler(async function POST(request) {
     0
   )
 
-  const attempt = await prisma.mockExamAttempt.create({
+  const attempt = await db.mockExamAttempt.create({
     data: {
       schoolId,
       studentId: student.id,

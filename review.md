@@ -270,12 +270,12 @@ The web app remains the primary admin and student surface; mobile targets field 
 
 ## 9. Deployment and operations
 
-| Target                           | Status                                           |
-| -------------------------------- | ------------------------------------------------ |
-| **Vercel + Neon PostgreSQL**     | Recommended (`docs/doc/VERCEL_DEPLOY.md`)        |
-| **Docker Compose**               | Postgres + web + solver (`docker-compose.yml`)   |
-| **Cloudflare Workers / Railway** | Documented as deprecated; migrated toward Vercel |
-| **Custom server**                | `server.js` for `0.0.0.0` binding in containers  |
+| Target                       | Status                                                          |
+| ---------------------------- | --------------------------------------------------------------- |
+| **Vercel + Neon PostgreSQL** | Recommended (`docs/doc/VERCEL_DEPLOY.md`)                       |
+| **Docker Compose**           | Postgres + web + solver (`docker-compose.yml`)                  |
+| **Legacy Railway hosting**   | Removed; production is **Vercel** (app) + **Neon** (PostgreSQL) |
+| **Custom server**            | `server.js` for `0.0.0.0` binding in containers                 |
 
 **Required production env (non-exhaustive):**
 

@@ -8,6 +8,10 @@
     {
       "path": "/api/cron/ecz-reminder",
       "schedule": "0 6 15 1 *"
+    },
+    {
+      "path": "/api/cron/sms-low-balance",
+      "schedule": "0 7 * * *"
     }
   ],
   "build": {

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { hodFeatureGate } from '@/lib/hod/gateHodFeature'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -25,6 +26,10 @@ export default function DailyRoutinePage() {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
   const [filterStatus, setFilterStatus] = useState('all')
   const [activeTab, setActiveTab] = useState('today')
+  const gated = hodFeatureGate('daily-routine')
+  if (gated) {
+    return <DashboardLayout title="Daily Routine">{gated}</DashboardLayout>
+  }
 
   // Sample daily routine data
   const routineData = {

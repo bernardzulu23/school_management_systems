@@ -3,39 +3,52 @@ import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'react-hot-toast'
 
+const SITE_DESCRIPTION =
+  'The complete school management platform for Zambian primary and secondary schools. ECZ SBA, CBC curriculum, attendance, timetables, and AI tools — built for Zambia.'
+
+const metadataBase = new URL(
+  process.env.NEXT_PUBLIC_APP_URL ||
+    process.env.NEXT_PUBLIC_APP_ORIGIN ||
+    'https://www.bluepeacktechnologies.com'
+)
+
 // Validate on server startup — throws if required vars are missing
 if (typeof window === 'undefined') {
   validateEnv()
 }
 
 export const metadata = {
+  metadataBase,
   icons: {
     icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
     shortcut: '/favicon.svg',
   },
-  title: 'School Management System - Zambia',
-  description:
-    'Complete school management solution built with Next.js for Zambian schools, supporting rural education, health, and nutrition.',
+  title: {
+    default: 'Zambian School Management System | Blue Peak Technologies',
+    template: '%s | ZSMS',
+  },
+  description: SITE_DESCRIPTION,
   openGraph: {
-    title: 'School Management System - Zambia',
-    description: 'Complete school management solution built with Next.js for Zambian schools.',
-    url: 'https://zambianschool.com',
-    siteName: 'EduZambia',
+    type: 'website',
+    locale: 'en_ZM',
+    url: '/',
+    siteName: 'Blue Peak Technologies — ZSMS',
+    title: 'Zambian School Management System',
+    description: SITE_DESCRIPTION,
     images: [
       {
-        url: 'https://zambianschool.com/og-image.jpg',
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
+        alt: 'ZSMS — Zambian School Management System',
       },
     ],
-    locale: 'en_ZM',
-    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'School Management System - Zambia',
-    description: 'Complete school management solution built with Next.js for Zambian schools.',
-    images: ['https://zambianschool.com/twitter-image.jpg'],
+    title: 'Zambian School Management System',
+    description: SITE_DESCRIPTION,
+    images: ['/og-image.jpg'],
   },
 }
 

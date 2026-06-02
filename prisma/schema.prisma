@@ -121,6 +121,9 @@ model School {
   specialAccommodations SpecialAccommodation[]
   questionBanks        QuestionBank[]
   planPayments         SchoolPlanPayment[]
+  smsSettings          SchoolSmsSettings?
+  smsBroadcasts        SmsBroadcast[]
+  smsLogs              SmsLog[]
 
   @@index([subdomain])
   @@index([active])
@@ -2348,4 +2351,78 @@ model QuestionBank {
   @@index([schoolId])
   @@index([subjectId])
   @@index([subjectName])
+}
+
+// ─── SMS broadcast engine (QStash + Africa's Talking) ───────────────────────
+
+model SchoolSmsSettings {
+  schoolId              String   @id
+  school                School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  smsBalance            Int      @default(0)
+  lowBalanceThreshold   Int      @default(50)
+  lowBalanceAlertEmail  String?
+  lowBalanceAlertSentAt DateTime?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model SmsBroadcast {
+  id              String   @id @default(uuid())
+  schoolId        String
+  school          School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  message         String   @db.Text
+  requestedCount  Int
+  validCount      Int      @default(0)
+  sentCount       Int      @default(0)
+  failedCount     Int      @default(0)
+  status          String   @default("pending") // pending | dispatching | completed | failed
+  createdByUserId String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  queueItems      SmsQueueItem[]
+
+  @@index([schoolId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model SmsQueueItem {
+  id              String   @id @default(uuid())
+  broadcastId     String
+  broadcast       SmsBroadcast @relation(fields: [broadcastId], references: [id], onDelete: Cascade)
+  schoolId        String
+  recipient       String
+  message         String   @db.Text
+  status          String   @default("pending") // pending | enqueued | sent | failed
+  idempotencyKey  String   @unique
+  providerRef     String?
+  errorMessage    String?
+  enqueuedAt      DateTime?
+  sentAt          DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([broadcastId])
+  @@index([schoolId])
+  @@index([status])
+}
+
+model SmsLog {
+  id             String   @id @default(uuid())
+  schoolId       String?
+  school         School?  @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  direction      String   @default("out") // out | in | dlr
+  recipient      String?
+  fromNumber     String?
+  body           String?  @db.Text
+  status         String   @default("SENT") // SENT | FAILED | QUEUED
+  provider       String   @default("africastalking")
+  providerRef    String?
+  broadcastId    String?
+  idempotencyKey String?  @unique
+  createdAt      DateTime @default(now())
+
+  @@index([schoolId])
+  @@index([createdAt])
+  @@index([broadcastId])
 }

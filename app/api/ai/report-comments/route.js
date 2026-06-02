@@ -1,4 +1,5 @@
 export const dynamic = 'force-dynamic'
+import { withAILimits } from '@/lib/middleware/withAILimits'
 import { NextResponse } from 'next/server'
 import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
@@ -21,7 +22,7 @@ import {
   performanceLevelFromPercentage,
 } from '@/lib/ai/subject-adaptive-prompts'
 
-export async function POST(request) {
+export const POST = withAILimits(async function POST(request) {
   const user = await getAuthUser(request)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   if (!roleCheck(user, ['TEACHER', 'HOD', 'ADMIN'])) {
@@ -46,7 +47,7 @@ export async function POST(request) {
   const blocked = await requireFeature(schoolId, 'ai-report-comments')
   if (blocked) return blocked
 
-  const limitBlock = await checkAILimit(schoolId)
+  const limitBlock = await checkAILimit(schoolId, String(auth.user?.id || auth.user?.userId || ''))
   if (limitBlock) return limitBlock
 
   try {
@@ -109,4 +110,4 @@ export async function POST(request) {
   })
 
   return new Response(stream, { headers: GROQ_SSE_HEADERS })
-}
+})

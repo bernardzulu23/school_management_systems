@@ -2,7 +2,9 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
-import { sendAfricasTalkingSms, pushSmsLog } from '@/lib/sms'
+import { sendAfricasTalkingSms, normalizePhoneNumbers } from '@/lib/sms'
+import { createSmsLog } from '@/lib/sms/persistLog'
+import { reserveSmsCredits } from '@/lib/sms/balance'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { SendSMSSchema } from '@/lib/schemas'
@@ -23,15 +25,32 @@ export const POST = withErrorHandler(async function POST(request) {
 
   const { to, message, from = null } = await parseBodyOrThrow(request, SendSMSSchema)
 
-  const result = await sendAfricasTalkingSms({ to, message, from })
+  const normalized = normalizePhoneNumbers(to)
+  if (!normalized.length) throw new ApiError('No valid Zambian phone numbers', 400)
 
-  pushSmsLog({
-    direction: 'out',
-    schoolId,
-    to: result.recipients,
-    message: String(message || ''),
-    provider: result.provider,
-  })
+  const reserve = await reserveSmsCredits(schoolId, normalized.length)
+  if (!reserve.ok) {
+    throw new ApiError(reserve.reason || 'Insufficient SMS credits', 402)
+  }
+
+  const result = await sendAfricasTalkingSms({ to: normalized, message, from })
+
+  if (!result.ok) {
+    const { refundSmsCredit } = await import('@/lib/sms/balance')
+    await refundSmsCredit(schoolId, normalized.length)
+    throw new ApiError('SMS delivery failed', 502)
+  }
+
+  for (const phone of result.recipients) {
+    await createSmsLog({
+      schoolId,
+      direction: 'out',
+      recipient: phone,
+      body: String(message || ''),
+      status: 'SENT',
+      provider: result.provider,
+    })
+  }
 
   return NextResponse.json({ success: true, data: result })
 })

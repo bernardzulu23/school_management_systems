@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
@@ -31,6 +31,7 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+  const db = getTenantClient(schoolId)
 
   const { searchParams } = new URL(request.url)
   const limit = Math.min(50, Math.max(1, parseInt(searchParams.get('limit')) || 30))
@@ -39,7 +40,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const since = new Date()
   since.setDate(since.getDate() - 30)
 
-  const activities = await prisma.activity.findMany({
+  const activities = await db.activity.findMany({
     where: { schoolId, date: { gte: since } },
     orderBy: { date: 'desc' },
     take: limit,

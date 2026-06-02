@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic'
 
+import { withAILimits } from '@/lib/middleware/withAILimits'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
@@ -45,7 +46,7 @@ export async function GET(request) {
   return NextResponse.json({ success: true, data: rows })
 }
 
-export async function POST(request) {
+export const POST = withAILimits(async function POST(request) {
   const user = await getAuthUser(request)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -77,4 +78,4 @@ export async function POST(request) {
   } catch (e) {
     return NextResponse.json({ error: e?.message || 'Generation failed' }, { status: 500 })
   }
-}
+})

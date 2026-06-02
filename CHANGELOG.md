@@ -4,6 +4,37 @@ All notable changes to the Zambian School Management System during the audit and
 
 ## [Unreleased]
 
+### Documentation
+
+- **Deployment stack** — All docs now describe production as **Vercel** (app) + **Neon** (PostgreSQL), not Railway. Removed obsolete `railway.toml`.
+
+### Amber flags (Part 2 — master engineering prompts)
+
+- **Branding / SEO** — Fixed Open Graph and Twitter metadata (`metadataBase`, Blue Peak URLs); school `generateMetadata` in `app/dashboard/layout.js`; updated `robots.txt` / `sitemap.xml`; replaced stray “EduZambia” UI strings.
+- **HOD mock pages** — Feature flags gate budget, correspondence, meetings, minutes, stock-book, staff-meetings, daily-routine (`docs/hod-api-audit.md`).
+- **Routing** — Removed redirect-only routes (`teacher/attendance`, `timetable/hod`, `timetable/master`); documented `/dashboard/admin` alias.
+- **Caching** — `lib/cache/` modules (subjects, school config, timetable entries, ECZ constructs); timetable publish calls `revalidateTag`.
+- **AI provider layer** — `lib/ai/` with Groq + OpenAI stub, Sentry on failures.
+- **Innovation Hub** — Beta badges on non-core features; code playground dangerous-pattern guard; PhET iframe `sandbox` / `referrerPolicy`.
+- **Mobile** — `docs/mobile-app-scope.md`, in-app web banner (`zsms-mobile`), teacher “Download app” card.
+
+### Security (red flag fixes)
+
+- **Tenant isolation tooling** — `npm run audit:tenant` scans API routes for Prisma calls missing `schoolId`; results in `scripts/tenant-audit-results.json`. Added `lib/prisma/client.js` (basePrisma + slow-query logging), `lib/prisma/tenantClient.js` (`getTenantClient` extension), `lib/prisma/withTenant.js` (`withTenantClient`, Sentry school tags).
+- **Tenant route migration** — All `app/api/student/**` routes, `app/api/assessments/route.js`, `app/api/students/route.js`, and `app/api/subjects` now use `getTenantClient(schoolId)`.
+- **Rate limiting** — Upstash sliding-window limiters (`lib/middleware/upstashLimiters.js`, `withAILimits` on every `app/api/ai/**` POST); proxy + LRU limits unchanged; AI monthly + burst limits in `checkAILimit`.
+- **Health check** — `GET /api/health` returns `ok` / `degraded` / `down` with parallel DB, pool, env, and optional Upstash Redis checks; use with UptimeRobot or similar on Vercel; `Cache-Control: no-store`.
+- **Monitoring** — Sentry `service: zsms-api` tag; Prisma slow-query breadcrumb (≥1s); dashboard `ErrorBoundary` with optional `showReportDialog`.
+- **Caching** — `GET /api/subjects` uses `getCachedSubjects`; published timetables use `getCachedPublishedTimetableEntries` in `GET /api/timetable/view`.
+- **Docs** — `docs/CLOUDFLARE_RATE_LIMITING.md`, `docs/database-index-checklist.md` (generated), implementation status in `docs/Zsms red flag fixes.md`.
+
+### Added
+
+- **Bulk SMS broadcast engine** — `POST /api/sms/broadcast` enqueues messages via Upstash QStash; `queue-worker` and `broadcast-dispatcher` deliver through Africa's Talking with signature verification, idempotent logs, and credit reservation.
+- **SMS credits & low-balance alerts** — per-school `SchoolSmsSettings`, `GET/PATCH /api/sms/balance`, email alerts (24h cooldown), daily cron `/api/cron/sms-low-balance`.
+- **Persistent SMS logs** — `SmsLog` Prisma model; `GET /api/sms/logs`; parent recipient loader `GET /api/sms/recipients`.
+- **SMS dashboard** — broadcast UI, balance display, and alert settings on `/dashboard/sms`.
+
 ### Features (Phase 4 — Track B)
 
 - **Task 32 — National Assessment Platform (ECZ mock examinations).** Structured

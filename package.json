@@ -66,7 +66,8 @@
     "seed:schools:docker": "docker compose exec -T web npm run seed:schools",
     "seed:timeslots:docker": "docker compose exec -T web npm run seed:timeslots",
     "export:users": "node scripts/export-users-excel.js",
-    "docs:api-routes": "node scripts/generate-api-routes-doc.js"
+    "docs:api-routes": "node scripts/generate-api-routes-doc.js",
+    "audit:tenant": "node scripts/audit-tenant-isolation.mjs"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -88,6 +89,9 @@
     "@prisma/client": "6.19.3",
     "@sentry/nextjs": "^10.54.0",
     "@tanstack/react-query": "^4.35.0",
+    "@upstash/qstash": "^2.11.0",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.0",
     "@vercel/blob": "^2.4.0",
     "africastalking": "^0.7.9",
     "ai": "^6.0.191",

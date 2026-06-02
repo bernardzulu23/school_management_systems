@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { hodFeatureGate } from '@/lib/hod/gateHodFeature'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -102,6 +103,10 @@ export default function BudgetPage() {
 
   // Recent transactions - will be loaded from API
   const [recentTransactions, setRecentTransactions] = useState([])
+  const gated = hodFeatureGate('budget')
+  if (gated) {
+    return <DashboardLayout title="Department Budget">{gated}</DashboardLayout>
+  }
 
   const getStatusIcon = (status) => {
     switch (status) {

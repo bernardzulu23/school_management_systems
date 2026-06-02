@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { hodFeatureGate } from '@/lib/hod/gateHodFeature'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -28,6 +29,10 @@ export default function StockBookPage() {
 
   // Stock data - will be loaded from API
   const [stockData, setStockData] = useState([])
+  const gated = hodFeatureGate('stock-book')
+  if (gated) {
+    return <DashboardLayout title="Stock Book">{gated}</DashboardLayout>
+  }
 
   const getStatusIcon = (status) => {
     switch (status) {

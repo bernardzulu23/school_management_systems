@@ -552,7 +552,7 @@ Add to package.json scripts:
 
 ## 3. Environment variables needed
 
-Add to .env.local and Railway:
+Add to `.env.local` and Vercel (Project → Settings → Environment Variables):
 
 ```env
 ANTHROPIC_API_KEY=sk-ant-xxxxx   ← for AI Story Weaver

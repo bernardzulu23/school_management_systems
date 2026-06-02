@@ -55,6 +55,8 @@ import {
 import Link from 'next/link'
 import { SCHOOL_SUBJECTS, getSubjectsByIds } from '@/data/subjects'
 import AdvancedTeachingTools from '@/components/teaching/AdvancedTeachingTools'
+import { isEnabled } from '@/lib/featureFlags'
+import { useSchool } from '@/lib/context/SchoolContext'
 import { percentTextClass } from '@/lib/utils/percentColor'
 // Temporarily commented out to isolate error
 // import {
@@ -83,6 +85,7 @@ export default function TeacherDashboard() {
   const router = useRouter()
   // Get current user data from auth context
   const { user: currentUser, isAuthenticated, logout, syncSession } = useAuth()
+  const { school } = useSchool()
   const { timeSlots } = useSchoolTimeSlots()
   const [timetableClasses, setTimetableClasses] = useState([])
   const [timetableClassrooms, setTimetableClassrooms] = useState([])
@@ -496,6 +499,25 @@ export default function TeacherDashboard() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                {isEnabled('MOBILE_APP_DOWNLOAD') ? (
+                  <div className="p-6 bg-royalPurple-accent/10 border border-royalPurple-border rounded-2xl h-full">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl mb-4 bg-royalPurple-accent/20">
+                      <Rocket className="h-6 w-6 text-royalPurple-accentTx" />
+                    </div>
+                    <h3 className="text-xl font-bold text-royalPurple-text1 mb-2">
+                      Take attendance on the go
+                    </h3>
+                    <p className="text-royalPurple-text3 text-sm mb-4">
+                      Download the ZSMS Teacher App for fast mobile attendance marking.
+                    </p>
+                    <p className="text-xs text-royalPurple-text3">
+                      App Store / Play Store links coming when published.
+                      {school?.subdomain
+                        ? ` Portal: ${school.subdomain}.bluepeacktechnologies.com`
+                        : ''}
+                    </p>
+                  </div>
+                ) : null}
                 <Link href="/dashboard/teacher/results" className="block">
                   <div className="p-6 bg-royalPurple-card/60 dark:bg-royalPurple-card/60 border border-royalPurple-border2 dark:border-royalPurple-border2/40 hover:border-royalPurple-border2 hover:bg-royalPurple-page dark:hover:bg-royalPurple-muted/80 rounded-2xl transition-all duration-300 group cursor-pointer h-full shadow-sm hover:shadow-md">
                     <div

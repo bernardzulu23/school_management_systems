@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /admin/
 
-Sitemap: https://zambianschool.com/sitemap.xml
+Sitemap: https://www.bluepeacktechnologies.com/sitemap.xml

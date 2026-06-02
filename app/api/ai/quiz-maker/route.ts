@@ -1,3 +1,4 @@
+import { withAILimits } from '@/lib/middleware/withAILimits'
 import { NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { z } from 'zod'
@@ -41,7 +42,7 @@ function buildPrompt(input: QuizMakerInput): string {
   })
 }
 
-export async function POST(request: Request) {
+export const POST = withAILimits(async function POST(request: Request) {
   const requestId = crypto.randomUUID()
 
   try {
@@ -71,7 +72,7 @@ export async function POST(request: Request) {
     const blocked = await requireFeature(schoolId, 'ai-quiz-maker')
     if (blocked) return blocked as any
 
-    const limitBlock = await checkAILimit(schoolId)
+    const limitBlock = await checkAILimit(schoolId, String(user.id || ''))
     if (limitBlock) return limitBlock as any
 
     try {
@@ -156,4 +157,4 @@ export async function POST(request: Request) {
     logger.error('ai.quiz-maker.error', error, { requestId })
     return NextResponse.json({ error: 'Failed to process request' }, { status: 500 })
   }
-}
+})

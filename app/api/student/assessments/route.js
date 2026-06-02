@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { parseInteractiveQuizPayload } from '@/lib/assessments/interactiveQuiz'
@@ -18,8 +18,9 @@ export async function GET(request) {
     if (!tenant.ok) return tenant.response
     const schoolId = tenant.schoolId
     if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+    const db = getTenantClient(schoolId)
 
-    const student = await prisma.student.findFirst({
+    const student = await db.student.findFirst({
       where: { schoolId, userId: auth.user.id },
       select: { id: true, classId: true, class: true, selected_subjects: true },
     })
@@ -29,7 +30,7 @@ export async function GET(request) {
     }
 
     // Fetch Upcoming Assessments
-    const upcoming = await prisma.assessment.findMany({
+    const upcoming = await db.assessment.findMany({
       where: {
         schoolId,
         ...(student.classId ? { classId: student.classId } : { class: student.class }),
@@ -42,7 +43,7 @@ export async function GET(request) {
       take: 50,
     })
 
-    const assignments = await prisma.assignment.findMany({
+    const assignments = await db.assignment.findMany({
       where: {
         schoolId,
         ...(student.classId ? { classId: student.classId } : { class: student.class }),
@@ -54,7 +55,7 @@ export async function GET(request) {
       take: 100,
     })
 
-    const submissions = await prisma.assignmentSubmission.findMany({
+    const submissions = await db.assignmentSubmission.findMany({
       where: {
         schoolId,
         studentId: student.id,
@@ -103,7 +104,7 @@ export async function GET(request) {
       })
       .filter(Boolean)
 
-    const results = await prisma.result.findMany({
+    const results = await db.result.findMany({
       where: {
         schoolId,
         studentId: student.id,

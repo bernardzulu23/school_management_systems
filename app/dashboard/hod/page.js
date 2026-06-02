@@ -10,6 +10,63 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StudentRosterCard } from '@/components/dashboard/StudentRosterCard'
 import { Button } from '@/components/ui/Button'
 import HodAssignments from '@/components/dashboard/HodAssignments'
+import { isEnabled } from '@/lib/featureFlags'
+
+const HOD_DUTY_FLAGS = {
+  correspondence: 'HOD_CORRESPONDENCE',
+  meetings: 'HOD_MEETINGS',
+  minutes: 'HOD_MINUTES',
+  'staff-meetings': 'HOD_STAFF_MEETINGS',
+  budget: 'HOD_BUDGET',
+  'stock-book': 'HOD_STOCK_BOOK',
+  'daily-routine': 'HOD_DAILY_ROUTINE',
+}
+const DEPARTMENTS = {
+  Mathematics: [
+    'Mathematics',
+    'Information Technology',
+    'Computer Studies',
+    'Additional Mathematics',
+  ],
+  'Literature and Languages': [
+    'English Language',
+    'Literature',
+    'Kikaonde',
+    'Silozi',
+    'Chibemba',
+    'Chichewa',
+    'Chitonga',
+    'Luvale',
+    'Lunda',
+    'Chinese',
+    'French',
+  ],
+  'Social Sciences': ['Geography', 'Social Studies', 'Civic', 'History'],
+  'Arts and Design': [
+    'Physical Education',
+    'Music',
+    'Expressive Art',
+    'Design and Technology',
+    'Metalwork',
+    'Woodwork',
+  ],
+  'Natural Sciences': [
+    'Biology',
+    'Physics',
+    'Chemistry',
+    'Integrated Science',
+    'Agricultural Sciences',
+  ],
+  'Business Studies': ['Commerce', 'Accounts', 'Business Studies', 'Religious Education'],
+  'Home Economics': ['Home Economics', 'Fashion and Fabrics', 'Food and Nutrition'],
+}
+
+function filterHodDuties(duties) {
+  return duties.filter((d) => {
+    const flag = HOD_DUTY_FLAGS[d.id]
+    return !flag || isEnabled(flag)
+  })
+}
 import { DepartmentTimetableView } from '@/components/timetable/DepartmentTimetableView'
 import { useSchoolTimeSlots } from '@/lib/timetable/useSchoolTimeSlots'
 import { api } from '@/lib/api'
@@ -111,47 +168,6 @@ export default function HodDashboard() {
     }
   }, [currentUser, router])
 
-  // Department configuration
-  const departments = {
-    Mathematics: [
-      'Mathematics',
-      'Information Technology',
-      'Computer Studies',
-      'Additional Mathematics',
-    ],
-    'Literature and Languages': [
-      'English Language',
-      'Literature',
-      'Kikaonde',
-      'Silozi',
-      'Chibemba',
-      'Chichewa',
-      'Chitonga',
-      'Luvale',
-      'Lunda',
-      'Chinese',
-      'French',
-    ],
-    'Social Sciences': ['Geography', 'Social Studies', 'Civic', 'History'],
-    'Arts and Design': [
-      'Physical Education',
-      'Music',
-      'Expressive Art',
-      'Design and Technology',
-      'Metalwork',
-      'Woodwork',
-    ],
-    'Natural Sciences': [
-      'Biology',
-      'Physics',
-      'Chemistry',
-      'Integrated Science',
-      'Agricultural Sciences',
-    ],
-    'Business Studies': ['Commerce', 'Accounts', 'Business Studies', 'Religious Education'],
-    'Home Economics': ['Home Economics', 'Fashion and Fabrics', 'Food and Nutrition'],
-  }
-
   const currentDepartment =
     currentUser?.department ||
     currentUser?.hodProfile?.departmentRef?.name ||
@@ -183,7 +199,7 @@ export default function HodDashboard() {
   const normalizedDepartment =
     currentDepartment === 'Art and Design' ? 'Arts and Design' : currentDepartment
   const departmentSubjects = useMemo(() => {
-    return departments[normalizedDepartment] || departments[currentDepartment] || []
+    return DEPARTMENTS[normalizedDepartment] || DEPARTMENTS[currentDepartment] || []
   }, [normalizedDepartment, currentDepartment])
 
   useEffect(() => {
@@ -336,7 +352,7 @@ export default function HodDashboard() {
       title: 'Timetable & Class Allocation',
       description: 'Schedule and class management',
       icon: CalendarDays,
-      route: '/dashboard/timetable/hod',
+      route: '/dashboard/hod/timetable',
     },
     {
       id: 'teacher-performance',
@@ -854,7 +870,7 @@ export default function HodDashboard() {
                       </ul>
                       <Button
                         className="w-full mt-3 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50"
-                        onClick={() => router.push('/dashboard/timetable/hod')}
+                        onClick={() => router.push('/dashboard/hod/timetable')}
                       >
                         Manage Curriculum
                       </Button>
@@ -1214,7 +1230,7 @@ export default function HodDashboard() {
             {/* File Management Section */}
             {renderDutySection(
               'File Management',
-              fileManagementDuties,
+              filterHodDuties(fileManagementDuties),
               'bg-royalPurple-accent',
               'hover:bg-royalPurple-accent hover:text-royalPurple-text1'
             )}
@@ -1230,7 +1246,7 @@ export default function HodDashboard() {
             {/* Daily Operations Section */}
             {renderDutySection(
               'Daily Operations',
-              dailyOperationsDuties,
+              filterHodDuties(dailyOperationsDuties),
               'bg-royalPurple-success',
               'hover:bg-royalPurple-success hover:text-royalPurple-text1'
             )}
@@ -1238,7 +1254,7 @@ export default function HodDashboard() {
             {/* Financial Management Section */}
             {renderDutySection(
               'Financial Management',
-              financialManagementDuties,
+              filterHodDuties(financialManagementDuties),
               'bg-accent',
               'hover:bg-accent hover:text-royalPurple-text1'
             )}

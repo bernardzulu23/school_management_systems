@@ -43,7 +43,7 @@ export default function ResponsiveDashboardLayout({ children }) {
                 {school.name}
               </span>
             ) : (
-              <span className="ml-4 font-bold text-lg text-ink">EduZambia</span>
+              <span className="ml-4 font-bold text-lg text-ink">ZSMS</span>
             )}
           </div>
 

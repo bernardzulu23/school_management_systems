@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
@@ -20,18 +20,19 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+  const db = getTenantClient(schoolId)
 
   const parsedId = idString.safeParse(String(routeParams?.id || ''))
   if (!parsedId.success) throw new ApiError('Invalid attempt id', 400)
   const attemptId = parsedId.data
 
-  const student = await prisma.student.findFirst({
+  const student = await db.student.findFirst({
     where: { schoolId, userId: auth.user.id },
     select: { id: true },
   })
   if (!student) throw new ApiError('Student profile not found', 404)
 
-  const attempt = await prisma.mockExamAttempt.findFirst({
+  const attempt = await db.mockExamAttempt.findFirst({
     where: { id: attemptId, schoolId, studentId: student.id },
   })
   if (!attempt) throw new ApiError('Mock exam not found', 404)

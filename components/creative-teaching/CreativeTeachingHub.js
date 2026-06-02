@@ -86,6 +86,18 @@ const iconMap = {
   Box,
 }
 
+/** Production-ready — no Beta badge */
+const PRODUCTION_FEATURE_IDS = new Set(['ai_lesson_planner', 'ai_quiz_maker', 'ecz_practice'])
+
+function FeatureBetaBadge({ featureId }) {
+  if (PRODUCTION_FEATURE_IDS.has(featureId)) return null
+  return (
+    <span className="absolute top-2 right-2 text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-amber-500 text-white">
+      Beta
+    </span>
+  )
+}
+
 const componentMap = {
   interactive_whiteboard: InteractiveWhiteboard,
   ai_story_generator: AIStoryWeaver,
@@ -197,6 +209,16 @@ export default function CreativeTeachingHub() {
 
   return (
     <div className="space-y-6">
+      <p className="text-sm text-royalPurple-text3 text-center">
+        Beta features are actively developed. Report issues to{' '}
+        <a
+          className="underline text-royalPurple-accentTx"
+          href="mailto:support@bluepeacktechnologies.com"
+        >
+          support@bluepeacktechnologies.com
+        </a>
+        .
+      </p>
       <Card className="bg-royalPurple-card/60 border-royalPurple-border/40">
         <CardHeader>
           <CardTitle className="text-royalPurple-text1 flex items-center justify-between">
@@ -249,8 +271,9 @@ export default function CreativeTeachingHub() {
               {availableFeatures.slice(0, 4).map((feature) => (
                 <Card
                   key={feature.id}
-                  className="bg-royalPurple-muted/60 border-royalPurple-border/40 hover:border-royalPurple-border2/60 transition-colors cursor-pointer"
+                  className="relative bg-royalPurple-muted/60 border-royalPurple-border/40 hover:border-royalPurple-border2/60 transition-colors cursor-pointer"
                 >
+                  <FeatureBetaBadge featureId={feature.id} />
                   <CardContent className="p-4">
                     <div className="text-center">
                       <feature.icon className="h-12 w-12 mx-auto mb-3 text-royalPurple-pillTx" />
@@ -309,8 +332,9 @@ export default function CreativeTeachingHub() {
               {creativeFeatures.map((feature) => (
                 <Card
                   key={feature.id}
-                  className="bg-royalPurple-muted/60 border-royalPurple-border/40 hover:border-royalPurple-border2/60 transition-colors"
+                  className="relative bg-royalPurple-muted/60 border-royalPurple-border/40 hover:border-royalPurple-border2/60 transition-colors"
                 >
+                  <FeatureBetaBadge featureId={feature.id} />
                   <CardContent className="p-4">
                     <div className="flex items-start space-x-3">
                       <feature.icon className="h-8 w-8 text-royalPurple-pillTx mt-1" />
@@ -381,8 +405,9 @@ export default function CreativeTeachingHub() {
               {stemFeatures.map((feature) => (
                 <Card
                   key={feature.id}
-                  className="bg-royalPurple-muted/60 border-royalPurple-border/40 hover:border-royalPurple-border2/60 transition-colors"
+                  className="relative bg-royalPurple-muted/60 border-royalPurple-border/40 hover:border-royalPurple-border2/60 transition-colors"
                 >
+                  <FeatureBetaBadge featureId={feature.id} />
                   <CardContent className="p-4">
                     <div className="flex items-start space-x-3">
                       <feature.icon className="h-8 w-8 text-royalPurple-accentTx mt-1" />

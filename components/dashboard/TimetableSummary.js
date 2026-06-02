@@ -115,15 +115,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
     }
 
     return bySeason
-  }, [
-    assignments,
-    activeSeason,
-    resolvedRole,
-    user?.id,
-    user?.studentProfile?.classId,
-    user?.teacherProfile?.id,
-    userId,
-  ])
+  }, [assignments, activeSeason, resolvedRole, user?.id, user?.studentProfile?.classId, userId])
 
   const todayKey = useMemo(() => {
     if (!mounted) return null
@@ -170,7 +162,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
       case 'teacher':
         return '/dashboard/timetable/teacher'
       case 'hod':
-        return '/dashboard/timetable/hod'
+        return '/dashboard/hod/timetable'
       case 'headteacher':
         return '/dashboard/headteacher/timetable'
       default:

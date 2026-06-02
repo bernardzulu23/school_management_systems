@@ -44,7 +44,7 @@ export const POST = withErrorHandler(async function POST(request) {
   const blocked = await requireFeature(schoolId, 'ai-lesson-planner')
   if (blocked) return blocked
 
-  const limitBlock = await checkAILimit(schoolId)
+  const limitBlock = await checkAILimit(schoolId, String(auth.user?.id || auth.user?.userId || ''))
   if (limitBlock) return limitBlock
 
   try {

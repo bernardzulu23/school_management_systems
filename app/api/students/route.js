@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { basePrisma } from '@/lib/prisma/client'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
 import {
   findStudentByUserId,
   findStudentsByClass,
@@ -69,7 +70,7 @@ export const GET = withErrorHandler(async (request) => {
   if (!auth.isAuthenticated) return auth.response
 
   try {
-    await prisma.$queryRaw`SELECT 1`
+    await basePrisma.$queryRaw`SELECT 1`
   } catch (dbError) {
     const sanitizeErrorDetails = (value) =>
       String(value || '')
@@ -111,11 +112,12 @@ export const GET = withErrorHandler(async (request) => {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+  const db = getTenantClient(schoolId)
 
   let resolvedClassName = className ? String(className) : null
   let classCandidates = []
   if (!resolvedClassName && classId) {
-    const cls = await prisma.class.findFirst({
+    const cls = await db.class.findFirst({
       where: { id: String(classId), schoolId },
       select: { id: true, name: true, year_group: true, section: true },
     })
@@ -135,7 +137,7 @@ export const GET = withErrorHandler(async (request) => {
       ]
     }
   } else if (resolvedClassName) {
-    const cls = await prisma.class.findFirst({
+    const cls = await db.class.findFirst({
       where: { schoolId, name: { equals: resolvedClassName, mode: 'insensitive' } },
       select: { id: true, name: true, year_group: true, section: true },
     })
@@ -205,8 +207,9 @@ export const POST = withErrorHandler(async (request) => {
 
   const schoolId = auth.user?.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+  const db = getTenantClient(schoolId)
 
-  const result = await prisma.$transaction(async (tx) => {
+  const result = await db.$transaction(async (tx) => {
     const existingUser = await tx.user.findUnique({
       where: { schoolId_email: { schoolId, email: studentData.email } },
     })

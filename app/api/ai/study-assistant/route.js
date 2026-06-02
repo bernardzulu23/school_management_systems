@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic'
 
+import { withAILimits } from '@/lib/middleware/withAILimits'
 import { NextResponse } from 'next/server'
 import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
 import { generateAIText } from '@/lib/ai/client'
@@ -12,7 +13,7 @@ const SYSTEM =
 /**
  * POST /api/ai/study-assistant — RAG-grounded Q&A for students (Phase 3 P3.6).
  */
-export async function POST(request) {
+export const POST = withAILimits(async function POST(request) {
   const user = await getAuthUser(request)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -54,4 +55,4 @@ export async function POST(request) {
     answer: text,
     refs: rag.refs?.slice(0, 8) || [],
   })
-}
+})

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { hodFeatureGate } from '@/lib/hod/gateHodFeature'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -25,6 +26,10 @@ export default function MeetingFilesPage() {
   const [activeTab, setActiveTab] = useState('upcoming')
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState('all')
+  const gated = hodFeatureGate('meetings')
+  if (gated) {
+    return <DashboardLayout title="Department Meetings">{gated}</DashboardLayout>
+  }
 
   // Sample meeting data
   const meetingsData = {

@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from 'react'
 import {
   PLAYGROUND_LANGUAGES,
   buildPreviewDocument,
-  fileNameForLanguage,
   isPistonLanguage,
   monacoLanguageFor,
 } from '@/lib/creative-teaching/playgroundLanguages'
@@ -58,23 +57,26 @@ export default function CodePlayground({ embedded = false }) {
     setError(false)
 
     try {
-      const res = await fetch('https://emkc.org/api/v2/piston/execute', {
+      const res = await fetch('/api/code-playground/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           language: lang.id,
           version: lang.version,
-          files: [{ name: fileNameForLanguage(lang.id), content: code }],
-          stdin: '',
-          args: [],
-          compile_timeout: 10000,
-          run_timeout: 5000,
+          code,
         }),
       })
 
       const data = await res.json().catch(() => ({}))
-      const stdout = String(data?.run?.stdout || '')
-      const stderr = String(data?.run?.stderr || data?.compile?.stderr || '')
+      const stdout = String(data?.stdout || '')
+      const stderr = String(data?.stderr || data?.message || data?.error || '')
+
+      if (!res.ok) {
+        setOutput(stderr || 'Could not run code')
+        setError(true)
+        return
+      }
 
       if (stderr) {
         setOutput(stderr)
@@ -241,6 +243,7 @@ export default function CodePlayground({ embedded = false }) {
             </span>
           </div>
           <PlaygroundEditor
+            key={lang.id}
             height={editorHeight}
             language={monacoLanguageFor(lang)}
             value={code}

@@ -1,5 +1,6 @@
 'use client'
 
+import { hodFeatureGate } from '@/lib/hod/gateHodFeature'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -7,6 +8,11 @@ import { ArrowLeft, FileText, CalendarDays } from 'lucide-react'
 import Link from 'next/link'
 
 export default function DepartmentMinutesPage() {
+  const gated = hodFeatureGate('minutes')
+  if (gated) {
+    return <DashboardLayout title="Department Minutes">{gated}</DashboardLayout>
+  }
+
   return (
     <DashboardLayout title="Department Minutes">
       <div className="max-w-6xl mx-auto space-y-6">

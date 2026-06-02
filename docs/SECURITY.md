@@ -1,6 +1,6 @@
 # ZSMS Security — Multi-Tenant Isolation
 
-> Living document. Owner: platform engineering. Last reviewed: 2026-05-29 (Phase 4, Task 27).
+> Living document. Owner: platform engineering. Last reviewed: 2026-06-02 (red flag hardening).
 
 This system is **multi-tenant**: every school (tenant) shares one database and one
 deployment. The most severe class of bug here is **cross-tenant data leakage** —
@@ -46,10 +46,16 @@ A tenant-scoped route must satisfy **at least one**, and in practice combines se
    `app.current_school_id`, set via `withSchoolContext()` /
    `setSchoolContext()` (`lib/db/school-context.js`,
    migration `20260528120000_enable_rls`).
-2. **Explicit query scoping** — every Prisma query filters on
+2. **Prisma tenant extension (new)** — `getTenantClient(schoolId)` in
+   `lib/prisma/tenantClient.js` auto-injects `schoolId` on reads/writes.
+   Use via `withTenantClient(request, fn)` in `lib/prisma/withTenant.js`.
+   Platform/onboarding routes continue to use `basePrisma` from `lib/prisma/client.js`.
+3. **Automated audit** — run `npm run audit:tenant` before releases; review
+   `scripts/tenant-audit-results.json` for Prisma calls missing `schoolId`.
+4. **Explicit query scoping** — every Prisma query filters on
    `where: { schoolId }`, where `schoolId` comes from
    `resolveAuthenticatedSchoolId`.
-3. **Route-level tenant checks** — `verifyTenant()` / `getVerifiedSchoolId()` /
+5. **Route-level tenant checks** — `verifyTenant()` / `getVerifiedSchoolId()` /
    `assertSameTenant()` (`lib/middleware/verify-tenant.js`) for routes with a
    `[schoolId]` param or object-level (IDOR) reads.
 

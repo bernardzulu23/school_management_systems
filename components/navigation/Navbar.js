@@ -29,9 +29,7 @@ const Navbar = () => {
               <div className="bg-royalPurple-accent p-1.5 rounded-lg">
                 <GraduationCap className="h-6 w-6 text-royalPurple-text1" />
               </div>
-              <span className="text-xl font-bold text-royalPurple-text1 hidden sm:block">
-                EduZambia
-              </span>
+              <span className="text-xl font-bold text-royalPurple-text1 hidden sm:block">ZSMS</span>
             </Link>
           </div>
 

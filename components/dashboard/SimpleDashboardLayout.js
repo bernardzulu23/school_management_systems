@@ -14,6 +14,7 @@ import SubscriptionBanner from '@/components/billing/SubscriptionBanner'
 import { SubscriptionWarningBanner } from '@/components/billing/SubscriptionWarningBanner'
 import ServerSessionGuard from '@/components/auth/ServerSessionGuard'
 import { Sidebar } from '@/components/dashboard/Sidebar'
+import { ErrorBoundary } from '@/components/dashboard/ErrorBoundary'
 
 export function DashboardLayout({ children, title }) {
   const { user, logout } = useAuth()
@@ -187,7 +188,7 @@ export function DashboardLayout({ children, title }) {
             <div className="px-4 py-6 sm:px-0 space-y-4">
               <SubscriptionBanner />
               <SubscriptionWarningBanner />
-              {!isExpired ? children : null}
+              {!isExpired ? <ErrorBoundary>{children}</ErrorBoundary> : null}
             </div>
           </ServerSessionGuard>
         </main>

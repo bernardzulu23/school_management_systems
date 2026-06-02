@@ -103,28 +103,34 @@ env.features.email // true when Resend + from address set
 
 ## Health check
 
-| Endpoint                 | Behavior                                           |
-| ------------------------ | -------------------------------------------------- |
-| `GET /api/health`        | Database probe + feature flags; **503** if DB down |
-| `GET /api/health?live=1` | Fast liveness (no DB); always **200**              |
-| `GET /api/ping`          | Minimal JSON `{ ok: true }` for load balancers     |
+| Endpoint                 | Behavior                                                       |
+| ------------------------ | -------------------------------------------------------------- |
+| `GET /api/health`        | DB, pool, env, optional Redis; **503** if critical checks fail |
+| `GET /api/health?live=1` | Fast liveness (no DB); always **200**                          |
+| `GET /api/ping`          | Minimal JSON `{ ok: true }` for load balancers                 |
+
+`status` values: `ok` (all critical checks pass), `degraded` (e.g. high DB pool or missing optional env), `down` (DB or required env failure).
 
 Example response (`/api/health`):
 
 ```json
 {
-  "status": "healthy",
+  "status": "ok",
   "timestamp": "2026-05-25T12:00:00.000Z",
   "version": "2.0.3",
   "checks": {
-    "database": true,
-    "email": true,
-    "ai": true,
-    "sms": false,
-    "payments": true
+    "database": { "status": "ok", "responseMs": 12 },
+    "dbPool": { "status": "ok", "connections": 14 },
+    "environment": { "status": "ok", "missing": [] },
+    "redis": { "status": "skipped" },
+    "email": { "status": "ok" },
+    "ai": { "status": "ok" },
+    "sms": { "status": "skipped" }
   }
 }
 ```
+
+**Tenant audit:** `npm run audit:tenant` — see `docs/SECURITY.md` and `docs/Zsms red flag fixes.md`.
 
 ---
 
@@ -135,7 +141,7 @@ Example response (`/api/health`):
 3. Set `COOKIE_DOMAIN` and `APP_BASE_DOMAIN` for your production domain.
 4. Set `LIPILA_API_KEY` and ensure Lipila can reach:
    `https://{your-domain}/api/onboarding/lipila/callback`
-5. Deploy; confirm `GET https://{your-domain}/api/health` returns `"status": "healthy"`.
+5. Deploy; confirm `GET https://{your-domain}/api/health` returns `"status": "ok"`.
 
 See also [docs/doc/VERCEL_DEPLOY.md](./doc/VERCEL_DEPLOY.md) and [docs/doc/LEGACY_MISC_ARCHIVE.md](./doc/LEGACY_MISC_ARCHIVE.md).
 

@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 // app/api/timetable/publish/route.js
 import { NextResponse } from 'next/server'
+import { revalidateTag } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
@@ -59,6 +60,9 @@ export async function POST(req) {
 
     return updated.count
   })
+
+  revalidateTag(`timetable-${schoolId}`)
+  revalidateTag('timetable')
 
   return NextResponse.json({
     success: true,
