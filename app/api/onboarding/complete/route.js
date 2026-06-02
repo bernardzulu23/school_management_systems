@@ -190,13 +190,25 @@ export async function POST(request) {
       return school
     })
 
-    await sendSchoolPortalLinkEmail({
+    const portalEmailSent = await sendSchoolPortalLinkEmail({
       to: reg.email,
       schoolName: created.name,
       subdomain: created.subdomain,
       loginUrl,
       adminName,
     })
+    if (!portalEmailSent && process.env.DEV_ONBOARDING_SKIP_EMAIL !== 'true') {
+      return NextResponse.json(
+        {
+          error:
+            'School created, but portal email was not sent. Check RESEND_API_KEY and EMAIL_FROM_NOREPLY.',
+          code: 'EMAIL_NOT_SENT',
+          school: created,
+          loginUrl,
+        },
+        { status: 502 }
+      )
+    }
 
     if (isTrial) {
       try {

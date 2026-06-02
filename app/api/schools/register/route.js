@@ -270,11 +270,19 @@ export const POST = withSecureApi(async function POST(request) {
       subdomain: created.subdomain,
       verifyUrl,
     })
-    if (!emailSent) {
+    if (!emailSent && process.env.DEV_ONBOARDING_SKIP_EMAIL !== 'true') {
       console.error(`Failed to send verification email to ${adminEmail}`)
-    } else {
-      console.log(`Verification email sent`)
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            'We could not send the verification email. Check RESEND_API_KEY and EMAIL_FROM_NOREPLY (verified sender domain).',
+          code: 'EMAIL_NOT_SENT',
+        },
+        { status: 502 }
+      )
     }
+    console.log(`Verification email sent`)
 
     return NextResponse.json({ success: true, requiresVerification: true })
   } catch (error) {
