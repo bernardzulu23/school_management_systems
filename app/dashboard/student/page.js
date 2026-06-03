@@ -289,7 +289,7 @@ export default function StudentDashboard() {
                   { id: 'games', name: 'Games & Learning', icon: GamepadIcon },
                   { id: 'achievements', name: 'Achievements', icon: Trophy },
                   { id: 'subjects', name: 'My Subjects', icon: BookOpen },
-                  { id: 'learning-path', name: 'Learning Path', icon: LearningPathIcon },
+                  { id: 'learning-path', name: 'Career guidance', icon: LearningPathIcon },
                 ].map((tab) => {
                   const Icon = tab.icon
                   const active = activeTab === tab.id
@@ -1297,7 +1297,7 @@ export default function StudentDashboard() {
                     </Link>
                   </div>
                   <div className="bg-royalPurple-pill p-4 rounded-lg border border-royalPurple-border2">
-                    <h4 className="font-semibold text-royalPurple-pillTx mb-2">Learning Paths</h4>
+                    <h4 className="font-semibold text-royalPurple-pillTx mb-2">Career guidance</h4>
                     <p className="text-royalPurple-pillTx text-sm">Adaptive learning routes</p>
                     <button
                       onClick={() => setActiveTab('learning-path')}
@@ -1630,7 +1630,7 @@ export default function StudentDashboard() {
             </div>
           )}
 
-          {/* Learning Path Tab */}
+          {/* Career guidance tab */}
           {activeTab === 'learning-path' && (
             <div className="space-y-6">
               <LearningPathPage />

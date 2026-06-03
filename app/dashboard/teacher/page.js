@@ -55,6 +55,7 @@ import {
 import Link from 'next/link'
 import { SCHOOL_SUBJECTS, getSubjectsByIds } from '@/data/subjects'
 import AdvancedTeachingTools from '@/components/teaching/AdvancedTeachingTools'
+import { DepartmentActivityReminders } from '@/components/dashboard/teacher/DepartmentActivityReminders'
 import { isEnabled } from '@/lib/featureFlags'
 import { useSchool } from '@/lib/context/SchoolContext'
 import { percentTextClass } from '@/lib/utils/percentColor'
@@ -389,6 +390,8 @@ export default function TeacherDashboard() {
               />
             </div>
           </section>
+
+          <DepartmentActivityReminders />
 
           <div className="backdrop-blur-lg bg-royalPurple-card/60 dark:bg-royalPurple-card/60 rounded-3xl p-8 shadow-2xl transition-colors duration-300">
             <div className="flex justify-between items-center">

@@ -124,6 +124,17 @@ model School {
   smsSettings          SchoolSmsSettings?
   smsBroadcasts        SmsBroadcast[]
   smsLogs              SmsLog[]
+  careerClusters       CareerCluster[]
+  careers              Career[]
+  hodBudgetCategories  HodBudgetCategory[]
+  hodBudgetTransactions HodBudgetTransaction[]
+  hodCorrespondence    HodCorrespondence[]
+  hodMeetings          HodMeeting[]
+  hodStockItems        HodStockItem[]
+  hodStockMovements    HodStockMovement[]
+  hodDailyRoutineTasks HodDailyRoutineTask[]
+  hodWeeklyRoutinePlans HodWeeklyRoutinePlan[]
+  hodFiles               HodFile[]
 
   @@index([subdomain])
   @@index([active])
@@ -1156,11 +1167,237 @@ model Goal {
   updatedAt   DateTime @updatedAt
   
   @@index([schoolId]) 
-  @@index([studentId]) 
+  @@index([studentId])
   @@index([status])
-} 
+}
 
-model Note { 
+// Career guidance: subject/career clusters and detailed career profiles (admin-managed)
+model CareerCluster {
+  id          String   @id @default(uuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  name        String
+  description String   @db.Text
+  sortOrder   Int      @default(0)
+  active      Boolean  @default(true)
+  careers     Career[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([schoolId, name])
+  @@index([schoolId])
+  @@index([schoolId, active])
+}
+
+model Career {
+  id                   String        @id @default(uuid())
+  schoolId             String
+  school               School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  clusterId            String
+  cluster              CareerCluster @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  title                String
+  summary              String?
+  overview             String?       @db.Text
+  subjectsToFocus      String?       @db.Text
+  recommendedCourses   String?       @db.Text
+  collegesInstitutions String?       @db.Text
+  salaryExpectations   String?       @db.Text
+  qualifications       String?       @db.Text
+  careerProgression    String?       @db.Text
+  additionalNotes      String?       @db.Text
+  sortOrder            Int           @default(0)
+  active               Boolean       @default(true)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  @@unique([schoolId, clusterId, title])
+  @@index([schoolId])
+  @@index([clusterId])
+  @@index([schoolId, active])
+}
+
+// HOD department administrative files (per school / department)
+model HodBudgetCategory {
+  id           String   @id @default(uuid())
+  schoolId     String
+  school       School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  departmentId String?
+  name         String
+  allocated    Float    @default(0)
+  color        String?
+  sortOrder    Int      @default(0)
+  transactions HodBudgetTransaction[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([schoolId, departmentId])
+}
+
+model HodBudgetTransaction {
+  id              String   @id @default(uuid())
+  schoolId        String
+  school          School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  departmentId    String?
+  categoryId      String?
+  category        HodBudgetCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  description     String
+  amount          Float
+  status          String   @default("pending")
+  requestedBy     String?
+  transactionDate DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([schoolId, departmentId])
+  @@index([categoryId])
+}
+
+model HodCorrespondence {
+  id           String   @id @default(uuid())
+  schoolId     String
+  school       School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  departmentId String?
+  direction    String
+  subject      String
+  party        String
+  itemDate     DateTime @default(now())
+  priority     String   @default("medium")
+  status       String   @default("pending")
+  itemType     String   @default("letter")
+  attachments  Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([schoolId, departmentId])
+  @@index([schoolId, direction])
+}
+
+model HodMeeting {
+  id            String   @id @default(uuid())
+  schoolId      String
+  school        School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  departmentId  String?
+  title         String
+  meetingType   String   @default("Department")
+  meetingScope  String   @default("department")
+  meetingDate   DateTime
+  meetingTime   String?
+  duration      String?
+  location      String?
+  status        String   @default("scheduled")
+  attendees     String[] @default([])
+  agenda        String[] @default([])
+  minutes       String?  @db.Text
+  actionItems   Int      @default(0)
+  minutesStatus String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([schoolId, departmentId])
+  @@index([schoolId, status])
+  @@index([schoolId, meetingScope])
+}
+
+model HodStockItem {
+  id            String   @id @default(uuid())
+  schoolId      String
+  school        School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  departmentId  String?
+  itemName      String
+  category      String   @default("General")
+  currentStock  Int      @default(0)
+  minimumStock  Int      @default(0)
+  maximumStock  Int      @default(100)
+  unitPrice     Float    @default(0)
+  supplier      String?
+  location      String?
+  status        String   @default("in_stock")
+  movements     HodStockMovement[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([schoolId, departmentId])
+}
+
+model HodStockMovement {
+  id           String   @id @default(uuid())
+  schoolId     String
+  school       School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  itemId       String
+  item         HodStockItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  movementType String
+  quantity     Int
+  note         String?
+  createdAt    DateTime @default(now())
+
+  @@index([schoolId])
+  @@index([itemId])
+}
+
+model HodDailyRoutineTask {
+  id           String   @id @default(uuid())
+  schoolId     String
+  school       School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  departmentId String?
+  taskDate     DateTime
+  taskTime     String?
+  title        String
+  description  String?  @db.Text
+  priority     String   @default("medium")
+  status       String   @default("pending")
+  duration     String?
+  assignedTo   String?
+  category     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([schoolId, departmentId])
+  @@index([schoolId, taskDate])
+}
+
+model HodWeeklyRoutinePlan {
+  id           String   @id @default(uuid())
+  schoolId     String
+  school       School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  departmentId String?
+  dayName      String
+  focus        String?
+  tasks        String[] @default([])
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([schoolId, departmentId, dayName])
+  @@index([schoolId])
+}
+
+model HodFile {
+  id           String   @id @default(uuid())
+  schoolId     String
+  school       School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  departmentId String?
+  entityType   String
+  entityId     String
+  label        String   @default("attachment")
+  fileName     String
+  filePath     String
+  fileType     String
+  fileSize     Int
+  uploadedBy   String
+  createdAt    DateTime @default(now())
+
+  @@index([schoolId])
+  @@index([schoolId, entityType, entityId])
+  @@index([schoolId, departmentId])
+}
+
+model Note {
   id          String   @id @default(uuid()) 
   userId      String 
   user        User     @relation(fields: [userId], references: [id]) 

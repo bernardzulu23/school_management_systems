@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { hodFeatureGate } from '@/lib/hod/gateHodFeature'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import { useHodApi } from '@/lib/hod/useHodApi'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
@@ -35,18 +35,19 @@ import {
 } from 'recharts'
 import Link from 'next/link'
 import { percentTextClass } from '@/lib/utils/percentColor'
+import { EmptyModuleState } from '@/components/dashboard/EmptyModuleState'
 
 export default function BudgetPage() {
   const [selectedPeriod, setSelectedPeriod] = useState('current')
   const [activeTab, setActiveTab] = useState('overview')
+  const { data, loading, error } = useHodApi('/api/hod/budget')
 
-  // Sample budget data
-  const budgetOverview = {
-    totalAllocated: 50000,
-    totalSpent: 32500,
-    remaining: 17500,
-    pendingRequests: 5,
-    approvedRequests: 12,
+  const budgetOverview = data?.overview ?? {
+    totalAllocated: 0,
+    totalSpent: 0,
+    remaining: 0,
+    pendingRequests: 0,
+    approvedRequests: 0,
   }
 
   const utilizedPercent =
@@ -54,59 +55,9 @@ export default function BudgetPage() {
       ? Math.round((budgetOverview.totalSpent / budgetOverview.totalAllocated) * 100)
       : 0
 
-  const budgetCategories = [
-    {
-      name: 'Teaching Materials',
-      allocated: 15000,
-      spent: 12000,
-      remaining: 3000,
-      color: 'var(--warn-color)',
-    },
-    {
-      name: 'Equipment',
-      allocated: 12000,
-      spent: 8500,
-      remaining: 3500,
-      color: 'var(--color-accent)',
-    },
-    {
-      name: 'Professional Development',
-      allocated: 8000,
-      spent: 6000,
-      remaining: 2000,
-      color: 'var(--rp-text2)',
-    },
-    {
-      name: 'Maintenance',
-      allocated: 7000,
-      spent: 4000,
-      remaining: 3000,
-      color: 'var(--rp-border)',
-    },
-    {
-      name: 'Miscellaneous',
-      allocated: 8000,
-      spent: 2000,
-      remaining: 6000,
-      color: 'var(--color-brand-hover)',
-    },
-  ]
-
-  const monthlySpending = [
-    { month: 'Jan', amount: 4500 },
-    { month: 'Feb', amount: 6200 },
-    { month: 'Mar', amount: 5800 },
-    { month: 'Apr', amount: 7100 },
-    { month: 'May', amount: 4900 },
-    { month: 'Jun', amount: 3900 },
-  ]
-
-  // Recent transactions - will be loaded from API
-  const [recentTransactions, setRecentTransactions] = useState([])
-  const gated = hodFeatureGate('budget')
-  if (gated) {
-    return <DashboardLayout title="Department Budget">{gated}</DashboardLayout>
-  }
+  const budgetCategories = data?.budgetCategories ?? []
+  const monthlySpending = data?.monthlySpending ?? []
+  const recentTransactions = data?.recentTransactions ?? []
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -141,9 +92,23 @@ export default function BudgetPage() {
     return { color: 'text-royalPurple-successTx', status: 'Healthy' }
   }
 
+  const hasBudgetData =
+    budgetOverview.totalAllocated > 0 ||
+    budgetCategories.length > 0 ||
+    monthlySpending.length > 0 ||
+    recentTransactions.length > 0
+
   return (
     <DashboardLayout title="Budget File">
       <div className="space-y-6">
+        {loading && <p className="text-sm text-royalPurple-text3">Loading budget data…</p>}
+        {error && <p className="text-sm text-royalPurple-dangerTx">{error}</p>}
+        {!loading && !hasBudgetData && (
+          <EmptyModuleState
+            title="Department budget not set up yet"
+            description="Budget categories, spending, and transactions will appear here once your school adds real budget records."
+          />
+        )}
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -267,7 +232,7 @@ export default function BudgetPage() {
               <div
                 className="bg-royalPurple-success h-4 rounded-full"
                 style={{
-                  width: `${(budgetOverview.totalSpent / budgetOverview.totalAllocated) * 100}%`,
+                  width: `${utilizedPercent}%`,
                 }}
               ></div>
             </div>

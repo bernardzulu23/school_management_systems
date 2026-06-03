@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { hodFeatureGate } from '@/lib/hod/gateHodFeature'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import { useHodApi } from '@/lib/hod/useHodApi'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
@@ -21,18 +21,16 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { percentTextClass } from '@/lib/utils/percentColor'
+import { EmptyModuleState } from '@/components/dashboard/EmptyModuleState'
 
 export default function StockBookPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterCategory, setFilterCategory] = useState('all')
   const [filterStatus, setFilterStatus] = useState('all')
 
-  // Stock data - will be loaded from API
-  const [stockData, setStockData] = useState([])
-  const gated = hodFeatureGate('stock-book')
-  if (gated) {
-    return <DashboardLayout title="Stock Book">{gated}</DashboardLayout>
-  }
+  const { data, loading, error } = useHodApi('/api/hod/stock')
+  const stockData = data?.items ?? []
+  const stockMovements = data?.movements ?? []
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -93,9 +91,19 @@ export default function StockBookPage() {
     inStockItems: stockData.filter((item) => item.status === 'in_stock').length,
   }
 
+  const hasStock = stockData.length > 0
+
   return (
     <DashboardLayout title="Stock Book">
       <div className="space-y-6">
+        {loading && <p className="text-sm text-royalPurple-text3">Loading inventory…</p>}
+        {error && <p className="text-sm text-royalPurple-dangerTx">{error}</p>}
+        {!loading && !hasStock && (
+          <EmptyModuleState
+            title="Inventory is empty"
+            description="Add stock items and track levels here when your department inventory is set up."
+          />
+        )}
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -401,47 +409,28 @@ export default function StockBookPage() {
             <CardTitle>Recent Stock Movements</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              <div className="p-3 bg-royalPurple-success border border-royalPurple-border rounded-lg">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium text-royalPurple-successTx">
-                      Stock In: Scientific Calculators
-                    </h4>
-                    <p className="text-sm text-royalPurple-successTx">
-                      Added 25 units • Total: 75 units
-                    </p>
+            {stockMovements.length === 0 ? (
+              <p className="text-sm text-royalPurple-text3 text-center py-6">
+                Stock movement history will appear when transactions are recorded.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {stockMovements.map((m) => (
+                  <div
+                    key={m.id}
+                    className="flex justify-between text-sm border-b border-royalPurple-border pb-2"
+                  >
+                    <span>
+                      {m.itemName} — {m.movementType === 'in' ? 'Stock in' : 'Stock out'} (
+                      {m.quantity})
+                    </span>
+                    <span className="text-royalPurple-text3">
+                      {new Date(m.createdAt).toLocaleDateString()}
+                    </span>
                   </div>
-                  <span className="text-xs text-royalPurple-successTx">2 hours ago</span>
-                </div>
+                ))}
               </div>
-              <div className="p-3 bg-royalPurple-danger border border-royalPurple-border rounded-lg">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium text-royalPurple-dangerTx">
-                      Stock Out: Whiteboard Markers
-                    </h4>
-                    <p className="text-sm text-royalPurple-dangerTx">
-                      Issued 8 units • Remaining: 12 units
-                    </p>
-                  </div>
-                  <span className="text-xs text-royalPurple-dangerTx">1 day ago</span>
-                </div>
-              </div>
-              <div className="p-3 bg-royalPurple-accent border border-royalPurple-border2 rounded-lg">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium text-royalPurple-accentTx">
-                      New Item Added: Laboratory Equipment Set
-                    </h4>
-                    <p className="text-sm text-royalPurple-accentTx">
-                      Initial stock: 8 units • Value: $1,200
-                    </p>
-                  </div>
-                  <span className="text-xs text-royalPurple-accentTx">3 days ago</span>
-                </div>
-              </div>
-            </div>
+            )}
           </CardContent>
         </Card>
       </div>

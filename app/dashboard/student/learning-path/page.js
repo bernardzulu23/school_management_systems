@@ -1,43 +1,22 @@
 'use client'
 
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Construction } from 'lucide-react'
+import { CareerExplorer } from '@/components/careers/CareerExplorer'
 
 export default function LearningPathPage() {
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Career guidance">
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Learning Path</h1>
-          <p className="text-muted-foreground">
-            Personalized learning journey and progress tracking
+          <h1 className="text-3xl font-bold tracking-tight text-royalPurple-text1">
+            Career guidance
+          </h1>
+          <p className="text-royalPurple-text2 mt-1">
+            Explore career clusters and pathways published by your school — subjects to study,
+            courses, colleges, and salary expectations.
           </p>
         </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Construction className="h-5 w-5" />
-              Under Development
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-royalPurple-text2">
-              The Learning Path feature is currently under development. This page will provide
-              personalized learning recommendations and track your academic progress.
-            </p>
-            <div className="mt-4 p-4 bg-royalPurple-accent rounded-lg">
-              <h3 className="font-semibold text-royalPurple-accentTx">Coming Soon:</h3>
-              <ul className="mt-2 text-royalPurple-accentTx space-y-1">
-                <li>• Personalized learning recommendations</li>
-                <li>• Progress tracking and analytics</li>
-                <li>• Adaptive learning paths</li>
-                <li>• Achievement milestones</li>
-              </ul>
-            </div>
-          </CardContent>
-        </Card>
+        <CareerExplorer embedded />
       </div>
     </DashboardLayout>
   )

@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { hodFeatureGate } from '@/lib/hod/gateHodFeature'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import { useHodApi } from '@/lib/hod/useHodApi'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
@@ -21,114 +21,19 @@ import {
   Pause,
 } from 'lucide-react'
 import Link from 'next/link'
+import { EmptyModuleState } from '@/components/dashboard/EmptyModuleState'
+import { HodAddRoutineTaskDialog } from '@/components/hod/HodAddRoutineTaskDialog'
+import { HodFileUpload } from '@/components/hod/HodFileUpload'
 
 export default function DailyRoutinePage() {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
   const [filterStatus, setFilterStatus] = useState('all')
   const [activeTab, setActiveTab] = useState('today')
-  const gated = hodFeatureGate('daily-routine')
-  if (gated) {
-    return <DashboardLayout title="Daily Routine">{gated}</DashboardLayout>
-  }
-
-  // Sample daily routine data
-  const routineData = {
-    today: [
-      {
-        id: 1,
-        time: '08:00',
-        task: 'Department Morning Briefing',
-        description: 'Review daily objectives and priorities with department staff',
-        priority: 'high',
-        status: 'completed',
-        duration: '30 minutes',
-        assignedTo: 'All Department Staff',
-        category: 'Management',
-      },
-      {
-        id: 2,
-        time: '08:30',
-        task: 'Class Observation - Mathematics',
-        description: 'Observe Year 9 Mathematics class for quality assurance',
-        priority: 'high',
-        status: 'in-progress',
-        duration: '45 minutes',
-        assignedTo: 'HOD',
-        category: 'Academic',
-      },
-      {
-        id: 3,
-        time: '09:30',
-        task: 'Student Progress Review',
-        description: 'Review at-risk students with subject teachers',
-        priority: 'medium',
-        status: 'pending',
-        duration: '60 minutes',
-        assignedTo: 'Subject Teachers',
-        category: 'Student Support',
-      },
-      {
-        id: 4,
-        time: '11:00',
-        task: 'Resource Allocation Meeting',
-        description: 'Discuss equipment and material distribution',
-        priority: 'medium',
-        status: 'pending',
-        duration: '45 minutes',
-        assignedTo: 'Department Heads',
-        category: 'Resources',
-      },
-      {
-        id: 5,
-        time: '14:00',
-        task: 'Teacher Performance Review',
-        description: 'One-on-one performance discussion with junior teachers',
-        priority: 'high',
-        status: 'pending',
-        duration: '90 minutes',
-        assignedTo: 'HOD',
-        category: 'Staff Development',
-      },
-      {
-        id: 6,
-        time: '16:00',
-        task: 'Department Documentation',
-        description: 'Update department files and administrative records',
-        priority: 'low',
-        status: 'pending',
-        duration: '60 minutes',
-        assignedTo: 'HOD',
-        category: 'Administration',
-      },
-    ],
-    weekly: [
-      {
-        day: 'Monday',
-        tasks: ['Department Planning', 'Staff Meetings', 'Class Observations'],
-        focus: 'Planning & Coordination',
-      },
-      {
-        day: 'Tuesday',
-        tasks: ['Student Assessments', 'Teacher Evaluations', 'Curriculum Review'],
-        focus: 'Academic Quality',
-      },
-      {
-        day: 'Wednesday',
-        tasks: ['Resource Management', 'Budget Review', 'Equipment Checks'],
-        focus: 'Resource Management',
-      },
-      {
-        day: 'Thursday',
-        tasks: ['Professional Development', 'Training Sessions', 'Skill Building'],
-        focus: 'Staff Development',
-      },
-      {
-        day: 'Friday',
-        tasks: ['Week Review', 'Progress Reports', 'Next Week Planning'],
-        focus: 'Review & Planning',
-      },
-    ],
-  }
+  const { data, loading, error, reload } = useHodApi(
+    `/api/hod/daily-routine?date=${selectedDate}`,
+    [selectedDate]
+  )
+  const routineData = data ?? { today: [], weekly: [] }
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -184,11 +89,24 @@ export default function DailyRoutinePage() {
     pendingTasks: routineData.today.filter((task) => task.status === 'pending').length,
   }
 
-  const completionRate = Math.round((routineStats.completedTasks / routineStats.totalTasks) * 100)
+  const completionRate =
+    routineStats.totalTasks > 0
+      ? Math.round((routineStats.completedTasks / routineStats.totalTasks) * 100)
+      : 0
+
+  const hasRoutine = routineData.today.length > 0 || routineData.weekly.length > 0
 
   return (
     <DashboardLayout title="Daily Routine">
       <div className="space-y-6">
+        {loading && <p className="text-sm text-royalPurple-text3">Loading routine…</p>}
+        {error && <p className="text-sm text-royalPurple-dangerTx">{error}</p>}
+        {!loading && !hasRoutine && (
+          <EmptyModuleState
+            title="No daily routine tasks"
+            description="Add today’s tasks and weekly overview when your department routine is configured."
+          />
+        )}
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -219,10 +137,7 @@ export default function DailyRoutinePage() {
               <Download className="h-4 w-4 mr-2" />
               Export Schedule
             </Button>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Task
-            </Button>
+            <HodAddRoutineTaskDialog defaultDate={selectedDate} onCreated={reload} />
           </div>
         </div>
 
@@ -411,6 +326,12 @@ export default function DailyRoutinePage() {
                         </Button>
                       </div>
                     </div>
+                    <HodFileUpload
+                      entityType="daily_routine"
+                      entityId={task.id}
+                      defaultLabel="schedule"
+                      compact
+                    />
                   </div>
                 ))}
               </div>

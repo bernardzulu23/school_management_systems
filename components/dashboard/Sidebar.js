@@ -32,6 +32,8 @@ import {
   Sparkles,
   Code,
   MessageCircle,
+  Layers,
+  Briefcase,
 } from 'lucide-react'
 
 export function Sidebar({ className, mobileOpen, setMobileOpen }) {
@@ -64,6 +66,8 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Registration', href: '/admin/registration', icon: UserPlus },
         { name: 'Scheduling Recipes', href: '/dashboard/admin/recipes', icon: ClipboardList },
         { name: 'Subjects', href: '/admin/subjects', icon: BookOpen },
+        { name: 'Career clusters', href: '/admin/career-clusters', icon: Layers },
+        { name: 'Careers', href: '/admin/careers', icon: Briefcase },
         { name: 'Teacher Performance', href: '/admin/teacher-performance', icon: Target },
         { name: 'Classes', href: '/dashboard/classes', icon: GraduationCap },
         {
@@ -166,6 +170,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Flashcards', href: '/dashboard/student/flashcards', icon: BookOpen },
         { name: 'Results', href: '/dashboard/student/results', icon: BarChart3 },
         { name: 'ECZ Practice', href: '/dashboard/student/ecz-practice', icon: Target },
+        { name: 'Career guidance', href: '/dashboard/student/learning-path', icon: Briefcase },
         {
           name: 'Study assistant',
           href: '/dashboard/student/study-assistant',

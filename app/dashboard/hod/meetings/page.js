@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { hodFeatureGate } from '@/lib/hod/gateHodFeature'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import { useHodApi } from '@/lib/hod/useHodApi'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
@@ -21,75 +21,16 @@ import {
   CheckCircle,
 } from 'lucide-react'
 import Link from 'next/link'
+import { EmptyModuleState } from '@/components/dashboard/EmptyModuleState'
+import { HodScheduleMeetingDialog } from '@/components/hod/HodScheduleMeetingDialog'
+import { HodFileUpload } from '@/components/hod/HodFileUpload'
 
 export default function MeetingFilesPage() {
   const [activeTab, setActiveTab] = useState('upcoming')
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState('all')
-  const gated = hodFeatureGate('meetings')
-  if (gated) {
-    return <DashboardLayout title="Department Meetings">{gated}</DashboardLayout>
-  }
-
-  // Sample meeting data
-  const meetingsData = {
-    upcoming: [
-      {
-        id: 1,
-        title: 'Department Planning Meeting',
-        type: 'Department',
-        date: '2024-01-25',
-        time: '10:00 AM',
-        duration: '2 hours',
-        attendees: ['All Department Staff'],
-        agenda: ['Curriculum Review', 'Resource Planning', 'Performance Analysis'],
-        location: 'Conference Room A',
-        status: 'scheduled',
-      },
-      {
-        id: 2,
-        title: 'Staff Development Workshop',
-        type: 'Professional Development',
-        date: '2024-01-28',
-        time: '2:00 PM',
-        duration: '3 hours',
-        attendees: ['Mathematics Teachers', 'Science Teachers'],
-        agenda: ['Teaching Methodologies', 'Assessment Strategies'],
-        location: 'Training Hall',
-        status: 'scheduled',
-      },
-    ],
-    completed: [
-      {
-        id: 3,
-        title: 'Monthly Department Review',
-        type: 'Department',
-        date: '2024-01-15',
-        time: '9:00 AM',
-        duration: '1.5 hours',
-        attendees: ['All Department Staff'],
-        agenda: ['Performance Review', 'Student Progress', 'Resource Updates'],
-        location: 'Conference Room B',
-        status: 'completed',
-        minutes: 'Available',
-        actionItems: 3,
-      },
-      {
-        id: 4,
-        title: 'Subject Coordination Meeting',
-        type: 'Academic',
-        date: '2024-01-10',
-        time: '11:00 AM',
-        duration: '1 hour',
-        attendees: ['Subject Heads', 'Senior Teachers'],
-        agenda: ['Syllabus Updates', 'Assessment Calendar'],
-        location: 'Department Office',
-        status: 'completed',
-        minutes: 'Available',
-        actionItems: 5,
-      },
-    ],
-  }
+  const { data, loading, error, reload } = useHodApi('/api/hod/meetings?scope=department')
+  const meetingsData = data ?? { upcoming: [], completed: [] }
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -142,9 +83,19 @@ export default function MeetingFilesPage() {
     ),
   }
 
+  const hasMeetings = meetingsData.upcoming.length > 0 || meetingsData.completed.length > 0
+
   return (
     <DashboardLayout title="Meeting Files">
       <div className="space-y-6">
+        {loading && <p className="text-sm text-royalPurple-text3">Loading meetings…</p>}
+        {error && <p className="text-sm text-royalPurple-dangerTx">{error}</p>}
+        {!loading && !hasMeetings && (
+          <EmptyModuleState
+            title="No meetings recorded"
+            description="Schedule and document department meetings here once your school starts adding records."
+          />
+        )}
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -169,10 +120,7 @@ export default function MeetingFilesPage() {
               <Download className="h-4 w-4 mr-2" />
               Export Schedule
             </Button>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Schedule Meeting
-            </Button>
+            <HodScheduleMeetingDialog meetingScope="department" onCreated={reload} />
           </div>
         </div>
 
@@ -347,18 +295,21 @@ export default function MeetingFilesPage() {
                       ))}
                     </div>
                     {meeting.status === 'completed' && (
-                      <div className="mt-3 flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <span className="text-sm text-royalPurple-successTx">
-                            Minutes: {meeting.minutes}
-                          </span>
-                          <span className="text-sm text-royalPurple-accentTx">
-                            Action Items: {meeting.actionItems}
-                          </span>
-                        </div>
-                        <Button size="sm">View Minutes</Button>
+                      <div className="mt-3 flex items-center space-x-4">
+                        <span className="text-sm text-royalPurple-successTx">
+                          Minutes: {meeting.minutes}
+                        </span>
+                        <span className="text-sm text-royalPurple-accentTx">
+                          Action Items: {meeting.actionItems}
+                        </span>
                       </div>
                     )}
+                    <HodFileUpload
+                      entityType="meeting"
+                      entityId={meeting.id}
+                      defaultLabel={meeting.status === 'completed' ? 'minutes' : 'schedule'}
+                      compact
+                    />
                   </div>
                 </div>
               ))}
@@ -403,29 +354,9 @@ export default function MeetingFilesPage() {
               <CardTitle>Recent Meeting Activity</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                <div className="p-3 bg-royalPurple-success border border-royalPurple-border rounded-lg">
-                  <h4 className="font-medium text-royalPurple-successTx mb-1">Meeting Completed</h4>
-                  <p className="text-sm text-royalPurple-successTx">
-                    Monthly Department Review - Minutes uploaded
-                  </p>
-                  <p className="text-xs text-royalPurple-successTx mt-1">2 hours ago</p>
-                </div>
-                <div className="p-3 bg-royalPurple-accent border border-royalPurple-border2 rounded-lg">
-                  <h4 className="font-medium text-royalPurple-accentTx mb-1">Meeting Scheduled</h4>
-                  <p className="text-sm text-royalPurple-accentTx">
-                    Department Planning Meeting - Jan 25, 10:00 AM
-                  </p>
-                  <p className="text-xs text-royalPurple-accentTx mt-1">1 day ago</p>
-                </div>
-                <div className="p-3 bg-warn/10 border border-warn/40 rounded-lg">
-                  <h4 className="font-medium text-g-800 mb-1">Action Items Due</h4>
-                  <p className="text-sm text-g-700">
-                    3 action items from last meeting need attention
-                  </p>
-                  <p className="text-xs text-warn mt-1">Due in 2 days</p>
-                </div>
-              </div>
+              <p className="text-sm text-royalPurple-text3 text-center py-6">
+                Recent activity will show here when meetings are logged.
+              </p>
             </CardContent>
           </Card>
         </div>

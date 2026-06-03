@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-import { hodFeatureGate } from '@/lib/hod/gateHodFeature'
+import { Fragment, useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import { useHodApi } from '@/lib/hod/useHodApi'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
@@ -23,22 +23,17 @@ import {
   Eye,
 } from 'lucide-react'
 import Link from 'next/link'
+import { EmptyModuleState } from '@/components/dashboard/EmptyModuleState'
+import { HodAddCorrespondenceDialog } from '@/components/hod/HodAddCorrespondenceDialog'
+import { HodFileUpload } from '@/components/hod/HodFileUpload'
 
 export default function CorrespondencePage() {
   const [activeTab, setActiveTab] = useState('incoming')
-  const [showAddDialog, setShowAddDialog] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
 
-  // Correspondence data - will be loaded from API
-  const [correspondenceData, setCorrespondenceData] = useState({
-    incoming: [],
-    outgoing: [],
-  })
-  const gated = hodFeatureGate('correspondence')
-  if (gated) {
-    return <DashboardLayout title="Correspondence">{gated}</DashboardLayout>
-  }
+  const { data, loading, error, reload } = useHodApi('/api/hod/correspondence')
+  const correspondenceData = data ?? { incoming: [], outgoing: [] }
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -90,9 +85,20 @@ export default function CorrespondencePage() {
     drafts: correspondenceData.outgoing.filter((item) => item.status === 'draft').length,
   }
 
+  const hasCorrespondence =
+    correspondenceData.incoming.length > 0 || correspondenceData.outgoing.length > 0
+
   return (
     <DashboardLayout title="Correspondence File">
       <div className="space-y-6">
+        {loading && <p className="text-sm text-royalPurple-text3">Loading correspondence…</p>}
+        {error && <p className="text-sm text-royalPurple-dangerTx">{error}</p>}
+        {!loading && !hasCorrespondence && (
+          <EmptyModuleState
+            title="No correspondence on file"
+            description="Incoming and outgoing letters will be listed here when records are added."
+          />
+        )}
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -110,10 +116,7 @@ export default function CorrespondencePage() {
               <p className="text-royalPurple-text2">Manage incoming and outgoing communications</p>
             </div>
           </div>
-          <Button onClick={() => setShowAddDialog(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Correspondence
-          </Button>
+          <HodAddCorrespondenceDialog onCreated={reload} />
         </div>
 
         {/* Statistics Cards */}
@@ -228,53 +231,65 @@ export default function CorrespondencePage() {
                 </thead>
                 <tbody>
                   {correspondenceData[activeTab].map((item) => (
-                    <tr key={item.id}>
-                      <td className="py-3 px-4 font-medium">{item.subject}</td>
-                      <td className="py-3 px-4">
-                        {activeTab === 'incoming' ? item.sender : item.recipient}
-                      </td>
-                      <td className="py-3 px-4 text-sm text-royalPurple-text3">
-                        {new Date(item.date).toLocaleDateString()}
-                      </td>
-                      <td className="py-3 px-4">
-                        <span
-                          className={`px-2 py-1 text-xs rounded-full ${getPriorityColor(item.priority)}`}
-                        >
-                          {item.priority}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4">
-                        <div className="flex items-center">
-                          {getStatusIcon(item.status)}
+                    <Fragment key={item.id}>
+                      <tr>
+                        <td className="py-3 px-4 font-medium">{item.subject}</td>
+                        <td className="py-3 px-4">
+                          {activeTab === 'incoming' ? item.sender : item.recipient}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-royalPurple-text3">
+                          {new Date(item.date).toLocaleDateString()}
+                        </td>
+                        <td className="py-3 px-4">
                           <span
-                            className={`ml-2 px-2 py-1 text-xs rounded-full ${getStatusColor(item.status)}`}
+                            className={`px-2 py-1 text-xs rounded-full ${getPriorityColor(item.priority)}`}
                           >
-                            {item.status}
+                            {item.priority}
                           </span>
-                        </div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className="badge-brand">{item.type}</span>
-                      </td>
-                      <td className="py-3 px-4 text-center">
-                        {item.attachments > 0 && (
-                          <span className="text-royalPurple-accentTx">{item.attachments}</span>
-                        )}
-                      </td>
-                      <td className="py-3 px-4">
-                        <div className="flex items-center space-x-2">
-                          <Button size="sm" variant="outline">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="flex items-center">
+                            {getStatusIcon(item.status)}
+                            <span
+                              className={`ml-2 px-2 py-1 text-xs rounded-full ${getStatusColor(item.status)}`}
+                            >
+                              {item.status}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className="badge-brand">{item.type}</span>
+                        </td>
+                        <td className="py-3 px-4 text-center">
+                          {item.attachments > 0 && (
+                            <span className="text-royalPurple-accentTx">{item.attachments}</span>
+                          )}
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="flex items-center space-x-2">
+                            <Button size="sm" variant="outline">
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button size="sm" variant="outline">
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button size="sm" variant="outline">
+                              <Download className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr key={`${item.id}-files`}>
+                        <td colSpan={8} className="py-2 px-4 bg-royalPurple-page/30">
+                          <HodFileUpload
+                            entityType="correspondence"
+                            entityId={item.id}
+                            defaultLabel="letter"
+                            compact
+                          />
+                        </td>
+                      </tr>
+                    </Fragment>
                   ))}
                 </tbody>
               </table>
