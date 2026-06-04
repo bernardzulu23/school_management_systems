@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 import { cn } from '@/lib/utils'
+import { AppVersionLabel } from '@/components/dashboard/AppVersionLabel'
 import { useSchool } from '@/lib/context/SchoolContext'
 import {
   Home,
@@ -56,6 +57,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         name: 'Profile',
         href: '/dashboard/profile',
         icon: UserIcon,
+      },
+      {
+        name: 'Settings',
+        href: '/dashboard/settings',
+        icon: Settings,
       },
     ]
 
@@ -269,7 +275,14 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         })}
       </div>
 
-      <div className="p-4 mt-auto border-t border-royalPurple-border">
+      <div className="p-4 mt-auto border-t border-royalPurple-border space-y-3">
+        {!isCollapsed || mobileOpen ? (
+          <AppVersionLabel />
+        ) : (
+          <div className="flex justify-center">
+            <AppVersionLabel compact />
+          </div>
+        )}
         <button
           onClick={logout}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border border-royalPurple-border2 text-royalPurple-text2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx transition-colors"

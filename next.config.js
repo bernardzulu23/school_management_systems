@@ -1,3 +1,5 @@
+const { version: appVersion } = require('./package.json')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Keep dev-only formatters out of the server bundle if a dependency imports them
@@ -5,10 +7,17 @@ const nextConfig = {
 
   transpilePackages: ['monaco-editor', '@monaco-editor/react'],
 
+  // Production source maps are expensive during webpack builds on Vercel.
+  productionBrowserSourceMaps: false,
+
   experimental: {
     serverActions: {
       bodySizeLimit: '2mb',
     },
+    // Lower peak RAM during static generation (125+ app routes).
+    cpus: 1,
+    workerThreads: false,
+    staticGenerationMaxConcurrency: 1,
   },
 
   // Skip typecheck during Vercel builds; run `npm run lint` and `tsc` locally.
@@ -41,6 +50,8 @@ const nextConfig = {
 
   // Environment variables
   env: {
+    NEXT_PUBLIC_APP_VERSION: process.env.NEXT_PUBLIC_APP_VERSION || appVersion,
+    NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME || 'Zambian School Management System',
     NEXT_PUBLIC_APP_URL:
       process.env.NEXT_PUBLIC_APP_URL ||
       process.env.NEXT_PUBLIC_APP_ORIGIN ||
@@ -120,12 +131,19 @@ const nextConfig = {
 
 const { withSentryConfig } = require('@sentry/nextjs')
 
+// Source map upload during build is very memory-heavy; opt in explicitly.
+const sentryUploadSourceMaps = process.env.SENTRY_UPLOAD_SOURCEMAPS === '1'
+
 module.exports = withSentryConfig(nextConfig, {
   org: process.env.SENTRY_ORG || 'zinks-0m',
   project: process.env.SENTRY_PROJECT || 'javascript-nextjs',
   authToken: process.env.SENTRY_AUTH_TOKEN,
   silent: !process.env.CI,
-  widenClientFileUpload: true,
+  sourcemaps: {
+    disable: !sentryUploadSourceMaps,
+  },
+  widenClientFileUpload: sentryUploadSourceMaps,
+  hideSourceMaps: true,
   tunnelRoute: '/monitoring',
   webpack: {
     automaticVercelMonitors: true,

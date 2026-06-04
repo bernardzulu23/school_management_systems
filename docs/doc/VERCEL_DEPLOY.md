@@ -140,19 +140,19 @@ If the CLI fails on Windows with `unable to verify the first certificate`, use *
 
 ## 7. Troubleshooting
 
-| Issue                                       | Fix                                                                                                                                    |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `Can't reach database` at runtime           | Use **pooled** `DATABASE_URL`; check `sslmode=require`                                                                                 |
-| Migrate fails on CI/Vercel                  | Use `DIRECT_URL` (non-pooler) for `prisma migrate deploy`                                                                              |
-| Auth cookies not shared on subdomains       | Set `COOKIE_DOMAIN` with leading dot                                                                                                   |
-| `ERR_NAME_NOT_RESOLVED` on school login     | Add Vercel domain `*.yourdomain.com` **and** DNS wildcard `*` CNAME → Vercel; apex alone is not enough                                 |
-| Login works on apex but not `school.domain` | Wildcard DNS missing; interim: `https://yourdomain.com/login?subdomain=schoolslug`                                                     |
-| Build OOM                                   | Already skipping TS in build via `next.config.js`; run `npm run lint` locally                                                          |
-| `write EPIPE` during `next build`           | Project uses `next build --webpack` (see `scripts/vercel-build.js`). Push latest `main` — old Cloudflare lockfiles cause huge installs |
-| `eslint` invalid in `next.config.js`        | Removed in Next.js 16 — lint via `npm run lint` only                                                                                   |
-| `husky` during Vercel install               | `installCommand` uses `--ignore-scripts`; set `HUSKY=0` in Vercel (see `vercel.json`)                                                  |
-| `prisma: command not found`                 | `prisma` is in `dependencies`; build runs `npx prisma generate`. `NPM_CONFIG_PRODUCTION=false` in `vercel.json` installs dev tools     |
-| Wrong public URL in emails                  | Set `NEXT_PUBLIC_APP_URL` / `VERCEL_URL` is used as fallback in `next.config.js`                                                       |
+| Issue                                       | Fix                                                                                                                                                                                                                                                          |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Can't reach database` at runtime           | Use **pooled** `DATABASE_URL`; check `sslmode=require`                                                                                                                                                                                                       |
+| Migrate fails on CI/Vercel                  | Use `DIRECT_URL` (non-pooler) for `prisma migrate deploy`                                                                                                                                                                                                    |
+| Auth cookies not shared on subdomains       | Set `COOKIE_DOMAIN` with leading dot                                                                                                                                                                                                                         |
+| `ERR_NAME_NOT_RESOLVED` on school login     | Add Vercel domain `*.yourdomain.com` **and** DNS wildcard `*` CNAME → Vercel; apex alone is not enough                                                                                                                                                       |
+| Login works on apex but not `school.domain` | Wildcard DNS missing; interim: `https://yourdomain.com/login?subdomain=schoolslug`                                                                                                                                                                           |
+| Build OOM (`SIGKILL`, OOM in build report)  | `vercel.json` sets `NODE_OPTIONS=--max-old-space-size=4096` and `GENERATE_SOURCEMAP=false`. Build limits parallel static gen (`cpus: 1`). Sentry source maps only upload when `SENTRY_UPLOAD_SOURCEMAPS=1`. Redeploy after push. Run `npm run lint` locally. |
+| `write EPIPE` during `next build`           | Project uses `next build --webpack` (see `scripts/vercel-build.js`). Push latest `main` — old Cloudflare lockfiles cause huge installs                                                                                                                       |
+| `eslint` invalid in `next.config.js`        | Removed in Next.js 16 — lint via `npm run lint` only                                                                                                                                                                                                         |
+| `husky` during Vercel install               | `installCommand` uses `--ignore-scripts`; set `HUSKY=0` in Vercel (see `vercel.json`)                                                                                                                                                                        |
+| `prisma: command not found`                 | `prisma` is in `dependencies`; build runs `npx prisma generate`. `NPM_CONFIG_PRODUCTION=false` in `vercel.json` installs dev tools                                                                                                                           |
+| Wrong public URL in emails                  | Set `NEXT_PUBLIC_APP_URL` / `VERCEL_URL` is used as fallback in `next.config.js`                                                                                                                                                                             |
 
 ---
 

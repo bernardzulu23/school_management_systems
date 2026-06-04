@@ -5,7 +5,8 @@ import toast from 'react-hot-toast'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { Settings, Shield, Save, Camera, Eye, EyeOff } from 'lucide-react'
+import { Settings, Shield, Save, Camera, Eye, EyeOff, Info } from 'lucide-react'
+import { AppVersionLabel } from '@/components/dashboard/AppVersionLabel'
 import { useAuth } from '@/lib/auth'
 import ProfilePictureUpload from '@/components/ui/ProfilePictureUpload'
 
@@ -61,7 +62,10 @@ export default function SettingsPage() {
     }
   }
 
-  const tabs = [{ id: 'account', name: 'Account', icon: Shield }]
+  const tabs = [
+    { id: 'account', name: 'Account', icon: Shield },
+    { id: 'about', name: 'About', icon: Info },
+  ]
 
   return (
     <DashboardLayout title="Settings">
@@ -83,6 +87,24 @@ export default function SettingsPage() {
             </Button>
           ))}
         </div>
+
+        {activeTab === 'about' && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Info className="h-5 w-5" />
+                About this system
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AppVersionLabel />
+              <p className="text-sm text-royalPurple-text2 mt-4">
+                You are running the release shown above. After an upgrade, refresh the page if the
+                version does not update.
+              </p>
+            </CardContent>
+          </Card>
+        )}
 
         {activeTab === 'account' && (
           <div className="space-y-6">

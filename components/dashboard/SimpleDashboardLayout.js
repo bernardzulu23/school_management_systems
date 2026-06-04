@@ -15,6 +15,7 @@ import { SubscriptionWarningBanner } from '@/components/billing/SubscriptionWarn
 import ServerSessionGuard from '@/components/auth/ServerSessionGuard'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { ErrorBoundary } from '@/components/dashboard/ErrorBoundary'
+import { getAppVersion } from '@/lib/app-version'
 
 export function DashboardLayout({ children, title }) {
   const { user, logout } = useAuth()
@@ -295,8 +296,11 @@ export function DashboardLayout({ children, title }) {
         <footer className="bg-royalPurple-deep border-t border-royalPurple-border mt-auto transition-colors duration-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="py-4 text-center text-sm text-royalPurple-text2">
-              {new Date().getFullYear()} Zambian School Management System - Empowering Rural
+              {new Date().getFullYear()} Zambian School Management System — Empowering Rural
               Education
+              <span className="block text-xs text-royalPurple-text3 mt-1 tabular-nums">
+                Version {getAppVersion()}
+              </span>
             </div>
           </div>
         </footer>
