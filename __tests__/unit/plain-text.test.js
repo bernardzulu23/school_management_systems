@@ -18,6 +18,16 @@ describe('sanitizePlainText', () => {
     expect(sanitizePlainText(input)).toBe('Story text\nComprehension Questions\n1. First?')
   })
 
+  it('strips --- glued to a section header without whitespace', () => {
+    const input = 'Story end.\n---COMPREHENSION QUESTIONS\n1. First?'
+    expect(sanitizePlainText(input)).toBe('Story end.\nCOMPREHENSION QUESTIONS\n1. First?')
+  })
+
+  it('strips unicode em-dash divider lines', () => {
+    const input = 'Story end.\n—\nComprehension Questions'
+    expect(sanitizePlainText(input)).toBe('Story end.\n\nComprehension Questions')
+  })
+
   it('strips asterisk-only divider lines', () => {
     const input = 'Section\n***\nNext'
     expect(sanitizePlainText(input)).toBe('Section\n\nNext')

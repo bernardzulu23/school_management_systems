@@ -131,22 +131,6 @@ export function createGroqTextEventStream(options: GroqStreamOptions): ReadableS
 
         const finalText = options.plainText ? sanitizePlainText(responseText) : responseText
 
-        // #region agent log
-        if (options.plainText) {
-          const { agentLog } = await import('@/lib/debug/agentLog')
-          agentLog(
-            'groq-client.ts:stream:done',
-            'plain_text_stream_complete',
-            {
-              rawLen: responseText.length,
-              cleanLen: finalText.length,
-              stillHasMarkdown: /---|\*\*|^#{1,6}\s/m.test(finalText),
-            },
-            'H-PT'
-          )
-        }
-        // #endregion
-
         if (options.onComplete) {
           await options.onComplete(finalText, usage, model)
         }

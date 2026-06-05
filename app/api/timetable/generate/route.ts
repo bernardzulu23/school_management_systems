@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
   if (allocations.length === 0) {
     return NextResponse.json(
       {
-        error: `No pushed allocations found for ${term} ${academicYear}. Ask HODs to push their department allocations first.`,
+        error: `No approved teaching allocations found for ${term} ${academicYear}. HODs must submit class allocations and you must approve them on the Department Allocations tab (same term/year) before generating.`,
       },
       { status: 400 }
     )

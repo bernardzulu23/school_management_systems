@@ -21,8 +21,10 @@ export function sanitizePlainText(text: string): string {
 
   return text
     .replace(/^\s*---+?\s*$/gm, '')
-    .replace(/^\s*---+[ \t]+/gm, '')
+    .replace(/^\s*---+[ \t]*/gm, '')
     .replace(/^\s*\*{3,}\s*$/gm, '')
+    .replace(/^\s*[—–]\s*$/gm, '')
+    .replace(/^\s*[—–][ \t]*/gm, '')
     .replace(/\*\*(.+?)\*\*/g, '$1')
     .replace(/\*(.+?)\*/g, '$1')
     .replace(/__(.+?)__/g, '$1')

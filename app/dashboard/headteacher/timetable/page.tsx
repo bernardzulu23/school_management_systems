@@ -305,39 +305,7 @@ function HeadteacherTimetablePageContent() {
         setPendingAllocations(pending)
         setMasterEntries(entries)
         setDepartments(deptList)
-        // #region agent log
-        fetch('/api/debug/agent-log', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            location: 'headteacher/timetable/page.tsx:allocations',
-            message: 'allocation_workflow_loaded',
-            data: {
-              pendingCount: pending.length,
-              masterCount: entries.length,
-              deptCount: deptList.length,
-              term,
-              academicYear,
-            },
-            hypothesisId: 'H5',
-          }),
-        }).catch(() => {})
-        // #endregion
       } catch (e: any) {
-        // #region agent log
-        fetch('/api/debug/agent-log', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            location: 'headteacher/timetable/page.tsx:allocations:error',
-            message: 'allocation_workflow_failed',
-            data: { error: e?.message || 'unknown' },
-            hypothesisId: 'H5',
-          }),
-        }).catch(() => {})
-        // #endregion
         toast.error(e?.message || 'Failed to load allocation workflow')
       } finally {
         setAllocationsLoading(false)
@@ -1053,6 +1021,13 @@ function HeadteacherTimetablePageContent() {
                         </div>
                       </div>
                       <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 p-4">
+                        <div className="text-xs text-royalPurple-text3">Season</div>
+                        <div className="text-sm font-semibold text-royalPurple-text1">
+                          {String(reviewData?.term || 'Term 1')} ·{' '}
+                          {String(reviewData?.academicYear || academicYear)}
+                        </div>
+                      </div>
+                      <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 p-4">
                         <div className="text-xs text-royalPurple-text3">Period config</div>
                         <div className="text-sm font-semibold text-royalPurple-text1 break-words">
                           {formatPeriodDisplay(reviewData?.periodConfig)}
@@ -1109,16 +1084,25 @@ function HeadteacherTimetablePageContent() {
                                     method: 'POST',
                                     credentials: 'include',
                                     headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ term, academicYear }),
+                                    body: JSON.stringify({
+                                      term: reviewData?.term || term,
+                                      academicYear: reviewData?.academicYear || academicYear,
+                                    }),
                                   }
                                 )
                                 const json = await res.json().catch(() => ({}))
                                 if (!res.ok)
                                   throw new Error(json?.message || json?.error || 'Approve failed')
                                 const synced = Number(json?.timetableAllocationsSynced || 0)
+                                const approvedTerm = String(json?.term || reviewData?.term || term)
+                                const approvedYear = String(
+                                  json?.academicYear || reviewData?.academicYear || academicYear
+                                )
+                                if (approvedTerm !== term) setTerm(approvedTerm)
+                                if (approvedYear !== academicYear) setAcademicYear(approvedYear)
                                 toast.success(
                                   synced > 0
-                                    ? `Approved — ${synced} teaching allocation row(s) ready for timetable (${term}, ${academicYear})`
+                                    ? `Approved — ${synced} teaching allocation row(s) ready for timetable (${approvedTerm}, ${approvedYear})`
                                     : 'Approved ✓'
                                 )
                                 const nextPending = pendingAllocations.filter(

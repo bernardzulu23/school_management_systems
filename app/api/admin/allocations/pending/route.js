@@ -5,7 +5,6 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
-import { agentLog } from '@/lib/debug/agentLog'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -22,15 +21,6 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const { searchParams } = new URL(request.url)
   const departmentId = String(searchParams.get('departmentId') || '').trim()
-
-  // #region agent log
-  agentLog(
-    'pending/route.js:GET',
-    'pending_allocations_query',
-    { schoolId, departmentId: departmentId || null, userRole: auth.user?.role },
-    'H1'
-  )
-  // #endregion
 
   const pending = await prisma.departmentAllocation.findMany({
     where: {
@@ -49,15 +39,6 @@ export const GET = withErrorHandler(async function GET(request) {
     orderBy: [{ submittedAt: 'desc' }, { createdAt: 'desc' }],
     take: 2000,
   })
-
-  // #region agent log
-  agentLog(
-    'pending/route.js:GET:result',
-    'pending_allocations_result',
-    { count: pending.length, ids: pending.slice(0, 5).map((a) => a.id) },
-    'H2'
-  )
-  // #endregion
 
   return NextResponse.json({ success: true, allocations: pending })
 })

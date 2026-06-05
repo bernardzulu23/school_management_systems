@@ -6,6 +6,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveTeacherUserId } from '@/lib/utils/resolveTeacherId'
+import { resolveAllocationSeason } from '@/lib/timetable/allocationSeason'
 
 function unwrapAllocationData(data) {
   const raw = data && typeof data === 'object' ? data : {}
@@ -44,6 +45,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   if (!allocation) throw new ApiError('Not found', 404)
 
   const details = unwrapAllocationData(allocation.allocationData)
+  const { term, academicYear } = resolveAllocationSeason(allocation.allocationData)
 
   const teacherUser = await resolveTeacherUserId(prisma, schoolId, details.teacherId)
 
@@ -60,6 +62,8 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
       classes: details.classes,
       subject: details.subject,
       periodConfig: details.periodConfig,
+      term,
+      academicYear,
       createdBy: allocation.createdBy,
       submittedAt: allocation.submittedAt,
       rejectionReason: allocation.rejectionReason,
