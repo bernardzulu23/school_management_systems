@@ -18,6 +18,7 @@ import {
   createGroqTextEventStream,
   GROQ_SSE_HEADERS,
 } from '@/lib/ai/groq-client'
+import { sanitizePlainText } from '@/lib/ai/plain-text'
 import { buildStoryPrompt, estimateWordCountFromLength } from '@/lib/ai/subject-adaptive-prompts'
 
 const StoryWeaverInputSchema = z.object({
@@ -135,8 +136,10 @@ export const POST = withAILimits(async function POST(request: Request) {
       prompt,
       maxTokens: 2200,
       temperature: 0.8,
+      plainText: true,
       onErrorMessage: 'Failed to generate story',
       onComplete: async (responseText) => {
+        const cleaned = responseText
         await trackAIUsage(schoolId, 'ai-story-weaver')
         await prisma.aIRequest.create({
           data: {
@@ -144,7 +147,7 @@ export const POST = withAILimits(async function POST(request: Request) {
             schoolId,
             feature: 'ai-story-weaver',
             prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
-            response: responseText.length > 20000 ? responseText.slice(0, 20000) : responseText,
+            response: cleaned.length > 20000 ? cleaned.slice(0, 20000) : cleaned,
             tokens: 0,
           },
         })

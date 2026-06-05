@@ -17,6 +17,7 @@ import {
   createGroqTextEventStream,
   GROQ_SSE_HEADERS,
 } from '@/lib/ai/groq-client'
+import { sanitizePlainText } from '@/lib/ai/plain-text'
 import {
   buildReportCommentPrompt,
   performanceLevelFromPercentage,
@@ -93,8 +94,10 @@ export const POST = withAILimits(async function POST(request) {
     prompt,
     maxTokens: 500,
     temperature: 0.6,
+    plainText: true,
     onErrorMessage: 'Failed to generate comment',
     onComplete: async (responseText) => {
+      const cleaned = responseText
       await trackAIUsage(schoolId, 'ai-report-comments')
       await prisma.aIRequest.create({
         data: {
@@ -102,7 +105,7 @@ export const POST = withAILimits(async function POST(request) {
           schoolId,
           feature: 'ai-report-comments',
           prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
-          response: responseText.length > 20000 ? responseText.slice(0, 20000) : responseText,
+          response: cleaned.length > 20000 ? cleaned.slice(0, 20000) : cleaned,
           tokens: 0,
         },
       })

@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
+import { sanitizePlainText } from '@/lib/ai/plain-text'
 
 function parseSSEChunk(buffer) {
   const parts = buffer.split('\n\n')
@@ -15,7 +16,8 @@ function parseSSEChunk(buffer) {
   return { events, remaining }
 }
 
-export function useAIStream(endpoint) {
+export function useAIStream(endpoint, options = {}) {
+  const { plainText = false } = options
   const [text, setText] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -79,6 +81,9 @@ export function useAIStream(endpoint) {
           buffer = parsed.remaining
           for (const eventStr of parsed.events) {
             if (eventStr === '[DONE]') {
+              if (plainText) {
+                setText((prev) => sanitizePlainText(prev))
+              }
               setDone(true)
               continue
             }
@@ -93,11 +98,21 @@ export function useAIStream(endpoint) {
             } else if (Array.isArray(parsedEvent?.ragReferences)) {
               setRagReferences(parsedEvent.ragReferences)
             } else if (typeof parsedEvent?.text === 'string') {
-              setText((prev) => prev + parsedEvent.text)
+              if (parsedEvent.replace) {
+                setText(plainText ? sanitizePlainText(parsedEvent.text) : parsedEvent.text)
+              } else {
+                setText((prev) => {
+                  const next = prev + parsedEvent.text
+                  return plainText ? sanitizePlainText(next) : next
+                })
+              }
             }
           }
         }
 
+        if (plainText) {
+          setText((prev) => sanitizePlainText(prev))
+        }
         setDone(true)
       } catch (e) {
         if (e?.name !== 'AbortError') setError({ error: e?.message || 'Request failed' })
@@ -105,7 +120,7 @@ export function useAIStream(endpoint) {
         setLoading(false)
       }
     },
-    [endpoint]
+    [endpoint, plainText]
   )
 
   const stop = useCallback(() => {

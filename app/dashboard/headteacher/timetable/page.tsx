@@ -305,7 +305,39 @@ function HeadteacherTimetablePageContent() {
         setPendingAllocations(pending)
         setMasterEntries(entries)
         setDepartments(deptList)
+        // #region agent log
+        fetch('/api/debug/agent-log', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            location: 'headteacher/timetable/page.tsx:allocations',
+            message: 'allocation_workflow_loaded',
+            data: {
+              pendingCount: pending.length,
+              masterCount: entries.length,
+              deptCount: deptList.length,
+              term,
+              academicYear,
+            },
+            hypothesisId: 'H5',
+          }),
+        }).catch(() => {})
+        // #endregion
       } catch (e: any) {
+        // #region agent log
+        fetch('/api/debug/agent-log', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            location: 'headteacher/timetable/page.tsx:allocations:error',
+            message: 'allocation_workflow_failed',
+            data: { error: e?.message || 'unknown' },
+            hypothesisId: 'H5',
+          }),
+        }).catch(() => {})
+        // #endregion
         toast.error(e?.message || 'Failed to load allocation workflow')
       } finally {
         setAllocationsLoading(false)

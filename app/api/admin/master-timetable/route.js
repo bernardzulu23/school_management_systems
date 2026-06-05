@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { agentLog } from '@/lib/debug/agentLog'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -28,6 +29,15 @@ export const GET = withErrorHandler(async function GET(request) {
     orderBy: { insertedAt: 'desc' },
     take: 5000,
   })
+
+  // #region agent log
+  agentLog(
+    'master-timetable/route.js:GET',
+    'master_timetable_entries',
+    { schoolId, entryCount: entries.length },
+    'H2'
+  )
+  // #endregion
 
   return NextResponse.json({ success: true, entries })
 })

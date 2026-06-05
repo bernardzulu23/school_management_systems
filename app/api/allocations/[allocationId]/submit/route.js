@@ -7,6 +7,7 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
 import { canManageDepartmentAllocations } from '@/lib/utils/hodAccess'
+import { agentLog } from '@/lib/debug/agentLog'
 
 function adminRoleWhere() {
   const values = ['headteacher', 'admin', 'administrator', 'superadmin']
@@ -74,6 +75,15 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       skipDuplicates: true,
     })
   }
+
+  // #region agent log
+  agentLog(
+    'submit/route.js:POST',
+    'hod_allocation_submitted',
+    { allocationId: updated.id, status: updated.status, adminNotifyCount: admins.length, schoolId },
+    'H3'
+  )
+  // #endregion
 
   return NextResponse.json({ status: updated.status, submittedAt: updated.submittedAt })
 })

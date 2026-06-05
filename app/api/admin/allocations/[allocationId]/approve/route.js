@@ -8,6 +8,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { syncDepartmentApprovalToTeacherAllocations } from '@/lib/timetable/departmentApprovalSync'
 import { formatPeriodConfigLabel } from '@/lib/timetable/formatPeriodConfig'
 import { resolveTeacherUserId } from '@/lib/utils/resolveTeacherId'
+import { agentLog } from '@/lib/debug/agentLog'
 
 function unwrapAllocationData(data) {
   const raw = data && typeof data === 'object' ? data : {}
@@ -127,6 +128,22 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
 
     return { updated, masterEntry, timetableSync, term, academicYear }
   })
+
+  // #region agent log
+  agentLog(
+    'approve/route.js:POST',
+    'allocation_approved',
+    {
+      allocationId,
+      status: result.updated.status,
+      masterEntryId: result.masterEntry.id,
+      syncedCount: result.timetableSync.count,
+      term: result.term,
+      academicYear: result.academicYear,
+    },
+    'H4'
+  )
+  // #endregion
 
   return NextResponse.json({
     status: result.updated.status,

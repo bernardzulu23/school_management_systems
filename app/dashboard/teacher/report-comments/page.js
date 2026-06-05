@@ -13,7 +13,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 export default function TeacherReportCommentsPage() {
-  const { text, loading, error, start, reset, stop } = useAIStream('/api/ai/report-comments')
+  const { text, loading, error, start, reset, stop } = useAIStream('/api/ai/report-comments', {
+    plainText: true,
+  })
   const [form, setForm] = useState({
     studentName: '',
     grade: 'Grade 9',

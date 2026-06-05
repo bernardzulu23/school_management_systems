@@ -6,9 +6,11 @@ import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
 import { generateAIText } from '@/lib/ai/client'
 import { buildRagContextForQuery, appendRagToSystemPrompt } from '@/lib/ai/rag-context'
 import { getSchoolPlanForUsage, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
+import { PLAIN_TEXT_OUTPUT_RULES, sanitizePlainText } from '@/lib/ai/plain-text'
 
-const SYSTEM =
-  'You are a helpful study assistant for Zambian CBC students. Answer clearly using school materials when provided. Cite [Ref N] when using references.'
+const SYSTEM = `You are a helpful study assistant for Zambian CBC students. Answer clearly using school materials when provided. Cite [Ref N] when using references.
+
+${PLAIN_TEXT_OUTPUT_RULES}`
 
 /**
  * POST /api/ai/study-assistant — RAG-grounded Q&A for students (Phase 3 P3.6).
@@ -52,7 +54,7 @@ export const POST = withAILimits(async function POST(request) {
 
   return NextResponse.json({
     success: true,
-    answer: text,
+    answer: sanitizePlainText(text),
     refs: rag.refs?.slice(0, 8) || [],
   })
 })

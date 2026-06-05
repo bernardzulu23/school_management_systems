@@ -352,7 +352,10 @@ export default function HODAllocationPage() {
     if (!id) return
     setSubmitting(true)
     try {
-      const res = await fetch(`/api/allocations/${id}/submit`, { method: 'POST' })
+      const res = await fetch(`/api/allocations/${id}/submit`, {
+        method: 'POST',
+        credentials: 'include',
+      })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data?.message || data?.error || 'Failed to submit')
       toast.success('Submitted to admin')

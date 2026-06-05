@@ -84,6 +84,8 @@ export type GroqStreamOptions = GroqChatOptions & {
   onErrorMessage?: string
   /** Sent as the first SSE event before text chunks (e.g. ragReferences). */
   meta?: Record<string, unknown>
+  /** Sanitize cumulative output and send full clean text each chunk ({ replace: true }). */
+  plainText?: boolean
 }
 
 /** SSE stream compatible with useAIStream (`data: {"text":"..."}` + `[DONE]`). */
@@ -105,10 +107,19 @@ export function createGroqTextEventStream(options: GroqStreamOptions): ReadableS
           model: options.model,
         })
 
+        const { sanitizePlainText } = await import('@/lib/ai/plain-text')
+
         for await (const chunk of result.textStream) {
           if (!chunk) continue
           responseText += chunk
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`))
+          if (options.plainText) {
+            const cleaned = sanitizePlainText(responseText)
+            controller.enqueue(
+              encoder.encode(`data: ${JSON.stringify({ text: cleaned, replace: true })}\n\n`)
+            )
+          } else {
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`))
+          }
         }
 
         const usage = result.usage
@@ -118,8 +129,26 @@ export function createGroqTextEventStream(options: GroqStreamOptions): ReadableS
             }
           : { promptTokens: 0, completionTokens: 0 }
 
+        const finalText = options.plainText ? sanitizePlainText(responseText) : responseText
+
+        // #region agent log
+        if (options.plainText) {
+          const { agentLog } = await import('@/lib/debug/agentLog')
+          agentLog(
+            'groq-client.ts:stream:done',
+            'plain_text_stream_complete',
+            {
+              rawLen: responseText.length,
+              cleanLen: finalText.length,
+              stillHasMarkdown: /---|\*\*|^#{1,6}\s/m.test(finalText),
+            },
+            'H-PT'
+          )
+        }
+        // #endregion
+
         if (options.onComplete) {
-          await options.onComplete(responseText, usage, model)
+          await options.onComplete(finalText, usage, model)
         }
 
         controller.enqueue(encoder.encode('data: [DONE]\n\n'))

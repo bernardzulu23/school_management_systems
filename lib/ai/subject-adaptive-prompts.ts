@@ -3,6 +3,8 @@
  * Resolves UI subject names to canonical keys and tailors pedagogy per subject.
  */
 
+import { PLAIN_TEXT_OUTPUT_RULES } from '@/lib/ai/plain-text'
+
 export const SUBJECT_GUIDELINES: Record<string, string> = {
   'Mathematics (Core)': `
     - Include 3-5 worked examples with step-by-step solutions
@@ -716,7 +718,7 @@ export function buildStoryPrompt(params: {
     if (params.questionTypes?.evaluative) types.push('Evaluative — opinion and judgement')
     const count = Math.min(Math.max(params.questionCount ?? 5, 1), 10)
     questionBlocks.push(`
----
+
 COMPREHENSION QUESTIONS (${count} questions):
 Question types to include: ${types.length ? types.join('; ') : 'Literal and inferential'}
 Spread questions across the selected types and link to life in Zambia where possible.`)
@@ -754,7 +756,9 @@ ${vocabularyLine ? '7' : '6'}. Learning outcome: Readers understand the subject 
 ${vocabularyLine ? '8' : '7'}. Language: ${languageLine}
 ${vocabularyLine ? '9' : '8'}. Align story outcomes to the listed CBC competencies${questionBlocks.join('')}
 
-Write the ${storyType.toLowerCase()} now.`
+${PLAIN_TEXT_OUTPUT_RULES}
+
+Write the ${storyType.toLowerCase()} now. Output plain text only — no markdown.`
 }
 
 export function buildQuizPrompt(params: {
@@ -853,7 +857,9 @@ The comment should:
 5. Suit Zambian schools; simple English for parents
 6. Do NOT include marks or percentages
 
-Write the comment only (plain text, no JSON).`
+${PLAIN_TEXT_OUTPUT_RULES}
+
+Write the comment only (plain text, no JSON, no markdown).`
 }
 
 export function buildEczPracticePrompt(params: {

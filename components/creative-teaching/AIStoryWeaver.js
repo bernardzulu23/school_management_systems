@@ -76,7 +76,16 @@ export default function AIStoryWeaver() {
   const [characterDraft, setCharacterDraft] = useState('')
   const [vocabDraft, setVocabDraft] = useState('')
   const [savedHint, setSavedHint] = useState('')
-  const { text: story, loading, error, start, reset, stop } = useAIStream('/api/ai/story-weaver')
+  const {
+    text: story,
+    loading,
+    error,
+    start,
+    reset,
+    stop,
+  } = useAIStream('/api/ai/story-weaver', {
+    plainText: true,
+  })
   const [copied, setCopied] = useState(false)
 
   const generate = async () => {

@@ -1,30 +1,15 @@
 /** Shared plain-text cleanup for lesson plan display, export, and generation. */
 
+import { sanitizePlainText } from '@/lib/ai/plain-text'
 import { stripLessonPlanHeaderBlock } from '@/lib/lesson-plans/header-block'
 
-export function sanitizeText(text: string): string {
-  if (!text) return ''
-
-  return text
-    .replace(/\*\*(.+?)\*\*/g, '$1')
-    .replace(/\*(.+?)\*/g, '$1')
-    .replace(/__(.+?)__/g, '$1')
-    .replace(/_(.+?)_/g, '$1')
-    .replace(/^#{1,6}\s*/gm, '')
-    .replace(/^---+$/gm, '')
-    .replace(/```[\s\S]*?```/g, '')
-    .replace(/\[(.+?)\]\(.+?\)/g, '$1')
-    .replace(/^[-*+]\s+/gm, '')
-    .replace(/<[^>]*>/g, '')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim()
-}
+export { sanitizePlainText as sanitizeText } from '@/lib/ai/plain-text'
 
 /** Remove AI-generated framework preamble so we can inject the teacher's form values instead. */
 export function stripAiFrameworkSection(text: string): string {
   if (!text) return ''
 
-  const cleaned = sanitizeText(text)
+  const cleaned = sanitizePlainText(text)
   const sectionStart = cleaned.search(
     /\n\s*(?:RATIONALE:|LEARNING OUTCOMES|1\.\s+GENERAL COMPETENCE|LESSON PLAN HEADER)\b/i
   )
@@ -52,7 +37,7 @@ export function composeLessonPlanDisplay(
   const opts: ComposeLessonPlanOptions =
     typeof options === 'string' || options == null ? { frameworkBlock: options } : options
 
-  let body = sanitizeText(rawContent)
+  let body = sanitizePlainText(rawContent)
   body = stripLessonPlanHeaderBlock(body)
   body = stripAiFrameworkSection(body)
 
@@ -61,7 +46,7 @@ export function composeLessonPlanDisplay(
 }
 
 export function formatLessonPlanForDisplay(content: string): string {
-  return sanitizeText(content)
+  return sanitizePlainText(content)
 }
 
 export function parseLessonPlanContent(content: string): {
@@ -69,7 +54,7 @@ export function parseLessonPlanContent(content: string): {
   sections: Array<{ title: string; content: string }>
   rawText: string
 } {
-  const clean = sanitizeText(content)
+  const clean = sanitizePlainText(content)
   const lines = clean.split('\n')
 
   const sections: Array<{ title: string; content: string }> = []
