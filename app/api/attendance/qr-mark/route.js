@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { validateAttendanceToken, resolveStudentFromRoster } from '@/lib/attendance/qr'
 import { getEnrolledRoster, recordAttendanceMark } from '@/lib/attendance/sessions'
-import { applyRateLimit } from '@/lib/middleware/withRateLimit'
+import { rateLimiter } from '@/lib/middleware/rateLimiter'
 
 /**
  * POST /api/attendance/qr-mark
@@ -12,12 +12,12 @@ import { applyRateLimit } from '@/lib/middleware/withRateLimit'
  * BODY: { token, studentName? } or { token, studentId }
  */
 export const POST = withErrorHandler(async function POST(request) {
-  const limited = applyRateLimit(request, {
+  const rl = rateLimiter(request, {
     limit: 30,
     windowMs: 60 * 1000,
     keyPrefix: 'qr_mark_',
   })
-  if (limited) return limited
+  if (rl.isLimited) return rl.response
 
   const body = await request.json().catch(() => ({}))
   const token = String(body.token || '').trim()
