@@ -27,7 +27,8 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const deckId = String(params?.id || '').trim()
+  const { id } = await params
+  const deckId = String(id || '').trim()
   if (!deckId) throw new ApiError('Deck id required', 400)
 
   const db = getTenantClient(schoolId)

@@ -75,9 +75,15 @@ export default function StudentFlashcardStudyPage() {
   }
 
   const finishSession = async (finalAnswers) => {
+    const id = deck?.id || deckId
+    if (!id) {
+      alert('Could not identify this deck. Go back and open it again from the list.')
+      return
+    }
+
     setCompleting(true)
     try {
-      const res = await fetch(`/api/student/flashcards/${deckId}/complete`, {
+      const res = await fetch(`/api/student/flashcards/${id}/complete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
