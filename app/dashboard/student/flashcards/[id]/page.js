@@ -6,8 +6,21 @@ import { useParams } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { ArrowLeft, CheckCircle2, XCircle } from 'lucide-react'
+import { ArrowLeft, BookOpen, CheckCircle2, FileText, Loader2, Star, XCircle } from 'lucide-react'
 import { isFlashcardAnswerCorrect, resolveFlashcardAnswer } from '@/lib/flashcards/resolveAnswer'
+
+function StarRating({ count = 0, max = 5 }) {
+  return (
+    <div className="flex gap-1" aria-label={`${count} out of ${max} stars`}>
+      {Array.from({ length: max }, (_, i) => (
+        <Star
+          key={i}
+          className={`h-5 w-5 ${i < count ? 'fill-amber-400 text-amber-400' : 'text-royalPurple-text3'}`}
+        />
+      ))}
+    </div>
+  )
+}
 
 export default function StudentFlashcardStudyPage() {
   const params = useParams()
@@ -16,6 +29,9 @@ export default function StudentFlashcardStudyPage() {
   const [index, setIndex] = useState(0)
   const [selected, setSelected] = useState(null)
   const [answers, setAnswers] = useState({})
+  const [phase, setPhase] = useState('study')
+  const [completing, setCompleting] = useState(false)
+  const [sessionResult, setSessionResult] = useState(null)
 
   useEffect(() => {
     if (!deckId) return
@@ -31,6 +47,7 @@ export default function StudentFlashcardStudyPage() {
   const cards = Array.isArray(deck?.cards) ? deck.cards : []
   const card = cards[index]
   const revealed = selected != null
+  const isLastCard = index + 1 >= cards.length
 
   const resolvedAnswer = useMemo(() => {
     if (!card) return null
@@ -57,13 +74,37 @@ export default function StudentFlashcardStudyPage() {
     setAnswers((prev) => ({ ...prev, [card.id]: option }))
   }
 
-  const next = () => {
-    setSelected(null)
-    setIndex((i) => (i + 1 < cards.length ? i + 1 : i))
+  const finishSession = async (finalAnswers) => {
+    setCompleting(true)
+    try {
+      const res = await fetch(`/api/student/flashcards/${deckId}/complete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ answers: finalAnswers }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || json?.message || 'Could not complete session')
+      setSessionResult(json.data)
+      setPhase('complete')
+    } catch (e) {
+      alert(e.message || 'Failed to load your results. Please try again.')
+    } finally {
+      setCompleting(false)
+    }
   }
 
-  const answeredCount = Object.keys(answers).length
-  const finished = answeredCount === cards.length && cards.length > 0
+  const next = async () => {
+    if (!revealed) return
+
+    if (isLastCard) {
+      await finishSession(answers)
+      return
+    }
+
+    setSelected(null)
+    setIndex((i) => i + 1)
+  }
 
   if (!deck) {
     return (
@@ -72,6 +113,103 @@ export default function StudentFlashcardStudyPage() {
         <Link href="/dashboard/student/flashcards">
           <Button className="mt-4">Back</Button>
         </Link>
+      </DashboardLayout>
+    )
+  }
+
+  if (phase === 'complete' && sessionResult) {
+    const { score: finalScore, feedback } = sessionResult
+    return (
+      <DashboardLayout title={`${deck.subjectName} — Results`}>
+        <div className="space-y-4 max-w-2xl mx-auto">
+          <Link href="/dashboard/student/flashcards">
+            <Button variant="outline" size="sm">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to flashcards
+            </Button>
+          </Link>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Session complete</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="text-3xl font-bold text-royalPurple-text1">
+                  {finalScore.correct}/{finalScore.total}
+                </div>
+                <div>
+                  <p className="text-lg font-semibold text-royalPurple-accentTx">
+                    {finalScore.rating.label}
+                  </p>
+                  <StarRating count={finalScore.rating.stars} />
+                  <p className="text-sm text-royalPurple-text3 mt-1">
+                    {finalScore.percent}% correct
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-royalPurple-text2">{feedback.summary}</p>
+
+              {feedback.strengths?.length ? (
+                <div>
+                  <h3 className="font-medium text-royalPurple-text1 mb-2">What you did well</h3>
+                  <ul className="list-disc pl-5 space-y-1 text-sm text-royalPurple-text2">
+                    {feedback.strengths.map((s) => (
+                      <li key={s}>{s}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              {feedback.topicsToImprove?.length ? (
+                <div>
+                  <h3 className="font-medium text-royalPurple-text1 mb-2">Topics to study more</h3>
+                  <ul className="list-disc pl-5 space-y-1 text-sm text-royalPurple-text2">
+                    {feedback.topicsToImprove.map((t) => (
+                      <li key={t}>{t}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              {feedback.readingList?.length ? (
+                <div>
+                  <h3 className="font-medium text-royalPurple-text1 mb-2">
+                    Books &amp; articles to read
+                  </h3>
+                  <div className="space-y-3">
+                    {feedback.readingList.map((item) => (
+                      <div
+                        key={`${item.type}-${item.title}`}
+                        className="rounded-lg border border-royalPurple-border p-3 bg-royalPurple-card"
+                      >
+                        <div className="flex items-start gap-2">
+                          {item.type === 'book' ? (
+                            <BookOpen className="h-4 w-4 mt-0.5 text-royalPurple-accentTx shrink-0" />
+                          ) : (
+                            <FileText className="h-4 w-4 mt-0.5 text-royalPurple-accentTx shrink-0" />
+                          )}
+                          <div>
+                            <p className="font-medium text-royalPurple-text1">{item.title}</p>
+                            {item.author ? (
+                              <p className="text-xs text-royalPurple-text3">{item.author}</p>
+                            ) : null}
+                            <p className="text-sm text-royalPurple-text2 mt-1">{item.reason}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              <Link href="/dashboard/student/flashcards">
+                <Button className="w-full">Done — return to decks</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
       </DashboardLayout>
     )
   }
@@ -113,7 +251,7 @@ export default function StudentFlashcardStudyPage() {
                     key={`${card.id}_${optIdx}`}
                     type="button"
                     onClick={() => choose(opt)}
-                    disabled={revealed}
+                    disabled={revealed || completing}
                     className={`w-full text-left px-3 py-2 rounded-lg border flex items-center justify-between ${cls}`}
                   >
                     <span className="text-royalPurple-text1">{opt}</span>
@@ -152,16 +290,19 @@ export default function StudentFlashcardStudyPage() {
               <span className="text-sm text-royalPurple-text2">
                 Score: {score}/{cards.length}
               </span>
-              <Button onClick={next} disabled={!revealed || index + 1 >= cards.length}>
-                Next question
+              <Button onClick={next} disabled={!revealed || completing}>
+                {completing ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Finishing…
+                  </>
+                ) : isLastCard ? (
+                  'Finish & see results'
+                ) : (
+                  'Next question'
+                )}
               </Button>
             </div>
-
-            {finished ? (
-              <div className="rounded-lg p-3 bg-royalPurple-accent/20 text-royalPurple-accentTx text-sm">
-                Deck complete! You scored {score}/{cards.length}. Keep practising to improve.
-              </div>
-            ) : null}
           </CardContent>
         </Card>
       </div>
