@@ -7,7 +7,7 @@ import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { PISTON_LANGUAGES } from '@/lib/creative-teaching/playgroundLanguages'
-import { executeViaPiston, isPistonConfigured } from '@/lib/creative-teaching/executePiston'
+import { executeViaPiston } from '@/lib/creative-teaching/executePiston'
 import { runJavaScriptSandbox } from '@/lib/creative-teaching/runJavaScriptSandbox'
 
 const ExecuteSchema = z.object({
@@ -52,13 +52,6 @@ export const POST = withErrorHandler(async function POST(request) {
       runtime: result.runtime,
       error: Boolean(result.stderr),
     })
-  }
-
-  if (!isPistonConfigured()) {
-    throw new ApiError(
-      'Python, Java, C, and other compiled languages need PISTON_API_KEY on the server. JavaScript runs without it — switch to the JavaScript tab.',
-      503
-    )
   }
 
   const result = await executeViaPiston({

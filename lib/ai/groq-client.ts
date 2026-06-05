@@ -34,22 +34,21 @@ export type GroqChatResult = {
   content: string
   usage: { promptTokens: number; completionTokens: number; totalTokens: number }
   model: string
+  provider?: 'groq' | 'gemini'
 }
 
 export async function groqChatCompletion(options: GroqChatOptions): Promise<GroqChatResult> {
-  const { text, usage, model } = await generateAIText(options.prompt, {
-    system: options.system,
-    maxTokens: options.maxTokens,
-    temperature: options.temperature,
-  })
+  const { generateWithFallback } = await import('@/lib/ai/orchestrator')
+  const messages: import('@/lib/ai/types').AIMessage[] = []
+  if (options.system) messages.push({ role: 'system', content: options.system })
+  messages.push({ role: 'user', content: options.prompt })
+
+  const result = await generateWithFallback(messages)
   return {
-    content: text,
-    usage: {
-      promptTokens: usage.inputTokens,
-      completionTokens: usage.outputTokens,
-      totalTokens: usage.totalTokens,
-    },
-    model: options.model || model,
+    content: result.text,
+    usage: { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
+    model: result.model,
+    provider: result.provider,
   }
 }
 
