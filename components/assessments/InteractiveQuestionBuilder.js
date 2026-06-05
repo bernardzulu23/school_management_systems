@@ -15,17 +15,25 @@ function emptyQuestion(idx) {
   }
 }
 
-export function InteractiveQuestionBuilder({ questions, onChange, maxQuestions = 50 }) {
+export function InteractiveQuestionBuilder({
+  questions,
+  onChange,
+  maxQuestions = 50,
+  readOnly = false,
+}) {
   const list = Array.isArray(questions) ? questions : []
 
-  const update = (next) => onChange(next)
+  const update = (next) => {
+    if (!readOnly) onChange(next)
+  }
 
   const addQuestion = () => {
-    if (list.length >= maxQuestions) return
+    if (readOnly || list.length >= maxQuestions) return
     update([...list, emptyQuestion(list.length + 1)])
   }
 
   const removeQuestion = (idx) => {
+    if (readOnly) return
     update(list.filter((_, i) => i !== idx))
   }
 
@@ -49,14 +57,17 @@ export function InteractiveQuestionBuilder({ questions, onChange, maxQuestions =
         >
           <div className="flex items-center justify-between">
             <span className="font-semibold text-royalPurple-text1">Question {idx + 1}</span>
-            <Button type="button" variant="outline" size="sm" onClick={() => removeQuestion(idx)}>
-              <Trash2 className="h-4 w-4" />
-            </Button>
+            {!readOnly ? (
+              <Button type="button" variant="outline" size="sm" onClick={() => removeQuestion(idx)}>
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            ) : null}
           </div>
           <div className="space-y-2">
             <Label>Question text</Label>
             <Input
               value={q.question || ''}
+              disabled={readOnly}
               onChange={(e) => patchQuestion(idx, { question: e.target.value })}
             />
           </div>
@@ -64,7 +75,11 @@ export function InteractiveQuestionBuilder({ questions, onChange, maxQuestions =
             {(q.options || ['', '', '', '']).map((opt, oIdx) => (
               <div key={oIdx} className="space-y-1">
                 <Label className="text-xs">Option {String.fromCharCode(65 + oIdx)}</Label>
-                <Input value={opt} onChange={(e) => patchOption(idx, oIdx, e.target.value)} />
+                <Input
+                  value={opt}
+                  disabled={readOnly}
+                  onChange={(e) => patchOption(idx, oIdx, e.target.value)}
+                />
               </div>
             ))}
           </div>
@@ -72,6 +87,7 @@ export function InteractiveQuestionBuilder({ questions, onChange, maxQuestions =
             <Label>Correct answer (must match one option exactly)</Label>
             <Input
               value={q.answer || ''}
+              disabled={readOnly}
               onChange={(e) => patchQuestion(idx, { answer: e.target.value })}
             />
           </div>
@@ -79,20 +95,23 @@ export function InteractiveQuestionBuilder({ questions, onChange, maxQuestions =
             <Label>Explanation (shown after student selects)</Label>
             <Input
               value={q.explanation || ''}
+              disabled={readOnly}
               onChange={(e) => patchQuestion(idx, { explanation: e.target.value })}
             />
           </div>
         </div>
       ))}
-      <Button
-        type="button"
-        variant="outline"
-        onClick={addQuestion}
-        disabled={list.length >= maxQuestions}
-      >
-        <Plus className="h-4 w-4 mr-2" />
-        Add question ({list.length}/{maxQuestions})
-      </Button>
+      {!readOnly ? (
+        <Button
+          type="button"
+          variant="outline"
+          onClick={addQuestion}
+          disabled={list.length >= maxQuestions}
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Add question ({list.length}/{maxQuestions})
+        </Button>
+      ) : null}
     </div>
   )
 }

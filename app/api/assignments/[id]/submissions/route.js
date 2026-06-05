@@ -3,7 +3,12 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
-import { gradeQuizAttempt, parseInteractiveQuizPayload } from '@/lib/assessments/interactiveQuiz'
+import {
+  gradeQuizAttempt,
+  parseInteractiveQuizPayload,
+  sanitizeQuizForStudent,
+} from '@/lib/assessments/interactiveQuiz'
+import { maybeNotifyTeacherOfAttempts } from '@/lib/assessments/review'
 
 function parseSubmissionContent(raw) {
   if (!raw) return null
@@ -26,9 +31,25 @@ async function resolveContext(request, routeParams) {
 
   const assignment = await prisma.assignment.findFirst({
     where: { id: routeParams.id, schoolId },
+    include: {
+      assessment: { select: { id: true, status: true } },
+    },
   })
   if (!assignment)
     return { error: NextResponse.json({ error: 'Assignment not found' }, { status: 404 }) }
+
+  if (
+    assignment.assessmentId &&
+    assignment.assessment &&
+    String(assignment.assessment.status) !== 'PUBLISHED'
+  ) {
+    return {
+      error: NextResponse.json(
+        { error: 'This assessment is not yet available for students' },
+        { status: 403 }
+      ),
+    }
+  }
 
   const payload = parseInteractiveQuizPayload(assignment.description)
   if (!payload?.quiz) {
@@ -67,6 +88,8 @@ export async function GET(request, { params }) {
       where: { assignmentId: assignment.id, studentId: student.id, schoolId },
     })
     const submissionContent = parseSubmissionContent(submission?.content)
+    const hasSubmitted = submission?.status === 'submitted'
+    const quizForStudent = hasSubmitted ? payload.quiz : sanitizeQuizForStudent(payload.quiz)
 
     return NextResponse.json({
       success: true,
@@ -78,7 +101,7 @@ export async function GET(request, { params }) {
           dueDate: assignment.dueDate,
           class: assignment.class,
         },
-        quiz: payload.quiz,
+        quiz: quizForStudent,
         submission: submission
           ? {
               id: submission.id,
@@ -86,8 +109,9 @@ export async function GET(request, { params }) {
               submittedAt: submission.submittedAt,
               grade: submission.grade,
               answers: submissionContent?.answers || {},
-              review: submissionContent?.review || [],
-              encouragement: submissionContent?.encouragement || '',
+              review: hasSubmitted ? submissionContent?.review || [] : [],
+              encouragement: hasSubmitted ? submissionContent?.encouragement || '' : '',
+              needsReview: Boolean(submissionContent?.needsReview),
             }
           : null,
       },
@@ -176,6 +200,7 @@ export async function POST(request, { params }) {
     totalMarks: grading.totalMarks,
     percentage: grading.percentage,
     encouragement: grading.encouragement,
+    needsReview: grading.needsReview,
   })
 
   const saved = await prisma.assignmentSubmission.upsert({
@@ -198,6 +223,14 @@ export async function POST(request, { params }) {
     },
   })
 
+  if (submit) {
+    await maybeNotifyTeacherOfAttempts({
+      assignment,
+      schoolId,
+      studentId: auth.user.id,
+    })
+  }
+
   return NextResponse.json({
     success: true,
     data: {
@@ -207,7 +240,8 @@ export async function POST(request, { params }) {
       totalMarks: grading.totalMarks,
       percentage: grading.percentage,
       encouragement: grading.encouragement,
-      review: grading.review,
+      needsReview: grading.needsReview,
+      review: submit ? grading.review : [],
     },
   })
 }

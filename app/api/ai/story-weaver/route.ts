@@ -28,6 +28,22 @@ const StoryWeaverInputSchema = z.object({
   setting: z.string().min(1).max(100).optional(),
   length: z.string().min(1).max(50).default('4-5 paragraphs'),
   includeQuestions: z.boolean().optional().default(false),
+  cbcCompetencies: z.array(z.string().min(1).max(80)).max(8).optional(),
+  characters: z.array(z.string().min(1).max(60)).max(12).optional(),
+  characterMode: z.enum(['auto', 'custom']).optional(),
+  vocabularyWords: z.array(z.string().min(1).max(60)).max(20).optional(),
+  languageMode: z.enum(['english', 'bilingual']).optional(),
+  questionTypes: z
+    .object({
+      literal: z.boolean().optional(),
+      inferential: z.boolean().optional(),
+      evaluative: z.boolean().optional(),
+    })
+    .optional(),
+  questionCount: z.number().int().min(1).max(10).optional(),
+  vocabularyExercises: z.boolean().optional(),
+  discussionPrompts: z.boolean().optional(),
+  writingExtension: z.boolean().optional(),
 })
 
 type StoryWeaverInput = z.infer<typeof StoryWeaverInputSchema>
@@ -44,6 +60,16 @@ function buildPrompt(input: StoryWeaverInput): string {
     storyType: input.storyType,
     setting: input.setting || 'Zambia',
     includeQuestions: input.includeQuestions,
+    cbcCompetencies: input.cbcCompetencies,
+    characters: input.characters,
+    characterMode: input.characterMode,
+    vocabularyWords: input.vocabularyWords,
+    languageMode: input.languageMode,
+    questionTypes: input.questionTypes,
+    questionCount: input.questionCount,
+    vocabularyExercises: input.vocabularyExercises,
+    discussionPrompts: input.discussionPrompts,
+    writingExtension: input.writingExtension,
   })
 }
 
@@ -107,7 +133,7 @@ export const POST = withAILimits(async function POST(request: Request) {
 
     const stream = createGroqTextEventStream({
       prompt,
-      maxTokens: 1500,
+      maxTokens: 2200,
       temperature: 0.8,
       onErrorMessage: 'Failed to generate story',
       onComplete: async (responseText) => {

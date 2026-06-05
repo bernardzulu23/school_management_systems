@@ -28,6 +28,24 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   })
   if (!assessment) throw new ApiError('Assessment not found', 404)
 
+  if (assessment.publishedAssignmentId || assessment.status === 'PUBLISHED') {
+    return NextResponse.json({
+      success: true,
+      data: {
+        assessmentId: assessment.id,
+        publishedAssignmentId: assessment.publishedAssignmentId,
+        message: 'Already published to students',
+      },
+    })
+  }
+
+  if (!['APPROVED', 'SUBMITTED'].includes(String(assessment.status))) {
+    throw new ApiError(
+      'Assessment must be approved by HOD before publishing. Submit to HOD first.',
+      400
+    )
+  }
+
   const body = await request.json().catch(() => ({}))
   const stored = parseAssessmentInteractive(assessment.description)
   const questions = Array.isArray(body.questions) ? body.questions : stored?.questions || []
@@ -56,12 +74,17 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     teacherId: teacher?.id,
   })
 
+  await prisma.assessment.update({
+    where: { id: assessment.id },
+    data: { status: 'PUBLISHED', publishedAssignmentId: assignment.id },
+  })
+
   return NextResponse.json({
     success: true,
     data: {
       assessmentId: assessment.id,
       publishedAssignmentId: assignment.id,
-      message: 'Published to students — answers hidden until they select an option',
+      message: 'Published to students — answers are hidden until submission is graded',
     },
   })
 })

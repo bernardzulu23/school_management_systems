@@ -38,7 +38,7 @@ export function PublishedAssessmentAttemptsPanel({ assessmentId, publishedAssign
           <CardTitle className="text-base">Student attempts</CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-royalPurple-text2">
-          Publish to students to see who has attempted and how they performed.
+          After HOD approval, student attempts and class performance appear here.
         </CardContent>
       </Card>
     )
@@ -135,6 +135,7 @@ export function PublishedAssessmentAttemptsPanel({ assessmentId, publishedAssign
                     <th className="text-left p-2">Score</th>
                     <th className="text-left p-2">Submitted</th>
                     <th className="text-left p-2">Feedback</th>
+                    <th className="text-left p-2">Review</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -161,6 +162,12 @@ export function PublishedAssessmentAttemptsPanel({ assessmentId, publishedAssign
                       </td>
                       <td className="p-2 text-royalPurple-text2 text-xs max-w-[200px]">
                         {s.encouragement || '—'}
+                      </td>
+                      <td className="p-2 text-royalPurple-text2 text-xs">
+                        {s.needsReview ? 'Needs review' : 'Auto-graded'}
+                        {Array.isArray(s.review) && s.review.length > 0
+                          ? ` · ${s.review.filter((r) => !r.isCorrect).length} wrong`
+                          : ''}
                       </td>
                     </tr>
                   ))}

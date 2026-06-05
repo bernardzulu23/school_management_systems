@@ -50,6 +50,10 @@ export async function GET(request) {
         ...(Array.isArray(student.selected_subjects) && student.selected_subjects.length > 0
           ? { subject: { in: student.selected_subjects } }
           : {}),
+        OR: [{ assessmentId: null }, { assessment: { status: 'PUBLISHED' } }],
+      },
+      include: {
+        assessment: { select: { status: true } },
       },
       orderBy: { dueDate: 'asc' },
       take: 100,

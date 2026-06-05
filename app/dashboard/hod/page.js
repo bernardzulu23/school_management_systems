@@ -1401,9 +1401,9 @@ export default function HodDashboard() {
                     Create Assessment
                   </Button>
                 </Link>
-                <Link href="/dashboard/hod/assessments">
+                <Link href="/dashboard/hod/quizzes">
                   <Button className="bg-royalPurple-muted/60 hover:bg-royalPurple-muted/80 text-royalPurple-text1 border border-royalPurple-border/50">
-                    View All
+                    Review quizzes
                   </Button>
                 </Link>
               </div>

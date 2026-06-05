@@ -9,7 +9,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { InteractiveQuestionBuilder } from '@/components/assessments/InteractiveQuestionBuilder'
 import { PublishedAssessmentAttemptsPanel } from '@/components/assessments/PublishedAssessmentAttemptsPanel'
+import { QuizClassAnalysisPanel } from '@/components/assessments/QuizClassAnalysisPanel'
 import { ArrowLeft, Download, Send, Save } from 'lucide-react'
+
+function statusPill(status) {
+  const s = String(status || 'DRAFT').toUpperCase()
+  if (s === 'PUBLISHED') return 'bg-royalPurple-success/20 text-royalPurple-successTx'
+  if (s === 'SUBMITTED') return 'bg-royalPurple-accent/20 text-royalPurple-accentTx'
+  if (s === 'APPROVED') return 'bg-royalPurple-success/20 text-royalPurple-successTx'
+  if (s === 'REJECTED' || s === 'REVISION_REQUESTED')
+    return 'bg-royalPurple-danger/20 text-royalPurple-dangerTx'
+  return 'bg-royalPurple-card2 text-royalPurple-text2'
+}
 
 export default function TeacherAssessmentInteractivePage() {
   const params = useParams()
@@ -19,7 +30,7 @@ export default function TeacherAssessmentInteractivePage() {
   const [questions, setQuestions] = useState([])
   const [publishedAssignmentId, setPublishedAssignmentId] = useState('')
   const [saving, setSaving] = useState(false)
-  const [publishing, setPublishing] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
     if (!assessmentId) return
@@ -62,45 +73,36 @@ export default function TeacherAssessmentInteractivePage() {
     }
   }
 
-  const publish = async () => {
-    setPublishing(true)
+  const submitToHod = async () => {
+    if (!questions.length) {
+      toast.error('Add at least one question')
+      return
+    }
+    setSubmitting(true)
     try {
       await saveQuestions()
-      const res = await fetch(`/api/assessments/${assessmentId}/publish`, {
+      const res = await fetch(`/api/assessments/${assessmentId}/submit-hod`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ questions }),
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json.error || 'Publish failed')
-      const newId = json.data?.publishedAssignmentId || ''
-      setPublishedAssignmentId(newId)
-      toast.success('Published to students')
-    } catch (e) {
-      toast.error(e.message || 'Publish failed')
-    } finally {
-      setPublishing(false)
-    }
-  }
-
-  const submitToHod = async () => {
-    if (!publishedAssignmentId) {
-      toast.error('Publish to students first')
-      return
-    }
-    try {
-      const res = await fetch(`/api/assignments/${publishedAssignmentId}/submit-hod`, {
-        method: 'POST',
-        credentials: 'include',
+        body: JSON.stringify({ topic: meta?.topic || meta?.title }),
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json.error || 'Submit failed')
-      toast.success('Submitted to HOD')
+      setMeta((m) => ({ ...m, status: 'SUBMITTED', ...(json.data || {}) }))
+      toast.success('Submitted to HOD for review')
     } catch (e) {
       toast.error(e.message || 'Submit failed')
+    } finally {
+      setSubmitting(false)
     }
   }
+
+  const canEdit = ['DRAFT', 'REJECTED', 'REVISION_REQUESTED'].includes(
+    String(meta?.status || 'DRAFT').toUpperCase()
+  )
+  const canSubmitHod = canEdit && questions.length > 0
+  const isPublished = String(meta?.status || '').toUpperCase() === 'PUBLISHED'
 
   if (loading) {
     return (
@@ -122,23 +124,34 @@ export default function TeacherAssessmentInteractivePage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>{meta?.title || 'Assessment'}</CardTitle>
+            <CardTitle className="flex flex-wrap items-center gap-2">
+              {meta?.title || 'Assessment'}
+              <span
+                className={`text-xs font-medium px-2 py-1 rounded-full ${statusPill(meta?.status)}`}
+              >
+                {meta?.status || 'DRAFT'}
+              </span>
+            </CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-royalPurple-text2 space-y-1">
             <div>
               {meta?.subject} · {meta?.class}
             </div>
             <div>
-              Students see questions without answers until they choose. Auto-graded with
-              encouragement feedback.
+              Submit to your HOD first. Once approved, the quiz is sent to students automatically
+              (answers hidden; auto-graded).
             </div>
-            {publishedAssignmentId ? (
+            {meta?.status === 'SUBMITTED' ? (
+              <div className="text-royalPurple-accentTx">Awaiting HOD approval</div>
+            ) : null}
+            {meta?.rejectionReason ? (
+              <div className="text-royalPurple-dangerTx">HOD feedback: {meta.rejectionReason}</div>
+            ) : null}
+            {isPublished ? (
               <div className="text-royalPurple-successTx">
                 Published to students — attempts tracked below
               </div>
-            ) : (
-              <div className="text-warn">Not yet published to students</div>
-            )}
+            ) : null}
           </CardContent>
         </Card>
 
@@ -147,28 +160,34 @@ export default function TeacherAssessmentInteractivePage() {
             <CardTitle>Questions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <InteractiveQuestionBuilder questions={questions} onChange={setQuestions} />
+            <InteractiveQuestionBuilder
+              questions={questions}
+              onChange={setQuestions}
+              readOnly={!canEdit}
+            />
             <div className="flex flex-wrap gap-2 pt-2 border-t border-royalPurple-border">
-              <Button onClick={saveQuestions} disabled={saving} variant="outline">
+              <Button onClick={saveQuestions} disabled={saving || !canEdit} variant="outline">
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? 'Saving…' : 'Save'}
               </Button>
-              <Button onClick={publish} disabled={publishing}>
+              <Button onClick={submitToHod} disabled={submitting || !canSubmitHod}>
                 <Send className="h-4 w-4 mr-2" />
-                {publishing ? 'Publishing…' : 'Publish to Students'}
+                {submitting ? 'Submitting…' : 'Submit to HOD'}
               </Button>
               <Button variant="outline" onClick={() => window.print()}>
                 <Download className="h-4 w-4 mr-2" />
                 Print / PDF
-              </Button>
-              <Button variant="outline" onClick={submitToHod} disabled={!publishedAssignmentId}>
-                Submit to HOD
               </Button>
             </div>
           </CardContent>
         </Card>
 
         <PublishedAssessmentAttemptsPanel
+          assessmentId={assessmentId}
+          publishedAssignmentId={publishedAssignmentId}
+        />
+
+        <QuizClassAnalysisPanel
           assessmentId={assessmentId}
           publishedAssignmentId={publishedAssignmentId}
         />

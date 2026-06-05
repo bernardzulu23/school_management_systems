@@ -13,7 +13,6 @@ import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'react-hot-toast'
-import { buildInteractiveQuizPayload } from '@/lib/assessments/interactiveQuiz'
 
 export default function TeacherQuizMakerPage() {
   const { data, loading, error, fetch: fetchQuiz } = useAIFetch('/api/ai/quiz-maker')
@@ -94,59 +93,48 @@ export default function TeacherQuizMakerPage() {
     }
   }
 
-  const handlePublish = async () => {
+  const handleSubmitToHod = async () => {
     if (!quiz || !selectedTeachingAssignment) {
       toast.error('Select class + subject target first')
       return
     }
     setPublishing(true)
     try {
-      const payload = buildInteractiveQuizPayload(quiz, {
-        grade: form.grade,
-        topic: form.topic,
-        difficulty: form.difficulty,
-      })
       const dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-      const res = await fetch('/api/assignments', {
+      const createRes = await fetch('/api/assessments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           title: quiz.title || `${form.subject} ${form.topic} ${publishType}`,
+          type: 'quiz',
           subject: selectedTeachingAssignment.subjectName || form.subject,
           classId: selectedTeachingAssignment.classId,
           class: selectedTeachingAssignment.className,
-          dueDate,
-          description: JSON.stringify(payload),
+          date: dueDate,
+          topic: form.topic,
+          questions: quiz.questions || [],
         }),
       })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.error || 'Failed to publish')
-      const assignmentId = json?.data?.id
-      setPublishedAssignmentId(assignmentId)
-      toast.success('Published to students successfully')
-      await loadSubmissionStats(assignmentId)
+      const created = await createRes.json().catch(() => ({}))
+      if (!createRes.ok) throw new Error(created?.error || 'Failed to create assessment')
+
+      const assessmentId = created?.data?.id
+      const submitRes = await fetch(`/api/assessments/${assessmentId}/submit-hod`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ topic: form.topic }),
+      })
+      const submitted = await submitRes.json().catch(() => ({}))
+      if (!submitRes.ok) throw new Error(submitted?.error || 'Failed to submit to HOD')
+
+      setPublishedAssignmentId(submitted?.data?.publishedAssignmentId || '')
+      toast.success('Submitted to HOD — students receive it after approval')
     } catch (error) {
-      toast.error(error?.message || 'Failed to publish quiz')
+      toast.error(error?.message || 'Failed to submit quiz')
     } finally {
       setPublishing(false)
-    }
-  }
-
-  const handleSubmitToHod = async () => {
-    if (!publishedAssignmentId) {
-      toast.error('Publish first before submitting to HOD')
-      return
-    }
-    try {
-      const res = await fetch(`/api/assignments/${publishedAssignmentId}/submit-hod`, {
-        method: 'POST',
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.error || 'Failed to submit to HOD')
-      toast.success('Submitted to HOD')
-      await loadSubmissionStats(publishedAssignmentId)
-    } catch (error) {
-      toast.error(error?.message || 'Failed to submit')
     }
   }
 
@@ -305,20 +293,13 @@ export default function TeacherQuizMakerPage() {
                     {saving ? 'Saving...' : 'Save'}
                   </Button>
                   <Button
-                    onClick={handlePublish}
+                    onClick={handleSubmitToHod}
                     disabled={publishing || !selectedTeachingAssignment}
                   >
-                    {publishing ? 'Publishing...' : 'Publish to Students'}
+                    {publishing ? 'Submitting...' : 'Submit to HOD for approval'}
                   </Button>
                   <Button variant="outline" onClick={() => window.print()}>
                     Print / Save PDF
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={handleSubmitToHod}
-                    disabled={!publishedAssignmentId}
-                  >
-                    Submit to HOD
                   </Button>
                 </div>
                 {publishedAssignmentId ? (

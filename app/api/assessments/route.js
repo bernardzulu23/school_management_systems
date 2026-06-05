@@ -102,6 +102,7 @@ export async function POST(request) {
           ? String(data.description)
           : null
 
+    const userId = String(auth.user?.id || '').trim()
     const newAssessment = await db.assessment.create({
       data: {
         title: data.title,
@@ -113,6 +114,9 @@ export async function POST(request) {
         duration_minutes: parseInt(data.duration_minutes) || 60,
         description,
         schoolId,
+        status: 'DRAFT',
+        topic: data.topic ? String(data.topic).trim() : null,
+        createdByUserId: userId || null,
       },
     })
 

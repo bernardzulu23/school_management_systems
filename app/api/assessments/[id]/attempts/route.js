@@ -36,7 +36,8 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   if (!assessment) throw new ApiError('Assessment not found', 404)
 
   const interactive = parseAssessmentInteractive(assessment.description)
-  const publishedAssignmentId = interactive?.publishedAssignmentId
+  const publishedAssignmentId =
+    assessment.publishedAssignmentId || interactive?.publishedAssignmentId
 
   if (!publishedAssignmentId) {
     return NextResponse.json({
@@ -110,6 +111,8 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
       totalMarks: content?.totalMarks ?? questionCount,
       encouragement: content?.encouragement || s.feedback || '',
       needsSupport: percentage != null && percentage < 65,
+      needsReview: Boolean(content?.needsReview),
+      review: Array.isArray(content?.review) ? content.review : [],
     }
   })
 
@@ -129,6 +132,8 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
       title: assessment.title,
       subject: assessment.subject,
       class: assessment.class,
+      topic: assessment.topic,
+      status: assessment.status,
       questionCount,
       stats: {
         classSize: classStudents.length,

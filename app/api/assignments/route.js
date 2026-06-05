@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { parseInteractiveQuizPayload } from '@/lib/assessments/interactiveQuiz'
 
 export async function GET(request) {
   const auth = await authMiddleware(request)
@@ -106,18 +107,53 @@ export async function POST(request) {
         })
       : null
 
+  const description = body.description ? String(body.description) : null
+  const isInteractiveQuiz = Boolean(parseInteractiveQuizPayload(description))
+  const assessmentId = body.assessmentId ? String(body.assessmentId).trim() : ''
+
+  if (isInteractiveQuiz && !assessmentId) {
+    return NextResponse.json(
+      {
+        error:
+          'Interactive quizzes must be created as an assessment and approved by HOD before publishing.',
+      },
+      { status: 400 }
+    )
+  }
+
+  if (assessmentId) {
+    const linked = await prisma.assessment.findFirst({
+      where: { id: assessmentId, schoolId },
+      select: { id: true, status: true },
+    })
+    if (!linked || !['APPROVED', 'PUBLISHED'].includes(String(linked.status))) {
+      return NextResponse.json(
+        { error: 'Linked assessment must be HOD-approved before publishing to students' },
+        { status: 400 }
+      )
+    }
+  }
+
   const assignment = await prisma.assignment.create({
     data: {
       title,
-      description: body.description ? String(body.description) : null,
+      description,
       subject,
       classId: classRecord?.id || null,
       class: classRecord?.name || className,
       dueDate,
       schoolId,
       teacherId: teacher?.id || null,
+      assessmentId: assessmentId || null,
     },
   })
+
+  if (assessmentId) {
+    await prisma.assessment.update({
+      where: { id: assessmentId },
+      data: { status: 'PUBLISHED', publishedAssignmentId: assignment.id },
+    })
+  }
 
   return NextResponse.json({ success: true, data: assignment }, { status: 201 })
 }

@@ -8,6 +8,7 @@ import {
   buildAssessmentInteractiveDescription,
   parseAssessmentInteractive,
 } from '@/lib/assessments/assessmentInteractive'
+import { ASSESSMENT_EDITABLE } from '@/lib/assessments/review'
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
   const routeParams = await params
@@ -33,9 +34,17 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
       title: assessment.title,
       subject: assessment.subject,
       class: assessment.class,
+      topic: assessment.topic,
+      status: assessment.status,
       questions: interactive?.questions || [],
-      publishedAssignmentId: interactive?.publishedAssignmentId || null,
+      publishedAssignmentId:
+        assessment.publishedAssignmentId || interactive?.publishedAssignmentId || null,
       publishedAt: interactive?.publishedAt || null,
+      submittedAt: assessment.submittedAt,
+      approvedAt: assessment.approvedAt,
+      rejectionReason: assessment.rejectionReason,
+      approvalNotes: assessment.approvalNotes,
+      aiAnalysis: assessment.aiAnalysis,
     },
   })
 })
@@ -58,6 +67,10 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
     where: { id: routeParams.id, schoolId },
   })
   if (!assessment) throw new ApiError('Assessment not found', 404)
+
+  if (!ASSESSMENT_EDITABLE.has(String(assessment.status))) {
+    throw new ApiError(`Cannot edit questions while status is ${assessment.status}`, 400)
+  }
 
   const body = await request.json().catch(() => ({}))
   const questions = Array.isArray(body.questions) ? body.questions : []

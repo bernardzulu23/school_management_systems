@@ -143,19 +143,22 @@ Example response (`/api/health`):
    `https://{your-domain}/api/onboarding/lipila/callback`
 5. Deploy; confirm `GET https://{your-domain}/api/health` returns `"status": "ok"`.
 
-See also [docs/doc/VERCEL_DEPLOY.md](./doc/VERCEL_DEPLOY.md) and [docs/doc/LEGACY_MISC_ARCHIVE.md](./doc/LEGACY_MISC_ARCHIVE.md).
+See also [docs/doc/VERCEL_DEPLOY.md](./doc/VERCEL_DEPLOY.md), [NEON_POST_DEPLOY_CHECKLIST.md](./NEON_POST_DEPLOY_CHECKLIST.md), and [docs/doc/LEGACY_MISC_ARCHIVE.md](./doc/LEGACY_MISC_ARCHIVE.md).
+
+**Neon branch note:** The operational ZSMS database lives on the `import-2026-05-19` branch (`ep-red-dawn-abn43kbe`), not the Neon default `production` branch (`ep-ancient-mountain-abuub3my`). Both pooled and direct URLs must use the import branch endpoints.
 
 ---
 
 ## Troubleshooting
 
-| Symptom                                     | Fix                                                 |
-| ------------------------------------------- | --------------------------------------------------- |
-| Startup error listing missing env vars      | Compare `.env.local` to `.env.example` and this doc |
-| `JWT_SECRET must be at least 32 characters` | Use a longer random secret                          |
-| Health `database: false`                    | Check `DATABASE_URL`, Neon IP allowlist, SSL params |
-| `email: false` in health                    | Set `RESEND_API_KEY` and `EMAIL_FROM_NOREPLY`       |
-| Payments disabled                           | Set `LIPILA_API_KEY`; see `lib/payments/lipila.js`  |
+| Symptom                                     | Fix                                                                                                                                        |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Startup error listing missing env vars      | Compare `.env.local` to `.env.example` and this doc                                                                                        |
+| `JWT_SECRET must be at least 32 characters` | Use a longer random secret                                                                                                                 |
+| Health `database: false`                    | Check `DATABASE_URL`, Neon IP allowlist, SSL params                                                                                        |
+| App works in migrate but fails at runtime   | `DATABASE_URL` and `DIRECT_URL` must target the **same** Neon branch; see [NEON_POST_DEPLOY_CHECKLIST.md](./NEON_POST_DEPLOY_CHECKLIST.md) |
+| `email: false` in health                    | Set `RESEND_API_KEY` and `EMAIL_FROM_NOREPLY`                                                                                              |
+| Payments disabled                           | Set `LIPILA_API_KEY`; see `lib/payments/lipila.js`                                                                                         |
 
 ---
 

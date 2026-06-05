@@ -660,6 +660,12 @@ Additional teacher instructions: ${extras}
 Write the complete lesson plan now. Start with Worked Examples — they are the most important section.`
 }
 
+export type StoryQuestionTypes = {
+  literal?: boolean
+  inferential?: boolean
+  evaluative?: boolean
+}
+
 export function buildStoryPrompt(params: {
   subject: string
   grade: string
@@ -668,6 +674,16 @@ export function buildStoryPrompt(params: {
   storyType?: string
   setting?: string
   includeQuestions?: boolean
+  cbcCompetencies?: string[]
+  characters?: string[]
+  characterMode?: 'auto' | 'custom'
+  vocabularyWords?: string[]
+  languageMode?: 'english' | 'bilingual'
+  questionTypes?: StoryQuestionTypes
+  questionCount?: number
+  vocabularyExercises?: boolean
+  discussionPrompts?: boolean
+  writingExtension?: boolean
 }): string {
   const canonical = resolveCanonicalSubject(params.subject)
   const storyType = mapStoryTypeToLabel(params.storyType || 'story')
@@ -676,32 +692,67 @@ export function buildStoryPrompt(params: {
     'The story should be educational and engaging for learners in Zambia, integrating the subject naturally.'
 
   const setting = params.setting?.trim() || 'Zambia'
-  const questions = params.includeQuestions
-    ? `
-
-After the story, add:
----
-COMPREHENSION QUESTIONS:
-1. [Recall]
-2. [Understanding/inference]
-3. [Critical thinking]
-4. [Connection to life in Zambia]
-5. [Subject-specific application for ${canonical}]`
+  const competencies = params.cbcCompetencies?.length
+    ? params.cbcCompetencies.join(', ')
+    : 'Communication, Critical thinking'
+  const characterLine =
+    params.characterMode === 'custom' && params.characters?.length
+      ? `Use these character names: ${params.characters.join(', ')}.`
+      : 'Use authentic Zambian character names (e.g. Chanda, Mwila, Bwalya, Mrs Phiri).'
+  const vocabularyLine = params.vocabularyWords?.length
+    ? `Weave these vocabulary words naturally into the story: ${params.vocabularyWords.join(', ')}.`
     : ''
+  const languageLine =
+    params.languageMode === 'bilingual'
+      ? 'Include occasional Nyanja or Bemba phrases with English translations in brackets.'
+      : 'Write in English only.'
+
+  const questionBlocks: string[] = []
+  if (params.includeQuestions) {
+    const types: string[] = []
+    if (params.questionTypes?.literal !== false) types.push('Literal — recall facts from the story')
+    if (params.questionTypes?.inferential !== false)
+      types.push('Inferential — read between the lines')
+    if (params.questionTypes?.evaluative) types.push('Evaluative — opinion and judgement')
+    const count = Math.min(Math.max(params.questionCount ?? 5, 1), 10)
+    questionBlocks.push(`
+---
+COMPREHENSION QUESTIONS (${count} questions):
+Question types to include: ${types.length ? types.join('; ') : 'Literal and inferential'}
+Spread questions across the selected types and link to life in Zambia where possible.`)
+    if (params.vocabularyExercises !== false) {
+      questionBlocks.push(`
+VOCABULARY EXERCISES:
+Provide 3–5 short exercises using key words from the story.`)
+    }
+    if (params.discussionPrompts !== false) {
+      questionBlocks.push(`
+DISCUSSION PROMPTS:
+Provide 2–3 open discussion prompts for the class.`)
+    }
+    if (params.writingExtension) {
+      questionBlocks.push(`
+WRITING EXTENSION:
+Provide one short creative writing activity linked to the story theme.`)
+    }
+  }
 
   return `Write a ${storyType.toLowerCase()} for ${params.grade} Zambian students (approximately ${params.wordCount} words).
 
 THEME / TOPIC: ${params.theme}
 SUBJECT: ${canonical}
 SETTING: ${setting}
+CBC COMPETENCIES (Zambia 2023): ${competencies}
 
 REQUIREMENTS:
 1. Subject integration: ${context}
-2. Zambian context: Zambian characters, places, culture (authentic names e.g. Chanda, Mwamba, Bwalya)
+2. Zambian context: Zambian characters, places, culture. ${characterLine}
 3. Educational value: Teach ${canonical} concepts through the narrative
-4. Age-appropriate vocabulary for ${params.grade}
-5. Engaging plot with clear beginning, middle, and end
-6. Learning outcome: Readers understand the subject concept by the end${questions}
+4. Age-appropriate vocabulary for ${params.grade}${vocabularyLine ? `\n5. Vocabulary focus: ${vocabularyLine}` : ''}
+${vocabularyLine ? '6' : '5'}. Engaging plot with clear beginning, middle, and end
+${vocabularyLine ? '7' : '6'}. Learning outcome: Readers understand the subject concept by the end
+${vocabularyLine ? '8' : '7'}. Language: ${languageLine}
+${vocabularyLine ? '9' : '8'}. Align story outcomes to the listed CBC competencies${questionBlocks.join('')}
 
 Write the ${storyType.toLowerCase()} now.`
 }
