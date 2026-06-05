@@ -7,6 +7,7 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { ArrowLeft, CheckCircle2, XCircle } from 'lucide-react'
+import { isFlashcardAnswerCorrect, resolveFlashcardAnswer } from '@/lib/flashcards/resolveAnswer'
 
 export default function StudentFlashcardStudyPage() {
   const params = useParams()
@@ -31,17 +32,21 @@ export default function StudentFlashcardStudyPage() {
   const card = cards[index]
   const revealed = selected != null
 
+  const resolvedAnswer = useMemo(() => {
+    if (!card) return null
+    return resolveFlashcardAnswer(card.options, card.answer)
+  }, [card])
+
   const isCorrect = useMemo(() => {
-    if (!revealed || !card) return false
-    return String(selected).trim().toLowerCase() === String(card.answer).trim().toLowerCase()
+    if (!revealed || !card || selected == null) return false
+    return isFlashcardAnswerCorrect(selected, card.options, card.answer)
   }, [revealed, selected, card])
 
   const score = useMemo(() => {
     let correct = 0
     for (const c of cards) {
       const a = answers[c.id]
-      if (a && String(a).trim().toLowerCase() === String(c.answer).trim().toLowerCase())
-        correct += 1
+      if (a && isFlashcardAnswerCorrect(a, c.options, c.answer)) correct += 1
     }
     return correct
   }, [answers, cards])
@@ -95,7 +100,8 @@ export default function StudentFlashcardStudyPage() {
                 const chosen = selected === opt
                 const correctOption =
                   revealed &&
-                  String(opt).trim().toLowerCase() === String(card.answer).trim().toLowerCase()
+                  resolvedAnswer &&
+                  String(opt).trim().toLowerCase() === resolvedAnswer.trim().toLowerCase()
                 let cls = 'border-royalPurple-border bg-royalPurple-card'
                 if (revealed && correctOption)
                   cls = 'border-royalPurple-successTx bg-royalPurple-success/20'
@@ -129,7 +135,9 @@ export default function StudentFlashcardStudyPage() {
                     : 'bg-royalPurple-danger/20 text-royalPurple-dangerTx'
                 }`}
               >
-                {isCorrect ? 'Correct! ' : `Not quite. Correct answer: ${card.answer}. `}
+                {isCorrect
+                  ? 'Correct! '
+                  : `Not quite. Correct answer: ${resolvedAnswer || card.answer}. `}
                 {card.explanation ? (
                   <span className="text-royalPurple-text2">{card.explanation}</span>
                 ) : null}

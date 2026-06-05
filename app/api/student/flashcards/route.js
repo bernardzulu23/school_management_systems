@@ -20,7 +20,7 @@ import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { GenerateFlashcardsSchema } from '@/lib/schemas'
 
 const FLASHCARD_SYSTEM =
-  'You are a Zambian CBC study coach. Create concise self-quiz flashcards. Each card has a clear question, 3-4 plausible options, exactly one correct answer matching an option, and a one-line explanation. Use the subject language where natural (e.g. Cinyanja for Cinyanja).'
+  'You are a Zambian CBC study coach. Create concise self-quiz flashcards. Each card has a clear question, 3-4 plausible options, exactly one correct answer, and a one-line explanation. The answer field must be the full text of the correct option (not a letter like A or B). Use the subject language where natural (e.g. Cinyanja for Cinyanja).'
 
 function buildFlashcardPrompt({ subjectName, topic, count }) {
   return `Create ${count} multiple-choice study flashcards for the subject "${subjectName}"${
@@ -28,7 +28,7 @@ function buildFlashcardPrompt({ subjectName, topic, count }) {
   }.
 Rules:
 - Exactly ${count} cards (never more than ${MAX_CARDS_PER_DECK}).
-- Each card: a question (front), 3-4 options, one correct answer matching an option exactly, and a short explanation.
+- Each card: a question (front), 3-4 options, one correct answer as the full option text (not A/B/C/D), and a short explanation.
 - Age-appropriate for Zambian secondary learners. Use local context where helpful.`
 }
 

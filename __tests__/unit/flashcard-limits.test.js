@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { validateFlashcards, MAX_CARDS_PER_DECK } from '@/lib/flashcards/limits'
+import { isFlashcardAnswerCorrect, resolveFlashcardAnswer } from '@/lib/flashcards/resolveAnswer'
 
 /** Build a valid quiz-style card (question + options + answer). */
 function quizCard(i) {
@@ -30,5 +31,33 @@ describe('flashcard limits', () => {
     const result = validateFlashcards([{ question: 'Q', answer: 'A' }])
     expect(result.ok).toBe(false)
     expect(result.error).toMatch(/options/i)
+  })
+
+  it('normalizes letter answers to full option text', () => {
+    const result = validateFlashcards([
+      {
+        front: 'Water movement in plants?',
+        options: ['Transpiration', 'Respiration', 'Photosynthesis', 'Osmosis'],
+        answer: 'A',
+      },
+    ])
+    expect(result.ok).toBe(true)
+    expect(result.cards[0].answer).toBe('Transpiration')
+  })
+})
+
+describe('resolveFlashcardAnswer', () => {
+  const options = ['Transpiration', 'Respiration', 'Photosynthesis', 'Osmosis']
+
+  it('maps letter A to first option', () => {
+    expect(resolveFlashcardAnswer(options, 'A')).toBe('Transpiration')
+  })
+
+  it('matches full text case-insensitively', () => {
+    expect(resolveFlashcardAnswer(options, 'transpiration')).toBe('Transpiration')
+  })
+
+  it('marks correct when selected text matches letter-stored answer', () => {
+    expect(isFlashcardAnswerCorrect('Transpiration', options, 'A')).toBe(true)
   })
 })
