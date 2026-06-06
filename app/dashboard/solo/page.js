@@ -84,7 +84,7 @@ export default function SoloDashboardPage() {
     }
   }
 
-  const plan = dashboard?.school?.plan || 'individual_free'
+  const plan = dashboard?.school?.plan || 'individual'
   const stats = dashboard?.stats || {}
 
   return (
@@ -101,7 +101,7 @@ export default function SoloDashboardPage() {
             <span className="text-xs font-medium px-3 py-1 rounded-full border border-royalPurple-border bg-white">
               {PLAN_LABELS[plan] || plan}
             </span>
-            {plan === 'individual_free' ? (
+            {plan === 'individual' || plan === 'individual_free' ? (
               <Link href="/dashboard/billing">
                 <Button size="sm">Upgrade to Premium</Button>
               </Link>

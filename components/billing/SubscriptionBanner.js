@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useSchool } from '@/lib/context/SchoolContext'
+import { TRIAL_MONTHS } from '@/lib/billing/subscription'
 
 function computeState(school) {
   const plan = String(school?.plan || 'trial')
@@ -10,17 +11,20 @@ function computeState(school) {
   const trialEndsAt = school?.trialEndsAt ? new Date(school.trialEndsAt) : null
   const planExpiresAt = school?.planExpiresAt ? new Date(school.planExpiresAt) : null
   const now = new Date()
-  const isTrial = plan === 'trial'
-  const expiresAt = isTrial ? trialEndsAt : planExpiresAt
+  const onTrial = Boolean(trialEndsAt && trialEndsAt.getTime() > now.getTime())
+  const onPaid = Boolean(planExpiresAt && planExpiresAt.getTime() > now.getTime())
+  const isTrialPlan = plan === 'trial'
+  const expiresAt = onPaid ? planExpiresAt : trialEndsAt || planExpiresAt
   if (!expiresAt) return { show: false }
 
   const msLeft = expiresAt.getTime() - now.getTime()
   const daysLeft = Math.ceil(msLeft / (24 * 60 * 60 * 1000))
-  const isExpired = msLeft < 0
+  const isExpired = !onTrial && !onPaid && msLeft < 0
+  const inTrialWindow = onTrial && !onPaid
 
   return {
-    show: isTrial || isExpired,
-    isTrial,
+    show: inTrialWindow || isExpired || (isTrialPlan && !isExpired),
+    isTrial: inTrialWindow || isTrialPlan,
     isExpired,
     daysLeft,
     expiresAt,
@@ -41,10 +45,10 @@ export default function SubscriptionBanner() {
           {state.isTrial ? 'Your free trial has ended' : 'Your subscription has expired'}
         </p>
         <p className="text-sm text-red-700/90 dark:text-red-200/80 mt-2">
-          Access is paused until your school completes payment. Expired on{' '}
+          Access is paused until payment is completed. Expired on{' '}
           {state.expiresAt.toLocaleDateString('en-GB')}.
           {state.isTrial
-            ? ' Trials last exactly 30 days — upgrade now to restore full service for admins, teachers, HODs, and students.'
+            ? ` Free trials last ${TRIAL_MONTHS} months — subscribe now to restore access for all roles.`
             : ' Renew your plan to restore access for everyone.'}
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
@@ -52,7 +56,7 @@ export default function SubscriptionBanner() {
             href="/dashboard/billing"
             className="inline-flex items-center rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
           >
-            Upgrade / Pay now
+            Subscribe / Pay now
           </Link>
         </div>
       </div>
@@ -77,15 +81,15 @@ export default function SubscriptionBanner() {
               Free trial — {state.daysLeft} day{state.daysLeft === 1 ? '' : 's'} remaining
             </p>
             <p className="text-xs mt-1 text-muted">
-              Trial ends {state.expiresAt.toLocaleDateString('en-GB')}. After 30 days, access stops
-              until payment is made.
+              Trial ends {state.expiresAt.toLocaleDateString('en-GB')}. After {TRIAL_MONTHS} months,
+              access stops until you subscribe.
             </p>
           </div>
           <Link
             href="/dashboard/billing"
             className={`text-sm font-bold underline shrink-0 ${urgent ? 'text-amber-800' : 'text-blue-800'}`}
           >
-            Upgrade early
+            Subscribe early
           </Link>
         </div>
       </div>

@@ -1,59 +1,51 @@
 'use client'
 
-import { Suspense, useMemo, useState } from 'react'
+import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import toast from 'react-hot-toast'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Eye, EyeOff } from 'lucide-react'
+import { PLAN_LABELS, PLAN_PRICING } from '@/lib/billing/plan-pricing'
+import { TRIAL_MONTHS } from '@/lib/billing/subscription'
+import { useIndividualOnboarding } from '@/lib/hooks/useIndividualOnboarding'
+import { IndividualVerifyStep } from '@/components/onboarding/IndividualOnboardingSteps'
+
+const STUDENT_PLANS = [
+  {
+    id: 'student_premium',
+    label: PLAN_LABELS.student_premium,
+    description: `${TRIAL_MONTHS}-month free trial · then K${PLAN_PRICING.student_premium}/mo · Student dashboard & premium study tools`,
+  },
+  {
+    id: 'student_free',
+    label: 'Student Starter',
+    description: `${TRIAL_MONTHS}-month free trial · then subscribe to continue · Core ECZ practice`,
+  },
+]
 
 function JoinStudentContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const codeParam = searchParams.get('code') || ''
+  const initialStep = searchParams.get('step') || 'start'
 
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [enrollmentCode, setEnrollmentCode] = useState(codeParam)
   const [showPassword, setShowPassword] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
 
-  const canSubmit = useMemo(
-    () => name.trim().length >= 2 && email.trim() && password.length >= 6,
-    [name, email, password]
-  )
+  const flow = useIndividualOnboarding({
+    accountType: 'student',
+    defaultPlan: 'student_premium',
+    initialStep,
+  })
 
-  const submit = async (e) => {
-    e.preventDefault()
-    setSubmitting(true)
-    try {
-      const res = await fetch('/api/onboarding/student', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          enrollmentCode: enrollmentCode.trim() || undefined,
-        }),
-      })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Signup failed')
-      toast.success(
-        json.enrolledUnderTeacher
-          ? `Enrolled under ${json.teacherName || 'your teacher'}`
-          : 'Account created'
-      )
-      router.push('/login')
-    } catch (e) {
-      toast.error(e.message || 'Signup failed')
-    } finally {
-      setSubmitting(false)
-    }
+  const finishSetup = async () => {
+    const json = await flow.complete({
+      enrollmentCode: enrollmentCode.trim() || undefined,
+    })
+    if (json?.loginUrl) router.push(json.loginUrl)
   }
 
   return (
@@ -62,7 +54,8 @@ function JoinStudentContent() {
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold text-royalPurple-text1">Student sign up</h1>
           <p className="text-royalPurple-text2">
-            Prepare for ECZ exams on your own terms — always free.
+            Verify email → {TRIAL_MONTHS}-month free trial → Subscribe when it ends. Student
+            dashboard only — no teacher/HOD workflows.
           </p>
           <p className="text-sm text-royalPurple-text3">
             <Link href="/join" className="underline">
@@ -71,12 +64,29 @@ function JoinStudentContent() {
           </p>
         </div>
 
-        <Card className="white-card">
-          <CardHeader>
-            <CardTitle>Create your account</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={submit} className="space-y-4">
+        {flow.step === 'start' ? (
+          <Card className="white-card">
+            <CardHeader>
+              <CardTitle>Choose your plan</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 gap-3">
+                {STUDENT_PLANS.map((p) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => flow.setPlan(p.id)}
+                    className={`rounded-xl border p-4 text-left transition-colors ${
+                      flow.plan === p.id
+                        ? 'border-royalPurple-accent bg-royalPurple-accent/10'
+                        : 'border-royalPurple-border'
+                    }`}
+                  >
+                    <p className="font-semibold text-royalPurple-text1">{p.label}</p>
+                    <p className="text-sm text-royalPurple-text3 mt-1">{p.description}</p>
+                  </button>
+                ))}
+              </div>
               <div>
                 <Label>Enrollment code (optional)</Label>
                 <Input
@@ -90,15 +100,14 @@ function JoinStudentContent() {
               </div>
               <div>
                 <Label>Full name</Label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} required />
+                <Input value={flow.name} onChange={(e) => flow.setName(e.target.value)} />
               </div>
               <div>
                 <Label>Email</Label>
                 <Input
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
+                  value={flow.email}
+                  onChange={(e) => flow.setEmail(e.target.value)}
                 />
               </div>
               <div>
@@ -106,9 +115,8 @@ function JoinStudentContent() {
                 <div className="relative">
                   <Input
                     type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
+                    value={flow.password}
+                    onChange={(e) => flow.setPassword(e.target.value)}
                   />
                   <button
                     type="button"
@@ -119,12 +127,43 @@ function JoinStudentContent() {
                   </button>
                 </div>
               </div>
-              <Button type="submit" disabled={!canSubmit || submitting} fullWidth>
-                {submitting ? 'Creating account…' : 'Create free account'}
+              <Button onClick={flow.start} disabled={!flow.canStart || flow.submitting} fullWidth>
+                {flow.submitting ? 'Sending verification…' : 'Continue'}
               </Button>
-            </form>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        ) : null}
+
+        {flow.step === 'verify' ? (
+          <Card className="white-card">
+            <CardHeader>
+              <CardTitle>Verify your email</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <IndividualVerifyStep
+                email={flow.email}
+                resendVerification={flow.resendVerification}
+                resending={flow.resending}
+                resendCooldown={flow.resendCooldown}
+                afterVerified={flow.afterVerified}
+              />
+            </CardContent>
+          </Card>
+        ) : null}
+
+        {flow.step === 'setup' ? (
+          <Card className="white-card">
+            <CardContent className="py-8 space-y-4">
+              <p className="text-royalPurple-text2">
+                Finish creating your account as <strong>{flow.name}</strong>. You get{' '}
+                <strong>{TRIAL_MONTHS} months free</strong>, then your chosen plan applies.
+              </p>
+              <Button onClick={finishSetup} disabled={flow.submitting || !flow.canSetup} fullWidth>
+                {flow.submitting ? 'Creating account…' : 'Start my free trial'}
+              </Button>
+            </CardContent>
+          </Card>
+        ) : null}
       </div>
     </div>
   )

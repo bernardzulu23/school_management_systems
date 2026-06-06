@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import ProviderLogos, { ProviderLogoImage } from '@/components/payments/ProviderLogos'
 import { Eye, EyeOff } from 'lucide-react'
 import { ProvinceDistrictFields } from '@/components/onboarding/ProvinceDistrictFields'
+import { TRIAL_MONTHS } from '@/lib/billing/subscription'
 
 function parsePlanParam(searchParams) {
   const raw = String(searchParams?.get?.('plan') || '')
@@ -479,7 +480,7 @@ function OnboardingPageContent() {
                 <div>
                   <div className="text-royalPurple-text1 font-medium">Free trial</div>
                   <p className="text-sm text-royalPurple-text2 mt-1">
-                    30 days, no mobile money payment. Your email is already verified.
+                    {TRIAL_MONTHS} months, no mobile money payment. Your email is already verified.
                   </p>
                 </div>
                 <Button

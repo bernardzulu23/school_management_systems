@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { cookies } from 'next/headers'
 import { signOnboardingToken } from '@/lib/middleware/onboardingAuth'
+import { individualOnboardingRedirectPath } from '@/lib/onboarding/individual'
 
 export async function GET(request, { params }) {
   const routeParams = await params
@@ -16,6 +17,8 @@ export async function GET(request, { params }) {
       verificationExpiry: true,
       plan: true,
       paymentStatus: true,
+      schoolType: true,
+      accountType: true,
     },
   })
 
@@ -43,7 +46,6 @@ export async function GET(request, { params }) {
     return configured.startsWith('.') ? configured : `.${configured}`
   })()
 
-  // ✅ FIX: await cookies() before calling .set()
   const cookieStore = await cookies()
   cookieStore.set('onboarding_token', onboardingToken, {
     httpOnly: true,
@@ -60,12 +62,19 @@ export async function GET(request, { params }) {
   const paymentStatus = String(reg?.paymentStatus || '')
     .trim()
     .toLowerCase()
-  const step = plan === 'trial' || paymentStatus === 'paid' ? 'setup' : 'plan'
+  const isIndividual = String(reg?.schoolType || 'SCHOOL').toUpperCase() === 'INDIVIDUAL'
+  const step = isIndividual || plan === 'trial' || paymentStatus === 'paid' ? 'setup' : 'plan'
+
   const host = request.headers.get('host') || ''
   const isLocal =
     host.includes('localhost') || host.startsWith('127.0.0.1') || /^[0-9.]+:\d+$/.test(host)
   const origin = host
     ? `${isLocal ? 'http' : 'https'}://${host}`
     : `https://${process.env.APP_BASE_DOMAIN || 'bluepeacktechnologies.com'}`
-  return NextResponse.redirect(`${origin}/onboarding?step=${step}`)
+
+  const path = isIndividual
+    ? individualOnboardingRedirectPath(reg, step)
+    : `/onboarding?step=${step === 'setup' ? 'setup' : 'plan'}`
+
+  return NextResponse.redirect(`${origin}${path}`)
 }

@@ -36,18 +36,15 @@ export async function POST(request) {
     if (!INDIVIDUAL_PLANS.has(plan)) {
       return NextResponse.json({ error: 'Invalid individual plan' }, { status: 400 })
     }
-    if (plan === 'individual_free') {
-      await prisma.schoolRegistration.update({
-        where: { id: reg.id },
-        data: { plan: 'individual_free', paymentStatus: 'unpaid' },
-      })
-      return NextResponse.json({ success: true, plan, nextStep: 'setup' }, { status: 200 })
-    }
+    const storedPlan = plan === 'individual_free' ? 'individual' : plan
     await prisma.schoolRegistration.update({
       where: { id: reg.id },
-      data: { plan },
+      data: { plan: storedPlan, paymentStatus: 'unpaid' },
     })
-    return NextResponse.json({ success: true, plan, nextStep: 'plan' }, { status: 200 })
+    return NextResponse.json(
+      { success: true, plan: storedPlan, nextStep: 'setup' },
+      { status: 200 }
+    )
   }
 
   if (plan !== 'trial' && !PAID_SCHOOL_PLANS.has(plan)) {

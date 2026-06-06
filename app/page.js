@@ -20,6 +20,7 @@ import { AIFeatures } from '@/components/sections/AIFeatures'
 import { CurriculumFeatures } from '@/components/sections/CurriculumFeatures'
 import { TimeSavings } from '@/components/sections/TimeSavings'
 import { Pricing } from '@/components/sections/Pricing'
+import { TRIAL_MONTHS } from '@/lib/billing/subscription'
 
 export default function HomePage() {
   const { isAuthenticated, user } = useAuth()
@@ -504,7 +505,7 @@ export default function HomePage() {
             className="fade-up fade-up-4"
             style={{ fontSize: 13, color: 'var(--text-muted)', margin: 0 }}
           >
-            Free 30-day trial · No credit card required · Cancel anytime
+            Free {TRIAL_MONTHS}-month trial · No credit card required · Subscribe after trial
           </p>
         </div>
       </section>

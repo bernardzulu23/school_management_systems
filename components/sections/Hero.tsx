@@ -3,6 +3,7 @@
 import React from 'react'
 import { Button } from '@/components/ui/Button'
 import { colors, typography, spacing } from '@/lib/design-tokens'
+import { TRIAL_MONTHS } from '@/lib/billing/subscription'
 
 export function Hero() {
   return (
@@ -87,7 +88,7 @@ export function Hero() {
             marginBottom: 0,
           }}
         >
-          Free 30-day trial. No credit card required. Cancel anytime.
+          Free {TRIAL_MONTHS}-month trial. No credit card required. Subscribe after trial.
         </p>
       </div>
     </section>

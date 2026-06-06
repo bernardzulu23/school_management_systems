@@ -1,90 +1,51 @@
 'use client'
 
-import { Suspense, useEffect, useMemo, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import toast from 'react-hot-toast'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Eye, EyeOff } from 'lucide-react'
 import { PLAN_LABELS, PLAN_PRICING } from '@/lib/billing/plan-pricing'
+import { TRIAL_MONTHS } from '@/lib/billing/subscription'
+import { useIndividualOnboarding } from '@/lib/hooks/useIndividualOnboarding'
+import { IndividualVerifyStep } from '@/components/onboarding/IndividualOnboardingSteps'
+
+const TEACHER_PLANS = [
+  {
+    id: 'individual',
+    label: PLAN_LABELS.individual,
+    description: `${TRIAL_MONTHS}-month free trial · then K${PLAN_PRICING.individual}/mo · Up to 5 students · ECZ tools`,
+  },
+  {
+    id: 'individual_premium',
+    label: PLAN_LABELS.individual_premium,
+    description: `${TRIAL_MONTHS}-month free trial · then K${PLAN_PRICING.individual_premium}/mo · Unlimited students · AI tools`,
+  },
+]
 
 function JoinPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const asStudent = searchParams.get('as') === 'student'
+  const initialStep = searchParams.get('step') || 'start'
 
   useEffect(() => {
     if (asStudent) router.replace('/join/student')
   }, [asStudent, router])
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [plan, setPlan] = useState('individual_free')
-  const [step, setStep] = useState('start')
-  const [submitting, setSubmitting] = useState(false)
+  const flow = useIndividualOnboarding({
+    accountType: 'teacher',
+    defaultPlan: 'individual',
+    initialStep,
+  })
 
-  const canStart = useMemo(
-    () => email.trim() && password.length >= 6 && name.trim().length >= 2,
-    [email, password, name]
-  )
-
-  const start = async () => {
-    setSubmitting(true)
-    try {
-      const res = await fetch('/api/onboarding/start', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          email,
-          password,
-          plan,
-          schoolType: 'INDIVIDUAL',
-          accountType: 'teacher',
-        }),
-      })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Failed to start signup')
-      if (json.requiresVerification) {
-        setStep('verify')
-        toast.success('Check your email to verify your account')
-        return
-      }
-      if (json.requiresPayment) {
-        setStep('pay')
-        return
-      }
-      setStep('setup')
-    } catch (e) {
-      toast.error(e.message || 'Signup failed')
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  const complete = async () => {
-    setSubmitting(true)
-    try {
-      const res = await fetch('/api/onboarding/complete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ adminName: name }),
-      })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Failed to create workspace')
-      toast.success('Workspace ready — sign in to continue')
-      router.push(json.loginUrl || '/login')
-    } catch (e) {
-      toast.error(e.message || 'Setup failed')
-    } finally {
-      setSubmitting(false)
-    }
+  const finishSetup = async () => {
+    const json = await flow.complete()
+    if (json?.loginUrl) router.push(json.loginUrl)
   }
 
   return (
@@ -93,12 +54,12 @@ function JoinPageContent() {
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold text-royalPurple-text1">Join as a solo teacher</h1>
           <p className="text-royalPurple-text2">
-            Your professional teaching workspace. No school subscription required.
+            Verify email → Start your {TRIAL_MONTHS}-month free trial → Subscribe when it ends.
           </p>
           <p className="text-sm text-royalPurple-text3">
             Are you a student?{' '}
             <Link href="/join/student" className="underline text-royalPurple-accentTx">
-              Sign up free
+              Student signup
             </Link>
             {' · '}
             <Link href="/onboarding" className="underline">
@@ -107,48 +68,48 @@ function JoinPageContent() {
           </p>
         </div>
 
-        {step === 'start' ? (
+        {flow.step === 'start' ? (
           <Card className="white-card">
             <CardHeader>
               <CardTitle>Choose your plan</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {['individual_free', 'individual_premium'].map((p) => (
+                {TEACHER_PLANS.map((p) => (
                   <button
-                    key={p}
+                    key={p.id}
                     type="button"
-                    onClick={() => setPlan(p)}
+                    onClick={() => flow.setPlan(p.id)}
                     className={`rounded-xl border p-4 text-left transition-colors ${
-                      plan === p
+                      flow.plan === p.id
                         ? 'border-royalPurple-accent bg-royalPurple-accent/10'
                         : 'border-royalPurple-border'
                     }`}
                   >
-                    <p className="font-semibold text-royalPurple-text1">{PLAN_LABELS[p]}</p>
-                    <p className="text-sm text-royalPurple-text3 mt-1">
-                      {p === 'individual_free'
-                        ? 'Up to 5 students · ECZ tools'
-                        : `K${PLAN_PRICING.individual_premium}/mo · AI tools`}
-                    </p>
+                    <p className="font-semibold text-royalPurple-text1">{p.label}</p>
+                    <p className="text-sm text-royalPurple-text3 mt-1">{p.description}</p>
                   </button>
                 ))}
               </div>
               <div>
                 <Label>Your name</Label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} />
+                <Input value={flow.name} onChange={(e) => flow.setName(e.target.value)} />
               </div>
               <div>
                 <Label>Email</Label>
-                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <Input
+                  type="email"
+                  value={flow.email}
+                  onChange={(e) => flow.setEmail(e.target.value)}
+                />
               </div>
               <div>
                 <Label>Password</Label>
                 <div className="relative">
                   <Input
                     type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={flow.password}
+                    onChange={(e) => flow.setPassword(e.target.value)}
                   />
                   <button
                     type="button"
@@ -159,33 +120,39 @@ function JoinPageContent() {
                   </button>
                 </div>
               </div>
-              <Button onClick={start} disabled={!canStart || submitting} fullWidth>
-                {submitting ? 'Creating account…' : 'Continue'}
+              <Button onClick={flow.start} disabled={!flow.canStart || flow.submitting} fullWidth>
+                {flow.submitting ? 'Sending verification…' : 'Continue'}
               </Button>
             </CardContent>
           </Card>
         ) : null}
 
-        {step === 'verify' ? (
+        {flow.step === 'verify' ? (
           <Card className="white-card">
-            <CardContent className="py-8 text-center space-y-4">
-              <p className="text-royalPurple-text2">
-                We sent a verification link to <strong>{email}</strong>. Open it, then return here
-                and finish setup.
-              </p>
-              <Button onClick={() => setStep('setup')}>I verified my email</Button>
+            <CardHeader>
+              <CardTitle>Verify your email</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <IndividualVerifyStep
+                email={flow.email}
+                resendVerification={flow.resendVerification}
+                resending={flow.resending}
+                resendCooldown={flow.resendCooldown}
+                afterVerified={flow.afterVerified}
+              />
             </CardContent>
           </Card>
         ) : null}
 
-        {step === 'setup' ? (
+        {flow.step === 'setup' ? (
           <Card className="white-card">
             <CardContent className="py-8 space-y-4">
               <p className="text-royalPurple-text2">
-                Create your workspace as <strong>{name}</strong>.
+                Create your workspace as <strong>{flow.name}</strong>. You get{' '}
+                <strong>{TRIAL_MONTHS} months free</strong>, then your chosen plan applies.
               </p>
-              <Button onClick={complete} disabled={submitting} fullWidth>
-                {submitting ? 'Creating workspace…' : 'Create my workspace'}
+              <Button onClick={finishSetup} disabled={flow.submitting || !flow.canSetup} fullWidth>
+                {flow.submitting ? 'Creating workspace…' : 'Start my free trial'}
               </Button>
             </CardContent>
           </Card>

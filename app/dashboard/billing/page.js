@@ -70,11 +70,11 @@ function BillingPageContent() {
     () => String(school?.schoolType || 'SCHOOL').toUpperCase() === 'INDIVIDUAL',
     [school?.schoolType]
   )
-  const upgradePlanKeys = useMemo(
-    () =>
-      isIndividual ? ['individual_premium', 'individual_annual'] : ['basic', 'standard', 'premium'],
-    [isIndividual]
-  )
+  const upgradePlanKeys = useMemo(() => {
+    if (!isIndividual) return ['basic', 'standard', 'premium']
+    if (plan.startsWith('student')) return ['student_premium']
+    return ['individual', 'individual_premium', 'individual_annual']
+  }, [isIndividual, plan])
   const expiry = useMemo(
     () => school?.planExpiresAt || school?.trialEndsAt || null,
     [school?.planExpiresAt, school?.trialEndsAt]

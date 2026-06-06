@@ -11,7 +11,7 @@ import {
   lipilaCreateMobileMoneyCollection,
 } from '@/lib/payments/lipila'
 
-import { PLAN_PRICING } from '@/lib/billing/plan-pricing'
+import { PLAN_PRICING, normalizePlanSlug } from '@/lib/billing/plan-pricing'
 
 function normalizeZambiaMsisdn(value) {
   const digits = String(value || '').replace(/\D/g, '')
@@ -42,14 +42,9 @@ export async function POST(request) {
   if (!reg) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   if (!reg.isVerified)
     return NextResponse.json({ error: 'Verify your email first' }, { status: 401 })
-  if (String(reg.plan || '').toLowerCase() === 'trial') {
+  const planSlug = normalizePlanSlug(reg.plan || '')
+  if (planSlug === 'trial') {
     return NextResponse.json({ error: 'Payment is not required for free trial' }, { status: 400 })
-  }
-  if (String(reg.plan || '').toLowerCase() === 'individual_free') {
-    return NextResponse.json(
-      { error: 'Payment is not required for Individual Free' },
-      { status: 400 }
-    )
   }
   if (String(reg.paymentStatus || '').toLowerCase() === 'paid') {
     return NextResponse.json({ error: 'Payment already completed' }, { status: 400 })

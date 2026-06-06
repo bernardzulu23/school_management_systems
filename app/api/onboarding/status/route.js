@@ -36,6 +36,8 @@ export async function GET(request) {
       subdomain: true,
       level: true,
       adminName: true,
+      schoolType: true,
+      accountType: true,
     },
   })
 
@@ -83,13 +85,20 @@ export async function GET(request) {
         subdomain: true,
         level: true,
         adminName: true,
+        schoolType: true,
+        accountType: true,
       },
     })
   }
 
   const paymentStatus = String(reg?.paymentStatus || '').toLowerCase()
+  const currentPlan = String(reg?.plan || '')
+    .trim()
+    .toLowerCase()
+  const isIndividual = String(reg?.schoolType || 'SCHOOL').toUpperCase() === 'INDIVIDUAL'
   const canCompleteSetup =
-    Boolean(reg?.isVerified) && (plan === 'trial' || paymentStatus === 'paid')
+    Boolean(reg?.isVerified) &&
+    (isIndividual || currentPlan === 'trial' || paymentStatus === 'paid')
 
   return NextResponse.json(
     {

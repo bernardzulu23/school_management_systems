@@ -7,7 +7,7 @@ import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { sendOnboardingVerificationEmail } from '@/config/email'
 import { signOnboardingToken } from '@/lib/middleware/onboardingAuth'
 import { getOnboardingVerifyUrl } from '@/lib/onboarding/emailLinks'
-import { INDIVIDUAL_PLANS, SCHOOL_PLANS } from '@/lib/onboarding/individual'
+import { INDIVIDUAL_PLANS } from '@/lib/onboarding/individual'
 
 function isValidEmail(value) {
   const email = String(value || '')
@@ -43,7 +43,12 @@ export async function POST(request) {
       requestedPlan === 'standard' ||
       requestedPlan === 'premium'
     const validIndividualPlans = INDIVIDUAL_PLANS.has(requestedPlan)
-    const defaultIndividualPlan = schoolType === 'INDIVIDUAL' ? 'individual_free' : null
+    const defaultIndividualPlan =
+      schoolType === 'INDIVIDUAL'
+        ? accountType === 'student'
+          ? 'student_premium'
+          : 'individual'
+        : null
 
     let plan = null
     if (schoolType === 'INDIVIDUAL') {
@@ -76,8 +81,8 @@ export async function POST(request) {
       !existing || allowTrialOverride || existingStatus === 'unpaid' || !existingStatus
     const finalPlan = canChangePlan && requested ? requested : existingPlan || requested || null
     const isTrial = finalPlan === 'trial'
-    const isIndividualFree = finalPlan === 'individual_free'
-    const skipPayment = isTrial || isIndividualFree
+    const normalizedFinal = String(finalPlan || '').toLowerCase()
+    const skipPayment = isTrial || schoolType === 'INDIVIDUAL'
 
     if (existing?.isVerified && isPortalCreated && (isTrial || existingStatus === 'paid')) {
       const baseDomain = String(
@@ -190,7 +195,7 @@ export async function POST(request) {
         requiresVerification: true,
         schoolType,
         ...(isTrial ? { trialIntent: true } : {}),
-        ...(isIndividualFree ? { individualFree: true } : {}),
+        requiresPayment: schoolType !== 'INDIVIDUAL' && !skipPayment,
       })
     }
 

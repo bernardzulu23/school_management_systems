@@ -4,51 +4,39 @@ The Individual Portal lets **solo teachers** and **independent students** use ZS
 
 ## Subscriber types
 
-| Type         | Role          | Plan                                      |
-| ------------ | ------------- | ----------------------------------------- |
-| Solo teacher | `teacher`     | `individual_free` or `individual_premium` |
-| Solo student | `student`     | `student_free` (always free)              |
-| School       | `headteacher` | Existing school plans (unchanged)         |
+| Type         | Role          | Plan                                                 |
+| ------------ | ------------- | ---------------------------------------------------- |
+| Solo teacher | `teacher`     | `individual` (K50/mo) or `individual_premium`        |
+| Solo student | `student`     | `student_premium` (K99/mo) or `student_free` starter |
+| School       | `headteacher` | Existing school plans (unchanged)                    |
 
-## Architecture: school of one
+## Free trial (all roles)
 
-Each individual subscriber gets a normal `School` row with `schoolType: INDIVIDUAL`. All existing APIs remain `schoolId`-scoped.
+Every account — school, solo teacher, or student — gets a **2-month free trial** (`trialEndsAt`). After that, **subscription is required** via `/dashboard/billing` (Lipila mobile money). There are no permanently free plans.
 
-- Solo teacher workspace: auto subdomain, `ownerUserId`, `enrollmentCode` for student invites
-- Solo student (no tutor): separate `INDIVIDUAL` school with `plan: student_free`
-- Student with tutor: joins teacher workspace via enrollment code
+## Pricing after trial
+
+- **Individual teacher (`individual`)**: K50/month — up to 5 students, ECZ tools.
+- **Individual premium (`individual_premium`)**: K99/month — unlimited students + AI tools.
+- **Student premium (`student_premium`)**: K99/month — student-facing dashboard only.
+- **Student starter (`student_free`)**: core ECZ practice during trial; subscribe to continue.
 
 ## Onboarding URLs
 
-- `/join` — solo teacher (Free or Premium)
+**Verify email → Start 2-month trial → Subscribe when trial ends**
+
+- `/join` — solo teacher
 - `/join/student` — student signup (optional `?code=XXXXXX`)
-- `/onboarding` — full school signup (unchanged)
+- `/onboarding` — full school signup
 
 ## Dashboard
 
 - Solo teachers: `/dashboard/solo`
-- Students: `/dashboard/student` (unchanged)
-
-## API routes
-
-| Method | Path                                   | Purpose             |
-| ------ | -------------------------------------- | ------------------- |
-| GET    | `/api/solo/dashboard`                  | Workspace stats     |
-| GET    | `/api/solo/enrollment-code`            | Current invite code |
-| POST   | `/api/solo/enrollment-code/regenerate` | New invite code     |
-| GET    | `/api/solo/students`                   | Enrolled students   |
-| DELETE | `/api/solo/students/[id]`              | Remove student      |
-| POST   | `/api/onboarding/student`              | Student self-signup |
+- Students: `/dashboard/student`
 
 ## Plan gating
 
-Feature access uses existing `requireFeature()` + `PLAN_FEATURES` in `lib/zambiaSchoolFeatures.js`.
-
-- `individual_free`: ECZ practice, whiteboard, lab, code playground — no AI generation
-- `individual_premium`: adds AI lesson planner, quiz maker, story weaver, report comments, attendance
-- `student_free`: ECZ practice and creative tools only
-
-School-only features (timetable, bulk SMS, MOE reports, HOD workflows) return 403 for `INDIVIDUAL` schools via `requireSchoolType()`.
+Feature access uses `requireFeature()` + `PLAN_FEATURES` in `lib/zambiaSchoolFeatures.js`. Access also requires an active trial or paid subscription (`lib/billing/subscription.js`).
 
 ## Database migration
 
@@ -59,6 +47,6 @@ npx prisma migrate deploy
 npx prisma generate
 ```
 
-## Upgrade path
+## Renewal
 
-Solo teachers upgrade via `/dashboard/billing` using `individual_premium` (Lipila mobile money).
+All roles renew or upgrade via `/dashboard/billing` after the 2-month trial.

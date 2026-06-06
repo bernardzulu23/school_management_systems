@@ -199,7 +199,13 @@ export const POST = withSecureApi(async function POST(request) {
     if (!school || school.active === false) {
       return NextResponse.json({ error: 'School is not active' }, { status: 403 })
     }
-    if (!school.emailVerified && user.role === 'headteacher' && !isPilotEmail(user.email)) {
+    if (
+      !school.emailVerified &&
+      (user.role === 'headteacher' ||
+        (String(school.schoolType || '').toUpperCase() === 'INDIVIDUAL' &&
+          ['teacher', 'student'].includes(String(user.role || '').toLowerCase()))) &&
+      !isPilotEmail(user.email)
+    ) {
       return NextResponse.json(
         { error: 'Please verify your email address first.', code: 'EMAIL_NOT_VERIFIED' },
         { status: 403 }
