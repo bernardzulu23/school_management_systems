@@ -1,52 +1,37 @@
 # ZSMS Individual Portal
 
-The Individual Portal lets **solo teachers** and **independent students** use ZSMS without a subscribing school.
+The Individual Portal is for **solo teachers** only. Schools use `/onboarding`; students join through a **school portal** or are registered by a solo teacher.
 
 ## Subscriber types
 
-| Type         | Role          | Plan                                                 |
-| ------------ | ------------- | ---------------------------------------------------- |
-| Solo teacher | `teacher`     | `individual` (K50/mo) or `individual_premium`        |
-| Solo student | `student`     | `student_premium` (K99/mo) or `student_free` starter |
-| School       | `headteacher` | Existing school plans (unchanged)                    |
+| Type         | Role          | Plan                                          |
+| ------------ | ------------- | --------------------------------------------- |
+| Solo teacher | `teacher`     | `individual` (K50/mo) or `individual_premium` |
+| School       | `headteacher` | Existing school plans (unchanged)             |
+
+Independent student signup (`/join/student`, `student_free`, `student_premium`) has been removed.
 
 ## Free trial (all roles)
 
-Every account — school, solo teacher, or student — gets a **2-month free trial** (`trialEndsAt`). After that, **subscription is required** via `/dashboard/billing` (Lipila mobile money). There are no permanently free plans.
-
-## Pricing after trial
-
-- **Individual teacher (`individual`)**: K50/month — up to 5 students, ECZ tools.
-- **Individual premium (`individual_premium`)**: K99/month — unlimited students + AI tools.
-- **Student premium (`student_premium`)**: K99/month — student-facing dashboard only.
-- **Student starter (`student_free`)**: core ECZ practice during trial; subscribe to continue.
+Every account gets a **2-month free trial** (`trialEndsAt`). After that, **subscription is required** via `/dashboard/billing`.
 
 ## Onboarding URLs
 
-**Verify email → Start 2-month trial → Subscribe when trial ends**
+**Verify email (required) → Start 2-month trial → Subscribe when trial ends**
 
-- `/join` — solo teacher
-- `/join/student` — student signup (optional `?code=XXXXXX`)
+- `/join` — solo teacher only
 - `/onboarding` — full school signup
+
+Email verification is mandatory before workspace creation. The onboarding cookie is only issued after the verification link is opened.
+
+## Students under a solo teacher
+
+Teachers register students through **User Registration** in their workspace. The enrollment code is for reference; there is no public student self-signup flow.
 
 ## Dashboard
 
 - Solo teachers: `/dashboard/solo`
-- Students: `/dashboard/student`
-
-## Plan gating
-
-Feature access uses `requireFeature()` + `PLAN_FEATURES` in `lib/zambiaSchoolFeatures.js`. Access also requires an active trial or paid subscription (`lib/billing/subscription.js`).
-
-## Database migration
-
-From the **web project root** (not `zsms-mobile`):
-
-```bash
-npx prisma migrate deploy
-npx prisma generate
-```
 
 ## Renewal
 
-All roles renew or upgrade via `/dashboard/billing` after the 2-month trial.
+Renew or upgrade via `/dashboard/billing` after the 2-month trial.

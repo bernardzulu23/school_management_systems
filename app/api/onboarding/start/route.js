@@ -33,6 +33,16 @@ export async function POST(request) {
     const password = String(body?.password || '')
     const schoolType = String(body?.schoolType || 'SCHOOL').toUpperCase()
     const accountType = String(body?.accountType || 'teacher').toLowerCase()
+
+    if (schoolType === 'INDIVIDUAL' && accountType === 'student') {
+      return NextResponse.json(
+        {
+          error:
+            'Independent student signup is not available. Use a school portal or solo teacher workspace.',
+        },
+        { status: 400 }
+      )
+    }
     const requestedPlan = String(body?.plan || '')
       .trim()
       .toLowerCase()
@@ -43,12 +53,7 @@ export async function POST(request) {
       requestedPlan === 'standard' ||
       requestedPlan === 'premium'
     const validIndividualPlans = INDIVIDUAL_PLANS.has(requestedPlan)
-    const defaultIndividualPlan =
-      schoolType === 'INDIVIDUAL'
-        ? accountType === 'student'
-          ? 'student_premium'
-          : 'individual'
-        : null
+    const defaultIndividualPlan = schoolType === 'INDIVIDUAL' ? 'individual' : null
 
     let plan = null
     if (schoolType === 'INDIVIDUAL') {
@@ -124,7 +129,7 @@ export async function POST(request) {
         lastVerificationSentAt,
         paymentStatus: 'unpaid',
         schoolType,
-        accountType,
+        accountType: schoolType === 'INDIVIDUAL' ? 'teacher' : accountType,
         ...(finalPlan ? { plan: finalPlan } : {}),
         ...(finalPlan ? { subscriptionMonths: 1 } : {}),
       },
@@ -139,7 +144,7 @@ export async function POST(request) {
         paymentStatus: skipPayment ? 'unpaid' : existing?.paymentStatus || 'unpaid',
         plan: finalPlan,
         schoolType,
-        accountType,
+        accountType: schoolType === 'INDIVIDUAL' ? 'teacher' : accountType,
         subscriptionMonths: existing?.subscriptionMonths || 1,
         ...(skipPayment
           ? {
@@ -190,13 +195,15 @@ export async function POST(request) {
           { status: 502 }
         )
       }
-      return NextResponse.json({
+      const response = NextResponse.json({
         success: true,
         requiresVerification: true,
         schoolType,
         ...(isTrial ? { trialIntent: true } : {}),
         requiresPayment: schoolType !== 'INDIVIDUAL' && !skipPayment,
       })
+      response.cookies.set('onboarding_token', '', { maxAge: 0, path: '/' })
+      return response
     }
 
     const onboardingToken = signOnboardingToken(reg.id)

@@ -1,30 +1,22 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { verifyOnboardingToken } from '@/lib/middleware/onboardingAuth'
+import {
+  requireRegistrationEmailVerified,
+  loadOnboardingRegistration,
+} from '@/lib/onboarding/guards'
 import { INDIVIDUAL_PLANS } from '@/lib/onboarding/individual'
 
 const PAID_SCHOOL_PLANS = new Set(['basic', 'standard', 'premium'])
 const PAID_INDIVIDUAL_PLANS = new Set(['individual_premium', 'individual_annual'])
 
 export async function POST(request) {
-  const token = request.cookies.get('onboarding_token')?.value || ''
-  const registrationId = verifyOnboardingToken(token)
-  if (!registrationId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const loaded = await loadOnboardingRegistration(request)
+  if (!loaded.ok) return loaded.response
+  const reg = loaded.reg
 
-  const reg = await prisma.schoolRegistration.findUnique({
-    where: { id: registrationId },
-    select: { id: true, isVerified: true, paymentStatus: true, schoolType: true },
-  })
-  if (!reg) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  if (!reg.isVerified) {
-    return NextResponse.json(
-      { error: 'Verify your email before starting a free trial or selecting a plan' },
-      { status: 403 }
-    )
-  }
+  const verifyBlock = requireRegistrationEmailVerified(reg)
+  if (verifyBlock) return verifyBlock
 
   const body = await request.json().catch(() => ({}))
   const plan = String(body?.plan || '')

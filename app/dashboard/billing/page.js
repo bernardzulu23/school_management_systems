@@ -72,9 +72,8 @@ function BillingPageContent() {
   )
   const upgradePlanKeys = useMemo(() => {
     if (!isIndividual) return ['basic', 'standard', 'premium']
-    if (plan.startsWith('student')) return ['student_premium']
     return ['individual', 'individual_premium', 'individual_annual']
-  }, [isIndividual, plan])
+  }, [isIndividual])
   const expiry = useMemo(
     () => school?.planExpiresAt || school?.trialEndsAt || null,
     [school?.planExpiresAt, school?.trialEndsAt]

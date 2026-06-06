@@ -59,7 +59,7 @@ See [AI_GUIDE.md](./AI_GUIDE.md).
 
 ### Individual Portal (solo teachers & students)
 
-- Onboarding: `/join`, `/join/student` → see [INDIVIDUAL_PORTAL.md](./INDIVIDUAL_PORTAL.md).
+- Onboarding: `/join` (solo teacher) → see [INDIVIDUAL_PORTAL.md](./INDIVIDUAL_PORTAL.md).
 - `School.schoolType`: `SCHOOL` (default) or `INDIVIDUAL`.
 - Solo dashboard: `/dashboard/solo`; APIs under `/api/solo/*`.
 - School-only routes use `requireSchoolType()` from `lib/middleware/individual-gate.js`.

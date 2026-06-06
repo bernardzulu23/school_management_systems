@@ -3,7 +3,10 @@ import { NextResponse } from 'next/server'
 import crypto from 'crypto'
 import prisma from '@/lib/prisma'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
-import { verifyOnboardingToken } from '@/lib/middleware/onboardingAuth'
+import {
+  requireRegistrationEmailVerified,
+  loadOnboardingRegistration,
+} from '@/lib/onboarding/guards'
 import {
   extractGatewayReferenceId,
   getLipilaConfig,
@@ -31,17 +34,12 @@ export async function POST(request) {
   })
   if (rl.isLimited) return rl.response
 
-  const token = request.cookies.get('onboarding_token')?.value || ''
-  const registrationId = verifyOnboardingToken(token)
-  if (!registrationId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const loaded = await loadOnboardingRegistration(request)
+  if (!loaded.ok) return loaded.response
+  const reg = loaded.reg
 
-  const reg = await prisma.schoolRegistration.findUnique({
-    where: { id: registrationId },
-    select: { id: true, email: true, isVerified: true, plan: true, paymentStatus: true },
-  })
-  if (!reg) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  if (!reg.isVerified)
-    return NextResponse.json({ error: 'Verify your email first' }, { status: 401 })
+  const verifyBlock = requireRegistrationEmailVerified(reg)
+  if (verifyBlock) return verifyBlock
   const planSlug = normalizePlanSlug(reg.plan || '')
   if (planSlug === 'trial') {
     return NextResponse.json({ error: 'Payment is not required for free trial' }, { status: 400 })

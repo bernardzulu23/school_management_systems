@@ -26,15 +26,15 @@ export const GET = withSecureApi(async function GET(request) {
 
   const host = request.headers.get('x-forwarded-host') || request.headers.get('host') || ''
   const isLocal = baseDomain.includes('localhost') || String(host).includes('localhost')
-  const shareUrl = isLocal
-    ? `${request.headers.get('origin') || ''}/join/student?code=${school?.enrollmentCode || ''}`
-    : `https://${school?.subdomain}.${baseDomain}/join/student?code=${school?.enrollmentCode || ''}`
+  const loginUrl = isLocal
+    ? `${request.headers.get('origin') || ''}/login`
+    : `https://${school?.subdomain}.${baseDomain}/login`
 
   return NextResponse.json({
     success: true,
     data: {
       enrollmentCode: school?.enrollmentCode,
-      shareUrl,
+      loginUrl,
       subdomain: school?.subdomain,
       plan: school?.plan,
       workspaceName: school?.name,

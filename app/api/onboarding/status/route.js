@@ -103,6 +103,7 @@ export async function GET(request) {
   return NextResponse.json(
     {
       authenticated: true,
+      emailVerified: Boolean(reg?.isVerified),
       registration: reg,
       canCompleteSetup,
     },

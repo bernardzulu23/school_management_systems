@@ -493,9 +493,6 @@ export default function HomePage() {
             <Link href="/join" className="btn-secondary">
               Solo teacher
             </Link>
-            <Link href="/join/student" className="btn-secondary">
-              Student
-            </Link>
             <Link href="#ecz" className="btn-secondary">
               ECZ compliance
             </Link>

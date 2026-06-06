@@ -15,12 +15,7 @@ import {
 import { clearAuthSessionCookies } from '@/lib/security/cookies'
 import { logger, captureError } from '@/lib/utils/logger'
 import { validateSchoolLocation } from '@/lib/platform/reportingStream'
-import {
-  completeIndividualOnboarding,
-  completeIndividualStudentOnboarding,
-  isIndividualRegistration,
-  isStudentIndividualRegistration,
-} from '@/lib/onboarding/individual'
+import { completeIndividualOnboarding, isIndividualRegistration } from '@/lib/onboarding/individual'
 import { seedSubjectsForSchool } from '@/lib/subjects/seedSubjects'
 
 const RESERVED = new Set([
@@ -101,15 +96,17 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
     if (!reg.isVerified) {
-      log.response(401, Date.now() - start)
-      return NextResponse.json({ error: 'Verify your email first' }, { status: 401 })
+      log.response(403, Date.now() - start)
+      return NextResponse.json(
+        { error: 'Verify your email first', code: 'EMAIL_NOT_VERIFIED' },
+        { status: 403 }
+      )
     }
     const plan = String(reg.plan || 'basic')
       .trim()
       .toLowerCase()
     const isTrial = plan === 'trial'
     const isIndividual = isIndividualRegistration(reg)
-    const isStudentIndividual = isStudentIndividualRegistration(reg)
 
     if (isIndividual) {
       // 2-month trial at signup — payment collected via billing after trial ends
@@ -134,51 +131,6 @@ export async function POST(request) {
         return NextResponse.json({ error: 'Your name is required' }, { status: 400 })
       }
 
-      if (isStudentIndividual) {
-        const enrollmentCode = body?.enrollmentCode ?? null
-        const result = await completeIndividualStudentOnboarding({
-          prisma,
-          reg,
-          adminName,
-          adminPhone,
-          baseDomain,
-          isLocal,
-          enrollmentCode,
-        })
-
-        const portalEmailSent = await sendSchoolPortalLinkEmail({
-          to: reg.email,
-          schoolName: result.school.name,
-          subdomain: result.school.subdomain,
-          loginUrl: result.loginUrl,
-          adminName,
-        })
-        if (!portalEmailSent && process.env.DEV_ONBOARDING_SKIP_EMAIL !== 'true') {
-          return NextResponse.json(
-            {
-              error: 'Account created, but portal email was not sent.',
-              code: 'EMAIL_NOT_SENT',
-              school: result.school,
-              loginUrl: result.loginUrl,
-            },
-            { status: 502 }
-          )
-        }
-
-        const response = NextResponse.json({
-          success: true,
-          school: result.school,
-          loginUrl: result.loginUrl,
-          redirectUrl: result.redirectUrl,
-          enrolledUnderTeacher: result.enrolledUnderTeacher,
-          teacherName: result.teacherName,
-        })
-        response.cookies.set('onboarding_token', '', { maxAge: 0, path: '/' })
-        clearAuthSessionCookies(response, request)
-        logger({ route, schoolId: result.school.id }).response(200, Date.now() - start)
-        return response
-      }
-
       const result = await completeIndividualOnboarding({
         prisma,
         reg,
@@ -186,7 +138,6 @@ export async function POST(request) {
         adminPhone,
         baseDomain,
         isLocal,
-        reserved: RESERVED,
       })
 
       const portalEmailSent = await sendSchoolPortalLinkEmail({

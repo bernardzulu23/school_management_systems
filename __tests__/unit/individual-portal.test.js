@@ -6,6 +6,7 @@ import {
   INDIVIDUAL_STUDENT_LIMIT,
   PLAN_PRICING,
   normalizePlanSlug,
+  INDIVIDUAL_PLANS,
 } from '@/lib/billing/plan-pricing'
 import {
   individualPlanRequiresPayment,
@@ -24,6 +25,12 @@ describe('Individual Portal utilities', () => {
     expect(TRIAL_DAYS).toBe(60)
   })
 
+  it('individual plans are teacher-only', () => {
+    expect(INDIVIDUAL_PLANS.has('individual')).toBe(true)
+    expect(INDIVIDUAL_PLANS.has('student_premium')).toBe(false)
+    expect(INDIVIDUAL_PLANS.has('student_free')).toBe(false)
+  })
+
   it('individual teacher plan is K50 and requires payment after trial', () => {
     expect(PLAN_PRICING.individual).toBe(50)
     expect(individualPlanRequiresPayment('individual')).toBe(true)
@@ -38,34 +45,6 @@ describe('Individual Portal utilities', () => {
 
   it('individual_premium includes AI lesson planner', () => {
     expect(planIncludes('individual_premium', 'ai-lesson-planner')).toBe(true)
-  })
-
-  it('student_premium includes student tools but not teacher ECZ tracking', () => {
-    expect(planIncludes('student_premium', 'ecz-practice')).toBe(true)
-    expect(planIncludes('student_premium', 'ai-quiz-maker')).toBe(true)
-    expect(planIncludes('student_premium', 'ecz-tracking')).toBe(false)
-    expect(planIncludes('student_premium', 'teacher-dashboard')).toBe(false)
-  })
-
-  it('student_free includes ecz-practice only among AI features', () => {
-    expect(planIncludes('student_free', 'ecz-practice')).toBe(true)
-    expect(planIncludes('student_free', 'ai-lesson-planner')).toBe(false)
-  })
-
-  it('student_free expires when trial ends without payment', () => {
-    const active = getSubscriptionState({
-      plan: 'student_free',
-      active: true,
-      trialEndsAt: new Date(Date.now() + 86400000),
-    })
-    expect(active.active).toBe(true)
-
-    const expired = getSubscriptionState({
-      plan: 'student_free',
-      active: true,
-      trialEndsAt: new Date(Date.now() - 86400000),
-    })
-    expect(expired.active).toBe(false)
   })
 
   it('individual paid plan respects planExpiresAt after trial', () => {
@@ -89,12 +68,6 @@ describe('Individual Portal utilities', () => {
   it('student cap limit is 5 on individual plan', () => {
     expect(INDIVIDUAL_STUDENT_LIMIT.individual).toBe(5)
     expect(INDIVIDUAL_STUDENT_LIMIT.individual_premium).toBe(Infinity)
-  })
-
-  it('student premium is K99 and requires payment after trial', () => {
-    expect(PLAN_PRICING.student_premium).toBe(99)
-    expect(individualPlanRequiresPayment('student_premium')).toBe(true)
-    expect(individualPlanRequiresPayment('student_free')).toBe(true)
   })
 })
 

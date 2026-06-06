@@ -1,13 +1,12 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 
-/** @deprecated Use /join/student with email verification and payment flow */
 export async function POST() {
   return NextResponse.json(
     {
       error:
-        'Direct student signup is disabled. Use /join/student to verify your email and complete onboarding.',
-      code: 'USE_JOIN_FLOW',
+        'Independent student signup is not available. Join through your school or a solo teacher workspace.',
+      code: 'STUDENT_SIGNUP_DISABLED',
     },
     { status: 410 }
   )

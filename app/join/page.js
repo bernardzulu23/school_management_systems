@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
@@ -29,16 +29,10 @@ const TEACHER_PLANS = [
 function JoinPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const asStudent = searchParams.get('as') === 'student'
   const initialStep = searchParams.get('step') || 'start'
-
-  useEffect(() => {
-    if (asStudent) router.replace('/join/student')
-  }, [asStudent, router])
 
   const [showPassword, setShowPassword] = useState(false)
   const flow = useIndividualOnboarding({
-    accountType: 'teacher',
     defaultPlan: 'individual',
     initialStep,
   })
@@ -57,13 +51,9 @@ function JoinPageContent() {
             Verify email → Start your {TRIAL_MONTHS}-month free trial → Subscribe when it ends.
           </p>
           <p className="text-sm text-royalPurple-text3">
-            Are you a student?{' '}
-            <Link href="/join/student" className="underline text-royalPurple-accentTx">
-              Student signup
-            </Link>
-            {' · '}
+            Registering a school?{' '}
             <Link href="/onboarding" className="underline">
-              Register a school
+              School signup
             </Link>
           </p>
         </div>
@@ -140,6 +130,10 @@ function JoinPageContent() {
                 resendCooldown={flow.resendCooldown}
                 afterVerified={flow.afterVerified}
               />
+              <p className="text-xs text-royalPurple-text3 mt-4 text-center">
+                You must open the link in your email. Setup stays locked until verification
+                succeeds.
+              </p>
             </CardContent>
           </Card>
         ) : null}
@@ -148,7 +142,7 @@ function JoinPageContent() {
           <Card className="white-card">
             <CardContent className="py-8 space-y-4">
               <p className="text-royalPurple-text2">
-                Create your workspace as <strong>{flow.name}</strong>. You get{' '}
+                Email verified. Create your workspace as <strong>{flow.name}</strong>. You get{' '}
                 <strong>{TRIAL_MONTHS} months free</strong>, then your chosen plan applies.
               </p>
               <Button onClick={finishSetup} disabled={flow.submitting || !flow.canSetup} fullWidth>

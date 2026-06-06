@@ -47,10 +47,10 @@ export default function SoloDashboardPage() {
     toast.success('Enrollment code copied')
   }
 
-  const copyLink = () => {
-    if (!enrollment?.shareUrl) return
-    navigator.clipboard.writeText(enrollment.shareUrl)
-    toast.success('Invite link copied')
+  const copyLogin = () => {
+    if (!enrollment?.loginUrl) return
+    navigator.clipboard.writeText(enrollment.loginUrl)
+    toast.success('Portal login link copied')
   }
 
   const regenerateCode = async () => {
@@ -148,20 +148,24 @@ export default function SoloDashboardPage() {
                       {enrollment?.enrollmentCode || '———'}
                     </p>
                   </div>
+                  <p className="text-sm text-royalPurple-text3">
+                    Register students from your workspace user admin. Share your portal login link
+                    so they can sign in after you create their accounts.
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     <Button variant="outline" size="sm" onClick={copyCode}>
                       <Copy className="h-4 w-4 mr-1" /> Copy code
                     </Button>
-                    <Button variant="outline" size="sm" onClick={copyLink}>
-                      <Copy className="h-4 w-4 mr-1" /> Copy invite link
+                    <Button variant="outline" size="sm" onClick={copyLogin}>
+                      <Copy className="h-4 w-4 mr-1" /> Copy portal link
                     </Button>
                     <Button variant="ghost" size="sm" onClick={regenerateCode}>
                       <RefreshCw className="h-4 w-4 mr-1" /> Regenerate
                     </Button>
                   </div>
-                  {enrollment?.shareUrl ? (
+                  {enrollment?.loginUrl ? (
                     <p className="text-xs text-royalPurple-text3 break-all">
-                      {enrollment.shareUrl}
+                      {enrollment.loginUrl}
                     </p>
                   ) : null}
                 </CardContent>

@@ -203,7 +203,7 @@ export const POST = withSecureApi(async function POST(request) {
       !school.emailVerified &&
       (user.role === 'headteacher' ||
         (String(school.schoolType || '').toUpperCase() === 'INDIVIDUAL' &&
-          ['teacher', 'student'].includes(String(user.role || '').toLowerCase()))) &&
+          String(user.role || '').toLowerCase() === 'teacher')) &&
       !isPilotEmail(user.email)
     ) {
       return NextResponse.json(
