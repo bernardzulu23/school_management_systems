@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
 const CAN_ACCESS = ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
@@ -20,6 +21,9 @@ export const GET = withSecureApi(async function GET(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
+  const eczCheck = await requireSecondarySchoolAccess(schoolId)
+  if (!eczCheck.ok) return eczCheck.response
+
   const { searchParams } = new URL(request.url)
   const academicYear = searchParams.get('academicYear')
     ? parseInt(searchParams.get('academicYear'), 10)
@@ -33,8 +37,14 @@ export const GET = withSecureApi(async function GET(request) {
       where: {
         schoolId,
         academicYear,
-        formLevel: formLevel ?? { not: 4 },
-        totalSBAScore: { gt: 0 },
+        ...(formLevel != null ? { formLevel } : { formLevel: { not: 4 } }),
+        OR: [
+          { totalSBAScore: { gt: 0 } },
+          { task1Score: { gt: 0 } },
+          { task2Score: { gt: 0 } },
+          { task3Score: { gt: 0 } },
+          { termTestScore: { gt: 0 } },
+        ],
       },
       include: {
         student: { select: { id: true, name: true, exam_number: true, class: true } },

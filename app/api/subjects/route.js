@@ -2,12 +2,21 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { revalidateTag } from 'next/cache'
 import { getTenantClient } from '@/lib/prisma/tenantClient'
+import { basePrisma } from '@/lib/prisma/client'
 import { getCachedSubjects } from '@/lib/cache/subjects'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
-import { SCHOOL_SUBJECTS } from '@/data/subjects'
 import { validateBody } from '@/lib/middleware/validate-request'
 import { CreateSubjectSchema } from '@/lib/schemas'
+import { resolveSubjectCatalog } from '@/lib/subjects/resolveSubjectCatalog'
+import { seedSubjectsForSchool, filterDbSubjectsByLevel } from '@/lib/subjects/seedSubjects'
+
+async function loadSchool(schoolId) {
+  return basePrisma.school.findUnique({
+    where: { id: schoolId },
+    select: { id: true, level: true, enabledLocalLanguages: true },
+  })
+}
 
 export async function GET(request) {
   const auth = await authMiddleware(request)
@@ -21,40 +30,30 @@ export async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const { searchParams } = new URL(request.url)
+  const gradeLevel = searchParams.get('gradeLevel') || searchParams.get('grade') || null
+
+  const school = await loadSchool(schoolId)
+  const { educationLevel } = resolveSubjectCatalog({
+    schoolLevel: school?.level,
+    gradeLevel,
+    enabledLocalLanguages: school?.enabledLocalLanguages,
+  })
+
   const db = getTenantClient(schoolId)
-
-  const usedCodes = new Set()
-  const createData = []
-  for (const s of SCHOOL_SUBJECTS) {
-    const name = String(s.name || '').trim()
-    if (!name) continue
-
-    let code = s.code ? String(s.code) : null
-    if (code && usedCodes.has(code)) {
-      code = `${code}_${name.substring(0, 3).toUpperCase()}`
-    }
-    if (code) usedCodes.add(code)
-
-    createData.push({
-      schoolId,
-      name,
-      code,
-      topics: [],
-    })
-  }
-
-  if (createData.length > 0) {
-    await db.subject.createMany({
-      data: createData,
-      skipDuplicates: true,
-    })
-    revalidateTag(`subjects-${schoolId}`)
-    revalidateTag('subjects')
-  }
+  await seedSubjectsForSchool(db, school || { id: schoolId, level: 'combined' })
+  revalidateTag(`subjects-${schoolId}`)
+  revalidateTag('subjects')
 
   const subjects = await getCachedSubjects(schoolId)
+  const filtered = filterDbSubjectsByLevel(subjects, educationLevel)
 
-  return NextResponse.json({ success: true, data: subjects })
+  return NextResponse.json({
+    success: true,
+    data: filtered,
+    meta: { educationLevel, schoolLevel: school?.level || 'combined' },
+  })
 }
 
 export async function POST(request) {
@@ -70,6 +69,9 @@ export async function POST(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
   const db = getTenantClient(schoolId)
+
+  const school = await loadSchool(schoolId)
+  const { educationLevel } = resolveSubjectCatalog({ schoolLevel: school?.level })
 
   const { data: body, error: validationError } = await validateBody(request, CreateSubjectSchema)
   if (validationError) return validationError
@@ -87,12 +89,14 @@ export async function POST(request) {
         code: code || null,
         description: description || null,
         topics: [],
+        educationLevel: body.educationLevel || educationLevel,
       },
       update: {
         code: code || undefined,
         description: description || undefined,
+        educationLevel: body.educationLevel || undefined,
       },
-      select: { id: true, name: true, code: true, description: true },
+      select: { id: true, name: true, code: true, description: true, educationLevel: true },
     })
     revalidateTag(`subjects-${schoolId}`)
     revalidateTag('subjects')

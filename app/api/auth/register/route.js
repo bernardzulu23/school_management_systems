@@ -20,13 +20,23 @@ export const POST = withErrorHandler(async (request) => {
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: `Only administrators can register new users. Your role: ${auth.user?.role}`,
-      },
-      { status: 403 }
-    )
+    const schoolMeta = await prisma.school.findUnique({
+      where: { id: schoolId },
+      select: { schoolType: true, ownerUserId: true },
+    })
+    const isIndividualOwner =
+      schoolMeta?.schoolType === 'INDIVIDUAL' &&
+      schoolMeta.ownerUserId === auth.user?.id &&
+      roleCheck(auth.user, ['TEACHER', 'teacher'])
+    if (!isIndividualOwner) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Only administrators can register new users. Your role: ${auth.user?.role}`,
+        },
+        { status: 403 }
+      )
+    }
   }
 
   const body = await request.json()
@@ -66,10 +76,10 @@ export const POST = withErrorHandler(async (request) => {
   // 2b. Check if school has paid (payment gate) - skip for pilot schools
   const school = await prisma.school.findUnique({
     where: { id: schoolId },
-    select: { plan: true, emailVerified: true },
+    select: { plan: true, emailVerified: true, schoolType: true },
   })
   const isPilotUser = isPilotEmail(auth.user?.email)
-  if (school?.plan === 'unpaid' && !isPilotUser) {
+  if (school?.plan === 'unpaid' && !isPilotUser && school?.schoolType !== 'INDIVIDUAL') {
     return NextResponse.json(
       {
         success: false,
@@ -98,6 +108,12 @@ export const POST = withErrorHandler(async (request) => {
       },
       { status: 400 }
     )
+  }
+
+  if (role === 'student' && school?.schoolType === 'INDIVIDUAL') {
+    const { checkStudentCap } = await import('@/lib/middleware/individual-gate')
+    const capCheck = await checkStudentCap(schoolId)
+    if (!capCheck.allowed) return capCheck.response
   }
 
   // 4. Hash password (auto-generate if not provided for student/admin registration)

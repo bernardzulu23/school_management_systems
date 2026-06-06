@@ -48,7 +48,7 @@ export const POST = withAILimits(async function POST(request) {
   const blocked = await requireFeature(schoolId, 'ai-report-comments')
   if (blocked) return blocked
 
-  const limitBlock = await checkAILimit(schoolId, String(auth.user?.id || auth.user?.userId || ''))
+  const limitBlock = await checkAILimit(schoolId, String(user.id || user.userId || ''))
   if (limitBlock) return limitBlock
 
   try {

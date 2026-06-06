@@ -23,13 +23,13 @@ export default function SubscriptionUpgradePanel({
   selectedPlan: selectedPlanProp,
   onPlanChange,
   currentPlan = 'trial',
+  planOptions = ['basic', 'standard', 'premium'],
   onPaymentStarted,
 }) {
-  const [internalPlan, setInternalPlan] = useState(
-    ['basic', 'standard', 'premium'].includes(String(currentPlan).toLowerCase())
-      ? String(currentPlan).toLowerCase()
-      : 'standard'
-  )
+  const defaultPlan = planOptions.includes(String(currentPlan).toLowerCase())
+    ? String(currentPlan).toLowerCase()
+    : planOptions[0] || 'standard'
+  const [internalPlan, setInternalPlan] = useState(defaultPlan)
   const selectedPlan = selectedPlanProp || internalPlan
   const setSelectedPlan = onPlanChange || setInternalPlan
   const [provider, setProvider] = useState('mtn')
@@ -85,7 +85,7 @@ export default function SubscriptionUpgradePanel({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {Object.keys(PLAN_PRICING).map((planKey) => {
+        {planOptions.map((planKey) => {
           const price = formatPlanPrice(planKey, 1)
           const active = selectedPlan === planKey
           return (

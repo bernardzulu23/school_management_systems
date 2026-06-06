@@ -193,6 +193,7 @@ export const POST = withSecureApi(async function POST(request) {
         plan: true,
         planExpiresAt: true,
         trialEndsAt: true,
+        schoolType: true,
       },
     })
     if (!school || school.active === false) {
@@ -284,6 +285,7 @@ export const POST = withSecureApi(async function POST(request) {
       name: user.name,
       role: user.role,
       schoolId: user.schoolId,
+      schoolType: school?.schoolType || 'SCHOOL',
       profile_picture_url: user.profile_picture_url,
       department: user?.hodProfile?.department || undefined,
     })

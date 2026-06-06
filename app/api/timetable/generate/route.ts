@@ -15,6 +15,7 @@ import {
   type DayPeriodSlot,
 } from '@/lib/timetable/scheduler'
 import { resolveConflictsWithLLM } from '@/lib/timetable/llm-resolver'
+import { requireSchoolType } from '@/lib/middleware/individual-gate'
 
 export async function GET(req: NextRequest) {
   const user = await getAuthUser(req as any)
@@ -22,6 +23,9 @@ export async function GET(req: NextRequest) {
 
   const schoolId = await resolveSchoolId(req as any, user)
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
+
+  const typeCheck = await requireSchoolType(schoolId, ['SCHOOL'])
+  if (!typeCheck.allowed) return typeCheck.response
 
   const config = await prisma.timetableConfig.findUnique({ where: { schoolId } })
   return NextResponse.json({ config })
@@ -33,6 +37,9 @@ export async function POST(req: NextRequest) {
 
   const schoolId = await resolveSchoolId(req as any, user)
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
+
+  const typeCheck = await requireSchoolType(schoolId, ['SCHOOL'])
+  if (!typeCheck.allowed) return typeCheck.response
 
   const role = String(user.role || '').toLowerCase()
   if (!['headteacher', 'administrator', 'admin', 'superadmin'].includes(role)) {

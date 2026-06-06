@@ -40,7 +40,7 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
       .then((json) => {
         const list = Array.isArray(json?.data) ? json.data : []
         setSubjects(list)
-        if (list[0]?.id) setSubjectId(list[0].id)
+        if (list[0]?.id) setSubjectId(String(list[0].id))
       })
       .catch(() => {})
   }, [])
@@ -169,7 +169,7 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
           </SelectTrigger>
           <SelectContent>
             {subjects.map((s) => (
-              <SelectItem key={s.id} value={s.id}>
+              <SelectItem key={s.id} value={String(s.id)}>
                 {s.name} {s.code ? `(${s.code})` : ''}
               </SelectItem>
             ))}

@@ -1,9 +1,11 @@
 import React from 'react'
 import { GraduationCap, FileText, Building, BookOpen } from 'lucide-react'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
-import { GRADE_LEVELS, SECTIONS, STUDENT_SUBJECTS_MAX, STUDENT_SUBJECTS_MIN } from '@/lib/constants'
+import { getGradeLevelsForSchoolLevel, getStudentSubjectLimits, SECTIONS } from '@/lib/constants'
 import { useSubjects } from '@/lib/hooks/useSubjects'
 import SubjectSelection from '@/components/registration/SubjectSelection'
+import { PRIMARY_SUBJECT_CATEGORIES } from '@/data/subjects-primary'
+import { SECONDARY_SUBJECT_CATEGORIES } from '@/data/subjects-secondary'
 
 export default function AcademicInfoStep({
   formData,
@@ -11,8 +13,23 @@ export default function AcademicInfoStep({
   onInputChange,
   onSubjectsChange,
   classes = [],
+  schoolLevel = 'combined',
 }) {
-  const { subjects } = useSubjects()
+  const {
+    subjects,
+    loading: subjectsLoading,
+    meta,
+  } = useSubjects({
+    gradeLevel: formData.year_group,
+  })
+  const gradeOptions = getGradeLevelsForSchoolLevel(schoolLevel)
+  const limits = getStudentSubjectLimits({
+    schoolLevel: meta?.schoolLevel || schoolLevel,
+    yearGroup: formData.year_group,
+  })
+  const categories =
+    meta?.educationLevel === 'primary' ? PRIMARY_SUBJECT_CATEGORIES : SECONDARY_SUBJECT_CATEGORIES
+
   const classNamePreview =
     formData.year_group && formData.section
       ? `${String(formData.year_group).trim()}${String(formData.section).trim()}`
@@ -80,7 +97,7 @@ export default function AcademicInfoStep({
             aria-describedby="year_group-error"
           >
             <option value="">Select Year Group</option>
-            {GRADE_LEVELS.map((level) => (
+            {gradeOptions.map((level) => (
               <option key={level} value={level}>
                 {level}
               </option>
@@ -118,7 +135,6 @@ export default function AcademicInfoStep({
           />
         </div>
 
-        {/* Subject Selection */}
         <div className="bg-royalPurple-success p-6 rounded-xl border border-royalPurple-border">
           <h4 className="text-lg font-semibold text-royalPurple-successTx mb-4 flex items-center">
             <BookOpen className="h-5 w-5 mr-2" />
@@ -129,55 +145,49 @@ export default function AcademicInfoStep({
             <p className="text-sm text-royalPurple-successTx mb-2">
               <strong>Instructions:</strong> Select the subjects you will be studying this academic
               year.
+              {meta?.educationLevel === 'primary'
+                ? ' Primary CBC subjects are shown for your grade.'
+                : null}
             </p>
           </div>
 
           <div>
-            <SubjectSelection
-              selectedSubjects={formData.selected_subjects || []}
-              onSubjectsChange={onSubjectsChange}
-              userRole="student"
-              minSelections={STUDENT_SUBJECTS_MIN}
-              maxSelections={STUDENT_SUBJECTS_MAX}
-              valueType="name"
-            />
+            {subjectsLoading ? (
+              <p className="text-sm text-royalPurple-text3">Loading subjects…</p>
+            ) : (
+              <SubjectSelection
+                selectedSubjects={formData.selected_subjects || []}
+                onSubjectsChange={onSubjectsChange}
+                userRole="student"
+                minSelections={limits.min}
+                maxSelections={limits.max}
+                valueType="name"
+                catalogSubjects={subjects}
+                categories={categories}
+              />
+            )}
             {errors.selected_subjects && (
               <p className="text-royalPurple-dangerTx text-sm mt-1">{errors.selected_subjects}</p>
             )}
           </div>
 
-          {/* Subject Summary */}
-          <div className="mt-4 p-4 bg-royalPurple-card rounded-lg border border-royalPurple-border">
-            <h5 className="font-medium text-royalPurple-successTx mb-2">Subject Summary:</h5>
-            <div className="text-sm">
-              <div className="mb-2">
-                <span className="text-royalPurple-successTx font-medium">Class: </span>
-                <span className="text-royalPurple-text2">{classNamePreview || 'Not selected'}</span>
-              </div>
-              <span className="text-royalPurple-successTx font-medium">Selected Subjects: </span>
-              <span className="text-royalPurple-text2">
-                {formData.selected_subjects?.length || 0} subjects
-                {formData.selected_subjects?.length > 0 && (
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {formData.selected_subjects.map((subjectName) => {
-                      const subject = subjects.find((s) => s.name === subjectName)
-                      return (
-                        <span
-                          key={subjectName}
-                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-royalPurple-success text-royalPurple-successTx"
-                        >
-                          {subject
-                            ? `${subject.name}${subject.category ? ` (${subject.category})` : ''}`
-                            : subjectName}
-                        </span>
-                      )
-                    })}
-                  </div>
-                )}
-              </span>
+          {(formData.selected_subjects || []).length > 0 && (
+            <div className="mt-4 p-4 bg-white rounded-lg border border-royalPurple-border">
+              <p className="text-sm font-medium text-royalPurple-text1 mb-2">Selected subjects:</p>
+              <ul className="list-disc list-inside text-sm text-royalPurple-text2">
+                {(formData.selected_subjects || []).map((subject) => (
+                  <li key={subject}>{subject}</li>
+                ))}
+              </ul>
             </div>
-          </div>
+          )}
         </div>
+
+        {classNamePreview ? (
+          <p className="text-sm text-royalPurple-text3">
+            Class preview: <strong>{classNamePreview}</strong>
+          </p>
+        ) : null}
       </div>
     </FormSection>
   )

@@ -12,6 +12,7 @@ import {
   resolveSchoolTimeSlots,
   validateTimetableConfig,
 } from '@/lib/timetable/timeSlotsFromConfig'
+import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 
 function mapDbSlot(s) {
   return {
@@ -51,6 +52,9 @@ export async function GET(req) {
   const schoolId = await resolveSchoolId(req, user)
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
+  const typeCheck = await guardSchoolOnlyTimetable(schoolId)
+  if (!typeCheck.allowed) return typeCheck.response
+
   const config = await ensureTimetableConfig(prisma, schoolId)
   await syncTimeSlotsFromConfig(prisma, schoolId).catch((err) => {
     console.warn('[timetable/config] syncTimeSlotsFromConfig:', err?.message)
@@ -66,6 +70,9 @@ export async function POST(req) {
 
   const schoolId = await resolveSchoolId(req, user)
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
+
+  const typeCheck = await guardSchoolOnlyTimetable(schoolId)
+  if (!typeCheck.allowed) return typeCheck.response
 
   const role = String(user.role || '').toLowerCase()
   if (!['headteacher', 'administrator', 'admin', 'superadmin'].includes(role)) {

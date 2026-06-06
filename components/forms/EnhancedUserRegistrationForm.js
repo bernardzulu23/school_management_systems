@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 
 // Shared Utilities & Constants
-import { STUDENT_SUBJECTS_MAX, STUDENT_SUBJECTS_MIN, USER_ROLES } from '@/lib/constants'
+import { getStudentSubjectLimits, USER_ROLES } from '@/lib/constants'
 import { handleInputChange, handleMultiSelectChange, parseDateInput } from '@/lib/utils/formHelpers'
 import { api } from '@/lib/api'
 import { useAuth } from '@/lib/auth'
@@ -37,6 +37,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
   const currentUser = useAuth((s) => s.user)
   const [lookupsLoading, setLookupsLoading] = useState(false)
   const [lookups, setLookups] = useState({ classes: [], subjects: [], departments: [] })
+  const [schoolLevel, setSchoolLevel] = useState('combined')
   const [formData, setFormData] = useState({
     // Basic user info
     name: '',
@@ -144,12 +145,18 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
 
       setLookupsLoading(true)
       try {
-        const [classesRes, subjectsRes, departmentsRes] = await Promise.all([
+        const [classesRes, subjectsRes, departmentsRes, schoolRes] = await Promise.all([
           api.get('/classes'),
           api.get('/subjects'),
           api.get('/departments'),
+          fetch('/api/school/current', { credentials: 'include' }).then((r) =>
+            r.ok ? r.json() : { school: null }
+          ),
         ])
         if (!active) return
+        if (schoolRes?.school?.level) {
+          setSchoolLevel(schoolRes.school.level)
+        }
         const nextLookups = {
           classes: Array.isArray(classesRes.data?.data) ? classesRes.data.data : [],
           subjects: Array.isArray(subjectsRes.data?.data) ? subjectsRes.data.data : [],
@@ -337,10 +344,14 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         const count = Array.isArray(formData.selected_subjects)
           ? formData.selected_subjects.length
           : 0
-        if (count < STUDENT_SUBJECTS_MIN) {
-          newErrors.selected_subjects = `Select at least ${STUDENT_SUBJECTS_MIN} subjects`
-        } else if (count > STUDENT_SUBJECTS_MAX) {
-          newErrors.selected_subjects = `Select at most ${STUDENT_SUBJECTS_MAX} subjects`
+        const limits = getStudentSubjectLimits({
+          schoolLevel,
+          yearGroup: formData.year_group,
+        })
+        if (count < limits.min) {
+          newErrors.selected_subjects = `Select at least ${limits.min} subjects`
+        } else if (count > limits.max) {
+          newErrors.selected_subjects = `Select at most ${limits.max} subjects`
         }
       } else if (role === 'headteacher') {
         if (!formData.employee_id.trim()) newErrors.employee_id = 'T.S No. is required'
@@ -466,6 +477,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
               onInputChange={onInputChange}
               onSubjectsChange={onSubjectsChange}
               classes={lookups.classes}
+              schoolLevel={schoolLevel}
             />
           )
         } else if (role === 'teacher' || role === 'hod') {

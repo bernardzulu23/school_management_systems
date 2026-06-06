@@ -15,6 +15,12 @@ import {
 import { clearAuthSessionCookies } from '@/lib/security/cookies'
 import { logger, captureError } from '@/lib/utils/logger'
 import { validateSchoolLocation } from '@/lib/platform/reportingStream'
+import {
+  completeIndividualOnboarding,
+  individualPlanRequiresPayment,
+  isIndividualRegistration,
+} from '@/lib/onboarding/individual'
+import { seedSubjectsForSchool } from '@/lib/subjects/seedSubjects'
 
 const RESERVED = new Set([
   'www',
@@ -25,6 +31,7 @@ const RESERVED = new Set([
   'login',
   'register',
   'onboarding',
+  'join',
 ])
 
 function normalizeSubdomain(value) {
@@ -83,6 +90,8 @@ export async function POST(request) {
         plan: true,
         paymentStatus: true,
         subscriptionMonths: true,
+        schoolType: true,
+        adminName: true,
       },
     })
     if (!reg) {
@@ -97,12 +106,79 @@ export async function POST(request) {
       .trim()
       .toLowerCase()
     const isTrial = plan === 'trial'
-    if (!isTrial && String(reg.paymentStatus || '').toLowerCase() !== 'paid') {
+    const isIndividual = isIndividualRegistration(reg)
+    const isIndividualFree = plan === 'individual_free'
+
+    if (isIndividual) {
+      if (
+        individualPlanRequiresPayment(plan) &&
+        String(reg.paymentStatus || '').toLowerCase() !== 'paid'
+      ) {
+        log.response(402, Date.now() - start)
+        return NextResponse.json({ error: 'Payment required' }, { status: 402 })
+      }
+    } else if (!isTrial && String(reg.paymentStatus || '').toLowerCase() !== 'paid') {
       log.response(402, Date.now() - start)
       return NextResponse.json({ error: 'Payment required' }, { status: 402 })
     }
 
     const body = await request.json().catch(() => ({}))
+
+    const baseDomain = String(
+      process.env.BASE_DOMAIN || process.env.COOKIE_DOMAIN || 'bluepeacktechnologies.com'
+    )
+      .trim()
+      .replace(/^\./, '')
+    const isLocal = baseDomain.includes('localhost') || baseDomain.includes('127.0.0.1')
+
+    if (isIndividual) {
+      const adminName = String(body?.adminName || reg.adminName || '').trim()
+      const adminPhone = body?.adminPhone ?? body?.phone ?? null
+      if (!adminName || adminName.length < 2) {
+        return NextResponse.json({ error: 'Your name is required' }, { status: 400 })
+      }
+
+      const result = await completeIndividualOnboarding({
+        prisma,
+        reg,
+        adminName,
+        adminPhone,
+        baseDomain,
+        isLocal,
+        reserved: RESERVED,
+      })
+
+      const portalEmailSent = await sendSchoolPortalLinkEmail({
+        to: reg.email,
+        schoolName: result.school.name,
+        subdomain: result.school.subdomain,
+        loginUrl: result.loginUrl,
+        adminName,
+      })
+      if (!portalEmailSent && process.env.DEV_ONBOARDING_SKIP_EMAIL !== 'true') {
+        return NextResponse.json(
+          {
+            error: 'Workspace created, but portal email was not sent.',
+            code: 'EMAIL_NOT_SENT',
+            school: result.school,
+            loginUrl: result.loginUrl,
+          },
+          { status: 502 }
+        )
+      }
+
+      const response = NextResponse.json({
+        success: true,
+        school: result.school,
+        loginUrl: result.loginUrl,
+        redirectUrl: result.redirectUrl,
+      })
+      response.cookies.set('onboarding_token', '', { maxAge: 0, path: '/' })
+      clearAuthSessionCookies(response, request)
+      logger({ route, schoolId: result.school.id }).response(200, Date.now() - start)
+      return response
+    }
+
     const schoolName = String(body?.schoolName || '').trim()
     const subdomain = normalizeSubdomain(body?.subdomain)
     const level = normalizeLevel(body?.level)
@@ -141,12 +217,6 @@ export async function POST(request) {
     if (existingSchool)
       return NextResponse.json({ error: 'Subdomain already taken' }, { status: 409 })
 
-    const baseDomain = String(
-      process.env.BASE_DOMAIN || process.env.COOKIE_DOMAIN || 'bluepeacktechnologies.com'
-    )
-      .trim()
-      .replace(/^\./, '')
-    const isLocal = baseDomain.includes('localhost') || baseDomain.includes('127.0.0.1')
     const loginUrl = isLocal ? `/login` : `https://${subdomain}.${baseDomain}/login`
 
     const created = await prisma.$transaction(async (tx) => {
@@ -186,6 +256,8 @@ export async function POST(request) {
         where: { id: reg.id },
         data: { schoolName, subdomain, level, adminName, province, district, reportingStreamKey },
       })
+
+      await seedSubjectsForSchool(tx, { id: school.id, level, enabledLocalLanguages: [] })
 
       return school
     })

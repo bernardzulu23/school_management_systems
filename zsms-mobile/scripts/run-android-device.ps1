@@ -16,4 +16,21 @@ adb devices
 
 Write-Host "`nBuilding and installing on physical device (not emulator)..."
 $env:GRADLE_OPTS = "-Dorg.gradle.project.cache.dir=$cacheDir"
-npx expo run:android --device
+
+$deviceLine = (adb devices | Select-String "device$" | Where-Object { $_ -notmatch "List of devices" } | Select-Object -First 1)
+if (-not $deviceLine) {
+  throw "No Android device connected. Enable USB debugging and run adb devices."
+}
+$serial = ($deviceLine -split "\s+")[0].Trim()
+$model = (adb -s $serial shell getprop ro.product.model 2>$null).Trim()
+if (-not $model) { $model = $serial }
+Write-Host "Using device: $model ($serial)"
+$env:ANDROID_SERIAL = $serial
+
+npx expo run:android --device $model
+if ($LASTEXITCODE -ne 0) {
+  Write-Host "Expo device picker failed; installing via Gradle on $serial..."
+  Set-Location (Join-Path $root "android")
+  .\gradlew.bat app:installDebug -PreactNativeArchitectures=arm64-v8a -PreactNativeDevServerPort=8081
+  Set-Location $root
+}

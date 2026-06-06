@@ -74,19 +74,28 @@ export function EczEvidencePanel() {
     }
   }, [statusFilter])
 
+  const [scoresLoading, setScoresLoading] = useState(false)
+  const [scoresError, setScoresError] = useState(null)
+
   const loadScores = useCallback(async () => {
+    setScoresLoading(true)
+    setScoresError(null)
     try {
-      const res = await fetch(
-        `/api/ecz/scores?academicYear=${new Date().getFullYear()}&formLevel=${formLevel}`,
-        { credentials: 'include' }
-      )
+      const year = new Date().getFullYear()
+      const res = await fetch(`/api/ecz/scores?academicYear=${year}&formLevel=${formLevel}`, {
+        credentials: 'include',
+      })
       const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Failed')
+      if (!res.ok) throw new Error(json.error || 'Failed to load score records')
       const list = json.data || []
       setScores(list)
-      if (list[0]?.id) setScoreId(list[0].id)
-    } catch {
+      setScoreId(list[0]?.id || '')
+    } catch (e) {
       setScores([])
+      setScoreId('')
+      setScoresError(e.message || 'Could not load score records')
+    } finally {
+      setScoresLoading(false)
     }
   }, [formLevel])
 
@@ -96,7 +105,7 @@ export function EczEvidencePanel() {
 
   useEffect(() => {
     if (showUpload) loadScores()
-  }, [showUpload, loadScores])
+  }, [showUpload, formLevel, loadScores])
 
   const upload = async (e) => {
     e.preventDefault()
@@ -235,17 +244,35 @@ export function EczEvidencePanel() {
             </div>
             <div>
               <Label>SBA score record</Label>
-              <Select value={scoreId} onValueChange={setScoreId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select learner / subject" />
+              <Select
+                value={scoreId || undefined}
+                onValueChange={setScoreId}
+                disabled={scoresLoading || !scores.length}
+              >
+                <SelectTrigger disabled={scoresLoading || !scores.length}>
+                  <SelectValue
+                    placeholder={
+                      scoresLoading
+                        ? 'Loading score records…'
+                        : scores.length
+                          ? 'Select learner / subject'
+                          : 'No score records for this form'
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  {scores.map((s) => (
-                    <SelectItem key={s.id} value={s.id}>
-                      {s.label}
-                      {s.evidenceCount ? ` · ${s.evidenceCount} file(s)` : ''}
-                    </SelectItem>
-                  ))}
+                  {scores.length === 0 ? (
+                    <p className="px-3 py-2 text-xs text-royalPurple-text3">
+                      Record SBA scores on the SBA &amp; scores tab first.
+                    </p>
+                  ) : (
+                    scores.map((s) => (
+                      <SelectItem key={s.id} value={s.id}>
+                        {s.label}
+                        {s.evidenceCount ? ` · ${s.evidenceCount} file(s)` : ''}
+                      </SelectItem>
+                    ))
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -262,15 +289,16 @@ export function EczEvidencePanel() {
           <Button type="submit" disabled={uploading || !scores.length}>
             {uploading ? 'Uploading…' : 'Store for 2 years'}
           </Button>
-          {!scores.length ? (
+          {!scoresLoading && !scores.length ? (
             <p className="text-xs text-amber-300">
               No scored learners for Form {formLevel}.{' '}
-              <Link href="/dashboard/teacher/assessments/ecz" className="underline">
+              <Link href="/dashboard/teacher/assessments/ecz?tab=sba" className="underline">
                 Record SBA scores
               </Link>{' '}
               first.
             </p>
           ) : null}
+          {scoresError ? <p className="text-xs text-red-300">{scoresError}</p> : null}
         </form>
       ) : null}
 

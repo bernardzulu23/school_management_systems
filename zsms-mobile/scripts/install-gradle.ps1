@@ -4,14 +4,20 @@
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 $tools = Join-Path $root "tools"
-$zip = Join-Path $tools "gradle-8.10.2-all.zip"
-$url = "https://services.gradle.org/distributions/gradle-8.10.2-all.zip"
 $wrapperProps = Join-Path $root "android\gradle\wrapper\gradle-wrapper.properties"
+
+# Match Expo SDK 56 / RN 0.85 prebuild (gradle-wrapper.properties after prebuild).
+$version = "9.3.1"
+$flavor = "bin"
+$zipName = "gradle-$version-$flavor.zip"
+$zip = Join-Path $tools $zipName
+$url = "https://services.gradle.org/distributions/$zipName"
+$minBytes = 100000000
 
 New-Item -ItemType Directory -Force -Path $tools | Out-Null
 
-if (-not (Test-Path $zip) -or (Get-Item $zip).Length -lt 200000000) {
-  Write-Host "Downloading Gradle 8.10.2 (~218 MB)..."
+if (-not (Test-Path $zip) -or (Get-Item $zip).Length -lt $minBytes) {
+  Write-Host "Downloading Gradle $version ($flavor)..."
   if (Get-Command curl.exe -ErrorAction SilentlyContinue) {
     & curl.exe --ssl-no-revoke -L -o $zip $url
   } else {
@@ -44,4 +50,4 @@ zipStorePath=wrapper/dists
 Set-Content -Path $wrapperProps -Value $props.TrimEnd()
 Write-Host "OK: $zip"
 Write-Host "OK: $wrapperProps"
-Write-Host "Next: npx expo run:android"
+Write-Host "Next: npm run android:device"

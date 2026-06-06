@@ -25,9 +25,15 @@ export const POST = withSecureApi(async function POST(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
+  const resolveComponent = (value) => {
+    if (value === 'FINAL_EXAMINATION') return 'FINAL_EXAMINATION'
+    if (value === 'PRACTICE_FORMATIVE') return 'PRACTICE_FORMATIVE'
+    return 'SBA_TASK'
+  }
+
   const body = await request.json().catch(() => ({}))
   const formLevel = Number(body.formLevel)
-  const component = body.component === 'FINAL_EXAMINATION' ? 'FINAL_EXAMINATION' : 'SBA_TASK'
+  const component = resolveComponent(body.component)
 
   if (component === 'SBA_TASK') {
     const formCheck = canCreateSBATask(formLevel)

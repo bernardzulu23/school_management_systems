@@ -5,10 +5,16 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { getAuthUser } from '@/lib/middleware/auth'
+import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 
 export async function GET(request) {
   const user = await getAuthUser(request)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  if (user.schoolId) {
+    const eczCheck = await requireSecondarySchoolAccess(user.schoolId)
+    if (!eczCheck.ok) return eczCheck.response
+  }
 
   const [competencies, subjects] = await Promise.all([
     prisma.eczCompetency.findMany({

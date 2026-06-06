@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
+import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,6 +22,9 @@ export async function POST(req: NextRequest) {
   if (!schoolId) {
     return NextResponse.json({ error: 'Missing school context' }, { status: 400 })
   }
+
+  const typeCheck = await guardSchoolOnlyTimetable(schoolId)
+  if (!typeCheck.allowed) return typeCheck.response
 
   const body = (await req.json().catch(() => ({}))) as PublishBody
   const versionId = String(body?.versionId || '').trim()

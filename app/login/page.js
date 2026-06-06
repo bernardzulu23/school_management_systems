@@ -149,7 +149,8 @@ function LoginPageContent() {
       } else if (['hod', 'head of department'].includes(role)) {
         router.push('/dashboard/hod')
       } else if (role === 'teacher') {
-        router.push('/dashboard/teacher')
+        const schoolType = String(result?.user?.schoolType || 'SCHOOL').toUpperCase()
+        router.push(schoolType === 'INDIVIDUAL' ? '/dashboard/solo' : '/dashboard/teacher')
       } else if (role === 'student') {
         router.push('/dashboard/student')
       } else {

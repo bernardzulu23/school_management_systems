@@ -12,6 +12,7 @@ import {
   normalizeTimetableConfig,
   resolveSchoolTimeSlots,
 } from '@/lib/timetable/timeSlotsFromConfig'
+import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import {
   mapDbEntriesToAssignments,
   buildTeacherWorkloadSummary,
@@ -112,6 +113,9 @@ export async function GET(req) {
 
   const schoolId = await resolveSchoolId(req, user)
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
+
+  const typeCheck = await guardSchoolOnlyTimetable(schoolId)
+  if (!typeCheck.allowed) return typeCheck.response
 
   const { searchParams } = new URL(req.url)
   const term = searchParams.get('term') || 'Term 1'

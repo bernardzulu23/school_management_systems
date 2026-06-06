@@ -5,6 +5,7 @@ import { unlink } from 'fs/promises'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
 const CAN_MANAGE = ['HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
@@ -23,6 +24,9 @@ export const DELETE = withSecureApi(async function DELETE(request, { params }) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const eczCheck = await requireSecondarySchoolAccess(schoolId)
+  if (!eczCheck.ok) return eczCheck.response
 
   const routeParams = await params
   const id = String(routeParams?.id || '')

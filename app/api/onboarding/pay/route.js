@@ -45,6 +45,12 @@ export async function POST(request) {
   if (String(reg.plan || '').toLowerCase() === 'trial') {
     return NextResponse.json({ error: 'Payment is not required for free trial' }, { status: 400 })
   }
+  if (String(reg.plan || '').toLowerCase() === 'individual_free') {
+    return NextResponse.json(
+      { error: 'Payment is not required for Individual Free' },
+      { status: 400 }
+    )
+  }
   if (String(reg.paymentStatus || '').toLowerCase() === 'paid') {
     return NextResponse.json({ error: 'Payment already completed' }, { status: 400 })
   }
@@ -80,7 +86,10 @@ export async function POST(request) {
     )
   }
 
-  const amount = PLAN_PRICING[plan] * months
+  const amount =
+    plan === 'individual_annual'
+      ? PLAN_PRICING.individual_annual
+      : (PLAN_PRICING[plan] ?? 0) * months
   const referenceId = crypto.randomUUID()
 
   const forwardedHost = request.headers.get('x-forwarded-host')

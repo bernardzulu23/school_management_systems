@@ -5,6 +5,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { resolveReviewerUserId } from '@/lib/lesson-plans/reviewer'
 import { sanitizeText } from '@/lib/lesson-plans/text'
+import { isIndividualSchool } from '@/lib/middleware/individual-gate'
 
 export const dynamic = 'force-dynamic'
 
@@ -44,6 +45,33 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
 
   if (!SUBMITTABLE.has(String(existing.status))) {
     throw new ApiError(`Cannot submit lesson plan with status: ${existing.status}`, 400)
+  }
+
+  const individual = await isIndividualSchool(schoolId)
+
+  if (individual) {
+    const now = new Date()
+    const updated = await prisma.lessonPlan.update({
+      where: { id },
+      data: {
+        status: 'APPROVED',
+        reviewerUserId: null,
+        submittedAt: now,
+        approvedAt: now,
+        rejectedAt: null,
+        rejectionReason: null,
+        ...(content != null ? { content } : {}),
+        version: { increment: 1 },
+      },
+      include: {
+        createdBy: { select: { id: true, name: true, email: true } },
+      },
+    })
+    return NextResponse.json({
+      success: true,
+      data: updated,
+      message: 'Lesson plan approved (solo workspace)',
+    })
   }
 
   const reviewerUserId = await resolveReviewerUserId({

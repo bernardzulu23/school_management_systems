@@ -23,7 +23,8 @@ Colors match the school management system brutalist palette — see [`color.md`]
 ## Lesson attendance (per subject)
 
 - **Attendance** tab → class with subject → lesson session (Present/Late, face scan picker, end session).
-- **Face ML (Android)**: uses `expo-face-detection` (MTCNN + MobileFaceNet). **Expo Go will not work** — build a dev client:
+- **Face ML (Android, optional)**: the native `expo-face-detection` module (MobileFaceNet) is not in this repo yet; a **stub** is linked so builds succeed. Attendance works via class register + manual picker. When the real native module is added, replace `stubs/expo-face-detection` in `package.json`.
+- **Dev client** (required for camera). **Expo Go will not work** — build a dev client:
   ```bash
   npm install
   npm run prebuild:android

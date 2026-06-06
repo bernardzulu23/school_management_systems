@@ -5,6 +5,7 @@ import { mkdir, writeFile } from 'fs/promises'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import {
   computeEvidenceExpiryDate,
@@ -50,6 +51,9 @@ export const GET = withSecureApi(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const eczCheck = await requireSecondarySchoolAccess(schoolId)
+  if (!eczCheck.ok) return eczCheck.response
 
   const { searchParams } = new URL(request.url)
   const scoreId = searchParams.get('scoreId') || undefined
@@ -102,6 +106,9 @@ export const POST = withSecureApi(async function POST(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const eczCheck = await requireSecondarySchoolAccess(schoolId)
+  if (!eczCheck.ok) return eczCheck.response
 
   const formData = await request.formData()
   const file = formData.get('file')

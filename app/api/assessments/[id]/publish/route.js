@@ -8,6 +8,7 @@ import {
   parseAssessmentInteractive,
   publishAssessmentAsAssignment,
 } from '@/lib/assessments/assessmentInteractive'
+import { isIndividualSchool } from '@/lib/middleware/individual-gate'
 
 export const POST = withErrorHandler(async function POST(request, { params }) {
   const routeParams = await params
@@ -40,10 +41,13 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   }
 
   if (!['APPROVED', 'SUBMITTED'].includes(String(assessment.status))) {
-    throw new ApiError(
-      'Assessment must be approved by HOD before publishing. Submit to HOD first.',
-      400
-    )
+    const individual = await isIndividualSchool(schoolId)
+    if (!(individual && String(assessment.status) === 'DRAFT')) {
+      throw new ApiError(
+        'Assessment must be approved by HOD before publishing. Submit to HOD first.',
+        400
+      )
+    }
   }
 
   const body = await request.json().catch(() => ({}))

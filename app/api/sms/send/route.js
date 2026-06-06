@@ -6,6 +6,7 @@ import { sendAfricasTalkingSms, normalizePhoneNumbers } from '@/lib/sms'
 import { createSmsLog } from '@/lib/sms/persistLog'
 import { reserveSmsCredits } from '@/lib/sms/balance'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { requireSchoolType } from '@/lib/middleware/individual-gate'
 import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { SendSMSSchema } from '@/lib/schemas'
 
@@ -22,6 +23,9 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const typeCheck = await requireSchoolType(schoolId, ['SCHOOL'])
+  if (!typeCheck.allowed) return typeCheck.response
 
   const { to, message, from = null } = await parseBodyOrThrow(request, SendSMSSchema)
 

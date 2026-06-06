@@ -10,6 +10,7 @@ import {
   notifyAssessmentReview,
   resolveAssessmentReviewer,
 } from '@/lib/assessments/review'
+import { isIndividualSchool } from '@/lib/middleware/individual-gate'
 
 function normalize(v) {
   return String(v || '').trim()
@@ -52,6 +53,34 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   const interactive = parseAssessmentInteractive(assessment.description)
   if (!interactive?.questions?.length) {
     throw new ApiError('Add at least one question before submitting to HOD', 400)
+  }
+
+  const individual = await isIndividualSchool(schoolId)
+
+  if (individual) {
+    const now = new Date()
+    const updated = await prisma.assessment.update({
+      where: { id: assessment.id },
+      data: {
+        status: 'APPROVED',
+        reviewerUserId: null,
+        submittedAt: now,
+        approvedAt: now,
+        rejectedAt: null,
+        rejectionReason: null,
+        approvalNotes: null,
+        ...(topic ? { topic } : {}),
+        ...(assessment.createdByUserId ? {} : { createdByUserId: userId }),
+      },
+      include: {
+        createdBy: { select: { id: true, name: true, email: true } },
+      },
+    })
+    return NextResponse.json({
+      success: true,
+      data: updated,
+      message: 'Assessment approved (solo workspace)',
+    })
   }
 
   const reviewerUserId = await resolveAssessmentReviewer({

@@ -9,6 +9,7 @@ import {
   PREDEFINED_TEACHER_COLORS,
   teacherColorMapToJson,
 } from '@/lib/timetable/teacherColors'
+import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { distinctTeacherHex } from '@/lib/timetable/teacherDisplay'
 
 export async function GET(req) {
@@ -17,6 +18,9 @@ export async function GET(req) {
 
   const schoolId = await resolveSchoolId(req, user)
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
+
+  const typeCheck = await guardSchoolOnlyTimetable(schoolId)
+  if (!typeCheck.allowed) return typeCheck.response
 
   const colorMap = await loadTeacherColorMap(prisma, schoolId)
   const teachers = await prisma.teacher.findMany({

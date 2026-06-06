@@ -41,7 +41,10 @@ export const GET = withErrorHandler(async function GET(request) {
   since.setDate(since.getDate() - 30)
 
   const activities = await db.activity.findMany({
-    where: { schoolId, date: { gte: since } },
+    where: {
+      schoolId,
+      OR: [{ date: null }, { date: { gte: since } }],
+    },
     orderBy: { date: 'desc' },
     take: limit,
     select: {
@@ -60,11 +63,11 @@ export const GET = withErrorHandler(async function GET(request) {
     id: a.id,
     title: a.title,
     description: a.description,
-    date: a.date.toISOString(),
+    date: a.date ? a.date.toISOString() : null,
     location: a.location,
     type: a.type,
     organizer: a.organizer?.name || null,
-    upcoming: a.date.getTime() >= now,
+    upcoming: a.date ? a.date.getTime() >= now : true,
   }))
 
   return NextResponse.json({ success: true, data: notices })

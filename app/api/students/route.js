@@ -6,6 +6,7 @@ import {
   findStudentByUserId,
   findStudentsByClass,
   findStudentsByClassNames,
+  searchStudents,
 } from '@/lib/db/queries'
 import bcrypt from 'bcryptjs'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
@@ -94,6 +95,7 @@ export const GET = withErrorHandler(async (request) => {
   const { searchParams } = new URL(request.url)
   const classId = searchParams.get('classId')
   const className = searchParams.get('class')
+  const q = String(searchParams.get('q') || searchParams.get('search') || '').trim()
   const page = parseInt(searchParams.get('page')) || 1
   const limit = parseInt(searchParams.get('limit')) || 20
 
@@ -113,6 +115,20 @@ export const GET = withErrorHandler(async (request) => {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
   const db = getTenantClient(schoolId)
+
+  if (q) {
+    const { students, total } = await searchStudents(schoolId, q, { page, limit })
+    return NextResponse.json({
+      success: true,
+      data: students.map((s) => sanitizeOutput(s)),
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    })
+  }
 
   let resolvedClassName = className ? String(className) : null
   let classCandidates = []

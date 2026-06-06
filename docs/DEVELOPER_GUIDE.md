@@ -57,6 +57,13 @@ See [AI_GUIDE.md](./AI_GUIDE.md).
 - Callback: `/api/payments/lipila/callback` → `lib/billing/activate-plan-payment.js`.
 - Plan prices: `lib/billing/plan-pricing.js`.
 
+### Individual Portal (solo teachers & students)
+
+- Onboarding: `/join`, `/join/student` → see [INDIVIDUAL_PORTAL.md](./INDIVIDUAL_PORTAL.md).
+- `School.schoolType`: `SCHOOL` (default) or `INDIVIDUAL`.
+- Solo dashboard: `/dashboard/solo`; APIs under `/api/solo/*`.
+- School-only routes use `requireSchoolType()` from `lib/middleware/individual-gate.js`.
+
 ---
 
 ## Adding a new API route

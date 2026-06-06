@@ -66,6 +66,15 @@ function BillingPageContent() {
 
   const plan = useMemo(() => String(school?.plan || 'trial').toLowerCase(), [school?.plan])
   const level = useMemo(() => String(school?.level || 'combined').toLowerCase(), [school?.level])
+  const isIndividual = useMemo(
+    () => String(school?.schoolType || 'SCHOOL').toUpperCase() === 'INDIVIDUAL',
+    [school?.schoolType]
+  )
+  const upgradePlanKeys = useMemo(
+    () =>
+      isIndividual ? ['individual_premium', 'individual_annual'] : ['basic', 'standard', 'premium'],
+    [isIndividual]
+  )
   const expiry = useMemo(
     () => school?.planExpiresAt || school?.trialEndsAt || null,
     [school?.planExpiresAt, school?.trialEndsAt]
@@ -94,8 +103,10 @@ function BillingPageContent() {
                   <span className="font-semibold text-royalPurple-text1 capitalize">{plan}</span>
                 </p>
                 <p>
-                  School level:{' '}
-                  <span className="font-semibold text-royalPurple-text1 capitalize">{level}</span>
+                  {isIndividual ? 'Workspace' : 'School level'}:{' '}
+                  <span className="font-semibold text-royalPurple-text1 capitalize">
+                    {isIndividual ? 'Individual' : level}
+                  </span>
                 </p>
                 {expiry ? (
                   <p>
@@ -125,7 +136,7 @@ function BillingPageContent() {
         <div>
           <h2 className="text-lg font-semibold text-royalPurple-text1 mb-3">Subscription plans</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {Object.keys(PLAN_PRICING).map((planKey) => (
+            {upgradePlanKeys.map((planKey) => (
               <PlanComparisonCard
                 key={planKey}
                 plan={planKey}
@@ -148,6 +159,7 @@ function BillingPageContent() {
               selectedPlan={selectedPlan}
               onPlanChange={setSelectedPlan}
               currentPlan={plan}
+              planOptions={upgradePlanKeys}
               onPaymentStarted={() => {
                 setTimeout(() => {
                   fetch('/api/school/current', { credentials: 'include', cache: 'no-store' })

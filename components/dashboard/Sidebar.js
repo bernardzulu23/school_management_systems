@@ -35,6 +35,7 @@ import {
   MessageCircle,
   Layers,
   Briefcase,
+  Trophy,
 } from 'lucide-react'
 
 export function Sidebar({ className, mobileOpen, setMobileOpen }) {
@@ -132,6 +133,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         },
         { name: 'Results', href: '/dashboard/results', icon: BarChart3 },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
+        { name: 'Extracurricular', href: '/dashboard/teacher/extracurricular', icon: Trophy },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
         { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
         { name: 'Attendance Returns', href: '/dashboard/attendance/returns', icon: UserCheck },
@@ -161,6 +163,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         },
         { name: 'Results', href: '/dashboard/teacher/results', icon: BarChart3 },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
+        { name: 'Extracurricular', href: '/dashboard/teacher/extracurricular', icon: Trophy },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
         { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
         { name: 'Payments', href: '/dashboard/payments', icon: CreditCard },
@@ -184,11 +187,26 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         },
         { name: 'Code Playground', href: '/dashboard/student/code-playground', icon: Code },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
+        { name: 'My Activities', href: '/dashboard/student/extracurricular', icon: Trophy },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
       ],
     }
 
-    return [...baseItems, ...(roleSpecificItems[roleKey] || [])]
+    const items = [...baseItems, ...(roleSpecificItems[roleKey] || [])]
+    const isIndividual = String(school?.schoolType || '').toUpperCase() === 'INDIVIDUAL'
+
+    if (isIndividual && roleKey === 'teacher') {
+      const hidden = new Set(['My Timetable', 'Payments', 'Extracurricular'])
+      return items
+        .map((item) =>
+          item.name === 'Dashboard'
+            ? { ...item, href: '/dashboard/solo', name: 'Solo workspace' }
+            : item
+        )
+        .filter((item) => !hidden.has(item.name))
+    }
+
+    return items
   }
 
   const navContent = (

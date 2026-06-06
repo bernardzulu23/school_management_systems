@@ -19,7 +19,7 @@ import {
   Upload,
 } from 'lucide-react'
 import { upload } from '@vercel/blob/client'
-import { SCHOOL_SUBJECTS } from '@/data/subjects'
+import { useSubjects } from '@/lib/hooks/useSubjects'
 
 const GRADE_OPTIONS = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5', 'Grade 7', 'Grade 9']
 
@@ -51,6 +51,7 @@ async function getCsrfToken() {
 }
 
 export default function AiMaterialsPage() {
+  const { subjects: catalogSubjects } = useSubjects()
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [materials, setMaterials] = useState([])
@@ -306,7 +307,7 @@ export default function AiMaterialsPage() {
                     onChange={(e) => setForm({ ...form, subject: e.target.value })}
                   >
                     <option value="">— Any subject —</option>
-                    {SCHOOL_SUBJECTS.map((s) => (
+                    {catalogSubjects.map((s) => (
                       <option key={s.id} value={s.name}>
                         {s.name}
                       </option>

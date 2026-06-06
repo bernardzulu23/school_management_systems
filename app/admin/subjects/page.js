@@ -31,6 +31,7 @@ export default function SubjectsPage() {
   const [showAddModal, setShowAddModal] = useState(false)
   const [newSubject, setNewSubject] = useState({ name: '', code: '', description: '' })
   const [saving, setSaving] = useState(false)
+  const [catalogMeta, setCatalogMeta] = useState(null)
 
   useEffect(() => {
     loadSubjects()
@@ -45,13 +46,14 @@ export default function SubjectsPage() {
       if (subjectsResponse.ok) {
         const subjectsData = await subjectsResponse.json()
         setSubjects(subjectsData.data || [])
+        setCatalogMeta(subjectsData.meta || null)
       }
 
-      // Load subjects by category (static catalog)
       const categoryResponse = await fetch('/api/subjects/by-category', { credentials: 'include' })
       if (categoryResponse.ok) {
         const categoryData = await categoryResponse.json()
         setSubjectsByCategory(categoryData.data || {})
+        if (categoryData.meta) setCatalogMeta((prev) => ({ ...prev, ...categoryData.meta }))
       }
     } catch (error) {
       console.error('Error loading subjects:', error)
@@ -184,7 +186,10 @@ export default function SubjectsPage() {
               School Subjects Management
             </h1>
             <p className="text-royalPurple-text2 mt-2">
-              Comprehensive subject catalog for Zambian secondary education
+              Subject catalog filtered for your school level
+              {catalogMeta?.educationLevel
+                ? ` (${catalogMeta.educationLevel === 'primary' ? 'Primary CBC' : 'Secondary'})`
+                : ''}
             </p>
           </div>
 

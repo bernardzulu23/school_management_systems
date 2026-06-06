@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
@@ -51,12 +51,24 @@ const HUB_TABS = [
 function EczAssessmentHubContent() {
   const searchParams = useSearchParams()
   const tabParam = searchParams.get('tab')
+  const [schoolLevel, setSchoolLevel] = useState(null)
   const [hubTab, setHubTab] = useState(HUB_TAB_IDS.includes(tabParam) ? tabParam : 'sba')
   const [rubricSubjectId, setRubricSubjectId] = useState('')
   const [rubricFormLevel, setRubricFormLevel] = useState('1')
   const [rubricTitle, setRubricTitle] = useState('')
   const [rubricTaskType, setRubricTaskType] = useState('Project')
   const [rubricDescription, setRubricDescription] = useState('')
+  const [tasks, setTasks] = useState([])
+  const [scoreCount, setScoreCount] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [showCreate, setShowCreate] = useState(false)
+  const [showRecord, setShowRecord] = useState(false)
+  const createPanelRef = useRef(null)
+  const [formLevelFilter, setFormLevelFilter] = useState('all')
+  const [seeding, setSeeding] = useState(false)
+  const [subjects, setSubjects] = useState([])
+  const [exportSubjectId, setExportSubjectId] = useState('')
+  const [exportFormLevel, setExportFormLevel] = useState('1')
 
   useEffect(() => {
     if (HUB_TAB_IDS.includes(tabParam)) {
@@ -64,16 +76,12 @@ function EczAssessmentHubContent() {
     }
   }, [tabParam])
 
-  const [tasks, setTasks] = useState([])
-  const [scoreCount, setScoreCount] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [showCreate, setShowCreate] = useState(false)
-  const [showRecord, setShowRecord] = useState(false)
-  const [formLevelFilter, setFormLevelFilter] = useState('all')
-  const [seeding, setSeeding] = useState(false)
-  const [subjects, setSubjects] = useState([])
-  const [exportSubjectId, setExportSubjectId] = useState('')
-  const [exportFormLevel, setExportFormLevel] = useState('1')
+  useEffect(() => {
+    fetch('/api/school/current', { credentials: 'include' })
+      .then((r) => (r.ok ? r.json() : { school: null }))
+      .then((data) => setSchoolLevel(data?.school?.level || 'combined'))
+      .catch(() => setSchoolLevel('combined'))
+  }, [])
 
   const sbaTasks = useMemo(() => tasks.filter((t) => t.component === 'SBA_TASK'), [tasks])
 
@@ -100,7 +108,7 @@ function EczAssessmentHubContent() {
       setScoreCount(scoresJson.totalRecords ?? 0)
       const subjList = Array.isArray(subjectsJson.data) ? subjectsJson.data : []
       setSubjects(subjList)
-      if (!exportSubjectId && subjList[0]?.id) setExportSubjectId(subjList[0].id)
+      setExportSubjectId((current) => current || subjList[0]?.id || '')
     } catch (e) {
       toast.error(e.message || 'Failed to load ECZ assessments')
     } finally {
@@ -115,6 +123,12 @@ function EczAssessmentHubContent() {
   useEffect(() => {
     if (subjects[0]?.id && !rubricSubjectId) setRubricSubjectId(subjects[0].id)
   }, [subjects, rubricSubjectId])
+
+  useEffect(() => {
+    if (showCreate && createPanelRef.current) {
+      createPanelRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [showCreate])
 
   const seedSubjects = async () => {
     setSeeding(true)
@@ -170,6 +184,26 @@ function EczAssessmentHubContent() {
     } catch (e) {
       toast.error(e.message || 'Submission failed')
     }
+  }
+
+  if (schoolLevel === 'primary') {
+    return (
+      <StaffRouteGuard>
+        <DashboardLayout>
+          <div className="p-4 md:p-6 max-w-3xl mx-auto">
+            <Card>
+              <CardHeader>
+                <CardTitle>ECZ assessments unavailable</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-royalPurple-text2">
+                ECZ SBA tracking is for secondary schools only. Primary schools use the CBC primary
+                subject catalog instead.
+              </CardContent>
+            </Card>
+          </div>
+        </DashboardLayout>
+      </StaffRouteGuard>
+    )
   }
 
   return (
@@ -347,6 +381,36 @@ function EczAssessmentHubContent() {
                 </Link>
               </div>
 
+              {showCreate ? (
+                <div ref={createPanelRef}>
+                  <Card className="ring-2 ring-royalPurple-accent/50">
+                    <CardHeader>
+                      <CardTitle>New ECZ-compliant assessment</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <CreateEczAssessmentForm
+                        onSuccess={() => {
+                          setShowCreate(false)
+                          loadTasks()
+                        }}
+                        onCancel={() => setShowCreate(false)}
+                      />
+                    </CardContent>
+                  </Card>
+                </div>
+              ) : null}
+
+              {showRecord ? (
+                <Card className="ring-2 ring-royalPurple-accent/50">
+                  <CardHeader>
+                    <CardTitle>Record SBA score (4-level rubric)</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <RecordSbaScoreForm sbaTasks={sbaTasks} onSuccess={() => loadTasks()} />
+                  </CardContent>
+                </Card>
+              ) : null}
+
               <Card>
                 <CardHeader>
                   <CardTitle className="text-base">
@@ -400,34 +464,6 @@ function EczAssessmentHubContent() {
                   </Link>
                 </CardContent>
               </Card>
-
-              {showCreate && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>New ECZ-compliant assessment</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CreateEczAssessmentForm
-                      onSuccess={() => {
-                        setShowCreate(false)
-                        loadTasks()
-                      }}
-                      onCancel={() => setShowCreate(false)}
-                    />
-                  </CardContent>
-                </Card>
-              )}
-
-              {showRecord && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Record SBA score (4-level rubric)</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <RecordSbaScoreForm sbaTasks={sbaTasks} onSuccess={() => loadTasks()} />
-                  </CardContent>
-                </Card>
-              )}
 
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between">

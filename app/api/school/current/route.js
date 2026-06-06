@@ -33,6 +33,10 @@ export async function GET(request) {
         planExpiresAt: true,
         trialEndsAt: true,
         level: true,
+        schoolType: true,
+        enabledLocalLanguages: true,
+        enrollmentCode: true,
+        ownerUserId: true,
         // Add other fields as needed for branding
       },
     })

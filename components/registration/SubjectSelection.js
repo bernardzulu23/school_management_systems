@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { SCHOOL_SUBJECTS, SUBJECT_CATEGORIES, getSubjectsByCategory } from '@/data/subjects'
+import { SCHOOL_SUBJECTS, SUBJECT_CATEGORIES } from '@/data/subjects'
 import { Search, Check, X, BookOpen, Filter } from 'lucide-react'
 
 const SUBJECT_ORDER = [
@@ -65,18 +65,22 @@ export default function SubjectSelection({
   maxSelections = null,
   minSelections = null,
   valueType = 'id',
+  catalogSubjects = null,
+  categories = null,
 }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
-  const [filteredSubjects, setFilteredSubjects] = useState(SCHOOL_SUBJECTS)
+  const subjectSource = catalogSubjects || SCHOOL_SUBJECTS
+  const categorySource = categories || SUBJECT_CATEGORIES
+  const [filteredSubjects, setFilteredSubjects] = useState(subjectSource)
 
   // Filter subjects based on search and category
   useEffect(() => {
-    let subjects = SCHOOL_SUBJECTS
+    let subjects = subjectSource
 
     // Filter by category
     if (selectedCategory !== 'All') {
-      subjects = getSubjectsByCategory(selectedCategory)
+      subjects = subjects.filter((s) => s.category === selectedCategory)
     }
 
     // Filter by search query
@@ -89,7 +93,7 @@ export default function SubjectSelection({
     }
 
     setFilteredSubjects(subjects.slice().sort(compareSubjects))
-  }, [searchQuery, selectedCategory])
+  }, [searchQuery, selectedCategory, subjectSource])
 
   const getValue = (subject) => {
     return valueType === 'name' ? subject.name : subject.id
@@ -122,9 +126,9 @@ export default function SubjectSelection({
     if (valueType === 'name') {
       return selectedSubjects.map((v) => String(v))
     }
-    return SCHOOL_SUBJECTS.filter((subject) => selectedSubjects.includes(subject.id)).map(
-      (subject) => subject.name
-    )
+    return subjectSource
+      .filter((subject) => selectedSubjects.includes(subject.id))
+      .map((subject) => subject.name)
   }
 
   const getCategoryColor = () => {
@@ -183,7 +187,7 @@ export default function SubjectSelection({
             className="zsms-select pl-10 pr-8 py-2 appearance-none"
           >
             <option value="All">All Categories</option>
-            {SUBJECT_CATEGORIES.map((category) => (
+            {categorySource.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}
               </option>

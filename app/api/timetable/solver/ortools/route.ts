@@ -6,6 +6,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { callOrtoolsHttp } from '@/lib/timetable/ortoolsClient'
 import {
   buildOrtoolsLessons,
@@ -29,6 +30,9 @@ export async function POST(request: NextRequest) {
   if (!schoolId) {
     return NextResponse.json({ error: 'School context required' }, { status: 400 })
   }
+
+  const typeCheck = await guardSchoolOnlyTimetable(schoolId)
+  if (!typeCheck.allowed) return typeCheck.response
 
   const body = await request.json().catch(() => ({}))
   const solverUrl = String(process.env.ORTOOLS_SOLVER_URL || '').trim()

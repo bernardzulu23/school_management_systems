@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 import { syncEczSubjects, fetchEczSubjects } from '@/lib/ecz/sync-ecz-subjects'
 import { ECZ_GUIDELINES_SUBJECT_COUNT } from '@/lib/ecz/ecz-subjects-data'
 
@@ -22,6 +23,9 @@ export async function POST(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
+  const eczCheck = await requireSecondarySchoolAccess(schoolId)
+  if (!eczCheck.ok) return eczCheck.response
+
   const result = await syncEczSubjects(prisma, schoolId)
 
   return NextResponse.json({
@@ -40,6 +44,9 @@ export async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const eczCheck = await requireSecondarySchoolAccess(schoolId)
+  if (!eczCheck.ok) return eczCheck.response
 
   const { searchParams } = new URL(request.url)
   const shouldSync = searchParams.get('sync') === 'true'

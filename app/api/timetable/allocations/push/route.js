@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 
 // POST — HOD pushes department allocations to the headteacher
 export async function POST(req) {
@@ -15,6 +16,9 @@ export async function POST(req) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
+
+  const typeCheck = await guardSchoolOnlyTimetable(schoolId)
+  if (!typeCheck.allowed) return typeCheck.response
 
   const isAdmin = roleCheck(user, ['ADMIN'])
   const hasHodProfile = await prisma.headOfDepartment.findFirst({

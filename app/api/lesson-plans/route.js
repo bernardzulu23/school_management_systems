@@ -5,6 +5,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { resolveReviewerUserId } from '@/lib/lesson-plans/reviewer'
 import { sanitizeText } from '@/lib/lesson-plans/text'
+import { isIndividualSchool } from '@/lib/middleware/individual-gate'
 
 export const dynamic = 'force-dynamic'
 
@@ -108,19 +109,28 @@ export const POST = withErrorHandler(async function POST(request) {
   let reviewerUserId = null
   let status = 'DRAFT'
   let submittedAt = null
+  let approvedAt = null
+
+  const individual = await isIndividualSchool(schoolId)
 
   if (submitNow) {
-    reviewerUserId = await resolveReviewerUserId({
-      schoolId,
-      teacherUserId: userId,
-      grade,
-      subject,
-    })
-    if (!reviewerUserId) {
-      throw new ApiError('No reviewer found for this lesson plan', 400)
+    if (individual) {
+      status = 'APPROVED'
+      submittedAt = new Date()
+      approvedAt = new Date()
+    } else {
+      reviewerUserId = await resolveReviewerUserId({
+        schoolId,
+        teacherUserId: userId,
+        grade,
+        subject,
+      })
+      if (!reviewerUserId) {
+        throw new ApiError('No reviewer found for this lesson plan', 400)
+      }
+      status = 'SUBMITTED'
+      submittedAt = new Date()
     }
-    status = 'SUBMITTED'
-    submittedAt = new Date()
   }
 
   const plan = await prisma.lessonPlan.create({
@@ -138,6 +148,7 @@ export const POST = withErrorHandler(async function POST(request) {
       templateType,
       content,
       submittedAt,
+      approvedAt,
     },
     select: {
       id: true,
@@ -151,7 +162,7 @@ export const POST = withErrorHandler(async function POST(request) {
     },
   })
 
-  if (submitNow && reviewerUserId) {
+  if (submitNow && reviewerUserId && !individual) {
     await prisma.timetableNotification.create({
       data: {
         schoolId,

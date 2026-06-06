@@ -7,6 +7,7 @@ import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { sendOnboardingVerificationEmail } from '@/config/email'
 import { signOnboardingToken } from '@/lib/middleware/onboardingAuth'
 import { getOnboardingVerifyUrl } from '@/lib/onboarding/emailLinks'
+import { INDIVIDUAL_PLANS, SCHOOL_PLANS } from '@/lib/onboarding/individual'
 
 function isValidEmail(value) {
   const email = String(value || '')
@@ -30,16 +31,26 @@ export async function POST(request) {
       .trim()
       .toLowerCase()
     const password = String(body?.password || '')
+    const schoolType = String(body?.schoolType || 'SCHOOL').toUpperCase()
+    const accountType = String(body?.accountType || 'teacher').toLowerCase()
     const requestedPlan = String(body?.plan || '')
       .trim()
       .toLowerCase()
-    const plan =
+
+    const validSchoolPlans =
       requestedPlan === 'trial' ||
       requestedPlan === 'basic' ||
       requestedPlan === 'standard' ||
       requestedPlan === 'premium'
-        ? requestedPlan
-        : null
+    const validIndividualPlans = INDIVIDUAL_PLANS.has(requestedPlan)
+    const defaultIndividualPlan = schoolType === 'INDIVIDUAL' ? 'individual_free' : null
+
+    let plan = null
+    if (schoolType === 'INDIVIDUAL') {
+      plan = validIndividualPlans ? requestedPlan : defaultIndividualPlan
+    } else if (validSchoolPlans) {
+      plan = requestedPlan
+    }
     if (!isValidEmail(email)) return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
     if (password.length < 6) {
       return NextResponse.json({ error: 'Password must be at least 6 characters' }, { status: 400 })
@@ -65,6 +76,8 @@ export async function POST(request) {
       !existing || allowTrialOverride || existingStatus === 'unpaid' || !existingStatus
     const finalPlan = canChangePlan && requested ? requested : existingPlan || requested || null
     const isTrial = finalPlan === 'trial'
+    const isIndividualFree = finalPlan === 'individual_free'
+    const skipPayment = isTrial || isIndividualFree
 
     if (existing?.isVerified && isPortalCreated && (isTrial || existingStatus === 'paid')) {
       const baseDomain = String(
@@ -105,6 +118,8 @@ export async function POST(request) {
         verificationExpiry,
         lastVerificationSentAt,
         paymentStatus: 'unpaid',
+        schoolType,
+        accountType,
         ...(finalPlan ? { plan: finalPlan } : {}),
         ...(finalPlan ? { subscriptionMonths: 1 } : {}),
       },
@@ -116,10 +131,12 @@ export async function POST(request) {
         lastVerificationSentAt: existing?.isVerified
           ? existing.lastVerificationSentAt
           : lastVerificationSentAt,
-        paymentStatus: isTrial ? 'unpaid' : existing?.paymentStatus || 'unpaid',
+        paymentStatus: skipPayment ? 'unpaid' : existing?.paymentStatus || 'unpaid',
         plan: finalPlan,
+        schoolType,
+        accountType,
         subscriptionMonths: existing?.subscriptionMonths || 1,
-        ...(isTrial
+        ...(skipPayment
           ? {
               paymentProvider: null,
               paymentReference: null,
@@ -147,8 +164,8 @@ export async function POST(request) {
             success: true,
             requiresVerification: false,
             devAutoVerified: true,
-            requiresPayment: !isTrial,
-            nextStep: !isTrial ? 'plan' : 'setup',
+            requiresPayment: !skipPayment,
+            nextStep: !skipPayment ? 'plan' : 'setup',
           })
           response.cookies.set('onboarding_token', onboardingToken, {
             httpOnly: true,
@@ -171,7 +188,9 @@ export async function POST(request) {
       return NextResponse.json({
         success: true,
         requiresVerification: true,
+        schoolType,
         ...(isTrial ? { trialIntent: true } : {}),
+        ...(isIndividualFree ? { individualFree: true } : {}),
       })
     }
 
@@ -189,12 +208,13 @@ export async function POST(request) {
       return configured.startsWith('.') ? configured : `.${configured}`
     })()
 
-    const requiresPayment = !isTrial && existingStatus !== 'paid'
+    const requiresPayment = !skipPayment && existingStatus !== 'paid'
 
     const response = NextResponse.json({
       success: true,
       alreadyVerified: true,
       requiresPayment,
+      schoolType,
       nextStep: requiresPayment ? 'plan' : 'setup',
     })
     response.cookies.set('onboarding_token', onboardingToken, {

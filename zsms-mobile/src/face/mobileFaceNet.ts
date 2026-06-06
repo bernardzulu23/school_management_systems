@@ -10,7 +10,8 @@ let cached: FaceModule | null = null
 let loadAttempted = false
 
 export function isMobileFaceNetAvailable(): boolean {
-  return Platform.OS === 'android'
+  if (Platform.OS !== 'android') return false
+  return getFaceModule() !== null
 }
 
 function getFaceModule(): FaceModule | null {
@@ -20,6 +21,10 @@ function getFaceModule(): FaceModule | null {
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     cached = require('expo-face-detection') as FaceModule
+    if ((cached as FaceModule & { __isStub?: boolean }).__isStub) {
+      cached = null
+      return cached
+    }
     cached.setMatchThreshold(DEFAULT_MATCH_L2_THRESHOLD)
   } catch {
     cached = null

@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 import { timeToMin } from '@/lib/timetable/timeSlotsFromConfig'
+import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 
 function formatHHMM(totalMin) {
   const h = Math.floor(totalMin / 60) % 24
@@ -51,6 +52,9 @@ export async function PATCH(req, { params }) {
 
   const schoolId = await resolveSchoolId(req, user)
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
+
+  const typeCheck = await guardSchoolOnlyTimetable(schoolId)
+  if (!typeCheck.allowed) return typeCheck.response
 
   const role = String(user.role || '').toLowerCase()
   if (!['headteacher', 'administrator', 'admin', 'superadmin'].includes(role)) {

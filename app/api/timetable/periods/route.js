@@ -8,6 +8,7 @@ import {
   ensureTimetableConfig,
   buildTimeSlotsFromConfig,
 } from '@/lib/timetable/timeSlotsFromConfig'
+import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { syncTimeSlotsFromConfig } from '@/lib/timetable/syncTimeSlots'
 
 function normalizeDay(day) {
@@ -23,6 +24,9 @@ export async function GET(req) {
 
   const schoolId = await resolveSchoolId(req, user)
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
+
+  const typeCheck = await guardSchoolOnlyTimetable(schoolId)
+  if (!typeCheck.allowed) return typeCheck.response
 
   const { searchParams } = new URL(req.url)
   const dayParam = searchParams.get('day') || 'monday'

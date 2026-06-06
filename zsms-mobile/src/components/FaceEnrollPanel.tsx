@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Modal, Text, View, StyleSheet, Platform } from 'react-native'
-import { FaceDetectionCameraView } from 'expo-face-detection'
 import { BrutalButton } from '@/components/BrutalButton'
 import { saveStudentFaceEmbedding } from '@/api/faceEnrollment'
 import { isMobileFaceNetAvailable } from '@/face/mobileFaceNet'
@@ -28,14 +27,17 @@ export function FaceEnrollPanel({ visible, studentId, studentName, onDone, onClo
         <View style={styles.container}>
           <Text style={styles.title}>Enrol face</Text>
           <Text style={styles.hint}>
-            Face enrollment uses ML Kit MobileFaceNet on Android only. Build with{' '}
-            <Text style={{ fontWeight: '700' }}>npx expo run:android</Text> (not Expo Go). Current
-            platform: {Platform.OS}.
+            Face ML (MobileFaceNet) is not installed in this build. Attendance still works via the
+            class register and manual pupil picker. Platform: {Platform.OS}.
           </Text>
           <BrutalButton title="Close" variant="secondary" onPress={onClose} />
         </View>
       </Modal>
     )
+  }
+
+  const { FaceDetectionCameraView } = require('expo-face-detection') as {
+    FaceDetectionCameraView: React.ComponentType<Record<string, unknown>>
   }
 
   return (

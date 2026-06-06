@@ -11,6 +11,11 @@ datasource db {
 // ============================================
 // MULTI-TENANCY: School Model
 // ============================================
+enum SchoolType {
+  SCHOOL
+  INDIVIDUAL
+}
+
 model School {
   id          String   @id @default(uuid())
   name        String
@@ -28,6 +33,10 @@ model School {
   trialEndsAt DateTime?
   level       String   @default("combined")
 
+  schoolType      SchoolType @default(SCHOOL)
+  enrollmentCode  String?    @unique
+  ownerUserId     String?
+
   // School Settings
   timezone    String   @default("Africa/Lusaka")
   currency    String   @default("ZMW")
@@ -42,7 +51,8 @@ model School {
   /** Stable key: province + district segment for monitoring / future province & district admins */
   reportingStreamKey String?
   eczCentreNumber String? // ECZ examination centre number for submissions
-  
+  enabledLocalLanguages String[] @default([])
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
@@ -135,6 +145,7 @@ model School {
   hodDailyRoutineTasks HodDailyRoutineTask[]
   hodWeeklyRoutinePlans HodWeeklyRoutinePlan[]
   hodFiles               HodFile[]
+  innovationProjects     InnovationProject[]
 
   @@index([subdomain])
   @@index([active])
@@ -280,6 +291,9 @@ model SchoolRegistration {
   district               String?
   reportingStreamKey     String?
 
+  schoolType             String?   @default("SCHOOL")
+  accountType            String?
+
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
 
@@ -392,6 +406,7 @@ model Student {
   specialAccommodations SpecialAccommodation[]
   termReports         TermReport[]
   mockExamAttempts    MockExamAttempt[]
+  activityParticipations ActivityParticipant[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -574,6 +589,7 @@ model Subject {
   topics      String[] // e.g. ["Algebra", "Geometry"] 
   construct   String?  // ECZ main competency statement
   description String?
+  educationLevel String? // primary | secondary
   
   // Multi-tenancy 
   schoolId    String 
@@ -602,6 +618,7 @@ model Subject {
   
   @@index([schoolId]) 
   @@index([name])
+  @@index([educationLevel])
   @@unique([schoolId, name])
   @@unique([schoolId, code]) 
 } 
@@ -1457,10 +1474,11 @@ model Activity {
   school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
   
   title       String 
-  description String 
-  date        DateTime 
-  location    String 
-  type        String   // 'sport', 'club', 'event' 
+  description String   @default("")
+  date        DateTime?
+  location    String?
+  type        String   // 'sport', 'club', 'event'
+  isActive    Boolean  @default(true)
   
   participants ActivityParticipant[] 
   
@@ -1470,15 +1488,19 @@ model Activity {
   @@index([schoolId]) 
   @@index([type])
   @@index([date])
+  @@index([isActive])
 } 
 
 model ActivityParticipant { 
   id          String   @id @default(uuid()) 
   activityId  String 
-  activity    Activity @relation(fields: [activityId], references: [id]) 
+  activity    Activity @relation(fields: [activityId], references: [id], onDelete: Cascade) 
   
-  userId      String 
-  user        User     @relation(fields: [userId], references: [id]) 
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  studentId   String?
+  student     Student? @relation(fields: [studentId], references: [id], onDelete: Cascade)
   
   role        String   @default("member") // 'member', 'leader' 
   joinedAt    DateTime @default(now()) 
@@ -1487,8 +1509,10 @@ model ActivityParticipant {
   schoolId    String 
   school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade) 
   
-  @@unique([activityId, userId]) 
-  @@index([schoolId]) 
+  @@unique([activityId, userId])
+  @@unique([activityId, studentId])
+  @@index([schoolId])
+  @@index([studentId])
 } 
 
 model GamificationProfile { 
@@ -2696,4 +2720,32 @@ model SmsLog {
   @@index([schoolId])
   @@index([createdAt])
   @@index([broadcastId])
+}
+
+enum InnovationProjectStatus {
+  DRAFT
+  IN_PROGRESS
+  REVIEW
+  COMPLETED
+  ARCHIVED
+}
+
+model InnovationProject {
+  id          String                  @id @default(uuid())
+  schoolId    String
+  school      School                  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  title       String
+  description String                  @db.Text
+  category    String
+  labType     String?
+  methodology String?
+  status      InnovationProjectStatus @default(DRAFT)
+  createdBy   String
+  teamMembers String[]                @default([])
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+
+  @@index([schoolId])
+  @@index([createdBy])
+  @@index([status])
 }

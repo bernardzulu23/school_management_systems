@@ -2,8 +2,10 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { verifyOnboardingToken } from '@/lib/middleware/onboardingAuth'
+import { INDIVIDUAL_PLANS } from '@/lib/onboarding/individual'
 
-const PAID_PLANS = new Set(['basic', 'standard', 'premium'])
+const PAID_SCHOOL_PLANS = new Set(['basic', 'standard', 'premium'])
+const PAID_INDIVIDUAL_PLANS = new Set(['individual_premium', 'individual_annual'])
 
 export async function POST(request) {
   const token = request.cookies.get('onboarding_token')?.value || ''
@@ -14,7 +16,7 @@ export async function POST(request) {
 
   const reg = await prisma.schoolRegistration.findUnique({
     where: { id: registrationId },
-    select: { id: true, isVerified: true, paymentStatus: true },
+    select: { id: true, isVerified: true, paymentStatus: true, schoolType: true },
   })
   if (!reg) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   if (!reg.isVerified) {
@@ -28,7 +30,27 @@ export async function POST(request) {
   const plan = String(body?.plan || '')
     .trim()
     .toLowerCase()
-  if (plan !== 'trial' && !PAID_PLANS.has(plan)) {
+  const isIndividual = String(reg.schoolType || 'SCHOOL').toUpperCase() === 'INDIVIDUAL'
+
+  if (isIndividual) {
+    if (!INDIVIDUAL_PLANS.has(plan)) {
+      return NextResponse.json({ error: 'Invalid individual plan' }, { status: 400 })
+    }
+    if (plan === 'individual_free') {
+      await prisma.schoolRegistration.update({
+        where: { id: reg.id },
+        data: { plan: 'individual_free', paymentStatus: 'unpaid' },
+      })
+      return NextResponse.json({ success: true, plan, nextStep: 'setup' }, { status: 200 })
+    }
+    await prisma.schoolRegistration.update({
+      where: { id: reg.id },
+      data: { plan },
+    })
+    return NextResponse.json({ success: true, plan, nextStep: 'plan' }, { status: 200 })
+  }
+
+  if (plan !== 'trial' && !PAID_SCHOOL_PLANS.has(plan)) {
     return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
   }
 

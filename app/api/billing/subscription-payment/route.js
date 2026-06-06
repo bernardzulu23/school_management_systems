@@ -28,7 +28,20 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod'])) {
-    return NextResponse.json({ error: 'Only school admins can upgrade the plan' }, { status: 403 })
+    const schoolMeta = await prisma.school.findUnique({
+      where: { id: schoolId },
+      select: { schoolType: true, ownerUserId: true },
+    })
+    const canIndividualUpgrade =
+      schoolMeta?.schoolType === 'INDIVIDUAL' &&
+      schoolMeta.ownerUserId === auth.user?.id &&
+      roleCheck(auth.user, ['TEACHER', 'teacher'])
+    if (!canIndividualUpgrade) {
+      return NextResponse.json(
+        { error: 'Only school admins can upgrade the plan' },
+        { status: 403 }
+      )
+    }
   }
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)

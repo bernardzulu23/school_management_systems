@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
+import { requireSchoolType } from '@/lib/middleware/individual-gate'
 import { getMoeReportSnapshot } from '@/lib/dashboard/schoolAnalytics'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
@@ -30,6 +31,9 @@ export const GET = withSecureApi(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const typeCheck = await requireSchoolType(schoolId, ['SCHOOL'])
+  if (!typeCheck.allowed) return typeCheck.response
 
   const gate = await requireFeature(schoolId, 'moe-reports')
   if (gate instanceof NextResponse) return gate

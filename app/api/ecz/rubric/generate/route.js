@@ -9,6 +9,7 @@ import {
   criteriaToPrismaCreate,
   rubricMaxPoints,
 } from '@/lib/ecz/ecz-rubric-builder'
+import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 
 export const POST = withSecureApi(async function POST(request) {
   const auth = await authMiddleware(request)
@@ -16,6 +17,11 @@ export const POST = withSecureApi(async function POST(request) {
 
   if (!roleCheck(auth.user, ROLE_GROUPS.SCHOOL_STAFF)) {
     return NextResponse.json({ error: staffRoleDeniedMessage(auth.user?.role) }, { status: 403 })
+  }
+
+  if (auth.user?.schoolId) {
+    const eczCheck = await requireSecondarySchoolAccess(auth.user.schoolId)
+    if (!eczCheck.ok) return eczCheck.response
   }
 
   const body = await request.json().catch(() => ({}))
