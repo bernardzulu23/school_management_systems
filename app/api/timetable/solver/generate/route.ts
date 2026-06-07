@@ -20,6 +20,7 @@ type GenerateBody = {
   maxSolutions?: number
   timeoutMs?: number
   name?: string
+  allowPartial?: boolean
 }
 
 function safeNumber(value: unknown, fallback: number) {
@@ -178,6 +179,8 @@ export async function POST(req: NextRequest) {
   const body = (await req.json().catch(() => ({}))) as GenerateBody
   const maxSolutions = Math.max(1, Math.min(5000, safeNumber(body.maxSolutions, 500)))
   const versionName = safeString(body.name) || 'Draft (Greedy Solver)'
+  const allowPartial = body.allowPartial === true
+  const maxExecutionMs = Math.max(1000, safeNumber(body.timeoutMs, 8000))
 
   try {
     const [
@@ -307,6 +310,7 @@ export async function POST(req: NextRequest) {
       })),
       recipes,
       teacherAllocations: mappedAllocations,
+      maxExecutionMs,
     }
 
     const effectiveLessons = resolveLessonsForSolver(payload)
@@ -320,6 +324,19 @@ export async function POST(req: NextRequest) {
     }
 
     const result = solveTimetable(payload)
+
+    if (!result.stats.success && !allowPartial) {
+      return NextResponse.json(
+        {
+          error:
+            'Incomplete timetable generation. Use POST /api/timetable/generate for production scheduling.',
+          stats: result.stats,
+          validationErrors: result.stats.validationErrors,
+          partial: true,
+        },
+        { status: 422 }
+      )
+    }
 
     if (!result.stats.success) {
       console.warn(

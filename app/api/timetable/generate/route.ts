@@ -54,7 +54,8 @@ export async function POST(req: NextRequest) {
   const academicYear = String((body as any)?.academicYear || new Date().getFullYear()).trim()
   const departments = (body as any)?.departments
   const replaceExisting = (body as any)?.replaceExisting !== false
-  const useLlm = (body as any)?.useLlm !== false
+  const useLlm = (body as any)?.useLlm === true
+  const allowPartial = (body as any)?.allowPartial === true
 
   const config = await ensureTimetableConfig(prisma, schoolId)
 
@@ -68,15 +69,37 @@ export async function POST(req: NextRequest) {
       : {}),
   }
 
-  const allocations = await prisma.teacherAllocation.findMany({
-    where: allocationWhere,
-    include: {
-      teacher: { select: { id: true, name: true } },
-      subject: { select: { id: true, name: true, code: true } },
-      class: { select: { id: true, name: true } },
-      hod: { select: { hodProfile: { select: { department: true } } } },
-    },
-  })
+  const [allocations, recipes, dbConstraints] = await Promise.all([
+    prisma.teacherAllocation.findMany({
+      where: allocationWhere,
+      include: {
+        teacher: { select: { id: true, name: true } },
+        subject: { select: { id: true, name: true, code: true } },
+        class: { select: { id: true, name: true } },
+        hod: { select: { hodProfile: { select: { department: true } } } },
+      },
+    }),
+    prisma.schedulingRecipe.findMany({
+      where: { schoolId, isValid: true, status: { not: 'ARCHIVED' } },
+      select: {
+        teacherId: true,
+        classId: true,
+        subjectId: true,
+        blocks: {
+          select: {
+            forbiddenDays: true,
+            forbiddenPeriods: true,
+            preferredDays: true,
+            preferredPeriods: true,
+          },
+        },
+      },
+    }),
+    prisma.constraint.findMany({
+      where: { schoolId, active: true },
+      select: { type: true, scope: true, targetId: true, active: true, config: true },
+    }),
+  ])
 
   if (allocations.length === 0) {
     return NextResponse.json(
@@ -105,6 +128,8 @@ export async function POST(req: NextRequest) {
     {
       singleMin,
       maxExecutionMs: 12000,
+      recipeRules: recipes as any[],
+      teacherConstraintRules: dbConstraints as any[],
     }
   )
 
@@ -138,6 +163,18 @@ export async function POST(req: NextRequest) {
   if (conflicts.length > 0 && entries.length === 0) {
     return NextResponse.json(
       { error: 'Could not generate a conflict-free timetable. Too many constraints.', conflicts },
+      { status: 422 }
+    )
+  }
+
+  if (scheduleResult.unplacedBlocks.length > 0 && !allowPartial) {
+    return NextResponse.json(
+      {
+        error: `Incomplete timetable: ${scheduleResult.unplacedBlocks.length} lesson block(s) could not be placed within the time limit.`,
+        conflicts,
+        stats: scheduleResult.stats,
+        partial: true,
+      },
       { status: 422 }
     )
   }

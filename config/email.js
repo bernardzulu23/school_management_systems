@@ -323,6 +323,80 @@ export async function sendPilotSchoolJoinedEmail({
   })
 }
 
+/**
+ * Notify platform operators when any tenant completes onboarding (school or individual).
+ */
+export async function sendOnboardingCompletedNotifyEmail({
+  recipients,
+  schoolName,
+  subdomain,
+  schoolType = 'SCHOOL',
+  plan,
+  adminName,
+  adminEmail,
+  adminPhone,
+  level,
+  province,
+  district,
+  loginUrl,
+}) {
+  const to = (recipients || []).filter(Boolean)
+  if (!to.length) {
+    console.warn('[email] No onboarding notify recipients configured')
+    return false
+  }
+
+  const safe = (v) =>
+    String(v || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+
+  const isIndividual = String(schoolType || '').toUpperCase() === 'INDIVIDUAL'
+  const tenantLabel = isIndividual ? 'Individual workspace' : 'School'
+  const dashboardBase = safe(
+    process.env.APP_BASE_DOMAIN || process.env.BASE_DOMAIN || 'bluepeacktechnologies.com'
+  )
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 640px; margin: 0 auto;">
+      <div style="background-color: #2d1b4e; color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <h2 style="margin: 0;">New ${tenantLabel.toLowerCase()} onboarded</h2>
+      </div>
+      <div style="background-color: #f5f5f5; padding: 28px; border-radius: 0 0 10px 10px;">
+        <p style="margin-top: 0;">A ${tenantLabel.toLowerCase()} has completed onboarding on ZSMS.</p>
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+          <tr><td style="padding: 8px 0; color: #64748b; width: 140px;">Type</td><td style="padding: 8px 0;"><strong>${safe(tenantLabel)}</strong></td></tr>
+          <tr><td style="padding: 8px 0; color: #64748b;">Name</td><td style="padding: 8px 0;"><strong>${safe(schoolName)}</strong></td></tr>
+          <tr><td style="padding: 8px 0; color: #64748b;">Subdomain</td><td style="padding: 8px 0;">${safe(subdomain)}</td></tr>
+          <tr><td style="padding: 8px 0; color: #64748b;">Plan</td><td style="padding: 8px 0;">${safe(plan || 'trial')}</td></tr>
+          ${level ? `<tr><td style="padding: 8px 0; color: #64748b;">Level</td><td style="padding: 8px 0;">${safe(level)}</td></tr>` : ''}
+          ${province ? `<tr><td style="padding: 8px 0; color: #64748b;">Location</td><td style="padding: 8px 0;">${safe(province)}${district ? `, ${safe(district)}` : ''}</td></tr>` : ''}
+          <tr><td style="padding: 8px 0; color: #64748b;">Contact</td><td style="padding: 8px 0;">${safe(adminName)}</td></tr>
+          <tr><td style="padding: 8px 0; color: #64748b;">Email</td><td style="padding: 8px 0;"><a href="mailto:${safe(adminEmail)}">${safe(adminEmail)}</a></td></tr>
+          ${adminPhone ? `<tr><td style="padding: 8px 0; color: #64748b;">Phone</td><td style="padding: 8px 0;">${safe(adminPhone)}</td></tr>` : ''}
+          <tr><td style="padding: 8px 0; color: #64748b;">Portal</td><td style="padding: 8px 0;"><a href="${safe(loginUrl)}">${safe(loginUrl)}</a></td></tr>
+        </table>
+        <div style="text-align: center; margin: 24px 0;">
+          <a href="${safe(loginUrl)}" style="background-color: #f59e0b; color: #111; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+            Open portal
+          </a>
+        </div>
+        <p style="color: #64748b; font-size: 12px; margin-bottom: 0;">
+          Manage tenants in the <a href="https://${dashboardBase}/platform/dashboard">platform dashboard</a>.
+        </p>
+      </div>
+    </div>
+  `
+
+  return sendEmail({
+    from: getNoreplyFrom(),
+    to,
+    subject: `[ZSMS] New ${isIndividual ? 'individual' : 'school'}: ${schoolName}`,
+    html,
+  })
+}
+
 export async function sendSmsLowBalanceEmail({ to, schoolName, balance, threshold }) {
   const list = Array.isArray(to) ? to : [to]
   const recipients = list.map((e) => String(e).trim()).filter(Boolean)

@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import crypto from 'crypto'
 import { verifyOnboardingToken } from '@/lib/middleware/onboardingAuth'
-import { sendSchoolPortalLinkEmail, sendPilotSchoolJoinedEmail } from '@/config/email'
-import { getPilotNotifyRecipients } from '@/lib/platform/pilotNotifyEmails'
+import { sendSchoolPortalLinkEmail } from '@/config/email'
+import { notifyOnboardingComplete } from '@/lib/onboarding/notifyOnboardingComplete'
 import { trialEndsAtFromStart } from '@/lib/billing/subscription'
 import {
   buildWelcomeSmsMessage,
@@ -159,6 +159,22 @@ export async function POST(request) {
         )
       }
 
+      await notifyOnboardingComplete({
+        route,
+        schoolId: result.school.id,
+        schoolName: result.school.name,
+        subdomain: result.school.subdomain,
+        schoolType: 'INDIVIDUAL',
+        plan: reg.plan || 'individual',
+        adminName,
+        adminEmail: reg.email,
+        adminPhone: adminPhone ? String(adminPhone).trim() : null,
+        level: 'secondary',
+        province: 'Lusaka',
+        district: 'Lusaka',
+        loginUrl: result.loginUrl,
+      })
+
       const response = NextResponse.json({
         success: true,
         school: result.school,
@@ -274,33 +290,21 @@ export async function POST(request) {
       )
     }
 
-    if (isTrial) {
-      try {
-        const recipients = getPilotNotifyRecipients()
-        if (recipients.length) {
-          const pilotSchoolCount = await prisma.school.count({
-            where: { plan: 'trial', active: true },
-          })
-          await sendPilotSchoolJoinedEmail({
-            recipients,
-            schoolName: created.name,
-            subdomain: created.subdomain,
-            adminName,
-            adminEmail: reg.email,
-            adminPhone: adminPhone ? String(adminPhone).trim() : null,
-            level,
-            province,
-            district,
-            loginUrl,
-            pilotSchoolCount,
-          })
-        } else {
-          log.warn('pilot-notify-skipped', { reason: 'no PILOT_NOTIFY_EMAILS configured' })
-        }
-      } catch (notifyErr) {
-        captureError(notifyErr, { route, schoolId: created.id, event: 'pilot_notify' })
-      }
-    }
+    await notifyOnboardingComplete({
+      route,
+      schoolId: created.id,
+      schoolName: created.name,
+      subdomain: created.subdomain,
+      schoolType: 'SCHOOL',
+      plan,
+      adminName,
+      adminEmail: reg.email,
+      adminPhone: adminPhone ? String(adminPhone).trim() : null,
+      level,
+      province,
+      district,
+      loginUrl,
+    })
 
     try {
       const recipients = normalizePhoneNumbers(adminPhone)

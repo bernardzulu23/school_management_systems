@@ -21,6 +21,7 @@ const SCHOOL_META_SELECT = {
   planExpiresAt: true,
   trialEndsAt: true,
   createdAt: true,
+  schoolType: true,
 }
 
 /** List affiliated, paid schools — metadata only (no enrollment counts). */

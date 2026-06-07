@@ -7,6 +7,8 @@ import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 
+import { validateDraftEntriesForPublish } from '@/lib/timetable/validateDraftEntries'
+
 export async function POST(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -40,6 +42,28 @@ export async function POST(req) {
           'No draft timetable to publish. Generate a timetable and save the draft to the database first.',
       },
       { status: 400 }
+    )
+  }
+
+  const validation = await validateDraftEntriesForPublish(prisma, {
+    schoolId,
+    term,
+    academicYear,
+  })
+
+  if (!validation.ok) {
+    if (validation.code === 'NO_DRAFT') {
+      return NextResponse.json({ error: validation.error }, { status: 400 })
+    }
+    return NextResponse.json(
+      {
+        error:
+          'Cannot publish: draft timetable has hard conflicts. Fix conflicts before publishing.',
+        hardConflicts: validation.hard,
+        softConflicts: validation.soft,
+        entryCount: validation.entryCount,
+      },
+      { status: 422 }
     )
   }
 

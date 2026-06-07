@@ -38,12 +38,14 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
   const [lookupsLoading, setLookupsLoading] = useState(false)
   const [lookups, setLookups] = useState({ classes: [], subjects: [], departments: [] })
   const [schoolLevel, setSchoolLevel] = useState('combined')
+  const [schoolType, setSchoolType] = useState('SCHOOL')
   const [formData, setFormData] = useState({
     // Basic user info
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
+    enrollmentCode: '',
     contact_number: '',
     address: '',
     date_of_birth: '',
@@ -156,6 +158,9 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         if (!active) return
         if (schoolRes?.school?.level) {
           setSchoolLevel(schoolRes.school.level)
+        }
+        if (schoolRes?.school?.schoolType) {
+          setSchoolType(String(schoolRes.school.schoolType).toUpperCase())
         }
         const nextLookups = {
           classes: Array.isArray(classesRes.data?.data) ? classesRes.data.data : [],
@@ -313,6 +318,13 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         newErrors.password = 'Password must be at least 6 characters'
       if (formData.password !== formData.confirmPassword)
         newErrors.confirmPassword = 'Passwords do not match'
+      if (
+        role === 'student' &&
+        schoolType === 'INDIVIDUAL' &&
+        !String(formData.enrollmentCode || '').trim()
+      ) {
+        newErrors.enrollmentCode = 'One-time enrollment code is required'
+      }
     } else if (currentStep === 3) {
       if (role === 'teacher' || role === 'hod') {
         if (!formData.ts_number.trim()) newErrors.ts_number = 'TS Number is required'
@@ -461,7 +473,12 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         )
       case 2:
         return (
-          <AccountSetupStep formData={formData} errors={errors} onInputChange={onInputChange} />
+          <AccountSetupStep
+            formData={formData}
+            errors={errors}
+            onInputChange={onInputChange}
+            requireEnrollmentCode={role === 'student' && schoolType === 'INDIVIDUAL'}
+          />
         )
       case 3:
         if (role === 'student') {

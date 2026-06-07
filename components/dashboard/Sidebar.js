@@ -197,13 +197,17 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
 
     if (isIndividual && roleKey === 'teacher') {
       const hidden = new Set(['My Timetable', 'Payments', 'Extracurricular'])
-      return items
-        .map((item) =>
-          item.name === 'Dashboard'
-            ? { ...item, href: '/dashboard/solo', name: 'Solo workspace' }
-            : item
-        )
-        .filter((item) => !hidden.has(item.name))
+      const soloItems = [
+        ...items
+          .map((item) =>
+            item.name === 'Dashboard'
+              ? { ...item, href: '/dashboard/solo', name: 'Solo workspace' }
+              : item
+          )
+          .filter((item) => !hidden.has(item.name)),
+        { name: 'Register student', href: '/admin/registration?role=student', icon: UserPlus },
+      ]
+      return soloItems
     }
 
     return items

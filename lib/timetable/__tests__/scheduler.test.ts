@@ -65,6 +65,19 @@ describe('canPlace', () => {
     if (!result.ok) expect(result.reason).toBe('teacher_conflict')
   })
 
+  it('detects forbidden recipe slots', () => {
+    const result = canPlace(block, { day: 'monday', startPeriod: 1, span: 1 }, [], {
+      placementRule: {
+        forbiddenDays: new Set(['monday']),
+        forbiddenPeriods: new Set(),
+        preferredDays: new Set(),
+        preferredPeriods: new Set(),
+      },
+    })
+    expect(result.ok).toBe(false)
+    if (!result.ok) expect(result.reason).toBe('forbidden_slot')
+  })
+
   it('allows non-overlapping placement', () => {
     const placed: PlacedBlock[] = [
       {

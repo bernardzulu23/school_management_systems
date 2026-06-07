@@ -44,7 +44,7 @@ export default function SoloDashboardPage() {
   const copyCode = () => {
     if (!enrollment?.enrollmentCode) return
     navigator.clipboard.writeText(enrollment.enrollmentCode)
-    toast.success('Enrollment code copied')
+    toast.success('One-time code copied')
   }
 
   const copyLogin = () => {
@@ -137,35 +137,44 @@ export default function SoloDashboardPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card className="white-card">
                 <CardHeader>
-                  <CardTitle>Enroll students</CardTitle>
+                  <CardTitle>Enroll students (one-time codes)</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="text-center py-4 rounded-xl border border-dashed border-royalPurple-border bg-royalPurple-card2/40">
                     <p className="text-xs text-royalPurple-text3 uppercase tracking-wide">
-                      Enrollment code
+                      Current one-time code (OTC)
                     </p>
                     <p className="text-3xl font-mono font-bold tracking-widest text-royalPurple-text1 mt-2">
                       {enrollment?.enrollmentCode || '———'}
                     </p>
                   </div>
                   <p className="text-sm text-royalPurple-text3">
-                    Register students from your workspace user admin. Share your portal login link
-                    so they can sign in after you create their accounts.
+                    Students cannot join on their own. Register each student from User Registration
+                    and enter a one-time code — each code works once. Generate a new code before
+                    adding the next student (up to 10 on your plan).
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <Button variant="outline" size="sm" onClick={copyCode}>
-                      <Copy className="h-4 w-4 mr-1" /> Copy code
+                      <Copy className="h-4 w-4 mr-1" /> Copy OTC
                     </Button>
                     <Button variant="outline" size="sm" onClick={copyLogin}>
                       <Copy className="h-4 w-4 mr-1" /> Copy portal link
                     </Button>
                     <Button variant="ghost" size="sm" onClick={regenerateCode}>
-                      <RefreshCw className="h-4 w-4 mr-1" /> Regenerate
+                      <RefreshCw className="h-4 w-4 mr-1" /> New OTC
                     </Button>
+                    <Link href="/admin/registration?role=student">
+                      <Button size="sm">Register student</Button>
+                    </Link>
                   </div>
+                  {enrollment?.unusedInviteCount != null ? (
+                    <p className="text-xs text-royalPurple-text3">
+                      Unused codes available: {enrollment.unusedInviteCount}
+                    </p>
+                  ) : null}
                   {enrollment?.loginUrl ? (
                     <p className="text-xs text-royalPurple-text3 break-all">
-                      {enrollment.loginUrl}
+                      After you register them, students sign in at: {enrollment.loginUrl}
                     </p>
                   ) : null}
                 </CardContent>

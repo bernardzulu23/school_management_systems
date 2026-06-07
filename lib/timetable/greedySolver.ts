@@ -6,7 +6,6 @@
 const DEFAULT_MAX_EXECUTION_MS = 8000
 
 import {
-  expandRecipeToUnits,
   normalizeAllocationPeriods,
   resolveSchedulableUnits,
   type AllocationLike,
@@ -14,6 +13,15 @@ import {
   type SchedulableUnit,
   type TeachingAssignmentLike,
 } from '@/lib/timetable/periodExpansion'
+import {
+  buildRecipePlacementRules,
+  buildTeacherDbConstraintRules,
+  getLessonPlacementRule,
+  isSlotForbidden,
+  placementPreferenceScore,
+  type DbConstraintLike,
+  type RecipeLikeForRules,
+} from '@/lib/timetable/constraintRules'
 
 export interface TimeSlot {
   id: string
@@ -234,6 +242,21 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
   const teachingSlots = sortSlots(slots.filter((s) => !s.isBreak))
   const byDay = slotsByDay(teachingSlots)
 
+  const recipeRulesMap = buildRecipePlacementRules((payload.recipes || []) as RecipeLikeForRules[])
+  const teacherRulesMap = buildTeacherDbConstraintRules(
+    (payload.constraints || []) as DbConstraintLike[]
+  )
+
+  const isSlotAllowed = (lesson: Lesson, run: TimeSlot[]) => {
+    const rule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, lesson)
+    for (const slot of run) {
+      if (isSlotForbidden(rule, normalizeDay(slot.dayOfWeek), Number(slot.period) || 0)) {
+        return false
+      }
+    }
+    return true
+  }
+
   const sortedLessons = [...lessons].sort((a, b) => {
     const pa = unitPriority(b) - unitPriority(a)
     if (pa !== 0) return pa
@@ -295,7 +318,24 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
 
     for (const day of daysSorted) {
       const daySlots = byDay.get(day) || []
-      for (let i = 0; i <= daySlots.length - size; i++) {
+      const startIndices = Array.from(
+        { length: Math.max(0, daySlots.length - size + 1) },
+        (_, i) => i
+      )
+      startIndices.sort((ia, ib) => {
+        const runA = findConsecutiveRun(daySlots, ia, size)
+        const runB = findConsecutiveRun(daySlots, ib, size)
+        const rule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, lesson)
+        const scoreA = runA
+          ? placementPreferenceScore(rule, day, Number(runA[0]?.period) || 0)
+          : 9999
+        const scoreB = runB
+          ? placementPreferenceScore(rule, day, Number(runB[0]?.period) || 0)
+          : 9999
+        return scoreA - scoreB
+      })
+
+      for (const i of startIndices) {
         if (Date.now() - START_TIME > MAX_MS) {
           timedOut = true
           return false
@@ -305,6 +345,7 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
         if (!run) continue
         const ids = run.map((s) => s.id)
         if (isBusy(lesson, ids)) continue
+        if (!isSlotAllowed(lesson, run)) continue
 
         assignments[lesson.id] = ids[0]
         slotSpans[lesson.id] = ids
@@ -348,6 +389,7 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
           if (!run) continue
           const ids = run.map((s) => s.id)
           if (isBusy(lesson, ids)) continue
+          if (!isSlotAllowed(lesson, run)) continue
           assignments[lesson.id] = ids[0]
           slotSpans[lesson.id] = ids
           markBusy(lesson, ids, day)

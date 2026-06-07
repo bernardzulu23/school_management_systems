@@ -6,7 +6,16 @@ import { authMiddleware } from '@/lib/middleware/auth'
 import { requirePlatformAdmin } from '@/lib/middleware/platformAuth'
 import { toPlatformSchoolSummary } from '@/lib/platform/schoolEligibility'
 import { validateSchoolLocation } from '@/lib/platform/reportingStream'
+import { deleteSchoolAndData } from '@/lib/platform/deleteSchool'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+
+const INDIVIDUAL_PLANS = [
+  'individual',
+  'individual_premium',
+  'individual_annual',
+  'individual_free',
+]
+const SCHOOL_PLANS = ['trial', 'basic', 'standard', 'premium']
 
 /** Patch tenant billing flags and location metadata only. */
 export const PATCH = withSecureApi(async function PATCH(request, { params }) {
@@ -33,7 +42,7 @@ export const PATCH = withSecureApi(async function PATCH(request, { params }) {
   if (typeof body.active === 'boolean') data.active = body.active
   if (body.plan != null) {
     const plan = String(body.plan).trim().toLowerCase()
-    if (!['trial', 'basic', 'standard', 'premium'].includes(plan)) {
+    if (![...SCHOOL_PLANS, ...INDIVIDUAL_PLANS].includes(plan)) {
       return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
     }
     data.plan = plan
@@ -87,5 +96,29 @@ export const PATCH = withSecureApi(async function PATCH(request, { params }) {
 
   return NextResponse.json({
     school: toPlatformSchoolSummary(school),
+  })
+})
+
+/** Permanently delete a school or individual workspace and all tenant data. */
+export const DELETE = withSecureApi(async function DELETE(request, { params }) {
+  const auth = await authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+
+  const gate = requirePlatformAdmin(auth.user)
+  if (!gate.ok) {
+    return NextResponse.json({ error: gate.error }, { status: gate.status })
+  }
+
+  const id = String((await params)?.id || '').trim()
+  if (!id) return NextResponse.json({ error: 'School id required' }, { status: 400 })
+
+  const result = await deleteSchoolAndData(id)
+  if (!result.ok) {
+    return NextResponse.json({ error: result.error }, { status: result.status })
+  }
+
+  return NextResponse.json({
+    success: true,
+    deleted: result.deleted,
   })
 })

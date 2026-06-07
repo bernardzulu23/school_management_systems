@@ -28,7 +28,11 @@ function qualityConfig(q: AutomationQuality) {
 }
 
 export function AutoGenerateButton(props: AutoGenerateButtonProps) {
-  const { schoolData, disabledReason, onDone } = props
+  const {
+    schoolData,
+    disabledReason = 'Browser-only genetic solver is disabled. Use Generate Perfect Timetable.',
+    onDone,
+  } = props
   const replaceAssignments = useTimetableStore((s) => s.replaceAssignments)
 
   const [open, setOpen] = useState(false)
@@ -102,6 +106,10 @@ export function AutoGenerateButton(props: AutoGenerateButtonProps) {
     setProgress(0)
     setError(null)
     toast('Generation cancelled')
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    return null
   }
 
   return (

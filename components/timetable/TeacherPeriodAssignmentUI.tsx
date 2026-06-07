@@ -177,28 +177,6 @@ export default function TeacherPeriodAssignmentUI(props: TeacherPeriodAssignment
     onError: (e: any) => toast.error(e?.message || 'Failed to unassign'),
   })
 
-  const generateMutation = useMutation({
-    mutationFn: async () => {
-      const res = await fetch('/api/timetable/solver/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: 'Draft (Locked Periods)',
-          timeoutMs: 20_000,
-          maxSolutions: 1500,
-        }),
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.error || 'Failed to generate')
-      return json
-    },
-    onSuccess: (data: any) => {
-      const score = Number(data?.version?.optimizationScore) || 0
-      toast.success(`Generated draft (score ${score}/100)`)
-    },
-    onError: (e: any) => toast.error(e?.message || 'Generation failed'),
-  })
-
   const loading = teachersQuery.isLoading || timeSlotsQuery.isLoading || assignmentsQuery.isLoading
 
   return (
@@ -390,16 +368,19 @@ export default function TeacherPeriodAssignmentUI(props: TeacherPeriodAssignment
       <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-5">
         <div className="text-lg font-semibold text-royalPurple-text1 mb-2">Step 3: Ready?</div>
         <div className="text-sm text-royalPurple-text2">
-          Once you’ve locked key teacher periods, generate a draft timetable. The solver will
-          respect your locked assignments.
+          Once you’ve locked key teacher periods, open <strong>Master Timetable</strong> and use{' '}
+          <strong>Generate Perfect Timetable</strong>. Locked periods are respected by the canonical
+          scheduler.
         </div>
         <div className="mt-4">
           <Button
-            onClick={() => generateMutation.mutate()}
-            disabled={generateMutation.isPending}
+            variant="outline"
+            onClick={() => {
+              window.location.href = '/dashboard/headteacher/timetable'
+            }}
             className="zsms-hover-raise"
           >
-            {generateMutation.isPending ? 'Generating…' : 'Generate Timetable (Respect Locks)'}
+            Open Master Timetable
           </Button>
         </div>
       </div>

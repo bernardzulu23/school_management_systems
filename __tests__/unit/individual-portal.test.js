@@ -65,8 +65,8 @@ describe('Individual Portal utilities', () => {
     expect(paid.active).toBe(true)
   })
 
-  it('student cap limit is 5 on individual plan', () => {
-    expect(INDIVIDUAL_STUDENT_LIMIT.individual).toBe(5)
+  it('student cap limit is 10 on individual plan', () => {
+    expect(INDIVIDUAL_STUDENT_LIMIT.individual).toBe(10)
     expect(INDIVIDUAL_STUDENT_LIMIT.individual_premium).toBe(Infinity)
   })
 })

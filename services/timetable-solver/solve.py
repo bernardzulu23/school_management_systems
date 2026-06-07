@@ -62,7 +62,21 @@ def main():
                     sum(assignment_vars[(li, si)] for li in class_lessons) <= 1
                 )
 
-    # Teacher workload
+    # One lesson per teacher per slot
+    for si in range(len(slots)):
+        for teacher in teachers:
+            tid = teacher.get("id")
+            t_lessons = [
+                li
+                for li, lesson in enumerate(lessons)
+                if lesson.get("teacherId") == tid
+            ]
+            if t_lessons:
+                model.Add(
+                    sum(assignment_vars[(li, si)] for li in t_lessons) <= 1
+                )
+
+    # Teacher workload (weekly max)
     teacher_max = {t["id"]: int(t.get("maxPeriods") or 25) for t in teachers}
     for tid, max_p in teacher_max.items():
         t_lessons = [

@@ -146,6 +146,7 @@ model School {
   hodWeeklyRoutinePlans HodWeeklyRoutinePlan[]
   hodFiles               HodFile[]
   innovationProjects     InnovationProject[]
+  enrollmentInvites      EnrollmentInvite[]
 
   @@index([subdomain])
   @@index([active])
@@ -222,6 +223,8 @@ model User {
   refreshTokens           RefreshToken[]
   auditLogs               AuditLog[]
   attendanceSessionsLed   AttendanceSession[]
+
+  enrollmentInvitesUsed   EnrollmentInvite[] @relation("EnrollmentInviteUsedBy")
 
   sharedMaterials         SharedMaterial[]
   materialRatings         MaterialRating[]
@@ -300,6 +303,21 @@ model SchoolRegistration {
   @@index([paymentStatus])
   @@index([verificationToken])
   @@index([reportingStreamKey])
+}
+
+/** Single-use student invite codes for individual (solo) teacher workspaces */
+model EnrollmentInvite {
+  id           String    @id @default(uuid())
+  schoolId     String
+  school       School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  code         String    @unique
+  usedAt       DateTime?
+  usedByUserId String?
+  usedBy       User?     @relation("EnrollmentInviteUsedBy", fields: [usedByUserId], references: [id], onDelete: SetNull)
+  createdAt    DateTime  @default(now())
+
+  @@index([schoolId])
+  @@index([schoolId, usedAt])
 }
 
 // Platform developer / super admin (no school tenant — metadata-only access)

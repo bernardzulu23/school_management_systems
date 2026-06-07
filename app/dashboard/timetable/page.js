@@ -6,9 +6,10 @@ import { useAuth, useAuthHasHydrated } from '@/lib/auth'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Calendar, RefreshCw, Wand2 } from 'lucide-react'
+import { Calendar, RefreshCw } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { getDefaultAcademicYear, getDefaultTerm } from '@/lib/timetable/timetableTermOptions'
+import { TIMETABLE_CANONICAL } from '@/lib/timetable/pipeline'
 
 export default function TimetablePage() {
   const router = useRouter()
@@ -16,7 +17,6 @@ export default function TimetablePage() {
   const user = useAuth((s) => s.user)
   const [loading, setLoading] = useState(true)
   const [status, setStatus] = useState({ assignments: 0, timeSlots: 0 })
-  const [runningSolver, setRunningSolver] = useState(false)
   const term = getDefaultTerm()
   const academicYear = getDefaultAcademicYear()
 
@@ -26,10 +26,10 @@ export default function TimetablePage() {
     if (role === 'teacher') return '/dashboard/timetable/teacher'
     if (role === 'hod' || role === 'head of department') return '/dashboard/hod/timetable'
     if (['headteacher', 'admin', 'administrator', 'superadmin'].includes(role))
-      return '/dashboard/headteacher/timetable'
+      return TIMETABLE_CANONICAL.headteacherUi
     return '/dashboard'
   }, [role])
-  const canGenerate = useMemo(
+  const canManage = useMemo(
     () => ['headteacher', 'admin', 'administrator', 'superadmin'].includes(role),
     [role]
   )
@@ -56,38 +56,6 @@ export default function TimetablePage() {
     load()
   }, [hydrated, term, academicYear])
 
-  async function runGreedyGenerate() {
-    if (!canGenerate || runningSolver) return
-    setRunningSolver(true)
-    try {
-      const genRes = await fetch('/api/timetable/solver/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ term, academicYear, name: `auto-${Date.now()}`, maxSolutions: 1 }),
-      })
-      const genJson = await genRes.json().catch(() => ({}))
-      if (!genRes.ok)
-        throw new Error(genJson?.error || genJson?.message || 'Greedy generation failed')
-
-      const pubRes = await fetch('/api/timetable/publish', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ term, academicYear }),
-      })
-      const pubJson = await pubRes.json().catch(() => ({}))
-      if (!pubRes.ok) throw new Error(pubJson?.error || pubJson?.message || 'Publish failed')
-
-      toast.success('Greedy timetable generated and published')
-      setStatus((s) => ({ ...s, assignments: Math.max(s.assignments, 1) }))
-    } catch (e) {
-      toast.error(e?.message || 'Failed to generate timetable')
-    } finally {
-      setRunningSolver(false)
-    }
-  }
-
   return (
     <DashboardLayout title="Timetable">
       <div className="space-y-4">
@@ -106,17 +74,20 @@ export default function TimetablePage() {
               Published lessons: {loading ? '…' : status.assignments} · Time slots:{' '}
               {loading ? '…' : status.timeSlots}
             </p>
+            {canManage ? (
+              <p className="text-sm text-royalPurple-text3">
+                Generate and publish timetables from the Master Timetable studio (HOD allocations →
+                generate → publish).
+              </p>
+            ) : null}
             <div className="flex flex-wrap gap-2">
               <Button onClick={() => router.push(roleRoute)}>Open My Timetable</Button>
-              {canGenerate ? (
+              {canManage ? (
                 <Button
                   variant="outline"
-                  onClick={runGreedyGenerate}
-                  disabled={runningSolver}
-                  className="inline-flex items-center"
+                  onClick={() => router.push(TIMETABLE_CANONICAL.headteacherUi)}
                 >
-                  <Wand2 className="h-4 w-4 mr-2" />
-                  {runningSolver ? 'Generating…' : 'Generate with Greedy Solver'}
+                  Open Master Timetable
                 </Button>
               ) : null}
               <Button

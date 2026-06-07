@@ -25,19 +25,43 @@ import { useAuth } from '@/lib/auth'
 function RegistrationContent() {
   const [activeForm, setActiveForm] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [schoolMeta, setSchoolMeta] = useState(null)
   const searchParams = useSearchParams()
   const router = useRouter()
   const { user, isAuthenticated } = useAuth()
 
   const role = String(user?.role || '').toLowerCase()
   const isHeadteacher = role === 'headteacher' || role === 'admin' || role === 'administrator'
+  const isIndividualOwner =
+    String(schoolMeta?.schoolType || '').toUpperCase() === 'INDIVIDUAL' &&
+    schoolMeta?.ownerUserId === user?.id &&
+    role === 'teacher'
+  const canRegisterUsers = isHeadteacher || isIndividualOwner
 
   useEffect(() => {
-    const role = searchParams.get('role')
-    if (role && ['student', 'teacher', 'hod', 'headteacher'].includes(role)) {
-      setActiveForm(role)
+    let active = true
+    fetch('/api/school/current', { credentials: 'include' })
+      .then((r) => (r.ok ? r.json() : { school: null }))
+      .then((data) => {
+        if (active) setSchoolMeta(data?.school || null)
+      })
+      .catch(() => {})
+    return () => {
+      active = false
     }
-  }, [searchParams])
+  }, [])
+
+  useEffect(() => {
+    const roleParam = searchParams.get('role')
+    if (!roleParam) return
+    if (isIndividualOwner && roleParam !== 'student') {
+      setActiveForm('student')
+      return
+    }
+    if (['student', 'teacher', 'hod', 'headteacher'].includes(roleParam)) {
+      setActiveForm(roleParam)
+    }
+  }, [searchParams, isIndividualOwner])
 
   const handleSubmit = async (formData, userType) => {
     if (loading) return
@@ -96,8 +120,9 @@ function RegistrationContent() {
     {
       id: 'student',
       title: 'Student Registration',
-      description:
-        'Register new students with subject selections based on grade level and career interests',
+      description: isIndividualOwner
+        ? 'Register a student with a one-time enrollment code from your Solo workspace (each code works once, up to 10 students)'
+        : 'Register new students with subject selections based on grade level and career interests',
       icon: User,
       color: 'bg-g-100 text-g-800 border border-black/[0.09]',
       features: [
@@ -131,9 +156,7 @@ function RegistrationContent() {
         <div className="container mx-auto px-4 py-6">
           <Card className="p-6">
             <h2 className="text-xl font-semibold text-royalPurple-text1 mb-2">Sign In Required</h2>
-            <p className="text-royalPurple-text2 mb-4">
-              Please sign in as Headteacher to register users.
-            </p>
+            <p className="text-royalPurple-text2 mb-4">Please sign in to register users.</p>
             <Link href="/login">
               <Button>Go to Login</Button>
             </Link>
@@ -143,13 +166,15 @@ function RegistrationContent() {
     )
   }
 
-  if (!isHeadteacher) {
+  if (!canRegisterUsers) {
     return (
       <DashboardLayout>
         <div className="container mx-auto px-4 py-6">
           <Card className="p-6">
             <h2 className="text-xl font-semibold text-royalPurple-text1 mb-2">Access Denied</h2>
-            <p className="text-royalPurple-text2 mb-4">Only Headteachers can register new users.</p>
+            <p className="text-royalPurple-text2 mb-4">
+              Only headteachers or solo teachers can register users.
+            </p>
             <Link href="/dashboard">
               <Button variant="outline">Back to Dashboard</Button>
             </Link>
@@ -159,7 +184,16 @@ function RegistrationContent() {
     )
   }
 
+  const visibleRegistrationTypes = isIndividualOwner
+    ? registrationTypes.filter((t) => t.id === 'student')
+    : registrationTypes
+
   if (activeForm) {
+    if (isIndividualOwner && activeForm !== 'student') {
+      setActiveForm('student')
+      return null
+    }
+
     return (
       <DashboardLayout>
         <div className="form-page">
@@ -267,7 +301,7 @@ function RegistrationContent() {
 
           {/* Registration Options */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {registrationTypes.map((type) => (
+            {visibleRegistrationTypes.map((type) => (
               <Card
                 key={type.id}
                 className="p-6 hover:-translate-y-px hover:shadow-lg hover:border-ink/20 transition-all"

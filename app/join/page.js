@@ -17,7 +17,7 @@ const TEACHER_PLANS = [
   {
     id: 'individual',
     label: PLAN_LABELS.individual,
-    description: `${TRIAL_MONTHS}-month free trial · then K${PLAN_PRICING.individual}/mo · Up to 5 students · ECZ tools`,
+    description: `${TRIAL_MONTHS}-month free trial · then K${PLAN_PRICING.individual}/mo · Up to 10 students · ECZ tools`,
   },
   {
     id: 'individual_premium',

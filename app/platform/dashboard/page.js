@@ -29,6 +29,8 @@ function PlatformDashboardContent() {
   const [editingId, setEditingId] = useState(null)
   const [editProvince, setEditProvince] = useState('')
   const [editDistrict, setEditDistrict] = useState('')
+  const [deletingId, setDeletingId] = useState(null)
+  const [deleteConfirm, setDeleteConfirm] = useState('')
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -99,6 +101,27 @@ function PlatformDashboardContent() {
     }
   }
 
+  async function deleteSchool(school) {
+    if (deleteConfirm !== school.subdomain) {
+      toast.error('Type the subdomain exactly to confirm deletion')
+      return
+    }
+    try {
+      const res = await fetch(`/api/platform/schools/${school.id}`, { method: 'DELETE' })
+      const data = await res.json()
+      if (!res.ok) {
+        toast.error(data.error || 'Delete failed')
+        return
+      }
+      toast.success(`${school.name} deleted permanently`)
+      setDeletingId(null)
+      setDeleteConfirm('')
+      load()
+    } catch {
+      toast.error('Delete failed')
+    }
+  }
+
   return (
     <PlatformShell
       title={
@@ -143,6 +166,7 @@ function PlatformDashboardContent() {
             <thead className="bg-ink text-paper text-left">
               <tr>
                 <th className="px-4 py-3 font-medium">School</th>
+                <th className="px-4 py-3 font-medium">Type</th>
                 <th className="px-4 py-3 font-medium">Subdomain</th>
                 <th className="px-4 py-3 font-medium">Location</th>
                 <th className="px-4 py-3 font-medium">Plan</th>
@@ -154,6 +178,9 @@ function PlatformDashboardContent() {
               {schools.map((s) => (
                 <tr key={s.id} className="border-t border-ink/10 hover:bg-paper align-top">
                   <td className="px-4 py-3 text-ink font-medium">{s.name}</td>
+                  <td className="px-4 py-3 text-muted text-xs uppercase">
+                    {s.schoolType === 'INDIVIDUAL' ? 'Individual' : 'School'}
+                  </td>
                   <td className="px-4 py-3 text-muted">{s.subdomain}</td>
                   <td className="px-4 py-3">
                     {editingId === s.id ? (
@@ -227,13 +254,59 @@ function PlatformDashboardContent() {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <button
-                      type="button"
-                      onClick={() => toggleActive(s)}
-                      className="text-xs text-accent hover:underline font-medium"
-                    >
-                      {s.active ? 'Suspend' : 'Activate'}
-                    </button>
+                    <div className="flex flex-col gap-2">
+                      <button
+                        type="button"
+                        onClick={() => toggleActive(s)}
+                        className="text-xs text-accent hover:underline font-medium text-left"
+                      >
+                        {s.active ? 'Suspend' : 'Activate'}
+                      </button>
+                      {deletingId === s.id ? (
+                        <div className="space-y-2 rounded border border-red-200 bg-red-50 p-2">
+                          <p className="text-xs text-red-800">
+                            Type <strong>{s.subdomain}</strong> to permanently delete this tenant
+                            and all data.
+                          </p>
+                          <input
+                            className="border border-red-300 rounded px-2 py-1 text-xs w-full"
+                            placeholder={s.subdomain}
+                            value={deleteConfirm}
+                            onChange={(e) => setDeleteConfirm(e.target.value)}
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              onClick={() => deleteSchool(s)}
+                              className="text-xs text-red-700 font-medium"
+                            >
+                              Delete forever
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setDeletingId(null)
+                                setDeleteConfirm('')
+                              }}
+                              className="text-xs text-muted"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setDeletingId(s.id)
+                            setDeleteConfirm('')
+                          }}
+                          className="text-xs text-red-700 hover:underline font-medium text-left"
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

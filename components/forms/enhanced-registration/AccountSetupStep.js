@@ -1,8 +1,13 @@
 import React, { useState } from 'react'
-import { Shield, Mail, Eye, EyeOff } from 'lucide-react'
+import { Shield, Mail, Eye, EyeOff, KeyRound } from 'lucide-react'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
 
-export default function AccountSetupStep({ formData, errors, onInputChange }) {
+export default function AccountSetupStep({
+  formData,
+  errors,
+  onInputChange,
+  requireEnrollmentCode = false,
+}) {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -70,6 +75,26 @@ export default function AccountSetupStep({ formData, errors, onInputChange }) {
           </button>
         </div>
       </div>
+
+      {requireEnrollmentCode ? (
+        <div className="mt-6">
+          <FormGroup
+            label="One-time enrollment code (OTC)"
+            name="enrollmentCode"
+            value={formData.enrollmentCode || ''}
+            onChange={onInputChange}
+            placeholder="Enter the code from your solo workspace"
+            required
+            icon={KeyRound}
+            error={errors.enrollmentCode}
+            aria-describedby="enrollmentCode-error"
+          />
+          <p className="text-xs text-royalPurple-text3 mt-2">
+            Generate a new code on your Solo workspace before registering each student. Each code
+            can only be used once.
+          </p>
+        </div>
+      ) : null}
 
       <div className="mt-6 p-4 bg-royalPurple-accent rounded-lg border border-royalPurple-border2">
         <h4 className="font-medium text-royalPurple-accentTx mb-2">Password Requirements:</h4>

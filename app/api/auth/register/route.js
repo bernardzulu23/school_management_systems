@@ -19,6 +19,17 @@ export const POST = withErrorHandler(async (request) => {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+
+  if (!schoolId) {
+    return NextResponse.json(
+      { success: false, message: 'School context required' },
+      { status: 400 }
+    )
+  }
+
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
     const schoolMeta = await prisma.school.findUnique({
       where: { id: schoolId },
@@ -55,19 +66,7 @@ export const POST = withErrorHandler(async (request) => {
     .trim()
     .toLowerCase()
 
-  // 2. Resolve schoolId
-  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
-  if (!tenant.ok) return tenant.response
-  const schoolId = tenant.schoolId
-
   console.log(`[REGISTER] email: ${email}, role: ${role}, resolvedSchoolId: ${schoolId}`)
-
-  if (!schoolId) {
-    return NextResponse.json(
-      { success: false, message: 'School context required' },
-      { status: 400 }
-    )
-  }
 
   if (body.schoolId && String(body.schoolId) !== String(schoolId)) {
     return NextResponse.json({ success: false, message: 'Invalid school context' }, { status: 400 })
@@ -110,10 +109,37 @@ export const POST = withErrorHandler(async (request) => {
     )
   }
 
+  let pendingEnrollmentInviteId = null
   if (role === 'student' && school?.schoolType === 'INDIVIDUAL') {
     const { checkStudentCap } = await import('@/lib/middleware/individual-gate')
     const capCheck = await checkStudentCap(schoolId)
     if (!capCheck.allowed) return capCheck.response
+
+    const { findUnusedEnrollmentInvite, normalizeInviteCode } =
+      await import('@/lib/solo/enrollmentInvites')
+    const inviteCode = normalizeInviteCode(body.enrollmentCode || body.enrollment_code)
+    if (!inviteCode) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Enrollment code is required for each student on individual workspaces.',
+          code: 'ENROLLMENT_CODE_REQUIRED',
+        },
+        { status: 400 }
+      )
+    }
+    const invite = await findUnusedEnrollmentInvite(prisma, inviteCode)
+    if (!invite || invite.schoolId !== schoolId) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Invalid or already used enrollment code.',
+          code: 'INVALID_ENROLLMENT_CODE',
+        },
+        { status: 400 }
+      )
+    }
+    pendingEnrollmentInviteId = invite.id
   }
 
   // 4. Hash password (auto-generate if not provided for student/admin registration)
@@ -455,6 +481,11 @@ export const POST = withErrorHandler(async (request) => {
         })
       }
 
+      if (pendingEnrollmentInviteId) {
+        const { consumeEnrollmentInvite } = await import('@/lib/solo/enrollmentInvites')
+        await consumeEnrollmentInvite(tx, pendingEnrollmentInviteId, user.id)
+      }
+
       return user
     })
   } catch (error) {
@@ -468,7 +499,8 @@ export const POST = withErrorHandler(async (request) => {
       msg.toLowerCase().includes('relation') ||
       msg.toLowerCase().includes('pupilsubjectenrollment') ||
       msg.toLowerCase().includes('teachingassignment') ||
-      msg.toLowerCase().includes('teacherdepartment')
+      msg.toLowerCase().includes('teacherdepartment') ||
+      msg.toLowerCase().includes('enrollmentinvite')
 
     if (looksLikeMissingMigration) {
       return NextResponse.json(

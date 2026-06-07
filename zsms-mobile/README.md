@@ -12,6 +12,18 @@ npm install
 npx expo start
 ```
 
+## APK via Expo (EAS Build)
+
+Link the app to your Expo account once, then build an installable APK in the cloud:
+
+```powershell
+npm install
+powershell -ExecutionPolicy Bypass -File scripts/link-expo.ps1
+npm run build:apk
+```
+
+Full guide: [`docs/EAS_APK_BUILD.md`](docs/EAS_APK_BUILD.md)
+
 ## Docs
 
 Full API and function inventory: [`../docs/doc/mobile-app.md`](../docs/doc/mobile-app.md)

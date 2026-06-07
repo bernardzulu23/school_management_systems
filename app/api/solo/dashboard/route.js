@@ -45,7 +45,7 @@ export const GET = withSecureApi(async function GET(request) {
     ])
 
   const plan = String(school?.plan || 'individual_free').toLowerCase()
-  const studentLimit = INDIVIDUAL_STUDENT_LIMIT[plan] ?? 5
+  const studentLimit = INDIVIDUAL_STUDENT_LIMIT[plan] ?? 10
 
   return NextResponse.json({
     success: true,

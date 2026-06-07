@@ -11,6 +11,16 @@
  */
 
 import { expandAllocationToUnits, type AllocationLike } from '@/lib/timetable/periodExpansion'
+import {
+  buildRecipePlacementRules,
+  buildTeacherDbConstraintRules,
+  getLessonPlacementRule,
+  isSlotForbidden,
+  placementPreferenceScore,
+  type DbConstraintLike,
+  type PlacementRule,
+  type RecipeLikeForRules,
+} from '@/lib/timetable/constraintRules'
 
 /** Period numbers after which a break/lunch occurs — blocks cannot cross these. */
 export const BREAK_AFTER_PERIODS = [2, 5]
@@ -129,17 +139,25 @@ export function canPlace(
   block: SchedulerBlock,
   slot: { day: string; startPeriod: number; span: number },
   placed: PlacedBlock[],
-  options?: { maxTeacherPeriodsPerDay?: number }
+  options?: {
+    maxTeacherPeriodsPerDay?: number
+    placementRule?: PlacementRule
+  }
 ): CanPlaceResult {
   const { day, startPeriod } = slot
   const span = slot.span || block.span
   const maxPerDay = options?.maxTeacherPeriodsPerDay ?? 6
+  const rule = options?.placementRule
 
   if (!consecutivePeriodsAreValid(startPeriod, span)) {
     return { ok: false, reason: 'spans_break' }
   }
 
   for (let p = startPeriod; p < startPeriod + span; p++) {
+    if (isSlotForbidden(rule, day, p)) {
+      return { ok: false, reason: 'forbidden_slot' }
+    }
+
     for (const pl of placed) {
       if (pl.day !== day) continue
 
@@ -303,6 +321,8 @@ export type GenerateTimetableOptions = {
   singleMin?: number
   maxExecutionMs?: number
   maxTeacherPeriodsPerDay?: number
+  recipeRules?: RecipeLikeForRules[]
+  teacherConstraintRules?: DbConstraintLike[]
 }
 
 /**
@@ -316,6 +336,9 @@ export function generateTimetable(
   const singleMin = Math.max(1, Number(options.singleMin) || 40)
   const maxMs = Math.max(2000, Number(options.maxExecutionMs) || 8000)
   const started = Date.now()
+
+  const recipeRulesMap = buildRecipePlacementRules(options.recipeRules || [])
+  const teacherRulesMap = buildTeacherDbConstraintRules(options.teacherConstraintRules || [])
 
   const allocById = new Map(allocations.map((a) => [String(a.id), a]))
   const allBlocks = expandAllocationsIntoBlocks(allocations)
@@ -338,6 +361,10 @@ export function generateTimetable(
 
     // Prefer days with lighter teacher load
     candidates.sort((a, b) => {
+      const rule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, block)
+      const prefA = placementPreferenceScore(rule, a.day, a.startPeriod)
+      const prefB = placementPreferenceScore(rule, b.day, b.startPeriod)
+      if (prefA !== prefB) return prefA - prefB
       const loadA = placed.filter((p) => p.teacherId === block.teacherId && p.day === a.day).length
       const loadB = placed.filter((p) => p.teacherId === block.teacherId && p.day === b.day).length
       return loadA - loadB
@@ -345,7 +372,8 @@ export function generateTimetable(
 
     for (const cand of candidates) {
       if (timedOut()) return false
-      const check = canPlace(block, cand, placed, options)
+      const placementRule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, block)
+      const check = canPlace(block, cand, placed, { ...options, placementRule })
       if (!check.ok) continue
 
       const run = cand.run

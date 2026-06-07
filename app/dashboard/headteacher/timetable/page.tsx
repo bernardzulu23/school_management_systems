@@ -109,8 +109,6 @@ function HeadteacherTimetablePageContent() {
   const searchParams = useSearchParams()
   const [tab, setTab] = useState<Tab>('assignment')
   const [loading, setLoading] = useState(true)
-  const [solverGenerating, setSolverGenerating] = useState(false)
-  const [solverDraftVersionId, setSolverDraftVersionId] = useState<string | null>(null)
   const [term, setTerm] = useState(() => String(searchParams.get('term') || 'Term 1'))
   const [academicYear, setAcademicYear] = useState(() =>
     String(searchParams.get('academicYear') || new Date().getFullYear())
@@ -617,7 +615,13 @@ function HeadteacherTimetablePageContent() {
         body: JSON.stringify({ term, academicYear, replaceExisting: true }),
       })
       const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.error || 'Generation failed')
+      if (!res.ok) {
+        const msg = json?.error || 'Generation failed'
+        if (json?.partial && Array.isArray(json?.conflicts)) {
+          setUnplacedLessons(json.conflicts.map(parseUnplacedConflict))
+        }
+        throw new Error(msg)
+      }
       const conflicts = Array.isArray(json?.conflicts) ? json.conflicts : []
       setUnplacedLessons(conflicts.map(parseUnplacedConflict))
       const unplaced = Number(json?.summary?.unplaced ?? json?.stats?.unplaced ?? 0)
@@ -633,45 +637,6 @@ function HeadteacherTimetablePageContent() {
       toast.error(e?.message || 'Generation failed')
     } finally {
       setDbGenerating(false)
-    }
-  }
-
-  const generateWithSolver = async () => {
-    setSolverGenerating(true)
-    try {
-      const res = await fetch('/api/timetable/solver/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ timeoutMs: 15_000, maxSolutions: 800 }),
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.error || 'Solver generation failed')
-      const fromUi = Array.isArray(json?.assignmentsForUi) ? json.assignmentsForUi : []
-      const legacy = Array.isArray(json?.assignments) ? json.assignments : []
-      const next = fromUi.length > 0 ? fromUi : legacy
-
-      const rawMap = json?.assignments
-      if (
-        next.length === 0 &&
-        rawMap &&
-        typeof rawMap === 'object' &&
-        !Array.isArray(rawMap) &&
-        Object.keys(rawMap).length > 0
-      ) {
-        throw new Error(
-          'Solver returned slot mappings but no timetable rows could be built. Check time slots and teaching assignments match your school data.'
-        )
-      }
-      replaceAssignments(next, { source: 'generate' })
-      const score = Number(json?.version?.optimizationScore) || 0
-      setSolverDraftVersionId(json?.version?.id ? String(json.version.id) : null)
-      toast.success(`Solver draft generated (score ${score}/100). Save to database when ready.`)
-      setTab('edit')
-    } catch (e: any) {
-      toast.error(e?.message || 'Solver generation failed')
-    } finally {
-      setSolverGenerating(false)
     }
   }
 
@@ -701,14 +666,6 @@ function HeadteacherTimetablePageContent() {
               className="zsms-hover-raise"
             >
               {dbGenerating ? 'Generating…' : 'Generate Perfect Timetable'}
-            </Button>
-            <Button
-              variant="outline"
-              onClick={generateWithSolver}
-              disabled={solverGenerating}
-              className="zsms-hover-raise"
-            >
-              {solverGenerating ? 'Generating…' : 'Generate (Greedy)'}
             </Button>
             <Button variant="outline" onClick={saveSolverDraftToDb} className="zsms-hover-raise">
               Save draft to DB
@@ -1230,10 +1187,7 @@ function HeadteacherTimetablePageContent() {
             </div>
 
             {schoolId ? (
-              <TeacherPeriodAssignmentUI
-                schoolId={schoolId}
-                timetableVersionId={solverDraftVersionId || undefined}
-              />
+              <TeacherPeriodAssignmentUI schoolId={schoolId} timetableVersionId={undefined} />
             ) : (
               <div className="onboard-card p-5">
                 <div className="text-royalPurple-text2 text-sm">Loading school context…</div>
