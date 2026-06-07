@@ -110,6 +110,22 @@ Common on Windows behind SSL inspection (same class of issue as Gradle in `READM
 
 Run `npx eas init` again after login.
 
+### Build failed: `Unable to resolve module .../src/storage/secure`
+
+`src/storage/secure.ts` was missing from GitHub because the repo root `.gitignore` had `storage/` (ignored **every** `storage/` folder). Fixed by scoping to `/storage/` only and committing `zsms-mobile/src/storage/secure.ts`.
+
+Push the fix, then rebuild.
+
+### Build failed: dependency version mismatches
+
+Run locally in `zsms-mobile`:
+
+```powershell
+npx expo install --fix
+```
+
+Then commit `package.json` and `package-lock.json` (or `yarn.lock`) before rebuilding on GitHub.
+
 ### Build fails on native code
 
 Ensure `app.json` / plugins match your native modules. This repo includes a stub for `expo-face-detection`; cloud builds use the same stub unless you add the real native module.
