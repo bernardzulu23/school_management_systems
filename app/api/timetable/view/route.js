@@ -107,6 +107,25 @@ async function resolveDepartmentTeacherUserIds(prisma, schoolId, user) {
   return teachers.map((t) => t.userId).filter(Boolean)
 }
 
+function daySortKey(day) {
+  const order = {
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6,
+    sunday: 7,
+  }
+  return (
+    order[
+      String(day || '')
+        .trim()
+        .toLowerCase()
+    ] ?? 99
+  )
+}
+
 export async function GET(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -192,7 +211,7 @@ export async function GET(req) {
       return true
     })
     entries.sort((a, b) => {
-      const day = (a.dayOfWeek || 0) - (b.dayOfWeek || 0)
+      const day = daySortKey(a.dayOfWeek) - daySortKey(b.dayOfWeek)
       if (day !== 0) return day
       return (a.periodNumber || 0) - (b.periodNumber || 0)
     })

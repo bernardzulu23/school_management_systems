@@ -46,6 +46,7 @@
     "experiments": {
       "typedRoutes": true
     },
+    "owner": "brian-ben",
     "extra": {
       "router": {},
       "eas": {

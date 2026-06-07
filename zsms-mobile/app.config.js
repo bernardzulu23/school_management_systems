@@ -7,7 +7,10 @@ module.exports = () => {
     ...expo,
     extra: {
       ...(expo.extra || {}),
-      ...(projectId ? { eas: { projectId } } : {}),
+      eas: {
+        ...(expo.extra?.eas || {}),
+        ...(projectId ? { projectId } : {}),
+      },
     },
   }
 }

@@ -7,6 +7,7 @@ const DEFAULT_MAX_EXECUTION_MS = 8000
 
 import {
   normalizeAllocationPeriods,
+  expandRecipeToUnits,
   resolveSchedulableUnits,
   type AllocationLike,
   type RecipeLike,
