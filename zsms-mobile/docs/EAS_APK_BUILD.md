@@ -38,6 +38,26 @@ This app uses **Expo SDK 56** with a **dev client** (`expo-dev-client`). Cloud A
    npx eas project:info
    ```
 
+## Build from GitHub (Expo dashboard)
+
+If you see:
+
+`Failed to read "/school_management_systems/zsms-mobile/eas.json"`
+
+the **Root directory** in Expo is wrong. Your repo is `bernardzulu23/school_management_systems`; the app lives in **`zsms-mobile/`** only.
+
+1. Open [Project → Settings / Details](https://expo.dev/accounts/brian-ben/projects/zsms-mobile)
+2. Set **Root directory** (or **App directory**) to:
+
+   ```
+   zsms-mobile
+   ```
+
+   **Not** `school_management_systems/zsms-mobile` — that path does not exist in the repo.
+
+3. Push latest code to GitHub (`eas.json` must be on the branch you build).
+4. Click **Build from GitHub** → Android → profile **preview**.
+
 ## Build an APK (installable file)
 
 | Command                  | Profile       | Output                                |

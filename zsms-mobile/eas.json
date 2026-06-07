@@ -18,7 +18,8 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_BASE_URL": "https://bluepeacktechnologies.com"
+        "EXPO_PUBLIC_API_BASE_URL": "https://bluepeacktechnologies.com",
+        "EXPO_PUBLIC_WEB_BASE": "bluepeacktechnologies.com"
       }
     },
     "production": {
@@ -27,7 +28,8 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_BASE_URL": "https://bluepeacktechnologies.com"
+        "EXPO_PUBLIC_API_BASE_URL": "https://bluepeacktechnologies.com",
+        "EXPO_PUBLIC_WEB_BASE": "bluepeacktechnologies.com"
       }
     },
     "production-aab": {

@@ -22,7 +22,9 @@ powershell -ExecutionPolicy Bypass -File scripts/link-expo.ps1
 npm run build:apk
 ```
 
-Full guide: [`docs/EAS_APK_BUILD.md`](docs/EAS_APK_BUILD.md)
+Full guide: [`docs/EXPO_ACCOUNT_AND_ENV.md`](docs/EXPO_ACCOUNT_AND_ENV.md) (account linking + Expo env keys for the website)
+
+See also [`docs/EAS_APK_BUILD.md`](docs/EAS_APK_BUILD.md)
 
 ## Docs
 
