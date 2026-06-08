@@ -1,4 +1,5 @@
 import { validateEnv } from '@/lib/config/env'
+import { headers } from 'next/headers'
 import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'react-hot-toast'
@@ -52,9 +53,12 @@ export const metadata = {
   },
 }
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const headersList = await headers()
+  const nonce = headersList.get('x-nonce') || undefined
+
   return (
-    <html lang="en" suppressHydrationWarning={true}>
+    <html lang="en" suppressHydrationWarning={true} nonce={nonce}>
       <body className="font-sans antialiased bg-paper text-ink">
         <Providers>
           {children}

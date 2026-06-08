@@ -68,7 +68,7 @@ const nextConfig = {
   generateEtags: true,
 
   // Fix ES Module and webpack issues (production build uses --webpack on Vercel)
-  webpack: (config, { isServer }) => {
+  webpack: (config, { dev, isServer }) => {
     config.externals = [
       ...(config.externals || []),
       'jsdom',
@@ -76,6 +76,10 @@ const nextConfig = {
       'bufferutil',
       'utf-8-validate',
     ]
+
+    if (!dev && !isServer) {
+      config.devtool = false
+    }
 
     if (!isServer) {
       config.module.rules.push({
@@ -87,7 +91,7 @@ const nextConfig = {
     return config
   },
 
-  // Security headers (also applied in proxy.js); shared source in lib/security/headers.js
+  // Security headers (CSP with nonce is applied per-request in proxy.js)
   async headers() {
     const { nextConfigSecurityHeaders } = require('./lib/security/headers.js')
     const securityHeaders = nextConfigSecurityHeaders()

@@ -3,7 +3,7 @@ import * as jose from 'jose'
 import {
   applySecurityHeaders,
   BLOCKED_HTTP_METHODS,
-  getCorsHeaders,
+  generateNonce,
   isForbiddenCrossOrigin,
   stripInternalRequestHeaders,
 } from './lib/security/headers'
@@ -68,9 +68,9 @@ const CSRF_EXEMPT_PATHS = [
   '/api/ping',
 ]
 
-function secureResponse(body, init, request) {
+function secureResponse(body, init, request, securityOptions = {}) {
   const response = body === null ? new NextResponse(null, init) : NextResponse.json(body, init)
-  return applySecurityHeaders(response, request)
+  return applySecurityHeaders(response, request, securityOptions)
 }
 
 /** Next.js 16 proxy — multi-tenant subdomain routing and API security. */
@@ -79,27 +79,33 @@ export async function handleSecurityProxy(request) {
     const { pathname } = request.nextUrl
     const method = String(request.method || 'GET').toUpperCase()
 
+    const nonce = generateNonce()
+
     // SECURITY (CVE-2025-29927 + tenant spoofing): strip internal/spoofable
     // headers from the forwarded request BEFORE any routing or auth decision.
     // This is the authoritative copy forwarded downstream via NextResponse.next.
     const requestHeaders = stripInternalRequestHeaders(new Headers(request.headers))
+    requestHeaders.set('x-nonce', nonce)
+    requestHeaders.set('x-current-path', pathname)
+
+    const securityOpts = { nonce, pathname }
 
     if (BLOCKED_HTTP_METHODS.has(method)) {
-      return secureResponse({ error: 'Method Not Allowed' }, { status: 405 }, request)
+      return secureResponse({ error: 'Method Not Allowed' }, { status: 405 }, request, securityOpts)
     }
 
     if (pathname === '/api/health' || pathname === '/api/ping') {
       const response = NextResponse.next({ request: { headers: requestHeaders } })
-      return applySecurityHeaders(response, request)
+      return applySecurityHeaders(response, request, securityOpts)
     }
 
     if (method === 'OPTIONS') {
-      const headers = new Headers(getCorsHeaders(request))
-      return new NextResponse(null, { status: 204, headers })
+      const response = new NextResponse(null, { status: 204 })
+      return applySecurityHeaders(response, request, securityOpts)
     }
 
     if (pathname.startsWith('/api') && isForbiddenCrossOrigin(request)) {
-      return secureResponse({ error: 'Forbidden origin' }, { status: 403 }, request)
+      return secureResponse({ error: 'Forbidden origin' }, { status: 403 }, request, securityOpts)
     }
 
     if (
@@ -112,7 +118,8 @@ export async function handleSecurityProxy(request) {
         return secureResponse(
           { error: csrf.error || 'Invalid CSRF token' },
           { status: 403 },
-          request
+          request,
+          securityOpts
         )
       }
     }
@@ -125,7 +132,8 @@ export async function handleSecurityProxy(request) {
           status: 429,
           headers: { 'Retry-After': String(rate.retryAfter) },
         },
-        request
+        request,
+        securityOpts
       )
     }
 
@@ -154,12 +162,12 @@ export async function handleSecurityProxy(request) {
 
       if (!hasToken) {
         if (pathname.startsWith('/api')) {
-          return secureResponse({ error: 'Unauthorized' }, { status: 401 }, request)
+          return secureResponse({ error: 'Unauthorized' }, { status: 401 }, request, securityOpts)
         }
         const loginUrl = new URL('/login', request.url)
         loginUrl.searchParams.set('from', pathname)
         const redirect = NextResponse.redirect(loginUrl)
-        return applySecurityHeaders(redirect, request)
+        return applySecurityHeaders(redirect, request, securityOpts)
       }
     }
 
@@ -168,7 +176,7 @@ export async function handleSecurityProxy(request) {
       const payload = await decodeAccessToken(request)
       const rk = roleKey(payload?.role)
       if (!payload?.id || !ADMIN_ROLE_KEYS.has(rk)) {
-        return secureResponse({ error: 'Forbidden' }, { status: 403 }, request)
+        return secureResponse({ error: 'Forbidden' }, { status: 403 }, request, securityOpts)
       }
     }
 
@@ -178,7 +186,7 @@ export async function handleSecurityProxy(request) {
       },
     })
 
-    applySecurityHeaders(response, request)
+    applySecurityHeaders(response, request, securityOpts)
 
     if (pathname.startsWith('/api/v1/')) {
       response.headers.set('Deprecation', 'true')
@@ -189,7 +197,10 @@ export async function handleSecurityProxy(request) {
     return response
   } catch {
     const response = NextResponse.next()
-    return applySecurityHeaders(response, request)
+    return applySecurityHeaders(response, request, {
+      nonce: generateNonce(),
+      pathname: request?.nextUrl?.pathname || '',
+    })
   }
 }
 
@@ -245,5 +256,14 @@ function getSubdomain(hostname) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    {
+      source:
+        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
+      missing: [
+        { type: 'header', key: 'next-router-prefetch' },
+        { type: 'header', key: 'purpose', value: 'prefetch' },
+      ],
+    },
+  ],
 }

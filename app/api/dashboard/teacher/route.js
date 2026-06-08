@@ -374,14 +374,3 @@ export async function GET(request) {
     return NextResponse.json({ error: 'Failed to fetch teacher dashboard stats' }, { status: 500 })
   }
 }
-
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_APP_ORIGIN || 'http://localhost:3000',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    },
-  })
-}
