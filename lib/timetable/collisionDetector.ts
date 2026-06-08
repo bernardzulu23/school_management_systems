@@ -218,7 +218,7 @@ export class CollisionDetector {
       if (!this.sameDay(a, timeSlot.dayOfWeek)) continue
       if (!this.timeSlotsOverlap(a, timeSlot)) continue
       conflicts.push(
-        this.makeConflict('ClassDoubleBooked', 'critical', 'Class is double-booked', {
+        this.makeConflict('ClassDoubleBooked', 'critical', 'Grade is double-booked', {
           assignmentIds: [a.id],
           classIds: [classId],
         })
@@ -357,7 +357,7 @@ export class CollisionDetector {
       if (a.dayOfWeek !== assignment.dayOfWeek) continue
       if (!this.timeSlotsOverlap(a, assignment)) continue
       conflicts.push(
-        this.makeConflict('ClassDoubleBooked', 'critical', 'Class is double-booked', {
+        this.makeConflict('ClassDoubleBooked', 'critical', 'Grade is double-booked', {
           assignmentIds: [assignment.id, a.id],
           classIds: [String(assignment.classId)],
         })
@@ -432,6 +432,9 @@ export class CollisionDetector {
 
     const move = this.suggestMoveToFreeSlot(base)
     if (move) suggestions.push(move)
+
+    const moveAnyDay = this.suggestMoveToAnyFreeSlot(base)
+    if (moveAnyDay) suggestions.push(moveAnyDay)
 
     const swap = this.suggestSwap(base)
     if (swap) suggestions.push(swap)
@@ -512,7 +515,7 @@ export class CollisionDetector {
       for (const prev of classIndex.get(cid) || []) {
         if (prev.dayOfWeek !== a.dayOfWeek) continue
         if (!this.timeSlotsOverlap(prev, a)) continue
-        const c = this.makeConflict('ClassDoubleBooked', 'critical', 'Class is double-booked', {
+        const c = this.makeConflict('ClassDoubleBooked', 'critical', 'Grade is double-booked', {
           assignmentIds: [prev.id, a.id],
           classIds: [cid],
         })
@@ -674,6 +677,59 @@ export class CollisionDetector {
       preview,
       apply: () => preview,
     }
+  }
+
+  /** Search all days/periods for a conflict-free slot (Zambian auto-resolve). */
+  suggestMoveToAnyFreeSlot(base: Assignment): Suggestion | null {
+    if (!Array.isArray(this.timeSlots) || this.timeSlots.length === 0) return null
+    const dayRank: Record<string, number> = {
+      monday: 1,
+      tuesday: 2,
+      wednesday: 3,
+      thursday: 4,
+      friday: 5,
+      saturday: 6,
+      sunday: 7,
+    }
+    const teachingSlots = this.timeSlots
+      .filter((s) => !s.isBreak)
+      .sort((a, b) => {
+        const da = dayRank[String(a.dayOfWeek).toLowerCase()] || 99
+        const db = dayRank[String(b.dayOfWeek).toLowerCase()] || 99
+        if (da !== db) return da - db
+        return toMinutes(a.startTime) - toMinutes(b.startTime)
+      })
+
+    for (const slot of teachingSlots) {
+      if (
+        slot.dayOfWeek === base.dayOfWeek &&
+        slot.startTime === base.startTime &&
+        slot.endTime === base.endTime
+      ) {
+        continue
+      }
+      const whatIf: Assignment = {
+        ...base,
+        dayOfWeek: slot.dayOfWeek,
+        startTime: slot.startTime,
+        endTime: slot.endTime,
+        period: slot.period,
+        isBreak: slot.isBreak,
+      }
+      if (this.validateAssignment(whatIf).length !== 0) continue
+
+      const preview = this.assignments.map((a) => (a.id === base.id ? whatIf : a))
+      return {
+        title: `Move to ${String(slot.dayOfWeek)} period ${slot.period}`,
+        description: 'Moves the lesson to a free slot on another day or period.',
+        reason: 'Resolves grade or teacher double-booking without full regeneration.',
+        costReduction: 40,
+        impactedAssignments: 1,
+        preview,
+        apply: () => preview,
+      }
+    }
+    return null
   }
 
   private suggestAlternativeRoom(base: Assignment): Suggestion | null {

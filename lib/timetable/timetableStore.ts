@@ -8,6 +8,7 @@ import { normalizeApiTimeSlots } from './bellSchedule'
 import { normalizeTimetableConfig, resolveSchoolTimeSlots } from './timeSlotsFromConfig'
 import { canPublishTimetable, validateTimetable } from './validateTimetable'
 import { countUniqueConflicts } from './conflictDedupe'
+import { autoResolveConflicts as runAutoResolve } from './autoResolver'
 
 export type TimetableVersion = 'normal' | 'farming' | 'emergency'
 export type TimetableSeasonMode = 'normal' | 'planting' | 'harvest'
@@ -72,6 +73,7 @@ export interface TimetableStoreState {
   switchSeason: (season: TimetableSeasonMode) => void
   addTravelingTeacherRoute: (route: TravelingTeacherRoute) => void
   optimizeWorkload: () => void
+  autoResolveConflicts: () => { resolvedCount: number; remainingConflicts: number }
   loadFromApi: (opts?: { term?: string; academicYear?: string; status?: string }) => Promise<void>
   loadBellSchedule: () => Promise<BellScheduleSlot[]>
   setTimeSlots: (slots: BellScheduleSlot[]) => void
@@ -169,6 +171,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
         try {
           const detector = new CollisionDetector({
             assignments,
+            timeSlots: get().timeSlots,
             travelingTeacherRoutes: get().travelingTeacherRoutes,
             seasonMode: get().currentSeason,
           })
@@ -282,6 +285,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
             if (conflicts.length === 0) return []
             const engine = new SuggestionEngine({
               assignments: s.assignments,
+              timeSlots: s.timeSlots,
               travelingTeacherRoutes: s.travelingTeacherRoutes,
               seasonMode: s.currentSeason,
             })
@@ -333,7 +337,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
           const s = get()
           if (!canPublishTimetable(s.assignments)) {
             throw new Error(
-              'Cannot publish: fix all teacher and class double-booking conflicts first.'
+              'Cannot publish: fix all teacher and grade double-booking conflicts first.'
             )
           }
           pushSnapshot()
@@ -428,6 +432,33 @@ export const useTimetableStore = create<TimetableStoreState>()(
           pushSnapshot()
           set((s) => ({ conflicts: detect(s.assignments) }))
           trackChange({ id: genId(), kind: 'optimize', at: nowIso() })
+        },
+
+        autoResolveConflicts: () => {
+          pushSnapshot()
+          const s = get()
+          const result = runAutoResolve({
+            assignments: s.assignments,
+            timeSlots: s.timeSlots,
+            seasonMode: s.currentSeason,
+          })
+          set({
+            assignments: result.assignments,
+            conflicts: detect(result.assignments),
+            isPublished: false,
+          })
+          if (result.resolvedCount > 0) {
+            trackChange({
+              id: genId(),
+              kind: 'optimize',
+              at: nowIso(),
+              meta: { autoResolve: result.resolvedCount },
+            })
+          }
+          return {
+            resolvedCount: result.resolvedCount,
+            remainingConflicts: result.remainingConflicts,
+          }
         },
 
         loadFromApi: async (opts = {}) => {

@@ -139,7 +139,7 @@ export function ConflictDisplay(props: ConflictDisplayProps) {
           </Button>
           <Button
             onClick={() => onResolveAll?.(resolveAllSuggestions)}
-            disabled={!onResolveAll || resolveAllSuggestions.length === 0}
+            disabled={!onResolveAll || total === 0}
             className="zsms-hover-raise"
           >
             Resolve all

@@ -74,7 +74,7 @@ export function validateTimetable(
         conflicts.push({
           type: 'CLASS_DOUBLE_BOOKED',
           severity: 'hard',
-          message: 'Class is double-booked',
+          message: 'Grade is double-booked',
           entityId: String(a1.classId),
           assignmentIds: [String(a1.id), String(a2.id)],
         })

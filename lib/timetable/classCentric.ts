@@ -1,6 +1,6 @@
 /**
- * Zambian secondary timetables are class/grade-centric (Form 1A, Grade 10B, etc.).
- * Physical room allocation is not part of scheduling.
+ * Zambian secondary timetables are grade-centric (Form 1A, Grade 10B, etc.).
+ * Physical class/room allocation is not part of scheduling.
  */
 
 export const TIMETABLE_CLASS_CENTRIC = true

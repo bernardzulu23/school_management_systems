@@ -356,7 +356,7 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
                         />
                       )
                     }
-                    const periodLabel = slot.period != null ? String(slot.period - 1) : String(idx)
+                    const periodLabel = slot.period != null ? String(slot.period) : String(idx + 1)
                     return (
                       <th
                         key={`${d}-${slot.period}-${idx}`}

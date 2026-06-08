@@ -143,7 +143,7 @@ export default function TeacherAssignments({ teacherData }) {
 
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-royalPurple-text2">Classes:</span>
+                    <span className="text-royalPurple-text2">Grades:</span>
                     <span className="font-medium">{subject.classes.join(', ')}</span>
                   </div>
                   <div className="flex justify-between text-sm">

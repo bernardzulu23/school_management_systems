@@ -52,7 +52,7 @@ export default function SubjectsPage() {
                   {subject.classes && (
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="text-royalPurple-text2">Classes:</span>
+                        <span className="text-royalPurple-text2">Grades:</span>
                         <p className="font-medium">{subject.classes.join(', ')}</p>
                       </div>
                       <div>

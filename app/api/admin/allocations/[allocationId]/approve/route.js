@@ -6,6 +6,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { syncDepartmentApprovalToTeacherAllocations } from '@/lib/timetable/departmentApprovalSync'
+import { normalizeGradeLabel } from '@/lib/timetable/zambiaTerminology'
 import { formatPeriodConfigLabel } from '@/lib/timetable/formatPeriodConfig'
 import { resolveTeacherUserId } from '@/lib/utils/resolveTeacherId'
 import { resolveAllocationSeason } from '@/lib/timetable/allocationSeason'
@@ -73,6 +74,30 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     const teacherUserId = teacherUser.id
 
     const periodConfiguration = formatPeriodConfigLabel(details.periodConfig)
+
+    const normGradeKey = details.classes
+      .map((c) => normalizeGradeLabel(c))
+      .filter(Boolean)
+      .sort()
+      .join('|')
+    const priorEntries = await tx.masterTimetableEntry.findMany({
+      where: { schoolId, teacherId: teacherUserId, subject: details.subject },
+      select: { id: true, classes: true },
+    })
+    const duplicateMaster = priorEntries.find((e) => {
+      const key = (e.classes || [])
+        .map((c) => normalizeGradeLabel(c))
+        .filter(Boolean)
+        .sort()
+        .join('|')
+      return key === normGradeKey && key.length > 0
+    })
+    if (duplicateMaster) {
+      throw new ApiError(
+        'An identical teaching allocation (same teacher, subject, and grades) is already approved. Edit the existing entry instead of approving a duplicate.',
+        409
+      )
+    }
 
     const updated = await tx.departmentAllocation.update({
       where: { id: allocation.id },

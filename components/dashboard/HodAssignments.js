@@ -190,7 +190,7 @@ export default function HodAssignments({ hodData }) {
                     <span className="font-medium">{subject.teachers.length}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-royalPurple-text2">Classes:</span>
+                    <span className="text-royalPurple-text2">Grades:</span>
                     <span className="font-medium">{subject.classes.length}</span>
                   </div>
                   <div className="flex justify-between text-sm">
@@ -272,7 +272,7 @@ export default function HodAssignments({ hodData }) {
                     <strong>Subjects:</strong> {teacher.subjects.join(', ')}
                   </div>
                   <div>
-                    <strong>Classes:</strong> {teacher.classes.join(', ')}
+                    <strong>Grades:</strong> {teacher.classes.join(', ')}
                   </div>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { ConflictDisplay } from '@/components/timetable/ConflictDisplay'
@@ -28,6 +28,7 @@ import {
   resolveSchoolTimeSlots,
 } from '@/lib/timetable/timeSlotsFromConfig'
 import { formatPeriodConfigLabel } from '@/lib/timetable/formatPeriodConfig'
+import { normalizeGradeLabel } from '@/lib/timetable/zambiaTerminology'
 import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
@@ -154,6 +155,8 @@ function HeadteacherTimetablePageContent() {
   const pendingChanges = useTimetableStore((s) => s.pendingChanges)
   const conflictCount = useTimetableStore((s) => s.getConflictCount)
   const loadFromApi = useTimetableStore((s) => s.loadFromApi)
+  const loadBellSchedule = useTimetableStore((s) => s.loadBellSchedule)
+  const autoResolveConflicts = useTimetableStore((s) => s.autoResolveConflicts)
   const setStoreTimeSlots = useTimetableStore((s) => s.setTimeSlots)
   const setTeacherColors = useTimetableStore((s) => s.setTeacherColors)
 
@@ -362,7 +365,26 @@ function HeadteacherTimetablePageContent() {
       if (!groups.has(name)) groups.set(name, [])
       groups.get(name)!.push(e)
     }
-    return Array.from(groups.entries()).sort((a, b) => a[0].localeCompare(b[0]))
+    return Array.from(groups.entries())
+      .map(([deptName, entries]) => {
+        const merged = new Map<string, any>()
+        for (const e of entries) {
+          const gradeKey = (Array.isArray(e?.classes) ? e.classes : [])
+            .map((c: string) => normalizeGradeLabel(c))
+            .filter(Boolean)
+            .sort()
+            .join('|')
+          const mergeKey = `${e?.teacherId}|${e?.subject}|${gradeKey}`
+          if (merged.has(mergeKey)) {
+            const prev = merged.get(mergeKey)
+            merged.set(mergeKey, { ...prev, _mergeCount: (prev._mergeCount || 1) + 1 })
+          } else {
+            merged.set(mergeKey, { ...e, _mergeCount: 1 })
+          }
+        }
+        return [deptName, Array.from(merged.values())] as [string, any[]]
+      })
+      .sort((a, b) => a[0].localeCompare(b[0]))
   }, [masterEntries])
 
   useEffect(() => {
@@ -372,13 +394,31 @@ function HeadteacherTimetablePageContent() {
 
   useEffect(() => {
     const run = async () => {
+      await loadBellSchedule()
       await loadFromApi({ term, academicYear, status: 'draft' })
       if (useTimetableStore.getState().assignments.length === 0) {
         await loadFromApi({ term, academicYear, status: 'published' })
       }
     }
     run()
-  }, [term, academicYear, loadFromApi])
+  }, [term, academicYear, loadFromApi, loadBellSchedule])
+
+  const autoResolvedRef = useRef('')
+  useEffect(() => {
+    const key = `${term}|${academicYear}`
+    if (autoResolvedRef.current === key) return
+    if (assignments.length === 0) return
+    const before = useTimetableStore.getState().getConflictCount()
+    if (before === 0) {
+      autoResolvedRef.current = key
+      return
+    }
+    autoResolvedRef.current = key
+    const result = autoResolveConflicts()
+    if (result.resolvedCount > 0) {
+      toast.success(`Resolved ${result.resolvedCount} conflict(s) automatically`)
+    }
+  }, [term, academicYear, assignments.length, autoResolveConflicts])
 
   useEffect(() => {
     let cancelled = false
@@ -473,13 +513,19 @@ function HeadteacherTimetablePageContent() {
     }
   }
 
-  const onResolveAll = (sugs: any[]) => {
-    if (!sugs?.length) return
+  const onResolveAll = (_sugs?: any[]) => {
     try {
-      let next = assignments
-      for (const s of sugs) next = s.apply()
-      replaceAssignments(next, { source: 'optimize' })
-      toast.success('Resolutions applied')
+      const before = useTimetableStore.getState().getConflictCount()
+      if (before === 0) return
+      const result = autoResolveConflicts()
+      if (result.resolvedCount > 0) {
+        toast.success(
+          `Resolved ${result.resolvedCount} conflict(s)` +
+            (result.remainingConflicts > 0 ? ` — ${result.remainingConflicts} remaining` : '')
+        )
+      } else if (result.remainingConflicts > 0) {
+        toast.error('No free period for some grades — reduce allocation or add periods.')
+      }
     } catch (e: any) {
       toast.error(e?.message || 'Failed to resolve all')
     }
@@ -882,9 +928,14 @@ function HeadteacherTimetablePageContent() {
                         >
                           <div className="text-sm font-bold text-royalPurple-text1">
                             {String(e?.teacher?.name || 'Teacher')}
+                            {e?._mergeCount > 1 ? (
+                              <span className="ml-2 text-xs font-semibold text-royalPurple-text3">
+                                ×{e._mergeCount} merged
+                              </span>
+                            ) : null}
                           </div>
                           <div className="text-xs text-royalPurple-text3 mt-1">
-                            <span className="font-semibold text-royalPurple-text2">Classes:</span>{' '}
+                            <span className="font-semibold text-royalPurple-text2">Grades:</span>{' '}
                             {Array.isArray(e?.classes)
                               ? e.classes.join(', ')
                               : String(e?.classes || '')}

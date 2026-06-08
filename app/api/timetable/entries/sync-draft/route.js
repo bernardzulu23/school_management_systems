@@ -6,6 +6,44 @@ import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 
+function toMinutes(t) {
+  const [h, m] = String(t || '0:0')
+    .split(':')
+    .map(Number)
+  if (!Number.isFinite(h) || !Number.isFinite(m)) return 0
+  return h * 60 + m
+}
+
+function timesOverlap(a, b) {
+  if (String(a.dayOfWeek) !== String(b.dayOfWeek)) return false
+  const a0 = toMinutes(a.startTime)
+  const a1 = toMinutes(a.endTime)
+  const b0 = toMinutes(b.startTime)
+  const b1 = toMinutes(b.endTime)
+  if (a1 <= a0 || b1 <= b0) return false
+  return a0 < b1 && b0 < a1
+}
+
+function findGradeDoubleBookings(rows) {
+  const conflicts = []
+  for (let i = 0; i < rows.length; i++) {
+    for (let j = i + 1; j < rows.length; j++) {
+      const a = rows[i]
+      const b = rows[j]
+      if (String(a.classId) !== String(b.classId)) continue
+      if (!timesOverlap(a, b)) continue
+      conflicts.push({
+        classId: a.classId,
+        dayOfWeek: a.dayOfWeek,
+        startTime: a.startTime,
+        endTime: a.endTime,
+        message: 'Grade is double-booked',
+      })
+    }
+  }
+  return conflicts
+}
+
 function normalizeDayOfWeek(day) {
   const d = String(day || '')
     .trim()
@@ -113,6 +151,18 @@ export async function POST(req) {
   if (!toCreate.length) {
     return NextResponse.json(
       { error: 'No rows could be matched to HOD allocations', skipped: skipped.length },
+      { status: 422 }
+    )
+  }
+
+  const gradeConflicts = findGradeDoubleBookings(toCreate)
+  if (gradeConflicts.length > 0) {
+    return NextResponse.json(
+      {
+        error:
+          'Draft contains grade double-bookings (two subjects in the same period for one grade). Fix conflicts before saving.',
+        conflicts: gradeConflicts.slice(0, 20),
+      },
       { status: 422 }
     )
   }

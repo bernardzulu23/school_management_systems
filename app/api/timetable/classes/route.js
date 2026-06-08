@@ -75,6 +75,7 @@ export const GET = withErrorHandler(async function GET(request) {
       departmentId: c.departmentId || departmentId || null,
       department: c.department || null,
       label: c.name,
+      gradeLabel: c.name,
     })),
   })
 })
