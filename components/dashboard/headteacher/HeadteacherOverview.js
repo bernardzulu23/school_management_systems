@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
@@ -25,9 +26,21 @@ import { LiveAttendanceSummary } from '@/components/headteacher/LiveAttendanceSu
 import { LearningAnalyticsPanel } from '@/components/analytics/LearningAnalyticsPanel'
 import { HeadteacherChronicAbsentees } from './HeadteacherChronicAbsentees'
 import { percentTextClass } from '@/lib/utils/percentColor'
+import Link from 'next/link'
 
 export const HeadteacherOverview = memo(function HeadteacherOverview() {
   const { dashboardData, schoolStats, setActiveTab, subjectPerformanceData } = useHeadteacher()
+
+  const { data: complianceData } = useQuery({
+    queryKey: ['teacher-compliance-overview'],
+    queryFn: async () => {
+      const res = await fetch('/api/dashboard/teacher-compliance', { credentials: 'include' })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) return null
+      return json.data
+    },
+    staleTime: 120_000,
+  })
 
   const hasResults = !!dashboardData
   const performanceTrends = Array.isArray(dashboardData?.performanceTrends)
@@ -82,6 +95,22 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
       <TimetableSummary userRole="headteacher" className="max-w-none" />
 
       <LiveAttendanceSummary />
+
+      {(complianceData?.summary?.missingAssessments || 0) > 0 && (
+        <div className="backdrop-blur-lg bg-warn/10 border border-warn/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <p className="text-sm text-royalPurple-text1">
+            {complianceData.summary.missingAssessments} teacher
+            {complianceData.summary.missingAssessments === 1 ? '' : 's'} have not recorded
+            assessments this term.
+          </p>
+          <Link
+            href="/dashboard/assessments"
+            className="text-sm font-semibold text-royalPurple-accentTx hover:underline shrink-0"
+          >
+            View compliance
+          </Link>
+        </div>
+      )}
 
       <LearningAnalyticsPanel role="headteacher" />
 
@@ -265,39 +294,41 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
         </Card>
       )}
 
-      {Array.isArray(dashboardData?.recent_activities) &&
-        dashboardData.recent_activities.length > 0 && (
-          <Card variant="glass">
-            <CardHeader>
-              <CardTitle className="text-royalPurple-text1 flex items-center">
-                <Clock className="h-6 w-6 mr-3 text-royalPurple-text2" />
-                Recent Results Entered
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                <div className="space-y-3">
-                  {dashboardData.recent_activities.slice(0, 6).map((a) => (
-                    <div
-                      key={a.id}
-                      className="flex items-center justify-between p-3 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-lg"
-                    >
-                      <div>
-                        <div className="text-royalPurple-text1 font-semibold text-sm">
-                          {a.title}
-                        </div>
-                        <div className="text-royalPurple-text2 text-xs">
-                          {a.description}
-                          {a.actor ? ` • ${a.actor}` : ''}
-                        </div>
+      <Card variant="glass">
+        <CardHeader>
+          <CardTitle className="text-royalPurple-text1 flex items-center">
+            <Clock className="h-6 w-6 mr-3 text-royalPurple-text2" />
+            Recent Results Entered
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+            {Array.isArray(dashboardData?.recent_activities) &&
+            dashboardData.recent_activities.length > 0 ? (
+              <div className="space-y-3">
+                {dashboardData.recent_activities.slice(0, 6).map((a) => (
+                  <div
+                    key={a.id}
+                    className="flex items-center justify-between p-3 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-lg"
+                  >
+                    <div>
+                      <div className="text-royalPurple-text1 font-semibold text-sm">{a.title}</div>
+                      <div className="text-royalPurple-text2 text-xs">
+                        {a.description}
+                        {a.actor ? ` • ${a.actor}` : ''}
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
-            </CardContent>
-          </Card>
-        )}
+            ) : (
+              <p className="text-royalPurple-text2 text-sm text-center py-4">
+                No results have been entered yet this term.
+              </p>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       <StudentRosterCard />
 

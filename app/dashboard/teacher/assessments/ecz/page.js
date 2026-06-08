@@ -26,6 +26,7 @@ import { EczSbaTrackingSheet } from '@/components/assessments/EczSbaTrackingShee
 import { SpecialAccommodationsPanel } from '@/components/assessments/SpecialAccommodationsPanel'
 import { EczEvidencePanel } from '@/components/assessments/EczEvidencePanel'
 import { toast } from 'react-hot-toast'
+import { TeacherCompliancePanel } from '@/components/compliance/TeacherCompliancePanel'
 import {
   Select,
   SelectContent,
@@ -83,7 +84,18 @@ function EczAssessmentHubContent() {
       .catch(() => setSchoolLevel('combined'))
   }, [])
 
-  const sbaTasks = useMemo(() => tasks.filter((t) => t.component === 'SBA_TASK'), [tasks])
+  const sbaTasks = useMemo(
+    () => tasks.filter((t) => String(t.component || '') === 'SBA_TASK'),
+    [tasks]
+  )
+
+  const learnersWithScores = useMemo(() => {
+    const ids = new Set()
+    for (const t of sbaTasks) {
+      if (t._count?.scores > 0) ids.add(t.id)
+    }
+    return sbaTasks.reduce((sum, t) => sum + (t._count?.scores || 0), 0)
+  }, [sbaTasks])
 
   const loadTasks = useCallback(async () => {
     setLoading(true)
@@ -225,6 +237,8 @@ function EczAssessmentHubContent() {
 
           <ECZDeadlineTracker />
 
+          <TeacherCompliancePanel domain="ecz_sba" />
+
           <div className="flex flex-wrap gap-2 border-b border-royalPurple-border/40 pb-4">
             {HUB_TABS.map((t) => {
               const Icon = t.icon
@@ -325,7 +339,7 @@ function EczAssessmentHubContent() {
                     <CardTitle className="text-sm font-medium">Learners with scores</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-2xl font-bold">{scoreCount}</p>
+                    <p className="text-2xl font-bold">{learnersWithScores || scoreCount}</p>
                   </CardContent>
                 </Card>
                 <Card>
@@ -498,7 +512,10 @@ function EczAssessmentHubContent() {
                           <div>
                             <p className="font-medium">{t.title}</p>
                             <p className="text-sm text-muted-foreground">
-                              {t.subject?.name} · Form {t.formLevel} ·{' '}
+                              Grade: {t.class?.name || `Form ${t.formLevel}`} · Subject:{' '}
+                              {t.subject?.name || '—'} · Teacher: {t.creator?.name || '—'}
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-0.5">
                               {t.component?.replace(/_/g, ' ')} · {t.type}
                               {t._count?.scores != null ? ` · ${t._count.scores} score(s)` : ''}
                             </p>

@@ -219,7 +219,6 @@ export default function TeacherDashboard() {
     // Initialize with empty arrays - data will come from API
     setResults([])
     setHasResults(false)
-    setTeacherClasses([])
     setTeacherGoals([])
   }, [currentUser])
 

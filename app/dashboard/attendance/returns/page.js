@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { Download, Send } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { TeacherCompliancePanel } from '@/components/compliance/TeacherCompliancePanel'
 
 function currentMonthKey() {
   const d = new Date()
@@ -70,6 +71,7 @@ export default function AttendanceReturnsPage() {
   return (
     <DashboardLayout title="Attendance Returns">
       <div className="space-y-6">
+        <TeacherCompliancePanel domain="attendance" />
         <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
           <CardHeader>
             <CardTitle className="text-royalPurple-text1">Monthly Returns</CardTitle>

@@ -210,6 +210,16 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       return soloItems
     }
 
+    if (roleKey === 'headteacher') {
+      const hidden = new Set([
+        'AI Lesson Planner',
+        'AI Quiz Maker',
+        'AI Story Weaver',
+        'Innovation Hub',
+      ])
+      return items.filter((item) => !hidden.has(item.name))
+    }
+
     return items
   }
 

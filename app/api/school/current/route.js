@@ -26,6 +26,8 @@ export async function GET(request) {
       select: {
         id: true,
         name: true,
+        phone: true,
+        email: true,
         subdomain: true,
         logo_url: true,
         active: true,

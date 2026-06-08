@@ -47,8 +47,16 @@ export const POST = withSecureApi(async function POST(request) {
   const subjectId = String(body.subjectId || '').trim()
   if (!subjectId) return NextResponse.json({ error: 'subjectId is required' }, { status: 400 })
 
+  const classIdRaw = body.classId ? String(body.classId).trim() : ''
+  const classId = classIdRaw || null
+
   const subject = await prisma.subject.findFirst({ where: { id: subjectId, schoolId } })
   if (!subject) return NextResponse.json({ error: 'Subject not found' }, { status: 404 })
+
+  if (classId) {
+    const classRow = await prisma.class.findFirst({ where: { id: classId, schoolId } })
+    if (!classRow) return NextResponse.json({ error: 'Class not found' }, { status: 404 })
+  }
 
   const title = String(body.title || '').trim()
   if (!title) return NextResponse.json({ error: 'title is required' }, { status: 400 })
@@ -58,6 +66,7 @@ export const POST = withSecureApi(async function POST(request) {
       data: {
         schoolId,
         subjectId,
+        classId,
         component,
         formLevel,
         title,
@@ -80,7 +89,7 @@ export const POST = withSecureApi(async function POST(request) {
         generatedByAI: Boolean(body.generatedByAI),
         aiModel: body.aiModel ? String(body.aiModel) : null,
       },
-      include: { subject: true },
+      include: { subject: true, class: true, creator: { select: { id: true, name: true } } },
     })
 
     if (body.createDefaultRubric !== false && component === 'SBA_TASK') {
@@ -169,6 +178,8 @@ export const GET = withSecureApi(async function GET(request) {
       },
       include: {
         subject: true,
+        class: true,
+        creator: { select: { id: true, name: true } },
         rubric: { include: { criteria: true } },
         _count: { select: { scores: true, items: true } },
       },

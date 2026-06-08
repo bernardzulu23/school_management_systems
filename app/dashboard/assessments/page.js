@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { api } from '@/lib/api'
 import { ClipboardList, Plus, Calendar, Users, BookOpen, Edit, Trash2 } from 'lucide-react'
 import Link from 'next/link'
+import { TeacherCompliancePanel } from '@/components/compliance/TeacherCompliancePanel'
 
 export default function AssessmentsPage() {
   const { data: dashboardData } = useQuery({
@@ -17,6 +18,7 @@ export default function AssessmentsPage() {
   return (
     <DashboardLayout title="My Assessments">
       <div className="space-y-6">
+        <TeacherCompliancePanel domain="assessments" />
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>

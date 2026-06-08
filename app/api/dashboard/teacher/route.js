@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
+import { resolveTeacherLoad } from '@/lib/teachers/resolveTeacherLoad'
 
 export async function GET(request) {
   try {
@@ -60,40 +61,10 @@ export async function GET(request) {
       })
     }
 
-    const assignments = teacher.teachingAssignments || []
-
-    const classById = new Map()
-    assignments.forEach((a) => {
-      if (a?.class?.id) classById.set(String(a.class.id), a.class)
+    const { assignments, classById, subjectById } = await resolveTeacherLoad({
+      schoolId,
+      teacher,
     })
-    ;(teacher.classes || []).forEach((c) => {
-      if (c?.id) classById.set(String(c.id), c)
-    })
-
-    const subjectById = new Map()
-    assignments.forEach((a) => {
-      if (a?.subject?.id) subjectById.set(String(a.subject.id), a.subject)
-    })
-    ;(teacher.subjects || []).forEach((s) => {
-      if (s?.id) subjectById.set(String(s.id), s)
-    })
-
-    const assignedSubjectNames = Array.isArray(teacher.assignedSubjects)
-      ? teacher.assignedSubjects.map(String).filter(Boolean)
-      : []
-
-    if (assignedSubjectNames.length > 0) {
-      const existingSubjects = await prisma.subject.findMany({
-        where: {
-          schoolId,
-          OR: [{ name: { in: assignedSubjectNames } }, { id: { in: assignedSubjectNames } }],
-        },
-        select: { id: true, name: true, code: true, topics: true },
-      })
-      existingSubjects.forEach((s) => {
-        if (s?.id) subjectById.set(String(s.id), s)
-      })
-    }
 
     const classIds = Array.from(classById.keys())
     const subjectIds = Array.from(subjectById.keys())
@@ -259,24 +230,22 @@ export async function GET(request) {
       take: 10,
     })
 
-    const studentIdsForRecent = Array.from(studentIdSet).slice(0, 5000)
-    const recentResults =
-      subjectIds.length > 0
-        ? await prisma.result.findMany({
-            where: {
-              schoolId,
-              enteredByUserId: auth.user.id,
-              subjectId: { in: subjectIds },
-              ...(studentIdsForRecent.length > 0 ? { studentId: { in: studentIdsForRecent } } : {}),
-            },
-            include: {
-              student: { select: { id: true, name: true, exam_number: true, class: true } },
-              subject: { select: { id: true, name: true, code: true } },
-            },
-            orderBy: { updatedAt: 'desc' },
-            take: 5,
-          })
-        : []
+    const hasTeachingLoad = assignments.length > 0 || subjectIds.length > 0 || classIds.length > 0
+    const recentResults = hasTeachingLoad
+      ? await prisma.result.findMany({
+          where: {
+            schoolId,
+            enteredByUserId: auth.user.id,
+            ...(subjectIds.length > 0 ? { subjectId: { in: subjectIds } } : {}),
+          },
+          include: {
+            student: { select: { id: true, name: true, exam_number: true, class: true } },
+            subject: { select: { id: true, name: true, code: true } },
+          },
+          orderBy: { updatedAt: 'desc' },
+          take: 5,
+        })
+      : []
 
     const myClasses = myClassRecords.filter(Boolean).map((c) => ({
       id: c.id,

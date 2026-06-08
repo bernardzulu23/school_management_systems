@@ -214,6 +214,7 @@ model User {
 
   assessmentsCreated Assessment[] @relation("AssessmentsCreatedBy")
   assessmentsToReview Assessment[] @relation("AssessmentsReviewer")
+  eczAssessmentsCreated EczAssessment[] @relation("EczAssessmentsCreatedBy")
 
   createdAllocations      DepartmentAllocation[]  @relation("CreatedAllocations")
   approvedAllocations     DepartmentAllocation[]  @relation("ApprovedAllocations")
@@ -590,6 +591,7 @@ model Class {
   schedulingRecipes SchedulingRecipe[]
   allocations       TeacherAllocation[]
   attendanceSessions AttendanceSession[]
+  eczAssessments    EczAssessment[]
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -2468,6 +2470,9 @@ model EczAssessment {
   dueDate             DateTime?
   submissionDeadline  DateTime?
   createdBy           String
+  creator             User     @relation("EczAssessmentsCreatedBy", fields: [createdBy], references: [id], onDelete: Cascade)
+  classId             String?
+  class               Class?   @relation(fields: [classId], references: [id], onDelete: SetNull)
   status              EczAssessmentStatus @default(DRAFT)
 
   term                Int?
@@ -2488,6 +2493,7 @@ model EczAssessment {
 
   @@index([schoolId])
   @@index([subjectId])
+  @@index([classId])
   @@index([formLevel])
   @@index([component])
   @@index([schoolId, formLevel, term])

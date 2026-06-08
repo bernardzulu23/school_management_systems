@@ -34,6 +34,7 @@ import toast from 'react-hot-toast'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import type { Assignment, Class, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { Check, X } from 'lucide-react'
+import { TeacherCompliancePanel } from '@/components/compliance/TeacherCompliancePanel'
 
 type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings' | 'allocations'
 
@@ -689,6 +690,7 @@ function HeadteacherTimetablePageContent() {
   return (
     <DashboardLayout title="Master Timetable">
       <div className="space-y-6">
+        {tab === 'overview' && <TeacherCompliancePanel domain="attendance" />}
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="text-2xl font-bold text-royalPurple-text1">ZSMS Timetable Studio</div>

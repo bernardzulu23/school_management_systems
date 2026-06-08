@@ -1,14 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { Phone, Mail, MessageSquare, User, AlertTriangle, Send, Copy } from 'lucide-react'
+import { useSchool } from '@/lib/context/SchoolContext'
 
-export default function ContactParentsModal({ students, onClose }) {
-  const [selectedStudents, setSelectedStudents] = useState([])
-  const [message, setMessage] = useState(`Dear Parent/Guardian,
+function buildDefaultMessage(school) {
+  const schoolName = school?.name || 'School Administration'
+  const schoolPhone = school?.phone || '—'
+  const schoolEmail = school?.email || '—'
+
+  return `Dear Parent/Guardian,
 
 We need to discuss your child's academic performance urgently. Your child is currently scoring below the minimum 40% standard and requires immediate intervention.
 
@@ -22,30 +25,49 @@ This situation requires immediate attention and we need to work together to supp
 Please contact the school at your earliest convenience to schedule a meeting.
 
 Best regards,
-School Administration
-Springfield High School
-Phone: +1-555-0123
-Email: admin@springfield.edu`)
+${schoolName}
+Phone: ${schoolPhone}
+Email: ${schoolEmail}`
+}
+
+export default function ContactParentsModal({ students, onClose }) {
+  const { school } = useSchool()
+  const [selectedStudents, setSelectedStudents] = useState([])
+  const [message, setMessage] = useState(() => buildDefaultMessage(null))
 
   const [contactMethod, setContactMethod] = useState('sms')
 
-  // Mock parent contact data - in real app this would come from student profiles
+  useEffect(() => {
+    setMessage(buildDefaultMessage(school))
+  }, [school])
+
   const getParentContact = (student) => {
+    const fatherPhone = String(student.parent_father_contact || '').trim()
+    const motherPhone = String(student.parent_mother_contact || '').trim()
+    const guardianPhone = String(student.guardian_contact || student.parent_contact || '').trim()
+    const primaryPhone = fatherPhone || motherPhone || guardianPhone || 'Not on file'
+    const secondaryPhone = [motherPhone, guardianPhone].find((p) => p && p !== primaryPhone) || ''
+
     return {
       primary_contact: {
-        name: `Parent of ${student.name.split(' ')[0]}`,
-        relationship: 'Parent/Guardian',
-        phone: `+1 (555) 0${student.id}23-456${student.id}`,
-        email: `parent${student.id}@email.com`,
+        name:
+          student.parent_father_name ||
+          student.guardian_name ||
+          `Parent/Guardian of ${student.name?.split(' ')[0] || 'learner'}`,
+        relationship: student.guardian_relationship || 'Parent/Guardian',
+        phone: primaryPhone,
+        email: student.parent_father_email || student.guardian_email || '',
         is_primary: true,
       },
-      emergency_contact: {
-        name: `Emergency Contact ${student.id}`,
-        relationship: 'Emergency Contact',
-        phone: `+1 (555) 0${student.id}87-654${student.id}`,
-        email: `emergency${student.id}@email.com`,
-        is_primary: false,
-      },
+      emergency_contact: secondaryPhone
+        ? {
+            name: student.parent_mother_name || student.guardian_name || 'Alternate contact',
+            relationship: student.parent_mother_name ? 'Mother' : 'Guardian',
+            phone: secondaryPhone,
+            email: student.parent_mother_email || '',
+            is_primary: false,
+          }
+        : null,
     }
   }
 
@@ -64,15 +86,16 @@ Email: admin@springfield.edu`)
   }
 
   const personalizeMessage = (baseMessage, student) => {
-    const failingSubjects = student.subjects
-      .filter((s) => s.score < 40)
+    const subjects = Array.isArray(student.subjects) ? student.subjects : []
+    const failingSubjects = subjects
+      .filter((s) => Number(s.score) < 40)
       .map((s) => s.name)
       .join(', ')
 
     return baseMessage
-      .replace('[STUDENT_AVERAGE]', student.overall_average)
+      .replace('[STUDENT_AVERAGE]', String(student.overall_average ?? '—'))
       .replace('[FAILING_SUBJECTS]', failingSubjects || 'None')
-      .replace('[ATTENDANCE_RATE]', student.attendance_rate)
+      .replace('[ATTENDANCE_RATE]', String(student.attendance_rate ?? '—'))
   }
 
   const handleSendMessages = () => {
@@ -215,12 +238,22 @@ Email: admin@springfield.edu`)
                                   {contact.primary_contact.phone}
                                 </span>
                               </div>
-                              <div className="flex items-center">
-                                <Mail className="h-3 w-3 text-royalPurple-text3 mr-2" />
-                                <span className="text-royalPurple-text2">
-                                  {contact.primary_contact.email}
-                                </span>
-                              </div>
+                              {contact.emergency_contact?.phone ? (
+                                <div className="flex items-center">
+                                  <Phone className="h-3 w-3 text-royalPurple-text3 mr-2" />
+                                  <span className="text-royalPurple-text2">
+                                    {contact.emergency_contact.phone} (alt)
+                                  </span>
+                                </div>
+                              ) : null}
+                              {contact.primary_contact.email ? (
+                                <div className="flex items-center">
+                                  <Mail className="h-3 w-3 text-royalPurple-text3 mr-2" />
+                                  <span className="text-royalPurple-text2">
+                                    {contact.primary_contact.email}
+                                  </span>
+                                </div>
+                              ) : null}
                             </div>
                           </div>
 

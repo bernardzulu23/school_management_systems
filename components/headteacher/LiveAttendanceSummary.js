@@ -86,6 +86,22 @@ export function LiveAttendanceSummary() {
               </div>
             </div>
 
+            {data.currentPeriod?.isActive ? (
+              <div className="rounded-xl border border-royalPurple-accent/40 bg-royalPurple-accent/10 px-4 py-3 text-sm text-royalPurple-text1">
+                <strong>
+                  {data.currentPeriod.label} · {data.currentPeriod.timeRange}
+                </strong>
+                <span className="text-royalPurple-text3 ml-2">
+                  ({data.currentPeriod.weekday}, {data.currentPeriod.localTime} Lusaka)
+                </span>
+              </div>
+            ) : data.currentPeriod?.nextPeriod ? (
+              <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/40 px-4 py-3 text-sm text-royalPurple-text2">
+                Between periods — next: Period {data.currentPeriod.nextPeriod}
+                {data.currentPeriod.nextTimeRange ? ` · ${data.currentPeriod.nextTimeRange}` : ''}
+              </div>
+            ) : null}
+
             {(data.classesNotStarted ?? 0) > 0 ? (
               <div className="rounded-xl border border-amber-500/40 bg-amber-50/80 dark:bg-amber-950/20 px-4 py-3 text-sm text-amber-900 dark:text-amber-100">
                 <strong>{data.classesNotStarted}</strong> class
@@ -119,7 +135,11 @@ export function LiveAttendanceSummary() {
                   {data.sessions.map((s) => (
                     <li
                       key={s.sessionId}
-                      className="flex items-center justify-between gap-3 rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/60 px-4 py-2 text-sm"
+                      className={`flex items-center justify-between gap-3 rounded-xl border px-4 py-2 text-sm ${
+                        s.isCurrentPeriod
+                          ? 'border-royalPurple-accent/60 bg-royalPurple-accent/15 ring-1 ring-royalPurple-accent/30'
+                          : 'border-royalPurple-border/40 bg-royalPurple-card/60'
+                      }`}
                     >
                       <div>
                         <p className="font-medium text-royalPurple-text1">
@@ -128,6 +148,7 @@ export function LiveAttendanceSummary() {
                         <p className="text-royalPurple-text3 text-xs">
                           {s.teacherName}
                           {s.periodLabel ? ` · ${s.periodLabel}` : ''}
+                          {s.isCurrentPeriod ? ' · now' : ''}
                         </p>
                       </div>
                       <span className="text-royalPurple-text2 shrink-0 flex items-center gap-1">

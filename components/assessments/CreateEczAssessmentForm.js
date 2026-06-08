@@ -23,9 +23,11 @@ const ZAMBIA_HINTS = 'e.g. farmer in Mkushi, market in Lusaka, minibus in Kitwe'
 
 export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
   const [subjects, setSubjects] = useState([])
+  const [classes, setClasses] = useState([])
   const [component, setComponent] = useState('SBA_TASK')
   const [formLevel, setFormLevel] = useState('1')
   const [subjectId, setSubjectId] = useState('')
+  const [classId, setClassId] = useState('')
   const [title, setTitle] = useState('')
   const [type, setType] = useState('Project')
   const [context, setContext] = useState('')
@@ -35,12 +37,27 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
   const [numCriteria, setNumCriteria] = useState(4)
 
   useEffect(() => {
-    fetch('/api/ecz/subjects/seed?sync=true', { credentials: 'include' })
-      .then((r) => r.json())
-      .then((json) => {
-        const list = Array.isArray(json?.data) ? json.data : []
+    Promise.all([
+      fetch('/api/ecz/subjects/seed?sync=true', { credentials: 'include' }).then((r) => r.json()),
+      fetch('/api/teaching-assignments', { credentials: 'include' }).then((r) => r.json()),
+    ])
+      .then(([subjectsJson, assignmentsJson]) => {
+        const list = Array.isArray(subjectsJson?.data) ? subjectsJson.data : []
         setSubjects(list)
         if (list[0]?.id) setSubjectId(String(list[0].id))
+
+        const assignments = Array.isArray(assignmentsJson?.data) ? assignmentsJson.data : []
+        const byId = new Map()
+        for (const a of assignments) {
+          if (a?.classId && a?.className) {
+            byId.set(String(a.classId), { id: a.classId, name: a.className })
+          }
+        }
+        const classList = Array.from(byId.values()).sort((a, b) =>
+          String(a.name).localeCompare(String(b.name))
+        )
+        setClasses(classList)
+        if (classList[0]?.id) setClassId(String(classList[0].id))
       })
       .catch(() => {})
   }, [])
@@ -91,6 +108,7 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
           component,
           formLevel: parseInt(formLevel, 10),
           subjectId,
+          classId: classId || undefined,
           title: title.trim(),
           type,
           description: context.trim(),
@@ -159,6 +177,28 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
             </SelectContent>
           </Select>
         </div>
+      </div>
+
+      <div>
+        <Label>Grade / Class</Label>
+        <Select value={classId || 'none'} onValueChange={(v) => setClassId(v === 'none' ? '' : v)}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select grade (optional)" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">Not specified</SelectItem>
+            {classes.map((c) => (
+              <SelectItem key={c.id} value={String(c.id)}>
+                {c.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {classes.length === 0 && (
+          <p className="text-xs text-royalPurple-text3 mt-1">
+            No assigned classes found. You can still create the SBA task without a grade.
+          </p>
+        )}
       </div>
 
       <div>

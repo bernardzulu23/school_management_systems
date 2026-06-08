@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { formatTeachingAssignmentDtos, resolveTeacherLoad } from '@/lib/teachers/resolveTeacherLoad'
 
 export async function GET(request) {
   const auth = await authMiddleware(request)
@@ -40,119 +41,28 @@ export async function GET(request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const assignments = await prisma.teachingAssignment.findMany({
-    where: {
-      schoolId,
-      teacherId: resolvedTeacherId,
-    },
+  const teacher = await prisma.teacher.findFirst({
+    where: { id: resolvedTeacherId, schoolId },
     include: {
-      class: true,
-      subject: true,
-      teacher: {
-        include: { user: true },
+      user: { select: { id: true, name: true } },
+      classes: true,
+      subjects: true,
+      teachingAssignments: {
+        where: { schoolId },
+        include: { class: true, subject: true },
       },
-    },
-    orderBy: {
-      createdAt: 'desc',
     },
   })
 
-  if (assignments.length === 0) {
-    const teacher = await prisma.teacher.findFirst({
-      where: { id: resolvedTeacherId, schoolId },
-      include: {
-        user: { select: { name: true } },
-        classes: true,
-        subjects: true,
-      },
-    })
-
-    const assignedSubjectNames = Array.isArray(teacher?.assignedSubjects)
-      ? teacher.assignedSubjects.map(String).filter(Boolean)
-      : []
-
-    const subjectById = new Map((teacher?.subjects || []).map((s) => [String(s.id), s]))
-
-    if (assignedSubjectNames.length > 0) {
-      const subjectsByName = await prisma.subject.findMany({
-        where: {
-          schoolId,
-          OR: [{ name: { in: assignedSubjectNames } }, { id: { in: assignedSubjectNames } }],
-        },
-      })
-      subjectsByName.forEach((s) => {
-        if (s?.id) subjectById.set(String(s.id), s)
-      })
-    }
-
-    const classes = teacher?.classes || []
-    const subjects = Array.from(subjectById.values())
-
-    const virtual = []
-    const subjectClassIds = Array.from(
-      new Set(subjects.map((s) => String(s?.classId || '')).filter(Boolean))
-    )
-    const subjectClasses =
-      subjectClassIds.length > 0
-        ? await prisma.class.findMany({
-            where: { schoolId, id: { in: subjectClassIds } },
-          })
-        : []
-    const classById = new Map(subjectClasses.map((c) => [String(c.id), c]))
-
-    const resolvedClasses = classes.length > 0 ? classes : subjectClasses
-
-    for (const s of subjects) {
-      const preferredClassId = s?.classId ? String(s.classId) : ''
-      const preferredClass = preferredClassId ? classById.get(preferredClassId) : null
-      if (preferredClass) {
-        virtual.push({
-          id: `virtual:${String(preferredClass.id)}:${String(s.id)}`,
-          teacherId: resolvedTeacherId,
-          teacherName: teacher?.user?.name || null,
-          classId: preferredClass.id,
-          className: preferredClass.name || 'Unknown Class',
-          classYearGroup: preferredClass.year_group || null,
-          subjectId: s.id,
-          subjectName: s.name || 'Unknown Subject',
-          createdAt: null,
-        })
-        continue
-      }
-      for (const c of resolvedClasses) {
-        virtual.push({
-          id: `virtual:${String(c.id)}:${String(s.id)}`,
-          teacherId: resolvedTeacherId,
-          teacherName: teacher?.user?.name || null,
-          classId: c.id,
-          className: c.name || 'Unknown Class',
-          classYearGroup: c.year_group || null,
-          subjectId: s.id,
-          subjectName: s.name || 'Unknown Subject',
-          createdAt: null,
-        })
-      }
-    }
-
-    return NextResponse.json({
-      success: true,
-      data: virtual,
-    })
+  if (!teacher) {
+    return NextResponse.json({ success: true, data: [] })
   }
+
+  const { assignments } = await resolveTeacherLoad({ schoolId, teacher })
 
   return NextResponse.json({
     success: true,
-    data: assignments.map((a) => ({
-      id: a.id,
-      teacherId: a.teacherId,
-      teacherName: a.teacher?.user?.name || 'Unknown Teacher',
-      classId: a.classId,
-      className: a.class?.name || 'Unknown Class',
-      classYearGroup: a.class?.year_group || null,
-      subjectId: a.subjectId,
-      subjectName: a.subject?.name || 'Unknown Subject',
-      createdAt: a.createdAt,
-    })),
+    data: formatTeachingAssignmentDtos(assignments, teacher.user?.name),
   })
 }
 
