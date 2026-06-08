@@ -24,6 +24,67 @@ const STATUS_TEXT = {
   no_feedback: 'No feedback',
 }
 
+function AttendanceComplianceLists({ data }) {
+  const completed = data?.attendanceToday?.completed || []
+  const missing = data?.attendanceToday?.missing || []
+  const dateLabel = data?.attendanceToday?.date || 'today'
+
+  return (
+    <div className="space-y-4">
+      <p className="text-xs text-royalPurple-text3">
+        Based on attendance recorded today ({dateLabel}). Timetable engagement is not required until
+        conflict-free generation is available.
+      </p>
+
+      <div>
+        <p className="text-sm font-medium text-royalPurple-successTx mb-2">
+          Completed attendance ({completed.length})
+        </p>
+        {completed.length === 0 ? (
+          <p className="text-sm text-royalPurple-text3">
+            No teachers have recorded attendance yet.
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {completed.map((row) => (
+              <li
+                key={row.teacherId}
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 rounded-lg border border-royalPurple-success/30 bg-royalPurple-success/10 px-3 py-2 text-sm"
+              >
+                <span className="font-medium text-royalPurple-text1">{row.name}</span>
+                <span className="text-royalPurple-text2 text-xs">{row.detail}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div>
+        <p className="text-sm font-medium text-royalPurple-dangerTx mb-2">
+          Not yet recorded ({missing.length})
+        </p>
+        {missing.length === 0 ? (
+          <p className="text-sm text-royalPurple-text2">
+            All teachers with a teaching load have recorded attendance today.
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {missing.map((row) => (
+              <li
+                key={row.teacherId}
+                className="flex items-center justify-between rounded-lg border border-royalPurple-danger/30 bg-royalPurple-danger/10 px-3 py-2 text-sm"
+              >
+                <span className="font-medium text-royalPurple-text1">{row.name}</span>
+                <span className="text-xs text-royalPurple-text3">{row.reason}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  )
+}
+
 /**
  * @param {{ domain?: 'assessments'|'attendance'|'ecz_sba'|'results'|'results_feedback' }} props
  */
@@ -53,7 +114,8 @@ export function TeacherCompliancePanel({ domain }) {
 
   const flaggedForDomain = domain ? data.flagged.filter((f) => f.domain === domain) : data.flagged
 
-  const missingCount = flaggedForDomain.length
+  const missingCount =
+    domain === 'attendance' ? (data.attendanceToday?.missing || []).length : flaggedForDomain.length
   const domainLabel = domain ? DOMAIN_LABELS[domain] || domain : 'compliance'
 
   return (
@@ -74,7 +136,9 @@ export function TeacherCompliancePanel({ domain }) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        {missingCount === 0 ? (
+        {domain === 'attendance' ? (
+          <AttendanceComplianceLists data={data} />
+        ) : missingCount === 0 ? (
           <p className="text-sm text-royalPurple-text2">
             All teachers with a teaching load are compliant for {domainLabel.toLowerCase()}.
           </p>

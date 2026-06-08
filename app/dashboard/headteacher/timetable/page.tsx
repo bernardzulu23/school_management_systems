@@ -659,7 +659,7 @@ function HeadteacherTimetablePageContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ term, academicYear, replaceExisting: true }),
+        body: JSON.stringify({ term, academicYear, replaceExisting: true, allowPartial: true }),
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) {

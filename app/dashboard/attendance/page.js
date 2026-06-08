@@ -192,7 +192,12 @@ export default function AttendancePage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ date: selectedDate, records }),
+        body: JSON.stringify({
+          date: selectedDate,
+          classId: selectedClass,
+          subjectId: selectedSubjectId || undefined,
+          records,
+        }),
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json.error || 'Failed to save attendance')
@@ -201,6 +206,7 @@ export default function AttendancePage() {
     },
     onSuccess: (result) => {
       queryClient.invalidateQueries(['teacher-dashboard'])
+      queryClient.invalidateQueries(['teacher-compliance'])
       queryClient.invalidateQueries(['class-students', selectedClass])
       queryClient.invalidateQueries([
         'attendance-records',

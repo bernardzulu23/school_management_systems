@@ -6,6 +6,8 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { sendAttendanceStatusSmsBatch } from '@/lib/attendance/attendanceSms'
 import { mergeAttendanceRegister } from '@/lib/attendance/unified-register'
+import { syncWebAttendanceToSession } from '@/lib/compliance/attendanceToday'
+import { openAttendanceSession, recordAttendanceMark } from '@/lib/attendance/sessions'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -139,5 +141,32 @@ export const POST = withErrorHandler(async function POST(request) {
 
   const smsSummary = await sendAttendanceStatusSmsBatch({ schoolId, writes: finalWrites })
 
-  return NextResponse.json({ success: true, sms: smsSummary })
+  const classId = String(rawBody?.classId || '').trim()
+  let subjectId = String(rawBody?.subjectId || '').trim()
+  if (classId && !subjectId) {
+    const assignment = await prisma.teachingAssignment.findFirst({
+      where: { schoolId, classId, teacher: { userId: auth.user.id } },
+      select: { subjectId: true },
+    })
+    subjectId = assignment?.subjectId || ''
+  }
+
+  let sessionSync = null
+  if (classId && subjectId) {
+    try {
+      sessionSync = await syncWebAttendanceToSession({
+        schoolId,
+        teacherUserId: auth.user.id,
+        classId,
+        subjectId,
+        records: finalWrites,
+        openAttendanceSession,
+        recordAttendanceMark,
+      })
+    } catch (err) {
+      console.warn('Web attendance session sync failed:', err?.message || err)
+    }
+  }
+
+  return NextResponse.json({ success: true, sms: smsSummary, sessionSync })
 })
