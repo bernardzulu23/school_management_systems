@@ -10,6 +10,8 @@ import { useAuth } from '@/lib/auth'
 import { User, KeyRound, Upload, Eye, EyeOff } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { formatDDMMYYYY } from '@/lib/utils/formHelpers'
+import { getPasswordFormError } from '@/components/ui/PasswordRequirements'
+import PasswordRequirements from '@/components/ui/PasswordRequirements'
 
 const MAX_BYTES = 10 * 1024 * 1024
 
@@ -205,8 +207,9 @@ export default function ProfilePage() {
       toast.error('Enter current password and new password')
       return
     }
-    if (passwordForm.newPassword.length < 6) {
-      toast.error('New password must be at least 6 characters')
+    const passwordError = getPasswordFormError(passwordForm.newPassword)
+    if (passwordError) {
+      toast.error(passwordError)
       return
     }
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
@@ -459,6 +462,7 @@ export default function ProfilePage() {
                   </button>
                 </div>
               </div>
+              <PasswordRequirements password={passwordForm.newPassword} />
               <div>
                 <label className="block text-sm text-royalPurple-text2 mb-1">
                   Confirm New Password

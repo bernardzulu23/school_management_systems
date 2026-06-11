@@ -218,7 +218,8 @@ export const POST = withErrorHandler(async (request) => {
 
   // Use a secure random password for initial creation instead of hardcoded 'password123'
   // In a real app, this would trigger a password reset email
-  const tempPassword = Math.random().toString(36).slice(-10) + 'A1!'
+  const { generateCompliantPassword } = await import('@/lib/security/passwordPolicy')
+  const tempPassword = generateCompliantPassword()
   const hashedPassword = await bcrypt.hash(tempPassword, 12)
 
   const schoolId = auth.user?.schoolId

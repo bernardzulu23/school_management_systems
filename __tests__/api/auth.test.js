@@ -68,7 +68,7 @@ describe('POST /api/auth/login', () => {
       buildRequest({
         method: 'POST',
         url: 'http://localhost:3000/api/auth/login',
-        body: { email: 'teacher@test.com', password: 'correct-password', subdomain: 'testschool' },
+        body: { email: 'teacher@test.com', password: 'CorrectP@ss1', subdomain: 'testschool' },
         headers: { host: 'testschool.localhost:3000' },
       })
     )
@@ -79,6 +79,23 @@ describe('POST /api/auth/login', () => {
     expect(json.user.email).toBe('teacher@test.com')
     expect(res.cookies.get('access_token')?.value).toBeTruthy()
     expect(res.cookies.get('refresh_token')?.value).toBeTruthy()
+  })
+
+  it('returns 403 when password is correct but does not meet policy', async () => {
+    findUserByEmail.mockResolvedValue(baseUser)
+
+    const res = await POST(
+      buildRequest({
+        method: 'POST',
+        url: 'http://localhost:3000/api/auth/login',
+        body: { email: 'teacher@test.com', password: 'weakpass', subdomain: 'testschool' },
+        headers: { host: 'testschool.localhost:3000' },
+      })
+    )
+
+    expect(res.status).toBe(403)
+    const json = await parseJson(res)
+    expect(json.code).toBe('WEAK_PASSWORD')
   })
 
   it('returns 401 for wrong password', async () => {
@@ -141,7 +158,7 @@ describe('POST /api/auth/login', () => {
       buildRequest({
         method: 'POST',
         url: 'http://localhost:3000/api/auth/login',
-        body: { email: 'teacher@test.com', password: 'correct-password', subdomain: 'testschool' },
+        body: { email: 'teacher@test.com', password: 'CorrectP@ss1', subdomain: 'testschool' },
       })
     )
 

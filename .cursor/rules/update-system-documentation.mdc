@@ -1,0 +1,37 @@
+---
+description: Keep docs/SYSTEM_DOCUMENTATION.md in sync with meaningful codebase changes
+alwaysApply: true
+---
+
+# Update System Documentation
+
+When you make **meaningful changes** to ZSMS, update `docs/SYSTEM_DOCUMENTATION.md` in the **same session** before finishing. Bump the **Last updated** date (YYYY-MM-DD) at the top of that file.
+
+## When to update (required)
+
+| Change type | Update these sections |
+| ----------- | --------------------- |
+| New/removed API routes or conventions | API conventions, Core domains, Related docs; run `npm run docs:api-routes` |
+| Prisma schema / tenancy model | Data model overview, Core domains |
+| Auth, proxy.js, CSRF, CSP, RLS | Security model, System architecture |
+| New integration or env var | Integrations, Environment variables; also `docs/ENVIRONMENT.md` if new var |
+| Deployment, migrations, CI | Deployment and migrations |
+| New dashboard role or portal | User roles and portals |
+| Mobile API or zsms-mobile scope | Mobile app section |
+| Major new module (ECZ, timetable, billing, etc.) | Core domains table, Executive summary if user-facing |
+| Tech stack version bumps (Next, Prisma, Expo) | Technology stack table, header version note |
+
+## When to skip
+
+- Typo fixes, copy changes, or styling-only edits
+- Test-only changes with no behavior/API/schema impact
+- Refactors that do not change architecture or external contracts
+
+## How to update
+
+1. Read the current `docs/SYSTEM_DOCUMENTATION.md`.
+2. Edit only sections affected by your change; keep pointers to deeper docs (do not duplicate DEVELOPER_GUIDE content).
+3. Verify paths and names against the actual codebase.
+4. Set **Last updated** to today's date.
+
+If unsure whether a change is "meaningful," update the doc — prefer accuracy over omission.

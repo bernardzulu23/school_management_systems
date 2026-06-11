@@ -12,6 +12,7 @@ import {
 import prisma from '@/lib/prisma'
 import { ACCESS_TOKEN_MAX_AGE, authCookieOptions } from '@/lib/security/cookies'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+import { passwordPolicyError } from '@/lib/security/passwordPolicy'
 
 export const GET = withSecureApi(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -106,11 +107,9 @@ export const PATCH = withSecureApi(async function PATCH(request) {
   }
 
   if (changingPassword) {
-    if (newPassword.length < 8) {
-      return NextResponse.json(
-        { error: 'New password must be at least 8 characters' },
-        { status: 400 }
-      )
+    const policyError = passwordPolicyError(newPassword)
+    if (policyError) {
+      return NextResponse.json({ error: policyError, code: 'WEAK_PASSWORD' }, { status: 400 })
     }
   }
 

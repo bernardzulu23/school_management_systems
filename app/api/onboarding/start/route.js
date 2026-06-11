@@ -8,6 +8,8 @@ import { sendOnboardingVerificationEmail } from '@/config/email'
 import { signOnboardingToken } from '@/lib/middleware/onboardingAuth'
 import { getOnboardingVerifyUrl } from '@/lib/onboarding/emailLinks'
 import { INDIVIDUAL_PLANS } from '@/lib/onboarding/individual'
+import { passwordPolicyError } from '@/lib/security/passwordPolicy'
+import { withSecureApi } from '@/lib/middleware/secureApi'
 
 function isValidEmail(value) {
   const email = String(value || '')
@@ -16,7 +18,7 @@ function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
-export async function POST(request) {
+export const POST = withSecureApi(async function POST(request) {
   try {
     const rl = rateLimiter(request, {
       limit: process.env.NODE_ENV === 'production' ? 10 : 100,
@@ -62,8 +64,9 @@ export async function POST(request) {
       plan = requestedPlan
     }
     if (!isValidEmail(email)) return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
-    if (password.length < 6) {
-      return NextResponse.json({ error: 'Password must be at least 6 characters' }, { status: 400 })
+    const policyError = passwordPolicyError(password)
+    if (policyError) {
+      return NextResponse.json({ error: policyError, code: 'WEAK_PASSWORD' }, { status: 400 })
     }
 
     const existing = await prisma.schoolRegistration.findUnique({ where: { email } })
@@ -271,4 +274,4 @@ export async function POST(request) {
       { status: 500 }
     )
   }
-}
+})

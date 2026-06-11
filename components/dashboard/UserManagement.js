@@ -26,6 +26,7 @@ import { SCHOOL_SUBJECTS } from '@/data/subjects'
 import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
 import SubjectSelection from '@/components/registration/SubjectSelection'
 import UserTypeCards from '@/components/dashboard/UserTypeCards'
+import { evaluatePassword, getPasswordFormError } from '@/components/ui/PasswordRequirements'
 
 export default function UserManagement() {
   const [activeUserType, setActiveUserType] = useState('all')
@@ -1621,6 +1622,11 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
       toast.error('User account not linked')
       return
     }
+    const passwordError = getPasswordFormError(newPassword)
+    if (passwordError) {
+      toast.error(passwordError)
+      return
+    }
     setPasswordSaving(true)
     try {
       await api.post(`/users/${userId}/password`, { newPassword })
@@ -1742,7 +1748,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
               </div>
               <Button
                 onClick={resetPassword}
-                disabled={passwordSaving || !newPassword || newPassword.length < 6}
+                disabled={passwordSaving || !newPassword || !evaluatePassword(newPassword).isValid}
               >
                 Update Password
               </Button>

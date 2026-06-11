@@ -3,8 +3,10 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { passwordPolicyError } from '@/lib/security/passwordPolicy'
+import { withSecureApi } from '@/lib/middleware/secureApi'
 
-export async function POST(request) {
+export const POST = withSecureApi(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -31,8 +33,9 @@ export async function POST(request) {
   if (!currentPassword || !newPassword) {
     return NextResponse.json({ error: 'Current and new password are required' }, { status: 400 })
   }
-  if (newPassword.length < 6) {
-    return NextResponse.json({ error: 'Password must be at least 6 characters' }, { status: 400 })
+  const policyError = passwordPolicyError(newPassword)
+  if (policyError) {
+    return NextResponse.json({ error: policyError, code: 'WEAK_PASSWORD' }, { status: 400 })
   }
   if (newPassword !== confirmPassword) {
     return NextResponse.json({ error: 'Passwords do not match' }, { status: 400 })
@@ -54,4 +57,4 @@ export async function POST(request) {
   })
 
   return NextResponse.json({ success: true })
-}
+})

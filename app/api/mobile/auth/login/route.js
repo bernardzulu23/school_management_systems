@@ -10,6 +10,7 @@ import { resolvePublicSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { JWT_AUDIENCE } from '@/lib/middleware/auth'
+import { evaluatePassword, weakPasswordLoginPayload } from '@/lib/security/passwordPolicy'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
@@ -118,6 +119,10 @@ export const POST = withSecureApi(async function POST(request) {
     const isValid = await bcrypt.compare(password, storedHash)
     if (!isValid) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+    }
+
+    if (!evaluatePassword(password).isValid) {
+      return NextResponse.json(weakPasswordLoginPayload(), { status: 403 })
     }
 
     const accessToken = jwt.sign(

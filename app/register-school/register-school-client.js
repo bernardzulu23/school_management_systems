@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Eye, EyeOff } from 'lucide-react'
 import { ProvinceDistrictFields } from '@/components/onboarding/ProvinceDistrictFields'
+import { evaluatePassword } from '@/lib/security/passwordPolicy'
 
 function normalizeSubdomain(input) {
   const raw = String(input || '')
@@ -95,14 +96,8 @@ export default function RegisterSchoolClient() {
   }, [passwordStrength])
 
   const getPasswordStrength = (pwd) => {
-    const p = String(pwd || '')
-    let score = 0
-    if (p.length >= 8) score++
-    if (p.length >= 12) score++
-    if (/[A-Z]/.test(p)) score++
-    if (/[0-9]/.test(p)) score++
-    if (/[^A-Za-z0-9]/.test(p)) score++
-    return score
+    const { requirements } = evaluatePassword(pwd)
+    return Object.values(requirements).filter(Boolean).length
   }
 
   const validateZambianPhone = (phone) => {
@@ -391,7 +386,7 @@ export default function RegisterSchoolClient() {
               subdomainAvailable === false ||
               Boolean(subdomainError) ||
               Boolean(phoneError) ||
-              passwordStrength < 3 ||
+              !evaluatePassword(form.adminPassword).isValid ||
               !form.province.trim() ||
               !form.district.trim()
             }

@@ -28,6 +28,7 @@ import AcademicInfoStep from './enhanced-registration/AcademicInfoStep'
 import ProfessionalInfoStep from './enhanced-registration/ProfessionalInfoStep'
 import AdministrativeInfoStep from './enhanced-registration/AdministrativeInfoStep'
 import ParentGuardianStep from './enhanced-registration/ParentGuardianStep'
+import { getPasswordFormError } from '@/components/ui/PasswordRequirements'
 
 let lookupsCache = null
 let lookupsCacheAt = 0
@@ -314,8 +315,8 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
       if (!formData.email.trim()) newErrors.email = 'Email is required'
       if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid'
       if (!formData.password) newErrors.password = 'Password is required'
-      if (formData.password.length < 6)
-        newErrors.password = 'Password must be at least 6 characters'
+      const passwordError = getPasswordFormError(formData.password)
+      if (formData.password && passwordError) newErrors.password = passwordError
       if (formData.password !== formData.confirmPassword)
         newErrors.confirmPassword = 'Passwords do not match'
       if (

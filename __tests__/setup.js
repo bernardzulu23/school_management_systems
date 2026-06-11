@@ -43,6 +43,7 @@ vi.mock('@/lib/sms', () => ({
 vi.mock('@/lib/security/cookies', () => ({
   clearAuthSessionCookies: vi.fn(),
   authCookieOptions: vi.fn(() => ({})),
+  refreshTokenCookieOptions: vi.fn(() => ({ path: '/api/auth/refresh' })),
   ACCESS_TOKEN_MAX_AGE: 3600,
   REFRESH_TOKEN_MAX_AGE: 86400,
   REMEMBER_ACCESS_TOKEN_MAX_AGE: 3600,

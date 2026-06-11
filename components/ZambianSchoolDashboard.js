@@ -12,6 +12,7 @@ import { powerManagement } from '../lib/powerManagement.js'
 import { languageSystem } from '../lib/languageSystem.js'
 import { smsSystem } from '../lib/smsSystem.js'
 import { mobileMoneySystem } from '../lib/mobileMoneySystem.js'
+import { escapeHtml } from '../lib/security.js'
 
 // Sub-components
 import SystemStatusCard from './dashboard/zambian/SystemStatusCard'
@@ -179,7 +180,7 @@ const ZambianSchoolDashboard = () => {
       ">
         <div>
           🚨 <strong>EMERGENCY ALERT</strong><br>
-          ${alertData.description}<br>
+          ${escapeHtml(String(alertData.description || ''))}<br>
           <small>Emergency services have been notified</small><br>
           <button onclick="this.parentElement.parentElement.remove()" style="
             margin-top: 20px;

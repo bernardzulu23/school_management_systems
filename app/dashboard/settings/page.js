@@ -9,6 +9,8 @@ import { Settings, Shield, Save, Camera, Eye, EyeOff, Info } from 'lucide-react'
 import { AppVersionLabel } from '@/components/dashboard/AppVersionLabel'
 import { useAuth } from '@/lib/auth'
 import ProfilePictureUpload from '@/components/ui/ProfilePictureUpload'
+import { getPasswordFormError, evaluatePassword } from '@/components/ui/PasswordRequirements'
+import PasswordRequirements from '@/components/ui/PasswordRequirements'
 
 export default function SettingsPage() {
   const { user, updateUser } = useAuth()
@@ -25,6 +27,15 @@ export default function SettingsPage() {
   const role = String(user?.role || '').toLowerCase()
 
   const handleChangePassword = async () => {
+    const passwordError = getPasswordFormError(newPassword)
+    if (passwordError) {
+      toast.error(passwordError)
+      return
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error('Passwords do not match')
+      return
+    }
     setSavingPassword(true)
     try {
       const res = await fetch('/api/account/password', {
@@ -190,6 +201,7 @@ export default function SettingsPage() {
                       </button>
                     </div>
                   </div>
+                  <PasswordRequirements password={newPassword} />
                   <div>
                     <label className="block text-sm font-medium text-royalPurple-text2 mb-2">
                       Confirm Password
@@ -220,7 +232,11 @@ export default function SettingsPage() {
                   <Button
                     onClick={handleChangePassword}
                     disabled={
-                      savingPassword || !currentPassword || !newPassword || !confirmPassword
+                      savingPassword ||
+                      !currentPassword ||
+                      !newPassword ||
+                      !confirmPassword ||
+                      !evaluatePassword(newPassword).isValid
                     }
                     className="flex items-center gap-2"
                   >

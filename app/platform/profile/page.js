@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { ArrowLeft, LogOut, Shield, User } from 'lucide-react'
+import { getPasswordFormError } from '@/components/ui/PasswordRequirements'
+import PasswordRequirements from '@/components/ui/PasswordRequirements'
 
 export default function PlatformProfilePage() {
   const router = useRouter()
@@ -54,6 +56,14 @@ export default function PlatformProfilePage() {
     if (newPassword && newPassword !== confirmPassword) {
       toast.error('New passwords do not match')
       return
+    }
+
+    if (newPassword) {
+      const passwordError = getPasswordFormError(newPassword)
+      if (passwordError) {
+        toast.error(passwordError)
+        return
+      }
     }
 
     const changingEmail = email.trim().toLowerCase() !== profile?.email?.toLowerCase()
@@ -205,6 +215,7 @@ export default function PlatformProfilePage() {
                   placeholder="Leave blank to keep current"
                 />
               </div>
+              {newPassword ? <PasswordRequirements password={newPassword} /> : null}
               <div>
                 <label className="block text-sm text-muted mb-1">Confirm new password</label>
                 <input

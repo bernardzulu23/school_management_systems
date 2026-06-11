@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Shield, Mail, Eye, EyeOff, KeyRound } from 'lucide-react'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
+import PasswordRequirements from '@/components/ui/PasswordRequirements'
 
 export default function AccountSetupStep({
   formData,
@@ -96,14 +97,7 @@ export default function AccountSetupStep({
         </div>
       ) : null}
 
-      <div className="mt-6 p-4 bg-royalPurple-accent rounded-lg border border-royalPurple-border2">
-        <h4 className="font-medium text-royalPurple-accentTx mb-2">Password Requirements:</h4>
-        <ul className="text-sm text-royalPurple-accentTx space-y-1">
-          <li>• At least 6 characters long</li>
-          <li>• Include both letters and numbers</li>
-          <li>• Use a unique password you haven't used elsewhere</li>
-        </ul>
-      </div>
+      <PasswordRequirements password={formData.password} className="mt-6" />
     </FormSection>
   )
 }

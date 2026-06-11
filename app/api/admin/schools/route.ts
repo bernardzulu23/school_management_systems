@@ -4,6 +4,7 @@ import { hash } from 'bcryptjs'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { requirePlatformAdmin } from '@/lib/middleware/platformAuth'
 import { toPlatformSchoolSummary } from '@/lib/platform/schoolEligibility'
+import { passwordPolicyError } from '@/lib/security/passwordPolicy'
 
 // GET all schools (admin only)
 export async function GET(request: NextRequest) {
@@ -93,8 +94,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (String(adminPassword).length < 8) {
-      return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 })
+    const policyError = passwordPolicyError(String(adminPassword))
+    if (policyError) {
+      return NextResponse.json({ error: policyError, code: 'WEAK_PASSWORD' }, { status: 400 })
     }
 
     // Validate subdomain format (lowercase, alphanumeric, hyphens only)

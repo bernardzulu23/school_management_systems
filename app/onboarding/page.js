@@ -12,6 +12,8 @@ import ProviderLogos, { ProviderLogoImage } from '@/components/payments/Provider
 import { Eye, EyeOff } from 'lucide-react'
 import { ProvinceDistrictFields } from '@/components/onboarding/ProvinceDistrictFields'
 import { TRIAL_MONTHS } from '@/lib/billing/subscription'
+import { evaluatePassword } from '@/lib/security/passwordPolicy'
+import PasswordRequirements from '@/components/ui/PasswordRequirements'
 
 function parsePlanParam(searchParams) {
   const raw = String(searchParams?.get?.('plan') || '')
@@ -58,7 +60,10 @@ function OnboardingPageContent() {
     setPlan(next)
   }, [searchParams])
 
-  const canStart = useMemo(() => email.trim() && password.length >= 6, [email, password])
+  const canStart = useMemo(
+    () => email.trim() && evaluatePassword(password).isValid,
+    [email, password]
+  )
   const canPay = useMemo(() => accountNumber.trim(), [accountNumber])
   const canSetup = useMemo(
     () =>
@@ -410,7 +415,7 @@ function OnboardingPageContent() {
                       type={showPassword ? 'text' : 'password'}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Min 6 characters"
+                      placeholder="Min 8 characters with mixed case, numbers & symbols"
                       className="pr-10"
                     />
                     <button
@@ -423,6 +428,7 @@ function OnboardingPageContent() {
                     </button>
                   </div>
                 </div>
+                <PasswordRequirements password={password} />
               </div>
               <Button
                 onClick={() => start()}

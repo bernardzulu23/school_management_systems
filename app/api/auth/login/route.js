@@ -14,6 +14,7 @@ import {
   REMEMBER_ACCESS_TOKEN_MAX_AGE,
   REMEMBER_REFRESH_TOKEN_MAX_AGE,
   authCookieOptions,
+  refreshTokenCookieOptions,
 } from '@/lib/security/cookies'
 import { setCsrfCookie } from '@/lib/security/csrf'
 import { withSecureApi } from '@/lib/middleware/secureApi'
@@ -26,6 +27,7 @@ import {
   getPlatformLoginHint,
 } from '@/lib/platform/platformAdminAuth'
 import { buildPlatformLoginResponse } from '@/lib/platform/completePlatformLogin'
+import { evaluatePassword, weakPasswordLoginPayload } from '@/lib/security/passwordPolicy'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
@@ -100,6 +102,9 @@ export const POST = withSecureApi(async function POST(request) {
     await ensurePlatformAdminFromEnv()
     const platformAdmin = await verifyPlatformAdminCredentials(normalizedEmail, password)
     if (platformAdmin) {
+      if (!evaluatePassword(password).isValid) {
+        return NextResponse.json(weakPasswordLoginPayload(), { status: 403 })
+      }
       log.response(200, Date.now() - start)
       return buildPlatformLoginResponse(request, platformAdmin)
     }
@@ -247,6 +252,10 @@ export const POST = withSecureApi(async function POST(request) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
 
+    if (!evaluatePassword(password).isValid) {
+      return NextResponse.json(weakPasswordLoginPayload(), { status: 403 })
+    }
+
     // 4. Token Generation & Cookie Setting (include schoolId for multi-tenant isolation)
     const remember = Boolean(rememberMe)
     const accessMaxAge = remember ? REMEMBER_ACCESS_TOKEN_MAX_AGE : ACCESS_TOKEN_MAX_AGE
@@ -310,7 +319,7 @@ export const POST = withSecureApi(async function POST(request) {
     response.cookies.set(
       'refresh_token',
       newRefreshTokenValue,
-      authCookieOptions(request, { maxAgeSeconds: refreshMaxAge, name: 'refresh_token' })
+      refreshTokenCookieOptions(request, { maxAgeSeconds: refreshMaxAge })
     )
     setCsrfCookie(response, request)
 

@@ -9,6 +9,8 @@ import FormField from '@/components/forms/FormField'
 import { useSchool } from '@/lib/context/SchoolContext'
 import toast from 'react-hot-toast'
 import { SchoolLogo } from '@/components/SchoolLogo'
+import { getPasswordFormError } from '@/components/ui/PasswordRequirements'
+import PasswordRequirements from '@/components/ui/PasswordRequirements'
 
 export default function ResetPasswordTokenPage() {
   const router = useRouter()
@@ -25,6 +27,12 @@ export default function ResetPasswordTokenPage() {
 
     if (password !== confirmPassword) {
       toast.error('Passwords do not match')
+      return
+    }
+
+    const passwordError = getPasswordFormError(password)
+    if (passwordError) {
+      toast.error(passwordError)
       return
     }
 
@@ -114,6 +122,8 @@ export default function ResetPasswordTokenPage() {
             required
             icon={Lock}
           />
+
+          <PasswordRequirements password={password} />
 
           <Button type="submit" className="w-full py-3" disabled={isLoading}>
             {isLoading ? (

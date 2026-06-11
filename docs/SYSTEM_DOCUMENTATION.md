@@ -1,0 +1,536 @@
+# ZSMS System Documentation
+
+**Zambian School Management System (ZSMS)**  
+**Last updated:** 2026-06-12  
+**Application version:** 2.0.3 (`package.json`)  
+**Document version:** 1.0
+
+This is the **authoritative system overview** for the ZSMS monorepo. For step-by-step setup, feature deep-dives, and API catalogs, follow the links in [Related documentation](#related-documentation).
+
+---
+
+## Executive summary
+
+ZSMS is a **multi-tenant school management platform** built for Zambian primary and secondary schools. Each school operates in an isolated tenant (`schoolId`), typically accessed via a **per-school subdomain** (e.g. `https://stmarys.bluepeacktechnologies.com`).
+
+The product delivers:
+
+- Role-based web dashboards (headteacher, HOD, teacher, student, admin)
+- **ECZ-aligned** School-Based Assessment (SBA) and submission workflows
+- Timetabling, attendance (including QR and offline), lesson plans, and results
+- **Mobile money billing** (Lipila), email onboarding (Resend), and SMS (Africa's Talking)
+- AI-assisted teaching tools (Groq / Vercel AI SDK)
+- An optional **Expo mobile app** (`zsms-mobile/`) for teacher attendance and sync
+- A **platform super-admin** console for operator-level school and billing oversight
+
+The web app is a **Next.js 16 App Router** application backed by **PostgreSQL (Neon)** via **Prisma 6**, deployed primarily on **Vercel**. Security is enforced at the edge through `proxy.js` (subdomain routing, CSP, CSRF, rate limits, auth gates).
+
+---
+
+## System architecture
+
+```mermaid
+flowchart TB
+  subgraph clients [Clients]
+    Web[Web PWA - Browser]
+    Mobile[zsms-mobile - Expo]
+    Platform[Platform admin - apex domain]
+  end
+
+  subgraph edge [Edge security - proxy.js]
+    Proxy[Subdomain resolve, CSP nonce, CSRF, rate limit, auth gate]
+  end
+
+  subgraph next [Next.js 16 application]
+    Pages[app/ - marketing, login, onboarding, join]
+    Dash[app/dashboard/ - role UIs]
+    API[app/api/ - REST handlers]
+    PlatformUI[app/platform/ - super-admin]
+  end
+
+  subgraph lib [Shared libraries]
+    Tenant[lib/tenant/ - resolveAuthenticatedSchoolId]
+    Auth[lib/middleware/auth]
+    Prisma[lib/prisma/ - client + withTenant]
+    ECZ[lib/ecz/ - compliance + export]
+    AI[lib/ai/ - Groq client + schemas]
+    Billing[lib/billing/]
+    SMS[lib/sms/]
+  end
+
+  subgraph data [Data layer]
+    DB[(PostgreSQL / Neon)]
+    RLS[Postgres RLS - app.current_school_id]
+  end
+
+  subgraph external [External services]
+    Lipila[Lipila - mobile money]
+    Resend[Resend - email]
+    AT[Africa's Talking - SMS]
+    Groq[Groq - AI]
+    Sentry[Sentry - errors]
+    Sanity[Sanity - marketing CMS]
+    QStash[Upstash QStash - SMS workers]
+    Blob[Vercel Blob - file storage]
+  end
+
+  subgraph optional [Optional services]
+    Solver[solver-service/ - Python OR-Tools]
+    ORTools[ORTOOLS_SOLVER_URL - remote solver]
+  end
+
+  Web --> Proxy
+  Mobile --> Proxy
+  Platform --> Proxy
+  Proxy --> Pages
+  Proxy --> Dash
+  Proxy --> API
+  Proxy --> PlatformUI
+  API --> Tenant
+  API --> Auth
+  API --> Prisma
+  Prisma --> DB
+  Prisma --> RLS
+  API --> ECZ
+  API --> AI
+  API --> Billing
+  API --> SMS
+  Billing --> Lipila
+  SMS --> AT
+  AI --> Groq
+  Pages --> Sanity
+  API --> Solver
+  API --> ORTools
+```
+
+### Request flow (typical tenant API route)
+
+```
+Client → proxy.js (security headers, subdomain → x-school-subdomain)
+      → app/api/.../route.js
+      → authMiddleware (JWT cookie / Bearer)
+      → resolveAuthenticatedSchoolId (tenant from session, not request body)
+      → requireFeature / subscriptionGate (plan)
+      → Prisma query (always filter by schoolId)
+      → NextResponse.json
+```
+
+See [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) for the canonical route template.
+
+---
+
+## Technology stack
+
+| Layer            | Technology                                          | Location / notes                                 |
+| ---------------- | --------------------------------------------------- | ------------------------------------------------ |
+| Framework        | Next.js 16 (App Router)                             | `app/`, `next.config.js`                         |
+| UI               | React 19, Tailwind CSS, Lucide                      | `components/`, `styles/`                         |
+| State            | Zustand (auth), TanStack Query                      | `lib/hooks/`, dashboard pages                    |
+| Database         | PostgreSQL + Prisma 6                               | `prisma/schema.prisma`                           |
+| DB hosting       | Neon (pooled + direct URLs)                         | `DATABASE_URL`, `DIRECT_URL`                     |
+| Edge security    | `proxy.js`                                          | Root — CSP, CSRF, subdomain, rate limits         |
+| Auth             | JWT (httpOnly cookies + refresh)                    | `lib/middleware/auth`, `lib/security/cookies.js` |
+| Tenancy          | `schoolId` + subdomain                              | `lib/tenant/resolveSchoolId.js`                  |
+| Email            | Resend                                              | `config/email.js`                                |
+| Payments         | Lipila (MTN / Airtel / Zamtel)                      | `lib/billing/`, `/api/payments/lipila/callback`  |
+| SMS              | Africa's Talking + QStash workers                   | `lib/sms/`, `/api/sms/*`                         |
+| AI               | Groq (+ optional Gemini fallback) via Vercel AI SDK | `lib/ai/`, `lib/config/env.js`                   |
+| Observability    | Sentry (`@sentry/nextjs`)                           | `sentry.*.config.ts`, `/monitoring` tunnel       |
+| Marketing CMS    | Sanity (optional)                                   | `lib/sanity/`, `sanity/queries/`                 |
+| File storage     | Vercel Blob                                         | `@vercel/blob`                                   |
+| Rate limiting    | Upstash Redis (optional)                            | `lib/middleware/upstashLimiters.js`              |
+| PWA / offline    | Workbox, Dexie                                      | `public/sw.js`, `lib/offline/`                   |
+| Mobile           | Expo 56 + React Native                              | `zsms-mobile/`                                   |
+| Timetable solver | TypeScript greedy + optional Python service         | `lib/timetable/`, `solver-service/`              |
+| Testing          | Vitest, Playwright, Jest (legacy)                   | `__tests__/`, `vitest.config.*`                  |
+| CI               | GitHub Actions                                      | `.github/workflows/`                             |
+| Deployment       | Vercel (primary)                                    | `vercel.json`, `scripts/vercel-build.js`         |
+
+**Node.js:** 20.x (see `package.json` engines).
+
+---
+
+## Repository structure
+
+```
+school_management_systems/
+├── app/                    # Next.js App Router — pages and API routes
+│   ├── api/                # ~280 REST route handlers
+│   ├── dashboard/          # Role-based dashboards (~100 pages)
+│   ├── platform/           # Platform super-admin UI
+│   ├── login/, onboarding/, join/
+│   └── layout.js           # Server layout; imports lib/config/env.js validation
+├── components/             # React UI (dashboard, forms, timetable, ui/)
+├── lib/                    # Business logic, middleware, integrations (~300 modules)
+│   ├── ai/                 # Groq client, schemas, streaming
+│   ├── attendance/         # Sessions, QR, live summary
+│   ├── billing/            # Plans, Lipila activation
+│   ├── ecz/                # SBA rules, export, rubrics
+│   ├── middleware/         # auth, errorHandler, subscriptionGate, verify-tenant
+│   ├── prisma/             # Client, withTenant, tenantClient
+│   ├── security/           # headers, CSRF, cookies, rate limits
+│   ├── sms/                # Africa's Talking templates
+│   ├── tenant/             # resolveAuthenticatedSchoolId
+│   └── timetable/          # Scheduler, pipeline, validation
+├── prisma/
+│   ├── schema.prisma       # ~100 models, School-centric multi-tenancy
+│   ├── migrations/         # Production schema migrations
+│   └── seeds/              # ECZ, schools, platform admin, etc.
+├── proxy.js                # Next.js 16 edge proxy — security + tenancy headers
+├── docs/                   # Documentation (this file is the system overview)
+├── __tests__/              # Vitest API/unit tests + Jest legacy tests
+├── scripts/                # Build, seeds, API doc generation, tenant audit
+├── public/                 # Static assets, PWA, fonts
+├── sanity/                 # GROQ queries for marketing homepage
+├── solver-service/         # Optional Python timetable solver (Docker :8001)
+├── zsms-mobile/            # Expo teacher mobile app
+├── config/                 # Email and app config
+├── data/                   # Static subject/catalog data
+└── vercel.json             # Vercel build, region (fra1), cron jobs
+```
+
+---
+
+## Core domains and modules
+
+| Domain                | Purpose                                        | Key paths                                                                                                                |
+| --------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| **Multi-tenancy**     | School isolation by `schoolId` and subdomain   | `prisma/schema.prisma` (`School`), `lib/tenant/`, `proxy.js`                                                             |
+| **Auth & sessions**   | Login, JWT cookies, refresh, password reset    | `app/api/auth/`, `lib/middleware/auth`                                                                                   |
+| **Onboarding**        | School signup, email verify, Lipila payment    | `app/onboarding/`, `app/api/onboarding/`                                                                                 |
+| **Individual portal** | Solo teachers (`SchoolType.INDIVIDUAL`)        | `app/join/`, `app/dashboard/solo/`, `lib/middleware/individual-gate.js`                                                  |
+| **Platform admin**    | Cross-tenant operator console                  | `app/platform/`, `app/api/platform/`, `lib/platform/`                                                                    |
+| **ECZ / SBA**         | ZECF-aligned assessments, scores, submissions  | `lib/ecz/`, `lib/middleware/ecz-validation.js`, `app/api/ecz/`, `app/api/assessments/sba-*`                              |
+| **Timetabling**       | HOD allocations → generate → publish pipeline  | `lib/timetable/pipeline.js`, `app/api/timetable/`, [TIMETABLE_PIPELINE.md](./TIMETABLE_PIPELINE.md)                      |
+| **Attendance**        | Sessions, QR, offline Dexie sync, live summary | `lib/attendance/`, `app/api/attendance/`, [QR_ATTENDANCE.md](./QR_ATTENDANCE.md), [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) |
+| **Lesson plans**      | Authoring, HOD review, AI generation           | `app/api/lesson-plans/`, `lib/lesson-plans/`                                                                             |
+| **Results & reports** | Term reports, MOE exports, teacher results     | `app/api/teacher/results/`, `app/dashboard/headteacher/moe-reports/`                                                     |
+| **Billing**           | Plans, trials, Lipila subscription payments    | `lib/billing/plan-pricing.js`, `app/api/billing/`, `SchoolPlanPayment` model                                             |
+| **SMS**               | Broadcasts, templates, inbound webhooks        | `lib/sms/`, `app/api/sms/`, [SMS_GUIDE.md](./SMS_GUIDE.md)                                                               |
+| **AI features**       | Lesson planner, quizzes, report comments, RAG  | `lib/ai/`, [AI_GUIDE.md](./AI_GUIDE.md), [RAG.md](./RAG.md)                                                              |
+| **Mobile API**        | Teacher attendance, sync, push tokens          | `app/api/mobile/` (12 routes)                                                                                            |
+| **Marketplace**       | Shared teaching materials                      | `app/api/marketplace/`, `SharedMaterial` model                                                                           |
+| **USSD**              | Parent portal via USSD gateway                 | `app/api/ussd/`, [USSD_GUIDE.md](./USSD_GUIDE.md)                                                                        |
+| **Innovation / SDG**  | School innovation projects, SDG dashboard      | `app/dashboard/innovation/`, `app/api/innovation/`                                                                       |
+
+Regenerate the API catalog after route changes: `npm run docs:api-routes` → [API_ROUTES.md](./API_ROUTES.md).
+
+---
+
+## Data model overview
+
+### Tenancy model
+
+- **`School`** is the tenant root (`prisma/schema.prisma`). Almost every domain model includes `schoolId` and relates to `School`.
+- Schools are addressed by **`subdomain`** (unique) or optional **`domain`** (custom domain).
+- **`SchoolType`**: `SCHOOL` (default) or `INDIVIDUAL` (solo teacher workspace).
+- **`User`** belongs to exactly one school; email is unique per school (`@@unique([schoolId, email])`).
+- **`Student`**, **`Teacher`**, **`HeadOfDepartment`** extend users with role-specific profiles.
+
+### Model scale
+
+The Prisma schema defines **~100 models**, grouped roughly as:
+
+| Group              | Examples                                                                                       |
+| ------------------ | ---------------------------------------------------------------------------------------------- |
+| Core tenancy       | `School`, `User`, `RefreshToken`, `AuditLog`, `EnrollmentInvite`                               |
+| People             | `Student`, `Teacher`, `HeadOfDepartment`                                                       |
+| Academic structure | `Class`, `Subject`, `Department`, `TeachingAssignment`, `PupilSubjectEnrollment`               |
+| Timetable          | `TimeSlot`, `TimetableVersion`, `TimetableEntry`, `TeacherAllocation`, `SchedulingRecipe`      |
+| Assessment & ECZ   | `EczAssessment`, `EczAssessmentScore`, `EczSubmission`, `EczCompetency`, `EczSubjectConstruct` |
+| Attendance         | `Attendance`, `AttendanceSession`, `AttendanceMark`                                            |
+| Operations         | `LessonPlan`, `TermReport`, `SmsBroadcast`, `SchoolPlanPayment`, `SchoolRegistration`          |
+| HOD admin          | `HodBudgetCategory`, `HodMeeting`, `HodStockItem`, etc.                                        |
+
+Seed ECZ reference data: `npm run seed:ecz`.
+
+### Row-level security
+
+Postgres **RLS** policies (migration `20260528120000_enable_rls`) complement application-level `schoolId` filtering. Context is set via `lib/db/school-context.js` (`withSchoolContext`, `setSchoolContext`). See [SECURITY.md](./SECURITY.md) and [RLS.md](./RLS.md).
+
+### Prisma tenant helpers
+
+- **`getTenantClient(schoolId)`** — auto-injects `schoolId` on reads/writes (`lib/prisma/tenantClient.js`)
+- **`withTenantClient(request, fn)`** — wraps handlers (`lib/prisma/withTenant.js`)
+- Platform/onboarding routes use **`basePrisma`** from `lib/prisma/client.js`
+
+Run tenant isolation audit before releases: `npm run audit:tenant`.
+
+---
+
+## Security model
+
+### Edge layer (`proxy.js`)
+
+Root-level **Next.js 16 proxy** handles:
+
+| Control                   | Implementation                                                                     |
+| ------------------------- | ---------------------------------------------------------------------------------- |
+| CSP with nonce            | `lib/security/headers.js` — per-request nonce via `x-nonce`                        |
+| CSRF                      | `verifyCsrfRequest` — state-changing `/api/*` except exempt paths (auth, webhooks) |
+| Rate limiting             | `checkProxyRateLimit` — `lib/security/proxyRateLimit.js`                           |
+| Method blocking           | `BLOCKED_HTTP_METHODS`                                                             |
+| Cross-origin API block    | `isForbiddenCrossOrigin`                                                           |
+| Subdomain → tenant header | Sets `x-school-subdomain` from verified hostname only                              |
+| Header stripping          | `stripInternalRequestHeaders` — prevents tenant spoofing (CVE-2025-29927 class)    |
+| Auth gate                 | Protected `/dashboard` and `/api` paths require token cookie or `Authorization`    |
+| Admin API gate            | `/api/admin/*` requires admin role keys                                            |
+
+Static security headers also apply via `next.config.js`; **dynamic CSP uses the proxy nonce**.
+
+### Authentication
+
+- **Access token:** `access_token` httpOnly cookie (JWT, HS256), `sameSite: strict`, `secure` in production
+- **Refresh token:** `refresh_token` httpOnly cookie scoped to `Path=/api/auth/refresh`; signed with `JWT_REFRESH_SECRET` in production
+- **Mobile:** Bearer tokens via `/api/mobile/auth/login` and `/api/mobile/auth/refresh`
+- **Platform:** `isPlatform: true` + `superadmin` role; `schoolId: null` — only controlled cross-tenant bypass
+
+### Password policy
+
+Central rules in `lib/security/passwordPolicy.js` (enforced on server and mirrored in forms via `components/ui/PasswordRequirements.js`):
+
+| Rule      | Requirement                             |
+| --------- | --------------------------------------- |
+| Length    | Minimum 8 characters                    |
+| Uppercase | At least one `A–Z`                      |
+| Lowercase | At least one `a–z`                      |
+| Number    | At least one digit                      |
+| Special   | At least one non-alphanumeric character |
+
+Applied on every password **set/change** path (`/api/auth/register`, onboarding, reset, profile/account password, admin user reset, school registration). **Login is denied** (`403`, code `WEAK_PASSWORD`) when credentials are correct but the password does not meet policy — users must use Forgot Password to upgrade. Auto-generated passwords use `generateCompliantPassword()`.
+
+### XSS and output encoding
+
+- Per-request **CSP nonce** + `strict-dynamic` for scripts (`lib/security/headers.js`, `proxy.js`)
+- API `sanitizeOutput()` strips `<script>` blocks and HTML-escapes string fields (auth and student routes; extend as needed)
+- User-controlled values injected into DOM must use `escapeHtml()` from `lib/security.js` (e.g. emergency alerts in `components/ZambianSchoolDashboard.js`)
+- Prisma ORM is the default data path (parameterized queries); raw SQL uses bound parameters in RAG and health checks
+
+### CORS and CSRF
+
+- CSRF double-submit on mutating `/api/*` via `lib/security/csrf.js` and `proxy.js`
+- CORS allows `X-CSRF-Token` / `x-csrf-token` for credentialed cross-origin clients (`lib/security/headers.js`)
+
+### Tenant trust boundary
+
+**Never trust `schoolId` from request body, query, or client headers.** The authoritative tenant comes from `resolveAuthenticatedSchoolId()` in `lib/tenant/resolveSchoolId.js`, which cross-checks JWT, DB user, subdomain, and rejects mismatches.
+
+See [SECURITY.md](./SECURITY.md) for route classification and IDOR guards (`lib/middleware/verify-tenant.js`).
+
+### Environment validation
+
+Startup validation in `lib/config/env.js` (imported from `app/layout.js`). Production weak-secret checks in `lib/security/env.js`.
+
+---
+
+## API conventions
+
+| Convention     | Detail                                                       |
+| -------------- | ------------------------------------------------------------ |
+| Location       | `app/api/<feature>/route.js` or `[id]/route.js`              |
+| Dynamic routes | `export const dynamic = 'force-dynamic'` for DB/auth routes  |
+| Error handling | `withErrorHandler` from `lib/middleware/errorHandler.js`     |
+| Secure wrapper | `withSecureApi` where applicable                             |
+| Auth           | `authMiddleware(request)` → check `auth.isAuthenticated`     |
+| Roles          | `roleCheck(auth.user, [...])` or `requireRole`               |
+| Tenancy        | `resolveAuthenticatedSchoolId(request, auth.user)`           |
+| Plans          | `requireFeature(schoolId, 'feature-id')`, `subscriptionGate` |
+| Logging        | `logger({ route })`, `captureError` — no secrets in logs     |
+| Versioning     | `/api/v1/*` deprecated (Sunset header set in proxy)          |
+| Health         | `GET /api/health`, `GET /api/ping`                           |
+| CSRF token     | `GET /api/csrf-token` for browser clients                    |
+
+Full route list: [API_ROUTES.md](./API_ROUTES.md) (auto-generated).
+
+---
+
+## User roles and portals
+
+### School roles (`User.role`)
+
+| Role                     | Dashboard entry          | Typical capabilities                                       |
+| ------------------------ | ------------------------ | ---------------------------------------------------------- |
+| `headteacher`            | `/dashboard/headteacher` | School-wide admin, timetable publish, MOE reports, billing |
+| `hod` / `HOD`            | `/dashboard/hod`         | Department staff, allocations, lesson plan review, budget  |
+| `teacher`                | `/dashboard/teacher`     | Classes, SBA, attendance, lesson plans, results            |
+| `student`                | `/dashboard/student`     | Subjects, assessments, results, study tools, ECZ practice  |
+| `ADMIN` / admin variants | `/dashboard/admin`       | User registration, school settings                         |
+
+Role normalization handles case and aliases (e.g. `headmaster`, `principal`) in auth middleware.
+
+### Portal types
+
+| Portal           | URL pattern                             | Doc                                            |
+| ---------------- | --------------------------------------- | ---------------------------------------------- |
+| School tenant    | `https://{subdomain}.{APP_BASE_DOMAIN}` | This doc                                       |
+| Solo teacher     | `/dashboard/solo` after `/join`         | [INDIVIDUAL_PORTAL.md](./INDIVIDUAL_PORTAL.md) |
+| Platform admin   | Apex domain `/login` → `/platform`      | [PLATFORM_ADMIN.md](./PLATFORM_ADMIN.md)       |
+| Public marketing | `/` (Sanity-driven when configured)     | `lib/sanity/marketingHomepage.js`              |
+
+All accounts receive a **2-month trial** (`trialEndsAt`); subscription required afterward via `/dashboard/billing`.
+
+---
+
+## Integrations
+
+| Service              | Purpose                             | Config / entry points                                                |
+| -------------------- | ----------------------------------- | -------------------------------------------------------------------- |
+| **Neon PostgreSQL**  | Primary database                    | `DATABASE_URL`, `DIRECT_URL`                                         |
+| **Vercel**           | Hosting, cron, Blob                 | `vercel.json`, region `fra1`                                         |
+| **Resend**           | Transactional email                 | `RESEND_API_KEY`, `EMAIL_FROM_NOREPLY`                               |
+| **Lipila**           | Mobile money (onboarding + billing) | `LIPILA_API_KEY`, callbacks under `/api/payments/lipila/`            |
+| **Africa's Talking** | SMS send/receive                    | `AFRICASTALKING_*`, webhooks `/api/sms/inbound`, `/api/sms/delivery` |
+| **Upstash QStash**   | Async SMS broadcast workers         | `QSTASH_*`, `/api/sms/queue-worker`                                  |
+| **Groq**             | Primary AI provider                 | `GROQ_API_KEY`, `lib/ai/client.js`                                   |
+| **Gemini**           | Optional AI fallback                | `GEMINI_API_KEY`                                                     |
+| **Sentry**           | Error monitoring                    | `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`                               |
+| **Sanity**           | Marketing homepage CMS              | `SANITY_PROJECT_ID`, `SANITY_API_READ_TOKEN`                         |
+| **Upstash Redis**    | Rate limits (optional)              | Used by `lib/middleware/upstashLimiters.js` when configured          |
+
+Payment logos: `public/payments/` or `NEXT_PUBLIC_PAYMENT_LOGO_*`.
+
+Vercel crons (see `vercel.json`):
+
+- `/api/cron/ecz-reminder` — 15 January ECZ deadline reminders
+- `/api/cron/sms-low-balance` — daily SMS balance check
+
+---
+
+## Mobile app (`zsms-mobile/`)
+
+| Item       | Detail                                                         |
+| ---------- | -------------------------------------------------------------- |
+| Stack      | Expo 56, Expo Router, TypeScript, Zustand                      |
+| Package    | `com.bluepeack.zsms.teacher`                                   |
+| Scope      | Teacher attendance, SBA scores, lesson plan cache, push tokens |
+| API prefix | `/api/mobile/*` (12 routes)                                    |
+| Auth       | `/api/mobile/auth/login`, `/api/mobile/auth/refresh`           |
+| Build      | EAS (`eas build`) — see `zsms-mobile/docs/EAS_APK_BUILD.md`    |
+
+Web-only workflows (timetable master build, billing, full ECZ submission, bulk SMS) remain on the school web portal. See [mobile-app-scope.md](./mobile-app-scope.md) and [doc/mobile-app.md](./doc/mobile-app.md).
+
+Mobile env template: `zsms-mobile/.env.example`.
+
+---
+
+## Environment variables
+
+**Do not commit secrets.** Use `.env.local` locally and Vercel environment settings in production.
+
+| Category        | Variables                                                                                                | Reference                          |
+| --------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| Required        | `DATABASE_URL`, `JWT_SECRET`, `RESEND_API_KEY`, `EMAIL_FROM_NOREPLY`, `GROQ_API_KEY` or `GEMINI_API_KEY` | [ENVIRONMENT.md](./ENVIRONMENT.md) |
+| Migrations      | `DIRECT_URL`                                                                                             | Neon direct connection             |
+| Production auth | `JWT_REFRESH_SECRET`, `COOKIE_DOMAIN`, `APP_BASE_DOMAIN`                                                 | Multi-subdomain cookies            |
+| Features        | `LIPILA_*`, `AFRICASTALKING_*`, `QSTASH_*`, `SENTRY_*`, `SANITY_*`                                       | Disabled when unset                |
+| Local dev       | `LOCAL_DEV_SCHOOL_SUBDOMAIN`, `DEV_ONBOARDING_SKIP_EMAIL`, `PLATFORM_ADMIN_*`                            | See [SETUP.md](./SETUP.md)         |
+
+Programmatic access:
+
+```javascript
+import { env, validateEnv } from '@/lib/config/env'
+validateEnv()
+env.features.payments // true when Lipila configured
+```
+
+Template: `.env.example` at repo root.
+
+---
+
+## Local development setup
+
+```bash
+git clone <repo-url>
+cd school_management_systems
+npm install
+cp .env.example .env.local   # fill required vars
+npx prisma generate && npx prisma db push
+npm run seed:ecz
+npm run dev                    # http://localhost:3000
+```
+
+Verify: `curl http://localhost:3000/api/health`
+
+Full guide: [SETUP.md](./SETUP.md).
+
+Optional seeds: `seed:local`, `seed:st-marys`, `seed:platform-admin`, `seed:timeslots`.
+
+---
+
+## Deployment and migrations
+
+### Primary deployment (Vercel)
+
+1. Connect GitHub repo to Vercel (Next.js preset).
+2. Set environment variables per [ENVIRONMENT.md](./ENVIRONMENT.md).
+3. Map Neon pooled URL → `DATABASE_URL`, direct URL → `DIRECT_URL`.
+4. Build: `npm run build` → `scripts/vercel-build.js` runs `prisma generate` + `next build --webpack`.
+5. Configure school subdomains and apex domain in Vercel DNS.
+
+Details: [doc/VERCEL_DEPLOY.md](./doc/VERCEL_DEPLOY.md), [NEON_POST_DEPLOY_CHECKLIST.md](./NEON_POST_DEPLOY_CHECKLIST.md).
+
+### Migrations
+
+| Environment     | Command                                                  |
+| --------------- | -------------------------------------------------------- |
+| Local prototype | `npx prisma db push`                                     |
+| Local tracked   | `npx prisma migrate dev --name describe_change`          |
+| Production      | `npm run prisma:migrate:deploy` or CI step before deploy |
+| Soft start      | `npm run start:with-migrate`                             |
+
+Recovery: [MIGRATION_RECOVERY.md](./MIGRATION_RECOVERY.md).
+
+**Note:** `.github/workflows/deploy.yml` references Cloudflare Workers but no `npm run deploy` script exists in `package.json`; **Vercel is the documented and configured production path** (`vercel.json`, `.vercel/`).
+
+### Pre-release checks
+
+```bash
+npm test                  # Vitest critical paths
+npm run audit:tenant      # Tenant isolation audit
+npm run lint
+npm run docs:api-routes   # if API routes changed
+```
+
+---
+
+## Testing approach
+
+| Tool           | Scope                                  | Command             |
+| -------------- | -------------------------------------- | ------------------- |
+| **Vitest**     | API routes, unit tests (mocked Prisma) | `npm test`          |
+| **Playwright** | E2E browser tests                      | `npm run test:e2e`  |
+| **Jest**       | Legacy React component tests           | `npm run test:jest` |
+
+Critical path suites (must pass before deploy): auth, onboarding/Lipila, SBA, ECZ, offline attendance, teaching assignments — see [TESTING.md](./TESTING.md).
+
+Test locations: `__tests__/api/`, `__tests__/unit/`, `__tests__/helpers/`, `test/security/`.
+
+---
+
+## Related documentation
+
+| Document                                         | When to use                                       |
+| ------------------------------------------------ | ------------------------------------------------- |
+| [README.md](../README.md)                        | Detailed route catalog, Android integration notes |
+| [docs/README.md](./README.md)                    | Documentation index                               |
+| [SETUP.md](./SETUP.md)                           | First-time local setup                            |
+| [ENVIRONMENT.md](./ENVIRONMENT.md)               | Every env variable                                |
+| [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md)       | Adding APIs, AI, SMS, migrations                  |
+| [SECURITY.md](./SECURITY.md)                     | Tenant isolation, route audit                     |
+| [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md)         | SBA rules and models                              |
+| [INDIVIDUAL_PORTAL.md](./INDIVIDUAL_PORTAL.md)   | Solo teacher portal                               |
+| [PLATFORM_ADMIN.md](./PLATFORM_ADMIN.md)         | Super-admin console                               |
+| [API_ROUTES.md](./API_ROUTES.md)                 | Auto-generated API list                           |
+| [TESTING.md](./TESTING.md)                       | Test conventions                                  |
+| [AI_GUIDE.md](./AI_GUIDE.md)                     | AI features                                       |
+| [TIMETABLE_PIPELINE.md](./TIMETABLE_PIPELINE.md) | Timetable canonical flow                          |
+| [review.md](../review.md)                        | Project review and gap analysis                   |
+| [CHANGELOG.md](../CHANGELOG.md)                  | Release history                                   |
+
+---
+
+## Maintenance
+
+This document must stay aligned with the codebase. When making architectural or integration changes, update the relevant sections and bump **Last updated** at the top.
+
+**Enforcement:** Cursor rule `.cursor/rules/update-system-documentation.mdc` requires agents to update this file in the same session when changing architecture, modules, APIs, schema, security, deployment, or integrations.

@@ -10,8 +10,10 @@ import {
   pushSmsLog,
   sendAfricasTalkingSms,
 } from '@/lib/sms'
+import { passwordPolicyError } from '@/lib/security/passwordPolicy'
+import { withSecureApi } from '@/lib/middleware/secureApi'
 
-export async function POST(request, { params }) {
+export const POST = withSecureApi(async function POST(request, { params }) {
   try {
     const routeParams = await params
     const token = String(routeParams?.token || '')
@@ -32,8 +34,9 @@ export async function POST(request, { params }) {
       return NextResponse.json({ error: 'Passwords do not match' }, { status: 400 })
     }
 
-    if (newPassword.length < 6) {
-      return NextResponse.json({ error: 'Password must be at least 6 characters' }, { status: 400 })
+    const policyError = passwordPolicyError(newPassword)
+    if (policyError) {
+      return NextResponse.json({ error: policyError, code: 'WEAK_PASSWORD' }, { status: 400 })
     }
 
     const schoolId = await resolvePublicSchoolId(request)
@@ -94,4 +97,4 @@ export async function POST(request, { params }) {
     console.error('Reset password error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
-}
+})

@@ -3,8 +3,10 @@ import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { passwordPolicyError } from '@/lib/security/passwordPolicy'
+import { withSecureApi } from '@/lib/middleware/secureApi'
 
-export async function POST(request, { params }) {
+export const POST = withSecureApi(async function POST(request, { params }) {
   const routeParams = await params
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
@@ -20,8 +22,9 @@ export async function POST(request, { params }) {
 
   const body = await request.json()
   const newPassword = String(body.newPassword || '')
-  if (!newPassword || newPassword.length < 6) {
-    return NextResponse.json({ error: 'Password must be at least 6 characters' }, { status: 400 })
+  const policyError = passwordPolicyError(newPassword)
+  if (policyError) {
+    return NextResponse.json({ error: policyError, code: 'WEAK_PASSWORD' }, { status: 400 })
   }
 
   const user = await prisma.user.findFirst({
@@ -34,4 +37,4 @@ export async function POST(request, { params }) {
   await prisma.user.update({ where: { id: user.id }, data: { password: hashed } })
 
   return NextResponse.json({ success: true })
-}
+})

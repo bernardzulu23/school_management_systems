@@ -8,6 +8,7 @@ import {
   ACCESS_TOKEN_MAX_AGE,
   REFRESH_TOKEN_MAX_AGE,
   authCookieOptions,
+  refreshTokenCookieOptions,
 } from '@/lib/security/cookies'
 import { setCsrfCookie } from '@/lib/security/csrf'
 import { withSecureApi } from '@/lib/middleware/secureApi'
@@ -69,7 +70,7 @@ export const POST = withSecureApi(async function POST(request) {
       response.cookies.set(
         'refresh_token',
         newRefreshTokenValue,
-        authCookieOptions(request, { maxAgeSeconds: REFRESH_TOKEN_MAX_AGE, name: 'refresh_token' })
+        refreshTokenCookieOptions(request, { maxAgeSeconds: REFRESH_TOKEN_MAX_AGE })
       )
       setCsrfCookie(response, request)
       return response
@@ -163,7 +164,7 @@ export const POST = withSecureApi(async function POST(request) {
     response.cookies.set(
       'refresh_token',
       newRefreshTokenValue,
-      authCookieOptions(request, { maxAgeSeconds: REFRESH_TOKEN_MAX_AGE, name: 'refresh_token' })
+      refreshTokenCookieOptions(request, { maxAgeSeconds: REFRESH_TOKEN_MAX_AGE })
     )
     setCsrfCookie(response, request)
 

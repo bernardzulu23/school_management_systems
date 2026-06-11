@@ -8,6 +8,7 @@ import { sendSchoolVerificationEmail } from '@/config/email'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { trialEndsAtFromStart } from '@/lib/billing/subscription'
 import { validateSchoolLocation } from '@/lib/platform/reportingStream'
+import { passwordPolicyError } from '@/lib/security/passwordPolicy'
 
 const RESERVED = new Set([
   'www',
@@ -147,22 +148,10 @@ export const POST = withSecureApi(async function POST(request) {
         { status: 400 }
       )
     }
-    if (!adminPassword || adminPassword.length < 8) {
+    const policyError = passwordPolicyError(adminPassword)
+    if (policyError) {
       return NextResponse.json(
-        { success: false, error: 'Password must be at least 8 characters' },
-        { status: 400 }
-      )
-    }
-    if (
-      !/[A-Z]/.test(adminPassword) ||
-      !/[a-z]/.test(adminPassword) ||
-      !/[0-9]/.test(adminPassword)
-    ) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Password must include uppercase, lowercase, and a number',
-        },
+        { success: false, error: policyError, code: 'WEAK_PASSWORD' },
         { status: 400 }
       )
     }
