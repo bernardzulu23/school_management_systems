@@ -1,0 +1,40 @@
+---
+description: Keep docs/USER_GUIDE.md in sync with user-facing feature changes
+alwaysApply: true
+---
+
+# Update User Guide
+
+When you make **user-facing changes** to ZSMS, update `docs/USER_GUIDE.md` in the **same session** before finishing. Bump the **Last updated** date (YYYY-MM-DD) at the top of that file.
+
+## When to update (required)
+
+| Change type | Update these sections |
+| ----------- | --------------------- |
+| New/removed dashboard page or sidebar item | Role navigation tables for affected role(s); sync from `components/dashboard/Sidebar.js` |
+| New/removed platform admin page | Platform admin navigation table; sync from `components/platform/PlatformShell.js` |
+| New user workflow (onboarding, ECZ, timetable, attendance, billing, SMS, mobile) | Cross-role workflows + affected role's "Key workflows" |
+| New/changed subscription plan or pricing | Subscription and billing, Feature availability by plan |
+| New portal type or role | Executive summary, Getting started, new role section |
+| Login, password, or access flow change | Getting started |
+| Mobile app feature added/removed | Mobile app section; note web-only vs mobile scope |
+| Solo/individual portal change | Solo teacher portal section |
+| Troubleshooting for new common issue | Troubleshooting table |
+
+## When to skip
+
+- Backend-only refactors with no UI or workflow change
+- Developer-only API changes not exposed in dashboards
+- Typo fixes, styling-only edits, or copy tweaks that do not change behaviour
+- Test-only changes
+
+## How to update
+
+1. Read the current `docs/USER_GUIDE.md`.
+2. Verify routes against `Sidebar.js`, `PlatformShell.js`, and actual `app/dashboard/` pages.
+3. Edit only sections affected by your change; link to deeper docs (ECZ, SMS, offline) rather than duplicating them.
+4. Set **Last updated** to today's date.
+
+If unsure whether a change is user-facing, update the doc — prefer accuracy over omission.
+
+Also update `docs/SYSTEM_DOCUMENTATION.md` when the change affects architecture, APIs, schema, or integrations (see `.cursor/rules/update-system-documentation.mdc`).

@@ -20,130 +20,51 @@ import {
 } from 'lucide-react'
 import { TeacherCompliancePanel } from '@/components/compliance/TeacherCompliancePanel'
 
-function mapHeadteacherActivity(a) {
-  const scoreMatch = String(a.description || '').match(/(\d+)%\s*$/)
-  const percentage = scoreMatch ? Number(scoreMatch[1]) : 0
-  const parts = String(a.description || '')
-    .split('•')
-    .map((p) => p.trim())
-  const studentName = parts[0] || 'Student'
-  const className = parts[1] || a.class_name || ''
-
-  return {
-    id: a.id,
-    student_name: studentName,
-    student_id: '',
-    teacher_name: a.actor || '',
-    assessment: a.title || 'Result entered',
-    subject: a.subject_name || '',
-    class: className,
-    date: a.created_at ? new Date(a.created_at).toLocaleDateString() : '',
-    marks: percentage,
-    total: 100,
-    percentage,
-    grade: percentage >= 75 ? 'A' : percentage >= 65 ? 'B' : percentage >= 50 ? 'C' : 'D',
-    term: a.term,
-    year: a.year,
-  }
-}
-
-function mapTeacherResult(r) {
-  const percentage = Math.round(Number(r.score || 0))
-  return {
-    id: r.id,
-    student_name: r.studentName || 'Student',
-    student_id: r.studentExamNumber || r.studentId || '',
-    teacher_name: '',
-    assessment: `${r.term || ''} ${r.year || ''}`.trim() || 'Assessment',
-    subject: r.subjectName || '',
-    class: r.class || '',
-    date: r.updatedAt ? new Date(r.updatedAt).toLocaleDateString() : '',
-    marks: percentage,
-    total: 100,
-    percentage,
-    grade: r.grade || (percentage >= 75 ? 'A' : percentage >= 65 ? 'B' : 'C'),
-    term: r.term,
-    year: r.year,
-  }
-}
-
 export default function ResultsPage() {
   const [selectedClass, setSelectedClass] = useState('')
   const [selectedSubject, setSelectedSubject] = useState('')
+  const [selectedTeacher, setSelectedTeacher] = useState('')
   const { user } = useAuth()
 
   const role = String(user?.role || '').toLowerCase()
   const isHeadteacher = role === 'headteacher' || role === 'admin' || role === 'administrator'
-  const isTeacher = role === 'teacher' || role === 'hod'
+  const isHod = role === 'hod'
   const isStudent = role === 'student'
+  const showTeacherFilter = isHeadteacher || isHod
 
   const {
-    data: headteacherData,
-    isLoading: headteacherLoading,
-    refetch: refetchHeadteacher,
+    data: resultsData,
+    isLoading,
+    refetch,
   } = useQuery({
-    queryKey: ['headteacher-dashboard-results'],
-    queryFn: () => api.getHeadteacherDashboard().then((res) => res.data),
-    enabled: isHeadteacher,
+    queryKey: ['dashboard-results', selectedClass, selectedSubject, selectedTeacher],
+    queryFn: () =>
+      api
+        .getResultsOverview({
+          class: selectedClass || undefined,
+          subject: selectedSubject || undefined,
+          teacher: selectedTeacher || undefined,
+        })
+        .then((res) => res.data),
+    enabled: !isStudent,
   })
 
-  const {
-    data: teacherData,
-    isLoading: teacherLoading,
-    refetch: refetchTeacher,
-  } = useQuery({
-    queryKey: ['teacher-dashboard-results'],
-    queryFn: () => api.getTeacherDashboard().then((res) => res.data),
-    enabled: isTeacher && !isHeadteacher,
-  })
+  const classOptions = useMemo(
+    () => (resultsData?.filters?.classes || []).map((c) => c.name).filter(Boolean),
+    [resultsData]
+  )
 
-  const allResults = useMemo(() => {
-    if (isHeadteacher) {
-      const activities = Array.isArray(headteacherData?.recent_activities)
-        ? headteacherData.recent_activities
-        : []
-      return activities.map(mapHeadteacherActivity)
-    }
-    if (isTeacher) {
-      const rows = Array.isArray(teacherData?.recent_results) ? teacherData.recent_results : []
-      return rows.map(mapTeacherResult)
-    }
-    return []
-  }, [isHeadteacher, isTeacher, headteacherData, teacherData])
+  const subjectOptions = useMemo(
+    () => (resultsData?.filters?.subjects || []).map((s) => s.name).filter(Boolean),
+    [resultsData]
+  )
 
-  const filterSource = isHeadteacher ? headteacherData : teacherData
-  const classOptions = useMemo(() => {
-    const names = new Set()
-    allResults.forEach((r) => {
-      if (r.class) names.add(r.class)
-    })
-    if (isTeacher && Array.isArray(filterSource?.my_classes)) {
-      filterSource.my_classes.forEach((c) => names.add(c.name))
-    }
-    return Array.from(names).filter(Boolean).sort()
-  }, [allResults, filterSource, isTeacher])
+  const teacherOptions = useMemo(() => resultsData?.filters?.teachers || [], [resultsData])
 
-  const subjectOptions = useMemo(() => {
-    const names = new Set()
-    allResults.forEach((r) => {
-      if (r.subject) names.add(r.subject)
-    })
-    if (isTeacher && Array.isArray(filterSource?.my_subjects)) {
-      filterSource.my_subjects.forEach((s) => names.add(s.name))
-    }
-    return Array.from(names).filter(Boolean).sort()
-  }, [allResults, filterSource, isTeacher])
-
-  const resultsToShow = useMemo(() => {
-    return allResults.filter((r) => {
-      if (selectedClass && r.class !== selectedClass) return false
-      if (selectedSubject && r.subject !== selectedSubject) return false
-      return true
-    })
-  }, [allResults, selectedClass, selectedSubject])
-
-  const isLoading =
-    (isHeadteacher && headteacherLoading) || (isTeacher && !isHeadteacher && teacherLoading)
+  const resultsToShow = useMemo(
+    () => (Array.isArray(resultsData?.results) ? resultsData.results : []),
+    [resultsData]
+  )
 
   const getGradeColor = (grade) => {
     switch (grade) {
@@ -180,9 +101,7 @@ export default function ResultsPage() {
 
   const handleRefresh = () => {
     startTopLoading('Refreshing')
-    if (isHeadteacher) refetchHeadteacher()
-    else if (isTeacher) refetchTeacher()
-    setTimeout(() => window.location.reload(), 350)
+    refetch()
   }
 
   if (isLoading) {
@@ -237,6 +156,90 @@ export default function ResultsPage() {
           )}
         </header>
 
+        {!isStudent && (
+          <section aria-labelledby="filter-title">
+            <Card>
+              <CardHeader>
+                <CardTitle id="filter-title" className="flex items-center gap-2">
+                  <Filter className="h-4 w-4" />
+                  Filter Results
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div
+                  className={`grid grid-cols-1 gap-4 ${showTeacherFilter ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}
+                >
+                  <div>
+                    <label
+                      htmlFor="class-filter"
+                      className="block text-sm font-medium text-royalPurple-text2 mb-2"
+                    >
+                      Class / Grade
+                    </label>
+                    <select
+                      id="class-filter"
+                      value={selectedClass}
+                      onChange={(e) => setSelectedClass(e.target.value)}
+                      className="w-full p-2 border border-royalPurple-border rounded-md bg-royalPurple-card"
+                    >
+                      <option value="">All Classes</option>
+                      {classOptions.map((name) => (
+                        <option key={name} value={name}>
+                          {name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="subject-filter"
+                      className="block text-sm font-medium text-royalPurple-text2 mb-2"
+                    >
+                      Subject
+                    </label>
+                    <select
+                      id="subject-filter"
+                      value={selectedSubject}
+                      onChange={(e) => setSelectedSubject(e.target.value)}
+                      className="w-full p-2 border border-royalPurple-border rounded-md bg-royalPurple-card"
+                    >
+                      <option value="">All Subjects</option>
+                      {subjectOptions.map((name) => (
+                        <option key={name} value={name}>
+                          {name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  {showTeacherFilter && (
+                    <div>
+                      <label
+                        htmlFor="teacher-filter"
+                        className="block text-sm font-medium text-royalPurple-text2 mb-2"
+                      >
+                        Teacher
+                      </label>
+                      <select
+                        id="teacher-filter"
+                        value={selectedTeacher}
+                        onChange={(e) => setSelectedTeacher(e.target.value)}
+                        className="w-full p-2 border border-royalPurple-border rounded-md bg-royalPurple-card"
+                      >
+                        <option value="">All Teachers</option>
+                        {teacherOptions.map((teacher) => (
+                          <option key={teacher.id} value={teacher.id}>
+                            {teacher.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </section>
+        )}
+
         {resultsToShow.length === 0 ? (
           <Card className="focus-within:ring-2 focus-within:ring-g-500 transition-shadow">
             <CardContent className="text-center py-12">
@@ -250,7 +253,9 @@ export default function ResultsPage() {
               <p className="text-royalPurple-text2 mb-6">
                 {isStudent
                   ? 'Your results will appear here once they are published by your teachers.'
-                  : 'Student results will appear here once assessments are graded and published.'}
+                  : selectedClass || selectedSubject || selectedTeacher
+                    ? 'No results match the selected filters. Try clearing filters or check back after teachers enter grades.'
+                    : 'Student results will appear here once assessments are graded and published.'}
               </p>
             </CardContent>
           </Card>
@@ -322,65 +327,6 @@ export default function ResultsPage() {
               </Card>
             </section>
 
-            {!isStudent && (
-              <section aria-labelledby="filter-title">
-                <Card>
-                  <CardHeader>
-                    <CardTitle id="filter-title" className="flex items-center gap-2">
-                      <Filter className="h-4 w-4" />
-                      Filter Results
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label
-                          htmlFor="class-filter"
-                          className="block text-sm font-medium text-royalPurple-text2 mb-2"
-                        >
-                          Class / Grade
-                        </label>
-                        <select
-                          id="class-filter"
-                          value={selectedClass}
-                          onChange={(e) => setSelectedClass(e.target.value)}
-                          className="w-full p-2 border border-royalPurple-border rounded-md bg-royalPurple-card"
-                        >
-                          <option value="">All Classes</option>
-                          {classOptions.map((name) => (
-                            <option key={name} value={name}>
-                              {name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="subject-filter"
-                          className="block text-sm font-medium text-royalPurple-text2 mb-2"
-                        >
-                          Subject
-                        </label>
-                        <select
-                          id="subject-filter"
-                          value={selectedSubject}
-                          onChange={(e) => setSelectedSubject(e.target.value)}
-                          className="w-full p-2 border border-royalPurple-border rounded-md bg-royalPurple-card"
-                        >
-                          <option value="">All Subjects</option>
-                          {subjectOptions.map((name) => (
-                            <option key={name} value={name}>
-                              {name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </section>
-            )}
-
             <section aria-labelledby="results-table-title">
               <Card>
                 <CardHeader>
@@ -400,7 +346,7 @@ export default function ResultsPage() {
                           <th className="text-left py-3 px-4 text-sm text-royalPurple-text2">
                             Class
                           </th>
-                          {isHeadteacher && (
+                          {showTeacherFilter && (
                             <th className="text-left py-3 px-4 text-sm text-royalPurple-text2">
                               Teacher
                             </th>
@@ -431,7 +377,7 @@ export default function ResultsPage() {
                             <td className="py-3 px-4 text-sm text-royalPurple-text2">
                               {result.class}
                             </td>
-                            {isHeadteacher && (
+                            {showTeacherFilter && (
                               <td className="py-3 px-4 text-sm text-royalPurple-text2">
                                 {result.teacher_name}
                               </td>

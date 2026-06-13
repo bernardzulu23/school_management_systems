@@ -204,7 +204,7 @@ school_management_systems/
 | **Timetabling**       | HOD allocations → generate → publish pipeline  | `lib/timetable/pipeline.js`, `app/api/timetable/`, [TIMETABLE_PIPELINE.md](./TIMETABLE_PIPELINE.md)                      |
 | **Attendance**        | Sessions, QR, offline Dexie sync, live summary | `lib/attendance/`, `app/api/attendance/`, [QR_ATTENDANCE.md](./QR_ATTENDANCE.md), [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) |
 | **Lesson plans**      | Authoring, HOD review, AI generation           | `app/api/lesson-plans/`, `lib/lesson-plans/`                                                                             |
-| **Results & reports** | Term reports, MOE exports, teacher results     | `app/api/teacher/results/`, `app/dashboard/headteacher/moe-reports/`                                                     |
+| **Results & reports** | Term reports, MOE exports, teacher results     | `app/api/teacher/results/`, `app/api/dashboard/results/`, `app/dashboard/headteacher/moe-reports/`                       |
 | **Billing**           | Plans, trials, Lipila subscription payments    | `lib/billing/plan-pricing.js`, `app/api/billing/`, `SchoolPlanPayment` model                                             |
 | **SMS**               | Broadcasts, templates, inbound webhooks        | `lib/sms/`, `app/api/sms/`, [SMS_GUIDE.md](./SMS_GUIDE.md)                                                               |
 | **AI features**       | Lesson planner, quizzes, report comments, RAG  | `lib/ai/`, [AI_GUIDE.md](./AI_GUIDE.md), [RAG.md](./RAG.md)                                                              |
@@ -511,6 +511,7 @@ Test locations: `__tests__/api/`, `__tests__/unit/`, `__tests__/helpers/`, `test
 
 | Document                                         | When to use                                       |
 | ------------------------------------------------ | ------------------------------------------------- |
+| [USER_GUIDE.md](./USER_GUIDE.md)                 | End-user guide — login, roles, workflows, nav     |
 | [README.md](../README.md)                        | Detailed route catalog, Android integration notes |
 | [docs/README.md](./README.md)                    | Documentation index                               |
 | [SETUP.md](./SETUP.md)                           | First-time local setup                            |
@@ -533,4 +534,7 @@ Test locations: `__tests__/api/`, `__tests__/unit/`, `__tests__/helpers/`, `test
 
 This document must stay aligned with the codebase. When making architectural or integration changes, update the relevant sections and bump **Last updated** at the top.
 
-**Enforcement:** Cursor rule `.cursor/rules/update-system-documentation.mdc` requires agents to update this file in the same session when changing architecture, modules, APIs, schema, security, deployment, or integrations.
+**Enforcement:** Cursor rules require agents to update docs in the same session:
+
+- `.cursor/rules/update-system-documentation.mdc` — architecture, modules, APIs, schema, security, deployment, integrations
+- `.cursor/rules/update-user-guide.mdc` — user-facing dashboards, workflows, roles, plans, onboarding
