@@ -10,11 +10,19 @@ export function HeadteacherAnalytics() {
   const {
     selectedTerm,
     setSelectedTerm,
+    selectedResultType,
+    setSelectedResultType,
     yearGroupPerformanceData,
     seniorResultsAnalysis,
     schoolStats,
     dashboardData,
   } = useHeadteacher()
+  const resultTypeOptions = Array.isArray(dashboardData?.result_type_options)
+    ? dashboardData.result_type_options
+    : [
+        { value: 'END_OF_TERM', label: 'End of term' },
+        { value: 'MIDTERM', label: 'Midterm' },
+      ]
   const performanceTrends = Array.isArray(dashboardData?.performanceTrends)
     ? dashboardData.performanceTrends
     : Array.isArray(dashboardData?.performance_trends)
@@ -53,18 +61,33 @@ export function HeadteacherAnalytics() {
       {/* Term Selector */}
       <Card variant="glass">
         <CardContent className="p-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <h3 className="text-royalPurple-text1 font-bold text-lg">Analytics Period</h3>
-            <select
-              value={selectedTerm}
-              onChange={(e) => setSelectedTerm(e.target.value)}
-              className="bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-lg px-4 py-2 text-royalPurple-text1"
-            >
-              <option value="All Terms">All Terms</option>
-              <option value="Term 1">Term 1</option>
-              <option value="Term 2">Term 2</option>
-              <option value="Term 3">Term 3</option>
-            </select>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <select
+                value={selectedTerm}
+                onChange={(e) => setSelectedTerm(e.target.value)}
+                className="bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-lg px-4 py-2 text-royalPurple-text1"
+              >
+                <option value="All Terms">All Terms</option>
+                <option value="Term 1">Term 1</option>
+                <option value="Term 2">Term 2</option>
+                <option value="Term 3">Term 3</option>
+              </select>
+              <select
+                value={selectedResultType}
+                onChange={(e) => setSelectedResultType(e.target.value)}
+                className="bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-lg px-4 py-2 text-royalPurple-text1"
+                aria-label="Result type"
+              >
+                <option value="">All types</option>
+                {resultTypeOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </CardContent>
       </Card>

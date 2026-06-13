@@ -26,6 +26,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const className = String(searchParams.get('class') || '').trim()
   const subjectName = String(searchParams.get('subject') || '').trim()
   const teacherUserId = String(searchParams.get('teacher') || '').trim()
+  const resultType = String(searchParams.get('resultType') || '').trim()
   const limit = Number(searchParams.get('limit') || 200)
 
   const data = await fetchResultsOverview({
@@ -35,6 +36,7 @@ export const GET = withErrorHandler(async function GET(request) {
     className,
     subjectName,
     teacherUserId,
+    resultType,
     limit,
   })
 

@@ -24,6 +24,7 @@ export default function StudentResultsPage() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedTerm, setSelectedTerm] = useState('All')
+  const [selectedResultType, setSelectedResultType] = useState('All')
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -76,8 +77,17 @@ export default function StudentResultsPage() {
   const filteredResults = results.filter((result) => {
     const matchesSearch = result.subject.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesTerm = selectedTerm === 'All' || result.term === selectedTerm
-    return matchesSearch && matchesTerm
+    const matchesType =
+      selectedResultType === 'All' ||
+      String(result.resultType || '') === selectedResultType ||
+      String(result.result_type_label || '') === selectedResultType
+    return matchesSearch && matchesTerm && matchesType
   })
+
+  const resultTypes = [
+    'All',
+    ...new Set(results.map((r) => r.result_type_label || r.resultType).filter(Boolean)),
+  ]
 
   // Get unique terms for filter
   const terms = ['All', ...new Set(results.map((r) => r.term))]
@@ -96,6 +106,7 @@ export default function StudentResultsPage() {
       Code: r.subjectCode || '',
       Term: r.term,
       Year: r.year,
+      Type: r.result_type_label || r.resultType || '',
       Score: r.score,
       Grade: r.grade,
       Date: r.date,
@@ -178,6 +189,18 @@ export default function StudentResultsPage() {
           <div className="flex gap-4 w-full md:w-auto">
             <select
               className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-g-500 bg-royalPurple-card"
+              value={selectedResultType}
+              onChange={(e) => setSelectedResultType(e.target.value)}
+            >
+              {resultTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type === 'All' ? 'All types' : type}
+                </option>
+              ))}
+            </select>
+
+            <select
+              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-g-500 bg-royalPurple-card"
               value={selectedTerm}
               onChange={(e) => setSelectedTerm(e.target.value)}
             >
@@ -223,6 +246,7 @@ export default function StudentResultsPage() {
                   <thead className="text-xs text-royalPurple-text2 uppercase bg-royalPurple-page">
                     <tr>
                       <th className="px-6 py-3">Subject</th>
+                      <th className="px-6 py-3">Type</th>
                       <th className="px-6 py-3">Term</th>
                       <th className="px-6 py-3">Score</th>
                       <th className="px-6 py-3">Grade</th>
@@ -242,6 +266,7 @@ export default function StudentResultsPage() {
                             {result.subjectCode}
                           </span>
                         </td>
+                        <td className="px-6 py-4">{result.result_type_label || 'End of term'}</td>
                         <td className="px-6 py-4">
                           {result.term} {result.year}
                         </td>

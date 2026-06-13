@@ -53,7 +53,8 @@ run_sql
 ```
 
 **Pass:** Latest repo migration under `prisma/migrations/` appears with a `finished_at` timestamp.  
-**Fail:** Missing `_prisma_migrations` or pending migrations → run `npx prisma migrate deploy` against `DIRECT_URL`.
+**Fail:** Missing `_prisma_migrations` or pending migrations → run `npx prisma migrate deploy` against `DIRECT_URL`.  
+**Local P1001 / network block:** paste and run `scripts/manual_neon_result_type_migration.sql` in the Neon SQL Editor (import branch), then re-check migration state.
 
 ### Row-count spot check
 

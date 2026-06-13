@@ -13,7 +13,7 @@ When you make **user-facing changes** to ZSMS, update `docs/USER_GUIDE.md` in th
 | ----------- | --------------------- |
 | New/removed dashboard page or sidebar item | Role navigation tables for affected role(s); sync from `components/dashboard/Sidebar.js` |
 | New/removed platform admin page | Platform admin navigation table; sync from `components/platform/PlatformShell.js` |
-| New user workflow (onboarding, ECZ, timetable, attendance, billing, SMS, mobile) | Cross-role workflows + affected role's "Key workflows" |
+| New user workflow (onboarding, ECZ, timetable, attendance, billing, SMS, mobile, **results types**) | Cross-role workflows + affected role's "Key workflows" |
 | New/changed subscription plan or pricing | Subscription and billing, Feature availability by plan |
 | New portal type or role | Executive summary, Getting started, new role section |
 | Login, password, or access flow change | Getting started |

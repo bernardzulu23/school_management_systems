@@ -10,6 +10,7 @@ import {
   getSchoolPortalLoginUrls,
   sendAfricasTalkingSms,
 } from '@/lib/sms'
+import { normalizeResultType, RESULT_TYPES } from '@/lib/results/resultTypes'
 
 async function gunzipAsync(data) {
   const ds = new DecompressionStream('gzip')
@@ -152,6 +153,7 @@ async function evaluateAndNotifyTermResultsComplete({
         studentId,
         term,
         year,
+        resultType: RESULT_TYPES.END_OF_TERM,
         subjectId: { in: enrolledSubjectIds },
       },
       select: { subjectId: true, workflowStatus: true },
@@ -272,6 +274,8 @@ export const GET = withErrorHandler(async function GET(request) {
   const subjectId = searchParams.get('subjectId')
   const termRaw = searchParams.get('term')
   const yearRaw = searchParams.get('year')
+  const resultTypeRaw = searchParams.get('resultType')
+  const resultTypeFilter = resultTypeRaw ? normalizeResultType(resultTypeRaw) : null
   const scope = String(searchParams.get('scope') || '')
     .trim()
     .toLowerCase()
@@ -421,6 +425,7 @@ export const GET = withErrorHandler(async function GET(request) {
     ...(subjectId ? { subjectId } : {}),
     ...(term ? { term } : {}),
     ...(year ? { year } : {}),
+    ...(resultTypeFilter ? { resultType: resultTypeFilter } : {}),
     ...(Array.isArray(rosterStudentIds) ? { studentId: { in: rosterStudentIds } } : {}),
     ...(isTeacher && scope !== 'all' && !resolvedClassId ? { enteredByUserId: auth.user.id } : {}),
   }
@@ -441,6 +446,7 @@ export const GET = withErrorHandler(async function GET(request) {
         grade: r.grade,
         term: r.term,
         year: r.year,
+        resultType: r.resultType,
         comments: r.comments,
         updatedAt: r.updatedAt,
       })),
@@ -481,6 +487,8 @@ export const POST = withErrorHandler(async function POST(request) {
   })()
 
   if (!Array.isArray(results)) throw new ApiError('Invalid data format', 400)
+
+  const batchResultType = normalizeResultType(body?.resultType)
 
   const teacherProfile = isAdmin
     ? null
@@ -681,9 +689,10 @@ export const POST = withErrorHandler(async function POST(request) {
       const termYear = parseTermYear(termRaw)
       const term = termYear.term
       const year = Number(r.year || termYear.year)
+      const resultType = normalizeResultType(r.resultType || batchResultType)
 
       const existing = await tx.result.findFirst({
-        where: { schoolId, studentId, subjectId, term, year },
+        where: { schoolId, studentId, subjectId, term, year, resultType },
         orderBy: { updatedAt: 'desc' },
       })
 
@@ -694,19 +703,21 @@ export const POST = withErrorHandler(async function POST(request) {
         !resolution
       ) {
         conflicts.push({
-          key: { schoolId, studentId, subjectId, term, year },
+          key: { schoolId, studentId, subjectId, term, year, resultType },
           server: {
             id: existing.id,
             score: existing.score,
             grade: existing.grade,
             term: existing.term,
             year: existing.year,
+            resultType: existing.resultType,
             updatedAt: existing.updatedAt,
           },
           client: {
             score,
             term,
             year,
+            resultType,
             baseUpdatedAt,
           },
         })
@@ -727,6 +738,7 @@ export const POST = withErrorHandler(async function POST(request) {
           data: {
             score,
             grade,
+            resultType,
             enteredByUserId: auth.user.id,
             workflowStatus: normalizedWorkflowStatus,
           },
@@ -741,13 +753,16 @@ export const POST = withErrorHandler(async function POST(request) {
             grade,
             term,
             year,
+            resultType,
             enteredByUserId: auth.user.id,
             workflowStatus: normalizedWorkflowStatus,
           },
         })
       }
 
-      touched.set(`${studentId}|${term}|${year}`, { studentId, classId, term, year })
+      if (resultType === RESULT_TYPES.END_OF_TERM) {
+        touched.set(`${studentId}|${term}|${year}`, { studentId, classId, term, year })
+      }
       applied += 1
     }
   })

@@ -1103,12 +1103,14 @@ model Result {
   
   enteredByUserId String?
   workflowStatus String @default("finalized")
-  score       Float 
-  grade       String 
-  term        String 
-  year        Int 
-  
-  comments    String? 
+  score       Float
+  grade       String
+  term        String
+  year        Int
+  /** END_OF_TERM | MIDTERM | CLASS_TEST */
+  resultType  String   @default("END_OF_TERM")
+
+  comments    String?
   
   createdAt   DateTime @default(now()) 
   updatedAt   DateTime @updatedAt
@@ -1119,8 +1121,10 @@ model Result {
   @@index([enteredByUserId])
   @@index([workflowStatus])
   @@index([score])
-  @@index([term, year]) 
-} 
+  @@index([term, year])
+  @@index([resultType])
+  @@index([schoolId, resultType])
+}
 
 model ResultsStatus {
   id                String   @id @default(uuid())

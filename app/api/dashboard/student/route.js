@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { gradeToPoints } from '@/lib/gradingSystem'
+import { getResultTypeLabel, RESULT_TYPES } from '@/lib/results/resultTypes'
 
 export const dynamic = 'force-dynamic'
 
@@ -134,6 +135,10 @@ export async function GET(request) {
       take: 200,
     })
 
+    const endOfTermResults = allResults.filter(
+      (r) => String(r.resultType || RESULT_TYPES.END_OF_TERM) === RESULT_TYPES.END_OF_TERM
+    )
+
     const normalize = (value) =>
       String(value || '')
         .trim()
@@ -155,7 +160,7 @@ export async function GET(request) {
     }
 
     const subjectAgg = new Map()
-    for (const r of allResults) {
+    for (const r of endOfTermResults) {
       const subjectId = String(r.subjectId || '')
       if (!subjectId) continue
       const subjectName = r.subject?.name || 'Unknown'
@@ -225,12 +230,12 @@ export async function GET(request) {
 
     // 1. Calculate Stats
     const totalSubjects = subjectNames.length
-    const totalResults = allResults.length
+    const totalResults = endOfTermResults.length
 
     // Calculate Average Grade
     let averageGrade = 0
     if (totalResults > 0) {
-      const totalScore = allResults.reduce((acc, curr) => acc + (curr.score || 0), 0)
+      const totalScore = endOfTermResults.reduce((acc, curr) => acc + (curr.score || 0), 0)
       averageGrade = totalScore / totalResults
     }
 
@@ -264,7 +269,19 @@ export async function GET(request) {
     }))
 
     // 4. Fetch Recent Results (with filtering)
-    const recentResults = allResults.slice(0, 10)
+    const recentResults = allResults.slice(0, 10).map((r) => ({
+      id: r.id,
+      subject: r.subject?.name || 'Unknown',
+      subjectId: r.subjectId,
+      score: r.score,
+      grade: r.grade,
+      term: r.term,
+      year: r.year,
+      resultType: r.resultType || RESULT_TYPES.END_OF_TERM,
+      result_type_label: getResultTypeLabel(r.resultType),
+      comments: r.comments,
+      date: r.updatedAt || r.createdAt,
+    }))
 
     // 5. Fetch Assignments and calculate statuses (scoped by schoolId)
     const rawAssignments = await prisma.assignment.findMany({

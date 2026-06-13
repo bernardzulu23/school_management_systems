@@ -900,10 +900,10 @@ export default function StudentDashboard() {
                             </div>
                             <div>
                               <h4 className="font-semibold text-royalPurple-text1">
-                                {result.subject?.name || 'Subject'}
+                                {result.subject?.name || result.subject || 'Subject'}
                               </h4>
                               <p className="text-royalPurple-text2 text-sm">
-                                {result.comments || 'Assessment'}
+                                {result.comments || result.result_type_label || 'Assessment'}
                               </p>
                             </div>
                           </div>

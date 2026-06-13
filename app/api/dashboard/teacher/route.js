@@ -5,6 +5,7 @@ import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
 import { resolveTeacherLoad } from '@/lib/teachers/resolveTeacherLoad'
+import { getResultTypeLabel } from '@/lib/results/resultTypes'
 
 export async function GET(request) {
   try {
@@ -353,6 +354,8 @@ export async function GET(request) {
         grade: r.grade,
         term: r.term,
         year: r.year,
+        resultType: r.resultType || 'END_OF_TERM',
+        result_type_label: getResultTypeLabel(r.resultType),
         updatedAt: r.updatedAt,
       })),
       teacher: {

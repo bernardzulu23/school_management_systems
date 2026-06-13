@@ -263,11 +263,18 @@ See [SMS_GUIDE.md](./SMS_GUIDE.md) and [SMS_BROADCAST.md](./SMS_BROADCAST.md).
 - **Subscription:** `/dashboard/billing` — upgrade plan or renew after trial.
 - **School fees:** `/dashboard/payments` — record and track in-app mobile money payments.
 
-#### View school-wide results
+#### Enter results (teacher)
 
-1. Open **Results** (`/dashboard/results`).
-2. Use **Class**, **Subject**, and **Teacher** filters — options include all enrolled subjects and teachers with teaching assignments, not only recent entries.
-3. Results load from `/api/dashboard/results` with server-side filtering (up to 200 rows).
+1. Open **Result Entry** (`/dashboard/teacher/results`).
+2. Choose **Result type**: End of term, Midterm, or Class test.
+3. Select **Term** and **Class + Subject**, then enter scores and save.
+
+#### View school-wide results (headteacher / HOD)
+
+1. On the **Headteacher dashboard** (`/dashboard/headteacher`), use **Result type** (End of term / Midterm) with the term filter — class tests are excluded from all headteacher analytics.
+2. Open **Results** (`/dashboard/results`).
+3. Use **Result type** filter: All term results, End of term, or Midterm (class tests are excluded).
+4. Filter by class, subject, and teacher as needed.
 
 ---
 
@@ -493,7 +500,7 @@ Students view timetables, materials, assessments, results, and study tools.
 #### View timetable and results
 
 - **Timetable:** `/dashboard/timetable/student` — daily/weekly schedule from the published master timetable.
-- **Results:** `/dashboard/student/results` — test scores and report cards.
+- **Results:** `/dashboard/student/results` — end-of-term, midterm, and class-test scores for your subjects only (filter by type or term).
 
 #### ECZ practice
 

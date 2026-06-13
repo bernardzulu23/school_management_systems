@@ -118,6 +118,10 @@ function HeadteacherDashboardContent() {
   const {
     activeTab,
     setActiveTab,
+    selectedTerm,
+    setSelectedTerm,
+    selectedResultType,
+    setSelectedResultType,
     schoolStats,
     dashboardData,
     stats,
@@ -125,6 +129,13 @@ function HeadteacherDashboardContent() {
     error,
     refreshAll,
   } = useHeadteacher()
+
+  const resultTypeOptions = Array.isArray(dashboardData?.result_type_options)
+    ? dashboardData.result_type_options
+    : [
+        { value: 'END_OF_TERM', label: 'End of term' },
+        { value: 'MIDTERM', label: 'Midterm' },
+      ]
 
   const role = String(user?.role || '').toLowerCase()
   const isHeadteacher = role === 'headteacher' || role === 'admin' || role === 'administrator'
@@ -475,6 +486,51 @@ function HeadteacherDashboardContent() {
               </div>
             </div>
           )}
+
+          <section
+            aria-label="Results filters"
+            className="bg-royalPurple-deep border border-royalPurple-border rounded-2xl p-4"
+          >
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-sm font-semibold text-royalPurple-text1">Results view</h2>
+                <p className="text-xs text-royalPurple-text2 mt-1">
+                  End-of-term and midterm results only. Class tests are visible on teacher and
+                  student dashboards.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <label className="flex flex-col gap-1 text-xs text-royalPurple-text2">
+                  Term
+                  <select
+                    value={selectedTerm}
+                    onChange={(e) => setSelectedTerm(e.target.value)}
+                    className="bg-royalPurple-card border border-royalPurple-border rounded-lg px-3 py-2 text-sm text-royalPurple-text1 min-w-[140px]"
+                  >
+                    <option value="All Terms">All terms</option>
+                    <option value="Term 1">Term 1</option>
+                    <option value="Term 2">Term 2</option>
+                    <option value="Term 3">Term 3</option>
+                  </select>
+                </label>
+                <label className="flex flex-col gap-1 text-xs text-royalPurple-text2">
+                  Result type
+                  <select
+                    value={selectedResultType}
+                    onChange={(e) => setSelectedResultType(e.target.value)}
+                    className="bg-royalPurple-card border border-royalPurple-border rounded-lg px-3 py-2 text-sm text-royalPurple-text1 min-w-[160px]"
+                  >
+                    <option value="">All types</option>
+                    {resultTypeOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            </div>
+          </section>
 
           {/* Quick Stats Overview */}
           <section aria-label="School Statistics" className="overflow-x-auto pb-2">

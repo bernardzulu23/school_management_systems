@@ -3,6 +3,12 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { calculateGrade } from '@/lib/gradingSystem'
+import {
+  normalizeResultType,
+  SCHOOL_WIDE_RESULT_TYPES,
+  getResultTypeLabel,
+  RESULT_TYPES,
+} from '@/lib/results/resultTypes'
 import { logger, captureError } from '@/lib/utils/logger'
 
 export const dynamic = 'force-dynamic'
@@ -139,9 +145,20 @@ export async function GET(request) {
     const yearParam = searchParams.get('year')
     const yearFilter = yearParam ? Number(yearParam) : null
     const termFilter = toTermLabel(searchParams.get('term'))
+    const resultTypeParam = String(searchParams.get('resultType') || '').trim()
+    const normalizedResultType = resultTypeParam ? normalizeResultType(resultTypeParam) : ''
+    const resultTypeFilter =
+      normalizedResultType && SCHOOL_WIDE_RESULT_TYPES.includes(normalizedResultType)
+        ? normalizedResultType
+        : ''
+
+    const resultTypeClause = resultTypeFilter
+      ? { resultType: resultTypeFilter }
+      : { resultType: { in: SCHOOL_WIDE_RESULT_TYPES } }
 
     const resultWhere = {
       schoolId,
+      ...resultTypeClause,
       ...(termFilter
         ? {
             OR: [
@@ -864,7 +881,7 @@ export async function GET(request) {
     })
 
     const recentResults = await prisma.result.findMany({
-      where: { schoolId },
+      where: { schoolId, ...resultTypeClause },
       orderBy: { updatedAt: 'desc' },
       select: {
         id: true,
@@ -874,6 +891,7 @@ export async function GET(request) {
         grade: true,
         term: true,
         year: true,
+        resultType: true,
         enteredByUserId: true,
         student: { select: { name: true, class: true } },
         subject: { select: { name: true } },
@@ -898,7 +916,7 @@ export async function GET(request) {
       type: 'result',
       created_at: r.updatedAt || r.createdAt,
       title: `${r.subject?.name || 'Subject'} result entered`,
-      description: `${r.student?.name || 'Student'} • ${r.student?.class || ''} • ${Math.round(
+      description: `${r.student?.name || 'Student'} • ${r.student?.class || ''} • ${getResultTypeLabel(r.resultType)} • ${Math.round(
         Number(r.score || 0)
       )}%`,
       actor: userNameById.get(String(r.enteredByUserId || '')) || 'Unknown',
@@ -956,6 +974,11 @@ export async function GET(request) {
       pass_rate: passRate,
       year_group_performance: year_group_performance,
       subject_performance_rows: subjectPerformanceRows,
+      result_type_options: SCHOOL_WIDE_RESULT_TYPES.map((value) => ({
+        value,
+        label: getResultTypeLabel(value),
+      })),
+      selected_result_type: resultTypeFilter || '',
     }
 
     log.response(200, Date.now() - start)

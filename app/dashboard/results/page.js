@@ -25,6 +25,7 @@ export default function ResultsPage() {
   const [selectedClass, setSelectedClass] = useState('')
   const [selectedSubject, setSelectedSubject] = useState('')
   const [selectedTeacher, setSelectedTeacher] = useState('')
+  const [selectedResultType, setSelectedResultType] = useState('')
   const { user } = useAuth()
 
   const role = String(user?.role || '').toLowerCase()
@@ -38,13 +39,20 @@ export default function ResultsPage() {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ['dashboard-results', selectedClass, selectedSubject, selectedTeacher],
+    queryKey: [
+      'dashboard-results',
+      selectedClass,
+      selectedSubject,
+      selectedTeacher,
+      selectedResultType,
+    ],
     queryFn: () =>
       api
         .getResultsOverview({
           class: selectedClass || undefined,
           subject: selectedSubject || undefined,
           teacher: selectedTeacher || undefined,
+          resultType: selectedResultType || undefined,
         })
         .then((res) => res.data),
     enabled: !isStudent,
@@ -61,6 +69,11 @@ export default function ResultsPage() {
   )
 
   const teacherOptions = useMemo(() => resultsData?.filters?.teachers || [], [resultsData])
+
+  const resultTypeOptions = useMemo(
+    () => (Array.isArray(resultsData?.result_type_options) ? resultsData.result_type_options : []),
+    [resultsData]
+  )
 
   const resultsToShow = useMemo(
     () => (Array.isArray(resultsData?.results) ? resultsData.results : []),
@@ -149,8 +162,31 @@ export default function ResultsPage() {
               </CardHeader>
               <CardContent>
                 <div
-                  className={`grid grid-cols-1 gap-4 ${showTeacherFilter ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}
+                  className={`grid grid-cols-1 gap-4 ${showTeacherFilter ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-2'}`}
                 >
+                  {showTeacherFilter && (
+                    <div>
+                      <label
+                        htmlFor="result-type-filter"
+                        className="block text-sm font-medium text-royalPurple-text2 mb-2"
+                      >
+                        Result type
+                      </label>
+                      <select
+                        id="result-type-filter"
+                        value={selectedResultType}
+                        onChange={(e) => setSelectedResultType(e.target.value)}
+                        className="w-full p-2 border border-royalPurple-border rounded-md bg-royalPurple-card"
+                      >
+                        <option value="">All term results</option>
+                        {resultTypeOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                   <div>
                     <label
                       htmlFor="class-filter"
@@ -325,6 +361,11 @@ export default function ResultsPage() {
                           <th className="text-left py-3 px-4 text-sm text-royalPurple-text2">
                             Subject
                           </th>
+                          {showTeacherFilter && (
+                            <th className="text-left py-3 px-4 text-sm text-royalPurple-text2">
+                              Type
+                            </th>
+                          )}
                           <th className="text-left py-3 px-4 text-sm text-royalPurple-text2">
                             Class
                           </th>
@@ -356,6 +397,11 @@ export default function ResultsPage() {
                             <td className="py-3 px-4 text-sm text-royalPurple-text2">
                               {result.subject}
                             </td>
+                            {showTeacherFilter && (
+                              <td className="py-3 px-4 text-sm text-royalPurple-text2">
+                                {result.result_type_label || 'End of term'}
+                              </td>
+                            )}
                             <td className="py-3 px-4 text-sm text-royalPurple-text2">
                               {result.class}
                             </td>

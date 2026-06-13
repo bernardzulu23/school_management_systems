@@ -914,6 +914,7 @@ export default function TeacherDashboard() {
                               {result.subjectName || 'Subject'}
                               {result.class ? ` • ${result.class}` : ''} • {result.term}{' '}
                               {result.year}
+                              {result.result_type_label ? ` • ${result.result_type_label}` : ''}
                             </p>
                           </div>
                         </div>

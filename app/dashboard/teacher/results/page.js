@@ -15,6 +15,11 @@ import {
 } from '@/components/ui/select'
 import { useAuth } from '@/lib/auth'
 import { calculateGrade } from '@/lib/gradingSystem'
+import {
+  RESULT_TYPES,
+  TEACHER_ENTRY_RESULT_TYPES,
+  getResultTypeLabel,
+} from '@/lib/results/resultTypes'
 import { toast } from 'react-hot-toast'
 import { Save, ArrowLeft, Loader2, CheckCircle, AlertCircle, Trash2 } from 'lucide-react'
 import Link from 'next/link'
@@ -28,6 +33,7 @@ export default function ResultEntryPage() {
   const [assignments, setAssignments] = useState([])
   const [selectedAssignmentId, setSelectedAssignmentId] = useState('')
   const [selectedTerm, setSelectedTerm] = useState('')
+  const [selectedResultType, setSelectedResultType] = useState(RESULT_TYPES.END_OF_TERM)
   const [termError, setTermError] = useState(false)
 
   const [pupils, setPupils] = useState([])
@@ -52,7 +58,7 @@ export default function ResultEntryPage() {
 
   const parseTermYear = (termRaw) => {
     const t = String(termRaw || '').trim()
-    const match = t.match(/(Term\\s*\\d+)\\s*(\\d{4})/i)
+    const match = t.match(/(Term\s*\d+)\s*(\d{4})/i)
     if (match) return { term: match[1].trim(), year: Number(match[2]) }
     return { term: t || 'Term 1', year: new Date().getFullYear() }
   }
@@ -115,6 +121,10 @@ export default function ResultEntryPage() {
         const preferred = draft?.selectedAssignmentId
         const draftTerm = String(draft?.selectedTerm || '').trim()
         if (draftTerm && terms.includes(draftTerm)) setSelectedTerm(draftTerm)
+        const draftType = String(draft?.selectedResultType || '').trim()
+        if (draftType && TEACHER_ENTRY_RESULT_TYPES.includes(draftType)) {
+          setSelectedResultType(draftType)
+        }
         if (preferred && data.some((a) => a.id === preferred)) {
           setSelectedAssignmentId(preferred)
         } else if (!selectedAssignmentId && data.length > 0) {
@@ -128,8 +138,8 @@ export default function ResultEntryPage() {
   }, [])
 
   useEffect(() => {
-    saveDraft({ selectedAssignmentId, selectedTerm })
-  }, [selectedAssignmentId, selectedTerm])
+    saveDraft({ selectedAssignmentId, selectedTerm, selectedResultType })
+  }, [selectedAssignmentId, selectedTerm, selectedResultType])
 
   const fetchPupilsAndResults = async () => {
     if (!selectedAssignment || !selectedTerm) return
@@ -148,7 +158,7 @@ export default function ResultEntryPage() {
 
       const fetchResultsOnce = async () =>
         fetch(
-          `/api/teacher/results?classId=${encodeURIComponent(selectedAssignment.classId)}&subjectId=${encodeURIComponent(selectedAssignment.subjectId)}&term=${encodeURIComponent(term)}&year=${encodeURIComponent(year)}`,
+          `/api/teacher/results?classId=${encodeURIComponent(selectedAssignment.classId)}&subjectId=${encodeURIComponent(selectedAssignment.subjectId)}&term=${encodeURIComponent(term)}&year=${encodeURIComponent(year)}&resultType=${encodeURIComponent(selectedResultType)}`,
           { cache: 'no-store', credentials: 'include' }
         )
 
@@ -202,7 +212,7 @@ export default function ResultEntryPage() {
 
   useEffect(() => {
     fetchPupilsAndResults()
-  }, [selectedAssignmentId, selectedTerm])
+  }, [selectedAssignmentId, selectedTerm, selectedResultType])
 
   const handleScoreChange = (studentId, value) => {
     // Allow empty string for clearing
@@ -277,11 +287,12 @@ export default function ResultEntryPage() {
         classId: selectedAssignment.classId,
         term,
         year,
+        resultType: selectedResultType,
         score: scores[p.id] === '' ? null : scores[p.id],
         baseUpdatedAt: baseUpdatedAtByPupil[p.id] || null,
       }))
       .filter((r) => r.score !== undefined && r.score !== null)
-    return { results }
+    return { results, resultType: selectedResultType }
   }
 
   const chunkPayload = (payload, size = SAVE_BATCH_SIZE) => {
@@ -512,7 +523,22 @@ export default function ResultEntryPage() {
         {/* Filters */}
         <Card>
           <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="space-y-2">
+                <Label>Result type</Label>
+                <Select value={selectedResultType} onValueChange={setSelectedResultType}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select result type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {TEACHER_ENTRY_RESULT_TYPES.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {getResultTypeLabel(type)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="space-y-2">
                 <Label>Term</Label>
                 <Select
@@ -573,7 +599,7 @@ export default function ResultEntryPage() {
                   {selectedAssignment.className} - {selectedAssignment.subjectName}
                 </span>
                 <span className="text-sm font-normal text-royalPurple-text3">
-                  {pupils.length} Pupils
+                  {getResultTypeLabel(selectedResultType)} · {pupils.length} Pupils
                 </span>
               </CardTitle>
             </CardHeader>

@@ -4,6 +4,7 @@ import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { getResultTypeLabel, RESULT_TYPES } from '@/lib/results/resultTypes'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -61,6 +62,8 @@ export const GET = withErrorHandler(async function GET(request) {
     grade: result.grade,
     term: result.term,
     year: result.year,
+    resultType: result.resultType || RESULT_TYPES.END_OF_TERM,
+    result_type_label: getResultTypeLabel(result.resultType),
     comments: result.comments,
     date: result.createdAt.toISOString(),
   }))
