@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 // import TeacherAssignments from '@/components/dashboard/TeacherAssignments'
 import { api } from '@/lib/api'
+import { getGradeBadgeClasses } from '@/lib/gradingSystem'
 import { TeacherTimetableView } from '@/components/timetable/TeacherTimetableView'
 import { useSchoolTimeSlots } from '@/lib/timetable/useSchoolTimeSlots'
 import { printTimetable } from '@/lib/timetable/printTimetable'
@@ -325,12 +326,7 @@ export default function TeacherDashboard() {
   }
 
   // Helper function to calculate grade color
-  const getGradeColor = (grade) => {
-    if (grade === 'A+' || grade === 'A') return 'text-royalPurple-successTx bg-royalPurple-success'
-    if (grade === 'B+' || grade === 'B') return 'text-royalPurple-accentTx bg-royalPurple-accent'
-    if (grade === 'C+' || grade === 'C') return 'text-warn bg-warn/20'
-    return 'text-royalPurple-dangerTx bg-royalPurple-danger'
-  }
+  const getGradeColor = (grade) => getGradeBadgeClasses(grade)
 
   const teacherTitle = String(currentUser?.gender || '')
     .trim()

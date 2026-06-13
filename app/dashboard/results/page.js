@@ -18,6 +18,7 @@ import {
   GraduationCap,
   RefreshCw,
 } from 'lucide-react'
+import { getGradeBadgeClasses } from '@/lib/gradingSystem'
 import { TeacherCompliancePanel } from '@/components/compliance/TeacherCompliancePanel'
 
 export default function ResultsPage() {
@@ -65,25 +66,6 @@ export default function ResultsPage() {
     () => (Array.isArray(resultsData?.results) ? resultsData.results : []),
     [resultsData]
   )
-
-  const getGradeColor = (grade) => {
-    switch (grade) {
-      case 'A':
-      case 'A+':
-        return 'text-royalPurple-successTx bg-royalPurple-success'
-      case 'A-':
-      case 'B+':
-        return 'text-royalPurple-accentTx bg-royalPurple-accent'
-      case 'B':
-      case 'B-':
-        return 'text-warn bg-warn/20'
-      case 'C+':
-      case 'C':
-        return 'text-accent bg-accent/20'
-      default:
-        return 'text-royalPurple-dangerTx bg-royalPurple-danger'
-    }
-  }
 
   const stats = useMemo(() => {
     if (resultsToShow.length === 0) {
@@ -385,7 +367,7 @@ export default function ResultsPage() {
                             <td className="py-3 px-4 text-sm font-medium">{result.percentage}%</td>
                             <td className="py-3 px-4">
                               <span
-                                className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${getGradeColor(result.grade)}`}
+                                className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${getGradeBadgeClasses(result.grade)}`}
                               >
                                 {result.grade}
                               </span>

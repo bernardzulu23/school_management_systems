@@ -17,6 +17,7 @@ import { useSchoolTimeSlots } from '@/lib/timetable/useSchoolTimeSlots'
 import { printTimetable } from '@/lib/timetable/printTimetable'
 import { api } from '@/lib/api'
 import { percentTextClass } from '@/lib/utils/percentColor'
+import { calculateGrade, getGradeBadgeClasses, isTopAchievementGrade } from '@/lib/gradingSystem'
 import {
   BookOpen,
   ClipboardList,
@@ -192,22 +193,14 @@ export default function StudentDashboard() {
 
   // Helper function to get achievement icon based on grade
   const getAchievementIcon = (grade) => {
-    if (grade === 'A+' || grade === 'A' || grade === 'ONE' || grade === '1' || grade === '2') {
+    if (isTopAchievementGrade(grade)) {
       return <Trophy className="h-4 w-4 text-warn/100" />
     }
     return null
   }
 
-  // Helper function to get grade from score
-  const getGrade = (score) => {
-    if (!score) return 'N/A'
-    if (score >= 75) return 'A+'
-    if (score >= 70) return 'A'
-    if (score >= 60) return 'B'
-    if (score >= 50) return 'C'
-    if (score >= 40) return 'D'
-    return 'F'
-  }
+  const studentClassName = dashboardData?.student?.class || studentProfile?.class || ''
+  const overallGradeInfo = calculateGrade(dashboardStats.averageGrade, studentClassName)
 
   // Game handlers
   const handleGameComplete = async (results) => {
@@ -519,9 +512,11 @@ export default function StudentDashboard() {
                         </div>
                         <h3 className="font-bold text-royalPurple-text1 text-lg">Overall Grade</h3>
                         <p className="text-3xl font-bold text-royalPurple-successTx mt-2">
-                          {getGrade(dashboardStats.averageGrade)}
+                          {overallGradeInfo.grade}
                         </p>
-                        <p className="text-royalPurple-text2 text-sm mt-1">Above Average</p>
+                        <p className="text-royalPurple-text2 text-sm mt-1">
+                          {overallGradeInfo.status || 'Overall performance'}
+                        </p>
                       </div>
                       <div className="text-center">
                         <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
@@ -922,17 +917,11 @@ export default function StudentDashboard() {
                               {Number(result.score) || 0}%
                             </div>
                             <div
-                              className={`text-xs px-3 py-1 rounded-full font-medium flex items-center ${
-                                result.grade === 'A+' || result.grade === 'A'
-                                  ? 'bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50'
-                                  : result.grade === 'B+' || result.grade === 'B'
-                                    ? 'bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50'
-                                    : result.grade === 'C+' || result.grade === 'C'
-                                      ? 'bg-warn/60 text-warn/20 border border-warn/50'
-                                      : 'bg-royalPurple-danger/60 text-royalPurple-dangerTx border border-royalPurple-border/50'
-                              }`}
+                              className={`text-xs px-3 py-1 rounded-full font-medium flex items-center border border-royalPurple-border/50 ${getGradeBadgeClasses(result.grade || calculateGrade(result.score, studentClassName).grade)}`}
                             >
-                              Grade {result.grade}
+                              {result.grade || calculateGrade(result.score, studentClassName).grade}
+                              {' · '}
+                              {calculateGrade(result.score, studentClassName).status}
                               {getAchievementIcon(result.grade) && (
                                 <span className="ml-1">{getAchievementIcon(result.grade)}</span>
                               )}
