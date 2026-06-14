@@ -4,6 +4,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { getHodTeacherPerformance } from '@/lib/analytics/hodTeacherPerformance'
+import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,6 +20,8 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  await assertHodSchoolAccess(schoolId)
 
   const userId = String(auth.user?.id || '').trim()
   if (!userId) throw new ApiError('Unauthorized', 401)

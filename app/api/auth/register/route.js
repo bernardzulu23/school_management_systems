@@ -15,6 +15,7 @@ import {
   normalizeYearGroup,
   buildClassName,
 } from '@/lib/services/registrationHelpers'
+import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 
 export const POST = withErrorHandler(async (request) => {
   const auth = await authMiddleware(request)
@@ -76,7 +77,7 @@ export const POST = withErrorHandler(async (request) => {
   // 2b. Check if school has paid (payment gate) - skip for pilot schools
   const school = await prisma.school.findUnique({
     where: { id: schoolId },
-    select: { plan: true, emailVerified: true, schoolType: true },
+    select: { plan: true, emailVerified: true, schoolType: true, level: true },
   })
   const isPilotUser = isPilotEmail(auth.user?.email)
   if (school?.plan === 'unpaid' && !isPilotUser && school?.schoolType !== 'INDIVIDUAL') {
@@ -88,6 +89,21 @@ export const POST = withErrorHandler(async (request) => {
         code: 'PAYMENT_REQUIRED',
       },
       { status: 402 }
+    )
+  }
+
+  const roleNormalized = String(role || '').toLowerCase()
+  if (
+    (roleNormalized === 'hod' || roleNormalized === 'head of department') &&
+    !canAccessHodFeatures({ schoolLevel: school?.level })
+  ) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'HOD registration is not available for primary schools (ECE–Grade 7)',
+        code: 'PRIMARY_ONLY_BLOCKED',
+      },
+      { status: 403 }
     )
   }
 

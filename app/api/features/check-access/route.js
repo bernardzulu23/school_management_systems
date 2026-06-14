@@ -2,7 +2,12 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { getAuthUser } from '@/lib/middleware/auth'
-import { canUseFeature, planIncludes, PRIMARY_ONLY_FEATURES } from '@/lib/zambiaSchoolFeatures'
+import {
+  canUseFeature,
+  planIncludes,
+  PRIMARY_ONLY_FEATURES,
+  SECONDARY_ONLY_FEATURES,
+} from '@/lib/zambiaSchoolFeatures'
 
 export async function POST(request) {
   const user = await getAuthUser(request)
@@ -81,14 +86,42 @@ export async function POST(request) {
     }
 
     if (!canUseFeature(level, featureId)) {
+      if (level === 'primary' && SECONDARY_ONLY_FEATURES[featureId]) {
+        const meta = SECONDARY_ONLY_FEATURES[featureId]
+        return NextResponse.json(
+          {
+            allowed: false,
+            reason:
+              'This feature is not available for primary schools (ECE–Grade 7). Use CBC continuous assessment instead.',
+            code: 'SECONDARY_ONLY',
+            isSecondaryOnly: true,
+            featureName: meta?.name || null,
+            schoolLevel: level,
+          },
+          { status: 403 }
+        )
+      }
+
       const meta = PRIMARY_ONLY_FEATURES[featureId]
+      if (level === 'secondary' && meta) {
+        return NextResponse.json(
+          {
+            allowed: false,
+            reason: 'This feature is only available for primary schools',
+            code: 'PRIMARY_ONLY',
+            isPrimaryOnly: true,
+            featureName: meta?.name || null,
+            schoolLevel: level,
+          },
+          { status: 403 }
+        )
+      }
+
       return NextResponse.json(
         {
           allowed: false,
-          reason: 'This feature is only available for primary schools',
-          code: 'PRIMARY_ONLY',
-          isPrimaryOnly: true,
-          featureName: meta?.name || null,
+          reason: 'This feature is not available for your school level',
+          code: 'SCHOOL_LEVEL_RESTRICTED',
           schoolLevel: level,
         },
         { status: 403 }

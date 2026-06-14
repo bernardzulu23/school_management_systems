@@ -23,12 +23,16 @@ import { api } from '@/lib/api'
 import toast from 'react-hot-toast'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
+import { useSchool } from '@/lib/context/SchoolContext'
+import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
 import SubjectSelection from '@/components/registration/SubjectSelection'
 import UserTypeCards from '@/components/dashboard/UserTypeCards'
 import { evaluatePassword, getPasswordFormError } from '@/components/ui/PasswordRequirements'
 
 export default function UserManagement() {
+  const { school } = useSchool()
+  const showHodFeatures = canAccessHodFeatures({ schoolLevel: school?.level })
   const [activeUserType, setActiveUserType] = useState('all')
   const [users, setUsers] = useState([])
   const [hodAssignments, setHodAssignments] = useState([])
@@ -115,12 +119,16 @@ export default function UserManagement() {
       icon: GraduationCap,
       count: userCounts.totalTeachers,
     },
-    {
-      id: 'hods',
-      name: 'HODs',
-      icon: Settings,
-      count: userCounts.totalHods,
-    },
+    ...(showHodFeatures
+      ? [
+          {
+            id: 'hods',
+            name: 'HODs',
+            icon: Settings,
+            count: userCounts.totalHods,
+          },
+        ]
+      : []),
     {
       id: 'headteachers',
       name: 'Headteachers',
@@ -505,44 +513,46 @@ export default function UserManagement() {
             </CardContent>
           </Card>
 
-          <Card className="bg-royalPurple-card border border-royalPurple-border rounded-xl overflow-hidden hover:scale-105 transition-all duration-300">
-            <CardHeader className="bg-royalPurple-card2 p-4 border-b border-royalPurple-border">
-              <div className="flex items-center gap-3">
-                <div className="bg-royalPurple-card border border-royalPurple-border rounded-lg p-2">
-                  <Settings className="h-5 w-5 text-royalPurple-text2" aria-hidden="true" />
+          {showHodFeatures && (
+            <Card className="bg-royalPurple-card border border-royalPurple-border rounded-xl overflow-hidden hover:scale-105 transition-all duration-300">
+              <CardHeader className="bg-royalPurple-card2 p-4 border-b border-royalPurple-border">
+                <div className="flex items-center gap-3">
+                  <div className="bg-royalPurple-card border border-royalPurple-border rounded-lg p-2">
+                    <Settings className="h-5 w-5 text-royalPurple-text2" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-royalPurple-text1 font-semibold text-base">
+                      Assign HODs
+                    </CardTitle>
+                    <p className="text-royalPurple-text2 text-sm mt-1">
+                      Select an existing teacher and assign a department
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <CardTitle className="text-royalPurple-text1 font-semibold text-base">
-                    Assign HODs
-                  </CardTitle>
-                  <p className="text-royalPurple-text2 text-sm mt-1">
-                    Select an existing teacher and assign a department
-                  </p>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  <Button
+                    className="bg-royalPurple-accent text-royalPurple-deep font-semibold rounded-lg w-full py-2"
+                    onClick={() => setShowHodAssign(true)}
+                    aria-label="Assign a teacher as Head of Department"
+                  >
+                    <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
+                    Assign HOD
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                    onClick={() => setShowHodAssign(true)}
+                    aria-label="Manage HOD assignments"
+                  >
+                    <Users className="h-4 w-4 mr-2" aria-hidden="true" />
+                    Manage HOD Assignments
+                  </Button>
                 </div>
-              </div>
-            </CardHeader>
-            <CardContent className="p-6">
-              <div className="space-y-3">
-                <Button
-                  className="bg-royalPurple-accent text-royalPurple-deep font-semibold rounded-lg w-full py-2"
-                  onClick={() => setShowHodAssign(true)}
-                  aria-label="Assign a teacher as Head of Department"
-                >
-                  <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
-                  Assign HOD
-                </Button>
-                <Button
-                  variant="outline"
-                  className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
-                  onClick={() => setShowHodAssign(true)}
-                  aria-label="Manage HOD assignments"
-                >
-                  <Users className="h-4 w-4 mr-2" aria-hidden="true" />
-                  Manage HOD Assignments
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
 
           <Card className="bg-royalPurple-card border border-royalPurple-border rounded-xl overflow-hidden hover:scale-105 transition-all duration-300">
             <CardHeader className="bg-royalPurple-card2 p-4 border-b border-royalPurple-border">

@@ -4,6 +4,8 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { requireHodSchoolAccess } from '@/lib/school/hodAccess'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
 
 export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
@@ -17,6 +19,12 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const featureBlock = await requireFeature(schoolId, 'hod-management')
+  if (featureBlock) return featureBlock
+
+  const hodLevelCheck = await requireHodSchoolAccess(schoolId)
+  if (!hodLevelCheck.ok) return hodLevelCheck.response
 
   const body = await request.json()
   const teacherId = String(body?.teacherId || '')
@@ -85,6 +93,12 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const featureBlock = await requireFeature(schoolId, 'hod-management')
+  if (featureBlock) return featureBlock
+
+  const hodLevelCheck = await requireHodSchoolAccess(schoolId)
+  if (!hodLevelCheck.ok) return hodLevelCheck.response
 
   const body = await request.json().catch(() => ({}))
   const hodId = String(body?.hodId || '')

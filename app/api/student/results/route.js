@@ -5,6 +5,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getResultTypeLabel, RESULT_TYPES } from '@/lib/results/resultTypes'
+import { assertSecondaryGradingForContext } from '@/lib/school/gradingAccess'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -23,12 +24,17 @@ export const GET = withErrorHandler(async function GET(request) {
   // Resolve student profile
   const student = await db.student.findFirst({
     where: { userId: auth.user.id, schoolId },
-    select: { id: true },
+    select: { id: true, class: true },
   })
 
   if (!student) {
     throw new ApiError('Student profile not found', 404)
   }
+
+  await assertSecondaryGradingForContext(schoolId, {
+    gradeLevel: student.class,
+    prismaClient: db,
+  })
 
   const { searchParams } = new URL(request.url)
   const page = parseInt(searchParams.get('page')) || 1

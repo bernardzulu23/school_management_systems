@@ -3,11 +3,14 @@ import {
   resolveSubjectCatalog,
   resolveEducationLevelFromGrade,
   canAccessEczFeatures,
+  canAccessHodFeatures,
+  canAccessSecondaryGrading,
   getSubjectLimits,
 } from '@/lib/subjects/resolveSubjectCatalog'
 import { PRIMARY_SUBJECTS } from '@/data/subjects-primary'
 import { SECONDARY_SUBJECTS } from '@/data/subjects-secondary'
 import { canEditActivity, canManageAnyActivity, ACTIVITY_TYPES } from '@/lib/activities/helpers'
+import { canUseFeature } from '@/lib/zambiaSchoolFeatures'
 
 describe('resolveSubjectCatalog', () => {
   it('returns primary-only catalog for primary schools', () => {
@@ -76,6 +79,48 @@ describe('canAccessEczFeatures', () => {
     expect(canAccessEczFeatures({ schoolLevel: 'secondary' })).toBe(true)
     expect(canAccessEczFeatures({ schoolLevel: 'combined', gradeLevel: 'Grade 6' })).toBe(false)
     expect(canAccessEczFeatures({ schoolLevel: 'combined', gradeLevel: 'Form 3' })).toBe(true)
+    expect(canAccessEczFeatures({ schoolLevel: 'combined', gradeLevel: 'ECE' })).toBe(false)
+  })
+})
+
+describe('canAccessHodFeatures', () => {
+  it('blocks primary schools from HOD features', () => {
+    expect(canAccessHodFeatures({ schoolLevel: 'primary' })).toBe(false)
+    expect(canAccessHodFeatures({ schoolLevel: 'secondary' })).toBe(true)
+    expect(canAccessHodFeatures({ schoolLevel: 'combined' })).toBe(true)
+  })
+})
+
+describe('canAccessSecondaryGrading', () => {
+  it('mirrors ECZ education-band rules', () => {
+    expect(canAccessSecondaryGrading({ schoolLevel: 'primary' })).toBe(false)
+    expect(canAccessSecondaryGrading({ schoolLevel: 'secondary' })).toBe(true)
+    expect(canAccessSecondaryGrading({ schoolLevel: 'combined', gradeLevel: 'Grade 4' })).toBe(
+      false
+    )
+    expect(canAccessSecondaryGrading({ schoolLevel: 'combined', gradeLevel: 'Grade 10' })).toBe(
+      true
+    )
+    expect(canAccessSecondaryGrading({ schoolLevel: 'combined', gradeLevel: 'Reception' })).toBe(
+      false
+    )
+  })
+})
+
+describe('resolveEducationLevelFromGrade ECE', () => {
+  it('maps early childhood grades to primary', () => {
+    expect(resolveEducationLevelFromGrade('ECE')).toBe('primary')
+    expect(resolveEducationLevelFromGrade('Reception')).toBe('primary')
+  })
+})
+
+describe('canUseFeature secondary-only gating', () => {
+  it('blocks secondary-only plan features for primary schools', () => {
+    expect(canUseFeature('primary', 'hod-dashboard')).toBe(false)
+    expect(canUseFeature('primary', 'basic-results')).toBe(false)
+    expect(canUseFeature('primary', 'junior-performance')).toBe(false)
+    expect(canUseFeature('secondary', 'basic-results')).toBe(true)
+    expect(canUseFeature('combined', 'hod-management')).toBe(true)
   })
 })
 

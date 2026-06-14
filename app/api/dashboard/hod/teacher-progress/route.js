@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
+import { requireHodSchoolAccess } from '@/lib/school/hodAccess'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,6 +24,9 @@ export async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const hodLevelCheck = await requireHodSchoolAccess(schoolId)
+  if (!hodLevelCheck.ok) return hodLevelCheck.response
 
   const isAllowedRole = roleCheck(auth.user, [
     'HOD',
@@ -186,6 +190,9 @@ export async function PATCH(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const hodLevelCheck = await requireHodSchoolAccess(schoolId)
+  if (!hodLevelCheck.ok) return hodLevelCheck.response
 
   const isAllowedRole = roleCheck(auth.user, [
     'HOD',

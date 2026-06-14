@@ -16,10 +16,13 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts'
+import { useSchoolCapabilities } from '@/lib/school/useSchoolCapabilities'
+import { PrimarySchoolFeatureUnavailable } from '@/components/school/PrimarySchoolFeatureUnavailable'
 
 export default function StudentResultsPage() {
   const router = useRouter()
   const currentUser = useAuth((state) => state.user)
+  const { canAccessSecondaryGrading, isLoading: schoolLoading } = useSchoolCapabilities()
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -129,6 +132,19 @@ export default function StudentResultsPage() {
     a.click()
     a.remove()
     URL.revokeObjectURL(url)
+  }
+
+  if (!schoolLoading && !canAccessSecondaryGrading) {
+    return (
+      <DashboardLayout title="My Results">
+        <PrimarySchoolFeatureUnavailable title="Secondary grading unavailable">
+          <p>
+            Term grades and secondary result types are not shown for primary learners (ECE–Grade 7).
+            Your school uses CBC continuous assessment instead.
+          </p>
+        </PrimarySchoolFeatureUnavailable>
+      </DashboardLayout>
+    )
   }
 
   return (

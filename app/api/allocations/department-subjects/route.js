@@ -7,6 +7,7 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getHodProfile, resolveHodDepartmentIds } from '@/lib/utils/hodDepartmentScope'
 import { canManageDepartmentAllocations, isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
+import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
 
 function uniqueNames(values) {
   const seen = new Set()
@@ -30,6 +31,8 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  await assertHodSchoolAccess(schoolId)
 
   const hodProfile = await getHodProfile(prisma, auth.user.id, schoolId)
   if (!canManageDepartmentAllocations(auth.user, hodProfile)) {

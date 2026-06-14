@@ -16,10 +16,12 @@ import ServerSessionGuard from '@/components/auth/ServerSessionGuard'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { ErrorBoundary } from '@/components/dashboard/ErrorBoundary'
 import { getAppVersion } from '@/lib/app-version'
+import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 
 export function DashboardLayout({ children, title }) {
   const { user, logout } = useAuth()
   const { school } = useSchool()
+  const showHodLink = canAccessHodFeatures({ schoolLevel: school?.level })
   const [showFeedback, setShowFeedback] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [feedbackForm, setFeedbackForm] = useState({
@@ -143,14 +145,15 @@ export function DashboardLayout({ children, title }) {
                     Teacher Dashboard
                   </Link>
                 )}
-                {(user?.hodProfile || String(user?.role || '').toLowerCase() === 'hod') && (
-                  <Link
-                    href="/dashboard/hod"
-                    className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
-                  >
-                    HOD Dashboard
-                  </Link>
-                )}
+                {showHodLink &&
+                  (user?.hodProfile || String(user?.role || '').toLowerCase() === 'hod') && (
+                    <Link
+                      href="/dashboard/hod"
+                      className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
+                    >
+                      HOD Dashboard
+                    </Link>
+                  )}
                 <Link
                   href="/dashboard/profile"
                   className="inline-flex items-center gap-2 h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors"

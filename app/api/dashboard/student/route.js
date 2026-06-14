@@ -4,6 +4,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { gradeToPoints } from '@/lib/gradingSystem'
 import { getResultTypeLabel, RESULT_TYPES } from '@/lib/results/resultTypes'
+import { canAccessSecondaryGrading } from '@/lib/subjects/resolveSubjectCatalog'
 
 export const dynamic = 'force-dynamic'
 
@@ -64,6 +65,15 @@ export async function GET(request) {
     if (!student) {
       return NextResponse.json({ error: 'Student profile not found' }, { status: 404 })
     }
+
+    const schoolMeta = await prisma.school.findUnique({
+      where: { id: schoolId },
+      select: { level: true },
+    })
+    const showSecondaryGrading = canAccessSecondaryGrading({
+      schoolLevel: schoolMeta?.level,
+      gradeLevel: student.class,
+    })
 
     // Gamification: read the real profile, badges and games-played count so the
     // dashboard widgets reflect what is stored in the database.
@@ -128,16 +138,20 @@ export async function GET(request) {
       })
     }
 
-    const allResults = await prisma.result.findMany({
-      where: { schoolId, studentId: student.id },
-      include: { subject: { include: { teacher: { include: { user: true } } } } },
-      orderBy: { createdAt: 'desc' },
-      take: 200,
-    })
+    const allResults = showSecondaryGrading
+      ? await prisma.result.findMany({
+          where: { schoolId, studentId: student.id },
+          include: { subject: { include: { teacher: { include: { user: true } } } } },
+          orderBy: { createdAt: 'desc' },
+          take: 200,
+        })
+      : []
 
-    const endOfTermResults = allResults.filter(
-      (r) => String(r.resultType || RESULT_TYPES.END_OF_TERM) === RESULT_TYPES.END_OF_TERM
-    )
+    const endOfTermResults = showSecondaryGrading
+      ? allResults.filter(
+          (r) => String(r.resultType || RESULT_TYPES.END_OF_TERM) === RESULT_TYPES.END_OF_TERM
+        )
+      : []
 
     const normalize = (value) =>
       String(value || '')
@@ -160,24 +174,26 @@ export async function GET(request) {
     }
 
     const subjectAgg = new Map()
-    for (const r of endOfTermResults) {
-      const subjectId = String(r.subjectId || '')
-      if (!subjectId) continue
-      const subjectName = r.subject?.name || 'Unknown'
-      if (!subjectAgg.has(subjectId)) {
-        subjectAgg.set(subjectId, {
-          subjectId,
-          subjectName,
-          scores: [],
-          latestScore: null,
-          latestGrade: null,
-        })
-      }
-      const entry = subjectAgg.get(subjectId)
-      entry.scores.push(Number(r.score || 0))
-      if (entry.latestScore === null) {
-        entry.latestScore = Number(r.score || 0)
-        entry.latestGrade = r.grade ?? null
+    if (showSecondaryGrading) {
+      for (const r of endOfTermResults) {
+        const subjectId = String(r.subjectId || '')
+        if (!subjectId) continue
+        const subjectName = r.subject?.name || 'Unknown'
+        if (!subjectAgg.has(subjectId)) {
+          subjectAgg.set(subjectId, {
+            subjectId,
+            subjectName,
+            scores: [],
+            latestScore: null,
+            latestGrade: null,
+          })
+        }
+        const entry = subjectAgg.get(subjectId)
+        entry.scores.push(Number(r.score || 0))
+        if (entry.latestScore === null) {
+          entry.latestScore = Number(r.score || 0)
+          entry.latestGrade = r.grade ?? null
+        }
       }
     }
 

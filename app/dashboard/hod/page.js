@@ -4,6 +4,8 @@ import { useState, useEffect, useMemo } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
+import { useSchool } from '@/lib/context/SchoolContext'
+import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { StatsCard } from '@/components/dashboard/StatsCard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -154,6 +156,13 @@ export default function HodDashboard() {
 
   // Get current user data from auth context
   const { user: currentUser } = useAuth()
+  const { school } = useSchool()
+  useEffect(() => {
+    if (!school?.level) return
+    if (!canAccessHodFeatures({ schoolLevel: school.level })) {
+      router.replace('/dashboard/teacher')
+    }
+  }, [school?.level, router])
   useEffect(() => {
     if (!currentUser) return
     const role = String(currentUser.role || '').toLowerCase()

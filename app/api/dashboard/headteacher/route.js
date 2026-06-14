@@ -9,6 +9,7 @@ import {
   getResultTypeLabel,
   RESULT_TYPES,
 } from '@/lib/results/resultTypes'
+import { canAccessSecondaryGrading } from '@/lib/subjects/resolveSubjectCatalog'
 import { logger, captureError } from '@/lib/utils/logger'
 
 export const dynamic = 'force-dynamic'
@@ -170,6 +171,15 @@ export async function GET(request) {
       ...(yearFilter ? { year: yearFilter } : {}),
     }
 
+    const schoolRecord = await prisma.school.findUnique({
+      where: { id: schoolId },
+      select: { level: true },
+    })
+    const showSecondaryGrading = canAccessSecondaryGrading({ schoolLevel: schoolRecord?.level })
+    const effectiveResultWhere = showSecondaryGrading
+      ? resultWhere
+      : { schoolId, id: '00000000-0000-0000-0000-000000000000' }
+
     // 1. Basic Stats (scoped by schoolId for multi-tenant isolation)
     const [
       totalStudents,
@@ -188,7 +198,7 @@ export async function GET(request) {
       }),
       prisma.class.count({ where: { schoolId } }),
       prisma.subject.count({ where: { schoolId } }),
-      prisma.result.count({ where: resultWhere }),
+      prisma.result.count({ where: effectiveResultWhere }),
     ])
 
     console.log(`[HEADTEACHER-DASHBOARD] schoolId: ${schoolId}, totalStudents: ${totalStudents}`)
@@ -212,12 +222,12 @@ export async function GET(request) {
 
     // 3. Pass Rate Calculation (from Results, scoped by schoolId)
     const passedResults = await prisma.result.count({
-      where: { ...resultWhere, score: { gte: 40 } },
+      where: { ...effectiveResultWhere, score: { gte: 40 } },
     })
     const passRate = resultsCount > 0 ? Math.round((passedResults / resultsCount) * 100) : 0
 
     const scoreAgg = await prisma.result.aggregate({
-      where: resultWhere,
+      where: effectiveResultWhere,
       _avg: { score: true },
     })
     const averageScore = scoreAgg._avg.score ? Math.round(scoreAgg._avg.score) : 0
@@ -225,7 +235,7 @@ export async function GET(request) {
     const studentScoreRows =
       resultsCount > 0
         ? await prisma.result.findMany({
-            where: resultWhere,
+            where: effectiveResultWhere,
             select: { studentId: true, score: true },
             take: 200000,
           })
@@ -257,7 +267,7 @@ export async function GET(request) {
         ? await prisma.result.groupBy({
             by: ['enteredByUserId'],
             where: {
-              ...resultWhere,
+              ...effectiveResultWhere,
               enteredByUserId: { not: null },
             },
             _avg: { score: true },
@@ -270,7 +280,7 @@ export async function GET(request) {
         ? await prisma.result.groupBy({
             by: ['enteredByUserId'],
             where: {
-              ...resultWhere,
+              ...effectiveResultWhere,
               enteredByUserId: { not: null },
               score: { gte: 40 },
             },
@@ -392,7 +402,7 @@ export async function GET(request) {
 
     // 4. Students Requiring Attention (Score < 40, scoped by schoolId)
     const lowPerformingResults = await prisma.result.findMany({
-      where: { ...resultWhere, score: { lt: 40 } },
+      where: { ...effectiveResultWhere, score: { lt: 40 } },
       include: {
         student: {
           select: {
@@ -540,13 +550,13 @@ export async function GET(request) {
 
     const subjectAgg = await prisma.result.groupBy({
       by: ['subjectId'],
-      where: resultWhere,
+      where: effectiveResultWhere,
       _avg: { score: true },
       _count: { _all: true },
     })
     const subjectPassAgg = await prisma.result.groupBy({
       by: ['subjectId'],
-      where: { ...resultWhere, score: { gte: 40 } },
+      where: { ...effectiveResultWhere, score: { gte: 40 } },
       _count: { _all: true },
     })
     const passBySubjectId = new Map(
@@ -592,7 +602,7 @@ export async function GET(request) {
     const resultsWithClass =
       resultsCount > 0
         ? await prisma.result.findMany({
-            where: resultWhere,
+            where: effectiveResultWhere,
             select: { score: true, student: { select: { class: true } } },
             take: 200000,
           })
@@ -693,7 +703,7 @@ export async function GET(request) {
     // 5b. Junior Results (scoped by schoolId)
     const juniorResultRows = await prisma.result.findMany({
       where: {
-        ...resultWhere,
+        ...effectiveResultWhere,
         student: {
           OR: [
             { class: { contains: 'Form 1', mode: 'insensitive' } },
@@ -746,7 +756,7 @@ export async function GET(request) {
     const seniorResults =
       seniorStudentIds.length > 0
         ? await prisma.result.findMany({
-            where: { ...resultWhere, studentId: { in: seniorStudentIds } },
+            where: { ...effectiveResultWhere, studentId: { in: seniorStudentIds } },
             include: {
               student: { select: { name: true, class: true } },
               subject: {
@@ -842,7 +852,7 @@ export async function GET(request) {
 
     const juniorGenderRows = await prisma.result.findMany({
       where: {
-        ...resultWhere,
+        ...effectiveResultWhere,
         student: {
           OR: [
             { class: { contains: 'Form 1', mode: 'insensitive' } },
@@ -862,7 +872,7 @@ export async function GET(request) {
     const seniorGenderRows =
       seniorStudentIds.length > 0
         ? await prisma.result.findMany({
-            where: { ...resultWhere, studentId: { in: seniorStudentIds } },
+            where: { ...effectiveResultWhere, studentId: { in: seniorStudentIds } },
             select: {
               studentId: true,
               student: { select: { class: true, user: { select: { gender: true } } } },
@@ -880,24 +890,26 @@ export async function GET(request) {
       allowedYearGroups: ['Grade 10', 'Grade 11', 'Grade 12'],
     })
 
-    const recentResults = await prisma.result.findMany({
-      where: { schoolId, ...resultTypeClause },
-      orderBy: { updatedAt: 'desc' },
-      select: {
-        id: true,
-        createdAt: true,
-        updatedAt: true,
-        score: true,
-        grade: true,
-        term: true,
-        year: true,
-        resultType: true,
-        enteredByUserId: true,
-        student: { select: { name: true, class: true } },
-        subject: { select: { name: true } },
-      },
-      take: 30,
-    })
+    const recentResults = showSecondaryGrading
+      ? await prisma.result.findMany({
+          where: effectiveResultWhere,
+          orderBy: { updatedAt: 'desc' },
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            score: true,
+            grade: true,
+            term: true,
+            year: true,
+            resultType: true,
+            enteredByUserId: true,
+            student: { select: { name: true, class: true } },
+            subject: { select: { name: true } },
+          },
+          take: 30,
+        })
+      : []
 
     const enteredByIds = Array.from(
       new Set(recentResults.map((r) => String(r.enteredByUserId || '')).filter(Boolean))

@@ -1,5 +1,6 @@
 import {
   PRIMARY_ONLY_FEATURES,
+  SECONDARY_ONLY_FEATURES,
   PLAN_FEATURES,
   canUseFeature,
   getAvailableFeaturesForSchool,
@@ -32,6 +33,18 @@ describe('Zambia feature gating', () => {
     const features = getAvailableFeaturesForSchool('premium', 'secondary')
     const anyPrimaryOnlyIncluded = features.some((f) => PRIMARY_ONLY_FEATURES[f])
     expect(anyPrimaryOnlyIncluded).toBe(false)
+  })
+
+  test('primary schools cannot use secondary-only features', () => {
+    expect(canUseFeature('primary', 'hod-dashboard')).toBe(false)
+    expect(canUseFeature('primary', 'basic-results')).toBe(false)
+    expect(canUseFeature('secondary', 'basic-results')).toBe(true)
+  })
+
+  test('available features exclude secondary-only when school is primary', () => {
+    const features = getAvailableFeaturesForSchool('premium', 'primary')
+    const anySecondaryOnlyIncluded = features.some((f) => SECONDARY_ONLY_FEATURES[f])
+    expect(anySecondaryOnlyIncluded).toBe(false)
   })
 })
 

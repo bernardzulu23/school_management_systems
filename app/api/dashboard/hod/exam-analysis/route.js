@@ -5,6 +5,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
+import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
 
 function parseTermParam(termRaw) {
   const raw = String(termRaw || '').trim()
@@ -96,6 +97,8 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  await assertHodSchoolAccess(schoolId)
 
   const { searchParams } = new URL(request.url)
   const year = Number(searchParams.get('year') || new Date().getFullYear())

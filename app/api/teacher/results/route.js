@@ -11,6 +11,8 @@ import {
   sendAfricasTalkingSms,
 } from '@/lib/sms'
 import { normalizeResultType, RESULT_TYPES } from '@/lib/results/resultTypes'
+import { assertSecondaryGradingForContext } from '@/lib/school/gradingAccess'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
 
 async function gunzipAsync(data) {
   const ds = new DecompressionStream('gzip')
@@ -268,6 +270,9 @@ export const GET = withErrorHandler(async function GET(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
+  const featureBlock = await requireFeature(schoolId, 'basic-results')
+  if (featureBlock) return featureBlock
+
   const { searchParams } = new URL(request.url)
   const studentId = searchParams.get('studentId')
   const classId = searchParams.get('classId')
@@ -279,6 +284,11 @@ export const GET = withErrorHandler(async function GET(request) {
   const scope = String(searchParams.get('scope') || '')
     .trim()
     .toLowerCase()
+
+  await assertSecondaryGradingForContext(schoolId, {
+    classId: String(classId || '').trim(),
+    prismaClient: prisma,
+  })
 
   const parsedTermYear = parseTermYear(termRaw)
   const term = parsedTermYear.term
@@ -472,6 +482,9 @@ export const POST = withErrorHandler(async function POST(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
+  const featureBlock = await requireFeature(schoolId, 'basic-results')
+  if (featureBlock) return featureBlock
+
   const body = await readJson(request)
   const results = (() => {
     if (Array.isArray(body?.results)) return body.results
@@ -559,6 +572,16 @@ export const POST = withErrorHandler(async function POST(request) {
       c,
     ])
   )
+
+  await assertSecondaryGradingForContext(schoolId, { prismaClient: prisma })
+  for (const cid of classIds) {
+    const c = classMap.get(cid)
+    if (!c) continue
+    await assertSecondaryGradingForContext(schoolId, {
+      gradeLevel: c.year_group || c.name,
+      prismaClient: prisma,
+    })
+  }
 
   const enrollmentKeys = new Set()
   const classMembershipKeys = new Set()

@@ -270,7 +270,7 @@ export default function RegisterSchoolClient() {
               onChange={(e) => setForm((prev) => ({ ...prev, level: e.target.value }))}
               required
             >
-              <option value="primary">Primary School Only (Grades 1-7)</option>
+              <option value="primary">Primary School (ECE – Grade 7)</option>
               <option value="secondary">Secondary School Only (Grades 8-12)</option>
               <option value="combined">Combined Primary & Secondary</option>
             </select>

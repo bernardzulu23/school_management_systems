@@ -8,6 +8,11 @@ import { cn } from '@/lib/utils'
 import { AppVersionLabel } from '@/components/dashboard/AppVersionLabel'
 import { useSchool } from '@/lib/context/SchoolContext'
 import {
+  canAccessEczFeatures,
+  canAccessHodFeatures,
+  canAccessSecondaryGrading,
+} from '@/lib/subjects/resolveSubjectCatalog'
+import {
   Home,
   Users,
   BookOpen,
@@ -192,7 +197,24 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       ],
     }
 
-    const items = [...baseItems, ...(roleSpecificItems[roleKey] || [])]
+    const schoolLevel = String(school?.level || 'combined').toLowerCase()
+    const showHod = canAccessHodFeatures({ schoolLevel })
+    const showGrading = canAccessSecondaryGrading({ schoolLevel })
+    const showEcz = canAccessEczFeatures({ schoolLevel })
+    const navRoleKey = roleKey === 'hod' && !showHod ? 'teacher' : roleKey
+
+    const filterPrimaryItems = (items) =>
+      items.filter((item) => {
+        if (!showGrading && item.name === 'Results') return false
+        if (!showEcz && (item.name === 'ECZ SBA Hub' || item.name === 'ECZ Exam Tracking'))
+          return false
+        if (!showHod && navRoleKey === 'teacher') {
+          if (item.href?.startsWith('/dashboard/hod')) return false
+        }
+        return true
+      })
+
+    const items = filterPrimaryItems([...baseItems, ...(roleSpecificItems[navRoleKey] || [])])
     const isIndividual = String(school?.schoolType || '').toUpperCase() === 'INDIVIDUAL'
 
     if (isIndividual && roleKey === 'teacher') {

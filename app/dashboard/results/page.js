@@ -20,6 +20,8 @@ import {
 } from 'lucide-react'
 import { getGradeBadgeClasses } from '@/lib/gradingSystem'
 import { TeacherCompliancePanel } from '@/components/compliance/TeacherCompliancePanel'
+import { useSchoolCapabilities } from '@/lib/school/useSchoolCapabilities'
+import { PrimarySchoolFeatureUnavailable } from '@/components/school/PrimarySchoolFeatureUnavailable'
 
 export default function ResultsPage() {
   const [selectedClass, setSelectedClass] = useState('')
@@ -27,6 +29,7 @@ export default function ResultsPage() {
   const [selectedTeacher, setSelectedTeacher] = useState('')
   const [selectedResultType, setSelectedResultType] = useState('')
   const { user } = useAuth()
+  const { canAccessSecondaryGrading, isLoading: schoolLoading } = useSchoolCapabilities()
 
   const role = String(user?.role || '').toLowerCase()
   const isHeadteacher = role === 'headteacher' || role === 'admin' || role === 'administrator'
@@ -97,6 +100,16 @@ export default function ResultsPage() {
   const handleRefresh = () => {
     startTopLoading('Refreshing')
     refetch()
+  }
+
+  if (!schoolLoading && !canAccessSecondaryGrading) {
+    return (
+      <DashboardLayout title="Results & Grading">
+        <main className="max-w-3xl mx-auto">
+          <PrimarySchoolFeatureUnavailable title="Secondary grading unavailable" />
+        </main>
+      </DashboardLayout>
+    )
   }
 
   if (isLoading) {

@@ -24,6 +24,11 @@ import {
   TrendingUp,
 } from 'lucide-react'
 import { HeadteacherProvider, useHeadteacher } from '@/lib/context/HeadteacherContext'
+import { useSchool } from '@/lib/context/SchoolContext'
+import {
+  canAccessHodFeatures,
+  canAccessSecondaryGrading,
+} from '@/lib/subjects/resolveSubjectCatalog'
 import { ErrorBoundary } from '@/components/dashboard/ErrorBoundary'
 import { logger } from '@/lib/utils/logger'
 import { ERROR_MESSAGES } from '@/lib/utils/errorMessages'
@@ -129,6 +134,9 @@ function HeadteacherDashboardContent() {
     error,
     refreshAll,
   } = useHeadteacher()
+  const { school } = useSchool()
+  const showHodFeatures = canAccessHodFeatures({ schoolLevel: school?.level })
+  const showSecondaryGrading = canAccessSecondaryGrading({ schoolLevel: school?.level })
 
   const resultTypeOptions = Array.isArray(dashboardData?.result_type_options)
     ? dashboardData.result_type_options
@@ -211,81 +219,93 @@ function HeadteacherDashboardContent() {
   }
 
   const tabs = useMemo(
-    () => [
-      {
-        id: 'overview',
-        name: 'Dashboard Overview',
-        icon: BarChart3,
-        description: 'School statistics and performance',
-      },
-      {
-        id: 'creative-teaching',
-        name: 'Creative Teaching & STEM',
-        icon: Rocket,
-        description: 'Creative teaching tools and STEM learning features',
-      },
-      {
-        id: 'student-attention',
-        name: 'Students Requiring Attention',
-        icon: AlertCircle,
-        description: 'Students scoring below 40% - immediate intervention needed',
-      },
-      {
-        id: 'comprehensive-analytics',
-        name: 'Comprehensive Analytics',
-        icon: FileBarChart,
-        description: 'Detailed performance analytics and insights',
-      },
-      {
-        id: 'junior-analysis',
-        name: 'Junior Performance',
-        icon: Award,
-        description: 'Analysis of Form 1 and Form 2 results',
-      },
-      {
-        id: 'senior-analysis',
-        name: 'Senior Performance',
-        icon: Award,
-        description: 'Analysis of Grade 10 to Grade 12 results',
-      },
-      {
-        id: 'user-management',
-        name: 'User Management',
-        icon: UserPlus,
-        description: 'Register and manage users',
-      },
-      {
-        id: 'academic-management',
-        name: 'Academic Management',
-        icon: BookOpen,
-        description: 'Classes, subjects, and assessments',
-      },
-      {
-        id: 'performance-analytics',
-        name: 'Performance Analytics',
-        icon: TrendingUp,
-        description: 'School-wide monitoring and analytics',
-      },
-      {
-        id: 'strategic-planning',
-        name: 'Strategic Planning',
-        icon: Target,
-        description: 'Goals and strategic management',
-      },
-      {
-        id: 'settings',
-        name: 'School Settings',
-        icon: Settings,
-        description: 'System configuration',
-      },
-      {
-        id: 'advanced-features',
-        name: 'Advanced Features',
-        icon: Zap,
-        description: 'Advanced educational and management features',
-      },
-    ],
-    []
+    () =>
+      [
+        {
+          id: 'overview',
+          name: 'Dashboard Overview',
+          icon: BarChart3,
+          description: 'School statistics and performance',
+        },
+        {
+          id: 'creative-teaching',
+          name: 'Creative Teaching & STEM',
+          icon: Rocket,
+          description: 'Creative teaching tools and STEM learning features',
+        },
+        {
+          id: 'student-attention',
+          name: 'Students Requiring Attention',
+          icon: AlertCircle,
+          description: 'Students scoring below 40% - immediate intervention needed',
+        },
+        {
+          id: 'comprehensive-analytics',
+          name: 'Comprehensive Analytics',
+          icon: FileBarChart,
+          description: 'Detailed performance analytics and insights',
+        },
+        {
+          id: 'junior-analysis',
+          name: 'Junior Performance',
+          icon: Award,
+          description: 'Analysis of Form 1 and Form 2 results',
+        },
+        {
+          id: 'senior-analysis',
+          name: 'Senior Performance',
+          icon: Award,
+          description: 'Analysis of Grade 10 to Grade 12 results',
+        },
+        {
+          id: 'user-management',
+          name: 'User Management',
+          icon: UserPlus,
+          description: 'Register and manage users',
+        },
+        {
+          id: 'academic-management',
+          name: 'Academic Management',
+          icon: BookOpen,
+          description: 'Classes, subjects, and assessments',
+        },
+        {
+          id: 'performance-analytics',
+          name: 'Performance Analytics',
+          icon: TrendingUp,
+          description: 'School-wide monitoring and analytics',
+        },
+        {
+          id: 'strategic-planning',
+          name: 'Strategic Planning',
+          icon: Target,
+          description: 'Goals and strategic management',
+        },
+        {
+          id: 'settings',
+          name: 'School Settings',
+          icon: Settings,
+          description: 'System configuration',
+        },
+        {
+          id: 'advanced-features',
+          name: 'Advanced Features',
+          icon: Zap,
+          description: 'Advanced educational and management features',
+        },
+      ].filter((tab) => {
+        if (!showSecondaryGrading) {
+          return ![
+            'student-attention',
+            'comprehensive-analytics',
+            'junior-analysis',
+            'senior-analysis',
+            'performance-analytics',
+          ].includes(tab.id)
+        }
+        return true
+      }),
+    [showSecondaryGrading]
   )
 
   if (!user) {
@@ -425,7 +445,7 @@ function HeadteacherDashboardContent() {
               />
             )}
 
-            {showRegistrationForm === 'hod' && (
+            {showRegistrationForm === 'hod' && showHodFeatures && (
               <HodRegistrationForm
                 onSubmit={(data) => handleRegistration(data, 'hod')}
                 onCancel={() => setShowRegistrationForm(null)}
@@ -487,50 +507,52 @@ function HeadteacherDashboardContent() {
             </div>
           )}
 
-          <section
-            aria-label="Results filters"
-            className="bg-royalPurple-deep border border-royalPurple-border rounded-2xl p-4"
-          >
-            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h2 className="text-sm font-semibold text-royalPurple-text1">Results view</h2>
-                <p className="text-xs text-royalPurple-text2 mt-1">
-                  End-of-term and midterm results only. Class tests are visible on teacher and
-                  student dashboards.
-                </p>
+          {showSecondaryGrading && (
+            <section
+              aria-label="Results filters"
+              className="bg-royalPurple-deep border border-royalPurple-border rounded-2xl p-4"
+            >
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h2 className="text-sm font-semibold text-royalPurple-text1">Results view</h2>
+                  <p className="text-xs text-royalPurple-text2 mt-1">
+                    End-of-term and midterm results only. Class tests are visible on teacher and
+                    student dashboards.
+                  </p>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <label className="flex flex-col gap-1 text-xs text-royalPurple-text2">
+                    Term
+                    <select
+                      value={selectedTerm}
+                      onChange={(e) => setSelectedTerm(e.target.value)}
+                      className="bg-royalPurple-card border border-royalPurple-border rounded-lg px-3 py-2 text-sm text-royalPurple-text1 min-w-[140px]"
+                    >
+                      <option value="All Terms">All terms</option>
+                      <option value="Term 1">Term 1</option>
+                      <option value="Term 2">Term 2</option>
+                      <option value="Term 3">Term 3</option>
+                    </select>
+                  </label>
+                  <label className="flex flex-col gap-1 text-xs text-royalPurple-text2">
+                    Result type
+                    <select
+                      value={selectedResultType}
+                      onChange={(e) => setSelectedResultType(e.target.value)}
+                      className="bg-royalPurple-card border border-royalPurple-border rounded-lg px-3 py-2 text-sm text-royalPurple-text1 min-w-[160px]"
+                    >
+                      <option value="">All types</option>
+                      {resultTypeOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
               </div>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <label className="flex flex-col gap-1 text-xs text-royalPurple-text2">
-                  Term
-                  <select
-                    value={selectedTerm}
-                    onChange={(e) => setSelectedTerm(e.target.value)}
-                    className="bg-royalPurple-card border border-royalPurple-border rounded-lg px-3 py-2 text-sm text-royalPurple-text1 min-w-[140px]"
-                  >
-                    <option value="All Terms">All terms</option>
-                    <option value="Term 1">Term 1</option>
-                    <option value="Term 2">Term 2</option>
-                    <option value="Term 3">Term 3</option>
-                  </select>
-                </label>
-                <label className="flex flex-col gap-1 text-xs text-royalPurple-text2">
-                  Result type
-                  <select
-                    value={selectedResultType}
-                    onChange={(e) => setSelectedResultType(e.target.value)}
-                    className="bg-royalPurple-card border border-royalPurple-border rounded-lg px-3 py-2 text-sm text-royalPurple-text1 min-w-[160px]"
-                  >
-                    <option value="">All types</option>
-                    {resultTypeOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-            </div>
-          </section>
+            </section>
+          )}
 
           {/* Quick Stats Overview */}
           <section aria-label="School Statistics" className="overflow-x-auto pb-2">

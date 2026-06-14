@@ -2,7 +2,13 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { PLAN_FEATURES, PRIMARY_ONLY_FEATURES, planIncludes } from '@/lib/zambiaSchoolFeatures'
+import {
+  PLAN_FEATURES,
+  PRIMARY_ONLY_FEATURES,
+  SECONDARY_ONLY_FEATURES,
+  getAvailableFeaturesForSchool,
+  planIncludes,
+} from '@/lib/zambiaSchoolFeatures'
 import { Check, Lock, School } from 'lucide-react'
 
 export function FeatureGate({ featureId, children, fallback = null }) {
@@ -43,6 +49,7 @@ export function FeatureGate({ featureId, children, fallback = null }) {
           featureId={featureId}
           reason={access?.reason}
           isPrimaryOnly={access?.isPrimaryOnly}
+          isSecondaryOnly={access?.isSecondaryOnly}
           schoolLevel={access?.schoolLevel}
           onUpgrade={() => router.push('/dashboard/billing')}
         />
@@ -53,14 +60,37 @@ export function FeatureGate({ featureId, children, fallback = null }) {
   return children
 }
 
-export function FeatureLockedPrompt({ featureId, reason, isPrimaryOnly, schoolLevel, onUpgrade }) {
-  const featureMeta = PRIMARY_ONLY_FEATURES[featureId] || {}
+export function FeatureLockedPrompt({
+  featureId,
+  reason,
+  isPrimaryOnly,
+  isSecondaryOnly,
+  schoolLevel,
+  onUpgrade,
+}) {
+  const featureMeta = isSecondaryOnly
+    ? SECONDARY_ONLY_FEATURES[featureId] || {}
+    : PRIMARY_ONLY_FEATURES[featureId] || {}
 
   return (
     <div className="relative rounded-xl border border-royalPurple-border/40 bg-royalPurple-card p-6">
       <div className="absolute inset-0 rounded-xl bg-black/40 backdrop-blur-sm" />
       <div className="relative z-10 text-center">
-        {isPrimaryOnly ? (
+        {isSecondaryOnly ? (
+          <>
+            <School className="w-10 h-10 mx-auto mb-3 text-royalPurple-text1" aria-hidden="true" />
+            <h3 className="text-lg font-bold text-royalPurple-text1">
+              {featureMeta.name || 'Secondary only'}
+            </h3>
+            <p className="text-royalPurple-text2 mt-2">
+              {reason ||
+                'This feature is not available for primary schools (ECE–Grade 7). Use CBC continuous assessment instead.'}
+            </p>
+            <p className="text-royalPurple-text3 text-sm mt-2">
+              Your school level: <span className="font-semibold">{schoolLevel || 'unknown'}</span>
+            </p>
+          </>
+        ) : isPrimaryOnly ? (
           <>
             <School className="w-10 h-10 mx-auto mb-3 text-royalPurple-text1" aria-hidden="true" />
             <h3 className="text-lg font-bold text-royalPurple-text1">
@@ -128,13 +158,10 @@ export function FeatureBadge({ featureId, plan, schoolLevel, size = 'sm' }) {
 }
 
 export function AvailableFeaturesList({ schoolPlan, schoolLevel }) {
-  const available = useMemo(() => {
-    const planKey = String(schoolPlan || 'basic').toLowerCase()
-    const features = PLAN_FEATURES[planKey] || PLAN_FEATURES.basic
-    const level = String(schoolLevel || 'combined').toLowerCase()
-    if (level === 'secondary') return features.filter((f) => !PRIMARY_ONLY_FEATURES[f])
-    return features
-  }, [schoolPlan, schoolLevel])
+  const available = useMemo(
+    () => getAvailableFeaturesForSchool(schoolPlan, schoolLevel),
+    [schoolPlan, schoolLevel]
+  )
 
   return (
     <div className="space-y-4">
@@ -146,7 +173,7 @@ export function AvailableFeaturesList({ schoolPlan, schoolLevel }) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {available.map((id) => {
-            const meta = PRIMARY_ONLY_FEATURES[id]
+            const meta = PRIMARY_ONLY_FEATURES[id] || SECONDARY_ONLY_FEATURES[id]
             return (
               <div
                 key={id}
@@ -181,12 +208,8 @@ export function PlanComparisonCard({
   monthlyPrice,
 }) {
   const planKey = String(plan || 'basic').toLowerCase()
-  const features = PLAN_FEATURES[planKey] || []
   const level = String(schoolLevel || 'combined').toLowerCase()
-  const display =
-    level === 'secondary' ? features.filter((f) => !PRIMARY_ONLY_FEATURES[f]) : features
-
-  const primaryOnlyCount = level === 'primary' ? Object.keys(PRIMARY_ONLY_FEATURES).length : 0
+  const display = useMemo(() => getAvailableFeaturesForSchool(planKey, level), [planKey, level])
   const interactive = typeof onSelect === 'function'
 
   const className = `rounded-xl border p-6 text-left w-full transition-all ${
@@ -199,9 +222,7 @@ export function PlanComparisonCard({
     <>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-bold text-royalPurple-text1 capitalize">{planKey} Plan</h3>
-        <span className="text-sm text-royalPurple-text2">
-          {display.length + primaryOnlyCount} features
-        </span>
+        <span className="text-sm text-royalPurple-text2">{display.length} features</span>
       </div>
 
       {showPrice && monthlyPrice != null ? (

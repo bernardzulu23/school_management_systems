@@ -21,6 +21,7 @@ import {
 import toast from 'react-hot-toast'
 import { api } from '@/lib/api'
 import { useAuth } from '@/lib/auth'
+import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 
 function RegistrationContent() {
   const [activeForm, setActiveForm] = useState(null)
@@ -59,9 +60,13 @@ function RegistrationContent() {
       return
     }
     if (['student', 'teacher', 'hod', 'headteacher'].includes(roleParam)) {
+      if (roleParam === 'hod' && !canAccessHodFeatures({ schoolLevel: schoolMeta?.level })) {
+        setActiveForm(null)
+        return
+      }
       setActiveForm(roleParam)
     }
-  }, [searchParams, isIndividualOwner])
+  }, [searchParams, isIndividualOwner, schoolMeta?.level])
 
   const handleSubmit = async (formData, userType) => {
     if (loading) return
@@ -184,9 +189,16 @@ function RegistrationContent() {
     )
   }
 
-  const visibleRegistrationTypes = isIndividualOwner
-    ? registrationTypes.filter((t) => t.id === 'student')
-    : registrationTypes
+  const visibleRegistrationTypes = (() => {
+    let types = registrationTypes
+    if (isIndividualOwner) {
+      types = types.filter((t) => t.id === 'student')
+    }
+    if (!canAccessHodFeatures({ schoolLevel: schoolMeta?.level })) {
+      types = types.filter((t) => t.id !== 'hod')
+    }
+    return types
+  })()
 
   if (activeForm) {
     if (isIndividualOwner && activeForm !== 'student') {

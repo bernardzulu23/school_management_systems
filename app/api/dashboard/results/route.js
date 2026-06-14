@@ -6,6 +6,8 @@ import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { canAccessResultsOverview, fetchResultsOverview } from '@/lib/dashboard/resultsOverview'
+import { assertSecondaryGradingForContext } from '@/lib/school/gradingAccess'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -21,6 +23,11 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!schoolId) {
     return NextResponse.json({ error: 'School context required' }, { status: 400 })
   }
+
+  const featureBlock = await requireFeature(schoolId, 'basic-results')
+  if (featureBlock) return featureBlock
+
+  await assertSecondaryGradingForContext(schoolId, { prismaClient: prisma })
 
   const { searchParams } = new URL(request.url)
   const className = String(searchParams.get('class') || '').trim()

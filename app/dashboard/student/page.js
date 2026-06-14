@@ -48,6 +48,7 @@ import LearningPathPage from './learning-path/page'
 import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeachingHub'
 import { LearningAnalyticsPanel } from '@/components/analytics/LearningAnalyticsPanel'
 import { StudyAssistant } from '@/components/student/StudyAssistant'
+import { useSchoolCapabilities } from '@/lib/school/useSchoolCapabilities'
 import { SCHOOL_SUBJECTS, getSubjectsByIds } from '@/data/subjects'
 import toast from 'react-hot-toast'
 
@@ -200,6 +201,9 @@ export default function StudentDashboard() {
   }
 
   const studentClassName = dashboardData?.student?.class || studentProfile?.class || ''
+  const { canAccessSecondaryGrading: showSecondaryGrading } = useSchoolCapabilities({
+    gradeLevel: studentClassName,
+  })
   const overallGradeInfo = calculateGrade(dashboardStats.averageGrade, studentClassName)
 
   // Game handlers
@@ -341,17 +345,19 @@ export default function StudentDashboard() {
                     {dashboardData?.stats?.level || 1}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('subjects')}
-                  className="text-left p-6 rounded-2xl backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 hover:bg-royalPurple-card/80 transition-colors"
-                >
-                  <h3 className="text-lg font-semibold text-royalPurple-text1">Points</h3>
-                  <p className="text-3xl font-bold text-white">
-                    {dashboardData?.stats?.points || 0}
-                  </p>
-                  <p className="text-xs text-royalPurple-text2 mt-1">Best 6 subjects</p>
-                </button>
+                {showSecondaryGrading && (
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('subjects')}
+                    className="text-left p-6 rounded-2xl backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 hover:bg-royalPurple-card/80 transition-colors"
+                  >
+                    <h3 className="text-lg font-semibold text-royalPurple-text1">Points</h3>
+                    <p className="text-3xl font-bold text-white">
+                      {dashboardData?.stats?.points || 0}
+                    </p>
+                    <p className="text-xs text-royalPurple-text2 mt-1">Best 6 subjects</p>
+                  </button>
+                )}
               </div>
             )}
           </header>
@@ -468,22 +474,26 @@ export default function StudentDashboard() {
                     description="Enrolled subjects"
                     variant="flat"
                   />
-                  <StatsCard
-                    title="My Results"
-                    value={dashboardStats.totalResults}
-                    icon={BarChart3}
-                    color="green"
-                    description="Total results"
-                    variant="flat"
-                  />
-                  <StatsCard
-                    title="Average Grade"
-                    value={`${dashboardStats.averageGrade.toFixed(1)}%`}
-                    icon={Award}
-                    color="purple"
-                    description="Overall performance"
-                    variant="flat"
-                  />
+                  {showSecondaryGrading && (
+                    <>
+                      <StatsCard
+                        title="My Results"
+                        value={dashboardStats.totalResults}
+                        icon={BarChart3}
+                        color="green"
+                        description="Total results"
+                        variant="flat"
+                      />
+                      <StatsCard
+                        title="Average Grade"
+                        value={`${dashboardStats.averageGrade.toFixed(1)}%`}
+                        icon={Award}
+                        color="purple"
+                        description="Overall performance"
+                        variant="flat"
+                      />
+                    </>
+                  )}
                   <StatsCard
                     title="Goals Progress"
                     value={`${dashboardStats.completedGoals}/${dashboardStats.totalGoals}`}
@@ -496,62 +506,68 @@ export default function StudentDashboard() {
               </section>
 
               {/* Performance Overview Chart */}
-              <Card variant="glass">
-                <CardHeader>
-                  <CardTitle className="text-royalPurple-text1 flex items-center">
-                    <TrendingUp className="h-6 w-6 mr-3 text-royalPurple-successTx" />
-                    Performance Overview
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="text-center">
-                        <div className="backdrop-blur-md bg-royalPurple-success/60 border border-royalPurple-border/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                          <Award className="h-10 w-10 text-royalPurple-text1" />
-                        </div>
-                        <h3 className="font-bold text-royalPurple-text1 text-lg">Overall Grade</h3>
-                        <p className="text-3xl font-bold text-royalPurple-successTx mt-2">
-                          {overallGradeInfo.grade}
-                        </p>
-                        <p className="text-royalPurple-text2 text-sm mt-1">
-                          {overallGradeInfo.status || 'Overall performance'}
-                        </p>
-                      </div>
-                      <div className="text-center">
-                        <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                          <BarChart3 className="h-10 w-10 text-royalPurple-text1" />
-                        </div>
-                        <h3 className="font-bold text-royalPurple-text1 text-lg">Average Score</h3>
-                        <p
-                          className={`text-3xl font-bold mt-2 ${percentTextClass(dashboardStats.averageGrade)}`}
-                        >
-                          {Number(dashboardStats.averageGrade) || 0}%
-                        </p>
-                        <p className="text-royalPurple-text2 text-sm mt-1">Last 5 assessments</p>
-                      </div>
-                      <div className="text-center">
-                        <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                          <Calendar className="h-10 w-10 text-royalPurple-text1" />
-                        </div>
-                        <h3 className="font-bold text-royalPurple-text1 text-lg">Attendance</h3>
-                        {Number.isFinite(Number(dashboardData?.stats?.attendanceRate)) ? (
-                          <p
-                            className={`text-3xl font-bold mt-2 ${percentTextClass(
-                              Number(dashboardData?.stats?.attendanceRate)
-                            )}`}
-                          >
-                            {Number(dashboardData?.stats?.attendanceRate)}%
+              {showSecondaryGrading && (
+                <Card variant="glass">
+                  <CardHeader>
+                    <CardTitle className="text-royalPurple-text1 flex items-center">
+                      <TrendingUp className="h-6 w-6 mr-3 text-royalPurple-successTx" />
+                      Performance Overview
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="text-center">
+                          <div className="backdrop-blur-md bg-royalPurple-success/60 border border-royalPurple-border/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                            <Award className="h-10 w-10 text-royalPurple-text1" />
+                          </div>
+                          <h3 className="font-bold text-royalPurple-text1 text-lg">
+                            Overall Grade
+                          </h3>
+                          <p className="text-3xl font-bold text-royalPurple-successTx mt-2">
+                            {overallGradeInfo.grade}
                           </p>
-                        ) : (
-                          <p className="text-3xl font-bold text-g-400 mt-2 italic">No data</p>
-                        )}
-                        <p className="text-royalPurple-text2 text-sm mt-1">This semester</p>
+                          <p className="text-royalPurple-text2 text-sm mt-1">
+                            {overallGradeInfo.status || 'Overall performance'}
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                            <BarChart3 className="h-10 w-10 text-royalPurple-text1" />
+                          </div>
+                          <h3 className="font-bold text-royalPurple-text1 text-lg">
+                            Average Score
+                          </h3>
+                          <p
+                            className={`text-3xl font-bold mt-2 ${percentTextClass(dashboardStats.averageGrade)}`}
+                          >
+                            {Number(dashboardStats.averageGrade) || 0}%
+                          </p>
+                          <p className="text-royalPurple-text2 text-sm mt-1">Last 5 assessments</p>
+                        </div>
+                        <div className="text-center">
+                          <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                            <Calendar className="h-10 w-10 text-royalPurple-text1" />
+                          </div>
+                          <h3 className="font-bold text-royalPurple-text1 text-lg">Attendance</h3>
+                          {Number.isFinite(Number(dashboardData?.stats?.attendanceRate)) ? (
+                            <p
+                              className={`text-3xl font-bold mt-2 ${percentTextClass(
+                                Number(dashboardData?.stats?.attendanceRate)
+                              )}`}
+                            >
+                              {Number(dashboardData?.stats?.attendanceRate)}%
+                            </p>
+                          ) : (
+                            <p className="text-3xl font-bold text-g-400 mt-2 italic">No data</p>
+                          )}
+                          <p className="text-royalPurple-text2 text-sm mt-1">This semester</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              )}
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* My Class Info */}
@@ -801,7 +817,9 @@ export default function StudentDashboard() {
                                           : 'bg-royalPurple-danger/60 text-royalPurple-dangerTx border border-royalPurple-border/50'
                                   }`}
                                 >
-                                  Grade {performance.latestGrade}
+                                  {showSecondaryGrading
+                                    ? `Grade ${performance.latestGrade}`
+                                    : `${Number(performance.avgScore) || 0}% avg`}
                                 </div>
                               </div>
                               <h3 className="text-royalPurple-text1 font-bold text-lg mb-2">
@@ -873,78 +891,81 @@ export default function StudentDashboard() {
               <StudentSubjects studentData={dashboardData} />
 
               {/* Recent Results */}
-              <Card variant="glass">
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle className="text-royalPurple-text1 flex items-center">
-                    <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
-                    Recent Results
-                  </CardTitle>
-                  <Link href="/dashboard/student/results">
-                    <Button className="bg-gradient-to-r from-ink to-kpi-pass hover:from-g-800 hover:to-g-700 text-royalPurple-text1">
-                      View All Results
-                    </Button>
-                  </Link>
-                </CardHeader>
-                <CardContent>
-                  <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                    <div className="space-y-4">
-                      {/* Recent Results Data */}
-                      {(dashboardData?.recent_results || []).map((result) => (
-                        <div
-                          key={result.id}
-                          className="flex items-center justify-between p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-colors duration-200"
-                        >
-                          <div className="flex items-center space-x-4">
-                            <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-xl p-3">
-                              <BookOpen className="h-6 w-6 text-royalPurple-text1" />
+              {showSecondaryGrading && (
+                <Card variant="glass">
+                  <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle className="text-royalPurple-text1 flex items-center">
+                      <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+                      Recent Results
+                    </CardTitle>
+                    <Link href="/dashboard/student/results">
+                      <Button className="bg-gradient-to-r from-ink to-kpi-pass hover:from-g-800 hover:to-g-700 text-royalPurple-text1">
+                        View All Results
+                      </Button>
+                    </Link>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+                      <div className="space-y-4">
+                        {/* Recent Results Data */}
+                        {(dashboardData?.recent_results || []).map((result) => (
+                          <div
+                            key={result.id}
+                            className="flex items-center justify-between p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-colors duration-200"
+                          >
+                            <div className="flex items-center space-x-4">
+                              <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-xl p-3">
+                                <BookOpen className="h-6 w-6 text-royalPurple-text1" />
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-royalPurple-text1">
+                                  {result.subject?.name || result.subject || 'Subject'}
+                                </h4>
+                                <p className="text-royalPurple-text2 text-sm">
+                                  {result.comments || result.result_type_label || 'Assessment'}
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <h4 className="font-semibold text-royalPurple-text1">
-                                {result.subject?.name || result.subject || 'Subject'}
-                              </h4>
-                              <p className="text-royalPurple-text2 text-sm">
-                                {result.comments || result.result_type_label || 'Assessment'}
-                              </p>
+                            <div className="text-right">
+                              <div className="text-xl font-bold text-royalPurple-text1">
+                                {result.score}/100
+                              </div>
+                              <div
+                                className={`text-lg font-semibold ${percentTextClass(result.score)}`}
+                              >
+                                {Number(result.score) || 0}%
+                              </div>
+                              <div
+                                className={`text-xs px-3 py-1 rounded-full font-medium flex items-center border border-royalPurple-border/50 ${getGradeBadgeClasses(result.grade || calculateGrade(result.score, studentClassName).grade)}`}
+                              >
+                                {result.grade ||
+                                  calculateGrade(result.score, studentClassName).grade}
+                                {' · '}
+                                {calculateGrade(result.score, studentClassName).status}
+                                {getAchievementIcon(result.grade) && (
+                                  <span className="ml-1">{getAchievementIcon(result.grade)}</span>
+                                )}
+                              </div>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-xl font-bold text-royalPurple-text1">
-                              {result.score}/100
+                        ))}
+                        {(!dashboardData?.recent_results ||
+                          dashboardData.recent_results.length === 0) && (
+                          <div className="text-center py-8">
+                            <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                              <BarChart3 className="h-8 w-8 text-royalPurple-text1" />
                             </div>
-                            <div
-                              className={`text-lg font-semibold ${percentTextClass(result.score)}`}
-                            >
-                              {Number(result.score) || 0}%
-                            </div>
-                            <div
-                              className={`text-xs px-3 py-1 rounded-full font-medium flex items-center border border-royalPurple-border/50 ${getGradeBadgeClasses(result.grade || calculateGrade(result.score, studentClassName).grade)}`}
-                            >
-                              {result.grade || calculateGrade(result.score, studentClassName).grade}
-                              {' · '}
-                              {calculateGrade(result.score, studentClassName).status}
-                              {getAchievementIcon(result.grade) && (
-                                <span className="ml-1">{getAchievementIcon(result.grade)}</span>
-                              )}
-                            </div>
+                            <p className="text-royalPurple-text2">No results available yet</p>
+                            <p className="text-royalPurple-text3 text-sm mt-2">
+                              Results will appear here after assessments are graded
+                            </p>
                           </div>
-                        </div>
-                      ))}
-                      {(!dashboardData?.recent_results ||
-                        dashboardData.recent_results.length === 0) && (
-                        <div className="text-center py-8">
-                          <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                            <BarChart3 className="h-8 w-8 text-royalPurple-text1" />
-                          </div>
-                          <p className="text-royalPurple-text2">No results available yet</p>
-                          <p className="text-royalPurple-text3 text-sm mt-2">
-                            Results will appear here after assessments are graded
-                          </p>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              )}
 
               {/* Quick Actions */}
               <Card variant="glass">
@@ -970,19 +991,21 @@ export default function StudentDashboard() {
                           </p>
                         </div>
                       </Link>
-                      <Link href="/dashboard/student/results">
-                        <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
-                          <div className="backdrop-blur-md bg-royalPurple-success/60 border border-royalPurple-border/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <BarChart3 className="h-8 w-8 text-royalPurple-text1" />
+                      {showSecondaryGrading && (
+                        <Link href="/dashboard/student/results">
+                          <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
+                            <div className="backdrop-blur-md bg-royalPurple-success/60 border border-royalPurple-border/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                              <BarChart3 className="h-8 w-8 text-royalPurple-text1" />
+                            </div>
+                            <h3 className="text-royalPurple-text1 font-semibold text-center">
+                              Check Results
+                            </h3>
+                            <p className="text-royalPurple-text2 text-sm text-center mt-2">
+                              View your grades
+                            </p>
                           </div>
-                          <h3 className="text-royalPurple-text1 font-semibold text-center">
-                            Check Results
-                          </h3>
-                          <p className="text-royalPurple-text2 text-sm text-center mt-2">
-                            View your grades
-                          </p>
-                        </div>
-                      </Link>
+                        </Link>
+                      )}
                       <Link href="/dashboard/student/goals">
                         <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
                           <div className="backdrop-blur-md bg-warn/60 border border-warn/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -1548,7 +1571,9 @@ export default function StudentDashboard() {
                                           : 'bg-royalPurple-danger/60 text-royalPurple-dangerTx border border-royalPurple-border/50'
                                   }`}
                                 >
-                                  Grade {performance.latestGrade}
+                                  {showSecondaryGrading
+                                    ? `Grade ${performance.latestGrade}`
+                                    : `${Number(performance.avgScore) || 0}% avg`}
                                 </div>
                               </div>
                               <h3 className="text-royalPurple-text1 font-bold text-lg mb-2">

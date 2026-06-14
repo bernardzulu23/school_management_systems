@@ -17,6 +17,14 @@ ZSMS is a multi-tenant school management platform for Zambian primary and second
 
 Every account receives a **2-month free trial**. After trial expiry, subscription is required via `/dashboard/billing` (mobile money through Lipila).
 
+### Primary schools (ECE–Grade 7)
+
+When your school is registered as **Primary (ECE – Grade 7)** (`School.level = primary`):
+
+- **HOD features are hidden** — no HOD registration, department dashboards, or HOD navigation. Teachers report to the headteacher.
+- **Secondary-style grading is hidden** — no ONE–FOUR / 1–9 result entry, school-wide results pages, or student grade badges / best-six points. Use CBC continuous assessment workflows instead (ECZ SBA where applicable for upper primary is separate from term grading).
+- **Combined schools** keep HOD for secondary departments; grading remains available only for **Grade 8+ / Form** classes, not for G1–G7 classes.
+
 | Portal type       | Who                                       | Entry URL                                     |
 | ----------------- | ----------------------------------------- | --------------------------------------------- |
 | School tenant     | Headteacher, HOD, teacher, student, admin | `https://<subdomain>.<APP_BASE_DOMAIN>/login` |

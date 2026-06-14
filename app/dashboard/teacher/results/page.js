@@ -23,9 +23,12 @@ import {
 import { toast } from 'react-hot-toast'
 import { Save, ArrowLeft, Loader2, CheckCircle, AlertCircle, Trash2 } from 'lucide-react'
 import Link from 'next/link'
+import { useSchoolCapabilities } from '@/lib/school/useSchoolCapabilities'
+import { PrimarySchoolFeatureUnavailable } from '@/components/school/PrimarySchoolFeatureUnavailable'
 
 export default function ResultEntryPage() {
   const { user } = useAuth()
+  const { canAccessSecondaryGrading, isLoading: schoolLoading } = useSchoolCapabilities()
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [syncing, setSyncing] = useState(false)
@@ -482,6 +485,21 @@ export default function ResultEntryPage() {
     if (score === '' || score === undefined || score === null) return null
     const level = selectedAssignment?.classYearGroup || selectedAssignment?.className || 'form1'
     return calculateGrade(score, level)
+  }
+
+  if (!schoolLoading && !canAccessSecondaryGrading) {
+    return (
+      <DashboardLayout title="Enter Results">
+        <div className="max-w-3xl mx-auto">
+          <PrimarySchoolFeatureUnavailable title="Secondary grading unavailable">
+            <p>
+              Term result entry uses secondary grading scales (Forms and Grades 8–12). Primary
+              schools (ECE–Grade 7) should use CBC continuous assessment instead.
+            </p>
+          </PrimarySchoolFeatureUnavailable>
+        </div>
+      </DashboardLayout>
+    )
   }
 
   return (

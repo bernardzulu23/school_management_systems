@@ -7,6 +7,7 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
 import { canManageDepartmentAllocations } from '@/lib/utils/hodAccess'
+import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
 
 function adminRoleWhere() {
   const values = ['headteacher', 'admin', 'administrator', 'superadmin']
@@ -27,6 +28,8 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  await assertHodSchoolAccess(schoolId)
 
   const hodProfile = await getHodProfile(prisma, auth.user.id, schoolId)
   if (!canManageDepartmentAllocations(auth.user, hodProfile)) {

@@ -8,6 +8,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
 import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
 import { canManageDepartmentAllocations, isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
+import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
 
 async function assertCanAccessAllocation({ schoolId, user, allocation }) {
   if (isSchoolAdminOrHead(user)) return
@@ -43,6 +44,8 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
+  await assertHodSchoolAccess(schoolId)
+
   const allocation = await prisma.departmentAllocation.findFirst({
     where: { id: allocationId, schoolId },
     include: {
@@ -70,6 +73,8 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  await assertHodSchoolAccess(schoolId)
 
   const allocation = await prisma.departmentAllocation.findFirst({
     where: { id: allocationId, schoolId },

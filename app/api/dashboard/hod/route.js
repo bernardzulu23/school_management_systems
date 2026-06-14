@@ -4,6 +4,8 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
+import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,6 +17,11 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const featureBlock = await requireFeature(schoolId, 'hod-dashboard')
+  if (featureBlock) return featureBlock
+
+  await assertHodSchoolAccess(schoolId)
 
   const userId = String(auth.user?.id || '')
   if (!userId) throw new ApiError('Unauthorized', 401)
