@@ -4,16 +4,38 @@ ZSMS grounds AI features in each school's own uploaded notes, syllabi, and textb
 
 ## Stack (free tier)
 
-| Layer      | Service                                                                         |
-| ---------- | ------------------------------------------------------------------------------- |
-| Database   | Neon PostgreSQL + `pgvector`                                                    |
-| Embeddings | HuggingFace Inference API — `sentence-transformers/all-MiniLM-L6-v2` (384 dims) |
-| Chunking   | ~500 tokens, ~100 token overlap (`lib/rag/chunk.js`)                            |
-| Ingestion  | `POST /api/materials/ingest` (Vercel, up to 60s)                                |
-| Retrieval  | Cosine similarity, `WHERE schoolId` before search                               |
-| LLM        | Groq (existing)                                                                 |
+| Layer      | Service                                                                                   |
+| ---------- | ----------------------------------------------------------------------------------------- |
+| Database   | Neon PostgreSQL + `pgvector`                                                              |
+| Embeddings | HuggingFace Inference API — `sentence-transformers/all-MiniLM-L6-v2` (384 dims)           |
+| Paid embed | Gemini, Jina, OpenRouter, OpenAI, or Voyage — all at **384 dims** with automatic fallback |
+| Chunking   | ~500 tokens, ~100 token overlap (`lib/rag/chunk.js`)                                      |
+| Ingestion  | `POST /api/materials/ingest` (Vercel, up to 120s)                                         |
+| Retrieval  | Cosine similarity, `WHERE schoolId` before search                                         |
+| LLM        | Groq (existing)                                                                           |
 
-Paid plans can use Voyage or OpenAI embeddings via `lib/features/ragAccess.js` when API keys are set.
+Paid plans use every configured embedding key in priority order: **Gemini → Jina → OpenRouter → OpenAI → Voyage → HuggingFace** (`lib/rag/embedProviders.js`). On rate limits or errors the pipeline tries the next configured provider automatically. Pin one provider with `RAG_EMBED_PROVIDER=gemini` (or `jina`, etc.) if you need ingest and search to stay on the same model; re-index materials after changing the pin.
+
+## Environment
+
+```env
+HUGGINGFACE_API_KEY=hf_...   # Free tier + fallback (384-dim MiniLM)
+# GEMINI_API_KEY=             # Paid — primary when set (text-embedding-004 @ 384d)
+# JINA_API_KEY=               # Paid — jina-embeddings-v3 @ 384d
+# OPENROUTER_API_KEY=         # Paid — OpenAI-compatible embeddings API
+# OPENAI_API_KEY=             # Paid — text-embedding-3-small @ 384d
+# VOYAGE_API_KEY=             # Paid — batched voyage-3-lite @ 384d
+# RAG_EMBED_PROVIDER=gemini   # Optional pin — same provider for ingest + retrieval
+# OPENROUTER_EMBED_MODEL=openai/text-embedding-3-small
+# JINA_EMBED_MODEL=jina-embeddings-v3
+# VOYAGE_EMBED_MODEL=voyage-3-lite
+# VOYAGE_EMBED_BATCH_SIZE=8
+# VOYAGE_EMBED_BATCH_DELAY_MS=21000
+# VOYAGE_RATE_LIMIT_SLEEP_MS=20000
+# VOYAGE_EMBED_MAX_RETRIES=3
+```
+
+With your Vercel keys (**GEMINI**, **JINA**, **OPENROUTER**), uploads will try Gemini first, then Jina, then OpenRouter — without needing Voyage or HuggingFace.
 
 ## Prisma models
 
@@ -27,14 +49,6 @@ npx prisma migrate dev --name add_rag_models
 ```
 
 Ensure Neon has `CREATE EXTENSION vector` (included in migration SQL).
-
-## Environment
-
-```env
-HUGGINGFACE_API_KEY=hf_...   # Required for ingest + retrieval on free tier
-# VOYAGE_API_KEY=             # Optional — premium embedding
-# OPENAI_API_KEY=             # Optional — fallback premium embedding
-```
 
 ## Ingestion API
 
@@ -72,7 +86,7 @@ Retrieval filters: `schoolId`, optional `subject`, `gradeLevel`, and `materialId
 
 ## AI features using RAG
 
-When `HUGGINGFACE_API_KEY` is set and chunks exist for the school:
+When any embedding key is set (`GEMINI_API_KEY`, `JINA_API_KEY`, `OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `VOYAGE_API_KEY`, or `HUGGINGFACE_API_KEY`) and chunks exist for the school:
 
 - Lesson planner (`/api/ai/lesson-planner`, `/api/lesson-plans/generate`)
 - Quiz maker (`/api/ai/quiz-maker`)

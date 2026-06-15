@@ -387,19 +387,20 @@ All accounts receive a **2-month trial** (`trialEndsAt`); subscription required 
 
 ## Integrations
 
-| Service              | Purpose                             | Config / entry points                                                |
-| -------------------- | ----------------------------------- | -------------------------------------------------------------------- |
-| **Neon PostgreSQL**  | Primary database                    | `DATABASE_URL`, `DIRECT_URL`                                         |
-| **Vercel**           | Hosting, cron, Blob                 | `vercel.json`, region `fra1`                                         |
-| **Resend**           | Transactional email                 | `RESEND_API_KEY`, `EMAIL_FROM_NOREPLY`                               |
-| **Lipila**           | Mobile money (onboarding + billing) | `LIPILA_API_KEY`, callbacks under `/api/payments/lipila/`            |
-| **Africa's Talking** | SMS send/receive                    | `AFRICASTALKING_*`, webhooks `/api/sms/inbound`, `/api/sms/delivery` |
-| **Upstash QStash**   | Async SMS broadcast workers         | `QSTASH_*`, `/api/sms/queue-worker`                                  |
-| **Groq**             | Primary AI provider                 | `GROQ_API_KEY`, `lib/ai/client.js`                                   |
-| **Gemini**           | Optional AI fallback                | `GEMINI_API_KEY`                                                     |
-| **Sentry**           | Error monitoring                    | `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`                               |
-| **Sanity**           | Marketing homepage CMS              | `SANITY_PROJECT_ID`, `SANITY_API_READ_TOKEN`                         |
-| **Upstash Redis**    | Rate limits (optional)              | Used by `lib/middleware/upstashLimiters.js` when configured          |
+| Service                                                        | Purpose                                           | Config / entry points                                                                                       |
+| -------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **Neon PostgreSQL**                                            | Primary database                                  | `DATABASE_URL`, `DIRECT_URL`                                                                                |
+| **Vercel**                                                     | Hosting, cron, Blob                               | `vercel.json`, region `fra1`                                                                                |
+| **Resend**                                                     | Transactional email                               | `RESEND_API_KEY`, `EMAIL_FROM_NOREPLY`                                                                      |
+| **Lipila**                                                     | Mobile money (onboarding + billing)               | `LIPILA_API_KEY`, callbacks under `/api/payments/lipila/`                                                   |
+| **Africa's Talking**                                           | SMS send/receive                                  | `AFRICASTALKING_*`, webhooks `/api/sms/inbound`, `/api/sms/delivery`                                        |
+| **Upstash QStash**                                             | Async SMS broadcast workers                       | `QSTASH_*`, `/api/sms/queue-worker`                                                                         |
+| **Groq**                                                       | Primary AI provider                               | `GROQ_API_KEY`, `lib/ai/client.js`                                                                          |
+| **HuggingFace / Gemini / Jina / OpenRouter / Voyage / OpenAI** | RAG embeddings (384-dim, multi-provider fallback) | `GEMINI_API_KEY`, `JINA_API_KEY`, `OPENROUTER_API_KEY`, `HUGGINGFACE_API_KEY`, etc.; see [RAG.md](./RAG.md) |
+| **Gemini**                                                     | Optional AI fallback                              | `GEMINI_API_KEY`                                                                                            |
+| **Sentry**                                                     | Error monitoring                                  | `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`                                                                      |
+| **Sanity**                                                     | Marketing homepage CMS                            | `SANITY_PROJECT_ID`, `SANITY_API_READ_TOKEN`                                                                |
+| **Upstash Redis**                                              | Rate limits (optional)                            | Used by `lib/middleware/upstashLimiters.js` when configured                                                 |
 
 Payment logos: `public/payments/` or `NEXT_PUBLIC_PAYMENT_LOGO_*`.
 
@@ -431,13 +432,13 @@ Mobile env template: `zsms-mobile/.env.example`.
 
 **Do not commit secrets.** Use `.env.local` locally and Vercel environment settings in production.
 
-| Category        | Variables                                                                                                | Reference                          |
-| --------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| Required        | `DATABASE_URL`, `JWT_SECRET`, `RESEND_API_KEY`, `EMAIL_FROM_NOREPLY`, `GROQ_API_KEY` or `GEMINI_API_KEY` | [ENVIRONMENT.md](./ENVIRONMENT.md) |
-| Migrations      | `DIRECT_URL`                                                                                             | Neon direct connection             |
-| Production auth | `JWT_REFRESH_SECRET`, `COOKIE_DOMAIN`, `APP_BASE_DOMAIN`                                                 | Multi-subdomain cookies            |
-| Features        | `LIPILA_*`, `AFRICASTALKING_*`, `QSTASH_*`, `SENTRY_*`, `SANITY_*`                                       | Disabled when unset                |
-| Local dev       | `LOCAL_DEV_SCHOOL_SUBDOMAIN`, `DEV_ONBOARDING_SKIP_EMAIL`, `PLATFORM_ADMIN_*`                            | See [SETUP.md](./SETUP.md)         |
+| Category        | Variables                                                                                                                     | Reference                          |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| Required        | `DATABASE_URL`, `JWT_SECRET`, `RESEND_API_KEY`, `EMAIL_FROM_NOREPLY`, `GROQ_API_KEY` or `GEMINI_API_KEY`                      | [ENVIRONMENT.md](./ENVIRONMENT.md) |
+| Migrations      | `DIRECT_URL`                                                                                                                  | Neon direct connection             |
+| Production auth | `JWT_REFRESH_SECRET`, `COOKIE_DOMAIN`, `APP_BASE_DOMAIN`                                                                      | Multi-subdomain cookies            |
+| Features        | `LIPILA_*`, `AFRICASTALKING_*`, `QSTASH_*`, `SENTRY_*`, `SANITY_*`, `HUGGINGFACE_API_KEY`, `VOYAGE_*`, `OPENAI_API_KEY` (RAG) | Disabled when unset                |
+| Local dev       | `LOCAL_DEV_SCHOOL_SUBDOMAIN`, `DEV_ONBOARDING_SKIP_EMAIL`, `PLATFORM_ADMIN_*`                                                 | See [SETUP.md](./SETUP.md)         |
 
 Programmatic access:
 

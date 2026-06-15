@@ -1,5 +1,5 @@
 export const dynamic = 'force-dynamic'
-export const maxDuration = 60
+export const maxDuration = 120
 
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
@@ -20,13 +20,33 @@ function toApiError(error) {
   const lower = message.toLowerCase()
 
   if (
-    lower.includes('api_key is required') ||
+    lower.includes('no embedding provider is configured') ||
+    (lower.includes('api_key is required') &&
+      !lower.includes('rate limit') &&
+      !lower.includes('payment method'))
+  ) {
+    return new ApiError(`RAG embedding provider is not configured: ${message}`, 503)
+  }
+
+  if (
+    lower.includes('rate limit') ||
+    lower.includes('payment method') ||
+    lower.includes(' rpm') ||
+    lower.includes('too many requests')
+  ) {
+    return new ApiError(
+      `Embedding rate limit reached. Try again in a minute — other configured providers (Gemini, Jina, OpenRouter, HuggingFace) will be used automatically on retry. ${message}`,
+      429
+    )
+  }
+
+  if (
     lower.includes('embedding failed') ||
     lower.includes('huggingface') ||
     lower.includes('voyage') ||
     lower.includes('openai')
   ) {
-    return new ApiError(`RAG embedding provider is not configured: ${message}`, 503)
+    return new ApiError(message, 502)
   }
 
   if (
