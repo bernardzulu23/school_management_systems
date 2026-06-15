@@ -59,6 +59,17 @@ Or send `materialId` + `text` to re-index an existing material.
 
 Response: `{ success, materialId, chunksIndexed, materialTitle }`
 
+## Topic tests from materials
+
+Teachers can ground quizzes in specific uploads:
+
+1. **Upload** — `/dashboard/teacher/ai-materials` (subject required, teaching-assignment scoped).
+2. **Preview** — `GET /api/materials/rag-preview?subject=&topic=&gradeLevel=&materialIds=` (retrieval only, no LLM).
+3. **Generate** — `POST /api/ai/quiz-maker` with optional `materialIds[]` (max 5).
+4. **Assign** — Quiz Maker or **Topic Test** wizard (`/dashboard/teacher/topic-test`) → create `Assessment` with `aiAnalysis` (material IDs + RAG refs) → HOD approve → student attempt.
+
+Retrieval filters: `schoolId`, optional `subject`, `gradeLevel`, and `materialIds`. `lib/rag/retrieve.js` supports title boost for topic hints.
+
 ## AI features using RAG
 
 When `HUGGINGFACE_API_KEY` is set and chunks exist for the school:

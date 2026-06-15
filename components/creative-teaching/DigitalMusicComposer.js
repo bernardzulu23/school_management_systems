@@ -1,65 +1,32 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  NATURAL_NOTES,
+  SHARP_NOTES,
+  NOTE_COLORS,
+  SHARP_NOTE_COLORS,
+  DURATIONS,
+  DURATION_LABELS,
+  PRESETS,
+  getSalamanderUrls,
+} from '@/lib/music/notes'
 
-const NOTES = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5']
-const NOTE_COLORS = [
-  '#ef4444',
-  '#f97316',
-  '#f59e0b',
-  '#22c55e',
-  '#06b6d4',
-  '#3b82f6',
-  '#8b5cf6',
-  '#ec4899',
-  '#10b981',
-  '#f43f5e',
-]
-const DURATIONS = ['16n', '8n', '4n', '2n', '1n']
-const DURATION_LABELS = { '16n': '1/16', '8n': '1/8', '4n': '1/4', '2n': '1/2', '1n': 'Whole' }
+function noteColor(note) {
+  const ni = NATURAL_NOTES.indexOf(note)
+  if (ni >= 0) return NOTE_COLORS[ni]
+  const si = SHARP_NOTES.indexOf(note)
+  if (si >= 0) return SHARP_NOTE_COLORS[si]
+  return '#FF3B00'
+}
 
-const PRESETS = [
-  {
-    name: 'Twinkle',
-    sequence: [
-      { note: 'C4', duration: '4n' },
-      { note: 'C4', duration: '4n' },
-      { note: 'G4', duration: '4n' },
-      { note: 'G4', duration: '4n' },
-      { note: 'A4', duration: '4n' },
-      { note: 'A4', duration: '4n' },
-      { note: 'G4', duration: '2n' },
-      { note: 'F4', duration: '4n' },
-      { note: 'F4', duration: '4n' },
-      { note: 'E4', duration: '4n' },
-      { note: 'E4', duration: '4n' },
-      { note: 'D4', duration: '4n' },
-      { note: 'D4', duration: '4n' },
-      { note: 'C4', duration: '2n' },
-    ],
-  },
-  { name: 'Scale Up', sequence: NOTES.slice(0, 7).map((n) => ({ note: n, duration: '4n' })) },
-  {
-    name: 'Ode to Joy',
-    sequence: [
-      { note: 'E4', duration: '4n' },
-      { note: 'E4', duration: '4n' },
-      { note: 'F4', duration: '4n' },
-      { note: 'G4', duration: '4n' },
-      { note: 'G4', duration: '4n' },
-      { note: 'F4', duration: '4n' },
-      { note: 'E4', duration: '4n' },
-      { note: 'D4', duration: '4n' },
-      { note: 'C4', duration: '4n' },
-      { note: 'C4', duration: '4n' },
-      { note: 'D4', duration: '4n' },
-      { note: 'E4', duration: '4n' },
-      { note: 'E4', duration: '2n' },
-      { note: 'D4', duration: '4n' },
-      { note: 'D4', duration: '2n' },
-    ],
-  },
-]
+function noteRollHeight(note) {
+  const ni = NATURAL_NOTES.indexOf(note)
+  if (ni >= 0) return 20 + (ni / NATURAL_NOTES.length) * 60
+  const si = SHARP_NOTES.indexOf(note)
+  if (si >= 0) return 40 + (si / SHARP_NOTES.length) * 40
+  return 30
+}
 
 export default function DigitalMusicComposer() {
   const [Tone, setTone] = useState(null)
@@ -99,7 +66,7 @@ export default function DigitalMusicComposer() {
       if (synthRef.current) synthRef.current.dispose()
       if (type === 'piano') {
         synthRef.current = new Tone.Sampler({
-          urls: { C4: 'C4.mp3' },
+          urls: getSalamanderUrls(),
           baseUrl: 'https://tonejs.github.io/audio/salamander/',
         }).toDestination()
       } else if (type === 'marimba') {
@@ -319,7 +286,43 @@ export default function DigitalMusicComposer() {
             </button>
           ))}
 
-          <p style={{ ...labelStyle, marginTop: 16 }}>Select Note</p>
+          <p style={{ ...labelStyle, marginTop: 16 }}>Natural notes (C3–C6)</p>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(6, 1fr)',
+              gap: 4,
+              marginBottom: 8,
+              maxHeight: 160,
+              overflowY: 'auto',
+            }}
+          >
+            {NATURAL_NOTES.map((note) => {
+              const color = noteColor(note)
+              return (
+                <button
+                  key={note}
+                  onClick={() => {
+                    setSelectedNote(note)
+                    previewNote(note)
+                  }}
+                  style={{
+                    padding: '6px 2px',
+                    borderRadius: 6,
+                    border: `1px solid ${selectedNote === note ? color : '#111111'}`,
+                    background: selectedNote === note ? `${color}22` : 'transparent',
+                    color,
+                    fontSize: 10,
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {note}
+                </button>
+              )
+            })}
+          </div>
+          <p style={labelStyle}>Sharps (middle octave)</p>
           <div
             style={{
               display: 'grid',
@@ -328,27 +331,30 @@ export default function DigitalMusicComposer() {
               marginBottom: 12,
             }}
           >
-            {NOTES.map((note, i) => (
-              <button
-                key={note}
-                onClick={() => {
-                  setSelectedNote(note)
-                  previewNote(note)
-                }}
-                style={{
-                  padding: '8px 4px',
-                  borderRadius: 6,
-                  border: `1px solid ${selectedNote === note ? NOTE_COLORS[i] : '#111111'}`,
-                  background: selectedNote === note ? `${NOTE_COLORS[i]}22` : 'transparent',
-                  color: NOTE_COLORS[i],
-                  fontSize: 12,
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
-              >
-                {note}
-              </button>
-            ))}
+            {SHARP_NOTES.map((note) => {
+              const color = noteColor(note)
+              return (
+                <button
+                  key={note}
+                  onClick={() => {
+                    setSelectedNote(note)
+                    previewNote(note)
+                  }}
+                  style={{
+                    padding: '8px 4px',
+                    borderRadius: 6,
+                    border: `1px solid ${selectedNote === note ? color : '#111111'}`,
+                    background: selectedNote === note ? `${color}22` : 'transparent',
+                    color,
+                    fontSize: 11,
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {note}
+                </button>
+              )
+            })}
           </div>
 
           <p style={labelStyle}>Note Length</p>
@@ -438,8 +444,7 @@ export default function DigitalMusicComposer() {
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                 {sequence.map((item, i) => {
-                  const noteIndex = NOTES.indexOf(item.note)
-                  const color = NOTE_COLORS[noteIndex] || '#FF3B00'
+                  const color = noteColor(item.note)
                   return (
                     <div
                       key={item.id}
@@ -509,9 +514,8 @@ export default function DigitalMusicComposer() {
                 </p>
                 <div style={{ display: 'flex', gap: 2, alignItems: 'flex-end', height: 80 }}>
                   {sequence.map((item, i) => {
-                    const noteIndex = NOTES.indexOf(item.note)
-                    const height = 20 + (noteIndex / NOTES.length) * 60
-                    const color = NOTE_COLORS[noteIndex] || '#FF3B00'
+                    const height = noteRollHeight(item.note)
+                    const color = noteColor(item.note)
                     const widthMap = { '16n': 12, '8n': 20, '4n': 32, '2n': 52, '1n': 80 }
                     return (
                       <div

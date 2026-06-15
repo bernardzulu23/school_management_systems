@@ -117,6 +117,8 @@ export async function POST(request) {
         status: 'DRAFT',
         topic: data.topic ? String(data.topic).trim() : null,
         createdByUserId: userId || null,
+        aiAnalysis:
+          data.aiAnalysis && typeof data.aiAnalysis === 'object' ? data.aiAnalysis : undefined,
       },
     })
 

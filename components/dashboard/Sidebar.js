@@ -91,6 +91,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'MOE Reports', href: '/dashboard/headteacher/moe-reports', icon: FileText },
         { name: 'AI Lesson Planner', href: '/dashboard/teacher/lesson-planner', icon: Sparkles },
         { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
+        { name: 'Topic Test (RAG)', href: '/dashboard/teacher/topic-test', icon: ClipboardList },
         {
           name: 'Upload for AI (RAG)',
           href: '/dashboard/teacher/ai-materials',
@@ -132,6 +133,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Games', href: '/dashboard/hod/games', icon: GamepadIcon },
         { name: 'AI Lesson Planner', href: '/dashboard/teacher/lesson-planner', icon: Sparkles },
         { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
+        { name: 'Topic Test (RAG)', href: '/dashboard/teacher/topic-test', icon: ClipboardList },
         {
           name: 'Upload for AI (RAG)',
           href: '/dashboard/teacher/ai-materials',

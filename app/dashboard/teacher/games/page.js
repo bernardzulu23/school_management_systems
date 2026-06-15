@@ -8,19 +8,16 @@ export default function TeacherGamesPage() {
   const [subjects, setSubjects] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // Mock subjects data - replace with actual API call
   useEffect(() => {
-    setTimeout(() => {
-      setSubjects([
-        { id: 1, name: 'Mathematics' },
-        { id: 2, name: 'English' },
-        { id: 3, name: 'Science' },
-        { id: 4, name: 'History' },
-        { id: 5, name: 'Geography' },
-        { id: 6, name: 'Computer Science' },
-      ])
-      setLoading(false)
-    }, 1000)
+    fetch('/api/teaching-assignments', { credentials: 'include' })
+      .then((r) => r.json())
+      .then((json) => {
+        const rows = Array.isArray(json?.data) ? json.data : []
+        const names = [...new Set(rows.map((a) => a.subjectName).filter(Boolean))]
+        setSubjects(names.map((name, i) => ({ id: String(i + 1), name })))
+      })
+      .catch(() => setSubjects([]))
+      .finally(() => setLoading(false))
   }, [])
 
   if (loading) {

@@ -17,31 +17,41 @@ import {
 } from 'lucide-react'
 
 const gameTypes = [
-  { id: 'quiz', name: 'Quiz', icon: '❓', description: 'Multiple choice questions' },
+  {
+    id: 'quiz',
+    name: 'Quiz',
+    icon: '❓',
+    description: 'Multiple choice questions',
+    available: true,
+  },
   {
     id: 'flashcards',
     name: 'Flashcards',
     icon: '📚',
-    description: 'Study cards with front/back content',
+    description: 'Coming soon',
+    available: false,
   },
-  { id: 'matching', name: 'Matching', icon: '🔗', description: 'Match pairs of related items' },
+  { id: 'matching', name: 'Matching', icon: '🔗', description: 'Coming soon', available: false },
   {
     id: 'word-search',
     name: 'Word Search',
     icon: '🔍',
-    description: 'Find hidden words in a grid',
+    description: 'Coming soon',
+    available: false,
   },
   {
     id: 'fill-blanks',
     name: 'Fill in the Blanks',
     icon: '✏️',
-    description: 'Complete sentences with missing words',
+    description: 'Coming soon',
+    available: false,
   },
   {
     id: 'drag-drop',
     name: 'Drag & Drop',
     icon: '🎯',
-    description: 'Drag items to correct positions',
+    description: 'Coming soon',
+    available: false,
   },
 ]
 
@@ -130,8 +140,12 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
       {gameTypes.map((type) => (
         <div
           key={type.id}
-          onClick={() => handleInputChange('gameType', type.id)}
-          className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
+          onClick={() => type.available !== false && handleInputChange('gameType', type.id)}
+          className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+            type.available === false
+              ? 'opacity-50 cursor-not-allowed border-royalPurple-border'
+              : 'cursor-pointer hover:scale-105'
+          } ${
             gameData.gameType === type.id
               ? 'border-royalPurple-border2 bg-royalPurple-accent shadow-lg'
               : 'border-royalPurple-border hover:border-royalPurple-border2'

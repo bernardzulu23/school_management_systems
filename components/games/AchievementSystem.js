@@ -86,15 +86,27 @@ export default function AchievementSystem({
   const [showEarnedOnly, setShowEarnedOnly] = useState(false)
   const [newAchievement, setNewAchievement] = useState(null)
 
-  // Load achievements from API in production
+  // Load earned badges from student games API
   useEffect(() => {
-    // TODO: Replace with API call to fetch user achievements
     const loadAchievements = async () => {
       try {
-        // const response = await fetch('/api/achievements')
-        // const data = await response.json()
-        // setAchievements(data.achievements || [])
-        setAchievements([]) // Empty for production
+        const response = await fetch('/api/dashboard/student/games', { credentials: 'include' })
+        const json = await response.json().catch(() => ({}))
+        const earned = Array.isArray(json?.data?.achievements) ? json.data.achievements : []
+        const mapped = earned.map((a) => ({
+          id: a.id,
+          name: a.name,
+          description: a.description,
+          icon: a.icon,
+          category: 'performance',
+          rarity: a.rarity || 'common',
+          earned: true,
+          earnedAt: a.earnedAt,
+          pointsReward: a.pointsReward || 0,
+          progress: 1,
+          maxProgress: 1,
+        }))
+        setAchievements(mapped)
       } catch (error) {
         console.error('Failed to load achievements:', error)
         setAchievements([])
@@ -102,7 +114,7 @@ export default function AchievementSystem({
     }
 
     loadAchievements()
-  }, [])
+  }, [studentId])
 
   const filteredAchievements = achievements
     .filter((achievement) => {

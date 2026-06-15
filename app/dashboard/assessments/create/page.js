@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -40,30 +40,31 @@ export default function CreateAssessmentPage() {
 
   const [currentStep, setCurrentStep] = useState(1)
   const [isPreview, setIsPreview] = useState(false)
+  const [subjects, setSubjects] = useState([])
+  const [classes, setClasses] = useState([])
+
+  useEffect(() => {
+    Promise.all([
+      fetch('/api/subjects', { credentials: 'include' }).then((r) => r.json()),
+      fetch('/api/classes', { credentials: 'include' }).then((r) => r.json()),
+    ])
+      .then(([subJson, classJson]) => {
+        const subRows = Array.isArray(subJson?.data) ? subJson.data : []
+        const classRows = Array.isArray(classJson?.data) ? classJson.data : []
+        setSubjects(subRows.map((s) => ({ id: s.id, name: s.name })))
+        setClasses(classRows.map((c) => ({ id: c.id, name: c.name })))
+      })
+      .catch(() => {
+        setSubjects([])
+        setClasses([])
+      })
+  }, [])
 
   const assessmentTypes = [
     { value: 'test', label: 'Test', icon: ClipboardList },
     { value: 'quiz', label: 'Quiz', icon: Target },
     { value: 'assignment', label: 'Assignment', icon: FileText },
     { value: 'exam', label: 'Exam', icon: BookOpen },
-  ]
-
-  const mockSubjects = [
-    { id: '1', name: 'Mathematics' },
-    { id: '2', name: 'Physics' },
-    { id: '3', name: 'Chemistry' },
-    { id: '4', name: 'Biology' },
-    { id: '5', name: 'English' },
-    { id: '6', name: 'History' },
-  ]
-
-  const mockClasses = [
-    { id: '1', name: 'Grade 9A' },
-    { id: '2', name: 'Grade 9B' },
-    { id: '3', name: 'Grade 10A' },
-    { id: '4', name: 'Grade 10B' },
-    { id: '5', name: 'Grade 11A' },
-    { id: '6', name: 'Grade 12A' },
   ]
 
   const handleInputChange = (field, value) => {
@@ -230,7 +231,7 @@ export default function CreateAssessmentPage() {
                     className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2"
                   >
                     <option value="">Select Subject</option>
-                    {mockSubjects.map((subject) => (
+                    {subjects.map((subject) => (
                       <option key={subject.id} value={subject.id}>
                         {subject.name}
                       </option>
@@ -248,7 +249,7 @@ export default function CreateAssessmentPage() {
                     className="w-full p-3 border border-royalPurple-border rounded-md focus:ring-g-500 focus:border-royalPurple-border2"
                   >
                     <option value="">Select Class</option>
-                    {mockClasses.map((classItem) => (
+                    {classes.map((classItem) => (
                       <option key={classItem.id} value={classItem.id}>
                         {classItem.name}
                       </option>

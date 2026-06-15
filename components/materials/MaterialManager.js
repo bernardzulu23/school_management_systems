@@ -4,34 +4,25 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
-import { SCHOOL_SUBJECTS, getSubjectById } from '@/data/subjects'
 import {
   Upload,
   Download,
   FileText,
   Trash2,
-  Eye,
   Search,
-  Filter,
   BookOpen,
-  Calendar,
-  User,
-  Tag,
-  AlertCircle,
-  CheckCircle,
   Plus,
-  Edit,
   X,
   File,
-  FileImage,
-  FileVideo,
-  Archive,
+  Filter,
+  Eye,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function MaterialManager() {
   const { user } = useAuth()
   const [materials, setMaterials] = useState([])
+  const [loading, setLoading] = useState(true)
   const [selectedSubject, setSelectedSubject] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [showUploadModal, setShowUploadModal] = useState(false)
@@ -43,164 +34,75 @@ export default function MaterialManager() {
     type: 'document',
   })
 
-  // Get user's subjects based on role
-  const getUserSubjects = () => {
-    if (!user) return []
+  const [assignableSubjects, setAssignableSubjects] = useState([])
 
-    if (user.role === 'teacher') {
-      return user.assigned_subjects || []
-    } else if (user.role === 'student') {
-      return user.selected_subjects || []
-    } else if (user.role === 'hod') {
-      return user.assigned_subjects || []
-    }
-    return []
-  }
-
-  const userSubjects = getUserSubjects()
-  const userSubjectObjects = SCHOOL_SUBJECTS.filter(
-    (subject) => userSubjects.includes(subject.id) || userSubjects.includes(subject.name)
-  )
-
-  // Mock materials data - replace with API call
   useEffect(() => {
-    const mockMaterials = [
-      {
-        id: 1,
-        title: 'Introduction to Algebra',
-        description: 'Basic algebraic concepts and equations',
-        subject_id: 2, // Mathematics
-        subject_name: 'Mathematics',
-        file_name: 'algebra_intro.pdf',
-        file_size: '2.5 MB',
-        file_type: 'pdf',
-        uploaded_by: 'Ms. Sarah Johnson',
-        uploaded_at: '2024-01-15',
-        downloads: 45,
-        type: 'document',
-      },
-      {
-        id: 2,
-        title: 'Chemical Reactions Lab Guide',
-        description: 'Step-by-step guide for chemistry experiments',
-        subject_id: 6, // Chemistry
-        subject_name: 'Chemistry',
-        file_name: 'chem_lab_guide.pdf',
-        file_size: '4.1 MB',
-        file_type: 'pdf',
-        uploaded_by: 'Dr. Michael Brown',
-        uploaded_at: '2024-01-12',
-        downloads: 32,
-        type: 'document',
-      },
-    ]
-    setMaterials(mockMaterials)
+    let cancelled = false
+    fetch('/api/materials', { credentials: 'include' })
+      .then((r) => r.json())
+      .then((json) => {
+        if (cancelled) return
+        const rows = Array.isArray(json?.data) ? json.data : []
+        setAssignableSubjects(
+          Array.isArray(json?.assignableSubjects) ? json.assignableSubjects : []
+        )
+        setMaterials(
+          rows.map((m) => ({
+            id: m.id,
+            title: m.title,
+            description: m.gradeLevel ? `Grade: ${m.gradeLevel}` : '',
+            subject_id: m.subject || '',
+            subject_name: m.subject || 'General',
+            file_name: m.title,
+            file_type: m.fileType,
+            uploaded_at: m.createdAt,
+            chunksIndexed: m.chunksIndexed,
+            fileUrl: m.fileUrl,
+            type: 'document',
+          }))
+        )
+      })
+      .catch(() => setMaterials([]))
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
   }, [])
 
+  const subjectOptions = [
+    ...new Set([...assignableSubjects, ...materials.map((m) => m.subject_name).filter(Boolean)]),
+  ].sort()
+
   const filteredMaterials = materials.filter((material) => {
-    const matchesSubject = !selectedSubject || material.subject_id.toString() === selectedSubject
+    const matchesSubject = !selectedSubject || material.subject_name === selectedSubject
     const matchesSearch =
       !searchQuery ||
       material.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      material.description.toLowerCase().includes(searchQuery.toLowerCase())
-
-    // Filter by user's subjects
-    const hasAccess =
-      userSubjects.includes(material.subject_id) ||
-      userSubjects.includes(material.subject_name) ||
-      user?.role === 'headteacher'
-
-    return matchesSubject && matchesSearch && hasAccess
+      (material.description || '').toLowerCase().includes(searchQuery.toLowerCase())
+    return matchesSubject && matchesSearch
   })
 
   const handleFileUpload = async (e) => {
     e.preventDefault()
-
-    if (!uploadData.file || !uploadData.title || !uploadData.subject_id) {
-      toast.error('Please fill in all required fields and select a file')
-      return
-    }
-
-    try {
-      // Mock upload - replace with actual API call
-      const newMaterial = {
-        id: Date.now(),
-        title: uploadData.title,
-        description: uploadData.description,
-        subject_id: parseInt(uploadData.subject_id),
-        subject_name: getSubjectById(parseInt(uploadData.subject_id))?.name || '',
-        file_name: uploadData.file.name,
-        file_size: `${(uploadData.file.size / 1024 / 1024).toFixed(1)} MB`,
-        file_type: uploadData.file.name.split('.').pop().toLowerCase(),
-        uploaded_by: user?.name || 'Unknown',
-        uploaded_at: new Date().toISOString().split('T')[0],
-        downloads: 0,
-        type: uploadData.type,
-      }
-
-      setMaterials((prev) => [newMaterial, ...prev])
-      setShowUploadModal(false)
-      setUploadData({
-        title: '',
-        description: '',
-        subject_id: '',
-        file: null,
-        type: 'document',
-      })
-      toast.success('Material uploaded successfully!')
-    } catch (error) {
-      toast.error('Failed to upload material')
-    }
+    toast('Use AI Reference Materials to upload and index files for RAG.', { icon: 'ℹ️' })
+    window.location.href = '/dashboard/teacher/ai-materials'
   }
 
   const handleDownload = async (material) => {
-    try {
-      // Mock download - replace with actual file download
-      toast.success(`Downloading ${material.file_name}...`)
-
-      // Update download count
-      setMaterials((prev) =>
-        prev.map((m) => (m.id === material.id ? { ...m, downloads: m.downloads + 1 } : m))
-      )
-    } catch (error) {
-      toast.error('Failed to download file')
+    if (material.fileUrl) {
+      window.open(material.fileUrl, '_blank', 'noopener,noreferrer')
+      return
     }
+    toast.error('File URL not available')
   }
 
-  const handleDelete = async (materialId) => {
-    if (!confirm('Are you sure you want to delete this material?')) return
-
-    try {
-      setMaterials((prev) => prev.filter((m) => m.id !== materialId))
-      toast.success('Material deleted successfully')
-    } catch (error) {
-      toast.error('Failed to delete material')
-    }
+  const handleDelete = async () => {
+    toast('Delete materials from AI Reference Materials.', { icon: 'ℹ️' })
   }
 
-  const getFileIcon = (fileType) => {
-    switch (fileType?.toLowerCase()) {
-      case 'pdf':
-        return <FileText className="h-5 w-5 text-royalPurple-dangerTx" />
-      case 'doc':
-      case 'docx':
-        return <FileText className="h-5 w-5 text-royalPurple-accentTx" />
-      case 'jpg':
-      case 'jpeg':
-      case 'png':
-      case 'gif':
-        return <FileImage className="h-5 w-5 text-royalPurple-successTx" />
-      case 'mp4':
-      case 'avi':
-      case 'mov':
-        return <FileVideo className="h-5 w-5 text-royalPurple-pillTx" />
-      case 'zip':
-      case 'rar':
-        return <Archive className="h-5 w-5 text-orange-500" />
-      default:
-        return <File className="h-5 w-5 text-royalPurple-text3" />
-    }
-  }
+  const getFileIcon = () => <FileText className="h-5 w-5 text-royalPurple-accentTx" />
 
   return (
     <div className="space-y-6">
@@ -247,9 +149,9 @@ export default function MaterialManager() {
             className="pl-10 pr-8 py-2 border border-royalPurple-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-royalPurple-card min-w-[200px]"
           >
             <option value="">All Subjects</option>
-            {userSubjectObjects.map((subject) => (
-              <option key={subject.id} value={subject.id}>
-                {subject.name}
+            {subjectOptions.map((name) => (
+              <option key={name} value={name}>
+                {name}
               </option>
             ))}
           </select>
@@ -372,9 +274,9 @@ export default function MaterialManager() {
                     required
                   >
                     <option value="">Select Subject</option>
-                    {userSubjectObjects.map((subject) => (
-                      <option key={subject.id} value={subject.id}>
-                        {subject.name}
+                    {subjectOptions.map((name) => (
+                      <option key={name} value={name}>
+                        {name}
                       </option>
                     ))}
                   </select>

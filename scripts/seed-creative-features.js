@@ -13,7 +13,7 @@ async function main() {
       category: 'creative',
       roles: ['teacher', 'student'],
       difficulty: 'Beginner',
-      estimatedTime: '5-30 minutes'
+      estimatedTime: '5-30 minutes',
     },
     {
       featureId: 'virtual-trips',
@@ -23,7 +23,7 @@ async function main() {
       category: 'creative',
       roles: ['teacher', 'student', 'hod'],
       difficulty: 'Beginner',
-      estimatedTime: '20-45 minutes'
+      estimatedTime: '20-45 minutes',
     },
     {
       featureId: 'work-showcase',
@@ -33,7 +33,7 @@ async function main() {
       category: 'creative',
       roles: ['teacher', 'student', 'hod', 'headteacher'],
       difficulty: 'Beginner',
-      estimatedTime: '10-20 minutes'
+      estimatedTime: '10-20 minutes',
     },
     {
       featureId: 'project-templates',
@@ -43,7 +43,7 @@ async function main() {
       category: 'creative',
       roles: ['teacher', 'student'],
       difficulty: 'Beginner',
-      estimatedTime: '15-45 minutes'
+      estimatedTime: '15-45 minutes',
     },
     {
       featureId: 'storytelling',
@@ -53,17 +53,17 @@ async function main() {
       category: 'creative',
       roles: ['teacher', 'student'],
       difficulty: 'Intermediate',
-      estimatedTime: '30-60 minutes'
+      estimatedTime: '30-60 minutes',
     },
     {
-      featureId: 'art-music',
+      featureId: 'music_composer',
       name: 'Art & Music Integration',
       iconName: 'Music',
       description: 'Creative arts tools and music education features',
       category: 'creative',
       roles: ['teacher', 'student'],
       difficulty: 'Intermediate',
-      estimatedTime: '20-40 minutes'
+      estimatedTime: '20-40 minutes',
     },
     {
       featureId: 'math-problems',
@@ -73,7 +73,7 @@ async function main() {
       category: 'stem',
       roles: ['teacher', 'student'],
       difficulty: 'Beginner',
-      estimatedTime: '15-45 minutes'
+      estimatedTime: '15-45 minutes',
     },
     {
       featureId: 'tech-integration',
@@ -83,7 +83,7 @@ async function main() {
       category: 'stem',
       roles: ['teacher', 'student'],
       difficulty: 'Intermediate',
-      estimatedTime: '30-90 minutes'
+      estimatedTime: '30-90 minutes',
     },
     {
       featureId: 'data-collection',
@@ -93,7 +93,7 @@ async function main() {
       category: 'stem',
       roles: ['teacher', 'student'],
       difficulty: 'Intermediate',
-      estimatedTime: '20-60 minutes'
+      estimatedTime: '20-60 minutes',
     },
     {
       featureId: 'scientific-method',
@@ -103,8 +103,8 @@ async function main() {
       category: 'stem',
       roles: ['teacher', 'student'],
       difficulty: 'Beginner',
-      estimatedTime: '30-60 minutes'
-    }
+      estimatedTime: '30-60 minutes',
+    },
   ]
 
   for (const feature of features) {

@@ -5,6 +5,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { validateBody } from '@/lib/middleware/validate-request'
 import { CompleteGameSchema } from '@/lib/schemas'
+import { awardGameBadges } from '@/lib/games/awardBadges'
 
 /**
  * POST /api/dashboard/student/games/complete
@@ -88,10 +89,19 @@ export async function POST(request) {
       },
     })
 
+    const badgesAwarded = await awardGameBadges({
+      schoolId,
+      studentId: student.id,
+      profileId: updated.id,
+      percentage,
+      profile: updated,
+    })
+
     return NextResponse.json({
       data: {
         pointsEarned,
         leveledUp,
+        badgesAwarded: badgesAwarded.length,
         profile: {
           points: updated.points,
           level: updated.level,

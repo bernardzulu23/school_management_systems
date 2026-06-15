@@ -34,6 +34,7 @@ const QuizMakerInputSchema = z.object({
   topic: z.string().min(3).max(200),
   questionCount: z.number().int().min(1).max(30).default(10),
   difficulty: z.enum(['easy', 'medium', 'hard']).default('medium'),
+  materialIds: z.array(z.string().min(1)).max(5).optional(),
 })
 
 type QuizMakerInput = z.infer<typeof QuizMakerInputSchema>
@@ -114,6 +115,8 @@ export const POST = withAILimits(async function POST(request: Request) {
       schoolId,
       schoolPlan: school.plan,
       subject: input.subject,
+      materialIds: input.materialIds,
+      gradeLevel: input.grade,
     })
     if (rag.block) {
       prompt = `${prompt}\n\n---\nSchool reference materials:\n${rag.block}`
@@ -174,6 +177,7 @@ export const POST = withAILimits(async function POST(request: Request) {
       assessmentMode,
       bloomWarnings: bloomCheck.warnings,
       ragReferences: rag.refs?.length ? rag.refs : undefined,
+      materialIds: rag.materialIds?.length ? rag.materialIds : input.materialIds,
     })
   } catch (error) {
     if (error instanceof z.ZodError) {

@@ -46,65 +46,29 @@ export default function GameManagement({ userRole, subjects }) {
   const [filterGameType, setFilterGameType] = useState('')
   const [filterDifficulty, setFilterDifficulty] = useState('')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  // Mock data - replace with actual API calls
-  useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      const mockGames = [
-        {
-          id: 1,
-          title: 'Mathematics Quiz - Algebra Basics',
-          description: 'Test your knowledge of basic algebraic concepts',
-          subject: { id: 1, name: 'Mathematics' },
-          gameType: 'quiz',
-          difficulty: 'medium',
-          targetClass: 'Grade 9',
-          pointsReward: 15,
-          timeLimit: 20,
-          isActive: true,
-          playCount: 45,
-          averageScore: 78,
-          createdAt: '2024-01-15',
-          content: { questions: Array(10).fill({}) },
-        },
-        {
-          id: 2,
-          title: 'English Vocabulary Flashcards',
-          description: 'Learn new vocabulary words with interactive flashcards',
-          subject: { id: 2, name: 'English' },
-          gameType: 'flashcards',
-          difficulty: 'easy',
-          targetClass: 'Grade 8',
-          pointsReward: 10,
-          timeLimit: 15,
-          isActive: true,
-          playCount: 32,
-          averageScore: 85,
-          createdAt: '2024-01-10',
-          content: { flashcards: Array(20).fill({}) },
-        },
-        {
-          id: 3,
-          title: 'Science Elements Matching',
-          description: 'Match chemical elements with their symbols',
-          subject: { id: 3, name: 'Science' },
-          gameType: 'matching',
-          difficulty: 'hard',
-          targetClass: 'Grade 10',
-          pointsReward: 20,
-          timeLimit: 25,
-          isActive: true,
-          playCount: 28,
-          averageScore: 72,
-          createdAt: '2024-01-08',
-          content: { matchingPairs: Array(15).fill({}) },
-        },
-      ]
-      setGames(mockGames)
-      setFilteredGames(mockGames)
+  const loadGames = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/games', { credentials: 'include' })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.message || json?.error || 'Failed to load games')
+      const items = Array.isArray(json?.data) ? json.data : []
+      setGames(items)
+      setFilteredGames(items)
+    } catch (e) {
+      setError(e.message || 'Could not load games')
+      setGames([])
+      setFilteredGames([])
+    } finally {
       setLoading(false)
-    }, 1000)
+    }
+  }
+
+  useEffect(() => {
+    loadGames()
   }, [])
 
   // Filter games based on search and filters
@@ -112,8 +76,10 @@ export default function GameManagement({ userRole, subjects }) {
     let filtered = games.filter((game) => {
       const matchesSearch =
         game.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        game.description.toLowerCase().includes(searchTerm.toLowerCase())
-      const matchesSubject = !filterSubject || game.subject.id.toString() === filterSubject
+        (game.description || '').toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesSubject =
+        !filterSubject ||
+        String(game.subject?.name || '').toLowerCase() === filterSubject.toLowerCase()
       const matchesGameType = !filterGameType || game.gameType === filterGameType
       const matchesDifficulty = !filterDifficulty || game.difficulty === filterDifficulty
 
@@ -122,30 +88,53 @@ export default function GameManagement({ userRole, subjects }) {
     setFilteredGames(filtered)
   }, [games, searchTerm, filterSubject, filterGameType, filterDifficulty])
 
-  const handleCreateGame = (gameData) => {
-    // Simulate API call
-    const newGame = {
-      id: Date.now(),
-      ...gameData,
-      playCount: 0,
-      averageScore: 0,
-      createdAt: new Date().toISOString().split('T')[0],
-      isActive: true,
+  const handleCreateGame = async (gameData) => {
+    try {
+      const res = await fetch('/api/games', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(gameData),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.message || json?.error || 'Create failed')
+      await loadGames()
+      setShowCreateForm(false)
+    } catch (e) {
+      window.alert(e.message || 'Failed to create game')
     }
-    setGames((prev) => [newGame, ...prev])
-    setShowCreateForm(false)
   }
 
-  const handleEditGame = (gameData) => {
-    setGames((prev) =>
-      prev.map((game) => (game.id === editingGame.id ? { ...game, ...gameData } : game))
-    )
-    setEditingGame(null)
+  const handleEditGame = async (gameData) => {
+    if (!editingGame?.id) return
+    try {
+      const res = await fetch(`/api/games/${editingGame.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(gameData),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.message || json?.error || 'Update failed')
+      await loadGames()
+      setEditingGame(null)
+    } catch (e) {
+      window.alert(e.message || 'Failed to update game')
+    }
   }
 
-  const handleDeleteGame = (gameId) => {
-    if (window.confirm('Are you sure you want to delete this game?')) {
-      setGames((prev) => prev.filter((game) => game.id !== gameId))
+  const handleDeleteGame = async (gameId) => {
+    if (!window.confirm('Are you sure you want to delete this game?')) return
+    try {
+      const res = await fetch(`/api/games/${gameId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.message || json?.error || 'Delete failed')
+      await loadGames()
+    } catch (e) {
+      window.alert(e.message || 'Failed to delete game')
     }
   }
 

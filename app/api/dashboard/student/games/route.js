@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { computePlayStreak } from '@/lib/games/awardBadges'
 
 export async function GET(request) {
   try {
@@ -86,6 +87,13 @@ export async function GET(request) {
     })
 
     // 4. Get Leaderboard (Top 5 Students by Points)
+    const allPlayedDates = await prisma.studentGame.findMany({
+      where: { schoolId, studentId: student.id },
+      select: { playedAt: true },
+      orderBy: { playedAt: 'desc' },
+    })
+    const streak = computePlayStreak(allPlayedDates.map((r) => r.playedAt))
+
     const leaderboardData = await prisma.gamificationProfile.findMany({
       where: { schoolId },
       take: 5,
@@ -97,12 +105,19 @@ export async function GET(request) {
       },
     })
 
-    const leaderboard = leaderboardData.map((profile, index) => ({
-      rank: index + 1,
-      studentName: profile.student.name,
-      totalPoints: profile.points,
-      gamesPlayed: 0, // We'd need to count StudentGames for this, simplifying for now
-    }))
+    const leaderboard = await Promise.all(
+      leaderboardData.map(async (profile, index) => {
+        const gamesPlayed = await prisma.studentGame.count({
+          where: { schoolId, studentId: profile.studentId },
+        })
+        return {
+          rank: index + 1,
+          studentName: profile.student.name,
+          totalPoints: profile.points,
+          gamesPlayed,
+        }
+      })
+    )
 
     // Add current user to leaderboard if not present (optional)
     // Calculate rank for current user
@@ -144,8 +159,8 @@ export async function GET(request) {
         experiencePoints: gamificationProfile.xp,
         nextLevelXP: gamificationProfile.nextLevelXp,
         progressPercentage,
-        currentStreak: 1, // Need to track streaks in DB
-        longestStreak: 1,
+        currentStreak: streak.current,
+        longestStreak: streak.longest,
         gamesPlayed: await prisma.studentGame.count({ where: { schoolId, studentId: student.id } }),
         averageScore: 0, // Calculate below
         rank: { class: userRank, school: userRank },
@@ -159,14 +174,18 @@ export async function GET(request) {
         earnedAt: sb.awardedAt,
         pointsReward: sb.badge.xpValue,
       })),
-      recentSessions: recentSessions.map((s) => ({
-        id: s.id,
-        game: { title: s.game.title, gameType: s.game.type },
-        score: s.score,
-        percentage: s.score, // Assuming score is percentage
-        pointsEarned: 10, // Logic needed
-        completedAt: s.playedAt,
-      })),
+      recentSessions: recentSessions.map((s) => {
+        const baseReward = Number(s.game.content?.pointsReward) || 10
+        const pointsEarned = Math.max(1, Math.round((baseReward * s.score) / 100))
+        return {
+          id: s.id,
+          game: { title: s.game.title, gameType: s.game.type },
+          score: s.score,
+          percentage: s.score,
+          pointsEarned,
+          completedAt: s.playedAt,
+        }
+      }),
       leaderboard: leaderboard,
     }
 

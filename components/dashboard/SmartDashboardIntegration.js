@@ -110,13 +110,25 @@ export default function SmartDashboardIntegration({
     pwaManager.requestNotificationPermission()
   }, [pwaManager])
 
-  // Process gamification data
+  // Process gamification data — students use live games API; others skip engine mocks.
   useEffect(() => {
-    if (userRole === 'student' && userData) {
-      const processed = gamificationManager.processStudentData(userData)
-      setGamificationData(processed)
-    }
-  }, [userData, userRole, gamificationManager])
+    if (userRole !== 'student') return
+
+    fetch('/api/dashboard/student/games', { credentials: 'include' })
+      .then((r) => r.json())
+      .then((json) => {
+        const d = json?.data
+        if (!d) return
+        setGamificationData({
+          points: d.studentProgress?.totalPoints || 0,
+          level: d.studentProgress?.level || 1,
+          streak: d.studentProgress?.currentStreak || 0,
+        })
+        setLeaderboard(d.leaderboard || [])
+        setAchievements(d.achievements || [])
+      })
+      .catch(() => {})
+  }, [userRole])
 
   // Update search results
   useEffect(() => {

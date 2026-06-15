@@ -8,23 +8,17 @@ export default function HODGamesPage() {
   const [subjects, setSubjects] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // Mock subjects data - replace with actual API call
   useEffect(() => {
-    setTimeout(() => {
-      setSubjects([
-        { id: 1, name: 'Mathematics' },
-        { id: 2, name: 'English' },
-        { id: 3, name: 'Science' },
-        { id: 4, name: 'History' },
-        { id: 5, name: 'Geography' },
-        { id: 6, name: 'Computer Science' },
-        { id: 7, name: 'Physics' },
-        { id: 8, name: 'Chemistry' },
-        { id: 9, name: 'Biology' },
-        { id: 10, name: 'Art' },
-      ])
-      setLoading(false)
-    }, 1000)
+    fetch('/api/subjects', { credentials: 'include' })
+      .then((r) => r.json())
+      .then((json) => {
+        const rows = Array.isArray(json?.data) ? json.data : Array.isArray(json) ? json : []
+        setSubjects(
+          rows.map((s) => ({ id: s.id || s.name, name: s.name || String(s) })).filter((s) => s.name)
+        )
+      })
+      .catch(() => setSubjects([]))
+      .finally(() => setLoading(false))
   }, [])
 
   if (loading) {

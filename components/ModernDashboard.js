@@ -75,24 +75,17 @@ export default function ModernDashboard({ userRole, userId, userData }) {
 
   const handleVoiceCommand = async () => {
     if (!voiceInterface) return
+    if (
+      typeof window === 'undefined' ||
+      !('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)
+    ) {
+      speakResponse('Voice commands are not supported in this browser.')
+      return
+    }
 
     setIsListening(true)
     try {
-      // Mock voice input - in production would use Web Speech API
-      const mockVoiceInput = { duration: 2.5, audioData: 'mock_audio' }
-      const result = EmergingTechIntegration.processVoiceCommand(mockVoiceInput, {
-        page: 'dashboard',
-        userRole: userRole,
-      })
-
-      if (result.action) {
-        await executeVoiceAction(result.action)
-      }
-
-      // Provide voice feedback
-      if (result.response) {
-        speakResponse(result.response.message)
-      }
+      speakResponse('Voice commands are not configured for this dashboard.')
     } catch (error) {
       console.error('Voice command error:', error)
       speakResponse("Sorry, I couldn't process that command.")

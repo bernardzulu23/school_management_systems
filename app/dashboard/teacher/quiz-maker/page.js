@@ -35,6 +35,10 @@ export default function TeacherQuizMakerPage() {
   const [saving, setSaving] = useState(false)
   const [publishedAssignmentId, setPublishedAssignmentId] = useState('')
   const [submissionStats, setSubmissionStats] = useState(null)
+  const [materials, setMaterials] = useState([])
+  const [selectedMaterialIds, setSelectedMaterialIds] = useState([])
+  const [previewRefs, setPreviewRefs] = useState([])
+  const [previewLoading, setPreviewLoading] = useState(false)
 
   const selectedTeachingAssignment =
     teachingAssignments.find((a) => a.id === targetAssignmentId) || teachingAssignments[0] || null
@@ -53,6 +57,81 @@ export default function TeacherQuizMakerPage() {
     }
     loadAssignments()
   }, [])
+
+  const activeSubject = selectedTeachingAssignment?.subjectName || form.subject
+
+  useEffect(() => {
+    if (!activeSubject.trim()) {
+      setMaterials([])
+      return
+    }
+    fetch(`/api/materials?subject=${encodeURIComponent(activeSubject)}`, { credentials: 'include' })
+      .then((r) => r.json())
+      .then((json) => {
+        const items = Array.isArray(json?.data) ? json.data : []
+        setMaterials(items.filter((m) => (m.chunksIndexed || 0) > 0))
+      })
+      .catch(() => setMaterials([]))
+  }, [activeSubject])
+
+  useEffect(() => {
+    if (selectedTeachingAssignment?.subjectName) {
+      setForm((p) => ({ ...p, subject: selectedTeachingAssignment.subjectName }))
+    }
+  }, [selectedTeachingAssignment?.subjectName])
+
+  const toggleMaterial = (id) => {
+    setSelectedMaterialIds((prev) => {
+      if (prev.includes(id)) return prev.filter((x) => x !== id)
+      if (prev.length >= 5) {
+        toast.error('Select at most 5 materials')
+        return prev
+      }
+      return [...prev, id]
+    })
+  }
+
+  const handlePreviewSources = async () => {
+    if (!form.topic.trim() || form.topic.trim().length < 3) {
+      toast.error('Enter a topic (min 3 characters) to preview sources')
+      return
+    }
+    setPreviewLoading(true)
+    try {
+      const params = new URLSearchParams({
+        subject: activeSubject,
+        topic: form.topic.trim(),
+        gradeLevel: form.grade,
+      })
+      if (selectedMaterialIds.length) {
+        params.set('materialIds', selectedMaterialIds.join(','))
+      }
+      const res = await fetch(`/api/materials/rag-preview?${params}`, { credentials: 'include' })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.message || json?.error || 'Preview failed')
+      setPreviewRefs(Array.isArray(json?.refs) ? json.refs : [])
+      if (!json?.hasCoverage) {
+        toast('No matching chunks found — upload materials or broaden the topic', { icon: '⚠️' })
+      } else {
+        toast.success(`Found ${json.chunkCount} relevant excerpt(s)`)
+      }
+    } catch (e) {
+      toast.error(e.message || 'Could not preview sources')
+      setPreviewRefs([])
+    } finally {
+      setPreviewLoading(false)
+    }
+  }
+
+  const buildAiAnalysis = () => {
+    const titles = materials.filter((m) => selectedMaterialIds.includes(m.id)).map((m) => m.title)
+    return {
+      topic: form.topic.trim(),
+      materialIds: selectedMaterialIds.length ? selectedMaterialIds : data?.materialIds || [],
+      ragReferences: ragReferences.length ? ragReferences : previewRefs,
+      sourceMaterialTitles: titles.length ? titles : undefined,
+    }
+  }
 
   const loadSubmissionStats = async (assignmentId) => {
     if (!assignmentId) return
@@ -114,6 +193,7 @@ export default function TeacherQuizMakerPage() {
           date: dueDate,
           topic: form.topic,
           questions: quiz.questions || [],
+          aiAnalysis: buildAiAnalysis(),
         }),
       })
       const created = await createRes.json().catch(() => ({}))
@@ -245,6 +325,50 @@ export default function TeacherQuizMakerPage() {
                     onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
                   />
                 </div>
+                <div className="space-y-2 md:col-span-2">
+                  <Label>Reference materials (optional, max 5)</Label>
+                  {materials.length === 0 ? (
+                    <p className="text-sm text-royalPurple-text3">
+                      No indexed materials for {activeSubject}.{' '}
+                      <Link href="/dashboard/teacher/ai-materials" className="underline">
+                        Upload AI materials
+                      </Link>
+                    </p>
+                  ) : (
+                    <div className="space-y-2 max-h-40 overflow-y-auto border border-royalPurple-border rounded-lg p-3">
+                      {materials.map((m) => (
+                        <label key={m.id} className="flex items-start gap-2 text-sm cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={selectedMaterialIds.includes(m.id)}
+                            onChange={() => toggleMaterial(m.id)}
+                            className="mt-1"
+                          />
+                          <span>
+                            <span className="font-medium text-royalPurple-text1">{m.title}</span>
+                            <span className="text-royalPurple-text3">
+                              {' '}
+                              — {m.chunksIndexed} chunks
+                              {m.gradeLevel ? ` · ${m.gradeLevel}` : ''}
+                            </span>
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handlePreviewSources}
+                    disabled={previewLoading || !form.topic.trim()}
+                  >
+                    {previewLoading ? 'Previewing…' : 'Preview RAG sources'}
+                  </Button>
+                  {previewRefs.length > 0 && !ragReferences.length ? (
+                    <RagReferencesPanel references={previewRefs} />
+                  ) : null}
+                </div>
                 <div className="space-y-2">
                   <Label>Question Count</Label>
                   <Input
@@ -285,7 +409,16 @@ export default function TeacherQuizMakerPage() {
 
               {error ? <UpgradePrompt error={error} /> : null}
 
-              <Button onClick={() => fetchQuiz(form)} disabled={loading || !canGenerate}>
+              <Button
+                onClick={() =>
+                  fetchQuiz({
+                    ...form,
+                    subject: activeSubject,
+                    materialIds: selectedMaterialIds.length ? selectedMaterialIds : undefined,
+                  })
+                }
+                disabled={loading || !canGenerate}
+              >
                 {loading ? 'Generating...' : 'Create Quiz'}
               </Button>
             </CardContent>

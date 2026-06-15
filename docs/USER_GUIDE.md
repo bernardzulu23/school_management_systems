@@ -309,6 +309,7 @@ HODs manage their department: class allocations, teacher oversight, lesson plan 
 | Games                | `/dashboard/hod/games`                      |
 | AI Lesson Planner    | `/dashboard/teacher/lesson-planner`         |
 | AI Quiz Maker        | `/dashboard/teacher/quiz-maker`             |
+| Topic Test (RAG)     | `/dashboard/teacher/topic-test`             |
 | Upload for AI (RAG)  | `/dashboard/teacher/ai-materials`           |
 | AI Report Comments   | `/dashboard/teacher/report-comments`        |
 | AI Story Weaver      | `/dashboard/teacher/story-weaver`           |
@@ -390,6 +391,7 @@ Teachers manage classes, record SBA scores, take attendance, create lesson plans
 | Games               | `/dashboard/teacher/games`                  |
 | AI Lesson Planner   | `/dashboard/teacher/lesson-planner`         |
 | AI Quiz Maker       | `/dashboard/teacher/quiz-maker`             |
+| Topic Test (RAG)    | `/dashboard/teacher/topic-test`             |
 | AI Report Comments  | `/dashboard/teacher/report-comments`        |
 | AI Story Weaver     | `/dashboard/teacher/story-weaver`           |
 | Assessments         | `/dashboard/teacher/assessments`            |
@@ -451,6 +453,7 @@ See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) and [QR_ATTENDANCE.md](./QR_ATTENDANC
 | ------------------- | ------------------------------------ | ---------------- |
 | AI Lesson Planner   | `/dashboard/teacher/lesson-planner`  | AI-enabled plan  |
 | AI Quiz Maker       | `/dashboard/teacher/quiz-maker`      | AI-enabled plan  |
+| Topic Test (RAG)    | `/dashboard/teacher/topic-test`      | AI-enabled plan  |
 | AI Report Comments  | `/dashboard/teacher/report-comments` | AI-enabled plan  |
 | AI Story Weaver     | `/dashboard/teacher/story-weaver`    | AI-enabled plan  |
 | Upload for AI (RAG) | `/dashboard/teacher/ai-materials`    | AI-enabled plan  |
