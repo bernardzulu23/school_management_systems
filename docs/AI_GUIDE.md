@@ -38,17 +38,17 @@ Zod still validates the parsed object on our side. If you see a `json_schema` er
 
 ## AI features
 
-| Feature                  | Route / module                    | Mode                                                    | Schema                   |
-| ------------------------ | --------------------------------- | ------------------------------------------------------- | ------------------------ |
-| Lesson planner (stream)  | `POST /api/ai/lesson-planner`     | Stream prose via `aiChain` (Groq → Gemini → OpenRouter) | —                        |
-| Professional lesson plan | `POST /api/lesson-plans/generate` | Structured (default)                                    | `LessonPlanSchema`       |
-| Ministry plain-text plan | Same route, `format=ministry`     | Text                                                    | —                        |
-| Quiz maker               | `POST /api/ai/quiz-maker`         | Structured                                              | `QuizSchema`             |
-| ECZ practice             | `POST /api/ai/ecz-practice`       | Structured                                              | `ECZPracticePaperSchema` |
-| Story weaver             | `POST /api/ai/story-weaver`       | Stream                                                  | —                        |
-| Report comments          | `POST /api/ai/report-comments`    | Stream                                                  | —                        |
-| Phonics / Zambia helpers | `lib/ai/zambia-features.js`       | Text                                                    | —                        |
-| Legacy aiml tools        | `lib/aiml/tools/*`                | Mixed                                                   | Quiz / ECZ schemas       |
+| Feature                  | Route / module                    | Mode                                                                           | Schema                   |
+| ------------------------ | --------------------------------- | ------------------------------------------------------------------------------ | ------------------------ |
+| Lesson planner (stream)  | `POST /api/ai/lesson-planner`     | Stream prose via `aiChain` (Gemini → Groq → OpenRouter → OpenAI → HuggingFace) | —                        |
+| Professional lesson plan | `POST /api/lesson-plans/generate` | Structured (default)                                                           | `LessonPlanSchema`       |
+| Ministry plain-text plan | Same route, `format=ministry`     | Text                                                                           | —                        |
+| Quiz maker               | `POST /api/ai/quiz-maker`         | Structured                                                                     | `QuizSchema`             |
+| ECZ practice             | `POST /api/ai/ecz-practice`       | Structured                                                                     | `ECZPracticePaperSchema` |
+| Story weaver             | `POST /api/ai/story-weaver`       | Stream                                                                         | —                        |
+| Report comments          | `POST /api/ai/report-comments`    | Stream                                                                         | —                        |
+| Phonics / Zambia helpers | `lib/ai/zambia-features.js`       | Text                                                                           | —                        |
+| Legacy aiml tools        | `lib/aiml/tools/*`                | Mixed                                                                          | Quiz / ECZ schemas       |
 
 Structured lesson plans are stored on `LessonPlan.structuredContent` (JSON) plus plain `content` for display.
 
