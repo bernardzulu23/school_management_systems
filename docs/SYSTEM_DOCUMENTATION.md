@@ -193,25 +193,26 @@ school_management_systems/
 
 ## Core domains and modules
 
-| Domain                | Purpose                                                                                                               | Key paths                                                                                                                |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| **Multi-tenancy**     | School isolation by `schoolId` and subdomain                                                                          | `prisma/schema.prisma` (`School`), `lib/tenant/`, `proxy.js`                                                             |
-| **Auth & sessions**   | Login, JWT cookies, refresh, password reset                                                                           | `app/api/auth/`, `lib/middleware/auth`                                                                                   |
-| **Onboarding**        | School signup, email verify, Lipila payment                                                                           | `app/onboarding/`, `app/api/onboarding/`                                                                                 |
-| **Individual portal** | Solo teachers (`SchoolType.INDIVIDUAL`)                                                                               | `app/join/`, `app/dashboard/solo/`, `lib/middleware/individual-gate.js`                                                  |
-| **Platform admin**    | Cross-tenant operator console                                                                                         | `app/platform/`, `app/api/platform/`, `lib/platform/`                                                                    |
-| **ECZ / SBA**         | ZECF-aligned assessments, scores, submissions                                                                         | `lib/ecz/`, `lib/middleware/ecz-validation.js`, `app/api/ecz/`, `app/api/assessments/sba-*`                              |
-| **Timetabling**       | HOD allocations → generate → publish pipeline                                                                         | `lib/timetable/pipeline.js`, `app/api/timetable/`, [TIMETABLE_PIPELINE.md](./TIMETABLE_PIPELINE.md)                      |
-| **Attendance**        | Sessions, QR, offline Dexie sync, live summary                                                                        | `lib/attendance/`, `app/api/attendance/`, [QR_ATTENDANCE.md](./QR_ATTENDANCE.md), [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) |
-| **Lesson plans**      | Authoring, HOD review, AI generation                                                                                  | `app/api/lesson-plans/`, `lib/lesson-plans/`                                                                             |
-| **Results & reports** | End-of-term, midterm, and class-test results (secondary/combined G8+ only); headteacher/HOD views exclude class tests | `lib/results/resultTypes.js`, `lib/school/gradingAccess.js`, `app/api/teacher/results/`                                  |
-| **Billing**           | Plans, trials, Lipila subscription payments                                                                           | `lib/billing/plan-pricing.js`, `app/api/billing/`, `SchoolPlanPayment` model                                             |
-| **SMS**               | Broadcasts, templates, inbound webhooks                                                                               | `lib/sms/`, `app/api/sms/`, [SMS_GUIDE.md](./SMS_GUIDE.md)                                                               |
-| **AI features**       | Lesson planner, quizzes, report comments, RAG                                                                         | `lib/ai/`, [AI_GUIDE.md](./AI_GUIDE.md), [RAG.md](./RAG.md)                                                              |
-| **Mobile API**        | Teacher attendance, sync, push tokens                                                                                 | `app/api/mobile/` (12 routes)                                                                                            |
-| **Marketplace**       | Shared teaching materials                                                                                             | `app/api/marketplace/`, `SharedMaterial` model                                                                           |
-| **USSD**              | Parent portal via USSD gateway                                                                                        | `app/api/ussd/`, [USSD_GUIDE.md](./USSD_GUIDE.md)                                                                        |
-| **Innovation / SDG**  | School innovation projects, SDG dashboard                                                                             | `app/dashboard/innovation/`, `app/api/innovation/`                                                                       |
+| Domain                | Purpose                                                                                                               | Key paths                                                                                                                                          |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Multi-tenancy**     | School isolation by `schoolId` and subdomain                                                                          | `prisma/schema.prisma` (`School`), `lib/tenant/`, `proxy.js`                                                                                       |
+| **Auth & sessions**   | Login, JWT cookies, refresh, password reset                                                                           | `app/api/auth/`, `lib/middleware/auth`                                                                                                             |
+| **Onboarding**        | School signup, email verify, Lipila payment                                                                           | `app/onboarding/`, `app/api/onboarding/`                                                                                                           |
+| **Individual portal** | Solo teachers (`SchoolType.INDIVIDUAL`)                                                                               | `app/join/`, `app/dashboard/solo/`, `lib/middleware/individual-gate.js`                                                                            |
+| **Platform admin**    | Cross-tenant operator console                                                                                         | `app/platform/`, `app/api/platform/`, `lib/platform/`                                                                                              |
+| **ECZ / SBA**         | ZECF/ECSEOL-aligned assessments, exemplars, exam scenarios, moderation, scores, submissions                           | `lib/ecz/assessment-engine.js`, `lib/ecz/ecz-reference-constants.js`, `app/api/ecz/`, `app/api/ai/ecz-exam-questions`, `app/api/assessments/sba-*` |
+| **Primary CBC**       | Competency ratings (ECE–G7), CSV export, continuous-assessment-tool feature                                           | `CbcCompetencyRating`, `app/api/cbc/`, `/dashboard/teacher/assessments/cbc`                                                                        |
+| **Timetabling**       | HOD allocations → generate → publish pipeline                                                                         | `lib/timetable/pipeline.js`, `app/api/timetable/`, [TIMETABLE_PIPELINE.md](./TIMETABLE_PIPELINE.md)                                                |
+| **Attendance**        | Sessions, QR, offline Dexie sync, live summary                                                                        | `lib/attendance/`, `app/api/attendance/`, [QR_ATTENDANCE.md](./QR_ATTENDANCE.md), [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md)                           |
+| **Lesson plans**      | Authoring, HOD review, AI generation                                                                                  | `app/api/lesson-plans/`, `lib/lesson-plans/`                                                                                                       |
+| **Results & reports** | End-of-term, midterm, and class-test results (secondary/combined G8+ only); headteacher/HOD views exclude class tests | `lib/results/resultTypes.js`, `lib/school/gradingAccess.js`, `app/api/teacher/results/`                                                            |
+| **Billing**           | Plans, trials, Lipila subscription payments                                                                           | `lib/billing/plan-pricing.js`, `app/api/billing/`, `SchoolPlanPayment` model                                                                       |
+| **SMS**               | Broadcasts, templates, inbound webhooks                                                                               | `lib/sms/`, `app/api/sms/`, [SMS_GUIDE.md](./SMS_GUIDE.md)                                                                                         |
+| **AI features**       | Lesson planner, quizzes, report comments, RAG                                                                         | `lib/ai/`, [AI_GUIDE.md](./AI_GUIDE.md), [RAG.md](./RAG.md)                                                                                        |
+| **Mobile API**        | Teacher attendance, sync, push tokens                                                                                 | `app/api/mobile/` (12 routes)                                                                                                                      |
+| **Marketplace**       | Shared teaching materials                                                                                             | `app/api/marketplace/`, `SharedMaterial` model                                                                                                     |
+| **USSD**              | Parent portal via USSD gateway                                                                                        | `app/api/ussd/`, [USSD_GUIDE.md](./USSD_GUIDE.md)                                                                                                  |
+| **Innovation / SDG**  | School innovation projects, SDG dashboard                                                                             | `app/dashboard/innovation/`, `app/api/innovation/`                                                                                                 |
 
 Regenerate the API catalog after route changes: `npm run docs:api-routes` → [API_ROUTES.md](./API_ROUTES.md).
 
@@ -231,16 +232,16 @@ Regenerate the API catalog after route changes: `npm run docs:api-routes` → [A
 
 The Prisma schema defines **~100 models**, grouped roughly as:
 
-| Group              | Examples                                                                                       |
-| ------------------ | ---------------------------------------------------------------------------------------------- |
-| Core tenancy       | `School`, `User`, `RefreshToken`, `AuditLog`, `EnrollmentInvite`                               |
-| People             | `Student`, `Teacher`, `HeadOfDepartment`                                                       |
-| Academic structure | `Class`, `Subject`, `Department`, `TeachingAssignment`, `PupilSubjectEnrollment`               |
-| Timetable          | `TimeSlot`, `TimetableVersion`, `TimetableEntry`, `TeacherAllocation`, `SchedulingRecipe`      |
-| Assessment & ECZ   | `EczAssessment`, `EczAssessmentScore`, `EczSubmission`, `EczCompetency`, `EczSubjectConstruct` |
-| Attendance         | `Attendance`, `AttendanceSession`, `AttendanceMark`                                            |
-| Operations         | `LessonPlan`, `TermReport`, `SmsBroadcast`, `SchoolPlanPayment`, `SchoolRegistration`          |
-| HOD admin          | `HodBudgetCategory`, `HodMeeting`, `HodStockItem`, etc.                                        |
+| Group              | Examples                                                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Core tenancy       | `School`, `User`, `RefreshToken`, `AuditLog`, `EnrollmentInvite`                                                                     |
+| People             | `Student`, `Teacher`, `HeadOfDepartment`                                                                                             |
+| Academic structure | `Class`, `Subject`, `Department`, `TeachingAssignment`, `PupilSubjectEnrollment`                                                     |
+| Timetable          | `TimeSlot`, `TimetableVersion`, `TimetableEntry`, `TeacherAllocation`, `SchedulingRecipe`                                            |
+| Assessment & ECZ   | `EczAssessment`, `EczAssessmentScore`, `EczSubmission`, `EczCompetency`, `EczSubjectConstruct`, `EczExemplar`, `CbcCompetencyRating` |
+| Attendance         | `Attendance`, `AttendanceSession`, `AttendanceMark`                                                                                  |
+| Operations         | `LessonPlan`, `TermReport`, `SmsBroadcast`, `SchoolPlanPayment`, `SchoolRegistration`                                                |
+| HOD admin          | `HodBudgetCategory`, `HodMeeting`, `HodStockItem`, etc.                                                                              |
 
 Seed ECZ reference data: `npm run seed:ecz`.
 
@@ -327,7 +328,7 @@ See [SECURITY.md](./SECURITY.md) for route classification and IDOR guards (`lib/
 | HOD dashboards & assignment                                                    | Hidden             | Allowed     | Allowed                                                |
 | Secondary grading (ONE–FOUR / 1–9 result entry, best-six, school-wide results) | Hidden             | Allowed     | Allowed for secondary-grade classes only               |
 
-Primary schools see an informational unavailable card on result pages; CBC continuous assessment is the intended path (full UI is follow-up work). HOD users at primary schools are redirected to the teacher dashboard at login.
+Primary schools use **CBC Assessment** (`/dashboard/teacher/assessments/cbc`) for competency ratings and annual CSV export. Secondary schools use **ECZ SBA Hub** with ECSEOL exam scenarios, exemplar clone, and moderation. Combined schools see both nav entries.
 
 ### Environment validation
 
@@ -531,6 +532,7 @@ Test locations: `__tests__/api/`, `__tests__/unit/`, `__tests__/helpers/`, `test
 | [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md)       | Adding APIs, AI, SMS, migrations                  |
 | [SECURITY.md](./SECURITY.md)                     | Tenant isolation, route audit                     |
 | [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md)         | SBA rules and models                              |
+| [ECSEOL_ALIGNMENT.md](./ECSEOL_ALIGNMENT.md)     | ECSEOL 2026 teacher quick reference               |
 | [INDIVIDUAL_PORTAL.md](./INDIVIDUAL_PORTAL.md)   | Solo teacher portal                               |
 | [PLATFORM_ADMIN.md](./PLATFORM_ADMIN.md)         | Super-admin console                               |
 | [API_ROUTES.md](./API_ROUTES.md)                 | Auto-generated API list                           |

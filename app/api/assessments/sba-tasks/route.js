@@ -88,6 +88,7 @@ export const POST = withSecureApi(async function POST(request) {
         demonstration: body.demonstration ? String(body.demonstration) : null,
         generatedByAI: Boolean(body.generatedByAI),
         aiModel: body.aiModel ? String(body.aiModel) : null,
+        exemplarId: body.exemplarId ? String(body.exemplarId) : null,
       },
       include: { subject: true, class: true, creator: { select: { id: true, name: true } } },
     })

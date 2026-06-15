@@ -17,10 +17,20 @@ import { generateAIObject } from '@/lib/ai/client'
 import { ECZPracticePaperSchema } from '@/lib/ai/schemas'
 import { buildEczPracticePrompt } from '@/lib/ai/subject-adaptive-prompts'
 import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
+import { isValidEczExamLevel, normalizeEczExamLevel } from '@/lib/ecz/ecz-practice-levels'
+import {
+  resolveAssessmentMode,
+  normalizeQuestionsForMode,
+  ASSESSMENT_MODES,
+} from '@/lib/ecz/assessment-engine'
 
 const ECZ_PRACTICE_SYSTEM =
-  'You are an ECZ examination specialist for Zambian schools. Create valid practice papers with Zambian context. Match the requested exam level exactly.'
-import { isValidEczExamLevel, normalizeEczExamLevel } from '@/lib/ecz/ecz-practice-levels'
+  'You are an ECZ examination specialist for Zambian schools. Create valid practice papers with Zambian context. Match the requested exam level exactly. Secondary levels: scenario-based only, no MCQ.'
+
+function isSecondaryExamLevel(examLevel) {
+  const key = normalizeEczExamLevel(examLevel)
+  return /^form[1-6]$/.test(key) || /^grade(8|9|10|11|12)$/.test(key)
+}
 
 export const POST = withAILimits(async function POST(request) {
   const user = await getAuthUser(request)
@@ -58,7 +68,7 @@ export const POST = withAILimits(async function POST(request) {
   const blocked = await requireFeature(schoolId, 'ecz-practice')
   if (blocked) return blocked
 
-  const limitBlock = await checkAILimit(schoolId, String(auth.user?.id || auth.user?.userId || ''))
+  const limitBlock = await checkAILimit(schoolId, String(user.id || ''))
   if (limitBlock) return limitBlock
 
   try {
@@ -84,11 +94,19 @@ export const POST = withAILimits(async function POST(request) {
 
   const count =
     Number.isFinite(questionCount) && questionCount > 0 ? Math.min(20, questionCount) : 5
+
+  const assessmentMode =
+    isSecondaryExamLevel(examLevel) ||
+    resolveAssessmentMode({ schoolLevel: school.level }) === ASSESSMENT_MODES.SECONDARY_SCENARIO
+      ? ASSESSMENT_MODES.SECONDARY_SCENARIO
+      : ASSESSMENT_MODES.PRIMARY_MCQ
+
   let prompt = buildEczPracticePrompt({
     subject,
     examLevel,
     topic,
     questionCount: count,
+    assessmentMode,
   })
 
   const rag = await buildRagContextForQuery({
@@ -106,12 +124,19 @@ export const POST = withAILimits(async function POST(request) {
       ECZPracticePaperSchema,
       rag.block ? appendRagToSystemPrompt(ECZ_PRACTICE_SYSTEM, rag.block) : ECZ_PRACTICE_SYSTEM,
       prompt,
-      { maxTokens: 2500, temperature: 0.4 }
+      { maxTokens: 3000, temperature: 0.4 }
     )
 
     const paper = parsed?.paper
-    if (!paper || !Array.isArray(paper.questions)) {
+    const hasScenarios = Array.isArray(paper?.scenarios) && paper.scenarios.length > 0
+    const hasQuestions = Array.isArray(paper?.questions) && paper.questions.length > 0
+
+    if (!paper || (!hasScenarios && !hasQuestions)) {
       return NextResponse.json({ error: 'AI returned invalid ECZ JSON' }, { status: 502 })
+    }
+
+    if (assessmentMode === ASSESSMENT_MODES.SECONDARY_SCENARIO && hasQuestions) {
+      paper.questions = normalizeQuestionsForMode(paper.questions, assessmentMode)
     }
 
     await trackAIUsage(schoolId, 'ecz-practice')
@@ -132,6 +157,7 @@ export const POST = withAILimits(async function POST(request) {
     return NextResponse.json({
       success: true,
       paper,
+      assessmentMode,
       ragReferences: rag.refs?.length ? rag.refs : undefined,
     })
   } catch (err) {

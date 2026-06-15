@@ -18,18 +18,30 @@ import { assertGroqConfigured } from '@/lib/ai/client'
 import { logger } from '@/lib/utils/logger'
 import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { GenerateFlashcardsSchema } from '@/lib/schemas'
+import { resolveAssessmentMode } from '@/lib/ecz/assessment-engine'
 
 const FLASHCARD_SYSTEM =
   'You are a Zambian CBC study coach. Create concise self-quiz flashcards. Each card has a clear question, 3-4 plausible options, exactly one correct answer, and a one-line explanation. The answer field must be the full text of the correct option (not a letter like A or B). Use the subject language where natural (e.g. Cinyanja for Cinyanja).'
 
-function buildFlashcardPrompt({ subjectName, topic, count }) {
+function buildFlashcardPrompt({ subjectName, topic, count, assessmentMode }) {
+  const isSecondary = assessmentMode === 'secondary_scenario'
+  if (isSecondary) {
+    return `Create ${count} ECZ-style recall flashcards for "${subjectName}"${
+      topic ? ` on "${topic}"` : ''
+    }.
+Rules:
+- NO multiple choice options — use front/back recall cards (State, Define, Describe command terms).
+- Front: question with optional short Zambian context.
+- Back (answer field): model answer. Set options to a single-element array matching answer.
+- Age-appropriate for Zambian secondary learners.`
+  }
   return `Create ${count} multiple-choice study flashcards for the subject "${subjectName}"${
     topic ? ` focused on the topic "${topic}"` : ''
   }.
 Rules:
 - Exactly ${count} cards (never more than ${MAX_CARDS_PER_DECK}).
 - Each card: a question (front), 3-4 options, one correct answer as the full option text (not A/B/C/D), and a short explanation.
-- Age-appropriate for Zambian secondary learners. Use local context where helpful.`
+- Age-appropriate for Zambian primary/EPSC learners. Use local context where helpful.`
 }
 
 export const GET = withErrorHandler(async function GET(request) {
@@ -93,7 +105,7 @@ export const POST = withErrorHandler(async function POST(request) {
 
   const student = await db.student.findFirst({
     where: { schoolId, userId: auth.user.id },
-    select: { id: true },
+    select: { id: true, grade: true },
   })
   if (!student) throw new ApiError('Student profile not found', 404)
 
@@ -155,11 +167,21 @@ export const POST = withErrorHandler(async function POST(request) {
   }
   const system = ragBlock ? appendRagToSystemPrompt(FLASHCARD_SYSTEM, ragBlock) : FLASHCARD_SYSTEM
 
+  const assessmentMode = resolveAssessmentMode({
+    schoolLevel: school?.level,
+    gradeLevel: student.grade || body.gradeLevel,
+  })
+
   let generated
   try {
     generated = await generateFlashcardDeck({
       system,
-      userPrompt: buildFlashcardPrompt({ subjectName, topic, count }),
+      userPrompt: buildFlashcardPrompt({
+        subjectName,
+        topic,
+        count,
+        assessmentMode,
+      }),
       count,
     })
   } catch (e) {

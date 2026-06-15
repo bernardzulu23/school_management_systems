@@ -137,6 +137,23 @@ Annual weighting by term (ECZ):
 
 **Deadline:** 31 January of the calendar year after the academic year (e.g. 2025 academic year → 2026-01-31).
 
+## ECSEOL Assessment Schemes (2026) mapping
+
+| ECSEOL requirement                          | ZSMS implementation                                                                           |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Secondary: scenario + sub-questions, no MCQ | `lib/ecz/assessment-engine.js`; AI quiz/practice/exam routes                                  |
+| Command terms & Bloom targets               | `lib/ecz/ecz-reference-constants.js`; SBA Hub → ECSEOL reference tab                          |
+| Exemplar SBA & exam items                   | `EczExemplar` model; `GET /api/ecz/exemplars`; clone via `POST /api/ecz/exemplars/[id]/clone` |
+| Exam scenario AI generator                  | `POST /api/ai/ecz-exam-questions`; `ECZExamQuestionSchema`                                    |
+| Lesson plan construct/EoC                   | `LessonPlan.constructElementIds`, `sbaTaskType`; lesson planner UI                            |
+| Primary CBC ratings                         | `CbcCompetencyRating`; `/dashboard/teacher/assessments/cbc`; `GET/POST /api/cbc/ratings`      |
+| Primary export (31 Jan)                     | `GET /api/cbc/export`                                                                         |
+| SBA moderation QA                           | `EczAssessment.moderationStatus`; `GET/PATCH /api/ecz/moderation`                             |
+| Marking scheme                              | `POST /api/ecz/marking-scheme/generate`                                                       |
+| Quiz → term test (40 marks)                 | `POST /api/assessments/promote-term-test`                                                     |
+
+See [ECSEOL_ALIGNMENT.md](./ECSEOL_ALIGNMENT.md) for teacher-facing navigation.
+
 ## Adding a new ECZ rule
 
 1. Add the function to `lib/middleware/ecz-validation.js` (or `lib/ecz/ecz-compliance.js` if pure logic).
@@ -146,5 +163,6 @@ Annual weighting by term (ECZ):
 
 ## Related docs
 
+- [ECSEOL_ALIGNMENT.md](./ECSEOL_ALIGNMENT.md) — ECSEOL 2026 teacher quick reference
 - [AI_GUIDE.md](./AI_GUIDE.md) — `RubricSchema`, `SBATaskSchema` for AI-generated tasks
 - [TESTING.md](./TESTING.md) — critical path ECZ tests

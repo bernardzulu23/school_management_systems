@@ -65,6 +65,12 @@ export const POST = withErrorHandler(async function POST(request) {
   const templateType = normalize(body?.templateType) || 'professional'
   const useMinistryFormat = body?.format === 'ministry' || body?.useMinistryFormat === true
 
+  const constructElementIds = Array.isArray(body.constructElementIds)
+    ? body.constructElementIds
+    : null
+  const constructStatement = body.constructStatement ? String(body.constructStatement) : null
+  const sbaTaskType = body.sbaTaskType ? String(body.sbaTaskType) : null
+
   if (!grade || !subject || !topic) {
     throw new ApiError('grade, subject, and topic are required', 400)
   }
@@ -156,6 +162,9 @@ export const POST = withErrorHandler(async function POST(request) {
       templateType,
       content,
       structuredContent: structuredContent ?? undefined,
+      constructElementIds: constructElementIds ?? undefined,
+      constructStatement,
+      sbaTaskType,
       generatedAt,
       aiModel,
       version: 1,

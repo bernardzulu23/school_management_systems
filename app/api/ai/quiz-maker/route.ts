@@ -18,6 +18,12 @@ import { generateAIObject } from '@/lib/ai/client'
 import { QuizSchema } from '@/lib/ai/schemas'
 import { buildQuizPrompt } from '@/lib/ai/subject-adaptive-prompts'
 import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
+import {
+  resolveAssessmentMode,
+  normalizeQuestionsForMode,
+  validateBloomDistribution,
+  ASSESSMENT_MODES,
+} from '@/lib/ecz/assessment-engine'
 
 const QUIZ_SYSTEM =
   'You are a Zambian CBC assessment expert. Return only valid quiz data matching the schema. Use Zambian context where appropriate.'
@@ -32,13 +38,14 @@ const QuizMakerInputSchema = z.object({
 
 type QuizMakerInput = z.infer<typeof QuizMakerInputSchema>
 
-function buildPrompt(input: QuizMakerInput): string {
+function buildPrompt(input: QuizMakerInput, assessmentMode: string): string {
   return buildQuizPrompt({
     subject: input.subject,
     grade: input.grade,
     topic: input.topic,
     numQuestions: input.questionCount,
     difficulty: input.difficulty,
+    assessmentMode: assessmentMode as 'primary_mcq' | 'secondary_scenario' | 'sba_rubric',
   })
 }
 
@@ -96,7 +103,12 @@ export const POST = withAILimits(async function POST(request: Request) {
       subject: input.subject,
     })
 
-    let prompt = buildPrompt(input)
+    const assessmentMode = resolveAssessmentMode({
+      schoolLevel: school.level,
+      gradeLevel: input.grade,
+    })
+
+    let prompt = buildPrompt(input, assessmentMode)
     const rag = await buildRagContextForQuery({
       query: `${input.subject} ${input.grade} ${input.topic} quiz assessment`,
       schoolId,
@@ -123,6 +135,17 @@ export const POST = withAILimits(async function POST(request: Request) {
       return NextResponse.json({ error: 'AI returned invalid quiz JSON' }, { status: 502 })
     }
 
+    quiz.questions = normalizeQuestionsForMode(quiz.questions, assessmentMode)
+    const bloomCheck =
+      assessmentMode === ASSESSMENT_MODES.SECONDARY_SCENARIO
+        ? validateBloomDistribution(
+            quiz.questions.map((q: { bloomsLevel?: string; marks?: number }) => ({
+              bloomsLevel: q.bloomsLevel,
+              marks: q.marks,
+            }))
+          )
+        : { warnings: [], distribution: {} }
+
     await trackAIUsage(schoolId, 'ai-quiz-maker')
     await prisma.aIRequest.create({
       data: {
@@ -148,6 +171,8 @@ export const POST = withAILimits(async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       quiz,
+      assessmentMode,
+      bloomWarnings: bloomCheck.warnings,
       ragReferences: rag.refs?.length ? rag.refs : undefined,
     })
   } catch (error) {

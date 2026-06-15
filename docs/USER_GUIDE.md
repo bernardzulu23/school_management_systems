@@ -22,7 +22,8 @@ Every account receives a **2-month free trial**. After trial expiry, subscriptio
 When your school is registered as **Primary (ECE – Grade 7)** (`School.level = primary`):
 
 - **HOD features are hidden** — no HOD registration, department dashboards, or HOD navigation. Teachers report to the headteacher.
-- **Secondary-style grading is hidden** — no ONE–FOUR / 1–9 result entry, school-wide results pages, or student grade badges / best-six points. Use CBC continuous assessment workflows instead (ECZ SBA where applicable for upper primary is separate from term grading).
+- **Secondary-style grading is hidden** — no ONE–FOUR / 1–9 result entry or school-wide results pages. Use CBC continuous assessment instead.
+- **Primary CBC:** **CBC Assessment** (`/dashboard/teacher/assessments/cbc`) — record ZECF competency ratings (4-level descriptors) and export CSV by 31 January. See [ECSEOL_ALIGNMENT.md](./ECSEOL_ALIGNMENT.md).
 - **Combined schools** keep HOD for secondary departments; grading remains available only for **Grade 8+ / Form** classes, not for G1–G7 classes.
 
 | Portal type       | Who                                       | Entry URL                                     |
@@ -204,34 +205,36 @@ The headteacher is the school administrator with full oversight: users, timetabl
 
 ### Navigation menu
 
-| Menu item           | Route                                    |
-| ------------------- | ---------------------------------------- |
-| Dashboard           | `/dashboard/headteacher`                 |
-| Profile             | `/dashboard/profile`                     |
-| Settings            | `/dashboard/settings`                    |
-| User Feedback       | `/dashboard/feedback`                    |
-| User Management     | `/dashboard/users`                       |
-| Registration        | `/admin/registration`                    |
-| Scheduling Recipes  | `/dashboard/admin/recipes`               |
-| Subjects            | `/admin/subjects`                        |
-| Career clusters     | `/admin/career-clusters`                 |
-| Careers             | `/admin/careers`                         |
-| Teacher Performance | `/admin/teacher-performance`             |
-| Classes             | `/dashboard/classes`                     |
-| ECZ Exam Tracking   | `/dashboard/headteacher/exam-tracking`   |
-| STEM Monitoring     | `/dashboard/headteacher/stem-monitoring` |
-| MOE Reports         | `/dashboard/headteacher/moe-reports`     |
-| Upload for AI (RAG) | `/dashboard/teacher/ai-materials`        |
-| AI Report Comments  | `/dashboard/teacher/report-comments`     |
-| Attendance Returns  | `/dashboard/attendance/returns`          |
-| Timetable           | `/dashboard/headteacher/timetable`       |
-| Assessments         | `/dashboard/assessments`                 |
-| ECZ SBA Hub         | `/dashboard/teacher/assessments/ecz`     |
-| Results             | `/dashboard/results`                     |
-| Payments            | `/dashboard/payments`                    |
-| Billing             | `/dashboard/billing`                     |
-| Privacy             | `/dashboard/privacy`                     |
-| Reports             | `/dashboard/reports`                     |
+| Menu item           | Route                                         |
+| ------------------- | --------------------------------------------- |
+| Dashboard           | `/dashboard/headteacher`                      |
+| Profile             | `/dashboard/profile`                          |
+| Settings            | `/dashboard/settings`                         |
+| User Feedback       | `/dashboard/feedback`                         |
+| User Management     | `/dashboard/users`                            |
+| Registration        | `/admin/registration`                         |
+| Scheduling Recipes  | `/dashboard/admin/recipes`                    |
+| Subjects            | `/admin/subjects`                             |
+| Career clusters     | `/admin/career-clusters`                      |
+| Careers             | `/admin/careers`                              |
+| Teacher Performance | `/admin/teacher-performance`                  |
+| Classes             | `/dashboard/classes`                          |
+| ECZ Exam Tracking   | `/dashboard/headteacher/exam-tracking`        |
+| STEM Monitoring     | `/dashboard/headteacher/stem-monitoring`      |
+| MOE Reports         | `/dashboard/headteacher/moe-reports`          |
+| Upload for AI (RAG) | `/dashboard/teacher/ai-materials`             |
+| AI Report Comments  | `/dashboard/teacher/report-comments`          |
+| Attendance Returns  | `/dashboard/attendance/returns`               |
+| Timetable           | `/dashboard/headteacher/timetable`            |
+| Assessments         | `/dashboard/assessments`                      |
+| ECZ SBA Hub         | `/dashboard/teacher/assessments/ecz`          |
+| Exam scenarios      | `/dashboard/teacher/assessments/ecz?tab=exam` |
+| CBC Assessment      | `/dashboard/teacher/assessments/cbc`          |
+| Results             | `/dashboard/results`                          |
+| Payments            | `/dashboard/payments`                         |
+| Billing             | `/dashboard/billing`                          |
+| Privacy             | `/dashboard/privacy`                          |
+| Reports             | `/dashboard/reports`                          |
 
 **Also available (not in sidebar):** SMS broadcast at `/dashboard/sms`.
 
@@ -423,7 +426,7 @@ Teachers manage classes, record SBA scores, take attendance, create lesson plans
 5. Review export at `/dashboard/teacher/ecz/submit` — validate and export CSV before annual submission.
 6. Submit to ECZ before **31 January** of the year after the academic year.
 
-See [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md).
+See [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md) and [ECSEOL_ALIGNMENT.md](./ECSEOL_ALIGNMENT.md).
 
 #### Attendance (web + offline)
 

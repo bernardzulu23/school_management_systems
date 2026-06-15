@@ -138,6 +138,42 @@ export default function TeacherQuizMakerPage() {
     }
   }
 
+  const [promotingTermTest, setPromotingTermTest] = useState(false)
+  const [termForPromotion, setTermForPromotion] = useState('1')
+
+  const handlePromoteToTermTest = async () => {
+    if (!quiz || !selectedTeachingAssignment) {
+      toast.error('Generate a quiz and select class/subject first')
+      return
+    }
+    setPromotingTermTest(true)
+    try {
+      const formLevel = parseInt(String(form.grade || '').replace(/\D/g, ''), 10) || 2
+      const res = await fetch('/api/assessments/promote-term-test', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subjectId: selectedTeachingAssignment.subjectId,
+          classId: selectedTeachingAssignment.classId,
+          formLevel,
+          term: Number(termForPromotion),
+          title: `${quiz.title || form.topic} — End of Term Test`,
+          context: quiz.questions?.[0]?.question || form.topic,
+          questions: quiz.questions || [],
+          generatedByAI: true,
+        }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error || 'Promotion failed')
+      toast.success('Promoted to SBA End of Term Test (40 marks)')
+    } catch (e) {
+      toast.error(e.message || 'Could not promote quiz')
+    } finally {
+      setPromotingTermTest(false)
+    }
+  }
+
   const canGenerate = useMemo(
     () => form.topic.trim() && form.subject.trim(),
     [form.topic, form.subject]
@@ -291,6 +327,23 @@ export default function TeacherQuizMakerPage() {
                 <div className="flex flex-wrap gap-2 pt-2 border-t border-royalPurple-border">
                   <Button variant="outline" onClick={handleSaveToQuestionBank} disabled={saving}>
                     {saving ? 'Saving...' : 'Save'}
+                  </Button>
+                  <select
+                    className="h-10 rounded-md border border-input bg-background px-2 text-sm"
+                    value={termForPromotion}
+                    onChange={(e) => setTermForPromotion(e.target.value)}
+                    aria-label="Term for SBA promotion"
+                  >
+                    <option value="1">Term 1 (20%)</option>
+                    <option value="2">Term 2 (30%)</option>
+                    <option value="3">Term 3 (50%)</option>
+                  </select>
+                  <Button
+                    variant="secondary"
+                    onClick={handlePromoteToTermTest}
+                    disabled={promotingTermTest || !selectedTeachingAssignment}
+                  >
+                    {promotingTermTest ? 'Promoting…' : 'Promote to SBA term test'}
                   </Button>
                   <Button
                     onClick={handleSubmitToHod}

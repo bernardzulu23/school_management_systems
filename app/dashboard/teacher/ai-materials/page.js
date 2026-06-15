@@ -19,7 +19,6 @@ import {
   Upload,
 } from 'lucide-react'
 import { upload } from '@vercel/blob/client'
-import { useSubjects } from '@/lib/hooks/useSubjects'
 
 const GRADE_OPTIONS = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5', 'Grade 7', 'Grade 9']
 
@@ -51,10 +50,11 @@ async function getCsrfToken() {
 }
 
 export default function AiMaterialsPage() {
-  const { subjects: catalogSubjects } = useSubjects()
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [materials, setMaterials] = useState([])
+  const [assignedSubjects, setAssignedSubjects] = useState([])
+  const [assignmentsLoading, setAssignmentsLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState({
@@ -76,6 +76,30 @@ export default function AiMaterialsPage() {
         if (!cancelled) setBlobEnabled(Boolean(j?.enabled))
       })
       .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/teaching-assignments', { credentials: 'include' })
+      .then((r) => r.json())
+      .then((json) => {
+        if (cancelled) return
+        const rows = Array.isArray(json?.data) ? json.data : []
+        const names = [
+          ...new Set(rows.map((a) => String(a.subjectName || '').trim()).filter(Boolean)),
+        ]
+        setAssignedSubjects(names.sort((a, b) => a.localeCompare(b)))
+        if (names[0]) {
+          setForm((prev) => ({ ...prev, subject: prev.subject || names[0] }))
+        }
+      })
+      .catch(() => setAssignedSubjects([]))
+      .finally(() => {
+        if (!cancelled) setAssignmentsLoading(false)
+      })
     return () => {
       cancelled = true
     }
@@ -117,7 +141,12 @@ export default function AiMaterialsPage() {
   }, [materials, search])
 
   const resetForm = () => {
-    setForm({ title: '', subject: '', gradeLevel: '', file: null })
+    setForm({
+      title: '',
+      subject: assignedSubjects[0] || '',
+      gradeLevel: '',
+      file: null,
+    })
     setShowForm(false)
   }
 
@@ -147,6 +176,10 @@ export default function AiMaterialsPage() {
     }
     if (!form.title.trim()) {
       toast.error('Title is required')
+      return
+    }
+    if (!form.subject.trim()) {
+      toast.error('Select the subject you teach for this material')
       return
     }
     if (form.file.size > maxBytes) {
@@ -299,20 +332,33 @@ export default function AiMaterialsPage() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="rag-subject">Subject (optional, improves retrieval)</Label>
-                  <select
-                    id="rag-subject"
-                    className="w-full rounded-md border border-royalPurple-border bg-royalPurple-card px-3 py-2 text-sm"
-                    value={form.subject}
-                    onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                  >
-                    <option value="">— Any subject —</option>
-                    {catalogSubjects.map((s) => (
-                      <option key={s.id} value={s.name}>
-                        {s.name}
-                      </option>
-                    ))}
-                  </select>
+                  <Label htmlFor="rag-subject">Subject you teach *</Label>
+                  {assignmentsLoading ? (
+                    <p className="text-sm text-royalPurple-text3">Loading your assignments…</p>
+                  ) : assignedSubjects.length === 0 ? (
+                    <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3">
+                      No teaching assignments found. Ask your headteacher to assign your classes and
+                      subjects before uploading AI materials.
+                    </p>
+                  ) : (
+                    <select
+                      id="rag-subject"
+                      className="w-full rounded-md border border-royalPurple-border bg-royalPurple-card px-3 py-2 text-sm"
+                      value={form.subject}
+                      onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                      required
+                    >
+                      {assignedSubjects.map((name) => (
+                        <option key={name} value={name}>
+                          {name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  <p className="mt-1 text-xs text-royalPurple-text3">
+                    Materials are indexed only for subjects on your teaching load so quizzes and
+                    lesson plans stay scoped to what you teach.
+                  </p>
                 </div>
                 <div>
                   <Label htmlFor="rag-grade">Grade / form (optional)</Label>
@@ -346,7 +392,10 @@ export default function AiMaterialsPage() {
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <Button type="submit" disabled={uploading}>
+                  <Button
+                    type="submit"
+                    disabled={uploading || assignmentsLoading || !assignedSubjects.length}
+                  >
                     {uploading ? (
                       <>
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />

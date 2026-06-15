@@ -157,7 +157,12 @@ export default function AILessonPlanner() {
     // New fields from curriculum corrections
     languageOfInstruction: 'English (Grade 5 and above)',
     resourceLevel: 'Moderate (textbooks, chalkboard, some printed materials)',
+    sbaTaskType: 'Project',
+    constructStatement: '',
+    constructElementIds: [],
   })
+
+  const [eczReference, setEczReference] = useState(null)
 
   const { text, loading, error, done, ragReferences, start, reset, stop } =
     useAIStream('/api/ai/lesson-planner')
@@ -196,6 +201,20 @@ export default function AILessonPlanner() {
       cancelled = true
     }
   }, [activeSubject])
+
+  useEffect(() => {
+    fetch('/api/ecz/reference', { credentials: 'include' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json) => setEczReference(json))
+      .catch(() => setEczReference(null))
+  }, [])
+
+  const subjectConstruct = useMemo(() => {
+    const list = eczReference?.subjectConstructs || []
+    return list.find(
+      (s) => String(s.subjectName || '').toLowerCase() === activeSubject.trim().toLowerCase()
+    )
+  }, [eczReference, activeSubject])
 
   const headerBlock = useMemo(() => {
     if (!teacherContext) return null
@@ -456,6 +475,10 @@ export default function AILessonPlanner() {
           teachingAids: form.teachingAids?.trim() || undefined,
           lessonNumber: form.lessonNumber ? Number(form.lessonNumber) : undefined,
           totalLessonsInUnit: form.totalLessonsInUnit ? Number(form.totalLessonsInUnit) : undefined,
+          sbaTaskType: form.sbaTaskType || undefined,
+          constructStatement: form.constructStatement?.trim() || subjectConstruct?.construct,
+          constructElementIds:
+            form.constructElementIds?.length > 0 ? form.constructElementIds : undefined,
         }),
       })
       const json = await res.json().catch(() => ({}))
@@ -980,6 +1003,60 @@ export default function AILessonPlanner() {
               ))}
             </select>
           </div>
+
+          <div className="space-y-2">
+            <Label>SBA task type (ECSEOL)</Label>
+            <select
+              className={selectClass}
+              value={form.sbaTaskType}
+              onChange={(e) => setForm((p) => ({ ...p, sbaTaskType: e.target.value }))}
+            >
+              {(eczReference?.sbaTaskTypes || ['Project', 'Practical task', 'Fieldwork']).map(
+                (t) => (
+                  <option key={typeof t === 'string' ? t : t} value={typeof t === 'string' ? t : t}>
+                    {typeof t === 'string' ? t : t}
+                  </option>
+                )
+              )}
+            </select>
+          </div>
+
+          {subjectConstruct ? (
+            <div className="space-y-2 md:col-span-2">
+              <Label>Element of construct (ECZ)</Label>
+              <p className="text-xs text-muted-foreground">{subjectConstruct.construct}</p>
+              <div className="flex flex-wrap gap-2">
+                {(Array.isArray(subjectConstruct.elementsOfConstruct)
+                  ? subjectConstruct.elementsOfConstruct
+                  : []
+                ).map((el, idx) => {
+                  const id = String(el.id || el.elementNumber || idx)
+                  const label = el.statement || el.label || String(el)
+                  const checked = form.constructElementIds.includes(id)
+                  return (
+                    <label
+                      key={id}
+                      className="flex items-start gap-2 text-xs border rounded px-2 py-1 cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => {
+                          setForm((p) => ({
+                            ...p,
+                            constructElementIds: checked
+                              ? p.constructElementIds.filter((x) => x !== id)
+                              : [...p.constructElementIds, id],
+                          }))
+                        }}
+                      />
+                      {label}
+                    </label>
+                  )
+                })}
+              </div>
+            </div>
+          ) : null}
 
           <div className="space-y-2 md:col-span-2">
             <Label>

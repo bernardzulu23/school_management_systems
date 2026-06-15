@@ -7,6 +7,7 @@
  */
 const { PrismaClient } = require('@prisma/client')
 const { ECZ_COMPETENCIES, CBC_SUBJECTS } = require('./ecz-seed-data')
+const { ECZ_EXEMPLARS } = require('./ecz-exemplar-seed-data')
 
 const prisma = new PrismaClient()
 
@@ -46,6 +47,30 @@ async function main() {
     })
   }
   console.log(`  ✓ ${CBC_SUBJECTS.length} subject constructs`)
+
+  console.log('Seeding ECSEOL exemplars...')
+  await prisma.eczExemplar.deleteMany({ where: { source: 'ecseol_2026' } })
+  for (const row of ECZ_EXEMPLARS) {
+    await prisma.eczExemplar.create({
+      data: {
+        subjectCode: row.subjectCode,
+        subjectName: row.subjectName,
+        form: row.form,
+        band: row.band,
+        title: row.title,
+        context: row.context,
+        task: row.task,
+        taskType: row.taskType || null,
+        materials: row.materials || null,
+        rubricJson: row.rubricJson || null,
+        demonstration: row.demonstration || null,
+        examSubQuestionsJson: row.examSubQuestionsJson || null,
+        source: 'ecseol_2026',
+      },
+    })
+  }
+  console.log(`  ✓ ${ECZ_EXEMPLARS.length} exemplars`)
+
   console.log('ECZ seed complete.')
 }
 

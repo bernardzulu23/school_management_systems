@@ -767,28 +767,61 @@ export function buildQuizPrompt(params: {
   topic: string
   numQuestions: number
   difficulty?: string
+  assessmentMode?: 'primary_mcq' | 'secondary_scenario' | 'sba_rubric'
 }): string {
   const canonical = resolveCanonicalSubject(params.subject)
   const subjectGuidelines = getSubjectGuidelines(canonical)
   const difficulty = params.difficulty || 'medium'
+  const mode = params.assessmentMode || 'primary_mcq'
+  const isSecondary = mode === 'secondary_scenario'
+
+  const typeRule = isSecondary
+    ? 'Use ONLY structured, scenario, short, extended_response, or calculation types. NEVER use mcq or true_false.'
+    : 'Use mcq, short, or true_false types (EPSC-style for primary).'
+
+  const questionShape = isSecondary
+    ? `{
+      "id": "q1",
+      "type": "structured|scenario|short|calculation",
+      "question": "string with Zambian scenario context",
+      "commandTerm": "State|Explain|Calculate|etc.",
+      "elementOfConstruct": "string",
+      "bloomsLevel": "Remembering|Understanding|Applying|Analysing|Evaluating|Creating",
+      "answer": "string",
+      "marks": number,
+      "explanation": "string"
+    }`
+    : `{
+      "id": "q1",
+      "type": "mcq|short|true_false",
+      "question": "string",
+      "options": ["A", "B", "C", "D"],
+      "answer": "string",
+      "marks": number,
+      "competencies": ["string"],
+      "explanation": "string"
+    }`
 
   return `Create a formative quiz for ${params.grade} ${canonical} learners and return ONLY valid JSON.
 
 TOPIC: ${params.topic}
 DIFFICULTY: ${difficulty}
 QUESTION COUNT: ${params.numQuestions}
-CURRICULUM: Zambian CBC
+CURRICULUM: Zambian CBC / ECSEOL
+ASSESSMENT MODE: ${mode}
+QUESTION TYPES: ${typeRule}
 
 SUBJECT-SPECIFIC APPROACH for ${canonical}:
 ${subjectGuidelines}
 
 REQUIREMENTS:
 1. Progressively increase difficulty
-2. Include 1-2 application/analysis questions (not only recall)
+2. Include application/analysis questions (not only recall)
 3. Use correct ${canonical} terminology
-4. Reference Zambian examples where relevant
+4. Reference Zambian examples where relevant (markets, provinces, local contexts)
 5. Provide correct answer and brief explanation per question
 6. Avoid trick questions
+${isSecondary ? '7. Each item must include commandTerm and elementOfConstruct\n8. NEVER include multiple choice options' : ''}
 
 Return JSON:
 {
@@ -798,16 +831,7 @@ Return JSON:
   "topic": "${params.topic}",
   "totalMarks": number,
   "questions": [
-    {
-      "id": "q1",
-      "type": "mcq|short|true_false",
-      "question": "string",
-      "options": ["A", "B", "C", "D"],
-      "answer": "string",
-      "marks": number,
-      "competencies": ["string"],
-      "explanation": "string"
-    }
+    ${questionShape}
   ]
 }
 
@@ -867,19 +891,78 @@ export function buildEczPracticePrompt(params: {
   examLevel: string
   topic: string
   questionCount: number
+  assessmentMode?: 'primary_mcq' | 'secondary_scenario'
 }): string {
   const canonical = resolveCanonicalSubject(params.subject)
   const subjectGuidelines = getSubjectGuidelines(canonical)
   const levelLabel = String(params.examLevel || 'grade9').trim()
+  const isSecondary =
+    params.assessmentMode === 'secondary_scenario' ||
+    /^form[1-6]$/i.test(levelLabel.replace(/\s+/g, '')) ||
+    /^grade(8|9|10|11|12)$/.test(levelLabel.replace(/\s+/g, ''))
 
-  return `Create ECZ-style practice questions for Zambian students and return ONLY valid JSON.
+  if (isSecondary) {
+    return `Create ECSEOL-style scenario-based practice for Zambian secondary learners. Return ONLY valid JSON.
 
 Subject: ${canonical}
-Exam Level: ${levelLabel} (primary Grades 1–7, junior Grades 8–9, senior Grades 10–12, or CBC Forms 1–6)
+Exam Level: ${levelLabel}
+Topic: ${params.topic}
+Scenario Count: ${Math.min(3, Math.max(1, Math.ceil(params.questionCount / 3)))}
+
+SUBJECT-SPECIFIC APPROACH for ${canonical}:
+${subjectGuidelines}
+
+ECSEOL RULES (MANDATORY):
+- NO multiple choice — hasMultipleChoice must be false on every scenario
+- Each scenario: 2-4 sentence Zambian context (market, farm, school, province)
+- 2-4 sub-questions per scenario with command terms (State, Explain, Calculate, etc.)
+- Map each scenario to an element of construct
+- Include Bloom level and model answer per sub-question
+
+Return JSON:
+{
+  "paper": {
+    "examInfo": {
+      "subject": "${canonical}",
+      "level": "${levelLabel}",
+      "topic": "${params.topic}",
+      "totalMarks": number,
+      "timeAllowed": "string"
+    },
+    "scenarios": [
+      {
+        "questionNumber": 1,
+        "zambianScenario": "string (min 30 chars, real Zambian context)",
+        "elementOfConstruct": "string",
+        "hasMultipleChoice": false,
+        "subQuestions": [
+          {
+            "number": "(a)",
+            "commandTerm": "Explain",
+            "question": "string",
+            "marks": number,
+            "bloomsLevel": "Applying",
+            "modelAnswer": "mark scheme"
+          }
+        ],
+        "totalMarks": number
+      }
+    ],
+    "questions": []
+  }
+}
+
+No markdown or code fences.`
+  }
+
+  return `Create ECZ-style EPSC practice questions for Zambian primary learners and return ONLY valid JSON.
+
+Subject: ${canonical}
+Exam Level: ${levelLabel} (primary Grades 1–7 — MCQ allowed for external exam prep)
 Topic: ${params.topic}
 Question Count: ${params.questionCount}
 
-Adapt question difficulty, vocabulary, and ECZ exam format to match ${levelLabel} exactly.
+Adapt question difficulty, vocabulary, and format to match ${levelLabel} exactly.
 
 SUBJECT-SPECIFIC APPROACH for ${canonical}:
 ${subjectGuidelines}
@@ -897,7 +980,7 @@ Return JSON:
     "questions": [
       {
         "id": "q1",
-        "type": "mcq|short|structured",
+        "type": "mcq|short",
         "question": "string",
         "options": ["string"],
         "marks": number,
@@ -909,8 +992,43 @@ Return JSON:
 }
 
 Rules:
-- Match ECZ tone and difficulty for the level
-- Use ${canonical} conventions (notation, terminology, practical focus as appropriate)
+- MCQ and short answer appropriate for EPSC primary levels
+- Use Zambian context where relevant
 - Include marking guidance in answer and explanation
 - No markdown or code fences.`
+}
+
+export function buildEczExamPrompt(params: {
+  subject: string
+  form: string
+  topic: string
+  elementOfConstruct?: string
+  scenarioCount?: number
+}): string {
+  const canonical = resolveCanonicalSubject(params.subject)
+  const subjectGuidelines = getSubjectGuidelines(canonical)
+  const form = String(params.form || 'Form 2').trim()
+  const count = Math.min(3, Math.max(1, params.scenarioCount ?? 1))
+  const eoc = params.elementOfConstruct
+    ? `Focus on element of construct: ${params.elementOfConstruct}`
+    : 'Select appropriate elements of construct for the topic.'
+
+  return `Create ${count} ECSEOL-compliant exam scenario(s) for ${form} ${canonical} and return ONLY valid JSON.
+
+Topic: ${params.topic}
+${eoc}
+
+SUBJECT-SPECIFIC APPROACH for ${canonical}:
+${subjectGuidelines}
+
+MANDATORY ECSEOL RULES:
+- hasMultipleChoice: false on EVERY scenario
+- zambianScenario: 2-4 sentences with authentic Zambian context
+- 2-6 sub-questions per scenario with valid command terms
+- Include bloomsLevel and modelAnswer (mark scheme) per sub-question
+- totalMarks must equal sum of sub-question marks
+
+Return JSON matching the scenarios array schema with questionNumber, zambianScenario, subject, form, elementOfConstruct, subQuestions, totalMarks, hasMultipleChoice: false.
+
+No markdown or code fences.`
 }

@@ -10,6 +10,11 @@ import { ArrowLeft, ClipboardList, Plus, Save, Trash2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { StaffRouteGuard } from '@/components/auth/StaffRouteGuard'
+import {
+  resolveAssessmentMode,
+  getAllowedQuestionTypes,
+  ASSESSMENT_MODES,
+} from '@/lib/ecz/assessment-engine'
 
 export default function TeacherQuestionBankPage() {
   const [assignments, setAssignments] = useState([])
@@ -18,19 +23,43 @@ export default function TeacherQuestionBankPage() {
   const [sets, setSets] = useState([])
   const [selectedId, setSelectedId] = useState('')
   const [loading, setLoading] = useState(false)
-
+  const [schoolLevel, setSchoolLevel] = useState('combined')
   const [newSetTitle, setNewSetTitle] = useState('')
-  const [newSetGrade, setNewSetGrade] = useState('')
+  const [newSetGrade, setNewSetGrade] = useState('Form 2')
   const [creating, setCreating] = useState(false)
 
+  const assessmentMode = resolveAssessmentMode({
+    schoolLevel,
+    gradeLevel: newSetGrade || 'Form 2',
+  })
+  const allowedTypes = getAllowedQuestionTypes(assessmentMode)
+  const defaultType = allowedTypes[0] || 'mcq'
+
   const [newQuestion, setNewQuestion] = useState({
-    type: 'mcq',
+    type: 'structured',
     question: '',
     options: '',
     answer: '',
     marks: 1,
+    commandTerm: '',
+    elementOfConstruct: '',
   })
   const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    fetch('/api/school/current', { credentials: 'include' })
+      .then((r) => (r.ok ? r.json() : { school: null }))
+      .then((data) => setSchoolLevel(data?.school?.level || 'combined'))
+      .catch(() => setSchoolLevel('combined'))
+  }, [])
+
+  useEffect(() => {
+    const types = getAllowedQuestionTypes(
+      resolveAssessmentMode({ schoolLevel, gradeLevel: newSetGrade })
+    )
+    const nextDefault = types[0] || 'mcq'
+    setNewQuestion((p) => (types.includes(p.type) ? p : { ...p, type: nextDefault, options: '' }))
+  }, [schoolLevel, newSetGrade])
 
   useEffect(() => {
     async function loadAssignments() {
@@ -185,10 +214,20 @@ export default function TeacherQuestionBankPage() {
         options,
         answer: String(newQuestion.answer || '').trim(),
         marks: Number(newQuestion.marks || 1),
+        commandTerm: newQuestion.commandTerm || undefined,
+        elementOfConstruct: newQuestion.elementOfConstruct || undefined,
       },
     ]
     await saveQuestions(next)
-    setNewQuestion({ type: 'mcq', question: '', options: '', answer: '', marks: 1 })
+    setNewQuestion({
+      type: defaultType,
+      question: '',
+      options: '',
+      answer: '',
+      marks: 1,
+      commandTerm: '',
+      elementOfConstruct: '',
+    })
   }
 
   const removeQuestion = async (index) => {
@@ -234,6 +273,11 @@ export default function TeacherQuestionBankPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
+              {assessmentMode === ASSESSMENT_MODES.SECONDARY_SCENARIO && (
+                <p className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg p-3">
+                  Secondary ECSEOL mode: use structured/scenario items with command terms — no MCQ.
+                </p>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label>Subject</Label>
@@ -338,10 +382,42 @@ export default function TeacherQuestionBankPage() {
                                   setNewQuestion((p) => ({ ...p, type: e.target.value }))
                                 }
                               >
-                                <option value="mcq">Multiple Choice</option>
-                                <option value="short">Short Answer</option>
+                                {allowedTypes.map((t) => (
+                                  <option key={t} value={t}>
+                                    {t.replace(/_/g, ' ')}
+                                  </option>
+                                ))}
                               </select>
                             </div>
+                            {assessmentMode === ASSESSMENT_MODES.SECONDARY_SCENARIO && (
+                              <>
+                                <div className="space-y-2">
+                                  <Label>Command term</Label>
+                                  <Input
+                                    value={newQuestion.commandTerm}
+                                    onChange={(e) =>
+                                      setNewQuestion((p) => ({
+                                        ...p,
+                                        commandTerm: e.target.value,
+                                      }))
+                                    }
+                                    placeholder="Explain, Calculate, State…"
+                                  />
+                                </div>
+                                <div className="space-y-2 md:col-span-2">
+                                  <Label>Element of construct</Label>
+                                  <Input
+                                    value={newQuestion.elementOfConstruct}
+                                    onChange={(e) =>
+                                      setNewQuestion((p) => ({
+                                        ...p,
+                                        elementOfConstruct: e.target.value,
+                                      }))
+                                    }
+                                  />
+                                </div>
+                              </>
+                            )}
                             <div className="space-y-2">
                               <Label>Marks</Label>
                               <Input

@@ -128,6 +128,7 @@ model School {
   eczAssessments       EczAssessment[]
   eczAssessmentScores EczAssessmentScore[]
   eczSubmissions       EczSubmission[]
+  cbcCompetencyRatings CbcCompetencyRating[]
   specialAccommodations SpecialAccommodation[]
   questionBanks        QuestionBank[]
   planPayments         SchoolPlanPayment[]
@@ -215,6 +216,7 @@ model User {
   assessmentsCreated Assessment[] @relation("AssessmentsCreatedBy")
   assessmentsToReview Assessment[] @relation("AssessmentsReviewer")
   eczAssessmentsCreated EczAssessment[] @relation("EczAssessmentsCreatedBy")
+  cbcRatingsRecorded    CbcCompetencyRating[] @relation("CbcRatingsRecorded")
 
   createdAllocations      DepartmentAllocation[]  @relation("CreatedAllocations")
   approvedAllocations     DepartmentAllocation[]  @relation("ApprovedAllocations")
@@ -422,6 +424,7 @@ model Student {
   flashcardDecks      StudentFlashcardDeck[]
   subjectEnrollments  PupilSubjectEnrollment[]
   eczAssessmentScores EczAssessmentScore[]
+  cbcCompetencyRatings CbcCompetencyRating[]
   specialAccommodations SpecialAccommodation[]
   termReports         TermReport[]
   mockExamAttempts    MockExamAttempt[]
@@ -2116,6 +2119,9 @@ model LessonPlan {
   templateType    String?
   content         String          @db.Text
   structuredContent Json?
+  constructElementIds Json?
+  constructStatement  String?
+  sbaTaskType         String?
   generatedAt     DateTime?
   aiModel         String?
   approvalNotes   String?         @db.Text
@@ -2394,7 +2400,67 @@ model EczCompetency {
   descriptor  String   @db.Text
   category    String   // Cognitive | Social | Applied
   assessments EczAssessmentCompetency[]
+  cbcRatings  CbcCompetencyRating[]
   createdAt   DateTime @default(now())
+}
+
+/// ECSEOL exemplar SBA tasks and exam scenarios (global reference, seeded)
+enum EczExemplarBand {
+  sba_task
+  exam_scenario
+}
+
+model EczExemplar {
+  id                   String          @id @default(cuid())
+  subjectCode          String
+  subjectName          String
+  form                 Int
+  band                 EczExemplarBand
+  title                String
+  context              String          @db.Text
+  task                 String?         @db.Text
+  taskType             String?
+  materials            Json?
+  rubricJson           Json?
+  demonstration        String?         @db.Text
+  examSubQuestionsJson Json?
+  source               String          @default("ecseol_2026")
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+
+  @@index([subjectCode, form, band])
+  @@index([subjectName])
+}
+
+enum CbcRatingLevel {
+  EXCELLENT
+  GOOD
+  FAIR
+  NEEDS_IMPROVEMENT
+}
+
+/// Primary CBC competency ratings (ECE–Grade 7)
+model CbcCompetencyRating {
+  id            String         @id @default(cuid())
+  schoolId      String
+  school        School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  studentId     String
+  student       Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  competencyId  String
+  competency    EczCompetency  @relation(fields: [competencyId], references: [id], onDelete: Cascade)
+  gradeLevel    String
+  term          Int
+  academicYear  Int
+  level         CbcRatingLevel
+  evidenceNote  String?        @db.Text
+  recordedBy    String
+  recorder      User           @relation("CbcRatingsRecorded", fields: [recordedBy], references: [id], onDelete: Cascade)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([schoolId, studentId, competencyId, term, academicYear])
+  @@index([schoolId, gradeLevel, term, academicYear])
+  @@index([studentId])
 }
 
 /// Official CBC subject construct + elements (16 subjects) — global reference data
@@ -2486,6 +2552,11 @@ model EczAssessment {
   aiModel             String?
   instructions        String?  @db.Text
   demonstration       String?  @db.Text
+  exemplarId          String?
+  moderationStatus    EczModerationStatus @default(PENDING)
+  moderationNotes     String?  @db.Text
+  moderatedBy         String?
+  moderatedAt         DateTime?
 
   rubric              EczRubric?
   items               EczAssessmentItem[]
@@ -2501,6 +2572,7 @@ model EczAssessment {
   @@index([formLevel])
   @@index([component])
   @@index([schoolId, formLevel, term])
+  @@index([schoolId, moderationStatus])
 }
 
 model EczAssessmentCompetency {

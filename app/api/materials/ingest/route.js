@@ -9,6 +9,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getSchoolPlanForUsage } from '@/lib/middleware/aiUsageTracker'
 import { ingestMaterialText } from '@/lib/rag/ingest'
 import { extractTextFromBuffer, inferFileTypeFromName } from '@/lib/rag/parse'
+import { assertTeacherMaterialSubject } from '@/lib/materials/teacherMaterialSubject'
 
 function normalize(v) {
   return String(v || '').trim()
@@ -135,6 +136,17 @@ export const POST = withErrorHandler(async function POST(request) {
 
   if (!text) {
     throw new ApiError('text or file content is required for ingestion', 400)
+  }
+
+  const subjectCheck = await assertTeacherMaterialSubject({
+    schoolId,
+    userId,
+    userRole: auth.user?.role,
+    subject,
+    requireSubject: true,
+  })
+  if (!subjectCheck.ok) {
+    throw new ApiError(subjectCheck.error, subjectCheck.status)
   }
 
   if (!materialId) {

@@ -36,17 +36,33 @@ import {
 } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
 import { EczGuidelinesCatalog } from '@/components/assessments/EczGuidelinesCatalog'
+import { EczExamScenarioBuilder } from '@/components/assessments/EczExamScenarioBuilder'
+import { EczReferencePanel } from '@/components/assessments/EczReferencePanel'
+import { EczModerationPanel } from '@/components/assessments/EczModerationPanel'
 import { ECZ_GUIDELINES_SUBJECT_COUNT } from '@/lib/ecz/ecz-subjects-data'
 import { StaffRouteGuard } from '@/components/auth/StaffRouteGuard'
+import { FileText, Target, ShieldCheck } from 'lucide-react'
 
-const HUB_TAB_IDS = ['sba', 'rubric', 'tracking', 'accommodations', 'evidence']
+const HUB_TAB_IDS = [
+  'sba',
+  'exam',
+  'rubric',
+  'tracking',
+  'accommodations',
+  'evidence',
+  'reference',
+  'moderation',
+]
 
 const HUB_TABS = [
   { id: 'sba', label: 'SBA & scores', icon: ClipboardList },
+  { id: 'exam', label: 'Exam scenarios', icon: Target },
   { id: 'rubric', label: 'Rubric builder', icon: Table2 },
   { id: 'tracking', label: 'Tracking sheet', icon: Sheet },
   { id: 'accommodations', label: 'Accommodations', icon: UserCheck },
   { id: 'evidence', label: 'Evidence vault', icon: Archive },
+  { id: 'reference', label: 'ECSEOL reference', icon: BookOpen },
+  { id: 'moderation', label: 'Moderation', icon: ShieldCheck },
 ]
 
 function EczAssessmentHubContent() {
@@ -202,14 +218,19 @@ function EczAssessmentHubContent() {
     return (
       <StaffRouteGuard>
         <DashboardLayout>
-          <div className="p-4 md:p-6 max-w-3xl mx-auto">
+          <div className="p-4 md:p-6 max-w-3xl mx-auto space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>ECZ assessments unavailable</CardTitle>
+                <CardTitle>ECZ SBA is for secondary schools</CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-royalPurple-text2">
-                ECZ SBA tracking is for secondary schools only. Primary schools use the CBC primary
-                subject catalog instead.
+              <CardContent className="text-sm text-royalPurple-text2 space-y-3">
+                <p>
+                  Primary schools use CBC continuous assessment (ECE–Grade 7), not ECZ secondary
+                  SBA.
+                </p>
+                <Link href="/dashboard/teacher/assessments/cbc">
+                  <Button>Open CBC Assessment</Button>
+                </Link>
               </CardContent>
             </Card>
           </div>
@@ -259,6 +280,42 @@ function EczAssessmentHubContent() {
               )
             })}
           </div>
+
+          {hubTab === 'exam' ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>Exam scenario builder (ECSEOL)</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <EczExamScenarioBuilder subjects={subjects} />
+              </CardContent>
+            </Card>
+          ) : null}
+
+          {hubTab === 'reference' ? (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  ECSEOL reference
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <EczReferencePanel />
+              </CardContent>
+            </Card>
+          ) : null}
+
+          {hubTab === 'moderation' ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>SBA moderation queue</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <EczModerationPanel />
+              </CardContent>
+            </Card>
+          ) : null}
 
           {hubTab === 'rubric' ? (
             <Card>

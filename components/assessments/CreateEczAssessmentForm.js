@@ -35,6 +35,54 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
   const [submitting, setSubmitting] = useState(false)
   const [rubricCriteria, setRubricCriteria] = useState([])
   const [numCriteria, setNumCriteria] = useState(4)
+  const [exemplars, setExemplars] = useState([])
+  const [selectedExemplarId, setSelectedExemplarId] = useState('')
+  const [cloning, setCloning] = useState(false)
+
+  useEffect(() => {
+    if (formLevel && formLevel !== '4') {
+      fetch(`/api/ecz/exemplars?form=${formLevel}&type=sba_task`, { credentials: 'include' })
+        .then((r) => r.json())
+        .then((json) => setExemplars(Array.isArray(json?.data) ? json.data : []))
+        .catch(() => setExemplars([]))
+    }
+  }, [formLevel])
+
+  const applyExemplar = (ex) => {
+    if (!ex) return
+    setTitle(ex.title || '')
+    setContext(ex.context || '')
+    setType(ex.taskType || 'Project')
+    if (ex.task) setContext((c) => (c ? c : ex.context))
+  }
+
+  const cloneFromExemplar = async () => {
+    if (!selectedExemplarId || !subjectId) {
+      toast.error('Select exemplar and subject')
+      return
+    }
+    setCloning(true)
+    try {
+      const res = await fetch(`/api/ecz/exemplars/${selectedExemplarId}/clone`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subjectId,
+          classId: classId || undefined,
+          formLevel: parseInt(formLevel, 10),
+        }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error || 'Clone failed')
+      toast.success('Assessment cloned from ECSEOL exemplar')
+      onSuccess?.()
+    } catch (e) {
+      toast.error(e.message || 'Could not clone exemplar')
+    } finally {
+      setCloning(false)
+    }
+  }
 
   useEffect(() => {
     Promise.all([
@@ -116,6 +164,7 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
           numCriteria: rubricCriteria.length || numCriteria,
           rubricCriteria: rubricCriteria.length > 0 ? rubricCriteria : undefined,
           createDefaultRubric: component === 'SBA_TASK' && rubricCriteria.length === 0,
+          exemplarId: selectedExemplarId || undefined,
         }),
       })
       const json = await res.json().catch(() => ({}))
@@ -238,6 +287,43 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
           </div>
         ) : null}
       </div>
+
+      {component === 'SBA_TASK' && formLevel !== '4' && exemplars.length > 0 && (
+        <div className="rounded-lg border border-royalPurple-border/50 bg-royalPurple-deep/30 p-4 space-y-3">
+          <p className="text-sm font-medium text-royalPurple-text1">Clone from ECSEOL exemplar</p>
+          <Select
+            value={selectedExemplarId || 'none'}
+            onValueChange={(v) => {
+              const id = v === 'none' ? '' : v
+              setSelectedExemplarId(id)
+              const ex = exemplars.find((e) => e.id === id)
+              if (ex) applyExemplar(ex)
+            }}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Browse exemplars…" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">None — create manually</SelectItem>
+              {exemplars.map((ex) => (
+                <SelectItem key={ex.id} value={ex.id}>
+                  {ex.title} ({ex.subjectName})
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {selectedExemplarId && (
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={cloning}
+              onClick={cloneFromExemplar}
+            >
+              {cloning ? 'Cloning…' : 'One-click clone into live assessment'}
+            </Button>
+          )}
+        </div>
+      )}
 
       <div>
         <Label>Title *</Label>
