@@ -5,9 +5,9 @@
  *  1. Teacher cannot teach two grades at the same time.
  *  2. Grade cannot have two subjects at the same time.
  *
- * Soft constraints (blocked during search where noted):
+ * Soft constraints (optional during search via strictSoftConstraints):
  *  - Same subject twice on same day for same grade
- *  - Double/triple cannot span break after period 2 or lunch after period 5
+ *  - Teacher daily period cap
  */
 
 import { expandAllocationToUnits, type AllocationLike } from '@/lib/timetable/periodExpansion'
@@ -21,6 +21,7 @@ import {
   type PlacementRule,
   type RecipeLikeForRules,
 } from '@/lib/timetable/constraintRules'
+import type { LockedSlotReservation } from '@/lib/timetable/preflightFeasibility'
 
 /** Period numbers after which a break/lunch occurs — blocks cannot cross these. */
 export const BREAK_AFTER_PERIODS = [2, 5]
@@ -89,6 +90,7 @@ export type SchedulerStats = {
   backtracks: number
   llmUsed: boolean
   totalBlocks: number
+  restarts?: number
 }
 
 export type SchedulerResult = {
@@ -133,6 +135,18 @@ export function consecutivePeriodsAreValid(startPeriod: number, span: number): b
   return true
 }
 
+function reservedSlotKey(teacherId: string, day: string, period: number) {
+  return `${teacherId}|${normalizeDay(day)}|${period}`
+}
+
+function buildReservedSet(locks: LockedSlotReservation[] = []) {
+  const set = new Set<string>()
+  for (const lock of locks) {
+    set.add(reservedSlotKey(lock.teacherId, lock.day, lock.periodNumber))
+  }
+  return set
+}
+
 type CanPlaceResult = { ok: true } | { ok: false; reason: string }
 
 export function canPlace(
@@ -142,18 +156,26 @@ export function canPlace(
   options?: {
     maxTeacherPeriodsPerDay?: number
     placementRule?: PlacementRule
+    strictSoftConstraints?: boolean
+    reservedTeacherSlots?: Set<string>
   }
 ): CanPlaceResult {
   const { day, startPeriod } = slot
   const span = slot.span || block.span
   const maxPerDay = options?.maxTeacherPeriodsPerDay ?? 6
   const rule = options?.placementRule
+  const strictSoft = options?.strictSoftConstraints === true
+  const reserved = options?.reservedTeacherSlots
 
   if (!consecutivePeriodsAreValid(startPeriod, span)) {
     return { ok: false, reason: 'spans_break' }
   }
 
   for (let p = startPeriod; p < startPeriod + span; p++) {
+    if (reserved?.has(reservedSlotKey(block.teacherId, day, p))) {
+      return { ok: false, reason: 'locked_slot' }
+    }
+
     if (isSlotForbidden(rule, day, p)) {
       return { ok: false, reason: 'forbidden_slot' }
     }
@@ -171,18 +193,20 @@ export function canPlace(
     }
   }
 
-  const sameSubjectSameDay = placed.find(
-    (pl) => pl.subjectId === block.subjectId && pl.classId === block.classId && pl.day === day
-  )
-  if (sameSubjectSameDay) {
-    return { ok: false, reason: 'soft_same_day' }
-  }
+  if (strictSoft) {
+    const sameSubjectSameDay = placed.find(
+      (pl) => pl.subjectId === block.subjectId && pl.classId === block.classId && pl.day === day
+    )
+    if (sameSubjectSameDay) {
+      return { ok: false, reason: 'soft_same_day' }
+    }
 
-  const teacherDayLoad = placed.filter(
-    (pl) => pl.teacherId === block.teacherId && pl.day === day
-  ).length
-  if (teacherDayLoad >= maxPerDay) {
-    return { ok: false, reason: 'teacher_day_limit' }
+    const teacherDayLoad = placed.filter(
+      (pl) => pl.teacherId === block.teacherId && pl.day === day
+    ).length
+    if (teacherDayLoad >= maxPerDay) {
+      return { ok: false, reason: 'teacher_day_limit' }
+    }
   }
 
   return { ok: true }
@@ -210,7 +234,7 @@ export function expandAllocationsIntoBlocks(allocations: SchedulerAllocation[]):
 function sortBlocksHardestFirst(
   blocks: SchedulerBlock[],
   daySlots: Record<string, DayPeriodSlot[]>,
-  placed: PlacedBlock[]
+  restartSeed = 0
 ): SchedulerBlock[] {
   const teacherSlotCount = new Map<string, number>()
   for (const b of blocks) {
@@ -221,15 +245,18 @@ function sortBlocksHardestFirst(
       teacherSlotCount.set(b.teacherId, days * periodsPerDay)
     }
   }
-  for (const pl of placed) {
-    // already placed reduce remaining — not used for initial sort
+
+  const pseudoRandom = (n: number) => {
+    const x = Math.sin(restartSeed * 9973 + n * 7919) * 10000
+    return x - Math.floor(x)
   }
 
   return [...blocks].sort((a, b) => {
     if (b.span !== a.span) return b.span - a.span
     const ta = teacherSlotCount.get(a.teacherId) ?? 0
     const tb = teacherSlotCount.get(b.teacherId) ?? 0
-    return ta - tb
+    if (ta !== tb) return ta - tb
+    return pseudoRandom(a.blockId.length) - pseudoRandom(b.blockId.length)
   })
 }
 
@@ -243,8 +270,7 @@ function getPeriodSlotsForDay(
 function findSlotRun(
   dayPeriods: DayPeriodSlot[],
   startIndex: number,
-  span: number,
-  singleMin: number
+  span: number
 ): DayPeriodSlot[] | null {
   if (startIndex < 0 || startIndex >= dayPeriods.length) return null
   const start = dayPeriods[startIndex]
@@ -265,7 +291,7 @@ function findSlotRun(
 export function getCandidateSlots(
   block: SchedulerBlock,
   daySlots: Record<string, DayPeriodSlot[]>,
-  singleMin: number
+  _singleMin: number
 ): Array<{ day: string; startPeriod: number; span: number; run: DayPeriodSlot[] }> {
   const candidates: Array<{
     day: string
@@ -280,8 +306,9 @@ export function getCandidateSlots(
   for (const day of days) {
     const periods = getPeriodSlotsForDay(daySlots, day)
     for (let i = 0; i <= periods.length - block.span; i++) {
-      const run = findSlotRun(periods, i, block.span, singleMin)
+      const run = findSlotRun(periods, i, block.span)
       if (!run) continue
+      if (!consecutivePeriodsAreValid(Number(run[0].periodNumber), block.span)) continue
       candidates.push({
         day: normalizeDay(day),
         startPeriod: Number(run[0].periodNumber),
@@ -323,12 +350,53 @@ export type GenerateTimetableOptions = {
   maxTeacherPeriodsPerDay?: number
   recipeRules?: RecipeLikeForRules[]
   teacherConstraintRules?: DbConstraintLike[]
+  strictSoftConstraints?: boolean
+  reservedTeacherSlots?: LockedSlotReservation[]
+  initialPlaced?: PlacedBlock[]
+  blocksSubset?: SchedulerBlock[]
+  restartSeed?: number
+  maxRestarts?: number
+}
+
+function buildSchedulerResult(
+  placed: PlacedBlock[],
+  sortedBlocks: SchedulerBlock[],
+  allBlocks: SchedulerBlock[],
+  backtracks: number,
+  complete: boolean,
+  singleMin: number,
+  allocById: Map<string, SchedulerAllocation>
+): SchedulerResult {
+  const placedIds = new Set(placed.map((p) => p.blockId))
+  const unplacedBlocks = allBlocks.filter((b) => !placedIds.has(b.blockId))
+
+  const conflicts: SchedulerConflict[] = unplacedBlocks.map((block) => ({
+    allocationId: block.allocationId,
+    blockId: block.blockId,
+    type: block.unitType,
+    message: conflictMessage(allocById.get(block.allocationId), block),
+    reason: complete ? 'exhausted' : 'timeout_or_exhausted',
+  }))
+
+  return {
+    entries: placed.map((p) => blockToEntry(p, singleMin)),
+    conflicts,
+    unplacedBlocks,
+    placedBlocks: placed,
+    stats: {
+      placed: placed.filter((p) => sortedBlocks.some((b) => b.blockId === p.blockId)).length,
+      unplaced: unplacedBlocks.length,
+      backtracks,
+      llmUsed: false,
+      totalBlocks: allBlocks.length,
+    },
+  }
 }
 
 /**
- * Backtracking scheduler for HOD-pushed allocations.
+ * Single backtracking pass (one restart).
  */
-export function generateTimetable(
+export function generateTimetableOnce(
   allocations: SchedulerAllocation[],
   daySlots: Record<string, DayPeriodSlot[]>,
   options: GenerateTimetableOptions = {}
@@ -336,20 +404,29 @@ export function generateTimetable(
   const singleMin = Math.max(1, Number(options.singleMin) || 40)
   const maxMs = Math.max(2000, Number(options.maxExecutionMs) || 8000)
   const started = Date.now()
+  const restartSeed = Number(options.restartSeed) || 0
 
   const recipeRulesMap = buildRecipePlacementRules(options.recipeRules || [])
   const teacherRulesMap = buildTeacherDbConstraintRules(options.teacherConstraintRules || [])
+  const reservedSet = buildReservedSet(options.reservedTeacherSlots)
 
   const allocById = new Map(allocations.map((a) => [String(a.id), a]))
-  const allBlocks = expandAllocationsIntoBlocks(allocations)
+  const allBlocks = options.blocksSubset?.length
+    ? options.blocksSubset
+    : expandAllocationsIntoBlocks(allocations)
+
   let backtracks = 0
-
-  const placed: PlacedBlock[] = []
-
-  const sortedBlocks = sortBlocksHardestFirst(allBlocks, daySlots, placed)
+  const placed: PlacedBlock[] = [...(options.initialPlaced || [])]
+  const sortedBlocks = sortBlocksHardestFirst(allBlocks, daySlots, restartSeed)
 
   function timedOut() {
     return Date.now() - started > maxMs
+  }
+
+  const canPlaceOpts = {
+    maxTeacherPeriodsPerDay: options.maxTeacherPeriodsPerDay,
+    strictSoftConstraints: options.strictSoftConstraints,
+    reservedTeacherSlots: reservedSet,
   }
 
   function backtrackPlace(index: number): boolean {
@@ -359,7 +436,6 @@ export function generateTimetable(
     const block = sortedBlocks[index]
     const candidates = getCandidateSlots(block, daySlots, singleMin)
 
-    // Prefer days with lighter teacher load
     candidates.sort((a, b) => {
       const rule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, block)
       const prefA = placementPreferenceScore(rule, a.day, a.startPeriod)
@@ -373,13 +449,13 @@ export function generateTimetable(
     for (const cand of candidates) {
       if (timedOut()) return false
       const placementRule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, block)
-      const check = canPlace(block, cand, placed, { ...options, placementRule })
+      const check = canPlace(block, cand, placed, { ...canPlaceOpts, placementRule })
       if (!check.ok) continue
 
       const run = cand.run
       const first = run[0]
       const last = run[run.length - 1]
-      const placedBlock: PlacedBlock = {
+      placed.push({
         ...block,
         day: cand.day,
         startPeriod: cand.startPeriod,
@@ -387,8 +463,7 @@ export function generateTimetable(
         endMin: last.end,
         startTime: first.startTime,
         endTime: last.endTime,
-      }
-      placed.push(placedBlock)
+      })
 
       if (backtrackPlace(index + 1)) return true
 
@@ -400,33 +475,54 @@ export function generateTimetable(
   }
 
   const complete = backtrackPlace(0)
+  const result = buildSchedulerResult(
+    placed,
+    sortedBlocks,
+    allBlocks,
+    backtracks,
+    complete,
+    singleMin,
+    allocById
+  )
+  result.stats.placed = placed.length - (options.initialPlaced?.length || 0)
+  return result
+}
 
-  const placedIds = new Set(placed.map((p) => p.blockId))
-  const unplacedBlocks = sortedBlocks.filter((b) => !placedIds.has(b.blockId))
+/**
+ * Backtracking scheduler for HOD-pushed allocations with multi-restart.
+ */
+export function generateTimetable(
+  allocations: SchedulerAllocation[],
+  daySlots: Record<string, DayPeriodSlot[]>,
+  options: GenerateTimetableOptions = {}
+): SchedulerResult {
+  const maxRestarts = Math.max(1, Number(options.maxRestarts) || 3)
+  let best: SchedulerResult | null = null
 
-  const conflicts: SchedulerConflict[] = unplacedBlocks.map((block) => ({
-    allocationId: block.allocationId,
-    blockId: block.blockId,
-    type: block.unitType,
-    message: conflictMessage(allocById.get(block.allocationId), block),
-    reason: complete ? 'exhausted' : 'timeout_or_exhausted',
-  }))
+  for (let restart = 0; restart < maxRestarts; restart++) {
+    const result = generateTimetableOnce(allocations, daySlots, {
+      ...options,
+      restartSeed: restart,
+    })
 
-  const entries = placed.map((p) => blockToEntry(p, singleMin))
+    if (result.unplacedBlocks.length === 0) {
+      result.stats.restarts = restart + 1
+      return result
+    }
 
-  return {
-    entries,
-    conflicts,
-    unplacedBlocks,
-    placedBlocks: placed,
-    stats: {
-      placed: placed.length,
-      unplaced: unplacedBlocks.length,
-      backtracks,
-      llmUsed: false,
-      totalBlocks: sortedBlocks.length,
-    },
+    if (
+      !best ||
+      result.unplacedBlocks.length < best.unplacedBlocks.length ||
+      (result.unplacedBlocks.length === best.unplacedBlocks.length &&
+        result.stats.placed > best.stats.placed)
+    ) {
+      best = result
+    }
   }
+
+  const final = best!
+  final.stats.restarts = maxRestarts
+  return final
 }
 
 /** Merge LLM-resolved placements into a partial scheduler result. */
@@ -460,6 +556,39 @@ export function mergePlacements(
       placed: merged.length,
       unplaced: unplacedBlocks.length,
       llmUsed: extraPlaced.length > 0,
+    },
+  }
+}
+
+/** Convert scheduler result stats for a combined placed set. */
+export function schedulerResultFromPlaced(
+  placed: PlacedBlock[],
+  allBlocks: SchedulerBlock[],
+  singleMin: number,
+  allocById: Map<string, SchedulerAllocation>,
+  extraStats?: Partial<SchedulerStats>
+): SchedulerResult {
+  const placedIds = new Set(placed.map((p) => p.blockId))
+  const unplacedBlocks = allBlocks.filter((b) => !placedIds.has(b.blockId))
+  const conflicts = unplacedBlocks.map((block) => ({
+    allocationId: block.allocationId,
+    blockId: block.blockId,
+    type: block.unitType,
+    message: conflictMessage(allocById.get(block.allocationId), block),
+    reason: 'unresolved',
+  }))
+  return {
+    entries: placed.map((p) => blockToEntry(p, singleMin)),
+    conflicts,
+    unplacedBlocks,
+    placedBlocks: placed,
+    stats: {
+      placed: placed.length,
+      unplaced: unplacedBlocks.length,
+      backtracks: extraStats?.backtracks ?? 0,
+      llmUsed: extraStats?.llmUsed ?? false,
+      totalBlocks: allBlocks.length,
+      restarts: extraStats?.restarts,
     },
   }
 }

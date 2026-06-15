@@ -1,5 +1,6 @@
 'use client'
 
+import type { DragEvent } from 'react'
 import { abbreviateSubject } from '@/lib/timetable/subjectAbbrev'
 import { solidSubjectFill } from '@/lib/timetable/cardColors'
 import type { CardColor } from '@/lib/timetable/cardColors'
@@ -13,15 +14,18 @@ export type UnplacedLesson = {
   blockType?: string
   message?: string
   color?: CardColor
+  allocationId?: string
 }
 
 export function UnplacedLessonsTray({
   items,
   onSelect,
+  onDragStart,
   compact = false,
 }: {
   items: UnplacedLesson[]
   onSelect?: (item: UnplacedLesson) => void
+  onDragStart?: (item: UnplacedLesson, e: DragEvent) => void
   compact?: boolean
 }) {
   return (
@@ -61,11 +65,13 @@ export function UnplacedLessonsTray({
             {items.map((item) => {
               const abbrev = abbreviateSubject(item.subjectName, item.subjectCode)
               const solid = solidSubjectFill(item.subjectName)
-              const Tag = onSelect ? 'button' : 'div'
+              const Tag = onSelect || onDragStart ? 'button' : 'div'
               return (
                 <Tag
                   key={item.id}
-                  type={onSelect ? 'button' : undefined}
+                  type={onSelect || onDragStart ? 'button' : undefined}
+                  draggable={Boolean(onDragStart)}
+                  onDragStart={onDragStart ? (e) => onDragStart(item, e) : undefined}
                   onClick={onSelect ? () => onSelect(item) : undefined}
                   title={
                     [item.subjectName, item.className, item.teacherName, item.message]

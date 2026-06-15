@@ -121,30 +121,30 @@ See [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) for the canonical route template.
 
 ## Technology stack
 
-| Layer            | Technology                                          | Location / notes                                 |
-| ---------------- | --------------------------------------------------- | ------------------------------------------------ |
-| Framework        | Next.js 16 (App Router)                             | `app/`, `next.config.js`                         |
-| UI               | React 19, Tailwind CSS, Lucide                      | `components/`, `styles/`                         |
-| State            | Zustand (auth), TanStack Query                      | `lib/hooks/`, dashboard pages                    |
-| Database         | PostgreSQL + Prisma 6                               | `prisma/schema.prisma`                           |
-| DB hosting       | Neon (pooled + direct URLs)                         | `DATABASE_URL`, `DIRECT_URL`                     |
-| Edge security    | `proxy.js`                                          | Root — CSP, CSRF, subdomain, rate limits         |
-| Auth             | JWT (httpOnly cookies + refresh)                    | `lib/middleware/auth`, `lib/security/cookies.js` |
-| Tenancy          | `schoolId` + subdomain                              | `lib/tenant/resolveSchoolId.js`                  |
-| Email            | Resend                                              | `config/email.js`                                |
-| Payments         | Lipila (MTN / Airtel / Zamtel)                      | `lib/billing/`, `/api/payments/lipila/callback`  |
-| SMS              | Africa's Talking + QStash workers                   | `lib/sms/`, `/api/sms/*`                         |
-| AI               | Groq (+ optional Gemini fallback) via Vercel AI SDK | `lib/ai/`, `lib/config/env.js`                   |
-| Observability    | Sentry (`@sentry/nextjs`)                           | `sentry.*.config.ts`, `/monitoring` tunnel       |
-| Marketing CMS    | Sanity (optional)                                   | `lib/sanity/`, `sanity/queries/`                 |
-| File storage     | Vercel Blob                                         | `@vercel/blob`                                   |
-| Rate limiting    | Upstash Redis (optional)                            | `lib/middleware/upstashLimiters.js`              |
-| PWA / offline    | Workbox, Dexie                                      | `public/sw.js`, `lib/offline/`                   |
-| Mobile           | Expo 56 + React Native                              | `zsms-mobile/`                                   |
-| Timetable solver | TypeScript greedy + optional Python service         | `lib/timetable/`, `solver-service/`              |
-| Testing          | Vitest, Playwright, Jest (legacy)                   | `__tests__/`, `vitest.config.*`                  |
-| CI               | GitHub Actions                                      | `.github/workflows/`                             |
-| Deployment       | Vercel (primary)                                    | `vercel.json`, `scripts/vercel-build.js`         |
+| Layer            | Technology                                          | Location / notes                                     |
+| ---------------- | --------------------------------------------------- | ---------------------------------------------------- |
+| Framework        | Next.js 16 (App Router)                             | `app/`, `next.config.js`                             |
+| UI               | React 19, Tailwind CSS, Lucide                      | `components/`, `styles/`                             |
+| State            | Zustand (auth), TanStack Query                      | `lib/hooks/`, dashboard pages                        |
+| Database         | PostgreSQL + Prisma 6                               | `prisma/schema.prisma`                               |
+| DB hosting       | Neon (pooled + direct URLs)                         | `DATABASE_URL`, `DIRECT_URL`                         |
+| Edge security    | `proxy.js`                                          | Root — CSP, CSRF, subdomain, rate limits             |
+| Auth             | JWT (httpOnly cookies + refresh)                    | `lib/middleware/auth`, `lib/security/cookies.js`     |
+| Tenancy          | `schoolId` + subdomain                              | `lib/tenant/resolveSchoolId.js`                      |
+| Email            | Resend                                              | `config/email.js`                                    |
+| Payments         | Lipila (MTN / Airtel / Zamtel)                      | `lib/billing/`, `/api/payments/lipila/callback`      |
+| SMS              | Africa's Talking + QStash workers                   | `lib/sms/`, `/api/sms/*`                             |
+| AI               | Groq (+ optional Gemini fallback) via Vercel AI SDK | `lib/ai/`, `lib/config/env.js`                       |
+| Observability    | Sentry (`@sentry/nextjs`)                           | `sentry.*.config.ts`, `/monitoring` tunnel           |
+| Marketing CMS    | Sanity (optional)                                   | `lib/sanity/`, `sanity/queries/`                     |
+| File storage     | Vercel Blob                                         | `@vercel/blob`                                       |
+| Rate limiting    | Upstash Redis (optional)                            | `lib/middleware/upstashLimiters.js`                  |
+| PWA / offline    | Workbox, Dexie                                      | `public/sw.js`, `lib/offline/`                       |
+| Mobile           | Expo 56 + React Native                              | `zsms-mobile/`                                       |
+| Timetable solver | Hybrid backtracking + optional `solver-service`     | `lib/timetable/hybridGenerate.ts`, `solver-service/` |
+| Testing          | Vitest, Playwright, Jest (legacy)                   | `__tests__/`, `vitest.config.*`                      |
+| CI               | GitHub Actions                                      | `.github/workflows/`                                 |
+| Deployment       | Vercel (primary)                                    | `vercel.json`, `scripts/vercel-build.js`             |
 
 **Node.js:** 20.x (see `package.json` engines).
 
@@ -202,7 +202,7 @@ school_management_systems/
 | **Platform admin**    | Cross-tenant operator console                                                                                         | `app/platform/`, `app/api/platform/`, `lib/platform/`                                                                                              |
 | **ECZ / SBA**         | ZECF/ECSEOL-aligned assessments, exemplars, exam scenarios, moderation, scores, submissions                           | `lib/ecz/assessment-engine.js`, `lib/ecz/ecz-reference-constants.js`, `app/api/ecz/`, `app/api/ai/ecz-exam-questions`, `app/api/assessments/sba-*` |
 | **Primary CBC**       | Competency ratings (ECE–G7), CSV export, continuous-assessment-tool feature                                           | `CbcCompetencyRating`, `app/api/cbc/`, `/dashboard/teacher/assessments/cbc`                                                                        |
-| **Timetabling**       | HOD allocations → generate → publish pipeline                                                                         | `lib/timetable/pipeline.js`, `app/api/timetable/`, [TIMETABLE_PIPELINE.md](./TIMETABLE_PIPELINE.md)                                                |
+| **Timetabling**       | HOD allocations → hybrid generate (preflight → backtrack → solver fallback) → publish                                 | `lib/timetable/hybridGenerate.ts`, `app/api/timetable/generate`, [TIMETABLE_PIPELINE.md](./TIMETABLE_PIPELINE.md)                                  |
 | **Attendance**        | Sessions, QR, offline Dexie sync, live summary                                                                        | `lib/attendance/`, `app/api/attendance/`, [QR_ATTENDANCE.md](./QR_ATTENDANCE.md), [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md)                           |
 | **Lesson plans**      | Authoring, HOD review, AI generation                                                                                  | `app/api/lesson-plans/`, `lib/lesson-plans/`                                                                                                       |
 | **Results & reports** | End-of-term, midterm, and class-test results (secondary/combined G8+ only); headteacher/HOD views exclude class tests | `lib/results/resultTypes.js`, `lib/school/gradingAccess.js`, `app/api/teacher/results/`                                                            |

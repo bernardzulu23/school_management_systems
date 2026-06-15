@@ -9,13 +9,14 @@ import {
   timeToMin,
   minToTime,
 } from '@/lib/timetable/timeSlotsFromConfig'
-import {
-  generateTimetable as runBacktrackingScheduler,
-  mergePlacements,
-  type DayPeriodSlot,
-} from '@/lib/timetable/scheduler'
+import { type DayPeriodSlot } from '@/lib/timetable/scheduler'
+import { hybridGenerateTimetable, mergePlacements } from '@/lib/timetable/hybridGenerate'
 import { resolveConflictsWithLLM } from '@/lib/timetable/llm-resolver'
 import { requireSchoolType } from '@/lib/middleware/individual-gate'
+import {
+  loadLockedSlotReservations,
+  loadSchoolTimeSlots,
+} from '@/lib/timetable/loadGenerationContext'
 
 export async function GET(req: NextRequest) {
   const user = await getAuthUser(req as any)
@@ -56,6 +57,10 @@ export async function POST(req: NextRequest) {
   const replaceExisting = (body as any)?.replaceExisting !== false
   const useLlm = (body as any)?.useLlm === true
   const allowPartial = (body as any)?.allowPartial === true
+  const maxExecutionMs = Math.min(
+    60000,
+    Math.max(5000, Number((body as any)?.maxExecutionMs) || 30000)
+  )
 
   const config = await ensureTimetableConfig(prisma, schoolId)
 
@@ -69,7 +74,7 @@ export async function POST(req: NextRequest) {
       : {}),
   }
 
-  const [allocations, recipes, dbConstraints] = await Promise.all([
+  const [allocations, recipes, dbConstraints, lockedSlots, dbTimeSlots] = await Promise.all([
     prisma.teacherAllocation.findMany({
       where: allocationWhere,
       include: {
@@ -99,6 +104,8 @@ export async function POST(req: NextRequest) {
       where: { schoolId, active: true },
       select: { type: true, scope: true, targetId: true, active: true, config: true },
     }),
+    loadLockedSlotReservations(prisma, schoolId),
+    loadSchoolTimeSlots(prisma, schoolId),
   ])
 
   if (allocations.length === 0) {
@@ -122,16 +129,18 @@ export async function POST(req: NextRequest) {
     workingDays
   )
 
-  let scheduleResult = runBacktrackingScheduler(
-    allocations as any[],
-    daySlots as Record<string, DayPeriodSlot[]>,
-    {
+  let scheduleResult = await hybridGenerateTimetable(allocations as any[], daySlots, {
+    lockedSlots,
+    dbTimeSlots,
+    recipes: recipes as any[],
+    constraints: dbConstraints as any[],
+    options: {
       singleMin,
-      maxExecutionMs: 12000,
-      recipeRules: recipes as any[],
-      teacherConstraintRules: dbConstraints as any[],
-    }
-  )
+      maxExecutionMs,
+      useLlm,
+      solverUrl: process.env.ORTOOLS_SOLVER_URL,
+    },
+  })
 
   if (scheduleResult.unplacedBlocks.length > 0 && useLlm) {
     try {
@@ -142,7 +151,14 @@ export async function POST(req: NextRequest) {
         unplacedBlocks: scheduleResult.unplacedBlocks,
       })
       if (llm.placed.length) {
-        scheduleResult = mergePlacements(scheduleResult, llm.placed, singleMin)
+        scheduleResult = {
+          ...mergePlacements(scheduleResult, llm.placed, singleMin),
+          engine: scheduleResult.engine,
+          preflight: scheduleResult.preflight,
+          preflightWarnings: scheduleResult.preflightWarnings,
+          infeasibility: scheduleResult.infeasibility,
+          hardValidationCount: scheduleResult.hardValidationCount,
+        }
         if (llm.errors.length) {
           scheduleResult.conflicts.push(
             ...llm.errors.slice(0, 5).map((msg) => ({
@@ -154,15 +170,34 @@ export async function POST(req: NextRequest) {
         }
       }
     } catch {
-      // LLM is best-effort; keep partial backtracking result
+      // LLM is best-effort
     }
   }
 
   const { entries, conflicts } = scheduleResult
 
+  if (!scheduleResult.preflight.ok && scheduleResult.infeasibility) {
+    return NextResponse.json(
+      {
+        error: scheduleResult.infeasibility.message,
+        infeasibility: scheduleResult.infeasibility,
+        preflightWarnings: scheduleResult.preflightWarnings,
+        conflicts,
+        stats: scheduleResult.stats,
+        partial: true,
+      },
+      { status: 422 }
+    )
+  }
+
   if (conflicts.length > 0 && entries.length === 0) {
     return NextResponse.json(
-      { error: 'Could not generate a conflict-free timetable. Too many constraints.', conflicts },
+      {
+        error: 'Could not generate a conflict-free timetable. Too many constraints.',
+        conflicts,
+        infeasibility: scheduleResult.infeasibility,
+        preflightWarnings: scheduleResult.preflightWarnings,
+      },
       { status: 422 }
     )
   }
@@ -170,9 +205,25 @@ export async function POST(req: NextRequest) {
   if (scheduleResult.unplacedBlocks.length > 0 && !allowPartial) {
     return NextResponse.json(
       {
-        error: `Incomplete timetable: ${scheduleResult.unplacedBlocks.length} lesson block(s) could not be placed within the time limit.`,
+        error: `Incomplete timetable: ${scheduleResult.unplacedBlocks.length} lesson block(s) could not be placed.`,
         conflicts,
         stats: scheduleResult.stats,
+        engine: scheduleResult.engine,
+        infeasibility: scheduleResult.infeasibility,
+        preflightWarnings: scheduleResult.preflightWarnings,
+        partial: true,
+      },
+      { status: 422 }
+    )
+  }
+
+  if (scheduleResult.hardValidationCount > 0 && !allowPartial) {
+    return NextResponse.json(
+      {
+        error: `Generated timetable has ${scheduleResult.hardValidationCount} hard conflict(s).`,
+        conflicts,
+        stats: scheduleResult.stats,
+        engine: scheduleResult.engine,
         partial: true,
       },
       { status: 422 }
@@ -228,6 +279,8 @@ export async function POST(req: NextRequest) {
     conflicts: conflicts.length > 0 ? conflicts : [],
     entries: saved,
     stats: scheduleResult.stats,
+    engine: scheduleResult.engine,
+    preflightWarnings: scheduleResult.preflightWarnings,
     summary: {
       days: workingDays.length,
       allocationsScheduled: [...new Set(saved.map((e: any) => e.allocationId))].length,
@@ -237,7 +290,9 @@ export async function POST(req: NextRequest) {
       placed: scheduleResult.stats.placed,
       unplaced: scheduleResult.stats.unplaced,
       backtracks: scheduleResult.stats.backtracks,
+      restarts: scheduleResult.stats.restarts,
       llmUsed: scheduleResult.stats.llmUsed,
+      lockedSlots: lockedSlots.length,
     },
   })
 }

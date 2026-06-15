@@ -56,7 +56,10 @@ export function createMockPrisma() {
       upsert: vi.fn(),
     },
     refreshToken: {
+      findUnique: vi.fn(),
       create: vi.fn(),
+      update: vi.fn(),
+      updateMany: vi.fn(),
     },
     lessonPlan: {
       findFirst: vi.fn(),

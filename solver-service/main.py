@@ -91,6 +91,7 @@ class SolveRequest(BaseModel):
     lockedAssignments: List[LockedAssignmentIn] = Field(default_factory=list)
     atomicGroups: List[AtomicGroupIn] = Field(default_factory=list)
     recipes: List[RecipePayloadIn] = Field(default_factory=list)
+    breakAfterPeriods: List[int] = Field(default_factory=lambda: [2, 5])
 
     maxSolutions: int = 500
     timeoutMs: int = 15_000
@@ -219,6 +220,14 @@ def _solve(req: SolveRequest) -> SolveResponse:
     def _normalize_day(day: str) -> str:
         return str(day or "").strip().lower()
 
+    break_after = sorted(set(int(p) for p in (req.breakAfterPeriods or [2, 5])))
+
+    def _run_respects_breaks(start_period: int, span: int) -> bool:
+        for break_after_p in break_after:
+            if start_period <= break_after_p and start_period + span - 1 > break_after_p:
+                return False
+        return True
+
     def _allowed_starts_for_group(size: int, allowed_days: Optional[List[str]], prefer_morning: bool) -> List[List[str]]:
         allowed_day_set = set(_normalize_day(d) for d in (allowed_days or []) if str(d).strip())
         runs: List[List[str]] = []
@@ -227,6 +236,9 @@ def _solve(req: SolveRequest) -> SolveResponse:
             if allowed_day_set and day not in allowed_day_set:
                 continue
             if prefer_morning and int(s.period) > 4:
+                continue
+            start_period = int(s.period)
+            if not _run_respects_breaks(start_period, size):
                 continue
             run = [s.id]
             cur = s.id

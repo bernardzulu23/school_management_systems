@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, memo, useMemo, useState, type ReactNode } from 'react'
+import { Fragment, memo, useMemo, useState, type DragEvent, type ReactNode } from 'react'
 import type { Assignment, Class, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
@@ -15,6 +15,7 @@ import {
   UnplacedLessonsTray,
   type UnplacedLesson,
 } from '@/components/timetable/UnplacedLessonsTray'
+import { Lock } from 'lucide-react'
 
 /** aSc Timetables–style compact cell metrics */
 const GRID = {
@@ -54,7 +55,14 @@ export interface AscClassWallGridProps {
   season?: string
   showConflicts?: boolean
   unplacedLessons?: UnplacedLesson[]
+  lockedPeriodKeys?: Set<string>
   onAssignmentClick?: (assignment: Assignment) => void
+  onDropUnplaced?: (payload: {
+    lesson: UnplacedLesson
+    classId: string
+    day: string
+    period: number
+  }) => void
 }
 
 export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWallGridProps) {
@@ -66,7 +74,9 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
     season = 'normal',
     showConflicts = true,
     unplacedLessons = [],
+    lockedPeriodKeys,
     onAssignmentClick,
+    onDropUnplaced,
   } = props
 
   const storeConflicts = useTimetableStore((s) => s.conflicts)
@@ -203,12 +213,14 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
           const rowConflicts = showConflicts ? storeConflicts.get(String(a.id)) || [] : []
           const hasConflict = rowConflicts.length > 0
           const teacher = teacherName.get(String(a.teacherId))
+          const lockKey = `${String(a.teacherId)}|${String(day).toLowerCase()}|${slot.period}`
+          const isLocked = lockedPeriodKeys?.has(lockKey)
 
           cells.push(
             <td
               key={`${classId}-${day}-${slot.period}-${slot.startTime}`}
               colSpan={span}
-              className="p-0 align-middle"
+              className="p-0 align-middle relative"
               style={{
                 ...cellStyle(w, GRID.cellH),
                 borderTop: `1px solid ${GRID.border}`,
@@ -224,7 +236,7 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
                   setSelectedAssignment(a)
                 }}
                 title={[subjectName, teacher, `${day} P${slot.period}`].filter(Boolean).join(' · ')}
-                className="block w-full h-full m-0 p-0 border-0 cursor-pointer font-bold leading-none hover:opacity-90"
+                className="block w-full h-full m-0 p-0 border-0 cursor-pointer font-bold leading-none hover:opacity-90 relative"
                 style={{
                   background: hasConflict ? '#ef4444' : fill,
                   color: hasConflict ? '#fff' : text,
@@ -233,16 +245,44 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
                 }}
               >
                 {abbrev}
+                {isLocked ? (
+                  <Lock
+                    size={8}
+                    className="absolute top-0 right-0 text-white/90 drop-shadow"
+                    aria-label="Locked for generation"
+                  />
+                ) : null}
               </button>
             </td>
           )
 
           i += span - 1
         } else {
+          const handleDrop = (e: DragEvent) => {
+            e.preventDefault()
+            const raw = e.dataTransfer.getData('application/zsms-unplaced')
+            if (!raw || !onDropUnplaced) return
+            try {
+              const lesson = JSON.parse(raw) as UnplacedLesson
+              onDropUnplaced({
+                lesson,
+                classId,
+                day: String(day).toLowerCase(),
+                period: slot.period,
+              })
+            } catch {
+              /* ignore */
+            }
+          }
+
           cells.push(
             <td
               key={`${classId}-${day}-empty-${slot.period}-${i}`}
               className="p-0 align-middle bg-[#f3f4f6]"
+              onDragOver={(e) => {
+                if (onDropUnplaced) e.preventDefault()
+              }}
+              onDrop={handleDrop}
               style={{
                 ...cellStyle(GRID.cellW, GRID.cellH),
                 borderTop: `1px solid ${GRID.border}`,
@@ -418,7 +458,18 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
         </div>
       </div>
 
-      <UnplacedLessonsTray items={unplacedLessons} compact />
+      <UnplacedLessonsTray
+        items={unplacedLessons}
+        compact
+        onDragStart={
+          onDropUnplaced
+            ? (item, e) => {
+                e.dataTransfer.setData('application/zsms-unplaced', JSON.stringify(item))
+                e.dataTransfer.effectAllowed = 'move'
+              }
+            : undefined
+        }
+      />
 
       {selectedAssignment ? (
         <div className="border border-[#9ca3af] bg-[#f9fafb] px-2 py-1.5 text-[11px] print:hidden">

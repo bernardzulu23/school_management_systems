@@ -15,6 +15,7 @@ import { composeLessonPlanDisplay } from '@/lib/lesson-plans/text'
 import { LessonPlanDownloadButton } from '@/components/lesson-plans/LessonPlanViewer'
 import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
 import { Download, FileText, Printer } from 'lucide-react'
+import { sessionFetch, authErrorMessage } from '@/lib/auth/sessionFetch'
 
 const GRADE_GROUPS = [
   {
@@ -455,10 +456,9 @@ export default function AILessonPlanner() {
     setProfessionalRagReferences([])
     setSavedPlanId(null)
     try {
-      const res = await fetch('/api/lesson-plans/generate', {
+      const res = await sessionFetch('/api/lesson-plans/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({
           grade: form.grade,
           form: form.grade,
@@ -483,13 +483,15 @@ export default function AILessonPlanner() {
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok || !json?.success) {
-        toast.error(json?.message || json?.error || 'Failed to generate lesson plan')
+        const msg = authErrorMessage(res.status, json)
+        toast.error(msg)
+        if (res.status === 401 || res.status === 403) {
+          router.push('/login')
+        }
         return
       }
       setProfessionalRagReferences(Array.isArray(json?.ragReferences) ? json.ragReferences : [])
-      const detail = await fetch(`/api/lesson-plans/${encodeURIComponent(json.data.id)}`, {
-        credentials: 'include',
-      })
+      const detail = await sessionFetch(`/api/lesson-plans/${encodeURIComponent(json.data.id)}`)
       const detailJson = await detail.json().catch(() => ({}))
       if (detailJson?.data?.content) {
         setProfessionalContent(detailJson.data.content)

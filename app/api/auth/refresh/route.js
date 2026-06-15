@@ -91,24 +91,22 @@ export const POST = withSecureApi(async function POST(request) {
       )
     }
 
-    if (canUseDbTokenRotation && (!tokenRecord || tokenRecord.revoked)) {
-      // POTENTIAL ATTACK: If the token was previously valid but now revoked,
-      // someone might be trying to reuse an old token.
-      // Invalidate all tokens for this user as a safety measure.
-      if (tokenRecord && tokenRecord.revoked) {
-        await prisma.refreshToken.updateMany({
-          where: { userId: decoded.id },
-          data: { revoked: true },
-        })
-        console.warn(
-          `[Security] Refresh token reuse detected for user ${decoded.id}. All sessions revoked.`
-        )
-      }
+    if (canUseDbTokenRotation && tokenRecord?.revoked) {
+      // POTENTIAL ATTACK: reuse of a rotated refresh token — revoke all sessions.
+      await prisma.refreshToken.updateMany({
+        where: { userId: decoded.id },
+        data: { revoked: true },
+      })
+      console.warn(
+        `[Security] Refresh token reuse detected for user ${decoded.id}. All sessions revoked.`
+      )
       return NextResponse.json(
         { error: 'Session expired or revoked', stopRetry: true },
         { status: 401 }
       )
     }
+
+    // Missing DB row but JWT verified: allow refresh (login may have failed to persist token).
 
     const user = await prisma.user.findFirst({
       where: decoded.schoolId ? { id: decoded.id, schoolId: decoded.schoolId } : { id: decoded.id },
@@ -135,22 +133,33 @@ export const POST = withSecureApi(async function POST(request) {
       }
     )
 
-    // 5. Rotate tokens in DB: Revoke old, create new
-    if (canUseDbTokenRotation && tokenRecord?.id) {
-      await prisma.$transaction([
-        prisma.refreshToken.update({
-          where: { id: tokenRecord.id },
-          data: { revoked: true },
-        }),
-        prisma.refreshToken.create({
+    // 5. Rotate tokens in DB: Revoke old when present, always persist new refresh token.
+    if (canUseDbTokenRotation) {
+      if (tokenRecord?.id) {
+        await prisma.$transaction([
+          prisma.refreshToken.update({
+            where: { id: tokenRecord.id },
+            data: { revoked: true },
+          }),
+          prisma.refreshToken.create({
+            data: {
+              token: newRefreshTokenValue,
+              userId: user.id,
+              schoolId: user.schoolId,
+              expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            },
+          }),
+        ])
+      } else {
+        await prisma.refreshToken.create({
           data: {
             token: newRefreshTokenValue,
             userId: user.id,
             schoolId: user.schoolId,
             expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
           },
-        }),
-      ])
+        })
+      }
     }
 
     const response = NextResponse.json({ success: true, accessToken: newAccessToken })

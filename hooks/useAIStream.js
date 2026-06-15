@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react'
 import { sanitizePlainText } from '@/lib/ai/plain-text'
+import { sessionFetch, authErrorMessage } from '@/lib/auth/sessionFetch'
 
 function parseSSEChunk(buffer) {
   const parts = buffer.split('\n\n')
@@ -45,10 +46,9 @@ export function useAIStream(endpoint, options = {}) {
       setLoading(true)
 
       try {
-        const res = await fetch(endpoint, {
+        const res = await sessionFetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
           body: JSON.stringify(payload || {}),
           signal: ac.signal,
         })
@@ -56,7 +56,7 @@ export function useAIStream(endpoint, options = {}) {
         if (!res.ok) {
           const json = await res.json().catch(() => ({}))
           setError({
-            error: json?.error || json?.message || 'Request failed',
+            error: authErrorMessage(res.status, json),
             code: json?.code,
             status: res.status,
           })
@@ -142,15 +142,18 @@ export function useAIFetch(endpoint) {
       setError(null)
       setData(null)
       try {
-        const res = await fetch(endpoint, {
+        const res = await sessionFetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
           body: JSON.stringify(payload || {}),
         })
         const json = await res.json().catch(() => ({}))
         if (!res.ok) {
-          setError(json || { error: json?.error || 'Request failed', status: res.status })
+          setError({
+            error: authErrorMessage(res.status, json),
+            status: res.status,
+            ...json,
+          })
           return
         }
         setData(json)

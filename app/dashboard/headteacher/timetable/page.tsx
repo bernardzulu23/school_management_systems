@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { ConflictDisplay } from '@/components/timetable/ConflictDisplay'
@@ -35,6 +35,10 @@ import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import type { Assignment, Class, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { Check, X } from 'lucide-react'
 import { TeacherCompliancePanel } from '@/components/compliance/TeacherCompliancePanel'
+import {
+  GenerationProgressModal,
+  type GenerationProgressState,
+} from '@/components/timetable/GenerationProgressModal'
 
 type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings' | 'allocations'
 
@@ -140,6 +144,18 @@ function HeadteacherTimetablePageContent() {
   const [gridMode, setGridMode] = useState<TimetableGridMode>('wall')
   const [unplacedLessons, setUnplacedLessons] = useState<UnplacedLesson[]>([])
   const [reloadingTimetable, setReloadingTimetable] = useState(false)
+  const [lockedPeriodKeys, setLockedPeriodKeys] = useState<Set<string>>(() => new Set())
+  const [lastInfeasibility, setLastInfeasibility] = useState<{
+    code: string
+    message: string
+    details?: string[]
+  } | null>(null)
+  const [preflightWarnings, setPreflightWarnings] = useState<string[]>([])
+  const [genProgress, setGenProgress] = useState<GenerationProgressState>({
+    open: false,
+    stage: 'idle',
+    message: '',
+  })
 
   const assignments = useTimetableStore((s) => s.assignments)
   const conflicts = useTimetableStore((s) => s.conflicts)
@@ -160,6 +176,30 @@ function HeadteacherTimetablePageContent() {
   const autoResolveConflicts = useTimetableStore((s) => s.autoResolveConflicts)
   const setStoreTimeSlots = useTimetableStore((s) => s.setTimeSlots)
   const setTeacherColors = useTimetableStore((s) => s.setTeacherColors)
+
+  const loadLockedPeriodAssignments = useCallback(async () => {
+    try {
+      const res = await fetch('/api/timetable/teacherPeriodAssignments', {
+        cache: 'no-store',
+        credentials: 'include',
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) return
+      const rows = Array.isArray(json?.data) ? json.data : []
+      const keys = new Set<string>()
+      for (const row of rows) {
+        if (!row?.lockedForGeneration) continue
+        const ts = row?.timeSlot
+        if (!ts || ts.isBreak) continue
+        keys.add(
+          `${String(row.teacherId)}|${String(ts.dayOfWeek || '').toLowerCase()}|${Number(ts.period) || 1}`
+        )
+      }
+      setLockedPeriodKeys(keys)
+    } catch {
+      /* optional */
+    }
+  }, [])
 
   const loadAllocationNotifications = useCallback(async () => {
     try {
@@ -396,30 +436,14 @@ function HeadteacherTimetablePageContent() {
   useEffect(() => {
     const run = async () => {
       await loadBellSchedule()
+      await loadLockedPeriodAssignments()
       await loadFromApi({ term, academicYear, status: 'draft' })
       if (useTimetableStore.getState().assignments.length === 0) {
         await loadFromApi({ term, academicYear, status: 'published' })
       }
     }
     run()
-  }, [term, academicYear, loadFromApi, loadBellSchedule])
-
-  const autoResolvedRef = useRef('')
-  useEffect(() => {
-    const key = `${term}|${academicYear}`
-    if (autoResolvedRef.current === key) return
-    if (assignments.length === 0) return
-    const before = useTimetableStore.getState().getConflictCount()
-    if (before === 0) {
-      autoResolvedRef.current = key
-      return
-    }
-    autoResolvedRef.current = key
-    const result = autoResolveConflicts()
-    if (result.resolvedCount > 0) {
-      toast.success(`Resolved ${result.resolvedCount} conflict(s) automatically`)
-    }
-  }, [term, academicYear, assignments.length, autoResolveConflicts])
+  }, [term, academicYear, loadFromApi, loadBellSchedule, loadLockedPeriodAssignments])
 
   useEffect(() => {
     let cancelled = false
@@ -654,12 +678,23 @@ function HeadteacherTimetablePageContent() {
 
   const generateFromAllocations = async () => {
     setDbGenerating(true)
+    setGenProgress({
+      open: true,
+      stage: 'preflight',
+      message: 'Checking teacher load, locks, and bell schedule…',
+    })
     try {
       const res = await fetch('/api/timetable/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ term, academicYear, replaceExisting: true, allowPartial: true }),
+        body: JSON.stringify({
+          term,
+          academicYear,
+          replaceExisting: true,
+          allowPartial: false,
+          maxExecutionMs: 45000,
+        }),
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) {
@@ -667,28 +702,81 @@ function HeadteacherTimetablePageContent() {
         if (json?.partial && Array.isArray(json?.conflicts)) {
           setUnplacedLessons(json.conflicts.map(parseUnplacedConflict))
         }
+        setLastInfeasibility(json?.infeasibility || null)
+        setPreflightWarnings(Array.isArray(json?.preflightWarnings) ? json.preflightWarnings : [])
+        setGenProgress({
+          open: true,
+          stage: 'error',
+          message: msg,
+          stats: {
+            placed: Number(json?.stats?.placed ?? 0),
+            unplaced: Number(json?.stats?.unplaced ?? json?.conflicts?.length ?? 0),
+            backtracks: json?.stats?.backtracks,
+            restarts: json?.stats?.restarts,
+            engine: json?.engine,
+          },
+          infeasibility: json?.infeasibility,
+          preflightWarnings: json?.preflightWarnings,
+        })
         throw new Error(msg)
       }
       const conflicts = Array.isArray(json?.conflicts) ? json.conflicts : []
       setUnplacedLessons(conflicts.map(parseUnplacedConflict))
-      const unplaced = Number(json?.summary?.unplaced ?? json?.stats?.unplaced ?? 0)
-      toast.success(
-        unplaced > 0
-          ? `Generated ${Number(json?.generated || 0)} periods — ${unplaced} block(s) still unplaced`
-          : `Generated ${Number(json?.generated || 0)} periods`
-      )
+      setLastInfeasibility(null)
+      setPreflightWarnings(Array.isArray(json?.preflightWarnings) ? json.preflightWarnings : [])
+      setGenProgress({
+        open: true,
+        stage: 'done',
+        message: `Placed all ${Number(json?.summary?.placed ?? json?.stats?.placed ?? 0)} lesson blocks with zero hard conflicts.`,
+        stats: {
+          placed: Number(json?.summary?.placed ?? json?.stats?.placed ?? 0),
+          unplaced: Number(json?.summary?.unplaced ?? json?.stats?.unplaced ?? 0),
+          backtracks: json?.stats?.backtracks,
+          restarts: json?.stats?.restarts,
+          engine: json?.engine,
+        },
+        preflightWarnings: json?.preflightWarnings,
+      })
+      toast.success(`Generated ${Number(json?.generated || 0)} periods — conflict-free`)
       await loadFromApi({ term, academicYear, status: 'draft' })
+      await loadLockedPeriodAssignments()
       setGridMode('wall')
       setTab('overview')
     } catch (e: any) {
-      toast.error(e?.message || 'Generation failed')
+      if (!genProgress.open || genProgress.stage !== 'error') {
+        toast.error(e?.message || 'Generation failed')
+      }
     } finally {
       setDbGenerating(false)
     }
   }
 
+  const onDropUnplacedLesson = async (payload: {
+    lesson: UnplacedLesson
+    classId: string
+    day: string
+    period: number
+  }) => {
+    const slot = timeSlots.find(
+      (s) =>
+        !s.isBreak &&
+        String(s.dayOfWeek).toLowerCase() === payload.day &&
+        Number(s.period) === payload.period
+    )
+    if (!slot) {
+      toast.error('Invalid cell')
+      return
+    }
+    toast('Manual placement from unplaced tray — sync draft after editing', { icon: 'ℹ️' })
+    setUnplacedLessons((prev) => prev.filter((u) => u.id !== payload.lesson.id))
+  }
+
   return (
     <DashboardLayout title="Master Timetable">
+      <GenerationProgressModal
+        state={genProgress}
+        onClose={() => setGenProgress((s) => ({ ...s, open: false, stage: 'idle' }))}
+      />
       <div className="space-y-6">
         {tab === 'overview' && <TeacherCompliancePanel domain="attendance" />}
         <div className="flex flex-wrap items-start justify-between gap-4">
@@ -708,6 +796,24 @@ function HeadteacherTimetablePageContent() {
                 setReviewOpen(true)
               }}
             />
+            <Button
+              variant="outline"
+              onClick={() => {
+                const result = autoResolveConflicts()
+                if (result.resolvedCount > 0) {
+                  toast.success(`Auto-fixed ${result.resolvedCount} conflict(s)`)
+                } else if (result.remainingConflicts > 0) {
+                  toast.error(
+                    `${result.remainingConflicts} conflict(s) remain — regenerate or edit manually`
+                  )
+                } else {
+                  toast.success('No conflicts to fix')
+                }
+              }}
+              className="zsms-hover-raise"
+            >
+              Auto-fix conflicts
+            </Button>
             <Button
               onClick={generateFromAllocations}
               disabled={dbGenerating}
@@ -1204,6 +1310,8 @@ function HeadteacherTimetablePageContent() {
                 season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
                 showConflicts
                 unplacedLessons={unplacedLessons}
+                lockedPeriodKeys={lockedPeriodKeys}
+                onDropUnplaced={onDropUnplacedLesson}
               />
             ) : gridMode === 'master' ? (
               <MasterTimetableGrid
@@ -1283,13 +1391,40 @@ function HeadteacherTimetablePageContent() {
         ) : null}
 
         {tab === 'conflicts' ? (
-          <ConflictDisplay
-            conflicts={conflicts}
-            suggestionsByAssignmentId={suggestionsByAssignmentId}
-            onApplySuggestion={onApplySuggestion}
-            onUndo={undo}
-            onResolveAll={onResolveAll}
-          />
+          <div className="space-y-4">
+            {lastInfeasibility ? (
+              <div className="onboard-card p-4 border border-red-200 bg-red-50">
+                <div className="font-semibold text-red-800">Last generation issue</div>
+                <div className="text-sm text-red-700 mt-1">{lastInfeasibility.message}</div>
+                <ul className="mt-2 text-xs text-red-700 list-disc list-inside space-y-0.5">
+                  {(lastInfeasibility.details || []).slice(0, 8).map((d, i) => (
+                    <li key={i}>{d}</li>
+                  ))}
+                </ul>
+                <div className="mt-3 text-xs text-red-800">
+                  Fix: reduce teacher load, remove conflicting locks, or adjust HOD allocations —
+                  then regenerate.
+                </div>
+              </div>
+            ) : null}
+            {preflightWarnings.length > 0 ? (
+              <div className="onboard-card p-4 border border-amber-200 bg-amber-50 text-sm text-amber-900">
+                <div className="font-medium">Preflight warnings</div>
+                <ul className="mt-1 list-disc list-inside text-xs space-y-0.5">
+                  {preflightWarnings.map((w, i) => (
+                    <li key={i}>{w}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+            <ConflictDisplay
+              conflicts={conflicts}
+              suggestionsByAssignmentId={suggestionsByAssignmentId}
+              onApplySuggestion={onApplySuggestion}
+              onUndo={undo}
+              onResolveAll={onResolveAll}
+            />
+          </div>
         ) : null}
 
         {tab === 'settings' ? (

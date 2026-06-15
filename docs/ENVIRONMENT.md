@@ -59,19 +59,20 @@ For full local setup (database, seeds), see [docs/SETUP.md](./SETUP.md).
 
 When these are unset, related features are disabled (startup still succeeds).
 
-| Variable                                              | Feature                             | Notes                                                                   |
-| ----------------------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------- |
-| `LIPILA_API_KEY`                                      | Mobile money (onboarding + billing) | Also accepts `LIPILA_SECRET_KEY`                                        |
-| `LIPILA_BASE_URL`                                     | Lipila API host                     | Default: `https://api.lipila.dev` (dev), `https://blz.lipila.io` (prod) |
-| `AFRICASTALKING_API_KEY`                              | Outbound SMS                        | Both key and username needed for SMS                                    |
-| `AFRICASTALKING_USERNAME`                             | Africa's Talking account            | Sandbox available for testing                                           |
-| `EMAIL_INFO`                                          | Contact form recipient              | Defaults to info@ address in code                                       |
-| `PILOT_NOTIFY_EMAILS`                                 | Pilot / free-trial join alerts      | Comma-separated; falls back to `PLATFORM_ADMIN_EMAIL` then `EMAIL_INFO` |
-| `ALLOW_DIRECT_SCHOOL_REGISTRATION`                    | Legacy `/api/schools/register`      | Set `true` only for dev; production uses `/onboarding`                  |
-| `SENTRY_DSN`                                          | Server-side Sentry DSN              | [sentry.io](https://sentry.io) → Project → Client Keys                  |
-| `NEXT_PUBLIC_SENTRY_DSN`                              | Browser Sentry DSN (same value)     | Required for client error capture                                       |
-| `SENTRY_ORG` / `SENTRY_PROJECT` / `SENTRY_AUTH_TOKEN` | Optional source map upload on build | Sentry → Settings → Auth Tokens                                         |
-| `GROQ_MODEL`                                          | Override default Groq model         | Default: `llama-3.3-70b-versatile`                                      |
+| Variable                                              | Feature                             | Notes                                                                                                              |
+| ----------------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `LIPILA_API_KEY`                                      | Mobile money (onboarding + billing) | Also accepts `LIPILA_SECRET_KEY`                                                                                   |
+| `LIPILA_BASE_URL`                                     | Lipila API host                     | Default: `https://api.lipila.dev` (dev), `https://blz.lipila.io` (prod)                                            |
+| `AFRICASTALKING_API_KEY`                              | Outbound SMS                        | Both key and username needed for SMS                                                                               |
+| `AFRICASTALKING_USERNAME`                             | Africa's Talking account            | Sandbox available for testing                                                                                      |
+| `EMAIL_INFO`                                          | Contact form recipient              | Defaults to info@ address in code                                                                                  |
+| `PILOT_NOTIFY_EMAILS`                                 | Pilot / free-trial join alerts      | Comma-separated; falls back to `PLATFORM_ADMIN_EMAIL` then `EMAIL_INFO`                                            |
+| `ALLOW_DIRECT_SCHOOL_REGISTRATION`                    | Legacy `/api/schools/register`      | Set `true` only for dev; production uses `/onboarding`                                                             |
+| `SENTRY_DSN`                                          | Server-side Sentry DSN              | [sentry.io](https://sentry.io) → Project → Client Keys                                                             |
+| `NEXT_PUBLIC_SENTRY_DSN`                              | Browser Sentry DSN (same value)     | Required for client error capture                                                                                  |
+| `SENTRY_ORG` / `SENTRY_PROJECT` / `SENTRY_AUTH_TOKEN` | Optional source map upload on build | Sentry → Settings → Auth Tokens                                                                                    |
+| `GROQ_MODEL`                                          | Override default Groq model         | Default: `llama-3.3-70b-versatile`                                                                                 |
+| `ORTOOLS_SOLVER_URL`                                  | Timetable hybrid solver fallback    | Base URL for `solver-service` (e.g. `http://localhost:8001`); see [TIMETABLE_PIPELINE.md](./TIMETABLE_PIPELINE.md) |
 
 Payment provider logos: place files in `public/payments/` (`mtn.jpg`, `airtel.jpg`, `zamtel.png`) or set `NEXT_PUBLIC_PAYMENT_LOGO_*` URLs.
 
