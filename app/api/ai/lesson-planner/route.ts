@@ -15,12 +15,11 @@ import { prisma } from '@/lib/prisma'
 import { logger } from '@/lib/utils/logger'
 import { buildLessonPlanPrompt } from '@/lib/lessonPlanTemplate'
 import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
-import {
-  assertGroqConfigured,
-  createGroqTextEventStream,
-  GROQ_SSE_HEADERS,
-} from '@/lib/ai/groq-client'
 import { buildRagContextForQuery } from '@/lib/ai/rag-context'
+import { aiChain, AI_SSE_HEADERS } from '@/lib/ai/provider-fallback'
+
+const LESSON_PLAN_SYSTEM =
+  'You are an expert Zambian CBC lesson planner. Write complete, practical lesson plans aligned to MoGE guidelines and Zambian classroom context.'
 
 const LessonPlannerInputSchema = z.object({
   grade: z.string().min(1).max(20),
@@ -65,6 +64,8 @@ const LessonPlannerInputSchema = z.object({
   numberOfBoys: z.number().int().min(0).max(500).optional(),
   numberOfGirls: z.number().int().min(0).max(500).optional(),
   planDate: z.string().max(30).optional(),
+  /** When false, returns JSON `{ lessonPlan, generatedBy }` instead of SSE. Default true for UI streaming. */
+  stream: z.boolean().optional().default(true),
 })
 
 type LessonPlannerInput = z.infer<typeof LessonPlannerInputSchema>
@@ -141,14 +142,18 @@ export const POST = withAILimits(async function POST(request: Request) {
     const limitBlock = await checkAILimit(schoolId, String(user.id || ''))
     if (limitBlock) return limitBlock as any
 
-    try {
-      assertGroqConfigured()
-    } catch {
-      logger.error('ai.lesson-planner.misconfigured', new Error('Missing GROQ_API_KEY'), {
+    if (!aiChain.isConfigured()) {
+      logger.error('ai.lesson-planner.misconfigured', new Error('No AI provider keys set'), {
         requestId,
         schoolId,
       })
-      return NextResponse.json({ error: 'Service not configured' }, { status: 500 })
+      return NextResponse.json(
+        {
+          error:
+            'AI service is not configured. Set GROQ_API_KEY, GEMINI_API_KEY, or OPENROUTER_API_KEY.',
+        },
+        { status: 503 }
+      )
     }
 
     const raw = await request.json().catch(() => null)
@@ -172,42 +177,67 @@ export const POST = withAILimits(async function POST(request: Request) {
     if (rag.block) {
       prompt = `${prompt}\n\n---\nSchool reference materials (cite as [Ref N]):\n${rag.block}`
     }
+
+    const systemPrompt = rag.block
+      ? `${LESSON_PLAN_SYSTEM}\n\nUse these school reference materials where relevant:\n${rag.block}`
+      : LESSON_PLAN_SYSTEM
+
     const startTime = Date.now()
 
-    const stream = createGroqTextEventStream({
-      prompt,
+    // Groq → Gemini → OpenRouter (automatic fallback)
+    const aiResponse = await aiChain.generate(prompt, {
+      system: systemPrompt,
       maxTokens: 4500,
       temperature: 0.7,
-      meta: rag.refs?.length ? { ragReferences: rag.refs } : undefined,
-      onErrorMessage: 'Failed to generate lesson plan',
-      onComplete: async (responseText) => {
-        await trackAIUsage(schoolId, 'ai-lesson-planner')
-        await prisma.aIRequest.create({
-          data: {
-            id: crypto.randomUUID(),
-            schoolId,
-            feature: 'ai-lesson-planner',
-            prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
-            response: responseText.length > 20000 ? responseText.slice(0, 20000) : responseText,
-            tokens: 0,
-          },
-        })
-        logger.info('ai.lesson-planner.completed', {
-          requestId,
-          schoolId,
-          userId: user.id,
-          durationMs: Date.now() - startTime,
-        })
+    })
+
+    await trackAIUsage(schoolId, 'ai-lesson-planner')
+    await prisma.aIRequest.create({
+      data: {
+        id: crypto.randomUUID(),
+        schoolId,
+        feature: 'ai-lesson-planner',
+        prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
+        response:
+          aiResponse.text.length > 20000 ? aiResponse.text.slice(0, 20000) : aiResponse.text,
+        tokens: 0,
       },
     })
 
-    return new Response(stream, { headers: GROQ_SSE_HEADERS })
+    logger.info('ai.lesson-planner.completed', {
+      requestId,
+      schoolId,
+      userId: user.id,
+      durationMs: Date.now() - startTime,
+      generatedBy: aiResponse.provider,
+      model: aiResponse.model,
+    })
+
+    if (input.stream === false) {
+      return NextResponse.json({
+        success: true,
+        lessonPlan: aiResponse.text,
+        generatedBy: aiResponse.provider,
+        model: aiResponse.model,
+        ragReferences: rag.refs?.length ? rag.refs : undefined,
+      })
+    }
+
+    const stream = aiChain.textToEventStream({
+      text: aiResponse.text,
+      provider: aiResponse.provider,
+      model: aiResponse.model,
+      meta: rag.refs?.length ? { ragReferences: rag.refs } : undefined,
+    })
+
+    return new Response(stream, { headers: AI_SSE_HEADERS })
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: 'Invalid input', issues: error.issues }, { status: 400 })
     }
 
     logger.error('ai.lesson-planner.error', error, { requestId })
-    return NextResponse.json({ error: 'Failed to process request' }, { status: 500 })
+    const message = error instanceof Error ? error.message : 'Failed to process request'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 })

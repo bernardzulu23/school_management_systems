@@ -1,6 +1,6 @@
 # ZSMS AI Guide
 
-All AI features use **Groq** (free tier) via the **Vercel AI SDK** (`ai` + `@ai-sdk/groq`). No paid OpenAI/Anthropic providers are used.
+All AI features use **Groq** (free tier) via the **Vercel AI SDK** (`ai` + `@ai-sdk/groq`), with automatic fallback to **Gemini** and **OpenRouter** when keys are set (`lib/ai/provider-fallback.ts`, `lib/ai/orchestrator.ts`).
 
 ## Cost
 
@@ -11,7 +11,7 @@ All AI features use **Groq** (free tier) via the **Vercel AI SDK** (`ai` + `@ai-
 | Groq API         | Free up to ~14,400 requests/day on free tier           |
 | Default model    | `llama-3.3-70b-versatile` (override with `GROQ_MODEL`) |
 
-Set `GROQ_API_KEY` in `.env` / Vercel. Without it, `env.features.ai` is false and AI routes return 500.
+Set `GROQ_API_KEY` (and optionally `GEMINI_API_KEY`, `OPENROUTER_API_KEY`) in `.env` / Vercel.
 
 ## Architecture
 
@@ -38,17 +38,17 @@ Zod still validates the parsed object on our side. If you see a `json_schema` er
 
 ## AI features
 
-| Feature                  | Route / module                    | Mode                 | Schema                   |
-| ------------------------ | --------------------------------- | -------------------- | ------------------------ |
-| Lesson planner (stream)  | `POST /api/ai/lesson-planner`     | Stream prose         | —                        |
-| Professional lesson plan | `POST /api/lesson-plans/generate` | Structured (default) | `LessonPlanSchema`       |
-| Ministry plain-text plan | Same route, `format=ministry`     | Text                 | —                        |
-| Quiz maker               | `POST /api/ai/quiz-maker`         | Structured           | `QuizSchema`             |
-| ECZ practice             | `POST /api/ai/ecz-practice`       | Structured           | `ECZPracticePaperSchema` |
-| Story weaver             | `POST /api/ai/story-weaver`       | Stream               | —                        |
-| Report comments          | `POST /api/ai/report-comments`    | Stream               | —                        |
-| Phonics / Zambia helpers | `lib/ai/zambia-features.js`       | Text                 | —                        |
-| Legacy aiml tools        | `lib/aiml/tools/*`                | Mixed                | Quiz / ECZ schemas       |
+| Feature                  | Route / module                    | Mode                                                    | Schema                   |
+| ------------------------ | --------------------------------- | ------------------------------------------------------- | ------------------------ |
+| Lesson planner (stream)  | `POST /api/ai/lesson-planner`     | Stream prose via `aiChain` (Groq → Gemini → OpenRouter) | —                        |
+| Professional lesson plan | `POST /api/lesson-plans/generate` | Structured (default)                                    | `LessonPlanSchema`       |
+| Ministry plain-text plan | Same route, `format=ministry`     | Text                                                    | —                        |
+| Quiz maker               | `POST /api/ai/quiz-maker`         | Structured                                              | `QuizSchema`             |
+| ECZ practice             | `POST /api/ai/ecz-practice`       | Structured                                              | `ECZPracticePaperSchema` |
+| Story weaver             | `POST /api/ai/story-weaver`       | Stream                                                  | —                        |
+| Report comments          | `POST /api/ai/report-comments`    | Stream                                                  | —                        |
+| Phonics / Zambia helpers | `lib/ai/zambia-features.js`       | Text                                                    | —                        |
+| Legacy aiml tools        | `lib/aiml/tools/*`                | Mixed                                                   | Quiz / ECZ schemas       |
 
 Structured lesson plans are stored on `LessonPlan.structuredContent` (JSON) plus plain `content` for display.
 
