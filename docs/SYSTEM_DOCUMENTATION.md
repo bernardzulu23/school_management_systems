@@ -283,7 +283,7 @@ Static security headers also apply via `next.config.js`; **dynamic CSP uses the 
 ### Authentication
 
 - **Access token:** `access_token` httpOnly cookie (JWT, HS256), `sameSite: strict`, `secure` in production
-- **Refresh token:** `refresh_token` httpOnly cookie scoped to `Path=/api/auth/refresh`; signed with `JWT_REFRESH_SECRET` in production
+- **Refresh token:** `refresh_token` httpOnly cookie scoped to `Path=/api/auth/refresh`; signed with `JWT_REFRESH_SECRET` in production. Concurrent refresh in multiple tabs uses a **30s rotation grace window** (`REFRESH_ROTATION_GRACE_MS`) so benign reuse does not revoke all sessions. Browser AI calls use `lib/auth/sessionFetch.js` (deduplicated refresh + CSRF header).
 - **Mobile:** Bearer tokens via `/api/mobile/auth/login` and `/api/mobile/auth/refresh`
 - **Platform:** `isPlatform: true` + `superadmin` role; `schoolId: null` — only controlled cross-tenant bypass
 

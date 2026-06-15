@@ -17,6 +17,11 @@ import { signPlatformToken } from '@/lib/platform/platformAdminAuth'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
+/** Benign concurrent refresh: old token revoked within this window should not mass-revoke sessions. */
+const REFRESH_ROTATION_GRACE_MS = Math.max(
+  5000,
+  Number(process.env.REFRESH_ROTATION_GRACE_MS) || 30000
+)
 
 export const POST = withSecureApi(async function POST(request) {
   try {
@@ -82,6 +87,7 @@ export const POST = withSecureApi(async function POST(request) {
     try {
       tokenRecord = await prisma.refreshToken.findUnique({
         where: { token: refreshToken },
+        select: { id: true, token: true, revoked: true, userId: true, updatedAt: true },
       })
     } catch (e) {
       canUseDbTokenRotation = false
@@ -92,18 +98,24 @@ export const POST = withSecureApi(async function POST(request) {
     }
 
     if (canUseDbTokenRotation && tokenRecord?.revoked) {
-      // POTENTIAL ATTACK: reuse of a rotated refresh token — revoke all sessions.
-      await prisma.refreshToken.updateMany({
-        where: { userId: decoded.id },
-        data: { revoked: true },
-      })
-      console.warn(
-        `[Security] Refresh token reuse detected for user ${decoded.id}. All sessions revoked.`
-      )
-      return NextResponse.json(
-        { error: 'Session expired or revoked', stopRetry: true },
-        { status: 401 }
-      )
+      const revokedAt = tokenRecord.updatedAt ? new Date(tokenRecord.updatedAt).getTime() : 0
+      const recentlyRotated = revokedAt > 0 && Date.now() - revokedAt < REFRESH_ROTATION_GRACE_MS
+
+      if (!recentlyRotated) {
+        // POTENTIAL ATTACK: reuse of a rotated refresh token — revoke all sessions.
+        await prisma.refreshToken.updateMany({
+          where: { userId: decoded.id },
+          data: { revoked: true },
+        })
+        console.warn(
+          `[Security] Refresh token reuse detected for user ${decoded.id}. All sessions revoked.`
+        )
+        return NextResponse.json(
+          { error: 'Session expired or revoked', stopRetry: true },
+          { status: 401 }
+        )
+      }
+      // Concurrent refresh in another tab — allow issuing a new session below.
     }
 
     // Missing DB row but JWT verified: allow refresh (login may have failed to persist token).
@@ -179,6 +191,10 @@ export const POST = withSecureApi(async function POST(request) {
 
     return response
   } catch (error) {
-    return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
+    console.error('[Refresh] Unexpected error:', error?.message || error)
+    return NextResponse.json(
+      { error: 'Refresh temporarily unavailable', stopRetry: false },
+      { status: 503 }
+    )
   }
 })

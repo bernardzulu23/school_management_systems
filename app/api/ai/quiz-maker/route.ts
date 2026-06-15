@@ -85,12 +85,15 @@ export const POST = withAILimits(async function POST(request: Request) {
 
     try {
       assertGroqConfigured()
-    } catch {
-      logger.error('ai.quiz-maker.misconfigured', new Error('Missing GROQ_API_KEY'), {
+    } catch (configError) {
+      logger.error('ai.quiz-maker.misconfigured', configError, {
         requestId,
         schoolId,
       })
-      return NextResponse.json({ error: 'Service not configured' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'AI service is not configured (set GROQ_API_KEY or GEMINI_API_KEY)' },
+        { status: 503 }
+      )
     }
 
     const raw = await request.json().catch(() => null)
@@ -184,6 +187,8 @@ export const POST = withAILimits(async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid input', issues: error.issues }, { status: 400 })
     }
     logger.error('ai.quiz-maker.error', error, { requestId })
-    return NextResponse.json({ error: 'Failed to process request' }, { status: 500 })
+    const message = error instanceof Error ? error.message : 'Failed to process request'
+    const status = message.toLowerCase().includes('ai generation failed') ? 502 : 500
+    return NextResponse.json({ error: message }, { status })
   }
 })

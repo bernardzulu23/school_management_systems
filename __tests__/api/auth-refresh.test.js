@@ -82,6 +82,7 @@ describe('POST /api/auth/refresh', () => {
       token: refreshToken,
       revoked: true,
       userId,
+      updatedAt: new Date(Date.now() - 60_000),
     })
 
     const res = await POST(
@@ -95,5 +96,34 @@ describe('POST /api/auth/refresh', () => {
     expect(res.status).toBe(401)
     const json = await parseJson(res)
     expect(json.stopRetry).toBe(true)
+  })
+
+  it('allows refresh when token was revoked recently (concurrent tab rotation)', async () => {
+    const refreshToken = jwt.sign({ id: userId, schoolId }, JWT_REFRESH_SECRET, {
+      algorithm: 'HS256',
+      expiresIn: '7d',
+    })
+    cookieBag.refresh_token = refreshToken
+
+    mockPrisma.refreshToken.findUnique.mockResolvedValue({
+      id: 'rt-old',
+      token: refreshToken,
+      revoked: true,
+      userId,
+      updatedAt: new Date(),
+    })
+
+    const res = await POST(
+      buildRequest({
+        method: 'POST',
+        url: 'http://localhost:3000/api/auth/refresh',
+        headers: { host: 'testschool.localhost:3000' },
+      })
+    )
+
+    expect(res.status).toBe(200)
+    const json = await parseJson(res)
+    expect(json.success).toBe(true)
+    expect(mockPrisma.refreshToken.updateMany).not.toHaveBeenCalled()
   })
 })

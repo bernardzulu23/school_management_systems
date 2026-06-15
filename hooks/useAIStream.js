@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react'
 import { sanitizePlainText } from '@/lib/ai/plain-text'
-import { sessionFetch, authErrorMessage } from '@/lib/auth/sessionFetch'
+import { sessionFetch, authErrorMessage, shouldRedirectToLogin } from '@/lib/auth/sessionFetch'
 
 function parseSSEChunk(buffer) {
   const parts = buffer.split('\n\n')
@@ -55,6 +55,10 @@ export function useAIStream(endpoint, options = {}) {
 
         if (!res.ok) {
           const json = await res.json().catch(() => ({}))
+          if (shouldRedirectToLogin(res.status, json) && typeof window !== 'undefined') {
+            window.location.href = `/login?from=${encodeURIComponent(window.location.pathname)}`
+            return
+          }
           setError({
             error: authErrorMessage(res.status, json),
             code: json?.code,
@@ -149,6 +153,10 @@ export function useAIFetch(endpoint) {
         })
         const json = await res.json().catch(() => ({}))
         if (!res.ok) {
+          if (shouldRedirectToLogin(res.status, json) && typeof window !== 'undefined') {
+            window.location.href = `/login?from=${encodeURIComponent(window.location.pathname)}`
+            return
+          }
           setError({
             error: authErrorMessage(res.status, json),
             status: res.status,
