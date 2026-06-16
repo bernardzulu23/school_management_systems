@@ -47,7 +47,7 @@ export const GET = withErrorHandler(async function GET(request) {
       ...(studentId ? { studentId } : {}),
     },
     include: {
-      student: { select: { id: true, name: true, grade: true } },
+      student: { select: { id: true, name: true, class: true } },
       competency: { select: { id: true, name: true, category: true } },
       recorder: { select: { id: true, name: true } },
     },

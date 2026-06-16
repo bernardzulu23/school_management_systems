@@ -53,7 +53,7 @@ export const GET = withErrorHandler(async function GET(request) {
       ...(gradeLevel ? { gradeLevel } : {}),
     },
     include: {
-      student: { select: { name: true, exam_number: true, grade: true } },
+      student: { select: { name: true, exam_number: true, class: true } },
       competency: { select: { name: true, category: true } },
     },
     orderBy: [{ student: { name: 'asc' } }, { competency: { name: 'asc' } }],

@@ -1,6 +1,8 @@
 'use client'
 
-import { Loader2, CheckCircle, AlertTriangle } from 'lucide-react'
+import { useEffect } from 'react'
+import { Loader2, CheckCircle, AlertTriangle, X } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
 
 export type GenerationStage =
   | 'idle'
@@ -38,15 +40,51 @@ export function GenerationProgressModal({
   state: GenerationProgressState
   onClose: () => void
 }) {
-  if (!state.open) return null
-
   const isError = state.stage === 'error'
   const isDone = state.stage === 'done'
+  const canDismiss = isError || isDone
+
+  useEffect(() => {
+    if (!state.open || !canDismiss) return
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose()
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [state.open, canDismiss, onClose])
+
+  if (!state.open) return null
+
+  const handleBackdropClick = () => {
+    if (canDismiss) onClose()
+  }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-md rounded-xl border border-royalPurple-border/40 bg-white shadow-xl p-5 space-y-4">
-        <div className="flex items-start gap-3">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="generation-progress-title"
+      onClick={handleBackdropClick}
+    >
+      <div
+        className="relative w-full max-w-md rounded-xl border border-royalPurple-border/40 bg-white shadow-xl p-5 space-y-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {canDismiss ? (
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute right-3 top-3 rounded-md p-1.5 text-royalPurple-text2 hover:bg-royalPurple-muted hover:text-royalPurple-text1"
+            aria-label="Close"
+          >
+            <X size={18} />
+          </button>
+        ) : null}
+
+        <div className="flex items-start gap-3 pr-8">
           {isError ? (
             <AlertTriangle className="text-red-600 shrink-0 mt-0.5" size={22} />
           ) : isDone ? (
@@ -55,7 +93,7 @@ export function GenerationProgressModal({
             <Loader2 className="text-royalPurple-text2 shrink-0 mt-0.5 animate-spin" size={22} />
           )}
           <div>
-            <div className="font-semibold text-royalPurple-text1">
+            <div id="generation-progress-title" className="font-semibold text-royalPurple-text1">
               {isError
                 ? 'Generation failed'
                 : isDone
@@ -66,11 +104,11 @@ export function GenerationProgressModal({
           </div>
         </div>
 
-        {!isError && !isDone && (
+        {!isError && !isDone ? (
           <div className="text-xs text-royalPurple-text3 uppercase tracking-wide">
             Stage: {state.stage}
           </div>
-        )}
+        ) : null}
 
         {state.stats && (isDone || isError) ? (
           <div className="grid grid-cols-2 gap-2 text-sm">
@@ -115,15 +153,11 @@ export function GenerationProgressModal({
           </div>
         ) : null}
 
-        {(isDone || isError) && (
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-full rounded-lg bg-royalPurple-primary text-white py-2 text-sm font-medium hover:opacity-90"
-          >
+        {canDismiss ? (
+          <Button type="button" variant="primary" fullWidth onClick={onClose}>
             Close
-          </button>
-        )}
+          </Button>
+        ) : null}
       </div>
     </div>
   )
