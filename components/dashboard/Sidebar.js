@@ -89,36 +89,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         },
         { name: 'STEM Monitoring', href: '/dashboard/headteacher/stem-monitoring', icon: Target },
         { name: 'MOE Reports', href: '/dashboard/headteacher/moe-reports', icon: FileText },
-        { name: 'AI Lesson Planner', href: '/dashboard/teacher/lesson-planner', icon: Sparkles },
-        { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
-        { name: 'Topic Test (RAG)', href: '/dashboard/teacher/topic-test', icon: ClipboardList },
-        {
-          name: 'Upload for AI (RAG)',
-          href: '/dashboard/teacher/ai-materials',
-          icon: Sparkles,
-        },
         { name: 'AI Report Comments', href: '/dashboard/teacher/report-comments', icon: Sparkles },
-        { name: 'AI Story Weaver', href: '/dashboard/teacher/story-weaver', icon: Sparkles },
         { name: 'Attendance Returns', href: '/dashboard/attendance/returns', icon: UserCheck },
         { name: 'Timetable', href: '/dashboard/headteacher/timetable', icon: Calendar },
         { name: 'Assessments', href: '/dashboard/assessments', icon: ClipboardList },
-        {
-          name: 'ECZ SBA Hub',
-          href: '/dashboard/teacher/assessments/ecz',
-          icon: ClipboardList,
-        },
-        {
-          name: 'Exam scenarios',
-          href: '/dashboard/teacher/assessments/ecz?tab=exam',
-          icon: Target,
-        },
-        {
-          name: 'CBC Assessment',
-          href: '/dashboard/teacher/assessments/cbc',
-          icon: ClipboardList,
-        },
         { name: 'Results', href: '/dashboard/results', icon: BarChart3 },
-        { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
         { name: 'Payments', href: '/dashboard/payments', icon: CreditCard },
         { name: 'Billing', href: '/dashboard/billing', icon: CreditCard },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
@@ -272,16 +247,6 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Register student', href: '/admin/registration?role=student', icon: UserPlus },
       ]
       return soloItems
-    }
-
-    if (roleKey === 'headteacher') {
-      const hidden = new Set([
-        'AI Lesson Planner',
-        'AI Quiz Maker',
-        'AI Story Weaver',
-        'Innovation Hub',
-      ])
-      return items.filter((item) => !hidden.has(item.name))
     }
 
     return items

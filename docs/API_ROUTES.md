@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-06-13T14:39:43.199Z
+Generated: 2026-06-17T19:05:03.101Z
 
-Total route files: **306**
+Total route files: **318**
 
 ## Quick index
 
@@ -17,17 +17,18 @@ Total route files: **306**
 | `/api/account`              |     2 |
 | `/api/activities`           |     4 |
 | `/api/admin`                |    15 |
-| `/api/ai`                   |    10 |
+| `/api/ai`                   |    11 |
 | `/api/aiml`                 |     5 |
 | `/api/allocations`          |     7 |
 | `/api/analytics`            |     1 |
-| `/api/assessments`          |    11 |
+| `/api/assessments`          |    13 |
 | `/api/assignments`          |     4 |
 | `/api/attendance`           |     7 |
 | `/api/auth`                 |     8 |
 | `/api/billing`              |     1 |
 | `/api/career-clusters`      |     2 |
 | `/api/careers`              |     2 |
+| `/api/cbc`                  |     2 |
 | `/api/classes`              |     5 |
 | `/api/code-playground`      |     1 |
 | `/api/creative-features`    |     1 |
@@ -36,17 +37,18 @@ Total route files: **306**
 | `/api/csrf-token`           |     1 |
 | `/api/dashboard`            |    24 |
 | `/api/departments`          |     1 |
-| `/api/ecz`                  |    10 |
+| `/api/ecz`                  |    14 |
 | `/api/features`             |     1 |
 | `/api/feedback`             |     1 |
 | `/api/field-trips`          |     1 |
+| `/api/games`                |     2 |
 | `/api/health`               |     1 |
 | `/api/hod`                  |    11 |
 | `/api/hods`                 |     3 |
 | `/api/innovation`           |     2 |
 | `/api/lesson-plans`         |     8 |
 | `/api/marketplace`          |     7 |
-| `/api/materials`            |     4 |
+| `/api/materials`            |     5 |
 | `/api/mobile`               |    12 |
 | `/api/onboarding`           |     9 |
 | `/api/payments`             |     2 |
@@ -119,6 +121,7 @@ Total route files: **306**
 | Method    | Route                         | Summary                                                                      |
 | --------- | ----------------------------- | ---------------------------------------------------------------------------- |
 | POST      | `/api/ai/competency-analyzer` | —                                                                            |
+| POST      | `/api/ai/ecz-exam-questions`  | —                                                                            |
 | POST      | `/api/ai/ecz-practice`        | —                                                                            |
 | POST      | `/api/ai/lesson-planner`      | —                                                                            |
 | POST      | `/api/ai/phonics-trainer`     | —                                                                            |
@@ -159,19 +162,21 @@ Total route files: **306**
 
 ## /api/assessments
 
-| Method           | Route                              | Summary |
-| ---------------- | ---------------------------------- | ------- |
-| GET, POST        | `/api/assessments`                 | —       |
-| GET, PUT, DELETE | `/api/assessments/:id`             | —       |
-| GET, POST        | `/api/assessments/:id/ai-analysis` | —       |
-| GET              | `/api/assessments/:id/attempts`    | —       |
-| POST             | `/api/assessments/:id/publish`     | —       |
-| GET, PUT         | `/api/assessments/:id/questions`   | —       |
-| PATCH            | `/api/assessments/:id/review`      | —       |
-| POST             | `/api/assessments/:id/submit-hod`  | —       |
-| GET              | `/api/assessments/hod/pending`     | —       |
-| GET, POST        | `/api/assessments/sba-scores`      | —       |
-| GET, POST        | `/api/assessments/sba-tasks`       | —       |
+| Method           | Route                                | Summary |
+| ---------------- | ------------------------------------ | ------- |
+| GET, POST        | `/api/assessments`                   | —       |
+| GET, PUT, DELETE | `/api/assessments/:id`               | —       |
+| GET, POST        | `/api/assessments/:id/ai-analysis`   | —       |
+| GET              | `/api/assessments/:id/attempts`      | —       |
+| POST             | `/api/assessments/:id/publish`       | —       |
+| GET, PUT         | `/api/assessments/:id/questions`     | —       |
+| PATCH            | `/api/assessments/:id/review`        | —       |
+| POST             | `/api/assessments/:id/submit-hod`    | —       |
+| GET              | `/api/assessments/hod/pending`       | —       |
+| POST             | `/api/assessments/promote-term-test` | —       |
+| GET, POST        | `/api/assessments/sba-scores`        | —       |
+| GET, POST        | `/api/assessments/sba-tasks`         | —       |
+| GET              | `/api/assessments/teacher-overview`  | —       |
 
 ## /api/assignments
 
@@ -196,16 +201,16 @@ Total route files: **306**
 
 ## /api/auth
 
-| Method        | Route                             | Summary |
-| ------------- | --------------------------------- | ------- |
-| POST          | `/api/auth/forgot-password`       | —       |
-| POST          | `/api/auth/login`                 | —       |
-| POST, OPTIONS | `/api/auth/logout`                | —       |
-| GET           | `/api/auth/me`                    | —       |
-| POST          | `/api/auth/refresh`               | —       |
-| POST          | `/api/auth/register`              | —       |
-| POST          | `/api/auth/reset-password`        | —       |
-| POST          | `/api/auth/reset-password/:token` | —       |
+| Method        | Route                             | Summary                                                                                          |
+| ------------- | --------------------------------- | ------------------------------------------------------------------------------------------------ |
+| POST          | `/api/auth/forgot-password`       | —                                                                                                |
+| POST          | `/api/auth/login`                 | —                                                                                                |
+| POST, OPTIONS | `/api/auth/logout`                | —                                                                                                |
+| GET           | `/api/auth/me`                    | —                                                                                                |
+| POST          | `/api/auth/refresh`               | Benign concurrent refresh: old token revoked within this window should not mass-revoke sessions. |
+| POST          | `/api/auth/register`              | —                                                                                                |
+| POST          | `/api/auth/reset-password`        | —                                                                                                |
+| POST          | `/api/auth/reset-password/:token` | —                                                                                                |
 
 ## /api/billing
 
@@ -226,6 +231,13 @@ Total route files: **306**
 | ------------- | ------------------ | ------- |
 | GET, POST     | `/api/careers`     | —       |
 | PATCH, DELETE | `/api/careers/:id` | —       |
+
+## /api/cbc
+
+| Method    | Route              | Summary |
+| --------- | ------------------ | ------- |
+| GET       | `/api/cbc/export`  | —       |
+| GET, POST | `/api/cbc/ratings` | —       |
 
 ## /api/classes
 
@@ -312,6 +324,10 @@ Total route files: **306**
 | GET, POST     | `/api/ecz/evidence`                | —                                                                                   |
 | DELETE        | `/api/ecz/evidence/:id`            | —                                                                                   |
 | GET           | `/api/ecz/evidence/file/:filename` | —                                                                                   |
+| GET           | `/api/ecz/exemplars`               | —                                                                                   |
+| POST          | `/api/ecz/exemplars/:id/clone`     | —                                                                                   |
+| POST          | `/api/ecz/marking-scheme/generate` | —                                                                                   |
+| GET, PATCH    | `/api/ecz/moderation`              | —                                                                                   |
 | GET           | `/api/ecz/reference`               | GET /api/ecz/reference — ECZ competencies and CBC subject constructs (seeded data). |
 | POST          | `/api/ecz/rubric/generate`         | —                                                                                   |
 | GET           | `/api/ecz/scores`                  | Lightweight list of SBA score rows for evidence upload picker.                      |
@@ -335,6 +351,13 @@ Total route files: **306**
 | Method    | Route              | Summary |
 | --------- | ------------------ | ------- |
 | GET, POST | `/api/field-trips` | —       |
+
+## /api/games
+
+| Method             | Route            | Summary                                                                                   |
+| ------------------ | ---------------- | ----------------------------------------------------------------------------------------- |
+| GET, POST          | `/api/games`     | GET /api/games — list school games (teacher/HOD/admin) POST /api/games — create quiz game |
+| GET, PATCH, DELETE | `/api/games/:id` | —                                                                                         |
 
 ## /api/health
 
@@ -400,12 +423,13 @@ Total route files: **306**
 
 ## /api/materials
 
-| Method    | Route                        | Summary                                                                                                                                           |
-| --------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET       | `/api/materials`             | GET /api/materials — list RAG school materials for the tenant (with chunk counts).                                                                |
-| DELETE    | `/api/materials/:id`         | DELETE /api/materials/[id] — remove RAG material and all chunks (tenant-scoped).                                                                  |
-| GET, POST | `/api/materials/blob-upload` | GET — lets the client feature-detect whether direct-to-blob upload is available (i.e. BLOB_READ_WRITE_TOKEN is configured on the server).         |
-| POST      | `/api/materials/ingest`      | POST /api/materials/ingest Body JSON: { materialId, text? } OR multipart: file + metadata fields. Creates SchoolMaterial when materialId omitted. |
+| Method    | Route                        | Summary                                                                                                                                                              |
+| --------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET       | `/api/materials`             | GET /api/materials — list RAG school materials for the tenant (with chunk counts). Query: ?subject=Biology — filter by subject; teachers only see assigned subjects. |
+| DELETE    | `/api/materials/:id`         | DELETE /api/materials/[id] — remove RAG material and all chunks (tenant-scoped).                                                                                     |
+| GET, POST | `/api/materials/blob-upload` | GET — lets the client feature-detect whether direct-to-blob upload is available (i.e. BLOB_READ_WRITE_TOKEN is configured on the server).                            |
+| POST      | `/api/materials/ingest`      | POST /api/materials/ingest Body JSON: { materialId, text? } OR multipart: file + metadata fields. Creates SchoolMaterial when materialId omitted.                    |
+| GET       | `/api/materials/rag-preview` | GET /api/materials/rag-preview?subject=&topic=&gradeLevel=&materialIds=id1,id2 Retrieval-only preview (no LLM) for teachers before generating a topic test.          |
 
 ## /api/mobile
 
