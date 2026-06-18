@@ -2,6 +2,9 @@
 
 import { evaluatePassword, PASSWORD_REQUIREMENTS } from '@/lib/security/passwordPolicy'
 
+// Direct re-exports (local `export { evaluatePassword }` breaks Next.js client boundaries).
+export { evaluatePassword, getPasswordFormError } from '@/lib/security/passwordPolicy'
+
 /**
  * Live checklist of password policy requirements.
  * @param {{ password: string, className?: string }} props
@@ -26,10 +29,4 @@ export default function PasswordRequirements({ password, className = '' }) {
       </ul>
     </div>
   )
-}
-
-/** @param {string} password @returns {string | null} */
-export function getPasswordFormError(password) {
-  const result = evaluatePassword(password)
-  return result.isValid ? null : result.failures[0] || 'Password does not meet requirements'
 }
