@@ -141,6 +141,7 @@ model School {
   specialAccommodations SpecialAccommodation[]
   questionBanks        QuestionBank[]
   planPayments         SchoolPlanPayment[]
+  feePayments          SchoolFeePayment[]
   smsSettings          SchoolSmsSettings?
   smsBroadcasts        SmsBroadcast[]
   smsLogs              SmsLog[]
@@ -284,6 +285,30 @@ model SchoolPlanPayment {
 
   @@index([schoolId])
   @@index([status])
+}
+
+/** School fee mobile money collections via Lipila (tuition, transport, etc.). */
+model SchoolFeePayment {
+  id            String   @id @default(uuid())
+  schoolId      String
+  school        School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  initiatedById String?
+  amount        Float
+  currency      String   @default("ZMW")
+  provider      String?
+  referenceId   String   @unique
+  status        String   @default("pending")
+  accountNumber String?
+  narration     String?
+  paymentType   String?
+  studentId     String?
+  lipilaStatus  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 // Pre-provisioning school signup (onboarding flow before School is created)

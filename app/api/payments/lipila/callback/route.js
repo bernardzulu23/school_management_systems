@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { activatePlanPayment } from '@/lib/billing/activate-plan-payment'
+import { activateFeePayment } from '@/lib/payments/feePayments'
 import { isFailedLipilaStatus, isPaidLipilaStatus } from '@/lib/payments/lipila'
 
 function getIdentifier(payload) {
@@ -42,7 +43,10 @@ export async function POST(request) {
     }
 
     if (isPaidLipilaStatus(status) || isFailedLipilaStatus(status)) {
-      await activatePlanPayment({ identifier, referenceId, status })
+      const feeResult = await activateFeePayment({ identifier, referenceId, status })
+      if (!feeResult.handled) {
+        await activatePlanPayment({ identifier, referenceId, status })
+      }
     }
 
     return NextResponse.json({
@@ -67,6 +71,19 @@ export async function GET(request) {
 
   if (referenceId || identifier) {
     if (isPaidLipilaStatus(status) || isFailedLipilaStatus(status)) {
+      const feeResult = await activateFeePayment({
+        identifier: identifier || null,
+        referenceId,
+        status,
+      })
+      if (feeResult.handled) {
+        const params = new URLSearchParams({
+          payment: isPaidLipilaStatus(status) ? 'success' : 'failed',
+        })
+        if (referenceId) params.set('referenceId', referenceId)
+        return NextResponse.redirect(`${origin}/dashboard/payments?${params.toString()}`)
+      }
+
       const result = await activatePlanPayment({
         identifier: identifier || null,
         referenceId,

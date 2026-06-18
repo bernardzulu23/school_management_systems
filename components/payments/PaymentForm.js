@@ -83,6 +83,7 @@ export default function PaymentForm({ onSuccess, schoolId, userRole }) {
         provider: form.provider,
         accountNumber: form.accountNumber,
         amount: Number(form.amount),
+        paymentType: form.paymentType,
         narration:
           `${PAYMENT_TYPES.find((t) => t.value === form.paymentType)?.label || 'Payment'} - ${form.description || ''}`.trim(),
       }
@@ -270,6 +271,12 @@ export default function PaymentForm({ onSuccess, schoolId, userRole }) {
           </CardHeader>
           <CardContent>
             <div className="space-y-2 text-sm">
+              {result.referenceId && (
+                <div className="flex justify-between">
+                  <span className="text-royalPurple-text2">Reference:</span>
+                  <span className="font-mono text-royalPurple-text1">{result.referenceId}</span>
+                </div>
+              )}
               {result.reference && (
                 <div className="flex justify-between">
                   <span className="text-royalPurple-text2">Reference:</span>
@@ -300,7 +307,18 @@ export default function PaymentForm({ onSuccess, schoolId, userRole }) {
   )
 }
 
-export function PaymentHistory({ transactions = [] }) {
+export function PaymentHistory({ transactions = [], loading = false }) {
+  if (loading) {
+    return (
+      <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
+        <CardContent className="py-8 text-center">
+          <Clock className="w-12 h-12 mx-auto text-royalPurple-text3 mb-3 animate-spin" />
+          <p className="text-royalPurple-text2">Loading payment history…</p>
+        </CardContent>
+      </Card>
+    )
+  }
+
   if (transactions.length === 0) {
     return (
       <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">

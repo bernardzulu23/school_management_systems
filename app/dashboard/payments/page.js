@@ -1,49 +1,61 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { useAuth } from '@/lib/auth'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 import PaymentForm, { PaymentHistory, PaymentStats } from '@/components/payments/PaymentForm'
 import ProviderLogos from '@/components/payments/ProviderLogos'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/Button'
 import { CreditCard, History, Phone } from 'lucide-react'
 
 export default function PaymentsPage() {
   const { user } = useAuth()
+  const searchParams = useSearchParams()
   const [transactions, setTransactions] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('pay')
 
-  useEffect(() => {
-    async function fetchTransactions() {
-      try {
-        const res = await fetch('/api/payments/mobile-money', {
-          credentials: 'include',
-        })
-        if (res.ok) {
-          const data = await res.json()
-          setTransactions(data.transactions || [])
-        }
-      } catch (error) {
-        console.error('Failed to fetch transactions:', error)
-      } finally {
-        setLoading(false)
+  const fetchTransactions = useCallback(async () => {
+    try {
+      const res = await sessionFetch('/api/payments/mobile-money')
+      if (res.ok) {
+        const data = await res.json()
+        setTransactions(data.transactions || [])
       }
+    } catch (error) {
+      console.error('Failed to fetch transactions:', error)
+    } finally {
+      setLoading(false)
     }
-    fetchTransactions()
   }, [])
 
+  useEffect(() => {
+    fetchTransactions()
+  }, [fetchTransactions])
+
+  useEffect(() => {
+    if (searchParams.get('payment') === 'success') {
+      setActiveTab('history')
+      fetchTransactions()
+    }
+  }, [searchParams, fetchTransactions])
+
+  useEffect(() => {
+    const hasPending = transactions.some((tx) => tx.status === 'pending')
+    if (!hasPending) return undefined
+
+    const interval = setInterval(fetchTransactions, 10_000)
+    return () => clearInterval(interval)
+  }, [transactions, fetchTransactions])
+
+  const completed = transactions.filter((tx) => tx.status === 'completed')
   const stats = {
     totalTransactions: transactions.length,
-    totalAmount: transactions.reduce((sum, tx) => sum + (tx.amount || 0), 0),
+    totalAmount: completed.reduce((sum, tx) => sum + (tx.amount || 0), 0),
     successRate:
-      transactions.length > 0
-        ? Math.round(
-            (transactions.filter((tx) => tx.status === 'completed').length / transactions.length) *
-              100
-          )
-        : 0,
+      transactions.length > 0 ? Math.round((completed.length / transactions.length) * 100) : 0,
     pendingCount: transactions.filter((tx) => tx.status === 'pending').length,
   }
 
@@ -84,7 +96,19 @@ export default function PaymentsPage() {
                 userRole={user?.role}
                 onSuccess={(result) => {
                   if (result.transaction) {
-                    setTransactions((prev) => [result.transaction, ...prev])
+                    setTransactions((prev) => {
+                      const exists = prev.some((tx) => tx.id === result.transaction.id)
+                      if (exists) {
+                        return prev.map((tx) =>
+                          tx.id === result.transaction.id ? result.transaction : tx
+                        )
+                      }
+                      return [result.transaction, ...prev]
+                    })
+                  }
+                  fetchTransactions()
+                  if (result.transaction?.status === 'pending') {
+                    setActiveTab('history')
                   }
                 }}
               />
@@ -132,7 +156,9 @@ export default function PaymentsPage() {
           </div>
         )}
 
-        {activeTab === 'history' && <PaymentHistory transactions={transactions} />}
+        {activeTab === 'history' && (
+          <PaymentHistory transactions={transactions} loading={loading} />
+        )}
       </div>
     </DashboardLayout>
   )
