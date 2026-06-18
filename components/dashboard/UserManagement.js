@@ -28,7 +28,8 @@ import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
 import SubjectSelection from '@/components/registration/SubjectSelection'
 import UserTypeCards from '@/components/dashboard/UserTypeCards'
-import { evaluatePassword, getPasswordFormError } from '@/components/ui/PasswordRequirements'
+import { getPasswordFormError } from '@/components/ui/PasswordRequirements'
+import { evaluatePassword } from '@/lib/security/passwordPolicy'
 
 export default function UserManagement() {
   const { school } = useSchool()

@@ -2,8 +2,6 @@
 
 import { evaluatePassword, PASSWORD_REQUIREMENTS } from '@/lib/security/passwordPolicy'
 
-export { evaluatePassword }
-
 /**
  * Live checklist of password policy requirements.
  * @param {{ password: string, className?: string }} props

@@ -9,8 +9,9 @@ import { Settings, Shield, Save, Camera, Eye, EyeOff, Info } from 'lucide-react'
 import { AppVersionLabel } from '@/components/dashboard/AppVersionLabel'
 import { useAuth } from '@/lib/auth'
 import ProfilePictureUpload from '@/components/ui/ProfilePictureUpload'
-import { getPasswordFormError, evaluatePassword } from '@/components/ui/PasswordRequirements'
+import { getPasswordFormError } from '@/components/ui/PasswordRequirements'
 import PasswordRequirements from '@/components/ui/PasswordRequirements'
+import { evaluatePassword } from '@/lib/security/passwordPolicy'
 
 export default function SettingsPage() {
   const { user, updateUser } = useAuth()
