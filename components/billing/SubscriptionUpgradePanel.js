@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -51,10 +52,9 @@ export default function SubscriptionUpgradePanel({
 
     setPaying(true)
     try {
-      const res = await fetch('/api/billing/subscription-payment', {
+      const res = await sessionFetch('/api/billing/subscription-payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({
           plan: selectedPlan,
           provider,

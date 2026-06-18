@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
@@ -90,16 +91,22 @@ export default function PaymentForm({ onSuccess, schoolId, userRole }) {
         payload.studentId = form.studentId
       }
 
-      const res = await fetch('/api/payments/mobile-money', {
+      const res = await sessionFetch('/api/payments/mobile-money', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify(payload),
       })
 
       const json = await res.json()
 
       if (!res.ok) {
+        const code = json?.code
+        if (code === 'SCHOOL_TYPE_GATE' || code === 'OWNERSHIP_RESTRICTED') {
+          throw new Error(
+            json?.error ||
+              'Mobile money fee payments are only available for private and grant-aided schools.'
+          )
+        }
         throw new Error(json?.error || json?.message || 'Payment request failed')
       }
 
