@@ -28,7 +28,7 @@ import AcademicInfoStep from './enhanced-registration/AcademicInfoStep'
 import ProfessionalInfoStep from './enhanced-registration/ProfessionalInfoStep'
 import AdministrativeInfoStep from './enhanced-registration/AdministrativeInfoStep'
 import ParentGuardianStep from './enhanced-registration/ParentGuardianStep'
-import { getPasswordFormError } from '@/components/ui/PasswordRequirements'
+import { getPasswordFormError } from '@/lib/security/passwordValidate'
 
 let lookupsCache = null
 let lookupsCacheAt = 0

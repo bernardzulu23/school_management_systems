@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Eye, EyeOff } from 'lucide-react'
 import { ProvinceDistrictFields } from '@/components/onboarding/ProvinceDistrictFields'
-import { evaluatePassword } from '@/lib/security/passwordPolicy'
+import { evaluatePassword } from '@/lib/security/passwordValidate'
 
 function normalizeSubdomain(input) {
   const raw = String(input || '')

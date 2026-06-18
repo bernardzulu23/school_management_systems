@@ -12,7 +12,7 @@ import ProviderLogos, { ProviderLogoImage } from '@/components/payments/Provider
 import { Eye, EyeOff } from 'lucide-react'
 import { ProvinceDistrictFields } from '@/components/onboarding/ProvinceDistrictFields'
 import { TRIAL_MONTHS } from '@/lib/billing/subscription'
-import { evaluatePassword } from '@/lib/security/passwordPolicy'
+import { evaluatePassword } from '@/lib/security/passwordValidate'
 import PasswordRequirements from '@/components/ui/PasswordRequirements'
 
 function parsePlanParam(searchParams) {

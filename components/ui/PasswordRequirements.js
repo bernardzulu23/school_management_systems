@@ -1,9 +1,6 @@
 'use client'
 
-import { evaluatePassword, PASSWORD_REQUIREMENTS } from '@/lib/security/passwordPolicy'
-
-// Direct re-exports (local `export { evaluatePassword }` breaks Next.js client boundaries).
-export { evaluatePassword, getPasswordFormError } from '@/lib/security/passwordPolicy'
+import { evaluatePassword, PASSWORD_REQUIREMENTS } from '@/lib/security/passwordValidate'
 
 /**
  * Live checklist of password policy requirements.

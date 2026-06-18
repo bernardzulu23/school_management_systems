@@ -9,7 +9,7 @@ import FormField from '@/components/forms/FormField'
 import { useSchool } from '@/lib/context/SchoolContext'
 import toast from 'react-hot-toast'
 import { SchoolLogo } from '@/components/SchoolLogo'
-import { getPasswordFormError } from '@/components/ui/PasswordRequirements'
+import { getPasswordFormError } from '@/lib/security/passwordValidate'
 import PasswordRequirements from '@/components/ui/PasswordRequirements'
 
 function ResetPasswordContent() {

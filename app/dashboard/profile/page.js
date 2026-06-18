@@ -10,7 +10,7 @@ import { useAuth } from '@/lib/auth'
 import { User, KeyRound, Upload, Eye, EyeOff } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { formatDDMMYYYY } from '@/lib/utils/formHelpers'
-import { getPasswordFormError } from '@/components/ui/PasswordRequirements'
+import { getPasswordFormError } from '@/lib/security/passwordValidate'
 import PasswordRequirements from '@/components/ui/PasswordRequirements'
 
 const MAX_BYTES = 10 * 1024 * 1024

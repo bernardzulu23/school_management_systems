@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { ArrowLeft, LogOut, Shield, User } from 'lucide-react'
-import { getPasswordFormError } from '@/components/ui/PasswordRequirements'
+import { getPasswordFormError } from '@/lib/security/passwordValidate'
 import PasswordRequirements from '@/components/ui/PasswordRequirements'
 
 export default function PlatformProfilePage() {

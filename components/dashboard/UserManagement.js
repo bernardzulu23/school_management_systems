@@ -28,8 +28,8 @@ import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
 import SubjectSelection from '@/components/registration/SubjectSelection'
 import UserTypeCards from '@/components/dashboard/UserTypeCards'
-import { getPasswordFormError } from '@/components/ui/PasswordRequirements'
-import { evaluatePassword } from '@/lib/security/passwordPolicy'
+import { getPasswordFormError } from '@/lib/security/passwordValidate'
+import { evaluatePassword } from '@/lib/security/passwordValidate'
 
 export default function UserManagement() {
   const { school } = useSchool()
