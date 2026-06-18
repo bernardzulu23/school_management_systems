@@ -8,6 +8,7 @@ import {
   stripInternalRequestHeaders,
 } from './lib/security/headers'
 import { checkProxyRateLimit } from './lib/security/proxyRateLimit'
+import { checkAntiScraping, checkApiScrapeRateLimit } from './lib/security/antiScraping'
 import { verifyCsrfRequest } from './lib/security/csrf'
 
 const PUBLIC_PATHS = [
@@ -73,6 +74,10 @@ function secureResponse(body, init, request, securityOptions = {}) {
   return applySecurityHeaders(response, request, securityOptions)
 }
 
+function isPublicApiPath(pathname) {
+  return PUBLIC_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`))
+}
+
 /** Next.js 16 proxy — multi-tenant subdomain routing and API security. */
 export async function handleSecurityProxy(request) {
   try {
@@ -106,6 +111,35 @@ export async function handleSecurityProxy(request) {
 
     if (pathname.startsWith('/api') && isForbiddenCrossOrigin(request)) {
       return secureResponse({ error: 'Forbidden origin' }, { status: 403 }, request, securityOpts)
+    }
+
+    if (pathname.startsWith('/api')) {
+      const isPublicApi = isPublicApiPath(pathname)
+      const scrape = checkAntiScraping(request, pathname, { isPublic: isPublicApi })
+      if (scrape.blocked) {
+        return secureResponse(
+          {
+            error: 'Forbidden',
+            message: 'This request was blocked for security reasons.',
+          },
+          { status: scrape.status || 403 },
+          request,
+          securityOpts
+        )
+      }
+
+      const scrapeRate = checkApiScrapeRateLimit(request, pathname, { isPublic: isPublicApi })
+      if (scrapeRate.limited) {
+        return secureResponse(
+          { error: 'Too many requests', message: 'Please try again later.' },
+          {
+            status: 429,
+            headers: { 'Retry-After': String(scrapeRate.retryAfter) },
+          },
+          request,
+          securityOpts
+        )
+      }
     }
 
     if (
@@ -148,9 +182,7 @@ export async function handleSecurityProxy(request) {
 
     const protectedPaths = ['/dashboard', '/api']
     const isProtected = protectedPaths.some((path) => pathname.startsWith(path))
-    const isPublic = PUBLIC_PATHS.some(
-      (path) => pathname === path || pathname.startsWith(path + '/')
-    )
+    const isPublic = isPublicApiPath(pathname)
 
     if (isProtected && !isPublic) {
       const hasToken =

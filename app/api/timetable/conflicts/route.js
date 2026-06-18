@@ -1,0 +1,42 @@
+export const dynamic = 'force-dynamic'
+
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
+import { getAuthUser } from '@/lib/middleware/auth'
+import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { auditDraftTimetable, persistDraftConflictMeta } from '@/lib/timetable/conflictAudit'
+
+const ALLOWED_ROLES = new Set(['headteacher', 'administrator', 'admin', 'superadmin', 'hod'])
+
+/**
+ * GET /api/timetable/conflicts?term=Term+1&academicYear=2026
+ * Scan draft timetable allocation entries and return structured conflicts.
+ */
+export async function GET(req) {
+  const user = await getAuthUser(req)
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const role = String(user.role || '').toLowerCase()
+  if (!ALLOWED_ROLES.has(role)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
+  const schoolId = await resolveSchoolId(req, user)
+  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
+
+  const typeCheck = await guardSchoolOnlyTimetable(schoolId)
+  if (!typeCheck.allowed) return typeCheck.response
+
+  const { searchParams } = new URL(req.url)
+  const term = String(searchParams.get('term') || 'Term 1').trim()
+  const academicYear = String(searchParams.get('academicYear') || new Date().getFullYear()).trim()
+
+  const summary = await auditDraftTimetable(prisma, { schoolId, term, academicYear })
+
+  if (summary.entryCount > 0) {
+    await persistDraftConflictMeta(prisma, { schoolId, term, academicYear, summary })
+  }
+
+  return NextResponse.json(summary)
+}

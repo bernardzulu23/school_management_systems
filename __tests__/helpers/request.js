@@ -18,10 +18,21 @@ export function buildRequest({
   if (body !== undefined && !hdrs.has('content-type')) {
     hdrs.set('content-type', 'application/json')
   }
+  if (!hdrs.has('user-agent')) {
+    hdrs.set('user-agent', 'Mozilla/5.0 (compatible; ZSMS-Test/1.0)')
+  }
   const cookieHeader = Object.entries(cookies)
     .map(([k, v]) => `${k}=${v}`)
     .join('; ')
-  if (cookieHeader) hdrs.set('cookie', cookieHeader)
+  if (cookieHeader) {
+    hdrs.set('cookie', cookieHeader)
+    if (!hdrs.has('x-requested-with')) {
+      hdrs.set('x-requested-with', 'XMLHttpRequest')
+    }
+    if (!hdrs.has('accept')) {
+      hdrs.set('accept', 'application/json')
+    }
+  }
 
   const init = {
     method,

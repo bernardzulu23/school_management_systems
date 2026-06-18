@@ -12,6 +12,7 @@ import {
   canAccessHodFeatures,
   canAccessSecondaryGrading,
 } from '@/lib/subjects/resolveSubjectCatalog'
+import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
 import {
   Home,
   Users,
@@ -41,6 +42,9 @@ import {
   Layers,
   Briefcase,
   Trophy,
+  Bus,
+  Home as HomeIcon,
+  AlertTriangle,
 } from 'lucide-react'
 
 export function Sidebar({ className, mobileOpen, setMobileOpen }) {
@@ -92,6 +96,13 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'AI Report Comments', href: '/dashboard/teacher/report-comments', icon: Sparkles },
         { name: 'Attendance Returns', href: '/dashboard/attendance/returns', icon: UserCheck },
         { name: 'Timetable', href: '/dashboard/headteacher/timetable', icon: Calendar },
+        {
+          name: 'Timetable Conflicts',
+          href: '/dashboard/headteacher/timetable/conflicts',
+          icon: AlertTriangle,
+        },
+        { name: 'Transport', href: '/dashboard/headteacher/transport', icon: Bus },
+        { name: 'Hostel', href: '/dashboard/headteacher/hostel', icon: HomeIcon },
         { name: 'Assessments', href: '/dashboard/assessments', icon: ClipboardList },
         { name: 'Results', href: '/dashboard/results', icon: BarChart3 },
         { name: 'Payments', href: '/dashboard/payments', icon: CreditCard },
@@ -204,14 +215,20 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       ],
     }
 
-    const schoolLevel = String(school?.level || 'combined').toLowerCase()
-    const showHod = canAccessHodFeatures({ schoolLevel })
-    const showGrading = canAccessSecondaryGrading({ schoolLevel })
+    const features = getSchoolFeatures(school || { level: 'combined', ownershipType: 'PRIVATE' })
+    const showHod = features.hod && canAccessHodFeatures({ schoolLevel: school?.level })
+    const showGrading =
+      features.secondaryGrading && canAccessSecondaryGrading({ schoolLevel: school?.level })
     const showEcz =
-      schoolLevel === 'secondary' ||
-      schoolLevel === 'combined' ||
-      canAccessEczFeatures({ schoolLevel })
-    const showCbc = schoolLevel === 'primary' || schoolLevel === 'combined'
+      features.eczSBA &&
+      (String(school?.level || '').toLowerCase() === 'secondary' ||
+        String(school?.level || '').toLowerCase() === 'combined' ||
+        canAccessEczFeatures({ schoolLevel: school?.level }))
+    const showCbc = features.cbc
+    const showFees = features.feeManagement
+    const showHostel = features.hostel
+    const showCareer = features.careerGuidance
+    const showCodePlayground = features.codePlayground
     const navRoleKey = roleKey === 'hod' && !showHod ? 'teacher' : roleKey
 
     const filterPrimaryItems = (items) =>
@@ -225,6 +242,14 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         )
           return false
         if (!showCbc && item.name === 'CBC Assessment') return false
+        if (!showFees && item.name === 'Payments') return false
+        if (!showHostel && item.name === 'Hostel') return false
+        if (!showCareer && (item.name === 'Career clusters' || item.name === 'Careers')) {
+          return false
+        }
+        if (!showCodePlayground && item.name === 'Code Playground') return false
+        if (!showEcz && item.name === 'ECZ Practice') return false
+        if (!showCareer && item.name === 'Career guidance') return false
         if (!showHod && navRoleKey === 'teacher') {
           if (item.href?.startsWith('/dashboard/hod')) return false
         }

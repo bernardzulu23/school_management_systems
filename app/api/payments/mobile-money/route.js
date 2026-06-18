@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
+import { assertFeeManagementAllowed } from '@/lib/school/feeManagementAccess'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
 
 import { LIPILA_PROVIDER_PAYMENT_TYPES } from '@/lib/payments/lipila'
 
@@ -34,6 +36,12 @@ export async function POST(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const featureBlock = await requireFeature(schoolId, 'fee-management')
+  if (featureBlock) return featureBlock
+
+  const ownershipBlock = await assertFeeManagementAllowed(schoolId)
+  if (ownershipBlock) return ownershipBlock
 
   const rl = rateLimiter(request, {
     limit: process.env.NODE_ENV === 'production' ? 30 : 300,

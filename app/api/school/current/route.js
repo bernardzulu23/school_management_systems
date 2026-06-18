@@ -36,6 +36,7 @@ export async function GET(request) {
         trialEndsAt: true,
         level: true,
         schoolType: true,
+        ownershipType: true,
         enabledLocalLanguages: true,
         enrollmentCode: true,
         ownerUserId: true,

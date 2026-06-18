@@ -3,8 +3,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AppThemeProvider } from '@/lib/theme/AppThemeProvider'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { SchoolProvider } from '@/lib/context/SchoolContext'
+import { useEffect, useMemo, useState } from 'react'
+import { SchoolProvider, useSchool } from '@/lib/context/SchoolContext'
+import { SchoolFeaturesProvider } from '@/lib/school/SchoolFeaturesContext'
+import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
 import { useAuth } from '@/lib/auth'
 import GlobalTopLoadingBar from '@/components/ui/GlobalTopLoadingBar'
 import GlobalBackButton from '@/components/ui/GlobalBackButton'
@@ -43,6 +45,15 @@ function DevServiceWorkerReset() {
   }, [])
 
   return null
+}
+
+function SchoolFeaturesBridge({ children }) {
+  const { school } = useSchool()
+  const features = useMemo(
+    () => getSchoolFeatures(school || { level: 'combined', ownershipType: 'PRIVATE' }),
+    [school]
+  )
+  return <SchoolFeaturesProvider features={features}>{children}</SchoolFeaturesProvider>
 }
 
 function ActivitySessionKeeper({ children }) {
@@ -172,26 +183,28 @@ export function Providers({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
       <SchoolProvider>
-        <PWALoader />
-        <DevServiceWorkerReset />
-        {skipSessionSync ? (
-          <AppThemeProvider defaultTheme="light" enableSystem={false}>
-            <GlobalTopLoadingBar />
-            <GlobalBackButton />
-            <OfflineBanner />
-            {children}
-          </AppThemeProvider>
-        ) : (
-          <ActivitySessionKeeper>
-            <AuthSessionSync>
-              <AppThemeProvider defaultTheme="light" enableSystem={false}>
-                <GlobalTopLoadingBar />
-                <GlobalBackButton />
-                {children}
-              </AppThemeProvider>
-            </AuthSessionSync>
-          </ActivitySessionKeeper>
-        )}
+        <SchoolFeaturesBridge>
+          <PWALoader />
+          <DevServiceWorkerReset />
+          {skipSessionSync ? (
+            <AppThemeProvider defaultTheme="light" enableSystem={false}>
+              <GlobalTopLoadingBar />
+              <GlobalBackButton />
+              <OfflineBanner />
+              {children}
+            </AppThemeProvider>
+          ) : (
+            <ActivitySessionKeeper>
+              <AuthSessionSync>
+                <AppThemeProvider defaultTheme="light" enableSystem={false}>
+                  <GlobalTopLoadingBar />
+                  <GlobalBackButton />
+                  {children}
+                </AppThemeProvider>
+              </AuthSessionSync>
+            </ActivitySessionKeeper>
+          )}
+        </SchoolFeaturesBridge>
       </SchoolProvider>
     </QueryClientProvider>
   )

@@ -44,6 +44,10 @@ export const GET = withErrorHandler(async function GET(request) {
       smsBalance: settings.smsBalance,
       lowBalanceThreshold: settings.lowBalanceThreshold,
       lowBalanceAlertEmail: settings.lowBalanceAlertEmail,
+      parentSmsAbsent: settings.parentSmsAbsent ?? true,
+      parentSmsLate: settings.parentSmsLate ?? true,
+      parentSmsPresent: settings.parentSmsPresent ?? false,
+      parentSmsExcused: settings.parentSmsExcused ?? false,
       recentBroadcasts: recent,
     },
   })
@@ -70,6 +74,10 @@ export const PATCH = withErrorHandler(async function PATCH(request) {
       schoolId,
       lowBalanceThreshold: body.lowBalanceThreshold ?? 50,
       lowBalanceAlertEmail: body.lowBalanceAlertEmail ?? null,
+      ...(body.parentSmsAbsent !== undefined ? { parentSmsAbsent: body.parentSmsAbsent } : {}),
+      ...(body.parentSmsLate !== undefined ? { parentSmsLate: body.parentSmsLate } : {}),
+      ...(body.parentSmsPresent !== undefined ? { parentSmsPresent: body.parentSmsPresent } : {}),
+      ...(body.parentSmsExcused !== undefined ? { parentSmsExcused: body.parentSmsExcused } : {}),
     },
     update: {
       ...(body.lowBalanceThreshold !== undefined
@@ -78,6 +86,10 @@ export const PATCH = withErrorHandler(async function PATCH(request) {
       ...(body.lowBalanceAlertEmail !== undefined
         ? { lowBalanceAlertEmail: body.lowBalanceAlertEmail }
         : {}),
+      ...(body.parentSmsAbsent !== undefined ? { parentSmsAbsent: body.parentSmsAbsent } : {}),
+      ...(body.parentSmsLate !== undefined ? { parentSmsLate: body.parentSmsLate } : {}),
+      ...(body.parentSmsPresent !== undefined ? { parentSmsPresent: body.parentSmsPresent } : {}),
+      ...(body.parentSmsExcused !== undefined ? { parentSmsExcused: body.parentSmsExcused } : {}),
     },
   })
 

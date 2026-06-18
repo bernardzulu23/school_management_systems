@@ -90,6 +90,16 @@ When these are unset, related features are disabled (startup still succeeds).
 
 Payment provider logos: place files in `public/payments/` (`mtn.jpg`, `airtel.jpg`, `zamtel.png`) or set `NEXT_PUBLIC_PAYMENT_LOGO_*` URLs.
 
+### Anti-scraping (production edge security)
+
+| Variable                      | Purpose                                                           | Default          |
+| ----------------------------- | ----------------------------------------------------------------- | ---------------- |
+| `ANTI_SCRAPING_ENABLED`       | Master switch (`false` disables; `true` forces on in dev)         | On in production |
+| `SCRAPE_RATE_PUBLIC_GET`      | Max public GET requests per IP per minute                         | `60`             |
+| `SCRAPE_RATE_PUBLIC_MUTATION` | Max public POST/PUT/PATCH/DELETE per IP per minute                | `25`             |
+| `SCRAPE_RATE_AUTH_GET`        | Max authenticated GET requests per IP per 5 min (per route group) | `400`            |
+| `SCRAPE_RATE_AUTH_MUTATION`   | Max authenticated mutations per IP per 5 min (per route group)    | `150`            |
+
 ---
 
 ## Local development helpers

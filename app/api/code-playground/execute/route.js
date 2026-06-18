@@ -9,6 +9,8 @@ import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { PISTON_LANGUAGES } from '@/lib/creative-teaching/playgroundLanguages'
 import { executeViaPiston } from '@/lib/creative-teaching/executePiston'
 import { runJavaScriptSandbox } from '@/lib/creative-teaching/runJavaScriptSandbox'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
 
 const ExecuteSchema = z.object({
   language: z.string().trim().min(1).max(40),
@@ -25,6 +27,14 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!roleCheck(auth.user, ['STUDENT', 'student', 'TEACHER', 'teacher', 'headteacher', 'ADMIN'])) {
     throw new ApiError('Forbidden', 403)
   }
+
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) throw new ApiError('School context required', 400)
+
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'code-playground')
+  if (typeBlock) return typeBlock
 
   const rl = rateLimiter(request, {
     limit: 40,

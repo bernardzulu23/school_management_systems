@@ -6,6 +6,7 @@ import { staffRoleDeniedMessage } from '@/lib/auth/roles'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
+import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
 
 const LEVEL_MAP = {
   EXCELLENT: 4,
@@ -29,6 +30,9 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const featureBlock = await requireFeature(schoolId, 'continuous-assessment-tool')
   if (featureBlock) return featureBlock
+
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'cbc')
+  if (typeBlock) return typeBlock
 
   const { searchParams } = new URL(request.url)
   const gradeLevel = searchParams.get('gradeLevel') || undefined
@@ -72,6 +76,9 @@ export const POST = withErrorHandler(async function POST(request) {
 
   const featureBlock = await requireFeature(schoolId, 'continuous-assessment-tool')
   if (featureBlock) return featureBlock
+
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'cbc')
+  if (typeBlock) return typeBlock
 
   const body = await request.json().catch(() => ({}))
   const studentId = String(body.studentId || '').trim()

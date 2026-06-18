@@ -48,6 +48,7 @@ function OnboardingPageContent() {
   const [schoolName, setSchoolName] = useState('')
   const [subdomain, setSubdomain] = useState('')
   const [level, setLevel] = useState('combined')
+  const [ownershipType, setOwnershipType] = useState('PRIVATE')
   const [adminName, setAdminName] = useState('')
   const [province, setProvince] = useState('')
   const [district, setDistrict] = useState('')
@@ -287,7 +288,15 @@ function OnboardingPageContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ schoolName, subdomain, level, adminName, province, district }),
+        body: JSON.stringify({
+          schoolName,
+          subdomain,
+          level,
+          ownershipType,
+          adminName,
+          province,
+          district,
+        }),
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json?.error || 'Failed to complete setup')
@@ -761,6 +770,23 @@ function OnboardingPageContent() {
                     <option value="secondary">Secondary School Only (Grades 8-12)</option>
                     <option value="combined">Combined Primary & Secondary</option>
                   </select>
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <Label>School ownership type</Label>
+                  <select
+                    className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
+                    value={ownershipType}
+                    onChange={(e) => setOwnershipType(e.target.value)}
+                  >
+                    <option value="GOVERNMENT">Government school</option>
+                    <option value="PRIVATE">Private school</option>
+                    <option value="COMMUNITY">Community school</option>
+                    <option value="GRANT_AIDED">Grant-aided school</option>
+                  </select>
+                  <p className="text-xs text-royalPurple-text3 mt-1">
+                    Government and community schools use free-education features. Private and
+                    grant-aided schools can use fee management.
+                  </p>
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <Label>Admin Full Name</Label>

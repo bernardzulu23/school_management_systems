@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
-import { sendAttendanceStatusSmsBatch } from '@/lib/attendance/attendanceSms'
+import { scheduleParentAttendanceSmsBatch } from '@/lib/attendance/parentNotifications'
 import { mergeAttendanceRegister } from '@/lib/attendance/unified-register'
 import { syncWebAttendanceToSession } from '@/lib/compliance/attendanceToday'
 import { openAttendanceSession, recordAttendanceMark } from '@/lib/attendance/sessions'
@@ -120,6 +120,18 @@ export const POST = withErrorHandler(async function POST(request) {
     return NextResponse.json({ error: 'No valid records' }, { status: 400 })
   }
 
+  const existingRows = await prisma.attendance.findMany({
+    where: {
+      schoolId,
+      date: finalWrites[0].date,
+      studentId: { in: finalWrites.map((w) => w.studentId) },
+    },
+    select: { studentId: true, status: true },
+  })
+  const existingByStudent = new Map(
+    existingRows.map((r) => [String(r.studentId), String(r.status || '').toLowerCase()])
+  )
+
   await prisma.$transaction(
     finalWrites.map((r) =>
       prisma.attendance.upsert({
@@ -139,7 +151,21 @@ export const POST = withErrorHandler(async function POST(request) {
     )
   )
 
-  const smsSummary = await sendAttendanceStatusSmsBatch({ schoolId, writes: finalWrites })
+  const changedWrites = finalWrites.filter(
+    (w) =>
+      String(existingByStudent.get(String(w.studentId)) || '') !== String(w.status).toLowerCase()
+  )
+
+  scheduleParentAttendanceSmsBatch({
+    marks: changedWrites.map((r) => ({
+      studentId: r.studentId,
+      status: r.status,
+      date: r.date,
+    })),
+    schoolId,
+    sessionId: null,
+    date: new Date(),
+  })
 
   const classId = String(rawBody?.classId || '').trim()
   let subjectId = String(rawBody?.subjectId || '').trim()
@@ -168,5 +194,5 @@ export const POST = withErrorHandler(async function POST(request) {
     }
   }
 
-  return NextResponse.json({ success: true, sms: smsSummary, sessionSync })
+  return NextResponse.json({ success: true, sms: { queued: true }, sessionSync })
 })

@@ -12,7 +12,7 @@ import {
 } from '@/lib/ecz/ecz-compliance'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { recordAttendanceMark, closeAttendanceSession } from '@/lib/attendance/sessions'
-import { sendAttendanceStatusSmsBatch } from '@/lib/attendance/attendanceSms'
+import { scheduleParentAttendanceSmsBatch } from '@/lib/attendance/parentNotifications'
 
 const STAFF_ROLES = ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
 const VALID_ATTENDANCE = ['present', 'absent', 'late', 'excused']
@@ -104,7 +104,16 @@ export const POST = withSecureApi(async function POST(request) {
           String(existingByStudent.get(String(w.studentId)) || '').toLowerCase() !==
           String(w.status)
       )
-      await sendAttendanceStatusSmsBatch({ schoolId, writes: changedWrites })
+      scheduleParentAttendanceSmsBatch({
+        marks: changedWrites.map((w) => ({
+          studentId: w.studentId,
+          status: w.status,
+          date: w.date,
+        })),
+        schoolId,
+        sessionId: null,
+        date: new Date(),
+      })
       attendanceResult.synced += 1
     } catch (e) {
       attendanceResult.failed.push({ index: i, error: String(e?.message || e) })

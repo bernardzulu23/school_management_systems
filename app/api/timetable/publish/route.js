@@ -62,6 +62,9 @@ export async function POST(req) {
         hardConflicts: validation.hard,
         softConflicts: validation.soft,
         entryCount: validation.entryCount,
+        conflictErrors: validation.hard.length,
+        conflictCentreUrl: '/dashboard/headteacher/timetable/conflicts',
+        code: 'PUBLISH_BLOCKED_BY_CONFLICTS',
       },
       { status: 422 }
     )

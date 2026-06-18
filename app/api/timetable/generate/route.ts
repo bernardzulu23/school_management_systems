@@ -17,6 +17,7 @@ import {
   loadLockedSlotReservations,
   loadSchoolTimeSlots,
 } from '@/lib/timetable/loadGenerationContext'
+import { auditDraftTimetable, persistDraftConflictMeta } from '@/lib/timetable/conflictAudit'
 
 export async function GET(req: NextRequest) {
   const user = await getAuthUser(req as any)
@@ -272,6 +273,19 @@ export async function POST(req: NextRequest) {
     orderBy: [{ dayOfWeek: 'asc' }, { periodNumber: 'asc' }],
   })
 
+  let conflictAudit: Awaited<ReturnType<typeof auditDraftTimetable>> | null = null
+  try {
+    conflictAudit = await auditDraftTimetable(prisma, { schoolId, term, academicYear })
+    await persistDraftConflictMeta(prisma, {
+      schoolId,
+      term,
+      academicYear,
+      summary: conflictAudit,
+    })
+  } catch (conflictError) {
+    console.error('[TimetableGenerate] Conflict audit failed:', conflictError)
+  }
+
   return NextResponse.json({
     success: true,
     generated: saved.length,
@@ -281,6 +295,20 @@ export async function POST(req: NextRequest) {
     stats: scheduleResult.stats,
     engine: scheduleResult.engine,
     preflightWarnings: scheduleResult.preflightWarnings,
+    conflictSummary: conflictAudit
+      ? {
+          total: conflictAudit.totalConflicts,
+          errors: conflictAudit.errorCount,
+          warnings: conflictAudit.warningCount,
+          canPublish: conflictAudit.canPublish,
+          preview: conflictAudit.conflicts.slice(0, 5),
+        }
+      : null,
+    message: conflictAudit
+      ? conflictAudit.errorCount === 0
+        ? `Timetable generated with ${conflictAudit.warningCount} warning(s)`
+        : `Timetable generated with ${conflictAudit.errorCount} error(s) — resolve before publishing`
+      : undefined,
     summary: {
       days: workingDays.length,
       allocationsScheduled: [...new Set(saved.map((e: any) => e.allocationId))].length,

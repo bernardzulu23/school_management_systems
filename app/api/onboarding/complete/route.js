@@ -47,6 +47,15 @@ function normalizeLevel(value) {
   return null
 }
 
+function normalizeOwnershipType(value) {
+  const key = String(value || 'PRIVATE')
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z_]/g, '')
+  if (['PRIVATE', 'GOVERNMENT', 'COMMUNITY', 'GRANT_AIDED'].includes(key)) return key
+  return null
+}
+
 function planToExpiresAt(plan, months) {
   const p = String(plan || '')
     .trim()
@@ -190,6 +199,7 @@ export async function POST(request) {
     const schoolName = String(body?.schoolName || '').trim()
     const subdomain = normalizeSubdomain(body?.subdomain)
     const level = normalizeLevel(body?.level)
+    const ownershipType = normalizeOwnershipType(body?.ownershipType) || 'PRIVATE'
     const adminName = String(body?.adminName || '').trim()
     const adminPhone = body?.adminPhone ?? body?.phone ?? null
     const location = validateSchoolLocation({
@@ -239,6 +249,7 @@ export async function POST(request) {
           planExpiresAt: isTrial ? null : planToExpiresAt(plan, reg.subscriptionMonths),
           trialEndsAt: isTrial ? trialEndsAt() : null,
           level,
+          ownershipType,
           province,
           district,
           reportingStreamKey,

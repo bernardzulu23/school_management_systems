@@ -16,6 +16,13 @@ enum SchoolType {
   INDIVIDUAL
 }
 
+enum SchoolOwnership {
+  PRIVATE
+  GOVERNMENT
+  COMMUNITY
+  GRANT_AIDED
+}
+
 model School {
   id          String   @id @default(uuid())
   name        String
@@ -34,6 +41,7 @@ model School {
   level       String   @default("combined")
 
   schoolType      SchoolType @default(SCHOOL)
+  ownershipType   SchoolOwnership @default(PRIVATE)
   enrollmentCode  String?    @unique
   ownerUserId     String?
 
@@ -109,6 +117,7 @@ model School {
   timetableNotifications TimetableNotification[]
   timetableConfig        TimetableConfig?
   timetableAllocationEntries TimetableAllocationEntry[]
+  timetableDraftMeta     TimetableDraftMeta[]
   teacherColors          TeacherColor[]
 
   lessonPlans          LessonPlan[]
@@ -148,6 +157,10 @@ model School {
   hodFiles               HodFile[]
   innovationProjects     InnovationProject[]
   enrollmentInvites      EnrollmentInvite[]
+  busRoutes              BusRoute[]
+  hostelRooms            HostelRoom[]
+  studentBusRoutes       StudentBusRoute[]
+  studentHostels         StudentHostel[]
 
   @@index([subdomain])
   @@index([active])
@@ -429,6 +442,8 @@ model Student {
   termReports         TermReport[]
   mockExamAttempts    MockExamAttempt[]
   activityParticipations ActivityParticipant[]
+  busRouteAssignment  StudentBusRoute?
+  hostelAssignments   StudentHostel[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -2082,6 +2097,25 @@ model TimetableAllocationEntry {
   @@index([schoolId, status])
 }
 
+model TimetableDraftMeta {
+  id               String   @id @default(uuid())
+  schoolId         String
+  school           School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  term             String
+  academicYear     String
+  conflictCount    Int      @default(0)
+  conflictErrors   Int      @default(0)
+  conflictWarnings Int      @default(0)
+  conflictSummary  Json?
+  lastScannedAt    DateTime?
+  canPublish       Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([schoolId, term, academicYear])
+  @@index([schoolId])
+}
+
 enum AllocationStatus {
   DRAFT
   SUBMITTED
@@ -2757,6 +2791,10 @@ model SchoolSmsSettings {
   lowBalanceThreshold   Int      @default(50)
   lowBalanceAlertEmail  String?
   lowBalanceAlertSentAt DateTime?
+  parentSmsAbsent       Boolean  @default(true)
+  parentSmsLate         Boolean  @default(true)
+  parentSmsPresent      Boolean  @default(false)
+  parentSmsExcused      Boolean  @default(false)
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 }
@@ -2848,4 +2886,65 @@ model InnovationProject {
   @@index([schoolId])
   @@index([createdBy])
   @@index([status])
+}
+
+model BusRoute {
+  id        String   @id @default(cuid())
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  name      String
+  driver    String?
+  capacity  Int?
+  students  StudentBusRoute[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([schoolId])
+}
+
+model StudentBusRoute {
+  id        String   @id @default(cuid())
+  studentId String   @unique
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  routeId   String
+  route     BusRoute @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, schoolId])
+  @@index([schoolId])
+  @@index([routeId])
+}
+
+model HostelRoom {
+  id        String   @id @default(cuid())
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  name      String
+  capacity  Int
+  gender    String
+  students  StudentHostel[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([schoolId])
+}
+
+model StudentHostel {
+  id        String     @id @default(cuid())
+  studentId String
+  student   Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  roomId    String
+  room      HostelRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  schoolId  String
+  school    School     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  year      Int
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@unique([studentId, year])
+  @@index([schoolId])
+  @@index([roomId])
 }

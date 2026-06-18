@@ -581,12 +581,12 @@ The **ZSMS Teacher** mobile app (`zsms-mobile/`) extends web workflows for teach
 
 ### App tabs
 
-| Tab        | Features                                                      |
-| ---------- | ------------------------------------------------------------- |
-| Home       | Dashboard summary, shortcuts                                  |
-| Attendance | Lesson sessions, manual/face marking (Android), offline queue |
-| Scores     | SBA score entry                                               |
-| Profile    | Sync now, push tokens, cached lesson plans                    |
+| Tab        | Features                                                                                                 |
+| ---------- | -------------------------------------------------------------------------------------------------------- |
+| Home       | Dashboard summary, shortcuts                                                                             |
+| Attendance | Lesson sessions, manual/face marking (Android), offline queue; parent SMS sent by server when marks sync |
+| Scores     | SBA score entry                                                                                          |
+| Profile    | Sync now, push tokens, cached lesson plans                                                               |
 
 ### Web-only workflows
 
@@ -598,7 +598,7 @@ These remain on the web portal:
 - MOE reports and ECZ submission
 - Bulk SMS broadcast
 
-See [mobile-app-scope.md](./mobile-app-scope.md) and [doc/mobile-app.md](./doc/mobile-app.md).
+See [mobile-app-scope.md](./mobile-app-scope.md), [doc/mobile-app.md](./doc/mobile-app.md), and [04 attendance parent sms](./04%20attendance%20parent%20sms.md) (mobile sync + lesson session SMS).
 
 Build instructions: `zsms-mobile/docs/EAS_APK_BUILD.md`.
 

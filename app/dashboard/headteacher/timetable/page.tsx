@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { ConflictDisplay } from '@/components/timetable/ConflictDisplay'
@@ -906,9 +907,17 @@ function HeadteacherTimetablePageContent() {
           </div>
           <div className="onboard-card p-4">
             <div className="text-xs text-royalPurple-text3">Conflicts</div>
-            <div className={`text-xl font-bold ${stats.conflicts === 0 ? 'kpi-pass' : 'kpi-fail'}`}>
-              {stats.conflicts}
-            </div>
+            {stats.conflicts > 0 ? (
+              <Link
+                href={`/dashboard/headteacher/timetable/conflicts?term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}`}
+                className={`text-xl font-bold kpi-fail hover:opacity-80 underline underline-offset-2 block`}
+                title="Open Conflict Resolution Centre"
+              >
+                {stats.conflicts} →
+              </Link>
+            ) : (
+              <div className={`text-xl font-bold kpi-pass`}>{stats.conflicts}</div>
+            )}
           </div>
           <div className="onboard-card p-4">
             <div className="text-xs text-royalPurple-text3">Status</div>

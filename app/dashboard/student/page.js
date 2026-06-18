@@ -201,7 +201,11 @@ export default function StudentDashboard() {
   }
 
   const studentClassName = dashboardData?.student?.class || studentProfile?.class || ''
-  const { canAccessSecondaryGrading: showSecondaryGrading } = useSchoolCapabilities({
+  const {
+    canAccessSecondaryGrading: showSecondaryGrading,
+    codePlayground: showCodePlayground,
+    careerGuidance: showCareerGuidance,
+  } = useSchoolCapabilities({
     gradeLevel: studentClassName,
   })
   const overallGradeInfo = calculateGrade(dashboardStats.averageGrade, studentClassName)
@@ -286,7 +290,9 @@ export default function StudentDashboard() {
                   { id: 'games', name: 'Games & Learning', icon: GamepadIcon },
                   { id: 'achievements', name: 'Achievements', icon: Trophy },
                   { id: 'subjects', name: 'My Subjects', icon: BookOpen },
-                  { id: 'learning-path', name: 'Career guidance', icon: LearningPathIcon },
+                  ...(showCareerGuidance
+                    ? [{ id: 'learning-path', name: 'Career guidance', icon: LearningPathIcon }]
+                    : []),
                 ].map((tab) => {
                   const Icon = tab.icon
                   const active = activeTab === tab.id
@@ -1045,19 +1051,21 @@ export default function StudentDashboard() {
                           </p>
                         </div>
                       </Link>
-                      <Link href="/dashboard/student/code-playground">
-                        <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
-                          <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <Code className="h-8 w-8 text-royalPurple-text1" />
+                      {showCodePlayground && (
+                        <Link href="/dashboard/student/code-playground">
+                          <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
+                            <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                              <Code className="h-8 w-8 text-royalPurple-text1" />
+                            </div>
+                            <h3 className="text-royalPurple-text1 font-semibold text-center">
+                              Code Playground
+                            </h3>
+                            <p className="text-royalPurple-text2 text-sm text-center mt-2">
+                              Run Python &amp; more on your phone
+                            </p>
                           </div>
-                          <h3 className="text-royalPurple-text1 font-semibold text-center">
-                            Code Playground
-                          </h3>
-                          <p className="text-royalPurple-text2 text-sm text-center mt-2">
-                            Run Python &amp; more on your phone
-                          </p>
-                        </div>
-                      </Link>
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </CardContent>
@@ -1239,25 +1247,27 @@ export default function StudentDashboard() {
           {activeTab === 'creative-teaching' && (
             <div className="space-y-6">
               <StudyAssistant />
-              <Card variant="glass">
-                <CardContent className="pt-6">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                      <h3 className="text-lg font-bold text-royalPurple-text1 flex items-center gap-2">
-                        <Code className="h-5 w-5 text-royalPurple-pillTx" />
-                        Code Playground
-                      </h3>
-                      <p className="text-sm text-royalPurple-text2 mt-1">
-                        Write and run Python, JavaScript, and more from your phone — same tool your
-                        ICT teacher uses in class.
-                      </p>
+              {showCodePlayground && (
+                <Card variant="glass">
+                  <CardContent className="pt-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div>
+                        <h3 className="text-lg font-bold text-royalPurple-text1 flex items-center gap-2">
+                          <Code className="h-5 w-5 text-royalPurple-pillTx" />
+                          Code Playground
+                        </h3>
+                        <p className="text-sm text-royalPurple-text2 mt-1">
+                          Write and run Python, JavaScript, and more from your phone — same tool
+                          your ICT teacher uses in class.
+                        </p>
+                      </div>
+                      <Link href="/dashboard/student/code-playground">
+                        <Button className="w-full sm:w-auto">Open playground</Button>
+                      </Link>
                     </div>
-                    <Link href="/dashboard/student/code-playground">
-                      <Button className="w-full sm:w-auto">Open playground</Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              )}
               <CreativeTeachingHub />
             </div>
           )}
@@ -1308,16 +1318,20 @@ export default function StudentDashboard() {
                       Find Groups
                     </Link>
                   </div>
-                  <div className="bg-royalPurple-pill p-4 rounded-lg border border-royalPurple-border2">
-                    <h4 className="font-semibold text-royalPurple-pillTx mb-2">Career guidance</h4>
-                    <p className="text-royalPurple-pillTx text-sm">Adaptive learning routes</p>
-                    <button
-                      onClick={() => setActiveTab('learning-path')}
-                      className="mt-2 bg-royalPurple-pill text-royalPurple-text1 px-3 py-1 rounded text-sm hover:bg-royalPurple-pill w-full transition-colors"
-                    >
-                      Start Learning
-                    </button>
-                  </div>
+                  {showCareerGuidance && (
+                    <div className="bg-royalPurple-pill p-4 rounded-lg border border-royalPurple-border2">
+                      <h4 className="font-semibold text-royalPurple-pillTx mb-2">
+                        Career guidance
+                      </h4>
+                      <p className="text-royalPurple-pillTx text-sm">Adaptive learning routes</p>
+                      <button
+                        onClick={() => setActiveTab('learning-path')}
+                        className="mt-2 bg-royalPurple-pill text-royalPurple-text1 px-3 py-1 rounded text-sm hover:bg-royalPurple-pill w-full transition-colors"
+                      >
+                        Start Learning
+                      </button>
+                    </div>
+                  )}
                   <div className="bg-warn/10 p-4 rounded-lg border border-warn/40">
                     <h4 className="font-semibold text-g-900 mb-2">Goal Setting</h4>
                     <p className="text-g-700 text-sm">Track academic goals</p>
@@ -1645,7 +1659,7 @@ export default function StudentDashboard() {
           )}
 
           {/* Career guidance tab */}
-          {activeTab === 'learning-path' && (
+          {activeTab === 'learning-path' && showCareerGuidance && (
             <div className="space-y-6">
               <LearningPathPage />
             </div>

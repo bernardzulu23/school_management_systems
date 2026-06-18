@@ -64,7 +64,7 @@ npm run android
 
 Or download in a browser: https://services.gradle.org/distributions/gradle-8.10.2-all.zip → save as `tools/gradle-8.10.2-all.zip`, then run the script above.
 
-- **Offline**: marks and session close queue in Profile → **Sync now**.
+- **Offline**: marks and session close queue in Profile → **Sync now**. Parent attendance SMS is sent on the server when sync completes (absent/late by default).
 - **Twins**: if API returns twin verification, enter PIN or use device biometrics (set PIN via `POST /api/students/{id}/twin-pin` on web/admin).
 
 ## Pilot school

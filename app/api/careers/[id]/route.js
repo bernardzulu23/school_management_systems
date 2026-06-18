@@ -5,6 +5,13 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { validateBody } from '@/lib/middleware/validate-request'
 import { UpdateCareerSchema } from '@/lib/schemas'
+import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
+
+async function assertCareerGuidanceAccess(schoolId) {
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'career-guidance')
+  if (typeBlock) return typeBlock
+  return null
+}
 
 function pickCareerFields(body) {
   const fields = [
@@ -40,6 +47,9 @@ export async function PATCH(request, { params }) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const typeBlock = await assertCareerGuidanceAccess(schoolId)
+  if (typeBlock) return typeBlock
 
   const { data: body, error: validationError } = await validateBody(request, UpdateCareerSchema)
   if (validationError) return validationError

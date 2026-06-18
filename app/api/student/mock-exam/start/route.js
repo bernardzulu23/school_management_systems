@@ -11,6 +11,7 @@ import { generateMockExamPaper } from '@/lib/mock-exam/generate-paper'
 import { sanitizePaperForStudent, toAttemptSummary } from '@/lib/mock-exam'
 import { normalizeEczExamLevel } from '@/lib/ecz/ecz-practice-levels'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
+import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { getPerMinuteLimit, getSchoolPlanForUsage } from '@/lib/middleware/aiUsageTracker'
 
@@ -29,6 +30,9 @@ export const POST = withErrorHandler(async function POST(request) {
 
   const blocked = await requireFeature(schoolId, 'ecz-practice')
   if (blocked) return blocked
+
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'mock-exams')
+  if (typeBlock) return typeBlock
 
   const school = await getSchoolPlanForUsage(schoolId)
   const perMinuteLimit = getPerMinuteLimit(school?.plan)

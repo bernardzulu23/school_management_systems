@@ -5,6 +5,13 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { validateBody } from '@/lib/middleware/validate-request'
 import { UpdateCareerClusterSchema } from '@/lib/schemas'
+import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
+
+async function assertCareerGuidanceAccess(schoolId) {
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'career-guidance')
+  if (typeBlock) return typeBlock
+  return null
+}
 
 export async function PATCH(request, { params }) {
   const routeParams = await params
@@ -19,6 +26,9 @@ export async function PATCH(request, { params }) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const typeBlock = await assertCareerGuidanceAccess(schoolId)
+  if (typeBlock) return typeBlock
 
   const { data: body, error: validationError } = await validateBody(
     request,
@@ -69,6 +79,9 @@ export async function DELETE(request, { params }) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const typeBlock = await assertCareerGuidanceAccess(schoolId)
+  if (typeBlock) return typeBlock
 
   const db = getTenantClient(schoolId)
   const existing = await db.careerCluster.findFirst({

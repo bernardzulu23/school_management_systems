@@ -5,6 +5,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { validateBody } from '@/lib/middleware/validate-request'
 import { CreateCareerClusterSchema } from '@/lib/schemas'
+import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
 
 export async function GET(request) {
   const auth = await authMiddleware(request)
@@ -14,6 +15,9 @@ export async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'career-guidance')
+  if (typeBlock) return typeBlock
 
   const db = getTenantClient(schoolId)
   const { searchParams } = new URL(request.url)
@@ -49,6 +53,9 @@ export async function POST(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'career-guidance')
+  if (typeBlock) return typeBlock
 
   const { data: body, error: validationError } = await validateBody(
     request,
