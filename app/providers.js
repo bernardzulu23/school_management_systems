@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { SchoolProvider, useSchool } from '@/lib/context/SchoolContext'
 import { SchoolFeaturesProvider } from '@/lib/school/SchoolFeaturesContext'
 import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
+import { withBrowserSessionFetchInit } from '@/lib/security/browserSessionHeaders'
 import { useAuth } from '@/lib/auth'
 import GlobalTopLoadingBar from '@/components/ui/GlobalTopLoadingBar'
 import GlobalBackButton from '@/components/ui/GlobalBackButton'
@@ -103,11 +104,14 @@ function ActivitySessionKeeper({ children }) {
 
       if (now - lastKeepAliveAt > keepAliveEveryMs) {
         try {
-          const res = await fetch('/api/auth/refresh', {
-            method: 'POST',
-            credentials: 'include',
-            cache: 'no-store',
-          })
+          const res = await fetch(
+            '/api/auth/refresh',
+            withBrowserSessionFetchInit({
+              method: 'POST',
+              credentials: 'include',
+              cache: 'no-store',
+            })
+          )
 
           if (res.ok) {
             lastKeepAliveAt = now

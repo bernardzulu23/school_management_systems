@@ -356,6 +356,8 @@ Three fields on `School` drive what each tenant can access:
 
 **Client:** `lib/school/useSchoolCapabilities.js` + `SchoolFeaturesProvider` in `app/providers.js`; `/api/school/current` exposes `ownershipType`.
 
+**Existing schools (pre–ownership selector):** `School.ownershipType` defaults to `PRIVATE` in the database. That preserves prior behaviour (fee management, private feature set) until a headteacher sets the correct type during onboarding for new schools, or an operator runs `prisma/scripts/backfill-school-ownership.sql` (e.g. set `GOVERNMENT` for government secondaries). Missing ownership does **not** block login; session bootstrap uses `/api/auth/me` and `/api/auth/refresh`, which are exempt from the anti-scraping XHR header check in `lib/security/antiScraping.js`.
+
 **Existing wrappers** (delegate to helpers): `lib/school/hodAccess.js`, `lib/school/gradingAccess.js`, `lib/school/feeManagementAccess.js`, `lib/subjects/eczAccess.js`, `lib/middleware/planGate-zambia.js` (`requireFeature` for plan + level + ownership).
 
 ### Education-level feature gating
