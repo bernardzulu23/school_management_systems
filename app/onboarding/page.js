@@ -50,6 +50,7 @@ function OnboardingPageContent() {
   const [level, setLevel] = useState('combined')
   const [ownershipType, setOwnershipType] = useState('PRIVATE')
   const [adminName, setAdminName] = useState('')
+  const [adminPhone, setAdminPhone] = useState('')
   const [province, setProvince] = useState('')
   const [district, setDistrict] = useState('')
   const [saving, setSaving] = useState(false)
@@ -294,6 +295,7 @@ function OnboardingPageContent() {
           level,
           ownershipType,
           adminName,
+          adminPhone: adminPhone.trim() || undefined,
           province,
           district,
         }),
@@ -796,6 +798,16 @@ function OnboardingPageContent() {
                     placeholder="Headteacher Full Name"
                   />
                 </div>
+                <div className="space-y-2 md:col-span-2">
+                  <Label>Admin phone (optional — welcome SMS from ZSMS)</Label>
+                  <Input
+                    value={adminPhone}
+                    onChange={(e) => setAdminPhone(e.target.value)}
+                    placeholder="+260971234567"
+                    inputMode="tel"
+                    autoComplete="tel"
+                  />
+                </div>
                 <ProvinceDistrictFields
                   province={province}
                   district={district}
@@ -807,7 +819,8 @@ function OnboardingPageContent() {
 
               <div className="text-xs text-royalPurple-text3">
                 After you create the portal, we email your verified address with the school login
-                link to share with teachers and learners.
+                link to share with teachers and learners. If you add a phone number, we also send a
+                welcome SMS from ZSMS.
               </div>
 
               <div className="flex flex-wrap gap-2">

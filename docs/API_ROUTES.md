@@ -610,17 +610,19 @@ Total route files: **345**
 
 ## /api/sms
 
-| Method     | Route                           | Summary |
-| ---------- | ------------------------------- | ------- |
-| GET, PATCH | `/api/sms/balance`              | —       |
-| POST       | `/api/sms/broadcast`            | —       |
-| POST       | `/api/sms/broadcast-dispatcher` | —       |
-| POST       | `/api/sms/delivery`             | —       |
-| POST       | `/api/sms/inbound`              | —       |
-| GET        | `/api/sms/logs`                 | —       |
-| POST       | `/api/sms/queue-worker`         | —       |
-| GET        | `/api/sms/recipients`           | —       |
-| POST       | `/api/sms/send`                 | —       |
+| Method     | Route                           | Summary                                                                      |
+| ---------- | ------------------------------- | ---------------------------------------------------------------------------- |
+| GET, PATCH | `/api/sms/balance`              | —                                                                            |
+| POST       | `/api/sms/broadcast`            | —                                                                            |
+| POST       | `/api/sms/broadcast-dispatcher` | —                                                                            |
+| POST       | `/api/sms/delivery`             | —                                                                            |
+| POST       | `/api/sms/inbound`              | —                                                                            |
+| GET        | `/api/sms/logs`                 | —                                                                            |
+| POST       | `/api/sms/queue-worker`         | —                                                                            |
+| GET        | `/api/sms/recipients`           | —                                                                            |
+| POST       | `/api/sms/send`                 | —                                                                            |
+| POST       | `/api/sms/test/onboarding`      | DEV ONLY — test onboarding welcome SMS (sender ZSMS).                        |
+| POST       | `/api/sms/test/results-parent`  | DEV ONLY — test parent results-complete SMS (does not update ResultsStatus). |
 
 ## /api/solo
 

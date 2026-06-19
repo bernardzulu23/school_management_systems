@@ -18,7 +18,7 @@ The product delivers:
 - Role-based web dashboards (headteacher, HOD, teacher, student, admin)
 - **ECZ-aligned** School-Based Assessment (SBA) and submission workflows
 - Timetabling, attendance (including QR and offline), lesson plans, and results
-- **Mobile money billing** (Lipila), email onboarding (Resend), and SMS (Africa's Talking)
+- **Mobile money billing** (Lipila), email onboarding (Resend), and SMS (Mocean primary, Africa's Talking fallback)
 - AI-assisted teaching tools (Groq / Vercel AI SDK)
 - An optional **Expo mobile app** (`zsms-mobile/`) for teacher attendance and sync
 - A **platform super-admin** console for operator-level school and billing oversight
@@ -66,7 +66,8 @@ flowchart TB
   subgraph external [External services]
     Lipila[Lipila - mobile money]
     Resend[Resend - email]
-    AT[Africa's Talking - SMS]
+    AT[Africa's Talking - SMS fallback]
+    Mocean[Mocean - SMS primary]
     Groq[Groq - AI]
     Sentry[Sentry - errors]
     Sanity[Sanity - marketing CMS]
@@ -96,6 +97,7 @@ flowchart TB
   API --> Billing
   API --> SMS
   Billing --> Lipila
+  SMS --> Mocean
   SMS --> AT
   AI --> Groq
   Pages --> Sanity
@@ -121,30 +123,30 @@ See [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) for the canonical route template.
 
 ## Technology stack
 
-| Layer            | Technology                                          | Location / notes                                     |
-| ---------------- | --------------------------------------------------- | ---------------------------------------------------- |
-| Framework        | Next.js 16 (App Router)                             | `app/`, `next.config.js`                             |
-| UI               | React 19, Tailwind CSS, Lucide                      | `components/`, `styles/`                             |
-| State            | Zustand (auth), TanStack Query                      | `lib/hooks/`, dashboard pages                        |
-| Database         | PostgreSQL + Prisma 6                               | `prisma/schema.prisma`                               |
-| DB hosting       | Neon (pooled + direct URLs)                         | `DATABASE_URL`, `DIRECT_URL`                         |
-| Edge security    | `proxy.js`                                          | Root — CSP, CSRF, subdomain, rate limits             |
-| Auth             | JWT (httpOnly cookies + refresh)                    | `lib/middleware/auth`, `lib/security/cookies.js`     |
-| Tenancy          | `schoolId` + subdomain                              | `lib/tenant/resolveSchoolId.js`                      |
-| Email            | Resend                                              | `config/email.js`                                    |
-| Payments         | Lipila (MTN / Airtel / Zamtel)                      | `lib/billing/`, `/api/payments/lipila/callback`      |
-| SMS              | Africa's Talking + QStash workers                   | `lib/sms/`, `/api/sms/*`                             |
-| AI               | Groq (+ optional Gemini fallback) via Vercel AI SDK | `lib/ai/`, `lib/config/env.js`                       |
-| Observability    | Sentry (`@sentry/nextjs`)                           | `sentry.*.config.ts`, `/monitoring` tunnel           |
-| Marketing CMS    | Sanity (optional)                                   | `lib/sanity/`, `sanity/queries/`                     |
-| File storage     | Vercel Blob                                         | `@vercel/blob`                                       |
-| Rate limiting    | Upstash Redis (optional)                            | `lib/middleware/upstashLimiters.js`                  |
-| PWA / offline    | Workbox, Dexie                                      | `public/sw.js`, `lib/offline/`                       |
-| Mobile           | Expo 56 + React Native                              | `zsms-mobile/`                                       |
-| Timetable solver | Hybrid backtracking + optional `solver-service`     | `lib/timetable/hybridGenerate.ts`, `solver-service/` |
-| Testing          | Vitest, Playwright, Jest (legacy)                   | `__tests__/`, `vitest.config.*`                      |
-| CI               | GitHub Actions                                      | `.github/workflows/`                                 |
-| Deployment       | Vercel (primary)                                    | `vercel.json`, `scripts/vercel-build.js`             |
+| Layer            | Technology                                                   | Location / notes                                     |
+| ---------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
+| Framework        | Next.js 16 (App Router)                                      | `app/`, `next.config.js`                             |
+| UI               | React 19, Tailwind CSS, Lucide                               | `components/`, `styles/`                             |
+| State            | Zustand (auth), TanStack Query                               | `lib/hooks/`, dashboard pages                        |
+| Database         | PostgreSQL + Prisma 6                                        | `prisma/schema.prisma`                               |
+| DB hosting       | Neon (pooled + direct URLs)                                  | `DATABASE_URL`, `DIRECT_URL`                         |
+| Edge security    | `proxy.js`                                                   | Root — CSP, CSRF, subdomain, rate limits             |
+| Auth             | JWT (httpOnly cookies + refresh)                             | `lib/middleware/auth`, `lib/security/cookies.js`     |
+| Tenancy          | `schoolId` + subdomain                                       | `lib/tenant/resolveSchoolId.js`                      |
+| Email            | Resend                                                       | `config/email.js`                                    |
+| Payments         | Lipila (MTN / Airtel / Zamtel)                               | `lib/billing/`, `/api/payments/lipila/callback`      |
+| SMS              | Mocean (primary) + Africa's Talking (fallback) + QStash bulk | `lib/sms/`, `/api/sms/*`                             |
+| AI               | Groq (+ optional Gemini fallback) via Vercel AI SDK          | `lib/ai/`, `lib/config/env.js`                       |
+| Observability    | Sentry (`@sentry/nextjs`)                                    | `sentry.*.config.ts`, `/monitoring` tunnel           |
+| Marketing CMS    | Sanity (optional)                                            | `lib/sanity/`, `sanity/queries/`                     |
+| File storage     | Vercel Blob                                                  | `@vercel/blob`                                       |
+| Rate limiting    | Upstash Redis (optional)                                     | `lib/middleware/upstashLimiters.js`                  |
+| PWA / offline    | Workbox, Dexie                                               | `public/sw.js`, `lib/offline/`                       |
+| Mobile           | Expo 56 + React Native                                       | `zsms-mobile/`                                       |
+| Timetable solver | Hybrid backtracking + optional `solver-service`              | `lib/timetable/hybridGenerate.ts`, `solver-service/` |
+| Testing          | Vitest, Playwright, Jest (legacy)                            | `__tests__/`, `vitest.config.*`                      |
+| CI               | GitHub Actions                                               | `.github/workflows/`                                 |
+| Deployment       | Vercel (primary)                                             | `vercel.json`, `scripts/vercel-build.js`             |
 
 **Node.js:** 20.x (see `package.json` engines).
 
@@ -215,7 +217,7 @@ school_management_systems/
 | **Inter-house**             | Social competition houses (all school levels); any student assignable; gender stats per house for manual balancing                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `SchoolHouse`, `StudentHouseMembership`, `lib/houses/`, `/api/houses/*`, `/dashboard/headteacher/houses`                                                                                                                                                                                                              |
 | **Government school tools** | EMIS HDCT export, grants tracking, gender/GPI report, teacher leave, deployments — `GOVERNMENT` / `COMMUNITY` ownership only                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `lib/government/*`, `SchoolGrant`, `GrantAllocation`, `TeacherLeave`, `TeacherDeployment`, `/api/government/*`, `/dashboard/headteacher/government/*`                                                                                                                                                                 |
 | **Billing**                 | Plans, trials, Lipila subscription payments (ZSMS platform billing — not school fees)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `lib/billing/plan-pricing.js`, `app/api/billing/`, `SchoolPlanPayment` model                                                                                                                                                                                                                                          |
-| **SMS**                     | Broadcasts, templates, inbound webhooks, **parent attendance auto-SMS** (`SchoolSmsSettings.parentSms*`)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `lib/sms/`, `lib/attendance/parentNotifications.js`, `app/api/sms/`, [SMS_GUIDE.md](./SMS_GUIDE.md)                                                                                                                                                                                                                   |
+| **SMS**                     | Mocean-primary routing via `sendOutboundSms`; Africa's Talking fallback + bulk QStash; onboarding welcome from **ZSMS**; parent results SMS **prefixes school name**; dev test routes `/api/sms/test/onboarding`, `/api/sms/test/results-parent`                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | `lib/sms/sendOutbound.js`, `lib/sms/mocean.js`, `lib/attendance/parentNotifications.js`, `app/api/sms/`, [SMS_GUIDE.md](./SMS_GUIDE.md)                                                                                                                                                                               |
 | **AI features**             | Lesson planner, quizzes, topic tests (RAG material picker), report comments, RAG                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | `lib/ai/`, `GET /api/materials/rag-preview`, `/dashboard/teacher/topic-test`, [AI_GUIDE.md](./AI_GUIDE.md), [RAG.md](./RAG.md)                                                                                                                                                                                        |
 | **Games**                   | Teacher CRUD (`/api/games`), student play + badges/streaks from DB                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `app/api/games/`, `app/api/dashboard/student/games/`, `lib/games/awardBadges.js`                                                                                                                                                                                                                                      |
 | **Mobile API**              | Teacher attendance, sync, push tokens                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `app/api/mobile/` (12 routes)                                                                                                                                                                                                                                                                                         |
@@ -445,7 +447,8 @@ All accounts receive a **2-month trial** (`trialEndsAt`); subscription required 
 | **Vercel**                                            | Hosting, cron, Blob                          | `vercel.json`, region `fra1`                                                    |
 | **Resend**                                            | Transactional email                          | `RESEND_API_KEY`, `EMAIL_FROM_NOREPLY`                                          |
 | **Lipila**                                            | Mobile money (onboarding + billing)          | `LIPILA_API_KEY`, callbacks under `/api/payments/lipila/`                       |
-| **Africa's Talking**                                  | SMS send/receive                             | `AFRICASTALKING_*`, webhooks `/api/sms/inbound`, `/api/sms/delivery`            |
+| **Mocean**                                            | SMS send (primary when token set)            | `MOCEAN_API_TOKEN`, `lib/sms/mocean.js`, `sendOutboundSms`                      |
+| **Africa's Talking**                                  | SMS send/receive (fallback + bulk broadcast) | `AFRICASTALKING_*`, webhooks `/api/sms/inbound`, `/api/sms/delivery`            |
 | **Upstash QStash**                                    | Async SMS broadcast workers                  | `QSTASH_*`, `/api/sms/queue-worker`                                             |
 | **Groq / Gemini / OpenRouter / OpenAI / HuggingFace** | AI text generation (multi-provider fallback) | `lib/ai/provider-fallback.ts` — see [AI_GUIDE.md](./AI_GUIDE.md)                |
 | **HuggingFace / Jina / Voyage**                       | RAG embeddings (384-dim)                     | `HUGGINGFACE_API_KEY`, `JINA_API_KEY`, `VOYAGE_API_KEY`; see [RAG.md](./RAG.md) |

@@ -1,70 +1,97 @@
-# ZSMS SMS Guide (Africa's Talking)
+# ZSMS SMS Guide (Mocean + Africa's Talking)
 
-ZSMS uses the official [`africastalking`](https://www.npmjs.com/package/africastalking) SDK for outbound SMS.
+ZSMS routes outbound SMS through **`sendOutboundSms`** in `lib/sms/sendOutbound.js`:
 
-## Setup (sandbox for development)
+1. **Mocean** when `MOCEAN_API_TOKEN` is set (primary)
+2. **Africa's Talking** when Mocean is unset but `AFRICASTALKING_API_KEY` + `AFRICASTALKING_USERNAME` are set (fallback)
 
-1. Create an account at [africastalking.com](https://africastalking.com).
-2. Create an app and copy API credentials.
-3. In development, you can use sandbox credentials (`username=sandbox`).
-4. Set environment variables:
+Bulk broadcast (`/api/sms/broadcast`) still uses Africa's Talking + QStash only.
+
+## Environment variables
 
 ```env
+# Primary (Mocean)
+MOCEAN_API_TOKEN=...
+MOCEAN_SENDER_ID=...              # optional — school-context SMS sender
+
+# Onboarding welcome SMS sender (default ZSMS)
+ZSMS_ONBOARDING_SENDER_ID=ZSMS
+
+# Fallback (Africa's Talking)
 AFRICASTALKING_API_KEY=...
 AFRICASTALKING_USERNAME=...
+AFRICASTALKING_SENDER_ID=...      # optional — bulk broadcast + school fallback
 ```
 
-When these are missing, `env.features.sms` is false and sends are skipped safely.
+When neither Mocean nor AT credentials are set, `env.features.sms` is false and sends are skipped safely.
 
-## Send an SMS from code
-
-Preferred service:
+## Send from code
 
 ```javascript
-import { smsService } from '@/lib/sms/africastalking'
+import { sendOutboundSms, sendAfricasTalkingSms, getOnboardingSmsFrom } from '@/lib/sms'
 
-await smsService.sendSMS(['+260971234567'], 'Your message here')
-```
-
-Backward-compatible helper still used by API routes:
-
-```javascript
-import { sendAfricasTalkingSms } from '@/lib/sms'
-
-await sendAfricasTalkingSms({
+await sendOutboundSms({
   to: ['+260971234567'],
   message: 'Your message here',
-  from: 'ZSMS',
+  from: getOnboardingSmsFrom(), // "ZSMS"
 })
+
+// Backward-compatible alias (routes through sendOutboundSms)
+await sendAfricasTalkingSms({ to: ['+260971234567'], message: 'Hello', from: 'ZSMS' })
 ```
 
-## Available SMS templates
+## Sender IDs
 
-Defined in `lib/sms/africastalking.js`:
+| Flow                    | Sender (`from`)                                  | Message branding                                               |
+| ----------------------- | ------------------------------------------------ | -------------------------------------------------------------- |
+| Onboarding welcome      | `ZSMS_ONBOARDING_SENDER_ID` (default `ZSMS`)     | Body mentions "Zambian School Management System" + school name |
+| Parent results complete | `MOCEAN_SENDER_ID` or `AFRICASTALKING_SENDER_ID` | Body **starts with school name**                               |
+| Attendance alerts       | Same as school-context                           | School name in body                                            |
 
-- `PORTAL_CREATED(schoolName, subdomain)`
-- `SBA_DEADLINE_REMINDER(teacherName, subject, form)`
-- `ATTENDANCE_ALERT(studentName, date, schoolName)`
-- `RESULTS_PUBLISHED(studentName, term)`
-- `PAYMENT_CONFIRMED(amount, schoolName)`
+## Dev test routes (non-production only)
 
-## Add a new template
+Requires authenticated session. Disabled when `NODE_ENV=production`.
 
-1. Open `lib/sms/africastalking.js`.
-2. Add a new key under `SMS_TEMPLATES`.
-3. Keep language concise and under SMS length limits where possible.
-4. Reuse from route/service code via `SMS_TEMPLATES.YOUR_KEY(...)`.
+### Onboarding welcome SMS
 
-## Zambia phone format requirements
+```bash
+curl -X POST http://localhost:3000/api/sms/test/onboarding \
+  -H "Content-Type: application/json" \
+  -H "Cookie: <session>" \
+  -d '{"to":"+260971234567","schoolName":"Test School","loginUrl":"https://test.example.com/login"}'
+```
+
+### Parent results-complete SMS
+
+```bash
+curl -X POST http://localhost:3000/api/sms/test/results-parent \
+  -H "Content-Type: application/json" \
+  -H "Cookie: <session>" \
+  -d '{"to":"+260971234567","studentName":"Jane Banda","schoolName":"Nyimba East Day Secondary School"}'
+```
+
+Or pass `studentId` to load parent contacts and school from the database (requires school tenant context).
+
+These routes do **not** update `ResultsStatus.smsSentAt`.
+
+## Message builders (`lib/sms.js`)
+
+- `buildWelcomeSmsMessage({ schoolName, loginUrl })`
+- `buildTermResultsCompleteSmsMessage({ studentName, studentEmail, loginUrl, schoolName })`
+- `buildAttendanceSmsMessage(...)`
+
+Legacy templates in `lib/sms/africastalking.js` (`SMS_TEMPLATES`) remain for reference.
+
+## Zambia phone format
 
 Accepted output format is E.164 Zambia mobile:
 
 - `+260XXXXXXXXX` where network starts with `7` or `9`
-- Examples: `+260971234567`, `+260955555555`
+- Mocean receives numbers without `+` (e.g. `260971234567`)
 
-Normalization handled by:
+Normalization: `normalizePhoneNumbers()` / `normalizeZambianPhoneNumbers()`.
 
-- `normalizeZambianPhoneNumber()`
-- `normalizeZambianPhoneNumbers()`
+## Africa's Talking sandbox
 
-Invalid numbers are filtered out before sending.
+1. Create an account at [africastalking.com](https://africastalking.com).
+2. Use sandbox credentials (`username=sandbox`) for development fallback testing.

@@ -8,6 +8,7 @@ import { notifyOnboardingComplete } from '@/lib/onboarding/notifyOnboardingCompl
 import { trialEndsAtFromStart } from '@/lib/billing/subscription'
 import {
   buildWelcomeSmsMessage,
+  getOnboardingSmsFrom,
   normalizePhoneNumbers,
   pushSmsLog,
   sendAfricasTalkingSms,
@@ -321,7 +322,11 @@ export async function POST(request) {
       const recipients = normalizePhoneNumbers(adminPhone)
       if (recipients.length > 0) {
         const message = buildWelcomeSmsMessage({ schoolName: created.name, loginUrl })
-        const sent = await sendAfricasTalkingSms({ to: recipients, message })
+        const sent = await sendAfricasTalkingSms({
+          to: recipients,
+          message,
+          from: getOnboardingSmsFrom(),
+        })
         pushSmsLog({
           direction: 'out',
           schoolId: created.id,
