@@ -19,7 +19,7 @@ import {
 import { setCsrfCookie } from '@/lib/security/csrf'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { JWT_AUDIENCE } from '@/lib/middleware/auth'
-import { getSubscriptionState } from '@/lib/billing/subscription'
+import { getSubscriptionState, hydrateLegacySchoolAccess } from '@/lib/billing/subscription'
 import { logger, captureError } from '@/lib/utils/logger'
 import {
   verifyPlatformAdminCredentials,
@@ -198,17 +198,27 @@ export const POST = withSecureApi(async function POST(request) {
         plan: true,
         planExpiresAt: true,
         trialEndsAt: true,
+        createdAt: true,
         schoolType: true,
         level: true,
       },
     })
     if (!school || school.active === false) {
-      return NextResponse.json({ error: 'School is not active' }, { status: 403 })
+      return NextResponse.json(
+        {
+          error:
+            'School is not active yet. Open the verification link from your registration email, or contact support.',
+          code: 'SCHOOL_NOT_ACTIVE',
+        },
+        { status: 403 }
+      )
     }
+
+    const hydratedSchool = await hydrateLegacySchoolAccess(prisma, schoolId, school)
     if (
-      !school.emailVerified &&
+      !hydratedSchool.emailVerified &&
       (user.role === 'headteacher' ||
-        (String(school.schoolType || '').toUpperCase() === 'INDIVIDUAL' &&
+        (String(hydratedSchool.schoolType || '').toUpperCase() === 'INDIVIDUAL' &&
           String(user.role || '').toLowerCase() === 'teacher')) &&
       !isPilotEmail(user.email)
     ) {
@@ -218,7 +228,7 @@ export const POST = withSecureApi(async function POST(request) {
       )
     }
 
-    const subscription = getSubscriptionState(school)
+    const subscription = getSubscriptionState(hydratedSchool)
     if (subscription.expired && !isPilotEmail(user.email)) {
       return NextResponse.json(
         {
@@ -301,8 +311,8 @@ export const POST = withSecureApi(async function POST(request) {
       name: user.name,
       role: user.role,
       schoolId: user.schoolId,
-      schoolType: school?.schoolType || 'SCHOOL',
-      schoolLevel: school?.level || 'combined',
+      schoolType: hydratedSchool?.schoolType || 'SCHOOL',
+      schoolLevel: hydratedSchool?.level || 'combined',
       profile_picture_url: user.profile_picture_url,
       department: user?.hodProfile?.department || undefined,
     })

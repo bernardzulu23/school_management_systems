@@ -21,6 +21,7 @@ vi.mock('@/lib/tenant/resolveSchoolId', () => ({
 
 vi.mock('@/lib/billing/subscription', () => ({
   getSubscriptionState: vi.fn(() => ({ expired: false, isTrialExpired: false })),
+  hydrateLegacySchoolAccess: vi.fn(async (_prisma, _schoolId, school) => school),
 }))
 
 const bcryptCompare = vi.fn().mockResolvedValue(true)

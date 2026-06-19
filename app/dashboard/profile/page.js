@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import ProfilePictureDisplay from '@/components/ui/ProfilePictureDisplay'
 import { useAuth } from '@/lib/auth'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { User, KeyRound, Upload, Eye, EyeOff } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { formatDDMMYYYY } from '@/lib/utils/formHelpers'
@@ -49,7 +50,7 @@ export default function ProfilePage() {
     let active = true
     const load = async () => {
       try {
-        const res = await fetch('/api/auth/me', { cache: 'no-store', credentials: 'include' })
+        const res = await sessionFetch('/api/auth/me', { cache: 'no-store' })
         if (!res.ok) return
         const data = await res.json()
         if (active) setMe(data?.user || null)

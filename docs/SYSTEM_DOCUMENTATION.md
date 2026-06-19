@@ -1,7 +1,7 @@
 # ZSMS System Documentation
 
 **Zambian School Management System (ZSMS)**  
-**Last updated:** 2026-06-12  
+**Last updated:** 2026-06-19  
 **Application version:** 2.0.3 (`package.json`)  
 **Document version:** 1.0
 
@@ -357,6 +357,8 @@ Three fields on `School` drive what each tenant can access:
 **Client:** `lib/school/useSchoolCapabilities.js` + `SchoolFeaturesProvider` in `app/providers.js`; `/api/school/current` exposes `ownershipType`.
 
 **Existing schools (pre–ownership selector):** `School.ownershipType` defaults to `PRIVATE` in the database. That preserves prior behaviour (fee management, private feature set) until a headteacher sets the correct type during onboarding for new schools, or an operator runs `prisma/scripts/backfill-school-ownership.sql` (e.g. set `GOVERNMENT` for government secondaries). Missing ownership does **not** block login; session bootstrap uses `/api/auth/me` and `/api/auth/refresh`, which are exempt from the anti-scraping XHR header check in `lib/security/antiScraping.js`.
+
+**Legacy trial / verification:** Schools created before `trialEndsAt` was populated may have been blocked at login with `402 SUBSCRIPTION_EXPIRED`. Login and API subscription checks now call `hydrateLegacySchoolAccess()` in `lib/billing/subscription.js` to backfill `trialEndsAt` and `emailVerified` for active schools. Bulk fix: `prisma/scripts/backfill-school-trial.sql`.
 
 **Existing wrappers** (delegate to helpers): `lib/school/hodAccess.js`, `lib/school/gradingAccess.js`, `lib/school/feeManagementAccess.js`, `lib/subjects/eczAccess.js`, `lib/middleware/planGate-zambia.js` (`requireFeature` for plan + level + ownership).
 
