@@ -8,6 +8,7 @@ import { getAuthUser } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 
 import { validateDraftEntriesForPublish } from '@/lib/timetable/validateDraftEntries'
+import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
 
 export async function POST(req) {
   const user = await getAuthUser(req)
@@ -52,6 +53,7 @@ export async function POST(req) {
   })
 
   if (!validation.ok) {
+    await rescanAndPersistDraftMeta(prisma, { schoolId, term, academicYear }).catch(() => {})
     if (validation.code === 'NO_DRAFT') {
       return NextResponse.json({ error: validation.error }, { status: 400 })
     }
@@ -94,6 +96,8 @@ export async function POST(req) {
 
   revalidateTag(`timetable-${schoolId}`)
   revalidateTag('timetable')
+
+  await rescanAndPersistDraftMeta(prisma, { schoolId, term, academicYear }).catch(() => {})
 
   return NextResponse.json({
     success: true,

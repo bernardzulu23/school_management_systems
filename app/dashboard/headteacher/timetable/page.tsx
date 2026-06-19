@@ -40,6 +40,10 @@ import {
   GenerationProgressModal,
   type GenerationProgressState,
 } from '@/components/timetable/GenerationProgressModal'
+import {
+  useTimetableDraftMeta,
+  notifyTimetableConflictsUpdated,
+} from '@/hooks/useTimetableDraftMeta'
 
 type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings' | 'allocations'
 
@@ -177,6 +181,14 @@ function HeadteacherTimetablePageContent() {
   const autoResolveConflicts = useTimetableStore((s) => s.autoResolveConflicts)
   const setStoreTimeSlots = useTimetableStore((s) => s.setTimeSlots)
   const setTeacherColors = useTimetableStore((s) => s.setTeacherColors)
+
+  const {
+    meta: draftMeta,
+    loading: draftMetaLoading,
+    rescan: rescanDraftConflicts,
+    refresh: refreshDraftMeta,
+    isFresh: draftMetaFresh,
+  } = useTimetableDraftMeta({ term, academicYear })
 
   const loadLockedPeriodAssignments = useCallback(async () => {
     try {
@@ -368,11 +380,17 @@ function HeadteacherTimetablePageContent() {
   )
 
   const stats = useMemo(() => {
-    const c = conflictCount()
+    const clientConflicts = conflictCount()
+    const serverErrors = draftMeta?.conflictErrors ?? 0
+    const serverWarnings = draftMeta?.conflictWarnings ?? 0
+    const displayConflicts = draftMetaFresh && draftMeta != null ? serverErrors : clientConflicts
     return {
       classCount: classes.length,
       teacherCount: teachers.length,
-      conflicts: c,
+      conflicts: displayConflicts,
+      serverErrors,
+      serverWarnings,
+      clientConflicts,
       published: isPublished,
       pending: pendingChanges.length,
       lastPublished: lastPublishedAt ? lastPublishedAt.toLocaleString() : null,
@@ -381,6 +399,8 @@ function HeadteacherTimetablePageContent() {
     classes.length,
     teachers.length,
     conflictCount,
+    draftMeta,
+    draftMetaFresh,
     isPublished,
     pendingChanges.length,
     lastPublishedAt,
@@ -557,7 +577,13 @@ function HeadteacherTimetablePageContent() {
     }
   }
 
-  const canPublish = stats.conflicts === 0 && assignments.length > 0
+  const canPublish =
+    assignments.length > 0 &&
+    (draftMetaFresh && draftMeta != null
+      ? draftMeta.canPublish && (draftMeta.conflictErrors ?? 0) === 0
+      : stats.clientConflicts === 0)
+
+  const conflictCentreHref = `/dashboard/headteacher/timetable/conflicts?term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}`
 
   const coverBaseSlots = useMemo(() => {
     const map = new Map<string, TimeSlot>()
@@ -672,6 +698,8 @@ function HeadteacherTimetablePageContent() {
       if (!res.ok) throw new Error(json?.error || 'Failed to save draft')
       toast.success(`Saved ${json.saved ?? 0} periods to database`)
       await loadFromApi({ term, academicYear, status: 'draft' })
+      await refreshDraftMeta(false)
+      notifyTimetableConflictsUpdated()
     } catch (e: any) {
       toast.error(e?.message || 'Save failed')
     }
@@ -740,6 +768,8 @@ function HeadteacherTimetablePageContent() {
       })
       toast.success(`Generated ${Number(json?.generated || 0)} periods — conflict-free`)
       await loadFromApi({ term, academicYear, status: 'draft' })
+      await refreshDraftMeta(true)
+      notifyTimetableConflictsUpdated()
       await loadLockedPeriodAssignments()
       setGridMode('wall')
       setTab('overview')
@@ -858,6 +888,8 @@ function HeadteacherTimetablePageContent() {
                   publish()
                   toast.success(`Published ${j.published ?? 0} periods`)
                   await loadFromApi({ term, academicYear, status: 'published' })
+                  await refreshDraftMeta(true)
+                  notifyTimetableConflictsUpdated()
                 } catch (e: any) {
                   toast.error(e?.message || 'Failed to publish to database')
                 } finally {
@@ -906,18 +938,33 @@ function HeadteacherTimetablePageContent() {
             <div className="text-xl font-bold text-royalPurple-text1">{stats.teacherCount}</div>
           </div>
           <div className="onboard-card p-4">
-            <div className="text-xs text-royalPurple-text3">Conflicts</div>
-            {stats.conflicts > 0 ? (
+            <div className="text-xs text-royalPurple-text3">Conflicts (server)</div>
+            {stats.serverErrors > 0 ? (
               <Link
-                href={`/dashboard/headteacher/timetable/conflicts?term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}`}
-                className={`text-xl font-bold kpi-fail hover:opacity-80 underline underline-offset-2 block`}
+                href={conflictCentreHref}
+                className="text-xl font-bold kpi-fail hover:opacity-80 underline underline-offset-2 block"
                 title="Open Conflict Resolution Centre"
               >
-                {stats.conflicts} →
+                {stats.serverErrors} error{stats.serverErrors === 1 ? '' : 's'} →
+              </Link>
+            ) : stats.serverWarnings > 0 ? (
+              <Link
+                href={conflictCentreHref}
+                className="text-xl font-bold kpi-warn hover:opacity-80 underline underline-offset-2 block"
+                title="Review warnings in Conflict Resolution Centre"
+              >
+                {stats.serverWarnings} warning{stats.serverWarnings === 1 ? '' : 's'} →
               </Link>
             ) : (
-              <div className={`text-xl font-bold kpi-pass`}>{stats.conflicts}</div>
+              <div className="text-xl font-bold kpi-pass">0</div>
             )}
+            {draftMetaFresh ? (
+              <div className="text-[10px] text-royalPurple-text3 mt-1">Last scan synced</div>
+            ) : stats.clientConflicts > 0 ? (
+              <div className="text-[10px] text-royalPurple-text3 mt-1">
+                {stats.clientConflicts} in editor (rescan to sync)
+              </div>
+            ) : null}
           </div>
           <div className="onboard-card p-4">
             <div className="text-xs text-royalPurple-text3">Status</div>
@@ -950,7 +997,15 @@ function HeadteacherTimetablePageContent() {
               { id: 'assignment', label: 'Teacher Period Assignment' },
               { id: 'overview', label: 'Overview' },
               { id: 'edit', label: 'Edit' },
-              { id: 'conflicts', label: 'Conflicts' },
+              {
+                id: 'conflicts',
+                label:
+                  stats.serverErrors > 0
+                    ? `Conflicts (${stats.serverErrors})`
+                    : stats.serverWarnings > 0
+                      ? `Conflicts (${stats.serverWarnings})`
+                      : 'Conflicts',
+              },
               { id: 'cover', label: 'Daily Cover' },
               { id: 'settings', label: 'Settings' },
               { id: 'allocations', label: 'Department Allocations' },
@@ -1401,6 +1456,57 @@ function HeadteacherTimetablePageContent() {
 
         {tab === 'conflicts' ? (
           <div className="space-y-4">
+            <div className="onboard-card p-4 border border-royalPurple-border/40">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <div className="font-semibold text-royalPurple-text1">Server conflict audit</div>
+                  <div className="text-sm text-royalPurple-text3 mt-1">
+                    {draftMetaLoading
+                      ? 'Loading draft conflict summary…'
+                      : draftMeta?.lastScannedAt
+                        ? `Last scanned ${new Date(draftMeta.lastScannedAt).toLocaleString()}`
+                        : 'No scan yet — generate a timetable or rescan'}
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-3 text-sm">
+                    <span
+                      className={
+                        stats.serverErrors > 0 ? 'text-red-600 font-medium' : 'text-green-700'
+                      }
+                    >
+                      {stats.serverErrors} error{stats.serverErrors === 1 ? '' : 's'}
+                    </span>
+                    <span className="text-amber-700">
+                      {stats.serverWarnings} warning{stats.serverWarnings === 1 ? '' : 's'}
+                    </span>
+                    {stats.clientConflicts > 0 ? (
+                      <span className="text-royalPurple-text3">
+                        {stats.clientConflicts} in local editor preview
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={draftMetaLoading}
+                    onClick={() => rescanDraftConflicts()}
+                    className="zsms-hover-raise"
+                  >
+                    Rescan
+                  </Button>
+                  <Link href={conflictCentreHref}>
+                    <Button size="sm" className="zsms-hover-raise">
+                      Open Conflict Centre
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+              <p className="text-xs text-royalPurple-text3 mt-3">
+                Apply fixes that persist to the database in the Conflict Resolution Centre. Auto-fix
+                below is a local preview only until you save the draft.
+              </p>
+            </div>
             {lastInfeasibility ? (
               <div className="onboard-card p-4 border border-red-200 bg-red-50">
                 <div className="font-semibold text-red-800">Last generation issue</div>

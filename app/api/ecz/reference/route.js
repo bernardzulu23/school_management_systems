@@ -5,8 +5,7 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { getAuthUser } from '@/lib/middleware/auth'
-import { canAccessEczFeatures } from '@/lib/subjects/resolveSubjectCatalog'
-import { loadSchoolLevelContext } from '@/lib/school/schoolLevelContext'
+import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 import {
   ECZ_COMMAND_TERMS,
   ECZ_BLOOM_TARGETS,
@@ -18,33 +17,31 @@ export async function GET(request) {
   const user = await getAuthUser(request)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const school = user.schoolId ? await loadSchoolLevelContext(user.schoolId) : null
-  const schoolLevel = String(school?.level || '').toLowerCase()
-  const includeConstructs =
-    !school ||
-    schoolLevel === 'secondary' ||
-    schoolLevel === 'combined' ||
-    canAccessEczFeatures({ schoolLevel: school.level })
+  const schoolId = String(user?.schoolId || '').trim()
+  if (!schoolId) {
+    return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  }
+
+  const eczCheck = await requireSecondarySchoolAccess(schoolId)
+  if (!eczCheck.ok) return eczCheck.response
 
   const [competencies, subjects] = await Promise.all([
     prisma.eczCompetency.findMany({
       orderBy: { name: 'asc' },
       select: { id: true, name: true, descriptor: true, category: true },
     }),
-    includeConstructs
-      ? prisma.eczSubjectConstruct.findMany({
-          orderBy: { subjectName: 'asc' },
-          select: {
-            id: true,
-            subjectName: true,
-            construct: true,
-            elementsOfConstruct: true,
-            sbaWeight: true,
-            examWeight: true,
-            hasMultipleChoice: true,
-          },
-        })
-      : Promise.resolve([]),
+    prisma.eczSubjectConstruct.findMany({
+      orderBy: { subjectName: 'asc' },
+      select: {
+        id: true,
+        subjectName: true,
+        construct: true,
+        elementsOfConstruct: true,
+        sbaWeight: true,
+        examWeight: true,
+        hasMultipleChoice: true,
+      },
+    }),
   ])
 
   return NextResponse.json({

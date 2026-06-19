@@ -6,6 +6,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { toAttemptSummary } from '@/lib/mock-exam'
+import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -18,6 +19,10 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'mock-exams')
+  if (typeBlock) return typeBlock
+
   const db = getTenantClient(schoolId)
 
   const student = await db.student.findFirst({

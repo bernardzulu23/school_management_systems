@@ -23,6 +23,7 @@ import {
   type DbConstraintLike,
   type RecipeLikeForRules,
 } from '@/lib/timetable/constraintRules'
+import { wouldStackSameDay, type MultiBlockPlacement } from '@/lib/timetable/scheduler'
 
 export interface TimeSlot {
   id: string
@@ -228,6 +229,7 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
   const teacherSlots = new Map<string, Set<string>>()
   const classSlots = new Map<string, Set<string>>()
   const teacherDayLoad = new Map<string, number>()
+  const placedMulti: MultiBlockPlacement[] = []
 
   for (const teacher of payload.teachers) {
     teacherSlots.set(teacher.id, new Set())
@@ -296,6 +298,48 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
     else teacherDayLoad.set(key, cur - 1)
   }
 
+  const wouldStackGreedy = (lesson: Lesson, day: string) => {
+    const size = Math.max(1, Number(lesson.consecutivePeriods) || 1)
+    if (size < 2) return false
+    return wouldStackSameDay(
+      {
+        teacherId: lesson.teacherId,
+        classId: lesson.classId,
+        subjectId: lesson.subjectId,
+        span: size,
+      },
+      day,
+      placedMulti
+    )
+  }
+
+  const markMulti = (lesson: Lesson, day: string) => {
+    const size = Math.max(1, Number(lesson.consecutivePeriods) || 1)
+    if (size < 2) return
+    placedMulti.push({
+      teacherId: lesson.teacherId,
+      classId: lesson.classId,
+      subjectId: lesson.subjectId,
+      day: normalizeDay(day),
+      span: size,
+    })
+  }
+
+  const unmarkMulti = (lesson: Lesson, day: string) => {
+    const size = Math.max(1, Number(lesson.consecutivePeriods) || 1)
+    if (size < 2) return
+    const nd = normalizeDay(day)
+    const idx = placedMulti.findIndex(
+      (p) =>
+        p.teacherId === lesson.teacherId &&
+        p.classId === lesson.classId &&
+        p.subjectId === lesson.subjectId &&
+        p.day === nd &&
+        p.span === size
+    )
+    if (idx >= 0) placedMulti.splice(idx, 1)
+  }
+
   const dayOrder = Array.from(byDay.keys()).sort(
     (a, b) => (DAY_ORDER[a] ?? 99) - (DAY_ORDER[b] ?? 99)
   )
@@ -347,10 +391,12 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
         const ids = run.map((s) => s.id)
         if (isBusy(lesson, ids)) continue
         if (!isSlotAllowed(lesson, run)) continue
+        if (wouldStackGreedy(lesson, day)) continue
 
         assignments[lesson.id] = ids[0]
         slotSpans[lesson.id] = ids
         markBusy(lesson, ids, day)
+        markMulti(lesson, day)
         assignedCount += 1
 
         if (solveDepthFirst(lessonIndex + 1)) return true
@@ -358,6 +404,7 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
         delete assignments[lesson.id]
         delete slotSpans[lesson.id]
         unmarkBusy(lesson, ids, day)
+        unmarkMulti(lesson, day)
         assignedCount -= 1
       }
     }
@@ -391,9 +438,11 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
           const ids = run.map((s) => s.id)
           if (isBusy(lesson, ids)) continue
           if (!isSlotAllowed(lesson, run)) continue
+          if (wouldStackGreedy(lesson, day)) continue
           assignments[lesson.id] = ids[0]
           slotSpans[lesson.id] = ids
           markBusy(lesson, ids, day)
+          markMulti(lesson, day)
           assignedCount += 1
           break
         }

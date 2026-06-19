@@ -5,6 +5,7 @@ import {
   consecutivePeriodsAreValid,
   generateTimetable,
   periodsOverlap,
+  wouldStackSameDay,
   type PlacedBlock,
   type SchedulerBlock,
 } from '@/lib/timetable/scheduler'
@@ -100,6 +101,79 @@ describe('canPlace', () => {
     const result = canPlace(other, { day: 'monday', startPeriod: 2, span: 1 }, placed)
     expect(result.ok).toBe(true)
   })
+
+  it('rejects second double same class+subject on same day (non-overlapping periods)', () => {
+    const doubleBlock: SchedulerBlock = {
+      blockId: 'b1',
+      allocationId: 'a1',
+      teacherId: 't1',
+      classId: 'c1',
+      subjectId: 's1',
+      span: 2,
+      unitType: 'DOUBLE',
+    }
+    const placed: PlacedBlock[] = [
+      {
+        ...doubleBlock,
+        blockId: 'existing',
+        day: 'thursday',
+        startPeriod: 1,
+        startMin: 0,
+        endMin: 80,
+        startTime: '07:00',
+        endTime: '08:20',
+      },
+    ]
+    const secondDouble: SchedulerBlock = {
+      ...doubleBlock,
+      blockId: 'b2',
+      teacherId: 't2',
+    }
+    const result = canPlace(secondDouble, { day: 'thursday', startPeriod: 3, span: 2 }, placed)
+    expect(result.ok).toBe(false)
+    if (!result.ok) expect(result.reason).toBe('same_day_multi_block')
+  })
+
+  it('rejects second double same teacher on same day', () => {
+    const doubleBlock: SchedulerBlock = {
+      blockId: 'b1',
+      allocationId: 'a1',
+      teacherId: 't1',
+      classId: 'c1',
+      subjectId: 's1',
+      span: 2,
+      unitType: 'DOUBLE',
+    }
+    const placed: PlacedBlock[] = [
+      {
+        ...doubleBlock,
+        blockId: 'existing',
+        day: 'friday',
+        startPeriod: 1,
+        startMin: 0,
+        endMin: 80,
+        startTime: '07:00',
+        endTime: '08:20',
+      },
+    ]
+    const otherClass: SchedulerBlock = {
+      ...doubleBlock,
+      blockId: 'b2',
+      classId: 'c2',
+      subjectId: 's2',
+    }
+    const result = canPlace(otherClass, { day: 'friday', startPeriod: 3, span: 2 }, placed)
+    expect(result.ok).toBe(false)
+    if (!result.ok) expect(result.reason).toBe('same_day_multi_block')
+  })
+})
+
+describe('wouldStackSameDay', () => {
+  it('returns false for single-period blocks', () => {
+    expect(
+      wouldStackSameDay({ teacherId: 't1', classId: 'c1', subjectId: 's1', span: 1 }, 'monday', [])
+    ).toBe(false)
+  })
 })
 
 describe('periodsOverlap', () => {
@@ -192,5 +266,50 @@ describe('generateTimetable', () => {
     )
     expect(result.stats.placed).toBe(2)
     expect(result.stats.unplaced).toBe(0)
+  })
+
+  it('spreads three doubles for one allocation across multiple days when feasible', () => {
+    const wednesday = [
+      {
+        type: 'period' as const,
+        periodNumber: 1,
+        start: 0,
+        end: 40,
+        startTime: '07:00',
+        endTime: '07:40',
+        durationMin: 40,
+        day: 'wednesday',
+      },
+      {
+        type: 'period' as const,
+        periodNumber: 2,
+        start: 40,
+        end: 80,
+        startTime: '07:40',
+        endTime: '08:20',
+        durationMin: 40,
+        day: 'wednesday',
+      },
+    ]
+    const slots = { ...daySlots, wednesday }
+
+    const result = generateTimetable(
+      [
+        {
+          id: 'a1',
+          teacherId: 't1',
+          classId: 'c1',
+          subjectId: 's1',
+          periodsPerWeek: 6,
+          blockType: 'DOUBLE',
+        },
+      ],
+      slots,
+      { singleMin: 40, maxExecutionMs: 8000 }
+    )
+
+    expect(result.stats.placed).toBeGreaterThan(0)
+    const daysUsed = new Set(result.placedBlocks.map((p) => p.day))
+    expect(daysUsed.size).toBeGreaterThanOrEqual(2)
   })
 })

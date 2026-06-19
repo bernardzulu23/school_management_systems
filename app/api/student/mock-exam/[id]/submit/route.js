@@ -9,6 +9,7 @@ import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { SubmitMockExamSchema, idString } from '@/lib/schemas'
 import { scoreMockExam } from '@/lib/assessment/auto-scorer'
 import { paperWithResults, toAttemptSummary } from '@/lib/mock-exam'
+import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
 
 export const POST = withErrorHandler(async function POST(request, { params }) {
   const routeParams = await params
@@ -22,6 +23,10 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'mock-exams')
+  if (typeBlock) return typeBlock
+
   const db = getTenantClient(schoolId)
 
   const parsedId = idString.safeParse(String(routeParams?.id || ''))

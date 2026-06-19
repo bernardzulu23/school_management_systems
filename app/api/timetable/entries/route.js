@@ -5,6 +5,8 @@ import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { validatePatchedDraftEntries } from '@/lib/timetable/draftHardConflictCheck'
+import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
 
 function normalizeDayOfWeek(day) {
   const d = String(day || '')
@@ -100,6 +102,36 @@ export async function PATCH(req) {
     return NextResponse.json({ error: 'No fields to update' }, { status: 400 })
   }
 
+  const allDraft = await prisma.timetableAllocationEntry.findMany({
+    where: {
+      schoolId,
+      term: entry.term,
+      academicYear: entry.academicYear,
+      status: 'draft',
+    },
+    include: {
+      allocation: {
+        include: {
+          teacher: { select: { id: true, name: true } },
+          subject: { select: { id: true, name: true, code: true } },
+          class: { select: { id: true, name: true } },
+        },
+      },
+    },
+  })
+
+  const hardConflicts = validatePatchedDraftEntries(allDraft, id, data)
+  if (hardConflicts.length > 0) {
+    return NextResponse.json(
+      {
+        error: 'This change would introduce a hard timetable conflict.',
+        hardConflicts: hardConflicts.slice(0, 10),
+        code: 'PATCH_BLOCKED_BY_CONFLICTS',
+      },
+      { status: 422 }
+    )
+  }
+
   const updated = await prisma.timetableAllocationEntry.update({
     where: { id },
     data,
@@ -112,6 +144,12 @@ export async function PATCH(req) {
         },
       },
     },
+  })
+
+  await rescanAndPersistDraftMeta(prisma, {
+    schoolId,
+    term: entry.term,
+    academicYear: entry.academicYear,
   })
 
   return NextResponse.json({ entry: updated })

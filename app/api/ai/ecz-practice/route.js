@@ -18,6 +18,7 @@ import { ECZPracticePaperSchema } from '@/lib/ai/schemas'
 import { buildEczPracticePrompt } from '@/lib/ai/subject-adaptive-prompts'
 import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
 import { isValidEczExamLevel, normalizeEczExamLevel } from '@/lib/ecz/ecz-practice-levels'
+import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 import {
   resolveAssessmentMode,
   normalizeQuestionsForMode,
@@ -52,6 +53,9 @@ export const POST = withAILimits(async function POST(request) {
 
   const schoolId = String(user.schoolId || '').trim()
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const eczCheck = await requireSecondarySchoolAccess(schoolId)
+  if (!eczCheck.ok) return eczCheck.response
 
   const school = await getSchoolPlanForUsage(schoolId)
   if (!school) return NextResponse.json({ error: 'School not found' }, { status: 404 })

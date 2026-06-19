@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { api } from '@/lib/api'
+import { notifyTimetableConflictsUpdated } from '@/hooks/useTimetableDraftMeta'
 import {
   AlertTriangle,
   CheckCircle,
@@ -40,10 +42,9 @@ function TimetableConflictsContent() {
     setLoading(true)
     setError(null)
     try {
-      const qs = new URLSearchParams({ term, academicYear })
-      const res = await fetch(`/api/timetable/conflicts?${qs}`)
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Failed to fetch conflicts')
+      const res = await api.scanTimetableConflicts({ term, academicYear })
+      const data = res?.data ?? res
+      if (!data || data.error) throw new Error(data?.error || 'Failed to fetch conflicts')
       setSummary(data)
     } catch (e) {
       setError(e?.message || 'Failed to fetch conflicts')
@@ -60,15 +61,12 @@ function TimetableConflictsContent() {
     setResolving(conflictId)
     setSuccessMsg(null)
     try {
-      const res = await fetch('/api/timetable/conflicts/resolve', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, ...payload }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Resolution failed')
+      const res = await api.resolveTimetableConflict({ action, ...payload })
+      const data = res?.data ?? res
+      if (!data?.success) throw new Error(data?.error || 'Resolution failed')
       setSuccessMsg(data.message)
       setExpanded(null)
+      notifyTimetableConflictsUpdated()
       await fetchConflicts()
     } catch (e) {
       setError(e?.message || 'Resolution failed')

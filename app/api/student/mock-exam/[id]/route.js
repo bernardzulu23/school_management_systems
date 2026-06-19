@@ -7,6 +7,7 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { idString } from '@/lib/schemas'
 import { sanitizePaperForStudent, paperWithResults, toAttemptSummary } from '@/lib/mock-exam'
+import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
   const routeParams = await params
@@ -20,6 +21,10 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'mock-exams')
+  if (typeBlock) return typeBlock
+
   const db = getTenantClient(schoolId)
 
   const parsedId = idString.safeParse(String(routeParams?.id || ''))

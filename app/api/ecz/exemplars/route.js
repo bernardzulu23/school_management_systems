@@ -3,6 +3,8 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 
 export const GET = withErrorHandler(async function GET(request) {
@@ -23,6 +25,14 @@ export const GET = withErrorHandler(async function GET(request) {
   ) {
     throw new ApiError('Forbidden', 403)
   }
+
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) throw new ApiError('School context required', 400)
+
+  const eczCheck = await requireSecondarySchoolAccess(schoolId)
+  if (!eczCheck.ok) return eczCheck.response
 
   const { searchParams } = new URL(request.url)
   const subject = String(searchParams.get('subject') || '').trim()

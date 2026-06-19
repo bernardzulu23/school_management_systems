@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-06-19T20:27:20.618Z
+Generated: 2026-06-19T21:08:02.694Z
 
-Total route files: **344**
+Total route files: **345**
 
 ## Quick index
 
@@ -79,7 +79,7 @@ Total route files: **344**
 | `/api/teacher-performance`  |     4 |
 | `/api/teachers`             |     3 |
 | `/api/teaching-assignments` |     1 |
-| `/api/timetable`            |    24 |
+| `/api/timetable`            |    25 |
 | `/api/transport`            |     2 |
 | `/api/users`                |     3 |
 | `/api/ussd`                 |     1 |
@@ -722,32 +722,33 @@ Total route files: **344**
 
 ## /api/timetable
 
-| Method             | Route                                      | Summary                                                                                                                             |
-| ------------------ | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
-| GET, POST          | `/api/timetable/allocations`               | —                                                                                                                                   |
-| DELETE             | `/api/timetable/allocations/:id`           | —                                                                                                                                   |
-| POST               | `/api/timetable/allocations/push`          | —                                                                                                                                   |
-| POST               | `/api/timetable/assignTeacherToPeriod`     | —                                                                                                                                   |
-| GET                | `/api/timetable/classes`                   | —                                                                                                                                   |
-| GET, POST          | `/api/timetable/config`                    | —                                                                                                                                   |
-| GET                | `/api/timetable/conflicts`                 | GET /api/timetable/conflicts?term=Term+1&academicYear=2026 Scan draft timetable allocation entries and return structured conflicts. |
-| POST               | `/api/timetable/conflicts/resolve`         | POST /api/timetable/conflicts/resolve Apply a resolution action to draft timetable allocation entries.                              |
-| POST               | `/api/timetable/conflicts/seed-test`       | POST /api/timetable/conflicts/seed-test Development-only mock conflicts for UI testing.                                             |
-| GET, PATCH, DELETE | `/api/timetable/entries`                   | —                                                                                                                                   |
-| POST               | `/api/timetable/entries/sync-draft`        | POST /api/timetable/entries/sync-draft Persist in-memory solver/UI assignments to TimetableAllocationEntry (draft).                 |
-| GET, POST          | `/api/timetable/generate`                  | —                                                                                                                                   |
-| GET, POST          | `/api/timetable/notifications`             | —                                                                                                                                   |
-| GET                | `/api/timetable/periods`                   | —                                                                                                                                   |
-| POST               | `/api/timetable/publish`                   | —                                                                                                                                   |
-| POST               | `/api/timetable/solver/generate`           | POST /api/timetable/solver/generate Greedy timetable solver — runs on Vercel + Neon with no external services.                      |
-| POST               | `/api/timetable/solver/ortools`            | POST /api/timetable/solver/ortools Tries OR-Tools service (ORTOOLS_SOLVER_URL) then falls back to greedy solver.                    |
-| GET, POST          | `/api/timetable/teacher-colors`            | —                                                                                                                                   |
-| PUT                | `/api/timetable/teacher-colors/:teacherId` | —                                                                                                                                   |
-| GET                | `/api/timetable/teacherPeriodAssignments`  | —                                                                                                                                   |
-| GET                | `/api/timetable/timeSlots`                 | —                                                                                                                                   |
-| PATCH              | `/api/timetable/timeSlots/:id`             | —                                                                                                                                   |
-| POST               | `/api/timetable/version/publish`           | Legacy TimetableVersion publish (separate from TimetableAllocationEntry publish).                                                   |
-| GET                | `/api/timetable/view`                      | —                                                                                                                                   |
+| Method             | Route                                      | Summary                                                                                                                                                |
+| ------------------ | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| GET, POST          | `/api/timetable/allocations`               | —                                                                                                                                                      |
+| DELETE             | `/api/timetable/allocations/:id`           | —                                                                                                                                                      |
+| POST               | `/api/timetable/allocations/push`          | —                                                                                                                                                      |
+| POST               | `/api/timetable/assignTeacherToPeriod`     | —                                                                                                                                                      |
+| GET                | `/api/timetable/classes`                   | —                                                                                                                                                      |
+| GET, POST          | `/api/timetable/config`                    | —                                                                                                                                                      |
+| GET                | `/api/timetable/conflicts`                 | GET /api/timetable/conflicts?term=Term+1&academicYear=2026 Scan draft timetable allocation entries and return structured conflicts.                    |
+| POST               | `/api/timetable/conflicts/resolve`         | POST /api/timetable/conflicts/resolve Apply a resolution action to draft timetable allocation entries.                                                 |
+| POST               | `/api/timetable/conflicts/seed-test`       | POST /api/timetable/conflicts/seed-test Development-only mock conflicts for UI testing.                                                                |
+| GET                | `/api/timetable/draft-meta`                | GET /api/timetable/draft-meta?term=Term+1&academicYear=2026&refresh=false Lightweight read of TimetableDraftMeta (no full rescan unless refresh=true). |
+| GET, PATCH, DELETE | `/api/timetable/entries`                   | —                                                                                                                                                      |
+| POST               | `/api/timetable/entries/sync-draft`        | POST /api/timetable/entries/sync-draft Persist in-memory solver/UI assignments to TimetableAllocationEntry (draft).                                    |
+| GET, POST          | `/api/timetable/generate`                  | —                                                                                                                                                      |
+| GET, POST          | `/api/timetable/notifications`             | —                                                                                                                                                      |
+| GET                | `/api/timetable/periods`                   | —                                                                                                                                                      |
+| POST               | `/api/timetable/publish`                   | —                                                                                                                                                      |
+| POST               | `/api/timetable/solver/generate`           | POST /api/timetable/solver/generate Greedy timetable solver — runs on Vercel + Neon with no external services.                                         |
+| POST               | `/api/timetable/solver/ortools`            | POST /api/timetable/solver/ortools Tries OR-Tools service (ORTOOLS_SOLVER_URL) then falls back to greedy solver.                                       |
+| GET, POST          | `/api/timetable/teacher-colors`            | —                                                                                                                                                      |
+| PUT                | `/api/timetable/teacher-colors/:teacherId` | —                                                                                                                                                      |
+| GET                | `/api/timetable/teacherPeriodAssignments`  | —                                                                                                                                                      |
+| GET                | `/api/timetable/timeSlots`                 | —                                                                                                                                                      |
+| PATCH              | `/api/timetable/timeSlots/:id`             | —                                                                                                                                                      |
+| POST               | `/api/timetable/version/publish`           | Legacy TimetableVersion publish (separate from TimetableAllocationEntry publish).                                                                      |
+| GET                | `/api/timetable/view`                      | —                                                                                                                                                      |
 
 ## /api/transport
 

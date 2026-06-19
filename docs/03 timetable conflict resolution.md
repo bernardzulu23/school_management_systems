@@ -1,8 +1,8 @@
 # ZSMS — Timetable Conflict Resolution
 
 **Last updated:** 2026-06-12  
-**Document version:** 3.0 (Phase 2 implemented)  
-**Implementation phase:** Phase 1 + Phase 2 complete
+**Document version:** 3.1 (Phase 3 integration)  
+**Implementation phase:** Phase 1 + Phase 2 + **Phase 3** (UI/meta wiring)
 
 This document is the **timetable conflict detection and resolution spec** for ZSMS. It was reviewed against the live codebase (`lib/timetable/*`, `app/dashboard/headteacher/timetable/page.tsx`, `app/api/timetable/*`, `prisma/schema.prisma`). **Phase 2** adds server-side conflict audit APIs, persisted draft metadata, and a dedicated Conflict Resolution Centre page.
 
@@ -307,7 +307,27 @@ Requires `Classroom` assignments on entries (`TimetableEntry.classroomId` exists
 
 ## Phase 2 — Navigation
 
-Sidebar: **Timetable Conflicts** → `/dashboard/headteacher/timetable/conflicts`. Optional future: dynamic badge from `TimetableDraftMeta.conflictCount`.
+Sidebar: **Timetable Conflicts** → `/dashboard/headteacher/timetable/conflicts` with live badge from `GET /api/timetable/draft-meta` (errors red, warnings amber). Main timetable hub KPI uses server `conflictErrors` / `conflictWarnings`; Conflicts tab shows rescan + link to Conflict Centre.
+
+---
+
+## Phase 3 — UI / meta integration (implemented)
+
+| Item                                     | Detail                                                                                  |
+| ---------------------------------------- | --------------------------------------------------------------------------------------- |
+| `GET /api/timetable/draft-meta`          | Lightweight read of `TimetableDraftMeta`; `?refresh=true` runs full audit               |
+| `draftMeta` on `GET /api/timetable/view` | Included for headteacher/admin/HOD when term/year provided                              |
+| `hooks/useTimetableDraftMeta.ts`         | Client hook + `timetable-conflicts-updated` invalidation event                          |
+| Main timetable KPI                       | Server error/warning counts; client editor count shown as preview when stale            |
+| `canPublish`                             | Uses fresh server meta when available; falls back to client hard count                  |
+| Sidebar badge                            | Timetable Conflicts nav item shows error/warning count                                  |
+| `PATCH /api/timetable/entries`           | Rejects patches that introduce hard conflicts; rescans meta                             |
+| `POST /api/timetable/entries/sync-draft` | Full `validateTimetable` hard gate (not just grade double-book)                         |
+| `APPLY_SUGGESTION` resolve action        | Alias of move-to-slot for detector suggestions                                          |
+| Suggestion enrichment                    | `conflictAudit.js` attaches `CollisionDetector.suggestAlternatives` on matrix conflicts |
+| Publish meta sync                        | `POST /api/timetable/publish` refreshes `TimetableDraftMeta` on pass or fail            |
+
+**Note:** Auto-fix on the main Conflicts tab remains a **local preview** until draft is saved or fixes are applied in Conflict Centre.
 
 ---
 
@@ -322,18 +342,19 @@ npx prisma generate
 
 ## Implementation checklist (Phase 2)
 
-| Step | Item                                                 | Status     |
-| ---- | ---------------------------------------------------- | ---------- |
-| 1    | `lib/timetable/conflictAudit.js`                     | ✅         |
-| 2    | `GET /api/timetable/conflicts`                       | ✅         |
-| 3    | Server validation on `PATCH /api/timetable/entries`  | Planned    |
-| 4    | `POST /api/timetable/conflicts/resolve`              | ✅         |
-| 5    | Workload / missing-period audits                     | ✅ partial |
-| 6    | `TimetableDraftMeta` + post-generate persist         | ✅         |
-| 7    | Align `sync-draft` with full hard-conflict rejection | Planned    |
-| 8    | HOD read-only conflict summary                       | Planned    |
-| 9    | `USER_GUIDE.md` conflict centre section              | Planned    |
-| 10   | `SYSTEM_DOCUMENTATION.md` + API routes               | ✅         |
+| Step | Item                                                 | Status                      |
+| ---- | ---------------------------------------------------- | --------------------------- |
+| 1    | `lib/timetable/conflictAudit.js`                     | ✅                          |
+| 2    | `GET /api/timetable/conflicts`                       | ✅                          |
+| 3    | Server validation on `PATCH /api/timetable/entries`  | ✅                          |
+| 4    | `POST /api/timetable/conflicts/resolve`              | ✅                          |
+| 5    | Workload / missing-period audits                     | ✅ partial                  |
+| 6    | `TimetableDraftMeta` + post-generate persist         | ✅                          |
+| 7    | Align `sync-draft` with full hard-conflict rejection | ✅                          |
+| 8    | HOD read-only conflict summary                       | ✅ (draft-meta counts only) |
+| 9    | `USER_GUIDE.md` conflict centre section              | Planned                     |
+| 10   | `SYSTEM_DOCUMENTATION.md` + API routes               | ✅                          |
+| 11   | Phase 3: draft-meta API, main UI KPI, sidebar badge  | ✅                          |
 
 ---
 
@@ -376,4 +397,4 @@ const hard = getHardConflicts(validateTimetable(assignments, { includeRoomChecks
 
 ---
 
-_Phase 1 delivers collision detection, auto-resolve, hybrid generation with validation, Conflicts tab UI, and publish hard-gating. Phase 2 adds server audit APIs, Conflict Resolution Centre, and `TimetableDraftMeta` persistence._
+_Phase 1 delivers collision detection, auto-resolve, hybrid generation with validation, Conflicts tab UI, and publish hard-gating. Phase 2 adds server audit APIs, Conflict Resolution Centre, and `TimetableDraftMeta` persistence. Phase 3 wires the main timetable hub and sidebar to server conflict meta and hardens entry mutations._

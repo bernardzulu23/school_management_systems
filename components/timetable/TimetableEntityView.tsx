@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import type { Assignment, Class, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
@@ -10,10 +10,13 @@ import {
   isPrimarySlotForAssignment,
   rowSpanForAssignment,
 } from '@/lib/timetable/gridHelpers'
+import { periodTypeBadge } from '@/lib/timetable/doublePeriodUtils'
 import { resolveCardColor } from '@/lib/timetable/cardColors'
 import { teacherDisplayName } from '@/lib/timetable/teacherDisplay'
 
 export type EntityViewMode = 'teacher' | 'class'
+
+const ROW_H = 72
 
 function dayOrder(day: string) {
   const map: Record<string, number> = {
@@ -90,6 +93,14 @@ export function TimetableEntityView({
       ? teacherName.get(selectedId) || 'Teacher'
       : className.get(selectedId) || 'Class'
 
+  const primaryAssignmentsForCell = (day: string, slot: TimeSlot) =>
+    filtered.filter(
+      (a) =>
+        String(a.dayOfWeek).toLowerCase() === String(day).toLowerCase() &&
+        assignmentOverlapsSlot(a, day, slot) &&
+        isPrimarySlotForAssignment(a, slot)
+    )
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-end gap-3">
@@ -143,84 +154,105 @@ export function TimetableEntityView({
             ))}
           </div>
 
-          {bellRows.map((slot) => (
-            <div
-              key={`${slot.period}-${slot.startTime}`}
-              className="grid border-b border-royalPurple-border/20"
-              style={{ gridTemplateColumns: `120px repeat(${days.length}, minmax(140px, 1fr))` }}
-            >
-              <div className="px-3 py-2 text-xs text-royalPurple-text3">
-                P{slot.period}
-                <div>
-                  {slot.startTime}–{slot.endTime}
-                </div>
-              </div>
-              {days.map((day) => {
-                const cellAssignments = filtered.filter(
-                  (a) =>
-                    String(a.dayOfWeek).toLowerCase() === String(day).toLowerCase() &&
-                    assignmentOverlapsSlot(a, day, slot) &&
-                    isPrimarySlotForAssignment(a, slot)
-                )
-                const continued = isContinuationSlot(day, slot, filtered, bellRows)
-                if (continued) {
-                  return <div key={day} className="border-l border-royalPurple-border/10" />
-                }
-                return (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: `120px repeat(${days.length}, minmax(140px, 1fr))`,
+              gridAutoRows: `minmax(${ROW_H}px, auto)`,
+            }}
+          >
+            {bellRows.map((slot, rowIndex) => {
+              const gridRow = rowIndex + 1
+              return (
+                <Fragment key={`${slot.period}-${slot.startTime}`}>
                   <div
-                    key={day}
-                    className="px-2 py-2 border-l border-royalPurple-border/10 min-h-[72px]"
+                    className="px-3 py-2 text-xs text-royalPurple-text3 border-b border-r border-royalPurple-border/10"
+                    style={{ gridRow, gridColumn: 1 }}
                   >
-                    {cellAssignments.map((a) => {
-                      const rowConflicts = conflicts.get(String(a.id)) || []
-                      const colors = resolveCardColor(
-                        a.subjectId,
-                        a.teacherId,
-                        teacherColors[String(a.teacherId || '')]?.colorHex
-                      )
-                      const span = rowSpanForAssignment(a, bellRows)
-                      return (
-                        <div
-                          key={String(a.id)}
-                          className="rounded-lg border px-2 py-1.5 text-xs mb-1"
-                          style={{
-                            borderColor: rowConflicts.length ? '#f59e0b' : colors.border,
-                            background: colors.bg,
-                            minHeight: span > 1 ? `${span * 72 - 8}px` : undefined,
-                          }}
-                        >
-                          <div className="font-semibold text-royalPurple-text1 truncate">
-                            {(a as any).subjectName ||
-                              (mode === 'class'
-                                ? teacherName.get(String(a.teacherId))
-                                : className.get(String(a.classId)))}
-                          </div>
-                          <div
-                            className="text-royalPurple-text3 truncate font-semibold"
-                            title={
-                              mode === 'teacher'
-                                ? className.get(String(a.classId)) || 'Class'
-                                : teacherName.get(String(a.teacherId)) || 'Teacher'
-                            }
-                          >
-                            {mode === 'teacher'
-                              ? className.get(String(a.classId))
-                              : teacherDisplayName(
-                                  teacherName.get(String(a.teacherId)),
-                                  'initials'
-                                )}
-                          </div>
-                          {rowConflicts.length ? (
-                            <div className="text-[10px] text-amber-500 mt-0.5">Conflict</div>
-                          ) : null}
-                        </div>
-                      )
-                    })}
+                    P{slot.period}
+                    <div>
+                      {slot.startTime}–{slot.endTime}
+                    </div>
                   </div>
-                )
-              })}
-            </div>
-          ))}
+                  {days.map((day, dayIndex) => {
+                    const cellAssignments = primaryAssignmentsForCell(day, slot)
+                    const continued =
+                      cellAssignments.length === 0 &&
+                      isContinuationSlot(day, slot, filtered, bellRows)
+                    if (continued) return null
+
+                    const maxSpan = cellAssignments.length
+                      ? Math.max(...cellAssignments.map((a) => rowSpanForAssignment(a, bellRows)))
+                      : 1
+
+                    return (
+                      <div
+                        key={day}
+                        className="px-2 py-2 border-b border-l border-royalPurple-border/10 flex flex-col"
+                        style={{
+                          gridRow: maxSpan > 1 ? `${gridRow} / span ${maxSpan}` : gridRow,
+                          gridColumn: dayIndex + 2,
+                        }}
+                      >
+                        {cellAssignments.length ? (
+                          cellAssignments.map((a) => {
+                            const rowConflicts = conflicts.get(String(a.id)) || []
+                            const colors = resolveCardColor(
+                              a.subjectId,
+                              a.teacherId,
+                              teacherColors[String(a.teacherId || '')]?.colorHex
+                            )
+                            const span = rowSpanForAssignment(a, bellRows)
+                            const badge = span > 1 ? periodTypeBadge(a.periodType, span) : ''
+                            return (
+                              <div
+                                key={String(a.id)}
+                                className="rounded-lg border px-2 py-1.5 text-xs mb-1 h-full min-h-[64px] flex flex-col flex-1"
+                                style={{
+                                  borderColor: rowConflicts.length ? '#f59e0b' : colors.border,
+                                  background: colors.bg,
+                                }}
+                              >
+                                <div className="font-semibold text-royalPurple-text1 truncate">
+                                  {(a as any).subjectName ||
+                                    (mode === 'class'
+                                      ? teacherName.get(String(a.teacherId))
+                                      : className.get(String(a.classId)))}
+                                  {badge ? (
+                                    <span className="ml-1 text-[10px] opacity-70">{badge}</span>
+                                  ) : null}
+                                </div>
+                                <div
+                                  className="text-royalPurple-text3 truncate font-semibold"
+                                  title={
+                                    mode === 'teacher'
+                                      ? className.get(String(a.classId)) || 'Class'
+                                      : teacherName.get(String(a.teacherId)) || 'Teacher'
+                                  }
+                                >
+                                  {mode === 'teacher'
+                                    ? className.get(String(a.classId))
+                                    : teacherDisplayName(
+                                        teacherName.get(String(a.teacherId)),
+                                        'initials'
+                                      )}
+                                </div>
+                                {rowConflicts.length ? (
+                                  <div className="text-[10px] text-amber-500 mt-0.5">Conflict</div>
+                                ) : null}
+                              </div>
+                            )
+                          })
+                        ) : (
+                          <div className="text-xs text-royalPurple-text3">—</div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </Fragment>
+              )
+            })}
+          </div>
         </div>
       </div>
     </div>

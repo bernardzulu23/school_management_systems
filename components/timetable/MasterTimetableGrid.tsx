@@ -1,6 +1,6 @@
 'use client'
 
-import { memo, useMemo, useState } from 'react'
+import { Fragment, memo, useMemo, useState } from 'react'
 import type {
   Assignment,
   Class,
@@ -20,6 +20,7 @@ import {
   isContinuationSlot,
   rowSpanForAssignment,
 } from '@/lib/timetable/gridHelpers'
+import { periodTypeBadge } from '@/lib/timetable/doublePeriodUtils'
 import Modal from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 
@@ -192,22 +193,24 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
       teacherColors[String(a.teacherId || '')]?.colorHex
     )
     const span = slotRowSpan > 1 ? slotRowSpan : rowSpanForAssignment(a, baseSlots)
+    const badge = span > 1 ? periodTypeBadge((a as any).periodType, span) : ''
 
     return (
       <button
         key={String(a.id)}
         type="button"
         onClick={() => onCellClick(a)}
-        className="w-full text-left rounded-xl px-3 py-2 border hover:opacity-95 transition-colors zsms-hover-raise relative z-[1]"
+        className="w-full h-full min-h-[80px] text-left rounded-xl px-3 py-2 border hover:opacity-95 transition-colors zsms-hover-raise relative z-[1]"
         style={{
           borderColor: border || cardColors.border,
           background: cardColors.bg,
-          minHeight: span > 1 ? `${span * rowH - 16}px` : undefined,
-          marginBottom: span > 1 ? `-${(span - 1) * rowH}px` : undefined,
         }}
       >
         <div className="font-bold text-[13px] text-royalPurple-text1 truncate">
           {className.get(String(a.classId)) || 'Class'}
+          {badge ? (
+            <span className="ml-1 text-[10px] font-semibold opacity-70">{badge}</span>
+          ) : null}
         </div>
         <div className="text-[12px] text-royalPurple-text2 truncate">
           {subjectLabel.get(String(a.subjectId)) || (a as any).subjectName || 'Subject'}
@@ -285,18 +288,25 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
             </div>
           </div>
 
-          <div style={{ paddingTop: padTop, paddingBottom: padBottom }}>
-            {visibleSlots.map((slot) => {
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: `200px repeat(${effectiveDays.length}, minmax(210px, 1fr))`,
+              gridAutoRows: `minmax(${rowH}px, auto)`,
+              paddingTop: padTop,
+              paddingBottom: padBottom,
+            }}
+          >
+            {visibleSlots.map((slot, rowIndex) => {
               const isBreak = Boolean(slot.isBreak)
+              const gridRow = rowIndex + 1
+
               return (
-                <div
-                  key={slotKey(slot)}
-                  className={`grid border-b ${isBreak ? 'border-royalPurple-border/40 bg-slate-100/70' : 'border-royalPurple-border/10'}`}
-                  style={{
-                    gridTemplateColumns: `200px repeat(${effectiveDays.length}, minmax(210px, 1fr))`,
-                  }}
-                >
-                  <div className="px-4 py-3">
+                <Fragment key={slotKey(slot)}>
+                  <div
+                    className={`px-4 py-3 border-b border-r ${isBreak ? 'bg-slate-100/70 border-royalPurple-border/40' : 'border-royalPurple-border/10'}`}
+                    style={{ gridRow, gridColumn: 1 }}
+                  >
                     <div className="font-semibold text-royalPurple-text1 text-sm">
                       {slot.label || (isBreak ? 'BREAK' : `Period ${slot.period}`)}
                     </div>
@@ -307,37 +317,39 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
 
                   {isBreak ? (
                     <div
-                      className="px-3 py-3 border-l border-royalPurple-border/20 flex items-center justify-center text-xs font-semibold text-royalPurple-text3 uppercase tracking-widest"
-                      style={{ gridColumn: `2 / span ${effectiveDays.length}` }}
+                      className="px-3 py-3 border-b border-royalPurple-border/40 flex items-center justify-center text-xs font-semibold text-royalPurple-text3 uppercase tracking-widest bg-slate-100/70"
+                      style={{
+                        gridRow,
+                        gridColumn: `2 / span ${effectiveDays.length}`,
+                      }}
                     >
                       {slot.label || 'Break / Lunch'}
                     </div>
                   ) : (
-                    effectiveDays.map((day) => {
+                    effectiveDays.map((day, dayIndex) => {
                       const key = `${day}|${slot.startTime}|${slot.endTime}|${slot.period}`
-                      const continued = isContinuationSlot(
-                        day,
-                        slot,
-                        filteredAssignments,
-                        baseSlots
-                      )
-                      if (continued) {
-                        return (
-                          <div
-                            key={key}
-                            className="px-3 py-3 border-l border-royalPurple-border/20"
-                            aria-hidden
-                          />
-                        )
-                      }
                       const list = cellAssignments.get(key) || []
+                      const continued =
+                        list.length === 0 &&
+                        isContinuationSlot(day, slot, filteredAssignments, baseSlots)
+                      if (continued) return null
+
+                      const maxSpan = list.length
+                        ? Math.max(...list.map((a) => rowSpanForAssignment(a, baseSlots)))
+                        : 1
+                      const gridColumn = dayIndex + 2
+
                       return (
                         <div
                           key={key}
-                          className="px-3 py-3 border-l border-royalPurple-border/20 relative overflow-visible"
+                          className="px-3 py-3 border-b border-l border-royalPurple-border/10 relative overflow-visible flex flex-col"
+                          style={{
+                            gridRow: maxSpan > 1 ? `${gridRow} / span ${maxSpan}` : gridRow,
+                            gridColumn,
+                          }}
                         >
                           {list.length ? (
-                            <div className="space-y-2">
+                            <div className="space-y-2 flex-1 flex flex-col">
                               {list.map((a) =>
                                 renderAssignment(a, rowSpanForAssignment(a, baseSlots))
                               )}
@@ -349,7 +361,7 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
                       )
                     })
                   )}
-                </div>
+                </Fragment>
               )
             })}
           </div>

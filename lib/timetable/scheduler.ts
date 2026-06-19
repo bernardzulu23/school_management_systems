@@ -4,6 +4,8 @@
  * Hard constraints (never violated):
  *  1. Teacher cannot teach two grades at the same time.
  *  2. Grade cannot have two subjects at the same time.
+ *  3. Multi-period blocks (double/triple) for the same class+subject or teacher
+ *     cannot stack on the same day (spread across weekdays).
  *
  * Soft constraints (optional during search via strictSoftConstraints):
  *  - Same subject twice on same day for same grade
@@ -149,6 +151,71 @@ function buildReservedSet(locks: LockedSlotReservation[] = []) {
 
 type CanPlaceResult = { ok: true } | { ok: false; reason: string }
 
+export type MultiBlockPlacement = {
+  teacherId: string
+  classId: string
+  subjectId: string
+  day: string
+  span: number
+}
+
+/** Days apart on the Mon–Fri calendar (0 = same day). */
+export function daysApart(day1: string, day2: string): number {
+  const order: Record<string, number> = {
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6,
+    sunday: 7,
+  }
+  const a = order[normalizeDay(day1)] ?? 0
+  const b = order[normalizeDay(day2)] ?? 0
+  if (!a || !b) return 99
+  return Math.abs(a - b)
+}
+
+/**
+ * True when placing a multi-period block on `day` would stack doubles/triples
+ * for the same class+subject or the same teacher on that day.
+ */
+export function wouldStackSameDay(
+  block: Pick<SchedulerBlock, 'teacherId' | 'classId' | 'subjectId' | 'span'>,
+  day: string,
+  placed: MultiBlockPlacement[]
+): boolean {
+  const span = Math.max(1, Number(block.span) || 1)
+  if (span < 2) return false
+  const nd = normalizeDay(day)
+
+  for (const pl of placed) {
+    if (normalizeDay(pl.day) !== nd) continue
+    if (Math.max(1, pl.span) < 2) continue
+    if (pl.classId === block.classId && pl.subjectId === block.subjectId) return true
+    if (pl.teacherId === block.teacherId) return true
+  }
+  return false
+}
+
+/** Soft preference: same-subject multi-blocks should be ≥2 days apart when possible. */
+export function tooCloseSameSubject(
+  block: Pick<SchedulerBlock, 'classId' | 'subjectId' | 'span'>,
+  day: string,
+  placed: MultiBlockPlacement[]
+): boolean {
+  const span = Math.max(1, Number(block.span) || 1)
+  if (span < 2) return false
+  const nd = normalizeDay(day)
+  return placed.some(
+    (pl) =>
+      Math.max(1, pl.span) >= 2 &&
+      pl.classId === block.classId &&
+      pl.subjectId === block.subjectId &&
+      daysApart(pl.day, nd) < 2
+  )
+}
+
 export function canPlace(
   block: SchedulerBlock,
   slot: { day: string; startPeriod: number; span: number },
@@ -191,6 +258,10 @@ export function canPlace(
         return { ok: false, reason: 'grade_conflict' }
       }
     }
+  }
+
+  if (span >= 2 && wouldStackSameDay(block, day, placed)) {
+    return { ok: false, reason: 'same_day_multi_block' }
   }
 
   if (strictSoft) {
@@ -443,7 +514,10 @@ export function generateTimetableOnce(
       if (prefA !== prefB) return prefA - prefB
       const loadA = placed.filter((p) => p.teacherId === block.teacherId && p.day === a.day).length
       const loadB = placed.filter((p) => p.teacherId === block.teacherId && p.day === b.day).length
-      return loadA - loadB
+      if (loadA !== loadB) return loadA - loadB
+      const closeA = tooCloseSameSubject(block, a.day, placed) ? 1 : 0
+      const closeB = tooCloseSameSubject(block, b.day, placed) ? 1 : 0
+      return closeA - closeB
     })
 
     for (const cand of candidates) {

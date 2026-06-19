@@ -284,6 +284,12 @@ export interface Assignment {
   notes?: string
   /** Whether this assignment is user-edited (manual override) vs auto-generated. */
   source?: 'manual' | 'generated' | 'imported'
+  /** From TimetableAllocationEntry — 40 | 80 | 120 minutes. */
+  durationMin?: number
+  periodType?: 'SINGLE' | 'DOUBLE' | 'TRIPLE' | string
+  consecutivePeriods?: number
+  /** Legacy double flag; prefer periodType / consecutivePeriods. */
+  isDoublePeriod?: boolean
 }
 
 export type ConflictSeverity = 'low' | 'medium' | 'high' | 'critical'

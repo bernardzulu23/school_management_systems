@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
@@ -45,7 +45,55 @@ import {
   Bus,
   Home as HomeIcon,
   AlertTriangle,
+  FileCheck,
 } from 'lucide-react'
+import { TIMETABLE_CONFLICTS_UPDATED } from '@/hooks/useTimetableDraftMeta'
+
+function TimetableConflictNavBadge() {
+  const [badge, setBadge] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    async function load() {
+      try {
+        const term = 'Term 1'
+        const academicYear = String(new Date().getFullYear())
+        const qs = new URLSearchParams({ term, academicYear })
+        const res = await fetch(`/api/timetable/draft-meta?${qs}`, { credentials: 'include' })
+        if (!res.ok) return
+        const data = await res.json()
+        if (cancelled) return
+        const errors = Number(data.conflictErrors ?? 0)
+        const warnings = Number(data.conflictWarnings ?? 0)
+        if (errors > 0) setBadge({ count: errors, tone: 'error' })
+        else if (warnings > 0) setBadge({ count: warnings, tone: 'warn' })
+        else setBadge(null)
+      } catch {
+        if (!cancelled) setBadge(null)
+      }
+    }
+    load()
+    window.addEventListener(TIMETABLE_CONFLICTS_UPDATED, load)
+    return () => {
+      cancelled = true
+      window.removeEventListener(TIMETABLE_CONFLICTS_UPDATED, load)
+    }
+  }, [])
+
+  if (!badge) return null
+  return (
+    <span
+      className={cn(
+        'ml-auto min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-bold flex items-center justify-center',
+        badge.tone === 'error'
+          ? 'bg-red-500/20 text-red-400 border border-red-500/40'
+          : 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+      )}
+    >
+      {badge.count}
+    </span>
+  )
+}
 
 export function Sidebar({ className, mobileOpen, setMobileOpen }) {
   const [isCollapsed, setIsCollapsed] = useState(false)
@@ -100,6 +148,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           name: 'Timetable Conflicts',
           href: '/dashboard/headteacher/timetable/conflicts',
           icon: AlertTriangle,
+          badge: 'timetable-conflicts',
         },
         { name: 'Transport', href: '/dashboard/headteacher/transport', icon: Bus },
         { name: 'Inter-house', href: '/dashboard/headteacher/houses', icon: Trophy },
@@ -203,6 +252,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Flashcards', href: '/dashboard/student/flashcards', icon: BookOpen },
         { name: 'Results', href: '/dashboard/student/results', icon: BarChart3 },
         { name: 'ECZ Practice', href: '/dashboard/student/ecz-practice', icon: Target },
+        { name: 'Mock Examination', href: '/dashboard/student/mock-exam', icon: FileCheck },
         { name: 'Career guidance', href: '/dashboard/student/learning-path', icon: Briefcase },
         {
           name: 'Study assistant',
@@ -231,6 +281,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     const showHostel = features.hostel
     const showCareer = features.careerGuidance
     const showCodePlayground = features.codePlayground
+    const showMockExams = features.mockExams
     const navRoleKey = roleKey === 'hod' && !showHod ? 'teacher' : roleKey
 
     let roleItems = roleSpecificItems[navRoleKey] || []
@@ -341,6 +392,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         }
         if (!showCodePlayground && item.name === 'Code Playground') return false
         if (!showEcz && item.name === 'ECZ Practice') return false
+        if (!showMockExams && item.name === 'Mock Examination') return false
         if (!showCareer && item.name === 'Career guidance') return false
         if (!showHod && navRoleKey === 'teacher') {
           if (item.href?.startsWith('/dashboard/hod')) return false
@@ -443,6 +495,9 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
                 )}
               />
               {(!isCollapsed || mobileOpen) && <span className="font-medium">{item.name}</span>}
+              {item.badge === 'timetable-conflicts' && (!isCollapsed || mobileOpen) ? (
+                <TimetableConflictNavBadge />
+              ) : null}
               {isCollapsed && !mobileOpen && (
                 <div className="absolute left-14 px-2 py-1 bg-royalPurple-deep text-royalPurple-text1 text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 border border-royalPurple-border">
                   {item.name}

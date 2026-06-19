@@ -6,7 +6,7 @@ import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { timesOverlap } from '@/lib/timetable/validateTimetable'
-import { persistDraftConflictMeta, auditDraftTimetable } from '@/lib/timetable/conflictAudit'
+import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
 
 const RESOLVE_ROLES = new Set(['headteacher', 'administrator', 'admin', 'superadmin'])
 
@@ -50,11 +50,7 @@ function entryInclude() {
 }
 
 async function rescanAndPersist(schoolId, term, academicYear) {
-  const summary = await auditDraftTimetable(prisma, { schoolId, term, academicYear })
-  if (summary.entryCount > 0) {
-    await persistDraftConflictMeta(prisma, { schoolId, term, academicYear, summary })
-  }
-  return summary
+  return rescanAndPersistDraftMeta(prisma, { schoolId, term, academicYear })
 }
 
 /**
@@ -125,8 +121,9 @@ export async function POST(req) {
         })
       }
 
-      case 'MOVE_TO_SLOT': {
-        const entryId = String(body?.entryId || '').trim()
+      case 'MOVE_TO_SLOT':
+      case 'APPLY_SUGGESTION': {
+        const entryId = String(body?.entryId || body?.originalAssignmentId || '').trim()
         if (!entryId) {
           return NextResponse.json({ error: 'entryId is required' }, { status: 400 })
         }
@@ -145,10 +142,10 @@ export async function POST(req) {
             durationMin: target.durationMin,
           }
         } else {
-          const dayOfWeek = normalizeDayOfWeek(body?.newDayOfWeek)
-          const startTime = String(body?.newStartTime || '').trim()
-          const endTime = String(body?.newEndTime || '').trim()
-          const periodNumber = Number(body?.newPeriodNumber)
+          const dayOfWeek = normalizeDayOfWeek(body?.newDayOfWeek || body?.dayOfWeek)
+          const startTime = String(body?.newStartTime || body?.startTime || '').trim()
+          const endTime = String(body?.newEndTime || body?.endTime || '').trim()
+          const periodNumber = Number(body?.newPeriodNumber ?? body?.periodNumber)
           const durationMin = Number(body?.newDurationMin || entry.durationMin)
 
           if (!dayOfWeek || !startTime || !endTime || !Number.isFinite(periodNumber)) {
@@ -313,7 +310,7 @@ export async function POST(req) {
       default:
         return NextResponse.json(
           {
-            error: `Unknown action: ${action}. Valid: REASSIGN_TEACHER, MOVE_TO_SLOT, REMOVE_ENTRY, SWAP_SLOTS`,
+            error: `Unknown action: ${action}. Valid: REASSIGN_TEACHER, MOVE_TO_SLOT, REMOVE_ENTRY, SWAP_SLOTS, APPLY_SUGGESTION`,
           },
           { status: 400 }
         )

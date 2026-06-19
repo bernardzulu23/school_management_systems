@@ -69,6 +69,16 @@ describe('schoolTypeHelpers', () => {
     expect(canUseFeatureByOwnership('GRANT_AIDED', 'school-fees-management')).toBe(true)
   })
 
+  it('canUseFeatureByOwnership blocks emis-export for private schools', () => {
+    expect(canUseFeatureByOwnership('PRIVATE', 'emis-export')).toBe(false)
+    expect(canUseFeatureByOwnership('GOVERNMENT', 'emis-export')).toBe(true)
+  })
+
+  it('canUseFeatureByOwnership blocks parent-portal for government schools', () => {
+    expect(canUseFeatureByOwnership('GOVERNMENT', 'parent-portal')).toBe(false)
+    expect(canUseFeatureByOwnership('PRIVATE', 'parent-portal')).toBe(true)
+  })
+
   it('GOVERNMENT_ONLY_FEATURES and teacher-leave are government-only', () => {
     expect(GOVERNMENT_ONLY_FEATURES).toContain('teacher-leave')
     expect(GOVERNMENT_ONLY_FEATURES).toContain('emis-export')

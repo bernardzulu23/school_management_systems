@@ -42,6 +42,7 @@ import {
   TrendingUp as LearningPathIcon,
   Globe,
   Code,
+  FileCheck,
 } from 'lucide-react'
 import Link from 'next/link'
 import LearningPathPage from './learning-path/page'
@@ -203,11 +204,14 @@ export default function StudentDashboard() {
   const studentClassName = dashboardData?.student?.class || studentProfile?.class || ''
   const {
     canAccessSecondaryGrading: showSecondaryGrading,
+    canAccessEcz: showEczPractice,
     codePlayground: showCodePlayground,
     careerGuidance: showCareerGuidance,
+    features,
   } = useSchoolCapabilities({
     gradeLevel: studentClassName,
   })
+  const showMockExams = features.mockExams
   const overallGradeInfo = calculateGrade(dashboardStats.averageGrade, studentClassName)
 
   // Game handlers
@@ -1062,6 +1066,36 @@ export default function StudentDashboard() {
                             </h3>
                             <p className="text-royalPurple-text2 text-sm text-center mt-2">
                               Run Python &amp; more on your phone
+                            </p>
+                          </div>
+                        </Link>
+                      )}
+                      {showEczPractice && (
+                        <Link href="/dashboard/student/ecz-practice">
+                          <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
+                            <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                              <Target className="h-8 w-8 text-royalPurple-text1" />
+                            </div>
+                            <h3 className="text-royalPurple-text1 font-semibold text-center">
+                              ECZ Practice
+                            </h3>
+                            <p className="text-royalPurple-text2 text-sm text-center mt-2">
+                              AI-generated exam-style papers
+                            </p>
+                          </div>
+                        </Link>
+                      )}
+                      {showMockExams && (
+                        <Link href="/dashboard/student/mock-exam">
+                          <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
+                            <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                              <FileCheck className="h-8 w-8 text-royalPurple-text1" />
+                            </div>
+                            <h3 className="text-royalPurple-text1 font-semibold text-center">
+                              Mock Examination
+                            </h3>
+                            <p className="text-royalPurple-text2 text-sm text-center mt-2">
+                              Timed ECZ-style mock exams
                             </p>
                           </div>
                         </Link>

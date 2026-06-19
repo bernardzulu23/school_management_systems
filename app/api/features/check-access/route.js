@@ -4,10 +4,19 @@ import prisma from '@/lib/prisma'
 import { getAuthUser } from '@/lib/middleware/auth'
 import {
   canUseFeature,
+  canUseFeatureForOwnership,
   planIncludes,
   PRIMARY_ONLY_FEATURES,
+  resolveOwnershipFeatureId,
   SECONDARY_ONLY_FEATURES,
 } from '@/lib/zambiaSchoolFeatures'
+
+const PRIVATE_OWNERSHIP_FEATURES = new Set([
+  'fee-management',
+  'parent-portal',
+  'proprietor-dashboard',
+  'sibling-discounts',
+])
 
 export async function POST(request) {
   const user = await getAuthUser(request)
@@ -34,6 +43,7 @@ export async function POST(request) {
         planExpiresAt: true,
         trialEndsAt: true,
         level: true,
+        ownershipType: true,
       },
     })
 
@@ -122,6 +132,23 @@ export async function POST(request) {
           allowed: false,
           reason: 'This feature is not available for your school level',
           code: 'SCHOOL_LEVEL_RESTRICTED',
+          schoolLevel: level,
+        },
+        { status: 403 }
+      )
+    }
+
+    if (!canUseFeatureForOwnership(school.ownershipType, featureId)) {
+      const resolved = resolveOwnershipFeatureId(featureId)
+      const reason = PRIVATE_OWNERSHIP_FEATURES.has(resolved)
+        ? 'This feature is not available for government schools.'
+        : 'This feature is only available for government schools.'
+      return NextResponse.json(
+        {
+          allowed: false,
+          reason,
+          code: 'OWNERSHIP_GATE',
+          ownershipType: school.ownershipType,
           schoolLevel: level,
         },
         { status: 403 }

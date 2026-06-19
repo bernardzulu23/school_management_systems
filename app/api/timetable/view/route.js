@@ -18,6 +18,7 @@ import {
   buildTeacherWorkloadSummary,
 } from '@/lib/timetable/mapEntriesToAssignments'
 import { loadTeacherColorMap, teacherColorMapToJson } from '@/lib/timetable/teacherColors'
+import { getDraftConflictMeta, formatDraftMetaResponse } from '@/lib/timetable/conflictAudit'
 
 function roleKey(role) {
   return String(role || '').toLowerCase()
@@ -297,6 +298,16 @@ export async function GET(req) {
 
   const teacherColorMap = await loadTeacherColorMap(prisma, schoolId)
 
+  let draftMeta = null
+  if (isSchoolAdmin(role) || role === 'hod') {
+    const metaRow = await getDraftConflictMeta(prisma, { schoolId, term, academicYear })
+    draftMeta = formatDraftMetaResponse(metaRow, {
+      term,
+      academicYear,
+      includeSummary: role !== 'hod',
+    })
+  }
+
   return NextResponse.json({
     entries,
     assignments: safeAssignments,
@@ -308,5 +319,6 @@ export async function GET(req) {
     academicYear,
     status,
     total: entries.length,
+    draftMeta,
   })
 }

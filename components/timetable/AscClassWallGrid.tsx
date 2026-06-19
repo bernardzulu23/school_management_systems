@@ -9,6 +9,7 @@ import {
   isContinuationSlot,
   rowSpanForAssignment,
 } from '@/lib/timetable/gridHelpers'
+import { periodTypeBadge } from '@/lib/timetable/doublePeriodUtils'
 import { solidSubjectFill } from '@/lib/timetable/cardColors'
 import { abbreviateSubject } from '@/lib/timetable/subjectAbbrev'
 import {
@@ -215,6 +216,7 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
           const teacher = teacherName.get(String(a.teacherId))
           const lockKey = `${String(a.teacherId)}|${String(day).toLowerCase()}|${slot.period}`
           const isLocked = lockedPeriodKeys?.has(lockKey)
+          const spanBadge = span > 1 ? periodTypeBadge(a.periodType, span) : ''
 
           cells.push(
             <td
@@ -245,6 +247,14 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
                 }}
               >
                 {abbrev}
+                {spanBadge ? (
+                  <span
+                    className="absolute bottom-0 right-0 text-[7px] opacity-80 pr-0.5"
+                    aria-label={`${spanBadge} period block`}
+                  >
+                    {spanBadge}
+                  </span>
+                ) : null}
                 {isLocked ? (
                   <Lock
                     size={8}

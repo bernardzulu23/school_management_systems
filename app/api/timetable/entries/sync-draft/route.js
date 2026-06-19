@@ -5,6 +5,8 @@ import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { getHardConflictsForDraftEntries } from '@/lib/timetable/draftHardConflictCheck'
+import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
 
 function toMinutes(t) {
   const [h, m] = String(t || '0:0')
@@ -167,6 +169,24 @@ export async function POST(req) {
     )
   }
 
+  const hardRows = toCreate.map((row, index) => ({
+    ...row,
+    id: row.id || `sync_${index}`,
+    allocation: {},
+  }))
+  const hardConflicts = getHardConflictsForDraftEntries(hardRows)
+  if (hardConflicts.length > 0) {
+    return NextResponse.json(
+      {
+        error:
+          'Draft contains hard timetable conflicts (teacher or class double-booked). Fix conflicts before saving.',
+        hardConflicts: hardConflicts.slice(0, 20),
+        code: 'SYNC_BLOCKED_BY_CONFLICTS',
+      },
+      { status: 422 }
+    )
+  }
+
   await prisma.$transaction(async (tx) => {
     if (replaceExisting) {
       await tx.timetableAllocationEntry.deleteMany({
@@ -175,6 +195,8 @@ export async function POST(req) {
     }
     await tx.timetableAllocationEntry.createMany({ data: toCreate, skipDuplicates: true })
   })
+
+  await rescanAndPersistDraftMeta(prisma, { schoolId, term, academicYear })
 
   return NextResponse.json({
     success: true,
