@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { PlatformShell } from '@/components/platform/PlatformShell'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import toast from 'react-hot-toast'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 function KpiCard({ label, value, sub }) {
   return (
@@ -22,7 +23,7 @@ export default function PlatformOverviewPage() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/platform/stats/overview', { cache: 'no-store' })
+      const res = await sessionFetch('/api/platform/stats/overview', { cache: 'no-store' })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || 'Failed to load')
       setData(json.data)

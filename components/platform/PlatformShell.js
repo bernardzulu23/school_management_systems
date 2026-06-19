@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 import {
   Building2,
   CreditCard,
@@ -30,7 +31,7 @@ export function PlatformShell({ title, children }) {
   const [user, setUser] = useState(null)
 
   const loadMe = useCallback(async () => {
-    const res = await fetch('/api/platform/auth/me', { cache: 'no-store' })
+    const res = await sessionFetch('/api/platform/auth/me', { cache: 'no-store' })
     if (!res.ok) {
       router.replace('/login')
       return
@@ -44,7 +45,7 @@ export function PlatformShell({ title, children }) {
   }, [loadMe])
 
   async function logout() {
-    await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
+    await sessionFetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
     router.push('/login')
   }
 

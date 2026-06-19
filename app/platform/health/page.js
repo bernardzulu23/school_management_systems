@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { PlatformShell } from '@/components/platform/PlatformShell'
 import toast from 'react-hot-toast'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 function StatusPill({ status }) {
   const map = {
@@ -29,13 +30,13 @@ export default function PlatformHealthPage() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/platform/health', { cache: 'no-store' })
+      const res = await sessionFetch('/api/platform/health', { cache: 'no-store' })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || 'Failed to load')
       setChecks(json.checks || [])
       setSummary(json.summary)
 
-      const ragRes = await fetch('/api/platform/health/rag', { cache: 'no-store' })
+      const ragRes = await sessionFetch('/api/platform/health/rag', { cache: 'no-store' })
       const ragJson = await ragRes.json().catch(() => ({}))
       if (ragRes.ok) setRagHealth(ragJson)
     } catch (e) {

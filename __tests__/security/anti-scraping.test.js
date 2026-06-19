@@ -83,6 +83,25 @@ describe('antiScraping module', () => {
     expect(result.blocked).toBe(false)
   })
 
+  it('allows plain fetch on platform session auth route', () => {
+    process.env.ANTI_SCRAPING_ENABLED = 'true'
+
+    const req = buildRequest({
+      url: 'http://localhost:3000/api/platform/auth/me',
+      headers: {
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        cookie: `access_token=${signedAccessToken('teacher')}`,
+      },
+    })
+    req.cookies = {
+      get: (name) =>
+        name === 'access_token' ? { value: signedAccessToken('teacher') } : undefined,
+    }
+
+    const result = checkAntiScraping(req, '/api/platform/auth/me', { isPublic: false })
+    expect(result.blocked).toBe(false)
+  })
+
   it('rate limits repeated API calls per IP', () => {
     process.env.ANTI_SCRAPING_ENABLED = 'true'
     process.env.SCRAPE_RATE_PUBLIC_GET = '2'

@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { ArrowLeft, LogOut, Shield, User } from 'lucide-react'
 import { getPasswordFormError } from '@/lib/security/passwordValidate'
 import PasswordRequirements from '@/components/ui/PasswordRequirements'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 export default function PlatformProfilePage() {
   const router = useRouter()
@@ -22,7 +23,7 @@ export default function PlatformProfilePage() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/platform/auth/profile', { cache: 'no-store' })
+      const res = await sessionFetch('/api/platform/auth/profile', { cache: 'no-store' })
       const data = await res.json()
       if (res.status === 401 || res.status === 403) {
         router.replace('/login')
@@ -85,7 +86,7 @@ export default function PlatformProfilePage() {
         body.currentPassword = currentPassword
       }
 
-      const res = await fetch('/api/platform/auth/profile', {
+      const res = await sessionFetch('/api/platform/auth/profile', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -113,7 +114,7 @@ export default function PlatformProfilePage() {
   }
 
   async function logout() {
-    await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
+    await sessionFetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
     router.push('/login')
   }
 

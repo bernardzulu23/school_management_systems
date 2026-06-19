@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { PlatformShell } from '@/components/platform/PlatformShell'
 import toast from 'react-hot-toast'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 export default function PlatformBillingPage() {
   const [summary, setSummary] = useState(null)
@@ -13,8 +14,8 @@ export default function PlatformBillingPage() {
     setLoading(true)
     try {
       const [sumRes, payRes] = await Promise.all([
-        fetch('/api/platform/billing/summary', { cache: 'no-store' }),
-        fetch('/api/platform/billing/payments?limit=15', { cache: 'no-store' }),
+        sessionFetch('/api/platform/billing/summary', { cache: 'no-store' }),
+        sessionFetch('/api/platform/billing/payments?limit=15', { cache: 'no-store' }),
       ])
       const sumJson = await sumRes.json()
       const payJson = await payRes.json()

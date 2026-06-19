@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { PlatformShell } from '@/components/platform/PlatformShell'
 import toast from 'react-hot-toast'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 export default function PlatformProvincesPage() {
   const [rows, setRows] = useState([])
@@ -12,7 +13,7 @@ export default function PlatformProvincesPage() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/platform/stats/provinces', { cache: 'no-store' })
+      const res = await sessionFetch('/api/platform/stats/provinces', { cache: 'no-store' })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || 'Failed to load')
       setRows(json.data || [])

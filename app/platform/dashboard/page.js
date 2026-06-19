@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { PlatformShell } from '@/components/platform/PlatformShell'
 import { ZAMBIA_PROVINCES } from '@/lib/platform/zambiaProvinces'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 function statusBadge(status) {
   const map = {
@@ -40,7 +41,7 @@ function PlatformDashboardContent() {
       if (provinceFilter) qs.set('province', provinceFilter)
       if (districtFilter) qs.set('district', districtFilter)
       if (streamFilter) qs.set('stream', streamFilter)
-      const schoolsRes = await fetch(`/api/platform/schools?${qs}`, { cache: 'no-store' })
+      const schoolsRes = await sessionFetch(`/api/platform/schools?${qs}`, { cache: 'no-store' })
       if (schoolsRes.status === 401) {
         router.replace('/login')
         return
@@ -64,7 +65,7 @@ function PlatformDashboardContent() {
 
   async function toggleActive(school) {
     try {
-      const res = await fetch(`/api/platform/schools/${school.id}`, {
+      const res = await sessionFetch(`/api/platform/schools/${school.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ active: !school.active }),
@@ -83,7 +84,7 @@ function PlatformDashboardContent() {
 
   async function saveProvince(school) {
     try {
-      const res = await fetch(`/api/platform/schools/${school.id}`, {
+      const res = await sessionFetch(`/api/platform/schools/${school.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ province: editProvince, district: editDistrict }),
@@ -107,7 +108,7 @@ function PlatformDashboardContent() {
       return
     }
     try {
-      const res = await fetch(`/api/platform/schools/${school.id}`, { method: 'DELETE' })
+      const res = await sessionFetch(`/api/platform/schools/${school.id}`, { method: 'DELETE' })
       const data = await res.json()
       if (!res.ok) {
         toast.error(data.error || 'Delete failed')
