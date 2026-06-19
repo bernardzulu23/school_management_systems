@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-06-18T10:13:01.531Z
+Generated: 2026-06-19T20:27:20.618Z
 
-Total route files: **326**
+Total route files: **344**
 
 ## Quick index
 
@@ -32,7 +32,7 @@ Total route files: **326**
 | `/api/classes`              |     5 |
 | `/api/code-playground`      |     1 |
 | `/api/creative-features`    |     1 |
-| `/api/cron`                 |     2 |
+| `/api/cron`                 |     3 |
 | `/api/csp-report`           |     1 |
 | `/api/csrf-token`           |     1 |
 | `/api/dashboard`            |    24 |
@@ -40,22 +40,27 @@ Total route files: **326**
 | `/api/ecz`                  |    14 |
 | `/api/features`             |     1 |
 | `/api/feedback`             |     1 |
+| `/api/fees`                 |     6 |
 | `/api/field-trips`          |     1 |
 | `/api/games`                |     2 |
+| `/api/government`           |     7 |
 | `/api/health`               |     1 |
 | `/api/hod`                  |    11 |
 | `/api/hods`                 |     3 |
 | `/api/hostel`               |     2 |
+| `/api/houses`               |     2 |
 | `/api/innovation`           |     2 |
 | `/api/lesson-plans`         |     8 |
 | `/api/marketplace`          |     7 |
 | `/api/materials`            |     5 |
 | `/api/mobile`               |    12 |
 | `/api/onboarding`           |     9 |
+| `/api/parent`               |     1 |
 | `/api/payments`             |     2 |
 | `/api/ping`                 |     1 |
 | `/api/platform`             |    13 |
 | `/api/profile`              |     4 |
+| `/api/proprietor`           |     1 |
 | `/api/public`               |     6 |
 | `/api/question-bank`        |     2 |
 | `/api/recipes`              |     5 |
@@ -266,10 +271,11 @@ Total route files: **326**
 
 ## /api/cron
 
-| Method | Route                       | Summary                                                                            |
-| ------ | --------------------------- | ---------------------------------------------------------------------------------- |
-| GET    | `/api/cron/ecz-reminder`    | GET /api/cron/ecz-reminder — Vercel Cron (15 January). Requires CRON_SECRET.       |
-| GET    | `/api/cron/sms-low-balance` | GET /api/cron/sms-low-balance — daily low SMS credit alerts. Requires CRON_SECRET. |
+| Method | Route                         | Summary                                                                            |
+| ------ | ----------------------------- | ---------------------------------------------------------------------------------- |
+| GET    | `/api/cron/ecz-reminder`      | GET /api/cron/ecz-reminder — Vercel Cron (15 January). Requires CRON_SECRET.       |
+| GET    | `/api/cron/fee-overdue-check` | —                                                                                  |
+| GET    | `/api/cron/sms-low-balance`   | GET /api/cron/sms-low-balance — daily low SMS credit alerts. Requires CRON_SECRET. |
 
 ## /api/csp-report
 
@@ -349,6 +355,17 @@ Total route files: **326**
 | ---------------- | --------------- | ---------------------------------------------------------- |
 | GET, POST, PATCH | `/api/feedback` | GET /api/feedback — List feedback (admin/headteacher only) |
 
+## /api/fees
+
+| Method    | Route                         | Summary |
+| --------- | ----------------------------- | ------- |
+| GET       | `/api/fees/invoices`          | —       |
+| POST      | `/api/fees/invoices/generate` | —       |
+| GET, POST | `/api/fees/payments`          | —       |
+| GET, POST | `/api/fees/schedules`         | —       |
+| GET, POST | `/api/fees/siblings`          | —       |
+| GET       | `/api/fees/summary`           | —       |
+
 ## /api/field-trips
 
 | Method    | Route              | Summary |
@@ -361,6 +378,18 @@ Total route files: **326**
 | ------------------ | ---------------- | ----------------------------------------------------------------------------------------- |
 | GET, POST          | `/api/games`     | GET /api/games — list school games (teacher/HOD/admin) POST /api/games — create quiz game |
 | GET, PATCH, DELETE | `/api/games/:id` | —                                                                                         |
+
+## /api/government
+
+| Method           | Route                                    | Summary |
+| ---------------- | ---------------------------------------- | ------- |
+| GET, POST, PATCH | `/api/government/deployment`             | —       |
+| GET              | `/api/government/emis-export`            | —       |
+| GET              | `/api/government/gender-report`          | —       |
+| GET, POST        | `/api/government/grants`                 | —       |
+| POST, PATCH      | `/api/government/grants/:id/allocations` | —       |
+| GET, POST        | `/api/government/leave`                  | —       |
+| PATCH            | `/api/government/leave/:id`              | —       |
 
 ## /api/health
 
@@ -398,6 +427,13 @@ Total route files: **326**
 | ------------ | ------------------------- | ------- |
 | POST, DELETE | `/api/hostel/assignments` | —       |
 | GET, POST    | `/api/hostel/rooms`       | —       |
+
+## /api/houses
+
+| Method       | Route                     | Summary |
+| ------------ | ------------------------- | ------- |
+| GET, POST    | `/api/houses`             | —       |
+| POST, DELETE | `/api/houses/assignments` | —       |
 
 ## /api/innovation
 
@@ -472,12 +508,18 @@ Total route files: **326**
 | POST      | `/api/onboarding/student`             | —       |
 | GET       | `/api/onboarding/verify/:token`       | —       |
 
+## /api/parent
+
+| Method | Route                | Summary |
+| ------ | -------------------- | ------- |
+| GET    | `/api/parent/portal` | —       |
+
 ## /api/payments
 
 | Method    | Route                           | Summary |
 | --------- | ------------------------------- | ------- |
 | GET, POST | `/api/payments/lipila/callback` | —       |
-| POST      | `/api/payments/mobile-money`    | —       |
+| GET, POST | `/api/payments/mobile-money`    | —       |
 
 ## /api/ping
 
@@ -511,6 +553,12 @@ Total route files: **326**
 | PUT    | `/api/profile/password`               | —       |
 | PUT    | `/api/profile/picture`                | —       |
 | GET    | `/api/profile/picture/file/:filename` | —       |
+
+## /api/proprietor
+
+| Method | Route                      | Summary |
+| ------ | -------------------------- | ------- |
+| GET    | `/api/proprietor/overview` | —       |
 
 ## /api/public
 

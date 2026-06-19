@@ -1,10 +1,10 @@
 # ZSMS — Private School Features
 
 **Last updated:** 2026-06-12  
-**Document version:** 2.0 (structural alignment)  
-**Implementation phase:** Phase 1 complete → Phase 2 next
+**Document version:** 2.1 (Phase 2 fee management shipped)  
+**Implementation phase:** Phase 1 complete · **Phase 2 core complete** (invoicing, parent portal, proprietor overview, overdue cron)
 
-This document is the **private-school product spec** for ZSMS. It was reviewed against the live codebase (`prisma/schema.prisma`, `lib/zambiaSchoolFeatures.js`, `lib/school/feeManagementAccess.js`, payments APIs, parent SMS, and student AI features). Use it as the Cursor implementation prompt for **Phase 2** private-school fee and proprietor modules.
+This document is the **private-school product spec** for ZSMS. It was reviewed against the live codebase (`prisma/schema.prisma`, `lib/fees/*`, `lib/school/feeManagementAccess.js`, payments APIs, parent SMS, and student AI features). Phase 2 fee invoicing is implemented; remaining follow-ups (payment plans, USSD fee balance, public events) are listed below.
 
 **Companion:** [01 government school features.md](./01%20government%20school%20features.md) (MoE reporting, grants, government staff — gated to `GOVERNMENT` ownership).
 
@@ -143,9 +143,9 @@ Use `extractParentContacts()` from `lib/results/checkAndNotifyParent.js` or the 
 
 ---
 
-## Phase 2 — Private-school modules (planned)
+## Phase 2 — Private-school modules (core implemented)
 
-Gate every route under `app/api/fees/*` and private fee dashboards with **ownership + plan**:
+Gate every route under `app/api/fees/*` and private fee dashboards with **ownership + plan** (via `lib/fees/routeAuth.js`):
 
 ```js
 const ownershipBlock = await assertFeeManagementAllowed(schoolId)
@@ -155,11 +155,15 @@ const featureBlock = await requireFeature(schoolId, 'fee-management')
 if (featureBlock) return featureBlock
 ```
 
+**Migration:** `prisma/migrations/20260622120000_add_private_school_fee_features/`
+
+**Payment split (important):** Manual invoice payments use model **`FeePayment`** (`/api/fees/payments`). Lipila mobile-money attempts remain on **`SchoolFeePayment`** (`/api/payments/mobile-money`) — not auto-allocated to invoices in v1.
+
 ---
 
 ### FEATURE 2.1 — Parent portal with fee statements
 
-**Status:** Planned (Phase 2)
+**Status:** ✅ Implemented (Phase 2)
 
 Parents use **student login credentials** (no separate parent account) to view read-only: fee balance, payment history, attendance summary, latest results.
 
@@ -230,18 +234,19 @@ model FeePayment {
 }
 ```
 
-**APIs:**
+**APIs (shipped):**
 
-| Route                                     | Purpose                                             |
-| ----------------------------------------- | --------------------------------------------------- |
-| `app/api/fees/schedules/route.js`         | GET/POST fee schedules                              |
-| `app/api/fees/schedules/[id]/route.js`    | GET/PATCH/DELETE                                    |
-| `app/api/fees/invoices/route.js`          | List invoices                                       |
-| `app/api/fees/invoices/generate/route.js` | Bulk generate from schedule                         |
-| `app/api/fees/invoices/[id]/route.js`     | Invoice + payment history                           |
-| `app/api/fees/payments/route.js`          | Record payment (link to Lipila ref when applicable) |
-| `app/api/fees/summary/route.js`           | School-wide billed / collected / outstanding        |
-| `app/api/parent/portal/route.js`          | Parent view for logged-in student user              |
+| Route                                     | Purpose                                              |
+| ----------------------------------------- | ---------------------------------------------------- |
+| `app/api/fees/schedules/route.js`         | GET/POST fee schedules                               |
+| `app/api/fees/invoices/route.js`          | List invoices (filters: student, status, term, year) |
+| `app/api/fees/invoices/generate/route.js` | Bulk generate from schedule (idempotent per student) |
+| `app/api/fees/payments/route.js`          | GET ledger / POST manual payment against invoice     |
+| `app/api/fees/summary/route.js`           | School-wide billed / collected / outstanding         |
+| `app/api/fees/siblings/route.js`          | GET/POST sibling groups (min 2 students)             |
+| `app/api/parent/portal/route.js`          | Parent view for logged-in student user               |
+| `app/api/proprietor/overview/route.js`    | Headteacher/ADMIN KPI overview                       |
+| `app/api/cron/fee-overdue-check/route.js` | Weekly overdue mark + parent SMS (`CRON_SECRET`)     |
 
 **Parent portal query pattern (corrected):**
 
@@ -272,7 +277,7 @@ Latest results: use `Result` filtered by `studentId`, `term`, `year`, with `subj
 
 ### FEATURE 2.2 — Sibling discounts & payment plans
 
-**Status:** Planned (Phase 2)
+**Status:** Sibling groups ✅ implemented · Payment plans **planned** (v2)
 
 ```prisma
 model SiblingGroup {
@@ -313,9 +318,9 @@ model PaymentPlan {
 
 **Note:** v1.0 used `students Student[]` on `SiblingGroup` — use explicit join table for Prisma many-to-many clarity.
 
-**APIs:** `app/api/fees/siblings/route.js`, `app/api/fees/payment-plans/route.js`
+**APIs:** `app/api/fees/siblings/route.js` (shipped) · `app/api/fees/payment-plans/route.js` (not yet)
 
-**UI:** Sibling group modal + payment plan on invoice management pages under `/dashboard/headteacher/fees/*`
+**UI:** `/dashboard/headteacher/fees/siblings` (shipped) · payment plan modal on invoices (future)
 
 ---
 
@@ -323,18 +328,18 @@ model PaymentPlan {
 
 **Status:** Partially implemented — extend in Phase 2
 
-| Trigger                            | Status      | Implementation                                       |
-| ---------------------------------- | ----------- | ---------------------------------------------------- |
-| Attendance absent/late/present SMS | **Done**    | `lib/attendance/attendanceSms.js` — plan-gated       |
-| Results all subjects entered       | **Done**    | `lib/results/checkAndNotifyParent.js`                |
-| Fee overdue reminder               | **Planned** | Requires `StudentInvoice` + cron                     |
-| Low attendance warning (&lt;80%)   | **Planned** | Extend `lib/attendance/sessions.js` or dedicated job |
+| Trigger                            | Status      | Implementation                                                               |
+| ---------------------------------- | ----------- | ---------------------------------------------------------------------------- |
+| Attendance absent/late/present SMS | **Done**    | `lib/attendance/attendanceSms.js` — plan-gated                               |
+| Results all subjects entered       | **Done**    | `lib/results/checkAndNotifyParent.js`                                        |
+| Fee overdue reminder               | **Done**    | `lib/fees/overdueCron.js`, `GET /api/cron/fee-overdue-check` (Mon 07:00 UTC) |
+| Low attendance warning (&lt;80%)   | **Planned** | Extend `lib/attendance/sessions.js` or dedicated job                         |
 
-**Fee overdue (Phase 2):**
+**Fee overdue (shipped):**
 
-- `lib/fees/overdueNotifications.js` — query `StudentInvoice` where `dueDate < now` and status unpaid/partial
-- Cron: `app/api/cron/fee-overdue-check/route.js` (add to `vercel.json` — pattern exists for `ecz-reminder`, `sms-low-balance`)
-- Parent phone from **`Student`** guardian fields, not `User.parentPhone`
+- `lib/fees/overdueCron.js` — batch overdue invoices, update status, SMS parents
+- Cron: `app/api/cron/fee-overdue-check/route.js` in `vercel.json` (`0 7 * * 1`)
+- Parent phone from **`Student`** guardian fields via `pickParentPhone()` in `lib/fees/helpers.js`
 - SMS via `sendAfricasTalkingSms` from `lib/sms.js`
 
 **Do not duplicate** results SMS in a new `parentNotifications.js` — call `checkAndNotifyParent()` from results routes only.
@@ -343,17 +348,17 @@ model PaymentPlan {
 
 ### FEATURE 2.4 — School proprietor dashboard
 
-**Status:** Planned (Phase 2)
+**Status:** ✅ Implemented (v1 — headteacher/ADMIN; no separate `proprietor` role yet)
 
-Read-only financial + enrolment overview for school owners who are not headteachers.
+Read-only financial + enrolment overview for school owners.
 
-- New role **`proprietor`** in auth + `Sidebar.js` routing to `/dashboard/proprietor`
-- **API:** `app/api/proprietor/overview/route.js` — depends on `StudentInvoice` aggregates (Phase 2)
-- **UI:** `app/dashboard/proprietor/page.js` — KPIs: enrolment, collection rate %, outstanding K, attendance rate
-- Access: `proprietor` + optionally `headteacher` for same school
+- **API:** `app/api/proprietor/overview/route.js` — `StudentInvoice` + `FeePayment` aggregates
+- **UI:** `app/dashboard/proprietor/page.js` — KPIs, monthly collections chart, top outstanding
+- **Access:** `headteacher` or `ADMIN` + `requireSchoolTypeAccess(schoolId, 'proprietor-dashboard')`
+- Sidebar link **Owner Dashboard** when `features.proprietorDashboard`
 - **No** access to SBA, timetable edit, or full student PII export
 
-Until invoices exist, proprietor view can show: enrolment counts (`Student`), Lipila payment history if logged, attendance rate from `Attendance`.
+Future: dedicated **`proprietor`** user role seeding.
 
 ---
 
@@ -408,38 +413,26 @@ No Phase 2 work unless enhancing (subject filter, conversation history, ECZ exam
 
 ---
 
-## Phase 2 — Navigation
+## Phase 2 — Navigation (shipped)
 
-Show **Fee Management** section only when private:
+Fee links in `components/dashboard/Sidebar.js` when `features.feeManagement` (private/grant-aided):
 
-```js
-import { isGovernmentSchool } from '@/lib/school/feeManagementAccess'
+- `/dashboard/headteacher/fees/schedules` — Fee Schedules
+- `/dashboard/headteacher/fees/invoices` — Invoices
+- `/dashboard/headteacher/fees/siblings` — Sibling Groups
+- `/dashboard/proprietor` — Owner Dashboard (when `features.proprietorDashboard` + headteacher)
+- `/dashboard/student/parent-view` — Parent view (student nav)
 
-// school.ownershipType from SchoolContext / GET /api/school/current
-{
-  !isGovernmentSchool(school?.ownershipType) && (
-    <>
-      <Link href="/dashboard/headteacher/fees/schedules">Fee Schedules</Link>
-      <Link href="/dashboard/headteacher/fees/invoices">Invoices</Link>
-      <Link href="/dashboard/headteacher/fees/payments">Payments</Link>
-      <Link href="/dashboard/headteacher/fees/siblings">Sibling Groups</Link>
-    </>
-  )
-}
-```
-
-Keep existing **`/dashboard/payments`** (Lipila) in sidebar for private schools until full fee module replaces or complements it.
-
-**Proprietor** (Phase 2): separate nav block when `user.role === 'proprietor'`.
+Keep existing **`/dashboard/payments`** (Lipila) — separate from manual invoice payments.
 
 ---
 
 ## Billing vs school fees (important distinction)
 
-| Concept                         | Who pays          | UI                                                                         | API                                                      |
-| ------------------------------- | ----------------- | -------------------------------------------------------------------------- | -------------------------------------------------------- |
-| **ZSMS subscription**           | School → Bluepeak | `/dashboard/billing`                                                       | `app/api/billing/*`                                      |
-| **School fees (tuition, etc.)** | Parent → School   | `/dashboard/payments` (Phase 1), `/dashboard/headteacher/fees/*` (Phase 2) | `app/api/payments/mobile-money`, future `app/api/fees/*` |
+| Concept                         | Who pays          | UI                                                                                                | API                                                                    |
+| ------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| **ZSMS subscription**           | School → Bluepeak | `/dashboard/billing`                                                                              | `app/api/billing/*`                                                    |
+| **School fees (tuition, etc.)** | Parent → School   | `/dashboard/payments` (Lipila), `/dashboard/headteacher/fees/*`, `/dashboard/student/parent-view` | `app/api/payments/mobile-money` (Lipila), `app/api/fees/*` (invoicing) |
 
 Government schools: **school fees blocked**; **billing** for ZSMS plan still applies.
 
@@ -448,11 +441,13 @@ Government schools: **school fees blocked**; **billing** for ZSMS plan still app
 ## Phase 2 — Migration
 
 ```bash
-npx prisma migrate dev --name private_school_fees_and_proprietor
+npx prisma migrate deploy   # production
+# or locally:
+npx prisma migrate dev
 npx prisma generate
 ```
 
-`ownershipType` already migrated: `prisma/migrations/20260613180000_transport_hostel_ownership/`.
+Applied migration: `prisma/migrations/20260622120000_add_private_school_fee_features/`.
 
 Optional dependency for exports/receipts:
 
@@ -464,19 +459,19 @@ npm install xlsx   # if PDF/Excel fee statements needed
 
 ## Implementation checklist (Phase 2 order)
 
-| Step | Item                                                                           | Depends on              |
-| ---- | ------------------------------------------------------------------------------ | ----------------------- |
-| 1    | Expose `ownershipType` on `GET /api/school/current` + SchoolContext            | Phase 1                 |
-| 2    | Prisma: `FeeSchedule`, `StudentInvoice`, `FeePayment`                          | Migration               |
-| 3    | Fee schedules + invoice generation APIs                                        | Step 2                  |
-| 4    | Record payments + link Lipila `referenceId` to `FeePayment`                    | Step 3, existing Lipila |
-| 5    | Parent portal API + `/dashboard/student/parent-view`                           | Step 3                  |
-| 6    | Sibling groups + payment plans                                                 | Step 3                  |
-| 7    | Fee overdue cron + SMS                                                         | Step 3, `lib/sms`       |
-| 8    | Proprietor role + overview dashboard                                           | Step 3                  |
-| 9    | USSD fee balance menu item                                                     | Step 3                  |
-| 10   | Public events calendar (extend `Activity` or `SchoolEvent`)                    | Optional                |
-| 11   | Update `USER_GUIDE.md` + `SYSTEM_DOCUMENTATION.md` + `npm run docs:api-routes` | Each ship               |
+| Step | Item                                                                  | Status         |
+| ---- | --------------------------------------------------------------------- | -------------- |
+| 1    | Expose `ownershipType` on `GET /api/school/current` + SchoolContext   | ✅             |
+| 2    | Prisma: `FeeSchedule`, `StudentInvoice`, `FeePayment`, `SiblingGroup` | ✅             |
+| 3    | Fee schedules + invoice generation APIs                               | ✅             |
+| 4    | Record manual payments (`FeePayment`) — Lipila auto-link **deferred** | ✅ manual only |
+| 5    | Parent portal API + `/dashboard/student/parent-view`                  | ✅             |
+| 6    | Sibling groups (payment plans deferred)                               | ✅ partial     |
+| 7    | Fee overdue cron + SMS                                                | ✅             |
+| 8    | Proprietor overview dashboard (headteacher/ADMIN v1)                  | ✅             |
+| 9    | USSD fee balance menu item                                            | Planned        |
+| 10   | Public events calendar (extend `Activity` or `SchoolEvent`)           | Planned        |
+| 11   | `SYSTEM_DOCUMENTATION.md` + `npm run docs:api-routes` + unit tests    | ✅             |
 
 ---
 
@@ -493,4 +488,4 @@ npm install xlsx   # if PDF/Excel fee statements needed
 
 ---
 
-_Phase 1 structural work (ownership gating, partial Lipila payments, parent SMS for attendance & results, study assistant) is complete. Begin Phase 2 with section 2.1 (fee schedules + invoices) or the checklist above._
+_Phase 2 core fee management (schedules, invoices, manual payments, sibling discounts, parent portal, proprietor overview, overdue cron) is complete. Follow-ups: Lipila→invoice allocation, payment plans, USSD fee balance, public events calendar._

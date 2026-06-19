@@ -5,6 +5,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
+import { checkHostelGenderMatch } from '@/lib/hostel/genderMatch'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -34,7 +35,15 @@ export const GET = withErrorHandler(async function GET(request) {
       students: {
         where: { year },
         include: {
-          student: { select: { id: true, name: true, class: true, exam_number: true } },
+          student: {
+            select: {
+              id: true,
+              name: true,
+              class: true,
+              exam_number: true,
+              user: { select: { gender: true } },
+            },
+          },
         },
       },
       _count: { select: { students: true } },
@@ -50,14 +59,23 @@ export const GET = withErrorHandler(async function GET(request) {
       capacity: room.capacity,
       gender: room.gender,
       boardedCount: room.students.length,
-      students: room.students.map((s) => ({
-        assignmentId: s.id,
-        studentId: s.studentId,
-        name: s.student?.name,
-        class: s.student?.class,
-        examNumber: s.student?.exam_number,
-        year: s.year,
-      })),
+      students: room.students.map((s) => {
+        const studentGender = s.student?.user?.gender ?? null
+        const mismatch = !checkHostelGenderMatch({
+          studentGender,
+          roomGender: room.gender,
+        }).ok
+        return {
+          assignmentId: s.id,
+          studentId: s.studentId,
+          name: s.student?.name,
+          class: s.student?.class,
+          examNumber: s.student?.exam_number,
+          gender: studentGender,
+          genderMismatch: mismatch,
+          year: s.year,
+        }
+      }),
     })),
   })
 })

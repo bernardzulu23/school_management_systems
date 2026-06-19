@@ -162,6 +162,15 @@ model School {
   hostelRooms            HostelRoom[]
   studentBusRoutes       StudentBusRoute[]
   studentHostels         StudentHostel[]
+  schoolGrants           SchoolGrant[]
+  teacherLeaves          TeacherLeave[]
+  teacherDeployments     TeacherDeployment[]
+  schoolHouses           SchoolHouse[]
+  studentHouseMemberships StudentHouseMembership[]
+  feeSchedules           FeeSchedule[]
+  studentInvoices        StudentInvoice[]
+  siblingGroups          SiblingGroup[]
+  invoiceFeePayments     FeePayment[]
 
   @@index([subdomain])
   @@index([active])
@@ -309,6 +318,79 @@ model SchoolFeePayment {
   @@index([schoolId])
   @@index([status])
   @@index([createdAt])
+}
+
+/** Government school capitation / infrastructure grants (Phase 2). */
+model SchoolGrant {
+  id             String            @id @default(uuid())
+  schoolId       String
+  school         School            @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  grantType      String
+  amountReceived Float
+  receivedDate   DateTime
+  academicYear   Int
+  term           Int
+  pupilCount     Int
+  notes          String?
+  allocations    GrantAllocation[]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@index([schoolId, academicYear])
+}
+
+model GrantAllocation {
+  id        String      @id @default(uuid())
+  grantId   String
+  grant     SchoolGrant @relation(fields: [grantId], references: [id], onDelete: Cascade)
+  schoolId  String
+  lineItem  String
+  budgeted  Float
+  spent     Float       @default(0)
+  receipts  String[]    @default([])
+  updatedAt DateTime    @updatedAt
+  createdAt DateTime    @default(now())
+
+  @@index([grantId])
+  @@index([schoolId])
+}
+
+model TeacherLeave {
+  id         String   @id @default(uuid())
+  schoolId   String
+  school     School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  teacherId  String
+  teacher    Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  leaveType  String
+  startDate  DateTime
+  endDate    DateTime
+  daysCount  Int
+  reason     String?
+  approvedBy String?
+  status     String   @default("pending")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([schoolId, teacherId])
+  @@index([schoolId, startDate])
+}
+
+model TeacherDeployment {
+  id             String    @id @default(uuid())
+  schoolId       String
+  school         School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  teacherId      String    @unique
+  teacher        Teacher   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  deployedFrom   String?
+  deploymentDate DateTime?
+  tsNumber       String?
+  gradeLevel     String?
+  qualification  String?
+  subjectSpec    String[]  @default([])
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([schoolId])
 }
 
 // Pre-provisioning school signup (onboarding flow before School is created)
@@ -469,6 +551,9 @@ model Student {
   activityParticipations ActivityParticipant[]
   busRouteAssignment  StudentBusRoute?
   hostelAssignments   StudentHostel[]
+  houseMemberships    StudentHouseMembership[]
+  invoices            StudentInvoice[]
+  siblingMemberships  SiblingGroupMember[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -579,8 +664,10 @@ model Teacher {
   timetableEntries      TimetableEntry[]
   schedulingRecipes     SchedulingRecipe[]
   teacherColors         TeacherColor[]
-  
-  createdAt DateTime @default(now()) 
+  teacherLeaves         TeacherLeave[]
+  teacherDeployment     TeacherDeployment?
+
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt 
   
   @@index([schoolId]) 
@@ -2972,4 +3059,121 @@ model StudentHostel {
   @@unique([studentId, year])
   @@index([schoolId])
   @@index([roomId])
+}
+
+model SchoolHouse {
+  id        String   @id @default(cuid())
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  name      String
+  color     String?
+  members   StudentHouseMembership[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([schoolId, name])
+  @@index([schoolId])
+}
+
+model StudentHouseMembership {
+  id        String      @id @default(cuid())
+  studentId String
+  student   Student     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  houseId   String
+  house     SchoolHouse @relation(fields: [houseId], references: [id], onDelete: Cascade)
+  schoolId  String
+  school    School      @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  year      Int
+  createdAt DateTime    @default(now())
+
+  @@unique([studentId, year])
+  @@index([schoolId])
+  @@index([houseId])
+}
+
+model FeeSchedule {
+  id           String           @id @default(uuid())
+  schoolId     String
+  school       School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  name         String
+  amount       Float
+  dueDate      DateTime
+  term         Int
+  academicYear Int
+  yearGroup    String?
+  feeType      String           @default("tuition")
+  isActive     Boolean          @default(true)
+  invoices     StudentInvoice[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([schoolId, academicYear, term])
+}
+
+model StudentInvoice {
+  id           String       @id @default(uuid())
+  schoolId     String
+  school       School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  studentId    String
+  student      Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  scheduleId   String
+  schedule     FeeSchedule  @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  amountDue    Float
+  discount     Float        @default(0)
+  discountType String?
+  netAmount    Float
+  amountPaid   Float        @default(0)
+  balance      Float
+  status       String       @default("unpaid")
+  dueDate      DateTime
+  payments     FeePayment[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@unique([studentId, scheduleId])
+  @@index([schoolId, studentId])
+  @@index([schoolId, status])
+  @@index([schoolId, scheduleId])
+}
+
+/** Manual invoice payments (cash, bank, etc.) — separate from Lipila SchoolFeePayment. */
+model FeePayment {
+  id          String         @id @default(uuid())
+  schoolId    String
+  school      School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  invoiceId   String
+  invoice     StudentInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  amount      Float
+  paymentDate DateTime       @default(now())
+  method      String
+  reference   String?
+  recordedBy  String
+  notes       String?
+  createdAt   DateTime       @default(now())
+
+  @@index([invoiceId])
+  @@index([schoolId])
+}
+
+model SiblingGroup {
+  id        String               @id @default(uuid())
+  schoolId  String
+  school    School               @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  members   SiblingGroupMember[]
+  discount  Float                @default(0.10)
+  createdAt DateTime             @default(now())
+
+  @@index([schoolId])
+}
+
+model SiblingGroupMember {
+  id             String       @id @default(uuid())
+  siblingGroupId String
+  siblingGroup   SiblingGroup @relation(fields: [siblingGroupId], references: [id], onDelete: Cascade)
+  studentId      String
+  student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  schoolId       String
+
+  @@unique([siblingGroupId, studentId])
+  @@index([schoolId, studentId])
 }

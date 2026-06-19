@@ -3,9 +3,13 @@ import {
   getSchoolFeatures,
   isGovernment,
   isPrivate,
+  isGovernmentSchool,
+  isPrivateSchool,
   canUseCBC,
   canUseECZSBA,
   canUseFeeManagement,
+  canUseTeacherLeave,
+  GOVERNMENT_ONLY_FEATURES,
   canUseFeatureByLevel,
   canUseFeatureByOwnership,
 } from '@/lib/school/schoolTypeHelpers'
@@ -63,5 +67,27 @@ describe('schoolTypeHelpers', () => {
     expect(canUseFeatureByOwnership('GOVERNMENT', 'fee-management')).toBe(false)
     expect(canUseFeatureByOwnership('PRIVATE', 'fee-management')).toBe(true)
     expect(canUseFeatureByOwnership('GRANT_AIDED', 'school-fees-management')).toBe(true)
+  })
+
+  it('GOVERNMENT_ONLY_FEATURES and teacher-leave are government-only', () => {
+    expect(GOVERNMENT_ONLY_FEATURES).toContain('teacher-leave')
+    expect(GOVERNMENT_ONLY_FEATURES).toContain('emis-export')
+    expect(canUseFeatureByOwnership('GOVERNMENT', 'teacher-leave')).toBe(true)
+    expect(canUseFeatureByOwnership('PRIVATE', 'teacher-leave')).toBe(false)
+    expect(canUseFeatureByOwnership('GOVERNMENT', 'gender-dropout-report')).toBe(true)
+  })
+
+  it('ownership aliases delegate to isGovernment/isPrivate', () => {
+    expect(isGovernmentSchool('GOVERNMENT')).toBe(true)
+    expect(isGovernmentSchool('COMMUNITY')).toBe(true)
+    expect(isPrivateSchool('PRIVATE')).toBe(true)
+    expect(isPrivateSchool('GRANT_AIDED')).toBe(true)
+  })
+
+  it('canUseTeacherLeave and getSchoolFeatures.teacherLeave for government', () => {
+    const govt = { level: 'primary', ownershipType: 'GOVERNMENT' }
+    expect(canUseTeacherLeave(govt)).toBe(true)
+    expect(getSchoolFeatures(govt).teacherLeave).toBe(true)
+    expect(getSchoolFeatures({ ownershipType: 'PRIVATE' }).teacherLeave).toBe(false)
   })
 })

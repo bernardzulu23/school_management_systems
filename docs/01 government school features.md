@@ -1,8 +1,8 @@
 # ZSMS — Government School Features
 
 **Last updated:** 2026-06-12  
-**Document version:** 2.0 (structural alignment)  
-**Implementation phase:** Phase 1 complete → Phase 2 next
+**Document version:** 2.1 (Phase 2 implemented)  
+**Implementation phase:** Phase 2 complete
 
 This document is the **government-school product spec** for ZSMS. It was reviewed against the live codebase (`prisma/schema.prisma`, `lib/zambiaSchoolFeatures.js`, headteacher dashboards, and API routes). Use it as the Cursor implementation prompt for **Phase 2** government-only modules.
 
@@ -24,7 +24,7 @@ This document is the **government-school product spec** for ZSMS. It was reviewe
 | Teacher TSC #         | New `tscNumber` only in Phase 2 model                 | **`Teacher.ts_number`** already exists; extend in Phase 2 if needed                               |
 | MoE location fields   | Proposed as new                                       | **`School.province`**, **`School.district`**, **`School.reportingStreamKey`** already on `School` |
 | Fee features          | Not mentioned                                         | **`fee-management`** blocked for `GOVERNMENT` via `lib/school/feeManagementAccess.js`             |
-| EMIS / grants / leave | Written as if greenfield                              | **Not built yet** — Phase 2; partial overlap with existing **MOE Reports**                        |
+| EMIS / grants / leave | Written as if greenfield                              | **Phase 2 implemented** — see `/api/government/*` and `/dashboard/headteacher/government/*`       |
 | Backend stack         | “Node.js/Express”                                     | **Next.js 16 App Router** API routes only (`app/api/`)                                            |
 
 ---
@@ -137,26 +137,17 @@ These headteacher / school features work today when the school plan includes the
 
 ---
 
-## Phase 2 — Government-only modules (planned)
+## Phase 2 — Government-only modules (implemented)
 
-Implement the sections below under `app/api/government/*` and `app/dashboard/headteacher/government/*`. Gate APIs with:
+Routes live under `app/api/government/*` and `app/dashboard/headteacher/government/*`. APIs use `authorizeGovernmentRoute()` in `lib/government/routeAuth.js` (auth → tenancy → plan → `requireSchoolTypeAccess`).
 
-```js
-import { getSchoolOwnershipType, isGovernmentSchool } from '@/lib/school/feeManagementAccess'
-
-const ownershipType = await getSchoolOwnershipType(schoolId)
-if (!isGovernmentSchool(ownershipType)) {
-  return NextResponse.json({ error: 'This module is for government schools only' }, { status: 403 })
-}
-```
-
-Add plan feature id e.g. `government-emis-export` to `lib/zambiaSchoolFeatures.js` when shipping each module.
+Plan feature ids in `lib/zambiaSchoolFeatures.js`: `emis-export`, `grants-tracking`, `gender-report`, `teacher-leave`, `teacher-deployment`.
 
 ---
 
 ### FEATURE 2.1 — EMIS / MoE HDCT export (extends MOE Reports)
 
-**Status:** Planned (Phase 2)  
+**Status:** Implemented (Phase 2)  
 **Relation to today:** `/api/dashboard/moe-reports` provides enrollment CSV; Phase 2 adds **multi-sheet Excel** aligned to Harmonised Data Collection Tool (HDCT).
 
 **Prisma:** No new models required for v1 export. Optional Phase 2 field on `School`:
@@ -190,7 +181,7 @@ npm install xlsx
 
 ### FEATURE 2.2 — School grants tracking
 
-**Status:** Planned (Phase 2)
+**Status:** Implemented (Phase 2)
 
 Capitation and infrastructure grants from MoE — receipt, allocation by budget line, expenditure for DEO audit.
 
@@ -245,7 +236,7 @@ model GrantAllocation {
 
 ### FEATURE 2.3 — Gender parity & dropout reporting (SDG 4)
 
-**Status:** Planned (Phase 2)  
+**Status:** Implemented (Phase 2)  
 **Overlap:** Plan includes `girls-dropout-tracking` feature flag — wire UI here.
 
 Enrolment, attendance, and withdrawals disaggregated by gender; Gender Parity Index (GPI).
@@ -260,7 +251,7 @@ Enrolment, attendance, and withdrawals disaggregated by gender; Gender Parity In
 
 ### FEATURE 2.4 — Teacher deployment & leave records
 
-**Status:** Planned (Phase 2)  
+**Status:** Implemented (Phase 2)  
 **Overlap:** `teacher-deployment-system` exists in `ZAMBIA_FEATURES` metadata only — no `TeacherDeployment` model yet.
 
 **Prisma additions:**
@@ -309,68 +300,56 @@ model TeacherDeployment {
 
 **APIs:**
 
-- `app/api/government/leave/route.js` — GET, POST
-- `app/api/government/leave/[id]/route.js` — PATCH approve/reject, DELETE cancel
-- `app/api/government/leave/summary/route.js` — balances per teacher
+- `app/api/government/leave/route.js` — GET (with balances), POST
+- `app/api/government/leave/[id]/route.js` — PATCH approve/reject (headteacher)
 - `app/api/government/deployment/route.js` — GET, POST, PATCH
 
-**UI:** `app/dashboard/headteacher/government/staff-records/page.js` — deployment register, leave calendar, balances, DEO export.
+**UI:**
 
-**SMS:** On leave approval, use `lib/sms/sendAfricasTalkingSms` (same pattern as results SMS).
+- `app/dashboard/headteacher/government/leave/page.js` — leave register, balances, apply/approve
+- `app/dashboard/headteacher/government/deployment/page.js` — teacher deployment register
 
----
-
-## Phase 2 — Navigation
-
-Add a **Government Tools** sidebar section for headteachers when `ownershipType === 'GOVERNMENT'`. Load ownership from school context (e.g. `useSchool()` / API `GET /api/school/current` — extend payload with `ownershipType` if not already exposed).
-
-```js
-// components/dashboard/Sidebar.js (pattern)
-import { isGovernmentSchool } from '@/lib/school/feeManagementAccess'
-
-// school.ownershipType from SchoolContext
-{
-  isGovernmentSchool(school?.ownershipType) && (
-    <>
-      {/* Government Tools */}
-      <Link href="/dashboard/headteacher/government/emis-export">EMIS Export</Link>
-      <Link href="/dashboard/headteacher/government/grants">Grants Tracking</Link>
-      <Link href="/dashboard/headteacher/government/gender-report">Gender & Dropout</Link>
-      <Link href="/dashboard/headteacher/government/staff-records">Staff & Leave</Link>
-    </>
-  )
-}
-```
-
-Keep existing **MOE Reports** link for all schools on standard+ plans; Phase 2 EMIS export is the government HDCT superset.
+**SMS:** On leave approval, optional hook via `lib/sms/sendAfricasTalkingSms` (not wired in v1).
 
 ---
 
-## Phase 2 — Migration
+## Phase 2 — Navigation (implemented)
 
-After adding Phase 2 Prisma models:
+Headteacher sidebar (`components/dashboard/Sidebar.js`) injects five links after **MOE Reports** when `getSchoolFeatures(school).isGovernment` is true:
+
+| Link             | Path                                              |
+| ---------------- | ------------------------------------------------- |
+| EMIS Export      | `/dashboard/headteacher/government/emis-export`   |
+| Grants Tracking  | `/dashboard/headteacher/government/grants`        |
+| Gender & Dropout | `/dashboard/headteacher/government/gender-report` |
+| Staff Leave      | `/dashboard/headteacher/government/leave`         |
+| Deployments      | `/dashboard/headteacher/government/deployment`    |
+
+Keep existing **MOE Reports** for all schools on standard+ plans; EMIS export is the government HDCT superset.
+
+---
+
+## Phase 2 — Migration (shipped)
 
 ```bash
-npx prisma migrate dev --name government_grants_leave_deployment
-npx prisma generate
+npx prisma migrate deploy   # includes 20260620120000_government_school_features
+npm install xlsx
 ```
 
-`ownershipType` migration already shipped: `prisma/migrations/20260613180000_transport_hostel_ownership/`.
+Models: `SchoolGrant`, `GrantAllocation`, `TeacherLeave`, `TeacherDeployment`.
 
 ---
 
-## Implementation checklist (Phase 2 order)
+## Implementation checklist (Phase 2 — complete)
 
-| Step | Item                                                                | Depends on           |
-| ---- | ------------------------------------------------------------------- | -------------------- |
-| 1    | Expose `ownershipType` on `GET /api/school/current` + SchoolContext | Phase 1              |
-| 2    | Government sidebar section + route stubs                            | Step 1               |
-| 3    | EMIS HDCT export (Excel)                                            | MOE snapshot queries |
-| 4    | Gender / dropout report                                             | Step 3 queries       |
-| 5    | Grants models + UI                                                  | Migration            |
-| 6    | Leave + deployment models + UI                                      | Migration            |
-| 7    | Update `USER_GUIDE.md` headteacher nav + workflows                  | Each UI ship         |
-| 8    | Update `SYSTEM_DOCUMENTATION.md` + `npm run docs:api-routes`        | Each API ship        |
+| Step | Item                                                       | Status |
+| ---- | ---------------------------------------------------------- | ------ |
+| 1    | Helpers + `schoolTypeGate` + plan feature ids              | Done   |
+| 2    | Prisma models + migration + `xlsx`                         | Done   |
+| 3    | `lib/government/*` services                                | Done   |
+| 4    | `/api/government/*` routes                                 | Done   |
+| 5    | Sidebar + five headteacher UI pages (`sessionFetch`)       | Done   |
+| 6    | Unit tests + `SYSTEM_DOCUMENTATION.md` + `docs:api-routes` | Done   |
 
 ---
 
@@ -386,4 +365,4 @@ npx prisma generate
 
 ---
 
-_Phase 1 structural work is complete. Begin Phase 2 with section 2.1 (EMIS export) or the checklist above._
+_Phase 2 government modules (EMIS export, grants, gender report, leave, deployments) are implemented._

@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { FeatureGate } from '@/components/FeatureGate'
 import { ArrowLeft, RefreshCw } from 'lucide-react'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 import LoadingSpinner from '@/components/LoadingSpinner'
 
 export function AnalyticsFeaturePage({
@@ -25,7 +26,7 @@ export function AnalyticsFeaturePage({
     setLoading(true)
     setError('')
     try {
-      const res = await fetch(apiPath, { credentials: 'include' })
+      const res = await sessionFetch(apiPath)
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json.error || json.message || 'Failed to load data')
       setData(json.data ?? json)

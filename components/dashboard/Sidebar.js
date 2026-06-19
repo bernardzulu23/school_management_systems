@@ -102,6 +102,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           icon: AlertTriangle,
         },
         { name: 'Transport', href: '/dashboard/headteacher/transport', icon: Bus },
+        { name: 'Inter-house', href: '/dashboard/headteacher/houses', icon: Trophy },
         { name: 'Hostel', href: '/dashboard/headteacher/hostel', icon: HomeIcon },
         { name: 'Assessments', href: '/dashboard/assessments', icon: ClipboardList },
         { name: 'Results', href: '/dashboard/results', icon: BarChart3 },
@@ -211,6 +212,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Code Playground', href: '/dashboard/student/code-playground', icon: Code },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
         { name: 'My Activities', href: '/dashboard/student/extracurricular', icon: Trophy },
+        { name: 'Parent view', href: '/dashboard/student/parent-view', icon: Users },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
       ],
     }
@@ -231,6 +233,86 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     const showCodePlayground = features.codePlayground
     const navRoleKey = roleKey === 'hod' && !showHod ? 'teacher' : roleKey
 
+    let roleItems = roleSpecificItems[navRoleKey] || []
+    if (navRoleKey === 'headteacher' && features.proprietorDashboard) {
+      roleItems = [...roleItems]
+      const billingIndex = roleItems.findIndex((item) => item.name === 'Billing')
+      const proprietorItem = {
+        name: 'Owner Dashboard',
+        href: '/dashboard/proprietor',
+        icon: BarChart3,
+      }
+      if (billingIndex >= 0) {
+        roleItems.splice(billingIndex + 1, 0, proprietorItem)
+      } else {
+        roleItems.push(proprietorItem)
+      }
+    }
+
+    if (navRoleKey === 'headteacher' && features.feeManagement) {
+      roleItems = [...roleItems]
+      const billingIndex = roleItems.findIndex((item) => item.name === 'Billing')
+      const feeItems = [
+        {
+          name: 'Fee Schedules',
+          href: '/dashboard/headteacher/fees/schedules',
+          icon: FileText,
+        },
+        {
+          name: 'Invoices',
+          href: '/dashboard/headteacher/fees/invoices',
+          icon: ClipboardList,
+        },
+        {
+          name: 'Sibling Groups',
+          href: '/dashboard/headteacher/fees/siblings',
+          icon: Users,
+        },
+      ]
+      if (billingIndex >= 0) {
+        roleItems.splice(billingIndex + 1, 0, ...feeItems)
+      } else {
+        roleItems.push(...feeItems)
+      }
+    }
+
+    if (navRoleKey === 'headteacher' && features.isGovernment) {
+      roleItems = [...roleItems]
+      const moeIndex = roleItems.findIndex((item) => item.name === 'MOE Reports')
+      const govItems = [
+        {
+          name: 'EMIS Export',
+          href: '/dashboard/headteacher/government/emis-export',
+          icon: FileText,
+        },
+        {
+          name: 'Grants Tracking',
+          href: '/dashboard/headteacher/government/grants',
+          icon: CreditCard,
+        },
+        {
+          name: 'Gender & Dropout',
+          href: '/dashboard/headteacher/government/gender-report',
+          icon: BarChart3,
+        },
+        {
+          name: 'Staff Leave',
+          href: '/dashboard/headteacher/government/leave',
+          icon: UserCheck,
+        },
+        {
+          name: 'Deployments',
+          href: '/dashboard/headteacher/government/deployment',
+          icon: Users,
+        },
+      ]
+      if (moeIndex >= 0) {
+        roleItems.splice(moeIndex + 1, 0, ...govItems)
+      } else {
+        roleItems.push(...govItems)
+      }
+    }
+
     const filterPrimaryItems = (items) =>
       items.filter((item) => {
         if (!showGrading && item.name === 'Results') return false
@@ -243,6 +325,16 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           return false
         if (!showCbc && item.name === 'CBC Assessment') return false
         if (!showFees && item.name === 'Payments') return false
+        if (
+          !showFees &&
+          (item.name === 'Fee Schedules' ||
+            item.name === 'Invoices' ||
+            item.name === 'Sibling Groups' ||
+            item.name === 'Owner Dashboard' ||
+            item.name === 'Parent view')
+        ) {
+          return false
+        }
         if (!showHostel && item.name === 'Hostel') return false
         if (!showCareer && (item.name === 'Career clusters' || item.name === 'Careers')) {
           return false
@@ -256,7 +348,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         return true
       })
 
-    const items = filterPrimaryItems([...baseItems, ...(roleSpecificItems[navRoleKey] || [])])
+    const items = filterPrimaryItems([...baseItems, ...roleItems])
     const isIndividual = String(school?.schoolType || '').toUpperCase() === 'INDIVIDUAL'
 
     if (isIndividual && roleKey === 'teacher') {

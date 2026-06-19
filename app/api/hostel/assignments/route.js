@@ -5,6 +5,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
+import { checkHostelGenderMatch } from '@/lib/hostel/genderMatch'
 
 export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
@@ -31,14 +32,27 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!studentId || !roomId) throw new ApiError('studentId and roomId are required', 400)
 
   const [student, room] = await Promise.all([
-    db.student.findFirst({ where: { id: studentId, schoolId }, select: { id: true } }),
+    db.student.findFirst({
+      where: { id: studentId, schoolId },
+      select: { id: true, user: { select: { gender: true } } },
+    }),
     db.hostelRoom.findFirst({
       where: { id: roomId, schoolId },
-      select: { id: true, capacity: true },
+      select: { id: true, capacity: true, gender: true },
     }),
   ])
   if (!student) throw new ApiError('Student not found', 404)
   if (!room) throw new ApiError('Room not found', 404)
+
+  const genderCheck = checkHostelGenderMatch({
+    studentGender: student.user?.gender,
+    roomGender: room.gender,
+  })
+  if (!genderCheck.ok) {
+    const err = new ApiError(genderCheck.message, 400)
+    err.code = genderCheck.code
+    throw err
+  }
 
   const currentCount = await db.studentHostel.count({ where: { roomId, year } })
   if (currentCount >= room.capacity) {

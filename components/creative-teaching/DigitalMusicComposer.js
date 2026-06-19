@@ -37,19 +37,50 @@ export default function DigitalMusicComposer() {
   const [bpm, setBpm] = useState(120)
   const [currentStep, setCurrentStep] = useState(-1)
   const [instrument, setInstrument] = useState('synth')
+  const [instrumentLoading, setInstrumentLoading] = useState(false)
+  const [instrumentError, setInstrumentError] = useState(null)
   const synthRef = useRef(null)
   const partRef = useRef(null)
   const stopTimerRef = useRef(null)
+
+  const createSynth = useCallback((T, type) => {
+    if (type === 'marimba') {
+      return new T.Synth({
+        oscillator: { type: 'sine' },
+        envelope: { attack: 0.001, decay: 0.5, sustain: 0, release: 0.5 },
+      }).toDestination()
+    }
+    return new T.Synth({
+      oscillator: { type: 'triangle' },
+      envelope: { attack: 0.02, decay: 0.1, sustain: 0.5, release: 0.8 },
+    }).toDestination()
+  }, [])
+
+  const safeTriggerAttackRelease = useCallback(
+    async (note, duration, time) => {
+      if (!Tone || !synthRef.current || instrumentLoading) return false
+      try {
+        await Tone.start()
+        if (typeof time === 'number') {
+          synthRef.current.triggerAttackRelease(note, duration, time)
+        } else {
+          synthRef.current.triggerAttackRelease(note, duration)
+        }
+        return true
+      } catch (err) {
+        console.warn('[music] playback skipped:', err?.message || err)
+        return false
+      }
+    },
+    [Tone, instrumentLoading]
+  )
 
   useEffect(() => {
     let mounted = true
     import('tone').then((T) => {
       if (!mounted) return
       setTone(T)
-      synthRef.current = new T.Synth({
-        oscillator: { type: 'triangle' },
-        envelope: { attack: 0.02, decay: 0.1, sustain: 0.5, release: 0.8 },
-      }).toDestination()
+      synthRef.current = createSynth(T, 'synth')
     })
     return () => {
       mounted = false
@@ -57,31 +88,54 @@ export default function DigitalMusicComposer() {
       if (synthRef.current) synthRef.current.dispose()
       if (partRef.current) partRef.current.dispose()
     }
-  }, [])
+  }, [createSynth])
+
+  const stop = useCallback(() => {
+    if (!Tone) return
+    Tone.getTransport().stop()
+    if (partRef.current) {
+      partRef.current.stop()
+      partRef.current.dispose()
+      partRef.current = null
+    }
+    setPlaying(false)
+    setCurrentStep(-1)
+    if (stopTimerRef.current) clearTimeout(stopTimerRef.current)
+    stopTimerRef.current = null
+  }, [Tone])
 
   const changeInstrument = useCallback(
     async (type) => {
       if (!Tone) return
-      setInstrument(type)
+      stop()
+      setInstrumentError(null)
       if (synthRef.current) synthRef.current.dispose()
+
       if (type === 'piano') {
-        synthRef.current = new Tone.Sampler({
-          urls: getSalamanderUrls(),
-          baseUrl: 'https://tonejs.github.io/audio/salamander/',
-        }).toDestination()
-      } else if (type === 'marimba') {
-        synthRef.current = new Tone.Synth({
-          oscillator: { type: 'sine' },
-          envelope: { attack: 0.001, decay: 0.5, sustain: 0, release: 0.5 },
-        }).toDestination()
-      } else {
-        synthRef.current = new Tone.Synth({
-          oscillator: { type: 'triangle' },
-          envelope: { attack: 0.02, decay: 0.1, sustain: 0.5, release: 0.8 },
-        }).toDestination()
+        setInstrument(type)
+        setInstrumentLoading(true)
+        try {
+          const sampler = new Tone.Sampler({
+            urls: getSalamanderUrls(),
+            baseUrl: 'https://tonejs.github.io/audio/salamander/',
+          }).toDestination()
+          synthRef.current = sampler
+          await sampler.loaded
+        } catch (err) {
+          console.warn('[music] piano samples failed to load:', err?.message || err)
+          setInstrumentError('Piano samples could not load — using synth instead.')
+          synthRef.current = createSynth(Tone, 'synth')
+          setInstrument('synth')
+        } finally {
+          setInstrumentLoading(false)
+        }
+        return
       }
+
+      setInstrument(type)
+      synthRef.current = createSynth(Tone, type)
     },
-    [Tone]
+    [Tone, createSynth, stop]
   )
 
   const addNote = () => {
@@ -96,23 +150,11 @@ export default function DigitalMusicComposer() {
   }
 
   const previewNote = async (note) => {
-    if (!Tone || !synthRef.current) return
-    await Tone.start()
-    synthRef.current.triggerAttackRelease(note, '8n')
-  }
-
-  const stop = () => {
-    if (!Tone) return
-    Tone.getTransport().stop()
-    if (partRef.current) partRef.current.stop()
-    setPlaying(false)
-    setCurrentStep(-1)
-    if (stopTimerRef.current) clearTimeout(stopTimerRef.current)
-    stopTimerRef.current = null
+    await safeTriggerAttackRelease(note, '8n')
   }
 
   const play = async () => {
-    if (!Tone || !synthRef.current || sequence.length === 0) return
+    if (!Tone || !synthRef.current || sequence.length === 0 || instrumentLoading) return
     await Tone.start()
     if (partRef.current) {
       partRef.current.stop()
@@ -132,7 +174,11 @@ export default function DigitalMusicComposer() {
     })
 
     partRef.current = new Tone.Part((t, val) => {
-      synthRef.current.triggerAttackRelease(val.note, val.duration, t)
+      try {
+        synthRef.current?.triggerAttackRelease(val.note, val.duration, t)
+      } catch (err) {
+        console.warn('[music] playback skipped:', err?.message || err)
+      }
       setCurrentStep(val.index)
     }, events)
 
@@ -207,12 +253,17 @@ export default function DigitalMusicComposer() {
               padding: '6px 10px',
               fontSize: 13,
             }}
-            disabled={!Tone}
+            disabled={!Tone || instrumentLoading}
           >
             <option value="synth">Synth</option>
-            <option value="piano">Piano</option>
+            <option value="piano">
+              Piano{instrumentLoading && instrument === 'piano' ? ' (loading…)' : ''}
+            </option>
             <option value="marimba">Marimba</option>
           </select>
+          {instrumentError ? (
+            <span style={{ color: '#b45309', fontSize: 11, maxWidth: 180 }}>{instrumentError}</span>
+          ) : null}
 
           <span style={{ color: '#666666', fontSize: 12 }}>BPM:</span>
           <input
@@ -228,7 +279,7 @@ export default function DigitalMusicComposer() {
 
           <button
             onClick={playing ? stop : play}
-            disabled={sequence.length === 0 || !Tone}
+            disabled={sequence.length === 0 || !Tone || instrumentLoading}
             style={{
               padding: '7px 20px',
               background: playing ? '#ef4444' : '#22c55e',

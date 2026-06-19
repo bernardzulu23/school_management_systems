@@ -1,13 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { api } from '@/lib/api'
+import { normalizeRoomGender } from '@/lib/hostel/genderMatch'
+import { normalizeStudentGender } from '@/lib/government/genderReport'
 import { Home, Plus, UserPlus } from 'lucide-react'
 import toast from 'react-hot-toast'
+
+function studentMatchesRoom(student, roomGender) {
+  const room = normalizeRoomGender(roomGender)
+  if (room === 'mixed') return true
+  const g = normalizeStudentGender(student?.gender ?? student?.user?.gender)
+  if (g === 'Male') return room === 'male'
+  if (g === 'Female') return room === 'female'
+  return false
+}
 
 export default function HostelPage() {
   const queryClient = useQueryClient()
@@ -27,6 +38,15 @@ export default function HostelPage() {
     queryKey: ['hostel-students'],
     queryFn: () => api.getStudents({ limit: 500 }).then((res) => res.data?.data || res.data || []),
   })
+
+  const studentList = Array.isArray(students) ? students : []
+  const selectedRoom = (rooms || []).find((r) => r.id === assignRoomId)
+  const selectedRoomGender = normalizeRoomGender(selectedRoom?.gender)
+
+  const assignableStudents = useMemo(() => {
+    if (!assignRoomId || selectedRoomGender === 'mixed') return studentList
+    return studentList.filter((s) => studentMatchesRoom(s, selectedRoom?.gender))
+  }, [studentList, assignRoomId, selectedRoom?.gender, selectedRoomGender])
 
   const createRoom = async (e) => {
     e.preventDefault()
@@ -58,11 +78,14 @@ export default function HostelPage() {
       setAssignStudentId('')
       queryClient.invalidateQueries({ queryKey: ['hostel-rooms', year] })
     } catch (err) {
-      toast.error(err?.message || 'Failed to assign student')
+      toast.error(err?.response?.data?.error || err?.message || 'Failed to assign student')
     }
   }
 
-  const studentList = Array.isArray(students) ? students : []
+  const assignHint =
+    assignRoomId && selectedRoomGender !== 'mixed'
+      ? `Showing ${selectedRoomGender} students only for this dormitory.`
+      : null
 
   return (
     <DashboardLayout title="Hostel & Boarding">
@@ -119,35 +142,42 @@ export default function HostelPage() {
             <CardTitle>Assign boarder</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={assignStudent} className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <select
-                className="p-2 border border-royalPurple-border rounded-md bg-royalPurple-card"
-                value={assignStudentId}
-                onChange={(e) => setAssignStudentId(e.target.value)}
-              >
-                <option value="">Select student</option>
-                {studentList.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name} ({s.class})
-                  </option>
-                ))}
-              </select>
-              <select
-                className="p-2 border border-royalPurple-border rounded-md bg-royalPurple-card"
-                value={assignRoomId}
-                onChange={(e) => setAssignRoomId(e.target.value)}
-              >
-                <option value="">Select room</option>
-                {(rooms || []).map((r) => (
-                  <option key={r.id} value={r.id}>
-                    {r.name} ({r.boardedCount}/{r.capacity})
-                  </option>
-                ))}
-              </select>
-              <Button type="submit">
-                <UserPlus className="h-4 w-4 mr-2" />
-                Assign
-              </Button>
+            <form onSubmit={assignStudent} className="space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <select
+                  className="p-2 border border-royalPurple-border rounded-md bg-royalPurple-card"
+                  value={assignRoomId}
+                  onChange={(e) => {
+                    setAssignRoomId(e.target.value)
+                    setAssignStudentId('')
+                  }}
+                >
+                  <option value="">Select room</option>
+                  {(rooms || []).map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.name} ({r.boardedCount}/{r.capacity}) · {r.gender}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className="p-2 border border-royalPurple-border rounded-md bg-royalPurple-card"
+                  value={assignStudentId}
+                  onChange={(e) => setAssignStudentId(e.target.value)}
+                  disabled={!assignRoomId}
+                >
+                  <option value="">Select student</option>
+                  {assignableStudents.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name} ({s.class})
+                    </option>
+                  ))}
+                </select>
+                <Button type="submit" disabled={!assignStudentId || !assignRoomId}>
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Assign
+                </Button>
+              </div>
+              {assignHint ? <p className="text-xs text-royalPurple-text2">{assignHint}</p> : null}
             </form>
           </CardContent>
         </Card>
@@ -176,8 +206,16 @@ export default function HostelPage() {
                   </thead>
                   <tbody>
                     {(room.students || []).map((s) => (
-                      <tr key={s.studentId}>
-                        <td className="py-2 px-3">{s.name}</td>
+                      <tr
+                        key={s.studentId}
+                        className={s.genderMismatch ? 'bg-red-50/80' : undefined}
+                      >
+                        <td className="py-2 px-3">
+                          {s.name}
+                          {s.genderMismatch ? (
+                            <span className="ml-2 text-xs text-red-600">Gender mismatch</span>
+                          ) : null}
+                        </td>
                         <td className="py-2 px-3">{s.class}</td>
                         <td className="py-2 px-3">{s.examNumber || '—'}</td>
                       </tr>
