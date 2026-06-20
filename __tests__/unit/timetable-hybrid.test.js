@@ -87,6 +87,25 @@ describe('runPreflightFeasibility', () => {
     expect(result.ok).toBe(false)
     expect(result.blocking.some((b) => b.code === 'TEACHER_OVERLOAD')).toBe(true)
   })
+
+  it('does not false-alarm when doubles sum to more period-slots than grid capacity', () => {
+    const daySlots = makeDaySlots(9)
+    const allocations = Array.from({ length: 71 }, (_, i) => ({
+      id: `a${i}`,
+      teacherId: `t${i % 20}`,
+      classId: `c${i % 47}`,
+      subjectId: 's1',
+      singlePeriods: 0,
+      doublePeriods: 1,
+      triplePeriods: 0,
+      periodsPerWeek: 2,
+      blockType: 'DOUBLE',
+    }))
+    const result = runPreflightFeasibility({ allocations, daySlots, singleMin: 40 })
+    expect(result.blocking.some((b) => b.code === 'GLOBAL_OVERLOAD')).toBe(false)
+    expect(result.blocking.some((b) => b.code === 'CLASS_OVERLOAD')).toBe(false)
+    expect(result.ok).toBe(true)
+  })
 })
 
 describe('generateTimetable', () => {

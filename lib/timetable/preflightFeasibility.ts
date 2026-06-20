@@ -48,32 +48,14 @@ function periodsPerDay(daySlots: Record<string, DayPeriodSlot[]>): number {
   return (daySlots[firstDay] || []).filter((s) => s.type === 'period').length
 }
 
-function totalPeriodsDemand(allocations: SchedulerAllocation[]): number {
-  let total = 0
-  for (const alloc of allocations) {
-    const singles = Math.max(0, Number(alloc.singlePeriods) || 0)
-    const doubles = Math.max(0, Number(alloc.doublePeriods) || 0)
-    const triples = Math.max(0, Number(alloc.triplePeriods) || 0)
-    const computed = singles + doubles * 2 + triples * 3
-    if (computed > 0) {
-      total += computed
-      continue
-    }
-    total += Math.max(1, Number(alloc.periodsPerWeek) || 0)
-  }
-  return total
-}
-
-function teacherPeriodDemand(allocations: SchedulerAllocation[]): Map<string, number> {
+function blockDemandByEntity(
+  blocks: ReturnType<typeof expandAllocationsIntoBlocks>,
+  key: 'classId' | 'teacherId'
+): Map<string, number> {
   const map = new Map<string, number>()
-  for (const alloc of allocations) {
-    const tid = String(alloc.teacherId)
-    const singles = Math.max(0, Number(alloc.singlePeriods) || 0)
-    const doubles = Math.max(0, Number(alloc.doublePeriods) || 0)
-    const triples = Math.max(0, Number(alloc.triplePeriods) || 0)
-    let demand = singles + doubles * 2 + triples * 3
-    if (demand <= 0) demand = Math.max(1, Number(alloc.periodsPerWeek) || 0)
-    map.set(tid, (map.get(tid) || 0) + demand)
+  for (const block of blocks) {
+    const id = String(block[key])
+    map.set(id, (map.get(id) || 0) + 1)
   }
   return map
 }
@@ -102,41 +84,45 @@ export function runPreflightFeasibility(opts: {
   const teachingSlots = countTeachingSlots(daySlots)
   const days = Object.keys(daySlots).length
   const ppd = periodsPerDay(daySlots)
-  const totalCapacity = teachingSlots
-  const totalDemand = totalPeriodsDemand(allocations)
+  const availableSlotsPerClass = teachingSlots
+  const blocks = expandAllocationsIntoBlocks(allocations)
+  const classDemand = blockDemandByEntity(blocks, 'classId')
+  const teacherDemand = blockDemandByEntity(blocks, 'teacherId')
+  const teacherCapacity = teachingSlots
 
-  if (totalDemand > totalCapacity) {
-    blocking.push({
-      code: 'GLOBAL_OVERLOAD',
-      message: `Total teaching demand (${totalDemand} periods) exceeds available slots (${totalCapacity}).`,
-    })
-    details.push(
-      `Need ${totalDemand} period-slots but only ${totalCapacity} exist (${days} days × ~${ppd} periods).`
-    )
-  } else if (totalDemand > totalCapacity * 0.92) {
-    warnings.push({
-      code: 'GLOBAL_TIGHT',
-      message: `Timetable is very tight: ${totalDemand}/${totalCapacity} period-slots used.`,
-    })
+  for (const [classId, demand] of classDemand.entries()) {
+    if (demand > availableSlotsPerClass) {
+      blocking.push({
+        code: 'CLASS_OVERLOAD',
+        message: `Class ${classId} has ${demand} lesson blocks but only ${availableSlotsPerClass} slot positions available per week.`,
+        entityId: classId,
+      })
+      details.push(
+        `Class ${classId}: ${demand} lesson blocks required, ${availableSlotsPerClass} slot positions available (${days} days × ~${ppd} periods).`
+      )
+    } else if (demand > availableSlotsPerClass * 0.92) {
+      warnings.push({
+        code: 'CLASS_TIGHT',
+        message: `Class ${classId} timetable is very tight: ${demand}/${availableSlotsPerClass} lesson blocks.`,
+        entityId: classId,
+      })
+    }
   }
-
-  const teacherDemand = teacherPeriodDemand(allocations)
-  const teacherCapacity = days * ppd
 
   for (const [teacherId, demand] of teacherDemand.entries()) {
     if (demand > teacherCapacity) {
       blocking.push({
         code: 'TEACHER_OVERLOAD',
-        message: `Teacher ${teacherId} needs ${demand} periods but at most ${teacherCapacity} fit in the week.`,
+        message: `Teacher ${teacherId} has ${demand} lesson blocks but only ${teacherCapacity} slot positions available per week.`,
         entityId: teacherId,
       })
       details.push(
-        `Teacher ${teacherId}: ${demand} periods required, ${teacherCapacity} slots available.`
+        `Teacher ${teacherId}: ${demand} lesson blocks required, ${teacherCapacity} slot positions available.`
       )
     } else if (demand > teacherCapacity * 0.85) {
       warnings.push({
         code: 'TEACHER_TIGHT',
-        message: `Teacher ${teacherId} load is high (${demand}/${teacherCapacity} periods).`,
+        message: `Teacher ${teacherId} load is high (${demand}/${teacherCapacity} lesson blocks).`,
         entityId: teacherId,
       })
     }
@@ -166,7 +152,6 @@ export function runPreflightFeasibility(opts: {
     }
   }
 
-  const blocks = expandAllocationsIntoBlocks(allocations)
   for (const block of blocks) {
     if (block.span <= 1) continue
     const candidates = getCandidateSlots(block, daySlots, singleMin)
