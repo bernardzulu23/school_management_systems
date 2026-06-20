@@ -134,7 +134,7 @@ describe('canPlace', () => {
     if (!result.ok) expect(result.reason).toBe('same_day_multi_block')
   })
 
-  it('rejects second double same teacher on same day', () => {
+  it('allows second double same teacher on same day for different class', () => {
     const doubleBlock: SchedulerBlock = {
       blockId: 'b1',
       allocationId: 'a1',
@@ -163,8 +163,7 @@ describe('canPlace', () => {
       subjectId: 's2',
     }
     const result = canPlace(otherClass, { day: 'friday', startPeriod: 3, span: 2 }, placed)
-    expect(result.ok).toBe(false)
-    if (!result.ok) expect(result.reason).toBe('same_day_multi_block')
+    expect(result.ok).toBe(true)
   })
 })
 
@@ -172,6 +171,22 @@ describe('wouldStackSameDay', () => {
   it('returns false for single-period blocks', () => {
     expect(
       wouldStackSameDay({ teacherId: 't1', classId: 'c1', subjectId: 's1', span: 1 }, 'monday', [])
+    ).toBe(false)
+  })
+
+  it('blocks same class+subject double on same day', () => {
+    expect(
+      wouldStackSameDay({ teacherId: 't1', classId: 'c1', subjectId: 's1', span: 2 }, 'monday', [
+        { teacherId: 't2', classId: 'c1', subjectId: 's1', day: 'monday', span: 2 },
+      ])
+    ).toBe(true)
+  })
+
+  it('allows same teacher double on same day for different class', () => {
+    expect(
+      wouldStackSameDay({ teacherId: 't1', classId: 'c2', subjectId: 's1', span: 2 }, 'monday', [
+        { teacherId: 't1', classId: 'c1', subjectId: 's1', day: 'monday', span: 2 },
+      ])
     ).toBe(false)
   })
 })
@@ -311,5 +326,61 @@ describe('generateTimetable', () => {
     expect(result.stats.placed).toBeGreaterThan(0)
     const daysUsed = new Set(result.placedBlocks.map((p) => p.day))
     expect(daysUsed.size).toBeGreaterThanOrEqual(2)
+  })
+
+  it('places six doubles for one teacher across two classes on a five-day grid', () => {
+    const makeDay = (day: string, periods: number) => {
+      const slots = []
+      let cursor = 0
+      for (let p = 1; p <= periods; p++) {
+        slots.push({
+          type: 'period' as const,
+          periodNumber: p,
+          start: cursor,
+          end: cursor + 40,
+          startTime: '07:00',
+          endTime: '07:40',
+          durationMin: 40,
+          day,
+        })
+        cursor += 40
+      }
+      return slots
+    }
+    const daySlots = {
+      monday: makeDay('monday', 8),
+      tuesday: makeDay('tuesday', 8),
+      wednesday: makeDay('wednesday', 8),
+      thursday: makeDay('thursday', 8),
+      friday: makeDay('friday', 8),
+    }
+
+    const result = generateTimetable(
+      [
+        {
+          id: 'a1',
+          teacherId: 't1',
+          classId: 'c1',
+          subjectId: 'math',
+          doublePeriods: 3,
+          periodsPerWeek: 6,
+          blockType: 'DOUBLE',
+        },
+        {
+          id: 'a2',
+          teacherId: 't1',
+          classId: 'c2',
+          subjectId: 'math',
+          doublePeriods: 3,
+          periodsPerWeek: 6,
+          blockType: 'DOUBLE',
+        },
+      ],
+      daySlots,
+      { singleMin: 40, maxExecutionMs: 15000, maxRestarts: 5 }
+    )
+
+    expect(result.stats.placed).toBe(6)
+    expect(result.stats.unplaced).toBe(0)
   })
 })

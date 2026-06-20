@@ -178,7 +178,8 @@ export function daysApart(day1: string, day2: string): number {
 
 /**
  * True when placing a multi-period block on `day` would stack doubles/triples
- * for the same class+subject or the same teacher on that day.
+ * for the same class+subject on that day (e.g. two Maths doubles for 11A on Monday).
+ * Does not block the same teacher teaching doubles to different classes on one day.
  */
 export function wouldStackSameDay(
   block: Pick<SchedulerBlock, 'teacherId' | 'classId' | 'subjectId' | 'span'>,
@@ -193,9 +194,24 @@ export function wouldStackSameDay(
     if (normalizeDay(pl.day) !== nd) continue
     if (Math.max(1, pl.span) < 2) continue
     if (pl.classId === block.classId && pl.subjectId === block.subjectId) return true
-    if (pl.teacherId === block.teacherId) return true
   }
   return false
+}
+
+/** Soft penalty when sorting days: prefer spreading teacher doubles across the week. */
+export function teacherMultiBlockDayPenalty(
+  teacherId: string,
+  day: string,
+  placed: Pick<MultiBlockPlacement, 'teacherId' | 'day' | 'span'>[]
+): number {
+  const nd = normalizeDay(day)
+  const hasDouble = placed.some(
+    (p) =>
+      p.teacherId === teacherId &&
+      normalizeDay(p.day) === nd &&
+      Math.max(1, Number(p.span) || 1) >= 2
+  )
+  return hasDouble ? 0.5 : 0
 }
 
 /** Soft preference: same-subject multi-blocks should be ≥2 days apart when possible. */
@@ -514,7 +530,9 @@ export function generateTimetableOnce(
       if (prefA !== prefB) return prefA - prefB
       const loadA = placed.filter((p) => p.teacherId === block.teacherId && p.day === a.day).length
       const loadB = placed.filter((p) => p.teacherId === block.teacherId && p.day === b.day).length
-      if (loadA !== loadB) return loadA - loadB
+      const scoreA = loadA + teacherMultiBlockDayPenalty(block.teacherId, a.day, placed)
+      const scoreB = loadB + teacherMultiBlockDayPenalty(block.teacherId, b.day, placed)
+      if (scoreA !== scoreB) return scoreA - scoreB
       const closeA = tooCloseSameSubject(block, a.day, placed) ? 1 : 0
       const closeB = tooCloseSameSubject(block, b.day, placed) ? 1 : 0
       return closeA - closeB

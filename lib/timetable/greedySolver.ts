@@ -23,7 +23,11 @@ import {
   type DbConstraintLike,
   type RecipeLikeForRules,
 } from '@/lib/timetable/constraintRules'
-import { wouldStackSameDay, type MultiBlockPlacement } from '@/lib/timetable/scheduler'
+import {
+  wouldStackSameDay,
+  teacherMultiBlockDayPenalty,
+  type MultiBlockPlacement,
+} from '@/lib/timetable/scheduler'
 
 export interface TimeSlot {
   id: string
@@ -358,7 +362,9 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
     const daysSorted = [...dayOrder].sort((da, db) => {
       const la = teacherDayLoad.get(`${lesson.teacherId}|${da}`) || 0
       const lb = teacherDayLoad.get(`${lesson.teacherId}|${db}`) || 0
-      return la - lb
+      const scoreA = la + teacherMultiBlockDayPenalty(lesson.teacherId, da, placedMulti)
+      const scoreB = lb + teacherMultiBlockDayPenalty(lesson.teacherId, db, placedMulti)
+      return scoreA - scoreB
     })
 
     for (const day of daysSorted) {
@@ -427,7 +433,9 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
       const daysSorted = [...dayOrder].sort((da, db) => {
         const la = teacherDayLoad.get(`${lesson.teacherId}|${da}`) || 0
         const lb = teacherDayLoad.get(`${lesson.teacherId}|${db}`) || 0
-        return la - lb
+        const scoreA = la + teacherMultiBlockDayPenalty(lesson.teacherId, da, placedMulti)
+        const scoreB = lb + teacherMultiBlockDayPenalty(lesson.teacherId, db, placedMulti)
+        return scoreA - scoreB
       })
 
       for (const day of daysSorted) {
