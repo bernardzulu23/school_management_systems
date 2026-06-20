@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-06-20T10:06:38.524Z
+Generated: 2026-06-20T19:21:21.585Z
 
-Total route files: **348**
+Total route files: **349**
 
 ## Quick index
 
@@ -16,7 +16,7 @@ Total route files: **348**
 | --------------------------- | ----: |
 | `/api/account`              |     2 |
 | `/api/activities`           |     4 |
-| `/api/admin`                |    15 |
+| `/api/admin`                |    16 |
 | `/api/ai`                   |    11 |
 | `/api/aiml`                 |     5 |
 | `/api/allocations`          |     7 |
@@ -110,6 +110,7 @@ Total route files: **348**
 | POST      | `/api/admin/allocations/:allocationId/approve`  | —       |
 | POST      | `/api/admin/allocations/:allocationId/reject`   | —       |
 | GET       | `/api/admin/allocations/:allocationId/review`   | —       |
+| DELETE    | `/api/admin/allocations/clear`                  | —       |
 | GET       | `/api/admin/allocations/pending`                | —       |
 | GET       | `/api/admin/diagnostics/students`               | —       |
 | GET       | `/api/admin/export/users`                       | —       |
@@ -737,7 +738,7 @@ Total route files: **348**
 | POST               | `/api/timetable/conflicts/resolve`         | POST /api/timetable/conflicts/resolve Apply a resolution action to draft timetable allocation entries.                                                 |
 | POST               | `/api/timetable/conflicts/seed-test`       | POST /api/timetable/conflicts/seed-test Development-only mock conflicts for UI testing.                                                                |
 | GET                | `/api/timetable/draft-meta`                | GET /api/timetable/draft-meta?term=Term+1&academicYear=2026&refresh=false Lightweight read of TimetableDraftMeta (no full rescan unless refresh=true). |
-| GET, PATCH, DELETE | `/api/timetable/entries`                   | PATCH/DELETE draft by `{ id }`; DELETE `{ clearAll: true, term, academicYear }` wipes all draft entries for the term.                                  |
+| GET, PATCH, DELETE | `/api/timetable/entries`                   | Single entry: `{ id }`. Bulk clear: `{ clearAll: true, term, academicYear }` (draft only).                                                             |
 | POST               | `/api/timetable/entries/sync-draft`        | POST /api/timetable/entries/sync-draft Persist in-memory solver/UI assignments to TimetableAllocationEntry (draft).                                    |
 | GET, POST          | `/api/timetable/generate`                  | —                                                                                                                                                      |
 | GET, POST          | `/api/timetable/notifications`             | —                                                                                                                                                      |

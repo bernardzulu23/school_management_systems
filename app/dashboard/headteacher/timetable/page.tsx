@@ -152,6 +152,7 @@ function HeadteacherTimetablePageContent() {
   const [masterEntries, setMasterEntries] = useState<any[]>([])
   const [departments, setDepartments] = useState<any[]>([])
   const [allocationsLoading, setAllocationsLoading] = useState(false)
+  const [allocationsClearing, setAllocationsClearing] = useState(false)
   const [gridMode, setGridMode] = useState<TimetableGridMode>('master')
   const [unplacedLessons, setUnplacedLessons] = useState<UnplacedLesson[]>([])
   const [reloadingTimetable, setReloadingTimetable] = useState(false)
@@ -531,6 +532,57 @@ function HeadteacherTimetablePageContent() {
     )
     if (!ok) return
     await persistClearTimetable(mutationCtx)
+  }
+
+  const onClearDepartmentAllocations = async () => {
+    const seasonLabel = `${term} · ${academicYear}`
+    const ok = window.confirm(
+      `Remove ALL HOD department allocations for ${seasonLabel}?\n\nThis deletes draft, pending, approved, and rejected submissions so HODs can submit fresh ones. This cannot be undone.`
+    )
+    if (!ok) return
+    const alsoClearDraft = window.confirm(
+      'Also clear the draft timetable grid for this term? (Recommended when resetting the schedule.)'
+    )
+    setAllocationsClearing(true)
+    try {
+      const res = await sessionFetch('/api/admin/allocations/clear', {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          confirm: true,
+          term,
+          academicYear,
+          includeSyncedTeacherAllocations: true,
+          includeDraftTimetable: alsoClearDraft,
+        }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        throw new Error(json?.message || json?.error || 'Failed to clear department allocations')
+      }
+      const removed = Number(json?.departmentAllocationsDeleted || 0)
+      toast.success(
+        removed > 0
+          ? `Cleared ${removed} department allocation(s) for ${seasonLabel}`
+          : `No department allocations found for ${seasonLabel}`
+      )
+      const [pending, entries] = await Promise.all([
+        loadPendingAllocations().catch(() => []),
+        loadMasterTimetableEntries().catch(() => []),
+      ])
+      setPendingAllocations(pending)
+      setMasterEntries(entries)
+      setReviewOpen(false)
+      await loadAllocationNotifications()
+      if (alsoClearDraft) {
+        await loadFromApi({ term, academicYear })
+      }
+    } catch (e: any) {
+      toast.error(e?.message || 'Failed to clear department allocations')
+    } finally {
+      setAllocationsClearing(false)
+    }
   }
 
   const suggestionsByAssignmentId = (assignmentId: string) => {
@@ -1122,6 +1174,27 @@ function HeadteacherTimetablePageContent() {
                 ))}
               </div>
             )}
+
+            <div className="onboard-card p-5 border border-red-500/30">
+              <div className="text-royalPurple-text1 font-bold text-lg">Reset HOD allocations</div>
+              <p className="text-sm text-royalPurple-text3 mt-2 max-w-2xl">
+                Remove all department allocation submissions for{' '}
+                <span className="font-semibold text-royalPurple-text2">
+                  {term} · {academicYear}
+                </span>
+                . HODs can create and submit fresh allocations after this reset.
+              </p>
+              <div className="mt-4">
+                <Button
+                  variant="outline"
+                  onClick={onClearDepartmentAllocations}
+                  disabled={allocationsLoading || allocationsClearing}
+                  className="border-red-500/40 text-red-200 hover:bg-red-500/10"
+                >
+                  {allocationsClearing ? 'Clearing…' : 'Clear all department allocations'}
+                </Button>
+              </div>
+            </div>
 
             {reviewOpen ? (
               <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70">
