@@ -413,6 +413,7 @@ model SchoolRegistration {
   subdomain              String?
   level                  String?
   adminName              String?
+  adminPhone             String?
   province               String?
   district               String?
   reportingStreamKey     String?

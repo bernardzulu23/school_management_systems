@@ -496,17 +496,18 @@ Total route files: **345**
 
 ## /api/onboarding
 
-| Method    | Route                                 | Summary |
-| --------- | ------------------------------------- | ------- |
-| POST      | `/api/onboarding/complete`            | —       |
-| GET, POST | `/api/onboarding/lipila/callback`     | —       |
-| POST      | `/api/onboarding/pay`                 | —       |
-| POST      | `/api/onboarding/resend-verification` | —       |
-| POST      | `/api/onboarding/select-plan`         | —       |
-| POST      | `/api/onboarding/start`               | —       |
-| GET       | `/api/onboarding/status`              | —       |
-| POST      | `/api/onboarding/student`             | —       |
-| GET       | `/api/onboarding/verify/:token`       | —       |
+| Method    | Route                                 | Summary                                                     |
+| --------- | ------------------------------------- | ----------------------------------------------------------- |
+| POST      | `/api/onboarding/complete`            | —                                                           |
+| PATCH     | `/api/onboarding/contact`             | Save admin phone for welcome SMS during onboarding session. |
+| GET, POST | `/api/onboarding/lipila/callback`     | —                                                           |
+| POST      | `/api/onboarding/pay`                 | —                                                           |
+| POST      | `/api/onboarding/resend-verification` | —                                                           |
+| POST      | `/api/onboarding/select-plan`         | —                                                           |
+| POST      | `/api/onboarding/start`               | —                                                           |
+| GET       | `/api/onboarding/status`              | —                                                           |
+| POST      | `/api/onboarding/student`             | —                                                           |
+| GET       | `/api/onboarding/verify/:token`       | —                                                           |
 
 ## /api/parent
 

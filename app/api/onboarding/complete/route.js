@@ -99,6 +99,7 @@ export async function POST(request) {
         schoolType: true,
         accountType: true,
         adminName: true,
+        adminPhone: true,
       },
     })
     if (!reg) {
@@ -136,7 +137,7 @@ export async function POST(request) {
 
     if (isIndividual) {
       const adminName = String(body?.adminName || reg.adminName || '').trim()
-      const adminPhone = body?.adminPhone ?? body?.phone ?? null
+      const adminPhone = body?.adminPhone ?? body?.phone ?? reg.adminPhone ?? null
       if (!adminName || adminName.length < 2) {
         return NextResponse.json({ error: 'Your name is required' }, { status: 400 })
       }
@@ -202,7 +203,7 @@ export async function POST(request) {
     const level = normalizeLevel(body?.level)
     const ownershipType = normalizeOwnershipType(body?.ownershipType) || 'PRIVATE'
     const adminName = String(body?.adminName || '').trim()
-    const adminPhone = body?.adminPhone ?? body?.phone ?? null
+    const adminPhone = body?.adminPhone ?? body?.phone ?? reg.adminPhone ?? null
     const location = validateSchoolLocation({
       province: body?.province,
       district: body?.district,

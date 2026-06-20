@@ -8,6 +8,7 @@ import { sendOnboardingVerificationEmail } from '@/config/email'
 import { signOnboardingToken } from '@/lib/middleware/onboardingAuth'
 import { getOnboardingVerifyUrl } from '@/lib/onboarding/emailLinks'
 import { INDIVIDUAL_PLANS } from '@/lib/onboarding/individual'
+import { normalizePhoneNumbers } from '@/lib/sms'
 import { passwordPolicyError } from '@/lib/security/passwordPolicy'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
@@ -33,6 +34,7 @@ export const POST = withSecureApi(async function POST(request) {
       .trim()
       .toLowerCase()
     const password = String(body?.password || '')
+    const adminPhoneRaw = String(body?.adminPhone ?? body?.phone ?? '').trim()
     const schoolType = String(body?.schoolType || 'SCHOOL').toUpperCase()
     const accountType = String(body?.accountType || 'teacher').toLowerCase()
 
@@ -119,6 +121,15 @@ export const POST = withSecureApi(async function POST(request) {
     const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
     const passwordHash = await bcrypt.hash(password, 12)
     const lastVerificationSentAt = new Date()
+    const adminPhoneNormalized = normalizePhoneNumbers(adminPhoneRaw)
+    const adminPhone = adminPhoneNormalized[0] || (adminPhoneRaw ? adminPhoneRaw : null)
+
+    if (adminPhoneRaw && !adminPhone) {
+      return NextResponse.json(
+        { error: 'Enter a valid Zambian mobile number (+2607… or +2609…)', code: 'INVALID_PHONE' },
+        { status: 400 }
+      )
+    }
 
     const reg = await prisma.schoolRegistration.upsert({
       where: { email },
@@ -133,6 +144,7 @@ export const POST = withSecureApi(async function POST(request) {
         paymentStatus: 'unpaid',
         schoolType,
         accountType: schoolType === 'INDIVIDUAL' ? 'teacher' : accountType,
+        ...(adminPhone ? { adminPhone } : {}),
         ...(finalPlan ? { plan: finalPlan } : {}),
         ...(finalPlan ? { subscriptionMonths: 1 } : {}),
       },
@@ -148,6 +160,7 @@ export const POST = withSecureApi(async function POST(request) {
         plan: finalPlan,
         schoolType,
         accountType: schoolType === 'INDIVIDUAL' ? 'teacher' : accountType,
+        ...(adminPhone ? { adminPhone } : {}),
         subscriptionMonths: existing?.subscriptionMonths || 1,
         ...(skipPayment
           ? {

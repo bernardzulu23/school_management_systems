@@ -74,6 +74,14 @@ Or pass `studentId` to load parent contacts and school from the database (requir
 
 These routes do **not** update `ResultsStatus.smsSentAt`.
 
+## Onboarding welcome SMS (production flow)
+
+1. Enter **Mobile number for welcome SMS** on step 1 (before email verification) or save it later via **Save phone** on plan/setup steps.
+2. Phone is stored on `SchoolRegistration.adminPhone` (`PATCH /api/onboarding/contact` or `POST /api/onboarding/start`).
+3. When you **Create Portal**, welcome SMS is sent from **ZSMS** via `sendOutboundSms` (Mocean primary, Africa's Talking fallback).
+
+Requires `MOCEAN_API_TOKEN` or `AFRICASTALKING_*` in `.env.local`.
+
 ## Message builders (`lib/sms.js`)
 
 - `buildWelcomeSmsMessage({ schoolName, loginUrl })`

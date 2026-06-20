@@ -109,6 +109,11 @@ function OnboardingPageContent() {
   }, [])
 
   useEffect(() => {
+    const saved = String(status?.registration?.adminPhone || '').trim()
+    if (saved && !adminPhone.trim()) setAdminPhone(saved)
+  }, [status?.registration?.adminPhone])
+
+  useEffect(() => {
     if (resendCooldown <= 0) return
     const t = setInterval(() => {
       setResendCooldown((s) => Math.max(0, s - 1))
@@ -128,7 +133,12 @@ function OnboardingPageContent() {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         cache: 'no-store',
-        body: JSON.stringify({ email, password, plan: planToSend }),
+        body: JSON.stringify({
+          email,
+          password,
+          plan: planToSend,
+          adminPhone: adminPhone.trim() || undefined,
+        }),
       })
       const contentType = String(res.headers.get('content-type') || '')
       const rawText = await res.text().catch(() => '')
@@ -275,6 +285,31 @@ function OnboardingPageContent() {
     }
   }
 
+  const saveAdminPhone = async (options = {}) => {
+    const { silent = false } = options
+    const phone = adminPhone.trim()
+    if (!phone) {
+      if (!silent) toast.error('Enter a Zambian mobile number (+26097… or +26096…)')
+      return false
+    }
+    try {
+      const res = await fetch('/api/onboarding/contact', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ adminPhone: phone }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || 'Failed to save phone')
+      if (!silent) toast.success(json?.message || 'Phone saved for welcome SMS')
+      await refreshStatus()
+      return true
+    } catch (e) {
+      if (!silent) toast.error(e?.message || 'Failed to save phone')
+      return false
+    }
+  }
+
   const completeSetup = async () => {
     if (!canSetup) return
     if (!paid) {
@@ -285,6 +320,9 @@ function OnboardingPageContent() {
     }
     setSaving(true)
     try {
+      if (adminPhone.trim()) {
+        await saveAdminPhone({ silent: true })
+      }
       const res = await fetch('/api/onboarding/complete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -440,6 +478,21 @@ function OnboardingPageContent() {
                   </div>
                 </div>
                 <PasswordRequirements password={password} />
+                <div className="space-y-2 md:col-span-2">
+                  <Label>Mobile number for welcome SMS (optional)</Label>
+                  <Input
+                    value={adminPhone}
+                    onChange={(e) => setAdminPhone(e.target.value)}
+                    placeholder="+260971234567"
+                    inputMode="tel"
+                    autoComplete="tel"
+                  />
+                  <p className="text-xs text-royalPurple-text3">
+                    After you create your portal, ZSMS sends a welcome text from{' '}
+                    <strong>ZSMS</strong> to this number — even while email verification is in
+                    progress.
+                  </p>
+                </div>
               </div>
               <Button
                 onClick={() => start()}
@@ -493,6 +546,25 @@ function OnboardingPageContent() {
               <div className="onboard-subtitle">Select a plan, then pay via mobile money.</div>
             </div>
             <div className="onboard-card-body space-y-5">
+              <div className="rounded-xl border border-royalPurple-border/50 bg-royalPurple-deep/30 p-4 space-y-3">
+                <div className="text-sm font-medium text-royalPurple-text1">Welcome SMS number</div>
+                <p className="text-xs text-royalPurple-text3">
+                  Add your mobile to receive a welcome text from ZSMS when the portal is created.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Input
+                    value={adminPhone}
+                    onChange={(e) => setAdminPhone(e.target.value)}
+                    placeholder="+260971234567"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    className="flex-1"
+                  />
+                  <Button type="button" variant="outline" onClick={() => saveAdminPhone()}>
+                    Save phone
+                  </Button>
+                </div>
+              </div>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-royalPurple-border/60 bg-royalPurple-deep/40 p-4">
                 <div>
                   <div className="text-royalPurple-text1 font-medium">Free trial</div>
@@ -799,14 +871,26 @@ function OnboardingPageContent() {
                   />
                 </div>
                 <div className="space-y-2 md:col-span-2">
-                  <Label>Admin phone (optional — welcome SMS from ZSMS)</Label>
-                  <Input
-                    value={adminPhone}
-                    onChange={(e) => setAdminPhone(e.target.value)}
-                    placeholder="+260971234567"
-                    inputMode="tel"
-                    autoComplete="tel"
-                  />
+                  <Label>Admin phone for welcome SMS</Label>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Input
+                      value={adminPhone}
+                      onChange={(e) => setAdminPhone(e.target.value)}
+                      placeholder="+260971234567"
+                      inputMode="tel"
+                      autoComplete="tel"
+                      className="flex-1"
+                    />
+                    {status?.authenticated ? (
+                      <Button type="button" variant="outline" onClick={() => saveAdminPhone()}>
+                        Save phone
+                      </Button>
+                    ) : null}
+                  </div>
+                  <p className="text-xs text-royalPurple-text3">
+                    Welcome SMS from <strong>ZSMS</strong> is sent to this number when you create
+                    the portal. You can set it here or in step 1 before verifying email.
+                  </p>
                 </div>
                 <ProvinceDistrictFields
                   province={province}
