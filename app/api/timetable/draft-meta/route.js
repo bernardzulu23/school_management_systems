@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
-import { getAuthUser } from '@/lib/middleware/auth'
+import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import {
   getDraftConflictMeta,
@@ -11,7 +11,10 @@ import {
   rescanAndPersistDraftMeta,
 } from '@/lib/timetable/conflictAudit'
 
-const READ_ROLES = new Set(['headteacher', 'administrator', 'admin', 'superadmin', 'hod'])
+import {
+  canViewTimetableDraft,
+  timetableForbiddenResponse,
+} from '@/lib/timetable/timetableRouteAuth'
 
 /**
  * GET /api/timetable/draft-meta?term=Term+1&academicYear=2026&refresh=false
@@ -21,10 +24,7 @@ export async function GET(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const role = String(user.role || '').toLowerCase()
-  if (!READ_ROLES.has(role)) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  }
+  if (!canViewTimetableDraft(user)) return timetableForbiddenResponse()
 
   const schoolId = await resolveSchoolId(req, user)
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
@@ -36,7 +36,7 @@ export async function GET(req) {
   const term = String(searchParams.get('term') || 'Term 1').trim()
   const academicYear = String(searchParams.get('academicYear') || new Date().getFullYear()).trim()
   const refresh = searchParams.get('refresh') === 'true'
-  const isHod = role === 'hod'
+  const isHod = roleCheck(user, ['HOD', 'hod'])
 
   if (refresh) {
     const summary = await rescanAndPersistDraftMeta(prisma, { schoolId, term, academicYear })

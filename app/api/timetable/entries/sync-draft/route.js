@@ -7,6 +7,10 @@ import { getAuthUser } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { getHardConflictsForDraftEntries } from '@/lib/timetable/draftHardConflictCheck'
 import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
+import {
+  canManageTimetableDraft,
+  timetableForbiddenResponse,
+} from '@/lib/timetable/timetableRouteAuth'
 
 function toMinutes(t) {
   const [h, m] = String(t || '0:0')
@@ -76,10 +80,7 @@ export async function POST(req) {
   const typeCheck = await guardSchoolOnlyTimetable(schoolId)
   if (!typeCheck.allowed) return typeCheck.response
 
-  const role = String(user.role || '').toLowerCase()
-  if (!['headteacher', 'administrator', 'admin', 'superadmin'].includes(role)) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  }
+  if (!canManageTimetableDraft(user)) return timetableForbiddenResponse()
 
   const body = await req.json().catch(() => ({}))
   const term = String(body?.term || 'Term 1').trim()

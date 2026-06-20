@@ -244,9 +244,12 @@ const ADMIN_ROLE_KEYS = new Set([
   'headteacher',
   'schooladministrator',
   'schooladmin',
+  'schoolprincipal',
   'principal',
   'headmaster',
   'superadmin',
+  'deputyheadteacher',
+  'deputyhead',
 ])
 
 function roleKey(role) {
@@ -256,6 +259,14 @@ function roleKey(role) {
     .replace(/[^a-z0-9]+/g, '')
 }
 
+function jwtSecretKeys() {
+  const enc = new TextEncoder()
+  const keys = [enc.encode(String(process.env.JWT_SECRET || '').trim())]
+  const previous = String(process.env.JWT_SECRET_PREVIOUS || '').trim()
+  if (previous) keys.push(enc.encode(previous))
+  return keys.filter((k) => k.length > 0)
+}
+
 async function decodeAccessToken(request) {
   const bearer = String(request.headers.get('authorization') || '')
   const token =
@@ -263,15 +274,18 @@ async function decodeAccessToken(request) {
     (bearer.startsWith('Bearer ') ? bearer.slice(7).trim() : '')
   if (!token) return null
 
-  const secret = String(process.env.JWT_SECRET || '').trim()
-  if (!secret) return null
+  const keys = jwtSecretKeys()
+  if (!keys.length) return null
 
-  try {
-    const { payload } = await jose.jwtVerify(token, new TextEncoder().encode(secret))
-    return payload || null
-  } catch {
-    return null
+  for (const key of keys) {
+    try {
+      const { payload } = await jose.jwtVerify(token, key, { algorithms: ['HS256'] })
+      return payload || null
+    } catch {
+      /* try next signing key */
+    }
   }
+  return null
 }
 
 function getSubdomain(hostname) {

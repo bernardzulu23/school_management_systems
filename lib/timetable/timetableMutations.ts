@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast'
 import type { Assignment } from './types'
 import { useTimetableStore } from './timetableStore'
+import { sessionFetch, authErrorMessage } from '@/lib/auth/sessionFetch'
 
 export interface TimetableMutationContext {
   term: string
@@ -34,14 +35,14 @@ export async function persistAssignmentMove(a: Assignment, ctx: TimetableMutatio
   })
 
   try {
-    const res = await fetch('/api/timetable/entries', {
+    const res = await sessionFetch('/api/timetable/entries', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify(patchBody(a, ctx)),
     })
     const json = await res.json().catch(() => ({}))
-    if (!res.ok) throw new Error(json?.error || 'Failed to save timetable change')
+    if (!res.ok) throw new Error(authErrorMessage(res.status, json))
   } catch (e: unknown) {
     if (before) {
       useTimetableStore.getState().moveAssignment(a.id, {
@@ -93,14 +94,14 @@ export async function persistAssignmentSwap(
 
   try {
     for (const a of [nextB, nextA]) {
-      const res = await fetch('/api/timetable/entries', {
+      const res = await sessionFetch('/api/timetable/entries', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(patchBody(a, ctx)),
       })
       const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.error || 'Failed to save swap')
+      if (!res.ok) throw new Error(authErrorMessage(res.status, json))
     }
   } catch (e: unknown) {
     store.swapAssignments(
@@ -139,14 +140,14 @@ export async function persistAssignmentDelete(
   store.removeAssignment(assignmentId)
 
   try {
-    const res = await fetch('/api/timetable/entries', {
+    const res = await sessionFetch('/api/timetable/entries', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify({ id: assignmentId, term: ctx.term, academicYear: ctx.academicYear }),
     })
     const json = await res.json().catch(() => ({}))
-    if (!res.ok) throw new Error(json?.error || 'Failed to delete timetable entry')
+    if (!res.ok) throw new Error(authErrorMessage(res.status, json))
     toast.success('Deleted')
   } catch (e: unknown) {
     store.addAssignment(before)
@@ -161,7 +162,7 @@ export async function persistClearTimetable(ctx: TimetableMutationContext) {
   store.resetAssignments()
 
   try {
-    const res = await fetch('/api/timetable/entries', {
+    const res = await sessionFetch('/api/timetable/entries', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -172,7 +173,7 @@ export async function persistClearTimetable(ctx: TimetableMutationContext) {
       }),
     })
     const json = await res.json().catch(() => ({}))
-    if (!res.ok) throw new Error(json?.error || 'Failed to clear timetable')
+    if (!res.ok) throw new Error(authErrorMessage(res.status, json))
     toast.success('Timetable cleared')
   } catch (e: unknown) {
     store.replaceAssignments(previous, { source: 'update' })

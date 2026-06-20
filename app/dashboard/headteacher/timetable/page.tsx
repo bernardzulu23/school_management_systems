@@ -31,6 +31,7 @@ import { formatPeriodConfigLabel } from '@/lib/timetable/formatPeriodConfig'
 import { normalizeGradeLabel } from '@/lib/timetable/zambiaTerminology'
 import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import {
   persistAssignmentDelete,
@@ -197,7 +198,7 @@ function HeadteacherTimetablePageContent() {
 
   const loadLockedPeriodAssignments = useCallback(async () => {
     try {
-      const res = await fetch('/api/timetable/teacherPeriodAssignments', {
+      const res = await sessionFetch('/api/timetable/teacherPeriodAssignments', {
         cache: 'no-store',
         credentials: 'include',
       })
@@ -221,7 +222,7 @@ function HeadteacherTimetablePageContent() {
 
   const loadAllocationNotifications = useCallback(async () => {
     try {
-      const res = await fetch('/api/admin/notifications', {
+      const res = await sessionFetch('/api/admin/notifications', {
         cache: 'no-store',
         credentials: 'include',
       })
@@ -232,7 +233,7 @@ function HeadteacherTimetablePageContent() {
   }, [])
 
   const loadPendingAllocations = useCallback(async () => {
-    const res = await fetch('/api/admin/allocations/pending', {
+    const res = await sessionFetch('/api/admin/allocations/pending', {
       cache: 'no-store',
       credentials: 'include',
     })
@@ -243,7 +244,7 @@ function HeadteacherTimetablePageContent() {
   }, [])
 
   const loadMasterTimetableEntries = useCallback(async () => {
-    const res = await fetch('/api/admin/master-timetable', {
+    const res = await sessionFetch('/api/admin/master-timetable', {
       cache: 'no-store',
       credentials: 'include',
     })
@@ -255,7 +256,10 @@ function HeadteacherTimetablePageContent() {
 
   const loadDepartments = useCallback(async () => {
     try {
-      const res = await fetch('/api/departments', { cache: 'no-store', credentials: 'include' })
+      const res = await sessionFetch('/api/departments', {
+        cache: 'no-store',
+        credentials: 'include',
+      })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) return []
       return Array.isArray(json?.data) ? json.data : []
@@ -275,10 +279,13 @@ function HeadteacherTimetablePageContent() {
     }
     setReviewLoading(true)
     try {
-      const res = await fetch(`/api/admin/allocations/${encodeURIComponent(allocationId)}/review`, {
-        cache: 'no-store',
-        credentials: 'include',
-      })
+      const res = await sessionFetch(
+        `/api/admin/allocations/${encodeURIComponent(allocationId)}/review`,
+        {
+          cache: 'no-store',
+          credentials: 'include',
+        }
+      )
       const json = await res.json().catch(() => ({}))
       if (!res.ok)
         throw new Error(json?.message || json?.error || 'Failed to load allocation details')
@@ -293,11 +300,11 @@ function HeadteacherTimetablePageContent() {
       setLoading(true)
       try {
         const [teachersRes, classesRes, subjectsRes, schoolRes, configRes] = await Promise.all([
-          fetch('/api/teachers?limit=200', { cache: 'no-store' }),
-          fetch('/api/classes?limit=200', { cache: 'no-store' }),
-          fetch('/api/subjects?limit=500', { cache: 'no-store' }),
-          fetch('/api/school/current', { cache: 'no-store', credentials: 'include' }),
-          fetch('/api/timetable/config', { cache: 'no-store', credentials: 'include' }),
+          sessionFetch('/api/teachers?limit=200', { cache: 'no-store' }),
+          sessionFetch('/api/classes?limit=200', { cache: 'no-store' }),
+          sessionFetch('/api/subjects?limit=500', { cache: 'no-store' }),
+          sessionFetch('/api/school/current', { cache: 'no-store', credentials: 'include' }),
+          sessionFetch('/api/timetable/config', { cache: 'no-store', credentials: 'include' }),
         ])
 
         const teachersJson = await teachersRes.json().catch(() => ({}))
@@ -475,7 +482,7 @@ function HeadteacherTimetablePageContent() {
     let cancelled = false
     ;(async () => {
       try {
-        const res = await fetch('/api/timetable/teacher-colors', { cache: 'no-store' })
+        const res = await sessionFetch('/api/timetable/teacher-colors', { cache: 'no-store' })
         const data = await res.json().catch(() => ({}))
         if (!res.ok || cancelled) return
         if (data.map) setTeacherColors(data.map)
@@ -483,12 +490,12 @@ function HeadteacherTimetablePageContent() {
           (c: { fromDatabase?: boolean }) => !c.fromDatabase
         )
         if (missing.length > 0 && !cancelled) {
-          await fetch('/api/timetable/teacher-colors', {
+          await sessionFetch('/api/timetable/teacher-colors', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ autoAssign: true }),
           })
-          const res2 = await fetch('/api/timetable/teacher-colors', { cache: 'no-store' })
+          const res2 = await sessionFetch('/api/timetable/teacher-colors', { cache: 'no-store' })
           const data2 = await res2.json().catch(() => ({}))
           if (!cancelled && data2.map) setTeacherColors(data2.map)
         }
@@ -664,7 +671,7 @@ function HeadteacherTimetablePageContent() {
       return
     }
     try {
-      const res = await fetch('/api/timetable/entries/sync-draft', {
+      const res = await sessionFetch('/api/timetable/entries/sync-draft', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -694,7 +701,7 @@ function HeadteacherTimetablePageContent() {
       message: 'Checking teacher load, locks, and bell schedule…',
     })
     try {
-      const res = await fetch('/api/timetable/generate', {
+      const res = await sessionFetch('/api/timetable/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -842,7 +849,7 @@ function HeadteacherTimetablePageContent() {
                 setDbPublishing(true)
                 try {
                   if (assignments.length) {
-                    const syncRes = await fetch('/api/timetable/entries/sync-draft', {
+                    const syncRes = await sessionFetch('/api/timetable/entries/sync-draft', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       credentials: 'include',
@@ -858,7 +865,7 @@ function HeadteacherTimetablePageContent() {
                       throw new Error(syncJson?.error || 'Save draft to database before publishing')
                     }
                   }
-                  const r = await fetch('/api/timetable/publish', {
+                  const r = await sessionFetch('/api/timetable/publish', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',
@@ -1244,7 +1251,7 @@ function HeadteacherTimetablePageContent() {
                               if (!id) return
                               setReviewSubmitting(true)
                               try {
-                                const res = await fetch(
+                                const res = await sessionFetch(
                                   `/api/admin/allocations/${encodeURIComponent(id)}/approve`,
                                   {
                                     method: 'POST',
@@ -1305,7 +1312,7 @@ function HeadteacherTimetablePageContent() {
                               if (!reason) return toast.error('Enter rejection feedback')
                               setReviewSubmitting(true)
                               try {
-                                const res = await fetch(
+                                const res = await sessionFetch(
                                   `/api/admin/allocations/${encodeURIComponent(id)}/reject`,
                                   {
                                     method: 'POST',
@@ -1675,7 +1682,7 @@ function HeadteacherTimetablePageContent() {
                                 onClick={async () => {
                                   updateAssignment(lesson.id, { teacherId: c.teacher.id })
                                   try {
-                                    const res = await fetch('/api/timetable/entries', {
+                                    const res = await sessionFetch('/api/timetable/entries', {
                                       method: 'PATCH',
                                       headers: { 'Content-Type': 'application/json' },
                                       credentials: 'include',

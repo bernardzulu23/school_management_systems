@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Bell, ChevronRight } from 'lucide-react'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 export function TimetableNotificationBell() {
   const [unreadCount, setUnreadCount] = useState(0)
@@ -10,7 +11,7 @@ export function TimetableNotificationBell() {
 
   const fetchNotifications = useCallback(async () => {
     try {
-      const res = await fetch('/api/timetable/notifications', { cache: 'no-store' })
+      const res = await sessionFetch('/api/timetable/notifications', { cache: 'no-store' })
       const data = await res.json()
       const list = data.notifications || []
       setNotifications(list)
@@ -26,7 +27,7 @@ export function TimetableNotificationBell() {
 
   async function markRead(id) {
     try {
-      await fetch('/api/timetable/notifications', {
+      await sessionFetch('/api/timetable/notifications', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id }),

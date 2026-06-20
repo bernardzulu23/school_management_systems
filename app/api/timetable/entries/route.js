@@ -7,6 +7,10 @@ import { getAuthUser } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { validatePatchedDraftEntries } from '@/lib/timetable/draftHardConflictCheck'
 import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
+import {
+  canManageTimetableDraft,
+  timetableForbiddenResponse,
+} from '@/lib/timetable/timetableRouteAuth'
 
 function normalizeDayOfWeek(day) {
   const d = String(day || '')
@@ -58,6 +62,8 @@ export async function GET(req) {
 export async function PATCH(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  if (!canManageTimetableDraft(user)) return timetableForbiddenResponse()
 
   const schoolId = await resolveSchoolId(req, user)
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
@@ -169,10 +175,7 @@ export async function DELETE(req) {
   const academicYear = String(body?.academicYear || new Date().getFullYear()).trim()
 
   if (clearAll) {
-    const role = String(user.role || '').toLowerCase()
-    if (!['headteacher', 'administrator', 'admin', 'superadmin'].includes(role)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
+    if (!canManageTimetableDraft(user)) return timetableForbiddenResponse()
 
     const result = await prisma.timetableAllocationEntry.deleteMany({
       where: { schoolId, term, academicYear, status: 'draft' },
@@ -185,6 +188,8 @@ export async function DELETE(req) {
 
   const id = String(body?.id || '').trim()
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
+
+  if (!canManageTimetableDraft(user)) return timetableForbiddenResponse()
 
   const entry = await prisma.timetableAllocationEntry.findFirst({ where: { id, schoolId } })
   if (!entry) return NextResponse.json({ error: 'Entry not found' }, { status: 404 })

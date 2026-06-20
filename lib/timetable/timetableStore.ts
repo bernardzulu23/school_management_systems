@@ -9,6 +9,7 @@ import { normalizeTimetableConfig, resolveSchoolTimeSlots } from './timeSlotsFro
 import { canPublishTimetable, validateTimetable } from './validateTimetable'
 import { countUniqueConflicts } from './conflictDedupe'
 import { autoResolveConflicts as runAutoResolve } from './autoResolver'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 export type TimetableVersion = 'normal' | 'farming' | 'emergency'
 export type TimetableSeasonMode = 'normal' | 'planting' | 'harvest'
@@ -407,7 +408,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
 
         loadBellSchedule: async () => {
           try {
-            const res = await fetch('/api/timetable/config', {
+            const res = await sessionFetch('/api/timetable/config', {
               cache: 'no-store',
               credentials: 'include',
             })
@@ -528,7 +529,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
               academicYear,
               ...(status ? { status } : {}),
             })
-            const res = await fetch(`/api/timetable/view?${qs}`, { cache: 'no-store' })
+            const res = await sessionFetch(`/api/timetable/view?${qs}`, { cache: 'no-store' })
             if (!res.ok) throw new Error('Failed to fetch timetable')
             const data = await res.json()
             const assignments = Array.isArray(data.assignments) ? data.assignments : []
