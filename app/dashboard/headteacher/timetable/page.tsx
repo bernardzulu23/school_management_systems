@@ -123,7 +123,7 @@ export default function HeadteacherTimetablePage() {
 
 function HeadteacherTimetablePageContent() {
   const searchParams = useSearchParams()
-  const [tab, setTab] = useState<Tab>('assignment')
+  const [tab, setTab] = useState<Tab>('edit')
   const [loading, setLoading] = useState(true)
   const [term, setTerm] = useState(() => String(searchParams.get('term') || 'Term 1'))
   const [academicYear, setAcademicYear] = useState(() =>
@@ -151,7 +151,7 @@ function HeadteacherTimetablePageContent() {
   const [masterEntries, setMasterEntries] = useState<any[]>([])
   const [departments, setDepartments] = useState<any[]>([])
   const [allocationsLoading, setAllocationsLoading] = useState(false)
-  const [gridMode, setGridMode] = useState<TimetableGridMode>('wall')
+  const [gridMode, setGridMode] = useState<TimetableGridMode>('master')
   const [unplacedLessons, setUnplacedLessons] = useState<UnplacedLesson[]>([])
   const [reloadingTimetable, setReloadingTimetable] = useState(false)
   const [lockedPeriodKeys, setLockedPeriodKeys] = useState<Set<string>>(() => new Set())
@@ -752,8 +752,8 @@ function HeadteacherTimetablePageContent() {
       await refreshDraftMeta(true)
       notifyTimetableConflictsUpdated()
       await loadLockedPeriodAssignments()
-      setGridMode('wall')
-      setTab('overview')
+      setGridMode('master')
+      setTab('edit')
     } catch (e: any) {
       if (!genProgress.open || genProgress.stage !== 'error') {
         toast.error(e?.message || 'Generation failed')
@@ -973,6 +973,11 @@ function HeadteacherTimetablePageContent() {
         />
 
         <div className="flex flex-wrap items-center gap-2 border-b border-royalPurple-border/30 pb-2">
+          <p className="w-full text-xs text-royalPurple-text3 mb-1 print:hidden">
+            Use the <span className="font-semibold text-royalPurple-text2">Edit</span> tab to drag
+            lessons, delete entries, and clear the draft. Overview uses the view switcher above (By
+            period = master grid).
+          </p>
           {(
             [
               { id: 'assignment', label: 'Teacher Period Assignment' },
@@ -1417,7 +1422,6 @@ function HeadteacherTimetablePageContent() {
                 showConflicts
                 editable
                 enableDragDrop
-                compactHeader
                 onAssignmentChange={onAssignmentChange}
                 onSwapAssignments={onSwapAssignments}
                 onDeleteAssignment={onDeleteAssignment}

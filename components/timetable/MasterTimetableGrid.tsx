@@ -506,6 +506,13 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
 
   return (
     <div className="w-full min-w-0">
+      {props.compactHeader && dragEnabled ? (
+        <div className="mb-3 text-sm text-royalPurple-text3 print:hidden">
+          Drag lessons between cells. Valid targets show a{' '}
+          <span className="text-emerald-400 font-medium">green</span> ring; invalid slots show{' '}
+          <span className="text-red-400 font-medium">red</span>.
+        </div>
+      ) : null}
       {!props.compactHeader ? (
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4 print:hidden">
           <div>

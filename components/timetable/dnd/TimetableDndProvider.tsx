@@ -3,7 +3,9 @@
 import {
   DndContext,
   DragOverlay,
+  MouseSensor,
   PointerSensor,
+  pointerWithin,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -30,14 +32,18 @@ export function TimetableDndProvider({
   onDragCancel,
 }: TimetableDndProviderProps) {
   const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: { distance: 4 },
+    }),
     useSensor(PointerSensor, {
-      activationConstraint: { distance: 6 },
+      activationConstraint: { distance: 4 },
     })
   )
 
   return (
     <DndContext
       sensors={sensors}
+      collisionDetection={pointerWithin}
       onDragStart={onDragStart}
       onDragOver={onDragOver}
       onDragEnd={onDragEnd}
