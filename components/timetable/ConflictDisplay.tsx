@@ -117,18 +117,18 @@ export function ConflictDisplay(props: ConflictDisplayProps) {
   const padBottom = useVirtual ? (rows.length - end) * rowH : 0
 
   return (
-    <div className="bg-white border border-royalPurple-border/40 rounded-2xl p-5 shadow-sm">
-      <div className="flex items-start justify-between gap-3">
-        <div>
+    <div className="bg-white border border-royalPurple-border/40 rounded-2xl p-4 shadow-sm max-w-full">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <div className="text-royalPurple-text1 font-bold text-lg">Conflicts</div>
+            <div className="text-royalPurple-text1 font-bold text-base">Conflicts</div>
             <span className="badge-brand">{total}</span>
           </div>
-          <div className="text-royalPurple-text3 text-sm">
+          <div className="text-royalPurple-text3 text-xs mt-0.5">
             Sorted by severity. Click to expand suggestions.
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           <Button
             variant="outline"
             onClick={onUndo}
@@ -148,7 +148,7 @@ export function ConflictDisplay(props: ConflictDisplayProps) {
       </div>
 
       {total === 0 ? (
-        <div className="mt-6 text-sm text-royalPurple-text2">No conflicts detected.</div>
+        <div className="mt-3 text-xs text-royalPurple-text2">No conflicts detected.</div>
       ) : null}
 
       {useVirtual ? (

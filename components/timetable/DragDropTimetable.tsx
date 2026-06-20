@@ -306,7 +306,7 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
   const criticalCount = getCriticalConflictCount()
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0">
       <div className="flex items-center justify-between gap-3 mb-4">
         <div>
           <div className="text-royalPurple-text1 font-bold text-xl">Timetable</div>
@@ -329,8 +329,8 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
         </div>
       </div>
 
-      <div className="overflow-auto border border-royalPurple-border/40 rounded-2xl bg-royalPurple-card/60 print:bg-white print:border-gray-200">
-        <div className="min-w-[900px]">
+      <div className="overflow-auto border border-royalPurple-border/40 rounded-2xl bg-royalPurple-card/60 print:bg-white print:border-gray-200 max-w-full">
+        <div className="min-w-[720px] w-max max-w-none">
           <div className="sticky top-0 z-10 bg-royalPurple-deep/95 backdrop-blur border-b border-royalPurple-border/40 print:static print:bg-white">
             <div
               className="grid"

@@ -1422,8 +1422,8 @@ function HeadteacherTimetablePageContent() {
         ) : null}
 
         {tab === 'edit' ? (
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            <div className="xl:col-span-2">
+          <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_min(100%,280px)] gap-4 xl:gap-6 items-start">
+            <div className="min-w-0 overflow-hidden">
               <DragDropTimetable
                 assignments={seasonAssignments}
                 timeSlots={timeSlots}
@@ -1442,7 +1442,7 @@ function HeadteacherTimetablePageContent() {
                 </Button>
               </div>
             </div>
-            <div>
+            <div className="min-w-0 xl:sticky xl:top-4 xl:max-h-[calc(100vh-6rem)] xl:overflow-y-auto">
               <ConflictDisplay
                 conflicts={conflicts}
                 suggestionsByAssignmentId={suggestionsByAssignmentId}
