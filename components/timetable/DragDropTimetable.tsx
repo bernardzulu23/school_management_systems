@@ -1,17 +1,17 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useCollisionDetection } from '@/hooks/useCollisionDetection'
 import { CollisionDetector } from '@/lib/timetable/collisionDetector'
-import { generateCardColor, resolveCardColor } from '@/lib/timetable/cardColors'
+import { resolveCardColor } from '@/lib/timetable/cardColors'
 import { teacherDisplayName } from '@/lib/timetable/teacherDisplay'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import {
-  assignmentOverlapsSlot,
+  assignmentsForPrimaryCell,
   isContinuationSlot,
-  isPrimarySlotForAssignment,
   rowSpanForAssignment,
+  timeToMin,
 } from '@/lib/timetable/gridHelpers'
 import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
 import Modal from '@/components/ui/Modal'
@@ -50,6 +50,8 @@ type SwapState =
       nextB: Assignment
     }
 
+const ROW_H = 88
+
 function slotKey(slot: Pick<TimeSlot, 'period' | 'startTime' | 'endTime' | 'isBreak'>) {
   return `${slot.period}|${slot.startTime}|${slot.endTime}|${slot.isBreak ? 1 : 0}`
 }
@@ -65,6 +67,77 @@ function dayOrder(day: string) {
     sunday: 7,
   }
   return map[String(day).toLowerCase()] || 99
+}
+
+function findBellSlotForAssignment(assignment: Assignment, bellRows: TimeSlot[]) {
+  return bellRows.find(
+    (s) => !s.isBreak && s.startTime === assignment.startTime && s.period === assignment.period
+  )
+}
+
+function endTimeForSpanAtSlot(
+  assignment: Assignment,
+  targetSlot: TimeSlot,
+  bellRows: TimeSlot[]
+): Assignment['endTime'] {
+  const span = rowSpanForAssignment(assignment, bellRows)
+  if (span <= 1) return targetSlot.endTime
+
+  const startIdx = bellRows.findIndex(
+    (r) => !r.isBreak && r.startTime === targetSlot.startTime && r.period === targetSlot.period
+  )
+  if (startIdx < 0) return assignment.endTime
+
+  let counted = 0
+  let lastEnd = targetSlot.endTime
+  for (let i = startIdx; i < bellRows.length && counted < span; i++) {
+    const row = bellRows[i]
+    if (row.isBreak) break
+    lastEnd = row.endTime
+    counted += 1
+  }
+  return lastEnd
+}
+
+function buildAssignmentAtSlot(
+  assignment: Assignment,
+  dayOfWeek: string,
+  slot: TimeSlot,
+  bellRows: TimeSlot[]
+): Assignment {
+  return {
+    ...assignment,
+    dayOfWeek: dayOfWeek as Assignment['dayOfWeek'],
+    startTime: slot.startTime,
+    endTime: endTimeForSpanAtSlot(assignment, slot, bellRows),
+    period: slot.period,
+    isBreak: slot.isBreak,
+    durationMin: assignment.durationMin,
+    periodType: assignment.periodType,
+    consecutivePeriods: assignment.consecutivePeriods,
+    isDoublePeriod: assignment.isDoublePeriod,
+  }
+}
+
+function resolveDropTargetSlot(
+  dayOfWeek: string,
+  slot: TimeSlot,
+  assignments: Assignment[],
+  dragId: Assignment['id'],
+  bellRows: TimeSlot[]
+): TimeSlot {
+  const others = assignments.filter((x) => String(x.id) !== String(dragId))
+  if (!isContinuationSlot(dayOfWeek, slot, others, bellRows)) return slot
+
+  const covering = others.find(
+    (x) =>
+      String(x.dayOfWeek).toLowerCase() === String(dayOfWeek).toLowerCase() &&
+      timeToMin(x.startTime) < timeToMin(slot.startTime) &&
+      timeToMin(x.endTime) > timeToMin(slot.startTime)
+  )
+  if (!covering) return slot
+  const primary = bellRows.find((s) => !s.isBreak && s.startTime === covering.startTime)
+  return primary || slot
 }
 
 export function DragDropTimetable(props: DragDropTimetableProps) {
@@ -109,21 +182,6 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
     }))
   }, [timeSlots])
 
-  const cellAssignments = useMemo(() => {
-    const map = new Map<string, Assignment[]>()
-    for (const a of assignments) {
-      for (const slot of bellRows) {
-        if (slot.isBreak) continue
-        if (!assignmentOverlapsSlot(a, a.dayOfWeek, slot) || !isPrimarySlotForAssignment(a, slot))
-          continue
-        const k = `${a.dayOfWeek}|${slot.period}|${slot.startTime}|${slot.endTime}`
-        if (!map.has(k)) map.set(k, [])
-        map.get(k)!.push(a)
-      }
-    }
-    return map
-  }, [assignments, bellRows])
-
   const assignmentById = useMemo(() => {
     const map = new Map<string, Assignment>()
     for (const a of assignments) map.set(String(a.id), a)
@@ -159,14 +217,7 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
       return { valid: false, conflicts: [] as import('@/lib/timetable/types').Conflict[] }
     const a = assignmentById.get(String(drag.assignmentId))
     if (!a) return { valid: false, conflicts: [] as import('@/lib/timetable/types').Conflict[] }
-    const candidate: Assignment = {
-      ...a,
-      dayOfWeek: dayOfWeek as Assignment['dayOfWeek'],
-      startTime: slot.startTime,
-      endTime: slot.endTime,
-      period: slot.period,
-      isBreak: slot.isBreak,
-    }
+    const candidate = buildAssignmentAtSlot(a, dayOfWeek, slot, bellRows)
     const issues = validateAssignment(candidate)
     return { valid: issues.length === 0, conflicts: issues }
   }
@@ -203,32 +254,29 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
   }
 
   const onDropCell = (dayOfWeek: string, slot: TimeSlot) => {
-    if (!drag.active) return
+    if (!drag.active || slot.isBreak) return
     const a = assignmentById.get(String(drag.assignmentId))
     if (!a) return
-    const next: Assignment = {
-      ...a,
-      dayOfWeek: dayOfWeek as Assignment['dayOfWeek'],
-      startTime: slot.startTime,
-      endTime: slot.endTime,
-      period: slot.period,
-      isBreak: slot.isBreak,
-    }
-    const cellKey = `${dayOfWeek}|${slot.period}|${slot.startTime}|${slot.endTime}`
-    const occupants = cellAssignments.get(cellKey) || []
+
+    const targetSlot = resolveDropTargetSlot(dayOfWeek, slot, assignments, a.id, bellRows)
+    const next = buildAssignmentAtSlot(a, dayOfWeek, targetSlot, bellRows)
+    const occupants = assignmentsForPrimaryCell(dayOfWeek, targetSlot, assignments)
 
     const issues = validateAssignment(next)
     if (issues.length > 0) {
-      if (occupants.length === 1 && String(occupants[0].id) !== String(a.id) && !slot.isBreak) {
+      if (occupants.length === 1 && String(occupants[0].id) !== String(a.id)) {
         const b = occupants[0]
-        const nextB: Assignment = {
-          ...b,
-          dayOfWeek: a.dayOfWeek,
-          startTime: a.startTime,
-          endTime: a.endTime,
-          period: a.period,
-          isBreak: a.isBreak,
-        }
+        const fromSlot = findBellSlotForAssignment(a, bellRows)
+        const nextB = fromSlot
+          ? buildAssignmentAtSlot(b, String(a.dayOfWeek), fromSlot, bellRows)
+          : {
+              ...b,
+              dayOfWeek: a.dayOfWeek,
+              startTime: a.startTime,
+              endTime: a.endTime,
+              period: a.period,
+              isBreak: false,
+            }
 
         const hypothetical = assignments.map((x) => {
           if (String(x.id) === String(a.id)) return next
@@ -302,145 +350,171 @@ export function DragDropTimetable(props: DragDropTimetableProps) {
             </div>
           </div>
 
-          <div>
-            {bellRows.map((slot) => (
-              <div
-                key={slotKey(slot)}
-                className={`grid border-b border-royalPurple-border/20 ${
-                  slot.isBreak ? 'bg-royalPurple-page/50' : 'bg-transparent'
-                }`}
-                style={{ gridTemplateColumns: `200px repeat(${days.length}, minmax(180px, 1fr))` }}
-              >
-                <div className="px-4 py-3 text-sm text-royalPurple-text2">
-                  <div className="font-semibold text-royalPurple-text1">
-                    {slot.label || `Period ${slot.period}`}
-                  </div>
-                  <div className="text-xs text-royalPurple-text3">
-                    {slot.startTime}–{slot.endTime}
-                  </div>
-                </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: `200px repeat(${days.length}, minmax(180px, 1fr))`,
+              gridAutoRows: `minmax(${ROW_H}px, auto)`,
+            }}
+          >
+            {bellRows.map((slot, rowIndex) => {
+              const gridRow = rowIndex + 1
+              const isBreak = Boolean(slot.isBreak)
 
-                {days.map((day) => {
-                  const key = `${day}|${slot.period}|${slot.startTime}|${slot.endTime}`
-                  const continued = isContinuationSlot(day, slot, assignments, bellRows)
-                  if (continued) {
-                    return (
-                      <div
-                        key={key}
-                        className="px-3 py-3 min-h-[88px] border-l border-royalPurple-border/20"
-                        aria-hidden
-                      />
-                    )
-                  }
-                  const list = cellAssignments.get(key) || []
-                  const validation = computeCellValidity(day, slot)
-                  const isHover = hoverCell?.dayOfWeek === day && hoverCell?.key === key
-                  const ringClass = drag.active
-                    ? validation.valid
-                      ? 'ring-2 ring-emerald-500/60'
-                      : 'ring-2 ring-red-500/60'
-                    : ''
-
-                  return (
-                    <div
-                      key={key}
-                      onDragOver={(e) => {
-                        if (!drag.active) return
-                        e.preventDefault()
-                        setHoverCell({ dayOfWeek: day, key })
-                      }}
-                      onDragLeave={() => {
-                        if (isHover) setHoverCell(null)
-                      }}
-                      onDrop={(e) => {
-                        e.preventDefault()
-                        onDropCell(day, slot)
-                      }}
-                      className={`px-3 py-3 min-h-[88px] border-l border-royalPurple-border/20 transition-colors ${
-                        slot.isBreak ? 'opacity-60' : ''
-                      } ${ringClass} ${isHover && drag.active ? 'bg-white/5' : ''}`}
-                    >
-                      <div className="flex flex-col gap-2">
-                        {list.map((a) => {
-                          const aConflicts = conflicts.get(String(a.id)) || []
-                          const hasCritical = aConflicts.some((c) => c.severity === 'critical')
-                          const hasAny = aConflicts.length > 0
-                          const border = hasCritical
-                            ? 'border-red-500/60'
-                            : hasAny
-                              ? 'border-amber-500/60'
-                              : 'border-emerald-500/40'
-                          const cardColors = resolveCardColor(
-                            a.subjectId,
-                            a.teacherId,
-                            teacherColors[String(a.teacherId || '')]?.colorHex
-                          )
-                          const span = rowSpanForAssignment(a, bellRows)
-                          const rowH = 88
-
-                          return (
-                            <div
-                              key={String(a.id)}
-                              draggable={!slot.isBreak}
-                              onDragStart={(e) => {
-                                e.dataTransfer.setData('text/plain', String(a.id))
-                                onDragStart(a.id)
-                              }}
-                              onDragEnd={onDragEnd}
-                              className={`rounded-xl border ${border} px-3 py-2 cursor-grab active:cursor-grabbing zsms-hover-raise relative z-[1]`}
-                              style={{
-                                background: cardColors.bg,
-                                borderColor: hasAny || hasCritical ? undefined : cardColors.border,
-                                minHeight: span > 1 ? `${span * rowH - 12}px` : undefined,
-                                marginBottom: span > 1 ? `-${(span - 1) * rowH}px` : undefined,
-                              }}
-                              title={`${className.get(String(a.classId)) || 'Class'} • ${
-                                teacherName.get(String(a.teacherId)) || 'Teacher'
-                              } • ${subjectName.get(String(a.subjectId)) || (a as any).subjectName || 'Subject'}`}
-                            >
-                              <div className="flex items-center justify-between gap-2">
-                                <div className="text-sm font-semibold text-royalPurple-text1 truncate">
-                                  {subjectName.get(String(a.subjectId)) ||
-                                    (a as any).subjectName ||
-                                    className.get(String(a.classId)) ||
-                                    'Lesson'}
-                                </div>
-                                <div className="text-xs text-royalPurple-text3 truncate">
-                                  {className.get(String(a.classId)) || 'Class'}
-                                </div>
-                              </div>
-                              <div
-                                className="text-xs font-bold text-royalPurple-text2 mt-1 truncate"
-                                title={teacherName.get(String(a.teacherId)) || 'Teacher'}
-                              >
-                                {teacherDisplayName(
-                                  teacherName.get(String(a.teacherId)),
-                                  'initials'
-                                )}
-                              </div>
-                              {aConflicts.length > 0 ? (
-                                <div className="mt-1 text-[11px] text-amber-300">
-                                  {aConflicts.length} issue(s)
-                                </div>
-                              ) : null}
-                            </div>
-                          )
-                        })}
-
-                        {drag.active &&
-                        !validation.valid &&
-                        isHover &&
-                        validation.conflicts.length > 0 ? (
-                          <div className="text-[11px] text-red-300">
-                            {validation.conflicts[0]?.message || 'Invalid slot'}
-                          </div>
-                        ) : null}
-                      </div>
+              return (
+                <Fragment key={slotKey(slot)}>
+                  <div
+                    className={`px-4 py-3 text-sm text-royalPurple-text2 border-b border-royalPurple-border/20 ${
+                      isBreak ? 'bg-royalPurple-page/50' : 'bg-transparent'
+                    }`}
+                    style={{ gridRow, gridColumn: 1 }}
+                  >
+                    <div className="font-semibold text-royalPurple-text1">
+                      {slot.label || `Period ${slot.period}`}
                     </div>
-                  )
-                })}
-              </div>
-            ))}
+                    <div className="text-xs text-royalPurple-text3">
+                      {slot.startTime}–{slot.endTime}
+                    </div>
+                  </div>
+
+                  {isBreak ? (
+                    <div
+                      className="px-3 py-3 opacity-60 border-b border-l border-royalPurple-border/20 bg-royalPurple-page/50 flex items-center justify-center text-xs text-royalPurple-text3 uppercase tracking-widest"
+                      style={{ gridRow, gridColumn: `2 / span ${days.length}` }}
+                    >
+                      {slot.label || 'Break'}
+                    </div>
+                  ) : (
+                    days.map((day, dayIndex) => {
+                      const key = `${day}|${slot.period}|${slot.startTime}|${slot.endTime}`
+                      const list = assignmentsForPrimaryCell(day, slot, assignments)
+                      const continued =
+                        list.length === 0 && isContinuationSlot(day, slot, assignments, bellRows)
+                      if (continued) return null
+
+                      const maxSpan = list.length
+                        ? Math.max(...list.map((a) => rowSpanForAssignment(a, bellRows)))
+                        : 1
+                      const gridColumn = dayIndex + 2
+                      const validation = computeCellValidity(day, slot)
+                      const isHover = hoverCell?.dayOfWeek === day && hoverCell?.key === key
+                      const ringClass = drag.active
+                        ? validation.valid
+                          ? 'ring-2 ring-emerald-500/60'
+                          : 'ring-2 ring-red-500/60'
+                        : ''
+
+                      return (
+                        <div
+                          key={key}
+                          onDragOver={(e) => {
+                            if (!drag.active) return
+                            e.preventDefault()
+                            setHoverCell({ dayOfWeek: day, key })
+                          }}
+                          onDragLeave={() => {
+                            if (isHover) setHoverCell(null)
+                          }}
+                          onDrop={(e) => {
+                            e.preventDefault()
+                            onDropCell(day, slot)
+                          }}
+                          className={`px-3 py-3 border-b border-l border-royalPurple-border/20 transition-colors flex flex-col ${ringClass} ${
+                            isHover && drag.active ? 'bg-white/5' : ''
+                          }`}
+                          style={{
+                            gridRow: maxSpan > 1 ? `${gridRow} / span ${maxSpan}` : gridRow,
+                            gridColumn,
+                          }}
+                        >
+                          <div className="flex flex-col gap-2 h-full flex-1">
+                            {list.map((a) => {
+                              const aConflicts = conflicts.get(String(a.id)) || []
+                              const hasCritical = aConflicts.some((c) => c.severity === 'critical')
+                              const hasAny = aConflicts.length > 0
+                              const border = hasCritical
+                                ? 'border-red-500/60'
+                                : hasAny
+                                  ? 'border-amber-500/60'
+                                  : 'border-emerald-500/40'
+                              const cardColors = resolveCardColor(
+                                a.subjectId,
+                                a.teacherId,
+                                teacherColors[String(a.teacherId || '')]?.colorHex
+                              )
+                              const span = rowSpanForAssignment(a, bellRows)
+
+                              return (
+                                <div
+                                  key={String(a.id)}
+                                  draggable
+                                  onDragStart={(e) => {
+                                    e.dataTransfer.setData('text/plain', String(a.id))
+                                    onDragStart(a.id)
+                                  }}
+                                  onDragEnd={onDragEnd}
+                                  className={`rounded-xl border ${border} px-3 py-2 cursor-grab active:cursor-grabbing zsms-hover-raise relative z-[1] flex-1 h-full min-h-[72px]`}
+                                  style={{
+                                    background: cardColors.bg,
+                                    borderColor:
+                                      hasAny || hasCritical ? undefined : cardColors.border,
+                                  }}
+                                  title={`${className.get(String(a.classId)) || 'Class'} • ${
+                                    teacherName.get(String(a.teacherId)) || 'Teacher'
+                                  } • ${subjectName.get(String(a.subjectId)) || (a as any).subjectName || 'Subject'}`}
+                                >
+                                  <div className="flex items-center justify-between gap-2">
+                                    <div className="text-sm font-semibold text-royalPurple-text1 truncate">
+                                      {subjectName.get(String(a.subjectId)) ||
+                                        (a as any).subjectName ||
+                                        className.get(String(a.classId)) ||
+                                        'Lesson'}
+                                    </div>
+                                    <div className="flex items-center gap-1 shrink-0">
+                                      {span > 1 ? (
+                                        <span className="text-[10px] font-semibold text-royalPurple-text3 opacity-70">
+                                          {span}×
+                                        </span>
+                                      ) : null}
+                                      <span className="text-xs text-royalPurple-text3 truncate max-w-[4rem]">
+                                        {className.get(String(a.classId)) || 'Class'}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div
+                                    className="text-xs font-bold text-royalPurple-text2 mt-1 truncate"
+                                    title={teacherName.get(String(a.teacherId)) || 'Teacher'}
+                                  >
+                                    {teacherDisplayName(
+                                      teacherName.get(String(a.teacherId)),
+                                      'initials'
+                                    )}
+                                  </div>
+                                  {aConflicts.length > 0 ? (
+                                    <div className="mt-1 text-[11px] text-amber-300">
+                                      {aConflicts.length} issue(s)
+                                    </div>
+                                  ) : null}
+                                </div>
+                              )
+                            })}
+
+                            {drag.active &&
+                            !validation.valid &&
+                            isHover &&
+                            validation.conflicts.length > 0 ? (
+                              <div className="text-[11px] text-red-300">
+                                {validation.conflicts[0]?.message || 'Invalid slot'}
+                              </div>
+                            ) : null}
+                          </div>
+                        </div>
+                      )
+                    })
+                  )}
+                </Fragment>
+              )
+            })}
           </div>
         </div>
       </div>
