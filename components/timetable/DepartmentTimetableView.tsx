@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { resolveCardColor } from '@/lib/timetable/cardColors'
-import { teacherDisplayName } from '@/lib/timetable/teacherDisplay'
 import { uniqueBellRows, type BellScheduleSlot } from '@/lib/timetable/bellSchedule'
 import {
   assignmentOverlapsSlot,
@@ -14,6 +13,7 @@ import {
 } from '@/lib/timetable/gridHelpers'
 import { useAuth } from '@/lib/auth'
 import { printTimetable } from '@/lib/timetable/printTimetable'
+import { DraggableAssignmentCard } from '@/components/timetable/dnd/DraggableAssignmentCard'
 import Modal from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 
@@ -27,6 +27,8 @@ export interface DepartmentTimetableViewProps {
   hodId?: string
   classrooms?: Classroom[]
   mobile?: boolean
+  editable?: boolean
+  onAssignmentChange?: (assignment: Assignment) => void | Promise<void>
 }
 
 function dayOrder(day: string) {
@@ -87,6 +89,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
   const [selectedTeacherId, setSelectedTeacherId] = useState<string>('')
   const [isMobile, setIsMobile] = useState(false)
   const [open, setOpen] = useState(false)
+  const editable = props.editable === true
   const [activeAssignmentId, setActiveAssignmentId] = useState<string | null>(null)
   const [nextTeacherId, setNextTeacherId] = useState<string>('')
 
@@ -664,11 +667,6 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                       }
                       const list = byTeacherAndSlot.get(cellK) || []
                       const isFree = !slot.isBreak && list.length === 0
-                      const border = list.some(
-                        (a) => (storeConflicts.get(String(a.id)) || []).length > 0
-                      )
-                        ? 'border-red-500'
-                        : ''
 
                       return (
                         <div
@@ -694,46 +692,30 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                                   teacherColors[String(a.teacherId || '')]?.colorHex
                                 )
                                 const span = rowSpanForAssignment(a, baseSlots)
-                                const rowH = 66
+                                const label = `${subjectLabel.get(String(a.subjectId)) || (a as any).subjectName || 'Subject'} · ${(a as any).className || className.get(String(a.classId)) || 'Class'}`
+                                const tooltip = `${label} · ${teacherName.get(String(a.teacherId)) || 'Teacher'}`
                                 return (
-                                  <button
-                                    type="button"
+                                  <DraggableAssignmentCard
                                     key={String(a.id)}
-                                    onClick={() => {
-                                      setActiveAssignmentId(String(a.id))
-                                      setNextTeacherId(String(a.teacherId))
-                                      setOpen(true)
-                                    }}
-                                    className={`w-full text-left rounded-lg border px-2 py-1.5 hover:opacity-95 transition-colors relative z-[1] ${hasConflict ? 'border-red-500' : 'border-royalPurple-border/40'}`}
-                                    style={{
-                                      background: cardColors.bg,
-                                      borderColor: hasConflict ? undefined : cardColors.border,
-                                      minHeight: span > 1 ? `${span * rowH - 12}px` : undefined,
-                                      marginBottom:
-                                        span > 1 ? `-${(span - 1) * rowH}px` : undefined,
-                                    }}
-                                  >
-                                    <div className="font-bold text-[12px] text-slate-900 truncate">
-                                      {subjectLabel.get(String(a.subjectId)) ||
-                                        (a as any).subjectName ||
-                                        'Subject'}
-                                    </div>
-                                    <div className="text-[11px] text-slate-700 truncate">
-                                      {(a as any).className ||
-                                        className.get(String(a.classId)) ||
-                                        String(a.classId)}
-                                    </div>
-                                    <div
-                                      className="text-[11px] font-bold text-slate-600 truncate"
-                                      title={teacherName.get(String(a.teacherId)) || 'Teacher'}
-                                    >
-                                      {teacherDisplayName(
-                                        teacherName.get(String(a.teacherId)),
-                                        'initials'
-                                      )}
-                                      {hasConflict ? ' · Conflict' : ''}
-                                    </div>
-                                  </button>
+                                    assignment={a}
+                                    disabled={!editable}
+                                    label={label}
+                                    span={span}
+                                    borderColor={hasConflict ? '#ef4444' : undefined}
+                                    cardBg={cardColors.bg}
+                                    cardBorder={cardColors.border}
+                                    hasConflict={hasConflict}
+                                    tooltip={tooltip}
+                                    onClick={
+                                      editable
+                                        ? () => {
+                                            setActiveAssignmentId(String(a.id))
+                                            setNextTeacherId(String(a.teacherId))
+                                            setOpen(true)
+                                          }
+                                        : undefined
+                                    }
+                                  />
                                 )
                               })}
                             </div>
@@ -751,85 +733,90 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
         </div>
       ) : null}
 
-      <Modal isOpen={open} onClose={() => setOpen(false)} title="Edit / Reassign">
-        <div className="space-y-4">
-          {activeAssignment ? (
-            <div className="rounded-xl border border-royalPurple-border bg-royalPurple-card/40 p-4">
-              <div className="text-sm font-bold text-royalPurple-text1">
-                {String(activeAssignment.subjectId)}
+      {editable ? (
+        <Modal isOpen={open} onClose={() => setOpen(false)} title="Edit / Reassign">
+          <div className="space-y-4">
+            {activeAssignment ? (
+              <div className="rounded-xl border border-royalPurple-border bg-royalPurple-card/40 p-4">
+                <div className="text-sm font-bold text-royalPurple-text1">
+                  {String(activeAssignment.subjectId)}
+                </div>
+                <div className="text-sm text-royalPurple-text2 mt-1">
+                  {String(activeAssignment.dayOfWeek)} {String(activeAssignment.startTime)}-
+                  {String(activeAssignment.endTime)}
+                </div>
+                <div className="text-sm text-royalPurple-text2">
+                  {className.get(String(activeAssignment.classId)) ||
+                    String(activeAssignment.classId)}
+                </div>
               </div>
-              <div className="text-sm text-royalPurple-text2 mt-1">
-                {String(activeAssignment.dayOfWeek)} {String(activeAssignment.startTime)}-
-                {String(activeAssignment.endTime)}
-              </div>
-              <div className="text-sm text-royalPurple-text2">
-                {className.get(String(activeAssignment.classId)) ||
-                  String(activeAssignment.classId)}
-              </div>
-            </div>
-          ) : (
-            <div className="text-sm text-royalPurple-text2">No assignment selected.</div>
-          )}
+            ) : (
+              <div className="text-sm text-royalPurple-text2">No assignment selected.</div>
+            )}
 
-          {activeAssignment ? (
-            <div className="space-y-2">
-              <div className="text-sm font-semibold text-royalPurple-text1">Reassign to</div>
-              <select
-                className="zsms-select w-full"
-                value={nextTeacherId}
-                onChange={(e) => setNextTeacherId(e.target.value)}
-              >
-                {candidatesForActive.map((t: any) => (
-                  <option key={String(t.id)} value={String(t.id)}>
-                    {String(t.fullName || 'Teacher')}
-                  </option>
-                ))}
-              </select>
-              <div className="flex items-center justify-end gap-2 pt-2">
-                <Button variant="outline" onClick={() => setOpen(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  onClick={() => {
-                    if (!activeAssignment) return
-                    const fromTeacherId = String(activeAssignment.teacherId)
-                    const toTeacherId = String(nextTeacherId)
-                    if (!toTeacherId || toTeacherId === fromTeacherId) {
-                      setOpen(false)
-                      return
-                    }
+            {activeAssignment ? (
+              <div className="space-y-2">
+                <div className="text-sm font-semibold text-royalPurple-text1">Reassign to</div>
+                <select
+                  className="zsms-select w-full"
+                  value={nextTeacherId}
+                  onChange={(e) => setNextTeacherId(e.target.value)}
+                >
+                  {candidatesForActive.map((t: any) => (
+                    <option key={String(t.id)} value={String(t.id)}>
+                      {String(t.fullName || 'Teacher')}
+                    </option>
+                  ))}
+                </select>
+                <div className="flex items-center justify-end gap-2 pt-2">
+                  <Button variant="outline" onClick={() => setOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      if (!activeAssignment) return
+                      const fromTeacherId = String(activeAssignment.teacherId)
+                      const toTeacherId = String(nextTeacherId)
+                      if (!toTeacherId || toTeacherId === fromTeacherId) {
+                        setOpen(false)
+                        return
+                      }
 
-                    const swapKey = `${toTeacherId}|${activeAssignment.dayOfWeek}|${activeAssignment.period}|${activeAssignment.startTime}|${activeAssignment.endTime}`
-                    const swapList = byTeacherAndSlot.get(swapKey) || []
-                    if (swapList.length) {
-                      const other = swapList[0]
+                      const swapKey = `${toTeacherId}|${activeAssignment.dayOfWeek}|${activeAssignment.period}|${activeAssignment.startTime}|${activeAssignment.endTime}`
+                      const swapList = byTeacherAndSlot.get(swapKey) || []
+                      if (swapList.length) {
+                        const other = swapList[0]
+                        updateAssignment(
+                          String(activeAssignment.id) as any,
+                          { teacherId: toTeacherId } as any
+                        )
+                        updateAssignment(
+                          String(other.id) as any,
+                          { teacherId: fromTeacherId } as any
+                        )
+                        setOpen(false)
+                        return
+                      }
+
                       updateAssignment(
                         String(activeAssignment.id) as any,
                         { teacherId: toTeacherId } as any
                       )
-                      updateAssignment(String(other.id) as any, { teacherId: fromTeacherId } as any)
                       setOpen(false)
-                      return
-                    }
-
-                    updateAssignment(
-                      String(activeAssignment.id) as any,
-                      { teacherId: toTeacherId } as any
-                    )
-                    setOpen(false)
-                  }}
-                  className="zsms-hover-raise"
-                >
-                  Save
-                </Button>
+                    }}
+                    className="zsms-hover-raise"
+                  >
+                    Save
+                  </Button>
+                </div>
+                <div className="text-xs text-royalPurple-text3">
+                  If the selected teacher already has a lesson in this slot, Save performs a swap.
+                </div>
               </div>
-              <div className="text-xs text-royalPurple-text3">
-                If the selected teacher already has a lesson in this slot, Save performs a swap.
-              </div>
-            </div>
-          ) : null}
-        </div>
-      </Modal>
+            ) : null}
+          </div>
+        </Modal>
+      ) : null}
     </div>
   )
 }

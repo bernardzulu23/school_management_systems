@@ -5,7 +5,7 @@ import { Sidebar } from './Sidebar'
 import { Menu, Bell, Search, User } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { useSchool } from '@/lib/context/SchoolContext'
-import { TimetableNotificationBell } from '@/components/timetable/MasterTimetableGenerator'
+import { TimetableNotificationBell } from '@/components/timetable/TimetableNotificationBell'
 import SubscriptionBanner from '@/components/billing/SubscriptionBanner'
 import ServerSessionGuard from '@/components/auth/ServerSessionGuard'
 

@@ -97,6 +97,7 @@ export default function HodDepartmentTimetablePage() {
           departmentTeacherIds={departmentTeacherIds}
           teachers={teachers}
           classes={classes}
+          editable={false}
         />
       </div>
     </DashboardLayout>

@@ -156,6 +156,7 @@ export async function PATCH(req) {
 }
 
 export async function DELETE(req) {
+  /** Single entry: `{ id }`. Bulk clear: `{ clearAll: true, term, academicYear }` (draft only). */
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -163,6 +164,25 @@ export async function DELETE(req) {
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const body = await req.json().catch(() => ({}))
+  const clearAll = body?.clearAll === true
+  const term = String(body?.term || 'Term 1').trim()
+  const academicYear = String(body?.academicYear || new Date().getFullYear()).trim()
+
+  if (clearAll) {
+    const role = String(user.role || '').toLowerCase()
+    if (!['headteacher', 'administrator', 'admin', 'superadmin'].includes(role)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    const result = await prisma.timetableAllocationEntry.deleteMany({
+      where: { schoolId, term, academicYear, status: 'draft' },
+    })
+
+    await rescanAndPersistDraftMeta(prisma, { schoolId, term, academicYear })
+
+    return NextResponse.json({ success: true, deletedCount: result.count })
+  }
+
   const id = String(body?.id || '').trim()
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
 
@@ -173,5 +193,12 @@ export async function DELETE(req) {
   }
 
   await prisma.timetableAllocationEntry.delete({ where: { id } })
+
+  await rescanAndPersistDraftMeta(prisma, {
+    schoolId,
+    term: entry.term,
+    academicYear: entry.academicYear,
+  })
+
   return NextResponse.json({ success: true })
 }

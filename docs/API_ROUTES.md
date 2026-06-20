@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-06-19T21:08:02.694Z
+Generated: 2026-06-20T10:06:38.524Z
 
-Total route files: **345**
+Total route files: **348**
 
 ## Quick index
 
@@ -54,7 +54,7 @@ Total route files: **345**
 | `/api/marketplace`          |     7 |
 | `/api/materials`            |     5 |
 | `/api/mobile`               |    12 |
-| `/api/onboarding`           |     9 |
+| `/api/onboarding`           |    10 |
 | `/api/parent`               |     1 |
 | `/api/payments`             |     2 |
 | `/api/ping`                 |     1 |
@@ -67,7 +67,7 @@ Total route files: **345**
 | `/api/school`               |     1 |
 | `/api/schools`              |     3 |
 | `/api/sentry-example-api`   |     1 |
-| `/api/sms`                  |     9 |
+| `/api/sms`                  |    11 |
 | `/api/solo`                 |     6 |
 | `/api/strategic-goals`      |     2 |
 | `/api/strategic-reviews`    |     1 |
@@ -496,18 +496,18 @@ Total route files: **345**
 
 ## /api/onboarding
 
-| Method    | Route                                 | Summary                                                     |
-| --------- | ------------------------------------- | ----------------------------------------------------------- |
-| POST      | `/api/onboarding/complete`            | —                                                           |
-| PATCH     | `/api/onboarding/contact`             | Save admin phone for welcome SMS during onboarding session. |
-| GET, POST | `/api/onboarding/lipila/callback`     | —                                                           |
-| POST      | `/api/onboarding/pay`                 | —                                                           |
-| POST      | `/api/onboarding/resend-verification` | —                                                           |
-| POST      | `/api/onboarding/select-plan`         | —                                                           |
-| POST      | `/api/onboarding/start`               | —                                                           |
-| GET       | `/api/onboarding/status`              | —                                                           |
-| POST      | `/api/onboarding/student`             | —                                                           |
-| GET       | `/api/onboarding/verify/:token`       | —                                                           |
+| Method    | Route                                 | Summary                                                                   |
+| --------- | ------------------------------------- | ------------------------------------------------------------------------- |
+| POST      | `/api/onboarding/complete`            | —                                                                         |
+| PATCH     | `/api/onboarding/contact`             | Save admin phone during onboarding (after email verify / session cookie). |
+| GET, POST | `/api/onboarding/lipila/callback`     | —                                                                         |
+| POST      | `/api/onboarding/pay`                 | —                                                                         |
+| POST      | `/api/onboarding/resend-verification` | —                                                                         |
+| POST      | `/api/onboarding/select-plan`         | —                                                                         |
+| POST      | `/api/onboarding/start`               | —                                                                         |
+| GET       | `/api/onboarding/status`              | —                                                                         |
+| POST      | `/api/onboarding/student`             | —                                                                         |
+| GET       | `/api/onboarding/verify/:token`       | —                                                                         |
 
 ## /api/parent
 
@@ -622,7 +622,7 @@ Total route files: **345**
 | POST       | `/api/sms/queue-worker`         | —                                                                            |
 | GET        | `/api/sms/recipients`           | —                                                                            |
 | POST       | `/api/sms/send`                 | —                                                                            |
-| POST       | `/api/sms/test/onboarding`      | DEV ONLY — test onboarding welcome SMS (sender ZSMS).                        |
+| POST       | `/api/sms/test/onboarding`      | DEV ONLY — test onboarding welcome SMS.                                      |
 | POST       | `/api/sms/test/results-parent`  | DEV ONLY — test parent results-complete SMS (does not update ResultsStatus). |
 
 ## /api/solo
@@ -737,7 +737,7 @@ Total route files: **345**
 | POST               | `/api/timetable/conflicts/resolve`         | POST /api/timetable/conflicts/resolve Apply a resolution action to draft timetable allocation entries.                                                 |
 | POST               | `/api/timetable/conflicts/seed-test`       | POST /api/timetable/conflicts/seed-test Development-only mock conflicts for UI testing.                                                                |
 | GET                | `/api/timetable/draft-meta`                | GET /api/timetable/draft-meta?term=Term+1&academicYear=2026&refresh=false Lightweight read of TimetableDraftMeta (no full rescan unless refresh=true). |
-| GET, PATCH, DELETE | `/api/timetable/entries`                   | —                                                                                                                                                      |
+| GET, PATCH, DELETE | `/api/timetable/entries`                   | PATCH/DELETE draft by `{ id }`; DELETE `{ clearAll: true, term, academicYear }` wipes all draft entries for the term.                                  |
 | POST               | `/api/timetable/entries/sync-draft`        | POST /api/timetable/entries/sync-draft Persist in-memory solver/UI assignments to TimetableAllocationEntry (draft).                                    |
 | GET, POST          | `/api/timetable/generate`                  | —                                                                                                                                                      |
 | GET, POST          | `/api/timetable/notifications`             | —                                                                                                                                                      |

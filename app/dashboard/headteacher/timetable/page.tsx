@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { ConflictDisplay } from '@/components/timetable/ConflictDisplay'
-import { DragDropTimetable } from '@/components/timetable/DragDropTimetable'
 import { MasterTimetableGrid } from '@/components/timetable/MasterTimetableGrid'
 import { AscClassWallGrid } from '@/components/timetable/AscClassWallGrid'
 import type { UnplacedLesson } from '@/components/timetable/UnplacedLessonsTray'
@@ -33,6 +32,12 @@ import { normalizeGradeLabel } from '@/lib/timetable/zambiaTerminology'
 import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
+import {
+  persistAssignmentDelete,
+  persistAssignmentMove,
+  persistAssignmentSwap,
+  persistClearTimetable,
+} from '@/lib/timetable/timetableMutations'
 import type { Assignment, Class, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { Check, X } from 'lucide-react'
 import { TeacherCompliancePanel } from '@/components/compliance/TeacherCompliancePanel'
@@ -496,53 +501,29 @@ function HeadteacherTimetablePageContent() {
     }
   }, [setTeacherColors])
 
-  const onAssignmentChange = async (a: Assignment) => {
-    updateAssignment(a.id, {
-      dayOfWeek: a.dayOfWeek,
-      startTime: a.startTime,
-      endTime: a.endTime,
-      period: a.period,
-      isBreak: a.isBreak,
-    })
+  const mutationCtx = useMemo(
+    () => ({ term, academicYear, loadFromApi }),
+    [term, academicYear, loadFromApi]
+  )
 
-    try {
-      const res = await fetch('/api/timetable/entries', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          id: a.id,
-          term,
-          academicYear,
-          dayOfWeek: a.dayOfWeek,
-          startTime: a.startTime,
-          endTime: a.endTime,
-          periodNumber: a.period,
-        }),
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.error || 'Failed to save timetable change')
-    } catch (e: any) {
-      toast.error(e?.message || 'Failed to save timetable change')
-      await loadFromApi({ term, academicYear, status: 'draft' })
-    }
+  const onAssignmentChange = async (a: Assignment) => {
+    await persistAssignmentMove(a, mutationCtx)
+  }
+
+  const onSwapAssignments = async (nextA: Assignment, nextB: Assignment) => {
+    await persistAssignmentSwap(nextA, nextB, mutationCtx)
   }
 
   const onDeleteAssignment = async (assignmentId: string) => {
-    try {
-      const res = await fetch('/api/timetable/entries', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ id: assignmentId, term, academicYear }),
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.error || 'Failed to delete timetable entry')
-      removeAssignment(assignmentId as any)
-      toast.success('Deleted')
-    } catch (e: any) {
-      toast.error(e?.message || 'Failed to delete timetable entry')
-    }
+    await persistAssignmentDelete(assignmentId as Assignment['id'], mutationCtx)
+  }
+
+  const onClearTimetable = async () => {
+    const ok = window.confirm(
+      'Clear all draft timetable entries for this term? This cannot be undone.'
+    )
+    if (!ok) return
+    await persistClearTimetable(mutationCtx)
   }
 
   const suggestionsByAssignmentId = (assignmentId: string) => {
@@ -1386,6 +1367,9 @@ function HeadteacherTimetablePageContent() {
                 season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
                 showConflicts
                 editable
+                enableDragDrop
+                onAssignmentChange={onAssignmentChange}
+                onSwapAssignments={onSwapAssignments}
                 onDeleteAssignment={onDeleteAssignment}
               />
             ) : (
@@ -1424,14 +1408,20 @@ function HeadteacherTimetablePageContent() {
         {tab === 'edit' ? (
           <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_min(100%,280px)] gap-4 xl:gap-6 items-start">
             <div className="min-w-0 overflow-hidden">
-              <DragDropTimetable
+              <MasterTimetableGrid
                 assignments={seasonAssignments}
                 timeSlots={timeSlots}
+                classes={classes}
                 teachers={teachers}
-                studentClasses={classes}
+                season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
+                showConflicts
+                editable
+                enableDragDrop
+                compactHeader
                 onAssignmentChange={onAssignmentChange}
+                onSwapAssignments={onSwapAssignments}
+                onDeleteAssignment={onDeleteAssignment}
                 onConflictDetected={() => setTab('conflicts')}
-                season={uiSeasonToDetectorSeason(season)}
               />
               <div className="mt-4 flex flex-wrap gap-2">
                 <Button variant="outline" onClick={undo} className="zsms-hover-raise">
@@ -1439,6 +1429,13 @@ function HeadteacherTimetablePageContent() {
                 </Button>
                 <Button variant="outline" onClick={redo} className="zsms-hover-raise">
                   Redo
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={onClearTimetable}
+                  className="zsms-hover-raise text-red-400 border-red-500/40"
+                >
+                  Clear timetable
                 </Button>
               </div>
             </div>

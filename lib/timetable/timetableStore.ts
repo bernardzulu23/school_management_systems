@@ -56,7 +56,16 @@ export interface TimetableStoreState {
   addAssignment: (assignment: Assignment) => void
   replaceAssignments: (assignments: Assignment[], meta?: { source?: ChangeKind }) => void
   removeAssignment: (assignmentId: Assignment['id']) => void
+  deleteAssignment: (assignmentId: Assignment['id']) => void
   updateAssignment: (assignmentId: Assignment['id'], patch: Partial<Assignment>) => void
+  moveAssignment: (assignmentId: Assignment['id'], patch: Partial<Assignment>) => void
+  swapAssignments: (
+    idA: Assignment['id'],
+    patchA: Partial<Assignment>,
+    idB: Assignment['id'],
+    patchB: Partial<Assignment>
+  ) => void
+  resetAssignments: () => void
   detectConflicts: (opts?: {
     assignments?: Assignment[]
     whatIf?: boolean
@@ -268,6 +277,52 @@ export const useTimetableStore = create<TimetableStoreState>()(
             assignmentId,
             before,
             after,
+          })
+        },
+
+        deleteAssignment: (assignmentId) => {
+          get().removeAssignment(assignmentId)
+        },
+
+        moveAssignment: (assignmentId, patch) => {
+          get().updateAssignment(assignmentId, patch)
+        },
+
+        swapAssignments: (idA, patchA, idB, patchB) => {
+          const beforeA = get().assignments.find((a) => a.id === idA) || null
+          const beforeB = get().assignments.find((a) => a.id === idB) || null
+          if (!beforeA || !beforeB) return
+          const afterA: Assignment = { ...beforeA, ...patchA }
+          const afterB: Assignment = { ...beforeB, ...patchB }
+          pushSnapshot()
+          set((s) => {
+            const next = s.assignments.map((a) => {
+              if (a.id === idA) return afterA
+              if (a.id === idB) return afterB
+              return a
+            })
+            return { assignments: next, conflicts: detect(next), isPublished: false }
+          })
+          trackChange({
+            id: genId(),
+            kind: 'update',
+            at: nowIso(),
+            meta: { swap: true, idA, idB },
+          })
+        },
+
+        resetAssignments: () => {
+          pushSnapshot()
+          set(() => ({
+            assignments: [],
+            conflicts: new Map(),
+            isPublished: false,
+          }))
+          trackChange({
+            id: genId(),
+            kind: 'remove',
+            at: nowIso(),
+            meta: { clearAll: true },
           })
         },
 
