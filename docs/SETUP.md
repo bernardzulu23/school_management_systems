@@ -6,7 +6,7 @@ Get ZSMS running locally in about **15 minutes**.
 
 ## Prerequisites
 
-- **Node.js 20.x** (matches `package.json` engines)
+- **Node.js 24.x** (matches `package.json` engines)
 - **npm 9+**
 - **PostgreSQL** via [Neon](https://neon.tech) (free tier) or local Postgres
 - Accounts (free tiers): [Resend](https://resend.com), [Groq](https://console.groq.com)

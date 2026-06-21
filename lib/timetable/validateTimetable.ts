@@ -1,4 +1,5 @@
 import type { Assignment } from './types'
+import { assignmentsShareSlot } from './constraintCheck'
 
 export type TimetableConflictType =
   | 'TEACHER_DOUBLE_BOOKED'
@@ -59,7 +60,7 @@ export function validateTimetable(
     for (let j = i + 1; j < list.length; j++) {
       const a1 = list[i]
       const a2 = list[j]
-      if (!timesOverlap(a1, a2)) continue
+      if (!assignmentsShareSlot(a1, a2, [])) continue
 
       if (String(a1.teacherId) === String(a2.teacherId)) {
         conflicts.push({

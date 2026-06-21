@@ -7,6 +7,7 @@ import type { BellScheduleSlot } from './bellSchedule'
 import { normalizeApiTimeSlots } from './bellSchedule'
 import { normalizeTimetableConfig, resolveSchoolTimeSlots } from './timeSlotsFromConfig'
 import { canPublishTimetable, validateTimetable } from './validateTimetable'
+import { isConflict } from './constraintCheck'
 import { countUniqueConflicts } from './conflictDedupe'
 import { autoResolveConflicts as runAutoResolve } from './autoResolver'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
@@ -211,6 +212,8 @@ export const useTimetableStore = create<TimetableStoreState>()(
 
         addAssignment: (assignment) => {
           if (!assignment || !assignment.id) return
+          const slots = get().timeSlots
+          if (isConflict(assignment, get().assignments, slots)) return
           pushSnapshot()
           set((s) => {
             const next = [...s.assignments.filter((a) => a.id !== assignment.id), assignment]

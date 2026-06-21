@@ -2,6 +2,9 @@
 
 import { evaluatePassword, PASSWORD_REQUIREMENTS } from '@/lib/security/passwordValidate'
 
+// Re-export from client-safe module (not passwordPolicy.js — that pulls in Node crypto).
+export { evaluatePassword, getPasswordFormError } from '@/lib/security/passwordValidate'
+
 /**
  * Live checklist of password policy requirements.
  * @param {{ password: string, className?: string }} props

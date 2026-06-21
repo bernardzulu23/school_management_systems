@@ -20,6 +20,7 @@ import {
 import { auditDraftTimetable, persistDraftConflictMeta } from '@/lib/timetable/conflictAudit'
 import { normalizePushedAllocations } from '@/lib/timetable/normalizePushedAllocations'
 import { remapEntriesToValidAllocationIds } from '@/lib/timetable/resolveTimetableEntryAllocationIds'
+import { filterConflictFreeSchedulerEntries } from '@/lib/timetable/constraintCheck'
 
 export async function GET(req: NextRequest) {
   const user = await getAuthUser(req as any)
@@ -235,8 +236,12 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const { entries: entriesToSave, invalid: invalidAllocationEntries } =
+  let { entries: entriesToSave, invalid: invalidAllocationEntries } =
     await remapEntriesToValidAllocationIds(prisma, schoolId, entries, term, academicYear)
+
+  const beforeFilter = entriesToSave.length
+  entriesToSave = filterConflictFreeSchedulerEntries(entriesToSave)
+  const skippedConflicts = beforeFilter - entriesToSave.length
 
   if (invalidAllocationEntries.length > 0) {
     const sample = invalidAllocationEntries[0]
@@ -341,6 +346,7 @@ export async function POST(req: NextRequest) {
       days: workingDays.length,
       allocationsScheduled: [...new Set(saved.map((e: any) => e.allocationId))].length,
       totalAllocations: allocations.length,
+      skippedConflicts,
       teachers: [...new Set(saved.map((e: any) => e.teacherId))].length,
       classes: [...new Set(saved.map((e: any) => e.classId))].length,
       placed: scheduleResult.stats.placed,

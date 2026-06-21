@@ -14,6 +14,7 @@ import type {
   TravelingTeacherRoute,
 } from './types'
 import { TIMETABLE_CLASS_CENTRIC } from './classCentric'
+import { assignmentsShareSlot } from './constraintCheck'
 
 export interface WorkloadStatus {
   status: 'ok' | 'warning' | 'overload'
@@ -319,8 +320,7 @@ export class CollisionDetector {
     for (const a of listTeacher) {
       if (a.id === assignment.id) continue
       if (a.season !== assignment.season) continue
-      if (a.dayOfWeek !== assignment.dayOfWeek) continue
-      if (!this.timeSlotsOverlap(a, assignment)) continue
+      if (!assignmentsShareSlot(a, assignment, this.timeSlots)) continue
       conflicts.push(
         this.makeConflict('TeacherDoubleBooked', 'critical', 'Teacher is double-booked', {
           assignmentIds: [assignment.id, a.id],
@@ -337,8 +337,7 @@ export class CollisionDetector {
         for (const a of listRoom) {
           if (a.id === assignment.id) continue
           if (a.season !== assignment.season) continue
-          if (a.dayOfWeek !== assignment.dayOfWeek) continue
-          if (!this.timeSlotsOverlap(a, assignment)) continue
+          if (!assignmentsShareSlot(a, assignment, this.timeSlots)) continue
           conflicts.push(
             this.makeConflict('RoomDoubleBooked', 'critical', 'Classroom is double-booked', {
               assignmentIds: [assignment.id, a.id],
@@ -354,8 +353,7 @@ export class CollisionDetector {
     for (const a of listClass) {
       if (a.id === assignment.id) continue
       if (a.season !== assignment.season) continue
-      if (a.dayOfWeek !== assignment.dayOfWeek) continue
-      if (!this.timeSlotsOverlap(a, assignment)) continue
+      if (!assignmentsShareSlot(a, assignment, this.timeSlots)) continue
       conflicts.push(
         this.makeConflict('ClassDoubleBooked', 'critical', 'Grade is double-booked', {
           assignmentIds: [assignment.id, a.id],
@@ -481,8 +479,7 @@ export class CollisionDetector {
       const cid = String(a.classId)
 
       for (const prev of teacherIndex.get(tid) || []) {
-        if (prev.dayOfWeek !== a.dayOfWeek) continue
-        if (!this.timeSlotsOverlap(prev, a)) continue
+        if (!assignmentsShareSlot(prev, a, this.timeSlots)) continue
         const c = this.makeConflict('TeacherDoubleBooked', 'critical', 'Teacher is double-booked', {
           assignmentIds: [prev.id, a.id],
           teacherIds: [tid],
@@ -495,8 +492,7 @@ export class CollisionDetector {
         const rid = String(a.classroomId || '')
         if (rid && !isPlaceholderClassroom(rid)) {
           for (const prev of roomIndex.get(rid) || []) {
-            if (prev.dayOfWeek !== a.dayOfWeek) continue
-            if (!this.timeSlotsOverlap(prev, a)) continue
+            if (!assignmentsShareSlot(prev, a, this.timeSlots)) continue
             const c = this.makeConflict(
               'RoomDoubleBooked',
               'critical',
@@ -513,8 +509,7 @@ export class CollisionDetector {
       }
 
       for (const prev of classIndex.get(cid) || []) {
-        if (prev.dayOfWeek !== a.dayOfWeek) continue
-        if (!this.timeSlotsOverlap(prev, a)) continue
+        if (!assignmentsShareSlot(prev, a, this.timeSlots)) continue
         const c = this.makeConflict('ClassDoubleBooked', 'critical', 'Grade is double-booked', {
           assignmentIds: [prev.id, a.id],
           classIds: [cid],
