@@ -1710,7 +1710,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
               <input
                 value={form.user.name}
                 onChange={(e) => setUserField('name', e.target.value)}
-                className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                className="input text-sm"
               />
             </div>
             <div>
@@ -1720,7 +1720,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
               <input
                 value={form.user.contact_number}
                 onChange={(e) => setUserField('contact_number', e.target.value)}
-                className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                className="input text-sm"
               />
             </div>
             <div className="md:col-span-3">
@@ -1730,7 +1730,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
               <input
                 value={form.user.email}
                 onChange={(e) => setUserField('email', e.target.value)}
-                className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                className="input text-sm"
               />
             </div>
           </div>
@@ -1746,7 +1746,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                   placeholder="New password (min 6 chars)"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1 pr-10 focus:outline-none focus:border-royalPurple-border2 focus:ring-1 focus:ring-royalPurple-border2"
+                  className="input text-sm pr-10"
                 />
                 <button
                   type="button"
@@ -1828,7 +1828,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         student: { ...prev.student, exam_number: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                    className="input text-sm"
                   />
                 </div>
               </div>
@@ -1869,7 +1869,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         teacher: { ...prev.teacher, ts_number: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                    className="input text-sm"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -1884,7 +1884,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         teacher: { ...prev.teacher, specialization: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                    className="input text-sm"
                   />
                 </div>
                 <div className="md:col-span-3">
@@ -1900,7 +1900,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                       }))
                     }
                     rows={3}
-                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                    className="textarea text-sm"
                   />
                 </div>
               </div>
@@ -2051,7 +2051,7 @@ function UserEditModal({ user, onClose, onSaved, lookups, loadingLookups }) {
                         hod: { ...prev.hod, department: e.target.value },
                       }))
                     }
-                    className="w-full border rounded-md p-2 text-sm bg-royalPurple-card dark:bg-royalPurple-deep dark:text-royalPurple-text1"
+                    className="input text-sm"
                   />
                 </div>
                 <div>

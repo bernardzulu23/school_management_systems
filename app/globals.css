@@ -587,6 +587,18 @@ html:not(.dark) .bg-white {
   color: var(--rp-text1);
 }
 
+/* Tailwind `dark:bg-royalPurple-deep` does not add `.bg-royalPurple-deep` — mirror contrast */
+.dark .dark\:bg-royalPurple-deep {
+  --rp-text1: #f5f2ed;
+  --rp-text2: rgba(239, 236, 229, 0.7);
+  --rp-text3: rgba(239, 236, 229, 0.45);
+  color: var(--rp-text1);
+}
+
+.dark .dark\:bg-royalPurple-deep::placeholder {
+  color: rgba(239, 236, 229, 0.45);
+}
+
 .provider-pill {
   display: inline-flex;
   align-items: center;
