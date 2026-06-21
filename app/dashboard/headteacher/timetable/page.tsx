@@ -184,7 +184,6 @@ function HeadteacherTimetablePageContent() {
   const undoStack = useTimetableStore((s) => s.undoStack)
   const redoStack = useTimetableStore((s) => s.redoStack)
   const publish = useTimetableStore((s) => s.publish)
-  const isPublished = useTimetableStore((s) => s.isPublished)
   const lastPublishedAt = useTimetableStore((s) => s.lastPublishedAt)
   const pendingChanges = useTimetableStore((s) => s.pendingChanges)
   const conflictCount = useTimetableStore((s) => s.getConflictCount)
