@@ -1756,20 +1756,37 @@ function HeadteacherTimetablePageContent() {
                   onDropUnplaced={onDropUnplacedLesson}
                 />
               ) : gridMode === 'master' ? (
-                <MasterTimetableGrid
-                  assignments={seasonAssignments}
-                  timeSlots={timeSlots}
-                  classes={visibleClasses}
-                  teachers={teachers}
-                  season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
-                  showConflicts
-                  editable
-                  enableDragDrop
-                  onAssignmentChange={onAssignmentChange}
-                  onSwapAssignments={onSwapAssignments}
-                  onDeleteAssignment={onDeleteAssignment}
-                  onConflictDetected={() => setTab('conflicts')}
-                />
+                <>
+                  <MasterTimetableGrid
+                    assignments={seasonAssignments}
+                    timeSlots={timeSlots}
+                    classes={visibleClasses}
+                    teachers={teachers}
+                    season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
+                    showConflicts
+                    editable
+                    enableDragDrop
+                    onAssignmentChange={onAssignmentChange}
+                    onSwapAssignments={onSwapAssignments}
+                    onDeleteAssignment={onDeleteAssignment}
+                    onConflictDetected={() => setTab('conflicts')}
+                  />
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <Button variant="outline" onClick={undo} className="zsms-hover-raise">
+                      Undo
+                    </Button>
+                    <Button variant="outline" onClick={redo} className="zsms-hover-raise">
+                      Redo
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={onClearTimetable}
+                      className="zsms-hover-raise text-red-400 border-red-500/40"
+                    >
+                      Clear timetable
+                    </Button>
+                  </div>
+                </>
               ) : (
                 <TimetableEntityView
                   mode={gridMode}
@@ -1779,23 +1796,6 @@ function HeadteacherTimetablePageContent() {
                   classes={visibleClasses}
                 />
               )}
-              {gridMode === 'master' ? (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <Button variant="outline" onClick={undo} className="zsms-hover-raise">
-                    Undo
-                  </Button>
-                  <Button variant="outline" onClick={redo} className="zsms-hover-raise">
-                    Redo
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={onClearTimetable}
-                    className="zsms-hover-raise text-red-400 border-red-500/40"
-                  >
-                    Clear timetable
-                  </Button>
-                </div>
-              ) : null}
             </div>
             <div className="min-w-0 xl:sticky xl:top-4 xl:max-h-[calc(100vh-6rem)] xl:overflow-y-auto">
               <ConflictDisplay

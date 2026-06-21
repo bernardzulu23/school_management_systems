@@ -711,7 +711,10 @@ model Class {
   
   departmentId String?
   department   Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
-  
+
+  /** False for seeded/legacy rows with no students, allocations, or timetable entries. */
+  isActive    Boolean  @default(true)
+
   students    Student[]
   assessments Assessment[]
   assignments Assignment[]
@@ -730,6 +733,7 @@ model Class {
   @@index([schoolId])
   @@index([year_group])
   @@index([departmentId])
+  @@index([schoolId, isActive])
   @@unique([schoolId, name])
 } 
 

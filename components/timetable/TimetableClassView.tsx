@@ -51,6 +51,7 @@ export function TimetableClassView({
     <div className="space-y-5">
       <TimetableClassPicker
         classes={classes}
+        assignments={assignments}
         selectedClassId={selectedClassId}
         onSelectClass={onSelectClass}
       />

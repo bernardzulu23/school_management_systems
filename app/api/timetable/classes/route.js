@@ -9,6 +9,7 @@ import { getHodProfile, resolveHodDepartmentIds } from '@/lib/utils/hodDepartmen
 import { isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { resolveDepartmentClasses } from '@/lib/timetable/resolveDepartmentClasses'
+import { getActiveClasses } from '@/lib/timetable/getActiveClasses'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -25,6 +26,9 @@ export const GET = withErrorHandler(async function GET(request) {
   const { searchParams } = new URL(request.url)
   const departmentId = String(searchParams.get('departmentId') || '').trim()
   const teacherUserId = String(searchParams.get('teacherUserId') || '').trim()
+  const activeOnly = String(searchParams.get('activeOnly') || 'true').toLowerCase() !== 'false'
+  const term = String(searchParams.get('term') || 'Term 1')
+  const academicYear = String(searchParams.get('academicYear') || new Date().getFullYear())
 
   if (departmentId) {
     const hodProfile = await getHodProfile(prisma, auth.user.id, schoolId)
@@ -43,11 +47,13 @@ export const GET = withErrorHandler(async function GET(request) {
     return NextResponse.json({ success: true, data: classes })
   }
 
-  const classes = await prisma.class.findMany({
-    where: { schoolId },
-    include: { department: { select: { id: true, name: true, code: true } } },
-    orderBy: [{ year_group: 'asc' }, { name: 'asc' }],
-  })
+  const classes = activeOnly
+    ? await getActiveClasses(prisma, schoolId, { term, academicYear })
+    : await prisma.class.findMany({
+        where: { schoolId },
+        include: { department: { select: { id: true, name: true, code: true } } },
+        orderBy: [{ year_group: 'asc' }, { name: 'asc' }],
+      })
 
   return NextResponse.json({
     success: true,
@@ -56,7 +62,10 @@ export const GET = withErrorHandler(async function GET(request) {
       name: c.name,
       classId: c.name,
       form: c.year_group || '',
+      year_group: c.year_group || '',
       section: c.section || '',
+      isActive: c.isActive !== false,
+      studentCount: c._count?.students ?? 0,
       departmentId: c.departmentId || null,
       department: c.department || null,
       label: c.name,

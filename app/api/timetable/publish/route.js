@@ -9,6 +9,7 @@ import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 
 import { validateDraftEntriesForPublish } from '@/lib/timetable/validateDraftEntries'
 import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
+import { syncClassActiveFlags } from '@/lib/timetable/getActiveClasses'
 
 export async function POST(req) {
   const user = await getAuthUser(req)
@@ -97,6 +98,7 @@ export async function POST(req) {
   revalidateTag(`timetable-${schoolId}`)
   revalidateTag('timetable')
 
+  await syncClassActiveFlags(prisma, schoolId, { term, academicYear }).catch(() => {})
   await rescanAndPersistDraftMeta(prisma, { schoolId, term, academicYear }).catch(() => {})
 
   return NextResponse.json({

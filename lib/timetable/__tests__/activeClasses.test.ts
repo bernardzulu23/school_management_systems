@@ -1,5 +1,49 @@
 import { describe, expect, it } from 'vitest'
-import { collectAllocationClassNames, filterClassesInUse } from '../activeClasses'
+import {
+  collectAllocationClassNames,
+  dedupeClassesByLabel,
+  filterClassesForTimetablePicker,
+  filterClassesInUse,
+  normalizeClassLabel,
+} from '../activeClasses'
+
+describe('normalizeClassLabel', () => {
+  it('treats 10A and Grade 10A as the same key', () => {
+    expect(normalizeClassLabel('10A')).toBe('grade-10-a')
+    expect(normalizeClassLabel('Grade 10A')).toBe('grade-10-a')
+  })
+})
+
+describe('dedupeClassesByLabel', () => {
+  it('keeps the class with more assignments when labels collide', () => {
+    const out = dedupeClassesByLabel([
+      { id: 'c1', name: '10A', assignmentCount: 2 },
+      { id: 'c2', name: 'Grade 10A', assignmentCount: 8 },
+    ])
+    expect(out).toHaveLength(1)
+    expect(out[0].id).toBe('c2')
+  })
+})
+
+describe('filterClassesForTimetablePicker', () => {
+  it('only returns classes with assignments and dedupes labels', () => {
+    const out = filterClassesForTimetablePicker(
+      [
+        { id: 'c1', name: '10A' },
+        { id: 'c2', name: 'Grade 10A' },
+        { id: 'c3', name: '10B', isActive: false },
+        { id: 'c4', name: 'Form 1B' },
+      ],
+      [
+        { id: 'a1', classId: 'c1' } as any,
+        { id: 'a2', classId: 'c2' } as any,
+        { id: 'a3', classId: 'c2' } as any,
+      ]
+    )
+    expect(out.map((c) => c.name)).toEqual(['Grade 10A'])
+    expect(out[0].assignmentCount).toBe(3)
+  })
+})
 
 describe('filterClassesInUse', () => {
   const classes = [
@@ -27,6 +71,13 @@ describe('filterClassesInUse', () => {
       allocationClassNames: ['10A', 'Form 1B'],
     })
     expect(out.map((c) => c.name).sort()).toEqual(['10A', 'Form 1B'])
+  })
+
+  it('excludes inactive classes', () => {
+    const out = filterClassesInUse([{ id: 'c1', name: '10A', isActive: false, students: 40 }], {
+      assignments: [{ classId: 'c1' } as any],
+    })
+    expect(out).toHaveLength(0)
   })
 })
 

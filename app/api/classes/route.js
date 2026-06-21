@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { getActiveClasses } from '@/lib/timetable/getActiveClasses'
 
 function standardZambianClasses() {
   const sections = ['A', 'B', 'C', 'D']
@@ -19,7 +20,7 @@ function standardZambianClasses() {
     }
   }
 
-  const grades = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+  const grades = [10, 11, 12]
   for (const grade of grades) {
     for (const section of sections) {
       classes.push({
@@ -58,6 +59,9 @@ export async function GET(request) {
 
   const { searchParams } = new URL(request.url)
   const seedDefaults = String(searchParams.get('seedDefaults') || '').toLowerCase() === 'true'
+  const activeOnly = String(searchParams.get('activeOnly') || '').toLowerCase() === 'true'
+  const term = String(searchParams.get('term') || 'Term 1')
+  const academicYear = String(searchParams.get('academicYear') || new Date().getFullYear())
   if (seedDefaults && roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
     await prisma.$transaction(async (tx) => {
       for (const c of standardZambianClasses()) {
@@ -68,6 +72,7 @@ export async function GET(request) {
             name: c.name,
             year_group: c.year_group,
             section: c.section,
+            isActive: false,
           },
           update: {},
         })
@@ -75,18 +80,21 @@ export async function GET(request) {
     })
   }
 
-  const classes = await prisma.class.findMany({
-    where: { schoolId },
-    orderBy: [{ year_group: 'asc' }, { section: 'asc' }],
-    select: {
-      id: true,
-      name: true,
-      year_group: true,
-      section: true,
-      subjects: { select: { id: true, name: true } },
-      _count: { select: { students: true } },
-    },
-  })
+  const classes = activeOnly
+    ? await getActiveClasses(prisma, schoolId, { term, academicYear, timetableUi: false })
+    : await prisma.class.findMany({
+        where: { schoolId },
+        orderBy: [{ year_group: 'asc' }, { section: 'asc' }],
+        select: {
+          id: true,
+          name: true,
+          year_group: true,
+          section: true,
+          isActive: true,
+          subjects: { select: { id: true, name: true } },
+          _count: { select: { students: true } },
+        },
+      })
 
   return NextResponse.json({
     success: true,
@@ -95,6 +103,7 @@ export async function GET(request) {
       name: c.name,
       year_group: c.year_group,
       section: c.section,
+      isActive: c.isActive !== false,
       subjects: c.subjects || [],
       studentCount: c._count?.students ?? 0,
     })),

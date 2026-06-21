@@ -13,7 +13,7 @@ import {
   resolveSchoolTimeSlots,
 } from '@/lib/timetable/timeSlotsFromConfig'
 import { filterAssignmentsForUiSeason } from '@/lib/timetable/seasonFilter'
-import { filterClassesInUse, inferClassGrade } from '@/lib/timetable/activeClasses'
+import { filterClassesForTimetablePicker, inferClassGrade } from '@/lib/timetable/activeClasses'
 import type { Assignment, Class, Teacher, TimeSlot } from '@/lib/timetable/types'
 import toast from 'react-hot-toast'
 
@@ -83,7 +83,7 @@ function ClassTimetablePageContent() {
   )
 
   const visibleClasses = useMemo(
-    () => filterClassesInUse(classes, { assignments: seasonAssignments }),
+    () => filterClassesForTimetablePicker(classes, seasonAssignments as Assignment[]),
     [classes, seasonAssignments]
   )
 
@@ -160,8 +160,14 @@ function ClassTimetablePageContent() {
   }, [load])
 
   useEffect(() => {
-    if (selectedClassId || !visibleClasses.length) return
-    setSelectedClassId(String(visibleClasses[0].id))
+    if (!visibleClasses.length) {
+      if (selectedClassId) setSelectedClassId('')
+      return
+    }
+    const ids = new Set(visibleClasses.map((c) => String(c.id)))
+    if (!selectedClassId || !ids.has(selectedClassId)) {
+      setSelectedClassId(String(visibleClasses[0].id))
+    }
   }, [visibleClasses, selectedClassId])
 
   return (
