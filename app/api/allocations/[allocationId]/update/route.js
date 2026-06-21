@@ -9,20 +9,7 @@ import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
 import { canManageDepartmentAllocations } from '@/lib/utils/hodAccess'
 import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
 import { resolveTeacherRecordId } from '@/lib/utils/resolveTeacherId'
-
-function normalizeString(v) {
-  return String(v || '').trim()
-}
-
-function normalizeClasses(v) {
-  if (Array.isArray(v)) return v.map((x) => String(x).trim()).filter(Boolean)
-  const raw = String(v || '').trim()
-  if (!raw) return null
-  return raw
-    .split(',')
-    .map((x) => x.trim())
-    .filter(Boolean)
-}
+import { mergeAllocationPayload } from '@/lib/timetable/departmentAllocationMutations'
 
 export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const routeParams = await params
@@ -50,40 +37,28 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   })
   if (!allocation) throw new ApiError('Not found', 404)
   if (allocation.createdByUserId !== auth.user.id) throw new ApiError('Forbidden', 403)
-  if (allocation.status !== 'DRAFT' && allocation.status !== 'REJECTED') {
-    throw new ApiError('Only DRAFT or REJECTED allocations can be updated', 400)
+  const status = String(allocation.status || '').toUpperCase()
+  if (status !== 'DRAFT' && status !== 'REJECTED' && status !== 'SUBMITTED') {
+    throw new ApiError(
+      'Only draft, rejected, or submitted allocations can be updated. Contact the Headteacher to change approved allocations.',
+      400
+    )
   }
 
   const body = await request.json().catch(() => ({}))
-
-  const nextTeacherIdRaw = normalizeString(body?.teacherId)
-  let nextTeacherId = ''
-  if (nextTeacherIdRaw) {
-    nextTeacherId = (await resolveTeacherRecordId(prisma, schoolId, nextTeacherIdRaw)) || ''
-    if (!nextTeacherId) throw new ApiError('Teacher record not found for this school', 400)
-  }
-  const nextSubject = normalizeString(body?.subject)
-  const nextClasses = normalizeClasses(body?.classes)
-  const nextPeriodConfig = Object.prototype.hasOwnProperty.call(body || {}, 'periodConfig')
-    ? (body?.periodConfig ?? null)
-    : undefined
 
   const current =
     allocation.allocationData && typeof allocation.allocationData === 'object'
       ? allocation.allocationData
       : {}
 
-  const nextTerm = normalizeString(body?.term)
-  const nextYear = normalizeString(body?.academicYear)
+  let merged = mergeAllocationPayload(current, body)
 
-  const merged = {
-    ...current,
-    ...(nextTeacherId ? { teacherId: nextTeacherId } : {}),
-    ...(nextSubject ? { subject: nextSubject } : {}),
-    ...(Array.isArray(nextClasses) ? { classes: nextClasses } : {}),
-    ...(nextPeriodConfig !== undefined ? { periodConfig: nextPeriodConfig } : {}),
-    ...(nextTerm ? { term: nextTerm } : {}),
-    ...(nextYear ? { academicYear: nextYear } : {}),
+  const teacherIdRaw = String(merged?.teacherId || '').trim()
+  if (teacherIdRaw) {
+    const resolvedTeacherId = await resolveTeacherRecordId(prisma, schoolId, teacherIdRaw)
+    if (!resolvedTeacherId) throw new ApiError('Teacher record not found for this school', 400)
+    merged = { ...merged, teacherId: resolvedTeacherId }
   }
 
   const updated = await prisma.departmentAllocation.update({

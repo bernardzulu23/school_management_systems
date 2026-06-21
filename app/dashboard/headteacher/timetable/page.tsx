@@ -40,7 +40,8 @@ import {
   persistClearTimetable,
 } from '@/lib/timetable/timetableMutations'
 import type { Assignment, Class, Teacher, TimeSlot } from '@/lib/timetable/types'
-import { Check, X } from 'lucide-react'
+import { Check, X, Pencil, Trash2 } from 'lucide-react'
+import { AdminAllocationEditDialog } from '@/components/timetable/AdminAllocationEditDialog'
 import { TeacherCompliancePanel } from '@/components/compliance/TeacherCompliancePanel'
 import {
   GenerationProgressModal,
@@ -153,6 +154,8 @@ function HeadteacherTimetablePageContent() {
   const [departments, setDepartments] = useState<any[]>([])
   const [allocationsLoading, setAllocationsLoading] = useState(false)
   const [allocationsClearing, setAllocationsClearing] = useState(false)
+  const [editAllocationId, setEditAllocationId] = useState('')
+  const [editAllocationData, setEditAllocationData] = useState<any | null>(null)
   const [gridMode, setGridMode] = useState<TimetableGridMode>('master')
   const [unplacedLessons, setUnplacedLessons] = useState<UnplacedLesson[]>([])
   const [reloadingTimetable, setReloadingTimetable] = useState(false)
@@ -294,6 +297,49 @@ function HeadteacherTimetablePageContent() {
     } finally {
       setReviewLoading(false)
     }
+  }, [])
+
+  const refreshAllocationWorkflow = useCallback(async () => {
+    const [pending, entries] = await Promise.all([
+      loadPendingAllocations().catch(() => []),
+      loadMasterTimetableEntries().catch(() => []),
+    ])
+    setPendingAllocations(pending)
+    setMasterEntries(entries)
+    if (currentPendingId) {
+      await loadReview(currentPendingId).catch(() => {})
+    }
+  }, [currentPendingId, loadMasterTimetableEntries, loadPendingAllocations, loadReview])
+
+  const deleteAdminAllocation = useCallback(
+    async (allocationId: string) => {
+      if (!allocationId) return
+      if (
+        !window.confirm(
+          'Delete this allocation? Synced timetable rows for this submission will be removed.'
+        )
+      ) {
+        return
+      }
+      try {
+        const res = await sessionFetch(
+          `/api/admin/allocations/${encodeURIComponent(allocationId)}`,
+          { method: 'DELETE' }
+        )
+        const json = await res.json().catch(() => ({}))
+        if (!res.ok) throw new Error(json?.message || json?.error || 'Delete failed')
+        toast.success('Allocation deleted')
+        await refreshAllocationWorkflow()
+      } catch (e: any) {
+        toast.error(e?.message || 'Delete failed')
+      }
+    },
+    [refreshAllocationWorkflow]
+  )
+
+  const openEditAllocation = useCallback((allocationId: string, data?: any | null) => {
+    setEditAllocationId(String(allocationId))
+    setEditAllocationData(data || null)
   }, [])
 
   useEffect(() => {
@@ -1167,6 +1213,26 @@ function HeadteacherTimetablePageContent() {
                             </span>{' '}
                             {formatPeriodDisplay(e?.periodConfiguration)}
                           </div>
+                          {e?.allocationId ? (
+                            <div className="mt-3 flex gap-2">
+                              <Button
+                                variant="outline"
+                                className="h-8 px-2 text-xs"
+                                onClick={() => openEditAllocation(String(e.allocationId))}
+                              >
+                                <Pencil size={14} className="mr-1" />
+                                Edit
+                              </Button>
+                              <Button
+                                variant="outline"
+                                className="h-8 px-2 text-xs border-red-500/40 text-red-200"
+                                onClick={() => deleteAdminAllocation(String(e.allocationId))}
+                              >
+                                <Trash2 size={14} className="mr-1" />
+                                Delete
+                              </Button>
+                            </div>
+                          ) : null}
                         </div>
                       ))}
                     </div>
@@ -1318,6 +1384,17 @@ function HeadteacherTimetablePageContent() {
                         </div>
 
                         <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              if (currentPendingId) {
+                                openEditAllocation(currentPendingId, reviewData)
+                              }
+                            }}
+                            disabled={reviewSubmitting || !currentPendingId}
+                          >
+                            <Pencil size={16} /> Edit
+                          </Button>
                           <Button
                             onClick={async () => {
                               const id = currentPendingId
@@ -1800,6 +1877,18 @@ function HeadteacherTimetablePageContent() {
           </div>
         ) : null}
       </div>
+
+      <AdminAllocationEditDialog
+        open={Boolean(editAllocationId)}
+        allocationId={editAllocationId}
+        initialData={editAllocationData}
+        teachers={teachers.map((t) => ({ id: t.id, fullName: t.fullName }))}
+        onClose={() => {
+          setEditAllocationId('')
+          setEditAllocationData(null)
+        }}
+        onSaved={refreshAllocationWorkflow}
+      />
     </DashboardLayout>
   )
 }

@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 import { Plus, Trash2, Send, Bell, CheckCircle, AlertTriangle } from 'lucide-react'
 import { formatPeriodConfigLabel } from '@/lib/timetable/formatPeriodConfig'
 import { DepartmentFilteredClassDropdown } from '@/components/timetable/DepartmentFilteredClassDropdown'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 const TERMS = ['Term 1', 'Term 2', 'Term 3']
 
@@ -90,13 +91,16 @@ export default function HODAllocationPage() {
     setLoading(true)
     try {
       const [teachersRes, subjectsRes, departmentsRes, allocRes] = await Promise.all([
-        fetch('/api/users?role=teacher&scope=department', {
+        sessionFetch('/api/users?role=teacher&scope=department', {
           cache: 'no-store',
           credentials: 'include',
         }),
-        fetch('/api/subjects', { credentials: 'include', cache: 'no-store' }),
-        fetch('/api/departments', { credentials: 'include', cache: 'no-store' }),
-        fetch('/api/allocations/my-department', { cache: 'no-store', credentials: 'include' }),
+        sessionFetch('/api/subjects', { credentials: 'include', cache: 'no-store' }),
+        sessionFetch('/api/departments', { credentials: 'include', cache: 'no-store' }),
+        sessionFetch('/api/allocations/my-department', {
+          cache: 'no-store',
+          credentials: 'include',
+        }),
       ])
       const safeJson = async (res) => {
         try {
@@ -180,7 +184,7 @@ export default function HODAllocationPage() {
       return
     }
     try {
-      const res = await fetch(
+      const res = await sessionFetch(
         `/api/allocations/department-subjects?departmentId=${encodeURIComponent(departmentId)}&teacherUserId=${encodeURIComponent(teacherUserId)}`,
         { credentials: 'include', cache: 'no-store' }
       )
@@ -212,7 +216,7 @@ export default function HODAllocationPage() {
       return
     }
     try {
-      const res = await fetch(
+      const res = await sessionFetch(
         `/api/allocations/department-classes?departmentId=${encodeURIComponent(departmentId)}`,
         { credentials: 'include', cache: 'no-store' }
       )
@@ -288,7 +292,7 @@ export default function HODAllocationPage() {
     setSavingAllocation(true)
     try {
       if (editingId) {
-        const res = await fetch(`/api/allocations/${editingId}/update`, {
+        const res = await sessionFetch(`/api/allocations/${editingId}/update`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -303,9 +307,15 @@ export default function HODAllocationPage() {
         })
         const data = await res.json().catch(() => ({}))
         if (!res.ok) throw new Error(data?.message || data?.error || 'Failed to update allocation')
-        toast.success('Allocation updated')
+        const edited = allocations.find((row) => String(row.id) === String(editingId))
+        const editedStatus = String(edited?.status || '').toUpperCase()
+        toast.success(
+          editedStatus === 'SUBMITTED'
+            ? 'Submitted allocation updated — Headteacher will see your changes'
+            : 'Allocation updated'
+        )
       } else {
-        const res = await fetch('/api/allocations/create', {
+        const res = await sessionFetch('/api/allocations/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -352,7 +362,7 @@ export default function HODAllocationPage() {
     if (!id) return
     setSubmitting(true)
     try {
-      const res = await fetch(`/api/allocations/${id}/submit`, {
+      const res = await sessionFetch(`/api/allocations/${id}/submit`, {
         method: 'POST',
         credentials: 'include',
       })
@@ -369,7 +379,10 @@ export default function HODAllocationPage() {
 
   async function deleteAllocation(id) {
     try {
-      const res = await fetch(`/api/allocations/${id}`, { method: 'DELETE' })
+      const res = await sessionFetch(`/api/allocations/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data?.message || data?.error || 'Failed to delete')
       toast.success('Deleted')
@@ -381,7 +394,7 @@ export default function HODAllocationPage() {
 
   function startEdit(a) {
     const status = String(a?.status || '').toUpperCase()
-    if (status !== 'DRAFT' && status !== 'REJECTED') return
+    if (status !== 'DRAFT' && status !== 'REJECTED' && status !== 'SUBMITTED') return
     const data = a?.allocationData && typeof a.allocationData === 'object' ? a.allocationData : {}
     const storedTeacherId = normalizeString(data?.teacherId)
     const teacherRow = teachers.find(
@@ -1007,7 +1020,8 @@ export default function HODAllocationPage() {
                   <td style={tdStyle}>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
                       {(String(a?.status || '').toUpperCase() === 'DRAFT' ||
-                        String(a?.status || '').toUpperCase() === 'REJECTED') && (
+                        String(a?.status || '').toUpperCase() === 'REJECTED' ||
+                        String(a?.status || '').toUpperCase() === 'SUBMITTED') && (
                         <button
                           type="button"
                           onClick={() => startEdit(a)}
@@ -1048,7 +1062,8 @@ export default function HODAllocationPage() {
                         </button>
                       )}
 
-                      {String(a?.status || '').toUpperCase() === 'DRAFT' && (
+                      {(String(a?.status || '').toUpperCase() === 'DRAFT' ||
+                        String(a?.status || '').toUpperCase() === 'SUBMITTED') && (
                         <button
                           type="button"
                           onClick={() => deleteAllocation(a.id)}

@@ -83,8 +83,10 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   if (!allocation) throw new ApiError('Not found', 404)
 
   if (allocation.createdByUserId !== auth.user.id) throw new ApiError('Forbidden', 403)
-  if (allocation.status !== 'DRAFT')
-    throw new ApiError('Only DRAFT allocations can be deleted', 400)
+  const status = String(allocation.status || '').toUpperCase()
+  if (status !== 'DRAFT' && status !== 'SUBMITTED') {
+    throw new ApiError('Only draft or submitted allocations can be deleted', 400)
+  }
 
   await prisma.departmentAllocation.delete({ where: { id: allocation.id } })
 
