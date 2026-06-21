@@ -205,38 +205,40 @@ The headteacher is the school administrator with full oversight: users, timetabl
 
 ### Navigation menu
 
-| Menu item           | Route                                         |
-| ------------------- | --------------------------------------------- |
-| Dashboard           | `/dashboard/headteacher`                      |
-| Profile             | `/dashboard/profile`                          |
-| Settings            | `/dashboard/settings`                         |
-| User Feedback       | `/dashboard/feedback`                         |
-| User Management     | `/dashboard/users`                            |
-| Registration        | `/admin/registration`                         |
-| Scheduling Recipes  | `/dashboard/admin/recipes`                    |
-| Subjects            | `/admin/subjects`                             |
-| Career clusters     | `/admin/career-clusters`                      |
-| Careers             | `/admin/careers`                              |
-| Teacher Performance | `/admin/teacher-performance`                  |
-| Classes             | `/dashboard/classes`                          |
-| ECZ Exam Tracking   | `/dashboard/headteacher/exam-tracking`        |
-| STEM Monitoring     | `/dashboard/headteacher/stem-monitoring`      |
-| MOE Reports         | `/dashboard/headteacher/moe-reports`          |
-| Upload for AI (RAG) | `/dashboard/teacher/ai-materials`             |
-| AI Report Comments  | `/dashboard/teacher/report-comments`          |
-| Attendance Returns  | `/dashboard/attendance/returns`               |
-| Timetable           | `/dashboard/headteacher/timetable`            |
-| Assessments         | `/dashboard/assessments`                      |
-| ECZ SBA Hub         | `/dashboard/teacher/assessments/ecz`          |
-| Exam scenarios      | `/dashboard/teacher/assessments/ecz?tab=exam` |
-| CBC Assessment      | `/dashboard/teacher/assessments/cbc`          |
-| Results             | `/dashboard/results`                          |
-| Payments            | `/dashboard/payments`                         |
-| Billing             | `/dashboard/billing`                          |
-| Privacy             | `/dashboard/privacy`                          |
-| Reports             | `/dashboard/reports`                          |
+| Menu item           | Route                                        |
+| ------------------- | -------------------------------------------- |
+| Dashboard           | `/dashboard/headteacher`                     |
+| Profile             | `/dashboard/profile`                         |
+| Settings            | `/dashboard/settings`                        |
+| User Feedback       | `/dashboard/feedback`                        |
+| User Management     | `/dashboard/users`                           |
+| Registration        | `/admin/registration`                        |
+| Scheduling Recipes  | `/dashboard/admin/recipes`                   |
+| Subjects            | `/admin/subjects`                            |
+| Career clusters     | `/admin/career-clusters`                     |
+| Careers             | `/admin/careers`                             |
+| Teacher Performance | `/admin/teacher-performance`                 |
+| Classes             | `/dashboard/classes`                         |
+| ECZ Exam Tracking   | `/dashboard/headteacher/exam-tracking`       |
+| STEM Monitoring     | `/dashboard/headteacher/stem-monitoring`     |
+| MOE Reports         | `/dashboard/headteacher/moe-reports`         |
+| AI Report Comments  | `/dashboard/teacher/report-comments`         |
+| Attendance Returns  | `/dashboard/attendance/returns`              |
+| Timetable           | `/dashboard/headteacher/timetable`           |
+| Timetable Conflicts | `/dashboard/headteacher/timetable/conflicts` |
+| Transport           | `/dashboard/headteacher/transport`           |
+| Inter-house         | `/dashboard/headteacher/houses`              |
+| Hostel              | `/dashboard/headteacher/hostel`              |
+| Assessments         | `/dashboard/assessments`                     |
+| Results             | `/dashboard/results`                         |
+| Payments            | `/dashboard/payments`                        |
+| Billing             | `/dashboard/billing`                         |
+| Privacy             | `/dashboard/privacy`                         |
+| Reports             | `/dashboard/reports`                         |
 
-**Also available (not in sidebar):** SMS broadcast at `/dashboard/sms`.
+**Also available (not in sidebar):** SMS broadcast at `/dashboard/sms`; class-by-class timetable grid at `/dashboard/headteacher/timetable/class-view` (link from the Timetable **Edit** tab).
+
+**When enabled for your school:** **Fees** (schedules, invoices, sibling discounts), **Government** (EMIS export, grants, gender report, leave, deployment), and **Proprietor dashboard** appear as extra sidebar sections.
 
 ### Key workflows
 
@@ -247,13 +249,24 @@ The headteacher is the school administrator with full oversight: users, timetabl
 
 #### Master timetable
 
-1. Wait for HODs to submit class allocations (notification bell alerts you).
-2. Open **Timetable** (`/dashboard/headteacher/timetable`).
-3. Click **Generate Perfect Timetable**.
-4. Review the draft; drag/drop to fix conflicts if needed.
-5. Click **Publish** when ready — teachers and students see the published version.
+The **Timetable** page (`/dashboard/headteacher/timetable`) has tabs: **Overview**, **Edit**, **Conflicts**, **Cover**, **Settings**, and **Department Allocations**.
 
-See [TIMETABLE_PIPELINE.md](./TIMETABLE_PIPELINE.md) for the full pipeline.
+1. Wait for HODs to submit class allocations (notification bell alerts you).
+2. Open **Department Allocations** to review, **edit**, or **delete** submitted or approved rows when teachers are overloaded or allocations are wrong.
+3. On the **Edit** tab, choose a view mode:
+   - **Class wall** — all classes in one compact grid (aSc-style).
+   - **By period** — master grid (day × period); drag lessons to move or swap.
+   - **Teachers** / **One class** — filter by teacher or class.
+   - **Open class-by-class grid view** — link to `/dashboard/headteacher/timetable/class-view` (one class, period × MON–FRI, teacher colour coding).
+4. Click **Generate Perfect Timetable** (uses HOD allocations + bell schedule).
+5. Review the draft; red borders show **conflicts** (same teacher or same class in one period). Use **Conflicts** tab or **Timetable Conflicts** in the sidebar for the full Conflict Resolution Centre (`/dashboard/headteacher/timetable/conflicts`).
+6. Fix issues by dragging lessons, removing bad entries, editing allocations, or using suggested fixes on the conflicts page.
+7. Assign **teacher colours** on the **Settings** tab (or auto-assign) so grids are easy to read.
+8. Click **Publish** when there are **no hard conflicts** — teachers and students then see the published version.
+
+**Publish is blocked** while teacher double-booking or class double-booking errors remain.
+
+See [TIMETABLE_PIPELINE.md](./TIMETABLE_PIPELINE.md) and [03 timetable conflict resolution.md](./03%20timetable%20conflict%20resolution.md).
 
 #### MOE reports
 
@@ -349,9 +362,12 @@ These routes exist but may not appear in the main sidebar:
 #### Class allocation → timetable
 
 1. Open **Class Allocation** (`/dashboard/hod/allocation`).
-2. Create allocations: teacher → subject → class, with periods per week and block types (single/double/triple).
-3. Submit each allocation to the headteacher.
-4. Preview department timetable at **Department Timetable** (`/dashboard/hod/timetable`).
+2. Create allocations: teacher → subject → class(es), with periods per week and block types (single/double/triple).
+3. **Save** drafts, **Submit** to the headteacher, or **Remove/Delete** rows (including approved rows when the headteacher asks you to fix overload).
+4. You can **edit** allocations while status is DRAFT, REJECTED, or SUBMITTED (before the headteacher publishes the master timetable).
+5. Preview department timetable at **Department Timetable** (`/dashboard/hod/timetable`).
+
+If the allocation page shows a security block, refresh and sign in again — the page requires a normal browser session (not a plain API fetch).
 
 #### Lesson plan review
 
@@ -544,6 +560,7 @@ See [PLATFORM_ADMIN.md](./PLATFORM_ADMIN.md) for setup and security details.
 | Item              | Route                 |
 | ----------------- | --------------------- |
 | Overview          | `/platform/overview`  |
+| School usage      | `/platform/usage`     |
 | Schools           | `/platform/dashboard` |
 | Provinces         | `/platform/provinces` |
 | Reporting streams | `/platform/streams`   |
@@ -553,15 +570,16 @@ See [PLATFORM_ADMIN.md](./PLATFORM_ADMIN.md) for setup and security details.
 
 ### Capabilities
 
-| Section           | What you can do                                                                                                |
-| ----------------- | -------------------------------------------------------------------------------------------------------------- |
-| Overview          | View school counts (total, active, trial, expired, suspended), onboarding trends                               |
-| Schools           | List, filter by province/district/stream; activate, suspend, edit location; delete (type subdomain to confirm) |
-| Provinces         | Aggregated school counts per Zambian province                                                                  |
-| Districts         | Drill-down per province at `/platform/districts?province=…`                                                    |
-| Reporting streams | Schools grouped by `province-slug__district-slug`                                                              |
-| Billing           | Plan distribution, MRR estimate, recent payment metadata                                                       |
-| Health            | Integration readiness: CSP, Groq, Lipila, USSD, OR-Tools, ECZ cron, RLS, JWT                                   |
+| Section           | What you can do                                                                                                       |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Overview          | View school counts (total, active, trial, expired, suspended), onboarding trends                                      |
+| School usage      | See which schools use ZSMS with **student and teacher counts only** (no names or academic records); search and filter |
+| Schools           | List, filter by province/district/stream; activate, suspend, edit location; delete (type subdomain to confirm)        |
+| Provinces         | Aggregated school counts per Zambian province                                                                         |
+| Districts         | Drill-down per province at `/platform/districts?province=…`                                                           |
+| Reporting streams | Schools grouped by `province-slug__district-slug`                                                                     |
+| Billing           | Plan distribution, MRR estimate, recent payment metadata                                                              |
+| Health            | Integration readiness: CSP, Groq, Lipila, USSD, OR-Tools, ECZ cron, RLS, JWT                                          |
 
 ### What platform admin cannot see
 
@@ -612,20 +630,22 @@ Build instructions: `zsms-mobile/docs/EAS_APK_BUILD.md`.
 flowchart LR
   A[HOD: Class Allocation] --> B[HOD: Submit allocations]
   B --> C[Headteacher: Generate timetable]
-  C --> D[Headteacher: Edit draft]
+  C --> D[Headteacher: Edit draft / resolve conflicts]
   D --> E[Headteacher: Publish]
   E --> F[Teachers: My Timetable]
   E --> G[Students: My Timetable]
 ```
 
-| Step                  | Who               | Route                                                            |
-| --------------------- | ----------------- | ---------------------------------------------------------------- |
-| 1. Create allocations | HOD               | `/dashboard/hod/allocation`                                      |
-| 2. Submit to admin    | HOD               | Submit button on each allocation                                 |
-| 3. Generate           | Headteacher       | `/dashboard/headteacher/timetable`                               |
-| 4. Edit draft         | Headteacher       | Drag/drop on same page                                           |
-| 5. Publish            | Headteacher       | Publish button (when no conflicts)                               |
-| 6. View               | Teacher / Student | `/dashboard/timetable/teacher` or `/dashboard/timetable/student` |
+| Step                        | Who               | Route                                                                                 |
+| --------------------------- | ----------------- | ------------------------------------------------------------------------------------- |
+| 1. Create allocations       | HOD               | `/dashboard/hod/allocation`                                                           |
+| 2. Submit to admin          | HOD               | Submit button on each allocation                                                      |
+| 3. Review / fix allocations | Headteacher       | `/dashboard/headteacher/timetable` → **Department Allocations**                       |
+| 4. Generate                 | Headteacher       | `/dashboard/headteacher/timetable` → **Edit** tab                                     |
+| 5. Edit draft               | Headteacher       | Drag/drop on Edit tab, or class view at `/dashboard/headteacher/timetable/class-view` |
+| 6. Resolve conflicts        | Headteacher       | Conflicts tab or `/dashboard/headteacher/timetable/conflicts`                         |
+| 7. Publish                  | Headteacher       | Publish button (when no hard conflicts)                                               |
+| 8. View                     | Teacher / Student | `/dashboard/timetable/teacher` or `/dashboard/timetable/student`                      |
 
 ### Attendance modes
 
@@ -664,16 +684,20 @@ SMS requires credit balance top-up regardless of plan. AI tools require an AI-en
 
 ## Troubleshooting
 
-| Problem                         | Solution                                                              |
-| ------------------------------- | --------------------------------------------------------------------- |
-| Cannot log in                   | Check subdomain URL; use Forgot Password if weak password blocked     |
-| Dashboard blank after login     | Trial may have expired — go to `/dashboard/billing`                   |
-| Offline attendance not syncing  | Tap sync badge in header; ensure internet connection                  |
-| Timetable not visible           | Headteacher must publish; check term/academic year                    |
-| SBA task blocked for Form 4     | ECZ rules prohibit SBA in Form 4 — use exam tracking instead          |
-| SMS not sending                 | Check SMS balance at `/dashboard/sms`; top up credits                 |
-| AI tools unavailable            | Upgrade to a plan with AI features                                    |
-| Solo teacher cannot add student | Individual plan limited to 10 students; upgrade to Individual Premium |
+| Problem                         | Solution                                                                                                           |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Cannot log in                   | Check subdomain URL; use Forgot Password if weak password blocked                                                  |
+| Dashboard blank after login     | Trial may have expired — go to `/dashboard/billing`                                                                |
+| Offline attendance not syncing  | Tap sync badge in header; ensure internet connection                                                               |
+| Timetable not visible           | Headteacher must publish; check term/academic year                                                                 |
+| Timetable shows many conflicts  | Open **Timetable Conflicts**; fix double-booked teachers/classes; remove overloaded PE/allocation rows; regenerate |
+| Cannot publish timetable        | Resolve all **error**-severity conflicts first (Conflicts tab or sidebar)                                          |
+| Timetable generate fails        | Check HOD allocations for invalid multi-class rows or missing teachers; edit on **Department Allocations**         |
+| HOD allocation page blocked     | Sign out and back in; ensure you use the school subdomain URL                                                      |
+| SBA task blocked for Form 4     | ECZ rules prohibit SBA in Form 4 — use exam tracking instead                                                       |
+| SMS not sending                 | Check SMS balance at `/dashboard/sms`; top up credits                                                              |
+| AI tools unavailable            | Upgrade to a plan with AI features                                                                                 |
+| Solo teacher cannot add student | Individual plan limited to 10 students; upgrade to Individual Premium                                              |
 
 For technical issues, use **Give Feedback** (`/dashboard/feedback`) or contact your school administrator.
 
@@ -681,19 +705,20 @@ For technical issues, use **Give Feedback** (`/dashboard/feedback`) or contact y
 
 ## Related documentation
 
-| Document                                             | When to use                              |
-| ---------------------------------------------------- | ---------------------------------------- |
-| [SYSTEM_DOCUMENTATION.md](./SYSTEM_DOCUMENTATION.md) | Architecture, APIs, security, deployment |
-| [SETUP.md](./SETUP.md)                               | Local developer setup                    |
-| [INDIVIDUAL_PORTAL.md](./INDIVIDUAL_PORTAL.md)       | Solo teacher details                     |
-| [PLATFORM_ADMIN.md](./PLATFORM_ADMIN.md)             | Platform operator setup                  |
-| [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md)             | SBA rules and scoring                    |
-| [TIMETABLE_PIPELINE.md](./TIMETABLE_PIPELINE.md)     | Timetable generation flow                |
-| [QR_ATTENDANCE.md](./QR_ATTENDANCE.md)               | QR attendance security                   |
-| [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md)               | Offline sync behaviour                   |
-| [SMS_GUIDE.md](./SMS_GUIDE.md)                       | SMS templates and numbers                |
-| [AI_GUIDE.md](./AI_GUIDE.md)                         | AI feature details                       |
-| [mobile-app-scope.md](./mobile-app-scope.md)         | Mobile vs web scope                      |
+| Document                                                                           | When to use                                      |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------ |
+| [SYSTEM_DOCUMENTATION.md](./SYSTEM_DOCUMENTATION.md)                               | Architecture, APIs, security, deployment         |
+| [SETUP.md](./SETUP.md)                                                             | Local developer setup                            |
+| [INDIVIDUAL_PORTAL.md](./INDIVIDUAL_PORTAL.md)                                     | Solo teacher details                             |
+| [PLATFORM_ADMIN.md](./PLATFORM_ADMIN.md)                                           | Platform operator setup                          |
+| [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md)                                           | SBA rules and scoring                            |
+| [TIMETABLE_PIPELINE.md](./TIMETABLE_PIPELINE.md)                                   | Timetable generation flow                        |
+| [03 timetable conflict resolution.md](./03%20timetable%20conflict%20resolution.md) | Conflict centre, publish rules, detection layers |
+| [QR_ATTENDANCE.md](./QR_ATTENDANCE.md)                                             | QR attendance security                           |
+| [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md)                                             | Offline sync behaviour                           |
+| [SMS_GUIDE.md](./SMS_GUIDE.md)                                                     | SMS templates and numbers                        |
+| [AI_GUIDE.md](./AI_GUIDE.md)                                                       | AI feature details                               |
+| [mobile-app-scope.md](./mobile-app-scope.md)                                       | Mobile vs web scope                              |
 
 ---
 
