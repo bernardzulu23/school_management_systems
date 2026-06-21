@@ -81,14 +81,11 @@ export function compareDaySpread(opts: {
 
   const la = teacherDayLoad.get(`${teacherId}|${dayA}`) || 0
   const lb = teacherDayLoad.get(`${teacherId}|${dayB}`) || 0
+  if ((la === 0) !== (lb === 0)) {
+    return la - lb
+  }
+
   const penaltyA = opts.teacherMultiPenalty?.(teacherId, dayA) || 0
   const penaltyB = opts.teacherMultiPenalty?.(teacherId, dayB) || 0
-  const scoreA = la + penaltyA
-  const scoreB = lb + penaltyB
-
-  const aEmpty = la === 0 ? 0 : 1
-  const bEmpty = lb === 0 ? 0 : 1
-  if (aEmpty !== bEmpty) return aEmpty - bEmpty
-
-  return scoreA - scoreB
+  return la + penaltyA - (lb + penaltyB)
 }
