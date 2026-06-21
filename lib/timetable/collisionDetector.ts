@@ -14,7 +14,7 @@ import type {
   TravelingTeacherRoute,
 } from './types'
 import { TIMETABLE_CLASS_CENTRIC } from './classCentric'
-import { assignmentsShareSlot } from './constraintCheck'
+import { assignmentsShareSlot, teacherClassSameDayConflict } from './constraintCheck'
 
 export interface WorkloadStatus {
   status: 'ok' | 'warning' | 'overload'
@@ -320,6 +320,23 @@ export class CollisionDetector {
     for (const a of listTeacher) {
       if (a.id === assignment.id) continue
       if (a.season !== assignment.season) continue
+      if (String(a.classId) !== String(assignment.classId)) continue
+      if (teacherClassSameDayConflict(assignment, a, this.timeSlots)) {
+        conflicts.push(
+          this.makeConflict('ClassDoubleBooked', 'critical', 'Grade is double-booked', {
+            assignmentIds: [assignment.id, a.id],
+            classIds: [String(assignment.classId)],
+            teacherIds: [String(assignment.teacherId)],
+          })
+        )
+        break
+      }
+    }
+
+    for (const a of listTeacher) {
+      if (a.id === assignment.id) continue
+      if (a.season !== assignment.season) continue
+      if (String(a.classId) === String(assignment.classId)) continue
       if (!assignmentsShareSlot(a, assignment, this.timeSlots)) continue
       conflicts.push(
         this.makeConflict('TeacherDoubleBooked', 'critical', 'Teacher is double-booked', {
@@ -428,11 +445,11 @@ export class CollisionDetector {
     const base = this.assignments.find((a) => String(a.id) === String(assignmentId))
     if (!base) return suggestions
 
-    const move = this.suggestMoveToFreeSlot(base)
-    if (move) suggestions.push(move)
-
     const moveAnyDay = this.suggestMoveToAnyFreeSlot(base)
     if (moveAnyDay) suggestions.push(moveAnyDay)
+
+    const move = this.suggestMoveToFreeSlot(base)
+    if (move) suggestions.push(move)
 
     const swap = this.suggestSwap(base)
     if (swap) suggestions.push(swap)
@@ -479,6 +496,16 @@ export class CollisionDetector {
       const cid = String(a.classId)
 
       for (const prev of teacherIndex.get(tid) || []) {
+        if (String(prev.classId) === cid && teacherClassSameDayConflict(a, prev, this.timeSlots)) {
+          const c = this.makeConflict('ClassDoubleBooked', 'critical', 'Grade is double-booked', {
+            assignmentIds: [prev.id, a.id],
+            classIds: [cid],
+            teacherIds: [tid],
+          })
+          push(String(prev.id), c)
+          push(String(a.id), c)
+          continue
+        }
         if (!assignmentsShareSlot(prev, a, this.timeSlots)) continue
         const c = this.makeConflict('TeacherDoubleBooked', 'critical', 'Teacher is double-booked', {
           assignmentIds: [prev.id, a.id],

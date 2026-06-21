@@ -97,10 +97,6 @@ export default function HODAllocationPage() {
     customTriples: 0,
   })
 
-  useEffect(() => {
-    loadData()
-  }, [term, academicYear])
-
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
@@ -190,7 +186,11 @@ export default function HODAllocationPage() {
     } finally {
       setLoading(false)
     }
-  }, [term, academicYear])
+  }, [])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   const loadSubjectsForTeacher = useCallback(async (departmentId, teacherUserId) => {
     if (!departmentId || !teacherUserId) {
@@ -741,7 +741,8 @@ export default function HODAllocationPage() {
                 value={form.teacherId}
                 onChange={(e) => {
                   const teacherUserId = e.target.value
-                  setForm((f) => ({ ...f, teacherId: teacherUserId, subject: '' }))
+                  setForm((f) => ({ ...f, teacherId: teacherUserId, subject: '', classes: '' }))
+                  setSelectedClasses([])
                   loadSubjectsForTeacher(form.departmentId, teacherUserId)
                 }}
                 style={inputStyle}
@@ -758,6 +759,7 @@ export default function HODAllocationPage() {
             <FormRow label="Classes *">
               <DepartmentFilteredClassDropdown
                 departmentId={form.departmentId}
+                teacherUserId={form.teacherId}
                 selectedClassNames={selectedClasses}
                 onChange={({ names }) => {
                   setSelectedClasses(names)

@@ -8,6 +8,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getHodProfile, resolveHodDepartmentIds } from '@/lib/utils/hodDepartmentScope'
 import { isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { resolveDepartmentClasses } from '@/lib/timetable/resolveDepartmentClasses'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -23,6 +24,7 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const { searchParams } = new URL(request.url)
   const departmentId = String(searchParams.get('departmentId') || '').trim()
+  const teacherUserId = String(searchParams.get('teacherUserId') || '').trim()
 
   if (departmentId) {
     const hodProfile = await getHodProfile(prisma, auth.user.id, schoolId)
@@ -32,37 +34,20 @@ export const GET = withErrorHandler(async function GET(request) {
         throw new ApiError('Department not in your scope', 403)
       }
     }
+
+    const { classes } = await resolveDepartmentClasses(prisma, {
+      schoolId,
+      departmentId,
+      teacherUserId,
+    })
+    return NextResponse.json({ success: true, data: classes })
   }
 
-  const where = { schoolId, ...(departmentId ? { departmentId } : {}) }
-
-  let classes = await prisma.class.findMany({
-    where,
+  const classes = await prisma.class.findMany({
+    where: { schoolId },
     include: { department: { select: { id: true, name: true, code: true } } },
     orderBy: [{ year_group: 'asc' }, { name: 'asc' }],
   })
-
-  if (departmentId && classes.length === 0) {
-    const teachers = await prisma.teacher.findMany({
-      where: { schoolId, departments: { some: { departmentId } } },
-      include: {
-        teachingAssignments: { include: { class: true } },
-        classes: true,
-      },
-    })
-    const classById = new Map()
-    for (const t of teachers) {
-      for (const a of t.teachingAssignments || []) {
-        if (a?.class?.id) classById.set(String(a.class.id), a.class)
-      }
-      for (const c of t.classes || []) {
-        if (c?.id) classById.set(String(c.id), c)
-      }
-    }
-    classes = Array.from(classById.values()).sort((a, b) =>
-      String(a.name || '').localeCompare(String(b.name || ''))
-    )
-  }
 
   return NextResponse.json({
     success: true,
@@ -72,7 +57,7 @@ export const GET = withErrorHandler(async function GET(request) {
       classId: c.name,
       form: c.year_group || '',
       section: c.section || '',
-      departmentId: c.departmentId || departmentId || null,
+      departmentId: c.departmentId || null,
       department: c.department || null,
       label: c.name,
       gradeLabel: c.name,

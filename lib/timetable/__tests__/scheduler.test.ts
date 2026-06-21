@@ -120,11 +120,13 @@ describe('canPlace', () => {
     unitType: 'SINGLE',
   }
 
-  it('detects teacher conflict', () => {
+  it('detects teacher conflict on overlapping period', () => {
     const placed: PlacedBlock[] = [
       {
         ...block,
         blockId: 'existing',
+        classId: 'c2',
+        subjectId: 's2',
         day: 'monday',
         startPeriod: 1,
         startMin: 0,
@@ -149,6 +151,24 @@ describe('canPlace', () => {
     })
     expect(result.ok).toBe(false)
     if (!result.ok) expect(result.reason).toBe('forbidden_slot')
+  })
+
+  it('rejects same teacher+class+subject twice on same day', () => {
+    const placed: PlacedBlock[] = [
+      {
+        ...block,
+        blockId: 'existing',
+        day: 'monday',
+        startPeriod: 1,
+        startMin: 0,
+        endMin: 40,
+        startTime: '07:00',
+        endTime: '07:40',
+      },
+    ]
+    const result = canPlace(block, { day: 'monday', startPeriod: 3, span: 1 }, placed)
+    expect(result.ok).toBe(false)
+    if (!result.ok) expect(result.reason).toBe('teacher_class_subject_same_day')
   })
 
   it('allows non-overlapping placement', () => {

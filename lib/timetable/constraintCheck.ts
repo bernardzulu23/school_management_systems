@@ -89,8 +89,29 @@ export function assignmentsShareSlot(
   return timesOverlap(a, b)
 }
 
+export function assignmentsSameDay(a: Assignment, b: Assignment): boolean {
+  return normalizeDay(String(a.dayOfWeek)) === normalizeDay(String(b.dayOfWeek))
+}
+
 /**
- * Hard constraint: same teacher or same class at the same day/period.
+ * Hard constraint: same teacher + same class on the same day.
+ * - Same subject → conflict (only one block per day).
+ * - Different subjects → conflict only when period spans overlap.
+ */
+export function teacherClassSameDayConflict(
+  a: Assignment,
+  b: Assignment,
+  timeSlots: TimeSlot[] = []
+): boolean {
+  if (String(a.teacherId) !== String(b.teacherId)) return false
+  if (String(a.classId) !== String(b.classId)) return false
+  if (!assignmentsSameDay(a, b)) return false
+  if (String(a.subjectId) === String(b.subjectId)) return true
+  return assignmentsShareSlot(a, b, timeSlots)
+}
+
+/**
+ * Hard constraint checker for placement and post-generation filtering.
  */
 export function isConflict(
   assignment: Assignment,
@@ -101,6 +122,11 @@ export function isConflict(
 
   for (const existing of existingAssignments) {
     if (String(existing.id) === String(assignment.id)) continue
+    if (existing.isBreak) continue
+    if (assignment.season && existing.season && assignment.season !== existing.season) continue
+
+    if (teacherClassSameDayConflict(assignment, existing, timeSlots)) return true
+
     if (!assignmentsShareSlot(assignment, existing, timeSlots)) continue
 
     if (String(assignment.teacherId) === String(existing.teacherId)) return true
@@ -124,6 +150,9 @@ export function filterConflictFreeAssignments(
   }
   return kept
 }
+
+/** Alias used by solver integrations (`hasConflict` naming). */
+export { isConflict as hasConflict }
 
 type SchedulerEntryLike = {
   allocationId: string

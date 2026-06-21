@@ -54,6 +54,27 @@ import {
 
 type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings' | 'allocations'
 
+const TAB_VALUES: Tab[] = [
+  'assignment',
+  'overview',
+  'edit',
+  'conflicts',
+  'cover',
+  'settings',
+  'allocations',
+]
+
+function parseTabFromSearchParams(sp: URLSearchParams): Tab {
+  const raw = String(sp.get('tab') || sp.get('view') || 'edit').toLowerCase()
+  return TAB_VALUES.includes(raw as Tab) ? (raw as Tab) : 'edit'
+}
+
+function parseGridModeFromSearchParams(sp: URLSearchParams): TimetableGridMode {
+  const raw = String(sp.get('grid') || 'wall').toLowerCase()
+  if (raw === 'wall' || raw === 'master' || raw === 'teacher' || raw === 'class') return raw
+  return 'wall'
+}
+
 function formatPeriodDisplay(value: unknown): string {
   return formatPeriodConfigLabel(value as any) || String(value || '')
 }
@@ -125,7 +146,7 @@ export default function HeadteacherTimetablePage() {
 
 function HeadteacherTimetablePageContent() {
   const searchParams = useSearchParams()
-  const [tab, setTab] = useState<Tab>('edit')
+  const [tab, setTab] = useState<Tab>(() => parseTabFromSearchParams(searchParams))
   const [loading, setLoading] = useState(true)
   const [term, setTerm] = useState(() => String(searchParams.get('term') || 'Term 1'))
   const [academicYear, setAcademicYear] = useState(() =>
@@ -157,7 +178,9 @@ function HeadteacherTimetablePageContent() {
   const [editAllocationId, setEditAllocationId] = useState('')
   const [editAllocationData, setEditAllocationData] = useState<any | null>(null)
   const [seasonAllocations, setSeasonAllocations] = useState<any[]>([])
-  const [gridMode, setGridMode] = useState<TimetableGridMode>('master')
+  const [gridMode, setGridMode] = useState<TimetableGridMode>(() =>
+    parseGridModeFromSearchParams(searchParams)
+  )
   const [unplacedLessons, setUnplacedLessons] = useState<UnplacedLesson[]>([])
   const [reloadingTimetable, setReloadingTimetable] = useState(false)
   const [lockedPeriodKeys, setLockedPeriodKeys] = useState<Set<string>>(() => new Set())
@@ -541,6 +564,8 @@ function HeadteacherTimetablePageContent() {
   useEffect(() => {
     setTerm(String(searchParams.get('term') || 'Term 1'))
     setAcademicYear(String(searchParams.get('academicYear') || new Date().getFullYear()))
+    setTab(parseTabFromSearchParams(searchParams))
+    setGridMode(parseGridModeFromSearchParams(searchParams))
   }, [searchParams])
 
   useEffect(() => {
@@ -887,7 +912,7 @@ function HeadteacherTimetablePageContent() {
       await refreshDraftMeta(true)
       notifyTimetableConflictsUpdated()
       await loadLockedPeriodAssignments()
-      setGridMode('master')
+      setGridMode('wall')
       setTab('edit')
     } catch (e: any) {
       if (!genProgress.open || genProgress.stage !== 'error') {
@@ -1118,9 +1143,11 @@ function HeadteacherTimetablePageContent() {
 
         <div className="flex flex-wrap items-center gap-2 border-b border-royalPurple-border/30 pb-2">
           <p className="w-full text-xs text-royalPurple-text3 mb-1 print:hidden">
-            Use the <span className="font-semibold text-royalPurple-text2">Edit</span> tab to drag
-            lessons, delete entries, and clear the draft. Overview uses the view switcher above (By
-            period = master grid).
+            Use the <span className="font-semibold text-royalPurple-text2">Edit</span> tab with{' '}
+            <span className="font-semibold text-royalPurple-text2">Class wall</span> (default) for
+            the compact aSc-style grid, or switch to{' '}
+            <span className="font-semibold text-royalPurple-text2">By period</span> to drag lessons
+            on the master grid.
           </p>
           {(
             [
@@ -1700,35 +1727,59 @@ function HeadteacherTimetablePageContent() {
                   </Button>
                 </div>
               ) : null}
-              <MasterTimetableGrid
-                assignments={seasonAssignments}
-                timeSlots={timeSlots}
-                classes={classes}
-                teachers={teachers}
-                season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
-                showConflicts
-                editable
-                enableDragDrop
-                onAssignmentChange={onAssignmentChange}
-                onSwapAssignments={onSwapAssignments}
-                onDeleteAssignment={onDeleteAssignment}
-                onConflictDetected={() => setTab('conflicts')}
-              />
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Button variant="outline" onClick={undo} className="zsms-hover-raise">
-                  Undo
-                </Button>
-                <Button variant="outline" onClick={redo} className="zsms-hover-raise">
-                  Redo
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={onClearTimetable}
-                  className="zsms-hover-raise text-red-400 border-red-500/40"
-                >
-                  Clear timetable
-                </Button>
-              </div>
+              {gridMode === 'wall' ? (
+                <AscClassWallGrid
+                  assignments={seasonAssignments}
+                  timeSlots={timeSlots}
+                  classes={classes}
+                  teachers={teachers}
+                  season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
+                  showConflicts
+                  unplacedLessons={unplacedLessons}
+                  lockedPeriodKeys={lockedPeriodKeys}
+                  onDropUnplaced={onDropUnplacedLesson}
+                />
+              ) : gridMode === 'master' ? (
+                <MasterTimetableGrid
+                  assignments={seasonAssignments}
+                  timeSlots={timeSlots}
+                  classes={classes}
+                  teachers={teachers}
+                  season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
+                  showConflicts
+                  editable
+                  enableDragDrop
+                  onAssignmentChange={onAssignmentChange}
+                  onSwapAssignments={onSwapAssignments}
+                  onDeleteAssignment={onDeleteAssignment}
+                  onConflictDetected={() => setTab('conflicts')}
+                />
+              ) : (
+                <TimetableEntityView
+                  mode={gridMode}
+                  assignments={seasonAssignments}
+                  timeSlots={timeSlots}
+                  teachers={teachers}
+                  classes={classes}
+                />
+              )}
+              {gridMode === 'master' ? (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Button variant="outline" onClick={undo} className="zsms-hover-raise">
+                    Undo
+                  </Button>
+                  <Button variant="outline" onClick={redo} className="zsms-hover-raise">
+                    Redo
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={onClearTimetable}
+                    className="zsms-hover-raise text-red-400 border-red-500/40"
+                  >
+                    Clear timetable
+                  </Button>
+                </div>
+              ) : null}
             </div>
             <div className="min-w-0 xl:sticky xl:top-4 xl:max-h-[calc(100vh-6rem)] xl:overflow-y-auto">
               <ConflictDisplay

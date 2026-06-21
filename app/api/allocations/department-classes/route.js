@@ -8,6 +8,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getHodProfile, resolveHodDepartmentIds } from '@/lib/utils/hodDepartmentScope'
 import { canManageDepartmentAllocations, isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
 import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
+import { resolveDepartmentClasses } from '@/lib/timetable/resolveDepartmentClasses'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -27,6 +28,7 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const { searchParams } = new URL(request.url)
   const departmentId = String(searchParams.get('departmentId') || '').trim()
+  const teacherUserId = String(searchParams.get('teacherUserId') || '').trim()
   if (!departmentId) throw new ApiError('departmentId is required', 400)
 
   if (!isSchoolAdminOrHead(auth.user) && hodProfile) {
@@ -36,44 +38,16 @@ export const GET = withErrorHandler(async function GET(request) {
     }
   }
 
-  const dept = await prisma.department.findFirst({
-    where: { id: departmentId, schoolId },
-    select: { id: true, name: true },
+  const { department, classes } = await resolveDepartmentClasses(prisma, {
+    schoolId,
+    departmentId,
+    teacherUserId,
   })
-  if (!dept) throw new ApiError('Department not found', 404)
-
-  const teachers = await prisma.teacher.findMany({
-    where: {
-      schoolId,
-      departments: { some: { departmentId } },
-    },
-    include: {
-      teachingAssignments: { include: { class: true } },
-      classes: true,
-    },
-  })
-
-  const classById = new Map()
-  for (const t of teachers) {
-    for (const a of t.teachingAssignments || []) {
-      if (a?.class?.id) classById.set(String(a.class.id), a.class)
-    }
-    for (const c of t.classes || []) {
-      if (c?.id) classById.set(String(c.id), c)
-    }
-  }
-
-  const classes = Array.from(classById.values()).sort((a, b) =>
-    String(a.name || '').localeCompare(String(b.name || ''))
-  )
+  if (!department) throw new ApiError('Department not found', 404)
 
   return NextResponse.json({
     success: true,
-    department: dept,
-    data: classes.map((c) => ({
-      id: c.id,
-      name: c.name,
-      label: c.name || `${c.year_group || ''}${c.section || ''}`.trim(),
-    })),
+    department,
+    data: classes,
   })
 })

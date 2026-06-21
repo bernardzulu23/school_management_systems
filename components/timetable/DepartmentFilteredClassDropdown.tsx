@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 export type DepartmentClassOption = {
   id: string
@@ -12,6 +13,7 @@ export type DepartmentClassOption = {
 
 interface Props {
   departmentId: string
+  teacherUserId?: string
   selectedClassIds?: string[]
   selectedClassNames?: string[]
   multiple?: boolean
@@ -21,6 +23,7 @@ interface Props {
 
 export function DepartmentFilteredClassDropdown({
   departmentId,
+  teacherUserId = '',
   selectedClassIds = [],
   selectedClassNames = [],
   multiple = true,
@@ -36,7 +39,9 @@ export function DepartmentFilteredClassDropdown({
       return
     }
     setLoading(true)
-    fetch(`/api/timetable/classes?departmentId=${encodeURIComponent(departmentId)}`, {
+    const qs = new URLSearchParams({ departmentId })
+    if (teacherUserId) qs.set('teacherUserId', teacherUserId)
+    sessionFetch(`/api/timetable/classes?${qs.toString()}`, {
       cache: 'no-store',
       credentials: 'include',
     })
@@ -44,7 +49,7 @@ export function DepartmentFilteredClassDropdown({
       .then((data) => setClasses(Array.isArray(data?.data) ? data.data : []))
       .catch(() => setClasses([]))
       .finally(() => setLoading(false))
-  }, [departmentId])
+  }, [departmentId, teacherUserId])
 
   if (!departmentId) {
     return <p className="text-sm text-royalPurple-text3">Select a department to see its classes.</p>
@@ -57,8 +62,9 @@ export function DepartmentFilteredClassDropdown({
   if (classes.length === 0) {
     return (
       <p className="text-sm text-royalPurple-text3">
-        No classes linked to this department. Assign teachers to classes first, or set a department
-        on each class.
+        {teacherUserId
+          ? 'No classes found for this teacher in your department. Check their teaching assignments in User Management, or set a department on each class.'
+          : 'No classes linked to this department. Select a teacher first, assign teachers to classes in User Management, or set a department on each class.'}
       </p>
     )
   }

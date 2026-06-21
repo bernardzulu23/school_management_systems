@@ -274,12 +274,18 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
         (classSlots.get(lesson.classId)?.has(sid) ?? false)
     )
 
+  const teacherClassSubjectDay = new Set<string>()
+
+  const teacherClassSubjectKey = (lesson: Lesson, day: string) =>
+    `${lesson.teacherId}|${lesson.classId}|${lesson.subjectId}|${normalizeDay(day)}`
+
   const markBusy = (lesson: Lesson, slotIds: string[], day: string) => {
     for (const sid of slotIds) {
       teacherSlots.get(lesson.teacherId)?.add(sid)
       classSlots.get(lesson.classId)?.add(sid)
     }
     const nd = normalizeDay(day)
+    teacherClassSubjectDay.add(teacherClassSubjectKey(lesson, nd))
     const teacherKey = `${lesson.teacherId}|${nd}`
     teacherDayLoad.set(teacherKey, (teacherDayLoad.get(teacherKey) || 0) + 1)
     const csKey = `${lesson.classId}|${lesson.subjectId}|${nd}`
@@ -292,6 +298,7 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
       classSlots.get(lesson.classId)?.delete(sid)
     }
     const nd = normalizeDay(day)
+    teacherClassSubjectDay.delete(teacherClassSubjectKey(lesson, nd))
     const teacherKey = `${lesson.teacherId}|${nd}`
     const curTeacher = teacherDayLoad.get(teacherKey) || 0
     if (curTeacher <= 1) teacherDayLoad.delete(teacherKey)
@@ -421,6 +428,7 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
         if (isBusy(lesson, ids)) continue
         if (!isSlotAllowed(lesson, run)) continue
         if (wouldStackGreedy(lesson, day)) continue
+        if (teacherClassSubjectDay.has(teacherClassSubjectKey(lesson, day))) continue
 
         assignments[lesson.id] = ids[0]
         slotSpans[lesson.id] = ids
@@ -465,6 +473,7 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
           if (isBusy(lesson, ids)) continue
           if (!isSlotAllowed(lesson, run)) continue
           if (wouldStackGreedy(lesson, day)) continue
+          if (teacherClassSubjectDay.has(teacherClassSubjectKey(lesson, day))) continue
           assignments[lesson.id] = ids[0]
           slotSpans[lesson.id] = ids
           markBusy(lesson, ids, day)

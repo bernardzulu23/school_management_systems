@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
   filterConflictFreeSchedulerEntries,
+  hasConflict,
   isConflict,
+  teacherClassSameDayConflict,
   assignmentsShareSlot,
 } from '../constraintCheck'
 import type { Assignment } from '../types'
@@ -56,6 +58,44 @@ describe('isConflict', () => {
     const incoming = baseAssignment({ id: 'a2', dayOfWeek: 'Tuesday' })
     const existing = [baseAssignment()]
     expect(isConflict(incoming, existing)).toBe(false)
+  })
+
+  it('blocks same teacher+class+subject on same day even when periods differ', () => {
+    const incoming = baseAssignment({
+      id: 'a2',
+      period: 3,
+      startTime: '09:20',
+      endTime: '10:00',
+    })
+    const existing = [baseAssignment()]
+    expect(isConflict(incoming, existing)).toBe(true)
+    expect(hasConflict(incoming, existing)).toBe(true)
+  })
+
+  it('allows same teacher+class on same day with different subjects when periods do not overlap', () => {
+    const incoming = baseAssignment({
+      id: 'a2',
+      subjectId: 's2',
+      period: 3,
+      startTime: '09:20',
+      endTime: '10:00',
+    })
+    const existing = [baseAssignment()]
+    expect(teacherClassSameDayConflict(incoming, existing)).toBe(false)
+    expect(isConflict(incoming, existing)).toBe(false)
+  })
+
+  it('blocks same teacher+class on same day with different subjects when periods overlap', () => {
+    const incoming = baseAssignment({
+      id: 'a2',
+      subjectId: 's2',
+      period: 1,
+      consecutivePeriods: 2,
+    })
+    const existing = [
+      baseAssignment({ period: 2, teacherId: 't1', classId: 'c1', subjectId: 's3' }),
+    ]
+    expect(isConflict(incoming, existing)).toBe(true)
   })
 })
 

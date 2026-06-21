@@ -2,6 +2,7 @@ import type { Assignment, TimeSlot } from './types'
 import { CollisionDetector } from './collisionDetector'
 import { filterClassCentricConflicts } from './classCentric'
 import { countUniqueConflicts } from './conflictDedupe'
+import { backtrackReassignAssignments } from './solverBacktrackResolve'
 
 export type AutoResolveResult = {
   assignments: Assignment[]
@@ -26,8 +27,13 @@ export function autoResolveConflicts(opts: {
   timeSlots?: TimeSlot[]
   seasonMode?: 'normal' | 'planting' | 'harvest'
 }): AutoResolveResult {
-  let current = [...(opts.assignments || [])]
-  let resolvedCount = 0
+  const backtrack = backtrackReassignAssignments({
+    assignments: opts.assignments,
+    timeSlots: opts.timeSlots,
+  })
+
+  let current = backtrack.assignments
+  let resolvedCount = backtrack.moved
   let stalePasses = 0
 
   for (let pass = 0; pass < MAX_PASSES; pass++) {

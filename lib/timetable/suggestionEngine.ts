@@ -64,32 +64,65 @@ export class SuggestionEngine {
 
   suggestAlternativeTimeSlots(assignment: Assignment): Suggestion[] {
     if (!this.timeSlots.length) return []
+    return this.suggestAlternativeTimeSlotsAnyDay(assignment, 3)
+  }
+
+  /** Search all weekdays and periods for conflict-free slots (preferred for resolving double-booking). */
+  suggestAlternativeTimeSlotsAnyDay(assignment: Assignment, limit = 3): Suggestion[] {
+    if (!this.timeSlots.length) return []
+    const dayRank: Record<string, number> = {
+      monday: 1,
+      tuesday: 2,
+      wednesday: 3,
+      thursday: 4,
+      friday: 5,
+      saturday: 6,
+      sunday: 7,
+    }
     const slots = this.timeSlots
-      .filter((s) => s.dayOfWeek === assignment.dayOfWeek && !s.isBreak)
-      .sort((a, b) => a.period - b.period)
+      .filter((s) => !s.isBreak)
+      .sort((a, b) => {
+        const da = dayRank[String(a.dayOfWeek).toLowerCase()] || 99
+        const db = dayRank[String(b.dayOfWeek).toLowerCase()] || 99
+        if (da !== db) return da - db
+        return a.period - b.period
+      })
 
     const out: Suggestion[] = []
     for (const slot of slots) {
-      if (slot.startTime === assignment.startTime && slot.endTime === assignment.endTime) continue
+      const sameSlot =
+        String(slot.dayOfWeek).toLowerCase() === String(assignment.dayOfWeek).toLowerCase() &&
+        slot.startTime === assignment.startTime &&
+        slot.endTime === assignment.endTime
+      if (sameSlot) continue
+
       const candidate: Assignment = {
         ...assignment,
+        dayOfWeek: slot.dayOfWeek,
         startTime: slot.startTime,
         endTime: slot.endTime,
         period: slot.period,
       }
       const issues = this.detector.validateAssignment(candidate)
       if (issues.length > 0) continue
+
+      const sameDay =
+        String(slot.dayOfWeek).toLowerCase() === String(assignment.dayOfWeek).toLowerCase()
       const preview = this.assignments.map((a) => (a.id === assignment.id ? candidate : a))
       out.push({
-        title: `Move to ${assignment.dayOfWeek} ${slot.startTime}`,
-        description: 'Moves the lesson to an available time slot.',
-        reason: 'Avoids collisions while keeping the day unchanged.',
-        costReduction: 40,
+        title: `Move to ${String(slot.dayOfWeek)} ${slot.startTime}`,
+        description: sameDay
+          ? 'Moves the lesson to another period on the same day.'
+          : `Moves the lesson to ${String(slot.dayOfWeek)} period ${slot.period}.`,
+        reason: sameDay
+          ? 'Resolves the conflict on the same weekday.'
+          : 'Resolves the conflict by moving the lesson to a free day and period.',
+        costReduction: sameDay ? 35 : 50,
         impactedAssignments: estimateImpact(preview, [assignment.id]),
         preview,
         apply: () => preview,
       })
-      if (out.length >= 2) break
+      if (out.length >= limit) break
     }
     return out
   }
@@ -194,7 +227,7 @@ export class SuggestionEngine {
     if (!base) return []
 
     const list: Suggestion[] = []
-    list.push(...this.suggestAlternativeTimeSlots(base))
+    list.push(...this.suggestAlternativeTimeSlotsAnyDay(base, 3))
     list.push(...this.suggestAlternativeClassrooms(base))
     list.push(...this.suggestAlternativeTeachers(base))
     list.push(...this.suggestSwaps(base))
@@ -203,6 +236,7 @@ export class SuggestionEngine {
 
   rankSuggestions(suggestions: Suggestion[], base: Assignment): Suggestion[] {
     const seen = new Set<string>()
+    const baseDay = String(base.dayOfWeek).toLowerCase()
     const scored = suggestions
       .filter((s) => {
         const k = `${s.title}|${s.impactedAssignments}`
@@ -212,8 +246,10 @@ export class SuggestionEngine {
       })
       .map((s) => {
         const impactPenalty = s.impactedAssignments * 10
-        const sameDayBonus = s.title.toLowerCase().includes(String(base.dayOfWeek)) ? 5 : 0
-        const score = impactPenalty - s.costReduction - sameDayBonus
+        const titleDay = String(s.title).split(' ')[2]?.toLowerCase() || ''
+        const changesDay = titleDay && titleDay !== baseDay
+        const dayChangeBonus = changesDay ? 8 : 0
+        const score = impactPenalty - s.costReduction - dayChangeBonus
         return { s, score }
       })
       .sort((a, b) => a.score - b.score)

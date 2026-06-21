@@ -292,17 +292,38 @@ export function canPlace(
     if (isSlotForbidden(rule, day, p)) {
       return { ok: false, reason: 'forbidden_slot' }
     }
+  }
 
-    for (const pl of placed) {
-      if (normalizeDay(pl.day) !== nd) continue
+  for (const pl of placed) {
+    if (normalizeDay(pl.day) !== nd) continue
 
-      if (pl.teacherId === block.teacherId && periodsOverlap(pl.startPeriod, pl.span, p, 1)) {
-        return { ok: false, reason: 'teacher_conflict' }
+    if (
+      pl.teacherId === block.teacherId &&
+      pl.classId === block.classId &&
+      pl.subjectId === block.subjectId
+    ) {
+      return { ok: false, reason: 'teacher_class_subject_same_day' }
+    }
+
+    if (pl.teacherId === block.teacherId && pl.classId === block.classId) {
+      if (periodsOverlap(pl.startPeriod, pl.span, startPeriod, span)) {
+        return { ok: false, reason: 'teacher_class_overlap' }
       }
+      continue
+    }
 
-      if (pl.classId === block.classId && periodsOverlap(pl.startPeriod, pl.span, p, 1)) {
-        return { ok: false, reason: 'grade_conflict' }
-      }
+    if (
+      pl.teacherId === block.teacherId &&
+      periodsOverlap(pl.startPeriod, pl.span, startPeriod, span)
+    ) {
+      return { ok: false, reason: 'teacher_conflict' }
+    }
+
+    if (
+      pl.classId === block.classId &&
+      periodsOverlap(pl.startPeriod, pl.span, startPeriod, span)
+    ) {
+      return { ok: false, reason: 'grade_conflict' }
     }
   }
 
@@ -518,6 +539,7 @@ export function generateTimetableOnce(
   const breakAfterPeriods = deriveBreakAfterPeriods(daySlots)
 
   let backtracks = 0
+  let reassignments = 0
   const placed: PlacedBlock[] = [...(options.initialPlaced || [])]
   const sortedBlocks = sortBlocksHardestFirst(allBlocks, daySlots, restartSeed)
 
@@ -530,6 +552,59 @@ export function generateTimetableOnce(
     strictSoftConstraints: options.strictSoftConstraints,
     reservedTeacherSlots: reservedSet,
     breakAfterPeriods,
+  }
+
+  function pushPlacedFromCandidate(block: SchedulerBlock, cand: (typeof candidates)[0]) {
+    const run = cand.run
+    const first = run[0]
+    const last = run[run.length - 1]
+    placed.push({
+      ...block,
+      day: cand.day,
+      startPeriod: cand.startPeriod,
+      startMin: first.start,
+      endMin: last.end,
+      startTime: first.startTime,
+      endTime: last.endTime,
+    })
+  }
+
+  function tryReassignTeacherClassBlocks(blockIndex: number): boolean {
+    const block = sortedBlocks[blockIndex]
+    const victims = placed
+      .map((pl, idx) => ({ pl, idx }))
+      .filter(({ pl }) => pl.teacherId === block.teacherId && pl.classId === block.classId)
+
+    for (const { pl: victim, idx: victimIdx } of victims) {
+      const removed = placed.splice(victimIdx, 1)[0]
+      const victimBlock: SchedulerBlock = {
+        blockId: removed.blockId,
+        allocationId: removed.allocationId,
+        teacherId: removed.teacherId,
+        classId: removed.classId,
+        subjectId: removed.subjectId,
+        span: removed.span,
+        unitType: removed.unitType,
+      }
+
+      const altCandidates = getCandidateSlots(victimBlock, daySlots, singleMin, breakAfterPeriods)
+      for (const alt of altCandidates) {
+        const placementRule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, victimBlock)
+        const check = canPlace(victimBlock, alt, placed, { ...canPlaceOpts, placementRule })
+        if (!check.ok) continue
+
+        pushPlacedFromCandidate(victimBlock, alt)
+        reassignments += 1
+        if (backtrackPlace(blockIndex)) return true
+
+        placed.pop()
+        reassignments += 1
+      }
+
+      placed.splice(victimIdx, 0, removed)
+    }
+
+    return false
   }
 
   function backtrackPlace(index: number): boolean {
@@ -597,6 +672,8 @@ export function generateTimetableOnce(
       placed.pop()
       backtracks += 1
     }
+
+    if (tryReassignTeacherClassBlocks(index)) return true
 
     return false
   }
