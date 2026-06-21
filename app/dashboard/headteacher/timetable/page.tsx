@@ -1107,6 +1107,15 @@ function HeadteacherTimetablePageContent() {
           isPublished={stats.published}
         />
 
+        <div className="flex justify-end print:hidden">
+          <Link
+            href="/dashboard/headteacher/timetable/class-view"
+            className="text-xs font-semibold text-royalPurple-accent hover:underline"
+          >
+            Open class-by-class grid view →
+          </Link>
+        </div>
+
         <div className="flex flex-wrap items-center gap-2 border-b border-royalPurple-border/30 pb-2">
           <p className="w-full text-xs text-royalPurple-text3 mb-1 print:hidden">
             Use the <span className="font-semibold text-royalPurple-text2">Edit</span> tab to drag
