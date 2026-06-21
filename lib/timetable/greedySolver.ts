@@ -28,6 +28,7 @@ import {
   teacherMultiBlockDayPenalty,
   type MultiBlockPlacement,
 } from '@/lib/timetable/scheduler'
+import { interleaveLessons, compareDaySpread } from '@/lib/timetable/lessonOrdering'
 
 export interface TimeSlot {
   id: string
@@ -214,10 +215,6 @@ export function resolveLessonsForSolver(payload: SolverPayload): Lesson[] {
   return payload.lessons || []
 }
 
-function unitPriority(lesson: Lesson): number {
-  return Number(lesson.consecutivePeriods) || 1
-}
-
 /**
  * Backtracking scheduler: undoes placements that block later lessons.
  */
@@ -233,6 +230,7 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
   const teacherSlots = new Map<string, Set<string>>()
   const classSlots = new Map<string, Set<string>>()
   const teacherDayLoad = new Map<string, number>()
+  const classSubjectDayLoad = new Map<string, number>()
   const placedMulti: MultiBlockPlacement[] = []
 
   for (const teacher of payload.teachers) {
@@ -264,13 +262,7 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
     return true
   }
 
-  const sortedLessons = [...lessons].sort((a, b) => {
-    const pa = unitPriority(b) - unitPriority(a)
-    if (pa !== 0) return pa
-    if (a.teacherId !== b.teacherId) return a.teacherId.localeCompare(b.teacherId)
-    if (a.classId !== b.classId) return a.classId.localeCompare(b.classId)
-    return a.subjectId.localeCompare(b.subjectId)
-  })
+  const sortedLessons = interleaveLessons(lessons)
 
   let assignedCount = 0
   let timedOut = false
@@ -287,8 +279,11 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
       teacherSlots.get(lesson.teacherId)?.add(sid)
       classSlots.get(lesson.classId)?.add(sid)
     }
-    const key = `${lesson.teacherId}|${day}`
-    teacherDayLoad.set(key, (teacherDayLoad.get(key) || 0) + 1)
+    const nd = normalizeDay(day)
+    const teacherKey = `${lesson.teacherId}|${nd}`
+    teacherDayLoad.set(teacherKey, (teacherDayLoad.get(teacherKey) || 0) + 1)
+    const csKey = `${lesson.classId}|${lesson.subjectId}|${nd}`
+    classSubjectDayLoad.set(csKey, (classSubjectDayLoad.get(csKey) || 0) + 1)
   }
 
   const unmarkBusy = (lesson: Lesson, slotIds: string[], day: string) => {
@@ -296,10 +291,59 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
       teacherSlots.get(lesson.teacherId)?.delete(sid)
       classSlots.get(lesson.classId)?.delete(sid)
     }
-    const key = `${lesson.teacherId}|${day}`
-    const cur = teacherDayLoad.get(key) || 0
-    if (cur <= 1) teacherDayLoad.delete(key)
-    else teacherDayLoad.set(key, cur - 1)
+    const nd = normalizeDay(day)
+    const teacherKey = `${lesson.teacherId}|${nd}`
+    const curTeacher = teacherDayLoad.get(teacherKey) || 0
+    if (curTeacher <= 1) teacherDayLoad.delete(teacherKey)
+    else teacherDayLoad.set(teacherKey, curTeacher - 1)
+
+    const csKey = `${lesson.classId}|${lesson.subjectId}|${nd}`
+    const curCs = classSubjectDayLoad.get(csKey) || 0
+    if (curCs <= 1) classSubjectDayLoad.delete(csKey)
+    else classSubjectDayLoad.set(csKey, curCs - 1)
+  }
+
+  const sortDaysForLesson = (lesson: Lesson) =>
+    [...dayOrder].sort((da, db) =>
+      compareDaySpread({
+        teacherId: lesson.teacherId,
+        classId: lesson.classId,
+        subjectId: lesson.subjectId,
+        dayA: da,
+        dayB: db,
+        teacherDayLoad,
+        classSubjectDayLoad,
+        teacherMultiPenalty: (tid, day) => teacherMultiBlockDayPenalty(tid, day, placedMulti),
+      })
+    )
+
+  const sortStartIndices = (lesson: Lesson, day: string, daySlots: TimeSlot[], size: number) => {
+    const indices = Array.from({ length: Math.max(0, daySlots.length - size + 1) }, (_, i) => i)
+    const slotById = new Map(slots.map((s) => [s.id, s]))
+    return indices.sort((ia, ib) => {
+      const runA = findConsecutiveRun(daySlots, ia, size)
+      const runB = findConsecutiveRun(daySlots, ib, size)
+      if (!runA && !runB) return 0
+      if (!runA) return 1
+      if (!runB) return -1
+
+      const rule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, lesson)
+      const scoreA = placementPreferenceScore(rule, day, Number(runA[0]?.period) || 0)
+      const scoreB = placementPreferenceScore(rule, day, Number(runB[0]?.period) || 0)
+      if (scoreA !== scoreB) return scoreA - scoreB
+
+      const periodA = Number(runA[0]?.period) || 0
+      const periodB = Number(runB[0]?.period) || 0
+      const nearA = [...(teacherSlots.get(lesson.teacherId) || [])].filter((sid) => {
+        const slot = slotById.get(sid)
+        return slot && Math.abs((Number(slot.period) || 0) - periodA) <= 1
+      }).length
+      const nearB = [...(teacherSlots.get(lesson.teacherId) || [])].filter((sid) => {
+        const slot = slotById.get(sid)
+        return slot && Math.abs((Number(slot.period) || 0) - periodB) <= 1
+      }).length
+      return nearA - nearB
+    })
   }
 
   const wouldStackGreedy = (lesson: Lesson, day: string) => {
@@ -359,32 +403,11 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
     const lesson = sortedLessons[lessonIndex]
     const size = Math.max(1, Number(lesson.consecutivePeriods) || 1)
 
-    const daysSorted = [...dayOrder].sort((da, db) => {
-      const la = teacherDayLoad.get(`${lesson.teacherId}|${da}`) || 0
-      const lb = teacherDayLoad.get(`${lesson.teacherId}|${db}`) || 0
-      const scoreA = la + teacherMultiBlockDayPenalty(lesson.teacherId, da, placedMulti)
-      const scoreB = lb + teacherMultiBlockDayPenalty(lesson.teacherId, db, placedMulti)
-      return scoreA - scoreB
-    })
+    const daysSorted = sortDaysForLesson(lesson)
 
     for (const day of daysSorted) {
       const daySlots = byDay.get(day) || []
-      const startIndices = Array.from(
-        { length: Math.max(0, daySlots.length - size + 1) },
-        (_, i) => i
-      )
-      startIndices.sort((ia, ib) => {
-        const runA = findConsecutiveRun(daySlots, ia, size)
-        const runB = findConsecutiveRun(daySlots, ib, size)
-        const rule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, lesson)
-        const scoreA = runA
-          ? placementPreferenceScore(rule, day, Number(runA[0]?.period) || 0)
-          : 9999
-        const scoreB = runB
-          ? placementPreferenceScore(rule, day, Number(runB[0]?.period) || 0)
-          : 9999
-        return scoreA - scoreB
-      })
+      const startIndices = sortStartIndices(lesson, day, daySlots, size)
 
       for (const i of startIndices) {
         if (Date.now() - START_TIME > MAX_MS) {
@@ -430,17 +453,12 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
       if (assignments[lesson.id]) continue
 
       const size = Math.max(1, Number(lesson.consecutivePeriods) || 1)
-      const daysSorted = [...dayOrder].sort((da, db) => {
-        const la = teacherDayLoad.get(`${lesson.teacherId}|${da}`) || 0
-        const lb = teacherDayLoad.get(`${lesson.teacherId}|${db}`) || 0
-        const scoreA = la + teacherMultiBlockDayPenalty(lesson.teacherId, da, placedMulti)
-        const scoreB = lb + teacherMultiBlockDayPenalty(lesson.teacherId, db, placedMulti)
-        return scoreA - scoreB
-      })
+      const daysSorted = sortDaysForLesson(lesson)
 
       for (const day of daysSorted) {
         const daySlots = byDay.get(day) || []
-        for (let i = 0; i <= daySlots.length - size; i++) {
+        const startIndices = sortStartIndices(lesson, day, daySlots, size)
+        for (const i of startIndices) {
           const run = findConsecutiveRun(daySlots, i, size)
           if (!run) continue
           const ids = run.map((s) => s.id)

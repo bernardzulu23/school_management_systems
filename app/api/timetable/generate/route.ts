@@ -18,6 +18,7 @@ import {
   loadSchoolTimeSlots,
 } from '@/lib/timetable/loadGenerationContext'
 import { auditDraftTimetable, persistDraftConflictMeta } from '@/lib/timetable/conflictAudit'
+import { normalizePushedAllocations } from '@/lib/timetable/normalizePushedAllocations'
 
 export async function GET(req: NextRequest) {
   const user = await getAuthUser(req as any)
@@ -118,6 +119,8 @@ export async function POST(req: NextRequest) {
     )
   }
 
+  const normalizedAllocations = await normalizePushedAllocations(prisma, schoolId, allocations)
+
   const breakSlots = parseBreakSlots((config as any).breakSlots)
   const workingDays = normalizeWorkingDays((config as any).workingDays)
   const singleMin = Number((config as any).singleDuration || 40)
@@ -130,7 +133,7 @@ export async function POST(req: NextRequest) {
     workingDays
   )
 
-  let scheduleResult = await hybridGenerateTimetable(allocations as any[], daySlots, {
+  let scheduleResult = await hybridGenerateTimetable(normalizedAllocations as any[], daySlots, {
     lockedSlots,
     dbTimeSlots,
     recipes: recipes as any[],

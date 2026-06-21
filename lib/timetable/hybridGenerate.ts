@@ -26,10 +26,11 @@ import {
   type SchedulerAllocation,
   type SchedulerResult,
 } from '@/lib/timetable/scheduler'
+import { tryGreedySolverPass } from '@/lib/timetable/greedySchedulerFallback'
 import { validateTimetable, getHardConflicts } from '@/lib/timetable/validateTimetable'
 import type { DbConstraintLike, RecipeLikeForRules } from '@/lib/timetable/constraintRules'
 
-export type HybridEngine = 'backtrack' | 'solver' | 'repair' | 'none'
+export type HybridEngine = 'backtrack' | 'greedy' | 'solver' | 'repair' | 'none'
 
 export type HybridGenerateOptions = {
   singleMin?: number
@@ -214,8 +215,41 @@ export async function hybridGenerateTimetable(
   let result = generateTimetable(allocations, daySlots, schedulerOpts)
   let engine: HybridEngine = 'backtrack'
 
-  const solverUrl = String(options.solverUrl || process.env.ORTOOLS_SOLVER_URL || '').trim()
   const dbTimeSlots = opts.dbTimeSlots || []
+
+  if (result.unplacedBlocks.length > 0 && dbTimeSlots.length) {
+    const remainingMs = Math.max(2000, maxMs - (Date.now() - started))
+    const greedyPlaced = tryGreedySolverPass({
+      allocations,
+      dbTimeSlots,
+      lockedSlots,
+      recipes,
+      constraints,
+      singleMin,
+      maxExecutionMs: remainingMs,
+    })
+
+    if (greedyPlaced && greedyPlaced.length > result.placedBlocks.length) {
+      const allocById = new Map(allocations.map((a) => [String(a.id), a]))
+      const allBlocks = expandAllocationsIntoBlocks(allocations)
+      const greedyResult = schedulerResultFromPlaced(
+        greedyPlaced,
+        allBlocks,
+        singleMin,
+        allocById,
+        {
+          backtracks: result.stats.backtracks,
+          restarts: result.stats.restarts,
+        }
+      )
+      if (greedyResult.unplacedBlocks.length < result.unplacedBlocks.length) {
+        result = greedyResult
+        engine = 'greedy'
+      }
+    }
+  }
+
+  const solverUrl = String(options.solverUrl || process.env.ORTOOLS_SOLVER_URL || '').trim()
 
   if (result.unplacedBlocks.length > 0 && solverUrl && dbTimeSlots.length) {
     const merged = await trySolverPass({

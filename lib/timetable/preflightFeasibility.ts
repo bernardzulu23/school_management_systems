@@ -1,6 +1,6 @@
 import {
-  BREAK_AFTER_PERIODS,
   consecutivePeriodsAreValid,
+  deriveBreakAfterPeriods,
   expandAllocationsIntoBlocks,
   getCandidateSlots,
   normalizeDay,
@@ -86,6 +86,7 @@ export function runPreflightFeasibility(opts: {
   const ppd = periodsPerDay(daySlots)
   const availableSlotsPerClass = teachingSlots
   const blocks = expandAllocationsIntoBlocks(allocations)
+  const breakAfterPeriods = deriveBreakAfterPeriods(daySlots)
   const classDemand = blockDemandByEntity(blocks, 'classId')
   const teacherDemand = blockDemandByEntity(blocks, 'teacherId')
   const teacherCapacity = teachingSlots
@@ -154,7 +155,7 @@ export function runPreflightFeasibility(opts: {
 
   for (const block of blocks) {
     if (block.span <= 1) continue
-    const candidates = getCandidateSlots(block, daySlots, singleMin)
+    const candidates = getCandidateSlots(block, daySlots, singleMin, breakAfterPeriods)
     if (candidates.length === 0) {
       blocking.push({
         code: 'BLOCK_NO_RUN',
@@ -162,7 +163,7 @@ export function runPreflightFeasibility(opts: {
         entityId: block.allocationId,
       })
       details.push(
-        `${block.unitType} block ${block.blockId} cannot fit on any day without crossing break after P${BREAK_AFTER_PERIODS.join('/')}.`
+        `${block.unitType} block ${block.blockId} cannot fit on any day without crossing break after P${breakAfterPeriods.join('/')}.`
       )
     }
   }
@@ -175,7 +176,7 @@ export function runPreflightFeasibility(opts: {
         .filter((s) => s.type === 'period')
         .map((s) => Number(s.periodNumber))
       for (const p of periods) {
-        if (consecutivePeriodsAreValid(p, block.span)) {
+        if (consecutivePeriodsAreValid(p, block.span, breakAfterPeriods)) {
           anyValid = true
           break
         }

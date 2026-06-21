@@ -3,6 +3,7 @@ import { validateBundle, autoBundleSplit } from '@/lib/timetable/bundle-utils'
 import {
   canPlace,
   consecutivePeriodsAreValid,
+  deriveBreakAfterPeriods,
   generateTimetable,
   periodsOverlap,
   wouldStackSameDay,
@@ -34,6 +35,77 @@ describe('consecutivePeriodsAreValid', () => {
 
   it('allows double starting at period 3', () => {
     expect(consecutivePeriodsAreValid(3, 2)).toBe(true)
+  })
+
+  it('uses derived break positions from bell schedule', () => {
+    const daySlots = {
+      Monday: [
+        {
+          type: 'period' as const,
+          periodNumber: 1,
+          start: 0,
+          end: 40,
+          startTime: '07:00',
+          endTime: '07:40',
+          durationMin: 40,
+          day: 'Monday',
+        },
+        {
+          type: 'period' as const,
+          periodNumber: 2,
+          start: 40,
+          end: 80,
+          startTime: '07:40',
+          endTime: '08:20',
+          durationMin: 40,
+          day: 'Monday',
+        },
+        {
+          type: 'period' as const,
+          periodNumber: 3,
+          start: 80,
+          end: 120,
+          startTime: '08:20',
+          endTime: '09:00',
+          durationMin: 40,
+          day: 'Monday',
+        },
+        {
+          type: 'period' as const,
+          periodNumber: 4,
+          start: 120,
+          end: 160,
+          startTime: '09:00',
+          endTime: '09:40',
+          durationMin: 40,
+          day: 'Monday',
+        },
+        {
+          type: 'break' as const,
+          periodNumber: 0,
+          start: 160,
+          end: 180,
+          startTime: '09:40',
+          endTime: '10:00',
+          durationMin: 20,
+          day: 'Monday',
+        },
+        {
+          type: 'period' as const,
+          periodNumber: 5,
+          start: 180,
+          end: 220,
+          startTime: '10:00',
+          endTime: '10:40',
+          durationMin: 40,
+          day: 'Monday',
+        },
+      ],
+    }
+    const breaks = deriveBreakAfterPeriods(daySlots)
+    expect(breaks).toEqual([4])
+    expect(consecutivePeriodsAreValid(2, 2, breaks)).toBe(true)
+    expect(consecutivePeriodsAreValid(4, 2, breaks)).toBe(false)
   })
 })
 

@@ -20,6 +20,8 @@ export type AllocationLike = {
   singlePeriods?: number | null
   doublePeriods?: number | null
   triplePeriods?: number | null
+  /** Grade labels when one allocation row represents multiple classes (department workflow). */
+  classes?: string[]
 }
 
 export type SchedulableUnit = {
@@ -120,6 +122,43 @@ export function expandAllocationToUnits(
       consecutivePeriods: 1,
       unitType: 'SINGLE',
     })
+  }
+
+  return units
+}
+
+function isUuid(value: string) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value)
+}
+
+/** Class targets for expansion — fan-out only when one row carries multiple class UUIDs. */
+export function resolveAllocationClassIds(
+  allocation: AllocationLike & { classes?: string[] }
+): string[] {
+  const classId = String(allocation.classId || '').trim()
+  const classes = allocation.classes
+
+  if (Array.isArray(classes) && classes.length > 1 && classes.every((c) => isUuid(String(c)))) {
+    return classes.map((c) => String(c))
+  }
+
+  return classId ? [classId] : []
+}
+
+/** Expand period config into one block set per class (multi-grade HOD submissions). */
+export function expandAllocationToUnitsForAllClasses(
+  allocation: AllocationLike & { classes?: string[] },
+  idPrefix?: string
+): SchedulableUnit[] {
+  const classIds = resolveAllocationClassIds(allocation)
+  if (classIds.length === 0) return []
+
+  const base = idPrefix || String(allocation.id || 'alloc')
+  const units: SchedulableUnit[] = []
+
+  for (const classId of classIds) {
+    const perClass = expandAllocationToUnits({ ...allocation, classId }, `${base}-${classId}`)
+    units.push(...perClass)
   }
 
   return units
@@ -250,7 +289,7 @@ export function resolveSchedulableUnits(params: {
     }
   } else if (allocations.length) {
     for (const a of allocations) {
-      pushUnits(expandAllocationToUnits(a))
+      pushUnits(expandAllocationToUnitsForAllClasses(a))
     }
   }
 

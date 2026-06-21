@@ -4,15 +4,20 @@
  * Hard constraints (never violated):
  *  1. Teacher cannot teach two grades at the same time.
  *  2. Grade cannot have two subjects at the same time.
- *  3. Multi-period blocks (double/triple) for the same class+subject or teacher
- *     cannot stack on the same day (spread across weekdays).
+ *  3. Multi-period blocks for the same class+subject cannot stack on the same day.
  *
  * Soft constraints (optional during search via strictSoftConstraints):
  *  - Same subject twice on same day for same grade
  *  - Teacher daily period cap
+ *  - Prefer spreading teacher doubles across weekdays (not a hard block)
  */
 
-import { expandAllocationToUnits, type AllocationLike } from '@/lib/timetable/periodExpansion'
+import {
+  expandAllocationToUnits,
+  expandAllocationToUnitsForAllClasses,
+  type AllocationLike,
+} from '@/lib/timetable/periodExpansion'
+import { interleaveBlocks, compareDaySpread } from '@/lib/timetable/lessonOrdering'
 import {
   buildRecipePlacementRules,
   buildTeacherDbConstraintRules,
@@ -25,8 +30,39 @@ import {
 } from '@/lib/timetable/constraintRules'
 import type { LockedSlotReservation } from '@/lib/timetable/preflightFeasibility'
 
-/** Period numbers after which a break/lunch occurs — blocks cannot cross these. */
+/** Default break positions when daySlots cannot be inspected (legacy fallback). */
 export const BREAK_AFTER_PERIODS = [2, 5]
+
+/** Derive period numbers after which a break row follows in the bell schedule grid. */
+export function deriveBreakAfterPeriods(daySlots: Record<string, DayPeriodSlot[]>): number[] {
+  const dayKey =
+    Object.keys(daySlots).find((d) => (daySlots[d] || daySlots[normalizeDay(d)] || []).length) || ''
+  if (!dayKey) return [...BREAK_AFTER_PERIODS]
+
+  const slots = daySlots[dayKey] || daySlots[normalizeDay(dayKey)] || []
+  const after: number[] = []
+  for (let i = 0; i < slots.length; i++) {
+    const slot = slots[i]
+    if (slot.type !== 'period') continue
+    if (slots[i + 1]?.type === 'break') {
+      after.push(Number(slot.periodNumber))
+    }
+  }
+  return after.length ? after : [...BREAK_AFTER_PERIODS]
+}
+
+export function consecutivePeriodsAreValid(
+  startPeriod: number,
+  span: number,
+  breakAfterPeriods: number[] = BREAK_AFTER_PERIODS
+): boolean {
+  for (const breakAfter of breakAfterPeriods) {
+    if (startPeriod <= breakAfter && startPeriod + span - 1 > breakAfter) {
+      return false
+    }
+  }
+  return true
+}
 
 export type DayPeriodSlot = {
   type: 'period' | 'break'
@@ -126,15 +162,6 @@ export function periodsOverlap(
   span2: number
 ): boolean {
   return !(start1 + span1 <= start2 || start2 + span2 <= start1)
-}
-
-export function consecutivePeriodsAreValid(startPeriod: number, span: number): boolean {
-  for (const breakAfter of BREAK_AFTER_PERIODS) {
-    if (startPeriod <= breakAfter && startPeriod + span - 1 > breakAfter) {
-      return false
-    }
-  }
-  return true
 }
 
 function reservedSlotKey(teacherId: string, day: string, period: number) {
@@ -241,6 +268,7 @@ export function canPlace(
     placementRule?: PlacementRule
     strictSoftConstraints?: boolean
     reservedTeacherSlots?: Set<string>
+    breakAfterPeriods?: number[]
   }
 ): CanPlaceResult {
   const { day, startPeriod } = slot
@@ -249,8 +277,10 @@ export function canPlace(
   const rule = options?.placementRule
   const strictSoft = options?.strictSoftConstraints === true
   const reserved = options?.reservedTeacherSlots
+  const breakAfterPeriods = options?.breakAfterPeriods ?? BREAK_AFTER_PERIODS
+  const nd = normalizeDay(day)
 
-  if (!consecutivePeriodsAreValid(startPeriod, span)) {
+  if (!consecutivePeriodsAreValid(startPeriod, span, breakAfterPeriods)) {
     return { ok: false, reason: 'spans_break' }
   }
 
@@ -264,7 +294,7 @@ export function canPlace(
     }
 
     for (const pl of placed) {
-      if (pl.day !== day) continue
+      if (normalizeDay(pl.day) !== nd) continue
 
       if (pl.teacherId === block.teacherId && periodsOverlap(pl.startPeriod, pl.span, p, 1)) {
         return { ok: false, reason: 'teacher_conflict' }
@@ -302,13 +332,13 @@ export function canPlace(
 export function expandAllocationsIntoBlocks(allocations: SchedulerAllocation[]): SchedulerBlock[] {
   const blocks: SchedulerBlock[] = []
   for (const alloc of allocations) {
-    const units = expandAllocationToUnits(alloc, String(alloc.id))
+    const units = expandAllocationToUnitsForAllClasses(alloc, String(alloc.id))
     for (const u of units) {
       blocks.push({
         blockId: u.id,
         allocationId: String(alloc.id),
         teacherId: String(alloc.teacherId),
-        classId: String(alloc.classId),
+        classId: String(u.classId),
         subjectId: String(alloc.subjectId),
         span: u.consecutivePeriods,
         unitType: u.unitType,
@@ -320,31 +350,13 @@ export function expandAllocationsIntoBlocks(allocations: SchedulerAllocation[]):
 
 function sortBlocksHardestFirst(
   blocks: SchedulerBlock[],
-  daySlots: Record<string, DayPeriodSlot[]>,
+  _daySlots: Record<string, DayPeriodSlot[]>,
   restartSeed = 0
 ): SchedulerBlock[] {
-  const teacherSlotCount = new Map<string, number>()
-  for (const b of blocks) {
-    if (!teacherSlotCount.has(b.teacherId)) {
-      const days = Object.keys(daySlots).length || 5
-      const periodsPerDay =
-        (daySlots[Object.keys(daySlots)[0]] || []).filter((s) => s.type === 'period').length || 8
-      teacherSlotCount.set(b.teacherId, days * periodsPerDay)
-    }
-  }
-
-  const pseudoRandom = (n: number) => {
-    const x = Math.sin(restartSeed * 9973 + n * 7919) * 10000
-    return x - Math.floor(x)
-  }
-
-  return [...blocks].sort((a, b) => {
-    if (b.span !== a.span) return b.span - a.span
-    const ta = teacherSlotCount.get(a.teacherId) ?? 0
-    const tb = teacherSlotCount.get(b.teacherId) ?? 0
-    if (ta !== tb) return ta - tb
-    return pseudoRandom(a.blockId.length) - pseudoRandom(b.blockId.length)
-  })
+  const interleaved = interleaveBlocks(blocks)
+  if (!restartSeed || interleaved.length <= 1) return interleaved
+  const offset = restartSeed % interleaved.length
+  return [...interleaved.slice(offset), ...interleaved.slice(0, offset)]
 }
 
 function getPeriodSlotsForDay(
@@ -378,7 +390,8 @@ function findSlotRun(
 export function getCandidateSlots(
   block: SchedulerBlock,
   daySlots: Record<string, DayPeriodSlot[]>,
-  _singleMin: number
+  _singleMin: number,
+  breakAfterPeriods: number[] = BREAK_AFTER_PERIODS
 ): Array<{ day: string; startPeriod: number; span: number; run: DayPeriodSlot[] }> {
   const candidates: Array<{
     day: string
@@ -395,7 +408,8 @@ export function getCandidateSlots(
     for (let i = 0; i <= periods.length - block.span; i++) {
       const run = findSlotRun(periods, i, block.span)
       if (!run) continue
-      if (!consecutivePeriodsAreValid(Number(run[0].periodNumber), block.span)) continue
+      if (!consecutivePeriodsAreValid(Number(run[0].periodNumber), block.span, breakAfterPeriods))
+        continue
       candidates.push({
         day: normalizeDay(day),
         startPeriod: Number(run[0].periodNumber),
@@ -501,6 +515,7 @@ export function generateTimetableOnce(
   const allBlocks = options.blocksSubset?.length
     ? options.blocksSubset
     : expandAllocationsIntoBlocks(allocations)
+  const breakAfterPeriods = deriveBreakAfterPeriods(daySlots)
 
   let backtracks = 0
   const placed: PlacedBlock[] = [...(options.initialPlaced || [])]
@@ -514,6 +529,7 @@ export function generateTimetableOnce(
     maxTeacherPeriodsPerDay: options.maxTeacherPeriodsPerDay,
     strictSoftConstraints: options.strictSoftConstraints,
     reservedTeacherSlots: reservedSet,
+    breakAfterPeriods,
   }
 
   function backtrackPlace(index: number): boolean {
@@ -521,18 +537,37 @@ export function generateTimetableOnce(
     if (index >= sortedBlocks.length) return true
 
     const block = sortedBlocks[index]
-    const candidates = getCandidateSlots(block, daySlots, singleMin)
+    const candidates = getCandidateSlots(block, daySlots, singleMin, breakAfterPeriods)
 
     candidates.sort((a, b) => {
       const rule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, block)
       const prefA = placementPreferenceScore(rule, a.day, a.startPeriod)
       const prefB = placementPreferenceScore(rule, b.day, b.startPeriod)
       if (prefA !== prefB) return prefA - prefB
-      const loadA = placed.filter((p) => p.teacherId === block.teacherId && p.day === a.day).length
-      const loadB = placed.filter((p) => p.teacherId === block.teacherId && p.day === b.day).length
-      const scoreA = loadA + teacherMultiBlockDayPenalty(block.teacherId, a.day, placed)
-      const scoreB = loadB + teacherMultiBlockDayPenalty(block.teacherId, b.day, placed)
-      if (scoreA !== scoreB) return scoreA - scoreB
+
+      const classSubjectDayLoad = new Map<string, number>()
+      for (const pl of placed) {
+        const key = `${pl.classId}|${pl.subjectId}|${pl.day}`
+        classSubjectDayLoad.set(key, (classSubjectDayLoad.get(key) || 0) + 1)
+      }
+      const teacherDayLoad = new Map<string, number>()
+      for (const pl of placed) {
+        const key = `${pl.teacherId}|${pl.day}`
+        teacherDayLoad.set(key, (teacherDayLoad.get(key) || 0) + 1)
+      }
+
+      const daySpread = compareDaySpread({
+        teacherId: block.teacherId,
+        classId: block.classId,
+        subjectId: block.subjectId,
+        dayA: a.day,
+        dayB: b.day,
+        teacherDayLoad,
+        classSubjectDayLoad,
+        teacherMultiPenalty: (tid, day) => teacherMultiBlockDayPenalty(tid, day, placed),
+      })
+      if (daySpread !== 0) return daySpread
+
       const closeA = tooCloseSameSubject(block, a.day, placed) ? 1 : 0
       const closeB = tooCloseSameSubject(block, b.day, placed) ? 1 : 0
       return closeA - closeB
