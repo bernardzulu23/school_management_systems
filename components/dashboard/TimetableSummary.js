@@ -7,23 +7,12 @@ import { Button } from '@/components/ui/Button'
 import SkeletonLoader from '@/components/SkeletonLoader'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/lib/auth'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
-import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
-import { resolveCardColor, pastelBgForSubject } from '@/lib/timetable/cardColors'
-import {
-  assignmentsForPrimaryCell,
-  isContinuationSlot,
-  rowSpanForAssignment,
-} from '@/lib/timetable/gridHelpers'
+import { filterClassesInUse, inferClassGrade } from '@/lib/timetable/activeClasses'
+import { AscClassWallGrid } from '@/components/timetable/AscClassWallGrid'
+import { pastelBgForSubject } from '@/lib/timetable/cardColors'
 import { Calendar, Clock, MapPin, User, ChevronRight, AlertCircle } from 'lucide-react'
-
-const DAYS = [
-  { key: 'monday', label: 'MON' },
-  { key: 'tuesday', label: 'TUE' },
-  { key: 'wednesday', label: 'WED' },
-  { key: 'thursday', label: 'THU' },
-  { key: 'friday', label: 'FRI' },
-]
 
 function dayKeyFromDate(d) {
   const key = String(
@@ -79,19 +68,50 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
   const seasonMode = useTimetableStore((s) => s.currentSeason)
   const publish = useTimetableStore((s) => s.publish)
   const loadFromApi = useTimetableStore((s) => s.loadFromApi)
-  const loadBellSchedule = useTimetableStore((s) => s.loadBellSchedule)
   const storeTimeSlots = useTimetableStore((s) => s.timeSlots)
-  const getTeacherColorHex = useTimetableStore((s) => s.getTeacherColorHex)
   const [bellLoading, setBellLoading] = useState(true)
+  const [wallClasses, setWallClasses] = useState([])
 
   useEffect(() => {
     setMounted(true)
-    loadFromApi()
-    setBellLoading(true)
-    loadBellSchedule().finally(() => setBellLoading(false))
-  }, [loadFromApi, loadBellSchedule])
+    let cancelled = false
 
-  const bellRows = useMemo(() => uniqueBellRows(storeTimeSlots || []), [storeTimeSlots])
+    async function load() {
+      setBellLoading(true)
+      try {
+        let data = await loadFromApi({ status: 'published' })
+        if (!data?.assignments?.length) {
+          data = await loadFromApi({ status: 'draft' })
+        }
+        if (cancelled) return
+
+        if (String(userRole || user?.role || '').toLowerCase() === 'headteacher') {
+          const classesRes = await sessionFetch('/api/classes?limit=200', { cache: 'no-store' })
+          const classesJson = await classesRes.json().catch(() => ({}))
+          const classList = Array.isArray(classesJson?.data) ? classesJson.data : []
+          const mapped = classList.map((c) => ({
+            id: String(c.id),
+            name: String(c.name || c.className || 'Class'),
+            grade: inferClassGrade(c.name, c.yearGroup || c.year_group),
+            students: Number(c.studentCount || 0),
+            subjects: [],
+          }))
+          const loadedAssignments =
+            data?.assignments?.length > 0
+              ? data.assignments
+              : useTimetableStore.getState().assignments
+          setWallClasses(filterClassesInUse(mapped, { assignments: loadedAssignments }))
+        }
+      } finally {
+        if (!cancelled) setBellLoading(false)
+      }
+    }
+
+    load()
+    return () => {
+      cancelled = true
+    }
+  }, [loadFromApi, userRole, user?.role])
 
   const resolvedRole = String(userRole || user?.role || '').toLowerCase()
   const activeSeason = seasonFromMode(seasonMode)
@@ -116,6 +136,47 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
 
     return bySeason
   }, [assignments, activeSeason, resolvedRole, user?.id, user?.studentProfile?.classId, userId])
+
+  const wallTeachers = useMemo(() => {
+    const map = new Map()
+    for (const a of filteredAssignments) {
+      const id = String(a?.teacherId || '').trim()
+      if (!id) continue
+      if (!map.has(id)) {
+        map.set(id, {
+          id,
+          fullName: String(a?.teacherName || 'Teacher'),
+          subjects: [],
+          availability: [],
+          maxHours: { perWeek: 28 },
+          preferences: { minimizeGaps: true, maxTravelLegsPerDay: 1 },
+          traveling: { enabled: false, schools: [] },
+        })
+      }
+    }
+    return Array.from(map.values())
+  }, [filteredAssignments])
+
+  const displayWallClasses = useMemo(() => {
+    if (wallClasses.length) return wallClasses
+    const map = new Map()
+    for (const a of filteredAssignments) {
+      const id = String(a?.classId || '').trim()
+      if (!id) continue
+      if (!map.has(id)) {
+        map.set(id, {
+          id,
+          name: String(a?.className || id),
+          grade: inferClassGrade(String(a?.className || '')),
+          students: 0,
+          subjects: [],
+        })
+      }
+    }
+    return Array.from(map.values()).sort((a, b) =>
+      String(a.name).localeCompare(String(b.name), undefined, { numeric: true })
+    )
+  }, [wallClasses, filteredAssignments])
 
   const todayKey = useMemo(() => {
     if (!mounted) return null
@@ -245,7 +306,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
             <div className="rounded-xl border border-royalPurple-border bg-royalPurple-card/40 p-8 text-center text-sm text-royalPurple-text3">
               Loading school bell schedule…
             </div>
-          ) : bellRows.length === 0 ? (
+          ) : storeTimeSlots.length === 0 ? (
             <div className="rounded-xl border border-royalPurple-border bg-royalPurple-card/40 p-8 text-center">
               <div className="text-royalPurple-text1 font-semibold">
                 No bell schedule configured
@@ -260,112 +321,15 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
               </div>
             </div>
           ) : (
-            <div className="timetable-container overflow-x-auto rounded-lg border border-[#9ca3af] bg-white">
-              <table className="min-w-[640px] w-full border-collapse text-xs">
-                <thead>
-                  <tr className="bg-[#e5e7eb]">
-                    <th className="sticky left-0 z-10 bg-[#e5e7eb] px-2 py-1.5 text-left font-semibold text-[#374151] border-b border-[#9ca3af]">
-                      Time
-                    </th>
-                    {DAYS.map((d, idx) => (
-                      <th
-                        key={d.key}
-                        className={`px-2 py-1.5 text-center font-semibold text-[#374151] border-b border-[#9ca3af] ${
-                          idx > 0 ? 'border-l border-[#9ca3af]' : ''
-                        }`}
-                      >
-                        {d.label}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {bellRows.map((slot, rowIdx) => {
-                    const slotKey = `${slot.isBreak ? 'b' : 'p'}-${slot.startTime}-${slot.endTime}`
-                    const nextSlot = bellRows[rowIdx + 1]
-                    const blockEnd =
-                      slot.isBreak ||
-                      (nextSlot && nextSlot.isBreak) ||
-                      rowIdx === bellRows.length - 1
-
-                    if (slot.isBreak) {
-                      return (
-                        <tr key={slotKey} className="bg-[#d1d5db]">
-                          <td className="sticky left-0 z-10 bg-[#d1d5db] px-2 py-1 text-[#374151] whitespace-nowrap font-medium border-b border-[#9ca3af]">
-                            {slot.startTime}–{slot.endTime}
-                          </td>
-                          <td
-                            colSpan={DAYS.length}
-                            className="px-2 py-1 text-center text-[#4b5563] font-semibold uppercase tracking-widest border-b border-[#9ca3af]"
-                          >
-                            {slot.label || 'Break'}
-                          </td>
-                        </tr>
-                      )
-                    }
-
-                    return (
-                      <tr key={slotKey}>
-                        <td
-                          className={`sticky left-0 z-10 bg-[#f9fafb] px-2 py-1 text-[#4b5563] whitespace-nowrap border-b ${
-                            blockEnd ? 'border-[#9ca3af]' : 'border-[#e5e7eb]'
-                          }`}
-                        >
-                          {slot.startTime}–{slot.endTime}
-                        </td>
-                        {DAYS.map((d, dayIdx) => {
-                          if (isContinuationSlot(d.key, slot, filteredAssignments, bellRows)) {
-                            return null
-                          }
-                          const primary = assignmentsForPrimaryCell(
-                            d.key,
-                            slot,
-                            filteredAssignments
-                          )
-                          const a = primary[0]
-                          const span = a ? rowSpanForAssignment(a, bellRows) : 1
-                          const colors = a
-                            ? resolveCardColor(
-                                a.subjectId,
-                                a.teacherId,
-                                getTeacherColorHex(a.teacherId)
-                              )
-                            : null
-
-                          return (
-                            <td
-                              key={d.key}
-                              rowSpan={span > 1 ? span : undefined}
-                              className={`px-1 py-0.5 align-top border-b ${
-                                blockEnd ? 'border-[#9ca3af]' : 'border-[#e5e7eb]'
-                              } ${dayIdx > 0 ? 'border-l border-[#d1d5db]' : ''}`}
-                            >
-                              {a ? (
-                                <div
-                                  className="rounded px-1.5 py-1 min-h-[36px] border"
-                                  style={{
-                                    backgroundColor: colors.bg,
-                                    borderColor: colors.border,
-                                  }}
-                                >
-                                  <div className="font-bold text-[#111827] truncate text-[11px] leading-tight">
-                                    {a.subjectName || a.subjectId}
-                                  </div>
-                                  <div className="text-[10px] text-[#4b5563] truncate leading-tight">
-                                    {a.className || a.classId} · {a.teacherName || a.teacherId}
-                                  </div>
-                                </div>
-                              ) : (
-                                <span className="text-[#d1d5db] select-none">·</span>
-                              )}
-                            </td>
-                          )
-                        })}
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+            <div className="overflow-x-auto rounded-lg border border-royalPurple-border/40 bg-white p-2 max-h-[520px] overflow-y-auto">
+              <AscClassWallGrid
+                assignments={filteredAssignments}
+                timeSlots={storeTimeSlots}
+                classes={displayWallClasses}
+                teachers={wallTeachers}
+                season={activeSeason}
+                showConflicts
+              />
             </div>
           )}
 

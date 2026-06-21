@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { BarChart3, BookOpen, GraduationCap, TrendingUp } from 'lucide-react'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { percentTextClass } from '@/lib/utils/percentColor'
 
 /**
@@ -15,11 +16,11 @@ export function LearningAnalyticsPanel({ role = 'headteacher', department = '' }
     queryFn: async () => {
       const qs = new URLSearchParams()
       if (department) qs.set('department', department)
-      const res = await fetch(`/api/dashboard/analytics/learning?${qs}`, {
-        credentials: 'include',
+      const res = await sessionFetch(`/api/dashboard/analytics/learning?${qs}`, {
+        cache: 'no-store',
       })
       const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json.error || 'Failed to load analytics')
+      if (!res.ok) throw new Error(json.error || json.message || 'Failed to load analytics')
       return json.data
     },
   })

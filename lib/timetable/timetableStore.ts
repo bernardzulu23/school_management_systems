@@ -5,6 +5,7 @@ import { CollisionDetector } from './collisionDetector'
 import { SuggestionEngine, type Suggestion } from './suggestionEngine'
 import type { BellScheduleSlot } from './bellSchedule'
 import { normalizeApiTimeSlots } from './bellSchedule'
+import { alignAssignmentsToBellRows } from './gridHelpers'
 import { normalizeTimetableConfig, resolveSchoolTimeSlots } from './timeSlotsFromConfig'
 import { canPublishTimetable, validateTimetable } from './validateTimetable'
 import { isConflict } from './constraintCheck'
@@ -543,14 +544,15 @@ export const useTimetableStore = create<TimetableStoreState>()(
               Array.isArray(data?.timeSlots) ? data.timeSlots : []
             )
             const slots = normalizeApiTimeSlots(resolved)
+            const aligned = alignAssignmentsToBellRows(assignments, slots)
             set({
-              assignments,
+              assignments: aligned,
               timeSlots: slots.length ? slots : get().timeSlots,
               teacherColors:
                 data?.teacherColors && typeof data.teacherColors === 'object'
                   ? data.teacherColors
                   : get().teacherColors,
-              conflicts: detect(assignments),
+              conflicts: detect(aligned),
               isPublished: status === 'published',
               lastPublishedAt: status === 'published' ? new Date() : null,
             })

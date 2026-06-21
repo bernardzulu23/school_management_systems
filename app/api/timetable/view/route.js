@@ -17,6 +17,7 @@ import {
   mapDbEntriesToAssignments,
   buildTeacherWorkloadSummary,
 } from '@/lib/timetable/mapEntriesToAssignments'
+import { alignAssignmentsToBellRows } from '@/lib/timetable/gridHelpers'
 import { loadTeacherColorMap, teacherColorMapToJson } from '@/lib/timetable/teacherColors'
 import { getDraftConflictMeta, formatDraftMetaResponse } from '@/lib/timetable/conflictAudit'
 
@@ -277,6 +278,8 @@ export async function GET(req) {
     orderBy: [{ dayOfWeek: 'asc' }, { startTime: 'asc' }],
   })
   const timeSlots = resolveSchoolTimeSlots(normalizedConfig, dbSlots.length ? dbSlots : configSlots)
+
+  assignments = alignAssignmentsToBellRows(assignments, timeSlots)
 
   const hideTeacher = role === 'student'
   const safeAssignments = hideTeacher

@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import { calcRowSpan, rowSpanForAssignment } from '@/lib/timetable/gridHelpers'
+import {
+  alignAssignmentsToBellRows,
+  assignmentsForPrimaryCell,
+  calcRowSpan,
+  rowSpanForAssignment,
+} from '@/lib/timetable/gridHelpers'
 
 const bellRows40 = [
   { period: 1, startTime: '07:00', endTime: '07:40', isBreak: false },
@@ -62,5 +67,30 @@ describe('rowSpanForAssignment', () => {
       endTime: '08:20',
     }
     expect(rowSpanForAssignment(a, bellRows40)).toBe(2)
+  })
+})
+
+describe('alignAssignmentsToBellRows', () => {
+  it('snaps mismatched start times to bell rows by period', () => {
+    const bellRows = [
+      { period: 1, startTime: '07:00', endTime: '07:40', isBreak: false },
+      { period: 2, startTime: '07:40', endTime: '08:20', isBreak: false },
+    ]
+    const out = alignAssignmentsToBellRows(
+      [
+        {
+          id: 'a1',
+          dayOfWeek: 'monday',
+          period: 1,
+          startTime: '07:30',
+          endTime: '07:40',
+          subjectId: 's1',
+        },
+      ],
+      bellRows
+    )
+    expect(out[0].startTime).toBe('07:00')
+    expect(out[0].endTime).toBe('07:40')
+    expect(assignmentsForPrimaryCell('monday', bellRows[0], out).map((a) => a.id)).toEqual(['a1'])
   })
 })

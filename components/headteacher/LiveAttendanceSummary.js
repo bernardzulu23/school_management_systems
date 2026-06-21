@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { AlertTriangle, Clock, RefreshCw, Users } from 'lucide-react'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { percentTextClass } from '@/lib/utils/percentColor'
 
 function rateColor(rate) {
@@ -21,12 +22,11 @@ export function LiveAttendanceSummary() {
   const { data, isLoading, error, refetch, isFetching } = useQuery({
     queryKey: ['attendance-live'],
     queryFn: async () => {
-      const res = await fetch('/api/dashboard/attendance-live', {
-        credentials: 'include',
+      const res = await sessionFetch('/api/dashboard/attendance-live', {
         cache: 'no-store',
       })
       const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json.error || 'Failed to load live attendance')
+      if (!res.ok) throw new Error(json.error || json.message || 'Failed to load live attendance')
       return json
     },
     refetchInterval: 120_000,

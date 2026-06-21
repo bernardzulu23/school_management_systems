@@ -67,6 +67,11 @@ export function backtrackReassignAssignments(opts: {
   let current = [...(opts.assignments || [])]
   let moved = 0
   const maxPasses = Math.max(1, Number(opts.maxPasses) || 32)
+  const debug = process.env.NODE_ENV !== 'production'
+  const initialConflicts = countHardConflicts(current, timeSlots)
+  if (debug && initialConflicts > 0) {
+    console.log(`[Backtrack] Starting with ${initialConflicts} conflicting assignments`)
+  }
 
   for (let pass = 0; pass < maxPasses; pass++) {
     let progress = false
@@ -77,13 +82,19 @@ export function backtrackReassignAssignments(opts: {
       const others = current.filter((_, j) => j !== i)
       if (!isConflict(row, others, timeSlots)) continue
 
+      let placed = false
       for (const slot of slots) {
         const candidate = withSlot(row, slot)
         if (isConflict(candidate, others, timeSlots)) continue
         current = current.map((a, j) => (j === i ? candidate : a))
         moved += 1
         progress = true
+        placed = true
+        if (debug) console.log(`[Backtrack] Assignment ${row.id}: MOVED`)
         break
+      }
+      if (!placed && debug) {
+        console.log(`[Backtrack] Assignment ${row.id}: STUCK`)
       }
       if (progress) break
     }
@@ -93,9 +104,14 @@ export function backtrackReassignAssignments(opts: {
     if (!progress || after >= before) break
   }
 
+  const remainingConflicts = countHardConflicts(current, timeSlots)
+  if (debug && initialConflicts > 0) {
+    console.log(`[Backtrack] Final conflicts: ${remainingConflicts} (moved ${moved})`)
+  }
+
   return {
     assignments: current,
     moved,
-    remainingConflicts: countHardConflicts(current, timeSlots),
+    remainingConflicts,
   }
 }
