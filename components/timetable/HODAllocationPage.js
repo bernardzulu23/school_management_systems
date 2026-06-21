@@ -45,6 +45,20 @@ function stringifyPeriodConfig(periodConfig) {
   return formatPeriodConfigLabel(periodConfig)
 }
 
+function allocationSeason(row) {
+  const data =
+    row?.allocationData && typeof row.allocationData === 'object' ? row.allocationData : {}
+  return {
+    term: normalizeString(data.term) || 'Term 1',
+    academicYear: normalizeString(data.academicYear) || String(new Date().getFullYear()),
+  }
+}
+
+function matchesSelectedSeason(row, term, academicYear) {
+  const season = allocationSeason(row)
+  return season.term === term && season.academicYear === academicYear
+}
+
 function statusBadge(status) {
   const s = String(status || '').toUpperCase()
   const map = {
@@ -236,19 +250,24 @@ export default function HODAllocationPage() {
     else setDepartmentClasses([])
   }, [form.departmentId, loadClassesForDepartment])
 
+  const seasonAllocations = useMemo(
+    () => allocations.filter((a) => matchesSelectedSeason(a, term, academicYear)),
+    [allocations, term, academicYear]
+  )
+
   const rejectedAllocations = useMemo(
-    () => allocations.filter((a) => String(a?.status || '').toUpperCase() === 'REJECTED'),
-    [allocations]
+    () => seasonAllocations.filter((a) => String(a?.status || '').toUpperCase() === 'REJECTED'),
+    [seasonAllocations]
   )
 
   const statusCounts = useMemo(() => {
     const counts = { DRAFT: 0, SUBMITTED: 0, APPROVED: 0, REJECTED: 0 }
-    for (const a of allocations) {
+    for (const a of seasonAllocations) {
       const s = String(a?.status || '').toUpperCase()
       if (s in counts) counts[s] += 1
     }
     return counts
-  }, [allocations])
+  }, [seasonAllocations])
 
   function buildPeriodConfig() {
     if (form.periodPreset === 'custom') {
@@ -377,7 +396,24 @@ export default function HODAllocationPage() {
     }
   }
 
-  async function deleteAllocation(id) {
+  async function deleteAllocation(allocation) {
+    const id = allocation?.id || allocation
+    if (!id) return
+
+    const status = String(allocation?.status || '').toUpperCase()
+    let confirmMsg = 'Delete this allocation?'
+    if (status === 'APPROVED') {
+      confirmMsg =
+        'Delete this approved allocation?\n\nThis removes pushed teaching rows and any generated timetable periods linked to it. You will need Headteacher approval again if you recreate it.'
+    } else if (status === 'SUBMITTED') {
+      confirmMsg =
+        'Delete this submitted allocation? The Headteacher will no longer see it for review.'
+    } else if (status === 'REJECTED') {
+      confirmMsg = 'Delete this rejected allocation?'
+    }
+
+    if (!window.confirm(confirmMsg)) return
+
     try {
       const res = await sessionFetch(`/api/allocations/${id}`, {
         method: 'DELETE',
@@ -385,7 +421,7 @@ export default function HODAllocationPage() {
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data?.message || data?.error || 'Failed to delete')
-      toast.success('Deleted')
+      toast.success(status === 'APPROVED' ? 'Approved allocation removed' : 'Deleted')
       loadData()
     } catch (e) {
       toast.error(e?.message || 'Failed to delete')
@@ -445,7 +481,8 @@ export default function HODAllocationPage() {
           <p style={{ color: '#666666', fontSize: 13, margin: '4px 0 0' }}>
             Assign teachers to classes, submit for the Headteacher to approve. Approved rows sync to
             the timetable builder as pushed allocations — generate the school timetable from the
-            Master Timetable screen using the same term and year.
+            Master Timetable screen using the same term and year. Use <strong>Remove</strong> on
+            approved rows to delete pushed teaching allocations.
           </p>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -915,7 +952,7 @@ export default function HODAllocationPage() {
         <div style={{ textAlign: 'center', padding: '3rem', color: '#666666' }}>
           Loading allocations...
         </div>
-      ) : allocations.length === 0 ? (
+      ) : seasonAllocations.length === 0 ? (
         <div
           style={{
             textAlign: 'center',
@@ -943,145 +980,143 @@ export default function HODAllocationPage() {
             background: '#FFFFFF',
             borderRadius: 14,
             border: '1px solid #111111',
-            overflow: 'hidden',
+            overflowX: 'auto',
           }}
         >
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <table style={{ width: '100%', minWidth: 920, borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ background: '#EFECE5' }}>
-                {['Department', 'Teacher', 'Classes', 'Subject', 'Period config', 'Status', ''].map(
-                  (h) => (
-                    <th
-                      key={h}
-                      style={{
-                        padding: '10px 14px',
-                        textAlign: 'left',
-                        fontSize: 11,
-                        color: '#666666',
-                        fontWeight: 700,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.06em',
-                        borderBottom: '1px solid #111111',
-                      }}
-                    >
-                      {h}
-                    </th>
-                  )
-                )}
+                {[
+                  'Department',
+                  'Teacher',
+                  'Classes',
+                  'Subject',
+                  'Period config',
+                  'Status',
+                  'Actions',
+                ].map((h) => (
+                  <th
+                    key={h}
+                    style={{
+                      padding: '10px 14px',
+                      textAlign: 'left',
+                      fontSize: 11,
+                      color: '#666666',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.06em',
+                      borderBottom: '1px solid #111111',
+                    }}
+                  >
+                    {h}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {allocations.map((a) => (
-                <tr key={a.id} style={{ borderBottom: '1px solid #F5F2EB' }}>
-                  <td style={tdStyle}>{a.department?.name || '—'}</td>
-                  <td style={tdStyle}>
-                    {teachers.find(
-                      (t) =>
-                        String(t.teacherId || '') === String(a?.allocationData?.teacherId || '') ||
-                        String(t.id) === String(a?.allocationData?.teacherId || '')
-                    )?.name || '—'}
-                  </td>
-                  <td style={tdStyle}>
-                    {Array.isArray(a?.allocationData?.classes)
-                      ? a.allocationData.classes.join(', ')
-                      : normalizeString(a?.allocationData?.classes) || '—'}
-                  </td>
-                  <td style={tdStyle}>{normalizeString(a?.allocationData?.subject) || '—'}</td>
-                  <td style={tdStyle}>
-                    {stringifyPeriodConfig(a?.allocationData?.periodConfig) || '—'}
-                  </td>
-                  <td style={tdStyle}>
-                    {(() => {
-                      const b = statusBadge(a.status)
-                      return (
-                        <span
-                          style={{
-                            fontSize: 11,
-                            padding: '3px 8px',
-                            borderRadius: 99,
-                            fontWeight: 800,
-                            background: b.bg,
-                            color: b.fg,
-                            border: `1px solid ${b.bd}`,
-                          }}
+              {seasonAllocations.map((a) => {
+                const status = String(a?.status || '').toUpperCase()
+                const canEdit =
+                  status === 'DRAFT' || status === 'REJECTED' || status === 'SUBMITTED'
+                const canSubmit = status === 'DRAFT' || status === 'REJECTED'
+                return (
+                  <tr key={a.id} style={{ borderBottom: '1px solid #F5F2EB' }}>
+                    <td style={tdStyle}>{a.department?.name || '—'}</td>
+                    <td style={tdStyle}>
+                      {teachers.find(
+                        (t) =>
+                          String(t.teacherId || '') ===
+                            String(a?.allocationData?.teacherId || '') ||
+                          String(t.id) === String(a?.allocationData?.teacherId || '')
+                      )?.name || '—'}
+                    </td>
+                    <td style={tdStyle}>
+                      {Array.isArray(a?.allocationData?.classes)
+                        ? a.allocationData.classes.join(', ')
+                        : normalizeString(a?.allocationData?.classes) || '—'}
+                    </td>
+                    <td style={tdStyle}>{normalizeString(a?.allocationData?.subject) || '—'}</td>
+                    <td style={tdStyle}>
+                      {stringifyPeriodConfig(a?.allocationData?.periodConfig) || '—'}
+                    </td>
+                    <td style={tdStyle}>
+                      {(() => {
+                        const b = statusBadge(a.status)
+                        return (
+                          <span
+                            style={{
+                              fontSize: 11,
+                              padding: '3px 8px',
+                              borderRadius: 99,
+                              fontWeight: 800,
+                              background: b.bg,
+                              color: b.fg,
+                              border: `1px solid ${b.bd}`,
+                            }}
+                          >
+                            {b.label}
+                          </span>
+                        )
+                      })()}
+                      {String(a?.status || '').toUpperCase() === 'REJECTED' &&
+                      a?.rejectionReason ? (
+                        <div
+                          style={{ marginTop: 6, fontSize: 11, color: '#fca5a5', fontWeight: 700 }}
                         >
-                          {b.label}
-                        </span>
-                      )
-                    })()}
-                    {String(a?.status || '').toUpperCase() === 'REJECTED' && a?.rejectionReason ? (
+                          {String(a.rejectionReason)}
+                        </div>
+                      ) : null}
+                    </td>
+                    <td style={{ ...tdStyle, minWidth: 160, whiteSpace: 'nowrap' }}>
                       <div
-                        style={{ marginTop: 6, fontSize: 11, color: '#fca5a5', fontWeight: 700 }}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                          gap: 6,
+                          flexWrap: 'wrap',
+                        }}
                       >
-                        {String(a.rejectionReason)}
+                        {canEdit ? (
+                          <button
+                            type="button"
+                            onClick={() => startEdit(a)}
+                            style={actionBtnStyle('#F5F2EB', '#111111')}
+                          >
+                            Edit
+                          </button>
+                        ) : null}
+
+                        {canSubmit ? (
+                          <button
+                            type="button"
+                            onClick={() => submitAllocation(a.id)}
+                            disabled={submitting}
+                            style={{
+                              ...actionBtnStyle('#16a34a', '#fff'),
+                              opacity: submitting ? 0.7 : 1,
+                            }}
+                          >
+                            <Send size={14} /> Submit
+                          </button>
+                        ) : null}
+
+                        <button
+                          type="button"
+                          onClick={() => deleteAllocation(a)}
+                          style={actionBtnStyle('#fee2e2', '#b91c1c', '#fca5a5')}
+                          title={
+                            status === 'APPROVED'
+                              ? 'Remove approved allocation and pushed timetable rows'
+                              : 'Delete allocation'
+                          }
+                        >
+                          <Trash2 size={14} /> {status === 'APPROVED' ? 'Remove' : 'Delete'}
+                        </button>
                       </div>
-                    ) : null}
-                  </td>
-                  <td style={tdStyle}>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-                      {(String(a?.status || '').toUpperCase() === 'DRAFT' ||
-                        String(a?.status || '').toUpperCase() === 'REJECTED' ||
-                        String(a?.status || '').toUpperCase() === 'SUBMITTED') && (
-                        <button
-                          type="button"
-                          onClick={() => startEdit(a)}
-                          style={{
-                            background: 'none',
-                            border: '1px solid #111111',
-                            color: '#666666',
-                            cursor: 'pointer',
-                            padding: '4px 10px',
-                            borderRadius: 8,
-                            fontSize: 12,
-                            fontWeight: 800,
-                          }}
-                        >
-                          Edit
-                        </button>
-                      )}
-
-                      {(String(a?.status || '').toUpperCase() === 'DRAFT' ||
-                        String(a?.status || '').toUpperCase() === 'REJECTED') && (
-                        <button
-                          type="button"
-                          onClick={() => submitAllocation(a.id)}
-                          disabled={submitting}
-                          style={{
-                            background: '#16a34a',
-                            border: 'none',
-                            color: '#fff',
-                            cursor: 'pointer',
-                            padding: '4px 10px',
-                            borderRadius: 8,
-                            fontSize: 12,
-                            fontWeight: 800,
-                            opacity: submitting ? 0.7 : 1,
-                          }}
-                        >
-                          <Send size={14} /> Submit
-                        </button>
-                      )}
-
-                      {(String(a?.status || '').toUpperCase() === 'DRAFT' ||
-                        String(a?.status || '').toUpperCase() === 'SUBMITTED') && (
-                        <button
-                          type="button"
-                          onClick={() => deleteAllocation(a.id)}
-                          style={{
-                            background: 'none',
-                            border: 'none',
-                            color: '#fca5a5',
-                            cursor: 'pointer',
-                            padding: 4,
-                          }}
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
@@ -1132,6 +1167,19 @@ const selectStyle = {
   cursor: 'pointer',
 }
 const tdStyle = { padding: '10px 14px', fontSize: 13, color: '#111111' }
+const actionBtnStyle = (bg, color, border = '#111111') => ({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 4,
+  padding: '4px 10px',
+  background: bg,
+  border: `1px solid ${border}`,
+  borderRadius: 8,
+  color,
+  cursor: 'pointer',
+  fontSize: 12,
+  fontWeight: 800,
+})
 const btnStyle = (bg) => ({
   display: 'inline-flex',
   alignItems: 'center',

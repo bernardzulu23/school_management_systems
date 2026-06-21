@@ -5,6 +5,7 @@ The platform console is for **Bluepeak platform operators** only — not school 
 ## What you can see
 
 - **Overview** — total onboarded schools, active/trial/expired counts, onboarding trend by month
+- **School usage** — per-school **student** and **teacher** counts only (which schools are using the program; no names or academic data)
 - **Schools** — name, subdomain, plan, subscription status, province/district (metadata)
 - **Provinces** — aggregated school counts per Zambian province
 - **Districts** — drill-down per province (`/platform/districts?province=…`)
@@ -16,10 +17,11 @@ The platform console is for **Bluepeak platform operators** only — not school 
 
 By design, the platform console does **not** expose:
 
-- Student names, grades, attendance, or results
-- Per-school enrollment counts (users / teachers / pupils)
-- Lesson plans, timetables, or ECZ assessment data
+- Student or teacher **names**, grades, attendance, or results
+- Lesson plans, timetables, or ECZ assessment row data
 - Any row-level academic records
+
+**School usage** (`/platform/usage`) shows **aggregate counts only** — how many students and teachers each school has registered — so operators can see adoption without accessing tenant PII.
 
 School staff use tenant dashboards at `https://<subdomain>.bluepeacktechnologies.com`.
 

@@ -9,6 +9,7 @@ import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
 import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
 import { canManageDepartmentAllocations, isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
 import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
+import { deleteDepartmentAllocationCascade } from '@/lib/timetable/departmentAllocationMutations'
 
 async function assertCanAccessAllocation({ schoolId, user, allocation }) {
   if (isSchoolAdminOrHead(user)) return
@@ -82,13 +83,11 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   })
   if (!allocation) throw new ApiError('Not found', 404)
 
-  if (allocation.createdByUserId !== auth.user.id) throw new ApiError('Forbidden', 403)
-  const status = String(allocation.status || '').toUpperCase()
-  if (status !== 'DRAFT' && status !== 'SUBMITTED') {
-    throw new ApiError('Only draft or submitted allocations can be deleted', 400)
-  }
+  await assertCanAccessAllocation({ schoolId, user: auth.user, allocation })
 
-  await prisma.departmentAllocation.delete({ where: { id: allocation.id } })
+  await prisma.$transaction(async (tx) => {
+    await deleteDepartmentAllocationCascade(tx, schoolId, allocation.id)
+  })
 
   return NextResponse.json({ success: true })
 })

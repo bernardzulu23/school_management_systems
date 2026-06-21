@@ -19,6 +19,7 @@ import {
 } from '@/lib/timetable/loadGenerationContext'
 import { auditDraftTimetable, persistDraftConflictMeta } from '@/lib/timetable/conflictAudit'
 import { normalizePushedAllocations } from '@/lib/timetable/normalizePushedAllocations'
+import { remapEntriesToValidAllocationIds } from '@/lib/timetable/resolveTimetableEntryAllocationIds'
 
 export async function GET(req: NextRequest) {
   const user = await getAuthUser(req as any)
@@ -234,6 +235,28 @@ export async function POST(req: NextRequest) {
     )
   }
 
+  const { entries: entriesToSave, invalid: invalidAllocationEntries } =
+    await remapEntriesToValidAllocationIds(prisma, schoolId, entries, term, academicYear)
+
+  if (invalidAllocationEntries.length > 0) {
+    const sample = invalidAllocationEntries[0]
+    return NextResponse.json(
+      {
+        error:
+          'Could not save timetable: one or more lesson rows reference missing teaching allocations. Re-approve department allocations or regenerate after HOD resubmits.',
+        code: 'INVALID_ALLOCATION_FK',
+        invalidCount: invalidAllocationEntries.length,
+        sample: {
+          teacherId: sample?.teacherId,
+          classId: sample?.classId,
+          subjectId: sample?.subjectId,
+          allocationId: sample?.allocationId,
+        },
+      },
+      { status: 422 }
+    )
+  }
+
   await prisma.$transaction(async (tx) => {
     if (replaceExisting) {
       await tx.timetableAllocationEntry.deleteMany({
@@ -241,25 +264,27 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    await tx.timetableAllocationEntry.createMany({
-      data: entries.map((e: any) => ({
-        schoolId,
-        allocationId: e.allocationId,
-        teacherId: e.teacherId,
-        subjectId: e.subjectId,
-        classId: e.classId,
-        dayOfWeek: e.dayOfWeek,
-        startTime: e.startTime,
-        endTime: e.endTime,
-        durationMin: e.durationMin,
-        periodType: e.periodType,
-        periodNumber: e.periodNumber,
-        term,
-        academicYear,
-        status: 'draft',
-      })),
-      skipDuplicates: true,
-    })
+    if (entriesToSave.length > 0) {
+      await tx.timetableAllocationEntry.createMany({
+        data: entriesToSave.map((e: any) => ({
+          schoolId,
+          allocationId: e.allocationId,
+          teacherId: e.teacherId,
+          subjectId: e.subjectId,
+          classId: e.classId,
+          dayOfWeek: e.dayOfWeek,
+          startTime: e.startTime,
+          endTime: e.endTime,
+          durationMin: e.durationMin,
+          periodType: e.periodType,
+          periodNumber: e.periodNumber,
+          term,
+          academicYear,
+          status: 'draft',
+        })),
+        skipDuplicates: true,
+      })
+    }
   })
 
   const saved = await prisma.timetableAllocationEntry.findMany({

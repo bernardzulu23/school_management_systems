@@ -13,10 +13,12 @@ import {
   Shield,
   User,
   Activity,
+  Users,
 } from 'lucide-react'
 
 const NAV = [
   { href: '/platform/overview', label: 'Overview', icon: LayoutDashboard },
+  { href: '/platform/usage', label: 'School usage', icon: Users },
   { href: '/platform/dashboard', label: 'Schools', icon: Building2 },
   { href: '/platform/provinces', label: 'Provinces', icon: MapPin },
   { href: '/platform/streams', label: 'Reporting streams', icon: MapPin },

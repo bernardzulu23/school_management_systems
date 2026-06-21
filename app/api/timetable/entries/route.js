@@ -193,8 +193,12 @@ export async function DELETE(req) {
 
   const entry = await prisma.timetableAllocationEntry.findFirst({ where: { id, schoolId } })
   if (!entry) return NextResponse.json({ error: 'Entry not found' }, { status: 404 })
-  if (String(entry.status) !== 'draft') {
-    return NextResponse.json({ error: 'Only draft entries can be deleted.' }, { status: 409 })
+  const entryStatus = String(entry.status || '').toLowerCase()
+  if (entryStatus !== 'draft' && entryStatus !== 'published') {
+    return NextResponse.json(
+      { error: `Cannot delete timetable entry with status "${entry.status}".` },
+      { status: 409 }
+    )
   }
 
   await prisma.timetableAllocationEntry.delete({ where: { id } })

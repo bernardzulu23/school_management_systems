@@ -156,6 +156,7 @@ function HeadteacherTimetablePageContent() {
   const [allocationsClearing, setAllocationsClearing] = useState(false)
   const [editAllocationId, setEditAllocationId] = useState('')
   const [editAllocationData, setEditAllocationData] = useState<any | null>(null)
+  const [seasonAllocations, setSeasonAllocations] = useState<any[]>([])
   const [gridMode, setGridMode] = useState<TimetableGridMode>('master')
   const [unplacedLessons, setUnplacedLessons] = useState<UnplacedLesson[]>([])
   const [reloadingTimetable, setReloadingTimetable] = useState(false)
@@ -173,6 +174,7 @@ function HeadteacherTimetablePageContent() {
   })
 
   const assignments = useTimetableStore((s) => s.assignments)
+  const isPublished = useTimetableStore((s) => s.isPublished)
   const conflicts = useTimetableStore((s) => s.conflicts)
   const updateAssignment = useTimetableStore((s) => s.updateAssignment)
   const removeAssignment = useTimetableStore((s) => s.removeAssignment)
@@ -258,6 +260,17 @@ function HeadteacherTimetablePageContent() {
     return Array.isArray(json?.entries) ? json.entries : []
   }, [])
 
+  const loadSeasonAllocations = useCallback(async () => {
+    const qs = new URLSearchParams({ term, academicYear })
+    const res = await sessionFetch(`/api/admin/allocations?${qs.toString()}`, {
+      cache: 'no-store',
+      credentials: 'include',
+    })
+    const json = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(json?.message || json?.error || 'Failed to load allocations')
+    return Array.isArray(json?.allocations) ? json.allocations : []
+  }, [term, academicYear])
+
   const loadDepartments = useCallback(async () => {
     try {
       const res = await sessionFetch('/api/departments', {
@@ -300,16 +313,24 @@ function HeadteacherTimetablePageContent() {
   }, [])
 
   const refreshAllocationWorkflow = useCallback(async () => {
-    const [pending, entries] = await Promise.all([
+    const [pending, entries, seasonRows] = await Promise.all([
       loadPendingAllocations().catch(() => []),
       loadMasterTimetableEntries().catch(() => []),
+      loadSeasonAllocations().catch(() => []),
     ])
     setPendingAllocations(pending)
     setMasterEntries(entries)
+    setSeasonAllocations(seasonRows)
     if (currentPendingId) {
       await loadReview(currentPendingId).catch(() => {})
     }
-  }, [currentPendingId, loadMasterTimetableEntries, loadPendingAllocations, loadReview])
+  }, [
+    currentPendingId,
+    loadMasterTimetableEntries,
+    loadPendingAllocations,
+    loadReview,
+    loadSeasonAllocations,
+  ])
 
   const deleteAdminAllocation = useCallback(
     async (allocationId: string) => {
@@ -411,14 +432,16 @@ function HeadteacherTimetablePageContent() {
       if (tab !== 'allocations') return
       setAllocationsLoading(true)
       try {
-        const [pending, entries, deptList] = await Promise.all([
+        const [pending, entries, deptList, seasonRows] = await Promise.all([
           loadPendingAllocations(),
           loadMasterTimetableEntries(),
           loadDepartments(),
+          loadSeasonAllocations(),
         ])
         setPendingAllocations(pending)
         setMasterEntries(entries)
         setDepartments(deptList)
+        setSeasonAllocations(seasonRows)
       } catch (e: any) {
         toast.error(e?.message || 'Failed to load allocation workflow')
       } finally {
@@ -426,7 +449,15 @@ function HeadteacherTimetablePageContent() {
       }
     }
     run()
-  }, [loadDepartments, loadMasterTimetableEntries, loadPendingAllocations, tab])
+  }, [
+    loadDepartments,
+    loadMasterTimetableEntries,
+    loadPendingAllocations,
+    loadSeasonAllocations,
+    tab,
+    term,
+    academicYear,
+  ])
 
   useEffect(() => {
     if (!reviewOpen) return
@@ -1241,6 +1272,71 @@ function HeadteacherTimetablePageContent() {
               </div>
             )}
 
+            {seasonAllocations.length > 0 ? (
+              <div className="onboard-card p-5">
+                <div className="text-royalPurple-text1 font-bold text-lg">
+                  All department allocations ({term} · {academicYear})
+                </div>
+                <p className="text-sm text-royalPurple-text3 mt-1">
+                  Edit or remove any HOD submission — including approved rows that feed timetable
+                  generation.
+                </p>
+                <div className="mt-4 overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="text-left text-royalPurple-text3 border-b border-royalPurple-border/30">
+                        <th className="py-2 pr-3">Department</th>
+                        <th className="py-2 pr-3">Subject</th>
+                        <th className="py-2 pr-3">Classes</th>
+                        <th className="py-2 pr-3">Periods</th>
+                        <th className="py-2 pr-3">Status</th>
+                        <th className="py-2 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {seasonAllocations.map((row: any) => {
+                        const data =
+                          row?.allocationData && typeof row.allocationData === 'object'
+                            ? row.allocationData
+                            : {}
+                        const classes = Array.isArray(data.classes)
+                          ? data.classes.join(', ')
+                          : String(data.classes || '')
+                        return (
+                          <tr
+                            key={String(row.id)}
+                            className="border-b border-royalPurple-border/20 text-royalPurple-text2"
+                          >
+                            <td className="py-2 pr-3">{row?.department?.name || '—'}</td>
+                            <td className="py-2 pr-3">{String(data.subject || '—')}</td>
+                            <td className="py-2 pr-3">{classes || '—'}</td>
+                            <td className="py-2 pr-3">{formatPeriodDisplay(data.periodConfig)}</td>
+                            <td className="py-2 pr-3 font-semibold">{String(row.status || '')}</td>
+                            <td className="py-2 text-right whitespace-nowrap">
+                              <Button
+                                variant="outline"
+                                className="h-8 px-2 text-xs mr-1"
+                                onClick={() => openEditAllocation(String(row.id))}
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                variant="outline"
+                                className="h-8 px-2 text-xs border-red-500/40 text-red-200"
+                                onClick={() => deleteAdminAllocation(String(row.id))}
+                              >
+                                Delete
+                              </Button>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : null}
+
             <div className="onboard-card p-5 border border-red-500/30">
               <div className="text-royalPurple-text1 font-bold text-lg">Reset HOD allocations</div>
               <p className="text-sm text-royalPurple-text3 mt-2 max-w-2xl">
@@ -1394,6 +1490,16 @@ function HeadteacherTimetablePageContent() {
                             disabled={reviewSubmitting || !currentPendingId}
                           >
                             <Pencil size={16} /> Edit
+                          </Button>
+                          <Button
+                            variant="outline"
+                            className="border-red-500/40 text-red-200"
+                            onClick={() => {
+                              if (currentPendingId) deleteAdminAllocation(currentPendingId)
+                            }}
+                            disabled={reviewSubmitting || !currentPendingId}
+                          >
+                            <Trash2 size={16} /> Delete
                           </Button>
                           <Button
                             onClick={async () => {
@@ -1570,6 +1676,22 @@ function HeadteacherTimetablePageContent() {
         {tab === 'edit' ? (
           <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_min(100%,280px)] gap-4 xl:gap-6 items-start">
             <div className="min-w-0 overflow-hidden">
+              {isPublished ? (
+                <div className="mb-3 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-100 flex flex-wrap items-center justify-between gap-2">
+                  <span>
+                    Viewing the <strong>published</strong> timetable. Load the draft to edit or
+                    delete individual periods.
+                  </span>
+                  <Button
+                    variant="outline"
+                    className="h-8"
+                    onClick={() => reloadTimetable()}
+                    disabled={reloadingTimetable}
+                  >
+                    {reloadingTimetable ? 'Loading…' : 'Load draft'}
+                  </Button>
+                </div>
+              ) : null}
               <MasterTimetableGrid
                 assignments={seasonAssignments}
                 timeSlots={timeSlots}
