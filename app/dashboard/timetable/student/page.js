@@ -7,6 +7,7 @@ import { StudentTimetableView } from '@/components/timetable/StudentTimetableVie
 import { TimetableTermFilters } from '@/components/timetable/TimetableTermFilters'
 import { useAuth } from '@/lib/auth'
 import { getDefaultAcademicYear, getDefaultTerm } from '@/lib/timetable/timetableTermOptions'
+import { inferClassGrade } from '@/lib/timetable/activeClasses'
 
 export default function StudentTimetablePage() {
   const { user } = useAuth()
@@ -46,7 +47,7 @@ export default function StudentTimetablePage() {
           cList.map((c) => ({
             id: c.id,
             name: c.name || c.className || 'Class',
-            grade: Number(String(c.yearGroup || c.year_group || '').match(/\d+/)?.[0] || 8),
+            grade: inferClassGrade(c.name || c.className || 'Class', c.yearGroup || c.year_group),
             students: Number(c.studentCount || 40),
             subjects: [],
           }))

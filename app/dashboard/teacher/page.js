@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/Button'
 // import TeacherAssignments from '@/components/dashboard/TeacherAssignments'
 import { api } from '@/lib/api'
 import { getGradeBadgeClasses } from '@/lib/gradingSystem'
+import { inferClassGrade } from '@/lib/timetable/activeClasses'
 import { TeacherTimetableView } from '@/components/timetable/TeacherTimetableView'
 import { useSchoolTimeSlots } from '@/lib/timetable/useSchoolTimeSlots'
 import { printTimetable } from '@/lib/timetable/printTimetable'
@@ -138,7 +139,7 @@ export default function TeacherDashboard() {
         const mapped = list.map((c) => ({
           id: c.id,
           name: c.name || c.className || 'Class',
-          grade: Number(String(c.yearGroup || c.year_group || '').match(/\d+/)?.[0] || 8),
+          grade: inferClassGrade(c.name || c.className || 'Class', c.yearGroup || c.year_group),
           students: Number(c.studentCount || 40),
           subjects: [],
         }))

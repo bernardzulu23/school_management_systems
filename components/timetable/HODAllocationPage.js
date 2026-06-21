@@ -41,8 +41,8 @@ function normalizeClasses(v) {
     .filter(Boolean)
 }
 
-function stringifyPeriodConfig(periodConfig) {
-  return formatPeriodConfigLabel(periodConfig)
+function stringifyPeriodConfig(periodConfig, classes) {
+  return formatPeriodConfigLabel(periodConfig, { classes })
 }
 
 function allocationSeason(row) {
@@ -918,13 +918,29 @@ export default function HODAllocationPage() {
                     </div>
 
                     <div style={{ marginTop: 10, fontSize: 12, color: '#666666', fontWeight: 700 }}>
-                      Total periods:{' '}
-                      {Number(form.customSingles || 0) +
-                        Number(form.customDoubles || 0) * 2 +
-                        Number(form.customTriples || 0) * 3}
+                      {(() => {
+                        const classNames = selectedClasses.length
+                          ? selectedClasses
+                          : normalizeClasses(form.classes)
+                        const perClass =
+                          Number(form.customSingles || 0) +
+                          Number(form.customDoubles || 0) * 2 +
+                          Number(form.customTriples || 0) * 3
+                        if (classNames.length > 1 && perClass > 0) {
+                          return `Total periods: ${perClass * classNames.length} (${perClass} per class × ${classNames.length} classes)`
+                        }
+                        return `Total periods: ${perClass}`
+                      })()}
                     </div>
                   </div>
                 )}
+
+                <div style={{ marginTop: 10, fontSize: 12, color: '#666666', fontWeight: 700 }}>
+                  {stringifyPeriodConfig(
+                    buildPeriodConfig(),
+                    selectedClasses.length ? selectedClasses : normalizeClasses(form.classes)
+                  )}
+                </div>
               </div>
             </FormRow>
 
@@ -1039,7 +1055,10 @@ export default function HODAllocationPage() {
                     </td>
                     <td style={tdStyle}>{normalizeString(a?.allocationData?.subject) || '—'}</td>
                     <td style={tdStyle}>
-                      {stringifyPeriodConfig(a?.allocationData?.periodConfig) || '—'}
+                      {stringifyPeriodConfig(
+                        a?.allocationData?.periodConfig,
+                        a?.allocationData?.classes
+                      ) || '—'}
                     </td>
                     <td style={tdStyle}>
                       {(() => {

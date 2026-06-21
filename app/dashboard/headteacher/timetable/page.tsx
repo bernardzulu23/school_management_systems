@@ -28,6 +28,11 @@ import {
   resolveSchoolTimeSlots,
 } from '@/lib/timetable/timeSlotsFromConfig'
 import { formatPeriodConfigLabel } from '@/lib/timetable/formatPeriodConfig'
+import {
+  collectAllocationClassNames,
+  filterClassesInUse,
+  inferClassGrade,
+} from '@/lib/timetable/activeClasses'
 import { normalizeGradeLabel } from '@/lib/timetable/zambiaTerminology'
 import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
@@ -75,8 +80,8 @@ function parseGridModeFromSearchParams(sp: URLSearchParams): TimetableGridMode {
   return 'wall'
 }
 
-function formatPeriodDisplay(value: unknown): string {
-  return formatPeriodConfigLabel(value as any) || String(value || '')
+function formatPeriodDisplay(value: unknown, classes?: unknown): string {
+  return formatPeriodConfigLabel(value as any, { classes: classes as any }) || String(value || '')
 }
 
 function parseUnplacedConflict(conflict: any, index: number): UnplacedLesson {
@@ -117,8 +122,8 @@ function toTeacher(
 
 function toClass(c: any, fallbackSubjects: Array<{ id: string; name: string }>): Class {
   const name = String(c?.name || c?.className || 'Class').trim()
-  const gradeRaw = String(c?.yearGroup || c?.year_group || c?.grade || '').match(/\d+/)?.[0]
-  const grade = (Number(gradeRaw) as any) || 8
+  const yearGroup = String(c?.yearGroup || c?.year_group || c?.grade || '').trim()
+  const grade = inferClassGrade(name, yearGroup) as Class['grade']
   const subjects = Array.isArray(c?.subjects)
     ? c.subjects
         .map((s: any) => ({
@@ -491,13 +496,22 @@ function HeadteacherTimetablePageContent() {
     [assignments, season]
   )
 
+  const visibleClasses = useMemo(
+    () =>
+      filterClassesInUse(classes, {
+        assignments: seasonAssignments,
+        allocationClassNames: collectAllocationClassNames(seasonAllocations),
+      }),
+    [classes, seasonAssignments, seasonAllocations]
+  )
+
   const stats = useMemo(() => {
     const clientConflicts = conflictCount()
     const serverErrors = draftMeta?.conflictErrors ?? 0
     const serverWarnings = draftMeta?.conflictWarnings ?? 0
     const displayConflicts = draftMetaFresh && draftMeta != null ? serverErrors : clientConflicts
     return {
-      classCount: classes.length,
+      classCount: visibleClasses.length,
       teacherCount: teachers.length,
       conflicts: displayConflicts,
       serverErrors,
@@ -508,7 +522,7 @@ function HeadteacherTimetablePageContent() {
       lastPublished: lastPublishedAt ? lastPublishedAt.toLocaleString() : null,
     }
   }, [
-    classes.length,
+    visibleClasses.length,
     teachers.length,
     conflictCount,
     draftMeta,
@@ -1277,7 +1291,7 @@ function HeadteacherTimetablePageContent() {
                             <span className="font-semibold text-royalPurple-text2">
                               Period config:
                             </span>{' '}
-                            {formatPeriodDisplay(e?.periodConfiguration)}
+                            {formatPeriodDisplay(e?.periodConfiguration, e?.classes)}
                           </div>
                           {e?.allocationId ? (
                             <div className="mt-3 flex gap-2">
@@ -1345,7 +1359,9 @@ function HeadteacherTimetablePageContent() {
                             <td className="py-2 pr-3">{row?.department?.name || '—'}</td>
                             <td className="py-2 pr-3">{String(data.subject || '—')}</td>
                             <td className="py-2 pr-3">{classes || '—'}</td>
-                            <td className="py-2 pr-3">{formatPeriodDisplay(data.periodConfig)}</td>
+                            <td className="py-2 pr-3">
+                              {formatPeriodDisplay(data.periodConfig, data.classes)}
+                            </td>
                             <td className="py-2 pr-3 font-semibold">{String(row.status || '')}</td>
                             <td className="py-2 text-right whitespace-nowrap">
                               <Button
@@ -1473,7 +1489,7 @@ function HeadteacherTimetablePageContent() {
                       <div className="rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 p-4">
                         <div className="text-xs text-royalPurple-text3">Period config</div>
                         <div className="text-sm font-semibold text-royalPurple-text1 break-words">
-                          {formatPeriodDisplay(reviewData?.periodConfig)}
+                          {formatPeriodDisplay(reviewData?.periodConfig, reviewData?.classes)}
                         </div>
                       </div>
 
@@ -1653,7 +1669,7 @@ function HeadteacherTimetablePageContent() {
               <AscClassWallGrid
                 assignments={seasonAssignments}
                 timeSlots={timeSlots}
-                classes={classes}
+                classes={visibleClasses}
                 teachers={teachers}
                 season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
                 showConflicts
@@ -1665,7 +1681,7 @@ function HeadteacherTimetablePageContent() {
               <MasterTimetableGrid
                 assignments={seasonAssignments}
                 timeSlots={timeSlots}
-                classes={classes}
+                classes={visibleClasses}
                 teachers={teachers}
                 season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
                 showConflicts
@@ -1681,7 +1697,7 @@ function HeadteacherTimetablePageContent() {
                 assignments={seasonAssignments}
                 timeSlots={timeSlots}
                 teachers={teachers}
-                classes={classes}
+                classes={visibleClasses}
               />
             )}
           </div>
@@ -1731,7 +1747,7 @@ function HeadteacherTimetablePageContent() {
                 <AscClassWallGrid
                   assignments={seasonAssignments}
                   timeSlots={timeSlots}
-                  classes={classes}
+                  classes={visibleClasses}
                   teachers={teachers}
                   season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
                   showConflicts
@@ -1743,7 +1759,7 @@ function HeadteacherTimetablePageContent() {
                 <MasterTimetableGrid
                   assignments={seasonAssignments}
                   timeSlots={timeSlots}
-                  classes={classes}
+                  classes={visibleClasses}
                   teachers={teachers}
                   season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
                   showConflicts
@@ -1760,7 +1776,7 @@ function HeadteacherTimetablePageContent() {
                   assignments={seasonAssignments}
                   timeSlots={timeSlots}
                   teachers={teachers}
-                  classes={classes}
+                  classes={visibleClasses}
                 />
               )}
               {gridMode === 'master' ? (

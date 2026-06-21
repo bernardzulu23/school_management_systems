@@ -31,8 +31,6 @@ export default function ProfessionalInfoStep({
     'Form 4',
     'Form 5',
     'Form 6',
-    'Grade 8',
-    'Grade 9',
     'Grade 10',
     'Grade 11',
     'Grade 12',

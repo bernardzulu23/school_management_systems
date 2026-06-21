@@ -7,6 +7,7 @@ import { DepartmentTimetableView } from '@/components/timetable/DepartmentTimeta
 import { TeacherWorkloadSummary } from '@/components/timetable/TeacherWorkloadSummary'
 import { TimetableTermFilters } from '@/components/timetable/TimetableTermFilters'
 import { getDefaultAcademicYear, getDefaultTerm } from '@/lib/timetable/timetableTermOptions'
+import { filterClassesInUse, inferClassGrade } from '@/lib/timetable/activeClasses'
 
 export default function HodDepartmentTimetablePage() {
   const [timeSlots, setTimeSlots] = useState([])
@@ -32,7 +33,8 @@ export default function HodDepartmentTimetablePage() {
         const viewJson = await viewRes.json().catch(() => ({}))
         if (!viewRes.ok) throw new Error(viewJson?.error || 'Failed to load department timetable')
 
-        setAssignments(Array.isArray(viewJson.assignments) ? viewJson.assignments : [])
+        const loadedAssignments = Array.isArray(viewJson.assignments) ? viewJson.assignments : []
+        setAssignments(loadedAssignments)
         setTimeSlots(Array.isArray(viewJson.timeSlots) ? viewJson.timeSlots : [])
         setSummaries(Array.isArray(viewJson.teacherSummaries) ? viewJson.teacherSummaries : [])
 
@@ -51,15 +53,14 @@ export default function HodDepartmentTimetablePage() {
 
         const classesJson = await classesRes.json().catch(() => ({}))
         const cList = Array.isArray(classesJson?.data) ? classesJson.data : []
-        setClasses(
-          cList.map((c) => ({
-            id: c.id,
-            name: c.name || 'Class',
-            grade: 8,
-            students: 40,
-            subjects: [],
-          }))
-        )
+        const mappedClasses = cList.map((c) => ({
+          id: c.id,
+          name: c.name || 'Class',
+          grade: inferClassGrade(c.name || 'Class', c.yearGroup || c.year_group),
+          students: Number(c.studentCount || 40),
+          subjects: [],
+        }))
+        setClasses(filterClassesInUse(mappedClasses, { assignments: loadedAssignments }))
       } catch (e) {
         toast.error(e?.message || 'Failed to load timetable')
         setAssignments([])

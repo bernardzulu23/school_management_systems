@@ -24,7 +24,7 @@ When your school is registered as **Primary (ECE – Grade 7)** (`School.level =
 - **HOD features are hidden** — no HOD registration, department dashboards, or HOD navigation. Teachers report to the headteacher.
 - **Secondary-style grading is hidden** — no ONE–FOUR / 1–9 result entry or school-wide results pages. Use CBC continuous assessment instead.
 - **Primary CBC:** **CBC Assessment** (`/dashboard/teacher/assessments/cbc`) — record ZECF competency ratings (4-level descriptors) and export CSV by 31 January. See [ECSEOL_ALIGNMENT.md](./ECSEOL_ALIGNMENT.md).
-- **Combined schools** keep HOD for secondary departments; grading remains available only for **Grade 8+ / Form** classes, not for G1–G7 classes.
+- **Combined schools** keep HOD for secondary departments; grading remains available only for **Forms 1–6 and Grades 10–12**, not for G1–G7 classes.
 
 | Portal type       | Who                                       | Entry URL                                     |
 | ----------------- | ----------------------------------------- | --------------------------------------------- |

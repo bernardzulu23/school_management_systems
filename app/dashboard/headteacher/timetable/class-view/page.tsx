@@ -13,6 +13,7 @@ import {
   resolveSchoolTimeSlots,
 } from '@/lib/timetable/timeSlotsFromConfig'
 import { filterAssignmentsForUiSeason } from '@/lib/timetable/seasonFilter'
+import { filterClassesInUse, inferClassGrade } from '@/lib/timetable/activeClasses'
 import type { Assignment, Class, Teacher, TimeSlot } from '@/lib/timetable/types'
 import toast from 'react-hot-toast'
 
@@ -41,8 +42,8 @@ function toTeacher(
 
 function toClass(c: any, fallbackSubjects: Array<{ id: string; name: string }>): Class {
   const name = String(c?.name || c?.className || 'Class').trim()
-  const gradeRaw = String(c?.yearGroup || c?.year_group || c?.grade || '').match(/\d+/)?.[0]
-  const grade = (Number(gradeRaw) as any) || 8
+  const yearGroup = String(c?.yearGroup || c?.year_group || c?.grade || '').trim()
+  const grade = inferClassGrade(name, yearGroup) as Class['grade']
   const subjects = Array.isArray(c?.subjects)
     ? c.subjects
         .map((s: any) => ({
@@ -79,6 +80,11 @@ function ClassTimetablePageContent() {
   const seasonAssignments = useMemo(
     () => filterAssignmentsForUiSeason(assignments, currentSeason),
     [assignments, currentSeason]
+  )
+
+  const visibleClasses = useMemo(
+    () => filterClassesInUse(classes, { assignments: seasonAssignments }),
+    [classes, seasonAssignments]
   )
 
   const conflictAssignmentIds = useMemo(() => {
@@ -154,9 +160,9 @@ function ClassTimetablePageContent() {
   }, [load])
 
   useEffect(() => {
-    if (selectedClassId || !classes.length) return
-    setSelectedClassId(String(classes[0].id))
-  }, [classes, selectedClassId])
+    if (selectedClassId || !visibleClasses.length) return
+    setSelectedClassId(String(visibleClasses[0].id))
+  }, [visibleClasses, selectedClassId])
 
   return (
     <DashboardLayout>
@@ -178,7 +184,7 @@ function ClassTimetablePageContent() {
         </div>
 
         <TimetableClassView
-          classes={classes}
+          classes={visibleClasses}
           assignments={seasonAssignments as Assignment[]}
           timeSlots={timeSlots}
           teachers={teachers}

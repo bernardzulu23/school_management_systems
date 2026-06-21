@@ -18,6 +18,7 @@ import { printTimetable } from '@/lib/timetable/printTimetable'
 import { api } from '@/lib/api'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import { calculateGrade, getGradeBadgeClasses, isTopAchievementGrade } from '@/lib/gradingSystem'
+import { inferClassGrade } from '@/lib/timetable/activeClasses'
 import {
   BookOpen,
   ClipboardList,
@@ -135,7 +136,7 @@ export default function StudentDashboard() {
         const mappedClasses = cList.map((c) => ({
           id: c.id,
           name: c.name || c.className || 'Class',
-          grade: Number(String(c.yearGroup || c.year_group || '').match(/\d+/)?.[0] || 8),
+          grade: inferClassGrade(c.name || c.className || 'Class', c.yearGroup || c.year_group),
           students: Number(c.studentCount || 40),
           subjects: [],
         }))

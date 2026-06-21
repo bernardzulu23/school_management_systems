@@ -8,6 +8,7 @@ import { TeacherWorkloadSummary } from '@/components/timetable/TeacherWorkloadSu
 import { TimetableTermFilters } from '@/components/timetable/TimetableTermFilters'
 import { useAuth } from '@/lib/auth'
 import { getDefaultAcademicYear, getDefaultTerm } from '@/lib/timetable/timetableTermOptions'
+import { filterClassesInUse, inferClassGrade } from '@/lib/timetable/activeClasses'
 
 export default function TeacherTimetablePage() {
   const { user } = useAuth()
@@ -39,7 +40,8 @@ export default function TeacherTimetablePage() {
         if (!viewRes.ok)
           throw new Error(viewJson?.message || viewJson?.error || 'Failed to load timetable')
 
-        setAssignments(Array.isArray(viewJson.assignments) ? viewJson.assignments : [])
+        const loadedAssignments = Array.isArray(viewJson.assignments) ? viewJson.assignments : []
+        setAssignments(loadedAssignments)
         setTimeSlots(Array.isArray(viewJson.timeSlots) ? viewJson.timeSlots : [])
         setSummaries(Array.isArray(viewJson.teacherSummaries) ? viewJson.teacherSummaries : [])
 
@@ -47,15 +49,14 @@ export default function TeacherTimetablePage() {
         const subjectsJson = await subjectsRes.json().catch(() => ({}))
 
         const list = Array.isArray(classesJson?.data) ? classesJson.data : []
-        setClasses(
-          list.map((c) => ({
-            id: c.id,
-            name: c.name || c.className || 'Class',
-            grade: Number(String(c.yearGroup || c.year_group || '').match(/\d+/)?.[0] || 8),
-            students: Number(c.studentCount || 40),
-            subjects: [],
-          }))
-        )
+        const mappedClasses = list.map((c) => ({
+          id: c.id,
+          name: c.name || c.className || 'Class',
+          grade: inferClassGrade(c.name || c.className || 'Class', c.yearGroup || c.year_group),
+          students: Number(c.studentCount || 40),
+          subjects: [],
+        }))
+        setClasses(filterClassesInUse(mappedClasses, { assignments: loadedAssignments }))
 
         const sList = Array.isArray(subjectsJson?.subjects) ? subjectsJson.subjects : []
         setSubjects(sList.map((s) => ({ id: s.id, name: s.name })))

@@ -154,9 +154,10 @@ export function AdminAllocationEditDialog({
           customSingles,
           customDoubles,
           customTriples,
-        }) as any
+        }) as any,
+        { classes: normalizeClasses(classesText) }
       ),
-    [periodPreset, customSingles, customDoubles, customTriples]
+    [periodPreset, customSingles, customDoubles, customTriples, classesText]
   )
 
   async function onSave() {

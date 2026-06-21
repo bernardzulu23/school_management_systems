@@ -15,7 +15,7 @@ export function PrimarySchoolFeatureUnavailable({
         {children || (
           <>
             <p>
-              This feature is for secondary schools (Grade 8–12 and Forms). Primary schools
+              This feature is for secondary schools (Forms 1–6 and Grades 10–12). Primary schools
               (ECE–Grade 7) use CBC continuous assessment instead of secondary-style term grading.
             </p>
             <p>
