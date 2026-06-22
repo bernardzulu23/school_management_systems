@@ -28,11 +28,7 @@ import {
   resolveSchoolTimeSlots,
 } from '@/lib/timetable/timeSlotsFromConfig'
 import { formatPeriodConfigLabel } from '@/lib/timetable/formatPeriodConfig'
-import {
-  collectAllocationClassNames,
-  filterClassesInUse,
-  inferClassGrade,
-} from '@/lib/timetable/activeClasses'
+import { filterClassesForWallGrid, inferClassGrade } from '@/lib/timetable/activeClasses'
 import { normalizeGradeLabel } from '@/lib/timetable/zambiaTerminology'
 import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
@@ -396,7 +392,10 @@ function HeadteacherTimetablePageContent() {
       try {
         const [teachersRes, classesRes, subjectsRes, schoolRes, configRes] = await Promise.all([
           sessionFetch('/api/teachers?limit=200', { cache: 'no-store' }),
-          sessionFetch('/api/classes?limit=200', { cache: 'no-store' }),
+          sessionFetch(
+            `/api/classes?limit=200&activeOnly=true&term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}`,
+            { cache: 'no-store' }
+          ),
           sessionFetch('/api/subjects?limit=500', { cache: 'no-store' }),
           sessionFetch('/api/school/current', { cache: 'no-store', credentials: 'include' }),
           sessionFetch('/api/timetable/config', { cache: 'no-store', credentials: 'include' }),
@@ -446,7 +445,7 @@ function HeadteacherTimetablePageContent() {
       }
     }
     load()
-  }, [setStoreTimeSlots])
+  }, [setStoreTimeSlots, term, academicYear])
 
   useEffect(() => {
     loadAllocationNotifications()
@@ -497,12 +496,8 @@ function HeadteacherTimetablePageContent() {
   )
 
   const visibleClasses = useMemo(
-    () =>
-      filterClassesInUse(classes, {
-        assignments: seasonAssignments,
-        allocationClassNames: collectAllocationClassNames(seasonAllocations),
-      }),
-    [classes, seasonAssignments, seasonAllocations]
+    () => filterClassesForWallGrid(classes, seasonAssignments),
+    [classes, seasonAssignments]
   )
 
   const stats = useMemo(() => {

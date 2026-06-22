@@ -3,6 +3,7 @@ import {
   collectAllocationClassNames,
   dedupeClassesByLabel,
   filterClassesForTimetablePicker,
+  filterClassesForWallGrid,
   filterClassesInUse,
   normalizeClassLabel,
 } from '../activeClasses'
@@ -22,6 +23,20 @@ describe('dedupeClassesByLabel', () => {
     ])
     expect(out).toHaveLength(1)
     expect(out[0].id).toBe('c2')
+  })
+})
+
+describe('filterClassesForWallGrid', () => {
+  it('excludes enrolled-only classes with no assignments', () => {
+    const out = filterClassesForWallGrid(
+      [
+        { id: 'c1', name: '1A', students: 40 },
+        { id: 'c2', name: '8A', students: 35 },
+        { id: 'c3', name: '2A', students: 0 },
+      ],
+      [{ id: 'a1', classId: 'c1' } as any, { id: 'a2', classId: 'c3' } as any]
+    )
+    expect(out.map((c) => c.name).sort()).toEqual(['1A', '2A'])
   })
 })
 

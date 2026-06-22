@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { Bell } from 'lucide-react'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 /**
  * Admin / headteacher bell for HOD-submitted department allocations.
@@ -13,7 +14,10 @@ export function AllocationNotificationBell({ onOpenAllocations }) {
 
   const fetchNotifications = useCallback(async () => {
     try {
-      const res = await fetch('/api/admin/notifications', { cache: 'no-store' })
+      const res = await sessionFetch('/api/admin/notifications', {
+        cache: 'no-store',
+        credentials: 'include',
+      })
       const data = await res.json().catch(() => ({}))
       const list = Array.isArray(data.notifications) ? data.notifications : []
       setNotifications(list)
@@ -32,8 +36,9 @@ export function AllocationNotificationBell({ onOpenAllocations }) {
 
   async function markRead(id) {
     try {
-      await fetch(`/api/admin/notifications/${encodeURIComponent(id)}/read`, {
+      await sessionFetch(`/api/admin/notifications/${encodeURIComponent(id)}/read`, {
         method: 'POST',
+        credentials: 'include',
       })
       fetchNotifications()
     } catch {

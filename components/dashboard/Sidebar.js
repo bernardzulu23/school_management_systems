@@ -48,6 +48,7 @@ import {
   FileCheck,
 } from 'lucide-react'
 import { TIMETABLE_CONFLICTS_UPDATED } from '@/hooks/useTimetableDraftMeta'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 function TimetableConflictNavBadge() {
   const [badge, setBadge] = useState(null)
@@ -59,7 +60,10 @@ function TimetableConflictNavBadge() {
         const term = 'Term 1'
         const academicYear = String(new Date().getFullYear())
         const qs = new URLSearchParams({ term, academicYear })
-        const res = await fetch(`/api/timetable/draft-meta?${qs}`, { credentials: 'include' })
+        const res = await sessionFetch(`/api/timetable/draft-meta?${qs}`, {
+          credentials: 'include',
+          cache: 'no-store',
+        })
         if (!res.ok) return
         const data = await res.json()
         if (cancelled) return

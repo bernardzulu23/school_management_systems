@@ -206,9 +206,20 @@ export async function handleSecurityProxy(request) {
     // Uniform server-side role gate for all admin-prefixed APIs.
     if (pathname.startsWith('/api/admin')) {
       const payload = await decodeAccessToken(request)
-      const rk = roleKey(payload?.role)
-      if (!payload?.id || !ADMIN_ROLE_KEYS.has(rk)) {
-        return secureResponse({ error: 'Forbidden' }, { status: 403 }, request, securityOpts)
+      if (payload?.id) {
+        const rk = roleKey(payload?.role)
+        if (!ADMIN_ROLE_KEYS.has(rk)) {
+          return secureResponse({ error: 'Forbidden' }, { status: 403 }, request, securityOpts)
+        }
+      } else {
+        const hasRefresh =
+          Boolean(request.cookies?.get?.('refresh_token')?.value) ||
+          Boolean(request.cookies?.get?.('session-token')?.value) ||
+          Boolean(request.cookies?.get?.('session')?.value)
+        if (!hasRefresh) {
+          return secureResponse({ error: 'Unauthorized' }, { status: 401 }, request, securityOpts)
+        }
+        // Expired access token — let the route handler respond; client refresh + retry.
       }
     }
 

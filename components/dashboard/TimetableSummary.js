@@ -9,7 +9,7 @@ import toast from 'react-hot-toast'
 import { useAuth } from '@/lib/auth'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
-import { filterClassesInUse, inferClassGrade } from '@/lib/timetable/activeClasses'
+import { filterClassesForWallGrid, inferClassGrade } from '@/lib/timetable/activeClasses'
 import { AscClassWallGrid } from '@/components/timetable/AscClassWallGrid'
 import { pastelBgForSubject } from '@/lib/timetable/cardColors'
 import { Calendar, Clock, MapPin, User, ChevronRight, AlertCircle } from 'lucide-react'
@@ -100,7 +100,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
             data?.assignments?.length > 0
               ? data.assignments
               : useTimetableStore.getState().assignments
-          setWallClasses(filterClassesInUse(mapped, { assignments: loadedAssignments }))
+          setWallClasses(filterClassesForWallGrid(mapped, loadedAssignments))
         }
       } finally {
         if (!cancelled) setBellLoading(false)

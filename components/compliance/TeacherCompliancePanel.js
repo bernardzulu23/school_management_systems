@@ -1,6 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertTriangle, CheckCircle2 } from 'lucide-react'
 
@@ -92,7 +93,10 @@ export function TeacherCompliancePanel({ domain }) {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['teacher-compliance'],
     queryFn: async () => {
-      const res = await fetch('/api/dashboard/teacher-compliance', { credentials: 'include' })
+      const res = await sessionFetch('/api/dashboard/teacher-compliance', {
+        credentials: 'include',
+        cache: 'no-store',
+      })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json?.error || 'Failed to load compliance')
       return json.data

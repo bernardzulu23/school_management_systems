@@ -12,6 +12,7 @@ import {
 import { periodTypeBadge } from '@/lib/timetable/doublePeriodUtils'
 import { solidSubjectFill } from '@/lib/timetable/cardColors'
 import { abbreviateSubject } from '@/lib/timetable/subjectAbbrev'
+import { normalizeClassLabel } from '@/lib/timetable/activeClasses'
 import {
   UnplacedLessonsTray,
   type UnplacedLesson,
@@ -112,13 +113,31 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
   }, [teachers])
 
   const sortedClasses = useMemo(() => {
-    return [...classes].sort((a, b) =>
-      String(a.name || '').localeCompare(String(b.name || ''), undefined, {
-        numeric: true,
-        sensitivity: 'base',
+    const byId = new Set<string>()
+    const byLabel = new Set<string>()
+    for (const a of filteredAssignments) {
+      if (a?.classId) byId.add(String(a.classId))
+      const lbl = normalizeClassLabel(String(a.className || ''))
+      if (lbl) byLabel.add(lbl)
+    }
+
+    return [...classes]
+      .filter((c) => {
+        const id = String(c.id)
+        if (byId.has(id)) return true
+        const lbl = normalizeClassLabel(
+          String(c.name || ''),
+          (c as any).yearGroup || (c as any).year_group
+        )
+        return lbl && byLabel.has(lbl)
       })
-    )
-  }, [classes])
+      .sort((a, b) =>
+        String(a.name || '').localeCompare(String(b.name || ''), undefined, {
+          numeric: true,
+          sensitivity: 'base',
+        })
+      )
+  }, [classes, filteredAssignments])
 
   const days = useMemo(() => {
     const set = new Set<string>(['monday', 'tuesday', 'wednesday', 'thursday', 'friday'])

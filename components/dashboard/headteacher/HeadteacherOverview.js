@@ -27,6 +27,7 @@ import { LearningAnalyticsPanel } from '@/components/analytics/LearningAnalytics
 import { HeadteacherChronicAbsentees } from './HeadteacherChronicAbsentees'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import Link from 'next/link'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 export const HeadteacherOverview = memo(function HeadteacherOverview() {
   const { dashboardData, schoolStats, setActiveTab, subjectPerformanceData } = useHeadteacher()
@@ -34,7 +35,10 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
   const { data: complianceData } = useQuery({
     queryKey: ['teacher-compliance-overview'],
     queryFn: async () => {
-      const res = await fetch('/api/dashboard/teacher-compliance', { credentials: 'include' })
+      const res = await sessionFetch('/api/dashboard/teacher-compliance', {
+        credentials: 'include',
+        cache: 'no-store',
+      })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) return null
       return json.data
