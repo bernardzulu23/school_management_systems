@@ -64,6 +64,26 @@ describe('antiScraping module', () => {
     expect(result.code).toBe('invalid_client')
   })
 
+  it('allows cookie-authenticated same-origin fetch without X-Requested-With', () => {
+    process.env.ANTI_SCRAPING_ENABLED = 'true'
+
+    const req = buildRequest({
+      url: 'http://localhost:3000/api/attendance',
+      headers: {
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        'sec-fetch-site': 'same-origin',
+        cookie: `access_token=${signedAccessToken('teacher')}`,
+      },
+    })
+    req.cookies = {
+      get: (name) =>
+        name === 'access_token' ? { value: signedAccessToken('teacher') } : undefined,
+    }
+
+    const result = checkAntiScraping(req, '/api/attendance', { isPublic: false })
+    expect(result.blocked).toBe(false)
+  })
+
   it('allows plain fetch on session auth routes after login', () => {
     process.env.ANTI_SCRAPING_ENABLED = 'true'
 

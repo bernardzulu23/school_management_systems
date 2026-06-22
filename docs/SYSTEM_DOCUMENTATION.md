@@ -277,18 +277,18 @@ Run tenant isolation audit before releases: `npm run audit:tenant`.
 
 Root-level **Next.js 16 proxy** handles:
 
-| Control                   | Implementation                                                                                                                          |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| CSP with nonce            | `lib/security/headers.js` — per-request nonce via `x-nonce`                                                                             |
-| CSRF                      | `verifyCsrfRequest` — state-changing `/api/*` except exempt paths (auth, webhooks)                                                      |
-| Rate limiting             | `checkProxyRateLimit` — `lib/security/proxyRateLimit.js`                                                                                |
-| Anti-scraping             | `checkAntiScraping` + `checkApiScrapeRateLimit` — `lib/security/antiScraping.js` (bot UA block, XHR client validation, API rate limits) |
-| Method blocking           | `BLOCKED_HTTP_METHODS`                                                                                                                  |
-| Cross-origin API block    | `isForbiddenCrossOrigin`                                                                                                                |
-| Subdomain → tenant header | Sets `x-school-subdomain` from verified hostname only                                                                                   |
-| Header stripping          | `stripInternalRequestHeaders` — prevents tenant spoofing (CVE-2025-29927 class)                                                         |
-| Auth gate                 | Protected `/dashboard` and `/api` paths require token cookie or `Authorization`                                                         |
-| Admin API gate            | `/api/admin/*` requires admin role keys                                                                                                 |
+| Control                   | Implementation                                                                                                                                                                                                                                     |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CSP with nonce            | `lib/security/headers.js` — per-request nonce via `x-nonce`                                                                                                                                                                                        |
+| CSRF                      | `verifyCsrfRequest` — state-changing `/api/*` except exempt paths (auth, webhooks)                                                                                                                                                                 |
+| Rate limiting             | `checkProxyRateLimit` — `lib/security/proxyRateLimit.js`                                                                                                                                                                                           |
+| Anti-scraping             | `checkAntiScraping` + `checkApiScrapeRateLimit` — `lib/security/antiScraping.js` (bot UA block, trusted browser session via `X-Requested-With` or `Sec-Fetch-Site`, API rate limits); client `/api/*` fetch patch in `lib/auth/installApiFetch.js` |
+| Method blocking           | `BLOCKED_HTTP_METHODS`                                                                                                                                                                                                                             |
+| Cross-origin API block    | `isForbiddenCrossOrigin`                                                                                                                                                                                                                           |
+| Subdomain → tenant header | Sets `x-school-subdomain` from verified hostname only                                                                                                                                                                                              |
+| Header stripping          | `stripInternalRequestHeaders` — prevents tenant spoofing (CVE-2025-29927 class)                                                                                                                                                                    |
+| Auth gate                 | Protected `/dashboard` and `/api` paths require token cookie or `Authorization`                                                                                                                                                                    |
+| Admin API gate            | `/api/admin/*` requires admin role keys                                                                                                                                                                                                            |
 
 Static security headers also apply via `next.config.js`; **dynamic CSP uses the proxy nonce**.
 

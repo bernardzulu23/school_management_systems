@@ -27,6 +27,13 @@ export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) {
+    return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  }
+
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod'])) {
     const schoolMeta = await prisma.school.findUnique({
       where: { id: schoolId },
@@ -42,13 +49,6 @@ export const POST = withErrorHandler(async function POST(request) {
         { status: 403 }
       )
     }
-  }
-
-  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
-  if (!tenant.ok) return tenant.response
-  const schoolId = tenant.schoolId
-  if (!schoolId) {
-    return NextResponse.json({ error: 'School context required' }, { status: 400 })
   }
 
   const rl = rateLimiter(request, {

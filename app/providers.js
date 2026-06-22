@@ -8,10 +8,18 @@ import { SchoolProvider, useSchool } from '@/lib/context/SchoolContext'
 import { SchoolFeaturesProvider } from '@/lib/school/SchoolFeaturesContext'
 import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
 import { withBrowserSessionFetchInit } from '@/lib/security/browserSessionHeaders'
+import { installApiFetchPatch } from '@/lib/auth/installApiFetch'
 import { useAuth } from '@/lib/auth'
 import GlobalTopLoadingBar from '@/components/ui/GlobalTopLoadingBar'
 import GlobalBackButton from '@/components/ui/GlobalBackButton'
 import OfflineBanner from '@/components/ui/OfflineBanner'
+
+function ApiFetchPatch() {
+  useEffect(() => {
+    installApiFetchPatch()
+  }, [])
+  return null
+}
 
 function PWALoader() {
   useEffect(() => {
@@ -188,6 +196,7 @@ export function Providers({ children }) {
     <QueryClientProvider client={queryClient}>
       <SchoolProvider>
         <SchoolFeaturesBridge>
+          <ApiFetchPatch />
           <PWALoader />
           <DevServiceWorkerReset />
           {skipSessionSync ? (
