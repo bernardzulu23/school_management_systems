@@ -127,11 +127,13 @@ export const POST = withErrorHandler(async (request) => {
   }
 
   let pendingEnrollmentInviteId = null
-  if (role === 'student' && school?.schoolType === 'INDIVIDUAL') {
+  if (role === 'student') {
     const { checkStudentCap } = await import('@/lib/middleware/individual-gate')
     const capCheck = await checkStudentCap(schoolId)
     if (!capCheck.allowed) return capCheck.response
+  }
 
+  if (role === 'student' && school?.schoolType === 'INDIVIDUAL') {
     const { findUnusedEnrollmentInvite, normalizeInviteCode } =
       await import('@/lib/solo/enrollmentInvites')
     const inviteCode = normalizeInviteCode(body.enrollmentCode || body.enrollment_code)

@@ -14,11 +14,8 @@ import GlobalTopLoadingBar from '@/components/ui/GlobalTopLoadingBar'
 import GlobalBackButton from '@/components/ui/GlobalBackButton'
 import OfflineBanner from '@/components/ui/OfflineBanner'
 
-function ApiFetchPatch() {
-  useEffect(() => {
-    installApiFetchPatch()
-  }, [])
-  return null
+if (typeof window !== 'undefined') {
+  installApiFetchPatch()
 }
 
 function PWALoader() {
@@ -196,7 +193,6 @@ export function Providers({ children }) {
     <QueryClientProvider client={queryClient}>
       <SchoolProvider>
         <SchoolFeaturesBridge>
-          <ApiFetchPatch />
           <PWALoader />
           <DevServiceWorkerReset />
           {skipSessionSync ? (

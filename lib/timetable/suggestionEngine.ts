@@ -8,6 +8,7 @@ import type {
 } from './types'
 import { CollisionDetector, type Suggestion } from './collisionDetector'
 import { TIMETABLE_CLASS_CENTRIC } from './classCentric'
+import { rankTeachingSlots } from './slotScoring'
 
 export type { Suggestion } from './collisionDetector'
 
@@ -70,32 +71,16 @@ export class SuggestionEngine {
   /** Search all weekdays and periods for conflict-free slots (preferred for resolving double-booking). */
   suggestAlternativeTimeSlotsAnyDay(assignment: Assignment, limit = 3): Suggestion[] {
     if (!this.timeSlots.length) return []
-    const dayRank: Record<string, number> = {
-      monday: 1,
-      tuesday: 2,
-      wednesday: 3,
-      thursday: 4,
-      friday: 5,
-      saturday: 6,
-      sunday: 7,
-    }
-    const slots = this.timeSlots
-      .filter((s) => !s.isBreak)
-      .sort((a, b) => {
-        const da = dayRank[String(a.dayOfWeek).toLowerCase()] || 99
-        const db = dayRank[String(b.dayOfWeek).toLowerCase()] || 99
-        if (da !== db) return da - db
-        return a.period - b.period
-      })
+    const classAssignments = this.assignments.filter(
+      (a) => String(a.classId) === String(assignment.classId)
+    )
+    const slots = rankTeachingSlots(this.timeSlots, assignment, classAssignments, {
+      penalizeSameDay: true,
+      excludeSameSlot: true,
+    })
 
     const out: Suggestion[] = []
     for (const slot of slots) {
-      const sameSlot =
-        String(slot.dayOfWeek).toLowerCase() === String(assignment.dayOfWeek).toLowerCase() &&
-        slot.startTime === assignment.startTime &&
-        slot.endTime === assignment.endTime
-      if (sameSlot) continue
-
       const candidate: Assignment = {
         ...assignment,
         dayOfWeek: slot.dayOfWeek,

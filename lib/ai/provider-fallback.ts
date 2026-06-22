@@ -1,8 +1,9 @@
 /**
  * Multi-provider fallback chain for AI text generation.
- * Order: Gemini → Groq → OpenRouter → OpenAI → HuggingFace
+ * Order: Groq → Gemini → OpenRouter → OpenAI → HuggingFace
  */
 import { streamAITextWithFallback } from '@/lib/ai/client'
+import { geminiGenerateContentUrl, geminiModelCandidates } from '@/lib/ai/gemini-config'
 import { logger } from '@/lib/utils/logger'
 
 const log = logger({ route: 'AI:provider-fallback' })
@@ -69,18 +70,18 @@ export class AIProviderChain {
   constructor() {
     this.providers = [
       {
-        name: 'Gemini',
-        key: process.env.GEMINI_API_KEY,
-        endpoint: 'https://generativelanguage.googleapis.com/v1beta/models',
-        model: String(process.env.GEMINI_MODEL || 'gemini-1.5-flash').trim(),
-        isAvailable: Boolean(String(process.env.GEMINI_API_KEY || '').trim()),
-      },
-      {
         name: 'Groq',
         key: process.env.GROQ_API_KEY,
         endpoint: 'https://api.groq.com/openai/v1',
         model: String(process.env.GROQ_MODEL || 'llama-3.3-70b-versatile').trim(),
         isAvailable: Boolean(String(process.env.GROQ_API_KEY || '').trim()),
+      },
+      {
+        name: 'Gemini',
+        key: process.env.GEMINI_API_KEY,
+        endpoint: 'https://generativelanguage.googleapis.com/v1beta/models',
+        model: String(process.env.GEMINI_MODEL || 'gemini-2.0-flash').trim(),
+        isAvailable: Boolean(String(process.env.GEMINI_API_KEY || '').trim()),
       },
       {
         name: 'OpenRouter',
@@ -315,28 +316,41 @@ export class AIProviderChain {
       body.systemInstruction = { parts: [{ text: options.system }] }
     }
 
-    const response = await fetch(
-      `${provider.endpoint}/${provider.model}:generateContent?key=${key}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+    let lastError: Error | null = null
+    const models = geminiModelCandidates()
+
+    for (const model of models) {
+      try {
+        const response = await fetch(`${geminiGenerateContentUrl(model)}?key=${key}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        })
+
+        const data = await response.json().catch(() => ({}))
+        if (!response.ok) {
+          const msg = data?.error?.message || JSON.stringify(data)
+          throw new Error(`Gemini error ${response.status}: ${msg}`)
+        }
+
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text
+        if (typeof text !== 'string' || !text.trim()) {
+          throw new Error('Gemini returned an empty response')
+        }
+
+        return { text, provider: 'gemini', model }
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error))
+        const retryable =
+          lastError.message.includes('404') ||
+          lastError.message.includes('not found') ||
+          lastError.message.includes('not supported')
+        if (!retryable) throw lastError
+        log.warn('Gemini model unavailable, trying next', { model, message: lastError.message })
       }
-    )
-
-    const data = await response.json().catch(() => ({}))
-    if (!response.ok) {
-      throw new Error(
-        `Gemini error ${response.status}: ${data?.error?.message || JSON.stringify(data)}`
-      )
     }
 
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text
-    if (typeof text !== 'string' || !text.trim()) {
-      throw new Error('Gemini returned an empty response')
-    }
-
-    return { text, provider: 'gemini', model: provider.model }
+    throw lastError || new Error('Gemini: all model candidates failed')
   }
 
   private async callGroq(

@@ -224,6 +224,11 @@ export const POST = withErrorHandler(async (request) => {
 
   const schoolId = auth.user?.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const { checkStudentCap } = await import('@/lib/middleware/individual-gate')
+  const capCheck = await checkStudentCap(schoolId)
+  if (!capCheck.allowed) return capCheck.response
+
   const db = getTenantClient(schoolId)
 
   const result = await db.$transaction(async (tx) => {

@@ -99,7 +99,7 @@ The `admin` role uses the same sidebar and capabilities as headteacher.
 | Plan     | Price (ZMW/month) | Limits                              |
 | -------- | ----------------- | ----------------------------------- |
 | Trial    | Free (2 months)   | Full access during trial            |
-| Basic    | K500              | Up to 300 students                  |
+| Basic    | K500              | Up to 500 students                  |
 | Standard | K800              | Up to 800 students, analytics + SMS |
 | Premium  | K1,200            | Unlimited students, all features    |
 

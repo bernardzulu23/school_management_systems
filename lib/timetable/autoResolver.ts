@@ -18,9 +18,32 @@ function conflictPriority(type: string): number {
   return 2
 }
 
+function buildConflictRows(conflictMap: Map<string, { type: string }[]>) {
+  const rows: { assignmentId: string; conflict: { type: string } }[] = []
+  for (const [assignmentId, list] of conflictMap.entries()) {
+    for (const c of filterClassCentricConflicts(list)) {
+      rows.push({ assignmentId, conflict: c })
+    }
+  }
+  rows.sort((a, b) => conflictPriority(a.conflict.type) - conflictPriority(b.conflict.type))
+  return rows
+}
+
+function detectorFor(
+  assignments: Assignment[],
+  timeSlots?: TimeSlot[],
+  seasonMode?: 'normal' | 'planting' | 'harvest'
+) {
+  return new CollisionDetector({
+    assignments,
+    timeSlots,
+    seasonMode: seasonMode || 'normal',
+  })
+}
+
 /**
  * Iteratively moves conflicting lessons to free slots (same day, then any day, then swap).
- * Does not invoke full timetable regeneration.
+ * Rebuilds the collision detector after each applied suggestion so later moves see updated state.
  */
 export function autoResolveConflicts(opts: {
   assignments: Assignment[]
@@ -37,32 +60,19 @@ export function autoResolveConflicts(opts: {
   let stalePasses = 0
 
   for (let pass = 0; pass < MAX_PASSES; pass++) {
-    const detector = new CollisionDetector({
-      assignments: current,
-      timeSlots: opts.timeSlots,
-      seasonMode: opts.seasonMode || 'normal',
-    })
-    const conflictMap = detector.detectAllConflicts()
+    const snapshot = detectorFor(current, opts.timeSlots, opts.seasonMode)
+    const conflictMap = snapshot.detectAllConflicts()
     const remaining = countUniqueConflicts(conflictMap)
     if (remaining === 0) break
 
-    const rows: { assignmentId: string; conflict: { type: string } }[] = []
-    for (const [assignmentId, list] of conflictMap.entries()) {
-      for (const c of filterClassCentricConflicts(list)) {
-        rows.push({ assignmentId, conflict: c })
-      }
-    }
-    rows.sort((a, b) => conflictPriority(a.conflict.type) - conflictPriority(b.conflict.type))
-
+    const rows = buildConflictRows(conflictMap)
     let progress = false
-    for (const { assignmentId, conflict } of rows) {
-      const fresh = new CollisionDetector({
-        assignments: current,
-        timeSlots: opts.timeSlots,
-        seasonMode: opts.seasonMode || 'normal',
-      })
+
+    for (const { conflict } of rows) {
+      const fresh = detectorFor(current, opts.timeSlots, opts.seasonMode)
       const suggestions = fresh.suggestAlternatives(conflict as any)
       if (!suggestions.length) continue
+
       const best = suggestions.sort((a, b) => b.costReduction - a.costReduction)[0]
       current = best.apply()
       resolvedCount++
@@ -78,11 +88,7 @@ export function autoResolveConflicts(opts: {
     }
   }
 
-  const final = new CollisionDetector({
-    assignments: current,
-    timeSlots: opts.timeSlots,
-    seasonMode: opts.seasonMode || 'normal',
-  })
+  const final = detectorFor(current, opts.timeSlots, opts.seasonMode)
 
   return {
     assignments: current,

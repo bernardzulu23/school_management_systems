@@ -3,7 +3,7 @@ const { version: appVersion } = require('./package.json')
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Keep dev-only formatters out of the server bundle if a dependency imports them
-  serverExternalPackages: ['prettier'],
+  serverExternalPackages: ['prettier', 'resend'],
 
   transpilePackages: ['monaco-editor', '@monaco-editor/react'],
 

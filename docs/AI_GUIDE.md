@@ -1,6 +1,6 @@
 # ZSMS AI Guide
 
-All AI features use **Groq** (free tier) via the **Vercel AI SDK** (`ai` + `@ai-sdk/groq`), with automatic fallback to **Gemini** and **OpenRouter** when keys are set (`lib/ai/provider-fallback.ts`, `lib/ai/orchestrator.ts`).
+All AI features use **Groq** (free tier) via the **Vercel AI SDK** (`ai` + `@ai-sdk/groq`), with automatic **multi-stage fallback** through `lib/ai/provider-fallback.ts`: **Groq → Gemini → OpenRouter → OpenAI → HuggingFace**. Quiz maker and other structured routes use Groq `generateObject` first, then the full chain with JSON parsing (`lib/ai/client.js`).
 
 ## Cost
 
@@ -11,7 +11,7 @@ All AI features use **Groq** (free tier) via the **Vercel AI SDK** (`ai` + `@ai-
 | Groq API         | Free up to ~14,400 requests/day on free tier           |
 | Default model    | `llama-3.3-70b-versatile` (override with `GROQ_MODEL`) |
 
-Set `GROQ_API_KEY` (and optionally `GEMINI_API_KEY`, `OPENROUTER_API_KEY`) in `.env` / Vercel.
+Set `GROQ_API_KEY` (and optionally `GEMINI_API_KEY`, `OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `HUGGINGFACE_API_KEY`) in `.env` / Vercel. Default Gemini model is `gemini-2.0-flash` (override with `GEMINI_MODEL`).
 
 ## Architecture
 
@@ -40,7 +40,7 @@ Zod still validates the parsed object on our side. If you see a `json_schema` er
 
 | Feature                  | Route / module                    | Mode                                                                           | Schema                   |
 | ------------------------ | --------------------------------- | ------------------------------------------------------------------------------ | ------------------------ |
-| Lesson planner (stream)  | `POST /api/ai/lesson-planner`     | Stream prose via `aiChain` (Gemini → Groq → OpenRouter → OpenAI → HuggingFace) | —                        |
+| Lesson planner (stream)  | `POST /api/ai/lesson-planner`     | Stream prose via `aiChain` (Groq → Gemini → OpenRouter → OpenAI → HuggingFace) | —                        |
 | Professional lesson plan | `POST /api/lesson-plans/generate` | Structured (default)                                                           | `LessonPlanSchema`       |
 | Ministry plain-text plan | Same route, `format=ministry`     | Text                                                                           | —                        |
 | Quiz maker               | `POST /api/ai/quiz-maker`         | Structured                                                                     | `QuizSchema`             |

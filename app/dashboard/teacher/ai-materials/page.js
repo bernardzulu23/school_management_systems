@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'react-hot-toast'
+import { apiSessionFetch } from '@/lib/auth/apiFetch'
 import {
   ArrowLeft,
   Brain,
@@ -70,7 +71,7 @@ export default function AiMaterialsPage() {
 
   useEffect(() => {
     let cancelled = false
-    fetch('/api/materials/blob-upload', { credentials: 'include' })
+    apiSessionFetch('/api/materials/blob-upload')
       .then((r) => r.json())
       .then((j) => {
         if (!cancelled) setBlobEnabled(Boolean(j?.enabled))
@@ -83,7 +84,7 @@ export default function AiMaterialsPage() {
 
   useEffect(() => {
     let cancelled = false
-    fetch('/api/teaching-assignments', { credentials: 'include' })
+    apiSessionFetch('/api/teaching-assignments')
       .then((r) => r.json())
       .then((json) => {
         if (cancelled) return
@@ -108,7 +109,7 @@ export default function AiMaterialsPage() {
   const loadMaterials = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/materials', { credentials: 'include' })
+      const res = await apiSessionFetch('/api/materials')
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json?.message || json?.error || 'Failed to load materials')
       setMaterials(Array.isArray(json?.data) ? json.data : [])
@@ -203,9 +204,8 @@ export default function AiMaterialsPage() {
           access: 'public',
           handleUploadUrl: '/api/materials/blob-upload',
         })
-        const res = await fetch('/api/materials/ingest', {
+        const res = await apiSessionFetch('/api/materials/ingest', {
           method: 'POST',
-          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
             ...(csrf ? { 'x-csrf-token': csrf } : {}),
@@ -229,9 +229,8 @@ export default function AiMaterialsPage() {
         if (form.gradeLevel) body.append('gradeLevel', form.gradeLevel)
         body.append('fileUrl', form.file.name)
 
-        const res = await fetch('/api/materials/ingest', {
+        const res = await apiSessionFetch('/api/materials/ingest', {
           method: 'POST',
-          credentials: 'include',
           headers: csrf ? { 'x-csrf-token': csrf } : {},
           body,
         })
@@ -261,9 +260,8 @@ export default function AiMaterialsPage() {
     if (!ok) return
     try {
       const csrf = await getCsrfToken()
-      const res = await fetch(`/api/materials/${encodeURIComponent(material.id)}`, {
+      const res = await apiSessionFetch(`/api/materials/${encodeURIComponent(material.id)}`, {
         method: 'DELETE',
-        credentials: 'include',
         headers: csrf ? { 'x-csrf-token': csrf } : {},
       })
       const json = await res.json().catch(() => ({}))

@@ -17,7 +17,7 @@ export interface ConflictDisplayProps {
   suggestionsByAssignmentId?: (assignmentId: string) => Suggestion[]
   onApplySuggestion?: (suggestion: Suggestion) => void
   onUndo?: () => void
-  onResolveAll?: (suggestions: Suggestion[]) => void
+  onResolveAll?: () => void
   onHoverAssignmentId?: (assignmentId: string | null) => void
 }
 
@@ -87,22 +87,6 @@ export function ConflictDisplay(props: ConflictDisplayProps) {
   }, [rows])
 
   const total = rows.length
-  const resolveAllSuggestions = useMemo(() => {
-    if (!suggestionsByAssignmentId) return []
-    const all: Suggestion[] = []
-    const seen = new Set<string>()
-    for (const [assignmentId] of conflicts.entries()) {
-      const list = suggestionsByAssignmentId(String(assignmentId)) || []
-      for (const s of list) {
-        const key = `${assignmentId}|${s.title}`
-        if (seen.has(key)) continue
-        seen.add(key)
-        all.push(s)
-        break
-      }
-    }
-    return all
-  }, [conflicts, suggestionsByAssignmentId])
 
   const useVirtual = total >= 50
   const [scrollTop, setScrollTop] = useState(0)
@@ -138,7 +122,7 @@ export function ConflictDisplay(props: ConflictDisplayProps) {
             Undo
           </Button>
           <Button
-            onClick={() => onResolveAll?.(resolveAllSuggestions)}
+            onClick={() => onResolveAll?.()}
             disabled={!onResolveAll || total === 0}
             className="zsms-hover-raise"
           >

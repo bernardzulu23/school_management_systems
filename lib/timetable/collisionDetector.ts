@@ -15,6 +15,7 @@ import type {
 } from './types'
 import { TIMETABLE_CLASS_CENTRIC } from './classCentric'
 import { assignmentsShareSlot, teacherClassSameDayConflict } from './constraintCheck'
+import { rankTeachingSlots } from './slotScoring'
 
 export interface WorkloadStatus {
   status: 'ok' | 'warning' | 'overload'
@@ -665,71 +666,51 @@ export class CollisionDetector {
 
   private suggestMoveToFreeSlot(base: Assignment): Suggestion | null {
     if (!Array.isArray(this.timeSlots) || this.timeSlots.length === 0) return null
-    const sameDaySlots = this.timeSlots
-      .filter((s) => s.dayOfWeek === base.dayOfWeek && !s.isBreak)
-      .sort((a, b) => toMinutes(a.startTime) - toMinutes(b.startTime))
+    const classAssignments = this.byClass.get(String(base.classId)) || []
+    const sameDaySlots = rankTeachingSlots(
+      this.timeSlots.filter((s) => s.dayOfWeek === base.dayOfWeek),
+      base,
+      classAssignments,
+      { penalizeSameDay: false, excludeSameSlot: true }
+    )
 
-    const candidate = sameDaySlots.find((slot) => {
+    for (const candidate of sameDaySlots) {
       const whatIf: Assignment = {
         ...base,
-        startTime: slot.startTime,
-        endTime: slot.endTime,
-        period: slot.period,
-        isBreak: slot.isBreak,
+        startTime: candidate.startTime,
+        endTime: candidate.endTime,
+        period: candidate.period,
+        isBreak: candidate.isBreak,
       }
-      return this.validateAssignment(whatIf).length === 0
-    })
+      if (this.validateAssignment(whatIf).length !== 0) continue
 
-    if (!candidate) return null
-    const previewAssignment: Assignment = {
-      ...base,
-      startTime: candidate.startTime,
-      endTime: candidate.endTime,
-      period: candidate.period,
-      isBreak: candidate.isBreak,
-    }
-    const preview = this.assignments.map((a) => (a.id === base.id ? previewAssignment : a))
+      const previewAssignment: Assignment = { ...whatIf }
+      const preview = this.assignments.map((a) => (a.id === base.id ? previewAssignment : a))
 
-    return {
-      title: `Move to ${String(base.dayOfWeek)} ${candidate.startTime}`,
-      description: 'Moves the lesson to an available slot on the same day.',
-      reason: 'Minimizes disruption while resolving the conflict.',
-      costReduction: 50,
-      impactedAssignments: 1,
-      preview,
-      apply: () => preview,
+      return {
+        title: `Move to ${String(base.dayOfWeek)} period ${candidate.period}`,
+        description: 'Moves the lesson to an available slot on the same day.',
+        reason: 'Minimizes disruption while resolving the conflict.',
+        costReduction: 50,
+        impactedAssignments: 1,
+        preview,
+        apply: () => preview,
+      }
     }
+
+    return null
   }
 
   /** Search all days/periods for a conflict-free slot (Zambian auto-resolve). */
   suggestMoveToAnyFreeSlot(base: Assignment): Suggestion | null {
     if (!Array.isArray(this.timeSlots) || this.timeSlots.length === 0) return null
-    const dayRank: Record<string, number> = {
-      monday: 1,
-      tuesday: 2,
-      wednesday: 3,
-      thursday: 4,
-      friday: 5,
-      saturday: 6,
-      sunday: 7,
-    }
-    const teachingSlots = this.timeSlots
-      .filter((s) => !s.isBreak)
-      .sort((a, b) => {
-        const da = dayRank[String(a.dayOfWeek).toLowerCase()] || 99
-        const db = dayRank[String(b.dayOfWeek).toLowerCase()] || 99
-        if (da !== db) return da - db
-        return toMinutes(a.startTime) - toMinutes(b.startTime)
-      })
+    const classAssignments = this.byClass.get(String(base.classId)) || []
+    const teachingSlots = rankTeachingSlots(this.timeSlots, base, classAssignments, {
+      penalizeSameDay: true,
+      excludeSameSlot: true,
+    })
 
     for (const slot of teachingSlots) {
-      if (
-        slot.dayOfWeek === base.dayOfWeek &&
-        slot.startTime === base.startTime &&
-        slot.endTime === base.endTime
-      ) {
-        continue
-      }
       const whatIf: Assignment = {
         ...base,
         dayOfWeek: slot.dayOfWeek,
@@ -744,7 +725,7 @@ export class CollisionDetector {
       return {
         title: `Move to ${String(slot.dayOfWeek)} period ${slot.period}`,
         description: 'Moves the lesson to a free slot on another day or period.',
-        reason: 'Resolves grade or teacher double-booking without full regeneration.',
+        reason: 'Resolves double-booking with better weekly distribution.',
         costReduction: 40,
         impactedAssignments: 1,
         preview,

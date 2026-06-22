@@ -12,6 +12,7 @@ import ProviderLogos, { ProviderLogoImage } from '@/components/payments/Provider
 import { Eye, EyeOff } from 'lucide-react'
 import { ProvinceDistrictFields } from '@/components/onboarding/ProvinceDistrictFields'
 import { TRIAL_MONTHS } from '@/lib/billing/subscription'
+import { PLAN_DESCRIPTIONS } from '@/lib/billing/plan-pricing'
 import { evaluatePassword } from '@/lib/security/passwordValidate'
 import PasswordRequirements from '@/components/ui/PasswordRequirements'
 
@@ -597,7 +598,7 @@ function OnboardingPageContent() {
                     <span className="plan-price">K500</span>{' '}
                     <span className="plan-price-sub">/ month</span>
                   </div>
-                  <div className="plan-desc">Up to 300 students · Core modules</div>
+                  <div className="plan-desc">{PLAN_DESCRIPTIONS.basic}</div>
                 </button>
 
                 <button
@@ -613,7 +614,7 @@ function OnboardingPageContent() {
                     <span className="plan-price">K800</span>{' '}
                     <span className="plan-price-sub">/ month</span>
                   </div>
-                  <div className="plan-desc">Up to 800 students · Analytics + SMS</div>
+                  <div className="plan-desc">{PLAN_DESCRIPTIONS.standard}</div>
                 </button>
 
                 <button
@@ -626,7 +627,7 @@ function OnboardingPageContent() {
                     <span className="plan-price">K1200</span>{' '}
                     <span className="plan-price-sub">/ month</span>
                   </div>
-                  <div className="plan-desc">Unlimited · All features + priority support</div>
+                  <div className="plan-desc">{PLAN_DESCRIPTIONS.premium}</div>
                 </button>
               </div>
 

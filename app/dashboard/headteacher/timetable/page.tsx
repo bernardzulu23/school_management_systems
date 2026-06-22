@@ -709,7 +709,7 @@ function HeadteacherTimetablePageContent() {
     }
   }
 
-  const onResolveAll = (_sugs?: any[]) => {
+  const onResolveAll = () => {
     try {
       const before = useTimetableStore.getState().getConflictCount()
       if (before === 0) return

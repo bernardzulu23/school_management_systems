@@ -71,6 +71,7 @@
     "seed:timeslots:docker": "docker compose exec -T web npm run seed:timeslots",
     "export:users": "node scripts/export-users-excel.js",
     "docs:api-routes": "node scripts/generate-api-routes-doc.js",
+    "audit:api-paths": "node scripts/audit-api-paths.js",
     "audit:tenant": "node scripts/audit-tenant-isolation.mjs"
   },
   "lint-staged": {
@@ -93,6 +94,7 @@
     "@prisma/adapter-neon": "^6.19.3",
     "@prisma/adapter-pg": "6.19.3",
     "@prisma/client": "6.19.3",
+    "@react-email/render": "^2.0.9",
     "@sentry/nextjs": "^10.54.0",
     "@tanstack/react-query": "^4.35.0",
     "@upstash/qstash": "^2.11.0",

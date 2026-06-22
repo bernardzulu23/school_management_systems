@@ -22,6 +22,7 @@ import { SyncStatusBadge } from '@/components/attendance/SyncStatusBadge'
 import { attendanceStore } from '@/lib/offline/attendance-store'
 import { useOfflineSync } from '@/lib/offline/use-sync'
 import { useAuth } from '@/lib/auth'
+import { apiSessionFetch } from '@/lib/auth/apiFetch'
 
 export default function AttendancePage() {
   const [selectedClass, setSelectedClass] = useState('')
@@ -41,7 +42,7 @@ export default function AttendancePage() {
   useEffect(() => {
     const loadAssignments = async () => {
       try {
-        const res = await fetch('/api/teaching-assignments', { credentials: 'include' })
+        const res = await apiSessionFetch('/api/teaching-assignments')
         const json = await res.json().catch(() => ({}))
         setTeachingAssignments(Array.isArray(json?.data) ? json.data : [])
       } catch {
@@ -74,11 +75,8 @@ export default function AttendancePage() {
   const loadStudents = useCallback(async () => {
     if (!selectedClass) return []
     try {
-      const res = await fetch(
-        `/api/classes/students?classId=${encodeURIComponent(selectedClass)}`,
-        {
-          credentials: 'include',
-        }
+      const res = await apiSessionFetch(
+        `/api/classes/students?classId=${encodeURIComponent(selectedClass)}`
       )
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json.error || 'Failed to load students')
@@ -119,7 +117,7 @@ export default function AttendancePage() {
       params.set('classId', selectedClass)
       params.set('date', selectedDate)
       if (selectedSubjectId) params.set('subjectId', selectedSubjectId)
-      const res = await fetch(`/api/attendance?${params.toString()}`, { credentials: 'include' })
+      const res = await apiSessionFetch(`/api/attendance?${params.toString()}`)
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json.error || 'Failed to load attendance')
       setSessionSummary(Array.isArray(json?.sessions) ? json.sessions : [])
@@ -188,10 +186,9 @@ export default function AttendancePage() {
         return { offline: true }
       }
 
-      const res = await fetch('/api/attendance', {
+      const res = await apiSessionFetch('/api/attendance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({
           date: selectedDate,
           classId: selectedClass,
