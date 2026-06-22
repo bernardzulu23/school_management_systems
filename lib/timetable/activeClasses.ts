@@ -103,16 +103,6 @@ export function attachAssignmentCounts<T extends ClassLike>(
 }
 
 /**
- * Class wall / master grid — only rows with ≥1 timetable assignment (deduped labels).
- */
-export function filterClassesForWallGrid<T extends ClassLike>(
-  classes: T[],
-  assignments: Assignment[] = []
-): Array<T & { assignmentCount: number }> {
-  return filterClassesForTimetablePicker(classes, assignments)
-}
-
-/**
  * Timetable class tabs — only classes with ≥1 assignment (by id or normalized name).
  */
 export function filterClassesForTimetablePicker<T extends ClassLike>(
@@ -132,6 +122,16 @@ export function filterClassesForTimetablePicker<T extends ClassLike>(
   return dedupeClassesByLabel(
     merged.filter((c) => c.isActive !== false && Number(c.assignmentCount) > 0)
   )
+}
+
+/**
+ * Class wall / master grid — only rows with ≥1 timetable assignment (deduped labels).
+ */
+export function filterClassesForWallGrid<T extends ClassLike>(
+  classes: T[],
+  assignments: Assignment[] = []
+): Array<T & { assignmentCount: number }> {
+  return filterClassesForTimetablePicker(classes, assignments)
 }
 
 /**

@@ -112,6 +112,12 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
     return m
   }, [teachers])
 
+  const filteredAssignments = useMemo(() => {
+    return (assignments || []).filter(
+      (a) => a && (!a.season || a.season === season || season === 'normal')
+    )
+  }, [assignments, season])
+
   const sortedClasses = useMemo(() => {
     const byId = new Set<string>()
     const byLabel = new Set<string>()
@@ -150,12 +156,6 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
     const src = (timeSlots?.length ? timeSlots : storeTimeSlots) as TimeSlot[]
     return uniqueBellRows(src)
   }, [timeSlots, storeTimeSlots])
-
-  const filteredAssignments = useMemo(() => {
-    return (assignments || []).filter(
-      (a) => a && (!a.season || a.season === season || season === 'normal')
-    )
-  }, [assignments, season])
 
   const assignmentsByClass = useMemo(() => {
     const map = new Map<string, Assignment[]>()
