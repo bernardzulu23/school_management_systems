@@ -12,7 +12,7 @@ import ProviderLogos, { ProviderLogoImage } from '@/components/payments/Provider
 import { Eye, EyeOff } from 'lucide-react'
 import { ProvinceDistrictFields } from '@/components/onboarding/ProvinceDistrictFields'
 import { TRIAL_MONTHS } from '@/lib/billing/subscription'
-import { PLAN_DESCRIPTIONS } from '@/lib/billing/plan-pricing'
+import { PLAN_DESCRIPTIONS, PLAN_PRICING, getPlanMonthlyPrice } from '@/lib/billing/plan-pricing'
 import { evaluatePassword } from '@/lib/security/passwordValidate'
 import PasswordRequirements from '@/components/ui/PasswordRequirements'
 
@@ -365,7 +365,7 @@ function OnboardingPageContent() {
     (verified && registrationPlanIsTrial) ||
     paymentStatus === 'paid'
   const paymentPending = paymentStatus === 'pending' && !registrationPlanIsTrial
-  const monthlyPrice = plan === 'basic' ? 500 : plan === 'premium' ? 1200 : 800
+  const monthlyPrice = getPlanMonthlyPrice(plan) ?? PLAN_PRICING.standard
 
   useEffect(() => {
     if (paymentStatus === 'paid' && paymentAwaitingPin) {
@@ -595,7 +595,7 @@ function OnboardingPageContent() {
                 >
                   <div className="plan-name">Basic</div>
                   <div>
-                    <span className="plan-price">K500</span>{' '}
+                    <span className="plan-price">K{PLAN_PRICING.basic}</span>{' '}
                     <span className="plan-price-sub">/ month</span>
                   </div>
                   <div className="plan-desc">{PLAN_DESCRIPTIONS.basic}</div>
@@ -611,7 +611,7 @@ function OnboardingPageContent() {
                     <span className="plan-badge">Most popular</span>
                   </div>
                   <div>
-                    <span className="plan-price">K800</span>{' '}
+                    <span className="plan-price">K{PLAN_PRICING.standard}</span>{' '}
                     <span className="plan-price-sub">/ month</span>
                   </div>
                   <div className="plan-desc">{PLAN_DESCRIPTIONS.standard}</div>
@@ -624,7 +624,7 @@ function OnboardingPageContent() {
                 >
                   <div className="plan-name">Premium</div>
                   <div>
-                    <span className="plan-price">K1200</span>{' '}
+                    <span className="plan-price">K{PLAN_PRICING.premium}</span>{' '}
                     <span className="plan-price-sub">/ month</span>
                   </div>
                   <div className="plan-desc">{PLAN_DESCRIPTIONS.premium}</div>

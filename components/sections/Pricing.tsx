@@ -54,7 +54,7 @@ const plans = [
   },
   {
     name: 'Premium',
-    price: 'K1200',
+    price: 'K10',
     period: '/month',
     description: 'Unlimited for large schools',
     features: [
