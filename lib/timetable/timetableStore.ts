@@ -73,7 +73,10 @@ export interface TimetableStoreState {
     assignments?: Assignment[]
     whatIf?: boolean
   }) => Map<string, Conflict[]>
-  suggestResolutions: (assignmentId: Assignment['id']) => Suggestion[]
+  suggestResolutions: (
+    assignmentId: Assignment['id'],
+    opts?: { timeSlots?: BellScheduleSlot[] }
+  ) => Suggestion[]
   undo: () => void
   redo: () => void
   publish: () => void
@@ -87,6 +90,12 @@ export interface TimetableStoreState {
   optimizeWorkload: () => void
   autoResolveConflicts: () => { resolvedCount: number; remainingConflicts: number }
   loadFromApi: (opts?: { term?: string; academicYear?: string; status?: string }) => Promise<void>
+  /** Reload bell schedule + draft from API and refresh local conflict map. */
+  reloadFromServer: (opts?: {
+    term?: string
+    academicYear?: string
+    status?: string
+  }) => Promise<void>
   loadBellSchedule: () => Promise<BellScheduleSlot[]>
   setTimeSlots: (slots: BellScheduleSlot[]) => void
   setTeacherColors: (colors: Record<string, { colorHex: string; colorName?: string }>) => void
@@ -126,7 +135,16 @@ function safeArray<T>(value: unknown): T[] {
 }
 
 function normalizeAssignments(value: unknown): Assignment[] {
-  return safeArray<Assignment>(value).filter(Boolean)
+  const raw = safeArray<Assignment>(value).filter(Boolean)
+  const seen = new Set<string>()
+  const out: Assignment[] = []
+  for (const a of raw) {
+    const id = String(a.id || '')
+    if (!id || seen.has(id)) continue
+    seen.add(id)
+    out.push(a)
+  }
+  return out
 }
 
 function normalizeRouteList(value: unknown): TravelingTeacherRoute[] {
@@ -338,19 +356,44 @@ export const useTimetableStore = create<TimetableStoreState>()(
           return result
         },
 
-        suggestResolutions: (assignmentId) => {
+        suggestResolutions: (assignmentId, opts) => {
           try {
             const s = get()
+            const slots =
+              opts?.timeSlots && opts.timeSlots.length > 0 ? opts.timeSlots : s.timeSlots
+            if (!slots.length) return []
+
             const conflicts = s.conflicts.get(String(assignmentId)) || []
             if (conflicts.length === 0) return []
-            const engine = new SuggestionEngine({
+
+            const detector = new CollisionDetector({
               assignments: s.assignments,
-              timeSlots: s.timeSlots,
+              timeSlots: slots,
               travelingTeacherRoutes: s.travelingTeacherRoutes,
               seasonMode: s.currentSeason,
             })
-            return engine
-              .suggestBestSolutionsForAssignment(String(assignmentId), conflicts)
+
+            const generated: Suggestion[] = []
+            for (const c of conflicts) {
+              generated.push(...detector.suggestAlternatives(c))
+            }
+
+            if (generated.length === 0) {
+              const engine = new SuggestionEngine({
+                assignments: s.assignments,
+                timeSlots: slots,
+                travelingTeacherRoutes: s.travelingTeacherRoutes,
+                seasonMode: s.currentSeason,
+              })
+              return engine
+                .suggestBestSolutionsForAssignment(String(assignmentId), conflicts)
+                .slice(0, 3)
+            }
+
+            const unique = new Map<string, Suggestion>()
+            for (const sug of generated) unique.set(`${sug.title}|${sug.impactedAssignments}`, sug)
+            return [...unique.values()]
+              .sort((a, b) => b.costReduction - a.costReduction)
               .slice(0, 3)
           } catch {
             return []
@@ -497,9 +540,10 @@ export const useTimetableStore = create<TimetableStoreState>()(
         autoResolveConflicts: () => {
           pushSnapshot()
           const s = get()
+          const slots = s.timeSlots
           const result = runAutoResolve({
             assignments: s.assignments,
-            timeSlots: s.timeSlots,
+            timeSlots: slots,
             seasonMode: s.currentSeason,
           })
           set({
@@ -536,7 +580,9 @@ export const useTimetableStore = create<TimetableStoreState>()(
             const res = await sessionFetch(`/api/timetable/view?${qs}`, { cache: 'no-store' })
             if (!res.ok) throw new Error('Failed to fetch timetable')
             const data = await res.json()
-            const assignments = Array.isArray(data.assignments) ? data.assignments : []
+            const assignments = normalizeAssignments(
+              Array.isArray(data.assignments) ? data.assignments : []
+            )
 
             const normalized = normalizeTimetableConfig(data?.config)
             const resolved = resolveSchoolTimeSlots(
@@ -545,6 +591,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
             )
             const slots = normalizeApiTimeSlots(resolved)
             const aligned = alignAssignmentsToBellRows(assignments, slots)
+            const conflicts = detect(aligned)
             set({
               assignments: aligned,
               timeSlots: slots.length ? slots : get().timeSlots,
@@ -552,15 +599,30 @@ export const useTimetableStore = create<TimetableStoreState>()(
                 data?.teacherColors && typeof data.teacherColors === 'object'
                   ? data.teacherColors
                   : get().teacherColors,
-              conflicts: detect(aligned),
+              conflicts,
               isPublished: status === 'published',
               lastPublishedAt: status === 'published' ? new Date() : null,
+              pendingChanges: status === 'published' ? [] : get().pendingChanges,
             })
             return data
           } catch (err) {
             console.error('[timetableStore loadFromApi]', err)
             return null
           }
+        },
+
+        reloadFromServer: async (opts = {}) => {
+          const {
+            term = 'Term 1',
+            academicYear = new Date().getFullYear().toString(),
+            status = 'draft',
+          } = opts
+          await get().loadBellSchedule()
+          await get().loadFromApi({ term, academicYear, status })
+          if (status === 'draft' && get().assignments.length === 0) {
+            await get().loadFromApi({ term, academicYear, status: 'published' })
+          }
+          get().detectConflicts()
         },
 
         getConflictCount: () => countUniqueConflicts(get().conflicts),
@@ -585,6 +647,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
           try {
             const detector = new CollisionDetector({
               assignments: get().assignments,
+              timeSlots: get().timeSlots,
               travelingTeacherRoutes: get().travelingTeacherRoutes,
               seasonMode: get().currentSeason,
             })

@@ -47,9 +47,15 @@ export function scoreMoveSlot(opts: ScoreSlotOptions): number {
   ).length
   const loadPenalty = dayLoad * 20
 
+  const periodNum = Number(slot.period) || 0
+  const earlyPeriodPenalty = periodNum === 1 ? 35 : periodNum === 2 ? 12 : 0
+
+  const dayKey = String(slot.dayOfWeek).toLowerCase()
+  const mondayPenalty = dayKey === 'monday' && penalizeSameDay ? 8 : 0
+
   const jitter = randomJitter ? Math.random() * 15 : 0
 
-  return sameDayPenalty + midDayScore + loadPenalty + jitter
+  return sameDayPenalty + midDayScore + loadPenalty + earlyPeriodPenalty + mondayPenalty + jitter
 }
 
 export function compareScoredSlots(

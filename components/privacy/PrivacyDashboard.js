@@ -26,6 +26,9 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
+const PRIVACY_CONTACT_EMAIL = 'bernardzulu23@gmail.com'
+const PRIVACY_CONTACT_PHONE = '+260977934996'
+
 export default function PrivacyDashboard() {
   const { user } = useAuth()
   const [privacySettings, setPrivacySettings] = useState({
@@ -326,14 +329,22 @@ export default function PrivacyDashboard() {
               <div>
                 Email:{' '}
                 <a
-                  href="mailto:dpo@school.edu"
+                  href={`mailto:${PRIVACY_CONTACT_EMAIL}`}
                   className="text-royalPurple-accentTx hover:underline"
                 >
-                  dpo@school.edu
+                  {PRIVACY_CONTACT_EMAIL}
                 </a>
               </div>
-              <div>Phone: +1 (555) 123-4567</div>
-              <div>Office Hours: Monday-Friday, 9:00 AM - 5:00 PM</div>
+              <div>
+                Phone:{' '}
+                <a
+                  href={`tel:${PRIVACY_CONTACT_PHONE.replace(/\s/g, '')}`}
+                  className="text-royalPurple-accentTx hover:underline"
+                >
+                  {PRIVACY_CONTACT_PHONE}
+                </a>
+              </div>
+              <div>Office hours: Monday–Friday, 8:00 AM – 5:00 PM (CAT)</div>
             </div>
           </div>
         </CardContent>
@@ -351,19 +362,34 @@ export default function PrivacyDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <h4 className="font-medium text-royalPurple-text1 mb-2">Privacy Policy</h4>
-              <p className="text-sm text-royalPurple-text2 mb-2">Last updated: January 2024</p>
-              <Button variant="outline" size="sm">
+              <p className="text-sm text-royalPurple-text2 mb-2">Last updated: June 2026</p>
+              <p className="text-sm text-royalPurple-text2 mb-3">
+                ZSMS processes school and personal data to deliver timetabling, attendance, ECZ
+                assessments, and communications. Contact the Data Protection Officer for a copy of
+                the full policy or to exercise your rights.
+              </p>
+              <a
+                href={`mailto:${PRIVACY_CONTACT_EMAIL}?subject=ZSMS%20Privacy%20Policy%20request`}
+                className="inline-flex items-center rounded-lg border border-royalPurple-border px-3 py-1.5 text-sm font-medium text-royalPurple-text1 hover:bg-royalPurple-muted/60"
+              >
                 <FileText className="h-4 w-4 mr-2" />
-                View Policy
-              </Button>
+                Request privacy policy
+              </a>
             </div>
             <div>
               <h4 className="font-medium text-royalPurple-text1 mb-2">Terms of Service</h4>
-              <p className="text-sm text-royalPurple-text2 mb-2">Last updated: January 2024</p>
-              <Button variant="outline" size="sm">
+              <p className="text-sm text-royalPurple-text2 mb-2">Last updated: June 2026</p>
+              <p className="text-sm text-royalPurple-text2 mb-3">
+                Subscription plans, acceptable use, and school data ownership are governed by the
+                ZSMS terms of service. Schools may request the signed terms document by email.
+              </p>
+              <a
+                href={`mailto:${PRIVACY_CONTACT_EMAIL}?subject=ZSMS%20Terms%20of%20Service%20request`}
+                className="inline-flex items-center rounded-lg border border-royalPurple-border px-3 py-1.5 text-sm font-medium text-royalPurple-text1 hover:bg-royalPurple-muted/60"
+              >
                 <Globe className="h-4 w-4 mr-2" />
-                View Terms
-              </Button>
+                Request terms of service
+              </a>
             </div>
           </div>
         </CardContent>

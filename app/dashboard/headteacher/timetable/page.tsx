@@ -212,6 +212,8 @@ function HeadteacherTimetablePageContent() {
   const pendingChanges = useTimetableStore((s) => s.pendingChanges)
   const conflictCount = useTimetableStore((s) => s.getConflictCount)
   const loadFromApi = useTimetableStore((s) => s.loadFromApi)
+  const reloadFromServer = useTimetableStore((s) => s.reloadFromServer)
+  const detectConflicts = useTimetableStore((s) => s.detectConflicts)
   const loadBellSchedule = useTimetableStore((s) => s.loadBellSchedule)
   const autoResolveConflicts = useTimetableStore((s) => s.autoResolveConflicts)
   const setStoreTimeSlots = useTimetableStore((s) => s.setTimeSlots)
@@ -448,6 +450,14 @@ function HeadteacherTimetablePageContent() {
   }, [setStoreTimeSlots, term, academicYear])
 
   useEffect(() => {
+    if (timeSlots.length) setStoreTimeSlots(timeSlots as any)
+  }, [timeSlots, setStoreTimeSlots])
+
+  useEffect(() => {
+    loadLockedPeriodAssignments()
+  }, [loadLockedPeriodAssignments, term, academicYear])
+
+  useEffect(() => {
     loadAllocationNotifications()
     const timer = setInterval(loadAllocationNotifications, 25000)
     return () => clearInterval(timer)
@@ -504,14 +514,18 @@ function HeadteacherTimetablePageContent() {
     const clientConflicts = conflictCount()
     const serverErrors = draftMeta?.conflictErrors ?? 0
     const serverWarnings = draftMeta?.conflictWarnings ?? 0
+    const serverTotal = serverErrors + serverWarnings
     const displayConflicts = draftMetaFresh && draftMeta != null ? serverErrors : clientConflicts
+    const previewDiverged = draftMetaFresh && draftMeta != null && clientConflicts !== serverTotal
     return {
       classCount: visibleClasses.length,
       teacherCount: teachers.length,
       conflicts: displayConflicts,
       serverErrors,
       serverWarnings,
+      serverTotal,
       clientConflicts,
+      previewDiverged,
       published: isPublished,
       pending: pendingChanges.length,
       lastPublished: lastPublishedAt ? lastPublishedAt.toLocaleString() : null,
@@ -579,15 +593,12 @@ function HeadteacherTimetablePageContent() {
 
   useEffect(() => {
     const run = async () => {
-      await loadBellSchedule()
-      await loadLockedPeriodAssignments()
-      await loadFromApi({ term, academicYear, status: 'draft' })
-      if (useTimetableStore.getState().assignments.length === 0) {
-        await loadFromApi({ term, academicYear, status: 'published' })
-      }
+      await reloadFromServer({ term, academicYear, status: 'draft' })
+      const slots = useTimetableStore.getState().timeSlots
+      if (slots.length) setTimeSlots(slots as TimeSlot[])
     }
     run()
-  }, [term, academicYear, loadFromApi, loadBellSchedule, loadLockedPeriodAssignments])
+  }, [term, academicYear, reloadFromServer])
 
   useEffect(() => {
     let cancelled = false
@@ -695,15 +706,22 @@ function HeadteacherTimetablePageContent() {
     }
   }
 
-  const suggestionsByAssignmentId = (assignmentId: string) => {
-    return useTimetableStore.getState().suggestResolutions(assignmentId as any)
-  }
+  const suggestionsByAssignmentId = useCallback(
+    (assignmentId: string) => {
+      const bellSlots = timeSlots.length > 0 ? timeSlots : useTimetableStore.getState().timeSlots
+      return useTimetableStore.getState().suggestResolutions(assignmentId as any, {
+        timeSlots: bellSlots as any,
+      })
+    },
+    [timeSlots]
+  )
 
   const onApplySuggestion = (sug: any) => {
     try {
       const current = useTimetableStore.getState().assignments
-      const next = sug.apply(current)
+      const next = typeof sug.apply === 'function' ? sug.apply(current) : sug.preview
       replaceAssignments(next, { source: 'optimize' })
+      detectConflicts()
       toast.success('Suggestion applied')
     } catch (e: any) {
       toast.error(e?.message || 'Failed to apply suggestion')
@@ -712,9 +730,11 @@ function HeadteacherTimetablePageContent() {
 
   const onResolveAll = () => {
     try {
+      if (timeSlots.length) setStoreTimeSlots(timeSlots as any)
       const before = useTimetableStore.getState().getConflictCount()
       if (before === 0) return
       const result = autoResolveConflicts()
+      detectConflicts()
       if (result.resolvedCount > 0) {
         toast.success(
           `Resolved ${result.resolvedCount} conflict(s)` +
@@ -816,11 +836,12 @@ function HeadteacherTimetablePageContent() {
   const reloadTimetable = async () => {
     setReloadingTimetable(true)
     try {
-      await loadFromApi({ term, academicYear, status: 'draft' })
-      if (useTimetableStore.getState().assignments.length === 0) {
-        await loadFromApi({ term, academicYear, status: 'published' })
-      }
-      toast.success('Timetable reloaded')
+      await reloadFromServer({ term, academicYear, status: 'draft' })
+      const slots = useTimetableStore.getState().timeSlots
+      if (slots.length) setTimeSlots(slots as TimeSlot[])
+      detectConflicts()
+      await refreshDraftMeta(false)
+      toast.success('Timetable reloaded from server')
     } catch (e: any) {
       toast.error(e?.message || 'Reload failed')
     } finally {
@@ -848,7 +869,10 @@ function HeadteacherTimetablePageContent() {
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json?.error || 'Failed to save draft')
       toast.success(`Saved ${json.saved ?? 0} periods to database`)
-      await loadFromApi({ term, academicYear, status: 'draft' })
+      await reloadFromServer({ term, academicYear, status: 'draft' })
+      const slots = useTimetableStore.getState().timeSlots
+      if (slots.length) setTimeSlots(slots as TimeSlot[])
+      detectConflicts()
       await refreshDraftMeta(false)
       notifyTimetableConflictsUpdated()
     } catch (e: any) {
@@ -918,7 +942,10 @@ function HeadteacherTimetablePageContent() {
         preflightWarnings: json?.preflightWarnings,
       })
       toast.success(`Generated ${Number(json?.generated || 0)} periods — conflict-free`)
-      await loadFromApi({ term, academicYear, status: 'draft' })
+      await reloadFromServer({ term, academicYear, status: 'draft' })
+      const slots = useTimetableStore.getState().timeSlots
+      if (slots.length) setTimeSlots(slots as TimeSlot[])
+      detectConflicts()
       await refreshDraftMeta(true)
       notifyTimetableConflictsUpdated()
       await loadLockedPeriodAssignments()
@@ -981,7 +1008,9 @@ function HeadteacherTimetablePageContent() {
             <Button
               variant="outline"
               onClick={() => {
+                if (timeSlots.length) setStoreTimeSlots(timeSlots as any)
                 const result = autoResolveConflicts()
+                detectConflicts()
                 if (result.resolvedCount > 0) {
                   toast.success(`Auto-fixed ${result.resolvedCount} conflict(s)`)
                 } else if (result.remainingConflicts > 0) {
@@ -1027,6 +1056,7 @@ function HeadteacherTimetablePageContent() {
                     if (!syncRes.ok) {
                       throw new Error(syncJson?.error || 'Save draft to database before publishing')
                     }
+                    await reloadFromServer({ term, academicYear, status: 'draft' })
                   }
                   const r = await sessionFetch('/api/timetable/publish', {
                     method: 'POST',
@@ -1038,7 +1068,10 @@ function HeadteacherTimetablePageContent() {
                   if (!r.ok) throw new Error(j?.message || j?.error || 'Failed to publish')
                   publish()
                   toast.success(`Published ${j.published ?? 0} periods`)
-                  await loadFromApi({ term, academicYear, status: 'published' })
+                  await reloadFromServer({ term, academicYear, status: 'published' })
+                  const slots = useTimetableStore.getState().timeSlots
+                  if (slots.length) setTimeSlots(slots as TimeSlot[])
+                  detectConflicts()
                   await refreshDraftMeta(true)
                   notifyTimetableConflictsUpdated()
                 } catch (e: any) {
@@ -1141,6 +1174,25 @@ function HeadteacherTimetablePageContent() {
           conflictCount={stats.conflicts}
           isPublished={stats.published}
         />
+
+        {stats.previewDiverged ? (
+          <div className="rounded-xl border border-amber-500/50 bg-amber-950/20 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-amber-100">
+              Local preview may differ from saved draft — server reports {stats.serverTotal}{' '}
+              conflict(s), editor shows {stats.clientConflicts}. Click Reload to sync from the
+              database.
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={reloadTimetable}
+              disabled={reloadingTimetable}
+              className="zsms-hover-raise shrink-0"
+            >
+              {reloadingTimetable ? 'Reloading…' : 'Reload'}
+            </Button>
+          </div>
+        ) : null}
 
         <div className="flex justify-end print:hidden">
           <Link

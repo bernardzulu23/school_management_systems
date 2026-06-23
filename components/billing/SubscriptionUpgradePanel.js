@@ -26,6 +26,7 @@ export default function SubscriptionUpgradePanel({
   currentPlan = 'trial',
   planOptions = ['basic', 'standard', 'premium'],
   onPaymentStarted,
+  paymentAwaiting = false,
 }) {
   const defaultPlan = planOptions.includes(String(currentPlan).toLowerCase())
     ? String(currentPlan).toLowerCase()
@@ -67,7 +68,14 @@ export default function SubscriptionUpgradePanel({
         throw new Error(json.error || 'Payment could not be started')
       }
       toast.success(json.message || 'Check your phone and enter your PIN to approve payment.')
-      onPaymentStarted?.(json)
+      onPaymentStarted?.({
+        referenceId: json.referenceId,
+        plan: selectedPlan,
+        provider,
+        accountNumber,
+        months,
+        lipilaStatus: json.lipilaStatus,
+      })
     } catch (e) {
       toast.error(e.message || 'Payment failed')
     } finally {
@@ -172,8 +180,17 @@ export default function SubscriptionUpgradePanel({
           </p>
         ) : null}
 
-        <Button type="button" onClick={startPayment} disabled={paying} className="w-full md:w-auto">
-          {paying ? 'Sending payment request…' : `Pay ${pricing?.label || ''} via mobile money`}
+        <Button
+          type="button"
+          onClick={startPayment}
+          disabled={paying || paymentAwaiting}
+          className="w-full md:w-auto"
+        >
+          {paying
+            ? 'Sending payment request…'
+            : paymentAwaiting
+              ? 'Waiting for payment confirmation…'
+              : `Pay ${pricing?.label || ''} via mobile money`}
         </Button>
       </div>
     </div>
