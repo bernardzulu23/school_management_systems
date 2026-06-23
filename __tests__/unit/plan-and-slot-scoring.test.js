@@ -37,6 +37,7 @@ describe('slotScoring', () => {
     const ranked = rankTeachingSlots(slots, base, [base], {
       penalizeSameDay: true,
       excludeSameSlot: true,
+      randomJitter: false,
     })
     expect(String(ranked[0].dayOfWeek).toLowerCase()).toBe('wednesday')
   })
@@ -48,13 +49,31 @@ describe('slotScoring', () => {
       base,
       classAssignments: [base],
       penalizeSameDay: false,
+      randomJitter: false,
     })
     const mid = scoreMoveSlot({
       slot: mondayOnly[1],
       base,
       classAssignments: [base],
       penalizeSameDay: false,
+      randomJitter: false,
     })
     expect(mid).toBeLessThan(early)
+  })
+
+  it('uses random jitter when enabled', () => {
+    const scores = new Set()
+    for (let i = 0; i < 20; i++) {
+      scores.add(
+        scoreMoveSlot({
+          slot: slots[1],
+          base,
+          classAssignments: [base],
+          penalizeSameDay: false,
+          randomJitter: true,
+        })
+      )
+    }
+    expect(scores.size).toBeGreaterThan(1)
   })
 })

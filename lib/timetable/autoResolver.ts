@@ -1,5 +1,5 @@
 import type { Assignment, TimeSlot, Conflict } from './types'
-import { CollisionDetector } from './collisionDetector'
+import { CollisionDetector, type Suggestion } from './collisionDetector'
 import { countUniqueConflicts, dedupeConflictsFromMap } from './conflictDedupe'
 import { backtrackReassignAssignments } from './solverBacktrackResolve'
 
@@ -26,6 +26,13 @@ function buildConflictRows(conflictMap: Map<string, Conflict[]>) {
     }))
     .filter((row) => row.assignmentId)
     .sort((a, b) => conflictPriority(a.conflict.type) - conflictPriority(b.conflict.type))
+}
+
+function pickBestSuggestion(suggestions: Suggestion[]): Suggestion | null {
+  if (!suggestions.length) return null
+  const spread = suggestions.find((s) => String(s.reason || '').includes('weekly distribution'))
+  if (spread) return spread
+  return [...suggestions].sort((a, b) => b.costReduction - a.costReduction)[0]
 }
 
 function detectorFor(
@@ -77,8 +84,9 @@ export function autoResolveConflicts(opts: {
         const suggestions = fresh.suggestAlternatives(conflict)
         if (!suggestions.length) continue
 
-        const best = suggestions.sort((a, b) => b.costReduction - a.costReduction)[0]
-        current = best.apply()
+        const best = pickBestSuggestion(suggestions)
+        if (!best) continue
+        current = best.apply(current)
         resolvedCount++
         progress = true
         fixedOne = true

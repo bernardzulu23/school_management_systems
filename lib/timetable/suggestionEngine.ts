@@ -9,6 +9,7 @@ import type {
 import { CollisionDetector, type Suggestion } from './collisionDetector'
 import { TIMETABLE_CLASS_CENTRIC } from './classCentric'
 import { rankTeachingSlots } from './slotScoring'
+import { mergeAssignmentMove, mergePreview } from './suggestionApply'
 
 export type { Suggestion } from './collisionDetector'
 
@@ -77,6 +78,7 @@ export class SuggestionEngine {
     const slots = rankTeachingSlots(this.timeSlots, assignment, classAssignments, {
       penalizeSameDay: true,
       excludeSameSlot: true,
+      randomJitter: true,
     })
 
     const out: Suggestion[] = []
@@ -105,7 +107,7 @@ export class SuggestionEngine {
         costReduction: sameDay ? 35 : 50,
         impactedAssignments: estimateImpact(preview, [assignment.id]),
         preview,
-        apply: () => preview,
+        apply: mergeAssignmentMove(this.assignments, assignment.id, candidate),
       })
       if (out.length >= limit) break
     }
@@ -130,7 +132,7 @@ export class SuggestionEngine {
         costReduction: 25,
         impactedAssignments: estimateImpact(preview, [assignment.id]),
         preview,
-        apply: () => preview,
+        apply: mergeAssignmentMove(this.assignments, assignment.id, candidate),
       })
       if (out.length >= 2) break
     }
@@ -157,7 +159,7 @@ export class SuggestionEngine {
         costReduction: 25,
         impactedAssignments: estimateImpact(preview, [assignment.id]),
         preview,
-        apply: () => preview,
+        apply: mergeAssignmentMove(this.assignments, assignment.id, candidate),
       })
       if (out.length >= 2) break
     }
@@ -198,7 +200,7 @@ export class SuggestionEngine {
         costReduction: 35,
         impactedAssignments: estimateImpact(preview, [assignment.id, other.id]),
         preview,
-        apply: () => preview,
+        apply: mergePreview(this.assignments, preview),
       })
       if (out.length >= 1) break
     }

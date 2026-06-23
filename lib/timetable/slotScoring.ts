@@ -10,6 +10,8 @@ const DAY_RANK: Record<string, number> = {
   sunday: 7,
 }
 
+const MID_DAY_MINUTES = 10 * 60
+
 export function slotTimeMinutes(time: string): number {
   const [h, m] = String(time).split(':')
   const hh = Number(h)
@@ -18,27 +20,21 @@ export function slotTimeMinutes(time: string): number {
   return hh * 60 + mm
 }
 
-/** Stable jitter so equal scores do not always pick Monday period 1. */
-function slotJitter(slot: TimeSlot, baseId: string): number {
-  const seed = `${baseId}|${slot.dayOfWeek}|${slot.period}|${slot.startTime}`
-  let h = 0
-  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) % 1000
-  return (h % 150) / 10
-}
-
 export type ScoreSlotOptions = {
   slot: TimeSlot
   base: Assignment
   classAssignments: Assignment[]
   /** When true, prefer moving to a different weekday (any-day moves). */
   penalizeSameDay?: boolean
+  /** Random 0–15 jitter so tied slots do not always pick Monday period 1. */
+  randomJitter?: boolean
 }
 
 /** Lower score = better slot (spread across days, mid-day periods, lighter days). */
 export function scoreMoveSlot(opts: ScoreSlotOptions): number {
-  const { slot, base, classAssignments, penalizeSameDay = true } = opts
+  const { slot, base, classAssignments, penalizeSameDay = true, randomJitter = true } = opts
   const slotMin = slotTimeMinutes(slot.startTime)
-  const midDayScore = Math.abs(slotMin - slotTimeMinutes('10:00'))
+  const midDayScore = Math.abs(slotMin - MID_DAY_MINUTES)
 
   const sameDay = String(slot.dayOfWeek).toLowerCase() === String(base.dayOfWeek).toLowerCase()
   const sameDayPenalty = penalizeSameDay && sameDay ? 50 : 0
@@ -51,23 +47,9 @@ export function scoreMoveSlot(opts: ScoreSlotOptions): number {
   ).length
   const loadPenalty = dayLoad * 20
 
-  const slotTaken = classAssignments.some(
-    (a) =>
-      String(a.id) !== String(base.id) &&
-      !a.isBreak &&
-      String(a.dayOfWeek).toLowerCase() === String(slot.dayOfWeek).toLowerCase() &&
-      a.startTime === slot.startTime &&
-      a.endTime === slot.endTime
-  )
-  const slotTakenPenalty = slotTaken ? 10_000 : 0
+  const jitter = randomJitter ? Math.random() * 15 : 0
 
-  return (
-    sameDayPenalty +
-    midDayScore +
-    loadPenalty +
-    slotTakenPenalty +
-    slotJitter(slot, String(base.id))
-  )
+  return sameDayPenalty + midDayScore + loadPenalty + jitter
 }
 
 export function compareScoredSlots(
@@ -81,14 +63,40 @@ export function compareScoredSlots(
   return a.slot.period - b.slot.period
 }
 
+export type RankTeachingSlotsOptions = {
+  penalizeSameDay?: boolean
+  excludeSameSlot?: boolean
+  randomJitter?: boolean
+}
+
 export function rankTeachingSlots(
   slots: TimeSlot[],
   base: Assignment,
   classAssignments: Assignment[],
-  opts: { penalizeSameDay?: boolean; excludeSameSlot?: boolean } = {}
+  opts: RankTeachingSlotsOptions = {}
 ): TimeSlot[] {
   const penalizeSameDay = opts.penalizeSameDay ?? true
   const excludeSameSlot = opts.excludeSameSlot ?? true
+  const randomJitter = opts.randomJitter ?? true
+
+  return scoreTeachingSlots(slots, base, classAssignments, {
+    penalizeSameDay,
+    excludeSameSlot,
+    randomJitter,
+  })
+    .sort(compareScoredSlots)
+    .map(({ slot }) => slot)
+}
+
+export function scoreTeachingSlots(
+  slots: TimeSlot[],
+  base: Assignment,
+  classAssignments: Assignment[],
+  opts: RankTeachingSlotsOptions = {}
+): Array<{ slot: TimeSlot; score: number }> {
+  const penalizeSameDay = opts.penalizeSameDay ?? true
+  const excludeSameSlot = opts.excludeSameSlot ?? true
+  const randomJitter = opts.randomJitter ?? true
 
   return slots
     .filter((slot) => {
@@ -102,8 +110,6 @@ export function rankTeachingSlots(
     })
     .map((slot) => ({
       slot,
-      score: scoreMoveSlot({ slot, base, classAssignments, penalizeSameDay }),
+      score: scoreMoveSlot({ slot, base, classAssignments, penalizeSameDay, randomJitter }),
     }))
-    .sort(compareScoredSlots)
-    .map(({ slot }) => slot)
 }

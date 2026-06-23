@@ -701,7 +701,8 @@ function HeadteacherTimetablePageContent() {
 
   const onApplySuggestion = (sug: any) => {
     try {
-      const next = sug.apply()
+      const current = useTimetableStore.getState().assignments
+      const next = sug.apply(current)
       replaceAssignments(next, { source: 'optimize' })
       toast.success('Suggestion applied')
     } catch (e: any) {

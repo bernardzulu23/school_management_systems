@@ -16,6 +16,7 @@ import type {
 import { TIMETABLE_CLASS_CENTRIC } from './classCentric'
 import { assignmentsShareSlot, teacherClassSameDayConflict } from './constraintCheck'
 import { rankTeachingSlots } from './slotScoring'
+import { mergeAssignmentMove, mergePreview } from './suggestionApply'
 
 export interface WorkloadStatus {
   status: 'ok' | 'warning' | 'overload'
@@ -31,7 +32,8 @@ export interface Suggestion {
   costReduction: number
   impactedAssignments: number
   preview: Assignment[]
-  apply: () => Assignment[]
+  /** Merge this suggestion onto the latest assignments (pass current state after prior fixes). */
+  apply: (current?: Assignment[]) => Assignment[]
 }
 
 export interface CollisionDetectorOptions {
@@ -446,8 +448,8 @@ export class CollisionDetector {
     const base = this.assignments.find((a) => String(a.id) === String(assignmentId))
     if (!base) return suggestions
 
-    const moveAnyDay = this.suggestMoveToAnyFreeSlot(base)
-    if (moveAnyDay) suggestions.push(moveAnyDay)
+    const moveVariants = this.suggestMoveToAnyFreeSlotVariants(base, 2)
+    suggestions.push(...moveVariants)
 
     const swap = this.suggestSwap(base)
     if (swap) suggestions.push(swap)
@@ -665,15 +667,20 @@ export class CollisionDetector {
   }
 
   private suggestMoveToFreeSlot(base: Assignment): Suggestion | null {
-    if (!Array.isArray(this.timeSlots) || this.timeSlots.length === 0) return null
+    return this.suggestMoveToFreeSlotVariants(base, 1)[0] ?? null
+  }
+
+  private suggestMoveToFreeSlotVariants(base: Assignment, limit = 1): Suggestion[] {
+    if (!Array.isArray(this.timeSlots) || this.timeSlots.length === 0) return []
     const classAssignments = this.byClass.get(String(base.classId)) || []
     const sameDaySlots = rankTeachingSlots(
       this.timeSlots.filter((s) => s.dayOfWeek === base.dayOfWeek),
       base,
       classAssignments,
-      { penalizeSameDay: false, excludeSameSlot: true }
+      { penalizeSameDay: false, excludeSameSlot: true, randomJitter: true }
     )
 
+    const out: Suggestion[] = []
     for (const candidate of sameDaySlots) {
       const whatIf: Assignment = {
         ...base,
@@ -684,32 +691,37 @@ export class CollisionDetector {
       }
       if (this.validateAssignment(whatIf).length !== 0) continue
 
-      const previewAssignment: Assignment = { ...whatIf }
-      const preview = this.assignments.map((a) => (a.id === base.id ? previewAssignment : a))
-
-      return {
+      const preview = this.assignments.map((a) => (a.id === base.id ? whatIf : a))
+      out.push({
         title: `Move to ${String(base.dayOfWeek)} period ${candidate.period}`,
         description: 'Moves the lesson to an available slot on the same day.',
         reason: 'Minimizes disruption while resolving the conflict.',
-        costReduction: 50,
+        costReduction: 35,
         impactedAssignments: 1,
         preview,
-        apply: () => preview,
-      }
+        apply: mergeAssignmentMove(this.assignments, base.id, whatIf),
+      })
+      if (out.length >= limit) break
     }
 
-    return null
+    return out
   }
 
-  /** Search all days/periods for a conflict-free slot (Zambian auto-resolve). */
+  /** Search all days/periods for conflict-free slots (Zambian auto-resolve). */
   suggestMoveToAnyFreeSlot(base: Assignment): Suggestion | null {
-    if (!Array.isArray(this.timeSlots) || this.timeSlots.length === 0) return null
+    return this.suggestMoveToAnyFreeSlotVariants(base, 1)[0] ?? null
+  }
+
+  suggestMoveToAnyFreeSlotVariants(base: Assignment, limit = 1): Suggestion[] {
+    if (!Array.isArray(this.timeSlots) || this.timeSlots.length === 0) return []
     const classAssignments = this.byClass.get(String(base.classId)) || []
     const teachingSlots = rankTeachingSlots(this.timeSlots, base, classAssignments, {
       penalizeSameDay: true,
       excludeSameSlot: true,
+      randomJitter: true,
     })
 
+    const out: Suggestion[] = []
     for (const slot of teachingSlots) {
       const whatIf: Assignment = {
         ...base,
@@ -722,17 +734,18 @@ export class CollisionDetector {
       if (this.validateAssignment(whatIf).length !== 0) continue
 
       const preview = this.assignments.map((a) => (a.id === base.id ? whatIf : a))
-      return {
+      out.push({
         title: `Move to ${String(slot.dayOfWeek)} period ${slot.period}`,
         description: 'Moves the lesson to a free slot on another day or period.',
         reason: 'Resolves double-booking with better weekly distribution.',
-        costReduction: 40,
+        costReduction: 55,
         impactedAssignments: 1,
         preview,
-        apply: () => preview,
-      }
+        apply: mergeAssignmentMove(this.assignments, base.id, whatIf),
+      })
+      if (out.length >= limit) break
     }
-    return null
+    return out
   }
 
   private suggestAlternativeRoom(base: Assignment): Suggestion | null {
@@ -755,7 +768,7 @@ export class CollisionDetector {
       costReduction: 30,
       impactedAssignments: 1,
       preview,
-      apply: () => preview,
+      apply: mergeAssignmentMove(this.assignments, base.id, previewAssignment),
     }
   }
 
@@ -799,10 +812,10 @@ export class CollisionDetector {
       title: 'Swap with another class',
       description: 'Swaps time slots with another assignment to remove conflicts.',
       reason: 'Keeps overall timetable density stable while resolving a collision.',
-      costReduction: 40,
+      costReduction: 45,
       impactedAssignments: 2,
       preview,
-      apply: () => preview,
+      apply: mergePreview(this.assignments, preview),
     }
   }
 }
