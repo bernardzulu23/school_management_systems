@@ -51,7 +51,23 @@ export function scoreMoveSlot(opts: ScoreSlotOptions): number {
   ).length
   const loadPenalty = dayLoad * 20
 
-  return sameDayPenalty + midDayScore + loadPenalty + slotJitter(slot, String(base.id))
+  const slotTaken = classAssignments.some(
+    (a) =>
+      String(a.id) !== String(base.id) &&
+      !a.isBreak &&
+      String(a.dayOfWeek).toLowerCase() === String(slot.dayOfWeek).toLowerCase() &&
+      a.startTime === slot.startTime &&
+      a.endTime === slot.endTime
+  )
+  const slotTakenPenalty = slotTaken ? 10_000 : 0
+
+  return (
+    sameDayPenalty +
+    midDayScore +
+    loadPenalty +
+    slotTakenPenalty +
+    slotJitter(slot, String(base.id))
+  )
 }
 
 export function compareScoredSlots(

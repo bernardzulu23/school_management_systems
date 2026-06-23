@@ -184,12 +184,31 @@ export const POST = withAILimits(async function POST(request: Request) {
 
     const startTime = Date.now()
 
-    // Groq → Gemini → OpenRouter (automatic fallback)
-    const aiResponse = await aiChain.generate(prompt, {
-      system: systemPrompt,
-      maxTokens: 4500,
-      temperature: 0.7,
-    })
+    // Groq (AI SDK) → Gemini → OpenRouter → OpenAI → HuggingFace
+    let aiResponse
+    try {
+      const { generateAIText } = await import('@/lib/ai/client')
+      const sdkResult = await generateAIText(prompt, {
+        system: systemPrompt,
+        maxTokens: 4500,
+        temperature: 0.7,
+      })
+      aiResponse = {
+        text: sdkResult.text,
+        provider: sdkResult.provider || 'groq',
+        model: sdkResult.model,
+      }
+    } catch (sdkError) {
+      logger.warn('ai.lesson-planner.sdk-fallback', {
+        requestId,
+        message: sdkError instanceof Error ? sdkError.message : String(sdkError),
+      })
+      aiResponse = await aiChain.generate(prompt, {
+        system: systemPrompt,
+        maxTokens: 4500,
+        temperature: 0.7,
+      })
+    }
 
     await trackAIUsage(schoolId, 'ai-lesson-planner')
     await prisma.aIRequest.create({

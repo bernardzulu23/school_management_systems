@@ -1,7 +1,6 @@
-import type { Assignment, TimeSlot } from './types'
+import type { Assignment, TimeSlot, Conflict } from './types'
 import { CollisionDetector } from './collisionDetector'
-import { filterClassCentricConflicts } from './classCentric'
-import { countUniqueConflicts } from './conflictDedupe'
+import { countUniqueConflicts, dedupeConflictsFromMap } from './conflictDedupe'
 import { backtrackReassignAssignments } from './solverBacktrackResolve'
 
 export type AutoResolveResult = {
@@ -18,15 +17,15 @@ function conflictPriority(type: string): number {
   return 2
 }
 
-function buildConflictRows(conflictMap: Map<string, { type: string }[]>) {
-  const rows: { assignmentId: string; conflict: { type: string } }[] = []
-  for (const [assignmentId, list] of conflictMap.entries()) {
-    for (const c of filterClassCentricConflicts(list)) {
-      rows.push({ assignmentId, conflict: c })
-    }
-  }
-  rows.sort((a, b) => conflictPriority(a.conflict.type) - conflictPriority(b.conflict.type))
-  return rows
+function buildConflictRows(conflictMap: Map<string, Conflict[]>) {
+  const unique = dedupeConflictsFromMap(conflictMap)
+  return unique
+    .map((conflict) => ({
+      assignmentId: String(conflict.related?.assignmentIds?.[0] || ''),
+      conflict,
+    }))
+    .filter((row) => row.assignmentId)
+    .sort((a, b) => conflictPriority(a.conflict.type) - conflictPriority(b.conflict.type))
 }
 
 function detectorFor(
@@ -60,23 +59,40 @@ export function autoResolveConflicts(opts: {
   let stalePasses = 0
 
   for (let pass = 0; pass < MAX_PASSES; pass++) {
-    const snapshot = detectorFor(current, opts.timeSlots, opts.seasonMode)
-    const conflictMap = snapshot.detectAllConflicts()
-    const remaining = countUniqueConflicts(conflictMap)
-    if (remaining === 0) break
-
-    const rows = buildConflictRows(conflictMap)
     let progress = false
 
-    for (const { conflict } of rows) {
-      const fresh = detectorFor(current, opts.timeSlots, opts.seasonMode)
-      const suggestions = fresh.suggestAlternatives(conflict as any)
-      if (!suggestions.length) continue
+    for (;;) {
+      const snapshot = detectorFor(current, opts.timeSlots, opts.seasonMode)
+      const conflictMap = snapshot.detectAllConflicts()
+      if (countUniqueConflicts(conflictMap) === 0) {
+        pass = MAX_PASSES
+        break
+      }
 
-      const best = suggestions.sort((a, b) => b.costReduction - a.costReduction)[0]
-      current = best.apply()
-      resolvedCount++
-      progress = true
+      const rows = buildConflictRows(conflictMap)
+      let fixedOne = false
+
+      for (const { conflict } of rows) {
+        const fresh = detectorFor(current, opts.timeSlots, opts.seasonMode)
+        const suggestions = fresh.suggestAlternatives(conflict)
+        if (!suggestions.length) continue
+
+        const best = suggestions.sort((a, b) => b.costReduction - a.costReduction)[0]
+        current = best.apply()
+        resolvedCount++
+        progress = true
+        fixedOne = true
+        break
+      }
+
+      if (!fixedOne) break
+    }
+
+    if (
+      countUniqueConflicts(
+        detectorFor(current, opts.timeSlots, opts.seasonMode).detectAllConflicts()
+      ) === 0
+    ) {
       break
     }
 

@@ -449,11 +449,11 @@ export class CollisionDetector {
     const moveAnyDay = this.suggestMoveToAnyFreeSlot(base)
     if (moveAnyDay) suggestions.push(moveAnyDay)
 
-    const move = this.suggestMoveToFreeSlot(base)
-    if (move) suggestions.push(move)
-
     const swap = this.suggestSwap(base)
     if (swap) suggestions.push(swap)
+
+    const move = this.suggestMoveToFreeSlot(base)
+    if (move) suggestions.push(move)
 
     if (!TIMETABLE_CLASS_CENTRIC) {
       const changeRoom = this.suggestAlternativeRoom(base)

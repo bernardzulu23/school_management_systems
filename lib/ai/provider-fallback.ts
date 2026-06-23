@@ -2,8 +2,10 @@
  * Multi-provider fallback chain for AI text generation.
  * Order: Groq → Gemini → OpenRouter → OpenAI → HuggingFace
  */
-import { streamAITextWithFallback } from '@/lib/ai/client'
+import { generateText } from 'ai'
+import { aiHttpFetch } from '@/lib/ai/ai-http'
 import { geminiGenerateContentUrl, geminiModelCandidates } from '@/lib/ai/gemini-config'
+import { groqModelFor, groqModelIdsForChain } from '@/lib/ai/groq-config'
 import { logger } from '@/lib/utils/logger'
 
 const log = logger({ route: 'AI:provider-fallback' })
@@ -229,6 +231,7 @@ export class AIProviderChain {
             // Full chain failed — try Groq/Gemini streaming before giving up.
           }
 
+          const { streamAITextWithFallback } = await import('@/lib/ai/client')
           const streamed = await streamAITextWithFallback(options.system, options.prompt, {
             maxTokens: options.maxTokens,
             temperature: options.temperature,
@@ -321,7 +324,7 @@ export class AIProviderChain {
 
     for (const model of models) {
       try {
-        const response = await fetch(`${geminiGenerateContentUrl(model)}?key=${key}`, {
+        const response = await aiHttpFetch(`${geminiGenerateContentUrl(model)}?key=${key}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
@@ -358,35 +361,28 @@ export class AIProviderChain {
     provider: ProviderConfig,
     options: AIChainGenerateOptions
   ): Promise<AIChainResponse> {
-    const payload = openAiMessages(
-      prompt,
-      options.system,
-      options.maxTokens ?? 2000,
-      options.temperature ?? 0.7
-    )
+    const models = groqModelIdsForChain(provider.model)
+    let lastError: Error | null = null
 
-    const response = await fetch(`${provider.endpoint}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${provider.key}`,
-      },
-      body: JSON.stringify({ model: provider.model, ...payload }),
-    })
-
-    const data = await response.json().catch(() => ({}))
-    if (!response.ok) {
-      throw new Error(
-        `Groq error ${response.status}: ${data?.error?.message || JSON.stringify(data)}`
-      )
+    for (const modelId of models) {
+      try {
+        const result = await generateText({
+          model: groqModelFor(modelId),
+          system: options.system,
+          prompt,
+          maxOutputTokens: options.maxTokens ?? 2000,
+          temperature: options.temperature ?? 0.7,
+        })
+        const text = String(result.text || '').trim()
+        if (!text) throw new Error('Groq returned an empty response')
+        return { text, provider: 'groq', model: modelId }
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error))
+        log.warn('Groq model failed in chain', { model: modelId, message: lastError.message })
+      }
     }
 
-    const text = data.choices?.[0]?.message?.content
-    if (typeof text !== 'string' || !text.trim()) {
-      throw new Error('Groq returned an empty response')
-    }
-
-    return { text, provider: 'groq', model: provider.model }
+    throw lastError || new Error('Groq: all model candidates failed')
   }
 
   private async callOpenRouter(
@@ -401,7 +397,7 @@ export class AIProviderChain {
       options.temperature ?? 0.7
     )
 
-    const response = await fetch(`${provider.endpoint}/chat/completions`, {
+    const response = await aiHttpFetch(`${provider.endpoint}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -439,7 +435,7 @@ export class AIProviderChain {
       options.temperature ?? 0.7
     )
 
-    const response = await fetch(`${provider.endpoint}/chat/completions`, {
+    const response = await aiHttpFetch(`${provider.endpoint}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -470,7 +466,7 @@ export class AIProviderChain {
   ): Promise<AIChainResponse> {
     const fullPrompt = options.system ? `${options.system}\n\n${prompt}` : prompt
 
-    const response = await fetch(`${provider.endpoint}/${provider.model}`, {
+    const response = await aiHttpFetch(`${provider.endpoint}/${provider.model}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
