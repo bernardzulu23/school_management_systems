@@ -8,7 +8,7 @@ See [`lib/timetable/pipeline.js`](../lib/timetable/pipeline.js) for constants.
 2. HOD may lock teachers to periods via `TeacherPeriodAssignment` (`lockedForGeneration: true`)
 3. Headteacher **Generate Perfect Timetable** → `POST /api/timetable/generate` ([`hybridGenerate.ts`](../lib/timetable/hybridGenerate.ts))
    - **Preflight** — [`preflightFeasibility.ts`](../lib/timetable/preflightFeasibility.ts) (load, locks, break-span blocks)
-   - **Pass 1** — enhanced backtracking ([`scheduler.ts`](../lib/timetable/scheduler.ts), multi-restart, soft constraints relaxed during search)
+   - **Pass 1** — enhanced backtracking ([`scheduler.ts`](../lib/timetable/scheduler.ts), multi-restart, soft constraints relaxed during search). Candidate slots are ranked with [`scoreSchedulerPlacement`](../lib/timetable/slotScoring.ts) so teachers are spread across **period numbers** and mid-day slots (not every lesson in period 1–2 each morning).
    - **Pass 2** — optional solver-service fallback when `ORTOOLS_SOLVER_URL` is set ([`buildBlockSolverPayload.ts`](../lib/timetable/buildBlockSolverPayload.ts))
    - **Pass 3** — bounded repair pass on remaining unplaced blocks
    - Draft is saved **only** when `allowPartial: false` (default for Perfect Timetable) and zero hard conflicts + zero unplaced blocks

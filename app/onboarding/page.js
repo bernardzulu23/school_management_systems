@@ -15,6 +15,7 @@ import { TRIAL_MONTHS } from '@/lib/billing/subscription'
 import { PLAN_DESCRIPTIONS, PLAN_PRICING, getPlanMonthlyPrice } from '@/lib/billing/plan-pricing'
 import { evaluatePassword } from '@/lib/security/passwordValidate'
 import PasswordRequirements from '@/components/ui/PasswordRequirements'
+import { redirectToSafeUrl, sanitizeRedirectUrl } from '@/lib/security/safeRedirect'
 
 function parsePlanParam(searchParams) {
   const raw = String(searchParams?.get?.('plan') || '')
@@ -76,6 +77,11 @@ function OnboardingPageContent() {
       province.trim() &&
       district.trim(),
     [schoolName, subdomain, adminName, province, district]
+  )
+  const safeCompletedLoginUrl = useMemo(
+    () =>
+      completed?.loginUrl ? sanitizeRedirectUrl(completed.loginUrl, { fallback: '/login' }) : null,
+    [completed?.loginUrl]
   )
 
   const refreshStatus = async ({ syncPayment = false } = {}) => {
@@ -169,8 +175,7 @@ function OnboardingPageContent() {
 
       if (json.alreadyCompleted) {
         toast.success('Welcome back! Redirecting to dashboard...')
-        window.location.href =
-          typeof json?.loginUrl === 'string' && json.loginUrl.trim() ? json.loginUrl : '/dashboard'
+        redirectToSafeUrl(json?.loginUrl, { fallback: '/dashboard' })
         return
       }
 
@@ -801,15 +806,15 @@ function OnboardingPageContent() {
               <CardTitle className="text-royalPurple-text1">Stage 3: School Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {completed?.loginUrl ? (
+              {safeCompletedLoginUrl ? (
                 <div className="rounded-xl border border-royalPurple-border bg-royalPurple-deep p-4">
                   <div className="text-royalPurple-text1 font-semibold">Portal Ready</div>
                   <div className="text-royalPurple-text2 text-sm mt-1">Login URL:</div>
                   <a
                     className="text-royalPurple-accent text-sm break-all"
-                    href={completed.loginUrl}
+                    href={safeCompletedLoginUrl}
                   >
-                    {completed.loginUrl}
+                    {safeCompletedLoginUrl}
                   </a>
                 </div>
               ) : null}
@@ -915,9 +920,9 @@ function OnboardingPageContent() {
                 >
                   {saving ? 'Saving...' : 'Create Portal'}
                 </Button>
-                {completed?.loginUrl ? (
+                {safeCompletedLoginUrl ? (
                   <Button asChild variant="outline">
-                    <Link href={completed.loginUrl}>Go to Login</Link>
+                    <Link href={safeCompletedLoginUrl}>Go to Login</Link>
                   </Button>
                 ) : null}
               </div>

@@ -143,7 +143,7 @@ See [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) for the canonical route template.
 | Rate limiting    | Upstash Redis (optional)                                                                    | `lib/middleware/upstashLimiters.js`                  |
 | PWA / offline    | Workbox, Dexie                                                                              | `public/sw.js`, `lib/offline/`                       |
 | Mobile           | Expo 56 + React Native                                                                      | `zsms-mobile/`                                       |
-| Timetable solver | Hybrid backtracking + optional `solver-service`                                             | `lib/timetable/hybridGenerate.ts`, `solver-service/` |
+| Timetable solver | Hybrid backtracking + optional `solver-service` (FastAPI 0.133+, Starlette ≥1.0.1)          | `lib/timetable/hybridGenerate.ts`, `solver-service/` |
 | Testing          | Vitest, Playwright, Jest (legacy)                                                           | `__tests__/`, `vitest.config.*`                      |
 | CI               | GitHub Actions                                                                              | `.github/workflows/`                                 |
 | Deployment       | Vercel (primary)                                                                            | `vercel.json`, `scripts/vercel-build.js`             |
@@ -331,6 +331,10 @@ User-controlled route params, query strings, and JSON body IDs are validated as 
 | `safeCompositeKey` | Composite unique keys spread into `where`                     |
 
 Invalid values return **400** at the API boundary; internal cascade deletes sanitize IDs in `lib/db/deleteCascade.js`.
+
+### Open redirects
+
+Client navigations from API-controlled URLs use `lib/security/safeRedirect.js` (`sanitizeRedirectUrl`, `redirectToSafeUrl`): only root-relative paths and HTTPS URLs on the current host or tenant subdomains of `APP_BASE_DOMAIN` are allowed. Used on onboarding login redirects and dashboard voice navigation.
 
 - User-controlled values injected into DOM must use `escapeHtml()` from `lib/security.js` (e.g. emergency alerts in `components/ZambianSchoolDashboard.js`)
 - Prisma ORM is the default data path (parameterized queries); raw SQL uses bound parameters in RAG and health checks

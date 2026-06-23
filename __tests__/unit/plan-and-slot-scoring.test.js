@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest'
 import { getSchoolStudentLimit, SCHOOL_STUDENT_LIMIT } from '@/lib/billing/plan-pricing'
-import { rankTeachingSlots, scoreMoveSlot } from '@/lib/timetable/slotScoring'
+import {
+  rankTeachingSlots,
+  scoreMoveSlot,
+  scoreSchedulerPlacement,
+} from '@/lib/timetable/slotScoring'
 
 describe('school student limits', () => {
   it('sets basic to 500, standard to 800, premium unlimited', () => {
@@ -75,5 +79,24 @@ describe('slotScoring', () => {
       )
     }
     expect(scores.size).toBeGreaterThan(1)
+  })
+
+  it('scheduler placement penalizes repeating the same period on another day', () => {
+    const placed = [{ teacherId: 't1', day: 'monday', startPeriod: 1 }]
+    const repeatP1 = scoreSchedulerPlacement({
+      teacherId: 't1',
+      day: 'tuesday',
+      startPeriod: 1,
+      placed,
+      randomJitter: false,
+    })
+    const spreadP4 = scoreSchedulerPlacement({
+      teacherId: 't1',
+      day: 'tuesday',
+      startPeriod: 4,
+      placed,
+      randomJitter: false,
+    })
+    expect(spreadP4).toBeLessThan(repeatP1)
   })
 })

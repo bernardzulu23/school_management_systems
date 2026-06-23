@@ -18,6 +18,7 @@ import {
   type AllocationLike,
 } from '@/lib/timetable/periodExpansion'
 import { interleaveBlocks, compareDaySpread } from '@/lib/timetable/lessonOrdering'
+import { compareSchedulerPlacements, type PlacedPeriodLite } from '@/lib/timetable/slotScoring'
 import {
   buildRecipePlacementRules,
   buildTeacherDbConstraintRules,
@@ -412,7 +413,8 @@ export function getCandidateSlots(
   block: SchedulerBlock,
   daySlots: Record<string, DayPeriodSlot[]>,
   _singleMin: number,
-  breakAfterPeriods: number[] = BREAK_AFTER_PERIODS
+  breakAfterPeriods: number[] = BREAK_AFTER_PERIODS,
+  dayOrderOffset = 0
 ): Array<{ day: string; startPeriod: number; span: number; run: DayPeriodSlot[] }> {
   const candidates: Array<{
     day: string
@@ -423,8 +425,10 @@ export function getCandidateSlots(
   const days = Object.keys(daySlots).sort(
     (a, b) => (DAY_ORDER[normalizeDay(a)] ?? 99) - (DAY_ORDER[normalizeDay(b)] ?? 99)
   )
+  const offset = days.length ? ((dayOrderOffset % days.length) + days.length) % days.length : 0
+  const rotatedDays = [...days.slice(offset), ...days.slice(0, offset)]
 
-  for (const day of days) {
+  for (const day of rotatedDays) {
     const periods = getPeriodSlotsForDay(daySlots, day)
     for (let i = 0; i <= periods.length - block.span; i++) {
       const run = findSlotRun(periods, i, block.span)
@@ -569,51 +573,17 @@ export function generateTimetableOnce(
     })
   }
 
-  function tryReassignTeacherClassBlocks(blockIndex: number): boolean {
-    const block = sortedBlocks[blockIndex]
-    const victims = placed
-      .map((pl, idx) => ({ pl, idx }))
-      .filter(({ pl }) => pl.teacherId === block.teacherId && pl.classId === block.classId)
-
-    for (const { pl: victim, idx: victimIdx } of victims) {
-      const removed = placed.splice(victimIdx, 1)[0]
-      const victimBlock: SchedulerBlock = {
-        blockId: removed.blockId,
-        allocationId: removed.allocationId,
-        teacherId: removed.teacherId,
-        classId: removed.classId,
-        subjectId: removed.subjectId,
-        span: removed.span,
-        unitType: removed.unitType,
-      }
-
-      const altCandidates = getCandidateSlots(victimBlock, daySlots, singleMin, breakAfterPeriods)
-      for (const alt of altCandidates) {
-        const placementRule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, victimBlock)
-        const check = canPlace(victimBlock, alt, placed, { ...canPlaceOpts, placementRule })
-        if (!check.ok) continue
-
-        pushPlacedFromCandidate(victimBlock, alt)
-        reassignments += 1
-        if (backtrackPlace(blockIndex)) return true
-
-        placed.pop()
-        reassignments += 1
-      }
-
-      placed.splice(victimIdx, 0, removed)
-    }
-
-    return false
+  function placedPeriodLite(): PlacedPeriodLite[] {
+    return placed.map((p) => ({
+      teacherId: p.teacherId,
+      day: p.day,
+      startPeriod: p.startPeriod,
+      startMin: p.startMin,
+    }))
   }
 
-  function backtrackPlace(index: number): boolean {
-    if (timedOut()) return false
-    if (index >= sortedBlocks.length) return true
-
-    const block = sortedBlocks[index]
-    const candidates = getCandidateSlots(block, daySlots, singleMin, breakAfterPeriods)
-
+  function sortCandidates(block: SchedulerBlock, candidates: ReturnType<typeof getCandidateSlots>) {
+    const placedLite = placedPeriodLite()
     candidates.sort((a, b) => {
       const rule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, block)
       const prefA = placementPreferenceScore(rule, a.day, a.startPeriod)
@@ -643,10 +613,87 @@ export function generateTimetableOnce(
       })
       if (daySpread !== 0) return daySpread
 
+      const periodSpread = compareSchedulerPlacements(
+        {
+          teacherId: block.teacherId,
+          day: a.day,
+          startPeriod: a.startPeriod,
+          placed: placedLite,
+          startMin: a.run[0]?.start,
+          randomJitter: true,
+          jitterSeed: restartSeed,
+        },
+        {
+          teacherId: block.teacherId,
+          day: b.day,
+          startPeriod: b.startPeriod,
+          placed: placedLite,
+          startMin: b.run[0]?.start,
+          randomJitter: true,
+          jitterSeed: restartSeed,
+        }
+      )
+      if (periodSpread !== 0) return periodSpread
+
       const closeA = tooCloseSameSubject(block, a.day, placed) ? 1 : 0
       const closeB = tooCloseSameSubject(block, b.day, placed) ? 1 : 0
       return closeA - closeB
     })
+  }
+
+  function tryReassignTeacherClassBlocks(blockIndex: number): boolean {
+    const block = sortedBlocks[blockIndex]
+    const victims = placed
+      .map((pl, idx) => ({ pl, idx }))
+      .filter(({ pl }) => pl.teacherId === block.teacherId && pl.classId === block.classId)
+
+    for (const { pl: victim, idx: victimIdx } of victims) {
+      const removed = placed.splice(victimIdx, 1)[0]
+      const victimBlock: SchedulerBlock = {
+        blockId: removed.blockId,
+        allocationId: removed.allocationId,
+        teacherId: removed.teacherId,
+        classId: removed.classId,
+        subjectId: removed.subjectId,
+        span: removed.span,
+        unitType: removed.unitType,
+      }
+
+      const altCandidates = getCandidateSlots(
+        victimBlock,
+        daySlots,
+        singleMin,
+        breakAfterPeriods,
+        restartSeed
+      )
+      sortCandidates(victimBlock, altCandidates)
+      for (const alt of altCandidates) {
+        const placementRule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, victimBlock)
+        const check = canPlace(victimBlock, alt, placed, { ...canPlaceOpts, placementRule })
+        if (!check.ok) continue
+
+        pushPlacedFromCandidate(victimBlock, alt)
+        reassignments += 1
+        if (backtrackPlace(blockIndex)) return true
+
+        placed.pop()
+        reassignments += 1
+      }
+
+      placed.splice(victimIdx, 0, removed)
+    }
+
+    return false
+  }
+
+  function backtrackPlace(index: number): boolean {
+    if (timedOut()) return false
+    if (index >= sortedBlocks.length) return true
+
+    const block = sortedBlocks[index]
+    const candidates = getCandidateSlots(block, daySlots, singleMin, breakAfterPeriods, restartSeed)
+
+    sortCandidates(block, candidates)
 
     for (const cand of candidates) {
       if (timedOut()) return false

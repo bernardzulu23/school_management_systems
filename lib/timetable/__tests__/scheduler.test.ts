@@ -475,4 +475,65 @@ describe('generateTimetable', () => {
     expect(result.stats.placed).toBe(6)
     expect(result.stats.unplaced).toBe(0)
   })
+
+  it('spreads period numbers for one teacher instead of stacking period 1–2 every day', () => {
+    const makeDay = (day: string, periods: number) => {
+      const slots = []
+      let cursor = 0
+      for (let p = 1; p <= periods; p++) {
+        slots.push({
+          type: 'period' as const,
+          periodNumber: p,
+          start: cursor,
+          end: cursor + 40,
+          startTime: '07:00',
+          endTime: '07:40',
+          durationMin: 40,
+          day,
+        })
+        cursor += 40
+      }
+      return slots
+    }
+    const daySlots = {
+      monday: makeDay('monday', 8),
+      tuesday: makeDay('tuesday', 8),
+      wednesday: makeDay('wednesday', 8),
+      thursday: makeDay('thursday', 8),
+      friday: makeDay('friday', 8),
+    }
+
+    const result = generateTimetable(
+      [
+        {
+          id: 'a1',
+          teacherId: 't1',
+          classId: 'c1',
+          subjectId: 'chem',
+          doublePeriods: 2,
+          periodsPerWeek: 4,
+          blockType: 'DOUBLE',
+        },
+        {
+          id: 'a2',
+          teacherId: 't1',
+          classId: 'c2',
+          subjectId: 'chem',
+          doublePeriods: 2,
+          periodsPerWeek: 4,
+          blockType: 'DOUBLE',
+        },
+      ],
+      daySlots,
+      { singleMin: 40, maxExecutionMs: 15000, maxRestarts: 5 }
+    )
+
+    expect(result.stats.placed).toBe(4)
+    const teacherBlocks = result.placedBlocks.filter((p) => p.teacherId === 't1')
+    const startPeriods = teacherBlocks.map((p) => p.startPeriod)
+    const uniquePeriods = new Set(startPeriods)
+    expect(uniquePeriods.size).toBeGreaterThanOrEqual(2)
+    const allEarlyEveryDay = teacherBlocks.every((p) => p.startPeriod <= 2)
+    expect(allEarlyEveryDay).toBe(false)
+  })
 })

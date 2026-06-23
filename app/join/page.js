@@ -11,6 +11,7 @@ import { Eye, EyeOff } from 'lucide-react'
 import { PLAN_LABELS, PLAN_PRICING } from '@/lib/billing/plan-pricing'
 import { TRIAL_MONTHS } from '@/lib/billing/subscription'
 import { useIndividualOnboarding } from '@/lib/hooks/useIndividualOnboarding'
+import { sanitizeRedirectUrl } from '@/lib/security/safeRedirect'
 import { IndividualVerifyStep } from '@/components/onboarding/IndividualOnboardingSteps'
 
 const TEACHER_PLANS = [
@@ -39,7 +40,9 @@ function JoinPageContent() {
 
   const finishSetup = async () => {
     const json = await flow.complete()
-    if (json?.loginUrl) router.push(json.loginUrl)
+    if (json?.loginUrl) {
+      router.push(sanitizeRedirectUrl(json.loginUrl, { fallback: '/login' }))
+    }
   }
 
   return (

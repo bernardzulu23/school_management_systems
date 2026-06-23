@@ -7,6 +7,7 @@ import { PersonalizedLearningPaths } from '../lib/personalizedLearningPaths'
 import { ModernAssessmentSystem } from '../lib/modernAssessmentSystem'
 import { EmergingTechIntegration } from '../lib/emergingTechIntegration'
 import { Bot, Check, Gem, Mic, Star, TrendingUp, Trophy } from 'lucide-react'
+import { redirectToSafeUrl } from '@/lib/security/safeRedirect'
 
 /**
  * Modern Dashboard Component
@@ -97,7 +98,7 @@ export default function ModernDashboard({ userRole, userId, userData }) {
   const executeVoiceAction = async (action) => {
     switch (action.action) {
       case 'navigate':
-        window.location.href = action.target
+        redirectToSafeUrl(action.target, { fallback: '/dashboard', allowExternalTenant: false })
         break
       case 'ai_explain':
         const session = IntelligentLearningAssistant.createLearningSession(

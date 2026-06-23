@@ -11,6 +11,103 @@ const DAY_RANK: Record<string, number> = {
 }
 
 const MID_DAY_MINUTES = 10 * 60
+const IDEAL_PERIOD = 4
+
+export type PlacedPeriodLite = {
+  teacherId: string
+  day: string
+  startPeriod: number
+  startMin?: number
+}
+
+function normDay(day: string) {
+  return String(day || '')
+    .trim()
+    .toLowerCase()
+}
+
+function deterministicJitter(seed: number): number {
+  const x = Math.sin(seed) * 10000
+  return (x - Math.floor(x)) * 12
+}
+
+export type ScoreSchedulerPlacementOptions = {
+  teacherId: string
+  day: string
+  startPeriod: number
+  placed?: PlacedPeriodLite[]
+  startMin?: number
+  /** When true, add small pseudo-random tie-break (use jitterSeed for stable restarts). */
+  randomJitter?: boolean
+  jitterSeed?: number
+}
+
+/**
+ * Lower score = better placement. Spreads teachers across period numbers and mid-day slots
+ * so timetables are not all stacked in period 1–2 every morning.
+ */
+export function scoreSchedulerPlacement(opts: ScoreSchedulerPlacementOptions): number {
+  const {
+    teacherId,
+    day,
+    startPeriod,
+    placed = [],
+    startMin,
+    randomJitter = true,
+    jitterSeed = 0,
+  } = opts
+
+  const nd = normDay(day)
+  const teacherPlaced = placed.filter((p) => String(p.teacherId) === String(teacherId))
+
+  const samePeriodOtherDays = teacherPlaced.filter(
+    (p) => normDay(p.day) !== nd && Number(p.startPeriod) === startPeriod
+  ).length
+  const periodRepeatPenalty = samePeriodOtherDays * 90
+
+  const periodUsage = new Map<number, number>()
+  for (const p of teacherPlaced) {
+    const pn = Number(p.startPeriod) || 0
+    periodUsage.set(pn, (periodUsage.get(pn) || 0) + 1)
+  }
+  const usagePenalty = (periodUsage.get(startPeriod) || 0) * 50
+
+  const periodNum = Number(startPeriod) || 0
+  const earlyPeriodPenalty =
+    periodNum === 1 ? 60 : periodNum === 2 ? 38 : periodNum === 3 ? 18 : periodNum === 4 ? 6 : 0
+
+  const periodMidPenalty = Math.abs(periodNum - IDEAL_PERIOD) * 10
+
+  const timeMidPenalty =
+    startMin != null && Number.isFinite(startMin)
+      ? Math.abs(Number(startMin) - MID_DAY_MINUTES) * 0.03
+      : 0
+
+  const dayRank = DAY_RANK[nd] ?? 7
+  const jitter = randomJitter ? deterministicJitter(jitterSeed + periodNum * 17 + dayRank * 31) : 0
+
+  return (
+    periodRepeatPenalty +
+    usagePenalty +
+    earlyPeriodPenalty +
+    periodMidPenalty +
+    timeMidPenalty +
+    jitter
+  )
+}
+
+export function compareSchedulerPlacements(
+  a: ScoreSchedulerPlacementOptions,
+  b: ScoreSchedulerPlacementOptions
+): number {
+  const scoreA = scoreSchedulerPlacement(a)
+  const scoreB = scoreSchedulerPlacement(b)
+  if (scoreA !== scoreB) return scoreA - scoreB
+  const da = DAY_RANK[normDay(a.day)] ?? 99
+  const db = DAY_RANK[normDay(b.day)] ?? 99
+  if (da !== db) return da - db
+  return a.startPeriod - b.startPeriod
+}
 
 export function slotTimeMinutes(time: string): number {
   const [h, m] = String(time).split(':')

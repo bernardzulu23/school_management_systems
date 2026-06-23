@@ -29,6 +29,7 @@ import {
   type MultiBlockPlacement,
 } from '@/lib/timetable/scheduler'
 import { interleaveLessons, compareDaySpread } from '@/lib/timetable/lessonOrdering'
+import { compareSchedulerPlacements, type PlacedPeriodLite } from '@/lib/timetable/slotScoring'
 
 export interface TimeSlot {
   id: string
@@ -326,7 +327,21 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
 
   const sortStartIndices = (lesson: Lesson, day: string, daySlots: TimeSlot[], size: number) => {
     const indices = Array.from({ length: Math.max(0, daySlots.length - size + 1) }, (_, i) => i)
-    const slotById = new Map(slots.map((s) => [s.id, s]))
+
+    const placedLite: PlacedPeriodLite[] = []
+    for (const [lessonId, spanIds] of Object.entries(slotSpans)) {
+      const firstId = spanIds?.[0]
+      if (!firstId) continue
+      const slot = slots.find((s) => s.id === firstId)
+      const les = lessons.find((l) => l.id === lessonId)
+      if (!slot || !les) continue
+      placedLite.push({
+        teacherId: les.teacherId,
+        day: normalizeDay(slot.dayOfWeek),
+        startPeriod: Number(slot.period) || 0,
+      })
+    }
+
     return indices.sort((ia, ib) => {
       const runA = findConsecutiveRun(daySlots, ia, size)
       const runB = findConsecutiveRun(daySlots, ib, size)
@@ -335,21 +350,31 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
       if (!runB) return -1
 
       const rule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, lesson)
-      const scoreA = placementPreferenceScore(rule, day, Number(runA[0]?.period) || 0)
-      const scoreB = placementPreferenceScore(rule, day, Number(runB[0]?.period) || 0)
-      if (scoreA !== scoreB) return scoreA - scoreB
-
       const periodA = Number(runA[0]?.period) || 0
       const periodB = Number(runB[0]?.period) || 0
-      const nearA = [...(teacherSlots.get(lesson.teacherId) || [])].filter((sid) => {
-        const slot = slotById.get(sid)
-        return slot && Math.abs((Number(slot.period) || 0) - periodA) <= 1
-      }).length
-      const nearB = [...(teacherSlots.get(lesson.teacherId) || [])].filter((sid) => {
-        const slot = slotById.get(sid)
-        return slot && Math.abs((Number(slot.period) || 0) - periodB) <= 1
-      }).length
-      return nearA - nearB
+      const scoreA = placementPreferenceScore(rule, day, periodA)
+      const scoreB = placementPreferenceScore(rule, day, periodB)
+      if (scoreA !== scoreB) return scoreA - scoreB
+
+      const periodSpread = compareSchedulerPlacements(
+        {
+          teacherId: lesson.teacherId,
+          day,
+          startPeriod: periodA,
+          placed: placedLite,
+          randomJitter: true,
+        },
+        {
+          teacherId: lesson.teacherId,
+          day,
+          startPeriod: periodB,
+          placed: placedLite,
+          randomJitter: true,
+        }
+      )
+      if (periodSpread !== 0) return periodSpread
+
+      return periodA - periodB
     })
   }
 
