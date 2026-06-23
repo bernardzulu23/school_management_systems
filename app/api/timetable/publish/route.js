@@ -10,6 +10,7 @@ import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { validateDraftEntriesForPublish } from '@/lib/timetable/validateDraftEntries'
 import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
 import { syncClassActiveFlags } from '@/lib/timetable/getActiveClasses'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 export async function POST(req) {
   const user = await getAuthUser(req)
@@ -30,8 +31,11 @@ export async function POST(req) {
   }
 
   const body = await req.json().catch(() => ({}))
-  const term = String(body?.term || 'Term 1').trim()
-  const academicYear = String(body?.academicYear || new Date().getFullYear()).trim()
+  const term = safeQueryString(body?.term, { defaultValue: 'Term 1', maxLength: 64 })
+  const academicYear = safeQueryString(body?.academicYear, {
+    defaultValue: String(new Date().getFullYear()),
+    maxLength: 16,
+  })
 
   const draftCount = await prisma.timetableAllocationEntry.count({
     where: { schoolId, term, academicYear, status: 'draft' },

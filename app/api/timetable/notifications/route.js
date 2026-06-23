@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 // GET — fetch all timetable notifications for the logged-in user
 export async function GET(req) {
@@ -69,8 +70,12 @@ export async function POST(req) {
       data: { read: true, readAt: new Date() },
     })
   } else if (id) {
+    const notificationId = safeStringId(id)
+    if (!notificationId) {
+      return NextResponse.json({ error: 'Invalid notification id' }, { status: 400 })
+    }
     await prisma.timetableNotification.updateMany({
-      where: { schoolId, id, toUserId: user.id },
+      where: { schoolId, id: notificationId, toUserId: user.id },
       data: { read: true, readAt: new Date() },
     })
   }

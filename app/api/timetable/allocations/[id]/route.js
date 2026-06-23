@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 export async function DELETE(req, { params }) {
   const user = await getAuthUser(req)
@@ -15,7 +16,9 @@ export async function DELETE(req, { params }) {
   const typeCheck = await guardSchoolOnlyTimetable(schoolId)
   if (!typeCheck.allowed) return typeCheck.response
 
-  const { id } = await params
+  const id = await safeRouteParam(params, 'id')
+  if (!id) return NextResponse.json({ error: 'Invalid allocation id' }, { status: 400 })
+
   const result = await prisma.teacherAllocation.deleteMany({
     where: { id, schoolId },
   })

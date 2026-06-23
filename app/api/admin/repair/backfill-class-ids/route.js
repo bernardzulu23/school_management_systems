@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
 
 function classKey(value) {
   return String(value || '')
@@ -26,7 +27,7 @@ export const POST = withErrorHandler(async function POST(request) {
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
-  const schoolId = tenant.schoolId
+  const schoolId = safeStringId(tenant.schoolId)
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const body = await request.json().catch(() => ({}))
@@ -89,7 +90,7 @@ export const POST = withErrorHandler(async function POST(request) {
     let unmatched = 0
 
     for (const row of distinct) {
-      const raw = String(row.class || '').trim()
+      const raw = safeQueryString(row.class, { maxLength: 256, defaultValue: '' })
       if (!raw) continue
       const match = classByKey.get(classKey(raw))
       if (!match?.id) {

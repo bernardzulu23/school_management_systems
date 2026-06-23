@@ -5,6 +5,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { validateBody } from '@/lib/middleware/validate-request'
 import { CreateStudentGoalSchema } from '@/lib/schemas'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 export async function GET(request) {
   try {
@@ -162,8 +163,9 @@ export async function PUT(request) {
     })
     if (!student) return NextResponse.json({ error: 'Student not found' }, { status: 404 })
 
-    const { id, ...updates } = body
+    const { id: rawId, ...updates } = body
 
+    const id = safeStringId(rawId)
     if (!id) return NextResponse.json({ error: 'Goal ID required' }, { status: 400 })
 
     const data = {}
@@ -234,7 +236,7 @@ export async function DELETE(request) {
     if (!student) return NextResponse.json({ error: 'Student not found' }, { status: 404 })
 
     const { searchParams } = new URL(request.url)
-    const id = searchParams.get('id')
+    const id = safeStringId(searchParams.get('id'))
 
     if (!id) return NextResponse.json({ error: 'Goal ID required' }, { status: 400 })
 

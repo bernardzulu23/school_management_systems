@@ -3,29 +3,26 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { isFailedLipilaStatus, isPaidLipilaStatus } from '@/lib/payments/lipila'
 import { logger, captureError } from '@/lib/utils/logger'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 function getIdentifier(payload) {
   const p = payload || {}
-  return (
-    String(
-      p.identifier ||
-        p.internalId ||
-        p.internal_id ||
-        p?.data?.identifier ||
-        p?.data?.internalId ||
-        p?.data?.internal_id ||
-        ''
-    ).trim() || null
-  )
+  const raw =
+    p.identifier ||
+    p.internalId ||
+    p.internal_id ||
+    p?.data?.identifier ||
+    p?.data?.internalId ||
+    p?.data?.internal_id ||
+    null
+  return safeStringId(raw)
 }
 
 function getReferenceId(payload) {
   const p = payload || {}
-  return (
-    String(
-      p.referenceId || p.reference_id || p?.data?.referenceId || p?.data?.reference_id || ''
-    ).trim() || null
-  )
+  const raw =
+    p.referenceId || p.reference_id || p?.data?.referenceId || p?.data?.reference_id || null
+  return safeStringId(raw, { maxLength: 256 })
 }
 
 function getStatus(payload) {

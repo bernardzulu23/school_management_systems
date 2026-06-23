@@ -2,9 +2,12 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { safeRouteParam, safeStringId, safeQueryString } from '@/lib/security/safeQueryValue'
 
 export async function GET(request, { params }) {
-  const routeParams = await params
+  const assignmentId = await safeRouteParam(params, 'id')
+  if (!assignmentId) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -14,7 +17,7 @@ export async function GET(request, { params }) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const assignment = await prisma.assignment.findFirst({
-    where: { id: routeParams.id, schoolId },
+    where: { id: assignmentId, schoolId },
   })
 
   if (!assignment) return NextResponse.json({ error: 'Not found' }, { status: 404 })
@@ -40,7 +43,9 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const routeParams = await params
+  const assignmentId = await safeRouteParam(params, 'id')
+  if (!assignmentId) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -54,8 +59,8 @@ export async function PUT(request, { params }) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const body = await request.json()
-  const classId = body.classId ? String(body.classId).trim() : ''
-  const className = body.class ? String(body.class).trim() : ''
+  const classId = safeStringId(body?.classId) || ''
+  const className = safeQueryString(body?.class, { maxLength: 256, defaultValue: '' })
 
   const classRecord = classId
     ? await prisma.class.findFirst({
@@ -70,7 +75,7 @@ export async function PUT(request, { params }) {
       : null
 
   const updated = await prisma.assignment.updateMany({
-    where: { id: routeParams.id, schoolId },
+    where: { id: assignmentId, schoolId },
     data: {
       title: body.title ? String(body.title).trim() : undefined,
       description: body.description !== undefined ? String(body.description) : undefined,
@@ -84,12 +89,14 @@ export async function PUT(request, { params }) {
 
   if (updated.count === 0) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  const assignment = await prisma.assignment.findFirst({ where: { id: routeParams.id, schoolId } })
+  const assignment = await prisma.assignment.findFirst({ where: { id: assignmentId, schoolId } })
   return NextResponse.json({ success: true, data: assignment })
 }
 
 export async function DELETE(request, { params }) {
-  const routeParams = await params
+  const assignmentId = await safeRouteParam(params, 'id')
+  if (!assignmentId) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -103,7 +110,7 @@ export async function DELETE(request, { params }) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const deleted = await prisma.assignment.deleteMany({
-    where: { id: routeParams.id, schoolId },
+    where: { id: assignmentId, schoolId },
   })
 
   if (deleted.count === 0) return NextResponse.json({ error: 'Not found' }, { status: 404 })

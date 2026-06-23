@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { safeRouteParam, safeStringIds } from '@/lib/security/safeQueryValue'
 
 export async function GET(request, { params }) {
-  const routeParams = await params
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -13,7 +13,8 @@ export async function GET(request, { params }) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  const teacherId = routeParams.id
+  const teacherId = await safeRouteParam(params, 'id')
+  if (!teacherId) return NextResponse.json({ error: 'Invalid teacher id' }, { status: 400 })
 
   const teacher = await prisma.teacher.findFirst({
     where: { id: teacherId, schoolId },
@@ -41,7 +42,6 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const routeParams = await params
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -54,19 +54,24 @@ export async function PUT(request, { params }) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  const teacherId = routeParams.id
+  const teacherId = await safeRouteParam(params, 'id')
+  if (!teacherId) return NextResponse.json({ error: 'Invalid teacher id' }, { status: 400 })
   const body = await request.json()
 
   const departmentNames = Array.isArray(body.departmentNames)
     ? body.departmentNames.map(String)
     : []
-  const departmentIds = Array.isArray(body.departmentIds) ? body.departmentIds.map(String) : []
+  const departmentIds = safeStringIds(body.departmentIds)
 
   if (departmentNames.length === 0 && departmentIds.length === 0) {
     return NextResponse.json(
       { error: 'departmentNames or departmentIds required' },
       { status: 400 }
     )
+  }
+
+  if (Array.isArray(body.departmentIds) && body.departmentIds.length !== departmentIds.length) {
+    return NextResponse.json({ error: 'Invalid departmentIds' }, { status: 400 })
   }
 
   const teacher = await prisma.teacher.findFirst({

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { safeRouteParam, safeStringId } from '@/lib/security/safeQueryValue'
 
 export async function GET(request, { params }) {
   try {
@@ -11,7 +12,8 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const { id } = await params
+    const id = await safeRouteParam(params, 'id')
+    if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
 
     const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
     if (!tenant.ok) return tenant.response
@@ -40,7 +42,8 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const { id } = await params
+    const id = await safeRouteParam(params, 'id')
+    if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
     const data = await request.json()
 
     const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
@@ -66,9 +69,13 @@ export async function PUT(request, { params }) {
     const departmentId =
       data?.departmentId !== undefined
         ? data.departmentId
-          ? String(data.departmentId).trim()
+          ? safeStringId(data.departmentId)
           : null
         : undefined
+
+    if (data?.departmentId && departmentId === null && data.departmentId) {
+      return NextResponse.json({ error: 'Invalid departmentId' }, { status: 400 })
+    }
 
     if (departmentId) {
       const dept = await prisma.department.findFirst({
@@ -104,7 +111,8 @@ export async function DELETE(request, { params }) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const { id } = await params
+    const id = await safeRouteParam(params, 'id')
+    if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
 
     const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
     if (!tenant.ok) return tenant.response

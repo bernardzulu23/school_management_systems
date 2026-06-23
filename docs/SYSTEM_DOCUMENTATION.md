@@ -317,6 +317,21 @@ Applied on every password **set/change** path (`/api/auth/register`, onboarding,
 
 - Per-request **CSP nonce** + `strict-dynamic` for scripts (`lib/security/headers.js`, `proxy.js`)
 - API `sanitizeOutput()` strips `<script>` blocks and HTML-escapes string fields (auth and student routes; extend as needed)
+
+### Query / NoSQL injection (Prisma)
+
+User-controlled route params, query strings, and JSON body IDs are validated as **plain scalars** before use in Prisma `where` clauses (`findFirst`, `updateMany`, `deleteMany`, etc.). Shared helpers in `lib/security/safeQueryValue.js`:
+
+| Helper             | Use                                                           |
+| ------------------ | ------------------------------------------------------------- |
+| `safeStringId`     | Single ID from body/query (rejects objects like `{ $ne: 5 }`) |
+| `safeRouteParam`   | Async `[id]` route segment                                    |
+| `safeQueryString`  | Term, academic year, class name strings                       |
+| `safeStringIds`    | Arrays of IDs (e.g. department lists)                         |
+| `safeCompositeKey` | Composite unique keys spread into `where`                     |
+
+Invalid values return **400** at the API boundary; internal cascade deletes sanitize IDs in `lib/db/deleteCascade.js`.
+
 - User-controlled values injected into DOM must use `escapeHtml()` from `lib/security.js` (e.g. emergency alerts in `components/ZambianSchoolDashboard.js`)
 - Prisma ORM is the default data path (parameterized queries); raw SQL uses bound parameters in RAG and health checks
 

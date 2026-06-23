@@ -11,6 +11,7 @@ import {
   canManageTimetableDraft,
   timetableForbiddenResponse,
 } from '@/lib/timetable/timetableRouteAuth'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 function toMinutes(t) {
   const [h, m] = String(t || '0:0')
@@ -83,8 +84,11 @@ export async function POST(req) {
   if (!canManageTimetableDraft(user)) return timetableForbiddenResponse()
 
   const body = await req.json().catch(() => ({}))
-  const term = String(body?.term || 'Term 1').trim()
-  const academicYear = String(body?.academicYear || new Date().getFullYear()).trim()
+  const term = safeQueryString(body?.term, { defaultValue: 'Term 1', maxLength: 64 })
+  const academicYear = safeQueryString(body?.academicYear, {
+    defaultValue: String(new Date().getFullYear()),
+    maxLength: 16,
+  })
   const rows = Array.isArray(body?.assignments) ? body.assignments : []
   const replaceExisting = body?.replaceExisting !== false
 
