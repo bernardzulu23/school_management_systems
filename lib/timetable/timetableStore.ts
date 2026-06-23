@@ -11,6 +11,11 @@ import { canPublishTimetable, validateTimetable } from './validateTimetable'
 import { isConflict } from './constraintCheck'
 import { countUniqueConflicts } from './conflictDedupe'
 import { autoResolveConflicts as runAutoResolve } from './autoResolver'
+import {
+  assertNoDuplicateSlots,
+  countCriticalDoubleBookings,
+  dedupeAssignmentsByClassSlot,
+} from './assignmentInvariants'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 export type TimetableVersion = 'normal' | 'farming' | 'emergency'
@@ -104,6 +109,7 @@ export interface TimetableStoreState {
   canPublish: () => boolean
 
   getConflictCount: () => number
+  getCriticalDoubleBookingCount: () => number
   getHardConflictCount: () => number
   getAssignmentsByTeacher: (teacherId: Assignment['teacherId']) => Assignment[]
   getAssignmentsByClass: (classId: Assignment['classId']) => Assignment[]
@@ -137,14 +143,14 @@ function safeArray<T>(value: unknown): T[] {
 function normalizeAssignments(value: unknown): Assignment[] {
   const raw = safeArray<Assignment>(value).filter(Boolean)
   const seen = new Set<string>()
-  const out: Assignment[] = []
+  const byId: Assignment[] = []
   for (const a of raw) {
     const id = String(a.id || '')
     if (!id || seen.has(id)) continue
     seen.add(id)
-    out.push(a)
+    byId.push(a)
   }
-  return out
+  return dedupeAssignmentsByClassSlot(byId)
 }
 
 function normalizeRouteList(value: unknown): TravelingTeacherRoute[] {
@@ -250,6 +256,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
 
         replaceAssignments: (assignments, meta) => {
           const next = normalizeAssignments(assignments)
+          assertNoDuplicateSlots(next, meta?.source || 'replaceAssignments')
           pushSnapshot()
           set(() => ({
             assignments: next,
@@ -551,6 +558,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
             conflicts: detect(result.assignments),
             isPublished: false,
           })
+          assertNoDuplicateSlots(result.assignments, 'autoResolveConflicts')
           if (result.resolvedCount > 0) {
             trackChange({
               id: genId(),
@@ -592,6 +600,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
             const slots = normalizeApiTimeSlots(resolved)
             const aligned = alignAssignmentsToBellRows(assignments, slots)
             const conflicts = detect(aligned)
+            assertNoDuplicateSlots(aligned, 'loadFromApi')
             set({
               assignments: aligned,
               timeSlots: slots.length ? slots : get().timeSlots,
@@ -626,6 +635,12 @@ export const useTimetableStore = create<TimetableStoreState>()(
         },
 
         getConflictCount: () => countUniqueConflicts(get().conflicts),
+
+        getCriticalDoubleBookingCount: () =>
+          countCriticalDoubleBookings(get().assignments, {
+            timeSlots: get().timeSlots,
+            seasonMode: get().currentSeason,
+          }),
 
         getHardConflictCount: () => {
           return validateTimetable(get().assignments).filter((c) => c.severity === 'hard').length

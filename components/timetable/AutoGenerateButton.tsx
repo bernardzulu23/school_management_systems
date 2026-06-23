@@ -64,6 +64,7 @@ export function AutoGenerateButton(props: AutoGenerateButtonProps) {
 
     try {
       setStep('generating')
+      replaceAssignments([], { source: 'generate' })
       const result = await automationService.generateInWorker(schoolData, {
         quality,
         timeout,

@@ -850,10 +850,21 @@ function HeadteacherTimetablePageContent() {
   }
 
   const saveSolverDraftToDb = async () => {
-    if (!assignments.length) {
+    const store = useTimetableStore.getState()
+    const rows = store.assignments
+    if (!rows.length) {
       toast.error('Generate a timetable first')
       return
     }
+
+    const criticalCount = store.getCriticalDoubleBookingCount()
+    if (criticalCount > 0) {
+      toast.error(
+        `Cannot save: ${criticalCount} double-booking conflict${criticalCount === 1 ? '' : 's'} must be resolved first. Use Auto-fix conflicts or drag lessons to fix them.`
+      )
+      return
+    }
+
     try {
       const res = await sessionFetch('/api/timetable/entries/sync-draft', {
         method: 'POST',
@@ -862,7 +873,7 @@ function HeadteacherTimetablePageContent() {
         body: JSON.stringify({
           term,
           academicYear,
-          assignments,
+          assignments: rows,
           replaceExisting: true,
         }),
       })
@@ -882,6 +893,7 @@ function HeadteacherTimetablePageContent() {
 
   const generateFromAllocations = async () => {
     setDbGenerating(true)
+    replaceAssignments([], { source: 'generate' })
     setGenProgress({
       open: true,
       stage: 'preflight',
@@ -1041,6 +1053,13 @@ function HeadteacherTimetablePageContent() {
                 setDbPublishing(true)
                 try {
                   if (assignments.length) {
+                    const store = useTimetableStore.getState()
+                    const criticalCount = store.getCriticalDoubleBookingCount()
+                    if (criticalCount > 0) {
+                      throw new Error(
+                        `Cannot save: ${criticalCount} double-booking conflict${criticalCount === 1 ? '' : 's'} must be resolved first.`
+                      )
+                    }
                     const syncRes = await sessionFetch('/api/timetable/entries/sync-draft', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
@@ -1048,7 +1067,7 @@ function HeadteacherTimetablePageContent() {
                       body: JSON.stringify({
                         term,
                         academicYear,
-                        assignments,
+                        assignments: store.assignments,
                         replaceExisting: true,
                       }),
                     })
