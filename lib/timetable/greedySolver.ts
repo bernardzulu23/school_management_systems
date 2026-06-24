@@ -5,6 +5,8 @@
 
 const DEFAULT_MAX_EXECUTION_MS = 8000
 
+import { computeMaxExecutionMs } from '@/lib/timetable/solverTimeout'
+
 import {
   normalizeAllocationPeriods,
   expandRecipeToUnits,
@@ -226,9 +228,9 @@ export function resolveLessonsForSolver(payload: SolverPayload): Lesson[] {
  */
 export function solveTimetable(payload: SolverPayload): SolverResult {
   const START_TIME = Date.now()
-  const MAX_MS = Math.max(1000, Number(payload.maxExecutionMs) || DEFAULT_MAX_EXECUTION_MS)
-
   const lessons = resolveLessonsForSolver(payload)
+  const MAX_MS = computeMaxExecutionMs(lessons.length, payload.maxExecutionMs)
+
   const { slots, lockedAssignments } = payload
 
   const assignments: Record<string, string> = {}
@@ -439,6 +441,25 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
     (a, b) => (DAY_ORDER[a] ?? 99) - (DAY_ORDER[b] ?? 99)
   )
 
+  const lessonFrequencyFor = (lesson: Lesson) =>
+    sortedLessons.filter(
+      (l) =>
+        l.teacherId === lesson.teacherId &&
+        l.classId === lesson.classId &&
+        l.subjectId === lesson.subjectId
+    ).length
+
+  const allowsSameDayRepetition = (lesson: Lesson) => lessonFrequencyFor(lesson) > dayOrder.length
+
+  const sortGreedyDays = (lesson: Lesson) => {
+    const base = sortDaysForLesson(lesson)
+    return [...base].sort((da, db) => {
+      const aOnDay = teacherClassSubjectDay.has(teacherClassSubjectKey(lesson, da)) ? 1 : 0
+      const bOnDay = teacherClassSubjectDay.has(teacherClassSubjectKey(lesson, db)) ? 1 : 0
+      return aOnDay - bOnDay
+    })
+  }
+
   function solveDepthFirst(lessonIndex: number): boolean {
     if (Date.now() - START_TIME > MAX_MS) {
       timedOut = true
@@ -468,7 +489,8 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
         if (isBusy(lesson, ids)) continue
         if (!isSlotAllowed(lesson, run)) continue
         if (wouldStackGreedy(lesson, day)) continue
-        if (teacherClassSubjectDay.has(teacherClassSubjectKey(lesson, day))) continue
+        const alreadyOnDay = teacherClassSubjectDay.has(teacherClassSubjectKey(lesson, day))
+        if (alreadyOnDay && !allowsSameDayRepetition(lesson)) continue
 
         assignments[lesson.id] = ids[0]
         slotSpans[lesson.id] = ids
@@ -501,7 +523,7 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
       if (assignments[lesson.id]) continue
 
       const size = Math.max(1, Number(lesson.consecutivePeriods) || 1)
-      const daysSorted = sortDaysForLesson(lesson)
+      const daysSorted = sortGreedyDays(lesson)
 
       for (const day of daysSorted) {
         const daySlots = byDay.get(day) || []
@@ -513,7 +535,6 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
           if (isBusy(lesson, ids)) continue
           if (!isSlotAllowed(lesson, run)) continue
           if (wouldStackGreedy(lesson, day)) continue
-          if (teacherClassSubjectDay.has(teacherClassSubjectKey(lesson, day))) continue
           assignments[lesson.id] = ids[0]
           slotSpans[lesson.id] = ids
           markBusy(lesson, ids, day)

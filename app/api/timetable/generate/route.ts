@@ -2,14 +2,10 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
-import {
-  ensureTimetableConfig,
-  normalizeWorkingDays,
-  parseBreakSlots,
-  timeToMin,
-  minToTime,
-} from '@/lib/timetable/timeSlotsFromConfig'
-import { type DayPeriodSlot } from '@/lib/timetable/scheduler'
+import { ensureTimetableConfig } from '@/lib/timetable/timeSlotsFromConfig'
+import { computeMaxExecutionMs } from '@/lib/timetable/solverTimeout'
+import { buildDaySlotsFromTimetableConfig } from '@/lib/timetable/buildDaySlotsFromConfig'
+import { expandAllocationsIntoBlocks, type DayPeriodSlot } from '@/lib/timetable/scheduler'
 import { hybridGenerateTimetable, mergePlacements } from '@/lib/timetable/hybridGenerate'
 import { resolveConflictsWithLLM } from '@/lib/timetable/llm-resolver'
 import { requireSchoolType } from '@/lib/middleware/individual-gate'
@@ -61,10 +57,7 @@ export async function POST(req: NextRequest) {
   const replaceExisting = (body as any)?.replaceExisting !== false
   const useLlm = (body as any)?.useLlm === true
   const allowPartial = (body as any)?.allowPartial === true
-  const maxExecutionMs = Math.min(
-    60000,
-    Math.max(5000, Number((body as any)?.maxExecutionMs) || 30000)
-  )
+  const requestedMaxMs = Number((body as any)?.maxExecutionMs) || undefined
 
   const config = await ensureTimetableConfig(prisma, schoolId)
 
@@ -123,17 +116,11 @@ export async function POST(req: NextRequest) {
 
   const normalizedAllocations = await normalizePushedAllocations(prisma, schoolId, allocations)
 
-  const breakSlots = parseBreakSlots((config as any).breakSlots)
-  const workingDays = normalizeWorkingDays((config as any).workingDays)
   const singleMin = Number((config as any).singleDuration || 40)
-
-  const daySlots = buildDaySlots(
-    String((config as any).startTime),
-    String((config as any).endTime),
-    singleMin,
-    breakSlots,
-    workingDays
-  )
+  const daySlots = buildDaySlotsFromTimetableConfig(config as any)
+  const workingDays = Object.keys(daySlots)
+  const lessonCount = expandAllocationsIntoBlocks(normalizedAllocations as any[]).length
+  const maxExecutionMs = computeMaxExecutionMs(lessonCount, requestedMaxMs)
 
   let scheduleResult = await hybridGenerateTimetable(normalizedAllocations as any[], daySlots, {
     lockedSlots,
@@ -357,68 +344,4 @@ export async function POST(req: NextRequest) {
       lockedSlots: lockedSlots.length,
     },
   })
-}
-
-function buildDaySlots(
-  startTime: string,
-  endTime: string,
-  singleMin: number,
-  breakSlots: any[],
-  workingDays: string[]
-) {
-  const startMin = timeToMin(startTime)
-  const endMin = timeToMin(endTime)
-
-  const breaks = (breakSlots || []).map((b: any) => ({
-    start: timeToMin(String(b.start)),
-    end: timeToMin(String(b.end)),
-    label: b.label,
-    isLunch: Boolean(b.isLunch),
-  }))
-
-  const daySlots: Record<string, any[]> = {}
-  for (const day of workingDays) {
-    const slots: any[] = []
-    let cursor = startMin
-    let periodNum = 1
-
-    while (cursor < endMin) {
-      const inBreak = breaks.find((b: any) => cursor >= b.start && cursor < b.end)
-      if (inBreak) {
-        slots.push({
-          type: 'break',
-          label: inBreak.label,
-          start: inBreak.start,
-          end: inBreak.end,
-          isLunch: inBreak.isLunch,
-        })
-        cursor = inBreak.end
-        continue
-      }
-
-      const nextBreak = breaks.find((b: any) => b.start > cursor)
-      const ceilMin = nextBreak ? Math.min(endMin, nextBreak.start) : endMin
-
-      if (cursor + singleMin <= ceilMin) {
-        slots.push({
-          type: 'period',
-          periodNumber: periodNum,
-          start: cursor,
-          end: cursor + singleMin,
-          startTime: minToTime(cursor),
-          endTime: minToTime(cursor + singleMin),
-          durationMin: singleMin,
-          day,
-        })
-        cursor += singleMin
-        periodNum++
-      } else {
-        cursor = nextBreak ? nextBreak.start : endMin
-      }
-    }
-
-    daySlots[day] = slots
-  }
-
-  return daySlots
 }

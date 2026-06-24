@@ -73,7 +73,7 @@ describe('canPlace locked slots', () => {
 })
 
 describe('runPreflightFeasibility', () => {
-  it('flags overloaded teacher', () => {
+  it('flags overloaded teacher with named message', () => {
     const daySlots = makeDaySlots(4)
     const allocations = Array.from({ length: 25 }, (_, i) => ({
       id: `a${i}`,
@@ -82,10 +82,13 @@ describe('runPreflightFeasibility', () => {
       subjectId: 's1',
       periodsPerWeek: 1,
       blockType: 'SINGLE',
+      teacher: { name: 'MWALE LAUNDANI' },
     }))
     const result = runPreflightFeasibility({ allocations, daySlots, singleMin: 40 })
     expect(result.ok).toBe(false)
     expect(result.blocking.some((b) => b.code === 'TEACHER_OVERLOAD')).toBe(true)
+    expect(result.blocking[0]?.message).toContain('MWALE LAUNDANI')
+    expect(result.blocking[0]?.message).toContain('Reduce allocations')
   })
 
   it('does not false-alarm when doubles sum to more period-slots than grid capacity', () => {

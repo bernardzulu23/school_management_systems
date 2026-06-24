@@ -19,6 +19,18 @@ export type PreflightWarning = {
   code: string
   message: string
   entityId?: string
+  entityName?: string
+}
+
+export type FeasibilityUiConflict = {
+  id: string
+  type: 'FEASIBILITY_ERROR'
+  severity: 'error'
+  description: string
+  suggestedFix: string
+  code: string
+  entityId?: string
+  entityName?: string
 }
 
 export type PreflightInfeasibility = {
@@ -46,6 +58,52 @@ function periodsPerDay(daySlots: Record<string, DayPeriodSlot[]>): number {
   const firstDay = Object.keys(daySlots)[0]
   if (!firstDay) return 0
   return (daySlots[firstDay] || []).filter((s) => s.type === 'period').length
+}
+
+function aggregatePeriodsByTeacher(allocations: SchedulerAllocation[]) {
+  const map = new Map<string, { name: string; total: number }>()
+  for (const a of allocations) {
+    const tid = String(a.teacherId)
+    const periods = Number(a.periodsPerWeek || 0)
+    if (periods <= 0) continue
+    const name = String(a.teacher?.name || tid).trim() || tid
+    const row = map.get(tid) || { name, total: 0 }
+    row.total += periods
+    map.set(tid, row)
+  }
+  return map
+}
+
+function aggregatePeriodsByClass(allocations: SchedulerAllocation[]) {
+  const map = new Map<string, { name: string; total: number }>()
+  for (const a of allocations) {
+    const cid = String(a.classId)
+    const periods = Number(a.periodsPerWeek || 0)
+    if (periods <= 0) continue
+    const name = String(a.class?.name || cid).trim() || cid
+    const row = map.get(cid) || { name, total: 0 }
+    row.total += periods
+    map.set(cid, row)
+  }
+  return map
+}
+
+export function mapPreflightBlockingToConflicts(
+  blocking: PreflightWarning[]
+): FeasibilityUiConflict[] {
+  return (blocking || []).map((b, i) => ({
+    id: `feasibility_${i + 1}`,
+    type: 'FEASIBILITY_ERROR',
+    severity: 'error',
+    description: b.message,
+    suggestedFix:
+      b.code === 'TEACHER_OVERLOAD' || b.code === 'CLASS_OVERLOAD'
+        ? 'Reduce allocations in Department Allocations before generating.'
+        : 'Adjust the bell schedule, locks, or HOD allocations before generating.',
+    code: b.code,
+    entityId: b.entityId,
+    entityName: b.entityName,
+  }))
 }
 
 function blockDemandByEntity(
@@ -84,48 +142,83 @@ export function runPreflightFeasibility(opts: {
   const teachingSlots = countTeachingSlots(daySlots)
   const days = Object.keys(daySlots).length
   const ppd = periodsPerDay(daySlots)
-  const availableSlotsPerClass = teachingSlots
+  const availableSlotsPerWeek = teachingSlots
   const blocks = expandAllocationsIntoBlocks(allocations)
   const breakAfterPeriods = deriveBreakAfterPeriods(daySlots)
   const classDemand = blockDemandByEntity(blocks, 'classId')
   const teacherDemand = blockDemandByEntity(blocks, 'teacherId')
-  const teacherCapacity = teachingSlots
+  const teacherPeriods = aggregatePeriodsByTeacher(allocations)
+  const classPeriods = aggregatePeriodsByClass(allocations)
 
-  for (const [classId, demand] of classDemand.entries()) {
-    if (demand > availableSlotsPerClass) {
+  for (const [classId, row] of classPeriods.entries()) {
+    if (row.total > availableSlotsPerWeek) {
+      const message = `${row.name} is over-allocated: ${row.total} periods assigned but only ${availableSlotsPerWeek} slots available per week. Reduce allocations in Department Allocations before generating.`
       blocking.push({
         code: 'CLASS_OVERLOAD',
-        message: `Class ${classId} has ${demand} lesson blocks but only ${availableSlotsPerClass} slot positions available per week.`,
+        message,
         entityId: classId,
+        entityName: row.name,
       })
-      details.push(
-        `Class ${classId}: ${demand} lesson blocks required, ${availableSlotsPerClass} slot positions available (${days} days × ~${ppd} periods).`
-      )
-    } else if (demand > availableSlotsPerClass * 0.92) {
+      details.push(message)
+    } else if (row.total > availableSlotsPerWeek * 0.92) {
       warnings.push({
         code: 'CLASS_TIGHT',
-        message: `Class ${classId} timetable is very tight: ${demand}/${availableSlotsPerClass} lesson blocks.`,
+        message: `${row.name} timetable is very tight: ${row.total}/${availableSlotsPerWeek} periods.`,
         entityId: classId,
+        entityName: row.name,
       })
     }
   }
 
-  for (const [teacherId, demand] of teacherDemand.entries()) {
-    if (demand > teacherCapacity) {
+  for (const [teacherId, row] of teacherPeriods.entries()) {
+    if (row.total > availableSlotsPerWeek) {
+      const message = `Teacher ${row.name} is over-allocated: ${row.total} periods assigned but only ${availableSlotsPerWeek} slots available per week. Reduce allocations in Department Allocations before generating.`
       blocking.push({
         code: 'TEACHER_OVERLOAD',
-        message: `Teacher ${teacherId} has ${demand} lesson blocks but only ${teacherCapacity} slot positions available per week.`,
+        message,
         entityId: teacherId,
+        entityName: row.name,
       })
-      details.push(
-        `Teacher ${teacherId}: ${demand} lesson blocks required, ${teacherCapacity} slot positions available.`
-      )
-    } else if (demand > teacherCapacity * 0.85) {
+      details.push(message)
+    } else if (row.total > availableSlotsPerWeek * 0.85) {
       warnings.push({
         code: 'TEACHER_TIGHT',
-        message: `Teacher ${teacherId} load is high (${demand}/${teacherCapacity} lesson blocks).`,
+        message: `Teacher ${row.name} load is high (${row.total}/${availableSlotsPerWeek} periods).`,
         entityId: teacherId,
+        entityName: row.name,
       })
+    }
+  }
+
+  for (const [classId, demand] of classDemand.entries()) {
+    if (demand > availableSlotsPerWeek) {
+      if (!blocking.some((b) => b.code === 'CLASS_OVERLOAD' && b.entityId === classId)) {
+        const name = classPeriods.get(classId)?.name || classId
+        const message = `${name} requires ${demand} lesson blocks but only ${availableSlotsPerWeek} slot positions are available (${days} days × ${ppd} periods).`
+        blocking.push({
+          code: 'CLASS_BLOCK_OVERLOAD',
+          message,
+          entityId: classId,
+          entityName: name,
+        })
+        details.push(message)
+      }
+    }
+  }
+
+  for (const [teacherId, demand] of teacherDemand.entries()) {
+    if (demand > availableSlotsPerWeek) {
+      if (!blocking.some((b) => b.code === 'TEACHER_OVERLOAD' && b.entityId === teacherId)) {
+        const name = teacherPeriods.get(teacherId)?.name || teacherId
+        const message = `Teacher ${name} requires ${demand} lesson blocks but only ${availableSlotsPerWeek} slot positions are available per week.`
+        blocking.push({
+          code: 'TEACHER_BLOCK_OVERLOAD',
+          message,
+          entityId: teacherId,
+          entityName: name,
+        })
+        details.push(message)
+      }
     }
   }
 
@@ -197,7 +290,9 @@ export function runPreflightFeasibility(opts: {
     ? undefined
     : {
         code: blocking[0]?.code || 'INFEASIBLE',
-        message: blocking[0]?.message || 'Timetable inputs are infeasible.',
+        message:
+          blocking[0]?.message ||
+          'Timetable allocations cannot fit the bell schedule. Reduce allocations before generating.',
         details: details.length ? details : blocking.map((b) => b.message),
       }
 

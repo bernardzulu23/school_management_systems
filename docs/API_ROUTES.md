@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-06-20T19:21:21.585Z
+Generated: 2026-06-24T15:16:05.987Z
 
-Total route files: **349**
+Total route files: **363**
 
 ## Quick index
 
@@ -16,16 +16,17 @@ Total route files: **349**
 | --------------------------- | ----: |
 | `/api/account`              |     2 |
 | `/api/activities`           |     4 |
-| `/api/admin`                |    16 |
+| `/api/admin`                |    19 |
 | `/api/ai`                   |    11 |
 | `/api/aiml`                 |     5 |
 | `/api/allocations`          |     7 |
 | `/api/analytics`            |     1 |
+| `/api/announcements`        |     2 |
 | `/api/assessments`          |    13 |
 | `/api/assignments`          |     4 |
-| `/api/attendance`           |     8 |
+| `/api/attendance`           |     9 |
 | `/api/auth`                 |     8 |
-| `/api/billing`              |     1 |
+| `/api/billing`              |     2 |
 | `/api/career-clusters`      |     2 |
 | `/api/careers`              |     2 |
 | `/api/cbc`                  |     2 |
@@ -44,6 +45,7 @@ Total route files: **349**
 | `/api/field-trips`          |     1 |
 | `/api/games`                |     2 |
 | `/api/government`           |     7 |
+| `/api/grades`               |     1 |
 | `/api/health`               |     1 |
 | `/api/hod`                  |    11 |
 | `/api/hods`                 |     3 |
@@ -58,7 +60,7 @@ Total route files: **349**
 | `/api/parent`               |     1 |
 | `/api/payments`             |     2 |
 | `/api/ping`                 |     1 |
-| `/api/platform`             |    13 |
+| `/api/platform`             |    14 |
 | `/api/profile`              |     4 |
 | `/api/proprietor`           |     1 |
 | `/api/public`               |     6 |
@@ -79,11 +81,12 @@ Total route files: **349**
 | `/api/teacher-performance`  |     4 |
 | `/api/teachers`             |     3 |
 | `/api/teaching-assignments` |     1 |
-| `/api/timetable`            |    25 |
+| `/api/timetable`            |    28 |
 | `/api/transport`            |     2 |
+| `/api/upload`               |     1 |
 | `/api/users`                |     3 |
 | `/api/ussd`                 |     1 |
-| `/api/v1`                   |     6 |
+| `/api/v1`                   |     7 |
 
 ---
 
@@ -107,9 +110,12 @@ Total route files: **349**
 
 | Method    | Route                                           | Summary |
 | --------- | ----------------------------------------------- | ------- |
+| GET       | `/api/admin/allocations`                        | —       |
+| DELETE    | `/api/admin/allocations/:allocationId`          | —       |
 | POST      | `/api/admin/allocations/:allocationId/approve`  | —       |
 | POST      | `/api/admin/allocations/:allocationId/reject`   | —       |
 | GET       | `/api/admin/allocations/:allocationId/review`   | —       |
+| PUT       | `/api/admin/allocations/:allocationId/update`   | —       |
 | DELETE    | `/api/admin/allocations/clear`                  | —       |
 | GET       | `/api/admin/allocations/pending`                | —       |
 | GET       | `/api/admin/diagnostics/students`               | —       |
@@ -168,6 +174,13 @@ Total route files: **349**
 | ------ | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
 | GET    | `/api/analytics/national-percentile` | Anonymous national percentile for a student's mock exam score. Aggregates across all schools — no individual identities returned. |
 
+## /api/announcements
+
+| Method           | Route                    | Summary                                                                           |
+| ---------------- | ------------------------ | --------------------------------------------------------------------------------- |
+| GET, POST        | `/api/announcements`     | Legacy announcements API — returns school notices until a dedicated model exists. |
+| GET, PUT, DELETE | `/api/announcements/:id` | —                                                                                 |
+
 ## /api/assessments
 
 | Method           | Route                                | Summary |
@@ -197,16 +210,17 @@ Total route files: **349**
 
 ## /api/attendance
 
-| Method    | Route                            | Summary                                                                                                                                                                                 |
-| --------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET, POST | `/api/attendance`                | —                                                                                                                                                                                       |
-| POST      | `/api/attendance/qr-generate`    | POST /api/attendance/qr-generate Teacher starts a QR attendance session. Returns QR image and session details. BODY: { classId, subjectId, periodLabel?, term?, academicYear?, shift? } |
-| GET       | `/api/attendance/qr-info`        | GET /api/attendance/qr-info?t={token} Public: session context + roster for the /attend mobile page.                                                                                     |
-| POST      | `/api/attendance/qr-mark`        | POST /api/attendance/qr-mark Student marks present via QR token (no auth cookie required). BODY: { token, studentName? } or { token, studentId }                                        |
-| POST      | `/api/attendance/returns/submit` | —                                                                                                                                                                                       |
-| GET       | `/api/attendance/sessions`       | GET /api/attendance/sessions?classId=&date=YYYY-MM-DD&subjectId= Lists mobile lesson sessions for the unified web attendance dashboard.                                                 |
-| GET       | `/api/attendance/stats`          | —                                                                                                                                                                                       |
-| POST      | `/api/attendance/test-sms`       | DEV ONLY — test parent attendance SMS for a student.                                                                                                                                    |
+| Method           | Route                            | Summary                                                                                                                                                                                 |
+| ---------------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET, POST        | `/api/attendance`                | —                                                                                                                                                                                       |
+| GET, PUT, DELETE | `/api/attendance/:id`            | —                                                                                                                                                                                       |
+| POST             | `/api/attendance/qr-generate`    | POST /api/attendance/qr-generate Teacher starts a QR attendance session. Returns QR image and session details. BODY: { classId, subjectId, periodLabel?, term?, academicYear?, shift? } |
+| GET              | `/api/attendance/qr-info`        | GET /api/attendance/qr-info?t={token} Public: session context + roster for the /attend mobile page.                                                                                     |
+| POST             | `/api/attendance/qr-mark`        | POST /api/attendance/qr-mark Student marks present via QR token (no auth cookie required). BODY: { token, studentName? } or { token, studentId }                                        |
+| POST             | `/api/attendance/returns/submit` | —                                                                                                                                                                                       |
+| GET              | `/api/attendance/sessions`       | GET /api/attendance/sessions?classId=&date=YYYY-MM-DD&subjectId= Lists mobile lesson sessions for the unified web attendance dashboard.                                                 |
+| GET              | `/api/attendance/stats`          | —                                                                                                                                                                                       |
+| POST             | `/api/attendance/test-sms`       | DEV ONLY — test parent attendance SMS for a student.                                                                                                                                    |
 
 ## /api/auth
 
@@ -223,9 +237,10 @@ Total route files: **349**
 
 ## /api/billing
 
-| Method | Route                               | Summary |
-| ------ | ----------------------------------- | ------- |
-| POST   | `/api/billing/subscription-payment` | —       |
+| Method | Route                                      | Summary |
+| ------ | ------------------------------------------ | ------- |
+| POST   | `/api/billing/subscription-payment`        | —       |
+| GET    | `/api/billing/subscription-payment/status` | —       |
 
 ## /api/career-clusters
 
@@ -392,6 +407,12 @@ Total route files: **349**
 | GET, POST        | `/api/government/leave`                  | —       |
 | PATCH            | `/api/government/leave/:id`              | —       |
 
+## /api/grades
+
+| Method    | Route         | Summary                                                                                            |
+| --------- | ------------- | -------------------------------------------------------------------------------------------------- |
+| GET, POST | `/api/grades` | Offline sync legacy endpoint — returns empty grade list (use /api/assessments or /api/ecz/scores). |
+
 ## /api/health
 
 | Method | Route         | Summary                                                                                    |
@@ -531,21 +552,22 @@ Total route files: **349**
 
 ## /api/platform
 
-| Method        | Route                            | Summary                                                                                 |
-| ------------- | -------------------------------- | --------------------------------------------------------------------------------------- |
-| POST          | `/api/platform/auth/login`       | —                                                                                       |
-| GET           | `/api/platform/auth/me`          | —                                                                                       |
-| GET, PATCH    | `/api/platform/auth/profile`     | —                                                                                       |
-| GET           | `/api/platform/billing/payments` | —                                                                                       |
-| GET           | `/api/platform/billing/summary`  | —                                                                                       |
-| GET           | `/api/platform/health`           | —                                                                                       |
-| GET           | `/api/platform/health/rag`       | —                                                                                       |
-| GET           | `/api/platform/schools`          | List affiliated, paid schools — metadata only (no enrollment counts).                   |
-| PATCH, DELETE | `/api/platform/schools/:id`      | Patch tenant billing flags and location metadata only.                                  |
-| GET           | `/api/platform/stats/districts`  | GET /api/platform/stats/districts?province=Lusaka                                       |
-| GET           | `/api/platform/stats/overview`   | —                                                                                       |
-| GET           | `/api/platform/stats/provinces`  | —                                                                                       |
-| GET           | `/api/platform/stats/streams`    | GET /api/platform/stats/streams — schools grouped by province+district reporting stream |
+| Method        | Route                              | Summary                                                                                 |
+| ------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
+| POST          | `/api/platform/auth/login`         | —                                                                                       |
+| GET           | `/api/platform/auth/me`            | —                                                                                       |
+| GET, PATCH    | `/api/platform/auth/profile`       | —                                                                                       |
+| GET           | `/api/platform/billing/payments`   | —                                                                                       |
+| GET           | `/api/platform/billing/summary`    | —                                                                                       |
+| GET           | `/api/platform/health`             | —                                                                                       |
+| GET           | `/api/platform/health/rag`         | —                                                                                       |
+| GET           | `/api/platform/schools`            | List affiliated, paid schools — metadata only (no enrollment counts).                   |
+| PATCH, DELETE | `/api/platform/schools/:id`        | Patch tenant billing flags and location metadata only.                                  |
+| GET           | `/api/platform/stats/districts`    | GET /api/platform/stats/districts?province=Lusaka                                       |
+| GET           | `/api/platform/stats/overview`     | —                                                                                       |
+| GET           | `/api/platform/stats/provinces`    | —                                                                                       |
+| GET           | `/api/platform/stats/school-usage` | Per-school student + teacher counts only (no names, grades, or records).                |
+| GET           | `/api/platform/stats/streams`      | GET /api/platform/stats/streams — schools grouped by province+district reporting stream |
 
 ## /api/profile
 
@@ -728,6 +750,8 @@ Total route files: **349**
 
 | Method             | Route                                      | Summary                                                                                                                                                |
 | ------------------ | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| —                  | `/api/timetable`                           | Legacy alias — clients should call GET /api/timetable/view directly.                                                                                   |
+| GET, PUT, DELETE   | `/api/timetable/:id`                       | —                                                                                                                                                      |
 | GET, POST          | `/api/timetable/allocations`               | —                                                                                                                                                      |
 | DELETE             | `/api/timetable/allocations/:id`           | —                                                                                                                                                      |
 | POST               | `/api/timetable/allocations/push`          | —                                                                                                                                                      |
@@ -740,6 +764,7 @@ Total route files: **349**
 | GET                | `/api/timetable/draft-meta`                | GET /api/timetable/draft-meta?term=Term+1&academicYear=2026&refresh=false Lightweight read of TimetableDraftMeta (no full rescan unless refresh=true). |
 | GET, PATCH, DELETE | `/api/timetable/entries`                   | Single entry: `{ id }`. Bulk clear: `{ clearAll: true, term, academicYear }` (draft only).                                                             |
 | POST               | `/api/timetable/entries/sync-draft`        | POST /api/timetable/entries/sync-draft Persist in-memory solver/UI assignments to TimetableAllocationEntry (draft).                                    |
+| GET                | `/api/timetable/feasibility`               | GET /api/timetable/feasibility?term=Term+1&academicYear=2026 Pre-generation capacity check — teacher/class load vs bell schedule.                      |
 | GET, POST          | `/api/timetable/generate`                  | —                                                                                                                                                      |
 | GET, POST          | `/api/timetable/notifications`             | —                                                                                                                                                      |
 | GET                | `/api/timetable/periods`                   | —                                                                                                                                                      |
@@ -761,6 +786,12 @@ Total route files: **349**
 | POST, DELETE | `/api/transport/assignments` | —       |
 | GET, POST    | `/api/transport/routes`      | —       |
 
+## /api/upload
+
+| Method | Route         | Summary                                                                            |
+| ------ | ------------- | ---------------------------------------------------------------------------------- |
+| POST   | `/api/upload` | Legacy generic upload — use /api/materials/ingest or /api/profile/picture instead. |
+
 ## /api/users
 
 | Method           | Route                     | Summary |
@@ -777,14 +808,15 @@ Total route files: **349**
 
 ## /api/v1
 
-| Method | Route                                                        | Summary |
-| ------ | ------------------------------------------------------------ | ------- |
-| —      | `/api/v1/subjects/by-category`                               | —       |
-| —      | `/api/v1/teacher-performance/observation-tools`              | —       |
-| —      | `/api/v1/teacher-performance/observations`                   | —       |
-| —      | `/api/v1/teacher-performance/teachers/:id/detailed-analysis` | —       |
-| —      | `/api/v1/teacher-performance/teachers/:id/summary`           | —       |
-| —      | `/api/v1/users`                                              | —       |
+| Method | Route                                                        | Summary                                                                 |
+| ------ | ------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| POST   | `/api/v1/notifications/subscribe`                            | PWA push subscription stub — mobile app uses /api/mobile/push/register. |
+| —      | `/api/v1/subjects/by-category`                               | —                                                                       |
+| —      | `/api/v1/teacher-performance/observation-tools`              | —                                                                       |
+| —      | `/api/v1/teacher-performance/observations`                   | —                                                                       |
+| —      | `/api/v1/teacher-performance/teachers/:id/detailed-analysis` | —                                                                       |
+| —      | `/api/v1/teacher-performance/teachers/:id/summary`           | —                                                                       |
+| —      | `/api/v1/users`                                              | —                                                                       |
 
 ---
 

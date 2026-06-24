@@ -14,6 +14,7 @@ import {
   mergeSolverWithPartial,
   type DbTimeSlotRow,
 } from '@/lib/timetable/buildBlockSolverPayload'
+import { computeMaxExecutionMs } from '@/lib/timetable/solverTimeout'
 import {
   expandAllocationsIntoBlocks,
   generateTimetable,
@@ -165,7 +166,8 @@ export async function hybridGenerateTimetable(
 ): Promise<HybridGenerateResult> {
   const options = opts.options || {}
   const singleMin = Math.max(1, Number(options.singleMin) || 40)
-  const maxMs = Math.min(60000, Math.max(5000, Number(options.maxExecutionMs) || 30000))
+  const lessonCount = expandAllocationsIntoBlocks(allocations).length
+  const maxMs = computeMaxExecutionMs(lessonCount, options.maxExecutionMs)
   const started = Date.now()
 
   const lockedSlots = opts.lockedSlots || []

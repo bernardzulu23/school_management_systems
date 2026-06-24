@@ -11,6 +11,8 @@ export type TimetableDraftMeta = {
   conflictCount: number
   conflictErrors: number
   conflictWarnings: number
+  missingPeriodsCount?: number
+  byType?: Record<string, number>
   canPublish: boolean
   lastScannedAt: string | null
   conflictSummary?: unknown[]
@@ -60,6 +62,8 @@ export function useTimetableDraftMeta({
           conflictCount: Number(data.conflictCount ?? 0),
           conflictErrors: Number(data.conflictErrors ?? 0),
           conflictWarnings: Number(data.conflictWarnings ?? 0),
+          missingPeriodsCount: Number(data.missingPeriodsCount ?? 0),
+          byType: data.byType && typeof data.byType === 'object' ? data.byType : undefined,
           canPublish: Boolean(data.canPublish ?? true),
           lastScannedAt: data.lastScannedAt ?? null,
           conflictSummary: data.conflictSummary,
@@ -89,6 +93,8 @@ export function useTimetableDraftMeta({
         conflictCount: Number(data.totalConflicts ?? 0),
         conflictErrors: Number(data.errorCount ?? 0),
         conflictWarnings: Number(data.warningCount ?? 0),
+        missingPeriodsCount: Number(data.missingPeriodsCount ?? 0),
+        byType: data.byType && typeof data.byType === 'object' ? data.byType : undefined,
         canPublish: Boolean(data.canPublish ?? true),
         lastScannedAt: data.scannedAt ?? new Date().toISOString(),
         conflictSummary: data.conflicts,

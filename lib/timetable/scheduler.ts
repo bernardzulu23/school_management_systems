@@ -275,6 +275,8 @@ export function canPlace(
     strictSoftConstraints?: boolean
     reservedTeacherSlots?: Set<string>
     breakAfterPeriods?: number[]
+    allBlocks?: SchedulerBlock[]
+    workingDayCount?: number
   }
 ): CanPlaceResult {
   const { day, startPeriod } = slot
@@ -308,7 +310,19 @@ export function canPlace(
       pl.classId === block.classId &&
       pl.subjectId === block.subjectId
     ) {
-      return { ok: false, reason: 'teacher_class_subject_same_day' }
+      const allBlocks = options?.allBlocks || []
+      const lessonFrequency = allBlocks.length
+        ? allBlocks.filter(
+            (b) =>
+              b.teacherId === block.teacherId &&
+              b.classId === block.classId &&
+              b.subjectId === block.subjectId
+          ).length
+        : 1
+      const workingDayCount = options?.workingDayCount ?? 5
+      if (lessonFrequency <= workingDayCount) {
+        return { ok: false, reason: 'teacher_class_subject_same_day' }
+      }
     }
 
     if (pl.teacherId === block.teacherId && pl.classId === block.classId) {
@@ -563,6 +577,8 @@ export function generateTimetableOnce(
     strictSoftConstraints: options.strictSoftConstraints,
     reservedTeacherSlots: reservedSet,
     breakAfterPeriods,
+    allBlocks,
+    workingDayCount: Object.keys(daySlots).length,
   }
 
   function pushPlacedFromCandidate(block: SchedulerBlock, cand: SchedulerCandidateSlot) {

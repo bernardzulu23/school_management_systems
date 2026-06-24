@@ -54,6 +54,15 @@ import {
 } from '@/hooks/useTimetableDraftMeta'
 
 type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings' | 'allocations'
+type ConflictIssueFilter = 'all' | 'missing' | 'feasibility'
+
+type FeasibilityUiConflict = {
+  id: string
+  type: 'FEASIBILITY_ERROR'
+  severity: 'error'
+  description: string
+  suggestedFix?: string
+}
 
 const TAB_VALUES: Tab[] = [
   'assignment',
@@ -191,6 +200,13 @@ function HeadteacherTimetablePageContent() {
     details?: string[]
   } | null>(null)
   const [preflightWarnings, setPreflightWarnings] = useState<string[]>([])
+  const [feasibilityErrors, setFeasibilityErrors] = useState<FeasibilityUiConflict[]>([])
+  const [feasibilityLoading, setFeasibilityLoading] = useState(false)
+  const [conflictIssueFilter, setConflictIssueFilter] = useState<ConflictIssueFilter>(() => {
+    const raw = String(searchParams.get('filter') || 'all').toLowerCase()
+    if (raw === 'missing' || raw === 'feasibility') return raw
+    return 'all'
+  })
   const [genProgress, setGenProgress] = useState<GenerationProgressState>({
     open: false,
     stage: 'idle',
@@ -585,10 +601,61 @@ function HeadteacherTimetablePageContent() {
   }, [masterEntries])
 
   useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      setFeasibilityLoading(true)
+      try {
+        const qs = new URLSearchParams({ term, academicYear })
+        const res = await sessionFetch(`/api/timetable/feasibility?${qs}`, { cache: 'no-store' })
+        const json = await res.json().catch(() => ({}))
+        if (!cancelled && res.ok) {
+          setFeasibilityErrors(Array.isArray(json?.feasibilityErrors) ? json.feasibilityErrors : [])
+        }
+      } catch {
+        if (!cancelled) setFeasibilityErrors([])
+      } finally {
+        if (!cancelled) setFeasibilityLoading(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [term, academicYear])
+
+  const serverConflictRows = useMemo(() => {
+    const raw = draftMeta?.conflictSummary
+    if (!Array.isArray(raw)) return []
+    return raw.filter((row) => row && typeof row === 'object')
+  }, [draftMeta?.conflictSummary])
+
+  const missingPeriodsCount = useMemo(() => {
+    if (typeof draftMeta?.missingPeriodsCount === 'number' && draftMeta.missingPeriodsCount > 0) {
+      return draftMeta.missingPeriodsCount
+    }
+    if (typeof draftMeta?.byType?.MISSING_PERIODS === 'number') {
+      return draftMeta.byType.MISSING_PERIODS
+    }
+    return serverConflictRows.filter((c: any) => c.type === 'MISSING_PERIODS').length
+  }, [draftMeta, serverConflictRows])
+
+  const filteredServerConflicts = useMemo(() => {
+    if (conflictIssueFilter === 'missing') {
+      return serverConflictRows.filter((c: any) => c.type === 'MISSING_PERIODS')
+    }
+    if (conflictIssueFilter === 'feasibility') {
+      return feasibilityErrors
+    }
+    return serverConflictRows
+  }, [conflictIssueFilter, feasibilityErrors, serverConflictRows])
+
+  useEffect(() => {
     setTerm(String(searchParams.get('term') || 'Term 1'))
     setAcademicYear(String(searchParams.get('academicYear') || new Date().getFullYear()))
     setTab(parseTabFromSearchParams(searchParams))
     setGridMode(parseGridModeFromSearchParams(searchParams))
+    const rawFilter = String(searchParams.get('filter') || 'all').toLowerCase()
+    if (rawFilter === 'missing' || rawFilter === 'feasibility') setConflictIssueFilter(rawFilter)
+    else setConflictIssueFilter('all')
   }, [searchParams])
 
   useEffect(() => {
@@ -750,9 +817,22 @@ function HeadteacherTimetablePageContent() {
 
   const canPublish =
     assignments.length > 0 &&
+    feasibilityErrors.length === 0 &&
     (draftMetaFresh && draftMeta != null
-      ? draftMeta.canPublish && (draftMeta.conflictErrors ?? 0) === 0
+      ? draftMeta.canPublish &&
+        (draftMeta.conflictErrors ?? 0) === 0 &&
+        (draftMeta.conflictWarnings ?? 0) === 0
       : stats.clientConflicts === 0)
+
+  const openMissingConflictsTab = () => {
+    setConflictIssueFilter('missing')
+    setTab('conflicts')
+  }
+
+  const openFeasibilityConflictsTab = () => {
+    setConflictIssueFilter('feasibility')
+    setTab('conflicts')
+  }
 
   const conflictCentreHref = `/dashboard/headteacher/timetable/conflicts?term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}`
 
@@ -892,6 +972,16 @@ function HeadteacherTimetablePageContent() {
   }
 
   const generateFromAllocations = async () => {
+    if (feasibilityErrors.length > 0) {
+      setLastInfeasibility({
+        code: 'FEASIBILITY',
+        message: feasibilityErrors[0]?.description || 'Allocations cannot fit the bell schedule.',
+        details: feasibilityErrors.map((e) => e.description),
+      })
+      openFeasibilityConflictsTab()
+      toast.error('Fix feasibility errors before generating')
+      return
+    }
     setDbGenerating(true)
     replaceAssignments([], { source: 'generate' })
     setGenProgress({
@@ -1039,8 +1129,13 @@ function HeadteacherTimetablePageContent() {
             </Button>
             <Button
               onClick={generateFromAllocations}
-              disabled={dbGenerating}
+              disabled={dbGenerating || feasibilityLoading || feasibilityErrors.length > 0}
               className="zsms-hover-raise"
+              title={
+                feasibilityErrors.length > 0
+                  ? 'Fix feasibility errors on the Conflicts tab before generating'
+                  : undefined
+              }
             >
               {dbGenerating ? 'Generating…' : 'Generate Perfect Timetable'}
             </Button>
@@ -1131,7 +1226,7 @@ function HeadteacherTimetablePageContent() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
           <div className="onboard-card p-4">
             <div className="text-xs text-royalPurple-text3">Classes</div>
             <div className="text-xl font-bold text-royalPurple-text1">{stats.classCount}</div>
@@ -1140,6 +1235,23 @@ function HeadteacherTimetablePageContent() {
             <div className="text-xs text-royalPurple-text3">Teachers</div>
             <div className="text-xl font-bold text-royalPurple-text1">{stats.teacherCount}</div>
           </div>
+          <button
+            type="button"
+            onClick={openMissingConflictsTab}
+            className="onboard-card p-4 text-left hover:border-amber-400/60 transition-colors"
+          >
+            <div className="text-xs text-royalPurple-text3">Missing</div>
+            {missingPeriodsCount > 0 ? (
+              <div className="text-xl font-bold kpi-warn">
+                {missingPeriodsCount} period{missingPeriodsCount === 1 ? '' : 's'}
+              </div>
+            ) : (
+              <div className="text-xl font-bold kpi-pass">0</div>
+            )}
+            <div className="text-[10px] text-royalPurple-text3 mt-1">
+              Unplaced allocation periods
+            </div>
+          </button>
           <div className="onboard-card p-4">
             <div className="text-xs text-royalPurple-text3">Conflicts (server)</div>
             {stats.serverErrors > 0 ? (
@@ -1952,6 +2064,62 @@ function HeadteacherTimetablePageContent() {
                 <ul className="mt-1 list-disc list-inside text-xs space-y-0.5">
                   {preflightWarnings.map((w, i) => (
                     <li key={i}>{w}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+            {feasibilityErrors.length > 0 ? (
+              <div className="onboard-card p-4 border border-red-300 bg-red-50">
+                <div className="font-semibold text-red-800">Feasibility errors</div>
+                <div className="text-xs text-red-700 mt-1">
+                  Fix these before generating — allocations exceed bell-schedule capacity.
+                </div>
+                <ul className="mt-2 space-y-2">
+                  {feasibilityErrors.map((err) => (
+                    <li
+                      key={err.id}
+                      className="text-sm text-red-800 border border-red-200 rounded-lg px-3 py-2 bg-white/70"
+                    >
+                      {err.description}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : feasibilityLoading ? (
+              <div className="text-xs text-royalPurple-text3">Checking allocation feasibility…</div>
+            ) : null}
+            {conflictIssueFilter !== 'all' ? (
+              <div className="flex flex-wrap items-center gap-2 text-sm">
+                <span className="text-royalPurple-text2">
+                  Filter: {conflictIssueFilter === 'missing' ? 'Missing Periods' : 'Feasibility'}
+                </span>
+                <Button variant="outline" size="sm" onClick={() => setConflictIssueFilter('all')}>
+                  Show all
+                </Button>
+              </div>
+            ) : null}
+            {filteredServerConflicts.length > 0 ? (
+              <div className="onboard-card p-4 border border-royalPurple-border/40 space-y-2">
+                <div className="font-semibold text-royalPurple-text1">
+                  {conflictIssueFilter === 'feasibility'
+                    ? 'Feasibility errors'
+                    : conflictIssueFilter === 'missing'
+                      ? 'Missing periods'
+                      : 'Server audit issues'}
+                </div>
+                <ul className="space-y-2">
+                  {filteredServerConflicts.map((row: any, i: number) => (
+                    <li
+                      key={row.id || `srv-${i}`}
+                      className={`rounded-xl border px-3 py-2 text-sm ${
+                        row.severity === 'error' || row.type === 'FEASIBILITY_ERROR'
+                          ? 'border-red-200 bg-red-50 text-red-800'
+                          : 'border-amber-200 bg-amber-50 text-amber-900'
+                      }`}
+                    >
+                      <div className="font-medium">{row.type || 'CONFLICT'}</div>
+                      <div className="mt-0.5">{row.description || row.message}</div>
+                    </li>
                   ))}
                 </ul>
               </div>
