@@ -15,10 +15,10 @@ export const SUBJECTS = [
 
   // Languages
   'French',
-  'Portuguese', 
+  'Portuguese',
   'Swahili',
   'Chinese',
-  'Chichewa',
+  'Cinyanja',
   'Chitonga',
   'Luvale',
   'Lunda',
@@ -72,7 +72,7 @@ export const SUBJECTS = [
   'Life Skills',
 
   // Religious Studies
-  'Religious Education 2046'
+  'Religious Education 2046',
 ]
 
 export const DEPARTMENTS = [
@@ -86,23 +86,19 @@ export const DEPARTMENTS = [
       'Portuguese',
       'Swahili',
       'Chinese',
-      'Chichewa',
+      'Cinyanja',
       'Chitonga',
       'Luvale',
       'Lunda',
       'Kikaonde',
       'Bemba',
-      'Silozi'
-    ]
+      'Silozi',
+    ],
   },
   {
     id: 'mathematics',
     name: 'Mathematics',
-    subjects: [
-      'Mathematics',
-      'Additional Mathematics',
-      'Statistics'
-    ]
+    subjects: ['Mathematics', 'Additional Mathematics', 'Statistics'],
   },
   {
     id: 'social-sciences',
@@ -115,28 +111,18 @@ export const DEPARTMENTS = [
       'Psychology',
       'Sociology',
       'Philosophy',
-      'Religious Education 2046'
-    ]
+      'Religious Education 2046',
+    ],
   },
   {
     id: 'home-economics',
     name: 'Home Economics',
-    subjects: [
-      'Food and Nutrition',
-      'Fashion and Fabrics',
-      'Health Education',
-      'Life Skills'
-    ]
+    subjects: ['Food and Nutrition', 'Fashion and Fabrics', 'Health Education', 'Life Skills'],
   },
   {
     id: 'expressive-arts',
     name: 'Expressive Arts',
-    subjects: [
-      'Music',
-      'Art and Design',
-      'Drama/Theatre Arts',
-      'Physical Education'
-    ]
+    subjects: ['Music', 'Art and Design', 'Drama/Theatre Arts', 'Physical Education'],
   },
   {
     id: 'business-studies',
@@ -148,8 +134,8 @@ export const DEPARTMENTS = [
       'Economics',
       'Entrepreneurship',
       'Hospitality Management',
-      'Travel and Tourism'
-    ]
+      'Travel and Tourism',
+    ],
   },
   {
     id: 'natural-sciences',
@@ -168,9 +154,9 @@ export const DEPARTMENTS = [
       'Metalwork',
       'Woodwork',
       'Design and Technology',
-      'Agriculture Science'
-    ]
-  }
+      'Agriculture Science',
+    ],
+  },
 ]
 
 export const SUBJECT_CATEGORIES = {
@@ -182,20 +168,20 @@ export const SUBJECT_CATEGORIES = {
     'Science',
     'Physics',
     'Chemistry',
-    'Biology'
+    'Biology',
   ],
-  'Languages': [
+  Languages: [
     'French',
     'Portuguese',
     'Swahili',
     'Chinese',
-    'Chichewa',
+    'Cinyanja',
     'Chitonga',
     'Luvale',
     'Lunda',
     'Kikaonde',
     'Bemba',
-    'Silozi'
+    'Silozi',
   ],
   'Social Sciences': [
     'Geography',
@@ -204,21 +190,21 @@ export const SUBJECT_CATEGORIES = {
     'Civic Education',
     'Psychology',
     'Sociology',
-    'Philosophy'
+    'Philosophy',
   ],
   'Business & Economics': [
     'Business Studies',
     'Commerce',
     'Principles of Accounts',
     'Economics',
-    'Entrepreneurship'
+    'Entrepreneurship',
   ],
-  'Technology': [
+  Technology: [
     'Computer Studies',
     'Computer Science',
     'Information Technology',
     'Electronics',
-    'Technical Drawing'
+    'Technical Drawing',
   ],
   'Practical Arts': [
     'Food and Nutrition',
@@ -226,35 +212,22 @@ export const SUBJECT_CATEGORIES = {
     'Woodwork',
     'Fashion and Fabrics',
     'Design and Technology',
-    'Agriculture Science'
+    'Agriculture Science',
   ],
-  'Creative Arts': [
-    'Music',
-    'Art and Design',
-    'Drama/Theatre Arts'
-  ],
-  'Health & Wellness': [
-    'Physical Education',
-    'Health Education',
-    'Life Skills'
-  ],
-  'Hospitality': [
-    'Hospitality Management',
-    'Travel and Tourism'
-  ],
-  'Religious Studies': [
-    'Religious Education 2046'
-  ]
+  'Creative Arts': ['Music', 'Art and Design', 'Drama/Theatre Arts'],
+  'Health & Wellness': ['Physical Education', 'Health Education', 'Life Skills'],
+  Hospitality: ['Hospitality Management', 'Travel and Tourism'],
+  'Religious Studies': ['Religious Education 2046'],
 }
 
 // Helper functions
 export const getSubjectsByDepartment = (departmentId) => {
-  const department = DEPARTMENTS.find(dept => dept.id === departmentId)
+  const department = DEPARTMENTS.find((dept) => dept.id === departmentId)
   return department ? department.subjects : []
 }
 
 export const getDepartmentBySubject = (subject) => {
-  return DEPARTMENTS.find(dept => dept.subjects.includes(subject))
+  return DEPARTMENTS.find((dept) => dept.subjects.includes(subject))
 }
 
 export const getSubjectsByCategory = (category) => {
@@ -266,8 +239,8 @@ export const getAllSubjects = () => {
 }
 
 export const getAllDepartments = () => {
-  return DEPARTMENTS.map(dept => ({
+  return DEPARTMENTS.map((dept) => ({
     id: dept.id,
-    name: dept.name
+    name: dept.name,
   }))
 }

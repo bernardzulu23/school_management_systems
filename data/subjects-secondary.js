@@ -106,11 +106,11 @@ export const SECONDARY_SUBJECTS = [
   },
   {
     id: 14,
-    name: 'Chichewa',
+    name: 'Cinyanja',
     code: 'CHW',
     category: 'Languages',
     educationLevel: 'secondary',
-    description: 'Chichewa language and literature',
+    description: 'Cinyanja language and literature',
   },
   {
     id: 15,

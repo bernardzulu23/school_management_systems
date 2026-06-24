@@ -116,7 +116,7 @@ function RegistrationContent() {
       color: 'bg-g-100 text-g-800 border border-black/[0.09]',
       features: [
         'Subject assignment from 29 available subjects',
-        'Local language specializations (Chichewa, Chitonga, Bemba, etc.)',
+        'Local language specializations (Cinyanja, Chitonga, Bemba, etc.)',
         'Department allocation',
         'Professional qualifications tracking',
         'Emergency contact information',

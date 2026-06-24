@@ -31,6 +31,75 @@ import UserTypeCards from '@/components/dashboard/UserTypeCards'
 import { getPasswordFormError } from '@/lib/security/passwordValidate'
 import { evaluatePassword } from '@/lib/security/passwordValidate'
 
+function teacherAccountUserId(teacher) {
+  return String(teacher?.userId || teacher?.user?.id || '')
+}
+
+function inferRoleFromOriginal(original) {
+  if (!original || typeof original !== 'object') return ''
+
+  const accountRole = String(original?.user?.role || original?.role || '')
+    .trim()
+    .toLowerCase()
+  if (accountRole) return accountRole
+
+  if (
+    original.student_id != null ||
+    original.year_group != null ||
+    original.classId != null ||
+    original.grade_level != null
+  ) {
+    return 'student'
+  }
+
+  if (
+    original.departmentRef != null ||
+    (original.departmentId && original.userId && !original.ts_number)
+  ) {
+    return 'hod'
+  }
+
+  if (
+    original.userId != null &&
+    (original.ts_number != null ||
+      original.teachingAssignments != null ||
+      original.departments != null ||
+      original.assignedSubjects != null)
+  ) {
+    return 'teacher'
+  }
+
+  return ''
+}
+
+function resolveUserRoleKey(user) {
+  const direct = String(user?.role || '')
+    .trim()
+    .toLowerCase()
+  if (direct) return direct
+  return inferRoleFromOriginal(user?.original)
+}
+
+function formatRoleLabel(user) {
+  const role = resolveUserRoleKey(user)
+  const isHod = Boolean(user?.isHod || user?.hodAssignment || role === 'hod')
+
+  if (isHod) return 'HOD'
+  if (role === 'headteacher') return 'Headteacher'
+  if (role === 'admin' || role === 'administrator') return 'Administrator'
+  if (role === 'student') return 'Student'
+  if (role === 'teacher') return 'Teacher'
+  if (role === 'hod') return 'HOD'
+  if (role === 'parent') return 'Parent'
+  if (role) return role.replace(/\b\w/g, (c) => c.toUpperCase())
+  return 'User'
+}
+
+function normalizeUserListRow(row) {
+  const role = resolveUserRoleKey(row) || inferRoleFromOriginal(row?.original) || 'user'
+  return { ...row, role }
+}
+
 export default function UserManagement() {
   const { school } = useSchool()
   const showHodFeatures = canAccessHodFeatures({ schoolLevel: school?.level })
@@ -219,6 +288,20 @@ export default function UserManagement() {
           ])
         )
 
+        const mapTeacherRow = (u) => {
+          const accountUserId = teacherAccountUserId(u)
+          return {
+            id: u.id,
+            name: u.user?.name || u.name || 'Unknown',
+            email: u.user?.email ?? u.email ?? '',
+            role: 'teacher',
+            status: 'Active',
+            isHod: hodByUserId.has(accountUserId),
+            hodAssignment: hodByUserId.get(accountUserId) || null,
+            original: u,
+          }
+        }
+
         data = [
           ...students.map((u) => ({
             id: u.id,
@@ -228,16 +311,7 @@ export default function UserManagement() {
             status: 'Active',
             original: u,
           })),
-          ...teachers.map((u) => ({
-            id: u.id,
-            name: u.user?.name || 'Unknown',
-            email: u.user?.email ?? u.email ?? '',
-            role: 'teacher',
-            status: 'Active',
-            isHod: hodByUserId.has(String(u.userId || '')),
-            hodAssignment: hodByUserId.get(String(u.userId || '')) || null,
-            original: u,
-          })),
+          ...teachers.map(mapTeacherRow),
           ...headteachers.map((u) => ({
             id: u.id,
             name: u.name || 'Unknown',
@@ -275,16 +349,19 @@ export default function UserManagement() {
             },
           ])
         )
-        data = teacherData.map((u) => ({
-          id: u.id,
-          name: u.user?.name || 'Unknown',
-          email: u.user?.email ?? u.email ?? '',
-          role: 'teacher',
-          status: 'Active',
-          isHod: hodByUserId.has(String(u.userId || '')),
-          hodAssignment: hodByUserId.get(String(u.userId || '')) || null,
-          original: u,
-        }))
+        data = teacherData.map((u) => {
+          const accountUserId = teacherAccountUserId(u)
+          return {
+            id: u.id,
+            name: u.user?.name || u.name || 'Unknown',
+            email: u.user?.email ?? u.email ?? '',
+            role: 'teacher',
+            status: 'Active',
+            isHod: hodByUserId.has(accountUserId),
+            hodAssignment: hodByUserId.get(accountUserId) || null,
+            original: u,
+          }
+        })
       } else if (activeUserType === 'hods') {
         const res = await api.get('/hods')
         hodsForCounts = res.data.data || []
@@ -311,7 +388,7 @@ export default function UserManagement() {
       if (Array.isArray(hodsForCounts)) {
         setHodAssignments(hodsForCounts)
       }
-      setUsers(data)
+      setUsers(data.map(normalizeUserListRow))
     } catch (error) {
       console.error('Error fetching users:', error)
       setHasError(true)
@@ -402,15 +479,7 @@ export default function UserManagement() {
     }
   }
 
-  const roleLabel = (user) => {
-    if (user.role === 'teacher' && user.isHod) return 'HOD'
-    if (user.role === 'hod') return 'HOD'
-    if (user.role === 'headteacher') return 'Headteacher'
-    if (user.role === 'student') return 'Student'
-    if (!user.role && (String(user.id || '').startsWith('STU') || user.original?.student_id))
-      return 'Student'
-    return user.role ? String(user.role).replace(/\b\w/g, (c) => c.toUpperCase()) : ''
-  }
+  const roleLabel = formatRoleLabel
 
   return (
     <div className="space-y-8">

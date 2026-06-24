@@ -31,6 +31,7 @@ const KNOWN: Record<string, string> = {
   french: 'Fr',
   spanish: 'Sp',
   chichewa: 'Ch',
+  cinyanja: 'Ch',
   nyanja: 'Ny',
   bemba: 'Be',
   lozi: 'Lo',

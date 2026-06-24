@@ -134,9 +134,9 @@ export const SUBJECT_GUIDELINES: Record<string, string> = {
     - Emphasize preservation of Zambian languages
     - Include proverbs and traditional sayings
   `,
-  'Chichewa (Languages)': `
-    - Use authentic Chichewa language examples
-    - Reference Chichewa-speaking communities in Zambia
+  'Cinyanja (Languages)': `
+    - Use authentic Cinyanja language examples
+    - Reference Cinyanja-speaking communities in Zambia
     - Include vocabulary, grammar, and linguistic features
     - Discuss cultural contexts and traditions
     - Emphasize language preservation
@@ -322,8 +322,9 @@ const SUBJECT_ALIASES: Record<string, string> = {
   'literature in english': 'Literature in English (Languages)',
   french: 'French (Languages)',
   bemba: 'Bemba (Languages)',
-  chichewa: 'Chichewa (Languages)',
-  nyanja: 'Chichewa (Languages)',
+  chichewa: 'Cinyanja (Languages)',
+  cinyanja: 'Cinyanja (Languages)',
+  nyanja: 'Cinyanja (Languages)',
   chitonga: 'Chitonga (Languages)',
   tonga: 'Chitonga (Languages)',
   kikaonde: 'Kikaonde (Languages)',

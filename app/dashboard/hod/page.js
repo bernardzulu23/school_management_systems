@@ -36,7 +36,7 @@ const DEPARTMENTS = {
     'Kikaonde',
     'Silozi',
     'Chibemba',
-    'Chichewa',
+    'Cinyanja',
     'Chitonga',
     'Luvale',
     'Lunda',

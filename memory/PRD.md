@@ -17,7 +17,7 @@ The subjects are not displaying in the Teaching Assignments section of the teach
 
 1. **Fixed Subject Seeding** (`/app/app/api/subjects/route.js`)
    - Subjects API now seeds subjects for schools with 0 subjects
-   - Handles duplicate subject codes (CHI for Chinese and Chichewa)
+   - Handles duplicate subject codes (CHI for Chinese and Cinyanja)
    - Only seeds when no subjects exist to avoid conflicts
 
 2. **Fixed Login Dev Fallback** (`/app/app/api/auth/login/route.js`)
