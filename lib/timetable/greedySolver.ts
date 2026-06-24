@@ -28,8 +28,13 @@ import {
   teacherMultiBlockDayPenalty,
   type MultiBlockPlacement,
 } from '@/lib/timetable/scheduler'
-import { interleaveLessons, compareDaySpread } from '@/lib/timetable/lessonOrdering'
-import { compareSchedulerPlacements, type PlacedPeriodLite } from '@/lib/timetable/slotScoring'
+import { compareDaySpread, interleaveLessons } from '@/lib/timetable/lessonOrdering'
+import {
+  lessonJitterSeed,
+  scoreSchedulerPlacement,
+  slotTimeMinutes,
+  type PlacedPeriodLite,
+} from '@/lib/timetable/slotScoring'
 
 export interface TimeSlot {
   id: string
@@ -328,53 +333,63 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
   const sortStartIndices = (lesson: Lesson, day: string, daySlots: TimeSlot[], size: number) => {
     const indices = Array.from({ length: Math.max(0, daySlots.length - size + 1) }, (_, i) => i)
 
-    const placedLite: PlacedPeriodLite[] = []
-    for (const [lessonId, spanIds] of Object.entries(slotSpans)) {
-      const firstId = spanIds?.[0]
-      if (!firstId) continue
-      const slot = slots.find((s) => s.id === firstId)
-      const les = lessons.find((l) => l.id === lessonId)
-      if (!slot || !les) continue
-      placedLite.push({
-        teacherId: les.teacherId,
-        day: normalizeDay(slot.dayOfWeek),
-        startPeriod: Number(slot.period) || 0,
+    const placed: PlacedPeriodLite[] = Object.entries(assignments)
+      .filter(([lid]) => {
+        const l = sortedLessons.find((x) => x.id === lid)
+        return l?.teacherId === lesson.teacherId
       })
-    }
+      .map(([lid, slotId]) => {
+        const slot = slots.find((s) => s.id === slotId)
+        const l = sortedLessons.find((x) => x.id === lid)
+        const slotDay = slot?.dayOfWeek ? normalizeDay(slot.dayOfWeek) : ''
+        return {
+          teacherId: lesson.teacherId,
+          classId: l?.classId,
+          subjectId: l?.subjectId,
+          day: slotDay,
+          startPeriod: Number(slot?.period) || 0,
+          startMin: slot?.startTime ? slotTimeMinutes(slot.startTime) : undefined,
+        }
+      })
+      .filter((p) => p.startPeriod > 0)
+
+    const jitterSeed = lessonJitterSeed(lesson.teacherId, lesson.subjectId)
 
     return indices.sort((ia, ib) => {
       const runA = findConsecutiveRun(daySlots, ia, size)
       const runB = findConsecutiveRun(daySlots, ib, size)
-      if (!runA && !runB) return 0
       if (!runA) return 1
       if (!runB) return -1
 
-      const rule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, lesson)
       const periodA = Number(runA[0]?.period) || 0
       const periodB = Number(runB[0]?.period) || 0
-      const scoreA = placementPreferenceScore(rule, day, periodA)
-      const scoreB = placementPreferenceScore(rule, day, periodB)
-      if (scoreA !== scoreB) return scoreA - scoreB
+      const startMinA = runA[0]?.startTime ? slotTimeMinutes(runA[0].startTime) : undefined
+      const startMinB = runB[0]?.startTime ? slotTimeMinutes(runB[0].startTime) : undefined
 
-      const periodSpread = compareSchedulerPlacements(
-        {
-          teacherId: lesson.teacherId,
-          day,
-          startPeriod: periodA,
-          placed: placedLite,
-          randomJitter: true,
-        },
-        {
-          teacherId: lesson.teacherId,
-          day,
-          startPeriod: periodB,
-          placed: placedLite,
-          randomJitter: true,
-        }
-      )
-      if (periodSpread !== 0) return periodSpread
+      const scoreA = scoreSchedulerPlacement({
+        teacherId: lesson.teacherId,
+        classId: lesson.classId,
+        subjectId: lesson.subjectId,
+        day,
+        startPeriod: periodA,
+        placed,
+        startMin: startMinA,
+        randomJitter: true,
+        jitterSeed: jitterSeed + ia + DAY_ORDER[normalizeDay(day)] * 11,
+      })
+      const scoreB = scoreSchedulerPlacement({
+        teacherId: lesson.teacherId,
+        classId: lesson.classId,
+        subjectId: lesson.subjectId,
+        day,
+        startPeriod: periodB,
+        placed,
+        startMin: startMinB,
+        randomJitter: true,
+        jitterSeed: jitterSeed + ib + DAY_ORDER[normalizeDay(day)] * 11,
+      })
 
-      return periodA - periodB
+      return scoreA - scoreB
     })
   }
 

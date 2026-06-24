@@ -1,16 +1,27 @@
 'use client'
 
-import { evaluatePassword, PASSWORD_REQUIREMENTS } from '@/lib/security/passwordValidate'
+import {
+  evaluatePassword as evaluatePasswordImpl,
+  getPasswordFormError as getPasswordFormErrorImpl,
+  PASSWORD_REQUIREMENTS,
+} from '@/lib/security/passwordValidate'
 
-// Re-export from client-safe module (not passwordPolicy.js — that pulls in Node crypto).
-export { evaluatePassword, getPasswordFormError } from '@/lib/security/passwordValidate'
+/** Prefer importing from `@/lib/security/passwordValidate` in new code. */
+export function evaluatePassword(password) {
+  return evaluatePasswordImpl(password)
+}
+
+/** Prefer importing from `@/lib/security/passwordValidate` in new code. */
+export function getPasswordFormError(password) {
+  return getPasswordFormErrorImpl(password)
+}
 
 /**
  * Live checklist of password policy requirements.
  * @param {{ password: string, className?: string }} props
  */
 export default function PasswordRequirements({ password, className = '' }) {
-  const { requirements } = evaluatePassword(password)
+  const { requirements } = evaluatePasswordImpl(password)
 
   return (
     <div

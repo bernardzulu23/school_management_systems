@@ -6,7 +6,7 @@ import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/time
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { uniqueBellRows, type BellScheduleSlot } from '@/lib/timetable/bellSchedule'
 import { countUniqueConflicts } from '@/lib/timetable/conflictDedupe'
-import { resolveCardColor } from '@/lib/timetable/cardColors'
+import { buildTeacherColorMap } from '@/lib/timetable/teacherColors'
 import {
   assignmentsForPrimaryCell,
   isContinuationSlot,
@@ -101,6 +101,11 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
   const [activeDragId, setActiveDragId] = useState<string | null>(null)
   const [hoverDropId, setHoverDropId] = useState<string | null>(null)
   const [swap, setSwap] = useState<SwapState>({ open: false })
+
+  const teacherColorMap = useMemo(
+    () => buildTeacherColorMap((props.teachers || []).map((t) => String(t.id))),
+    [props.teachers]
+  )
 
   const teacherName = useMemo(() => {
     const map = new Map<string, string>()
@@ -293,11 +298,14 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
     const hasCritical = conflicts.some((c) => c.severity === 'critical')
     const hasAny = conflicts.length > 0
     const border = hasCritical ? '#ef4444' : hasAny ? '#f59e0b' : undefined
-    const cardColors = resolveCardColor(
-      a.subjectId,
-      a.teacherId,
-      teacherColors[String(a.teacherId || '')]?.colorHex
-    )
+    const hex =
+      teacherColorMap.get(String(a.teacherId)) ||
+      teacherColors[String(a.teacherId || '')]?.colorHex ||
+      '#90A4AE'
+    const teacherStyle = {
+      backgroundColor: `${hex}22`,
+      borderLeft: `3px solid ${hex}`,
+    }
     const span = slotRowSpan > 1 ? slotRowSpan : rowSpanForAssignment(a, baseSlots)
     const label = cardLabel(a)
 
@@ -309,8 +317,8 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
           label={label}
           span={span}
           borderColor={border}
-          cardBg={cardColors.bg}
-          cardBorder={cardColors.border}
+          cardBg={teacherStyle.backgroundColor}
+          cardBorder={hex}
           hasConflict={hasAny}
           tooltip={cardTooltip(a)}
           onClick={() => onCellClick(a)}
@@ -325,8 +333,9 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
         onClick={() => onCellClick(a)}
         className="w-full h-full text-left rounded-lg px-2 py-1 border hover:opacity-95 transition-colors zsms-hover-raise relative z-[1] text-[11px] leading-tight"
         style={{
-          borderColor: border || cardColors.border,
-          background: cardColors.bg,
+          borderColor: border || hex,
+          background: teacherStyle.backgroundColor,
+          borderLeft: teacherStyle.borderLeft,
         }}
         title={cardTooltip(a)}
       >
@@ -338,11 +347,13 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
   const activeDragAssignment = activeDragId ? assignmentById.get(activeDragId) : null
   const activeOverlayLabel = activeDragAssignment ? cardLabel(activeDragAssignment) : ''
   const activeOverlayColors = activeDragAssignment
-    ? resolveCardColor(
-        activeDragAssignment.subjectId,
-        activeDragAssignment.teacherId,
-        teacherColors[String(activeDragAssignment.teacherId || '')]?.colorHex
-      )
+    ? (() => {
+        const hex =
+          teacherColorMap.get(String(activeDragAssignment.teacherId)) ||
+          teacherColors[String(activeDragAssignment.teacherId || '')]?.colorHex ||
+          '#90A4AE'
+        return { bg: `${hex}22`, border: hex }
+      })()
     : null
 
   const gridBody = (
@@ -592,6 +603,23 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
           <span className="inline-flex items-center gap-2">
             <span className="inline-block w-3 h-3 rounded-sm ring-2 ring-emerald-500" /> Valid drop
           </span>
+        ) : null}
+        {(props.teachers || []).length > 0 ? (
+          <>
+            <span className="font-semibold ml-2">Teachers:</span>
+            {(props.teachers || []).map((t) => {
+              const hex = teacherColorMap.get(String(t.id)) || '#90A4AE'
+              return (
+                <span key={String(t.id)} className="inline-flex items-center gap-1.5">
+                  <span
+                    className="inline-block w-3 h-3 rounded-sm border"
+                    style={{ backgroundColor: `${hex}22`, borderColor: hex }}
+                  />
+                  {t.fullName || 'Teacher'}
+                </span>
+              )
+            })}
+          </>
         ) : null}
       </div>
 

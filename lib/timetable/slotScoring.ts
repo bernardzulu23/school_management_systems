@@ -18,6 +18,8 @@ export type PlacedPeriodLite = {
   day: string
   startPeriod: number
   startMin?: number
+  classId?: string
+  subjectId?: string
 }
 
 function normDay(day: string) {
@@ -31,8 +33,49 @@ function deterministicJitter(seed: number): number {
   return (x - Math.floor(x)) * 12
 }
 
+export function lessonJitterSeed(teacherId: string, subjectId: string): number {
+  const t = String(teacherId || '').charCodeAt(0) || 0
+  const s = String(subjectId || '').charCodeAt(0) || 0
+  return t + s
+}
+
+export function teacherUsedPeriodNumbers(
+  placed: PlacedPeriodLite[],
+  teacherId: string
+): Set<number> {
+  return new Set(
+    placed
+      .filter((p) => String(p.teacherId) === String(teacherId))
+      .map((p) => Number(p.startPeriod))
+      .filter((n) => Number.isFinite(n) && n > 0)
+  )
+}
+
+/** Fisher–Yates shuffle with a deterministic seed (different per restart/block). */
+export function shuffleArraySeeded<T>(items: T[], seedBase: number, salt = 0): void {
+  for (let i = items.length - 1; i > 0; i--) {
+    const seed = (seedBase * 9973 + i * 7919 + salt) >>> 0
+    const j = seed % (i + 1)
+    ;[items[i], items[j]] = [items[j], items[i]]
+  }
+}
+
+export function greedyStartIndexScore(opts: {
+  basePreference: number
+  period: number
+  teacherAssignedPeriods: Set<number>
+  jitterSeed: number
+}): number {
+  const { basePreference, period, teacherAssignedPeriods, jitterSeed } = opts
+  const spreadPenalty = teacherAssignedPeriods.has(period) ? 8 : 0
+  const jitter = ((jitterSeed * period * 2654435761) >>> 0) % 7
+  return basePreference + spreadPenalty + jitter
+}
+
 export type ScoreSchedulerPlacementOptions = {
   teacherId: string
+  classId?: string
+  subjectId?: string
   day: string
   startPeriod: number
   placed?: PlacedPeriodLite[]
@@ -42,13 +85,47 @@ export type ScoreSchedulerPlacementOptions = {
   jitterSeed?: number
 }
 
+/** Penalty for stacking lessons on the same weekday (spread across Mon–Fri). */
+export function scoreDaySpreadComponent(opts: {
+  teacherId: string
+  classId?: string
+  subjectId?: string
+  day: string
+  placed: PlacedPeriodLite[]
+}): number {
+  const { teacherId, classId, subjectId, day, placed } = opts
+  const nd = normDay(day)
+  const teacherPlaced = placed.filter((p) => String(p.teacherId) === String(teacherId))
+
+  const sameDayCount = teacherPlaced.filter((p) => normDay(p.day) === nd).length
+  let penalty = sameDayCount * 85
+
+  if (classId && subjectId) {
+    const csSameDay = teacherPlaced.filter(
+      (p) =>
+        normDay(p.day) === nd &&
+        String(p.classId || '') === String(classId) &&
+        String(p.subjectId || '') === String(subjectId)
+    ).length
+    penalty += csSameDay * 95
+  }
+
+  const distinctDays = new Set(teacherPlaced.map((p) => normDay(p.day)).filter(Boolean)).size
+  if (sameDayCount === 0 && distinctDays > 0) {
+    penalty -= 30
+  }
+
+  return penalty
+}
+
 /**
- * Lower score = better placement. Spreads teachers across period numbers and mid-day slots
- * so timetables are not all stacked in period 1–2 every morning.
+ * Lower score = better placement. Spreads teachers across weekdays and period numbers.
  */
 export function scoreSchedulerPlacement(opts: ScoreSchedulerPlacementOptions): number {
   const {
     teacherId,
+    classId,
+    subjectId,
     day,
     startPeriod,
     placed = [],
@@ -59,6 +136,14 @@ export function scoreSchedulerPlacement(opts: ScoreSchedulerPlacementOptions): n
 
   const nd = normDay(day)
   const teacherPlaced = placed.filter((p) => String(p.teacherId) === String(teacherId))
+
+  const daySpreadPenalty = scoreDaySpreadComponent({
+    teacherId,
+    classId,
+    subjectId,
+    day,
+    placed,
+  })
 
   const samePeriodOtherDays = teacherPlaced.filter(
     (p) => normDay(p.day) !== nd && Number(p.startPeriod) === startPeriod
@@ -87,6 +172,7 @@ export function scoreSchedulerPlacement(opts: ScoreSchedulerPlacementOptions): n
   const jitter = randomJitter ? deterministicJitter(jitterSeed + periodNum * 17 + dayRank * 31) : 0
 
   return (
+    daySpreadPenalty +
     periodRepeatPenalty +
     usagePenalty +
     earlyPeriodPenalty +

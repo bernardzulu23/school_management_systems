@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
-import { resolveCardColor } from '@/lib/timetable/cardColors'
+import { buildTeacherColorMap, teacherCardStyle } from '@/lib/timetable/teacherColors'
 import { uniqueBellRows, type BellScheduleSlot } from '@/lib/timetable/bellSchedule'
 import {
   assignmentOverlapsSlot,
@@ -28,6 +28,7 @@ export interface DepartmentTimetableViewProps {
   classrooms?: Classroom[]
   mobile?: boolean
   editable?: boolean
+  teacherColorMap?: Map<string, string>
   onAssignmentChange?: (assignment: Assignment) => void | Promise<void>
 }
 
@@ -155,6 +156,11 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
     const out = ids.map((id) => byId.get(String(id))).filter(Boolean)
     return out.sort((a, b) => String(a.fullName || '').localeCompare(String(b.fullName || '')))
   }, [teacherSet, effectiveTeachers])
+
+  const teacherColorMap = useMemo(() => {
+    if (props.teacherColorMap?.size) return props.teacherColorMap
+    return buildTeacherColorMap(departmentTeachers.map((t: any) => String(t.id)))
+  }, [props.teacherColorMap, departmentTeachers])
 
   const deptAssignments = useMemo(() => {
     return assignments.filter((a) => teacherSet.has(String(a.teacherId)))
@@ -686,11 +692,11 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                               {list.map((a) => {
                                 const conflicts = storeConflicts.get(String(a.id)) || []
                                 const hasConflict = conflicts.length > 0
-                                const cardColors = resolveCardColor(
-                                  a.subjectId,
-                                  a.teacherId,
-                                  teacherColors[String(a.teacherId || '')]?.colorHex
-                                )
+                                const hex =
+                                  teacherColorMap.get(String(a.teacherId)) ||
+                                  teacherColors[String(a.teacherId || '')]?.colorHex ||
+                                  '#90A4AE'
+                                const cardColors = teacherCardStyle(hex)
                                 const span = rowSpanForAssignment(a, baseSlots)
                                 const label = `${subjectLabel.get(String(a.subjectId)) || (a as any).subjectName || 'Subject'} · ${(a as any).className || className.get(String(a.classId)) || 'Class'}`
                                 const tooltip = `${label} · ${teacherName.get(String(a.teacherId)) || 'Teacher'}`
@@ -702,8 +708,8 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
                                     label={label}
                                     span={span}
                                     borderColor={hasConflict ? '#ef4444' : undefined}
-                                    cardBg={cardColors.bg}
-                                    cardBorder={cardColors.border}
+                                    cardBg={cardColors.backgroundColor}
+                                    cardBorder={hex}
                                     hasConflict={hasConflict}
                                     tooltip={tooltip}
                                     onClick={
@@ -730,6 +736,24 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
               </div>
             ))}
           </div>
+        </div>
+      ) : null}
+
+      {departmentTeachers.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-3 text-xs text-royalPurple-text2 print:hidden">
+          <span className="font-semibold">Teacher colours:</span>
+          {(departmentTeachers as any[]).map((t) => {
+            const hex = teacherColorMap.get(String(t.id)) || '#90A4AE'
+            return (
+              <span key={String(t.id)} className="inline-flex items-center gap-1.5">
+                <span
+                  className="inline-block w-3 h-3 rounded-sm border"
+                  style={{ backgroundColor: `${hex}22`, borderColor: hex }}
+                />
+                {String(t.fullName || 'Teacher')}
+              </span>
+            )
+          })}
         </div>
       ) : null}
 

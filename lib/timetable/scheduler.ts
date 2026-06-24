@@ -18,7 +18,12 @@ import {
   type AllocationLike,
 } from '@/lib/timetable/periodExpansion'
 import { interleaveBlocks, compareDaySpread } from '@/lib/timetable/lessonOrdering'
-import { compareSchedulerPlacements, type PlacedPeriodLite } from '@/lib/timetable/slotScoring'
+import {
+  scoreSchedulerPlacement,
+  shuffleArraySeeded,
+  slotTimeMinutes,
+  type PlacedPeriodLite,
+} from '@/lib/timetable/slotScoring'
 import {
   buildRecipePlacementRules,
   buildTeacherDbConstraintRules,
@@ -409,19 +414,21 @@ function findSlotRun(
   return run.length === span ? run : null
 }
 
+export type SchedulerCandidateSlot = {
+  day: string
+  startPeriod: number
+  span: number
+  run: DayPeriodSlot[]
+}
+
 export function getCandidateSlots(
   block: SchedulerBlock,
   daySlots: Record<string, DayPeriodSlot[]>,
   _singleMin: number,
   breakAfterPeriods: number[] = BREAK_AFTER_PERIODS,
   dayOrderOffset = 0
-): Array<{ day: string; startPeriod: number; span: number; run: DayPeriodSlot[] }> {
-  const candidates: Array<{
-    day: string
-    startPeriod: number
-    span: number
-    run: DayPeriodSlot[]
-  }> = []
+): SchedulerCandidateSlot[] {
+  const candidates: SchedulerCandidateSlot[] = []
   const days = Object.keys(daySlots).sort(
     (a, b) => (DAY_ORDER[normalizeDay(a)] ?? 99) - (DAY_ORDER[normalizeDay(b)] ?? 99)
   )
@@ -558,7 +565,7 @@ export function generateTimetableOnce(
     breakAfterPeriods,
   }
 
-  function pushPlacedFromCandidate(block: SchedulerBlock, cand: (typeof candidates)[0]) {
+  function pushPlacedFromCandidate(block: SchedulerBlock, cand: SchedulerCandidateSlot) {
     const run = cand.run
     const first = run[0]
     const last = run[run.length - 1]
@@ -573,17 +580,11 @@ export function generateTimetableOnce(
     })
   }
 
-  function placedPeriodLite(): PlacedPeriodLite[] {
-    return placed.map((p) => ({
-      teacherId: p.teacherId,
-      day: p.day,
-      startPeriod: p.startPeriod,
-      startMin: p.startMin,
-    }))
-  }
+  function sortCandidates(block: SchedulerBlock, candidates: SchedulerCandidateSlot[]) {
+    shuffleArraySeeded(candidates, restartSeed, block.blockId.charCodeAt(0) || 0)
 
-  function sortCandidates(block: SchedulerBlock, candidates: ReturnType<typeof getCandidateSlots>) {
-    const placedLite = placedPeriodLite()
+    const seed = (block.teacherId.charCodeAt(0) + block.subjectId.charCodeAt(0) + restartSeed) | 0
+
     candidates.sort((a, b) => {
       const rule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, block)
       const prefA = placementPreferenceScore(rule, a.day, a.startPeriod)
@@ -591,14 +592,12 @@ export function generateTimetableOnce(
       if (prefA !== prefB) return prefA - prefB
 
       const classSubjectDayLoad = new Map<string, number>()
-      for (const pl of placed) {
-        const key = `${pl.classId}|${pl.subjectId}|${pl.day}`
-        classSubjectDayLoad.set(key, (classSubjectDayLoad.get(key) || 0) + 1)
-      }
       const teacherDayLoad = new Map<string, number>()
       for (const pl of placed) {
-        const key = `${pl.teacherId}|${pl.day}`
-        teacherDayLoad.set(key, (teacherDayLoad.get(key) || 0) + 1)
+        const csKey = `${pl.classId}|${pl.subjectId}|${pl.day}`
+        classSubjectDayLoad.set(csKey, (classSubjectDayLoad.get(csKey) || 0) + 1)
+        const tKey = `${pl.teacherId}|${pl.day}`
+        teacherDayLoad.set(tKey, (teacherDayLoad.get(tKey) || 0) + 1)
       }
 
       const daySpread = compareDaySpread({
@@ -613,27 +612,40 @@ export function generateTimetableOnce(
       })
       if (daySpread !== 0) return daySpread
 
-      const periodSpread = compareSchedulerPlacements(
-        {
-          teacherId: block.teacherId,
-          day: a.day,
-          startPeriod: a.startPeriod,
-          placed: placedLite,
-          startMin: a.run[0]?.start,
-          randomJitter: true,
-          jitterSeed: restartSeed,
-        },
-        {
-          teacherId: block.teacherId,
-          day: b.day,
-          startPeriod: b.startPeriod,
-          placed: placedLite,
-          startMin: b.run[0]?.start,
-          randomJitter: true,
-          jitterSeed: restartSeed,
-        }
-      )
-      if (periodSpread !== 0) return periodSpread
+      const teacherPlaced: PlacedPeriodLite[] = placed
+        .filter((p) => p.teacherId === block.teacherId)
+        .map((p) => ({
+          teacherId: p.teacherId,
+          classId: p.classId,
+          subjectId: p.subjectId,
+          day: p.day,
+          startPeriod: p.startPeriod,
+          startMin: slotTimeMinutes(p.startTime),
+        }))
+
+      const scoreA = scoreSchedulerPlacement({
+        teacherId: block.teacherId,
+        classId: block.classId,
+        subjectId: block.subjectId,
+        day: a.day,
+        startPeriod: a.startPeriod,
+        placed: teacherPlaced,
+        startMin: a.run[0] ? slotTimeMinutes(a.run[0].startTime) : undefined,
+        randomJitter: true,
+        jitterSeed: seed + a.startPeriod * 17 + DAY_ORDER[normalizeDay(a.day)] * 11,
+      })
+      const scoreB = scoreSchedulerPlacement({
+        teacherId: block.teacherId,
+        classId: block.classId,
+        subjectId: block.subjectId,
+        day: b.day,
+        startPeriod: b.startPeriod,
+        placed: teacherPlaced,
+        startMin: b.run[0] ? slotTimeMinutes(b.run[0].startTime) : undefined,
+        randomJitter: true,
+        jitterSeed: seed + b.startPeriod * 17 + DAY_ORDER[normalizeDay(b.day)] * 11,
+      })
+      if (scoreA !== scoreB) return scoreA - scoreB
 
       const closeA = tooCloseSameSubject(block, a.day, placed) ? 1 : 0
       const closeB = tooCloseSameSubject(block, b.day, placed) ? 1 : 0

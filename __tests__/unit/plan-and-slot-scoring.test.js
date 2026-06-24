@@ -99,4 +99,50 @@ describe('slotScoring', () => {
     })
     expect(spreadP4).toBeLessThan(repeatP1)
   })
+
+  it('greedy solver uses strong scheduler placement spread penalties', () => {
+    const placed = [{ teacherId: 't1', day: 'monday', startPeriod: 1 }]
+    const repeatP1 = scoreSchedulerPlacement({
+      teacherId: 't1',
+      day: 'tuesday',
+      startPeriod: 1,
+      placed,
+      randomJitter: false,
+    })
+    const spreadP4 = scoreSchedulerPlacement({
+      teacherId: 't1',
+      day: 'tuesday',
+      startPeriod: 4,
+      placed,
+      randomJitter: false,
+    })
+    expect(spreadP4).toBeLessThan(repeatP1)
+    expect(repeatP1 - spreadP4).toBeGreaterThan(15)
+  })
+
+  it('scheduler placement penalizes stacking lessons on the same weekday', () => {
+    const placed = [
+      { teacherId: 't1', classId: 'c1', subjectId: 's1', day: 'monday', startPeriod: 2 },
+      { teacherId: 't1', classId: 'c2', subjectId: 's2', day: 'tuesday', startPeriod: 3 },
+    ]
+    const freshWednesday = scoreSchedulerPlacement({
+      teacherId: 't1',
+      classId: 'c3',
+      subjectId: 's3',
+      day: 'wednesday',
+      startPeriod: 4,
+      placed,
+      randomJitter: false,
+    })
+    const stackMonday = scoreSchedulerPlacement({
+      teacherId: 't1',
+      classId: 'c3',
+      subjectId: 's3',
+      day: 'monday',
+      startPeriod: 4,
+      placed,
+      randomJitter: false,
+    })
+    expect(freshWednesday).toBeLessThan(stackMonday)
+  })
 })

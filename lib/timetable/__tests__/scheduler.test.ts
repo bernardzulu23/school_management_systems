@@ -5,6 +5,7 @@ import {
   consecutivePeriodsAreValid,
   deriveBreakAfterPeriods,
   generateTimetable,
+  generateTimetableOnce,
   periodsOverlap,
   wouldStackSameDay,
   type PlacedBlock,
@@ -532,8 +533,132 @@ describe('generateTimetable', () => {
     const teacherBlocks = result.placedBlocks.filter((p) => p.teacherId === 't1')
     const startPeriods = teacherBlocks.map((p) => p.startPeriod)
     const uniquePeriods = new Set(startPeriods)
-    expect(uniquePeriods.size).toBeGreaterThanOrEqual(2)
+    expect(uniquePeriods.size).toBeGreaterThanOrEqual(3)
     const allEarlyEveryDay = teacherBlocks.every((p) => p.startPeriod <= 2)
     expect(allEarlyEveryDay).toBe(false)
+  })
+
+  it('spreads one teacher doubles across at least three weekdays when possible', () => {
+    const makeDay = (day: string, periods: number) => {
+      const slots = []
+      let cursor = 0
+      for (let p = 1; p <= periods; p++) {
+        slots.push({
+          type: 'period' as const,
+          periodNumber: p,
+          start: cursor,
+          end: cursor + 40,
+          startTime: '07:00',
+          endTime: '07:40',
+          durationMin: 40,
+          day,
+        })
+        cursor += 40
+      }
+      return slots
+    }
+    const daySlots = {
+      monday: makeDay('monday', 8),
+      tuesday: makeDay('tuesday', 8),
+      wednesday: makeDay('wednesday', 8),
+      thursday: makeDay('thursday', 8),
+      friday: makeDay('friday', 8),
+    }
+
+    const result = generateTimetable(
+      [
+        {
+          id: 'a1',
+          teacherId: 't1',
+          classId: 'c1',
+          subjectId: 'chem',
+          doublePeriods: 2,
+          periodsPerWeek: 4,
+          blockType: 'DOUBLE',
+        },
+        {
+          id: 'a2',
+          teacherId: 't1',
+          classId: 'c2',
+          subjectId: 'chem',
+          doublePeriods: 2,
+          periodsPerWeek: 4,
+          blockType: 'DOUBLE',
+        },
+      ],
+      daySlots,
+      { singleMin: 40, maxExecutionMs: 15000, maxRestarts: 5 }
+    )
+
+    expect(result.stats.placed).toBe(4)
+    const teacherDays = new Set(
+      result.placedBlocks.filter((p) => p.teacherId === 't1').map((p) => p.day)
+    )
+    expect(teacherDays.size).toBeGreaterThanOrEqual(3)
+  })
+
+  it('varies period distribution across restart seeds', () => {
+    const makeDay = (day: string, periods: number) => {
+      const slots = []
+      let cursor = 0
+      for (let p = 1; p <= periods; p++) {
+        slots.push({
+          type: 'period' as const,
+          periodNumber: p,
+          start: cursor,
+          end: cursor + 40,
+          startTime: '07:00',
+          endTime: '07:40',
+          durationMin: 40,
+          day,
+        })
+        cursor += 40
+      }
+      return slots
+    }
+    const daySlots = {
+      monday: makeDay('monday', 8),
+      tuesday: makeDay('tuesday', 8),
+      wednesday: makeDay('wednesday', 8),
+      thursday: makeDay('thursday', 8),
+      friday: makeDay('friday', 8),
+    }
+    const allocations = [
+      {
+        id: 'a1',
+        teacherId: 't1',
+        classId: 'c1',
+        subjectId: 'chem',
+        doublePeriods: 2,
+        periodsPerWeek: 4,
+        blockType: 'DOUBLE',
+      },
+      {
+        id: 'a2',
+        teacherId: 't1',
+        classId: 'c2',
+        subjectId: 'chem',
+        doublePeriods: 2,
+        periodsPerWeek: 4,
+        blockType: 'DOUBLE',
+      },
+    ]
+
+    const signatures = new Set<string>()
+    for (let seed = 0; seed < 3; seed++) {
+      const result = generateTimetableOnce(allocations, daySlots, {
+        singleMin: 40,
+        maxExecutionMs: 15000,
+        restartSeed: seed,
+      })
+      const sig = result.placedBlocks
+        .filter((p) => p.teacherId === 't1')
+        .map((p) => `${p.day}:P${p.startPeriod}`)
+        .sort()
+        .join('|')
+      signatures.add(sig)
+    }
+
+    expect(signatures.size).toBeGreaterThanOrEqual(2)
   })
 })
