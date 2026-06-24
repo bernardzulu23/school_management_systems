@@ -785,12 +785,12 @@ export default function UserManagement() {
                                 )}
                               </td>
                               <td className="py-4">
-                                <span className="px-3 py-1 text-xs rounded-full backdrop-blur-md bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50 capitalize font-medium">
-                                  {roleLabel(user)}
+                                <span className="inline-flex min-w-[4.5rem] justify-center px-3 py-1 text-xs rounded-full bg-royalPurple-accentBg text-royalPurple-text1 border border-royalPurple-accent/30 font-semibold">
+                                  {roleLabel(user) || 'User'}
                                 </span>
                               </td>
                               <td className="py-4">
-                                <span className="px-3 py-1 text-xs rounded-full backdrop-blur-md bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50 font-medium">
+                                <span className="inline-flex min-w-[4rem] justify-center px-3 py-1 text-xs rounded-full bg-up-bg text-up-text border border-emerald-200 font-semibold">
                                   {user.status}
                                 </span>
                               </td>
