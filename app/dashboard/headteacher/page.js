@@ -218,6 +218,10 @@ function HeadteacherDashboardContent() {
     }
   }
 
+  const studentsNeedingAttention = Array.isArray(dashboardData?.students_requiring_attention)
+    ? dashboardData.students_requiring_attention.length
+    : Number(dashboardData?.performance_summary?.students_requiring_attention || 0)
+
   const tabs = useMemo(
     () =>
       [
@@ -296,7 +300,6 @@ function HeadteacherDashboardContent() {
       ].filter((tab) => {
         if (!showSecondaryGrading) {
           return ![
-            'student-attention',
             'comprehensive-analytics',
             'junior-analysis',
             'senior-analysis',
@@ -572,6 +575,31 @@ function HeadteacherDashboardContent() {
             )}
           </section>
 
+          {/* Urgent student attention — always visible on dashboard home */}
+          {studentsNeedingAttention > 0 && activeTab === 'overview' && (
+            <div className="bg-royalPurple-danger/15 border border-royalPurple-danger/40 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="h-5 w-5 text-royalPurple-dangerTx shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-semibold text-royalPurple-text1">
+                    {studentsNeedingAttention} student{studentsNeedingAttention === 1 ? '' : 's'}{' '}
+                    require urgent attention
+                  </div>
+                  <p className="text-sm text-royalPurple-text2 mt-0.5">
+                    Overall average below 40% — review interventions and contact parents.
+                  </p>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                onClick={() => setActiveTab('student-attention')}
+                className="shrink-0"
+              >
+                View students
+              </Button>
+            </div>
+          )}
+
           {/* All Features Grid - Visible on One Screen */}
           <section aria-label="Dashboard Features">
             <div
@@ -605,6 +633,11 @@ function HeadteacherDashboardContent() {
                       <CardTitle className="flex items-center text-xs font-semibold">
                         <Icon className="h-4 w-4 mr-2 text-royalPurple-text2" aria-hidden="true" />
                         <span className="truncate">{tab.name}</span>
+                        {tab.id === 'student-attention' && studentsNeedingAttention > 0 ? (
+                          <span className="ml-auto shrink-0 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full bg-royalPurple-danger text-royalPurple-dangerTx text-[10px] font-bold">
+                            {studentsNeedingAttention}
+                          </span>
+                        ) : null}
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-0 pb-3">
