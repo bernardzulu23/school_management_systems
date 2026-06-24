@@ -1,6 +1,7 @@
 import type { Assignment, TimeSlot } from './types'
 import { CollisionDetector } from './collisionDetector'
 import { dedupeConflictsFromMap } from './conflictDedupe'
+import { classesFromAssignments } from './zambiaTerminology'
 
 function toMinutes(time: string): number {
   const [h, m] = String(time || '0:0')
@@ -96,6 +97,7 @@ export function countCriticalDoubleBookings(
     assignments,
     timeSlots: opts?.timeSlots || [],
     seasonMode: opts?.seasonMode || 'normal',
+    classes: classesFromAssignments(assignments),
   })
   return dedupeConflictsFromMap(detector.detectAllConflicts()).filter(
     (c) =>

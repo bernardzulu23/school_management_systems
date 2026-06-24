@@ -1867,6 +1867,8 @@ function HeadteacherTimetablePageContent() {
             <div className="min-w-0 xl:sticky xl:top-4 xl:max-h-[calc(100vh-6rem)] xl:overflow-y-auto">
               <ConflictDisplay
                 conflicts={conflicts}
+                assignments={seasonAssignments}
+                classes={visibleClasses}
                 suggestionsByAssignmentId={suggestionsByAssignmentId}
                 onApplySuggestion={onApplySuggestion}
                 onUndo={undo}
@@ -1956,6 +1958,8 @@ function HeadteacherTimetablePageContent() {
             ) : null}
             <ConflictDisplay
               conflicts={conflicts}
+              assignments={seasonAssignments}
+              classes={visibleClasses}
               suggestionsByAssignmentId={suggestionsByAssignmentId}
               onApplySuggestion={onApplySuggestion}
               onUndo={undo}

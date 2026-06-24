@@ -7,6 +7,7 @@ import { getAuthUser } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { getHardConflictsForDraftEntries } from '@/lib/timetable/draftHardConflictCheck'
 import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
+import { gradeDoubleBookedMessage } from '@/lib/timetable/zambiaTerminology'
 import {
   canManageTimetableDraft,
   timetableForbiddenResponse,
@@ -31,7 +32,7 @@ function timesOverlap(a, b) {
   return a0 < b1 && b0 < a1
 }
 
-function findGradeDoubleBookings(rows) {
+function findGradeDoubleBookings(rows, classNameById = new Map()) {
   const conflicts = []
   for (let i = 0; i < rows.length; i++) {
     for (let j = i + 1; j < rows.length; j++) {
@@ -44,7 +45,7 @@ function findGradeDoubleBookings(rows) {
         dayOfWeek: a.dayOfWeek,
         startTime: a.startTime,
         endTime: a.endTime,
-        message: 'Grade is double-booked',
+        message: gradeDoubleBookedMessage(classNameById.get(String(a.classId))),
       })
     }
   }
@@ -162,7 +163,24 @@ export async function POST(req) {
     )
   }
 
-  const gradeConflicts = findGradeDoubleBookings(toCreate)
+  const classIds = [...new Set(toCreate.map((row) => String(row.classId)).filter(Boolean))]
+  const classRows =
+    classIds.length > 0
+      ? await prisma.class.findMany({
+          where: { id: { in: classIds } },
+          select: { id: true, name: true },
+        })
+      : []
+  const classNameById = new Map(classRows.map((c) => [String(c.id), c.name]))
+  for (const row of rows) {
+    const classId = String(row?.classId || '').trim()
+    const className = String(row?.className || '').trim()
+    if (classId && className && !classNameById.has(classId)) {
+      classNameById.set(classId, className)
+    }
+  }
+
+  const gradeConflicts = findGradeDoubleBookings(toCreate, classNameById)
   if (gradeConflicts.length > 0) {
     return NextResponse.json(
       {

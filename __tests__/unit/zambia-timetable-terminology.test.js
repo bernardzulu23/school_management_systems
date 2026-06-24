@@ -20,6 +20,8 @@ describe('zambiaTerminology', () => {
 
   it('uses grade wording for double-booking message', () => {
     expect(gradeDoubleBookedMessage()).toBe('Grade is double-booked')
+    expect(gradeDoubleBookedMessage('1A')).toBe('1A is double-booked')
+    expect(gradeDoubleBookedMessage('Form 10A')).toBe('Form 10A is double-booked')
   })
 })
 

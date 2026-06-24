@@ -7,6 +7,7 @@ import type { BellScheduleSlot } from './bellSchedule'
 import { normalizeApiTimeSlots } from './bellSchedule'
 import { alignAssignmentsToBellRows } from './gridHelpers'
 import { normalizeTimetableConfig, resolveSchoolTimeSlots } from './timeSlotsFromConfig'
+import { classesFromAssignments } from './zambiaTerminology'
 import { canPublishTimetable, validateTimetable } from './validateTimetable'
 import { isConflict } from './constraintCheck'
 import { countUniqueConflicts } from './conflictDedupe'
@@ -210,6 +211,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
             timeSlots: get().timeSlots,
             travelingTeacherRoutes: get().travelingTeacherRoutes,
             seasonMode: get().currentSeason,
+            classes: classesFromAssignments(assignments),
           })
           return detector.detectAllConflicts()
         } catch {

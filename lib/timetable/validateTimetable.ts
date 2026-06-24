@@ -1,5 +1,6 @@
 import type { Assignment } from './types'
 import { assignmentsShareSlot } from './constraintCheck'
+import { gradeDoubleBookedMessage } from './zambiaTerminology'
 
 export type TimetableConflictType =
   | 'TEACHER_DOUBLE_BOOKED'
@@ -16,6 +17,13 @@ export interface TimetableValidationConflict {
   message: string
   entityId?: string
   assignmentIds: string[]
+}
+
+function classLabelFromAssignments(list: Assignment[], classId: string): string | undefined {
+  const row = list.find((a) => String(a.classId) === classId)
+  if (!row) return undefined
+  const name = String((row as Assignment & { className?: string }).className || '').trim()
+  return name || undefined
 }
 
 function toMinutes(t: string) {
@@ -72,11 +80,12 @@ export function validateTimetable(
         })
       }
       if (String(a1.classId) === String(a2.classId)) {
+        const classId = String(a1.classId)
         conflicts.push({
           type: 'CLASS_DOUBLE_BOOKED',
           severity: 'hard',
-          message: 'Grade is double-booked',
-          entityId: String(a1.classId),
+          message: gradeDoubleBookedMessage(classLabelFromAssignments(list, classId)),
+          entityId: classId,
           assignmentIds: [String(a1.id), String(a2.id)],
         })
       }

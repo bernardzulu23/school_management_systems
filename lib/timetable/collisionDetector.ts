@@ -17,6 +17,7 @@ import { TIMETABLE_CLASS_CENTRIC } from './classCentric'
 import { assignmentsShareSlot, teacherClassSameDayConflict } from './constraintCheck'
 import { rankTeachingSlots } from './slotScoring'
 import { mergeAssignmentMove, mergePreview } from './suggestionApply'
+import { formatStudentGroupName, gradeDoubleBookedMessage } from './zambiaTerminology'
 
 export interface WorkloadStatus {
   status: 'ok' | 'warning' | 'overload'
@@ -158,6 +159,25 @@ export class CollisionDetector {
     return this.classrooms.find((r) => String(r.id) === id)
   }
 
+  private gradeDoubleBookedMessageFor(classId: string): string {
+    const cls = this.findClass(classId)
+    if (cls) {
+      return gradeDoubleBookedMessage(
+        formatStudentGroupName({ name: cls.name, yearGroup: String(cls.grade ?? '') })
+      )
+    }
+    return gradeDoubleBookedMessage()
+  }
+
+  private gradeDoubleBookedMessageForClass(studentClass: Class): string {
+    return gradeDoubleBookedMessage(
+      formatStudentGroupName({
+        name: studentClass.name,
+        yearGroup: String(studentClass.grade ?? ''),
+      })
+    )
+  }
+
   checkTeacherConflict(teacher: Teacher, timeSlot: TimeSlot): boolean
   checkTeacherConflict(teacher: Teacher, timeSlot: TimeSlot, detailed: true): Conflict[]
   checkTeacherConflict(
@@ -222,10 +242,15 @@ export class CollisionDetector {
       if (!this.sameDay(a, timeSlot.dayOfWeek)) continue
       if (!this.timeSlotsOverlap(a, timeSlot)) continue
       conflicts.push(
-        this.makeConflict('ClassDoubleBooked', 'critical', 'Grade is double-booked', {
-          assignmentIds: [a.id],
-          classIds: [classId],
-        })
+        this.makeConflict(
+          'ClassDoubleBooked',
+          'critical',
+          this.gradeDoubleBookedMessageForClass(studentClass),
+          {
+            assignmentIds: [a.id],
+            classIds: [classId],
+          }
+        )
       )
     }
     return detailed ? conflicts : conflicts.length > 0
@@ -326,11 +351,16 @@ export class CollisionDetector {
       if (String(a.classId) !== String(assignment.classId)) continue
       if (teacherClassSameDayConflict(assignment, a, this.timeSlots)) {
         conflicts.push(
-          this.makeConflict('ClassDoubleBooked', 'critical', 'Grade is double-booked', {
-            assignmentIds: [assignment.id, a.id],
-            classIds: [String(assignment.classId)],
-            teacherIds: [String(assignment.teacherId)],
-          })
+          this.makeConflict(
+            'ClassDoubleBooked',
+            'critical',
+            this.gradeDoubleBookedMessageFor(String(assignment.classId)),
+            {
+              assignmentIds: [assignment.id, a.id],
+              classIds: [String(assignment.classId)],
+              teacherIds: [String(assignment.teacherId)],
+            }
+          )
         )
         break
       }
@@ -375,10 +405,15 @@ export class CollisionDetector {
       if (a.season !== assignment.season) continue
       if (!assignmentsShareSlot(a, assignment, this.timeSlots)) continue
       conflicts.push(
-        this.makeConflict('ClassDoubleBooked', 'critical', 'Grade is double-booked', {
-          assignmentIds: [assignment.id, a.id],
-          classIds: [String(assignment.classId)],
-        })
+        this.makeConflict(
+          'ClassDoubleBooked',
+          'critical',
+          this.gradeDoubleBookedMessageFor(String(assignment.classId)),
+          {
+            assignmentIds: [assignment.id, a.id],
+            classIds: [String(assignment.classId)],
+          }
+        )
       )
       break
     }
@@ -500,11 +535,16 @@ export class CollisionDetector {
 
       for (const prev of teacherIndex.get(tid) || []) {
         if (String(prev.classId) === cid && teacherClassSameDayConflict(a, prev, this.timeSlots)) {
-          const c = this.makeConflict('ClassDoubleBooked', 'critical', 'Grade is double-booked', {
-            assignmentIds: [prev.id, a.id],
-            classIds: [cid],
-            teacherIds: [tid],
-          })
+          const c = this.makeConflict(
+            'ClassDoubleBooked',
+            'critical',
+            this.gradeDoubleBookedMessageFor(cid),
+            {
+              assignmentIds: [prev.id, a.id],
+              classIds: [cid],
+              teacherIds: [tid],
+            }
+          )
           push(String(prev.id), c)
           push(String(a.id), c)
           continue
@@ -540,10 +580,15 @@ export class CollisionDetector {
 
       for (const prev of classIndex.get(cid) || []) {
         if (!assignmentsShareSlot(prev, a, this.timeSlots)) continue
-        const c = this.makeConflict('ClassDoubleBooked', 'critical', 'Grade is double-booked', {
-          assignmentIds: [prev.id, a.id],
-          classIds: [cid],
-        })
+        const c = this.makeConflict(
+          'ClassDoubleBooked',
+          'critical',
+          this.gradeDoubleBookedMessageFor(cid),
+          {
+            assignmentIds: [prev.id, a.id],
+            classIds: [cid],
+          }
+        )
         push(String(prev.id), c)
         push(String(a.id), c)
       }

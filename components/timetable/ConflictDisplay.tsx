@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import type { Assignment, Conflict, ConflictSeverity } from '@/lib/timetable/types'
+import type { Assignment, Class, Conflict, ConflictSeverity } from '@/lib/timetable/types'
 import type { Suggestion } from '@/lib/timetable/suggestionEngine'
 import { filterClassCentricConflicts } from '@/lib/timetable/classCentric'
 import {
@@ -9,11 +9,13 @@ import {
   conflictDedupeKey,
   primaryAssignmentId,
 } from '@/lib/timetable/conflictDedupe'
+import { formatStudentGroupName, gradeDoubleBookedMessage } from '@/lib/timetable/zambiaTerminology'
 import { Button } from '@/components/ui/Button'
 
 export interface ConflictDisplayProps {
   conflicts: Map<string, Conflict[]>
   assignments?: Assignment[]
+  classes?: Class[]
   suggestionsByAssignmentId?: (assignmentId: string) => Suggestion[]
   onApplySuggestion?: (suggestion: Suggestion) => void
   onUndo?: () => void
@@ -25,6 +27,7 @@ type ConflictRow = {
   key: string
   assignmentId: string
   conflict: Conflict
+  message: string
 }
 
 function severityOrder(sev: ConflictSeverity) {
@@ -41,9 +44,33 @@ function sevClass(sev: ConflictSeverity) {
   return 'text-blue-700'
 }
 
+function resolveConflictMessage(
+  conflict: Conflict,
+  classById: Map<string, Class>,
+  assignmentClassNameById: Map<string, string>
+): string {
+  if (conflict.type !== 'ClassDoubleBooked') return conflict.message
+  if (conflict.message !== gradeDoubleBookedMessage()) return conflict.message
+
+  const classId = conflict.related?.classIds?.[0]
+  if (!classId) return conflict.message
+
+  const cls = classById.get(String(classId))
+  if (cls) {
+    return gradeDoubleBookedMessage(
+      formatStudentGroupName({ name: cls.name, yearGroup: String(cls.grade ?? '') })
+    )
+  }
+  const fromAssignment = assignmentClassNameById.get(String(classId))
+  if (fromAssignment) return gradeDoubleBookedMessage(fromAssignment)
+  return conflict.message
+}
+
 export function ConflictDisplay(props: ConflictDisplayProps) {
   const {
     conflicts,
+    assignments = [],
+    classes = [],
     suggestionsByAssignmentId,
     onApplySuggestion,
     onUndo,
@@ -52,6 +79,22 @@ export function ConflictDisplay(props: ConflictDisplayProps) {
   } = props
 
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set())
+
+  const classById = useMemo(() => {
+    const map = new Map<string, Class>()
+    for (const c of classes) map.set(String(c.id), c)
+    return map
+  }, [classes])
+
+  const assignmentClassNameById = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const a of assignments) {
+      const id = String(a.classId || '')
+      const name = String((a as Assignment & { className?: string }).className || '').trim()
+      if (id && name) map.set(id, name)
+    }
+    return map
+  }, [assignments])
 
   const rows = useMemo<ConflictRow[]>(() => {
     const seen = new Set<string>()
@@ -65,6 +108,7 @@ export function ConflictDisplay(props: ConflictDisplayProps) {
           key: dedupeKey,
           assignmentId: primaryAssignmentId(c, assignmentId),
           conflict: c,
+          message: resolveConflictMessage(c, classById, assignmentClassNameById),
         })
       }
     }
@@ -73,7 +117,7 @@ export function ConflictDisplay(props: ConflictDisplayProps) {
       if (s !== 0) return s
       return String(a.conflict.type).localeCompare(String(b.conflict.type))
     })
-  }, [conflicts])
+  }, [conflicts, classById, assignmentClassNameById])
 
   const grouped = useMemo(() => {
     const g: Record<ConflictSeverity, ConflictRow[]> = {
@@ -225,7 +269,7 @@ function ConflictRowItem(props: {
               </div>
               <div className="text-royalPurple-text2 text-xs">{row.conflict.type}</div>
             </div>
-            <div className="text-royalPurple-text1 font-semibold mt-1">{row.conflict.message}</div>
+            <div className="text-royalPurple-text1 font-semibold mt-1">{row.message}</div>
             <div className="text-royalPurple-text3 text-xs mt-1">
               {affectedAssignmentCount(row.conflict)} assignment(s) affected
             </div>

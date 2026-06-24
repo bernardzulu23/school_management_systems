@@ -1,3 +1,5 @@
+import type { Assignment, Class } from './types'
+
 /**
  * Zambian school terminology:
  * - Grade / Form = permanent student group (Form 1A, 10A) — stored as Prisma `Class`
@@ -60,6 +62,35 @@ export function formatStudentGroupName(row: {
 }
 
 /** Conflict display message for grade double-booking */
-export function gradeDoubleBookedMessage() {
-  return 'Grade is double-booked'
+export function gradeDoubleBookedMessage(classLabel?: string | null) {
+  const label = String(classLabel || '').trim()
+  if (label) return `${label} is double-booked`
+  return `${STUDENT_GROUP.singular} is double-booked`
+}
+
+type AssignmentWithClassName = Assignment & { className?: string | null }
+
+/** Build minimal class rows for conflict labelling from assignment payloads. */
+export function classesFromAssignments(
+  assignments: Assignment[],
+  existingClasses: Class[] = []
+): Class[] {
+  const byId = new Map<string, Class>()
+  for (const c of existingClasses) {
+    byId.set(String(c.id), c)
+  }
+  for (const a of assignments || []) {
+    const id = String(a?.classId || '').trim()
+    if (!id || byId.has(id)) continue
+    const name = String((a as AssignmentWithClassName).className || '').trim()
+    if (!name) continue
+    byId.set(id, {
+      id,
+      name,
+      grade: name,
+      students: 0,
+      subjects: [],
+    })
+  }
+  return [...byId.values()]
 }
