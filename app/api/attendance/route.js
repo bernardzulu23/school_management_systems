@@ -8,6 +8,7 @@ import { scheduleParentAttendanceSmsBatch } from '@/lib/attendance/parentNotific
 import { mergeAttendanceRegister } from '@/lib/attendance/unified-register'
 import { syncWebAttendanceToSession } from '@/lib/compliance/attendanceToday'
 import { openAttendanceSession, recordAttendanceMark } from '@/lib/attendance/sessions'
+import { bulkUpsertAttendance } from '@/lib/attendance/bulkUpsert'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -132,24 +133,7 @@ export const POST = withErrorHandler(async function POST(request) {
     existingRows.map((r) => [String(r.studentId), String(r.status || '').toLowerCase()])
   )
 
-  await prisma.$transaction(
-    finalWrites.map((r) =>
-      prisma.attendance.upsert({
-        where: { studentId_date: { studentId: r.studentId, date: r.date } },
-        create: {
-          schoolId,
-          studentId: r.studentId,
-          date: r.date,
-          status: r.status,
-          remarks: r.remarks,
-        },
-        update: {
-          status: r.status,
-          remarks: r.remarks,
-        },
-      })
-    )
-  )
+  await bulkUpsertAttendance(prisma, schoolId, finalWrites)
 
   const changedWrites = finalWrites.filter(
     (w) =>

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
-import { buildTeacherColorMap, teacherCardStyle } from '@/lib/timetable/teacherColors'
+import { buildTeacherColorMap, teacherCardStyle } from '@/lib/timetable/teacherColorPalette'
 import { uniqueBellRows, type BellScheduleSlot } from '@/lib/timetable/bellSchedule'
 import {
   assignmentOverlapsSlot,

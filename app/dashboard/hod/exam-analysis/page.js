@@ -38,7 +38,7 @@ export default function ExamAnalysisPage() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const [selectedSubject, setSelectedSubject] = useState('all')
 
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['hod-exam-analysis', selectedTerm, selectedYear],
     queryFn: async () => {
       const params = new URLSearchParams()
@@ -147,7 +147,10 @@ export default function ExamAnalysisPage() {
         ) : isError ? (
           <Card className="p-8 text-center">
             <AlertTriangle className="h-10 w-10 text-royalPurple-dangerTx mx-auto mb-3" />
-            <p className="text-royalPurple-text2">Failed to load analysis</p>
+            <p className="text-royalPurple-text2">{error?.message || 'Failed to load analysis'}</p>
+            <Button variant="outline" className="mt-4" onClick={() => refetch()}>
+              Try again
+            </Button>
           </Card>
         ) : (
           <>

@@ -117,11 +117,46 @@ export default function StudentECZPracticePage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="text-sm text-royalPurple-text2">
-                  {paper?.examInfo?.topic} • Total marks: {paper?.examInfo?.totalMarks} • Time:{' '}
-                  {paper?.examInfo?.timeAllowed}
+                  {formatEczExamLevelLabel(paper?.examInfo?.level)} • {paper?.examInfo?.topic} •
+                  Total marks: {paper?.examInfo?.totalMarks} • Time: {paper?.examInfo?.timeAllowed}
                 </div>
                 <RagReferencesPanel references={ragReferences} />
                 <div className="space-y-3">
+                  {(paper.scenarios || []).map((s) => (
+                    <div
+                      key={s.questionNumber}
+                      className="p-4 rounded-xl border border-royalPurple-border bg-royalPurple-card/60 space-y-3"
+                    >
+                      <div className="text-royalPurple-text1 font-semibold">
+                        Question {s.questionNumber}
+                        {s.totalMarks ? ` — ${s.totalMarks} marks` : ''}
+                      </div>
+                      <p className="text-sm text-royalPurple-text2">{s.zambianScenario}</p>
+                      {s.elementOfConstruct ? (
+                        <p className="text-xs text-royalPurple-text3">
+                          Element of construct: {s.elementOfConstruct}
+                        </p>
+                      ) : null}
+                      {(s.subQuestions || []).length > 0 ? (
+                        <ol className="list-decimal pl-5 space-y-2 text-sm text-royalPurple-text2">
+                          {(s.subQuestions || []).map((sq) => (
+                            <li key={sq.number}>
+                              <span className="font-medium text-royalPurple-text1">
+                                [{sq.commandTerm}]
+                              </span>{' '}
+                              {sq.question}{' '}
+                              <span className="text-royalPurple-text3">({sq.marks}m)</span>
+                              {sq.modelAnswer ? (
+                                <p className="mt-1 text-xs text-kpi-pass/30">
+                                  Mark scheme: {sq.modelAnswer}
+                                </p>
+                              ) : null}
+                            </li>
+                          ))}
+                        </ol>
+                      ) : null}
+                    </div>
+                  ))}
                   {(paper.questions || []).map((q, idx) => (
                     <div
                       key={q.id || idx}
@@ -143,6 +178,12 @@ export default function StudentECZPracticePage() {
                       ) : null}
                     </div>
                   ))}
+                  {!((paper.scenarios || []).length || (paper.questions || []).length) ? (
+                    <p className="text-sm text-royalPurple-text3">
+                      No questions were returned for this paper. Try generating again with a
+                      different topic or question count.
+                    </p>
+                  ) : null}
                 </div>
               </CardContent>
             </Card>

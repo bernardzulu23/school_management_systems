@@ -592,6 +592,8 @@ export default function HodDashboard() {
                   color="purple"
                   description="Pending approval"
                   variant="flat"
+                  href="/dashboard/hod/lesson-plans"
+                  actionLabel="Review →"
                 />
                 <StatsCard
                   title="Performance"
@@ -608,6 +610,8 @@ export default function HodDashboard() {
                   color="red"
                   description="Pending assessments"
                   variant="flat"
+                  href="/dashboard/hod/quizzes"
+                  actionLabel="Approve →"
                 />
               </div>
             </section>

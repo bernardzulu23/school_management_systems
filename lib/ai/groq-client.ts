@@ -9,6 +9,7 @@ import {
   groqModel,
   streamAIText,
 } from '@/lib/ai/client'
+import { extractJSONObject as parseExtractJSONObject } from '@/lib/ai/parseJsonResponse'
 
 export { assertGroqConfigured, GROQ_MODEL, groqModel }
 
@@ -53,21 +54,7 @@ export async function groqChatCompletion(options: GroqChatOptions): Promise<Groq
 }
 
 export function extractJSONObject(text: string): Record<string, unknown> | null {
-  const s = String(text || '').trim()
-  if (!s) return null
-
-  const fenced = s.match(/```json\s*([\s\S]*?)\s*```/i) || s.match(/```\s*([\s\S]*?)\s*```/i)
-  const candidate = fenced ? fenced[1] : s
-
-  const first = candidate.indexOf('{')
-  const last = candidate.lastIndexOf('}')
-  if (first === -1 || last === -1 || last <= first) return null
-
-  try {
-    return JSON.parse(candidate.slice(first, last + 1)) as Record<string, unknown>
-  } catch {
-    return null
-  }
+  return parseExtractJSONObject(text)
 }
 
 export const GROQ_SSE_HEADERS = {

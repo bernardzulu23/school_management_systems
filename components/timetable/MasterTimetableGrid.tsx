@@ -6,7 +6,7 @@ import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/time
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { uniqueBellRows, type BellScheduleSlot } from '@/lib/timetable/bellSchedule'
 import { countUniqueConflicts } from '@/lib/timetable/conflictDedupe'
-import { buildTeacherColorMap } from '@/lib/timetable/teacherColors'
+import { buildTeacherColorMap } from '@/lib/timetable/teacherColorPalette'
 import {
   assignmentsForPrimaryCell,
   isContinuationSlot,

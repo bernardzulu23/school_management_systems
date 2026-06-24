@@ -4,6 +4,7 @@
  */
 
 import { generateAIText } from '@/lib/ai/client'
+import { extractJSONArray } from '@/lib/ai/parseJsonResponse'
 import {
   canPlace,
   getCandidateSlots,
@@ -94,13 +95,9 @@ function buildPrompt(
 }
 
 function parseJsonArray(raw: string): unknown[] {
-  const trimmed = String(raw || '').trim()
-  const fence = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i)
-  const body = fence ? fence[1].trim() : trimmed
-  const start = body.indexOf('[')
-  const end = body.lastIndexOf(']')
-  if (start < 0 || end < 0) throw new Error('LLM did not return a JSON array')
-  return JSON.parse(body.slice(start, end + 1)) as unknown[]
+  const parsed = extractJSONArray(raw)
+  if (parsed) return parsed
+  throw new Error('LLM did not return a JSON array')
 }
 
 function slotFromCandidate(

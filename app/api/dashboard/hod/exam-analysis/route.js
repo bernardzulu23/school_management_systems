@@ -6,6 +6,31 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
 import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
+import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
+
+function emptyExamAnalysis(term, year) {
+  return {
+    departmentStats: { totalStudents: 0, averageScore: 0, passRate: 0, improvement: 0 },
+    subjects: [],
+    gradeDistribution: [],
+    termComparison: [
+      { term: 'Term 1', average: 0, passRate: 0 },
+      { term: 'Term 2', average: 0, passRate: 0 },
+      { term: 'Term 3', average: 0, passRate: 0 },
+    ],
+    recommendedActions: [],
+    junior_gender_by_grade: [],
+    senior_gender_by_grade: [],
+    term,
+    year,
+  }
+}
+
+function canAccessHodExamAnalysis(user) {
+  const role = String(user?.role || '').toLowerCase()
+  if (roleCheck(user, ['HOD', 'hod', 'ADMIN', 'headteacher'])) return true
+  return Boolean(user?.hodProfile)
+}
 
 function parseTermParam(termRaw) {
   const raw = String(termRaw || '').trim()
@@ -89,7 +114,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['HOD', 'hod', 'ADMIN', 'headteacher'])) {
+  if (!canAccessHodExamAnalysis(auth.user)) {
     throw new ApiError('Forbidden', 403)
   }
 
@@ -105,170 +130,163 @@ export const GET = withErrorHandler(async function GET(request) {
   const term = parseTermParam(searchParams.get('term')) || 'Term 2'
 
   const userId = auth.user.id
-  const hodProfile = await prisma.headOfDepartment.findFirst({
-    where: { userId, schoolId },
-    select: { id: true, departmentId: true, department: true },
-  })
-  if (!hodProfile) throw new ApiError('HOD profile not found', 404)
-  const resolved = await resolveDepartmentScope({
-    prisma,
-    schoolId,
-    departmentId: hodProfile.departmentId,
-    departmentName: hodProfile.department,
-  })
-  const departmentIds = resolved.departmentIds
-  const departmentNameAliases = resolved.departmentNameAliases
-  if (departmentIds.length === 0) throw new ApiError('Department not assigned', 400)
+  const isAdminOrHead = roleCheck(auth.user, ['ADMIN', 'headteacher'])
+  const hodProfile = await getHodProfile(prisma, userId, schoolId)
 
-  const teacherDepartments = await prisma.teacherDepartment.findMany({
-    where: { departmentId: { in: departmentIds } },
-    select: { teacherId: true },
-  })
-
-  const teachersByNameOrJoin =
-    departmentNameAliases.length > 0 || departmentIds.length > 0
-      ? await prisma.teacher.findMany({
-          where: {
-            schoolId,
-            OR: [
-              ...(departmentIds.length > 0
-                ? [
-                    {
-                      departments: {
-                        some: { departmentId: { in: departmentIds } },
-                      },
-                    },
-                  ]
-                : []),
-              ...(departmentNameAliases.length > 0
-                ? [
-                    {
-                      OR: departmentNameAliases.map((n) => ({
-                        department: { equals: String(n), mode: 'insensitive' },
-                      })),
-                    },
-                  ]
-                : []),
-            ],
-          },
-          select: { id: true },
-          take: 20000,
-        })
-      : []
-
-  const teacherIds = Array.from(
-    new Set(
-      [
-        ...teacherDepartments.map((t) => String(t.teacherId || '')).filter(Boolean),
-        ...teachersByNameOrJoin.map((t) => String(t.id || '')).filter(Boolean),
-      ].filter(Boolean)
-    )
-  )
-
-  if (teacherIds.length === 0) {
-    return NextResponse.json({
-      success: true,
-      data: {
-        departmentStats: { totalStudents: 0, averageScore: 0, passRate: 0, improvement: 0 },
-        subjects: [],
-        gradeDistribution: [],
-        termComparison: [
-          { term: 'Term 1', average: 0, passRate: 0 },
-          { term: 'Term 2', average: 0, passRate: 0 },
-          { term: 'Term 3', average: 0, passRate: 0 },
-        ],
-        recommendedActions: [],
-        term,
-        year,
-      },
-    })
+  if (!hodProfile && !isAdminOrHead) {
+    throw new ApiError('HOD profile not found', 404)
   }
 
-  const assignments = await prisma.teachingAssignment.findMany({
-    where: { schoolId, teacherId: { in: teacherIds } },
-    select: { classId: true, subjectId: true },
-  })
+  let schoolWide = isAdminOrHead && !hodProfile
+  let pupilIds = null
+  let subjectIds = null
 
-  const pairKeys = new Set()
-  const pairs = []
-  for (const a of assignments) {
-    if (!a.classId || !a.subjectId) continue
-    const key = `${a.classId}:${a.subjectId}`
-    if (pairKeys.has(key)) continue
-    pairKeys.add(key)
-    pairs.push({ classId: a.classId, subjectId: a.subjectId })
-  }
-
-  if (pairs.length === 0) {
-    return NextResponse.json({
-      success: true,
-      data: {
-        departmentStats: { totalStudents: 0, averageScore: 0, passRate: 0, improvement: 0 },
-        subjects: [],
-        gradeDistribution: [],
-        termComparison: [
-          { term: 'Term 1', average: 0, passRate: 0 },
-          { term: 'Term 2', average: 0, passRate: 0 },
-          { term: 'Term 3', average: 0, passRate: 0 },
-        ],
-        recommendedActions: [],
-        term,
-        year,
-      },
-    })
-  }
-
-  const enrollments = await prisma.pupilSubjectEnrollment.findMany({
-    where: {
+  if (!schoolWide && hodProfile) {
+    const resolved = await resolveDepartmentScope({
+      prisma,
       schoolId,
-      OR: pairs.slice(0, 2000),
-    },
-    select: { pupilId: true, subjectId: true },
-    distinct: ['pupilId', 'subjectId'],
-    take: 20000,
-  })
-
-  const pupilIds = Array.from(new Set(enrollments.map((e) => String(e.pupilId)).filter(Boolean)))
-  const subjectIds = Array.from(
-    new Set(enrollments.map((e) => String(e.subjectId)).filter(Boolean))
-  )
-
-  if (pupilIds.length === 0 || subjectIds.length === 0) {
-    return NextResponse.json({
-      success: true,
-      data: {
-        departmentStats: { totalStudents: 0, averageScore: 0, passRate: 0, improvement: 0 },
-        subjects: [],
-        gradeDistribution: [],
-        termComparison: [
-          { term: 'Term 1', average: 0, passRate: 0 },
-          { term: 'Term 2', average: 0, passRate: 0 },
-          { term: 'Term 3', average: 0, passRate: 0 },
-        ],
-        recommendedActions: [],
-        term,
-        year,
-      },
+      departmentId: hodProfile.departmentId,
+      departmentName: hodProfile.department,
     })
+    const departmentIds = resolved.departmentIds
+    const departmentNameAliases = resolved.departmentNameAliases
+
+    if (departmentIds.length === 0) {
+      if (isAdminOrHead) schoolWide = true
+      else {
+        return NextResponse.json({ success: true, data: emptyExamAnalysis(term, year) })
+      }
+    }
+
+    if (!schoolWide) {
+      const teacherDepartments = await prisma.teacherDepartment.findMany({
+        where: { departmentId: { in: departmentIds } },
+        select: { teacherId: true },
+      })
+
+      const teachersByNameOrJoin =
+        departmentNameAliases.length > 0 || departmentIds.length > 0
+          ? await prisma.teacher.findMany({
+              where: {
+                schoolId,
+                OR: [
+                  ...(departmentIds.length > 0
+                    ? [
+                        {
+                          departments: {
+                            some: { departmentId: { in: departmentIds } },
+                          },
+                        },
+                      ]
+                    : []),
+                  ...(departmentNameAliases.length > 0
+                    ? [
+                        {
+                          OR: departmentNameAliases.map((n) => ({
+                            department: { equals: String(n), mode: 'insensitive' },
+                          })),
+                        },
+                      ]
+                    : []),
+                ],
+              },
+              select: { id: true },
+              take: 20000,
+            })
+          : []
+
+      const teacherIds = Array.from(
+        new Set(
+          [
+            ...teacherDepartments.map((t) => String(t.teacherId || '')).filter(Boolean),
+            ...teachersByNameOrJoin.map((t) => String(t.id || '')).filter(Boolean),
+          ].filter(Boolean)
+        )
+      )
+
+      if (teacherIds.length === 0) {
+        return NextResponse.json({ success: true, data: emptyExamAnalysis(term, year) })
+      }
+
+      const assignments = await prisma.teachingAssignment.findMany({
+        where: { schoolId, teacherId: { in: teacherIds } },
+        select: { classId: true, subjectId: true },
+      })
+
+      const pairKeys = new Set()
+      const pairs = []
+      for (const a of assignments) {
+        if (!a.classId || !a.subjectId) continue
+        const key = `${a.classId}:${a.subjectId}`
+        if (pairKeys.has(key)) continue
+        pairKeys.add(key)
+        pairs.push({ classId: a.classId, subjectId: a.subjectId })
+      }
+
+      if (pairs.length === 0) {
+        return NextResponse.json({ success: true, data: emptyExamAnalysis(term, year) })
+      }
+
+      const enrollments = await prisma.pupilSubjectEnrollment.findMany({
+        where: {
+          schoolId,
+          OR: pairs.slice(0, 2000),
+        },
+        select: { pupilId: true, subjectId: true },
+        distinct: ['pupilId', 'subjectId'],
+        take: 20000,
+      })
+
+      pupilIds = Array.from(new Set(enrollments.map((e) => String(e.pupilId)).filter(Boolean)))
+      subjectIds = Array.from(new Set(enrollments.map((e) => String(e.subjectId)).filter(Boolean)))
+
+      if (pupilIds.length === 0 || subjectIds.length === 0) {
+        return NextResponse.json({ success: true, data: emptyExamAnalysis(term, year) })
+      }
+    }
   }
 
-  const subjects = await prisma.subject.findMany({
-    where: { schoolId, id: { in: subjectIds } },
-    select: { id: true, name: true },
-  })
-  const subjectNameById = new Map(subjects.map((s) => [String(s.id), s.name]))
+  const resultScope = {
+    schoolId,
+    term,
+    year,
+    ...(pupilIds?.length ? { studentId: { in: pupilIds } } : {}),
+    ...(subjectIds?.length ? { subjectId: { in: subjectIds } } : {}),
+  }
+
+  let subjectNameById = new Map()
+  if (subjectIds?.length) {
+    const subjects = await prisma.subject.findMany({
+      where: { schoolId, id: { in: subjectIds } },
+      select: { id: true, name: true },
+    })
+    subjectNameById = new Map(subjects.map((s) => [String(s.id), s.name]))
+  } else {
+    const subjects = await prisma.subject.findMany({
+      where: { schoolId },
+      select: { id: true, name: true },
+      take: 5000,
+    })
+    subjectNameById = new Map(subjects.map((s) => [String(s.id), s.name]))
+  }
 
   const resultsForTerm = await prisma.result.findMany({
-    where: {
-      schoolId,
-      studentId: { in: pupilIds },
-      subjectId: { in: subjectIds },
-      term,
-      year,
-    },
+    where: resultScope,
     select: { studentId: true, subjectId: true, score: true, grade: true },
     take: 50000,
   })
+
+  if (!subjectIds?.length && resultsForTerm.length) {
+    subjectIds = Array.from(new Set(resultsForTerm.map((r) => String(r.subjectId)).filter(Boolean)))
+    const missingSubjectIds = subjectIds.filter((id) => !subjectNameById.has(id))
+    if (missingSubjectIds.length) {
+      const extraSubjects = await prisma.subject.findMany({
+        where: { schoolId, id: { in: missingSubjectIds } },
+        select: { id: true, name: true },
+      })
+      for (const s of extraSubjects) subjectNameById.set(String(s.id), s.name)
+    }
+  }
 
   const termNumber = Number(String(term).replace(/[^0-9]/g, '') || '2')
   const prevTerm = termNumber > 1 ? `Term ${termNumber - 1}` : null
@@ -276,11 +294,8 @@ export const GET = withErrorHandler(async function GET(request) {
   const resultsPrevTerm = prevTerm
     ? await prisma.result.findMany({
         where: {
-          schoolId,
-          studentId: { in: pupilIds },
-          subjectId: { in: subjectIds },
+          ...resultScope,
           term: prevTerm,
-          year,
         },
         select: { subjectId: true, score: true },
         take: 50000,
@@ -358,11 +373,8 @@ export const GET = withErrorHandler(async function GET(request) {
   for (const t of ['Term 1', 'Term 2', 'Term 3']) {
     const termResults = await prisma.result.findMany({
       where: {
-        schoolId,
-        studentId: { in: pupilIds },
-        subjectId: { in: subjectIds },
+        ...resultScope,
         term: t,
-        year,
       },
       select: { score: true },
       take: 50000,
