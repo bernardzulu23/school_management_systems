@@ -1981,6 +1981,7 @@ function HeadteacherTimetablePageContent() {
                 conflicts={conflicts}
                 assignments={seasonAssignments}
                 classes={visibleClasses}
+                unplacedLessons={unplacedLessons}
                 suggestionsByAssignmentId={suggestionsByAssignmentId}
                 onApplySuggestion={onApplySuggestion}
                 onUndo={undo}
@@ -2128,6 +2129,7 @@ function HeadteacherTimetablePageContent() {
               conflicts={conflicts}
               assignments={seasonAssignments}
               classes={visibleClasses}
+              unplacedLessons={unplacedLessons}
               suggestionsByAssignmentId={suggestionsByAssignmentId}
               onApplySuggestion={onApplySuggestion}
               onUndo={undo}

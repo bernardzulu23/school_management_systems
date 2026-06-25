@@ -11,11 +11,16 @@ import {
 } from '@/lib/timetable/conflictDedupe'
 import { formatStudentGroupName, gradeDoubleBookedMessage } from '@/lib/timetable/zambiaTerminology'
 import { Button } from '@/components/ui/Button'
+import {
+  UnplacedLessonsTray,
+  type UnplacedLesson,
+} from '@/components/timetable/UnplacedLessonsTray'
 
 export interface ConflictDisplayProps {
   conflicts: Map<string, Conflict[]>
   assignments?: Assignment[]
   classes?: Class[]
+  unplacedLessons?: UnplacedLesson[]
   suggestionsByAssignmentId?: (assignmentId: string) => Suggestion[]
   onApplySuggestion?: (suggestion: Suggestion) => void
   onUndo?: () => void
@@ -71,6 +76,7 @@ export function ConflictDisplay(props: ConflictDisplayProps) {
     conflicts,
     assignments = [],
     classes = [],
+    unplacedLessons = [],
     suggestionsByAssignmentId,
     onApplySuggestion,
     onUndo,
@@ -177,6 +183,18 @@ export function ConflictDisplay(props: ConflictDisplayProps) {
 
       {total === 0 ? (
         <div className="mt-3 text-xs text-royalPurple-text2">No conflicts detected.</div>
+      ) : null}
+
+      {unplacedLessons.length > 0 ? (
+        <div className="mt-4">
+          <div className="text-sm font-semibold text-royalPurple-text1 mb-2">
+            Unplaced lessons ({unplacedLessons.length})
+          </div>
+          <p className="text-xs text-royalPurple-text3 mb-2">
+            These allocation blocks have no slot yet — drag from the grid tray or regenerate.
+          </p>
+          <UnplacedLessonsTray items={unplacedLessons} />
+        </div>
       ) : null}
 
       {useVirtual ? (

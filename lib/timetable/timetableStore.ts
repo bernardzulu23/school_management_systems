@@ -8,6 +8,7 @@ import { normalizeApiTimeSlots } from './bellSchedule'
 import { alignAssignmentsToBellRows } from './gridHelpers'
 import { normalizeTimetableConfig, resolveSchoolTimeSlots } from './timeSlotsFromConfig'
 import { classesFromAssignments } from './zambiaTerminology'
+import { filterConflictMapForActiveClasses } from './filterActiveClassConflicts'
 import { canPublishTimetable, validateTimetable } from './validateTimetable'
 import { isConflict } from './constraintCheck'
 import { countUniqueConflicts } from './conflictDedupe'
@@ -213,7 +214,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
             seasonMode: get().currentSeason,
             classes: classesFromAssignments(assignments),
           })
-          return detector.detectAllConflicts()
+          return filterConflictMapForActiveClasses(detector.detectAllConflicts(), assignments)
         } catch {
           return new Map<string, Conflict[]>()
         }

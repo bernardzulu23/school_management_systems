@@ -13,7 +13,8 @@ import {
   loadLockedSlotReservations,
   loadSchoolTimeSlots,
 } from '@/lib/timetable/loadGenerationContext'
-import { auditDraftTimetable, persistDraftConflictMeta } from '@/lib/timetable/conflictAudit'
+import { auditDraftTimetable } from '@/lib/timetable/conflictAudit'
+import { cleanupStaleConflicts } from '@/lib/timetable/cleanupConflicts'
 import { normalizePushedAllocations } from '@/lib/timetable/normalizePushedAllocations'
 import { remapEntriesToValidAllocationIds } from '@/lib/timetable/resolveTimetableEntryAllocationIds'
 import { filterConflictFreeSchedulerEntries } from '@/lib/timetable/constraintCheck'
@@ -294,14 +295,10 @@ export async function POST(req: NextRequest) {
   })
 
   let conflictAudit: Awaited<ReturnType<typeof auditDraftTimetable>> | null = null
+  let conflictCleanup: Awaited<ReturnType<typeof cleanupStaleConflicts>> | null = null
   try {
+    conflictCleanup = await cleanupStaleConflicts(prisma, schoolId, { term, academicYear })
     conflictAudit = await auditDraftTimetable(prisma, { schoolId, term, academicYear })
-    await persistDraftConflictMeta(prisma, {
-      schoolId,
-      term,
-      academicYear,
-      summary: conflictAudit,
-    })
   } catch (conflictError) {
     console.error('[TimetableGenerate] Conflict audit failed:', conflictError)
   }
@@ -322,6 +319,7 @@ export async function POST(req: NextRequest) {
           warnings: conflictAudit.warningCount,
           canPublish: conflictAudit.canPublish,
           preview: conflictAudit.conflicts.slice(0, 5),
+          cleanup: conflictCleanup,
         }
       : null,
     message: conflictAudit
