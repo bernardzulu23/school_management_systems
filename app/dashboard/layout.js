@@ -1,5 +1,8 @@
 import { headers } from 'next/headers'
 
+/** Authenticated portal — never statically prerendered at build time. */
+export const dynamic = 'force-dynamic'
+
 const BASE_DOMAIN =
   process.env.APP_BASE_DOMAIN || process.env.BASE_DOMAIN || 'bluepeacktechnologies.com'
 

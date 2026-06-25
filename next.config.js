@@ -94,13 +94,11 @@ const nextConfig = {
   // Security headers (CSP with nonce is applied per-request in proxy.js)
   async headers() {
     const { nextConfigSecurityHeaders } = require('./lib/security/headers.js')
-    const {
-      PUBLIC_EDGE_CACHE_CONTROL,
-      PUBLIC_EDGE_CACHE_PATHS,
-    } = require('./lib/security/publicEdgeCache.js')
     const securityHeaders = nextConfigSecurityHeaders()
 
-    const marketingCacheHeaders = [{ key: 'Cache-Control', value: PUBLIC_EDGE_CACHE_CONTROL }]
+    const marketingCacheControl = 'public, s-maxage=3600, stale-while-revalidate=86400'
+    const marketingRoutes = ['/', '/pricing', '/features', '/about', '/privacy', '/terms']
+    const marketingCacheHeaders = [{ key: 'Cache-Control', value: marketingCacheControl }]
 
     const privateCacheHeaders = [
       { key: 'Cache-Control', value: 'private, no-store' },
@@ -112,7 +110,7 @@ const nextConfig = {
         source: '/:path*',
         headers: securityHeaders,
       },
-      ...PUBLIC_EDGE_CACHE_PATHS.map((route) => ({
+      ...marketingRoutes.map((route) => ({
         source: route === '/' ? '/' : route,
         headers: marketingCacheHeaders,
       })),

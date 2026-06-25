@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { useAuth } from '@/lib/auth'
@@ -10,7 +10,7 @@ import ProviderLogos from '@/components/payments/ProviderLogos'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CreditCard, History, Phone } from 'lucide-react'
 
-export default function PaymentsPage() {
+function PaymentsPageContent() {
   const { user } = useAuth()
   const searchParams = useSearchParams()
   const [transactions, setTransactions] = useState([])
@@ -161,5 +161,19 @@ export default function PaymentsPage() {
         )}
       </div>
     </DashboardLayout>
+  )
+}
+
+export default function PaymentsPage() {
+  return (
+    <Suspense
+      fallback={
+        <DashboardLayout title="Payments">
+          <div className="p-6 text-sm text-royalPurple-text3">Loading payments…</div>
+        </DashboardLayout>
+      }
+    >
+      <PaymentsPageContent />
+    </Suspense>
   )
 }
