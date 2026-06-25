@@ -52,6 +52,22 @@ describe('Content-Security-Policy', () => {
   it('allows connect hosts the app needs', () => {
     expect(csp).toContain('https://emkc.org')
     expect(csp).toContain('https://cdn.jsdelivr.net')
+    expect(csp).toContain('https://challenges.cloudflare.com')
+  })
+
+  it('allows Cloudflare and jsDelivr in script-src and script-src-elem', () => {
+    const docCsp = buildContentSecurityPolicy({ production: true })
+    expect(docCsp).toContain('script-src-elem')
+    expect(docCsp).toContain('https://static.cloudflareinsights.com')
+    expect(docCsp).toContain('https://challenges.cloudflare.com')
+    expect(scriptSrcDirective(docCsp)).toContain('https://cdn.jsdelivr.net')
+  })
+
+  it('document CSP allows Cloudflare inline bootstraps without strict-dynamic', () => {
+    const docCsp = buildContentSecurityPolicy({ production: true })
+    expect(docCsp).not.toContain("'strict-dynamic'")
+    expect(scriptSrcDirective(docCsp)).toContain("'unsafe-inline'")
+    expect(scriptSrcDirective(docCsp)).toContain("'self'")
   })
 })
 
@@ -137,6 +153,9 @@ describe('proxy applies security headers to responses', () => {
     const csp = res.headers.get('content-security-policy') || ''
     expect(csp).not.toContain("'nonce-")
     expect(csp).not.toContain("'strict-dynamic'")
+    expect(csp).toContain('script-src-elem')
+    expect(csp).toContain('https://challenges.cloudflare.com')
     expect(scriptSrcDirective(csp)).toContain("'self'")
+    expect(scriptSrcDirective(csp)).toContain('https://cdn.jsdelivr.net')
   })
 })
