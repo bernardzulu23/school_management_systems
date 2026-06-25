@@ -86,8 +86,12 @@ export async function handleSecurityProxy(request) {
     const method = String(request.method || 'GET').toUpperCase()
 
     const nonce = generateNonce()
-    const isPublicMarketingDoc =
-      method === 'GET' && !pathname.startsWith('/api') && isPublicEdgeCachePath(pathname)
+    const isDocumentGet =
+      method === 'GET' &&
+      !pathname.startsWith('/api') &&
+      !pathname.startsWith('/_next/static') &&
+      !pathname.startsWith('/_next/image')
+    const isPublicMarketingDoc = isDocumentGet && isPublicEdgeCachePath(pathname)
 
     // SECURITY (CVE-2025-29927 + tenant spoofing): strip internal/spoofable
     // headers from the forwarded request BEFORE any routing or auth decision.
@@ -98,8 +102,9 @@ export async function handleSecurityProxy(request) {
 
     const securityOpts = {
       pathname,
-      // Static marketing HTML is edge-cached — use self-only CSP (no per-request nonce).
-      nonce: isPublicMarketingDoc ? false : nonce,
+      // Prerendered Next.js HTML does not attach per-request nonces to script tags.
+      // strict-dynamic would block every /_next/static chunk — use self-only CSP on documents.
+      nonce: isDocumentGet ? false : nonce,
     }
 
     if (BLOCKED_HTTP_METHODS.has(method)) {

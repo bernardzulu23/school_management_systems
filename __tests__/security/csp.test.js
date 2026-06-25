@@ -127,4 +127,16 @@ describe('proxy applies security headers to responses', () => {
     expect(csp).not.toContain("'strict-dynamic'")
     expect(scriptSrcDirective(csp)).toContain("'self'")
   })
+
+  it('login page uses self-only script CSP (Next.js prerender has no script nonces)', async () => {
+    const req = buildRequest({ method: 'GET', url: 'https://www.bluepeacktechnologies.com/login' })
+    req.nextUrl = new URL(req.url)
+
+    const res = await proxy(req)
+    expect(res.headers.get('cache-control')).toContain('no-store')
+    const csp = res.headers.get('content-security-policy') || ''
+    expect(csp).not.toContain("'nonce-")
+    expect(csp).not.toContain("'strict-dynamic'")
+    expect(scriptSrcDirective(csp)).toContain("'self'")
+  })
 })
