@@ -193,7 +193,10 @@ export default function HomePageClient() {
     }
   }, [isHydrated, authHydrated, isAuthenticated, user, router])
 
-  if (!isHydrated || !authHydrated || isSchoolLoading) {
+  const needsSchoolContext = !isMarketingSite
+  const isBootstrapping = !isHydrated || (needsSchoolContext && isSchoolLoading)
+
+  if (isBootstrapping) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-royalPurple-page">
         <LoadingSpinner size="xl" color="primary" label="Loading" />
@@ -201,7 +204,7 @@ export default function HomePageClient() {
     )
   }
 
-  if (isAuthenticated) {
+  if (authHydrated && isAuthenticated && user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-royalPurple-page">
         <LoadingSpinner size="xl" color="primary" label="Redirecting" />
