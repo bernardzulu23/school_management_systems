@@ -11,6 +11,12 @@ import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { JWT_AUDIENCE } from '@/lib/middleware/auth'
 import { evaluatePassword, weakPasswordLoginPayload } from '@/lib/security/passwordPolicy'
+import {
+  checkLoginBruteForce,
+  clearLoginFailures,
+  getRequestIp,
+  handleLoginFailure,
+} from '@/lib/security/loginBruteForce'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
@@ -48,6 +54,15 @@ export const POST = withSecureApi(async function POST(request) {
     })
     if (rateLimitResult.isLimited) return rateLimitResult.response
 
+    const clientIp = getRequestIp(request)
+    const globalLock = checkLoginBruteForce({
+      request,
+      email: normalizedEmail,
+      schoolId: 'global',
+      ip: clientIp,
+    })
+    if (globalLock.blocked) return globalLock.response
+
     let schoolId = await resolvePublicSchoolId(request, subdomain)
     if (!schoolId) {
       const matches = await prisma.user.findMany({
@@ -69,6 +84,14 @@ export const POST = withSecureApi(async function POST(request) {
       )
     }
 
+    const schoolLock = checkLoginBruteForce({
+      request,
+      email: normalizedEmail,
+      schoolId,
+      ip: clientIp,
+    })
+    if (schoolLock.blocked) return schoolLock.response
+
     let user = await findUserByEmail(schoolId, normalizedEmail)
     if (!user) {
       const emailMatches = await prisma.user.findMany({
@@ -85,6 +108,13 @@ export const POST = withSecureApi(async function POST(request) {
     }
 
     if (!user) {
+      const lock = handleLoginFailure({
+        request,
+        email: normalizedEmail,
+        schoolId,
+        ip: clientIp,
+      })
+      if (lock.blocked) return lock.response
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
 
@@ -118,12 +148,22 @@ export const POST = withSecureApi(async function POST(request) {
 
     const isValid = await bcrypt.compare(password, storedHash)
     if (!isValid) {
+      const lock = handleLoginFailure({
+        request,
+        email: normalizedEmail,
+        schoolId,
+        ip: clientIp,
+      })
+      if (lock.blocked) return lock.response
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
 
     if (!evaluatePassword(password).isValid) {
       return NextResponse.json(weakPasswordLoginPayload(), { status: 403 })
     }
+
+    clearLoginFailures({ email: normalizedEmail, schoolId, ip: clientIp })
+    clearLoginFailures({ email: normalizedEmail, schoolId: 'global', ip: clientIp })
 
     const accessToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role, schoolId: user.schoolId },

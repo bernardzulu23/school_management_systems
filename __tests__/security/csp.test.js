@@ -115,4 +115,16 @@ describe('proxy applies security headers to responses', () => {
     expect(res.headers.get('x-content-type-options')).toBe('nosniff')
     expect(res.headers.get('x-frame-options')).toBe('DENY')
   })
+
+  it('marketing homepage uses edge cache headers and self-only script CSP', async () => {
+    const req = buildRequest({ method: 'GET', url: 'https://www.bluepeacktechnologies.com/' })
+    req.nextUrl = new URL(req.url)
+
+    const res = await proxy(req)
+    expect(res.headers.get('cache-control')).toContain('s-maxage=3600')
+    const csp = res.headers.get('content-security-policy') || ''
+    expect(csp).not.toContain("'nonce-")
+    expect(csp).not.toContain("'strict-dynamic'")
+    expect(scriptSrcDirective(csp)).toContain("'self'")
+  })
 })

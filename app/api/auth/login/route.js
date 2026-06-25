@@ -27,6 +27,13 @@ import {
   getPlatformLoginHint,
 } from '@/lib/platform/platformAdminAuth'
 import { buildPlatformLoginResponse } from '@/lib/platform/completePlatformLogin'
+import {
+  checkLoginBruteForce,
+  recordLoginFailure,
+  clearLoginFailures,
+  getRequestIp,
+  handleLoginFailure,
+} from '@/lib/security/loginBruteForce'
 import { evaluatePassword, weakPasswordLoginPayload } from '@/lib/security/passwordPolicy'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
@@ -98,13 +105,22 @@ export const POST = withSecureApi(async function POST(request) {
     })
     if (rateLimitResult.isLimited) return rateLimitResult.response
 
-    // Platform super-admin: same /login endpoint (apex URL, no school subdomain)
+    const clientIp = getRequestIp(request)
+    const globalLock = checkLoginBruteForce({
+      request,
+      email: normalizedEmail,
+      schoolId: 'global',
+      ip: clientIp,
+    })
+    if (globalLock.blocked) return globalLock.response
+
     await ensurePlatformAdminFromEnv()
     const platformAdmin = await verifyPlatformAdminCredentials(normalizedEmail, password)
     if (platformAdmin) {
       if (!evaluatePassword(password).isValid) {
         return NextResponse.json(weakPasswordLoginPayload(), { status: 403 })
       }
+      clearLoginFailures({ email: normalizedEmail, schoolId: 'platform', ip: clientIp })
       log.response(200, Date.now() - start)
       return buildPlatformLoginResponse(request, platformAdmin)
     }
@@ -120,6 +136,13 @@ export const POST = withSecureApi(async function POST(request) {
         .filter(Boolean)
     )
     if (platformEmails.has(normalizedEmail)) {
+      const lock = handleLoginFailure({
+        request,
+        email: normalizedEmail,
+        schoolId: 'platform',
+        ip: clientIp,
+      })
+      if (lock.blocked) return lock.response
       const hint = await getPlatformLoginHint(normalizedEmail)
       return NextResponse.json(
         {
@@ -162,6 +185,14 @@ export const POST = withSecureApi(async function POST(request) {
       )
     }
 
+    const schoolLock = checkLoginBruteForce({
+      request,
+      email: normalizedEmail,
+      schoolId,
+      ip: clientIp,
+    })
+    if (schoolLock.blocked) return schoolLock.response
+
     // 3. Database Lookup (scoped by schoolId; fall back to unique email match)
     let user = await findUserByEmail(schoolId, normalizedEmail)
 
@@ -186,6 +217,14 @@ export const POST = withSecureApi(async function POST(request) {
     }
 
     if (!user) {
+      const lock = handleLoginFailure({
+        request,
+        email: normalizedEmail,
+        schoolId,
+        ip: clientIp,
+      })
+      if (lock.blocked) return lock.response
+      recordLoginFailure({ email: normalizedEmail, schoolId: 'global', ip: clientIp })
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
 
@@ -248,6 +287,13 @@ export const POST = withSecureApi(async function POST(request) {
     const storedHash = String(user.password || '')
     if (!storedHash.startsWith('$2')) {
       console.error('[Login] User has no valid password hash:', user.id)
+      const lock = handleLoginFailure({
+        request,
+        email: normalizedEmail,
+        schoolId,
+        ip: clientIp,
+      })
+      if (lock.blocked) return lock.response
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
 
@@ -260,6 +306,14 @@ export const POST = withSecureApi(async function POST(request) {
     }
 
     if (!isValid) {
+      const lock = handleLoginFailure({
+        request,
+        email: normalizedEmail,
+        schoolId,
+        ip: clientIp,
+      })
+      if (lock.blocked) return lock.response
+      recordLoginFailure({ email: normalizedEmail, schoolId: 'global', ip: clientIp })
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
 
@@ -303,6 +357,9 @@ export const POST = withSecureApi(async function POST(request) {
     } catch (refreshTokenError) {
       console.warn('[Login] Failed to persist refresh token:', refreshTokenError?.message)
     }
+
+    clearLoginFailures({ email: normalizedEmail, schoolId, ip: clientIp })
+    clearLoginFailures({ email: normalizedEmail, schoolId: 'global', ip: clientIp })
 
     // 5. Sanitize Output
     const sanitizedUser = sanitizeOutput({

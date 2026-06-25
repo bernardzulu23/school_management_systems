@@ -22,7 +22,7 @@ import { TimeSavings } from '@/components/sections/TimeSavings'
 import { Pricing } from '@/components/sections/Pricing'
 import { TRIAL_MONTHS } from '@/lib/billing/subscription'
 
-export default function HomePage() {
+export default function HomePageClient() {
   const { isAuthenticated, user } = useAuth()
   const authHydrated = useAuthHasHydrated()
   const { school, isLoading: isSchoolLoading } = useSchool()

@@ -9,6 +9,12 @@ import {
   getPlatformLoginHint,
 } from '@/lib/platform/platformAdminAuth'
 import { buildPlatformLoginResponse } from '@/lib/platform/completePlatformLogin'
+import {
+  checkLoginBruteForce,
+  clearLoginFailures,
+  getRequestIp,
+  handleLoginFailure,
+} from '@/lib/security/loginBruteForce'
 
 /** @deprecated Use POST /api/auth/login — kept for backward-compatible clients. */
 export const POST = withSecureApi(async function POST(request) {
@@ -32,10 +38,21 @@ export const POST = withSecureApi(async function POST(request) {
     })
     if (rateLimitResult.isLimited) return rateLimitResult.response
 
+    const clientIp = getRequestIp(request)
+    const lockCheck = checkLoginBruteForce({
+      request,
+      email,
+      schoolId: 'platform',
+      ip: clientIp,
+    })
+    if (lockCheck.blocked) return lockCheck.response
+
     await ensurePlatformAdminFromEnv()
 
     const admin = await verifyPlatformAdminCredentials(email, password)
     if (!admin) {
+      const lock = handleLoginFailure({ request, email, schoolId: 'platform', ip: clientIp })
+      if (lock.blocked) return lock.response
       const hint = await getPlatformLoginHint(email)
       return NextResponse.json(
         {
@@ -46,6 +63,7 @@ export const POST = withSecureApi(async function POST(request) {
       )
     }
 
+    clearLoginFailures({ email, schoolId: 'platform', ip: clientIp })
     return buildPlatformLoginResponse(request, admin)
   } catch (error) {
     console.error('[platform login]', error)

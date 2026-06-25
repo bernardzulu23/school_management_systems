@@ -1,7 +1,7 @@
 # ZSMS System Documentation
 
 **Zambian School Management System (ZSMS)**  
-**Last updated:** 2026-06-24  
+**Last updated:** 2026-06-12  
 **Application version:** 2.0.3 (`package.json`)  
 **Document version:** 1.0
 
@@ -298,6 +298,7 @@ Static security headers also apply via `next.config.js`; **dynamic CSP uses the 
 - **Refresh token:** `refresh_token` httpOnly cookie scoped to `Path=/api/auth/refresh`; signed with `JWT_REFRESH_SECRET` in production. Concurrent refresh in multiple tabs uses a **30s rotation grace window** (`REFRESH_ROTATION_GRACE_MS`) so benign reuse does not revoke all sessions. Browser AI calls use `lib/auth/sessionFetch.js` (deduplicated refresh + CSRF header).
 - **Mobile:** Bearer tokens via `/api/mobile/auth/login` and `/api/mobile/auth/refresh`
 - **Platform:** `isPlatform: true` + `superadmin` role; `schoolId: null` — only controlled cross-tenant bypass
+- **Login brute-force protection:** `lib/security/loginBruteForce.js` — after repeated failed password attempts (5 in production, per `schoolId` + email + IP), returns **429** with code `LOGIN_LOCKED` and `Retry-After`. Complements IP rate limits on `/api/auth/login`, `/api/mobile/auth/login`, and `/api/platform/auth/login`. Cleared on successful login.
 
 ### Password policy
 
@@ -348,15 +349,18 @@ Client navigations from API-controlled URLs use `lib/security/safeRedirect.js` (
 
 Enabled in production by default (`ANTI_SCRAPING_ENABLED`; set `false` to disable). Enforced at the edge in `proxy.js`:
 
-| Control                   | Behaviour                                                                                                                         |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| Bot user-agent block      | Rejects common scraper/script clients (`curl`, `python-requests`, `scrapy`, headless browsers, SEO bots) on `/api/*`              |
-| Browser client validation | Cookie-authenticated API calls must send `X-Requested-With: XMLHttpRequest` and `Accept: application/json` (matches `lib/api.js`) |
-| Cross-site API block      | Blocks credentialed API calls when `Sec-Fetch-Site` is `cross-site` / `cross-origin`                                              |
-| API rate limits           | Per-IP limits on public and authenticated GET/mutation traffic (`SCRAPE_RATE_*` env vars)                                         |
-| List cap helper           | `clampListLimit()` caps `?limit=` on list routes (max 100 on assessments)                                                         |
-| robots.txt                | Disallows `/api/`, `/dashboard/`, `/admin/`, `/platform/` for compliant crawlers                                                  |
-| API robots header         | `X-Robots-Tag: noindex, nofollow, noarchive` on all `/api/*` responses                                                            |
+| Control                   | Behaviour                                                                                                                                                                                                                                                                                                   |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bot user-agent block      | Rejects common scraper/script clients (`curl`, `python-requests`, `scrapy`, headless browsers, SEO bots) on `/api/*`                                                                                                                                                                                        |
+| Browser client validation | Cookie-authenticated API calls must send `X-Requested-With: XMLHttpRequest` and `Accept: application/json` (matches `lib/api.js`)                                                                                                                                                                           |
+| Cross-site API block      | Blocks credentialed API calls when `Sec-Fetch-Site` is `cross-site` / `cross-origin`                                                                                                                                                                                                                        |
+| API rate limits           | Per-IP limits on public and authenticated GET/mutation traffic (`SCRAPE_RATE_*` env vars)                                                                                                                                                                                                                   |
+| List cap helper           | `clampListLimit()` caps `?limit=` on list routes (max 100 on assessments)                                                                                                                                                                                                                                   |
+| robots.txt                | Generated at build via `next-sitemap` (`next-sitemap.config.js`): allows Google/Bing; **blocks AI training crawlers** (GPTBot, ClaudeBot, Google-Extended, CCBot, etc.); disallows `/api/`, `/dashboard/`, `/admin/`, `/platform/`                                                                          |
+| Sitemap                   | `public/sitemap.xml` generated in `postbuild` (`scripts/vercel-build.js` runs `next-sitemap` after `next build`)                                                                                                                                                                                            |
+| www canonical             | Apex `bluepeacktechnologies.com` → `https://www.bluepeacktechnologies.com` (301 in `next.config.js`)                                                                                                                                                                                                        |
+| Marketing CDN cache       | Public routes live under `app/(marketing)/` with `force-static` + `revalidate=3600`. Root layout no longer calls `headers()` (that forced dynamic rendering and Next.js `private, no-store`). Proxy sets `public, s-maxage=3600` and self-only CSP (no nonce) on marketing GETs; dashboard/API stay private |
+| API robots header         | `X-Robots-Tag: noindex, nofollow, noarchive` on all `/api/*` responses                                                                                                                                                                                                                                      |
 
 Exempt: `/api/mobile/*`, webhooks, health/ping, SMS workers (own signature auth).
 
@@ -447,12 +451,12 @@ Role normalization handles case and aliases (e.g. `headmaster`, `principal`) in 
 
 ### Portal types
 
-| Portal           | URL pattern                             | Doc                                            |
-| ---------------- | --------------------------------------- | ---------------------------------------------- |
-| School tenant    | `https://{subdomain}.{APP_BASE_DOMAIN}` | This doc                                       |
-| Solo teacher     | `/dashboard/solo` after `/join`         | [INDIVIDUAL_PORTAL.md](./INDIVIDUAL_PORTAL.md) |
-| Platform admin   | Apex domain `/login` → `/platform`      | [PLATFORM_ADMIN.md](./PLATFORM_ADMIN.md)       |
-| Public marketing | `/` (Sanity-driven when configured)     | `lib/sanity/marketingHomepage.js`              |
+| Portal           | URL pattern                                                                                                                                            | Doc                                            |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
+| School tenant    | `https://{subdomain}.{APP_BASE_DOMAIN}`                                                                                                                | This doc                                       |
+| Solo teacher     | `/dashboard/solo` after `/join`                                                                                                                        | [INDIVIDUAL_PORTAL.md](./INDIVIDUAL_PORTAL.md) |
+| Platform admin   | Apex domain `/login` → `/platform`                                                                                                                     | [PLATFORM_ADMIN.md](./PLATFORM_ADMIN.md)       |
+| Public marketing | `/` — Server Component shell (`app/page.js`) + client interactivity (`components/marketing/HomePageClient.js`); Sanity-driven sections when configured | `lib/sanity/marketingHomepage.js`              |
 
 All accounts receive a **2-month trial** (`trialEndsAt`); subscription required afterward via `/dashboard/billing`.
 

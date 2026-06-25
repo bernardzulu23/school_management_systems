@@ -8,6 +8,7 @@ import {
   stripInternalRequestHeaders,
 } from './lib/security/headers'
 import { checkProxyRateLimit } from './lib/security/proxyRateLimit'
+import { isPublicEdgeCachePath } from './lib/security/publicEdgeCache'
 import { checkAntiScraping, checkApiScrapeRateLimit } from './lib/security/antiScraping'
 import { verifyCsrfRequest } from './lib/security/csrf'
 
@@ -85,6 +86,8 @@ export async function handleSecurityProxy(request) {
     const method = String(request.method || 'GET').toUpperCase()
 
     const nonce = generateNonce()
+    const isPublicMarketingDoc =
+      method === 'GET' && !pathname.startsWith('/api') && isPublicEdgeCachePath(pathname)
 
     // SECURITY (CVE-2025-29927 + tenant spoofing): strip internal/spoofable
     // headers from the forwarded request BEFORE any routing or auth decision.
@@ -93,7 +96,11 @@ export async function handleSecurityProxy(request) {
     requestHeaders.set('x-nonce', nonce)
     requestHeaders.set('x-current-path', pathname)
 
-    const securityOpts = { nonce, pathname }
+    const securityOpts = {
+      pathname,
+      // Static marketing HTML is edge-cached — use self-only CSP (no per-request nonce).
+      nonce: isPublicMarketingDoc ? false : nonce,
+    }
 
     if (BLOCKED_HTTP_METHODS.has(method)) {
       return secureResponse({ error: 'Method Not Allowed' }, { status: 405 }, request, securityOpts)

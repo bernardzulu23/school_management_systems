@@ -1,8 +1,88 @@
-User-agent: *
-Disallow: /api/
-Disallow: /dashboard/
-Disallow: /admin/
-Disallow: /platform/
+# Googlebot
+User-agent: Googlebot
 Allow: /
 
+# Bingbot
+User-agent: Bingbot
+Allow: /
+
+# GPTBot
+User-agent: GPTBot
+Disallow: /
+
+# ChatGPT-User
+User-agent: ChatGPT-User
+Disallow: /
+
+# OAI-SearchBot
+User-agent: OAI-SearchBot
+Disallow: /
+
+# ClaudeBot
+User-agent: ClaudeBot
+Disallow: /
+
+# Claude-Web
+User-agent: Claude-Web
+Disallow: /
+
+# anthropic-ai
+User-agent: anthropic-ai
+Disallow: /
+
+# Google-Extended
+User-agent: Google-Extended
+Disallow: /
+
+# Amazonbot
+User-agent: Amazonbot
+Disallow: /
+
+# PerplexityBot
+User-agent: PerplexityBot
+Disallow: /
+
+# YouBot
+User-agent: YouBot
+Disallow: /
+
+# cohere-ai
+User-agent: cohere-ai
+Disallow: /
+
+# meta-externalagent
+User-agent: meta-externalagent
+Disallow: /
+
+# Bytespider
+User-agent: Bytespider
+Disallow: /
+
+# CCBot
+User-agent: CCBot
+Disallow: /
+
+# DataForSeoBot
+User-agent: DataForSeoBot
+Disallow: /
+
+# PetalBot
+User-agent: PetalBot
+Disallow: /
+
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /dashboard
+Disallow: /api
+Disallow: /admin
+Disallow: /platform
+
+# Host
+Host: https://www.bluepeacktechnologies.com
+
+# Sitemaps
 Sitemap: https://www.bluepeacktechnologies.com/sitemap.xml

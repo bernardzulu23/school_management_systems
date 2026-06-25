@@ -94,12 +94,35 @@ const nextConfig = {
   // Security headers (CSP with nonce is applied per-request in proxy.js)
   async headers() {
     const { nextConfigSecurityHeaders } = require('./lib/security/headers.js')
+    const {
+      PUBLIC_EDGE_CACHE_CONTROL,
+      PUBLIC_EDGE_CACHE_PATHS,
+    } = require('./lib/security/publicEdgeCache.js')
     const securityHeaders = nextConfigSecurityHeaders()
+
+    const marketingCacheHeaders = [{ key: 'Cache-Control', value: PUBLIC_EDGE_CACHE_CONTROL }]
+
+    const privateCacheHeaders = [
+      { key: 'Cache-Control', value: 'private, no-store' },
+      { key: 'Pragma', value: 'no-cache' },
+    ]
 
     return [
       {
         source: '/:path*',
         headers: securityHeaders,
+      },
+      ...PUBLIC_EDGE_CACHE_PATHS.map((route) => ({
+        source: route === '/' ? '/' : route,
+        headers: marketingCacheHeaders,
+      })),
+      {
+        source: '/dashboard/:path*',
+        headers: privateCacheHeaders,
+      },
+      {
+        source: '/platform/:path*',
+        headers: privateCacheHeaders,
       },
       {
         // API responses must never be cached by browsers/proxies — they carry
@@ -118,6 +141,12 @@ const nextConfig = {
   // Redirects for better SEO
   async redirects() {
     return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'bluepeacktechnologies.com' }],
+        destination: 'https://www.bluepeacktechnologies.com/:path*',
+        permanent: true,
+      },
       {
         source: '/dashboard',
         destination: '/login',
