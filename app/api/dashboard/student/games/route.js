@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { computePlayStreak } from '@/lib/games/awardBadges'

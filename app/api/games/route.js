@@ -6,6 +6,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { mapGameForManagement } from '@/lib/games/mapGameResponse'
+import { normalizeGameContent, resolveSubjectLabel } from '@/lib/games/normalizeGameBody'
 
 /**
  * GET /api/games — list school games (teacher/HOD/admin)
@@ -68,10 +69,10 @@ export const POST = withErrorHandler(async function POST(request) {
   const body = await request.json().catch(() => ({}))
   const title = String(body.title || '').trim()
   const description = String(body.description || '').trim() || null
-  const subject = String(body.subject?.name || body.subject || '').trim() || null
+  const subject = resolveSubjectLabel(body) || null
   const gameType = String(body.gameType || body.type || 'quiz').trim()
   const difficulty = String(body.difficulty || 'medium').trim()
-  const content = body.content && typeof body.content === 'object' ? body.content : {}
+  const content = normalizeGameContent(body)
 
   if (!title) throw new ApiError('Title is required', 400)
   if (gameType !== 'quiz') {
@@ -88,12 +89,7 @@ export const POST = withErrorHandler(async function POST(request) {
       type: gameType,
       subject,
       difficulty,
-      content: {
-        questions: content.questions,
-        pointsReward: Number(content.pointsReward) || 10,
-        timeLimit: Number(content.timeLimit) || 0,
-        targetClass: content.targetClass || body.targetClass || null,
-      },
+      content,
       schoolId,
     },
   })

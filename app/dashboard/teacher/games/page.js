@@ -11,9 +11,19 @@ export default function TeacherGamesPage() {
   useEffect(() => {
     fetch('/api/teaching-assignments', { credentials: 'include' })
       .then((r) => r.json())
-      .then((json) => {
+      .then(async (json) => {
         const rows = Array.isArray(json?.data) ? json.data : []
-        const names = [...new Set(rows.map((a) => a.subjectName).filter(Boolean))]
+        let names = [...new Set(rows.map((a) => a.subjectName).filter(Boolean))]
+        if (!names.length) {
+          const subjectRes = await fetch('/api/subjects', { credentials: 'include' })
+          const subjectJson = await subjectRes.json().catch(() => ({}))
+          const subjectRows = Array.isArray(subjectJson?.data)
+            ? subjectJson.data
+            : Array.isArray(subjectJson)
+              ? subjectJson
+              : []
+          names = subjectRows.map((s) => s.name || String(s)).filter(Boolean)
+        }
         setSubjects(names.map((name, i) => ({ id: String(i + 1), name })))
       })
       .catch(() => setSubjects([]))

@@ -181,6 +181,12 @@ export default function GameManagement({ userRole, subjects }) {
         </Button>
       </div>
 
+      {error ? (
+        <Card className="border-royalPurple-danger bg-royalPurple-danger/10">
+          <CardContent className="p-4 text-sm text-royalPurple-dangerTx">{error}</CardContent>
+        </Card>
+      ) : null}
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="stats-card">
@@ -268,7 +274,7 @@ export default function GameManagement({ userRole, subjects }) {
               >
                 <option value="">All Subjects</option>
                 {subjects?.map((subject) => (
-                  <option key={subject.id} value={subject.id}>
+                  <option key={subject.id} value={subject.name}>
                     {subject.name}
                   </option>
                 ))}

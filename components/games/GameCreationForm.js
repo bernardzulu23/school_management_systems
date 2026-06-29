@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { resolveSubjectName } from '@/lib/games/resolveSubjectName'
 import {
   Plus,
   Trash2,
@@ -65,7 +66,9 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
   const [gameData, setGameData] = useState({
     title: initialData?.title || '',
     description: initialData?.description || '',
-    subject: initialData?.subject || '',
+    subject:
+      initialData?.subject?.name ||
+      (typeof initialData?.subject === 'string' ? initialData.subject : ''),
     gameType: initialData?.gameType || 'quiz',
     difficulty: initialData?.difficulty || 'medium',
     targetClass: initialData?.targetClass || '',
@@ -132,7 +135,17 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
   }
 
   const handleSave = () => {
-    onSave(gameData)
+    const subjectName = resolveSubjectName(gameData.subject, subjects)
+    onSave({
+      ...gameData,
+      subject: subjectName,
+      content: {
+        ...gameData.content,
+        pointsReward: gameData.pointsReward,
+        timeLimit: gameData.timeLimit,
+        targetClass: gameData.targetClass,
+      },
+    })
   }
 
   const renderGameTypeSelector = () => (
@@ -183,7 +196,7 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
           >
             <option value="">Select Subject</option>
             {subjects?.map((subject) => (
-              <option key={subject.id} value={subject.id}>
+              <option key={subject.id} value={subject.name}>
                 {subject.name}
               </option>
             ))}

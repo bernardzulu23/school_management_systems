@@ -94,6 +94,9 @@ describe('POST /api/games', () => {
           subject: 'Science',
           gameType: 'quiz',
           difficulty: 'medium',
+          pointsReward: 20,
+          timeLimit: 30,
+          targetClass: 'Form 2',
           content: {
             questions: [{ question: 'H2O?', options: ['Water'], correctAnswer: 'Water' }],
           },
@@ -103,6 +106,16 @@ describe('POST /api/games', () => {
     const json = await res.json()
     expect(res.status).toBe(201)
     expect(json.data.title).toBe('Science Quiz')
-    expect(prisma.game.create).toHaveBeenCalled()
+    expect(prisma.game.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          content: expect.objectContaining({
+            pointsReward: 20,
+            timeLimit: 30,
+            targetClass: 'Form 2',
+          }),
+        }),
+      })
+    )
   })
 })
