@@ -533,20 +533,22 @@ export async function api<T>(
 
 ## 18. Related backend files
 
-| File                                      | Purpose                            |
-| ----------------------------------------- | ---------------------------------- |
-| `app/api/mobile/auth/login/route.js`      | Mobile JWT login                   |
-| `app/api/mobile/auth/refresh/route.js`    | Token refresh                      |
-| `app/api/mobile/session-context/route.js` | Bootstrap                          |
-| `app/api/mobile/class-roster/route.js`    | Students                           |
-| `app/api/mobile/sync/route.js`            | Offline batch                      |
-| `app/api/mobile/school/lookup/route.js`   | Subdomain validation (public)      |
-| `zsms-mobile/`                            | React Native (Expo) app source     |
-| `lib/mobile/theme.js`                     | Shared color tokens (web + mobile) |
-| `app/api/attendance/route.js`             | Attendance CRUD                    |
-| `app/api/assessments/sba-scores/route.js` | Scores                             |
-| `lib/utils/getSchoolId.js`                | Subdomain → schoolId               |
-| `lib/middleware/auth.js`                  | Bearer + cookies                   |
+| File                                      | Purpose                               |
+| ----------------------------------------- | ------------------------------------- |
+| `app/api/mobile/auth/login/route.js`      | Mobile JWT login                      |
+| `app/api/mobile/auth/refresh/route.js`    | Token refresh                         |
+| `app/api/mobile/session-context/route.js` | Bootstrap                             |
+| `app/api/mobile/class-roster/route.js`    | Students                              |
+| `app/api/mobile/sync/route.js`            | Offline batch                         |
+| `app/api/mobile/school/lookup/route.js`   | Subdomain validation (public)         |
+| `zsms-mobile/`                            | React Native (Expo) app source        |
+| `lib/theme/zsmsPalette.js`                | Canonical color tokens (web + mobile) |
+| `lib/mobile/theme.js`                     | Re-export for web-side imports        |
+| `zsms-mobile/src/theme/colors.ts`         | React Native copy (keep in sync)      |
+| `app/api/attendance/route.js`             | Attendance CRUD                       |
+| `app/api/assessments/sba-scores/route.js` | Scores                                |
+| `lib/utils/getSchoolId.js`                | Subdomain → schoolId                  |
+| `lib/middleware/auth.js`                  | Bearer + cookies                      |
 
 ---
 

@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-06-24T15:16:05.987Z
+Generated: 2026-06-29T13:39:01.383Z
 
-Total route files: **363**
+Total route files: **379**
 
 ## Quick index
 
@@ -46,6 +46,7 @@ Total route files: **363**
 | `/api/games`                |     2 |
 | `/api/government`           |     7 |
 | `/api/grades`               |     1 |
+| `/api/guidance`             |    14 |
 | `/api/health`               |     1 |
 | `/api/hod`                  |    11 |
 | `/api/hods`                 |     3 |
@@ -75,7 +76,7 @@ Total route files: **363**
 | `/api/strategic-reviews`    |     1 |
 | `/api/student`              |    12 |
 | `/api/student-works`        |     1 |
-| `/api/students`             |     4 |
+| `/api/students`             |     6 |
 | `/api/subjects`             |     3 |
 | `/api/teacher`              |     6 |
 | `/api/teacher-performance`  |     4 |
@@ -413,6 +414,25 @@ Total route files: **363**
 | --------- | ------------- | -------------------------------------------------------------------------------------------------- |
 | GET, POST | `/api/grades` | Offline sync legacy endpoint — returns empty grade list (use /api/assessments or /api/ecz/scores). |
 
+## /api/guidance
+
+| Method        | Route                              | Summary |
+| ------------- | ---------------------------------- | ------- |
+| GET, POST     | `/api/guidance/assignments`        | —       |
+| DELETE        | `/api/guidance/assignments/:id`    | —       |
+| GET, POST     | `/api/guidance/cases`              | —       |
+| GET, PATCH    | `/api/guidance/cases/:id`          | —       |
+| POST          | `/api/guidance/cases/:id/escalate` | —       |
+| POST          | `/api/guidance/cases/:id/log`      | —       |
+| POST          | `/api/guidance/cases/:id/referral` | —       |
+| GET, PATCH    | `/api/guidance/escalations`        | —       |
+| GET           | `/api/guidance/pupils`             | —       |
+| GET, POST     | `/api/guidance/reentry`            | —       |
+| PATCH         | `/api/guidance/reentry/:id`        | —       |
+| GET           | `/api/guidance/reports/termly`     | —       |
+| GET, POST     | `/api/guidance/resources`          | —       |
+| PATCH, DELETE | `/api/guidance/resources/:id`      | —       |
+
 ## /api/health
 
 | Method | Route         | Summary                                                                                    |
@@ -697,12 +717,14 @@ Total route files: **363**
 
 ## /api/students
 
-| Method           | Route                               | Summary |
-| ---------------- | ----------------------------------- | ------- |
-| GET, POST        | `/api/students`                     | —       |
-| GET, PUT, DELETE | `/api/students/:id`                 | —       |
-| POST             | `/api/students/:id/face-enrollment` | —       |
-| POST             | `/api/students/:id/twin-pin`        | —       |
+| Method           | Route                                | Summary |
+| ---------------- | ------------------------------------ | ------- |
+| GET, POST        | `/api/students`                      | —       |
+| GET, PUT, DELETE | `/api/students/:id`                  | —       |
+| POST             | `/api/students/:id/face-enrollment`  | —       |
+| POST             | `/api/students/:id/twin-pin`         | —       |
+| POST             | `/api/students/bulk-upload`          | —       |
+| GET              | `/api/students/bulk-upload/template` | —       |
 
 ## /api/subjects
 

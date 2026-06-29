@@ -12,7 +12,9 @@ The app uses a **brutalist, high-contrast** palette: warm off-white surfaces, ne
 | ---------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | **Hard-coded hex in Tailwind**     | `className="bg-paper"`, `text-ink`, `text-accent` | Primary UI (dashboard, admin, auth)                                                 |
 | **CSS variables (`:root`)**        | `app/globals.css`                                 | Single source: `--color-paper`, `--color-ink`, `--color-accent`, `--text-secondary` |
-| **`lib/theme/brutalistColors.js`** | JS constants                                      | Shared hex for inline styles                                                        |
+| **`lib/theme/zsmsPalette.js`**     | Canonical JS export (web + mobile sync)           | Shared hex for all platforms                                                        |
+| **`lib/mobile/theme.js`**          | Re-export of `zsmsPalette`                        | Web docs, scripts                                                                   |
+| **`lib/theme/brutalistColors.js`** | Re-export (deprecated alias)                      | Legacy inline-style imports                                                         |
 | **`lib/design-tokens.ts`**         | TypeScript tokens                                 | Charts, legacy components                                                           |
 | **Tailwind palette remap**         | `tailwind.config.js`                              | `slate`, `gray`, `violet`, `purple`, `indigo` → brutalist (all routes)              |
 
@@ -263,6 +265,52 @@ For changes, prefer adding tokens to `@theme` in `index.css` and replacing `bg-[
 
 ---
 
-## Mobile teacher app (`zsms-mobile`)
+## Desktop & mobile companion apps (`zsms-mobile`)
 
-The React Native app mirrors this palette in `zsms-mobile/src/theme/colors.ts` (synced with `lib/mobile/theme.js`). It calls the same API and Postgres database as the web app; it does **not** use legacy `royalPurple` dashboard classes.
+The **ZSMS Teacher** app (Expo / React Native — Android APK, iOS, tablets) uses the **same brutalist palette** as the web dashboard. There is no separate purple or slate theme on mobile.
+
+| Source of truth        | Path                                                             | Consumers                                    |
+| ---------------------- | ---------------------------------------------------------------- | -------------------------------------------- |
+| CSS variables          | `app/globals.css` (`:root`)                                      | Next.js web, PWA installed on desktop        |
+| Tailwind tokens        | `tailwind.config.js` (`paper`, `ink`, `accent`, `royalPurple.*`) | Dashboard components                         |
+| JS palette (canonical) | `lib/theme/zsmsPalette.js`                                       | Web inline styles, shared exports            |
+| Web re-export          | `lib/mobile/theme.js`                                            | Docs, scripts                                |
+| Mobile copy            | `zsms-mobile/src/theme/colors.ts`                                | React Native screens (`src/theme/styles.ts`) |
+
+**When changing colors:** edit `app/globals.css` and `lib/theme/zsmsPalette.js`, then sync `zsms-mobile/src/theme/colors.ts` (same keys).
+
+### Core tokens (web + desktop companion)
+
+| Token                     | Hex / value | Web usage            | Mobile usage                  |
+| ------------------------- | ----------- | -------------------- | ----------------------------- |
+| `paper`                   | `#F5F2ED`   | Page background      | `screen`, `container` bg      |
+| `ink`                     | `#111111`   | Text, 2px borders    | Titles, card borders, shadows |
+| `accent`                  | `#FF3B00`   | CTAs, errors, focus  | Primary buttons, error text   |
+| `accentHover`             | `#CC2F00`   | Button hover         | Pressed states                |
+| `white` / `card`          | `#FFFFFF`   | Cards, inputs        | Card fill, input bg           |
+| `cardAlt`                 | `#F5F2EB`   | Alt rows, pills      | —                             |
+| `muted` / `textSecondary` | `#666666`   | Secondary copy       | `subtitle`                    |
+| `navBg`                   | `#1A1A1A`   | Sidebar (web)        | Dark header blocks            |
+| `navActiveBg`             | `#111111`   | Active nav item      | Tab bar active pill           |
+| `success` / `present`     | `#1A6B6A`   | KPI pass, attendance | Present chip                  |
+| `danger` / `absent`       | `#FF3B00`   | KPI fail, alerts     | Absent chip                   |
+| `warn` / `late`           | `#C99A2E`   | Pending, late        | Late chip                     |
+
+### Brutalist chrome (both platforms)
+
+- **Borders:** `2px solid #111111` on cards, inputs, buttons
+- **Shadow:** offset `4px 4px` ink (`ZsmsSpacing.brutalShadow`); hover `6px 6px`
+- **Radius:** cards `14px`, buttons `10px` (`tailwind` `card` / `buttonRadius`)
+- **Splash / adaptive icon:** paper `#F5F2ED`, Android adaptive bg `#111111`, notification accent `#FF3B00` (`zsms-mobile/app.json`)
+
+### Expo / native config
+
+```json
+"splash": { "backgroundColor": "#F5F2ED" },
+"android": { "adaptiveIcon": { "backgroundColor": "#111111" } },
+"plugins": [["expo-notifications", { "color": "#FF3B00" }]]
+```
+
+Legacy `royalPurple-*` Tailwind classes on web resolve to the remapped tokens in `globals.css` (`--rp-*`); mobile does not use those class names — import `ZsmsTheme` directly.
+
+---

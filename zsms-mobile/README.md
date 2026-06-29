@@ -32,7 +32,7 @@ Full API and function inventory: [`../docs/doc/mobile-app.md`](../docs/doc/mobil
 
 ## Theme
 
-Colors match the school management system brutalist palette — see [`color.md`](../color.md) and `src/theme/colors.ts` (`#F5F2ED` paper, `#111111` ink, `#FF3B00` accent).
+Colors match the school management system brutalist palette — see [`color.md`](../color.md), [`lib/theme/zsmsPalette.js`](../lib/theme/zsmsPalette.js), and `src/theme/colors.ts` (`#F5F2ED` paper, `#111111` ink, `#FF3B00` accent). Keep `colors.ts` in sync when web tokens change.
 
 ## Lesson attendance (per subject)
 
