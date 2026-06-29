@@ -261,7 +261,7 @@ export async function POST(request) {
         select: { id: true, name: true, subdomain: true },
       })
 
-      await tx.user.create({
+      const headteacher = await tx.user.create({
         data: {
           schoolId: school.id,
           email: reg.email,
@@ -271,6 +271,11 @@ export async function POST(request) {
           ...(adminPhone ? { contact_number: String(adminPhone).trim() || null } : {}),
         },
         select: { id: true },
+      })
+
+      await tx.school.update({
+        where: { id: school.id },
+        data: { ownerUserId: headteacher.id },
       })
 
       await tx.schoolRegistration.update({

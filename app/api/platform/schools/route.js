@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { requirePlatformAdmin } from '@/lib/middleware/platformAuth'
 import { isAffiliatedPaidSchool, toPlatformSchoolSummary } from '@/lib/platform/schoolEligibility'
+import { attachCreatorContacts } from '@/lib/platform/schoolCreatorContact'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 
 const SCHOOL_META_SELECT = {
@@ -22,6 +23,9 @@ const SCHOOL_META_SELECT = {
   trialEndsAt: true,
   createdAt: true,
   schoolType: true,
+  phone: true,
+  email: true,
+  ownerUserId: true,
 }
 
 /** List affiliated, paid schools — metadata only (no enrollment counts). */
@@ -54,8 +58,10 @@ export const GET = withSecureApi(async function GET(request) {
     (s) => s.active || includeUnpaid
   )
 
+  const withCreator = await attachCreatorContacts(filtered)
+
   return NextResponse.json({
-    schools: filtered.map((s) => toPlatformSchoolSummary(s)),
-    total: filtered.length,
+    schools: withCreator.map((s) => toPlatformSchoolSummary(s)),
+    total: withCreator.length,
   })
 })

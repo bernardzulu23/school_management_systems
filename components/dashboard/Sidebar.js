@@ -13,6 +13,7 @@ import {
   canAccessSecondaryGrading,
 } from '@/lib/subjects/resolveSubjectCatalog'
 import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
+import { hasGuidanceAssignment } from '@/lib/guidance/guidanceAccess'
 import {
   Home,
   Users,
@@ -43,6 +44,8 @@ import {
   Briefcase,
   Trophy,
   Bus,
+  Heart,
+  Megaphone,
   Home as HomeIcon,
   AlertTriangle,
   FileCheck,
@@ -131,11 +134,20 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       headteacher: [
         { name: 'User Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'User Management', href: '/dashboard/users', icon: Users },
+        { name: 'Bulk student upload', href: '/dashboard/students/bulk-upload', icon: Upload },
         { name: 'Registration', href: '/admin/registration', icon: UserPlus },
         { name: 'Scheduling Recipes', href: '/dashboard/admin/recipes', icon: ClipboardList },
         { name: 'Subjects', href: '/admin/subjects', icon: BookOpen },
-        { name: 'Career clusters', href: '/admin/career-clusters', icon: Layers },
-        { name: 'Careers', href: '/admin/careers', icon: Briefcase },
+        {
+          name: 'Guidance teachers',
+          href: '/dashboard/headteacher/guidance-teachers',
+          icon: Briefcase,
+        },
+        {
+          name: 'Guidance reports',
+          href: '/dashboard/headteacher/guidance-reports',
+          icon: FileText,
+        },
         { name: 'Teacher Performance', href: '/admin/teacher-performance', icon: Target },
         { name: 'Classes', href: '/dashboard/classes', icon: GraduationCap },
         {
@@ -205,6 +217,16 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
         { name: 'Attendance Returns', href: '/dashboard/attendance/returns', icon: UserCheck },
         { name: 'Term reports', href: '/dashboard/hod/term-reports', icon: FileText },
+      ],
+      guidance: [
+        { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
+        { name: 'Pupil register', href: '/dashboard/guidance/pupils', icon: Users },
+        { name: 'Case log', href: '/dashboard/guidance/cases', icon: ClipboardList },
+        { name: 'Career board', href: '/dashboard/guidance/resources', icon: Megaphone },
+        { name: 'Career clusters', href: '/dashboard/guidance/career-clusters', icon: Layers },
+        { name: 'Careers', href: '/dashboard/guidance/careers', icon: Briefcase },
+        { name: 'Girls re-entry', href: '/dashboard/guidance/reentry', icon: Heart },
+        { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
       ],
       teacher: [
         { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
@@ -286,7 +308,16 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     const showCareer = features.careerGuidance
     const showCodePlayground = features.codePlayground
     const showMockExams = features.mockExams
-    const navRoleKey = roleKey === 'hod' && !showHod ? 'teacher' : roleKey
+    const guidancePortal = pathname?.startsWith('/dashboard/guidance')
+    const hodPortal = pathname?.startsWith('/dashboard/hod')
+    const hasGuidanceRole = hasGuidanceAssignment(user)
+    let navRoleKey = roleKey === 'hod' && !showHod ? 'teacher' : roleKey
+    if (hodPortal && (user?.hodProfile || roleKey === 'hod' || roleKey === 'teacher')) {
+      navRoleKey = 'hod'
+    }
+    if (guidancePortal && hasGuidanceRole && showCareer) {
+      navRoleKey = 'guidance'
+    }
 
     let roleItems = roleSpecificItems[navRoleKey] || []
     if (navRoleKey === 'headteacher' && features.proprietorDashboard) {
@@ -391,20 +422,36 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           return false
         }
         if (!showHostel && item.name === 'Hostel') return false
-        if (!showCareer && (item.name === 'Career clusters' || item.name === 'Careers')) {
-          return false
-        }
         if (!showCodePlayground && item.name === 'Code Playground') return false
         if (!showEcz && item.name === 'ECZ Practice') return false
         if (!showMockExams && item.name === 'Mock Examination') return false
         if (!showCareer && item.name === 'Career guidance') return false
+        if (!showCareer && item.name === 'Guidance teachers') return false
+        if (!showCareer && item.name === 'Guidance reports') return false
+        if (
+          !showCareer &&
+          guidancePortal === false &&
+          (item.name === 'Career clusters' || item.name === 'Careers')
+        ) {
+          return false
+        }
         if (!showHod && navRoleKey === 'teacher') {
           if (item.href?.startsWith('/dashboard/hod')) return false
         }
         return true
       })
 
-    const items = filterPrimaryItems([...baseItems, ...roleItems])
+    let items = filterPrimaryItems([...baseItems, ...roleItems])
+    if (navRoleKey === 'guidance') {
+      items = items.map((item) =>
+        item.name === 'Dashboard' ? { ...item, href: '/dashboard/guidance' } : item
+      )
+    }
+    if (navRoleKey === 'hod') {
+      items = items.map((item) =>
+        item.name === 'Dashboard' ? { ...item, href: '/dashboard/hod' } : item
+      )
+    }
     const isIndividual = String(school?.schoolType || '').toUpperCase() === 'INDIVIDUAL'
 
     if (isIndividual && roleKey === 'teacher') {

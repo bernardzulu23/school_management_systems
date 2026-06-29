@@ -17,11 +17,16 @@ import { Sidebar } from '@/components/dashboard/Sidebar'
 import { ErrorBoundary } from '@/components/dashboard/ErrorBoundary'
 import { getAppVersion } from '@/lib/app-version'
 import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
+import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
+import { hasGuidanceAssignment } from '@/lib/guidance/guidanceAccess'
 
 export function DashboardLayout({ children, title }) {
   const { user, logout } = useAuth()
   const { school } = useSchool()
   const showHodLink = canAccessHodFeatures({ schoolLevel: school?.level })
+  const showGuidanceLink =
+    getSchoolFeatures(school || { level: 'combined', ownershipType: 'PRIVATE' }).careerGuidance &&
+    hasGuidanceAssignment(user)
   const [showFeedback, setShowFeedback] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [feedbackForm, setFeedbackForm] = useState({
@@ -154,6 +159,14 @@ export function DashboardLayout({ children, title }) {
                       HOD Dashboard
                     </Link>
                   )}
+                {showGuidanceLink && (
+                  <Link
+                    href="/dashboard/guidance"
+                    className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
+                  >
+                    Guidance Dashboard
+                  </Link>
+                )}
                 <Link
                   href="/dashboard/profile"
                   className="inline-flex items-center gap-2 h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors"

@@ -45,6 +45,16 @@ export const GET = withSecureApi(async function GET(request) {
         },
       },
       hodProfile: { include: { departmentRef: true } },
+      guidanceAssignment: {
+        select: {
+          id: true,
+          scope: true,
+          assignedAt: true,
+          active: true,
+          revokedAt: true,
+          canManageReEntry: true,
+        },
+      },
     },
   })
 
@@ -83,6 +93,16 @@ export const GET = withSecureApi(async function GET(request) {
       studentProfile: dbUser.studentProfile || undefined,
       teacherProfile: dbUser.teacherProfile || undefined,
       hodProfile: dbUser.hodProfile || undefined,
+      guidanceAssignment:
+        dbUser.guidanceAssignment?.active && !dbUser.guidanceAssignment?.revokedAt
+          ? {
+              id: dbUser.guidanceAssignment.id,
+              scope: dbUser.guidanceAssignment.scope,
+              assignedAt: dbUser.guidanceAssignment.assignedAt,
+              active: dbUser.guidanceAssignment.active,
+              canManageReEntry: dbUser.guidanceAssignment.canManageReEntry,
+            }
+          : undefined,
     },
   })
 })

@@ -10,6 +10,7 @@ import {
   RESULT_TYPES,
 } from '@/lib/results/resultTypes'
 import { canAccessSecondaryGrading } from '@/lib/subjects/resolveSubjectCatalog'
+import { currentTermLabel, termDateRange } from '@/lib/academic/currentTerm'
 import { logger, captureError } from '@/lib/utils/logger'
 
 export const dynamic = 'force-dynamic'
@@ -145,7 +146,16 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url)
     const yearParam = searchParams.get('year')
     const yearFilter = yearParam ? Number(yearParam) : null
-    const termFilter = toTermLabel(searchParams.get('term'))
+    const rawTermParam = searchParams.get('term')
+    const isAllTerms = rawTermParam != null && /^all\s*terms?$/i.test(String(rawTermParam).trim())
+    let termFilter = ''
+    if (isAllTerms) {
+      termFilter = ''
+    } else if (rawTermParam && String(rawTermParam).trim()) {
+      termFilter = toTermLabel(rawTermParam) || currentTermLabel()
+    } else {
+      termFilter = currentTermLabel()
+    }
     const resultTypeParam = String(searchParams.get('resultType') || '').trim()
     const normalizedResultType = resultTypeParam ? normalizeResultType(resultTypeParam) : ''
     const resultTypeFilter =
@@ -410,6 +420,7 @@ export async function GET(request) {
             name: true,
             class: true,
             exam_number: true,
+            user: { select: { name: true } },
             parent_father_contact: true,
             parent_father_name: true,
             parent_father_email: true,
@@ -436,6 +447,45 @@ export async function GET(request) {
       byStudent.get(sid).push(r)
     }
 
+    const attentionStudentIds = Array.from(byStudent.keys())
+    const attendanceYear = yearFilter || new Date().getFullYear()
+    const attendanceRange = termFilter
+      ? termDateRange(termFilter, attendanceYear)
+      : termDateRange(currentTermLabel(), attendanceYear)
+
+    const attendanceByStudent = new Map()
+    if (attentionStudentIds.length > 0) {
+      const attendanceRows = await prisma.attendance.findMany({
+        where: {
+          schoolId,
+          studentId: { in: attentionStudentIds },
+          date: { gte: attendanceRange.start, lte: attendanceRange.end },
+        },
+        select: { studentId: true, status: true },
+        take: 100000,
+      })
+      for (const row of attendanceRows) {
+        const sid = String(row.studentId || '')
+        if (!sid) continue
+        if (!attendanceByStudent.has(sid)) {
+          attendanceByStudent.set(sid, { present: 0, total: 0 })
+        }
+        const entry = attendanceByStudent.get(sid)
+        entry.total += 1
+        if (String(row.status || '').toLowerCase() === 'present') entry.present += 1
+      }
+    }
+
+    function resolveStudentDisplayName(student) {
+      const candidates = [
+        String(student?.name || '').trim(),
+        String(student?.user?.name || '').trim(),
+      ].filter(Boolean)
+      const exam = String(student?.exam_number || '').trim()
+      const name = candidates.find((value) => value && value !== exam) || candidates[0] || ''
+      return name || exam || 'Unknown student'
+    }
+
     const studentsRequiringAttention = Array.from(byStudent.entries())
       .map(([sid, rows]) => {
         const s = rows[0]?.student
@@ -458,10 +508,21 @@ export async function GET(request) {
         const subjectList = Array.from(uniqueByName.values()).sort((a, b) =>
           a.name.localeCompare(b.name)
         )
+        const lastAssessmentRow = rows.reduce((latest, row) => {
+          const at = row?.createdAt ? new Date(row.createdAt).getTime() : 0
+          if (!latest || at > latest.at) {
+            return { at, value: row.createdAt }
+          }
+          return latest
+        }, null)
+        const attendanceEntry = attendanceByStudent.get(String(sid))
+        const attendanceRate = attendanceEntry?.total
+          ? Math.round((attendanceEntry.present / attendanceEntry.total) * 100)
+          : null
 
         return {
           id: sid,
-          name: s?.name || 'Unknown',
+          name: resolveStudentDisplayName(s),
           student_id: s?.exam_number || '',
           class: s?.class || '',
           grade_level: gradeLevel,
@@ -472,6 +533,8 @@ export async function GET(request) {
           failed_assessments: rows.length,
           low_grades: rows.length,
           subjects: subjectList,
+          attendance_rate: attendanceRate,
+          last_assessment: lastAssessmentRow?.value || null,
           parent_contact: s?.parent_father_contact || s?.guardian_contact || 'N/A',
           parent_father_contact: s?.parent_father_contact || '',
           parent_father_name: s?.parent_father_name || '',
@@ -646,6 +709,8 @@ export async function GET(request) {
       average_school_performance: averageScore,
       subjects_most_challenging: challengingSubjects,
       classes_needing_support: strugglingClasses,
+      term: termFilter || 'All Terms',
+      academic_year: yearFilter || new Date().getFullYear(),
     }
 
     const groupResultsByStudent = async (rows) => {

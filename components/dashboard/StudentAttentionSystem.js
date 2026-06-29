@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
+import { useHeadteacher } from '@/lib/context/HeadteacherContext'
+import { currentTermLabel } from '@/lib/academic/currentTerm'
 import {
   AlertTriangle,
   Users,
@@ -29,7 +31,28 @@ import ScheduleMeetingsModal from './ScheduleMeetingsModal'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import { calculateGrade } from '@/lib/gradingSystem'
 
+function formatLastAssessment(value) {
+  if (!value) return 'No assessment yet'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return 'No assessment yet'
+  return date.toLocaleDateString()
+}
+
+function formatAttendanceRate(value) {
+  if (value === null || value === undefined) return 'No records'
+  const n = Number(value)
+  if (!Number.isFinite(n)) return 'No records'
+  return `${n}%`
+}
+
 export default function StudentAttentionSystem({ studentsData, performanceSummary }) {
+  const { selectedTerm, setSelectedTerm } = useHeadteacher()
+  const activeTerm =
+    performanceSummary?.term && performanceSummary.term !== 'All Terms'
+      ? performanceSummary.term
+      : selectedTerm && selectedTerm !== 'All Terms'
+        ? selectedTerm
+        : currentTermLabel()
   const [selectedStudent, setSelectedStudent] = useState(null)
   const [filterRisk, setFilterRisk] = useState('all')
   const [activeModal, setActiveModal] = useState(null)
@@ -97,12 +120,34 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
           </h2>
         </div>
 
+        <div className="flex flex-col gap-4 mb-6 md:flex-row md:items-center md:justify-between">
+          <p className="text-royalPurple-text2 text-sm text-center md:text-left">
+            Showing students with subject scores below 40% for{' '}
+            <span className="font-semibold text-royalPurple-text1">{activeTerm}</span>.
+          </p>
+          <label className="flex flex-col gap-1 text-xs text-royalPurple-text2 self-center md:self-auto">
+            Academic term
+            <select
+              value={selectedTerm}
+              onChange={(e) => setSelectedTerm(e.target.value)}
+              className="bg-royalPurple-card border border-royalPurple-border rounded-lg px-3 py-2 text-sm text-royalPurple-text1 min-w-[140px]"
+            >
+              <option value="All Terms">All terms</option>
+              <option value="Term 1">Term 1</option>
+              <option value="Term 2">Term 2</option>
+              <option value="Term 3">Term 3</option>
+            </select>
+          </label>
+        </div>
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div className="backdrop-blur-lg bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-2xl p-6 text-center hover:scale-105 transition-all duration-300">
             <div className="text-3xl font-bold text-royalPurple-text1 mb-2">
               {performanceSummary?.students_requiring_attention || 0}
             </div>
-            <div className="text-royalPurple-dangerTx font-medium">Students Below 40%</div>
+            <div className="text-royalPurple-dangerTx font-medium">
+              Students Below 40% ({activeTerm})
+            </div>
           </div>
           <div className="backdrop-blur-lg bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-2xl p-6 text-center hover:scale-105 transition-all duration-300">
             <div className="text-3xl font-bold text-royalPurple-text1 mb-2">
@@ -171,9 +216,10 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
                     <User className="h-5 w-5 text-royalPurple-text2" />
                   </div>
                   <div>
-                    <h3 className="font-semibold">{student.name}</h3>
+                    <h3 className="font-semibold text-royalPurple-text1">{student.name}</h3>
                     <p className="text-sm text-royalPurple-text2">
-                      {student.student_id} • {student.class}
+                      {student.student_id ? `Exam ${student.student_id}` : 'No exam number'}
+                      {student.class ? ` • ${student.class}` : ''}
                     </p>
                   </div>
                 </div>
@@ -187,9 +233,11 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
             <CardContent>
               <div className="space-y-4">
                 {/* Overall Performance */}
-                <div className="bg-royalPurple-page p-3 rounded-lg">
+                <div className="bg-royalPurple-page p-3 rounded-lg text-royalPurple-text1">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Overall Average</span>
+                    <span className="text-sm font-medium text-royalPurple-text1">
+                      Overall Average
+                    </span>
                     <span
                       className={`text-lg font-bold ${percentTextClass(student.overall_average)}`}
                     >
@@ -206,16 +254,18 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
 
                 {/* Subject Performance */}
                 <div>
-                  <h4 className="text-sm font-medium mb-2">Subject Performance</h4>
+                  <h4 className="text-sm font-medium mb-2 text-royalPurple-text1">
+                    Subject Performance
+                  </h4>
                   <div className="space-y-2">
                     {student.subjects.map((subject, index) => {
                       const gradeInfo = getGradeInfo(subject.score, student.grade_level)
                       return (
                         <div
                           key={index}
-                          className="flex items-center justify-between p-2 bg-royalPurple-page rounded"
+                          className="flex items-center justify-between p-2 bg-royalPurple-page rounded text-royalPurple-text1"
                         >
-                          <span className="text-sm">{subject.name}</span>
+                          <span className="text-sm text-royalPurple-text1">{subject.name}</span>
                           <div className="flex items-center space-x-2">
                             <span
                               className={`text-sm font-medium ${percentTextClass(subject.score)}`}
@@ -235,16 +285,19 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
                 </div>
 
                 {/* Additional Info */}
-                <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="grid grid-cols-2 gap-4 text-sm text-royalPurple-text1">
                   <div className="flex items-center">
                     <Clock className="h-4 w-4 mr-2 text-royalPurple-text3" />
-                    <span className={percentTextClass(student.attendance_rate)}>
-                      Attendance: {Number(student.attendance_rate) || 0}%
+                    <span>
+                      Attendance:{' '}
+                      <span className={percentTextClass(student.attendance_rate)}>
+                        {formatAttendanceRate(student.attendance_rate)}
+                      </span>
                     </span>
                   </div>
                   <div className="flex items-center">
                     <Calendar className="h-4 w-4 mr-2 text-royalPurple-text3" />
-                    <span>Last Test: {new Date(student.last_assessment).toLocaleDateString()}</span>
+                    <span>Last Test: {formatLastAssessment(student.last_assessment)}</span>
                   </div>
                 </div>
 
@@ -268,6 +321,15 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
           </Card>
         ))}
       </div>
+
+      {filteredStudents.length === 0 && (
+        <Card>
+          <CardContent className="p-8 text-center text-royalPurple-text2">
+            No students scored below 40% in {activeTerm}. Try another term or check that results
+            have been entered.
+          </CardContent>
+        </Card>
+      )}
 
       {/* Challenging Subjects */}
       <Card>

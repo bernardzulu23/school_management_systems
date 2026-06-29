@@ -6,6 +6,7 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { validateBody } from '@/lib/middleware/validate-request'
 import { UpdateCareerSchema } from '@/lib/schemas'
 import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
+import { assertCareerGuidanceManager } from '@/lib/guidance/careerGuidanceAuth'
 
 async function assertCareerGuidanceAccess(schoolId) {
   const typeBlock = await requireSchoolTypeAccess(schoolId, 'career-guidance')
@@ -39,14 +40,13 @@ export async function PATCH(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  }
-
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const managerBlock = await assertCareerGuidanceManager(auth.user, schoolId)
+  if (managerBlock) return managerBlock
 
   const typeBlock = await assertCareerGuidanceAccess(schoolId)
   if (typeBlock) return typeBlock
@@ -98,14 +98,16 @@ export async function DELETE(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  }
-
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const managerBlock = await assertCareerGuidanceManager(auth.user, schoolId)
+  if (managerBlock) return managerBlock
+
+  const typeBlock = await assertCareerGuidanceAccess(schoolId)
+  if (typeBlock) return typeBlock
 
   const db = getTenantClient(schoolId)
   const existing = await db.career.findFirst({

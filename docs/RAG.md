@@ -105,3 +105,17 @@ Every chunk stores `schoolId`. Retrieval always filters `WHERE schoolId = $tenan
 Teachers upload PDF, DOCX, or TXT files with optional subject/grade metadata. The UI calls `POST /api/materials/ingest` (multipart) and lists indexed materials via `GET /api/materials`.
 
 Student-facing **Study Materials** (`StudyMaterial` model) is separate from RAG `SchoolMaterial`.
+
+## Official CDC Chemistry syllabus (built-in)
+
+ZSMS ships the **Zambia CDC 2024 Chemistry syllabus** (Forms 1–4, 82 subtopic chunks) at `data/curriculum/chemistry-cdc-2024.json`. Each record maps to one embeddable chunk aligned to CDC competences, learning activities, and expected standards.
+
+- **Runtime context** — When `subject` is Chemistry, `buildRagContextForQuery` (`lib/ai/rag-context.js`) merges matching syllabus excerpts with school-uploaded materials. Citations appear as `[CDC N]` in the prompt block.
+- **Search** — `lib/curriculum/chemistry-cdc-2024.js` scores chunks by form, topic, subtopic, and keywords (no embedding required).
+- **Optional vector index** — Seed all 82 chunks into `SchoolMaterial` / `MaterialChunk` for cosine search alongside uploads:
+
+```bash
+SCHOOL_ID=<school-cuid> UPLOADED_BY=<userId> npm run seed:chemistry-curriculum
+```
+
+Uses `lib/rag/ingest-curriculum.js` (one syllabus subtopic per chunk, not naive text splitting).

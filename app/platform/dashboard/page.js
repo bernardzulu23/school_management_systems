@@ -170,6 +170,7 @@ function PlatformDashboardContent() {
                 <th className="px-4 py-3 font-medium">Type</th>
                 <th className="px-4 py-3 font-medium">Subdomain</th>
                 <th className="px-4 py-3 font-medium">Location</th>
+                <th className="px-4 py-3 font-medium">Creator contact</th>
                 <th className="px-4 py-3 font-medium">Plan</th>
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 font-medium">Actions</th>
@@ -245,6 +246,29 @@ function PlatformDashboardContent() {
                         </button>
                       </div>
                     )}
+                  </td>
+                  <td className="px-4 py-3">
+                    {s.creatorName ? (
+                      <span className="block text-ink text-xs font-medium">{s.creatorName}</span>
+                    ) : null}
+                    {s.creatorPhone ? (
+                      <a
+                        href={`tel:${s.creatorPhone.replace(/\s/g, '')}`}
+                        className="text-accent hover:underline text-sm"
+                      >
+                        {s.creatorPhone}
+                      </a>
+                    ) : (
+                      <span className="text-muted">—</span>
+                    )}
+                    {s.creatorEmail ? (
+                      <a
+                        href={`mailto:${s.creatorEmail}`}
+                        className="block text-xs text-muted hover:underline mt-0.5 truncate max-w-[180px]"
+                      >
+                        {s.creatorEmail}
+                      </a>
+                    ) : null}
                   </td>
                   <td className="px-4 py-3 text-muted capitalize">{s.plan}</td>
                   <td className="px-4 py-3">

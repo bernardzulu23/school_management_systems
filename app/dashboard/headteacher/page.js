@@ -353,6 +353,14 @@ function HeadteacherDashboardContent() {
     )
   }
 
+  const attentionTerm =
+    dashboardData?.performance_summary?.term &&
+    dashboardData.performance_summary.term !== 'All Terms'
+      ? dashboardData.performance_summary.term
+      : selectedTerm && selectedTerm !== 'All Terms'
+        ? selectedTerm
+        : 'the current term'
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'overview':
@@ -586,7 +594,8 @@ function HeadteacherDashboardContent() {
                     require urgent attention
                   </div>
                   <p className="text-sm text-royalPurple-text2 mt-0.5">
-                    Overall average below 40% — review interventions and contact parents.
+                    {attentionTerm} — overall average below 40%. Review interventions and contact
+                    parents.
                   </p>
                 </div>
               </div>

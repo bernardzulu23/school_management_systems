@@ -1,7 +1,7 @@
 # ZSMS User Guide
 
 **Zambian School Management System (ZSMS)**  
-**Last updated:** 2026-06-12  
+**Last updated:** 2026-06-26  
 **Application version:** 2.0.3 (`package.json`)  
 **Document version:** 1.0
 
@@ -212,11 +212,12 @@ The headteacher is the school administrator with full oversight: users, timetabl
 | Settings            | `/dashboard/settings`                        |
 | User Feedback       | `/dashboard/feedback`                        |
 | User Management     | `/dashboard/users`                           |
+| Bulk student upload | `/dashboard/students/bulk-upload`            |
 | Registration        | `/admin/registration`                        |
 | Scheduling Recipes  | `/dashboard/admin/recipes`                   |
 | Subjects            | `/admin/subjects`                            |
-| Career clusters     | `/admin/career-clusters`                     |
-| Careers             | `/admin/careers`                             |
+| Guidance teachers   | `/dashboard/headteacher/guidance-teachers`   |
+| Guidance reports    | `/dashboard/headteacher/guidance-reports`    |
 | Teacher Performance | `/admin/teacher-performance`                 |
 | Classes             | `/dashboard/classes`                         |
 | ECZ Exam Tracking   | `/dashboard/headteacher/exam-tracking`       |
@@ -244,8 +245,9 @@ The headteacher is the school administrator with full oversight: users, timetabl
 
 #### User management
 
-1. Go to **Registration** (`/admin/registration`) to add teachers, students, HODs, or admins.
-2. Use **User Management** (`/dashboard/users`) to view, edit, or deactivate accounts.
+1. Go to **Registration** (`/admin/registration`) to add teachers, students, HODs, or admins one at a time.
+2. For many students, use **Bulk student upload** (`/dashboard/students/bulk-upload`): download the Excel template, fill rows (max 1,000 per file), upload, and download an error report for any failed rows.
+3. Use **User Management** (`/dashboard/users`) to view, edit, or deactivate accounts.
 
 #### Master timetable
 
@@ -299,6 +301,13 @@ See [SMS_GUIDE.md](./SMS_GUIDE.md) and [SMS_BROADCAST.md](./SMS_BROADCAST.md).
 2. Open **Results** (`/dashboard/results`).
 3. Use **Result type** filter: All term results, End of term, or Midterm (class tests are excluded).
 4. Filter by class, subject, and teacher as needed.
+
+#### Students requiring immediate attention
+
+1. On the **Headteacher dashboard**, open **Students Requiring Attention** (or use the alert on **Dashboard Overview**).
+2. Use the **Term** filter at the top of the dashboard (or on the attention page) — the list defaults to the **current term** and only includes students with subject scores below 40% for that term.
+3. Choose **All terms** if you need a school-wide view across Term 1–3.
+4. Each card shows the student's **name**, exam number, class, subject breakdown, term attendance, and last assessment date.
 
 ---
 
@@ -420,6 +429,30 @@ Teachers manage classes, record SBA scores, take attendance, create lesson plans
 | Payments            | `/dashboard/payments`                       |
 | Term reports        | `/dashboard/teacher/term-reports`           |
 
+**Guidance teacher assignment:** If the headteacher assigns you as a guidance teacher, use **Guidance Dashboard** in the header (same pattern as **HOD Dashboard**). From the guidance workspace you can:
+
+- **Pupil register** — confidential list of pupils in your scope (junior/senior/all)
+- **Case log** — open counselling/welfare cases with confidentiality tiers (Standard, Sensitive, Safeguarding)
+- **Career guidance board** — publish bursaries and career events (visible school-wide when active)
+- **Career clusters** and **Careers** — maintain pathway content
+- **Girls re-entry** — only if the headteacher enabled re-entry permission on your assignment
+
+Safeguarding cases auto-escalate to the headteacher. Your main teacher account is unchanged — switch back via **Teacher Dashboard**.
+
+#### Guidance case workflow (assigned guidance teachers)
+
+1. Open **Pupil register** or **Case log** from the guidance sidebar.
+2. **New case** — select pupil, category, confidentiality tier, and summary.
+3. Add **log entries** with optional follow-up dates on the case detail page.
+4. Record **referrals** — guardian consent is required before marking a referral as sent externally.
+5. Use **Escalate to headteacher** for urgent safeguarding concerns (or choose Safeguarding tier at intake).
+
+#### Headteacher: guidance oversight
+
+1. Assign guidance teachers at **Guidance teachers** — set scope (All / Junior / Senior) and optionally **Girls re-entry** permission.
+2. Review **Guidance reports** for termly aggregate counts (small counts shown as `<3`; safeguarding excluded from totals).
+3. Acknowledge **safeguarding escalations** and open case detail from the reports page.
+
 **Additional routes (not in sidebar):**
 
 | Page                    | Route                                           |
@@ -475,6 +508,8 @@ See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) and [QR_ATTENDANCE.md](./QR_ATTENDANC
 | Upload for AI (RAG) | `/dashboard/teacher/ai-materials`    | AI-enabled plan  |
 
 See [AI_GUIDE.md](./AI_GUIDE.md).
+
+**Chemistry teachers:** Lesson planner, quiz maker, and topic tests automatically include official **Zambia CDC 2024 Chemistry** syllabus excerpts (Forms 1–4) when the subject is Chemistry — no upload required. Add your own notes via **Upload for AI (RAG)** to combine school materials with the syllabus.
 
 #### Assessments and results
 

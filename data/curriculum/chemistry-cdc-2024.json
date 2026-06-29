@@ -1,0 +1,2630 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 Chemistry Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre, Lusaka, 2024",
+    "level": "Secondary Education Ordinary Level",
+    "forms": [1, 2, 3, 4],
+    "isbn": "978-9982-00-938-9",
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026"
+  },
+  "curriculum": [
+    {
+      "id": "F1-T1-S1",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Introduction to Chemistry",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "Branches of Chemistry",
+      "specificCompetences": ["Demonstrate understanding of chemistry"],
+      "learningActivities": [
+        "Describing chemistry as a science that deals with the study of matter and its properties under different conditions",
+        "Investigating the main branches of chemistry such as inorganic chemistry, physical chemistry, organic chemistry, analytical chemistry and biochemistry"
+      ],
+      "expectedStandard": "Understanding of chemistry and its branches demonstrated correctly",
+      "keywords": [
+        "chemistry",
+        "matter",
+        "inorganic",
+        "physical chemistry",
+        "organic chemistry",
+        "analytical chemistry",
+        "biochemistry",
+        "branches"
+      ],
+      "suggestedAssessmentTypes": ["definition recall", "classification", "short answer"]
+    },
+    {
+      "id": "F1-T1-S2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Introduction to Chemistry",
+      "subtopicNumber": "1.1.2",
+      "subtopic": "Importance of Chemistry",
+      "specificCompetences": ["Relate the importance of chemistry to everyday life"],
+      "learningActivities": [
+        "Exploring the importance of chemistry in everyday life",
+        "Researching on the role of chemistry in everyday life: personal care products, medicine",
+        "Evaluating the impact of chemical reactions and products on the environment and health",
+        "Designing solutions to real-world problems using chemistry"
+      ],
+      "expectedStandard": "Importance of chemistry to everyday life related correctly",
+      "keywords": [
+        "everyday life",
+        "personal care",
+        "medicine",
+        "environment",
+        "health",
+        "chemical impact"
+      ],
+      "suggestedAssessmentTypes": ["discussion", "research project", "essay"]
+    },
+    {
+      "id": "F1-T1-S3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Introduction to Chemistry",
+      "subtopicNumber": "1.1.3",
+      "subtopic": "Safety and Waste Management in the Laboratory",
+      "specificCompetences": ["Apply laboratory safety", "Manage waste in the laboratory"],
+      "learningActivities": [
+        "Applying safety practices in the laboratory such as precautions and first aid steps",
+        "Classifying laboratory waste: chemicals, glassware, paper",
+        "Managing laboratory waste handling and disposal"
+      ],
+      "expectedStandard": "Laboratory safety applied correctly; waste managed appropriately",
+      "keywords": [
+        "laboratory safety",
+        "first aid",
+        "waste management",
+        "disposal",
+        "hazard",
+        "precautions",
+        "glassware"
+      ],
+      "suggestedAssessmentTypes": ["practical assessment", "safety quiz", "labelling exercise"]
+    },
+    {
+      "id": "F1-T1-S4",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Introduction to Chemistry",
+      "subtopicNumber": "1.1.4",
+      "subtopic": "Apparatus and Equipment in Chemistry",
+      "specificCompetences": [
+        "Use apparatus and equipment in chemistry",
+        "Measure quantities precisely and accurately"
+      ],
+      "learningActivities": [
+        "Demonstrating the use of various laboratory apparatus and equipment for chemistry-related activities",
+        "Demonstrating accuracy and precision in measuring quantities such as time, temperature, mass/weight and volume"
+      ],
+      "expectedStandard": "Laboratory apparatus used correctly; quantities measured with precision and accuracy",
+      "keywords": [
+        "apparatus",
+        "equipment",
+        "measurement",
+        "accuracy",
+        "precision",
+        "volume",
+        "mass",
+        "temperature",
+        "time"
+      ],
+      "suggestedAssessmentTypes": [
+        "practical assessment",
+        "identification quiz",
+        "measurement exercise"
+      ]
+    },
+    {
+      "id": "F1-T2-S1",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Matter",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "States and Basic Units of Matter",
+      "specificCompetences": ["Demonstrate understanding of states and basic units of matter"],
+      "learningActivities": [
+        "Investigating the states of matter: solids, liquids, gases, plasma",
+        "Exploring the basic units of matter: atoms, molecules, ions"
+      ],
+      "expectedStandard": "States and basic units of matter demonstrated correctly",
+      "keywords": [
+        "states of matter",
+        "solid",
+        "liquid",
+        "gas",
+        "plasma",
+        "atom",
+        "molecule",
+        "ion"
+      ],
+      "suggestedAssessmentTypes": ["multiple choice", "labelling diagrams", "short answer"]
+    },
+    {
+      "id": "F1-T2-S2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Matter",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "Kinetic Theory of Matter",
+      "specificCompetences": ["Demonstrate understanding of the kinetic theory of matter"],
+      "learningActivities": [
+        "Exploring the principles of the kinetic theory of matter in terms of temperature and kinetic energy, motion and arrangement of particles, collisions, diffusion",
+        "Demonstrating the evidence of kinetic theory such as diffusion and Brownian motion"
+      ],
+      "expectedStandard": "Kinetic theory of matter demonstrated correctly",
+      "keywords": [
+        "kinetic theory",
+        "temperature",
+        "kinetic energy",
+        "particle motion",
+        "diffusion",
+        "Brownian motion",
+        "collision",
+        "arrangement"
+      ],
+      "suggestedAssessmentTypes": ["explanation questions", "experiment design", "concept mapping"]
+    },
+    {
+      "id": "F1-T2-S3",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Matter",
+      "subtopicNumber": "1.2.3",
+      "subtopic": "Heating and Cooling Curves of Matter",
+      "specificCompetences": ["Construct the heating and cooling curves of matter"],
+      "learningActivities": [
+        "Constructing the heating and cooling curves",
+        "Interpreting heating and cooling curves"
+      ],
+      "expectedStandard": "Heating and cooling curves constructed and interpreted correctly",
+      "keywords": [
+        "heating curve",
+        "cooling curve",
+        "melting point",
+        "boiling point",
+        "freezing point",
+        "condensation",
+        "phase change"
+      ],
+      "suggestedAssessmentTypes": ["graph drawing", "graph interpretation", "data analysis"]
+    },
+    {
+      "id": "F1-T3-S1",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Elements, Compounds and Mixtures",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "Elements",
+      "specificCompetences": ["Demonstrate understanding of elements in everyday life"],
+      "learningActivities": [
+        "Describing an element as a substance consisting of only one type of atom",
+        "Classifying substances as elements: metallic and non-metallic elements in everyday life",
+        "Exploring the diagrammatic representation of elements"
+      ],
+      "expectedStandard": "Understanding of elements demonstrated correctly",
+      "keywords": ["element", "atom", "metallic", "non-metallic", "symbol", "classification"],
+      "suggestedAssessmentTypes": [
+        "classification exercise",
+        "periodic table activity",
+        "short answer"
+      ]
+    },
+    {
+      "id": "F1-T3-S2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Elements, Compounds and Mixtures",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "Compounds",
+      "specificCompetences": ["Demonstrate understanding of compounds"],
+      "learningActivities": [
+        "Describing a compound as a substance made up of two or more elements chemically combined",
+        "Exploring various compounds in everyday life",
+        "Exploring the diagrammatic representation of elements, compounds and mixtures",
+        "Analysing the characteristics of compounds"
+      ],
+      "expectedStandard": "Understanding of compounds demonstrated correctly",
+      "keywords": [
+        "compound",
+        "chemical combination",
+        "formula",
+        "characteristics",
+        "water",
+        "salt",
+        "everyday compounds"
+      ],
+      "suggestedAssessmentTypes": ["comparison table", "formula writing", "everyday examples"]
+    },
+    {
+      "id": "F1-T3-S3",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Elements, Compounds and Mixtures",
+      "subtopicNumber": "1.3.3",
+      "subtopic": "Mixtures",
+      "specificCompetences": ["Demonstrate understanding of mixtures"],
+      "learningActivities": [
+        "Describing a mixture as a substance consisting of two or more substances physically combined",
+        "Exploring examples of mixtures in everyday life",
+        "Classifying mixtures as homogeneous and heterogeneous",
+        "Exploring the diagrammatic representation of mixtures",
+        "Comparing and contrasting compounds and mixtures"
+      ],
+      "expectedStandard": "Understanding of mixtures demonstrated correctly",
+      "keywords": [
+        "mixture",
+        "homogeneous",
+        "heterogeneous",
+        "physical combination",
+        "suspension",
+        "solution",
+        "colloid"
+      ],
+      "suggestedAssessmentTypes": ["classification", "comparison table", "everyday examples"]
+    },
+    {
+      "id": "F1-T3-S4",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Elements, Compounds and Mixtures",
+      "subtopicNumber": "1.3.4",
+      "subtopic": "Physical and Chemical Changes",
+      "specificCompetences": ["Differentiate physical and chemical changes"],
+      "learningActivities": [
+        "Exploring with examples the physical and chemical changes",
+        "Comparing and contrasting physical and chemical changes"
+      ],
+      "expectedStandard": "Physical and chemical changes differentiated correctly",
+      "keywords": [
+        "physical change",
+        "chemical change",
+        "reversible",
+        "irreversible",
+        "new substance",
+        "properties"
+      ],
+      "suggestedAssessmentTypes": ["classification", "examples identification", "explanation"]
+    },
+    {
+      "id": "F1-T3-S5",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Elements, Compounds and Mixtures",
+      "subtopicNumber": "1.3.5",
+      "subtopic": "Criteria of Purity",
+      "specificCompetences": ["Determine the purity of a substance"],
+      "learningActivities": [
+        "Determining the purity of a substance: melting point, boiling point, density, refractive index, chromatography, effects of impurities",
+        "Exploring the importance of pure versus impure substances in foodstuffs, drinks, salt, on icy roads, inhaled substances"
+      ],
+      "expectedStandard": "Purity of substance determined correctly",
+      "keywords": [
+        "purity",
+        "melting point",
+        "boiling point",
+        "density",
+        "refractive index",
+        "chromatography",
+        "impurity",
+        "pure substance"
+      ],
+      "suggestedAssessmentTypes": ["practical experiment", "data interpretation", "short answer"]
+    },
+    {
+      "id": "F1-T3-S6",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Elements, Compounds and Mixtures",
+      "subtopicNumber": "1.3.6",
+      "subtopic": "Purification and Separation Techniques",
+      "specificCompetences": ["Separate mixtures into their desired components"],
+      "learningActivities": [
+        "Separating mixtures into their components using appropriate techniques: filtration, evaporation, simple distillation, fractional distillation, crystallisation, chromatography, separating funnel, centrifugation, sublimation, decantation",
+        "Investigating the applications and effects of separating techniques on the environment"
+      ],
+      "expectedStandard": "Mixtures separated correctly using appropriate techniques",
+      "keywords": [
+        "filtration",
+        "evaporation",
+        "distillation",
+        "fractional distillation",
+        "crystallisation",
+        "chromatography",
+        "centrifugation",
+        "sublimation",
+        "decantation",
+        "separating funnel"
+      ],
+      "suggestedAssessmentTypes": [
+        "practical assessment",
+        "method selection",
+        "application questions"
+      ]
+    },
+    {
+      "id": "F1-T4-S1",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Atomic Structure",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "Structure of an Atom",
+      "specificCompetences": ["Demonstrate understanding of an atom and its structure"],
+      "learningActivities": [
+        "Exploring atomic models (Bohr, Dalton model)",
+        "Describing an atom as the smallest particle of an element which takes part in a chemical reaction",
+        "Describing Bohr Model structure of an atom: nucleus at the centre surrounded by electrons"
+      ],
+      "expectedStandard": "Understanding of an atom and its structure demonstrated correctly",
+      "keywords": [
+        "atom",
+        "Bohr model",
+        "Dalton model",
+        "nucleus",
+        "electrons",
+        "atomic model",
+        "structure"
+      ],
+      "suggestedAssessmentTypes": ["diagram labelling", "model description", "short answer"]
+    },
+    {
+      "id": "F1-T4-S2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Atomic Structure",
+      "subtopicNumber": "1.4.2",
+      "subtopic": "Properties of Sub-atomic Particles",
+      "specificCompetences": ["Explore the properties of the sub-atomic particles"],
+      "learningActivities": [
+        "Identifying sub-atomic particles: protons, neutrons and electrons",
+        "Analysing the relative charges and appropriate relative masses of protons, neutrons and electrons (charges: +1, 0, -1; masses: 1, 1, 1/1840)",
+        "Justifying the neutrality of an atom"
+      ],
+      "expectedStandard": "Properties of sub-atomic particles explored correctly",
+      "keywords": [
+        "proton",
+        "neutron",
+        "electron",
+        "charge",
+        "mass",
+        "sub-atomic",
+        "neutrality",
+        "relative mass"
+      ],
+      "suggestedAssessmentTypes": ["table completion", "calculation", "explanation"]
+    },
+    {
+      "id": "F1-T4-S3",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Atomic Structure",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "Atomic Number, Mass Number and Nucleon Number",
+      "specificCompetences": ["Manipulate the numbers of sub-atomic particles"],
+      "learningActivities": [
+        "Describing atomic and mass numbers: (a) atomic number as the number of protons in an atom; (b) mass number as the sum of protons and neutrons in an atom",
+        "Formulating expressions relating to numbers of sub-atomic particles: A = Z + N",
+        "Chemical symbols and nuclide notation: interpreting and constructing the nuclide notation of atoms where X is atomic symbol, A is mass number and Z is atomic number"
+      ],
+      "expectedStandard": "Numbers of sub-atomic particles manipulated correctly",
+      "keywords": [
+        "atomic number",
+        "mass number",
+        "nucleon number",
+        "proton number",
+        "nuclide notation",
+        "Z",
+        "A",
+        "N"
+      ],
+      "suggestedAssessmentTypes": ["calculation", "nuclide notation", "fill in the blank"]
+    },
+    {
+      "id": "F1-T5-S1",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Atomic Structure (continued)",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "Chemical Symbols and Nuclide Notation",
+      "specificCompetences": ["Interpret chemical symbols and nuclide notation"],
+      "learningActivities": [
+        "Exploring the chemical symbols of elements from the English, Latin, Greek names",
+        "Interpreting and constructing the nuclide notation of atoms where X is symbol, A is mass number and Z is atomic number"
+      ],
+      "expectedStandard": "Chemical symbols and nuclide notation interpreted correctly",
+      "keywords": [
+        "chemical symbol",
+        "nuclide notation",
+        "element symbol",
+        "Latin names",
+        "Greek names"
+      ],
+      "suggestedAssessmentTypes": ["symbol identification", "notation writing", "matching"]
+    },
+    {
+      "id": "F1-T5-S2",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Atomic Structure (continued)",
+      "subtopicNumber": "1.5.2",
+      "subtopic": "Electronic Configuration",
+      "specificCompetences": ["Apply electronic configuration of atoms"],
+      "learningActivities": [
+        "Describing the electronic configuration as the arrangement of electrons in the shells of atoms",
+        "Demonstrating the build-up of electrons in shells for the first 20 elements using the formula 2n² taking into consideration the duplet and octet rules by drawing structures of atoms",
+        "Relating the electronic configurations of the first 20 elements to their positions on the Periodic Table",
+        "Classifying elements as metals or non-metals using their valence electrons and valency",
+        "Applying atomic structure concept to position elements on the periodic table"
+      ],
+      "expectedStandard": "Electronic configuration of atoms applied correctly",
+      "keywords": [
+        "electronic configuration",
+        "electron shells",
+        "duplet rule",
+        "octet rule",
+        "valence electrons",
+        "valency",
+        "first 20 elements",
+        "periodic table",
+        "2n² formula"
+      ],
+      "suggestedAssessmentTypes": [
+        "diagram drawing",
+        "configuration writing",
+        "periodic table positioning"
+      ]
+    },
+    {
+      "id": "F1-T5-S3",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Atomic Structure (continued)",
+      "subtopicNumber": "1.5.3",
+      "subtopic": "Isotopic Nature of Elements",
+      "specificCompetences": [
+        "Determine relative atomic mass of an element from relative isotopic masses"
+      ],
+      "learningActivities": [
+        "Describing isotopes as atoms of the same element having the same number of protons but different mass numbers (nucleon numbers)",
+        "Determining the relative atomic mass of an element given the percentage abundances of isotopes and from mass spectrum",
+        "Exploring the uses of radioactive isotopes: medical treatment of cancer, industrial uses, as tracers in archaeology, nuclear energy production",
+        "Exploring the hazardous nature of radioactive isotopes: health risks, contamination of the environment, accidents and mutagens",
+        "Exploring the safe storage and handling of radioisotopes"
+      ],
+      "expectedStandard": "Relative atomic mass of an element from relative isotopic masses determined correctly",
+      "keywords": [
+        "isotope",
+        "relative atomic mass",
+        "percentage abundance",
+        "mass spectrum",
+        "radioactive isotopes",
+        "nuclear energy",
+        "tracers",
+        "radiation hazards"
+      ],
+      "suggestedAssessmentTypes": [
+        "calculation",
+        "data from mass spectrum",
+        "application questions"
+      ]
+    },
+    {
+      "id": "F2-T1-S1",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Bonding",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "Chemical Bonding",
+      "specificCompetences": ["Demonstrate understanding of chemical bonding"],
+      "learningActivities": [
+        "Describing chemical bonding as a process by which atoms combine chemically to form molecules or compounds",
+        "Analysing the types of bonding: ionic (electrovalent), covalent, metallic"
+      ],
+      "expectedStandard": "Understanding of chemical bonding demonstrated correctly",
+      "keywords": [
+        "chemical bonding",
+        "ionic bond",
+        "covalent bond",
+        "metallic bond",
+        "electrovalent",
+        "molecule",
+        "compound"
+      ],
+      "suggestedAssessmentTypes": ["classification", "description", "comparison"]
+    },
+    {
+      "id": "F2-T1-S2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Bonding",
+      "subtopicNumber": "2.1.2",
+      "subtopic": "Ions",
+      "specificCompetences": ["Demonstrate understanding of ion formation in bonding"],
+      "learningActivities": [
+        "Describing an ion as an atom or chemically bonded group of atoms that have gained an overall electrical charge",
+        "Describing the formation of monatomic ions as cations by electron loss and anions by electron gain",
+        "Relating the charges of ions to their valencies",
+        "Relating the charges of radicals to their valencies: carbonate CO3²⁻, sulphate SO4²⁻, ammonium NH4⁺, nitrate NO3⁻, phosphate PO4³⁻"
+      ],
+      "expectedStandard": "Ion formation in bonding demonstrated correctly",
+      "keywords": [
+        "ion",
+        "cation",
+        "anion",
+        "electron loss",
+        "electron gain",
+        "valency",
+        "radical",
+        "carbonate",
+        "sulphate",
+        "ammonium",
+        "nitrate",
+        "phosphate"
+      ],
+      "suggestedAssessmentTypes": [
+        "ion formation diagrams",
+        "charge determination",
+        "formula writing"
+      ]
+    },
+    {
+      "id": "F2-T1-S3",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Bonding",
+      "subtopicNumber": "2.1.3",
+      "subtopic": "Chemical Formulae",
+      "specificCompetences": ["Deduce chemical formulae of compounds"],
+      "learningActivities": [
+        "Assigning valencies to elements and groups of atoms/radicals",
+        "Formulating chemical formulae of compounds using (a) valencies (b) charges",
+        "Naming of chemical compounds: (a) binary and (b) ternary compounds"
+      ],
+      "expectedStandard": "Chemical formulae of compounds deduced correctly",
+      "keywords": [
+        "chemical formula",
+        "valency",
+        "binary compound",
+        "ternary compound",
+        "IUPAC naming",
+        "formulae writing"
+      ],
+      "suggestedAssessmentTypes": ["formula writing", "naming compounds", "valency use"]
+    },
+    {
+      "id": "F2-T1-S4",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Bonding",
+      "subtopicNumber": "2.1.4",
+      "subtopic": "Ionic Bonding",
+      "specificCompetences": ["Demonstrate understanding of ionic bonding"],
+      "learningActivities": [
+        "Describing ionic bond as an electrostatic force of attraction between cations and anions",
+        "Describing the formation of ionic/electrovalent compounds",
+        "Explaining the properties of ionic compounds: high melting and boiling points, high density, conducts electricity in molten state or solution, made of ions, solid at rtp",
+        "Exploring the uses of ionic compounds in everyday life"
+      ],
+      "expectedStandard": "Understanding of ionic bonding demonstrated correctly",
+      "keywords": [
+        "ionic bond",
+        "electrovalent",
+        "electrostatic attraction",
+        "cation",
+        "anion",
+        "melting point",
+        "electrical conductivity",
+        "ionic lattice"
+      ],
+      "suggestedAssessmentTypes": [
+        "dot and cross diagrams",
+        "property explanation",
+        "application questions"
+      ]
+    },
+    {
+      "id": "F2-T1-S5",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Bonding",
+      "subtopicNumber": "2.1.5",
+      "subtopic": "Covalent Bonding",
+      "specificCompetences": ["Demonstrate understanding of covalent bonding"],
+      "learningActivities": [
+        "Describing covalent bond as a shared pair of electrons between non-metal atoms",
+        "Justifying formation of single, double and triple covalent bonds between atoms: hydrogen H₂, oxygen O₂ and nitrogen N₂ molecules respectively",
+        "Examining the properties of covalent compounds: low melting and boiling points, low density, do not conduct electricity in solid or solution form, made of molecules",
+        "Describing a molecule as a group of covalently bonded atoms which can exist independently",
+        "Exploring the uses of covalent compounds"
+      ],
+      "expectedStandard": "Understanding of covalent bonding demonstrated correctly",
+      "keywords": [
+        "covalent bond",
+        "shared electrons",
+        "single bond",
+        "double bond",
+        "triple bond",
+        "non-metal",
+        "molecule",
+        "low melting point"
+      ],
+      "suggestedAssessmentTypes": [
+        "dot and cross diagrams",
+        "property comparison",
+        "bond type identification"
+      ]
+    },
+    {
+      "id": "F2-T1-S6",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Bonding",
+      "subtopicNumber": "2.1.6",
+      "subtopic": "Metallic Bonding",
+      "specificCompetences": ["Demonstrate understanding of metallic bonding"],
+      "learningActivities": [
+        "Describing metallic bonding as the electrostatic force of attraction between positively charged ions and the pool of delocalised electrons within a metallic lattice",
+        "Exploring the uses of metallic substances",
+        "Justifying the use of specific metallic substances for different applications in everyday life"
+      ],
+      "expectedStandard": "Understanding of metallic bonding demonstrated correctly",
+      "keywords": [
+        "metallic bond",
+        "delocalised electrons",
+        "positive ions",
+        "metallic lattice",
+        "electrostatic attraction",
+        "conductivity",
+        "malleability"
+      ],
+      "suggestedAssessmentTypes": [
+        "diagram description",
+        "property explanation",
+        "application questions"
+      ]
+    },
+    {
+      "id": "F2-T1-S7",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Bonding",
+      "subtopicNumber": "2.1.7",
+      "subtopic": "Structure of Compounds",
+      "specificCompetences": ["Classify compounds into simple and giant structures"],
+      "learningActivities": [
+        "Describing structures of simple and giant compounds",
+        "Illustrating structures of simple and giant compounds",
+        "Distinguishing different compounds using the structures: simple and giant structures, macromolecules and ionic lattices"
+      ],
+      "expectedStandard": "Compounds classified into simple and giant structures correctly",
+      "keywords": [
+        "simple structure",
+        "giant structure",
+        "macromolecule",
+        "ionic lattice",
+        "diamond",
+        "graphite",
+        "silicon dioxide"
+      ],
+      "suggestedAssessmentTypes": ["diagram drawing", "classification", "structure comparison"]
+    },
+    {
+      "id": "F2-T2-S1",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Chemical Reactions",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "Principles of Chemical Reactions",
+      "specificCompetences": ["Demonstrate understanding of the principles of chemical reactions"],
+      "learningActivities": [
+        "Describing a chemical reaction as a process in which a substance undergoes change to produce a new substance",
+        "Investigating the types of chemical reactions: (a) Direct combination/Synthesis, (b) Decomposition, (c) Single displacement, (d) Double displacement, (e) Chain reactions"
+      ],
+      "expectedStandard": "Understanding of chemical reactions demonstrated correctly",
+      "keywords": [
+        "chemical reaction",
+        "synthesis",
+        "decomposition",
+        "single displacement",
+        "double displacement",
+        "chain reaction",
+        "reactants",
+        "products"
+      ],
+      "suggestedAssessmentTypes": [
+        "reaction type classification",
+        "equation writing",
+        "example identification"
+      ]
+    },
+    {
+      "id": "F2-T2-S2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Chemical Reactions",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "Chemical Equations",
+      "specificCompetences": ["Construct chemical equations"],
+      "learningActivities": [
+        "Describing a chemical equation",
+        "Describing the notation of a chemical equation as: Reactants → Products",
+        "Constructing word equations from descriptive chemical changes",
+        "Formulating and balancing chemical equations with state symbols correctly written in lower case in the same line as the species not as subscripts",
+        "Constructing net ionic equations for balanced chemical reactions",
+        "Investigating chemical reactions as endothermic or exothermic"
+      ],
+      "expectedStandard": "Chemical equations constructed and balanced correctly",
+      "keywords": [
+        "chemical equation",
+        "word equation",
+        "balanced equation",
+        "state symbols",
+        "net ionic equation",
+        "endothermic",
+        "exothermic",
+        "reactants",
+        "products"
+      ],
+      "suggestedAssessmentTypes": [
+        "equation balancing",
+        "word to symbol equation",
+        "state symbol addition"
+      ]
+    },
+    {
+      "id": "F2-T3-S1",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Chemical Kinetics",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "Rates of Chemical Reactions",
+      "specificCompetences": [
+        "Demonstrate understanding of rates of chemical reactions",
+        "Investigate factors that affect the rates of chemical reactions"
+      ],
+      "learningActivities": [
+        "Describing the rate of a chemical reaction",
+        "Experimenting on the rates of chemical reactions",
+        "Applying rates of chemical reactions to real life situations",
+        "Exploring the factors that affect the rate of a chemical reaction: temperature, concentration, surface area, pressure, catalyst, light",
+        "Collecting and interpreting data on rates of chemical reactions — graph representations",
+        "Exploring methods of controlling rates of chemical reactions by manipulating factors that affect the rates of chemical reactions"
+      ],
+      "expectedStandard": "Rates of chemical reactions demonstrated and factors identified correctly",
+      "keywords": [
+        "rate of reaction",
+        "temperature",
+        "concentration",
+        "surface area",
+        "pressure",
+        "catalyst",
+        "light",
+        "collision theory",
+        "activation energy"
+      ],
+      "suggestedAssessmentTypes": [
+        "graph interpretation",
+        "factor identification",
+        "experiment design",
+        "data analysis"
+      ]
+    },
+    {
+      "id": "F2-T4-S1",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Redox Reactions",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "Oxidation and Reduction",
+      "specificCompetences": ["Interpret redox reactions"],
+      "learningActivities": [
+        "Analysing oxidation and reduction in terms of: (a) oxygen/hydrogen exchange, (b) electron transfer, (c) oxidation state changes",
+        "Examining a redox reaction as a reaction involving both oxidation and reduction",
+        "Identifying the characteristics of oxidising and reducing agents",
+        "Oxidising agents identified using: potassium iodide solution as agent in the presence of starch, acidified potassium iodide paper",
+        "Reducing agents identified using: acidified potassium dichromate, potassium permanganate as agents and observing colour changes",
+        "Determining oxidation numbers of elements with variable oxidation states",
+        "Deducing a redox reaction using oxidation numbers",
+        "Describing a non-redox reaction as one in which there is neither oxidation nor reduction involved"
+      ],
+      "expectedStandard": "Redox reactions interpreted correctly",
+      "keywords": [
+        "oxidation",
+        "reduction",
+        "redox",
+        "electron transfer",
+        "oxidation state",
+        "oxidising agent",
+        "reducing agent",
+        "oxygen gain",
+        "hydrogen loss",
+        "oxidation number",
+        "potassium permanganate",
+        "potassium dichromate"
+      ],
+      "suggestedAssessmentTypes": [
+        "oxidation state calculation",
+        "oxidising/reducing agent identification",
+        "half equation writing",
+        "OIL RIG recall"
+      ]
+    },
+    {
+      "id": "F2-T5-S1",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Acids, Bases and Salts",
+      "subtopicNumber": "2.5.1",
+      "subtopic": "Composition of Acids, Bases and Salts",
+      "specificCompetences": ["Analyse the composition of acids, bases and salts"],
+      "learningActivities": [
+        "Investigating acids, bases, salts: chemical compositions of acids, bases and salts"
+      ],
+      "expectedStandard": "Composition of acids, bases and salts analysed correctly",
+      "keywords": ["acid", "base", "salt", "composition", "hydrogen ion", "hydroxide ion"],
+      "suggestedAssessmentTypes": ["identification", "composition analysis", "classification"]
+    },
+    {
+      "id": "F2-T5-S2",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Acids, Bases and Salts",
+      "subtopicNumber": "2.5.2",
+      "subtopic": "Acids",
+      "specificCompetences": [
+        "Demonstrate understanding of acids",
+        "Analyse the properties of acids"
+      ],
+      "learningActivities": [
+        "Classifying acids in terms of: (a) Nature — organic and inorganic, (b) Strength — strong and weak",
+        "Describing basicity of an acid as the number of ionisable hydrogens present in one molecule of an acid: monobasic, dibasic and tribasic",
+        "Demonstrating the physical and chemical properties of acids: (a) Physical properties — sour taste, pH less than 7, electrolytes; (b) Chemical properties — reactions with metals, bases, carbonates, bicarbonates and effects on indicators; does not react with highly reactive metals such as potassium, sodium, calcium",
+        "Exploring uses of acids and their environmental impact"
+      ],
+      "expectedStandard": "Understanding of acids demonstrated correctly; properties analysed",
+      "keywords": [
+        "acid",
+        "strong acid",
+        "weak acid",
+        "monobasic",
+        "dibasic",
+        "tribasic",
+        "pH",
+        "indicators",
+        "neutralisation",
+        "organic acid",
+        "inorganic acid",
+        "HCl",
+        "H2SO4",
+        "HNO3"
+      ],
+      "suggestedAssessmentTypes": ["property table", "reaction equations", "acid identification"]
+    },
+    {
+      "id": "F2-T5-S3",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Acids, Bases and Salts",
+      "subtopicNumber": "2.5.3",
+      "subtopic": "Bases and Alkalis",
+      "specificCompetences": [
+        "Demonstrate understanding of bases",
+        "Analyse the properties of bases"
+      ],
+      "learningActivities": [
+        "Classifying bases in terms of solubility, further classifying the soluble ones as alkalis as strong and weak",
+        "Describing acidity of a base as the number of hydroxides present in a molecule: monoacidic, diacidic and triacidic",
+        "Demonstrating the physical and chemical properties of bases: (a) Physical properties — taste, pH greater than 7, texture, electrolytes, alkalinity; (b) Chemical properties — reactions with acids and ammonium salts, effects on indicators",
+        "Exploring the uses of bases and their environmental impact",
+        "Classifying oxides: basic oxides, acidic oxides, amphoteric oxides, neutral oxides",
+        "Exploring the uses of oxides"
+      ],
+      "expectedStandard": "Understanding of bases demonstrated correctly; properties analysed",
+      "keywords": [
+        "base",
+        "alkali",
+        "strong base",
+        "weak base",
+        "monoacidic",
+        "diacidic",
+        "pH greater than 7",
+        "NaOH",
+        "KOH",
+        "Ca(OH)2",
+        "amphoteric oxide",
+        "basic oxide",
+        "acidic oxide",
+        "neutral oxide"
+      ],
+      "suggestedAssessmentTypes": ["property table", "reaction equations", "oxide classification"]
+    },
+    {
+      "id": "F2-T5-S4",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Acids, Bases and Salts",
+      "subtopicNumber": "2.5.4",
+      "subtopic": "Acid-Base Indicators",
+      "specificCompetences": [
+        "Apply acid-base indicators to determine the acidity, alkalinity and neutrality of a substance"
+      ],
+      "learningActivities": [
+        "Describing acid-base indicators",
+        "Investigating types of acid-base indicators",
+        "Determining the acidity, alkalinity or neutrality of a substance using pH scale, litmus paper/solution, methyl orange, phenolphthalein, universal indicator paper/solution",
+        "Making acid-base indicators from locally available resources"
+      ],
+      "expectedStandard": "Acid-base indicators applied correctly to determine pH",
+      "keywords": [
+        "indicator",
+        "litmus",
+        "methyl orange",
+        "phenolphthalein",
+        "universal indicator",
+        "pH scale",
+        "acid",
+        "alkali",
+        "neutral",
+        "colour change"
+      ],
+      "suggestedAssessmentTypes": [
+        "indicator colour chart",
+        "pH determination",
+        "practical observation"
+      ]
+    },
+    {
+      "id": "F2-T5-S5",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Acids, Bases and Salts",
+      "subtopicNumber": "2.5.5",
+      "subtopic": "Salts",
+      "specificCompetences": ["Prepare and obtain salts"],
+      "learningActivities": [
+        "Classifying salts: normal salts, acidic and basic salts, hydrated and anhydrous salts",
+        "Preparing soluble salts using appropriate methods: reaction of acid with alkali (titration), reaction of acid with insoluble base, reaction of acid with metal carbonate, reaction of acid with a reactive metal",
+        "Preparing insoluble salts by precipitation: silver chloride, lead(II)",
+        "Obtaining salts from solutions by evaporation and crystallisation",
+        "Describing water of crystallisation",
+        "Discussing the importance of water of crystallisation to hydrated salts",
+        "Determining the solubility of salts: soluble and insoluble salts",
+        "Investigating the behaviour of salts with reference to the atmosphere: hygroscopic, efflorescent, deliquescent",
+        "Analysing the use of salts in real world scenarios: food preservation, medicine, agriculture",
+        "Designing a solution using salt to real world problems such as preserving food, purifying water"
+      ],
+      "expectedStandard": "Salts prepared and obtained correctly",
+      "keywords": [
+        "salt",
+        "normal salt",
+        "acidic salt",
+        "basic salt",
+        "hydrated salt",
+        "anhydrous",
+        "water of crystallisation",
+        "soluble",
+        "insoluble",
+        "precipitation",
+        "titration",
+        "hygroscopic",
+        "efflorescent",
+        "deliquescent",
+        "crystallisation"
+      ],
+      "suggestedAssessmentTypes": [
+        "method selection",
+        "preparation procedure",
+        "classification",
+        "solubility rules"
+      ]
+    },
+    {
+      "id": "F2-T5-S6",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Acids, Bases and Salts",
+      "subtopicNumber": "2.5.6",
+      "subtopic": "Qualitative Analysis",
+      "specificCompetences": [
+        "Investigate the chemical composition of salts in terms of cations and anions present"
+      ],
+      "learningActivities": [
+        "Analysing and identifying cations and anions in their aqueous solutions: cations being aluminium Al³⁺, ammonium NH₄⁺, calcium Ca²⁺, copper(II) Cu²⁺, iron(II) Fe²⁺, iron(III) Fe³⁺ and zinc Zn²⁺ using aqueous sodium hydroxide and aqueous ammonia; anions being carbonate CO₃²⁻, chloride Cl⁻, iodide I⁻, nitrate NO₃⁻, sulphate SO₄²⁻",
+        "Carrying out chemical tests to identify gases: ammonia NH₃, carbon dioxide CO₂, chlorine Cl₂, hydrogen H₂, oxygen O₂, sulphur dioxide SO₂, water vapour H₂O",
+        "Exploring the use of analysis of salts in creation of economical products",
+        "Designing a new product that uses a new type of food preservative as fertiliser"
+      ],
+      "expectedStandard": "Chemical composition of salts in terms of cations and anions identified correctly",
+      "keywords": [
+        "qualitative analysis",
+        "cation",
+        "anion",
+        "Al³⁺",
+        "NH₄⁺",
+        "Ca²⁺",
+        "Cu²⁺",
+        "Fe²⁺",
+        "Fe³⁺",
+        "Zn²⁺",
+        "carbonate",
+        "chloride",
+        "sulphate",
+        "gas tests",
+        "NaOH",
+        "ammonia solution"
+      ],
+      "suggestedAssessmentTypes": [
+        "identification table",
+        "gas test procedure",
+        "observation recording",
+        "reagent selection"
+      ]
+    },
+    {
+      "id": "F3-T1-S1",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Stoichiometry and the Mole Concept",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Relative Formula Mass and Relative Molecular Mass",
+      "specificCompetences": ["Determine the relative formula mass and relative molecular mass"],
+      "learningActivities": [
+        "Describing the relative atomic mass",
+        "Calculating the relative atomic mass of isotopes",
+        "Describing the relative molecular mass",
+        "Determining the relative formula mass and relative molecular mass"
+      ],
+      "expectedStandard": "Relative formula mass and relative molecular mass determined correctly",
+      "keywords": [
+        "relative atomic mass",
+        "relative molecular mass",
+        "relative formula mass",
+        "RMM",
+        "RFM",
+        "isotopes",
+        "Ar",
+        "Mr"
+      ],
+      "suggestedAssessmentTypes": ["calculation", "formula mass determination", "Ar use"]
+    },
+    {
+      "id": "F3-T1-S2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Stoichiometry and the Mole Concept",
+      "subtopicNumber": "3.1.2",
+      "subtopic": "Mass Composition and Percentage Composition",
+      "specificCompetences": ["Apply the concept of mass composition and percentage composition"],
+      "learningActivities": [
+        "Determining the mass composition and percentage composition of elements in a compound"
+      ],
+      "expectedStandard": "Mass composition and percentage composition applied correctly",
+      "keywords": [
+        "percentage composition",
+        "mass composition",
+        "element in compound",
+        "formula",
+        "% by mass"
+      ],
+      "suggestedAssessmentTypes": ["calculation", "percentage composition problems"]
+    },
+    {
+      "id": "F3-T1-S3",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Stoichiometry and the Mole Concept",
+      "subtopicNumber": "3.1.3",
+      "subtopic": "The Mole",
+      "specificCompetences": ["Determine the number of moles of a given substance"],
+      "learningActivities": [
+        "Describing the mole as the amount of substance that contains 6.0 × 10²³ (Avogadro's constant) particles (atoms, ions, molecules, electrons, protons, neutrons)",
+        "Determining the number of moles using: (a) Number of particles in relation to Avogadro's constant, (b) Physical masses (m) and molar mass (MM), (c) Physical volume (V) and molar volume (Vm) of any gas at r.t.p. and s.t.p. where Vm = 24 dm³ at r.t.p. and 22.4 dm³ at s.t.p."
+      ],
+      "expectedStandard": "Number of moles determined correctly",
+      "keywords": [
+        "mole",
+        "Avogadro's constant",
+        "6.02 × 10²³",
+        "molar mass",
+        "molar volume",
+        "r.t.p.",
+        "s.t.p.",
+        "24 dm³",
+        "22.4 dm³",
+        "n = m/MM",
+        "n = V/Vm"
+      ],
+      "suggestedAssessmentTypes": ["mole calculation", "particle number", "gas volume problems"]
+    },
+    {
+      "id": "F3-T1-S4",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Stoichiometry and the Mole Concept",
+      "subtopicNumber": "3.1.4",
+      "subtopic": "Empirical and Molecular Formula",
+      "specificCompetences": ["Determine empirical and molecular formula"],
+      "learningActivities": [
+        "Describing empirical and molecular formula",
+        "Determining the empirical formula of a compound given: (a) the molecular formula using ratios, (b) percentage composition by mass, (c) masses",
+        "Determining the molecular formula from empirical formula using MF = (EF)n"
+      ],
+      "expectedStandard": "Empirical and molecular formula determined correctly",
+      "keywords": [
+        "empirical formula",
+        "molecular formula",
+        "MF = (EF)n",
+        "simplest ratio",
+        "percentage composition",
+        "mole ratio"
+      ],
+      "suggestedAssessmentTypes": [
+        "formula determination",
+        "calculation from % composition",
+        "calculation from masses"
+      ]
+    },
+    {
+      "id": "F3-T1-S5",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Stoichiometry and the Mole Concept",
+      "subtopicNumber": "3.1.5",
+      "subtopic": "Concentration of Solutions",
+      "specificCompetences": ["Demonstrate understanding of concentration of solutions"],
+      "learningActivities": [
+        "Describing the concentration of a solution in terms of: (a) mass concentration as the mass of a solute per unit volume of a solution (g/dm³), (b) mole concentration (molarity, M) as the number of moles per unit volume of solute per unit volume of solution (mol/dm³)",
+        "Applying the dilution law (M₁V₁ = M₂V₂)",
+        "Determining concentration given the amount of solute and volume of a solution and vice versa: M = n/v, mass concentration = mass/volume"
+      ],
+      "expectedStandard": "Understanding of concentration of solutions demonstrated correctly",
+      "keywords": [
+        "concentration",
+        "molarity",
+        "mol/dm³",
+        "g/dm³",
+        "dilution law",
+        "M1V1=M2V2",
+        "mole concentration",
+        "mass concentration"
+      ],
+      "suggestedAssessmentTypes": [
+        "concentration calculation",
+        "dilution calculation",
+        "molarity problems"
+      ]
+    },
+    {
+      "id": "F3-T1-S6",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Stoichiometry and the Mole Concept",
+      "subtopicNumber": "3.1.6",
+      "subtopic": "Standard Solutions",
+      "specificCompetences": ["Prepare standard solutions"],
+      "learningActivities": [
+        "Describing a standard solution",
+        "Preparing standard solutions starting with soluble solids and concentrated solutions",
+        "Calculating specific gravity (density) and % purity"
+      ],
+      "expectedStandard": "Standard solutions prepared suitably and correctly",
+      "keywords": [
+        "standard solution",
+        "primary standard",
+        "secondary standard",
+        "preparation",
+        "density",
+        "specific gravity",
+        "purity"
+      ],
+      "suggestedAssessmentTypes": ["preparation procedure", "calculation", "practical assessment"]
+    },
+    {
+      "id": "F3-T1-S7",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Stoichiometry and the Mole Concept",
+      "subtopicNumber": "3.1.7",
+      "subtopic": "Reacting Quantities",
+      "specificCompetences": [
+        "Carry out calculations involving stoichiometric reacting quantities",
+        "Determine the number of moles in hydrates",
+        "Determine percentage yield",
+        "Determine percentage purity"
+      ],
+      "learningActivities": [
+        "Describing reacting quantities",
+        "Carrying out calculations involving stoichiometric reacting quantities (moles, masses, volumes of gases and volumetric analysis/titration)",
+        "Determining the number of moles n in hydrates (X.nH₂O) by: (a) gravimetric analysis (solids), (b) volumetric analysis (liquids)",
+        "Determining percentage yield: % yield = (actual yield/theoretical yield) × 100",
+        "Determining percentage yield and purity: % Purity = (amount of component/amount of mixture) × 100"
+      ],
+      "expectedStandard": "Stoichiometric reacting quantities, percentage yield and purity calculated correctly",
+      "keywords": [
+        "stoichiometry",
+        "reacting quantities",
+        "mole ratio",
+        "titration",
+        "volumetric analysis",
+        "hydrate",
+        "percentage yield",
+        "percentage purity",
+        "limiting reagent",
+        "excess reagent"
+      ],
+      "suggestedAssessmentTypes": [
+        "stoichiometry calculation",
+        "titration calculation",
+        "% yield problems",
+        "hydrate calculation"
+      ]
+    },
+    {
+      "id": "F3-T1-S8",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Stoichiometry and the Mole Concept",
+      "subtopicNumber": "3.1.8",
+      "subtopic": "Environmental Stoichiometry",
+      "specificCompetences": [
+        "Solve environmental problems using stoichiometric principles",
+        "Explore the benefits of atom economy"
+      ],
+      "learningActivities": [
+        "Exploring the environmental stoichiometry: study of the balance of chemical elements and compounds in the environment in relation to the composition of clean air (nitrogen 78%, oxygen 20%, carbon dioxide 0.03%, rare gases 1%, water with variable percentage)",
+        "Exploring the environmental impact of chemical reactions",
+        "Solving environmental problems using stoichiometric principles",
+        "Describing atom economy as the measure of efficiency of chemical reactions or processes: Atom economy = (molecular mass of desired products/sum of molecular masses of all reactants) × 100",
+        "Exploring the benefits of atom economy: (a) reduced waste and bi-product, (b) minimised environmental impact, (c) lower resource consumption"
+      ],
+      "expectedStandard": "Stoichiometric principles used to solve environmental problems; atom economy explored",
+      "keywords": [
+        "environmental stoichiometry",
+        "atom economy",
+        "air composition",
+        "nitrogen",
+        "oxygen",
+        "carbon dioxide",
+        "green chemistry",
+        "waste reduction"
+      ],
+      "suggestedAssessmentTypes": [
+        "atom economy calculation",
+        "environmental application",
+        "efficiency analysis"
+      ]
+    },
+    {
+      "id": "F3-T2-S1",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Thermochemistry",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "Thermochemical Reactions",
+      "specificCompetences": [
+        "Demonstrate understanding of thermal reactions",
+        "Determine the enthalpy change of endothermic and exothermic reactions"
+      ],
+      "learningActivities": [
+        "Describing thermochemistry as the study of heat energy changes associated with chemical reactions and physical changes",
+        "Investigating characteristics of endothermic and exothermic reactions: enthalpy changes, energy profile diagrams (catalysed and uncatalysed), determining enthalpy changes using bond energies, temperature changes and natural processes such as respiration and photosynthesis",
+        "Determining enthalpy change related to endothermic and exothermic reactions in relation to bond breaking and bond formation using bond energies and temperature changes"
+      ],
+      "expectedStandard": "Understanding of thermal reactions demonstrated; enthalpy change determined correctly",
+      "keywords": [
+        "thermochemistry",
+        "endothermic",
+        "exothermic",
+        "enthalpy change",
+        "ΔH",
+        "bond energy",
+        "energy profile diagram",
+        "activation energy",
+        "H = mcΔT"
+      ],
+      "suggestedAssessmentTypes": [
+        "enthalpy calculation",
+        "energy profile diagram",
+        "exo/endothermic identification"
+      ]
+    },
+    {
+      "id": "F3-T2-S2",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Thermochemistry",
+      "subtopicNumber": "3.2.2",
+      "subtopic": "Sources of Energy",
+      "specificCompetences": ["Justify the need to harness alternative sources of energy"],
+      "learningActivities": [
+        "Exploring the advantages and disadvantages of sources of energy in terms of safety, cost, renewable/non-renewable, clean and unclean",
+        "Exploring the effects of using energy on the environment: air pollution, greenhouse effect, global warming"
+      ],
+      "expectedStandard": "Need to harness alternative sources of energy justified",
+      "keywords": [
+        "renewable energy",
+        "non-renewable energy",
+        "fossil fuels",
+        "solar",
+        "wind",
+        "hydroelectric",
+        "greenhouse effect",
+        "global warming",
+        "energy cost",
+        "safety"
+      ],
+      "suggestedAssessmentTypes": [
+        "comparison table",
+        "advantages/disadvantages",
+        "environmental impact analysis"
+      ]
+    },
+    {
+      "id": "F3-T2-S3",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Thermochemistry",
+      "subtopicNumber": "3.2.3",
+      "subtopic": "Nuclear Energy",
+      "specificCompetences": ["Demonstrate understanding of nuclear energy"],
+      "learningActivities": [
+        "Discussing nuclear energy as energy released from the nucleus of a radioactive atom through fission and fusion",
+        "Analysing case studies of nuclear power plants including their design, operation and safety features",
+        "Evaluating the advantages and disadvantages of nuclear energy",
+        "Designing solutions to challenges related to nuclear energy such as safety concerns or waste disposal",
+        "Analysing the uses of nuclear energy: medical, industry, electricity generation"
+      ],
+      "expectedStandard": "Understanding of nuclear energy demonstrated",
+      "keywords": [
+        "nuclear energy",
+        "nuclear fission",
+        "nuclear fusion",
+        "radioactive",
+        "nuclear power plant",
+        "nuclear waste",
+        "nuclear medicine",
+        "reactor"
+      ],
+      "suggestedAssessmentTypes": [
+        "comparison essay",
+        "case study analysis",
+        "advantages/disadvantages"
+      ]
+    },
+    {
+      "id": "F3-T3-S1",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Equilibrium",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "Chemical Equilibrium",
+      "specificCompetences": ["Demonstrate understanding of chemical equilibrium"],
+      "learningActivities": [
+        "Describing chemical equilibrium in a reversible chemical reaction where the rate of the forward reaction is equal to the rate of backward reaction, resulting in constant concentrations of the products and reactants over time"
+      ],
+      "expectedStandard": "Understanding of chemical equilibrium demonstrated correctly",
+      "keywords": [
+        "chemical equilibrium",
+        "reversible reaction",
+        "forward reaction",
+        "backward reaction",
+        "dynamic equilibrium",
+        "constant concentration"
+      ],
+      "suggestedAssessmentTypes": [
+        "definition recall",
+        "equilibrium description",
+        "concept explanation"
+      ]
+    },
+    {
+      "id": "F3-T3-S2",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Equilibrium",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "Reversible Reactions",
+      "specificCompetences": ["Demonstrate reversibility of chemical reactions"],
+      "learningActivities": [
+        "Demonstrating the reversibility of chemical reactions that proceed both forward and backwards",
+        "Exploring reversibility of chemical reactions",
+        "Demonstrating thermal dissociation of ammonium salts"
+      ],
+      "expectedStandard": "Reversibility of chemical reactions demonstrated correctly",
+      "keywords": [
+        "reversible reaction",
+        "thermal dissociation",
+        "ammonium chloride",
+        "forward reaction",
+        "backward reaction",
+        "⇌ symbol"
+      ],
+      "suggestedAssessmentTypes": [
+        "equation writing with ⇌",
+        "example identification",
+        "practical demonstration"
+      ]
+    },
+    {
+      "id": "F3-T3-S3",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Equilibrium",
+      "subtopicNumber": "3.3.3",
+      "subtopic": "Dynamic Equilibrium",
+      "specificCompetences": [
+        "Analyse the characteristics of a chemical reaction in a dynamic equilibrium",
+        "Evaluate the factors that affect position of dynamic equilibrium"
+      ],
+      "learningActivities": [
+        "Describing a dynamic equilibrium",
+        "Exploring the characteristics of chemical reaction in dynamic equilibrium: (a) rates of forward and backward reactions are equal; (b) the amounts of reactants and products are constant",
+        "Investigating the factors that affect the position of equilibrium: temperature, concentration, pressure — applying Le Chatelier's principle; refer to Haber process"
+      ],
+      "expectedStandard": "Dynamic equilibrium characteristics analysed; factors affecting equilibrium evaluated",
+      "keywords": [
+        "dynamic equilibrium",
+        "Le Chatelier's principle",
+        "temperature effect",
+        "concentration effect",
+        "pressure effect",
+        "Haber process",
+        "position of equilibrium",
+        "forward/backward rate"
+      ],
+      "suggestedAssessmentTypes": [
+        "Le Chatelier prediction",
+        "equilibrium shift explanation",
+        "Haber process application"
+      ]
+    },
+    {
+      "id": "F3-T4-S1",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Electricity and Chemistry (Electrochemistry)",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "Electrochemistry",
+      "specificCompetences": ["Demonstrate understanding of electrochemistry"],
+      "learningActivities": [
+        "Describing electrochemistry as the relationship between electricity and chemical reactions"
+      ],
+      "expectedStandard": "Understanding of electrochemistry demonstrated correctly",
+      "keywords": [
+        "electrochemistry",
+        "electricity",
+        "chemical reaction",
+        "electrolysis",
+        "electrochemical cell"
+      ],
+      "suggestedAssessmentTypes": ["definition", "concept mapping"]
+    },
+    {
+      "id": "F3-T4-S2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Electricity and Chemistry (Electrochemistry)",
+      "subtopicNumber": "3.4.2",
+      "subtopic": "Conductors and Non-Conductors",
+      "specificCompetences": [
+        "Evaluate the properties and applications of conductors and non-conductors"
+      ],
+      "learningActivities": [
+        "Investigating electrical conductivity of various materials: metals and non-metals",
+        "Evaluating the properties and applications of conductors and non-conductors",
+        "Classifying electrical conductivity of various materials: metals and non-metals",
+        "Researching on real world applications of conductors and non-conductors: electronics, transportation, medicine"
+      ],
+      "expectedStandard": "Properties and applications of conductors and non-conductors evaluated correctly",
+      "keywords": [
+        "conductor",
+        "non-conductor",
+        "insulator",
+        "electrical conductivity",
+        "metal",
+        "non-metal",
+        "electrolyte",
+        "non-electrolyte"
+      ],
+      "suggestedAssessmentTypes": [
+        "classification table",
+        "conductivity experiment",
+        "application examples"
+      ]
+    },
+    {
+      "id": "F3-T4-S3",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Electricity and Chemistry (Electrochemistry)",
+      "subtopicNumber": "3.4.3",
+      "subtopic": "Electrolysis",
+      "specificCompetences": ["Demonstrate understanding of electrolytic processes"],
+      "learningActivities": [
+        "Describing electrolysis as the process that uses electric current to drive a chemical reaction at electrodes",
+        "Analysing solutions of compounds as electrolytes and non-electrolytes: solutions of strong acids, alkalis and salts; weak electrolytes — solutions of weak acids and bases; non-electrolytes — ionic compounds in solution, molten and covalent compounds",
+        "Investigating the electrolytic decomposition of molten binary ionic compounds: lead(II) bromide, aluminium oxide — referring to the half electrode reactions; metals to be produced at cathode by reduction and non-metals to be produced at anode by oxidation",
+        "Deducing the electrode products given a suitable electrolyte and electrodes",
+        "Discussing the electrochemical series as the arrangement of ions in order of their electrode potential",
+        "Applying the electrochemical series in the preferential discharge of ions in electrolysis: (a) dilute sulphuric acid H₂SO₄, (b) concentrated hydrochloric acid HCl, (c) copper(II) sulphate CuSO₄, (d) concentrated sodium chloride brine NaCl"
+      ],
+      "expectedStandard": "Electrolytic processes demonstrated correctly",
+      "keywords": [
+        "electrolysis",
+        "electrolyte",
+        "non-electrolyte",
+        "anode",
+        "cathode",
+        "electrode",
+        "half equation",
+        "preferential discharge",
+        "electrochemical series",
+        "lead bromide",
+        "aluminium oxide",
+        "brine",
+        "copper sulphate"
+      ],
+      "suggestedAssessmentTypes": [
+        "electrode product prediction",
+        "half equation writing",
+        "preferential discharge",
+        "electrolysis diagram"
+      ]
+    },
+    {
+      "id": "F3-T4-S4",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Electricity and Chemistry (Electrochemistry)",
+      "subtopicNumber": "3.4.4",
+      "subtopic": "Quantitative Electrolysis — Faraday's Laws",
+      "specificCompetences": ["Determine quantities of electrolytic products"],
+      "learningActivities": [
+        "Applying Faraday's Laws to determine the quantities of electrolytic products at the electrodes and the ionic charge"
+      ],
+      "expectedStandard": "Quantities of electrolytic products determined correctly",
+      "keywords": [
+        "Faraday's laws",
+        "Faraday's first law",
+        "Faraday's second law",
+        "quantitative electrolysis",
+        "moles of electrons",
+        "charge",
+        "coulombs",
+        "electrode product mass"
+      ],
+      "suggestedAssessmentTypes": [
+        "Faraday's law calculation",
+        "electrode product mass",
+        "charge calculation"
+      ]
+    },
+    {
+      "id": "F3-T4-S5",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Electricity and Chemistry (Electrochemistry)",
+      "subtopicNumber": "3.4.5",
+      "subtopic": "Industrial Application of Electrolysis",
+      "specificCompetences": ["Analyse the uses of electrolytic processes in industries"],
+      "learningActivities": [
+        "Exploring the applications of electrolysis: extraction of metals (aluminium), electroplating, purification of metals (copper), anodising, chemical manufacture (H₂SO₄, NaOH, Cl₂, H₂)"
+      ],
+      "expectedStandard": "Uses of electrolytic processes in industries analysed correctly",
+      "keywords": [
+        "electroplating",
+        "anodising",
+        "aluminium extraction",
+        "copper purification",
+        "chlor-alkali process",
+        "industrial electrolysis",
+        "H2",
+        "Cl2",
+        "NaOH"
+      ],
+      "suggestedAssessmentTypes": [
+        "application matching",
+        "industrial process description",
+        "electrolysis product uses"
+      ]
+    },
+    {
+      "id": "F3-T4-S6",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Electricity and Chemistry (Electrochemistry)",
+      "subtopicNumber": "3.4.6",
+      "subtopic": "Chemical Cell",
+      "specificCompetences": ["Construct electrolytic cells"],
+      "learningActivities": [
+        "Constructing an electric cell by connecting two different electrodes dipped in suitable electrolyte to produce electricity",
+        "Relating reactivity series of metals to the amount of electricity produced by a simple cell",
+        "Comparing and contrasting simple cells and electrolytic cells in terms of similarities such as oxidation at the anode and reduction at cathode and differences such as polarities, charges and nature of electrodes"
+      ],
+      "expectedStandard": "Electrolytic cells constructed correctly; compared with simple cells",
+      "keywords": [
+        "simple cell",
+        "electrochemical cell",
+        "electrolytic cell",
+        "anode",
+        "cathode",
+        "reactivity series",
+        "EMF",
+        "electrode potential",
+        "volta cell"
+      ],
+      "suggestedAssessmentTypes": [
+        "cell diagram",
+        "simple vs electrolytic comparison",
+        "cell construction"
+      ]
+    },
+    {
+      "id": "F3-T5-S1",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Periodicity",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "Periodic Table",
+      "specificCompetences": [
+        "Demonstrate understanding of Groups and Periods of the Periodic Table",
+        "Apply periodic trends to determine metallic and non-metallic nature of elements",
+        "Apply periodic trends to predict the properties of newly discovered elements"
+      ],
+      "learningActivities": [
+        "Analysing trends in Periods 2 and 3 and various Groups I and VII in terms of physical and chemical properties: (a) Physical properties — solubility, melting and boiling points, density, colour, state of matter, atomic size; (b) Chemical properties — reactivity, electropositive, electronegative",
+        "Determining metallic and non-metallic nature using periodic trends",
+        "Researching on trends of elements in the same group/period as the new element",
+        "Predicting the properties of an element with a specific atomic number using the periodic trends",
+        "Conducting collaborative research project to investigate the discovery of new elements and their periodic trends",
+        "Exploring the importance of halogens: fluorine in toothpaste, chlorine in water treatment and antiseptics",
+        "Exploring the uses of the noble gases in providing an inert atmosphere: argon/neon/krypton in lighting, argon and krypton in insulation, xenon in medical anaesthesia, argon and helium in welding",
+        "Examining harmful effects of halogens and their compounds on the environment: CFCs and ozone layer depletion",
+        "Designing sustainable solutions to reduce the environmental impact of halogen compounds"
+      ],
+      "expectedStandard": "Periodic trends understood; properties predicted correctly",
+      "keywords": [
+        "periodic table",
+        "group",
+        "period",
+        "periodicity",
+        "atomic radius",
+        "electronegativity",
+        "melting point trend",
+        "Group I",
+        "Group VII",
+        "halogens",
+        "noble gases",
+        "reactivity trend",
+        "metallic character",
+        "CFCs",
+        "ozone layer"
+      ],
+      "suggestedAssessmentTypes": [
+        "trend prediction",
+        "property comparison",
+        "element placement",
+        "data interpretation"
+      ]
+    },
+    {
+      "id": "F3-T5-S2",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Periodicity",
+      "subtopicNumber": "3.5.2",
+      "subtopic": "Transition Metals",
+      "specificCompetences": ["Investigate properties and uses of transition elements"],
+      "learningActivities": [
+        "Exploring the typical properties of transition metals: high density, high melting and boiling points, coloured compounds (iron(II) green, iron(III) brown, copper blue), variable valencies and forming complex ions",
+        "Conducting experiments to investigate the properties of transition elements: reactivity, catalytic activity",
+        "Exploring the uses of transition metals: catalysts, alloys, construction"
+      ],
+      "expectedStandard": "Properties and uses of transition elements investigated correctly",
+      "keywords": [
+        "transition metals",
+        "variable valency",
+        "coloured compounds",
+        "complex ions",
+        "catalyst",
+        "iron",
+        "copper",
+        "alloys",
+        "high melting point"
+      ],
+      "suggestedAssessmentTypes": [
+        "property identification",
+        "use matching",
+        "colour observation table"
+      ]
+    },
+    {
+      "id": "F3-T5-S3",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Periodicity",
+      "subtopicNumber": "3.5.3",
+      "subtopic": "Properties of Metals and Reactivity Series",
+      "specificCompetences": [
+        "Investigate physical and chemical properties of metals",
+        "Determine the reactivity series of metals"
+      ],
+      "learningActivities": [
+        "Describing a metal as a pure substance that ionises by losing electrons",
+        "Investigating physical properties of metals: thermal and electrical conductivity, sonority, malleability, ductility, lustre, density, melting and boiling points, tensile strength",
+        "Investigating chemical properties of metals: reactivity with dilute acid, water, steam, oxygen, displacement reactions with other metals",
+        "Determining the reactivity series of metals using dilute acids, water, steam, oxygen/air, displacement reactions and simple cells",
+        "Analysing data from experiments involving the reactivity series of metals including identifying patterns and trends"
+      ],
+      "expectedStandard": "Physical and chemical properties of metals investigated; reactivity series determined correctly",
+      "keywords": [
+        "reactivity series",
+        "potassium",
+        "sodium",
+        "calcium",
+        "magnesium",
+        "aluminium",
+        "zinc",
+        "iron",
+        "copper",
+        "silver",
+        "gold",
+        "thermal conductivity",
+        "electrical conductivity",
+        "malleability",
+        "ductility",
+        "displacement reaction"
+      ],
+      "suggestedAssessmentTypes": [
+        "reactivity series ordering",
+        "displacement prediction",
+        "property identification"
+      ]
+    },
+    {
+      "id": "F4-T1-S1",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Metallurgy",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "Mineral Ores",
+      "specificCompetences": [
+        "Demonstrate understanding of metallurgy",
+        "Identify different mineral ores in the local environment"
+      ],
+      "learningActivities": [
+        "Discussing metallurgy as the science and technology of metals focusing on the occurrence, properties, extraction, processing and their uses",
+        "Exploring occurrence of ores in the local environment",
+        "Identifying different mineral ores using their physical and chemical properties",
+        "Classifying different mineral ores using their physical and chemical properties",
+        "Researching on the sources of metals: copper, gold, emeralds, nickel, lithium, cobalt, iron, aluminium, manganese"
+      ],
+      "expectedStandard": "Metallurgy understood; mineral ores identified and classified correctly",
+      "keywords": [
+        "metallurgy",
+        "mineral ore",
+        "copper ore",
+        "iron ore",
+        "aluminium ore",
+        "bauxite",
+        "haematite",
+        "malachite",
+        "occurrence",
+        "Zambian minerals",
+        "cobalt",
+        "lithium"
+      ],
+      "suggestedAssessmentTypes": [
+        "ore identification",
+        "mineral classification",
+        "local context application"
+      ]
+    },
+    {
+      "id": "F4-T1-S2",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Metallurgy",
+      "subtopicNumber": "4.1.2",
+      "subtopic": "Extraction of Metals",
+      "specificCompetences": ["Demonstrate understanding of metal extraction"],
+      "learningActivities": [
+        "Discussing the sustainable ways of extracting metals: copper, iron, zinc by chemical reduction and aluminium by electrolytic reduction",
+        "Illustrating metal extraction process for a specific ore including the steps involved and equipment needed"
+      ],
+      "expectedStandard": "Understanding of metal extraction demonstrated correctly",
+      "keywords": [
+        "metal extraction",
+        "chemical reduction",
+        "electrolytic reduction",
+        "blast furnace",
+        "iron extraction",
+        "aluminium extraction",
+        "copper extraction",
+        "zinc",
+        "coke",
+        "limestone",
+        "smelting"
+      ],
+      "suggestedAssessmentTypes": [
+        "extraction method selection",
+        "flow diagram",
+        "equation writing",
+        "blast furnace description"
+      ]
+    },
+    {
+      "id": "F4-T1-S3",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Metallurgy",
+      "subtopicNumber": "4.1.3",
+      "subtopic": "Uses of Metals",
+      "specificCompetences": ["Analyse the uses of metals in everyday life"],
+      "learningActivities": [
+        "Analysing the various uses of metals in everyday life: construction and building materials (steel, aluminium), transportation (airplanes, bicycles), electronics and technology (copper wiring, aluminium casings), packaging and consumer goods (aluminium cans, steel containers)",
+        "Developing sustainable use practices in a specific context including strategies for reducing waste and promoting recovering/reusing/recycling",
+        "Investigating the harmful effects of metals: lead poisoning (brain damage, infertility), sodium (raising high blood pressure, Alzheimer's), mercury (brain and kidney damage)"
+      ],
+      "expectedStandard": "Uses of metals in everyday life analysed correctly",
+      "keywords": [
+        "uses of metals",
+        "steel",
+        "aluminium",
+        "copper",
+        "iron",
+        "recycling",
+        "lead poisoning",
+        "mercury toxicity",
+        "sustainable use",
+        "toxic metals"
+      ],
+      "suggestedAssessmentTypes": [
+        "use matching",
+        "environmental impact analysis",
+        "Zambian context questions"
+      ]
+    },
+    {
+      "id": "F4-T1-S4",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Metallurgy",
+      "subtopicNumber": "4.1.4",
+      "subtopic": "Alloys",
+      "specificCompetences": ["Design an alloy for a specific application"],
+      "learningActivities": [
+        "Describing alloys as mixtures of two or more metals or non-metals: brass, bronze, steel",
+        "Drawing the structural representation of alloys with different nuclei positive in a sea of delocalised electrons",
+        "Explaining the advantages of using alloys over pure metals: conductivity, strength, weight, hardness, resistance to corrosion",
+        "Relating the uses of alloys to their properties: cutlery, packaging, aircraft parts",
+        "Designing an alloy for a specific application referring to composition, processing and properties"
+      ],
+      "expectedStandard": "Alloy designed for specific application correctly",
+      "keywords": [
+        "alloy",
+        "steel",
+        "brass",
+        "bronze",
+        "stainless steel",
+        "composition",
+        "hardness",
+        "corrosion resistance",
+        "strength",
+        "cutlery",
+        "aircraft"
+      ],
+      "suggestedAssessmentTypes": ["alloy comparison", "property-use matching", "design question"]
+    },
+    {
+      "id": "F4-T1-S5",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Metallurgy",
+      "subtopicNumber": "4.1.5",
+      "subtopic": "Corrosion and Its Prevention",
+      "specificCompetences": ["Prevent corrosion of metals"],
+      "learningActivities": [
+        "Describing corrosion as the chemical wearing of metal by oxidation using atmospheric oxygen in the presence of moisture",
+        "Demonstrating corrosion — rusting of iron",
+        "Relating corrosion to the reactivity of metals",
+        "Applying different methods of preventing corrosion: sacrificial protection, painting, greasing/oiling, alloying and galvanising"
+      ],
+      "expectedStandard": "Corrosion of metals prevented correctly",
+      "keywords": [
+        "corrosion",
+        "rusting",
+        "iron rust",
+        "Fe₂O₃",
+        "oxygen",
+        "moisture",
+        "sacrificial protection",
+        "galvanising",
+        "painting",
+        "alloying",
+        "zinc coating"
+      ],
+      "suggestedAssessmentTypes": [
+        "prevention method selection",
+        "rusting conditions",
+        "experiment design"
+      ]
+    },
+    {
+      "id": "F4-T2-S1",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Non-Metals",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "General Properties of Non-Metals",
+      "specificCompetences": ["Investigate the physical and chemical properties of non-metals"],
+      "learningActivities": [
+        "Describing non-metals as substances that ionise by gaining electrons (except hydrogen)",
+        "Investigating the physical properties of non-metals: density, melting and boiling points, thermal and electrical conductivity, physical state at rtp",
+        "Investigating the chemical properties of non-metals",
+        "Demonstrating use of physical and chemical properties of non-metals to solve problems, identify unknown substances or predict chemical reactions"
+      ],
+      "expectedStandard": "Physical and chemical properties of non-metals investigated correctly",
+      "keywords": [
+        "non-metals",
+        "electron gain",
+        "poor conductor",
+        "low melting point",
+        "brittle",
+        "physical properties",
+        "chemical properties"
+      ],
+      "suggestedAssessmentTypes": [
+        "property comparison with metals",
+        "identification exercise",
+        "classification"
+      ]
+    },
+    {
+      "id": "F4-T2-S2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Non-Metals",
+      "subtopicNumber": "4.2.2",
+      "subtopic": "Hydrogen",
+      "specificCompetences": [
+        "Prepare hydrogen gas",
+        "Investigate the industrial manufacture of hydrogen"
+      ],
+      "learningActivities": [
+        "Preparing, collecting and testing hydrogen gas in laboratory by action of moderately reactive metals with water, steam and acids; collect by upward delivery; test — put lighted splint with a 'pop' sound",
+        "Demonstrating the physical and chemical properties of hydrogen gas (CWS L): colourless, without smell/odour, lighter than air, solubility",
+        "Exploring the industrial manufacture of hydrogen: cracking, electrolysis of water/brine, and from natural gas",
+        "Exploring the uses of hydrogen: reducing agent, fuel for rockets, manufacture of ammonia and margarine, welding"
+      ],
+      "expectedStandard": "Hydrogen gas prepared, collected and tested correctly; industrial manufacture investigated",
+      "keywords": [
+        "hydrogen gas",
+        "laboratory preparation",
+        "Haber process",
+        "reducing agent",
+        "lighted splint pop test",
+        "cracking",
+        "electrolysis",
+        "rocket fuel",
+        "margarine",
+        "ammonia manufacture"
+      ],
+      "suggestedAssessmentTypes": [
+        "preparation procedure",
+        "test description",
+        "use matching",
+        "equation writing"
+      ]
+    },
+    {
+      "id": "F4-T2-S3",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Non-Metals",
+      "subtopicNumber": "4.2.3",
+      "subtopic": "Oxygen",
+      "specificCompetences": [
+        "Prepare oxygen gas",
+        "Investigate the industrial manufacture of oxygen",
+        "Investigate the properties and uses of oxygen gas"
+      ],
+      "learningActivities": [
+        "Preparing, collecting and testing oxygen gas in laboratory: catalytic decomposition of hydrogen peroxide, and thermal/catalytic decomposition of potassium chlorate; collect above water; test — relight a glowing splint",
+        "Exploring the industrial manufacture of oxygen: fractional distillation of air",
+        "Analysing the physical and chemical properties of oxygen gas: colour, odour, solubility, combustion",
+        "Exploring the uses of oxygen in industrial and natural processes: combustion, welding, in blast furnace, respiration",
+        "Practising sustainable ways of protecting the ozone layer",
+        "Demonstrating environmental awareness and concern for impact of human activities on the ozone layer"
+      ],
+      "expectedStandard": "Oxygen gas prepared, collected and tested correctly; properties and uses investigated",
+      "keywords": [
+        "oxygen gas",
+        "glowing splint test",
+        "catalytic decomposition",
+        "hydrogen peroxide",
+        "fractional distillation",
+        "ozone layer",
+        "combustion",
+        "respiration",
+        "welding",
+        "blast furnace"
+      ],
+      "suggestedAssessmentTypes": [
+        "preparation procedure",
+        "test description",
+        "use identification",
+        "equation writing"
+      ]
+    },
+    {
+      "id": "F4-T2-S4",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Non-Metals",
+      "subtopicNumber": "4.2.4",
+      "subtopic": "Nitrogen and Ammonia",
+      "specificCompetences": [
+        "Prepare ammonia gas in the laboratory",
+        "Investigate the industrial manufacture of nitrogen and its related products"
+      ],
+      "learningActivities": [
+        "Preparing, collecting and testing ammonia gas in laboratory by action of base on an ammonium salt; collected by upward delivery; test — turns red litmus paper blue",
+        "Investigating the physical and chemical properties of ammonia: colour, odour, density/weight, solubility, as reducing agent, as a base/alkali, complexing reagent",
+        "Exploring the industrial manufacture of nitrogen: fractional distillation of air",
+        "Exploring the industrial manufacture of ammonia: Haber process",
+        "Exploring the characteristics of nitrogen: non-reactive, insoluble gas",
+        "Analysing the uses of nitrogen: as refrigerant, in packaging, in manufacture of ammonia gas"
+      ],
+      "expectedStandard": "Ammonia gas prepared, collected and tested correctly; industrial manufacture investigated",
+      "keywords": [
+        "ammonia",
+        "Haber process",
+        "nitrogen",
+        "red litmus turns blue",
+        "ammonium salt",
+        "base",
+        "fractional distillation",
+        "refrigerant",
+        "reducing agent",
+        "fertiliser"
+      ],
+      "suggestedAssessmentTypes": [
+        "preparation procedure",
+        "test description",
+        "Haber process conditions",
+        "equation writing"
+      ]
+    },
+    {
+      "id": "F4-T2-S5",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Non-Metals",
+      "subtopicNumber": "4.2.5",
+      "subtopic": "Chlorine",
+      "specificCompetences": ["Prepare chlorine gas and its associated products"],
+      "learningActivities": [
+        "Preparing, collecting and testing chlorine gas by reaction of hot concentrated hydrochloric acid on manganese(IV) oxide; collected by downward delivery; test — turns damp blue litmus paper red then bleaches it",
+        "Investigating the physical and chemical properties of chlorine: colour, odour, density, solubility, poisonous, reactions with iron, non-metals, H₂, SO₂, iron(II) salts, halides",
+        "Exploring the uses of chlorine: sterilising water, manufacture of PVC, HCl, bleaching agents",
+        "Exploring the industrial manufacture of chlorine: electrolysis of brine NaCl",
+        "Preparing, collecting and testing hydrogen chloride by action of concentrated sulphuric acid on solid metallic halides; collected by downward delivery; reacts with ammonia to produce white smoke",
+        "Investigating the physical and chemical properties of hydrogen chloride gas: colour, odour, density, solubility, poisonous, reaction with ammonia and water",
+        "Preparing hydrochloric acid by dissolving hydrogen chloride gas in water",
+        "Exploring the uses of hydrochloric acid: manufacture of fertilisers, metal pickling, water treatment, as typical household cleaning agent"
+      ],
+      "expectedStandard": "Chlorine gas prepared, collected and tested correctly; properties and uses explored",
+      "keywords": [
+        "chlorine gas",
+        "damp litmus bleaches",
+        "MnO₂",
+        "sterilising water",
+        "PVC",
+        "brine electrolysis",
+        "hydrogen chloride",
+        "HCl",
+        "white smoke with ammonia",
+        "hydrochloric acid"
+      ],
+      "suggestedAssessmentTypes": [
+        "preparation procedure",
+        "test description",
+        "equation writing",
+        "use identification"
+      ]
+    },
+    {
+      "id": "F4-T2-S6",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Non-Metals",
+      "subtopicNumber": "4.2.6",
+      "subtopic": "Sulphur and Sulphur Dioxide",
+      "specificCompetences": ["Prepare sulphur dioxide"],
+      "learningActivities": [
+        "Investigating the formation of sulphur dioxide: combustion of sulphur, fossil fuels",
+        "Preparing, collecting and testing sulphur dioxide in laboratory by action of dilute acids on sulphites; collected by downward delivery; test — acidified potassium dichromate(V) turns green, decolourises purple potassium manganate(VII)",
+        "Investigating the physical and chemical properties of sulphur dioxide: colour, odour, density, solubility, poisonous, reaction with water, action on indicators, as a reducing agent",
+        "Exploring the uses of sulphur dioxide: food preservation, bleaching wood pulp for paper, manufacture of sulphuric acid",
+        "Investigating the impact of sulphur dioxide on the environment: air pollution, acid rain, damage to infrastructure, climate change, respiratory effects on humans",
+        "Exploring sustainable ways of reducing emissions of sulphur dioxide",
+        "Exploring the industrial manufacture of sulphuric acid: Contact process",
+        "Exploring the environmental impact of Contact process: pollution, resource depletion, water pollution, greenhouse gas emissions",
+        "Exploring the uses of sulphuric acid: explosives, drying agent, making salts, fertilisers"
+      ],
+      "expectedStandard": "Sulphur dioxide prepared, collected and tested correctly; industrial manufacture and environmental impact explored",
+      "keywords": [
+        "sulphur dioxide",
+        "SO₂",
+        "Contact process",
+        "sulphuric acid",
+        "acid rain",
+        "reducing agent",
+        "food preservation",
+        "potassium dichromate test",
+        "bleaching",
+        "H₂SO₄"
+      ],
+      "suggestedAssessmentTypes": [
+        "preparation procedure",
+        "test description",
+        "Contact process steps",
+        "equation writing",
+        "environmental impact analysis"
+      ]
+    },
+    {
+      "id": "F4-T2-S7",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Non-Metals",
+      "subtopicNumber": "4.2.7",
+      "subtopic": "Carbon",
+      "specificCompetences": ["Explore the nature and uses of carbon and its products"],
+      "learningActivities": [
+        "Discussing allotropes of carbon: crystalline graphite, diamond, non-crystalline coke, coal, soot, charcoal",
+        "Exploring the physical properties of allotropes of carbon and their uses",
+        "Investigating the formation and properties of carbon monoxide by incomplete combustion of carbon/carbon compounds, reduction of carbon dioxide by carbon",
+        "Preparing, collecting and testing carbon dioxide by reacting dilute acids with carbonates or bicarbonates; collected by downward delivery; test — forms white precipitate with lime water",
+        "Exploring the physical and chemical properties of carbon dioxide: colour, odour, density, solubility, reaction with limewater, alkalis, water, and carbon",
+        "Exploring the uses of carbon dioxide: fire extinguisher, carbonated drinks, dry ice, baking, photosynthesis",
+        "Analysing uses of limestone/calcium carbonate: manufacture of lime, glass, iron, tiles",
+        "Exploring the manufacturing of lime from limestone by thermal dissociation of limestone",
+        "Exploring the uses of lime and slaked lime: neutralising acidic soil, lime as a drying agent for ammonia"
+      ],
+      "expectedStandard": "Nature and uses of carbon and its products explored correctly",
+      "keywords": [
+        "carbon",
+        "allotropes",
+        "diamond",
+        "graphite",
+        "carbon monoxide",
+        "CO",
+        "carbon dioxide",
+        "CO₂",
+        "limewater test",
+        "white precipitate",
+        "fire extinguisher",
+        "limestone",
+        "lime",
+        "slaked lime",
+        "calcium carbonate"
+      ],
+      "suggestedAssessmentTypes": [
+        "allotrope comparison",
+        "test description",
+        "equation writing",
+        "use identification"
+      ]
+    },
+    {
+      "id": "F4-T2-S8",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Non-Metals",
+      "subtopicNumber": "4.2.8",
+      "subtopic": "Silicon",
+      "specificCompetences": ["Investigate the nature and uses of silicon and its products"],
+      "learningActivities": [
+        "Describing silicon as a metalloid",
+        "Exploring the uses of silicon in semiconductors, transistors, diodes and capacitors",
+        "Comparing and contrasting fire resistance of silicone plastics to carbon-based macromolecules: nature of combustion products — silicones produce silicon dioxide/sand (SiO₂) while organic-based macromolecules produce carbon dioxide (CO₂)",
+        "Exploring the uses of silicones: silicon chips, artificial hips, breasts, oils, waxes, plastics",
+        "Investigating silicones as macromolecules that exist as oils, waxes or plastics and their structures",
+        "Exploring forms of silicon dioxide: sand, silica, quartz and their uses: making glass, as fire extinguisher, iron extraction, construction"
+      ],
+      "expectedStandard": "Nature and uses of silicon and its products investigated correctly",
+      "keywords": [
+        "silicon",
+        "metalloid",
+        "semiconductor",
+        "silicone",
+        "silicon dioxide",
+        "SiO₂",
+        "quartz",
+        "silica",
+        "sand",
+        "transistor",
+        "silicon chip"
+      ],
+      "suggestedAssessmentTypes": [
+        "use identification",
+        "comparison with carbon compounds",
+        "property questions"
+      ]
+    },
+    {
+      "id": "F4-T3-S1",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Organic Chemistry",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "Introduction to Organic Chemistry",
+      "specificCompetences": ["Demonstrate the understanding of organic chemistry"],
+      "learningActivities": [
+        "Describing organic chemistry",
+        "Describing organic compounds",
+        "Exploring the characteristics of homologous series: general molecular formula, functional group, physical and chemical properties, nomenclature"
+      ],
+      "expectedStandard": "Understanding of organic chemistry demonstrated correctly",
+      "keywords": [
+        "organic chemistry",
+        "organic compound",
+        "homologous series",
+        "functional group",
+        "general formula",
+        "nomenclature",
+        "IUPAC"
+      ],
+      "suggestedAssessmentTypes": [
+        "definition",
+        "homologous series identification",
+        "characteristic listing"
+      ]
+    },
+    {
+      "id": "F4-T3-S2",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Organic Chemistry",
+      "subtopicNumber": "4.3.2",
+      "subtopic": "Saturated and Unsaturated Hydrocarbons (Non-Cyclic)",
+      "specificCompetences": [
+        "Evaluate the nature and uses of saturated and unsaturated hydrocarbons"
+      ],
+      "learningActivities": [
+        "Illustrating the structures of aliphatic alkanes up to ten carbon atoms",
+        "Naming the structures of aliphatic alkanes up to ten carbon atoms — IUPAC system, general formula CₙH₂ₙ₊₂",
+        "Demonstrating the structures of alkane isomers and their uses; branched and unbranched — butane and pentane — IUPAC nomenclature",
+        "Illustrating and naming the structures of aliphatic alkenes and alkynes up to ten carbon atoms — general formula CₙH₂ₙ and CₙH₂ₙ₋₂ — IUPAC system ending 'ene' and 'yne'",
+        "Demonstrating the structures of alkene and alkyne positional isomers and their names — branched and unbranched butene, butyne, pentene, pentyne — IUPAC system",
+        "Exploring the preparation of alkanes, alkenes and alkynes (refer to methane, ethane, ethyne)",
+        "Exploring the non-apparent reactivity of alkanes as compared to other organic compounds",
+        "Investigating physical and chemical properties of alkanes and alkenes",
+        "Testing for unsaturation: decolourises bromine water rapidly",
+        "Exploring fractional distillation of petroleum/crude oil and fractions and their uses",
+        "Evaluating the environmental impact of fractional distillation of crude oil: air pollution, water pollution, waste management, resource depletion",
+        "Exploring ways of sustainable production of crude oil",
+        "Investigating the environmental impact of combustion of hydrocarbons: air and water pollution, greenhouse gas emissions, climate change, acid rain impact",
+        "Exploring sustainable ways of addressing combustion of hydrocarbons: carbon capture"
+      ],
+      "expectedStandard": "Nature and uses of saturated and unsaturated hydrocarbons evaluated correctly",
+      "keywords": [
+        "alkane",
+        "alkene",
+        "alkyne",
+        "CnH2n+2",
+        "CnH2n",
+        "CnH2n-2",
+        "IUPAC naming",
+        "isomers",
+        "branched",
+        "unbranched",
+        "bromine water test",
+        "decolourises",
+        "fractional distillation",
+        "crude oil",
+        "petroleum",
+        "combustion",
+        "greenhouse gas"
+      ],
+      "suggestedAssessmentTypes": [
+        "naming compounds",
+        "structural formula drawing",
+        "isomer identification",
+        "bromine test",
+        "fraction uses matching"
+      ]
+    },
+    {
+      "id": "F4-T3-S3",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Organic Chemistry",
+      "subtopicNumber": "4.3.3",
+      "subtopic": "Carboxylic Acids and Alcohols",
+      "specificCompetences": [
+        "Demonstrate understanding of carboxylic acids",
+        "Explore the preparation of alcohols"
+      ],
+      "learningActivities": [
+        "Illustrating and naming structures of carboxylic acids up to five carbon atoms; general formula CₙH₂ₙ₊₁COOH",
+        "Exploring the preparation of carboxylic acids: ethanoic acid by oxidation of ethanol, hydrolysis of esters",
+        "Investigating physical and chemical properties of carboxylic acids: (a) physical — density, solubility, state of matter, boiling and melting points; (b) chemical — reactions with carbonates, metals and alcohols",
+        "Exploring the uses of carboxylic acids: food flavouring, esterification, manufacturing, in drinks",
+        "Describing alcohols",
+        "Exploring different types of alcohols",
+        "Illustrating the structures of alcohols up to five carbon atoms",
+        "Preparing alcohols: ethanol by hydration of ethene, fermentation of sugar, hydrolysis of esters",
+        "Investigating physical and chemical properties of alcohols: (a) physical — density, solubility, state of matter, boiling and melting points; (b) chemical — combustion, esterification, dehydration and oxidation",
+        "Exploring the uses of alcohols: as a fuel, as solvents, disinfectants, beer and wine, drug manufacturing"
+      ],
+      "expectedStandard": "Carboxylic acids and alcohols understood; preparation and properties explored correctly",
+      "keywords": [
+        "carboxylic acid",
+        "ethanoic acid",
+        "acetic acid",
+        "CnH2n+1COOH",
+        "alcohol",
+        "ethanol",
+        "fermentation",
+        "esterification",
+        "hydration of ethene",
+        "functional group",
+        "COOH",
+        "OH",
+        "dehydration",
+        "combustion of alcohol"
+      ],
+      "suggestedAssessmentTypes": [
+        "naming",
+        "structural drawing",
+        "reaction equation",
+        "preparation method",
+        "property table"
+      ]
+    },
+    {
+      "id": "F4-T3-S4",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Organic Chemistry",
+      "subtopicNumber": "4.3.4",
+      "subtopic": "Alkyl Alkanoates (Esters)",
+      "specificCompetences": [
+        "Demonstrate understanding of esters",
+        "Prepare esters (alkyl alkanoates) for different uses"
+      ],
+      "learningActivities": [
+        "Describing esters",
+        "Illustrating structures of esters up to five carbon atoms: ester link, general formula CₘH₂ₘ₊₁C(=O)-O-CₙH₂ₙ₊₁",
+        "Naming structures of esters up to five carbon atoms ending with '-oate'",
+        "Exploring the preparation of esters by esterification",
+        "Investigating physical and chemical properties of esters: (a) physical — density, solubility, state of matter, boiling and melting points; (b) chemical — combustion and hydrolysis",
+        "Exploring the uses of esters: perfumes, flavouring and preservation"
+      ],
+      "expectedStandard": "Esters prepared for different uses correctly",
+      "keywords": [
+        "ester",
+        "esterification",
+        "ester link",
+        "alkyl alkanoate",
+        "naming '-oate'",
+        "perfume",
+        "flavouring",
+        "hydrolysis of esters",
+        "carboxylic acid + alcohol"
+      ],
+      "suggestedAssessmentTypes": [
+        "naming esters",
+        "esterification equation",
+        "structural drawing",
+        "use identification"
+      ]
+    },
+    {
+      "id": "F4-T3-S5",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Organic Chemistry",
+      "subtopicNumber": "4.3.5",
+      "subtopic": "Macromolecules (Polymers)",
+      "specificCompetences": ["Demonstrate understanding of macromolecules"],
+      "learningActivities": [
+        "Describing macromolecules as giant molecules formed by combination of many small molecules (monomers)",
+        "Exploring macromolecules and their formations: synthetic macromolecules — polyethene, PVC, polypropene, polystyrene, PTFE (Teflon), nylon, terylene; natural macromolecules — fats, starch and proteins",
+        "Analysing the formation of macromolecules as addition polymers and condensation polymers",
+        "Investigating the nature of plastics as thermoplastics and thermosetting",
+        "Comparing and contrasting structures of macromolecules: nylon, proteins, terylene",
+        "Exploring the typical uses of plastics and synthetic fibres: carrier bags, buckets, pipes, clothing, tents, strings/ropes",
+        "Investigating the biodegradability of polymers and their effects on the environment",
+        "Investigating the hydrolysis of fats, proteins and starch",
+        "Demonstrating the formation of soaps (saponification) and glycerine by alkali and acid hydrolysis respectively"
+      ],
+      "expectedStandard": "Understanding of macromolecules demonstrated correctly",
+      "keywords": [
+        "polymer",
+        "monomer",
+        "addition polymer",
+        "condensation polymer",
+        "polyethene",
+        "PVC",
+        "nylon",
+        "terylene",
+        "Teflon",
+        "thermoplastic",
+        "thermosetting",
+        "biodegradable",
+        "saponification",
+        "soap making",
+        "protein",
+        "starch",
+        "fat"
+      ],
+      "suggestedAssessmentTypes": [
+        "polymer identification",
+        "addition vs condensation",
+        "environmental impact",
+        "repeat unit drawing"
+      ]
+    },
+    {
+      "id": "F4-T4-S1",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Environmental Chemistry",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "Chemistry and the Environment",
+      "specificCompetences": ["Analyse the role of chemistry in sustaining the environment"],
+      "learningActivities": [
+        "Discussing environmental chemistry as the study of chemical processes in the environment and how human and biological activities (anthropological activities) affect them",
+        "Researching on the impact of human activities on the environment and the role of chemistry in addressing these issues",
+        "Analysing the role of chemistry in environmental sustainability"
+      ],
+      "expectedStandard": "Role of chemistry in sustaining the environment analysed correctly",
+      "keywords": [
+        "environmental chemistry",
+        "pollution",
+        "human activity",
+        "sustainability",
+        "anthropological",
+        "chemical processes",
+        "environment"
+      ],
+      "suggestedAssessmentTypes": ["essay", "discussion", "research project"]
+    },
+    {
+      "id": "F4-T4-S2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Environmental Chemistry",
+      "subtopicNumber": "4.4.2",
+      "subtopic": "Pollution and Remediation",
+      "specificCompetences": ["Investigate pollution control and mitigation"],
+      "learningActivities": [
+        "Investigating types of pollution: air, water, land",
+        "Exploring pollution control and mitigation measures: solid waste management, water and wastewater treatment, recover, reuse, recycle, reduce"
+      ],
+      "expectedStandard": "Pollution control and mitigation investigated correctly",
+      "keywords": [
+        "pollution",
+        "air pollution",
+        "water pollution",
+        "land pollution",
+        "remediation",
+        "mitigation",
+        "waste management",
+        "recycling",
+        "reduce, reuse, recycle"
+      ],
+      "suggestedAssessmentTypes": [
+        "type identification",
+        "mitigation measures",
+        "local examples",
+        "solution design"
+      ]
+    },
+    {
+      "id": "F4-T4-S3",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Environmental Chemistry",
+      "subtopicNumber": "4.4.3",
+      "subtopic": "Role of Chemistry in Sustainable Agriculture",
+      "specificCompetences": ["Investigate the role of chemistry in sustainable agriculture"],
+      "learningActivities": [
+        "Investigating the use of sustainable agricultural practices: green pesticides, integrated bio-waste management, crop rotation, intercropping techniques, enhancing agroforestry, liming soil"
+      ],
+      "expectedStandard": "Role of chemistry in sustainable agriculture investigated correctly",
+      "keywords": [
+        "sustainable agriculture",
+        "fertiliser",
+        "pesticide",
+        "crop rotation",
+        "intercropping",
+        "agroforestry",
+        "liming",
+        "nitrogen fixation",
+        "NPK",
+        "green chemistry"
+      ],
+      "suggestedAssessmentTypes": [
+        "practice identification",
+        "Zambian agriculture context",
+        "application questions"
+      ]
+    },
+    {
+      "id": "F4-T4-S4",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Environmental Chemistry",
+      "subtopicNumber": "4.4.4",
+      "subtopic": "Climate Change",
+      "specificCompetences": [
+        "Demonstrate understanding of climate change",
+        "Investigate causes and effects of climate change"
+      ],
+      "learningActivities": [
+        "Describing climate change as long-term changes in temperatures and weather patterns; note climate effects are regional/specific around the world",
+        "Exploring the causes of climate change: deforestation, industrial processes, fossil fuels",
+        "Analysing the effects of climate change: depletion of ozone layer, global warming, floods, drought",
+        "Designing mitigation measures of climate change: transition to renewable energy sources, agroforestry"
+      ],
+      "expectedStandard": "Understanding of climate change demonstrated; causes and effects investigated correctly",
+      "keywords": [
+        "climate change",
+        "global warming",
+        "greenhouse effect",
+        "carbon dioxide",
+        "deforestation",
+        "fossil fuels",
+        "ozone depletion",
+        "floods",
+        "drought",
+        "mitigation",
+        "renewable energy"
+      ],
+      "suggestedAssessmentTypes": [
+        "cause-effect analysis",
+        "mitigation design",
+        "data interpretation",
+        "essay"
+      ]
+    },
+    {
+      "id": "F4-T4-S5",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Environmental Chemistry",
+      "subtopicNumber": "4.4.5",
+      "subtopic": "Water Management",
+      "specificCompetences": ["Demonstrate understanding of water management"],
+      "learningActivities": [
+        "Describing water management as the management of water resources under set standards, policies and regulations",
+        "Analysing the methods of water management: water purification, water harvesting, artificial rain, repurposing water"
+      ],
+      "expectedStandard": "Understanding of water management demonstrated correctly",
+      "keywords": [
+        "water management",
+        "water purification",
+        "water harvesting",
+        "clean water",
+        "filtration",
+        "chlorination",
+        "artificial rain",
+        "water policy",
+        "water treatment"
+      ],
+      "suggestedAssessmentTypes": [
+        "method description",
+        "purification steps",
+        "Zambian water context"
+      ]
+    }
+  ]
+}

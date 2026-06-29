@@ -67,6 +67,7 @@
     "seed:gamification": "node prisma/seed-gamification.js",
     "seed:ndake-premium-trial": "node prisma/seed-ndake-premium-trial.js",
     "seed:timeslots": "ts-node --transpile-only --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" prisma/seedTimeSlots.ts",
+    "seed:chemistry-curriculum": "node scripts/seed-chemistry-curriculum.js",
     "seed:schools:docker": "docker compose exec -T web npm run seed:schools",
     "seed:timeslots:docker": "docker compose exec -T web npm run seed:timeslots",
     "export:users": "node scripts/export-users-excel.js",

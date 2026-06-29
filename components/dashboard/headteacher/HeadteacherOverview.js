@@ -30,7 +30,8 @@ import Link from 'next/link'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 export const HeadteacherOverview = memo(function HeadteacherOverview() {
-  const { dashboardData, schoolStats, setActiveTab, subjectPerformanceData } = useHeadteacher()
+  const { dashboardData, schoolStats, setActiveTab, subjectPerformanceData, selectedTerm } =
+    useHeadteacher()
 
   const { data: complianceData } = useQuery({
     queryKey: ['teacher-compliance-overview'],
@@ -61,6 +62,14 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
     return `${n}%`
   }
 
+  const attentionTerm =
+    dashboardData?.performance_summary?.term &&
+    dashboardData.performance_summary.term !== 'All Terms'
+      ? dashboardData.performance_summary.term
+      : selectedTerm && selectedTerm !== 'All Terms'
+        ? selectedTerm
+        : 'Current term'
+
   return (
     <div className="space-y-8">
       {/* Critical Alert Banner */}
@@ -77,7 +86,8 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                   Attention
                 </h3>
                 <p className="text-royalPurple-dangerTx mt-1">
-                  Students scoring below 40% need urgent academic intervention
+                  {attentionTerm} results: students scoring below 40% need urgent academic
+                  intervention
                 </p>
               </div>
             </div>

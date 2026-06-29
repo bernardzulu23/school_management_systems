@@ -6,6 +6,10 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { validateBody } from '@/lib/middleware/validate-request'
 import { CreateCareerSchema } from '@/lib/schemas'
 import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
+import {
+  assertCareerGuidanceManager,
+  isCareerGuidanceStaff,
+} from '@/lib/guidance/careerGuidanceAuth'
 
 function pickCareerFields(body) {
   const fields = [
@@ -43,7 +47,7 @@ export async function GET(request) {
   const db = getTenantClient(schoolId)
   const { searchParams } = new URL(request.url)
   const clusterId = searchParams.get('clusterId')
-  const isStaff = roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod', 'TEACHER', 'teacher'])
+  const isStaff = await isCareerGuidanceStaff(auth.user, schoolId)
   const activeOnly = !isStaff || searchParams.get('all') !== '1'
 
   const careers = await db.career.findMany({
@@ -64,14 +68,13 @@ export async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  }
-
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const managerBlock = await assertCareerGuidanceManager(auth.user, schoolId)
+  if (managerBlock) return managerBlock
 
   const typeBlock = await requireSchoolTypeAccess(schoolId, 'career-guidance')
   if (typeBlock) return typeBlock

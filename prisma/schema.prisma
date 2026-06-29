@@ -146,6 +146,10 @@ model School {
   smsBroadcasts        SmsBroadcast[]
   smsLogs              SmsLog[]
   careerClusters       CareerCluster[]
+  guidanceAssignments  GuidanceAssignment[]
+  guidanceCases        GuidanceCase[]
+  girlsReEntryRecords  GirlsReEntryRecord[]
+  careerResources      CareerResource[]
   careers              Career[]
   hodBudgetCategories  HodBudgetCategory[]
   hodBudgetTransactions HodBudgetTransaction[]
@@ -214,6 +218,14 @@ model User {
   studentProfile Student?
   teacherProfile Teacher?
   hodProfile     HeadOfDepartment?
+  guidanceAssignment GuidanceAssignment? @relation("GuidanceTeacher")
+  guidanceAssignmentsCreated GuidanceAssignment[] @relation("GuidanceAssignedBy")
+  guidanceCasesAssigned GuidanceCase[] @relation("GuidanceCaseAssignee")
+  guidanceCasesOpened   GuidanceCase[] @relation("GuidanceCaseOpenedBy")
+  caseLogEntries        CaseLogEntry[]
+  caseAccessLogs        CaseAccessLog[]
+  careerResourcesPosted CareerResource[]
+  safeguardingEscalationsReceived SafeguardingEscalation[] @relation("SafeguardingEscalatedTo")
   
   // New Relations
   notes                   Note[]
@@ -555,6 +567,8 @@ model Student {
   houseMemberships    StudentHouseMembership[]
   invoices            StudentInvoice[]
   siblingMemberships  SiblingGroupMember[]
+  guidanceCases       GuidanceCase[]
+  girlsReEntryRecords GirlsReEntryRecord[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -694,9 +708,214 @@ model HeadOfDepartment {
   @@index([schoolId]) 
   @@index([department])
   @@index([departmentId])
-} 
+}
 
-model Class { 
+enum GuidanceScope {
+  ALL
+  JUNIOR
+  SENIOR
+}
+
+model GuidanceAssignment {
+  id               String         @id @default(cuid())
+  schoolId         String
+  userId           String         @unique
+  scope            GuidanceScope  @default(ALL)
+  canManageReEntry Boolean        @default(false)
+  assignedById     String
+  assignedAt       DateTime       @default(now())
+  revokedAt        DateTime?
+  active           Boolean        @default(true)
+
+  school     School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user       User   @relation("GuidanceTeacher", fields: [userId], references: [id], onDelete: Cascade)
+  assignedBy User   @relation("GuidanceAssignedBy", fields: [assignedById], references: [id], onDelete: Cascade)
+
+  @@index([schoolId, active])
+  @@index([userId, active])
+}
+
+enum CaseCategory {
+  CAREER
+  ACADEMIC
+  PERSONAL_SOCIAL
+  HEALTH_WELFARE
+}
+
+enum ConfidentialityTier {
+  STANDARD
+  SENSITIVE
+  SAFEGUARDING
+}
+
+enum CaseStatus {
+  OPEN
+  CLOSED
+  REFERRED
+}
+
+enum ReferralStatus {
+  PENDING
+  SENT
+  COMPLETED
+  CANCELLED
+}
+
+enum GuidanceResourceType {
+  BURSARY
+  INSTITUTION_INFO
+  CAREER_DAY
+}
+
+enum CaseAccessAction {
+  VIEW
+  EDIT
+  LOG_ENTRY
+  REFERRAL
+  ESCALATE
+}
+
+model GuidanceCase {
+  id              String              @id @default(cuid())
+  schoolId        String
+  pupilId         String
+  category        CaseCategory
+  confidentiality ConfidentialityTier @default(STANDARD)
+  status          CaseStatus          @default(OPEN)
+  summary         String?
+  legalBasis      String
+  openedAt        DateTime            @default(now())
+  closedAt        DateTime?
+  assignedToId    String
+  openedById      String
+
+  school     School  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  pupil      Student @relation(fields: [pupilId], references: [id], onDelete: Cascade)
+  assignedTo User    @relation("GuidanceCaseAssignee", fields: [assignedToId], references: [id], onDelete: Cascade)
+  openedBy   User    @relation("GuidanceCaseOpenedBy", fields: [openedById], references: [id], onDelete: Cascade)
+
+  logs        CaseLogEntry[]
+  referrals   ReferralRecord[]
+  escalation  SafeguardingEscalation?
+  accessLog   CaseAccessLog[]
+  reEntry     GirlsReEntryRecord?
+
+  @@index([schoolId, status])
+  @@index([schoolId, pupilId])
+  @@index([schoolId, category])
+  @@index([assignedToId])
+}
+
+model CaseLogEntry {
+  id           String    @id @default(cuid())
+  schoolId     String
+  caseId       String
+  date         DateTime  @default(now())
+  actionTaken  String
+  followUpDate DateTime?
+  loggedById   String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  case     GuidanceCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  loggedBy User         @relation(fields: [loggedById], references: [id], onDelete: Cascade)
+
+  @@index([schoolId])
+  @@index([caseId, date])
+}
+
+model ReferralRecord {
+  id                    String         @id @default(cuid())
+  schoolId              String
+  caseId                String
+  referredTo            String
+  referralDate          DateTime       @default(now())
+  consentObtained       Boolean        @default(false)
+  consentByGuardianId   String?
+  consentNotes          String?
+  status                ReferralStatus @default(PENDING)
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+
+  case GuidanceCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId])
+  @@index([caseId])
+}
+
+model SafeguardingEscalation {
+  id             String    @id @default(cuid())
+  schoolId       String
+  caseId         String    @unique
+  escalatedToId  String
+  reason         String
+  escalatedAt    DateTime  @default(now())
+  acknowledgedAt DateTime?
+
+  case        GuidanceCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  escalatedTo User         @relation("SafeguardingEscalatedTo", fields: [escalatedToId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId])
+  @@index([escalatedToId, acknowledgedAt])
+}
+
+model CaseAccessLog {
+  id        String           @id @default(cuid())
+  schoolId  String
+  caseId    String
+  userId    String
+  action    CaseAccessAction
+  timestamp DateTime         @default(now())
+
+  case GuidanceCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  user User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId])
+  @@index([caseId, timestamp])
+  @@index([userId])
+}
+
+model GirlsReEntryRecord {
+  id                 String    @id @default(cuid())
+  schoolId           String
+  pupilId            String
+  withdrawalDate     DateTime
+  expectedReturnDate DateTime?
+  actualReturnDate   DateTime?
+  supportPlan        String?
+  consentGuardian    Boolean   @default(false)
+  caseId             String?   @unique
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  school School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  pupil  Student       @relation(fields: [pupilId], references: [id], onDelete: Cascade)
+  case   GuidanceCase? @relation(fields: [caseId], references: [id], onDelete: SetNull)
+
+  @@index([schoolId])
+  @@index([pupilId])
+}
+
+model CareerResource {
+  id         String               @id @default(cuid())
+  schoolId   String
+  type       GuidanceResourceType
+  title      String
+  body       String
+  deadline   DateTime?
+  active     Boolean              @default(true)
+  postedById String
+  postedAt   DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+
+  school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  postedBy User   @relation(fields: [postedById], references: [id], onDelete: Cascade)
+
+  @@index([schoolId, active])
+  @@index([schoolId, type])
+}
+
+model Class {
   id          String   @id @default(uuid()) 
   name        String   // e.g. "Form 1A" 
   year_group  String   // e.g. "Form 1" 

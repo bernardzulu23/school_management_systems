@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
@@ -101,6 +102,7 @@ function normalizeUserListRow(row) {
 }
 
 export default function UserManagement() {
+  const router = useRouter()
   const { school } = useSchool()
   const showHodFeatures = canAccessHodFeatures({ schoolLevel: school?.level })
   const [activeUserType, setActiveUserType] = useState('all')
@@ -534,7 +536,7 @@ export default function UserManagement() {
                 <Button
                   variant="outline"
                   className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
-                  onClick={() => toast('Bulk import functionality - Coming soon')}
+                  onClick={() => router.push('/dashboard/students/bulk-upload')}
                   aria-label="Import multiple students via CSV"
                 >
                   <Users className="h-4 w-4 mr-2" aria-hidden="true" />
