@@ -4,8 +4,11 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { getAuthUser } from '@/lib/middleware/auth'
+import { authMiddleware } from '@/lib/middleware/auth'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { isEczStaff } from '@/lib/ecz/routeAuth'
 import {
   ECZ_COMMAND_TERMS,
   ECZ_BLOOM_TARGETS,
@@ -13,11 +16,16 @@ import {
   ECZ_ZAMBIAN_CONTEXTS,
 } from '@/lib/ecz/ecz-reference-constants'
 
-export async function GET(request) {
-  const user = await getAuthUser(request)
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+export const GET = withErrorHandler(async function GET(request) {
+  const auth = await authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+  if (!isEczStaff(auth.user)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
 
-  const schoolId = String(user?.schoolId || '').trim()
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) {
     return NextResponse.json({ error: 'School context required' }, { status: 400 })
   }
@@ -29,6 +37,7 @@ export async function GET(request) {
     prisma.eczCompetency.findMany({
       orderBy: { name: 'asc' },
       select: { id: true, name: true, descriptor: true, category: true },
+      take: 500,
     }),
     prisma.eczSubjectConstruct.findMany({
       orderBy: { subjectName: 'asc' },
@@ -41,6 +50,7 @@ export async function GET(request) {
         examWeight: true,
         hasMultipleChoice: true,
       },
+      take: 500,
     }),
   ])
 
@@ -53,4 +63,4 @@ export async function GET(request) {
     sbaTaskTypes: ECZ_SBA_TASK_TYPES,
     zambianContexts: ECZ_ZAMBIAN_CONTEXTS,
   })
-}
+})

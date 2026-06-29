@@ -9,6 +9,9 @@ import {
   sanitizeQuizForStudent,
 } from '@/lib/assessments/interactiveQuiz'
 import { maybeNotifyTeacherOfAttempts } from '@/lib/assessments/review'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
+import { assertTeacherManagesAssignment } from '@/lib/assignments/routeScope'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
 function parseSubmissionContent(raw) {
   if (!raw) return null
@@ -19,7 +22,7 @@ function parseSubmissionContent(raw) {
   }
 }
 
-async function resolveContext(request, routeParams) {
+async function resolveContext(request, assignmentId) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return { error: auth.response }
 
@@ -30,7 +33,7 @@ async function resolveContext(request, routeParams) {
     return { error: NextResponse.json({ error: 'School context required' }, { status: 400 }) }
 
   const assignment = await prisma.assignment.findFirst({
-    where: { id: routeParams.id, schoolId },
+    where: { id: assignmentId, schoolId },
     include: {
       assessment: { select: { id: true, status: true } },
     },
@@ -61,9 +64,10 @@ async function resolveContext(request, routeParams) {
   return { auth, schoolId, assignment, payload }
 }
 
-export async function GET(request, { params }) {
-  const routeParams = await params
-  const ctx = await resolveContext(request, routeParams)
+export const GET = withErrorHandler(async function GET(request, { params }) {
+  const assignmentId = await safeRouteParam(params, 'id')
+  if (!assignmentId) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+  const ctx = await resolveContext(request, assignmentId)
   if (ctx.error) return ctx.error
   const { auth, schoolId, assignment, payload } = ctx
 
@@ -122,6 +126,8 @@ export async function GET(request, { params }) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
+  await assertTeacherManagesAssignment({ schoolId, user: auth.user, assignment })
+
   const submissions = await prisma.assignmentSubmission.findMany({
     where: { assignmentId: assignment.id, schoolId },
     include: {
@@ -159,11 +165,12 @@ export async function GET(request, { params }) {
       }),
     },
   })
-}
+})
 
-export async function POST(request, { params }) {
-  const routeParams = await params
-  const ctx = await resolveContext(request, routeParams)
+export const POST = withErrorHandler(async function POST(request, { params }) {
+  const assignmentId = await safeRouteParam(params, 'id')
+  if (!assignmentId) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+  const ctx = await resolveContext(request, assignmentId)
   if (ctx.error) return ctx.error
   const { auth, schoolId, assignment, payload } = ctx
 
@@ -244,4 +251,4 @@ export async function POST(request, { params }) {
       review: submit ? grading.review : [],
     },
   })
-}
+})

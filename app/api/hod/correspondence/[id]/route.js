@@ -4,6 +4,7 @@ import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { validateBody } from '@/lib/middleware/validate-request'
 import { UpdateHodCorrespondenceSchema } from '@/lib/schemas'
 import { resolveHodScope, hodDepartmentWhere } from '@/lib/hod/resolveHodScope'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 export const PATCH = withErrorHandler(async function PATCH(request, { params }) {
   const scope = await resolveHodScope(request)
@@ -16,7 +17,8 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
   if (validationError) return validationError
 
   const { db, departmentId } = scope
-  const id = String(params?.id || '')
+  const id = await safeRouteParam(params, 'id')
+  if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
 
   const existing = await db.hodCorrespondence.findFirst({
     where: { id, ...hodDepartmentWhere(departmentId) },
@@ -47,7 +49,8 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   if (!scope.ok) return scope.response
 
   const { db, departmentId } = scope
-  const id = String(params?.id || '')
+  const id = await safeRouteParam(params, 'id')
+  if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
 
   const existing = await db.hodCorrespondence.findFirst({
     where: { id, ...hodDepartmentWhere(departmentId) },

@@ -4,10 +4,11 @@ import bcrypt from 'bcryptjs'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { passwordPolicyError } from '@/lib/security/passwordPolicy'
-import { withSecureApi } from '@/lib/middleware/secureApi'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
+import { revokeAllUserRefreshTokens } from '@/lib/auth/sessionRevocation'
 
-export const POST = withSecureApi(async function POST(request, { params }) {
-  const routeParams = await params
+export const POST = withSecureHandler(async function POST(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -20,7 +21,10 @@ export const POST = withSecureApi(async function POST(request, { params }) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  const body = await request.json()
+  const id = await safeRouteParam(params, 'id')
+  if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+
+  const body = await request.json().catch(() => ({}))
   const newPassword = String(body.newPassword || '')
   const policyError = passwordPolicyError(newPassword)
   if (policyError) {
@@ -28,13 +32,14 @@ export const POST = withSecureApi(async function POST(request, { params }) {
   }
 
   const user = await prisma.user.findFirst({
-    where: { id: routeParams.id, schoolId },
+    where: { id, schoolId },
     select: { id: true },
   })
   if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const hashed = await bcrypt.hash(newPassword, 12)
   await prisma.user.update({ where: { id: user.id }, data: { password: hashed } })
+  await revokeAllUserRefreshTokens(user.id)
 
   return NextResponse.json({ success: true })
 })

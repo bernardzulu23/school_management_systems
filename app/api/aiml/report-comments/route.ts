@@ -1,28 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateReportComment } from '@/lib/aiml/tools/report-comments'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json().catch(() => ({}))
-    if (
-      !body?.name ||
-      !body?.subject ||
-      !body?.grade ||
-      body?.marks === undefined ||
-      body?.attendance === undefined ||
-      !body?.participation ||
-      !body?.strengths ||
-      !body?.areasOfImprovement
-    ) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
-    }
+const DEPRECATED = 'Use /api/ai/report-comments instead'
 
-    const comment = await generateReportComment(body)
-    return NextResponse.json(comment)
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: error?.message || 'Failed to generate report comment' },
-      { status: 500 }
-    )
-  }
+function redirect(req: NextRequest) {
+  const url = new URL('/api/ai/report-comments', req.url)
+  return NextResponse.redirect(url, {
+    status: 307,
+    headers: {
+      Sunset: '2026-12-31',
+      'X-Deprecated': DEPRECATED,
+    },
+  })
 }
+
+export const GET = withSecureHandler(async function GET(req: NextRequest) {
+  return redirect(req)
+})
+
+export const POST = withSecureHandler(async function POST(req: NextRequest) {
+  return redirect(req)
+})

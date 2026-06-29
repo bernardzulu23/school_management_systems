@@ -5,6 +5,8 @@ import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
 import { staffRoleDeniedMessage } from '@/lib/auth/roles'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 function buildMarkingScheme(assessment) {
   const lines = []
@@ -52,17 +54,20 @@ export const POST = withErrorHandler(async function POST(request) {
     throw new ApiError(staffRoleDeniedMessage(auth.user?.role), 403)
   }
 
-  if (auth.user?.schoolId) {
-    const eczCheck = await requireSecondarySchoolAccess(auth.user.schoolId)
-    if (!eczCheck.ok) return eczCheck.response
-  }
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) throw new ApiError('School context required', 400)
+
+  const eczCheck = await requireSecondarySchoolAccess(schoolId)
+  if (!eczCheck.ok) return eczCheck.response
 
   const body = await request.json().catch(() => ({}))
-  const assessmentId = String(body.assessmentId || '').trim()
+  const assessmentId = safeStringId(body.assessmentId)
   if (!assessmentId) throw new ApiError('assessmentId is required', 400)
 
   const assessment = await prisma.eczAssessment.findFirst({
-    where: { id: assessmentId, schoolId: auth.user.schoolId },
+    where: { id: assessmentId, schoolId },
     include: {
       subject: true,
       rubric: { include: { criteria: true } },

@@ -8,13 +8,14 @@ import { CreateReferralSchema } from '@/lib/schemas'
 import { authorizeGuidancePortal } from '@/lib/guidance/routeAuth'
 import { canEditCase, logCaseAccess } from '@/lib/guidance/caseAccess'
 import { guidanceCaseDetailInclude } from '@/lib/guidance/caseQueries'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 export const POST = withErrorHandler(async function POST(request, { params }) {
-  const routeParams = await params
+  const caseId = await safeRouteParam(params, 'id')
+  if (!caseId) throw new ApiError('Invalid id', 400)
   const authz = await authorizeGuidancePortal(request)
   if (!authz.ok) return authz.response
 
-  const caseId = String(routeParams?.id || '').trim()
   const { schoolId, auth, assignment } = authz
   const db = getTenantClient(schoolId)
 

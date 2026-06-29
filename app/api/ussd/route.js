@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import { handleParentUssd } from '@/lib/ussd/parent-portal'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
 /**
  * POST /api/ussd — Africa's Talking USSD callback.
@@ -9,7 +10,7 @@ import { handleParentUssd } from '@/lib/ussd/parent-portal'
  *
  * Body fields: sessionId, phoneNumber, text, serviceCode
  */
-export async function POST(request) {
+export const POST = withSecureHandler(async function POST(request) {
   try {
     const body = await request.formData().catch(() => null)
     let phoneNumber = ''
@@ -35,12 +36,12 @@ export async function POST(request) {
       headers: { 'Content-Type': 'text/plain' },
     })
   }
-}
+})
 
-export async function GET() {
+export const GET = withSecureHandler(async function GET() {
   return NextResponse.json({
     ok: true,
     service: 'ZSMS Parent USSD',
     usage: "POST with phoneNumber and text (Africa's Talking)",
   })
-}
+})

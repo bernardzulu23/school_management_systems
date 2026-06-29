@@ -9,6 +9,7 @@ import { getHodProfile, resolveHodDepartmentIds } from '@/lib/utils/hodDepartmen
 import { canManageDepartmentAllocations, isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
 import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
 import { resolveDepartmentClasses } from '@/lib/timetable/resolveDepartmentClasses'
+import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -27,8 +28,8 @@ export const GET = withErrorHandler(async function GET(request) {
   }
 
   const { searchParams } = new URL(request.url)
-  const departmentId = String(searchParams.get('departmentId') || '').trim()
-  const teacherUserId = String(searchParams.get('teacherUserId') || '').trim()
+  const departmentId = safeStringId(searchParams.get('departmentId'))
+  const teacherUserId = safeQueryString(searchParams.get('teacherUserId'))
   if (!departmentId) throw new ApiError('departmentId is required', 400)
 
   if (!isSchoolAdminOrHead(auth.user) && hodProfile) {

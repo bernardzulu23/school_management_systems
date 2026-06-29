@@ -1,12 +1,12 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
-import { staffRoleDeniedMessage } from '@/lib/auth/roles'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
 import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
+import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
 
 const LEVEL_MAP = {
   EXCELLENT: 4,
@@ -19,8 +19,8 @@ export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ROLE_GROUPS.SCHOOL_STAFF)) {
-    throw new ApiError(staffRoleDeniedMessage(auth.user?.role), 403)
+  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher'])) {
+    throw new ApiError('Forbidden', 403)
   }
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
@@ -31,42 +31,56 @@ export const GET = withErrorHandler(async function GET(request) {
   const featureBlock = await requireFeature(schoolId, 'continuous-assessment-tool')
   if (featureBlock) return featureBlock
 
-  const typeBlock = await requireSchoolTypeAccess(schoolId, 'cbc')
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'continuous-assessment-tool')
   if (typeBlock) return typeBlock
 
   const { searchParams } = new URL(request.url)
-  const gradeLevel = searchParams.get('gradeLevel') || undefined
-  const term = searchParams.get('term') ? Number(searchParams.get('term')) : undefined
-  const academicYear = searchParams.get('academicYear')
-    ? Number(searchParams.get('academicYear'))
-    : new Date().getFullYear()
-  const studentId = searchParams.get('studentId') || undefined
+  const gradeLevel = safeQueryString(searchParams.get('gradeLevel'))
+  const termRaw = safeQueryString(searchParams.get('term'))
+  const term = termRaw ? Number(termRaw) : undefined
+  const yearRaw = safeQueryString(searchParams.get('academicYear'))
+  const academicYear = yearRaw ? Number(yearRaw) : new Date().getFullYear()
+  const studentId = safeStringId(searchParams.get('studentId'))
+  const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10) || 1)
+  const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '50', 10) || 50))
+  const skip = (page - 1) * limit
 
-  const ratings = await prisma.cbcCompetencyRating.findMany({
-    where: {
-      schoolId,
-      academicYear,
-      ...(gradeLevel ? { gradeLevel } : {}),
-      ...(term ? { term } : {}),
-      ...(studentId ? { studentId } : {}),
-    },
-    include: {
-      student: { select: { id: true, name: true, class: true } },
-      competency: { select: { id: true, name: true, category: true } },
-      recorder: { select: { id: true, name: true } },
-    },
-    orderBy: [{ student: { name: 'asc' } }, { competency: { name: 'asc' } }],
+  const where = {
+    schoolId,
+    academicYear,
+    ...(gradeLevel ? { gradeLevel } : {}),
+    ...(term != null && Number.isFinite(term) ? { term } : {}),
+    ...(studentId ? { studentId } : {}),
+  }
+
+  const [ratings, total] = await prisma.$transaction([
+    prisma.cbcCompetencyRating.findMany({
+      where,
+      include: {
+        student: { select: { id: true, name: true, class: true } },
+        competency: { select: { id: true, name: true, category: true } },
+        recorder: { select: { id: true, name: true } },
+      },
+      orderBy: [{ student: { name: 'asc' } }, { competency: { name: 'asc' } }],
+      skip,
+      take: limit,
+    }),
+    prisma.cbcCompetencyRating.count({ where }),
+  ])
+
+  return NextResponse.json({
+    success: true,
+    data: ratings,
+    pagination: { total, page, limit, totalPages: Math.ceil(total / limit) },
   })
-
-  return NextResponse.json({ success: true, data: ratings })
 })
 
 export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ROLE_GROUPS.SCHOOL_STAFF)) {
-    throw new ApiError(staffRoleDeniedMessage(auth.user?.role), 403)
+  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher'])) {
+    throw new ApiError('Forbidden', 403)
   }
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
@@ -77,13 +91,13 @@ export const POST = withErrorHandler(async function POST(request) {
   const featureBlock = await requireFeature(schoolId, 'continuous-assessment-tool')
   if (featureBlock) return featureBlock
 
-  const typeBlock = await requireSchoolTypeAccess(schoolId, 'cbc')
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'continuous-assessment-tool')
   if (typeBlock) return typeBlock
 
   const body = await request.json().catch(() => ({}))
-  const studentId = String(body.studentId || '').trim()
-  const competencyId = String(body.competencyId || '').trim()
-  const gradeLevel = String(body.gradeLevel || '').trim()
+  const studentId = safeStringId(body.studentId)
+  const competencyId = safeStringId(body.competencyId)
+  const gradeLevel = safeQueryString(body.gradeLevel)
   const term = Number(body.term)
   const academicYear = Number(body.academicYear || new Date().getFullYear())
   const level = String(body.level || '').toUpperCase()

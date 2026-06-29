@@ -15,12 +15,14 @@ import {
   canViewTimetableDraft,
   timetableForbiddenResponse,
 } from '@/lib/timetable/timetableRouteAuth'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 /**
  * GET /api/timetable/draft-meta?term=Term+1&academicYear=2026&refresh=false
  * Lightweight read of TimetableDraftMeta (no full rescan unless refresh=true).
  */
-export async function GET(req) {
+export const GET = withErrorHandler(async function GET(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -33,9 +35,11 @@ export async function GET(req) {
   if (!typeCheck.allowed) return typeCheck.response
 
   const { searchParams } = new URL(req.url)
-  const term = String(searchParams.get('term') || 'Term 1').trim()
-  const academicYear = String(searchParams.get('academicYear') || new Date().getFullYear()).trim()
-  const refresh = searchParams.get('refresh') === 'true'
+  const term = safeQueryString(searchParams.get('term'), { defaultValue: 'Term 1' })
+  const academicYear = safeQueryString(searchParams.get('academicYear'), {
+    defaultValue: String(new Date().getFullYear()),
+  })
+  const refresh = safeQueryString(searchParams.get('refresh')) === 'true'
   const isHod = roleCheck(user, ['HOD', 'hod'])
 
   if (refresh) {
@@ -57,4 +61,4 @@ export async function GET(req) {
   return NextResponse.json(
     formatDraftMetaResponse(meta, { term, academicYear, includeSummary: !isHod })
   )
-}
+})

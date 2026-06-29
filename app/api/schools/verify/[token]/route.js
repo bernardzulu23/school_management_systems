@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 const BLOCKED_SUBDOMAINS = [
   'demo',
@@ -21,11 +23,8 @@ function getBaseDomain(host) {
   return parts.slice(-2).join('.')
 }
 
-export async function GET(request, { params }) {
-  const routeParams = await params
-  const token = String(routeParams?.token || '').trim()
-  if (!token)
-    return NextResponse.redirect(new URL('/register-school?error=invalid-token', request.url))
+export const GET = withSecureHandler(async function GET(request, { params }) {
+  const token = await safeRouteParam(params, 'token')
 
   const now = new Date()
   const school = await prisma.school.findFirst({
@@ -58,4 +57,4 @@ export async function GET(request, { params }) {
 
   const url = `https://${school.subdomain}.${baseDomain}/login?verified=true`
   return NextResponse.redirect(url)
-}
+})

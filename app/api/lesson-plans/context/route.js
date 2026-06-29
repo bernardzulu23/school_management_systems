@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
 
 export const dynamic = 'force-dynamic'
@@ -22,7 +23,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const userId = String(auth.user?.id || '').trim()
   if (!userId) throw new ApiError('Unauthorized', 401)
 
-  const subject = new URL(request.url).searchParams.get('subject') || undefined
+  const subject = safeQueryString(new URL(request.url).searchParams.get('subject')) || undefined
   const context = await getLessonPlanTeacherContext(userId, schoolId, subject)
 
   return NextResponse.json({ success: true, data: context })

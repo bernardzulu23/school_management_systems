@@ -7,6 +7,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { resolveTeacherDepartmentId } from '@/lib/hod/resolveTeacherDepartment'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 const CAN_ACCESS = ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
 
@@ -22,7 +23,8 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  const id = String((await params)?.id || '')
+  const id = await safeRouteParam(params, 'id')
+  if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
   const row = await prisma.hodFile.findFirst({ where: { id, schoolId } })
   if (!row) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 

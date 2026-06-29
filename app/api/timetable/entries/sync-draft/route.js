@@ -12,7 +12,10 @@ import {
   canManageTimetableDraft,
   timetableForbiddenResponse,
 } from '@/lib/timetable/timetableRouteAuth'
-import { safeQueryString } from '@/lib/security/safeQueryValue'
+import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+
+const MAX_SYNC_ASSIGNMENTS = 500
 
 function toMinutes(t) {
   const [h, m] = String(t || '0:0')
@@ -72,7 +75,7 @@ function normalizeDayOfWeek(day) {
  * POST /api/timetable/entries/sync-draft
  * Persist in-memory solver/UI assignments to TimetableAllocationEntry (draft).
  */
-export async function POST(req) {
+export const POST = withErrorHandler(async function POST(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -90,11 +93,20 @@ export async function POST(req) {
     defaultValue: String(new Date().getFullYear()),
     maxLength: 16,
   })
-  const rows = Array.isArray(body?.assignments) ? body.assignments : []
+  const rows = (Array.isArray(body?.assignments) ? body.assignments : []).slice(
+    0,
+    MAX_SYNC_ASSIGNMENTS
+  )
   const replaceExisting = body?.replaceExisting !== false
 
   if (!rows.length) {
     return NextResponse.json({ error: 'assignments array is required' }, { status: 400 })
+  }
+  if (Array.isArray(body?.assignments) && body.assignments.length > MAX_SYNC_ASSIGNMENTS) {
+    return NextResponse.json(
+      { error: `assignments exceeds limit of ${MAX_SYNC_ASSIGNMENTS}` },
+      { status: 400 }
+    )
   }
 
   const allocations = await prisma.teacherAllocation.findMany({
@@ -111,9 +123,9 @@ export async function POST(req) {
   const skipped = []
 
   for (const row of rows) {
-    const teacherId = String(row?.teacherId || '').trim()
-    const subjectId = String(row?.subjectId || '').trim()
-    const classId = String(row?.classId || '').trim()
+    const teacherId = safeStringId(row?.teacherId)
+    const subjectId = safeStringId(row?.subjectId)
+    const classId = safeStringId(row?.classId)
     const dayOfWeek = normalizeDayOfWeek(row?.dayOfWeek)
     const startTime = String(row?.startTime || '').trim()
     const endTime = String(row?.endTime || '').trim()
@@ -226,4 +238,4 @@ export async function POST(req) {
     saved: toCreate.length,
     skipped: skipped.length,
   })
-}
+})

@@ -6,14 +6,16 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { validateBody } from '@/lib/middleware/validate-request'
 import { UpdateCareerResourceSchema } from '@/lib/schemas'
 import { authorizeGuidancePortal } from '@/lib/guidance/routeAuth'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 export const PATCH = withErrorHandler(async function PATCH(request, { params }) {
-  const routeParams = await params
+  const resourceId = await safeRouteParam(params, 'id')
+  if (!resourceId) throw new ApiError('Invalid id', 400)
+
   const authz = await authorizeGuidancePortal(request)
   if (!authz.ok) return authz.response
 
   const { schoolId } = authz
-  const resourceId = String(routeParams?.id || '').trim()
   const { data: body, error: validationError } = await validateBody(
     request,
     UpdateCareerResourceSchema
@@ -41,12 +43,13 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
 })
 
 export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
-  const routeParams = await params
+  const resourceId = await safeRouteParam(params, 'id')
+  if (!resourceId) throw new ApiError('Invalid id', 400)
+
   const authz = await authorizeGuidancePortal(request)
   if (!authz.ok) return authz.response
 
   const { schoolId } = authz
-  const resourceId = String(routeParams?.id || '').trim()
   const db = getTenantClient(schoolId)
 
   const existing = await db.careerResource.findFirst({ where: { id: resourceId } })

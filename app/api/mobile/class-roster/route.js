@@ -1,12 +1,22 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { authMiddleware } from '@/lib/middleware/auth'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeStringId } from '@/lib/security/safeQueryValue'
+import { assertTeacherMayAccessAttendanceClass } from '@/lib/attendance/routeAuth'
 
-export async function GET(request) {
+const STAFF_ROLES = ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod']
+const ROSTER_LIMIT = 200
+
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
+
+  if (!roleCheck(auth.user, STAFF_ROLES)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
@@ -16,18 +26,19 @@ export async function GET(request) {
   }
 
   const { searchParams } = new URL(request.url)
-  const classId = searchParams.get('classId')
-  const subjectId = searchParams.get('subjectId')
+  const classId = safeStringId(searchParams.get('classId'))
+  const subjectId = safeStringId(searchParams.get('subjectId'))
   const includeFaceData = searchParams.get('includeFaceData') === 'true'
 
   if (!classId) {
     return NextResponse.json({ error: 'classId is required' }, { status: 400 })
   }
 
+  await assertTeacherMayAccessAttendanceClass({ schoolId, user: auth.user, classId })
+
   let students = []
 
   if (subjectId) {
-    // Query PupilSubjectEnrollment to get only students enrolled in BOTH classId AND subjectId
     const enrollments = await prisma.pupilSubjectEnrollment.findMany({
       where: {
         schoolId,
@@ -37,6 +48,7 @@ export async function GET(request) {
       include: {
         pupil: true,
       },
+      take: ROSTER_LIMIT,
     })
     students = enrollments.map((e) => e.pupil)
   } else {
@@ -69,6 +81,7 @@ export async function GET(request) {
           schoolId,
           OR: [{ classId: classRecord.id }, { class: { in: classCandidates } }],
         },
+        take: ROSTER_LIMIT,
       })
     }
   }
@@ -77,7 +90,7 @@ export async function GET(request) {
     id: s.id,
     name: s.name,
     class: s.class,
-    qrCode: s.exam_number || null, // Using exam_number as QR code if available
+    qrCode: s.exam_number || null,
     faceEmbedding: includeFaceData ? s.faceEmbedding : null,
     twinGroupId: s.twinGroupId || null,
     requiresSecondaryAuth: Boolean(s.requiresSecondaryAuth),
@@ -85,4 +98,4 @@ export async function GET(request) {
   }))
 
   return NextResponse.json(responseData)
-}
+})

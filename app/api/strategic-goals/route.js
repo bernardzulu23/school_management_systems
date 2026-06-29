@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { requireRole } from '@/lib/middleware/requireRole'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 const ALLOWED_ROLES = ['headteacher', 'HOD', 'hod']
 
@@ -21,7 +23,7 @@ function clampProgress(value) {
   return Math.max(0, Math.min(100, Math.round(n)))
 }
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await requireRole(request, ALLOWED_ROLES)
   if (!auth.isAuthenticated) return auth.response
   if (auth.denied) return auth.response
@@ -32,7 +34,7 @@ export async function GET(request) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const { searchParams } = new URL(request.url)
-  const status = searchParams.get('status')
+  const status = safeQueryString(searchParams.get('status'))
   const take = Math.max(1, Math.min(50, Number(searchParams.get('take') || 20)))
 
   const where = {
@@ -86,9 +88,9 @@ export async function GET(request) {
       goals,
     },
   })
-}
+})
 
-export async function POST(request) {
+export const POST = withErrorHandler(async function POST(request) {
   const auth = await requireRole(request, ALLOWED_ROLES)
   if (!auth.isAuthenticated) return auth.response
   if (auth.denied) return auth.response
@@ -133,4 +135,4 @@ export async function POST(request) {
   })
 
   return NextResponse.json({ success: true, data: goal }, { status: 201 })
-}
+})

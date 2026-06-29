@@ -3,10 +3,11 @@ import prisma from '@/lib/prisma'
 import { cookies } from 'next/headers'
 import { signOnboardingToken } from '@/lib/middleware/onboardingAuth'
 import { individualOnboardingRedirectPath } from '@/lib/onboarding/individual'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
-export async function GET(request, { params }) {
-  const routeParams = await params
-  const token = String(routeParams?.token || '').trim()
+export const GET = withSecureHandler(async function GET(request, { params }) {
+  const token = await safeRouteParam(params, 'token')
   if (!token) return NextResponse.json({ error: 'Invalid token' }, { status: 400 })
 
   const reg = await prisma.schoolRegistration.findFirst({
@@ -77,4 +78,4 @@ export async function GET(request, { params }) {
     : `/onboarding?step=${step === 'setup' ? 'setup' : 'plan'}`
 
   return NextResponse.redirect(`${origin}${path}`)
-}
+})

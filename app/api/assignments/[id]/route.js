@@ -1,12 +1,18 @@
+export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { safeRouteParam, safeStringId, safeQueryString } from '@/lib/security/safeQueryValue'
+import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import {
+  assertTeacherManagesAssignment,
+  assertTeacherTeachesClassSubject,
+} from '@/lib/assignments/routeScope'
 
-export async function GET(request, { params }) {
+export const GET = withErrorHandler(async function GET(request, { params }) {
   const assignmentId = await safeRouteParam(params, 'id')
-  if (!assignmentId) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+  if (!assignmentId) throw new ApiError('Invalid id', 400)
 
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
@@ -14,49 +20,57 @@ export async function GET(request, { params }) {
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  if (!schoolId) throw new ApiError('School context required', 400)
 
   const assignment = await prisma.assignment.findFirst({
     where: { id: assignmentId, schoolId },
   })
 
-  if (!assignment) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  if (!assignment) throw new ApiError('Not found', 404)
 
   if (roleCheck(auth.user, ['STUDENT', 'student'])) {
     const student = await prisma.student.findFirst({
       where: { userId: auth.user.id, schoolId },
       select: { classId: true, class: true, selected_subjects: true },
     })
-    if (!student) return NextResponse.json({ error: 'Student profile not found' }, { status: 404 })
+    if (!student) throw new ApiError('Student profile not found', 404)
     if (student.classId) {
       if (String(assignment.classId || '') !== String(student.classId))
-        return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+        throw new ApiError('Forbidden', 403)
     } else if (assignment.class !== student.class) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      throw new ApiError('Forbidden', 403)
     }
     if (!(student.selected_subjects || []).includes(assignment.subject)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      throw new ApiError('Forbidden', 403)
     }
+  } else {
+    await assertTeacherManagesAssignment({ schoolId, user: auth.user, assignment })
   }
 
   return NextResponse.json({ success: true, data: assignment })
-}
+})
 
-export async function PUT(request, { params }) {
+export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const assignmentId = await safeRouteParam(params, 'id')
-  if (!assignmentId) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+  if (!assignmentId) throw new ApiError('Invalid id', 400)
 
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    throw new ApiError('Forbidden', 403)
   }
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  if (!schoolId) throw new ApiError('School context required', 400)
+
+  const existing = await prisma.assignment.findFirst({
+    where: { id: assignmentId, schoolId },
+  })
+  if (!existing) throw new ApiError('Not found', 404)
+  await assertTeacherManagesAssignment({ schoolId, user: auth.user, assignment: existing })
 
   const body = await request.json()
   const classId = safeStringId(body?.classId) || ''
@@ -74,6 +88,21 @@ export async function PUT(request, { params }) {
         })
       : null
 
+  if ((classId || className) && !classRecord) {
+    throw new ApiError('Class not found in this school', 404)
+  }
+
+  const nextSubject = body.subject ? String(body.subject).trim() : existing.subject
+  const nextClassId = classRecord?.id || existing.classId
+  if (classRecord || body.subject) {
+    await assertTeacherTeachesClassSubject({
+      schoolId,
+      user: auth.user,
+      classId: nextClassId,
+      subjectName: nextSubject,
+    })
+  }
+
   const updated = await prisma.assignment.updateMany({
     where: { id: assignmentId, schoolId },
     data: {
@@ -87,33 +116,37 @@ export async function PUT(request, { params }) {
     },
   })
 
-  if (updated.count === 0) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  if (updated.count === 0) throw new ApiError('Not found', 404)
 
   const assignment = await prisma.assignment.findFirst({ where: { id: assignmentId, schoolId } })
   return NextResponse.json({ success: true, data: assignment })
-}
+})
 
-export async function DELETE(request, { params }) {
+export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
   const assignmentId = await safeRouteParam(params, 'id')
-  if (!assignmentId) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+  if (!assignmentId) throw new ApiError('Invalid id', 400)
 
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    throw new ApiError('Forbidden', 403)
   }
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  if (!schoolId) throw new ApiError('School context required', 400)
 
-  const deleted = await prisma.assignment.deleteMany({
+  const existing = await prisma.assignment.findFirst({
+    where: { id: assignmentId, schoolId },
+  })
+  if (!existing) throw new ApiError('Not found', 404)
+  await assertTeacherManagesAssignment({ schoolId, user: auth.user, assignment: existing })
+
+  await prisma.assignment.deleteMany({
     where: { id: assignmentId, schoolId },
   })
 
-  if (deleted.count === 0) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-
   return NextResponse.json({ success: true })
-}
+})

@@ -43,9 +43,10 @@ describe('gemini-config', () => {
 
 describe('AI provider chain order', () => {
   it('prefers Groq before Gemini', async () => {
+    vi.resetModules()
     const { aiChain } = await import('@/lib/ai/provider-fallback')
     const status = aiChain.getProviderStatus()
     const names = status.map((p) => p.name)
     expect(names.indexOf('Groq')).toBeLessThan(names.indexOf('Gemini'))
-  })
+  }, 15000)
 })

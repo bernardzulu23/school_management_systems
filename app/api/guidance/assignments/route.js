@@ -8,6 +8,7 @@ import {
   authorizeGuidanceAssignmentRead,
 } from '@/lib/guidance/routeAuth'
 import { normalizeGuidanceScope } from '@/lib/guidance/guidanceAccess'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 export const GET = withErrorHandler(async function GET(request) {
   const authz = await authorizeGuidanceAssignmentRead(request)
@@ -31,6 +32,7 @@ export const GET = withErrorHandler(async function GET(request) {
         assignedBy: { select: { id: true, name: true } },
       },
       orderBy: { assignedAt: 'desc' },
+      take: 100,
     })
     return NextResponse.json({ success: true, data: assignments })
   }
@@ -44,7 +46,7 @@ export const POST = withErrorHandler(async function POST(request) {
 
   const { auth, schoolId } = authz
   const body = await request.json().catch(() => ({}))
-  const teacherId = String(body?.teacherId || '').trim()
+  const teacherId = safeStringId(body?.teacherId)
   const scope = normalizeGuidanceScope(body?.scope)
   const canManageReEntry = Boolean(body?.canManageReEntry)
 

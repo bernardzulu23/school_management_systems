@@ -3,18 +3,19 @@ import { NextResponse } from 'next/server'
 import path from 'path'
 import { readFile } from 'fs/promises'
 import prisma from '@/lib/prisma'
-import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
+import { isEczStaff } from '@/lib/ecz/routeAuth'
 
-const CAN_ACCESS = ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
-
-export async function GET(request, { params }) {
+export const GET = withErrorHandler(async function GET(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
-  if (!roleCheck(auth.user, CAN_ACCESS)) {
+  if (!isEczStaff(auth.user)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -26,9 +27,11 @@ export async function GET(request, { params }) {
   const eczCheck = await requireSecondarySchoolAccess(schoolId)
   if (!eczCheck.ok) return eczCheck.response
 
-  const routeParams = await params
-  const filename = path.basename(String(routeParams?.filename || ''))
-  if (!filename) return NextResponse.json({ error: 'Invalid file' }, { status: 400 })
+  const filenameParam = await safeRouteParam(params, 'filename')
+  const filename = filenameParam ? path.basename(filenameParam) : ''
+  if (!filename || filename.includes('..')) {
+    return NextResponse.json({ error: 'Invalid file' }, { status: 400 })
+  }
 
   const row = await prisma.eczEvidenceFile.findFirst({
     where: {
@@ -52,4 +55,4 @@ export async function GET(request, { params }) {
   } catch {
     return NextResponse.json({ error: 'File not found on disk' }, { status: 404 })
   }
-}
+})

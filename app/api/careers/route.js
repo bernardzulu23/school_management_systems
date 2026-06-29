@@ -10,6 +10,8 @@ import {
   assertCareerGuidanceManager,
   isCareerGuidanceStaff,
 } from '@/lib/guidance/careerGuidanceAuth'
+import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 function pickCareerFields(body) {
   const fields = [
@@ -32,7 +34,7 @@ function pickCareerFields(body) {
   return data
 }
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -46,7 +48,7 @@ export async function GET(request) {
 
   const db = getTenantClient(schoolId)
   const { searchParams } = new URL(request.url)
-  const clusterId = searchParams.get('clusterId')
+  const clusterId = safeQueryString(searchParams.get('clusterId'))
   const isStaff = await isCareerGuidanceStaff(auth.user, schoolId)
   const activeOnly = !isStaff || searchParams.get('all') !== '1'
 
@@ -56,15 +58,16 @@ export async function GET(request) {
       ...(activeOnly ? { active: true } : {}),
     },
     orderBy: [{ sortOrder: 'asc' }, { title: 'asc' }],
+    take: 500,
     include: {
       cluster: { select: { id: true, name: true, description: true, active: true } },
     },
   })
 
   return NextResponse.json({ success: true, data: careers })
-}
+})
 
-export async function POST(request) {
+export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -107,11 +110,8 @@ export async function POST(request) {
     return NextResponse.json({ success: true, data: career }, { status: 201 })
   } catch (error) {
     if (error?.code === 'P2002') {
-      return NextResponse.json(
-        { error: 'This career title already exists in the selected cluster' },
-        { status: 409 }
-      )
+      throw new ApiError('This career title already exists in the selected cluster', 409)
     }
-    return NextResponse.json({ error: error.message || 'Could not create career' }, { status: 500 })
+    throw error
   }
-}
+})

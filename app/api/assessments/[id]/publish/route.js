@@ -9,9 +9,11 @@ import {
   publishAssessmentAsAssignment,
 } from '@/lib/assessments/assessmentInteractive'
 import { isIndividualSchool } from '@/lib/middleware/individual-gate'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 export const POST = withErrorHandler(async function POST(request, { params }) {
-  const routeParams = await params
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('Assessment id is required', 400)
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -25,7 +27,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const assessment = await prisma.assessment.findFirst({
-    where: { id: routeParams.id, schoolId },
+    where: { id, schoolId },
   })
   if (!assessment) throw new ApiError('Assessment not found', 404)
 
@@ -40,7 +42,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     })
   }
 
-  if (!['APPROVED', 'SUBMITTED'].includes(String(assessment.status))) {
+  if (!['APPROVED'].includes(String(assessment.status))) {
     const individual = await isIndividualSchool(schoolId)
     if (!(individual && String(assessment.status) === 'DRAFT')) {
       throw new ApiError(

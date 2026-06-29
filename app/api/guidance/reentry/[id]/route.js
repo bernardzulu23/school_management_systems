@@ -6,6 +6,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { validateBody } from '@/lib/middleware/validate-request'
 import { UpdateReEntrySchema } from '@/lib/schemas'
 import { authorizeReEntryAccess } from '@/lib/guidance/routeAuth'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 const reEntryInclude = {
   pupil: { select: { id: true, name: true, class: true, exam_number: true } },
@@ -13,12 +14,13 @@ const reEntryInclude = {
 }
 
 export const PATCH = withErrorHandler(async function PATCH(request, { params }) {
-  const routeParams = await params
+  const recordId = await safeRouteParam(params, 'id')
+  if (!recordId) throw new ApiError('Invalid id', 400)
+
   const authz = await authorizeReEntryAccess(request)
   if (!authz.ok) return authz.response
 
   const { schoolId } = authz
-  const recordId = String(routeParams?.id || '').trim()
   const { data: body, error: validationError } = await validateBody(request, UpdateReEntrySchema)
   if (validationError) return validationError
 

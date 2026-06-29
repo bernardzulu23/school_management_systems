@@ -155,7 +155,6 @@ export const POST = withSecureApi(async function POST(request) {
 
     // 2. Resolve school for multi-tenant lookup
     let schoolId = await resolvePublicSchoolId(request, subdomain)
-    console.log('[Login Debug] Resolved School ID:', schoolId)
 
     if (!schoolId) {
       const matches = await prisma.user.findMany({
@@ -169,7 +168,6 @@ export const POST = withSecureApi(async function POST(request) {
       })
       if (matches.length === 1) {
         schoolId = matches[0].schoolId
-        console.log('[Login Debug] Inferred School ID (email fallback):', schoolId)
       }
     }
 
@@ -212,7 +210,6 @@ export const POST = withSecureApi(async function POST(request) {
       if (emailMatches.length === 1) {
         user = emailMatches[0]
         schoolId = user.schoolId
-        console.log('[Login Debug] Matched user via email fallback, schoolId:', schoolId)
       }
     }
 

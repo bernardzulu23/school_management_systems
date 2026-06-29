@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
 const ADMIN_ROLES = new Set(['headteacher', 'administrator', 'admin', 'superadmin'])
 
@@ -27,7 +28,7 @@ function normalizeRole(value) {
   return r
 }
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const user = await getAuthUser(request)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -41,6 +42,7 @@ export async function GET(request) {
   const features = await prisma.creativeFeature.findMany({
     where: { schoolId },
     orderBy: [{ category: 'asc' }, { createdAt: 'asc' }],
+    take: 200,
     select: {
       featureId: true,
       name: true,
@@ -78,4 +80,4 @@ export async function GET(request) {
     stem,
     all: enriched,
   })
-}
+})

@@ -34,6 +34,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const files = await db.hodFile.findMany({
     where: { entityType, entityId },
     orderBy: { createdAt: 'desc' },
+    take: 100,
   })
 
   return NextResponse.json({ success: true, data: files.map(mapHodFileRow) })

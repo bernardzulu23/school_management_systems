@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
@@ -12,6 +13,7 @@ import {
 } from '@/lib/sms'
 import { passwordPolicyError } from '@/lib/security/passwordPolicy'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+import { revokeAllUserRefreshTokens } from '@/lib/auth/sessionRevocation'
 
 export const POST = withSecureApi(async function POST(request, { params }) {
   try {
@@ -70,6 +72,8 @@ export const POST = withSecureApi(async function POST(request, { params }) {
         resetTokenExpiry: null,
       },
     })
+
+    await revokeAllUserRefreshTokens(user.id).catch(() => {})
 
     try {
       const recipients = normalizePhoneNumbers(user?.contact_number)

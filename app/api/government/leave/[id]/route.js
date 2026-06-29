@@ -3,9 +3,12 @@ import { NextResponse } from 'next/server'
 import { roleCheck } from '@/lib/middleware/auth'
 import { authorizeGovernmentRoute } from '@/lib/government/routeAuth'
 import { updateLeaveStatus } from '@/lib/government/leave'
-import { withSecureApi } from '@/lib/middleware/secureApi'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
-export const PATCH = withSecureApi(async function PATCH(request, context) {
+const ALLOWED_LEAVE_STATUS = new Set(['approved', 'rejected'])
+
+export const PATCH = withSecureHandler(async function PATCH(request, context) {
   const access = await authorizeGovernmentRoute(request, 'teacher-leave')
   if (!access.ok) return access.response
 
@@ -13,11 +16,12 @@ export const PATCH = withSecureApi(async function PATCH(request, context) {
     return NextResponse.json({ error: 'Only headteachers can approve leave' }, { status: 403 })
   }
 
-  const params = await context.params
-  const leaveId = String(params?.id || '')
+  const leaveId = await safeRouteParam(context.params, 'id')
+  if (!leaveId) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+
   const body = await request.json().catch(() => ({}))
   const status = String(body.status || '').toLowerCase()
-  if (status !== 'approved' && status !== 'rejected') {
+  if (!ALLOWED_LEAVE_STATUS.has(status)) {
     return NextResponse.json({ error: 'status must be approved or rejected' }, { status: 400 })
   }
 

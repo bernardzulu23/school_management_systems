@@ -10,8 +10,10 @@ import {
   extractLipilaStatus,
   lipilaCheckCollectionStatus,
 } from '@/lib/payments/lipila'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
-export async function GET(request) {
+export const GET = withSecureHandler(async function GET(request) {
   const token = request.cookies.get('onboarding_token')?.value || ''
   const registrationId = verifyOnboardingToken(token)
   if (!registrationId) {
@@ -19,7 +21,9 @@ export async function GET(request) {
   }
 
   const { searchParams } = new URL(request.url)
-  const syncPayment = searchParams.get('syncPayment') === '1' || searchParams.get('sync') === '1'
+  const syncPayment =
+    safeQueryString(searchParams.get('syncPayment')) === '1' ||
+    safeQueryString(searchParams.get('sync')) === '1'
 
   let reg = await prisma.schoolRegistration.findUnique({
     where: { id: registrationId },
@@ -54,7 +58,7 @@ export async function GET(request) {
     Boolean(reg.paymentReference)
 
   if (shouldSync) {
-    const deepSync = searchParams.get('deepSync') === '1'
+    const deepSync = safeQueryString(searchParams.get('deepSync')) === '1'
     if (deepSync && reg.paymentReference) {
       const outcome = await checkPaymentStatusWithRetry(reg.paymentReference)
       if (outcome === 'paid' || outcome === 'failed') {
@@ -111,4 +115,4 @@ export async function GET(request) {
     },
     { status: 200 }
   )
-}
+})

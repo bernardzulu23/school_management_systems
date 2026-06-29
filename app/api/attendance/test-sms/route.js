@@ -5,6 +5,7 @@ import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { notifyParentAttendance } from '@/lib/attendance/parentNotifications'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 /** DEV ONLY — test parent attendance SMS for a student. */
 export const POST = withErrorHandler(async function POST(request) {
@@ -21,7 +22,7 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const body = await request.json().catch(() => ({}))
-  const studentId = String(body?.studentId || '').trim()
+  const studentId = safeStringId(body?.studentId)
   if (!studentId) {
     return NextResponse.json({ error: 'studentId required' }, { status: 400 })
   }

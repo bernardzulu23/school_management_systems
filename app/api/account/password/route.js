@@ -3,8 +3,10 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { passwordPolicyError } from '@/lib/security/passwordPolicy'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+import { revokeAllUserRefreshTokens } from '@/lib/auth/sessionRevocation'
 
 export const POST = withSecureApi(async function POST(request) {
   const auth = await authMiddleware(request)
@@ -25,6 +27,13 @@ export const POST = withSecureApi(async function POST(request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) {
+    return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  }
+
   const body = await request.json()
   const currentPassword = String(body.currentPassword || '')
   const newPassword = String(body.newPassword || '')
@@ -42,7 +51,7 @@ export const POST = withSecureApi(async function POST(request) {
   }
 
   const user = await prisma.user.findFirst({
-    where: { id: auth.user.id, schoolId: auth.user.schoolId },
+    where: { id: auth.user.id, schoolId },
     select: { id: true, password: true },
   })
   if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 })
@@ -55,6 +64,8 @@ export const POST = withSecureApi(async function POST(request) {
     where: { id: user.id },
     data: { password: hashed },
   })
+
+  await revokeAllUserRefreshTokens(user.id).catch(() => {})
 
   return NextResponse.json({ success: true })
 })

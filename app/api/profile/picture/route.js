@@ -5,6 +5,7 @@ import { mkdir, writeFile } from 'fs/promises'
 import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
 const MAX_BYTES = 10 * 1024 * 1024
 const ALLOWED = {
@@ -13,7 +14,7 @@ const ALLOWED = {
   'image/webp': 'webp',
 }
 
-export async function PUT(request) {
+export const PUT = withErrorHandler(async function PUT(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -67,4 +68,4 @@ export async function PUT(request) {
   })
 
   return NextResponse.json({ success: true, profile_picture_url: url })
-}
+})

@@ -12,6 +12,7 @@ import {
 } from '@/lib/middleware/ecz-validation'
 import { generateEczRubricCriteria, criteriaToPrismaCreate } from '@/lib/ecz/ecz-rubric-builder'
 import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
@@ -34,8 +35,9 @@ export const POST = withErrorHandler(async function POST(request) {
   const formCheck = canCreateSBATask(formLevel)
   if (!formCheck.allowed) throw new ApiError(formCheck.reason, 400)
 
-  const subjectId = String(body.subjectId || '').trim()
-  const classId = body.classId ? String(body.classId).trim() : null
+  const subjectId = safeStringId(body.subjectId)
+  const classId = safeStringId(body.classId)
+  const sourceAssessmentId = safeStringId(body.sourceAssessmentId || body.assessmentId)
   const title = String(body.title || body.quizTitle || 'End of Term Test').trim()
   const term = Number(body.term)
   const questions = Array.isArray(body.questions) ? body.questions : []
@@ -45,6 +47,14 @@ export const POST = withErrorHandler(async function POST(request) {
     throw new ApiError('term (1–3) is required', 400)
   }
   if (!questions.length) throw new ApiError('questions array is required', 400)
+
+  if (sourceAssessmentId) {
+    const source = await prisma.assessment.findFirst({
+      where: { id: sourceAssessmentId, schoolId },
+      select: { id: true },
+    })
+    if (!source) throw new ApiError('Source assessment not found in this school', 404)
+  }
 
   const context = String(body.context || questions[0]?.question || '').trim()
   const contextCheck = validateZambianContext(context)

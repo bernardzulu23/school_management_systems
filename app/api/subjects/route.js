@@ -10,6 +10,8 @@ import { validateBody } from '@/lib/middleware/validate-request'
 import { CreateSubjectSchema } from '@/lib/schemas'
 import { resolveSubjectCatalog } from '@/lib/subjects/resolveSubjectCatalog'
 import { seedSubjectsForSchool, filterDbSubjectsByLevel } from '@/lib/subjects/seedSubjects'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 async function loadSchool(schoolId) {
   return basePrisma.school.findUnique({
@@ -18,7 +20,7 @@ async function loadSchool(schoolId) {
   })
 }
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -32,7 +34,10 @@ export async function GET(request) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const { searchParams } = new URL(request.url)
-  const gradeLevel = searchParams.get('gradeLevel') || searchParams.get('grade') || null
+  const gradeLevel =
+    safeQueryString(searchParams.get('gradeLevel')) ||
+    safeQueryString(searchParams.get('grade')) ||
+    null
 
   const school = await loadSchool(schoolId)
   const { educationLevel } = resolveSubjectCatalog({
@@ -54,9 +59,9 @@ export async function GET(request) {
     data: filtered,
     meta: { educationLevel, schoolLevel: school?.level || 'combined' },
   })
-}
+})
 
-export async function POST(request) {
+export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -80,28 +85,24 @@ export async function POST(request) {
   const code = body.code ? String(body.code).trim() : null
   const description = body.description ? String(body.description).trim() : null
 
-  try {
-    const subject = await db.subject.upsert({
-      where: { schoolId_name: { schoolId, name } },
-      create: {
-        schoolId,
-        name,
-        code: code || null,
-        description: description || null,
-        topics: [],
-        educationLevel: body.educationLevel || educationLevel,
-      },
-      update: {
-        code: code || undefined,
-        description: description || undefined,
-        educationLevel: body.educationLevel || undefined,
-      },
-      select: { id: true, name: true, code: true, description: true, educationLevel: true },
-    })
-    revalidateTag(`subjects-${schoolId}`)
-    revalidateTag('subjects')
-    return NextResponse.json({ success: true, data: subject }, { status: 201 })
-  } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
-}
+  const subject = await db.subject.upsert({
+    where: { schoolId_name: { schoolId, name } },
+    create: {
+      schoolId,
+      name,
+      code: code || null,
+      description: description || null,
+      topics: [],
+      educationLevel: body.educationLevel || educationLevel,
+    },
+    update: {
+      code: code || undefined,
+      description: description || undefined,
+      educationLevel: body.educationLevel || undefined,
+    },
+    select: { id: true, name: true, code: true, description: true, educationLevel: true },
+  })
+  revalidateTag(`subjects-${schoolId}`)
+  revalidateTag('subjects')
+  return NextResponse.json({ success: true, data: subject }, { status: 201 })
+})

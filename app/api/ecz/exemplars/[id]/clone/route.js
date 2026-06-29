@@ -12,6 +12,7 @@ import {
 } from '@/lib/middleware/ecz-validation'
 import { generateEczRubricCriteria, criteriaToPrismaCreate } from '@/lib/ecz/ecz-rubric-builder'
 import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
+import { safeRouteParam, safeStringId } from '@/lib/security/safeQueryValue'
 
 export const POST = withErrorHandler(async function POST(request, { params }) {
   const auth = await authMiddleware(request)
@@ -29,12 +30,12 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   const eczCheck = await requireSecondarySchoolAccess(schoolId)
   if (!eczCheck.ok) return eczCheck.response
 
-  const exemplarId = String(params?.id || '').trim()
+  const exemplarId = await safeRouteParam(params, 'id')
   if (!exemplarId) throw new ApiError('Exemplar id required', 400)
 
   const body = await request.json().catch(() => ({}))
-  const subjectId = String(body.subjectId || '').trim()
-  const classId = body.classId ? String(body.classId).trim() : null
+  const subjectId = safeStringId(body.subjectId)
+  const classId = body.classId ? safeStringId(body.classId) : null
   const formLevel = Number(body.formLevel)
   const term = body.term != null ? Number(body.term) : null
 

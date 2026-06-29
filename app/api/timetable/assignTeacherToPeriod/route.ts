@@ -3,6 +3,8 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,7 +16,7 @@ type Body = {
   notes?: string
 }
 
-export async function POST(req: NextRequest) {
+export const POST = withErrorHandler(async function POST(req: NextRequest) {
   const auth = await authMiddleware(req as any)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, ['ADMIN', 'HOD'])) {
@@ -32,8 +34,8 @@ export async function POST(req: NextRequest) {
   if (!typeCheck.allowed) return typeCheck.response
 
   const body = (await req.json().catch(() => ({}))) as Body
-  const teacherId = String(body.teacherId || '').trim()
-  const timeSlotId = String(body.timeSlotId || '').trim()
+  const teacherId = safeStringId(body.teacherId)
+  const timeSlotId = safeStringId(body.timeSlotId)
   const action = body.action || 'assign'
 
   if (!teacherId || !timeSlotId) {
@@ -86,4 +88,4 @@ export async function POST(req: NextRequest) {
     assignment,
     message: `Teacher assigned to period ${assignment.timeSlot.period}`,
   })
-}
+})

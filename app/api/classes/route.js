@@ -4,6 +4,8 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { getActiveClasses } from '@/lib/timetable/getActiveClasses'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 function standardZambianClasses() {
   const sections = ['A', 'B', 'C', 'D']
@@ -33,7 +35,7 @@ function standardZambianClasses() {
   return classes
 }
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -60,8 +62,11 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url)
   const seedDefaults = String(searchParams.get('seedDefaults') || '').toLowerCase() === 'true'
   const activeOnly = String(searchParams.get('activeOnly') || '').toLowerCase() === 'true'
-  const term = String(searchParams.get('term') || 'Term 1')
-  const academicYear = String(searchParams.get('academicYear') || new Date().getFullYear())
+  const term = safeQueryString(searchParams.get('term'), { defaultValue: 'Term 1' })
+  const academicYear = safeQueryString(searchParams.get('academicYear'), {
+    defaultValue: String(new Date().getFullYear()),
+  })
+
   if (seedDefaults && roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
     await prisma.$transaction(async (tx) => {
       for (const c of standardZambianClasses()) {
@@ -108,7 +113,7 @@ export async function GET(request) {
       studentCount: c._count?.students ?? 0,
     })),
   })
-}
+})
 
 function parseClassInput(rawName) {
   const name = String(rawName || '').trim()
@@ -152,7 +157,7 @@ function parseClassInput(rawName) {
   }
 }
 
-export async function POST(request) {
+export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -165,12 +170,7 @@ export async function POST(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  let body = {}
-  try {
-    body = await request.json()
-  } catch {
-    body = {}
-  }
+  const body = await request.json().catch(() => ({}))
 
   const parsed = parseClassInput(body?.name)
   if (!parsed?.name) {
@@ -183,23 +183,19 @@ export async function POST(request) {
     return NextResponse.json({ error: 'year_group and section are required' }, { status: 400 })
   }
 
-  try {
-    const created = await prisma.class.upsert({
-      where: { schoolId_name: { schoolId, name: parsed.name } },
-      create: {
-        schoolId,
-        name: parsed.name,
-        year_group,
-        section: section.toUpperCase(),
-      },
-      update: {
-        year_group,
-        section: section.toUpperCase(),
-      },
-      select: { id: true, name: true, year_group: true, section: true },
-    })
-    return NextResponse.json({ success: true, data: created }, { status: 201 })
-  } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
-}
+  const created = await prisma.class.upsert({
+    where: { schoolId_name: { schoolId, name: parsed.name } },
+    create: {
+      schoolId,
+      name: parsed.name,
+      year_group,
+      section: section.toUpperCase(),
+    },
+    update: {
+      year_group,
+      section: section.toUpperCase(),
+    },
+    select: { id: true, name: true, year_group: true, section: true },
+  })
+  return NextResponse.json({ success: true, data: created }, { status: 201 })
+})

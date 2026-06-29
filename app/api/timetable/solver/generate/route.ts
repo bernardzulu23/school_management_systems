@@ -13,6 +13,7 @@ import {
   type SolverPayload,
 } from '@/lib/timetable/greedySolver'
 import { syncTimeSlotsFromConfig } from '@/lib/timetable/syncTimeSlots'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
 export const dynamic = 'force-dynamic'
 
@@ -159,7 +160,7 @@ async function expandSolverAssignmentsToUi(
   return out
 }
 
-export async function POST(req: NextRequest) {
+export const POST = withErrorHandler(async function POST(req: NextRequest) {
   const auth = await authMiddleware(req as any)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HEADTEACHER'])) {
@@ -370,4 +371,4 @@ export async function POST(req: NextRequest) {
     const msg = err instanceof Error ? err.message : 'Solver generation failed'
     return NextResponse.json({ error: msg }, { status: 500 })
   }
-}
+})

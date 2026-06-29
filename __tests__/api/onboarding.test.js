@@ -43,9 +43,11 @@ describe('Onboarding payment gate', () => {
             name: 'New School',
             subdomain: 'newschool',
           }),
+          update: vi.fn().mockResolvedValue({ id: 'school-new-1' }),
         },
         user: { create: vi.fn().mockResolvedValue({ id: 'user-new-1' }) },
         schoolRegistration: { update: vi.fn().mockResolvedValue({}) },
+        subject: { createMany: vi.fn().mockResolvedValue({ count: 0 }) },
       }
       return fn(tx)
     })

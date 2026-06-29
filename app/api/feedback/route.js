@@ -3,9 +3,13 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeStringId } from '@/lib/security/safeQueryValue'
+
+const FEEDBACK_CATEGORIES = new Set(['general', 'usability', 'feature', 'bug', 'other'])
 
 /** GET /api/feedback — List feedback (admin/headteacher only) */
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -20,27 +24,30 @@ export async function GET(request) {
     return NextResponse.json({ error: 'School context could not be determined' }, { status: 400 })
   }
 
-  try {
-    const feedbacks = await prisma.feedback.findMany({
-      where: { schoolId },
-      include: {
-        user: {
-          select: { id: true, name: true, email: true, role: true },
-        },
+  const feedbacks = await prisma.feedback.findMany({
+    where: { schoolId },
+    include: {
+      user: {
+        select: { id: true, name: true, email: true, role: true },
       },
-      orderBy: { createdAt: 'desc' },
-    })
-    return NextResponse.json({ feedbacks })
-  } catch (err) {
-    console.error('Feedback list error:', err)
-    return NextResponse.json({ error: 'Failed to fetch feedback' }, { status: 500 })
-  }
-}
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 200,
+  })
+  return NextResponse.json({ success: true, feedbacks })
+})
 
 /** POST /api/feedback — Submit feedback (users only, NOT admin) */
-export async function POST(request) {
+export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
+
+  if (roleCheck(auth.user, ['ADMIN', 'headteacher', 'administrator', 'admin'])) {
+    return NextResponse.json(
+      { error: 'Administrators cannot submit feedback through this endpoint' },
+      { status: 403 }
+    )
+  }
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
@@ -49,14 +56,9 @@ export async function POST(request) {
     return NextResponse.json({ error: 'School context could not be determined' }, { status: 400 })
   }
 
-  let body
-  try {
-    body = await request.json()
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
-  }
+  const body = await request.json().catch(() => ({}))
 
-  const message = typeof body.message === 'string' ? body.message.trim() : ''
+  const message = typeof body.message === 'string' ? body.message.trim().slice(0, 5000) : ''
   if (!message || message.length < 3) {
     return NextResponse.json(
       { error: 'Feedback message must be at least 3 characters' },
@@ -64,33 +66,26 @@ export async function POST(request) {
     )
   }
 
-  const category = ['general', 'usability', 'feature', 'bug', 'other'].includes(body.category)
-    ? body.category
-    : 'general'
+  const category = FEEDBACK_CATEGORIES.has(body.category) ? body.category : 'general'
   const rating =
     typeof body.rating === 'number' && body.rating >= 1 && body.rating <= 5 ? body.rating : null
   const isPublic = body?.isPublic === true
 
-  try {
-    const feedback = await prisma.feedback.create({
-      data: {
-        userId: auth.user.id,
-        schoolId,
-        message,
-        category,
-        rating,
-        isPublic,
-      },
-    })
-    return NextResponse.json({ success: true, id: feedback.id })
-  } catch (err) {
-    console.error('Feedback create error:', err)
-    return NextResponse.json({ error: 'Failed to submit feedback' }, { status: 500 })
-  }
-}
+  const feedback = await prisma.feedback.create({
+    data: {
+      userId: auth.user.id,
+      schoolId,
+      message,
+      category,
+      rating,
+      isPublic,
+    },
+  })
+  return NextResponse.json({ success: true, id: feedback.id })
+})
 
 /** PATCH /api/feedback — Mark feedback public/private (admin/headteacher only) */
-export async function PATCH(request) {
+export const PATCH = withErrorHandler(async function PATCH(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -109,7 +104,7 @@ export async function PATCH(request) {
   }
 
   const body = await request.json().catch(() => ({}))
-  const id = typeof body?.id === 'string' ? body.id.trim() : ''
+  const id = safeStringId(body?.id)
   const isPublic = body?.isPublic === true
 
   if (!id) return NextResponse.json({ error: 'Feedback id is required' }, { status: 400 })
@@ -124,4 +119,4 @@ export async function PATCH(request) {
   }
 
   return NextResponse.json({ success: true })
-}
+})

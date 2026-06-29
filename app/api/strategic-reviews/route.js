@@ -3,10 +3,11 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { requireRole } from '@/lib/middleware/requireRole'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
 const ALLOWED_ROLES = ['headteacher', 'HOD', 'hod']
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await requireRole(request, ALLOWED_ROLES)
   if (!auth.isAuthenticated) return auth.response
   if (auth.denied) return auth.response
@@ -34,9 +35,9 @@ export async function GET(request) {
   })
 
   return NextResponse.json({ success: true, data: reviews })
-}
+})
 
-export async function POST(request) {
+export const POST = withErrorHandler(async function POST(request) {
   const auth = await requireRole(request, ALLOWED_ROLES)
   if (!auth.isAuthenticated) return auth.response
   if (auth.denied) return auth.response
@@ -68,4 +69,4 @@ export async function POST(request) {
   })
 
   return NextResponse.json({ success: true, data: review }, { status: 201 })
-}
+})

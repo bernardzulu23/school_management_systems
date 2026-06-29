@@ -3,6 +3,8 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { toPrismaJsonValue } from '@/lib/timetable/recipes'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 export const dynamic = 'force-dynamic'
 
@@ -164,7 +166,7 @@ function validateRecipeAgainstSlots(params: {
   return { isValid: errors.length === 0, result: { errors, warnings, totalPeriods } }
 }
 
-export async function POST(req: NextRequest) {
+export const POST = withErrorHandler(async function POST(req: NextRequest) {
   const auth = await authMiddleware(req as any)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, ['ADMIN']))
@@ -177,7 +179,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, error: 'Missing school context' }, { status: 400 })
 
   const body = (await req.json().catch(() => ({}))) as Body
-  const teachingAssignmentId = String(body.teachingAssignmentId || '').trim()
+  const teachingAssignmentId = safeStringId(body.teachingAssignmentId)
   const blocks = Array.isArray(body.blocks) ? body.blocks : []
   const constraints = Array.isArray(body.constraints) ? body.constraints : []
 
@@ -266,4 +268,4 @@ export async function POST(req: NextRequest) {
   })
 
   return NextResponse.json({ success: true, data: created })
-}
+})

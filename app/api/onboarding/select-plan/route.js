@@ -6,11 +6,12 @@ import {
   loadOnboardingRegistration,
 } from '@/lib/onboarding/guards'
 import { INDIVIDUAL_PLANS } from '@/lib/onboarding/individual'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
 const PAID_SCHOOL_PLANS = new Set(['basic', 'standard', 'premium'])
 const PAID_INDIVIDUAL_PLANS = new Set(['individual_premium', 'individual_annual'])
 
-export async function POST(request) {
+export const POST = withSecureHandler(async function POST(request) {
   const loaded = await loadOnboardingRegistration(request)
   if (!loaded.ok) return loaded.response
   const reg = loaded.reg
@@ -71,4 +72,4 @@ export async function POST(request) {
     data: { plan },
   })
   return NextResponse.json({ success: true, plan, nextStep: 'plan' }, { status: 200 })
-}
+})

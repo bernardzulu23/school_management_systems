@@ -7,6 +7,7 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { mapGameForManagement } from '@/lib/games/mapGameResponse'
 import { normalizeGameContent, resolveSubjectLabel } from '@/lib/games/normalizeGameBody'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 async function loadGame(id, schoolId) {
   const game = await prisma.game.findFirst({ where: { id, schoolId } })
@@ -15,7 +16,9 @@ async function loadGame(id, schoolId) {
 }
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
-  const routeParams = await params
+  const gameId = await safeRouteParam(params, 'id')
+  if (!gameId) throw new ApiError('Invalid id', 400)
+
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -28,7 +31,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const game = await loadGame(String(routeParams.id), schoolId)
+  const game = await loadGame(gameId, schoolId)
   const stats = await prisma.studentGame.aggregate({
     where: { schoolId, gameId: game.id },
     _count: { id: true },
@@ -45,7 +48,9 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
 })
 
 export const PATCH = withErrorHandler(async function PATCH(request, { params }) {
-  const routeParams = await params
+  const gameId = await safeRouteParam(params, 'id')
+  if (!gameId) throw new ApiError('Invalid id', 400)
+
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -58,7 +63,7 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const existing = await loadGame(String(routeParams.id), schoolId)
+  const existing = await loadGame(gameId, schoolId)
   const body = await request.json().catch(() => ({}))
   const prevContent =
     existing.content && typeof existing.content === 'object' ? existing.content : {}
@@ -103,7 +108,9 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
 })
 
 export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
-  const routeParams = await params
+  const gameId = await safeRouteParam(params, 'id')
+  if (!gameId) throw new ApiError('Invalid id', 400)
+
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -116,7 +123,7 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const existing = await loadGame(String(routeParams.id), schoolId)
+  const existing = await loadGame(gameId, schoolId)
   await prisma.game.delete({ where: { id: existing.id } })
 
   return NextResponse.json({ success: true })

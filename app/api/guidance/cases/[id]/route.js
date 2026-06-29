@@ -13,6 +13,7 @@ import {
   resolveHeadteacherUserId,
 } from '@/lib/guidance/caseAccess'
 import { guidanceCaseDetailInclude } from '@/lib/guidance/caseQueries'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 async function loadCase(db, caseId) {
   return db.guidanceCase.findFirst({
@@ -68,8 +69,8 @@ async function resolveCaseAuth(request, caseId) {
 }
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
-  const routeParams = await params
-  const caseId = String(routeParams?.id || '').trim()
+  const caseId = await safeRouteParam(params, 'id')
+  if (!caseId) throw new ApiError('Invalid id', 400)
   const authz = await resolveCaseAuth(request, caseId)
   if (!authz.ok) {
     if (authz.response) return authz.response
@@ -88,8 +89,8 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
 })
 
 export const PATCH = withErrorHandler(async function PATCH(request, { params }) {
-  const routeParams = await params
-  const caseId = String(routeParams?.id || '').trim()
+  const caseId = await safeRouteParam(params, 'id')
+  if (!caseId) throw new ApiError('Invalid id', 400)
   const authz = await resolveCaseAuth(request, caseId)
   if (!authz.ok) {
     if (authz.response) return authz.response

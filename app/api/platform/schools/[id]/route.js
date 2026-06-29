@@ -7,7 +7,8 @@ import { requirePlatformAdmin } from '@/lib/middleware/platformAuth'
 import { toPlatformSchoolSummary } from '@/lib/platform/schoolEligibility'
 import { validateSchoolLocation } from '@/lib/platform/reportingStream'
 import { deleteSchoolAndData } from '@/lib/platform/deleteSchool'
-import { withSecureApi } from '@/lib/middleware/secureApi'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 const INDIVIDUAL_PLANS = [
   'individual',
@@ -18,7 +19,7 @@ const INDIVIDUAL_PLANS = [
 const SCHOOL_PLANS = ['trial', 'basic', 'standard', 'premium']
 
 /** Patch tenant billing flags and location metadata only. */
-export const PATCH = withSecureApi(async function PATCH(request, { params }) {
+export const PATCH = withSecureHandler(async function PATCH(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -27,7 +28,7 @@ export const PATCH = withSecureApi(async function PATCH(request, { params }) {
     return NextResponse.json({ error: gate.error }, { status: gate.status })
   }
 
-  const id = String((await params)?.id || '').trim()
+  const id = await safeRouteParam(params, 'id')
   if (!id) return NextResponse.json({ error: 'School id required' }, { status: 400 })
 
   const existing = await prisma.school.findUnique({
@@ -100,7 +101,7 @@ export const PATCH = withSecureApi(async function PATCH(request, { params }) {
 })
 
 /** Permanently delete a school or individual workspace and all tenant data. */
-export const DELETE = withSecureApi(async function DELETE(request, { params }) {
+export const DELETE = withSecureHandler(async function DELETE(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -109,7 +110,7 @@ export const DELETE = withSecureApi(async function DELETE(request, { params }) {
     return NextResponse.json({ error: gate.error }, { status: gate.status })
   }
 
-  const id = String((await params)?.id || '').trim()
+  const id = await safeRouteParam(params, 'id')
   if (!id) return NextResponse.json({ error: 'School id required' }, { status: 400 })
 
   const result = await deleteSchoolAndData(id)

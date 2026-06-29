@@ -6,7 +6,8 @@ import { authMiddleware } from '@/lib/middleware/auth'
 import { requirePlatformAdmin } from '@/lib/middleware/platformAuth'
 import { isAffiliatedPaidSchool, toPlatformSchoolSummary } from '@/lib/platform/schoolEligibility'
 import { attachCreatorContacts } from '@/lib/platform/schoolCreatorContact'
-import { withSecureApi } from '@/lib/middleware/secureApi'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 const SCHOOL_META_SELECT = {
   id: true,
@@ -29,7 +30,7 @@ const SCHOOL_META_SELECT = {
 }
 
 /** List affiliated, paid schools — metadata only (no enrollment counts). */
-export const GET = withSecureApi(async function GET(request) {
+export const GET = withSecureHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -40,9 +41,9 @@ export const GET = withSecureApi(async function GET(request) {
 
   const { searchParams } = new URL(request.url)
   const includeUnpaid = searchParams.get('includeUnpaid') === '1'
-  const province = String(searchParams.get('province') || '').trim()
-  const district = String(searchParams.get('district') || '').trim()
-  const stream = String(searchParams.get('stream') || '').trim()
+  const province = safeQueryString(searchParams.get('province'), { defaultValue: '' })
+  const district = safeQueryString(searchParams.get('district'), { defaultValue: '' })
+  const stream = safeQueryString(searchParams.get('stream'), { defaultValue: '' })
 
   const schools = await prisma.school.findMany({
     where: {
@@ -52,6 +53,7 @@ export const GET = withSecureApi(async function GET(request) {
     },
     select: SCHOOL_META_SELECT,
     orderBy: { createdAt: 'desc' },
+    take: 500,
   })
 
   const filtered = (includeUnpaid ? schools : schools.filter(isAffiliatedPaidSchool)).filter(

@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 import { sanitizeText } from '@/lib/lesson-plans/text'
 import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
 
@@ -13,7 +14,6 @@ function normalize(v) {
 }
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
-  const routeParams = await params
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -25,7 +25,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const userId = String(auth.user?.id || '').trim()
   if (!userId) throw new ApiError('Unauthorized', 401)
 
-  const id = normalize(routeParams?.id)
+  const id = await safeRouteParam(params, 'id')
   if (!id) throw new ApiError('id is required', 400)
 
   const plan = await prisma.lessonPlan.findFirst({
@@ -80,7 +80,6 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
 const EDITABLE_STATUSES = new Set(['DRAFT', 'REJECTED', 'REVISION_REQUESTED'])
 
 export const PUT = withErrorHandler(async function PUT(request, { params }) {
-  const routeParams = await params
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -92,7 +91,8 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const userId = String(auth.user?.id || '').trim()
   if (!userId) throw new ApiError('Unauthorized', 401)
 
-  const id = normalize(routeParams?.id)
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('id is required', 400)
   const body = await request.json().catch(() => ({}))
   const content = body?.content != null ? sanitizeText(String(body.content)) : null
 
@@ -136,7 +136,6 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
 })
 
 export const PATCH = withErrorHandler(async function PATCH(request, { params }) {
-  const routeParams = await params
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -152,7 +151,7 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
   const userId = String(auth.user?.id || '').trim()
   if (!userId) throw new ApiError('Unauthorized', 401)
 
-  const id = normalize(routeParams?.id)
+  const id = await safeRouteParam(params, 'id')
   if (!id) throw new ApiError('id is required', 400)
 
   const body = await request.json().catch(() => ({}))

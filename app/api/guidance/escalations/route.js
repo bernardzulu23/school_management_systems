@@ -6,6 +6,7 @@ import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { authorizeGuidanceHead } from '@/lib/guidance/routeAuth'
 import { guidanceCaseDetailInclude } from '@/lib/guidance/caseQueries'
 import { logCaseAccess } from '@/lib/guidance/caseAccess'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 export const GET = withErrorHandler(async function GET(request) {
   const authz = await authorizeGuidanceHead(request)
@@ -43,7 +44,7 @@ export const PATCH = withErrorHandler(async function PATCH(request) {
 
   const { schoolId, auth } = authz
   const body = await request.json().catch(() => ({}))
-  const escalationId = String(body?.id || '').trim()
+  const escalationId = safeStringId(body?.id)
   if (!escalationId) {
     return NextResponse.json({ error: 'Escalation id is required' }, { status: 400 })
   }

@@ -9,6 +9,10 @@ import { mergeAttendanceRegister } from '@/lib/attendance/unified-register'
 import { syncWebAttendanceToSession } from '@/lib/compliance/attendanceToday'
 import { openAttendanceSession, recordAttendanceMark } from '@/lib/attendance/sessions'
 import { bulkUpsertAttendance } from '@/lib/attendance/bulkUpsert'
+import { assertTeacherTeachesClassSubject } from '@/lib/assignments/routeScope'
+import { assertTeacherMayAccessAttendanceClass } from '@/lib/attendance/routeAuth'
+import { safeStringId } from '@/lib/security/safeQueryValue'
+import { roleCheck } from '@/lib/middleware/auth'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -19,15 +23,21 @@ export const GET = withErrorHandler(async function GET(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
+  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   const { searchParams } = new URL(request.url)
-  const classId = String(searchParams.get('classId') || '').trim()
-  const dateStr = String(searchParams.get('date') || '').trim()
-  const subjectId = String(searchParams.get('subjectId') || '').trim() || undefined
+  const classId = safeStringId(searchParams.get('classId'))
+  const dateStr = safeStringId(searchParams.get('date'))
+  const subjectId = safeStringId(searchParams.get('subjectId')) || undefined
   const legacyOnly = searchParams.get('legacyOnly') === '1'
 
   if (!classId || !dateStr) {
     return NextResponse.json({ error: 'classId and date are required' }, { status: 400 })
   }
+
+  await assertTeacherMayAccessAttendanceClass({ schoolId, user: auth.user, classId })
 
   const date = new Date(dateStr)
   if (Number.isNaN(date.getTime())) {
@@ -70,6 +80,10 @@ export const POST = withErrorHandler(async function POST(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
+  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   const rawBody = await request.json().catch(() => ({}))
 
   // Handle both { date, records: [] } and directly [ { studentId, date, status, remarks }, ... ]
@@ -85,6 +99,20 @@ export const POST = withErrorHandler(async function POST(request) {
 
   if (records.length === 0)
     return NextResponse.json({ error: 'records are required' }, { status: 400 })
+
+  const classId = safeStringId(rawBody?.classId)
+  let subjectId = safeStringId(rawBody?.subjectId)
+  if (classId) {
+    await assertTeacherMayAccessAttendanceClass({ schoolId, user: auth.user, classId })
+  }
+  if (classId && subjectId) {
+    await assertTeacherTeachesClassSubject({
+      schoolId,
+      user: auth.user,
+      classId,
+      subjectId,
+    })
+  }
 
   const validStatuses = ['present', 'absent', 'late', 'excused']
 
@@ -103,8 +131,11 @@ export const POST = withErrorHandler(async function POST(request) {
       const status = String(r?.status || '').toLowerCase()
       if (!validStatuses.includes(status)) return { error: `Invalid status: ${status}` }
 
+      const studentId = safeStringId(r?.studentId)
+      if (!studentId) return null
+
       return {
-        studentId: String(r?.studentId || ''),
+        studentId,
         status,
         remarks: r?.remarks !== undefined ? String(r.remarks || '') : null,
         date: normalized,
@@ -151,8 +182,6 @@ export const POST = withErrorHandler(async function POST(request) {
     date: new Date(),
   })
 
-  const classId = String(rawBody?.classId || '').trim()
-  let subjectId = String(rawBody?.subjectId || '').trim()
   if (classId && !subjectId) {
     const assignment = await prisma.teachingAssignment.findFirst({
       where: { schoolId, classId, teacher: { userId: auth.user.id } },

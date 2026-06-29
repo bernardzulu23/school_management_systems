@@ -2,8 +2,9 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import { fetchMarketingHomepage } from '@/lib/sanity/marketingHomepage'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
-export async function GET() {
+export const GET = withSecureHandler(async function GET() {
   try {
     const content = await fetchMarketingHomepage()
     if (!content) {
@@ -17,4 +18,4 @@ export async function GET() {
       { status: 500 }
     )
   }
-}
+})

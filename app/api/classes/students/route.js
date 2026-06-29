@@ -1,12 +1,18 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { authMiddleware } from '@/lib/middleware/auth'
+import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
+
+  if (!roleCheck(auth.user, ROLE_GROUPS.SCHOOL_STAFF)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
@@ -14,10 +20,13 @@ export async function GET(request) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const { searchParams } = new URL(request.url)
-  const classId = String(searchParams.get('classId') || '')
-  const subjectId = searchParams.get('subjectId') ? String(searchParams.get('subjectId')) : ''
+  const classId = safeStringId(searchParams.get('classId'))
+  const subjectId = safeStringId(searchParams.get('subjectId'))
   const includeFaceDataRaw = String(searchParams.get('includeFaceData') || '')
-  const includeFaceData = includeFaceDataRaw === 'true' || includeFaceDataRaw === '1'
+  const includeFaceData =
+    roleCheck(auth.user, ['ADMIN', 'headteacher', 'TEACHER', 'teacher']) &&
+    (includeFaceDataRaw === 'true' || includeFaceDataRaw === '1')
+
   if (!classId) return NextResponse.json({ error: 'classId is required' }, { status: 400 })
 
   const cls = await prisma.class.findFirst({
@@ -58,7 +67,7 @@ export async function GET(request) {
             where: { schoolId, id: { in: pupilIds } },
             include: studentInclude,
             orderBy: { updatedAt: 'desc' },
-            take: 2000,
+            take: 500,
           })
         : []
   } else {
@@ -69,7 +78,7 @@ export async function GET(request) {
       },
       include: studentInclude,
       orderBy: { updatedAt: 'desc' },
-      take: 2000,
+      take: 500,
     })
 
     const enrollments = await prisma.pupilSubjectEnrollment.findMany({
@@ -85,7 +94,7 @@ export async function GET(request) {
             where: { schoolId, id: { in: pupilIds } },
             include: studentInclude,
             orderBy: { updatedAt: 'desc' },
-            take: 2000,
+            take: 500,
           })
         : []
 
@@ -107,4 +116,4 @@ export async function GET(request) {
       ...(includeFaceData ? { faceEmbedding: s.faceEmbedding || null } : {}),
     })),
   })
-}
+})

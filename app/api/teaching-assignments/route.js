@@ -4,8 +4,10 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { formatTeachingAssignmentDtos, resolveTeacherLoad } from '@/lib/teachers/resolveTeacherLoad'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -15,7 +17,7 @@ export async function GET(request) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const { searchParams } = new URL(request.url)
-  const teacherId = searchParams.get('teacherId')
+  const teacherId = safeQueryString(searchParams.get('teacherId'))
 
   if (!roleCheck(auth.user, ROLE_GROUPS.SCHOOL_STAFF)) {
     return NextResponse.json({ success: true, data: [] })
@@ -64,9 +66,9 @@ export async function GET(request) {
     success: true,
     data: formatTeachingAssignmentDtos(assignments, teacher.user?.name),
   })
-}
+})
 
-export async function POST(request) {
+export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -80,9 +82,9 @@ export async function POST(request) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const body = await request.json()
-  const teacherId = body.teacherId
-  const classId = body.classId
-  const subjectId = body.subjectId
+  const teacherId = safeStringId(body.teacherId)
+  const classId = safeStringId(body.classId)
+  const subjectId = safeStringId(body.subjectId)
   const className = body.className
   const subjectName = body.subjectName
 
@@ -169,4 +171,4 @@ export async function POST(request) {
       subjectName: assignment.subject?.name || null,
     },
   })
-}
+})

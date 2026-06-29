@@ -3,70 +3,62 @@ import { NextResponse } from 'next/server'
 import { activatePlanPayment } from '@/lib/billing/activate-plan-payment'
 import { activateFeePayment } from '@/lib/payments/feePayments'
 import { isFailedLipilaStatus, isPaidLipilaStatus } from '@/lib/payments/lipila'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeStringId, safeQueryString } from '@/lib/security/safeQueryValue'
 
 function getIdentifier(payload) {
   const p = payload || {}
-  return (
-    String(
-      p.identifier ||
-        p.internalId ||
-        p.internal_id ||
-        p?.data?.identifier ||
-        p?.data?.internalId ||
-        ''
-    ).trim() || null
-  )
+  const raw =
+    p.identifier ||
+    p.internalId ||
+    p.internal_id ||
+    p?.data?.identifier ||
+    p?.data?.internalId ||
+    p?.data?.internal_id ||
+    null
+  return safeStringId(raw)
 }
 
 function getReferenceId(payload) {
   const p = payload || {}
-  return (
-    String(
-      p.referenceId || p.reference_id || p?.data?.referenceId || p?.data?.reference_id || ''
-    ).trim() || null
-  )
+  const raw =
+    p.referenceId || p.reference_id || p?.data?.referenceId || p?.data?.reference_id || null
+  return safeStringId(raw, { maxLength: 256 })
 }
 
 function getStatus(payload) {
   return String(payload?.status || payload?.data?.status || '').trim()
 }
 
-export async function POST(request) {
-  try {
-    const payload = await request.json().catch(() => ({}))
-    const identifier = getIdentifier(payload)
-    const referenceId = getReferenceId(payload)
-    const status = getStatus(payload)
+export const POST = withSecureHandler(async function POST(request) {
+  const payload = await request.json().catch(() => ({}))
+  const identifier = getIdentifier(payload)
+  const referenceId = getReferenceId(payload)
+  const status = getStatus(payload)
 
-    if (!identifier && !referenceId) {
-      return NextResponse.json({ success: true }, { status: 200 })
-    }
-
-    if (isPaidLipilaStatus(status) || isFailedLipilaStatus(status)) {
-      const feeResult = await activateFeePayment({ identifier, referenceId, status })
-      if (!feeResult.handled) {
-        await activatePlanPayment({ identifier, referenceId, status })
-      }
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Payment status processed',
-      referenceId,
-    })
-  } catch (error) {
-    console.error('Payment callback error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Callback processing failed' },
-      { status: 500 }
-    )
+  if (!identifier && !referenceId) {
+    return NextResponse.json({ success: true }, { status: 200 })
   }
-}
 
-export async function GET(request) {
-  const referenceId = String(request.nextUrl.searchParams.get('referenceId') || '').trim()
-  const identifier = String(request.nextUrl.searchParams.get('identifier') || '').trim()
-  const status = String(request.nextUrl.searchParams.get('status') || '').trim()
+  if (isPaidLipilaStatus(status) || isFailedLipilaStatus(status)) {
+    const feeResult = await activateFeePayment({ identifier, referenceId, status })
+    if (!feeResult.handled) {
+      await activatePlanPayment({ identifier, referenceId, status })
+    }
+  }
+
+  return NextResponse.json({
+    success: true,
+    message: 'Payment status processed',
+    referenceId,
+  })
+})
+
+export const GET = withSecureHandler(async function GET(request) {
+  const { searchParams } = new URL(request.url)
+  const referenceId = safeQueryString(searchParams.get('referenceId'), { defaultValue: '' })
+  const identifier = safeQueryString(searchParams.get('identifier'), { defaultValue: '' })
+  const status = safeQueryString(searchParams.get('status'), { defaultValue: '' })
   const origin = new URL(request.url).origin
 
   if (referenceId || identifier) {
@@ -107,4 +99,4 @@ export async function GET(request) {
   }
 
   return NextResponse.json({ success: true, message: 'Payment callback endpoint active' })
-}
+})

@@ -3,25 +3,28 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(req: NextRequest) {
+const ASSIGNMENT_LIST_LIMIT = 500
+
+export const GET = withErrorHandler(async function GET(req: NextRequest) {
+  const auth = await authMiddleware(req as any)
+  if (!auth.isAuthenticated) return auth.response
+  if (!roleCheck(auth.user, ['ADMIN', 'HOD', 'headteacher', 'administrator'])) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
+  const tenant = await resolveAuthenticatedSchoolId(req as any, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) return NextResponse.json({ error: 'Missing school context' }, { status: 400 })
+
+  const typeCheck = await guardSchoolOnlyTimetable(schoolId)
+  if (!typeCheck.allowed) return typeCheck.response
+
   try {
-    const auth = await authMiddleware(req as any)
-    if (!auth.isAuthenticated) return auth.response
-    if (!roleCheck(auth.user, ['ADMIN', 'HOD', 'headteacher', 'administrator'])) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-
-    const tenant = await resolveAuthenticatedSchoolId(req as any, auth.user)
-    if (!tenant.ok) return tenant.response
-    const schoolId = tenant.schoolId
-    if (!schoolId) return NextResponse.json({ error: 'Missing school context' }, { status: 400 })
-
-    const typeCheck = await guardSchoolOnlyTimetable(schoolId)
-    if (!typeCheck.allowed) return typeCheck.response
-
     const assignments = await prisma.teacherPeriodAssignment.findMany({
       where: { schoolId },
       select: {
@@ -49,6 +52,7 @@ export async function GET(req: NextRequest) {
         },
       },
       orderBy: [{ timeSlot: { dayOfWeek: 'asc' } }, { timeSlot: { period: 'asc' } }],
+      take: ASSIGNMENT_LIST_LIMIT,
     })
 
     return NextResponse.json({ success: true, data: assignments })
@@ -61,12 +65,6 @@ export async function GET(req: NextRequest) {
         { status: 503 }
       )
     }
-    return NextResponse.json(
-      {
-        error: 'Failed to load teacher period assignments',
-        ...(process.env.NODE_ENV === 'development' ? { details: raw } : {}),
-      },
-      { status: 500 }
-    )
+    throw error
   }
-}
+})

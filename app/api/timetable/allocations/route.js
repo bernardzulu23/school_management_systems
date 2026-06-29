@@ -6,9 +6,13 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveBundleFromBody } from '@/lib/timetable/bundle-utils'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
+
+const ALLOCATION_LIST_LIMIT = 500
 
 // GET — fetch all allocations for this school (HOD sees own dept, headteacher sees all)
-export async function GET(req) {
+export const GET = withErrorHandler(async function GET(req) {
   const auth = await authMiddleware(req)
   if (!auth.isAuthenticated) return auth.response
 
@@ -32,10 +36,13 @@ export async function GET(req) {
 
   const isHod = roleCheck(user, ['HOD', 'hod']) || Boolean(hasHodProfile)
   const { searchParams } = new URL(req.url)
-  const term = searchParams.get('term') || 'Term 1'
-  const academicYear = searchParams.get('academicYear') || new Date().getFullYear().toString()
-  const department = searchParams.get('department')
-  const status = searchParams.get('status') // "pushed" to get publishable ones
+  const term = safeQueryString(searchParams.get('term'), { defaultValue: 'Term 1' })
+  const academicYear =
+    safeQueryString(searchParams.get('academicYear'), {
+      defaultValue: String(new Date().getFullYear()),
+    }) || String(new Date().getFullYear())
+  const department = safeQueryString(searchParams.get('department'))
+  const status = safeQueryString(searchParams.get('status'))
 
   const where = { schoolId, term, academicYear }
 
@@ -51,57 +58,44 @@ export async function GET(req) {
 
   if (status) where.status = status
 
-  try {
-    const allocations = await prisma.teacherAllocation.findMany({
-      where,
-      include: {
-        teacher: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            teacherProfile: { select: { department: true, ts_number: true } },
-          },
+  const allocations = await prisma.teacherAllocation.findMany({
+    where,
+    include: {
+      teacher: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          teacherProfile: { select: { department: true, ts_number: true } },
         },
-        hod: {
-          select: {
-            id: true,
-            name: true,
-            hodProfile: { select: { department: true } },
-          },
-        },
-        subject: { select: { id: true, name: true, code: true } },
-        class: { select: { id: true, name: true, year_group: true, section: true } },
       },
-      orderBy: [{ class: { name: 'asc' } }, { subject: { name: 'asc' } }],
-    })
+      hod: {
+        select: {
+          id: true,
+          name: true,
+          hodProfile: { select: { department: true } },
+        },
+      },
+      subject: { select: { id: true, name: true, code: true } },
+      class: { select: { id: true, name: true, year_group: true, section: true } },
+    },
+    orderBy: [{ class: { name: 'asc' } }, { subject: { name: 'asc' } }],
+    take: ALLOCATION_LIST_LIMIT,
+  })
 
-    // Compute summary stats
-    const summary = {
-      total: allocations.length,
-      pushed: allocations.filter((a) => a.status === 'pushed').length,
-      draft: allocations.filter((a) => a.status === 'draft').length,
-      totalPeriods: allocations.reduce((s, a) => s + a.periodsPerWeek, 0),
-      teachers: [...new Set(allocations.map((a) => a.teacherId))].length,
-    }
-
-    return NextResponse.json({ allocations, summary })
-  } catch (err) {
-    const message = String(err?.message || '')
-    const code = err?.code
-    if (code === 'P2021' || /does not exist/i.test(message)) {
-      return NextResponse.json(
-        { error: 'Timetable tables are missing. Run database migrations first.' },
-        { status: 503 }
-      )
-    }
-    console.error('[timetable allocations GET]', message)
-    return NextResponse.json({ error: 'Failed to fetch allocations' }, { status: 500 })
+  const summary = {
+    total: allocations.length,
+    pushed: allocations.filter((a) => a.status === 'pushed').length,
+    draft: allocations.filter((a) => a.status === 'draft').length,
+    totalPeriods: allocations.reduce((s, a) => s + a.periodsPerWeek, 0),
+    teachers: [...new Set(allocations.map((a) => a.teacherId))].length,
   }
-}
+
+  return NextResponse.json({ allocations, summary })
+})
 
 // POST — create a new allocation (HOD only)
-export async function POST(req) {
+export const POST = withErrorHandler(async function POST(req) {
   const auth = await authMiddleware(req)
   if (!auth.isAuthenticated) return auth.response
 
@@ -211,4 +205,4 @@ export async function POST(req) {
     console.error('[allocations POST]', message)
     return NextResponse.json({ error: 'Failed to save allocation' }, { status: 500 })
   }
-}
+})

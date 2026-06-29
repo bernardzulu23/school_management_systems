@@ -1,7 +1,8 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
-export async function POST() {
+export const POST = withSecureHandler(async function POST() {
   return NextResponse.json(
     {
       error:
@@ -10,4 +11,4 @@ export async function POST() {
     },
     { status: 410 }
   )
-}
+})

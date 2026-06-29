@@ -7,6 +7,8 @@ import { getAuthUser } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { timesOverlap } from '@/lib/timetable/validateTimetable'
 import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 const RESOLVE_ROLES = new Set(['headteacher', 'administrator', 'admin', 'superadmin'])
 
@@ -57,7 +59,7 @@ async function rescanAndPersist(schoolId, term, academicYear) {
  * POST /api/timetable/conflicts/resolve
  * Apply a resolution action to draft timetable allocation entries.
  */
-export async function POST(req) {
+export const POST = withErrorHandler(async function POST(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -76,13 +78,13 @@ export async function POST(req) {
   if (!typeCheck.allowed) return typeCheck.response
 
   const body = await req.json().catch(() => ({}))
-  const action = String(body?.action || '').trim()
+  const action = safeQueryString(body?.action, { defaultValue: '' })
 
   try {
     switch (action) {
       case 'REASSIGN_TEACHER': {
-        const entryId = String(body?.entryId || '').trim()
-        const newTeacherId = String(body?.newTeacherId || '').trim()
+        const entryId = safeStringId(body?.entryId)
+        const newTeacherId = safeStringId(body?.newTeacherId)
         if (!entryId || !newTeacherId) {
           return NextResponse.json(
             { error: 'entryId and newTeacherId are required' },
@@ -123,13 +125,13 @@ export async function POST(req) {
 
       case 'MOVE_TO_SLOT':
       case 'APPLY_SUGGESTION': {
-        const entryId = String(body?.entryId || body?.originalAssignmentId || '').trim()
+        const entryId = safeStringId(body?.entryId) || safeStringId(body?.originalAssignmentId)
         if (!entryId) {
           return NextResponse.json({ error: 'entryId is required' }, { status: 400 })
         }
 
         const entry = await verifyDraftEntry(entryId, schoolId)
-        const targetEntryId = String(body?.targetEntryId || '').trim()
+        const targetEntryId = safeStringId(body?.targetEntryId)
 
         let slotData = {}
         if (targetEntryId) {
@@ -229,7 +231,7 @@ export async function POST(req) {
       }
 
       case 'REMOVE_ENTRY': {
-        const entryId = String(body?.entryId || '').trim()
+        const entryId = safeStringId(body?.entryId)
         if (!entryId) {
           return NextResponse.json({ error: 'entryId is required' }, { status: 400 })
         }
@@ -254,8 +256,8 @@ export async function POST(req) {
       }
 
       case 'SWAP_SLOTS': {
-        const entryAId = String(body?.entryAId || '').trim()
-        const entryBId = String(body?.entryBId || '').trim()
+        const entryAId = safeStringId(body?.entryAId)
+        const entryBId = safeStringId(body?.entryBId)
         if (!entryAId || !entryBId) {
           return NextResponse.json({ error: 'entryAId and entryBId are required' }, { status: 400 })
         }
@@ -319,4 +321,4 @@ export async function POST(req) {
     const status = err?.status || 500
     return NextResponse.json({ error: err?.message || 'Resolution failed' }, { status })
   }
-}
+})

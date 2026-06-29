@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 export const POST = withErrorHandler(async function POST(request, { params }) {
   const auth = await authMiddleware(request)
@@ -21,7 +22,10 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     return NextResponse.json({ error: 'School context required' }, { status: 400 })
   }
 
-  const { id: studentId } = await params
+  const studentId = await safeRouteParam(params, 'id')
+  if (!studentId) {
+    return NextResponse.json({ error: 'Student id is required' }, { status: 400 })
+  }
   const body = await request.json().catch(() => ({}))
   const pin = String(body.pin || '').trim()
 

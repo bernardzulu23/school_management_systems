@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { calculateGrade } from '@/lib/gradingSystem'
 import {
   normalizeResultType,
@@ -99,7 +100,7 @@ function buildGenderByGrade({ rows, allowedYearGroups }) {
     })
 }
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const route = '/api/dashboard/headteacher'
   const start = Date.now()
   let log = logger({ route })
@@ -1132,4 +1133,4 @@ export async function GET(request) {
       { status: 500, headers: { 'x-error-code': String(code) } }
     )
   }
-}
+})

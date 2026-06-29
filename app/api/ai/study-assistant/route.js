@@ -2,41 +2,41 @@ export const dynamic = 'force-dynamic'
 
 import { withAILimits } from '@/lib/middleware/withAILimits'
 import { NextResponse } from 'next/server'
-import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
 import { generateAIText } from '@/lib/ai/client'
 import { buildRagContextForQuery, appendRagToSystemPrompt } from '@/lib/ai/rag-context'
-import { getSchoolPlanForUsage, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
+import { trackAIUsage } from '@/lib/middleware/aiUsageTracker'
 import { PLAIN_TEXT_OUTPUT_RULES, sanitizePlainText } from '@/lib/ai/plain-text'
+import { authorizeAiRoute } from '@/lib/ai/routeAuth'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 const SYSTEM = `You are a helpful study assistant for Zambian CBC students. Answer clearly using school materials when provided. Cite [Ref N] when using references.
 
 ${PLAIN_TEXT_OUTPUT_RULES}`
 
 /**
- * POST /api/ai/study-assistant — RAG-grounded Q&A for students (Phase 3 P3.6).
+ * POST /api/ai/study-assistant — RAG-grounded Q&A scoped to school materials.
  */
 export const POST = withAILimits(async function POST(request) {
-  const user = await getAuthUser(request)
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const access = await authorizeAiRoute(request, {
+    roles: ['student', 'STUDENT', 'teacher', 'TEACHER'],
+    rateLimitPrefix: 'ai_study_assistant_',
+  })
+  if (!access.ok) return access.response
 
-  if (!roleCheck(user, ['student', 'STUDENT', 'teacher', 'TEACHER'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  }
-
-  const schoolId = String(user.schoolId || '').trim()
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
-
+  const { schoolId, school } = access
   const body = await request.json().catch(() => ({}))
-  const question = String(body.question || '').trim()
-  const subject = String(body.subject || '').trim()
+  const question = safeQueryString(body.question, { maxLength: 2000 })
+  const subject = safeQueryString(body.subject, { maxLength: 128 })
 
   if (!question) {
-    return NextResponse.json({ error: 'question is required' }, { status: 400 })
+    return NextResponse.json(
+      { error: 'question is required', code: 'MISSING_QUESTION' },
+      { status: 400 }
+    )
   }
 
-  const school = await getSchoolPlanForUsage(schoolId)
   const rag = await buildRagContextForQuery({
-    query: `${subject} ${question}`,
+    query: `${subject || ''} ${question}`,
     schoolId,
     schoolPlan: school?.plan,
     subject,
@@ -54,7 +54,9 @@ export const POST = withAILimits(async function POST(request) {
 
   return NextResponse.json({
     success: true,
-    answer: sanitizePlainText(text),
-    refs: rag.refs?.slice(0, 8) || [],
+    data: {
+      answer: sanitizePlainText(text),
+      refs: rag.refs?.slice(0, 8) || [],
+    },
   })
 })

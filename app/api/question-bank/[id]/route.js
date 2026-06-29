@@ -2,9 +2,11 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
-export async function PUT(request, { params }) {
-  const routeParams = await params
+export const PUT = withErrorHandler(async function PUT(request, { params }) {
+  const id = await safeRouteParam(params, 'id')
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -16,9 +18,6 @@ export async function PUT(request, { params }) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
-
-  const id = String(routeParams?.id || '').trim()
-  if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
 
   const body = await request.json().catch(() => ({}))
 
@@ -54,10 +53,10 @@ export async function PUT(request, { params }) {
   })
 
   return NextResponse.json({ success: true, data: updated })
-}
+})
 
-export async function DELETE(request, { params }) {
-  const routeParams = await params
+export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
+  const id = await safeRouteParam(params, 'id')
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -69,9 +68,6 @@ export async function DELETE(request, { params }) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
-
-  const id = String(routeParams?.id || '').trim()
-  if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
 
   const bank = await prisma.questionBank.findFirst({
     where: { id, schoolId },
@@ -90,4 +86,4 @@ export async function DELETE(request, { params }) {
 
   await prisma.game.delete({ where: { id } })
   return NextResponse.json({ success: true })
-}
+})

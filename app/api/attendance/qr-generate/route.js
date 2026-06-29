@@ -6,6 +6,9 @@ import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { openAttendanceSession } from '@/lib/attendance/sessions'
 import { generateAttendanceQR } from '@/lib/attendance/qr'
 import { getBaseUrlFromRequest } from '@/lib/sms'
+import { assertTeacherTeachesClassSubject } from '@/lib/assignments/routeScope'
+import { safeStringId } from '@/lib/security/safeQueryValue'
+import { rateLimiter } from '@/lib/middleware/rateLimiter'
 
 /**
  * POST /api/attendance/qr-generate
@@ -13,6 +16,13 @@ import { getBaseUrlFromRequest } from '@/lib/sms'
  * BODY: { classId, subjectId, periodLabel?, term?, academicYear?, shift? }
  */
 export const POST = withErrorHandler(async function POST(request) {
+  const rl = rateLimiter(request, {
+    limit: 20,
+    windowMs: 60 * 1000,
+    keyPrefix: 'qr_generate_',
+  })
+  if (rl.isLimited) return rl.response
+
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -28,11 +38,18 @@ export const POST = withErrorHandler(async function POST(request) {
   }
 
   const body = await request.json().catch(() => ({}))
-  const classId = String(body.classId || '').trim()
-  const subjectId = String(body.subjectId || '').trim()
+  const classId = safeStringId(body.classId)
+  const subjectId = safeStringId(body.subjectId)
   if (!classId || !subjectId) {
     return NextResponse.json({ error: 'classId and subjectId are required' }, { status: 400 })
   }
+
+  await assertTeacherTeachesClassSubject({
+    schoolId,
+    user: auth.user,
+    classId,
+    subjectId,
+  })
 
   const session = await openAttendanceSession({
     schoolId,

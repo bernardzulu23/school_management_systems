@@ -4,10 +4,10 @@ import { NextResponse } from 'next/server'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { requirePlatformAdmin } from '@/lib/middleware/platformAuth'
 import { getPlatformDistrictStats } from '@/lib/platform/platformStats'
-import { withSecureApi } from '@/lib/middleware/secureApi'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
 /** GET /api/platform/stats/districts?province=Lusaka */
-export const GET = withSecureApi(async function GET(request) {
+export const GET = withSecureHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 

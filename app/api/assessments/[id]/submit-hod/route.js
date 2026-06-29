@@ -11,13 +11,15 @@ import {
   resolveAssessmentReviewer,
 } from '@/lib/assessments/review'
 import { isIndividualSchool } from '@/lib/middleware/individual-gate'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 function normalize(v) {
   return String(v || '').trim()
 }
 
 export const POST = withErrorHandler(async function POST(request, { params }) {
-  const routeParams = await params
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('Assessment id is required', 400)
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -33,7 +35,6 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   const userId = normalize(auth.user?.id)
   if (!userId) throw new ApiError('Unauthorized', 401)
 
-  const id = normalize(routeParams?.id)
   const body = await request.json().catch(() => ({}))
   const topic = body?.topic != null ? normalize(body.topic) : null
 

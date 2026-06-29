@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 /**
  * GET /api/marketplace/mine
@@ -22,7 +23,9 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const userId = String(auth.user.id)
-  const scope = String(new URL(request.url).searchParams.get('scope') || '').toLowerCase()
+  const scope = safeQueryString(new URL(request.url).searchParams.get('scope'), {
+    defaultValue: '',
+  }).toLowerCase()
 
   let where
   if (scope === 'review') {

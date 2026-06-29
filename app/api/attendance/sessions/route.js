@@ -4,6 +4,8 @@ import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { getSessionsForClassDate } from '@/lib/attendance/unified-register'
+import { assertTeacherMayAccessAttendanceClass } from '@/lib/attendance/routeAuth'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 /**
  * GET /api/attendance/sessions?classId=&date=YYYY-MM-DD&subjectId=
@@ -23,13 +25,15 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const { searchParams } = new URL(request.url)
-  const classId = String(searchParams.get('classId') || '').trim()
-  const dateStr = String(searchParams.get('date') || '').trim()
-  const subjectId = String(searchParams.get('subjectId') || '').trim() || undefined
+  const classId = safeStringId(searchParams.get('classId'))
+  const dateStr = safeStringId(searchParams.get('date'))
+  const subjectId = safeStringId(searchParams.get('subjectId')) || undefined
 
   if (!classId || !dateStr) {
     return NextResponse.json({ error: 'classId and date are required' }, { status: 400 })
   }
+
+  await assertTeacherMayAccessAttendanceClass({ schoolId, user: auth.user, classId })
 
   const sessions = await getSessionsForClassDate({ schoolId, classId, dateStr, subjectId })
 

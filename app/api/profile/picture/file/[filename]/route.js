@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import path from 'path'
 import { readFile } from 'fs/promises'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 const TYPE_BY_EXT = {
   jpg: 'image/jpeg',
@@ -9,9 +11,8 @@ const TYPE_BY_EXT = {
   webp: 'image/webp',
 }
 
-export async function GET(_request, { params }) {
-  const routeParams = await params
-  const raw = String(routeParams?.filename || '')
+export const GET = withSecureHandler(async function GET(_request, { params }) {
+  const raw = await safeRouteParam(params, 'filename')
   const filename = path.basename(raw)
   const ext = filename.split('.').pop()?.toLowerCase() || ''
   const contentType = TYPE_BY_EXT[ext]
@@ -57,4 +58,4 @@ export async function GET(_request, { params }) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 })
     }
   }
-}
+})

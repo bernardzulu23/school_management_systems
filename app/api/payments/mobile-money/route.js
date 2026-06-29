@@ -14,6 +14,8 @@ import {
   LIPILA_PROVIDER_PAYMENT_TYPES,
 } from '@/lib/payments/lipila'
 import { activateFeePayment, serializeFeePayment } from '@/lib/payments/feePayments'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 const PAYMENT_OPTION_BY_PROVIDER = {
   airtel: { label: 'Airtel Zambia', paymentType: LIPILA_PROVIDER_PAYMENT_TYPES.airtel },
@@ -61,7 +63,7 @@ async function authorizeSchoolFeeAccess(request) {
   return { ok: true, auth, schoolId }
 }
 
-export async function GET(request) {
+export const GET = withSecureHandler(async function GET(request) {
   const access = await authorizeSchoolFeeAccess(request)
   if (!access.ok) return access.response
 
@@ -81,9 +83,9 @@ export async function GET(request) {
     }
     throw error
   }
-}
+})
 
-export async function POST(request) {
+export const POST = withSecureHandler(async function POST(request) {
   const access = await authorizeSchoolFeeAccess(request)
   if (!access.ok) return access.response
 
@@ -115,7 +117,7 @@ export async function POST(request) {
     .toUpperCase()
   const email = String(body?.email || auth.user?.email || '').trim()
   const paymentType = String(body?.paymentType || '').trim() || null
-  const studentId = String(body?.studentId || '').trim() || null
+  const studentId = safeStringId(body?.studentId)
 
   const providerRaw = String(body?.provider || body?.paymentOption || '')
     .trim()
@@ -125,7 +127,7 @@ export async function POST(request) {
   const provider = providerKey || null
 
   const paymentId = crypto.randomUUID()
-  const referenceId = String(body?.referenceId || crypto.randomUUID()).trim()
+  const referenceId = safeStringId(body?.referenceId, { maxLength: 256 }) || crypto.randomUUID()
 
   const origin = request.headers.get('origin') || new URL(request.url).origin
   const callbackUrl = String(body?.callbackUrl || `${origin}/api/payments/lipila/callback`).trim()
@@ -336,4 +338,4 @@ export async function POST(request) {
     }
     return NextResponse.json({ error: 'Payment gateway unavailable' }, { status: 502 })
   }
-}
+})

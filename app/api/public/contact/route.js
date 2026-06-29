@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { sendPublicEnquiryEmail } from '@/config/email'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
 export const dynamic = 'force-dynamic'
 
@@ -8,7 +9,7 @@ function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim())
 }
 
-export async function POST(request) {
+export const POST = withSecureHandler(async function POST(request) {
   const rl = rateLimiter(request, {
     limit: process.env.NODE_ENV === 'production' ? 8 : 40,
     windowMs: 15 * 60 * 1000,
@@ -44,4 +45,4 @@ export async function POST(request) {
     success: true,
     message: 'Thank you. We will respond from info@bluepeacktechnologies.com shortly.',
   })
-}
+})

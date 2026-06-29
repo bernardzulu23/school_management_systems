@@ -24,7 +24,7 @@ export const GET = withErrorHandler(async function GET(request) {
       _count: { select: { guidanceCases: { where: { status: 'OPEN' } } } },
     },
     orderBy: [{ class: 'asc' }, { name: 'asc' }],
-    take: 5000,
+    take: 2000,
   })
 
   const rows = students

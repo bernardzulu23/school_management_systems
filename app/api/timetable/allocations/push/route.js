@@ -5,9 +5,11 @@ import { prisma } from '@/lib/prisma'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeStringIds } from '@/lib/security/safeQueryValue'
 
 // POST — HOD pushes department allocations to the headteacher
-export async function POST(req) {
+export const POST = withErrorHandler(async function POST(req) {
   const auth = await authMiddleware(req)
   if (!auth.isAuthenticated) return auth.response
 
@@ -30,23 +32,23 @@ export async function POST(req) {
     return NextResponse.json({ error: 'HOD role required' }, { status: 403 })
   }
 
-  const { term, academicYear, allocationIds } = await req.json()
+  const { term, academicYear, allocationIds: rawIds } = await req.json()
+  const allocationIds = safeStringIds(Array.isArray(rawIds) ? rawIds : [])
 
   if (!term || !academicYear) {
     return NextResponse.json({ error: 'term and academicYear required' }, { status: 400 })
   }
 
-  if (!isHod && !(allocationIds?.length > 0)) {
+  if (!isHod && allocationIds.length === 0) {
     return NextResponse.json({ error: 'allocationIds required for non-HOD users' }, { status: 400 })
   }
 
-  // Fetch allocations to push — either specific IDs or all draft for this HOD
   const where = {
     schoolId,
     status: 'draft',
     term,
     academicYear,
-    ...(allocationIds?.length ? { id: { in: allocationIds } } : isHod ? { hodId: user.id } : {}),
+    ...(allocationIds.length ? { id: { in: allocationIds } } : isHod ? { hodId: user.id } : {}),
   }
 
   const allocations = await prisma.teacherAllocation.findMany({
@@ -154,4 +156,4 @@ export async function POST(req) {
     notifiedCount: recipients.length,
     notified: recipients.map((r) => ({ id: r.id, name: r.name, role: r.role })),
   })
-}
+})

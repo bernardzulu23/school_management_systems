@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { requireRole } from '@/lib/middleware/requireRole'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 const ALLOWED_ROLES = ['headteacher', 'HOD', 'hod']
 
@@ -20,8 +22,8 @@ function clampProgress(value) {
   return Math.max(0, Math.min(100, Math.round(n)))
 }
 
-export async function PUT(request, { params }) {
-  const routeParams = await params
+export const PUT = withErrorHandler(async function PUT(request, { params }) {
+  const id = await safeRouteParam(params, 'id')
   const auth = await requireRole(request, ALLOWED_ROLES)
   if (!auth.isAuthenticated) return auth.response
   if (auth.denied) return auth.response
@@ -30,9 +32,6 @@ export async function PUT(request, { params }) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
-
-  const id = String(routeParams?.id || '').trim()
-  if (!id) return NextResponse.json({ error: 'Goal id is required' }, { status: 400 })
 
   const body = await request.json().catch(() => ({}))
   const data = {}
@@ -78,10 +77,10 @@ export async function PUT(request, { params }) {
   }
 
   return NextResponse.json({ success: true })
-}
+})
 
-export async function DELETE(request, { params }) {
-  const routeParams = await params
+export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
+  const id = await safeRouteParam(params, 'id')
   const auth = await requireRole(request, ALLOWED_ROLES)
   if (!auth.isAuthenticated) return auth.response
   if (auth.denied) return auth.response
@@ -90,9 +89,6 @@ export async function DELETE(request, { params }) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
-
-  const id = String(routeParams?.id || '').trim()
-  if (!id) return NextResponse.json({ error: 'Goal id is required' }, { status: 400 })
 
   const deleted = await prisma.strategicGoal.deleteMany({
     where: { id, schoolId },
@@ -103,4 +99,4 @@ export async function DELETE(request, { params }) {
   }
 
   return NextResponse.json({ success: true })
-}
+})

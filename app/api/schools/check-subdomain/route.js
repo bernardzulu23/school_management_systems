@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
 const RESERVED = new Set([
   'www',
@@ -44,7 +45,7 @@ function normalizeSubdomain(input) {
   return trimmed.slice(0, 40)
 }
 
-export async function GET(request) {
+export const GET = withSecureHandler(async function GET(request) {
   const rate = rateLimiter(request, {
     limit: 200,
     windowMs: 10 * 60 * 1000,
@@ -68,4 +69,4 @@ export async function GET(request) {
   })
 
   return NextResponse.json({ available: !existing, reason: existing ? 'Taken' : 'Available' })
-}
+})

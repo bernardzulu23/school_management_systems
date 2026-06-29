@@ -3,8 +3,9 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { safeRouteParam, safeStringIds } from '@/lib/security/safeQueryValue'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
-export async function GET(request, { params }) {
+export const GET = withErrorHandler(async function GET(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -39,9 +40,9 @@ export async function GET(request, { params }) {
       })),
     },
   })
-}
+})
 
-export async function PUT(request, { params }) {
+export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -136,4 +137,4 @@ export async function PUT(request, { params }) {
     data:
       updated?.departments.map((td) => ({ id: td.departmentId, name: td.department.name })) || [],
   })
-}
+})

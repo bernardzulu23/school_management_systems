@@ -2,27 +2,30 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
-import { getAuthUser } from '@/lib/middleware/auth'
+import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { authMiddleware } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
-export async function PUT(req, { params }) {
-  const user = await getAuthUser(req)
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+export const PUT = withErrorHandler(async function PUT(req, { params }) {
+  const auth = await authMiddleware(req)
+  if (!auth.isAuthenticated) return auth.response
 
-  const schoolId = await resolveSchoolId(req, user)
+  const tenant = await resolveAuthenticatedSchoolId(req, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const typeCheck = await guardSchoolOnlyTimetable(schoolId)
   if (!typeCheck.allowed) return typeCheck.response
 
-  const role = String(user.role || '').toLowerCase()
+  const role = String(auth.user.role || '').toLowerCase()
   if (!['headteacher', 'administrator', 'admin', 'superadmin', 'hod'].includes(role)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const routeParams = await params
-  const teacherKey = String(routeParams?.teacherId || '').trim()
+  const teacherKey = await safeRouteParam(params, 'teacherId')
   if (!teacherKey) return NextResponse.json({ error: 'teacherId required' }, { status: 400 })
 
   const body = await req.json().catch(() => ({}))
@@ -49,4 +52,4 @@ export async function PUT(req, { params }) {
     ...color,
     teacherUserId: teacher.userId,
   })
-}
+})

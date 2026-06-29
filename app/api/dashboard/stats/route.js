@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,10 +26,14 @@ function isDbUnreachableError(error) {
   )
 }
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   try {
     const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
+
+    if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
 
     const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
     if (!tenant.ok) return tenant.response
@@ -82,8 +87,6 @@ export async function GET(request) {
       prisma.subject.count({ where: { schoolId } }),
       prisma.assessment.count({ where: { schoolId } }),
     ])
-
-    console.log(`[DASHBOARD-STATS] schoolId: ${schoolId}, totalStudents: ${totalStudents}`)
 
     // Calculate attendance metrics
     const today = new Date()
@@ -230,4 +233,4 @@ export async function GET(request) {
       { status: 500, headers: { 'x-error-code': String(code) } }
     )
   }
-}
+})

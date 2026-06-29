@@ -1,10 +1,11 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { authMiddleware } from '@/lib/middleware/auth'
+import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { syncSchoolPlanPaymentFromLipila } from '@/lib/billing/sync-plan-payment'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 const paymentSelect = {
   id: true,
@@ -42,9 +43,23 @@ export const GET = withErrorHandler(async function GET(request) {
     return NextResponse.json({ error: 'School context required' }, { status: 400 })
   }
 
+  if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod'])) {
+    const schoolMeta = await prisma.school.findUnique({
+      where: { id: schoolId },
+      select: { schoolType: true, ownerUserId: true },
+    })
+    const canIndividualView =
+      schoolMeta?.schoolType === 'INDIVIDUAL' &&
+      schoolMeta.ownerUserId === auth.user?.id &&
+      roleCheck(auth.user, ['TEACHER', 'teacher'])
+    if (!canIndividualView) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+  }
+
   const { searchParams } = new URL(request.url)
   const syncPayment = searchParams.get('syncPayment') === '1' || searchParams.get('sync') === '1'
-  const referenceId = String(searchParams.get('referenceId') || '').trim()
+  const referenceId = safeQueryString(searchParams.get('referenceId'))
 
   let payment = null
   if (referenceId) {

@@ -1,8 +1,9 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { authMiddleware } from '@/lib/middleware/auth'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
-export async function POST() {
+export const POST = withErrorHandler(async function POST() {
   return NextResponse.json(
     {
       error:
@@ -11,4 +12,4 @@ export async function POST() {
     },
     { status: 410 }
   )
-}
+})

@@ -11,8 +11,9 @@ import { validateDraftEntriesForPublish } from '@/lib/timetable/validateDraftEnt
 import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
 import { syncClassActiveFlags } from '@/lib/timetable/getActiveClasses'
 import { safeQueryString } from '@/lib/security/safeQueryValue'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
-export async function POST(req) {
+export const POST = withErrorHandler(async function POST(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -112,4 +113,4 @@ export async function POST(req) {
     term,
     academicYear,
   })
-}
+})

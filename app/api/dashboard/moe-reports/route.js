@@ -5,7 +5,8 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
 import { requireSchoolType } from '@/lib/middleware/individual-gate'
 import { getMoeReportSnapshot } from '@/lib/dashboard/schoolAnalytics'
-import { withSecureApi } from '@/lib/middleware/secureApi'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 function toCsv(rows) {
   if (!rows.length) return ''
@@ -19,7 +20,7 @@ function toCsv(rows) {
   return lines.join('\n')
 }
 
-export const GET = withSecureApi(async function GET(request) {
+export const GET = withSecureHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -39,7 +40,7 @@ export const GET = withSecureApi(async function GET(request) {
   if (gate instanceof NextResponse) return gate
 
   const snapshot = await getMoeReportSnapshot(schoolId)
-  const format = new URL(request.url).searchParams.get('format')
+  const format = safeQueryString(new URL(request.url).searchParams.get('format'))
 
   if (format === 'csv') {
     const rows = snapshot.enrollmentByClass.map((r) => ({

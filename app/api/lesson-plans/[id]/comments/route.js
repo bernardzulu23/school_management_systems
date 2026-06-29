@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,7 +20,6 @@ async function canAccessPlan(auth, plan) {
 }
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
-  const routeParams = await params
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -28,7 +28,8 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const id = normalize(routeParams?.id)
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('id is required', 400)
   const plan = await prisma.lessonPlan.findFirst({ where: { id, schoolId } })
   if (!plan) throw new ApiError('Not found', 404)
   if (!(await canAccessPlan(auth, plan))) throw new ApiError('Forbidden', 403)
@@ -36,6 +37,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const comments = await prisma.lessonPlanComment.findMany({
     where: { lessonPlanId: id },
     orderBy: { createdAt: 'asc' },
+    take: 100,
     include: {
       commentedBy: { select: { id: true, name: true, email: true } },
     },
@@ -45,7 +47,6 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
 })
 
 export const POST = withErrorHandler(async function POST(request, { params }) {
-  const routeParams = await params
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -59,7 +60,8 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const userId = String(auth.user?.id || '').trim()
-  const id = normalize(routeParams?.id)
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('id is required', 400)
   const body = await request.json().catch(() => ({}))
   const comment = normalize(body?.comment)
   const sectionReference = normalize(body?.sectionReference) || null

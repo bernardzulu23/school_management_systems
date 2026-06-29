@@ -11,13 +11,15 @@ import {
   canCreateSBATask,
 } from '@/lib/middleware/ecz-validation'
 import { generateECZCSV } from '@/lib/ecz/ecz-csv'
-import { withSecureApi } from '@/lib/middleware/secureApi'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeStringId, safeQueryString } from '@/lib/security/safeQueryValue'
+import { ECZ_SUBMIT_ROLES } from '@/lib/ecz/routeAuth'
 
-export const POST = withSecureApi(async function POST(request) {
+export const POST = withSecureHandler(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod'])) {
+  if (!roleCheck(auth.user, ECZ_SUBMIT_ROLES)) {
     return NextResponse.json({ error: 'Only Admin/HOD can submit to ECZ' }, { status: 403 })
   }
 
@@ -30,9 +32,17 @@ export const POST = withSecureApi(async function POST(request) {
   if (!eczCheck.ok) return eczCheck.response
 
   const body = await request.json().catch(() => ({}))
-  const { subjectId, formLevel, academicYear } = body
-  const year = Number(academicYear) || new Date().getFullYear()
-  const level = Number(formLevel)
+  const subjectId = safeStringId(body.subjectId)
+  const level = Number(body.formLevel)
+  const yearRaw = body.academicYear
+  const year = Number.isFinite(Number(yearRaw)) ? Number(yearRaw) : new Date().getFullYear()
+
+  if (!subjectId) {
+    return NextResponse.json({ error: 'subjectId is required' }, { status: 400 })
+  }
+  if (!Number.isFinite(level)) {
+    return NextResponse.json({ error: 'formLevel is required' }, { status: 400 })
+  }
 
   const formGate = canCreateSBATask(level)
   if (!formGate.allowed) {
@@ -44,17 +54,24 @@ export const POST = withSecureApi(async function POST(request) {
     return NextResponse.json({ error: deadlineCheck.error }, { status: 400 })
   }
 
+  const subject = await prisma.subject.findFirst({
+    where: { id: subjectId, schoolId },
+    select: { id: true },
+  })
+  if (!subject) return NextResponse.json({ error: 'Subject not found' }, { status: 404 })
+
   const scores = await prisma.eczAssessmentScore.findMany({
     where: {
       schoolId,
       formLevel: level,
       academicYear: year,
-      assessment: { subjectId: String(subjectId) },
+      assessment: { subjectId },
     },
     include: {
       assessment: { include: { subject: true } },
       student: true,
     },
+    take: 5000,
   })
 
   if (scores.length === 0) {
@@ -98,14 +115,14 @@ export const POST = withSecureApi(async function POST(request) {
     where: {
       schoolId_subjectId_formLevel_academicYear: {
         schoolId,
-        subjectId: String(subjectId),
+        subjectId,
         formLevel: level,
         academicYear: year,
       },
     },
     create: {
       schoolId,
-      subjectId: String(subjectId),
+      subjectId,
       formLevel: level,
       academicYear: year,
       totalLearners: rows.length,
@@ -130,7 +147,7 @@ export const POST = withSecureApi(async function POST(request) {
       schoolId,
       formLevel: level,
       academicYear: year,
-      assessment: { subjectId: String(subjectId) },
+      assessment: { subjectId },
     },
     data: {
       submissionStatus: 'SUBMITTED_TO_ECZ',
@@ -152,11 +169,26 @@ export const POST = withSecureApi(async function POST(request) {
   )
 })
 
-export const GET = withSecureApi(async function GET(request) {
+export const GET = withSecureHandler(async function GET(request) {
+  const auth = await authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
+  if (!roleCheck(auth.user, ECZ_SUBMIT_ROLES)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+
+  const eczCheck = await requireSecondarySchoolAccess(schoolId)
+  if (!eczCheck.ok) return eczCheck.response
+
   const { searchParams } = new URL(request.url)
-  const academicYear = parseInt(
-    searchParams.get('academicYear') || String(new Date().getFullYear()),
-    10
-  )
-  return NextResponse.json(getDeadlineStatus(academicYear))
+  const yearRaw = safeQueryString(searchParams.get('academicYear'))
+  const academicYear =
+    yearRaw && Number.isFinite(Number(yearRaw)) ? Number(yearRaw) : new Date().getFullYear()
+
+  const deadline = getDeadlineStatus(academicYear)
+  return NextResponse.json({ success: true, ...deadline, data: deadline })
 })

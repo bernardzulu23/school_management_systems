@@ -69,8 +69,11 @@ export const POST = withAILimits(async function POST(request) {
   })
   if (rl.isLimited) return rl.response
 
-  const blocked = await requireFeature(schoolId, 'ecz-practice')
+  const blocked = await requireFeature(schoolId, 'ai-tools')
   if (blocked) return blocked
+
+  const blockedFeature = await requireFeature(schoolId, 'ecz-practice')
+  if (blockedFeature) return blockedFeature
 
   const limitBlock = await checkAILimit(schoolId, String(user.id || ''))
   if (limitBlock) return limitBlock

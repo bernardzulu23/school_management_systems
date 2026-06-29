@@ -4,6 +4,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { recordAttendanceMark } from '@/lib/attendance/sessions'
+import { safeRouteParam, safeStringId } from '@/lib/security/safeQueryValue'
 
 export const POST = withErrorHandler(async function POST(request, { params }) {
   const auth = await authMiddleware(request)
@@ -20,9 +21,12 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     return NextResponse.json({ error: 'School context required' }, { status: 400 })
   }
 
-  const { id: sessionId } = await params
+  const sessionId = await safeRouteParam(params, 'id')
+  if (!sessionId) {
+    return NextResponse.json({ error: 'Invalid session id' }, { status: 400 })
+  }
   const body = await request.json().catch(() => ({}))
-  const studentId = String(body.studentId || '').trim()
+  const studentId = safeStringId(body.studentId)
   if (!studentId) {
     return NextResponse.json({ error: 'studentId is required' }, { status: 400 })
   }

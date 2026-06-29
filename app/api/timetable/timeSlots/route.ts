@@ -3,8 +3,11 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
 export const dynamic = 'force-dynamic'
+
+const SLOT_LIST_LIMIT = 500
 
 function dayNumber(day: string) {
   const d = String(day || '').toLowerCase()
@@ -16,22 +19,22 @@ function dayNumber(day: string) {
   return 0
 }
 
-export async function GET(req: NextRequest) {
+export const GET = withErrorHandler(async function GET(req: NextRequest) {
+  const auth = await authMiddleware(req as any)
+  if (!auth.isAuthenticated) return auth.response
+  if (!roleCheck(auth.user, ['ADMIN', 'HOD'])) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
+  const tenant = await resolveAuthenticatedSchoolId(req as any, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) return NextResponse.json({ error: 'Missing school context' }, { status: 400 })
+
+  const typeCheck = await guardSchoolOnlyTimetable(schoolId)
+  if (!typeCheck.allowed) return typeCheck.response
+
   try {
-    const auth = await authMiddleware(req as any)
-    if (!auth.isAuthenticated) return auth.response
-    if (!roleCheck(auth.user, ['ADMIN', 'HOD'])) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-
-    const tenant = await resolveAuthenticatedSchoolId(req as any, auth.user)
-    if (!tenant.ok) return tenant.response
-    const schoolId = tenant.schoolId
-    if (!schoolId) return NextResponse.json({ error: 'Missing school context' }, { status: 400 })
-
-    const typeCheck = await guardSchoolOnlyTimetable(schoolId)
-    if (!typeCheck.allowed) return typeCheck.response
-
     const slots = await prisma.timeSlot.findMany({
       where: { schoolId },
       select: {
@@ -46,6 +49,7 @@ export async function GET(req: NextRequest) {
         breakDuration: true,
       },
       orderBy: [{ dayOfWeek: 'asc' }, { period: 'asc' }],
+      take: SLOT_LIST_LIMIT,
     })
 
     return NextResponse.json({
@@ -64,12 +68,6 @@ export async function GET(req: NextRequest) {
         { status: 503 }
       )
     }
-    return NextResponse.json(
-      {
-        error: 'Failed to load time slots',
-        ...(process.env.NODE_ENV === 'development' ? { details: raw } : {}),
-      },
-      { status: 500 }
-    )
+    throw error
   }
-}
+})

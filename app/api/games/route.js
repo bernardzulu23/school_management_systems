@@ -7,6 +7,7 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { mapGameForManagement } from '@/lib/games/mapGameResponse'
 import { normalizeGameContent, resolveSubjectLabel } from '@/lib/games/normalizeGameBody'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 /**
  * GET /api/games — list school games (teacher/HOD/admin)
@@ -26,7 +27,7 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const { searchParams } = new URL(request.url)
-  const subject = String(searchParams.get('subject') || '').trim()
+  const subject = safeQueryString(searchParams.get('subject'))
 
   const games = await prisma.game.findMany({
     where: {
@@ -34,6 +35,7 @@ export const GET = withErrorHandler(async function GET(request) {
       ...(subject ? { subject: { equals: subject, mode: 'insensitive' } } : {}),
     },
     orderBy: { createdAt: 'desc' },
+    take: 100,
   })
 
   const withStats = await Promise.all(

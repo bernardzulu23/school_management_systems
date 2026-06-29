@@ -6,6 +6,7 @@ import bcrypt from 'bcryptjs'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -26,9 +27,9 @@ export const GET = withErrorHandler(async function GET(request) {
   }
 
   const { searchParams } = new URL(request.url)
-  const department = searchParams.get('department')
-  const page = parseInt(searchParams.get('page')) || 1
-  const limit = parseInt(searchParams.get('limit')) || 20
+  const department = safeQueryString(searchParams.get('department'))
+  const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10) || 1)
+  const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '20', 10) || 20))
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
@@ -149,7 +150,7 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const { searchParams } = new URL(request.url)
-  const id = searchParams.get('id')
+  const id = safeQueryString(searchParams.get('id'))
 
   if (!id) {
     throw new ApiError('Teacher ID is required', 400)

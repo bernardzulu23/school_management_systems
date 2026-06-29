@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { rateLimiter } from '@/lib/middleware/rateLimiter'
 
 function safeString(v) {
   return v === null || v === undefined ? '' : String(v)
@@ -41,6 +42,14 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const limited = rateLimiter(request, {
+    limit: 1,
+    windowMs: 10 * 60 * 1000,
+    keyPrefix: 'admin_export_users_',
+    keyGenerator: () => schoolId,
+  })
+  if (limited.isLimited) return limited.response
 
   const school = await prisma.school.findFirst({
     where: { id: schoolId },

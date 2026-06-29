@@ -2,12 +2,13 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import { getAuthUser } from '@/lib/middleware/auth'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
 /**
  * POST /api/timetable/conflicts/seed-test
  * Development-only mock conflicts for UI testing.
  */
-export async function POST(req) {
+export const POST = withErrorHandler(async function POST(req) {
   if (process.env.NODE_ENV === 'production') {
     return NextResponse.json({ error: 'Dev only' }, { status: 403 })
   }
@@ -65,4 +66,4 @@ export async function POST(req) {
     ],
     byType: {},
   })
-}
+})

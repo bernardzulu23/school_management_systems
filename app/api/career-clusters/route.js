@@ -10,8 +10,9 @@ import {
   assertCareerGuidanceManager,
   isCareerGuidanceStaff,
 } from '@/lib/guidance/careerGuidanceAuth'
+import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -32,20 +33,22 @@ export async function GET(request) {
   const clusters = await db.careerCluster.findMany({
     where: activeOnly ? { active: true } : {},
     orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
+    take: 200,
     include: includeCareers
       ? {
           careers: {
             where: activeOnly ? { active: true } : {},
             orderBy: [{ sortOrder: 'asc' }, { title: 'asc' }],
+            take: 500,
           },
         }
       : undefined,
   })
 
   return NextResponse.json({ success: true, data: clusters })
-}
+})
 
-export async function POST(request) {
+export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -80,14 +83,8 @@ export async function POST(request) {
     return NextResponse.json({ success: true, data: cluster }, { status: 201 })
   } catch (error) {
     if (error?.code === 'P2002') {
-      return NextResponse.json(
-        { error: 'A cluster with this name already exists' },
-        { status: 409 }
-      )
+      throw new ApiError('A cluster with this name already exists', 409)
     }
-    return NextResponse.json(
-      { error: error.message || 'Could not create cluster' },
-      { status: 500 }
-    )
+    throw error
   }
-}
+})

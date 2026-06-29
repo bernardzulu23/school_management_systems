@@ -9,6 +9,7 @@ import { getHodProfile, resolveAllocationDepartmentId } from '@/lib/utils/hodDep
 import { canManageDepartmentAllocations, isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
 import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
 import { resolveTeacherRecordId } from '@/lib/utils/resolveTeacherId'
+import { safeStringId, safeStringIds } from '@/lib/security/safeQueryValue'
 
 function normalizeString(v) {
   return String(v || '').trim()
@@ -48,11 +49,11 @@ export const POST = withErrorHandler(async function POST(request) {
   }
 
   const body = await request.json().catch(() => ({}))
-  const requestedDepartmentId = normalizeString(body?.departmentId)
-  const teacherIdRaw = normalizeString(body?.teacherId)
+  const requestedDepartmentId = safeStringId(body?.departmentId)
+  const teacherIdRaw = safeStringId(body?.teacherId)
   const teacherId = await resolveTeacherRecordId(prisma, schoolId, teacherIdRaw)
   const subject = normalizeString(body?.subject)
-  const classes = normalizeClasses(body?.classes)
+  const classes = safeStringIds(normalizeClasses(body?.classes))
   const periodConfig = body?.periodConfig ?? null
   const term = normalizeString(body?.term) || 'Term 1'
   const academicYear = normalizeString(body?.academicYear) || String(new Date().getFullYear())
@@ -71,6 +72,19 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!teacherId) throw new ApiError('Teacher record not found for this school', 400)
   if (!subject) throw new ApiError('subject is required', 400)
   if (classes.length === 0) throw new ApiError('classes is required', 400)
+
+  const classRecords = await prisma.class.findMany({
+    where: {
+      schoolId,
+      OR: [{ id: { in: classes } }, { name: { in: classes } }],
+    },
+    select: { id: true, name: true },
+  })
+  const matched = new Set(classRecords.flatMap((c) => [c.id, c.name]))
+  const missing = classes.filter((c) => !matched.has(c))
+  if (missing.length > 0) {
+    throw new ApiError(`Classes not found in this school: ${missing.join(', ')}`, 400)
+  }
 
   const allocation = await prisma.departmentAllocation.create({
     data: {

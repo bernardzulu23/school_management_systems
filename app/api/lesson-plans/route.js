@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 import { resolveReviewerUserId } from '@/lib/lesson-plans/reviewer'
 import { sanitizeText } from '@/lib/lesson-plans/text'
 import { isIndividualSchool } from '@/lib/middleware/individual-gate'
@@ -23,8 +24,8 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const { searchParams } = new URL(request.url)
-  const scope = normalize(searchParams.get('scope')) || ''
-  const status = normalize(searchParams.get('status')) || ''
+  const scope = safeQueryString(searchParams.get('scope'), { defaultValue: '' })
+  const status = safeQueryString(searchParams.get('status'), { defaultValue: '' })
 
   const userId = String(auth.user?.id || '').trim()
   if (!userId) throw new ApiError('Unauthorized', 401)

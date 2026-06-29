@@ -3,9 +3,10 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
-import { authorizeGuidanceHead } from '@/lib/guidance/routeAuth'
+import { authorizeGuidanceHead, GUIDANCE_TERMLY_SCOPES } from '@/lib/guidance/routeAuth'
 import { buildTermlyCategoryCounts } from '@/lib/guidance/caseAccess'
 import { currentTermLabel } from '@/lib/academic/currentTerm'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 export const GET = withErrorHandler(async function GET(request) {
   const authz = await authorizeGuidanceHead(request)
@@ -13,8 +14,9 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const { schoolId } = authz
   const { searchParams } = new URL(request.url)
-  const term = searchParams.get('term') || currentTermLabel()
-  const scopeFilter = String(searchParams.get('scope') || 'ALL').toUpperCase()
+  const term = safeQueryString(searchParams.get('term'), { defaultValue: currentTermLabel() })
+  const scopeRaw = safeQueryString(searchParams.get('scope'), { defaultValue: 'ALL' }).toUpperCase()
+  const scopeFilter = GUIDANCE_TERMLY_SCOPES.has(scopeRaw) ? scopeRaw : 'ALL'
 
   const db = getTenantClient(schoolId)
   const cases = await db.guidanceCase.findMany({
@@ -28,7 +30,7 @@ export const GET = withErrorHandler(async function GET(request) {
       confidentiality: true,
       pupil: { select: { class: true } },
     },
-    take: 10000,
+    take: 2000,
   })
 
   const byCategory = buildTermlyCategoryCounts(cases, scopeFilter)

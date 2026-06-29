@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 const BLOCKED_SUBDOMAINS = [
   'demo',
   'test',
@@ -12,7 +13,7 @@ const BLOCKED_SUBDOMAINS = [
   'demohighschool',
 ]
 
-export async function GET() {
+export const GET = withSecureHandler(async function GET() {
   try {
     const feedbacks = await prisma.feedback.findMany({
       where: {
@@ -55,4 +56,4 @@ export async function GET() {
   } catch {
     return NextResponse.json({ feedbacks: [] }, { status: 200 })
   }
-}
+})

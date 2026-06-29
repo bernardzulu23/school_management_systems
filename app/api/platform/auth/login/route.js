@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
-import { withSecureApi } from '@/lib/middleware/secureApi'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 import {
   verifyPlatformAdminCredentials,
   ensurePlatformAdminFromEnv,
@@ -17,7 +17,7 @@ import {
 } from '@/lib/security/loginBruteForce'
 
 /** @deprecated Use POST /api/auth/login — kept for backward-compatible clients. */
-export const POST = withSecureApi(async function POST(request) {
+export const POST = withSecureHandler(async function POST(request) {
   try {
     const body = await request.json()
     const email = String(body?.email || '')

@@ -5,6 +5,7 @@ import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { safeRouteParam, safeStringId } from '@/lib/security/safeQueryValue'
 import { canEditActivity, canManageActivities, mapActivity } from '@/lib/activities/helpers'
 
 const activityInclude = {
@@ -28,10 +29,10 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const routeParams = await params
-  const activityId = String(routeParams?.id || '')
+  const activityId = await safeRouteParam(params, 'id')
+  if (!activityId) throw new ApiError('Activity id is required', 400)
   const body = await request.json().catch(() => ({}))
-  const studentId = String(body.studentId || '').trim()
+  const studentId = safeStringId(body.studentId)
   if (!studentId) throw new ApiError('studentId is required', 400)
 
   const db = getTenantClient(schoolId)
@@ -78,10 +79,10 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const routeParams = await params
-  const activityId = String(routeParams?.id || '')
+  const activityId = await safeRouteParam(params, 'id')
+  if (!activityId) throw new ApiError('Activity id is required', 400)
   const { searchParams } = new URL(request.url)
-  const studentId = String(searchParams.get('studentId') || '').trim()
+  const studentId = safeStringId(searchParams.get('studentId'))
   if (!studentId) throw new ApiError('studentId query param is required', 400)
 
   const db = getTenantClient(schoolId)

@@ -28,12 +28,23 @@ export function createMockPrisma() {
       create: vi.fn(),
       update: vi.fn(),
     },
+    teacher: {
+      findFirst: vi.fn(),
+      findUnique: vi.fn(),
+    },
     student: {
       findFirst: vi.fn(),
       findMany: vi.fn(),
     },
     subject: {
       findFirst: vi.fn(),
+      findMany: vi.fn(),
+    },
+    teacherAllocation: {
+      findMany: vi.fn(),
+    },
+    class: {
+      findMany: vi.fn(),
     },
     eczAssessment: {
       findFirst: vi.fn(),

@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeRouteParam, safeStringId } from '@/lib/security/safeQueryValue'
 
 export const POST = withErrorHandler(async function POST(request, { params }) {
   const auth = await authMiddleware(request)
@@ -21,14 +22,25 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     return NextResponse.json({ error: 'School context required' }, { status: 400 })
   }
 
-  const { id: sessionId } = await params
+  const sessionId = await safeRouteParam(params, 'id')
+  if (!sessionId) {
+    return NextResponse.json({ error: 'Invalid session id' }, { status: 400 })
+  }
   const body = await request.json().catch(() => ({}))
-  const studentId = String(body.studentId || '').trim()
+  const studentId = safeStringId(body.studentId)
   const pin = body.pin != null ? String(body.pin) : ''
   const biometricVerified = Boolean(body.biometricVerified)
 
   if (!studentId) {
     return NextResponse.json({ error: 'studentId is required' }, { status: 400 })
+  }
+
+  const session = await prisma.attendanceSession.findFirst({
+    where: { id: sessionId, schoolId, status: 'OPEN' },
+    select: { id: true },
+  })
+  if (!session) {
+    return NextResponse.json({ error: 'Session not found or closed' }, { status: 404 })
   }
 
   const student = await prisma.student.findFirst({

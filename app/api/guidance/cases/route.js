@@ -5,7 +5,8 @@ import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { validateBody } from '@/lib/middleware/validate-request'
 import { CreateGuidanceCaseSchema } from '@/lib/schemas'
-import { authorizeGuidancePortal } from '@/lib/guidance/routeAuth'
+import { authorizeGuidancePortal, GUIDANCE_CASE_STATUSES } from '@/lib/guidance/routeAuth'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 import { GUIDANCE_LEGAL_BASIS } from '@/lib/guidance/constants'
 import {
   canViewCaseDetail,
@@ -22,7 +23,8 @@ export const GET = withErrorHandler(async function GET(request) {
   const { schoolId, auth, assignment } = authz
   const db = getTenantClient(schoolId)
   const { searchParams } = new URL(request.url)
-  const status = searchParams.get('status')
+  const statusRaw = safeQueryString(searchParams.get('status'))
+  const status = statusRaw && GUIDANCE_CASE_STATUSES.has(statusRaw) ? statusRaw : undefined
 
   const cases = await db.guidanceCase.findMany({
     where: {

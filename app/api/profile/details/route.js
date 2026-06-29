@@ -4,8 +4,9 @@ import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { parseDateInput } from '@/lib/utils/formHelpers'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
-export async function PUT(request) {
+export const PUT = withErrorHandler(async function PUT(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -121,4 +122,4 @@ export async function PUT(request) {
   })
 
   return NextResponse.json({ success: true, user: updated })
-}
+})

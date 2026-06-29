@@ -18,6 +18,7 @@ import { logger, captureError } from '@/lib/utils/logger'
 import { validateSchoolLocation } from '@/lib/platform/reportingStream'
 import { completeIndividualOnboarding, isIndividualRegistration } from '@/lib/onboarding/individual'
 import { seedSubjectsForSchool } from '@/lib/subjects/seedSubjects'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
 const RESERVED = new Set([
   'www',
@@ -71,7 +72,7 @@ function trialEndsAt() {
   return trialEndsAtFromStart()
 }
 
-export async function POST(request) {
+export const POST = withSecureHandler(async function POST(request) {
   const route = '/api/onboarding/complete'
   const start = Date.now()
   const log = logger({ route })
@@ -357,4 +358,4 @@ export async function POST(request) {
     log.response(500, Date.now() - start)
     return NextResponse.json({ error: 'Failed to complete onboarding' }, { status: 500 })
   }
-}
+})

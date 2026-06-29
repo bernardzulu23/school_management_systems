@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 function normalizeTags(tags) {
   if (Array.isArray(tags)) return tags.map((t) => String(t).trim()).filter(Boolean)
@@ -15,7 +16,6 @@ function normalizeTags(tags) {
 }
 
 export const PUT = withErrorHandler(async function PUT(request, { params }) {
-  const routeParams = await params
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -28,7 +28,7 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const materialId = String(routeParams?.id || '').trim()
+  const materialId = await safeRouteParam(params, 'id')
   if (!materialId) throw new ApiError('Material id is required', 400)
 
   const existing = await prisma.studyMaterial.findFirst({
@@ -81,7 +81,6 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
 })
 
 export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
-  const routeParams = await params
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -94,7 +93,7 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const materialId = String(routeParams?.id || '').trim()
+  const materialId = await safeRouteParam(params, 'id')
   if (!materialId) throw new ApiError('Material id is required', 400)
 
   const existing = await prisma.studyMaterial.findFirst({

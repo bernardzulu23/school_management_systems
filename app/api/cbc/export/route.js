@@ -1,11 +1,11 @@
 export const dynamic = 'force-dynamic'
-import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
 import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 const LEVEL_SCORE = {
   EXCELLENT: 4,
@@ -18,6 +18,25 @@ function csvEscape(value) {
   const s = String(value ?? '')
   if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`
   return s
+}
+
+function formatCsvRow(r, school, academicYear) {
+  return [
+    school?.eczCentreNumber || '',
+    school?.name || '',
+    academicYear,
+    r.term,
+    r.student?.name || '',
+    r.student?.exam_number || '',
+    r.gradeLevel,
+    r.competency?.name || '',
+    r.competency?.category || '',
+    r.level,
+    LEVEL_SCORE[r.level] || '',
+    r.evidenceNote || '',
+  ]
+    .map(csvEscape)
+    .join(',')
 }
 
 export const GET = withErrorHandler(async function GET(request) {
@@ -36,32 +55,27 @@ export const GET = withErrorHandler(async function GET(request) {
   const featureBlock = await requireFeature(schoolId, 'continuous-assessment-tool')
   if (featureBlock) return featureBlock
 
-  const typeBlock = await requireSchoolTypeAccess(schoolId, 'cbc')
+  const typeBlock = await requireSchoolTypeAccess(schoolId, 'continuous-assessment-tool')
   if (typeBlock) return typeBlock
 
   const { searchParams } = new URL(request.url)
-  const academicYear = Number(searchParams.get('academicYear') || new Date().getFullYear())
-  const term = searchParams.get('term') ? Number(searchParams.get('term')) : undefined
-  const gradeLevel = searchParams.get('gradeLevel') || undefined
+  const yearRaw = safeQueryString(searchParams.get('academicYear'))
+  const academicYear = yearRaw ? Number(yearRaw) : new Date().getFullYear()
+  const termRaw = safeQueryString(searchParams.get('term'))
+  const term = termRaw ? Number(termRaw) : undefined
+  const gradeLevel = safeQueryString(searchParams.get('gradeLevel'))
 
   const school = await prisma.school.findUnique({
     where: { id: schoolId },
     select: { name: true, eczCentreNumber: true },
   })
 
-  const ratings = await prisma.cbcCompetencyRating.findMany({
-    where: {
-      schoolId,
-      academicYear,
-      ...(term ? { term } : {}),
-      ...(gradeLevel ? { gradeLevel } : {}),
-    },
-    include: {
-      student: { select: { name: true, exam_number: true, class: true } },
-      competency: { select: { name: true, category: true } },
-    },
-    orderBy: [{ student: { name: 'asc' } }, { competency: { name: 'asc' } }],
-  })
+  const where = {
+    schoolId,
+    academicYear,
+    ...(term != null && Number.isFinite(term) ? { term } : {}),
+    ...(gradeLevel ? { gradeLevel } : {}),
+  }
 
   const header = [
     'CentreNumber',
@@ -76,34 +90,48 @@ export const GET = withErrorHandler(async function GET(request) {
     'RatingLevel',
     'NumericScore',
     'EvidenceNote',
-  ]
+  ].join(',')
 
-  const rows = ratings.map((r) =>
-    [
-      school?.eczCentreNumber || '',
-      school?.name || '',
-      academicYear,
-      r.term,
-      r.student?.name || '',
-      r.student?.exam_number || '',
-      r.gradeLevel,
-      r.competency?.name || '',
-      r.competency?.category || '',
-      r.level,
-      LEVEL_SCORE[r.level] || '',
-      r.evidenceNote || '',
-    ]
-      .map(csvEscape)
-      .join(',')
-  )
+  const encoder = new TextEncoder()
+  const batchSize = 500
+  let recordCount = 0
 
-  const csv = [header.join(','), ...rows].join('\n')
+  const stream = new ReadableStream({
+    async start(controller) {
+      controller.enqueue(encoder.encode(`${header}\n`))
+      let skip = 0
+      for (;;) {
+        const batch = await prisma.cbcCompetencyRating.findMany({
+          where,
+          include: {
+            student: { select: { name: true, exam_number: true } },
+            competency: { select: { name: true, category: true } },
+          },
+          orderBy: [{ student: { name: 'asc' } }, { competency: { name: 'asc' } }],
+          skip,
+          take: batchSize,
+        })
+        if (!batch.length) break
+        for (const row of batch) {
+          controller.enqueue(encoder.encode(`${formatCsvRow(row, school, academicYear)}\n`))
+        }
+        recordCount += batch.length
+        skip += batch.length
+        if (batch.length < batchSize) break
+      }
+      controller.close()
+    },
+  })
 
-  return NextResponse.json({
-    success: true,
-    academicYear,
-    recordCount: ratings.length,
-    csvData: csv,
-    deadline: `${academicYear + 1}-01-31`,
+  const filename = `cbc-continuous-assessment-${academicYear}${term ? `-term${term}` : ''}.csv`
+
+  return new Response(stream, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/csv; charset=utf-8',
+      'Content-Disposition': `attachment; filename="${filename}"`,
+      'Cache-Control': 'no-store',
+      'X-Record-Count': String(recordCount),
+    },
   })
 })

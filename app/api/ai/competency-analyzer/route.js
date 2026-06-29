@@ -34,10 +34,13 @@ export const POST = withAILimits(async function POST(request) {
   })
   if (rl.isLimited) return rl.response
 
-  const blocked = await requireFeature(schoolId, 'cbc-competency-tracker')
+  const blocked = await requireFeature(schoolId, 'ai-tools')
   if (blocked) return blocked
 
-  const limitBlock = await checkAILimit(schoolId, String(auth.user?.id || auth.user?.userId || ''))
+  const blockedFeature = await requireFeature(schoolId, 'cbc-competency-tracker')
+  if (blockedFeature) return blockedFeature
+
+  const limitBlock = await checkAILimit(schoolId, String(user.id || user.userId || ''))
   if (limitBlock) return limitBlock
 
   const body = await request.json().catch(() => ({}))

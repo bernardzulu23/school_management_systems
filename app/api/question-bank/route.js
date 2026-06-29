@@ -4,6 +4,8 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck, ROLE_GROUPS } from '@/lib/middleware/auth'
 import { staffRoleDeniedMessage } from '@/lib/auth/roles'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
 
 function mapQuestionBank(item) {
   const questions = Array.isArray(item.questions) ? item.questions : item.questions?.questions || []
@@ -38,7 +40,7 @@ function mapLegacyGame(g) {
   }
 }
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -52,8 +54,8 @@ export async function GET(request) {
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
   const { searchParams } = new URL(request.url)
-  const subject = String(searchParams.get('subject') || '').trim()
-  const subjectId = String(searchParams.get('subjectId') || '').trim()
+  const subject = safeQueryString(searchParams.get('subject'))
+  const subjectId = safeStringId(searchParams.get('subjectId'))
 
   const [banks, legacy] = await Promise.all([
     prisma.questionBank.findMany({
@@ -67,6 +69,7 @@ export async function GET(request) {
       },
       include: { subject: { select: { id: true, name: true, code: true } } },
       orderBy: { updatedAt: 'desc' },
+      take: 200,
     }),
     prisma.game.findMany({
       where: {
@@ -75,15 +78,16 @@ export async function GET(request) {
         ...(subject ? { subject: { contains: subject, mode: 'insensitive' } } : {}),
       },
       orderBy: { updatedAt: 'desc' },
+      take: 200,
     }),
   ])
 
   const data = [...banks.map(mapQuestionBank), ...legacy.map(mapLegacyGame)]
 
   return NextResponse.json({ success: true, data })
-}
+})
 
-export async function POST(request) {
+export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -99,7 +103,7 @@ export async function POST(request) {
   const body = await request.json().catch(() => ({}))
   const title = String(body?.title || '').trim()
   const subjectName = String(body?.subject || body?.subjectName || '').trim()
-  const subjectId = body?.subjectId ? String(body.subjectId).trim() : null
+  const subjectId = safeStringId(body?.subjectId)
   const grade = body?.grade ? String(body.grade).trim() : null
   const formLevel = body?.formLevel ? parseInt(body.formLevel, 10) : null
   const difficulty = String(body?.difficulty || 'medium').trim() || 'medium'
@@ -136,4 +140,4 @@ export async function POST(request) {
   })
 
   return NextResponse.json({ success: true, data: mapQuestionBank(created) }, { status: 201 })
-}
+})

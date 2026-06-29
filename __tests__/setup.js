@@ -21,6 +21,20 @@ vi.mock('@/lib/prisma', () => ({
   prisma: mockPrisma,
 }))
 
+vi.mock('@/lib/prisma/client', () => ({
+  default: mockPrisma,
+  basePrisma: mockPrisma,
+}))
+
+vi.mock('@/lib/prisma/tenantClient', () => ({
+  getTenantClient: vi.fn(() => mockPrisma),
+  PLATFORM_MODELS: new Set(['School', 'PlatformAdmin', 'SchoolRegistration']),
+}))
+
+vi.mock('@/lib/middleware/subscriptionGate', () => ({
+  enforceSubscriptionIfNeeded: vi.fn().mockResolvedValue(null),
+}))
+
 vi.mock('@/lib/middleware/rateLimiter', () => ({
   rateLimiter: vi.fn(() => ({ isLimited: false })),
 }))

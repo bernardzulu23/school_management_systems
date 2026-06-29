@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { sendOnboardingVerificationEmail } from '@/config/email'
 import { getOnboardingVerifyUrl } from '@/lib/onboarding/emailLinks'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
 function isValidEmail(value) {
   const email = String(value || '')
@@ -13,7 +14,7 @@ function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
-export async function POST(request) {
+export const POST = withSecureHandler(async function POST(request) {
   const rl = rateLimiter(request, {
     limit: process.env.NODE_ENV === 'production' ? 20 : 200,
     windowMs: 15 * 60 * 1000,
@@ -81,4 +82,4 @@ export async function POST(request) {
   }
 
   return NextResponse.json({ success: true }, { status: 200 })
-}
+})

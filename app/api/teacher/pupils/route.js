@@ -4,6 +4,9 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
+
+const PUPIL_LIST_LIMIT = 500
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -14,10 +17,10 @@ export const GET = withErrorHandler(async function GET(request) {
   }
 
   const { searchParams } = new URL(request.url)
-  const classId = searchParams.get('classId')
-  const subjectId = searchParams.get('subjectId')
-  const className = searchParams.get('className')
-  const subjectName = searchParams.get('subjectName')
+  const classId = safeStringId(searchParams.get('classId'))
+  const subjectId = safeStringId(searchParams.get('subjectId'))
+  const className = safeQueryString(searchParams.get('className'))
+  const subjectName = safeQueryString(searchParams.get('subjectName'))
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
@@ -134,6 +137,7 @@ export const GET = withErrorHandler(async function GET(request) {
     orderBy: {
       pupil: { name: 'asc' },
     },
+    take: PUPIL_LIST_LIMIT,
   })
 
   const classRecord = await prisma.class.findFirst({
@@ -197,7 +201,7 @@ export const GET = withErrorHandler(async function GET(request) {
           },
           include: { user: true },
           orderBy: { name: 'asc' },
-          take: 10000,
+          take: PUPIL_LIST_LIMIT,
         })
       : []
 

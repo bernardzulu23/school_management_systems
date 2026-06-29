@@ -4,8 +4,12 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
-export async function GET(request) {
+const USER_LIST_LIMIT = 200
+
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -24,11 +28,9 @@ export async function GET(request) {
   }
 
   const { searchParams } = new URL(request.url)
-  const role = searchParams.get('role')
-  const scope = String(searchParams.get('scope') || '')
-    .trim()
-    .toLowerCase()
-  const q = String(searchParams.get('q') || '').trim()
+  const role = safeQueryString(searchParams.get('role'))
+  const scope = safeQueryString(searchParams.get('scope'), { defaultValue: '' }).toLowerCase()
+  const q = safeQueryString(searchParams.get('q'), { defaultValue: '' })
 
   const wantsTeachers =
     String(role || '')
@@ -90,7 +92,7 @@ export async function GET(request) {
             : {}),
         },
         select: { userId: true },
-        take: 50000,
+        take: 500,
       })
 
       teacherUserIds = teachers.map((t) => t.userId).filter(Boolean)
@@ -114,6 +116,7 @@ export async function GET(request) {
   const users = await prisma.user.findMany({
     where,
     orderBy: { createdAt: 'desc' },
+    take: USER_LIST_LIMIT,
     select: {
       id: true,
       name: true,
@@ -149,4 +152,4 @@ export async function GET(request) {
   }
 
   return NextResponse.json({ success: true, data })
-}
+})

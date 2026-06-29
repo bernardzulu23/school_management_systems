@@ -40,10 +40,12 @@ export const GET = withErrorHandler(async function GET(request) {
     db.hodDailyRoutineTask.findMany({
       where: { ...deptWhere, taskDate: dayRange(date) },
       orderBy: [{ taskTime: 'asc' }, { createdAt: 'asc' }],
+      take: 200,
     }),
     db.hodWeeklyRoutinePlan.findMany({
       where: deptWhere,
       orderBy: [{ sortOrder: 'asc' }, { dayName: 'asc' }],
+      take: 100,
     }),
   ])
 

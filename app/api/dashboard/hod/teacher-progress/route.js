@@ -4,6 +4,8 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
 import { requireHodSchoolAccess } from '@/lib/school/hodAccess'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeStringId, safeQueryString } from '@/lib/security/safeQueryValue'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,7 +18,7 @@ function parseTerm(termRaw) {
   return null
 }
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -56,7 +58,7 @@ export async function GET(request) {
 
   const { searchParams } = new URL(request.url)
   const termNum = parseTerm(searchParams.get('term'))
-  const yearRaw = String(searchParams.get('year') || '').trim()
+  const yearRaw = safeQueryString(searchParams.get('year'))
   const year = Number.isFinite(Number(yearRaw)) ? Number(yearRaw) : new Date().getFullYear()
   const term =
     termNum ||
@@ -180,9 +182,9 @@ export async function GET(request) {
       teachers: teachersWithProgress,
     },
   })
-}
+})
 
-export async function PATCH(request) {
+export const PATCH = withErrorHandler(async function PATCH(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -212,12 +214,18 @@ export async function PATCH(request) {
   }
 
   const body = await request.json().catch(() => ({}))
-  const teacherId = String(body?.teacherId || '').trim()
+  const teacherId = safeStringId(body?.teacherId)
   const termNum = parseTerm(body?.term)
   const year = Number.isFinite(Number(body?.year)) ? Number(body.year) : new Date().getFullYear()
   const term = termNum || 1
 
   if (!teacherId) return NextResponse.json({ error: 'teacherId is required' }, { status: 400 })
+
+  const teacher = await prisma.teacher.findFirst({
+    where: { id: teacherId, schoolId },
+    select: { id: true },
+  })
+  if (!teacher) return NextResponse.json({ error: 'Teacher not found' }, { status: 404 })
 
   const data = {}
   if (body?.cpdHours !== undefined) {
@@ -246,4 +254,4 @@ export async function PATCH(request) {
   })
 
   return NextResponse.json({ success: true })
-}
+})

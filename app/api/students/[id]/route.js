@@ -1,106 +1,104 @@
+export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { deleteStudentCascade, deleteUserCascade } from '@/lib/db/deleteCascade'
+import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { safeRouteParam, safeStringId } from '@/lib/security/safeQueryValue'
 
-export async function GET(request, { params }) {
-  try {
-    const routeParams = await params
-    const auth = await authMiddleware(request)
-    if (!auth.isAuthenticated) return auth.response
+export const GET = withErrorHandler(async function GET(request, { params }) {
+  const auth = await authMiddleware(request)
+  if (!auth.isAuthenticated) return auth.response
 
-    if (
-      !roleCheck(auth.user, [
-        'ADMIN',
-        'headteacher',
-        'HOD',
-        'hod',
-        'TEACHER',
-        'teacher',
-        'STUDENT',
-        'student',
-      ])
-    ) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-
-    const id = String(routeParams?.id || '').trim()
-    if (!id) return NextResponse.json({ error: 'Student id is required' }, { status: 400 })
-
-    const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
-    if (!tenant.ok) return tenant.response
-    const schoolId = tenant.schoolId
-    if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
-
-    const student = await prisma.student.findFirst({
-      where: { id, schoolId },
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            profile_picture_url: true,
-            contact_number: true,
-          },
-        },
-        results: true,
-        attendance: { orderBy: { date: 'desc' }, take: 30 },
-        subjectEnrollments: { include: { subject: true, class: true } },
-        gamificationProfile: true,
-      },
-    })
-
-    if (!student) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-
-    // Map user fields to top level
-    const shaped = {
-      ...student,
-      email: student.user?.email ?? null,
-      profilePicture: student.user?.profile_picture_url ?? null,
-      contactNumber: student.user?.contact_number ?? null,
-    }
-
-    if (roleCheck(auth.user, ['STUDENT', 'student']) && student.userId !== auth.user.id) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        ...shaped,
-        updatedAt: student.updatedAt,
-      },
-    })
-  } catch (error) {
-    console.error('GET /api/students/[id] error:', error)
-    return NextResponse.json({ error: 'Failed to load student' }, { status: 500 })
+  if (
+    !roleCheck(auth.user, [
+      'ADMIN',
+      'headteacher',
+      'HOD',
+      'hod',
+      'TEACHER',
+      'teacher',
+      'STUDENT',
+      'student',
+    ])
+  ) {
+    throw new ApiError('Forbidden', 403)
   }
-}
 
-export async function PUT(request, { params }) {
-  const routeParams = await params
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('Student id is required', 400)
+
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) throw new ApiError('School context required', 400)
+
+  const student = await prisma.student.findFirst({
+    where: { id, schoolId },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          profile_picture_url: true,
+          contact_number: true,
+        },
+      },
+      results: true,
+      attendance: { orderBy: { date: 'desc' }, take: 30 },
+      subjectEnrollments: { include: { subject: true, class: true } },
+      gamificationProfile: true,
+    },
+  })
+
+  if (!student) throw new ApiError('Not found', 404)
+
+  if (roleCheck(auth.user, ['STUDENT', 'student']) && student.userId !== auth.user.id) {
+    throw new ApiError('Forbidden', 403)
+  }
+
+  const shaped = {
+    ...student,
+    email: student.user?.email ?? null,
+    profilePicture: student.user?.profile_picture_url ?? null,
+    contactNumber: student.user?.contact_number ?? null,
+  }
+
+  return NextResponse.json({
+    success: true,
+    data: {
+      ...shaped,
+      updatedAt: student.updatedAt,
+    },
+  })
+})
+
+export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  if (!schoolId) throw new ApiError('School context required', 400)
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod', 'TEACHER', 'teacher'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    throw new ApiError('Forbidden', 403)
   }
+
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('Student id is required', 400)
 
   const body = await request.json()
   const baseUpdatedAt = body.baseUpdatedAt ? new Date(body.baseUpdatedAt) : null
   const resolution = body.resolution ? String(body.resolution) : null
 
   const existing = await prisma.student.findFirst({
-    where: { id: routeParams.id, schoolId },
+    where: { id, schoolId },
   })
-  if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  if (!existing) throw new ApiError('Not found', 404)
 
   if (baseUpdatedAt && existing.updatedAt.getTime() !== baseUpdatedAt.getTime() && !resolution) {
     return NextResponse.json(
@@ -148,7 +146,7 @@ export async function PUT(request, { params }) {
     const section = body.section ? String(body.section).trim() : null
     const classNameFromParts = yearGroup && section ? `${yearGroup}${section}` : null
 
-    const classId = body.classId ? String(body.classId).trim() : null
+    const classId = safeStringId(body.classId)
     const classRecord = classId
       ? await tx.class.findFirst({
           where: { id: classId, schoolId },
@@ -227,27 +225,29 @@ export async function PUT(request, { params }) {
   })
 
   return NextResponse.json({ success: true, data: { ...updated, updatedAt: updated.updatedAt } })
-}
+})
 
-export async function DELETE(request, { params }) {
-  const routeParams = await params
+export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  if (!schoolId) throw new ApiError('School context required', 400)
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    throw new ApiError('Forbidden', 403)
   }
 
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('Student id is required', 400)
+
   const existing = await prisma.student.findFirst({
-    where: { id: routeParams.id, schoolId },
+    where: { id, schoolId },
     select: { id: true, userId: true },
   })
-  if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  if (!existing) throw new ApiError('Not found', 404)
 
   await prisma.$transaction(async (tx) => {
     if (existing.userId) {
@@ -258,4 +258,4 @@ export async function DELETE(request, { params }) {
   })
 
   return NextResponse.json({ success: true })
-}
+})

@@ -5,7 +5,7 @@ import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { validateBody } from '@/lib/middleware/validate-request'
 import { CreateCareerResourceSchema } from '@/lib/schemas'
-import { authorizeGuidancePortal } from '@/lib/guidance/routeAuth'
+import { authorizeGuidancePortal, canViewInactiveCareerResources } from '@/lib/guidance/routeAuth'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
@@ -24,13 +24,12 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const db = getTenantClient(schoolId)
   const { searchParams } = new URL(request.url)
-  const includeInactive = searchParams.get('all') === '1'
-
-  const portal = await authorizeGuidancePortal(request)
-  const isGuidanceStaff = portal.ok
+  const wantsInactive = searchParams.get('all') === '1'
+  const canListInactive =
+    wantsInactive && (await canViewInactiveCareerResources(auth.user, schoolId))
 
   const resources = await db.careerResource.findMany({
-    where: isGuidanceStaff && includeInactive ? {} : { active: true },
+    where: canListInactive ? {} : { active: true },
     orderBy: [{ postedAt: 'desc' }],
     include: { postedBy: { select: { id: true, name: true } } },
     take: 200,

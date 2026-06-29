@@ -24,7 +24,8 @@ export const GET = withErrorHandler(async function GET(request) {
       e.name === 'TokenExpiredError'
         ? 'This QR code has expired. Ask your teacher for a new one.'
         : 'Invalid or expired QR code'
-    return NextResponse.json({ error: message }, { status: 401 })
+    const status = e.name === 'TokenExpiredError' ? 410 : 401
+    return NextResponse.json({ error: message }, { status })
   }
 
   const session = await prisma.attendanceSession.findFirst({

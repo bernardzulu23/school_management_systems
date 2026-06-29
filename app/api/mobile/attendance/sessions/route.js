@@ -5,12 +5,16 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { openAttendanceSession } from '@/lib/attendance/sessions'
+import { assertTeacherTeachesClassSubject } from '@/lib/assignments/routeScope'
+import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
+
+const STAFF_ROLES = ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod']
 
 export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
+  if (!roleCheck(auth.user, STAFF_ROLES)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -22,11 +26,13 @@ export const POST = withErrorHandler(async function POST(request) {
   }
 
   const body = await request.json().catch(() => ({}))
-  const classId = String(body.classId || '').trim()
-  const subjectId = String(body.subjectId || '').trim()
+  const classId = safeStringId(body.classId)
+  const subjectId = safeStringId(body.subjectId)
   if (!classId || !subjectId) {
     return NextResponse.json({ error: 'classId and subjectId are required' }, { status: 400 })
   }
+
+  await assertTeacherTeachesClassSubject({ schoolId, user: auth.user, classId, subjectId })
 
   const session = await openAttendanceSession({
     schoolId,
@@ -48,6 +54,10 @@ export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
+  if (!roleCheck(auth.user, STAFF_ROLES)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
@@ -56,7 +66,7 @@ export const GET = withErrorHandler(async function GET(request) {
   }
 
   const { searchParams } = new URL(request.url)
-  const status = searchParams.get('status') || 'OPEN'
+  const status = safeQueryString(searchParams.get('status'), { defaultValue: 'OPEN' })
 
   const sessions = await prisma.attendanceSession.findMany({
     where: {

@@ -59,7 +59,16 @@ describe('POST /api/ecz/submissions', () => {
       id: schoolId,
       name: 'Test School',
       eczCentreNumber: 'C001',
+      level: 'secondary',
+      ownershipType: 'PRIVATE',
+      schoolType: 'SCHOOL',
+      active: true,
+      plan: 'premium',
+      planExpiresAt: new Date('2030-01-01'),
+      trialEndsAt: null,
+      emailVerified: true,
     })
+    mockPrisma.subject.findFirst.mockResolvedValue({ id: 'sub-1' })
     mockPrisma.eczSubmission.upsert.mockResolvedValue({ id: 'submission-1' })
     mockPrisma.eczAssessmentScore.updateMany.mockResolvedValue({ count: 1 })
   })

@@ -4,27 +4,34 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { parseInteractiveQuizPayload } from '@/lib/assessments/interactiveQuiz'
+import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import {
+  assertTeacherTeachesClassSubject,
+  buildTeacherAssignmentWhere,
+  assertTeacherManagesAssignment,
+} from '@/lib/assignments/routeScope'
+import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  if (!schoolId) throw new ApiError('School context required', 400)
 
   const { searchParams } = new URL(request.url)
-  const className = searchParams.get('class')
-  const classId = searchParams.get('classId')
-  const subject = searchParams.get('subject')
+  const className = safeQueryString(searchParams.get('class'))
+  const classId = safeStringId(searchParams.get('classId'))
+  const subject = safeQueryString(searchParams.get('subject'))
 
   if (roleCheck(auth.user, ['STUDENT', 'student'])) {
     const student = await prisma.student.findFirst({
       where: { userId: auth.user.id, schoolId },
       select: { classId: true, class: true, selected_subjects: true },
     })
-    if (!student) return NextResponse.json({ error: 'Student profile not found' }, { status: 404 })
+    if (!student) throw new ApiError('Student profile not found', 404)
 
     const where = {
       schoolId,
@@ -41,12 +48,13 @@ export async function GET(request) {
   }
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    throw new ApiError('Forbidden', 403)
   }
 
+  const baseWhere = await buildTeacherAssignmentWhere(schoolId, auth.user)
   const where = {
-    schoolId,
-    ...(classId ? { classId: String(classId) } : className ? { class: className } : {}),
+    ...baseWhere,
+    ...(classId ? { classId } : className ? { class: className } : {}),
     ...(subject ? { subject } : {}),
   }
 
@@ -56,25 +64,25 @@ export async function GET(request) {
   })
 
   return NextResponse.json({ success: true, data: assignments })
-}
+})
 
-export async function POST(request) {
+export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
   if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    throw new ApiError('Forbidden', 403)
   }
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  if (!schoolId) throw new ApiError('School context required', 400)
 
   const body = await request.json()
   const title = String(body.title || '').trim()
   const subject = String(body.subject || '').trim()
-  const classId = body.classId ? String(body.classId).trim() : ''
+  const classId = safeStringId(body.classId)
   const className = String(body.class || '').trim()
   const dueDate = body.dueDate ? new Date(body.dueDate) : null
 
@@ -85,15 +93,8 @@ export async function POST(request) {
     !dueDate ||
     Number.isNaN(dueDate.getTime())
   ) {
-    return NextResponse.json(
-      { error: 'title, subject, class, dueDate are required' },
-      { status: 400 }
-    )
+    throw new ApiError('title, subject, class, dueDate are required', 400)
   }
-
-  const teacher = roleCheck(auth.user, ['TEACHER', 'teacher'])
-    ? await prisma.teacher.findUnique({ where: { userId: auth.user.id }, select: { id: true } })
-    : null
 
   const classRecord = classId
     ? await prisma.class.findFirst({
@@ -107,17 +108,30 @@ export async function POST(request) {
         })
       : null
 
+  if (!classRecord) throw new ApiError('Class not found in this school', 404)
+
+  await assertTeacherTeachesClassSubject({
+    schoolId,
+    user: auth.user,
+    classId: classRecord.id,
+    subjectName: subject,
+  })
+
+  const teacher = roleCheck(auth.user, ['TEACHER', 'teacher'])
+    ? await prisma.teacher.findFirst({
+        where: { userId: auth.user.id, schoolId },
+        select: { id: true },
+      })
+    : null
+
   const description = body.description ? String(body.description) : null
   const isInteractiveQuiz = Boolean(parseInteractiveQuizPayload(description))
-  const assessmentId = body.assessmentId ? String(body.assessmentId).trim() : ''
+  const assessmentId = safeStringId(body.assessmentId)
 
   if (isInteractiveQuiz && !assessmentId) {
-    return NextResponse.json(
-      {
-        error:
-          'Interactive quizzes must be created as an assessment and approved by HOD before publishing.',
-      },
-      { status: 400 }
+    throw new ApiError(
+      'Interactive quizzes must be created as an assessment and approved by HOD before publishing.',
+      400
     )
   }
 
@@ -127,9 +141,9 @@ export async function POST(request) {
       select: { id: true, status: true },
     })
     if (!linked || !['APPROVED', 'PUBLISHED'].includes(String(linked.status))) {
-      return NextResponse.json(
-        { error: 'Linked assessment must be HOD-approved before publishing to students' },
-        { status: 400 }
+      throw new ApiError(
+        'Linked assessment must be HOD-approved before publishing to students',
+        400
       )
     }
   }
@@ -139,8 +153,8 @@ export async function POST(request) {
       title,
       description,
       subject,
-      classId: classRecord?.id || null,
-      class: classRecord?.name || className,
+      classId: classRecord.id,
+      class: classRecord.name,
       dueDate,
       schoolId,
       teacherId: teacher?.id || null,
@@ -156,4 +170,4 @@ export async function POST(request) {
   }
 
   return NextResponse.json({ success: true, data: assignment }, { status: 201 })
-}
+})

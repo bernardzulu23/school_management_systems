@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { safeRouteParam, safeQueryString } from '@/lib/security/safeQueryValue'
 import { sanitizeText } from '@/lib/lesson-plans/text'
 import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
 import {
@@ -17,7 +18,6 @@ function normalize(v) {
 }
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
-  const routeParams = await params
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -29,10 +29,12 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const userId = String(auth.user?.id || '').trim()
   if (!userId) throw new ApiError('Unauthorized', 401)
 
-  const id = normalize(routeParams?.id)
+  const id = await safeRouteParam(params, 'id')
   if (!id) throw new ApiError('id is required', 400)
 
-  const format = new URL(request.url).searchParams.get('format') || 'word'
+  const format = safeQueryString(new URL(request.url).searchParams.get('format'), {
+    defaultValue: 'word',
+  })
 
   const plan = await prisma.lessonPlan.findFirst({
     where: { id, schoolId },

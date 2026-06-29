@@ -11,6 +11,11 @@ import {
   canManageTimetableDraft,
   timetableForbiddenResponse,
 } from '@/lib/timetable/timetableRouteAuth'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
+
+const ENTRY_LIST_LIMIT = 2000
+const DRAFT_SCAN_LIMIT = 2000
 
 function normalizeDayOfWeek(day) {
   const d = String(day || '')
@@ -26,7 +31,7 @@ function normalizeDayOfWeek(day) {
   return ''
 }
 
-export async function GET(req) {
+export const GET = withErrorHandler(async function GET(req) {
   const user = await getAuthUser(req)
   const schoolId = await resolveSchoolId(req, user)
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
@@ -35,9 +40,11 @@ export async function GET(req) {
   if (!typeCheck.allowed) return typeCheck.response
 
   const { searchParams } = new URL(req.url)
-  const term = searchParams.get('term') || 'Term 1'
-  const academicYear = searchParams.get('academicYear') || new Date().getFullYear().toString()
-  const status = searchParams.get('status') // draft or published
+  const term = safeQueryString(searchParams.get('term'), { defaultValue: 'Term 1' })
+  const academicYear = safeQueryString(searchParams.get('academicYear'), {
+    defaultValue: String(new Date().getFullYear()),
+  })
+  const status = safeQueryString(searchParams.get('status'))
 
   const where = { schoolId, term, academicYear }
   if (status) where.status = status
@@ -54,12 +61,13 @@ export async function GET(req) {
       },
     },
     orderBy: [{ dayOfWeek: 'asc' }, { periodNumber: 'asc' }],
+    take: ENTRY_LIST_LIMIT,
   })
 
   return NextResponse.json({ entries })
-}
+})
 
-export async function PATCH(req) {
+export const PATCH = withErrorHandler(async function PATCH(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -69,14 +77,14 @@ export async function PATCH(req) {
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const body = await req.json().catch(() => ({}))
-  const id = String(body?.id || '').trim()
+  const id = safeStringId(body?.id)
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
 
   const dayOfWeek = body?.dayOfWeek !== undefined ? normalizeDayOfWeek(body?.dayOfWeek) : ''
   const startTime = body?.startTime !== undefined ? String(body?.startTime || '').trim() : ''
   const endTime = body?.endTime !== undefined ? String(body?.endTime || '').trim() : ''
   const periodNumber = body?.periodNumber !== undefined ? Number(body?.periodNumber) : Number.NaN
-  const teacherId = body?.teacherId !== undefined ? String(body?.teacherId || '').trim() : undefined
+  const teacherId = body?.teacherId !== undefined ? safeStringId(body?.teacherId) : undefined
 
   if (body?.dayOfWeek !== undefined && !dayOfWeek) {
     return NextResponse.json({ error: 'Invalid dayOfWeek' }, { status: 400 })
@@ -124,6 +132,7 @@ export async function PATCH(req) {
         },
       },
     },
+    take: DRAFT_SCAN_LIMIT,
   })
 
   const hardConflicts = validatePatchedDraftEntries(allDraft, id, data)
@@ -159,9 +168,9 @@ export async function PATCH(req) {
   })
 
   return NextResponse.json({ entry: updated })
-}
+})
 
-export async function DELETE(req) {
+export const DELETE = withErrorHandler(async function DELETE(req) {
   /** Single entry: `{ id }`. Bulk clear: `{ clearAll: true, term, academicYear }` (draft only). */
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -171,8 +180,10 @@ export async function DELETE(req) {
 
   const body = await req.json().catch(() => ({}))
   const clearAll = body?.clearAll === true
-  const term = String(body?.term || 'Term 1').trim()
-  const academicYear = String(body?.academicYear || new Date().getFullYear()).trim()
+  const term = safeQueryString(body?.term, { defaultValue: 'Term 1' })
+  const academicYear = safeQueryString(body?.academicYear, {
+    defaultValue: String(new Date().getFullYear()),
+  })
 
   if (clearAll) {
     if (!canManageTimetableDraft(user)) return timetableForbiddenResponse()
@@ -186,12 +197,14 @@ export async function DELETE(req) {
     return NextResponse.json({ success: true, deletedCount: result.count })
   }
 
-  const id = String(body?.id || '').trim()
-  if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
+  const entryId = safeStringId(body?.id)
+  if (!entryId) return NextResponse.json({ error: 'id required' }, { status: 400 })
 
   if (!canManageTimetableDraft(user)) return timetableForbiddenResponse()
 
-  const entry = await prisma.timetableAllocationEntry.findFirst({ where: { id, schoolId } })
+  const entry = await prisma.timetableAllocationEntry.findFirst({
+    where: { id: entryId, schoolId },
+  })
   if (!entry) return NextResponse.json({ error: 'Entry not found' }, { status: 404 })
   const entryStatus = String(entry.status || '').toLowerCase()
   if (entryStatus !== 'draft' && entryStatus !== 'published') {
@@ -201,7 +214,7 @@ export async function DELETE(req) {
     )
   }
 
-  await prisma.timetableAllocationEntry.delete({ where: { id } })
+  await prisma.timetableAllocationEntry.delete({ where: { id: entryId } })
 
   await rescanAndPersistDraftMeta(prisma, {
     schoolId,
@@ -210,4 +223,4 @@ export async function DELETE(req) {
   })
 
   return NextResponse.json({ success: true })
-}
+})

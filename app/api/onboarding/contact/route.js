@@ -4,10 +4,10 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { verifyOnboardingToken } from '@/lib/middleware/onboardingAuth'
 import { normalizePhoneNumbers } from '@/lib/sms'
-import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
 /** Save admin phone during onboarding (after email verify / session cookie). */
-export const PATCH = withErrorHandler(async function PATCH(request) {
+export const PATCH = withSecureHandler(async function PATCH(request) {
   const token = request.cookies.get('onboarding_token')?.value || ''
   const registrationId = verifyOnboardingToken(token)
   if (!registrationId) {

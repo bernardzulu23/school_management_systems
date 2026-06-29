@@ -11,8 +11,11 @@ import {
 } from '@/lib/timetable/teacherColors'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { distinctTeacherHex } from '@/lib/timetable/teacherDisplay'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
-export async function GET(req) {
+const TEACHER_COLOR_LIMIT = 300
+
+export const GET = withErrorHandler(async function GET(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -27,6 +30,7 @@ export async function GET(req) {
     where: { schoolId },
     include: { user: { select: { id: true, name: true } } },
     orderBy: { user: { name: 'asc' } },
+    take: TEACHER_COLOR_LIMIT,
   })
 
   const total = teachers.length
@@ -50,9 +54,9 @@ export async function GET(req) {
     map: teacherColorMapToJson(colorMap),
     palette: PREDEFINED_TEACHER_COLORS,
   })
-}
+})
 
-export async function POST(req) {
+export const POST = withErrorHandler(async function POST(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -79,6 +83,7 @@ export async function POST(req) {
     where: { schoolId },
     orderBy: { user: { name: 'asc' } },
     include: { user: { select: { name: true } } },
+    take: TEACHER_COLOR_LIMIT,
   })
 
   const total = teachers.length
@@ -104,4 +109,4 @@ export async function POST(req) {
   }
 
   return NextResponse.json({ success: true, assigned: count, distinct: true })
-}
+})

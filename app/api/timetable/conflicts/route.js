@@ -6,6 +6,8 @@ import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { auditDraftTimetable, persistDraftConflictMeta } from '@/lib/timetable/conflictAudit'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 const ALLOWED_ROLES = new Set(['headteacher', 'administrator', 'admin', 'superadmin', 'hod'])
 
@@ -13,7 +15,7 @@ const ALLOWED_ROLES = new Set(['headteacher', 'administrator', 'admin', 'superad
  * GET /api/timetable/conflicts?term=Term+1&academicYear=2026
  * Scan draft timetable allocation entries and return structured conflicts.
  */
-export async function GET(req) {
+export const GET = withErrorHandler(async function GET(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -29,8 +31,10 @@ export async function GET(req) {
   if (!typeCheck.allowed) return typeCheck.response
 
   const { searchParams } = new URL(req.url)
-  const term = String(searchParams.get('term') || 'Term 1').trim()
-  const academicYear = String(searchParams.get('academicYear') || new Date().getFullYear()).trim()
+  const term = safeQueryString(searchParams.get('term'), { defaultValue: 'Term 1' })
+  const academicYear = safeQueryString(searchParams.get('academicYear'), {
+    defaultValue: String(new Date().getFullYear()),
+  })
 
   const summary = await auditDraftTimetable(prisma, { schoolId, term, academicYear })
 
@@ -39,4 +43,4 @@ export async function GET(req) {
   }
 
   return NextResponse.json(summary)
-}
+})

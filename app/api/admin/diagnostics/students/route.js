@@ -9,7 +9,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod'])) {
+  if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
     throw new ApiError('Forbidden', 403)
   }
 
@@ -38,13 +38,6 @@ export const GET = withErrorHandler(async function GET(request) {
     where: { schoolId, subjectEnrollments: { none: {} } },
   })
 
-  const sampleWithoutEnrollments = await prisma.student.findMany({
-    where: { schoolId, subjectEnrollments: { none: {} } },
-    select: { id: true, name: true, class: true, userId: true },
-    take: 20,
-    orderBy: { createdAt: 'desc' },
-  })
-
   return NextResponse.json({
     success: true,
     data: {
@@ -55,7 +48,6 @@ export const GET = withErrorHandler(async function GET(request) {
       usersRoleStudent,
       mismatchedUserSchool,
       studentsWithoutEnrollments,
-      sampleWithoutEnrollments,
     },
   })
 })

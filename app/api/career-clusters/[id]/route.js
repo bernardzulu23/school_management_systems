@@ -7,6 +7,8 @@ import { validateBody } from '@/lib/middleware/validate-request'
 import { UpdateCareerClusterSchema } from '@/lib/schemas'
 import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
 import { assertCareerGuidanceManager } from '@/lib/guidance/careerGuidanceAuth'
+import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 async function assertCareerGuidanceAccess(schoolId) {
   const typeBlock = await requireSchoolTypeAccess(schoolId, 'career-guidance')
@@ -14,8 +16,8 @@ async function assertCareerGuidanceAccess(schoolId) {
   return null
 }
 
-export async function PATCH(request, { params }) {
-  const routeParams = await params
+export const PATCH = withErrorHandler(async function PATCH(request, { params }) {
+  const clusterId = await safeRouteParam(params, 'id')
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -38,7 +40,7 @@ export async function PATCH(request, { params }) {
 
   const db = getTenantClient(schoolId)
   const existing = await db.careerCluster.findFirst({
-    where: { id: routeParams.id },
+    where: { id: clusterId },
     select: { id: true },
   })
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
@@ -57,17 +59,14 @@ export async function PATCH(request, { params }) {
     return NextResponse.json({ success: true, data: updated })
   } catch (error) {
     if (error?.code === 'P2002') {
-      return NextResponse.json(
-        { error: 'A cluster with this name already exists' },
-        { status: 409 }
-      )
+      throw new ApiError('A cluster with this name already exists', 409)
     }
-    return NextResponse.json({ error: error.message || 'Update failed' }, { status: 500 })
+    throw error
   }
-}
+})
 
-export async function DELETE(request, { params }) {
-  const routeParams = await params
+export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
+  const clusterId = await safeRouteParam(params, 'id')
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -84,11 +83,11 @@ export async function DELETE(request, { params }) {
 
   const db = getTenantClient(schoolId)
   const existing = await db.careerCluster.findFirst({
-    where: { id: routeParams.id },
+    where: { id: clusterId },
     select: { id: true },
   })
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   await db.careerCluster.delete({ where: { id: existing.id } })
   return NextResponse.json({ success: true })
-}
+})

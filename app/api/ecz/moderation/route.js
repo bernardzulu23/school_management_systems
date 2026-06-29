@@ -6,6 +6,8 @@ import { staffRoleDeniedMessage } from '@/lib/auth/roles'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
+import { safeStringId, safeQueryString } from '@/lib/security/safeQueryValue'
+import { MODERATION_STATUSES } from '@/lib/ecz/routeAuth'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -24,7 +26,10 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!eczCheck.ok) return eczCheck.response
 
   const { searchParams } = new URL(request.url)
-  const status = String(searchParams.get('status') || 'PENDING').toUpperCase()
+  const statusRaw = safeQueryString(searchParams.get('status'), {
+    defaultValue: 'PENDING',
+  }).toUpperCase()
+  const status = MODERATION_STATUSES.has(statusRaw) ? statusRaw : 'PENDING'
 
   const tasks = await prisma.eczAssessment.findMany({
     where: {
@@ -59,12 +64,12 @@ export const PATCH = withErrorHandler(async function PATCH(request) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const body = await request.json().catch(() => ({}))
-  const assessmentId = String(body.assessmentId || '').trim()
-  const moderationStatus = String(body.moderationStatus || '').toUpperCase()
-  const moderationNotes = body.moderationNotes ? String(body.moderationNotes) : null
+  const assessmentId = safeStringId(body.assessmentId)
+  const moderationStatus = safeQueryString(body.moderationStatus, { maxLength: 32 })?.toUpperCase()
+  const moderationNotes = body.moderationNotes ? String(body.moderationNotes).slice(0, 2000) : null
 
   if (!assessmentId) throw new ApiError('assessmentId is required', 400)
-  if (!['APPROVED', 'REJECTED', 'PENDING'].includes(moderationStatus)) {
+  if (!moderationStatus || !MODERATION_STATUSES.has(moderationStatus)) {
     throw new ApiError('Invalid moderationStatus', 400)
   }
 

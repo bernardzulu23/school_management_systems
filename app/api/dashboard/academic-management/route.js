@@ -3,8 +3,9 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -23,5 +24,5 @@ export async function GET(request) {
     prisma.assessment.count({ where: { schoolId } }),
   ])
 
-  return NextResponse.json({ classes, subjects, assessments })
-}
+  return NextResponse.json({ success: true, classes, subjects, assessments })
+})

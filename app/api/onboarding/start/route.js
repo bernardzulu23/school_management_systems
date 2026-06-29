@@ -10,7 +10,7 @@ import { getOnboardingVerifyUrl } from '@/lib/onboarding/emailLinks'
 import { INDIVIDUAL_PLANS } from '@/lib/onboarding/individual'
 import { normalizePhoneNumbers } from '@/lib/sms'
 import { passwordPolicyError } from '@/lib/security/passwordPolicy'
-import { withSecureApi } from '@/lib/middleware/secureApi'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
 function isValidEmail(value) {
   const email = String(value || '')
@@ -19,7 +19,7 @@ function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
-export const POST = withSecureApi(async function POST(request) {
+export const POST = withSecureHandler(async function POST(request) {
   try {
     const rl = rateLimiter(request, {
       limit: process.env.NODE_ENV === 'production' ? 10 : 100,

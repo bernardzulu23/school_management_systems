@@ -6,7 +6,8 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
-import { ReviewMaterialSchema, idString } from '@/lib/schemas'
+import { ReviewMaterialSchema } from '@/lib/schemas'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 /**
  * POST /api/marketplace/:id/review
@@ -27,15 +28,14 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const { id } = await params
-  const parsedId = idString.safeParse(id)
-  if (!parsedId.success) throw new ApiError('Invalid material id', 400)
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('Invalid material id', 400)
 
   const body = await parseBodyOrThrow(request, ReviewMaterialSchema)
 
   // Material must belong to the reviewer's own school.
   const material = await prisma.sharedMaterial.findFirst({
-    where: { id: parsedId.data, schoolId },
+    where: { id, schoolId },
     select: { id: true, status: true },
   })
   if (!material) throw new ApiError('Submission not found', 404)

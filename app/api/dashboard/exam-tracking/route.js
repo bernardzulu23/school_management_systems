@@ -4,9 +4,9 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
 import { getExamTrackingSummary } from '@/lib/dashboard/schoolAnalytics'
-import { withSecureApi } from '@/lib/middleware/secureApi'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
-export const GET = withSecureApi(async function GET(request) {
+export const GET = withSecureHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 

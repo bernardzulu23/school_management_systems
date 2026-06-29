@@ -5,13 +5,15 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { approveAndPublishAssessment, notifyAssessmentReview } from '@/lib/assessments/review'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 function normalize(v) {
   return String(v || '').trim()
 }
 
 export const PATCH = withErrorHandler(async function PATCH(request, { params }) {
-  const routeParams = await params
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('Assessment id is required', 400)
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -25,7 +27,6 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const userId = normalize(auth.user?.id)
-  const id = normalize(routeParams?.id)
   const body = await request.json().catch(() => ({}))
   const action = normalize(body?.action).toLowerCase()
   const reason = normalize(body?.reason || body?.rejectionReason)

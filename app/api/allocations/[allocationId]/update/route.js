@@ -10,10 +10,10 @@ import { canManageDepartmentAllocations } from '@/lib/utils/hodAccess'
 import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
 import { resolveTeacherRecordId } from '@/lib/utils/resolveTeacherId'
 import { mergeAllocationPayload } from '@/lib/timetable/departmentAllocationMutations'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 export const PUT = withErrorHandler(async function PUT(request, { params }) {
-  const routeParams = await params
-  const allocationId = String(routeParams?.allocationId || '').trim()
+  const allocationId = await safeRouteParam(params, 'allocationId')
   if (!allocationId) throw new ApiError('allocationId is required', 400)
 
   const auth = await authMiddleware(request)

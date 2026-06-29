@@ -1,19 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateLessonPlan } from '@/lib/aiml/tools/lesson-planner'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json().catch(() => ({}))
-    if (!body?.subject || !body?.grade || !body?.topic || !body?.duration) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
-    }
+const DEPRECATED = 'Use /api/ai/lesson-planner instead'
 
-    const lessonPlan = await generateLessonPlan(body)
-    return NextResponse.json(lessonPlan)
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: error?.message || 'Failed to generate lesson plan' },
-      { status: 500 }
-    )
-  }
+function redirect(req: NextRequest) {
+  const url = new URL('/api/ai/lesson-planner', req.url)
+  return NextResponse.redirect(url, {
+    status: 307,
+    headers: {
+      Sunset: '2026-12-31',
+      'X-Deprecated': DEPRECATED,
+    },
+  })
 }
+
+export const GET = withSecureHandler(async function GET(req: NextRequest) {
+  return redirect(req)
+})
+
+export const POST = withSecureHandler(async function POST(req: NextRequest) {
+  return redirect(req)
+})

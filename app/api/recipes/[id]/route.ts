@@ -3,6 +3,8 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { toPrismaJsonValue } from '@/lib/timetable/recipes'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 export const dynamic = 'force-dynamic'
 
@@ -164,7 +166,10 @@ function validateRecipeAgainstSlots(params: {
   return { isValid: errors.length === 0, result: { errors, warnings, totalPeriods } }
 }
 
-export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export const PUT = withErrorHandler(async function PUT(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   const auth = await authMiddleware(req as any)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, ['ADMIN']))
@@ -176,9 +181,7 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
   if (!schoolId)
     return NextResponse.json({ success: false, error: 'Missing school context' }, { status: 400 })
 
-  const { id: rawId } = await context.params
-  const id = String(rawId || '').trim()
-  if (!id) return NextResponse.json({ success: false, error: 'Missing recipe id' }, { status: 400 })
+  const id = await safeRouteParam(context.params, 'id')
 
   const existing = await prisma.schedulingRecipe.findFirst({
     where: { id, schoolId },
@@ -272,4 +275,4 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
   })
 
   return NextResponse.json({ success: true, data: updated })
-}
+})

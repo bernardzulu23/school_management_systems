@@ -5,7 +5,12 @@ import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
-import { ACTIVITY_TYPES, canManageActivities, mapActivity } from '@/lib/activities/helpers'
+import {
+  ACTIVITY_TYPES,
+  canManageActivities,
+  canManageAnyActivity,
+  mapActivity,
+} from '@/lib/activities/helpers'
 
 const activityInclude = {
   organizer: { select: { id: true, name: true } },
@@ -33,12 +38,13 @@ export const GET = withErrorHandler(async function GET(request) {
   const { searchParams } = new URL(request.url)
   const includeInactive = searchParams.get('includeInactive') === 'true'
   const mineOnly = searchParams.get('mine') === 'true'
+  const scopeToMine = !canManageAnyActivity(auth.user) || mineOnly
 
   const activities = await db.activity.findMany({
     where: {
       schoolId,
       ...(includeInactive ? {} : { isActive: true }),
-      ...(mineOnly ? { organizerId: auth.user.id } : {}),
+      ...(scopeToMine ? { organizerId: auth.user.id } : {}),
     },
     include: activityInclude,
     orderBy: [{ isActive: 'desc' }, { updatedAt: 'desc' }],

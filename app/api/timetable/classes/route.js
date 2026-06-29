@@ -10,6 +10,9 @@ import { isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { resolveDepartmentClasses } from '@/lib/timetable/resolveDepartmentClasses'
 import { getActiveClasses } from '@/lib/timetable/getActiveClasses'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
+
+const CLASS_LIST_LIMIT = 500
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -24,11 +27,15 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!typeCheck.allowed) return typeCheck.response
 
   const { searchParams } = new URL(request.url)
-  const departmentId = String(searchParams.get('departmentId') || '').trim()
-  const teacherUserId = String(searchParams.get('teacherUserId') || '').trim()
-  const activeOnly = String(searchParams.get('activeOnly') || 'true').toLowerCase() !== 'false'
-  const term = String(searchParams.get('term') || 'Term 1')
-  const academicYear = String(searchParams.get('academicYear') || new Date().getFullYear())
+  const departmentId = safeQueryString(searchParams.get('departmentId'), { defaultValue: '' })
+  const teacherUserId = safeQueryString(searchParams.get('teacherUserId'), { defaultValue: '' })
+  const activeOnly =
+    safeQueryString(searchParams.get('activeOnly'), { defaultValue: 'true' }).toLowerCase() !==
+    'false'
+  const term = safeQueryString(searchParams.get('term'), { defaultValue: 'Term 1' })
+  const academicYear = safeQueryString(searchParams.get('academicYear'), {
+    defaultValue: String(new Date().getFullYear()),
+  })
 
   if (departmentId) {
     const hodProfile = await getHodProfile(prisma, auth.user.id, schoolId)
@@ -53,6 +60,7 @@ export const GET = withErrorHandler(async function GET(request) {
         where: { schoolId },
         include: { department: { select: { id: true, name: true, code: true } } },
         orderBy: [{ year_group: 'asc' }, { name: 'asc' }],
+        take: CLASS_LIST_LIMIT,
       })
 
   return NextResponse.json({

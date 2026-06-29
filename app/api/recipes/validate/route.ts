@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,7 +35,7 @@ function toInt(v: unknown, fallback: number) {
   return Number.isFinite(n) ? Math.trunc(n) : fallback
 }
 
-export async function POST(req: NextRequest) {
+export const POST = withErrorHandler(async function POST(req: NextRequest) {
   const auth = await authMiddleware(req as any)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, ['ADMIN', 'HOD'])) {
@@ -57,6 +58,7 @@ export async function POST(req: NextRequest) {
 
   const timeSlots = await prisma.timeSlot.findMany({
     where: { schoolId },
+    take: 500,
     select: { dayOfWeek: true, period: true, isBreak: true },
   })
 
@@ -177,4 +179,4 @@ export async function POST(req: NextRequest) {
   const result = { errors, warnings, totalPeriods }
 
   return NextResponse.json({ success: true, feasible, availableSlots, result })
-}
+})

@@ -13,6 +13,7 @@ import {
   validateTimetableConfig,
 } from '@/lib/timetable/timeSlotsFromConfig'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
 function mapDbSlot(s) {
   return {
@@ -47,7 +48,7 @@ function configResponse(config, dbSlots) {
   })
 }
 
-export async function GET(req) {
+export const GET = withErrorHandler(async function GET(req) {
   const user = await getAuthUser(req)
   const schoolId = await resolveSchoolId(req, user)
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
@@ -62,9 +63,9 @@ export async function GET(req) {
   const normalized = normalizeTimetableConfig(config)
   const dbSlots = await loadTimeSlotsFromDb(prisma, schoolId, normalized)
   return configResponse(config, dbSlots)
-}
+})
 
-export async function POST(req) {
+export const POST = withErrorHandler(async function POST(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -113,4 +114,4 @@ export async function POST(req) {
 
   const timeSlots = await loadTimeSlotsFromDb(prisma, schoolId, normalized)
   return configResponse(config, timeSlots)
-}
+})

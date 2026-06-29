@@ -9,6 +9,7 @@ import { checkAILimit, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
 import { parseAssessmentInteractive } from '@/lib/assessments/assessmentInteractive'
 import { parseInteractiveQuizPayload } from '@/lib/assessments/interactiveQuiz'
 import { generateQuizClassAnalysis } from '@/lib/assessments/generateQuizClassAnalysis'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 function parseSubmissionContent(raw) {
   if (!raw) return null
@@ -21,7 +22,8 @@ function parseSubmissionContent(raw) {
 
 export const POST = withAILimits(
   withErrorHandler(async function POST(request, { params }) {
-    const routeParams = await params
+    const id = await safeRouteParam(params, 'id')
+    if (!id) throw new ApiError('Assessment id is required', 400)
     const auth = await authMiddleware(request)
     if (!auth.isAuthenticated) return auth.response
 
@@ -35,7 +37,7 @@ export const POST = withAILimits(
     if (!schoolId) throw new ApiError('School context required', 400)
 
     const assessment = await prisma.assessment.findFirst({
-      where: { id: routeParams.id, schoolId },
+      where: { id, schoolId },
     })
     if (!assessment) throw new ApiError('Assessment not found', 404)
 
@@ -107,7 +109,8 @@ export const POST = withAILimits(
 )
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
-  const routeParams = await params
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('Assessment id is required', 400)
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -120,7 +123,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const schoolId = tenant.schoolId
 
   const assessment = await prisma.assessment.findFirst({
-    where: { id: routeParams.id, schoolId },
+    where: { id, schoolId },
     select: { id: true, aiAnalysis: true },
   })
   if (!assessment) throw new ApiError('Assessment not found', 404)

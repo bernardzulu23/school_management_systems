@@ -6,6 +6,7 @@ import { resolvePlatformAdminRecord } from '@/lib/platform/platformAdminAuth'
 import prisma from '@/lib/prisma'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+import { hydrateLegacySchoolAccess } from '@/lib/billing/subscription'
 
 export const GET = withSecureApi(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -64,8 +65,22 @@ export const GET = withSecureApi(async function GET(request) {
 
   const school = await prisma.school.findFirst({
     where: { id: schoolId },
-    select: { id: true, name: true, logo_url: true, subdomain: true },
+    select: {
+      id: true,
+      name: true,
+      logo_url: true,
+      subdomain: true,
+      plan: true,
+      planExpiresAt: true,
+      trialEndsAt: true,
+      emailVerified: true,
+      active: true,
+      schoolType: true,
+      level: true,
+    },
   })
+
+  const hydratedSchool = school ? await hydrateLegacySchoolAccess(prisma, schoolId, school) : null
 
   const resolvedDepartment =
     dbUser.hodProfile?.departmentRef?.name ||
@@ -76,7 +91,18 @@ export const GET = withSecureApi(async function GET(request) {
 
   return NextResponse.json({
     success: true,
-    school: school || null,
+    school: hydratedSchool
+      ? {
+          id: hydratedSchool.id,
+          name: hydratedSchool.name,
+          logo_url: hydratedSchool.logo_url,
+          subdomain: hydratedSchool.subdomain,
+          plan: hydratedSchool.plan,
+          emailVerified: hydratedSchool.emailVerified,
+          schoolType: hydratedSchool.schoolType,
+          level: hydratedSchool.level,
+        }
+      : null,
     user: {
       id: dbUser.id,
       name: dbUser.name,

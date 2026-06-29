@@ -13,6 +13,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { studentSchema, validateRequest, sanitizeOutput } from '@/lib/middleware/inputValidation'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
 
 const normalizeYearGroup = (yearGroupRaw) => {
   const raw = String(yearGroupRaw || '').trim()
@@ -93,11 +94,13 @@ export const GET = withErrorHandler(async (request) => {
   }
 
   const { searchParams } = new URL(request.url)
-  const classId = searchParams.get('classId')
-  const className = searchParams.get('class')
-  const q = String(searchParams.get('q') || searchParams.get('search') || '').trim()
-  const page = parseInt(searchParams.get('page')) || 1
-  const limit = parseInt(searchParams.get('limit')) || 20
+  const classId = safeQueryString(searchParams.get('classId'))
+  const className = safeQueryString(searchParams.get('class'))
+  const q = safeQueryString(searchParams.get('q') || searchParams.get('search'), {
+    defaultValue: '',
+  })
+  const page = Math.max(1, parseInt(searchParams.get('page'), 10) || 1)
+  const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit'), 10) || 20))
 
   // Authorization: Only Admin, HOD, and Teacher can view all students or specific classes
   // Students can only view their own record (handled in a separate specific route or filtered here)
@@ -134,7 +137,7 @@ export const GET = withErrorHandler(async (request) => {
   let classCandidates = []
   if (!resolvedClassName && classId) {
     const cls = await db.class.findFirst({
-      where: { id: String(classId), schoolId },
+      where: { id: classId, schoolId },
       select: { id: true, name: true, year_group: true, section: true },
     })
     resolvedClassName = cls?.name || null
@@ -178,13 +181,7 @@ export const GET = withErrorHandler(async (request) => {
 
   const { students, total } =
     classCandidates.length > 0
-      ? await findStudentsByClassNames(
-          schoolId,
-          classCandidates,
-          classId ? String(classId) : null,
-          page,
-          limit
-        )
+      ? await findStudentsByClassNames(schoolId, classCandidates, classId || null, page, limit)
       : await findStudentsByClass(schoolId, resolvedClassName, page, limit)
 
   return NextResponse.json({
@@ -216,14 +213,16 @@ export const POST = withErrorHandler(async (request) => {
 
   const studentData = validation.data
 
+  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
+  if (!schoolId) throw new ApiError('School context required', 400)
+
   // Use a secure random password for initial creation instead of hardcoded 'password123'
   // In a real app, this would trigger a password reset email
   const { generateCompliantPassword } = await import('@/lib/security/passwordPolicy')
   const tempPassword = generateCompliantPassword()
   const hashedPassword = await bcrypt.hash(tempPassword, 12)
-
-  const schoolId = auth.user?.schoolId
-  if (!schoolId) throw new ApiError('School context required', 400)
 
   const { checkStudentCap } = await import('@/lib/middleware/individual-gate')
   const capCheck = await checkStudentCap(schoolId)
@@ -247,10 +246,14 @@ export const POST = withErrorHandler(async (request) => {
       },
     })
 
+    const safeClassId = safeStringId(studentData.class_id)
     const classRecord = await tx.class.findFirst({
       where: {
         schoolId,
-        OR: [{ id: studentData.class_id }, { name: studentData.class_id }],
+        OR: [
+          ...(safeClassId ? [{ id: safeClassId }] : []),
+          { name: String(studentData.class_id || '') },
+        ],
       },
       select: { id: true, name: true },
     })

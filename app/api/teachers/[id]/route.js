@@ -3,6 +3,8 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { deleteUserCascade } from '@/lib/db/deleteCascade'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 const parseClassNameParts = (className) => {
   const name = String(className || '').trim()
@@ -12,8 +14,10 @@ const parseClassNameParts = (className) => {
   return { year_group, section }
 }
 
-export async function GET(request, { params }) {
-  const routeParams = await params
+export const GET = withErrorHandler(async function GET(request, { params }) {
+  const teacherId = await safeRouteParam(params, 'id')
+  if (!teacherId) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -27,7 +31,7 @@ export async function GET(request, { params }) {
   }
 
   const teacher = await prisma.teacher.findFirst({
-    where: { id: routeParams.id, schoolId },
+    where: { id: teacherId, schoolId },
     include: {
       user: {
         select: {
@@ -63,10 +67,12 @@ export async function GET(request, { params }) {
   }
 
   return NextResponse.json({ success: true, data: shaped })
-}
+})
 
-export async function PUT(request, { params }) {
-  const routeParams = await params
+export const PUT = withErrorHandler(async function PUT(request, { params }) {
+  const teacherId = await safeRouteParam(params, 'id')
+  if (!teacherId) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -82,7 +88,7 @@ export async function PUT(request, { params }) {
   const body = await request.json()
 
   const existing = await prisma.teacher.findFirst({
-    where: { id: routeParams.id, schoolId },
+    where: { id: teacherId, schoolId },
     select: { id: true, userId: true },
   })
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
@@ -207,10 +213,12 @@ export async function PUT(request, { params }) {
   })
 
   return NextResponse.json({ success: true, data: updated })
-}
+})
 
-export async function DELETE(request, { params }) {
-  const routeParams = await params
+export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
+  const teacherId = await safeRouteParam(params, 'id')
+  if (!teacherId) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -224,7 +232,7 @@ export async function DELETE(request, { params }) {
   }
 
   const existing = await prisma.teacher.findFirst({
-    where: { id: routeParams.id, schoolId },
+    where: { id: teacherId, schoolId },
     select: { id: true, userId: true },
   })
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
@@ -234,4 +242,4 @@ export async function DELETE(request, { params }) {
   })
 
   return NextResponse.json({ success: true })
-}
+})

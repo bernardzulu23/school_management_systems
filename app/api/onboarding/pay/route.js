@@ -15,6 +15,7 @@ import {
 } from '@/lib/payments/lipila'
 
 import { PLAN_PRICING, normalizePlanSlug } from '@/lib/billing/plan-pricing'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
 function normalizeZambiaMsisdn(value) {
   const digits = String(value || '').replace(/\D/g, '')
@@ -25,7 +26,7 @@ function normalizeZambiaMsisdn(value) {
   return digits
 }
 
-export async function POST(request) {
+export const POST = withSecureHandler(async function POST(request) {
   const rl = rateLimiter(request, {
     limit: process.env.NODE_ENV === 'production' ? 30 : 300,
     windowMs: 15 * 60 * 1000,
@@ -181,4 +182,4 @@ export async function POST(request) {
     }
     return NextResponse.json({ error: 'Payment gateway unavailable' }, { status: 502 })
   }
-}
+})

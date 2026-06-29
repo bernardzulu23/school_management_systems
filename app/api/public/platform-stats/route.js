@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,7 +21,7 @@ function withTimeout(promise, ms) {
   ])
 }
 
-export async function GET() {
+export const GET = withSecureHandler(async function GET() {
   try {
     const counts = await withTimeout(
       Promise.all([
@@ -50,4 +51,4 @@ export async function GET() {
       stats: EMPTY_STATS,
     })
   }
-}
+})

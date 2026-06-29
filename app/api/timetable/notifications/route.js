@@ -6,9 +6,10 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { safeStringId } from '@/lib/security/safeQueryValue'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
 // GET — fetch all timetable notifications for the logged-in user
-export async function GET(req) {
+export const GET = withErrorHandler(async function GET(req) {
   const auth = await authMiddleware(req)
   if (!auth.isAuthenticated) return auth.response
 
@@ -49,10 +50,10 @@ export async function GET(req) {
       })
 
   return NextResponse.json({ notifications })
-}
+})
 
 // POST — mark notification as read
-export async function POST(req) {
+export const POST = withErrorHandler(async function POST(req) {
   const auth = await authMiddleware(req)
   if (!auth.isAuthenticated) return auth.response
 
@@ -81,4 +82,4 @@ export async function POST(req) {
   }
 
   return NextResponse.json({ success: true })
-}
+})

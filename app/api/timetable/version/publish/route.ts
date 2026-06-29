@@ -3,6 +3,8 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,7 +13,7 @@ type PublishBody = {
 }
 
 /** Legacy TimetableVersion publish (separate from TimetableAllocationEntry publish). */
-export async function POST(req: NextRequest) {
+export const POST = withErrorHandler(async function POST(req: NextRequest) {
   const auth = await authMiddleware(req as any)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, ['ADMIN'])) {
@@ -27,7 +29,7 @@ export async function POST(req: NextRequest) {
   if (!typeCheck.allowed) return typeCheck.response
 
   const body = (await req.json().catch(() => ({}))) as PublishBody
-  const versionId = String(body?.versionId || '').trim()
+  const versionId = safeStringId(body?.versionId)
 
   const version = versionId
     ? await prisma.timetableVersion.findFirst({
@@ -57,4 +59,4 @@ export async function POST(req: NextRequest) {
   ])
 
   return NextResponse.json({ success: true, versionId: version.id })
-}
+})

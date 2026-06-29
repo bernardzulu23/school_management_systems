@@ -1,14 +1,14 @@
 {
-  "scannedAt": "2026-06-02T06:09:56.638Z",
-  "totalRoutes": 268,
-  "vulnerableCalls": 133,
-  "safeCalls": 515,
+  "scannedAt": "2026-06-29T21:23:53.393Z",
+  "totalRoutes": 379,
+  "vulnerableCalls": 174,
+  "safeCalls": 584,
   "vulnerable": [
     {
       "file": "app/api/account/password/route.js",
       "model": "user",
       "method": "update",
-      "line": 51,
+      "line": 63,
       "status": "VULNERABLE"
     },
     {
@@ -36,133 +36,182 @@
       "file": "app/api/admin/repair/enrollments/route.js",
       "model": "pupilSubjectEnrollment",
       "method": "createMany",
-      "line": 151,
+      "line": 157,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/admin/repair/enrollments/route.js",
       "model": "student",
       "method": "update",
-      "line": 161,
+      "line": 167,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/admin/schools/route.ts",
       "model": "school",
       "method": "findMany",
-      "line": 18,
+      "line": 19,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/admin/schools/route.ts",
       "model": "school",
       "method": "findUnique",
-      "line": 110,
+      "line": 108,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/ai/term-reports/route.js",
       "model": "termReport",
       "method": "findMany",
-      "line": 39,
+      "line": 43,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/ai/term-reports/[id]/route.js",
       "model": "termReport",
       "method": "update",
-      "line": 43,
-      "status": "VULNERABLE"
-    },
-    {
-      "file": "app/api/allocations/[allocationId]/route.js",
-      "model": "departmentAllocation",
-      "method": "delete",
-      "line": 84,
+      "line": 48,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/allocations/[allocationId]/submit/route.js",
       "model": "departmentAllocation",
       "method": "update",
-      "line": 49,
+      "line": 52,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/allocations/[allocationId]/update/route.js",
       "model": "departmentAllocation",
       "method": "update",
-      "line": 86,
+      "line": 64,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/assessments/hod/pending/route.js",
+      "model": "assessment",
+      "method": "findMany",
+      "line": 35,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/assessments/promote-term-test/route.js",
+      "model": "eczRubric",
+      "method": "create",
+      "line": 87,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/assessments/promote-term-test/route.js",
+      "model": "eczAssessmentItem",
+      "method": "createMany",
+      "line": 104,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/assessments/sba-scores/route.js",
       "model": "eczAssessmentScore",
       "method": "findUnique",
-      "line": 56,
+      "line": 60,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/assessments/sba-scores/route.js",
       "model": "eczAssessmentScore",
       "method": "update",
-      "line": 97,
+      "line": 101,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/assessments/sba-scores/route.js",
       "model": "eczAssessmentScore",
       "method": "findMany",
-      "line": 168,
+      "line": 172,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/assessments/sba-tasks/route.js",
       "model": "eczRubric",
       "method": "create",
-      "line": 97,
+      "line": 113,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/assessments/sba-tasks/route.js",
       "model": "eczAssessmentItem",
       "method": "createMany",
-      "line": 106,
+      "line": 122,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/assessments/[id]/ai-analysis/route.js",
+      "model": "assessment",
+      "method": "update",
+      "line": 97,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/assessments/[id]/publish/route.js",
+      "model": "assessment",
+      "method": "update",
+      "line": 83,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/assessments/[id]/questions/route.js",
       "model": "assessment",
       "method": "update",
-      "line": 66,
+      "line": 82,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/assessments/[id]/review/route.js",
+      "model": "assessment",
+      "method": "update",
+      "line": 102,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/assessments/[id]/submit-hod/route.js",
+      "model": "assessment",
+      "method": "update",
+      "line": 63,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/assessments/[id]/submit-hod/route.js",
+      "model": "assessment",
+      "method": "update",
+      "line": 97,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/assignments/route.js",
       "model": "assignment",
       "method": "findMany",
-      "line": 34,
+      "line": 42,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/assignments/route.js",
       "model": "assignment",
       "method": "findMany",
-      "line": 52,
+      "line": 61,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/assignments/route.js",
-      "model": "teacher",
-      "method": "findUnique",
-      "line": 94,
+      "model": "assessment",
+      "method": "update",
+      "line": 166,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/attendance/qr-mark/route.js",
       "model": "attendanceMark",
       "method": "findUnique",
-      "line": 61,
+      "line": 62,
       "status": "VULNERABLE"
     },
     {
@@ -183,217 +232,280 @@
       "file": "app/api/auth/login/route.js",
       "model": "user",
       "method": "findMany",
-      "line": 164,
+      "line": 198,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/auth/refresh/route.js",
       "model": "refreshToken",
       "method": "findUnique",
-      "line": 82,
+      "line": 88,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/auth/refresh/route.js",
       "model": "refreshToken",
       "method": "updateMany",
-      "line": 98,
+      "line": 106,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/auth/refresh/route.js",
       "model": "refreshToken",
       "method": "update",
-      "line": 140,
+      "line": 152,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/auth/reset-password/route.js",
       "model": "user",
       "method": "update",
-      "line": 56,
+      "line": 60,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/auth/reset-password/[token]/route.js",
       "model": "user",
       "method": "update",
-      "line": 62,
+      "line": 67,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/billing/subscription-payment/route.js",
       "model": "schoolPlanPayment",
       "method": "update",
-      "line": 154,
+      "line": 167,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/billing/subscription-payment/route.js",
       "model": "schoolPlanPayment",
       "method": "update",
-      "line": 164,
+      "line": 177,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/billing/subscription-payment/route.js",
       "model": "schoolPlanPayment",
       "method": "update",
-      "line": 181,
+      "line": 194,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/billing/subscription-payment/status/route.js",
+      "model": "schoolPlanPayment",
+      "method": "findUnique",
+      "line": 80,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/cbc/export/route.js",
+      "model": "cbcCompetencyRating",
+      "method": "findMany",
+      "line": 104,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/cbc/ratings/route.js",
+      "model": "cbcCompetencyRating",
+      "method": "findMany",
+      "line": 57,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/cbc/ratings/route.js",
+      "model": "cbcCompetencyRating",
+      "method": "count",
+      "line": 68,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/cbc/ratings/route.js",
+      "model": "eczCompetency",
+      "method": "findUnique",
+      "line": 119,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/classes/[id]/route.js",
       "model": "class",
       "method": "update",
-      "line": 81,
+      "line": 92,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/headteacher/route.js",
       "model": "result",
       "method": "count",
-      "line": 174,
+      "line": 212,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/headteacher/route.js",
       "model": "result",
       "method": "count",
-      "line": 197,
+      "line": 235,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/headteacher/route.js",
       "model": "result",
       "method": "aggregate",
-      "line": 202,
-      "status": "VULNERABLE"
-    },
-    {
-      "file": "app/api/dashboard/headteacher/route.js",
-      "model": "result",
-      "method": "findMany",
-      "line": 210,
-      "status": "VULNERABLE"
-    },
-    {
-      "file": "app/api/dashboard/headteacher/route.js",
-      "model": "result",
-      "method": "groupBy",
       "line": 240,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/headteacher/route.js",
       "model": "result",
-      "method": "groupBy",
-      "line": 253,
-      "status": "VULNERABLE"
-    },
-    {
-      "file": "app/api/dashboard/headteacher/route.js",
-      "model": "result",
       "method": "findMany",
-      "line": 377,
+      "line": 248,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/headteacher/route.js",
       "model": "result",
       "method": "groupBy",
-      "line": 506,
+      "line": 278,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/headteacher/route.js",
       "model": "result",
       "method": "groupBy",
-      "line": 512,
+      "line": 291,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/headteacher/route.js",
       "model": "result",
       "method": "findMany",
-      "line": 559,
+      "line": 415,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/dashboard/headteacher/route.js",
+      "model": "result",
+      "method": "groupBy",
+      "line": 615,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/dashboard/headteacher/route.js",
+      "model": "result",
+      "method": "groupBy",
+      "line": 621,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/headteacher/route.js",
       "model": "result",
       "method": "findMany",
-      "line": 659,
+      "line": 668,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/headteacher/route.js",
       "model": "result",
       "method": "findMany",
-      "line": 713,
+      "line": 770,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/headteacher/route.js",
       "model": "result",
       "method": "findMany",
-      "line": 808,
+      "line": 824,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/headteacher/route.js",
       "model": "result",
       "method": "findMany",
-      "line": 829,
+      "line": 919,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/dashboard/headteacher/route.js",
+      "model": "result",
+      "method": "findMany",
+      "line": 940,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/dashboard/headteacher/route.js",
+      "model": "result",
+      "method": "findMany",
+      "line": 960,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/headteacher/route.js",
       "model": "user",
       "method": "findMany",
-      "line": 870,
+      "line": 984,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/hod/exam-analysis/route.js",
       "model": "teacherDepartment",
       "method": "findMany",
-      "line": 120,
+      "line": 162,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/dashboard/hod/exam-analysis/route.js",
+      "model": "result",
+      "method": "findMany",
+      "line": 273,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/dashboard/hod/exam-analysis/route.js",
+      "model": "result",
+      "method": "findMany",
+      "line": 295,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/dashboard/hod/exam-analysis/route.js",
+      "model": "result",
+      "method": "findMany",
+      "line": 374,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/hod/route.js",
       "model": "user",
       "method": "findMany",
-      "line": 266,
+      "line": 273,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/stats/route.js",
       "model": "user",
       "method": "findMany",
-      "line": 146,
+      "line": 149,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/student/games/complete/route.js",
       "model": "gamificationProfile",
       "method": "findUnique",
-      "line": 60,
+      "line": 61,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/student/games/complete/route.js",
       "model": "gamificationProfile",
       "method": "update",
-      "line": 81,
+      "line": 82,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/dashboard/student/games/route.js",
       "model": "gamificationProfile",
       "method": "findUnique",
-      "line": 30,
+      "line": 31,
       "status": "VULNERABLE"
     },
     {
@@ -421,70 +533,126 @@
       "file": "app/api/ecz/accommodations/[id]/route.js",
       "model": "specialAccommodation",
       "method": "update",
-      "line": 34,
+      "line": 43,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/ecz/accommodations/[id]/route.js",
       "model": "specialAccommodation",
       "method": "update",
-      "line": 41,
+      "line": 50,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/ecz/accommodations/[id]/route.js",
       "model": "specialAccommodation",
       "method": "delete",
-      "line": 71,
+      "line": 79,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/ecz/evidence/route.js",
       "model": "eczEvidenceFile",
       "method": "create",
-      "line": 151,
+      "line": 154,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/ecz/evidence/[id]/route.js",
       "model": "eczEvidenceFile",
       "method": "delete",
-      "line": 46,
+      "line": 45,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/ecz/exemplars/route.js",
+      "model": "eczExemplar",
+      "method": "findMany",
+      "line": 57,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/ecz/exemplars/[id]/clone/route.js",
+      "model": "eczExemplar",
+      "method": "findUnique",
+      "line": 45,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/ecz/exemplars/[id]/clone/route.js",
+      "model": "eczRubric",
+      "method": "create",
+      "line": 99,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/ecz/exemplars/[id]/clone/route.js",
+      "model": "eczAssessmentItem",
+      "method": "createMany",
+      "line": 108,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/ecz/moderation/route.js",
+      "model": "eczAssessment",
+      "method": "update",
+      "line": 79,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/ecz/reference/route.js",
       "model": "eczCompetency",
       "method": "findMany",
-      "line": 14,
+      "line": 37,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/ecz/reference/route.js",
       "model": "eczSubjectConstruct",
       "method": "findMany",
-      "line": 18,
+      "line": 42,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/games/[id]/route.js",
+      "model": "game",
+      "method": "update",
+      "line": 83,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/games/[id]/route.js",
+      "model": "game",
+      "method": "delete",
+      "line": 127,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/guidance/assignments/[id]/route.js",
+      "model": "guidanceAssignment",
+      "method": "update",
+      "line": 24,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/hods/assign/route.js",
       "model": "headOfDepartment",
       "method": "delete",
-      "line": 47,
+      "line": 55,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/hods/assign/route.js",
       "model": "teacherDepartment",
       "method": "upsert",
-      "line": 50,
+      "line": 58,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/hods/assign/route.js",
       "model": "headOfDepartment",
       "method": "delete",
-      "line": 104,
+      "line": 118,
       "status": "VULNERABLE"
     },
     {
@@ -492,6 +660,20 @@
       "model": "teacherDepartment",
       "method": "findMany",
       "line": 33,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/innovation/projects/[id]/route.js",
+      "model": "innovationProject",
+      "method": "update",
+      "line": 85,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/innovation/projects/[id]/route.js",
+      "model": "innovationProject",
+      "method": "delete",
+      "line": 115,
       "status": "VULNERABLE"
     },
     {
@@ -505,21 +687,21 @@
       "file": "app/api/lesson-plans/route.js",
       "model": "lessonPlan",
       "method": "findMany",
-      "line": 47,
+      "line": 49,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/lesson-plans/[id]/comments/route.js",
       "model": "lessonPlanComment",
       "method": "findMany",
-      "line": 36,
+      "line": 37,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/lesson-plans/[id]/comments/route.js",
       "model": "lessonPlanComment",
       "method": "create",
-      "line": 76,
+      "line": 78,
       "status": "VULNERABLE"
     },
     {
@@ -533,21 +715,28 @@
       "file": "app/api/lesson-plans/[id]/route.js",
       "model": "lessonPlan",
       "method": "update",
-      "line": 230,
+      "line": 229,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/lesson-plans/[id]/submit/route.js",
       "model": "lessonPlan",
       "method": "update",
-      "line": 60,
+      "line": 54,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/lesson-plans/[id]/submit/route.js",
+      "model": "lessonPlan",
+      "method": "update",
+      "line": 88,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/marketplace/mine/route.js",
       "model": "sharedMaterial",
       "method": "findMany",
-      "line": 37,
+      "line": 40,
       "status": "VULNERABLE"
     },
     {
@@ -575,14 +764,14 @@
       "file": "app/api/marketplace/[id]/download/route.js",
       "model": "sharedMaterial",
       "method": "findFirst",
-      "line": 34,
+      "line": 33,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/marketplace/[id]/download/route.js",
       "model": "sharedMaterial",
       "method": "update",
-      "line": 69,
+      "line": 68,
       "status": "VULNERABLE"
     },
     {
@@ -617,7 +806,14 @@
       "file": "app/api/marketplace/[id]/route.js",
       "model": "sharedMaterial",
       "method": "findFirst",
-      "line": 20,
+      "line": 19,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/materials/route.js",
+      "model": "schoolMaterial",
+      "method": "findMany",
+      "line": 42,
       "status": "VULNERABLE"
     },
     {
@@ -631,84 +827,126 @@
       "file": "app/api/mobile/auth/login/route.js",
       "model": "user",
       "method": "findMany",
-      "line": 73,
+      "line": 97,
       "status": "VULNERABLE"
     },
     {
-      "file": "app/api/mobile/push/register/route.js",
-      "model": "user",
-      "method": "update",
-      "line": 28,
+      "file": "app/api/mobile/auth/refresh/route.js",
+      "model": "refreshToken",
+      "method": "findUnique",
+      "line": 38,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/mobile/school/lookup/route.js",
       "model": "school",
       "method": "findFirst",
-      "line": 17,
+      "line": 27,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/mobile/session-context/route.js",
       "model": "teacher",
       "method": "findUnique",
-      "line": 40,
+      "line": 45,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/mobile/sync/route.js",
       "model": "eczAssessmentScore",
       "method": "findUnique",
-      "line": 178,
+      "line": 223,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/payments/mobile-money/route.js",
+      "model": "schoolFeePayment",
+      "method": "update",
+      "line": 192,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/payments/mobile-money/route.js",
+      "model": "schoolFeePayment",
+      "method": "update",
+      "line": 256,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/payments/mobile-money/route.js",
+      "model": "schoolFeePayment",
+      "method": "update",
+      "line": 293,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/payments/mobile-money/route.js",
+      "model": "schoolFeePayment",
+      "method": "update",
+      "line": 298,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/payments/mobile-money/route.js",
+      "model": "schoolFeePayment",
+      "method": "findUnique",
+      "line": 310,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/payments/mobile-money/route.js",
+      "model": "schoolFeePayment",
+      "method": "update",
+      "line": 332,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/profile/password/route.js",
       "model": "user",
       "method": "update",
-      "line": 43,
+      "line": 46,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/profile/picture/route.js",
       "model": "user",
       "method": "update",
-      "line": 64,
+      "line": 65,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/question-bank/[id]/route.js",
       "model": "questionBank",
       "method": "update",
-      "line": 28,
+      "line": 27,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/question-bank/[id]/route.js",
       "model": "game",
       "method": "update",
-      "line": 46,
+      "line": 45,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/question-bank/[id]/route.js",
       "model": "questionBank",
       "method": "delete",
-      "line": 81,
+      "line": 77,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/question-bank/[id]/route.js",
       "model": "game",
       "method": "delete",
-      "line": 91,
+      "line": 87,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/recipes/route.ts",
       "model": "schedulingRecipe",
       "method": "findMany",
-      "line": 33,
+      "line": 35,
       "status": "VULNERABLE"
     },
     {
@@ -722,49 +960,56 @@
       "file": "app/api/recipes/[id]/validate/route.ts",
       "model": "schedulingRecipe",
       "method": "update",
-      "line": 152,
+      "line": 153,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/schools/check-subdomain/route.js",
       "model": "school",
       "method": "findFirst",
-      "line": 65,
+      "line": 66,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/schools/register/route.js",
       "model": "school",
       "method": "findFirst",
-      "line": 201,
+      "line": 190,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/schools/verify/[token]/route.js",
       "model": "school",
       "method": "findFirst",
-      "line": 31,
+      "line": 30,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/schools/verify/[token]/route.js",
       "model": "school",
       "method": "update",
-      "line": 45,
+      "line": 44,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/sms/recipients/route.js",
       "model": "student",
       "method": "findMany",
-      "line": 40,
+      "line": 43,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/solo/students/[studentId]/route.js",
+      "model": "user",
+      "method": "delete",
+      "line": 24,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/strategic-goals/route.js",
       "model": "strategicGoal",
       "method": "findMany",
-      "line": 44,
+      "line": 46,
       "status": "VULNERABLE"
     },
     {
@@ -778,14 +1023,14 @@
       "file": "app/api/students/[id]/twin-pin/route.js",
       "model": "student",
       "method": "update",
-      "line": 41,
+      "line": 45,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/subjects/[id]/route.js",
       "model": "subject",
       "method": "update",
-      "line": 61,
+      "line": 60,
       "status": "VULNERABLE"
     },
     {
@@ -806,133 +1051,175 @@
       "file": "app/api/teacher/results/route.js",
       "model": "result",
       "method": "findMany",
-      "line": 428,
+      "line": 225,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/teacher/results/route.js",
       "model": "result",
       "method": "delete",
-      "line": 965,
+      "line": 785,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/teacher/results/route.js",
       "model": "result",
       "method": "delete",
-      "line": 1002,
+      "line": 822,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/teaching-assignments/route.js",
       "model": "teacher",
       "method": "findUnique",
-      "line": 25,
+      "line": 28,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/timetable/allocations/push/route.js",
       "model": "teacherAllocation",
       "method": "findMany",
-      "line": 48,
+      "line": 54,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/timetable/allocations/push/route.js",
       "model": "user",
       "method": "findUnique",
-      "line": 64,
+      "line": 70,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/timetable/allocations/route.js",
       "model": "teacherAllocation",
       "method": "findMany",
-      "line": 51,
+      "line": 61,
       "status": "VULNERABLE"
     },
     {
-      "file": "app/api/timetable/classes/route.js",
-      "model": "class",
-      "method": "findMany",
-      "line": 35,
+      "file": "app/api/timetable/allocations/[id]/route.js",
+      "model": "teacherAllocation",
+      "method": "deleteMany",
+      "line": 37,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/timetable/conflicts/resolve/route.js",
+      "model": "timetableAllocationEntry",
+      "method": "update",
+      "line": 104,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/timetable/conflicts/resolve/route.js",
+      "model": "timetableAllocationEntry",
+      "method": "update",
+      "line": 211,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/timetable/conflicts/resolve/route.js",
+      "model": "timetableAllocationEntry",
+      "method": "delete",
+      "line": 241,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/timetable/conflicts/resolve/route.js",
+      "model": "timetableAllocationEntry",
+      "method": "update",
+      "line": 272,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/timetable/conflicts/resolve/route.js",
+      "model": "timetableAllocationEntry",
+      "method": "update",
+      "line": 283,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/timetable/entries/route.js",
       "model": "timetableAllocationEntry",
       "method": "findMany",
-      "line": 35,
+      "line": 52,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/timetable/entries/route.js",
       "model": "timetableAllocationEntry",
       "method": "update",
-      "line": 99,
+      "line": 150,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/timetable/entries/route.js",
       "model": "timetableAllocationEntry",
       "method": "delete",
-      "line": 133,
+      "line": 215,
+      "status": "VULNERABLE"
+    },
+    {
+      "file": "app/api/timetable/entries/sync-draft/route.js",
+      "model": "class",
+      "method": "findMany",
+      "line": 181,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/timetable/generate/route.ts",
       "model": "teacherAllocation",
       "method": "findMany",
-      "line": 64,
+      "line": 83,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/timetable/timeSlots/[id]/route.js",
       "model": "timeSlot",
       "method": "update",
-      "line": 84,
+      "line": 89,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/timetable/timeSlots/[id]/route.js",
       "model": "timeSlot",
       "method": "update",
-      "line": 104,
+      "line": 109,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/timetable/version/publish/route.ts",
       "model": "timetableVersion",
       "method": "update",
-      "line": 48,
+      "line": 54,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/timetable/view/route.js",
       "model": "timetableAllocationEntry",
       "method": "findMany",
-      "line": 196,
+      "line": 230,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/users/route.js",
       "model": "user",
       "method": "findMany",
-      "line": 114,
+      "line": 116,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/users/[id]/password/route.js",
       "model": "user",
       "method": "update",
-      "line": 34,
+      "line": 41,
       "status": "VULNERABLE"
     },
     {
       "file": "app/api/users/[id]/route.js",
       "model": "user",
       "method": "update",
-      "line": 58,
+      "line": 65,
       "status": "VULNERABLE"
     }
   ]

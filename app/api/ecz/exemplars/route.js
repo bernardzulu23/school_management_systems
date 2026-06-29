@@ -6,6 +6,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -35,10 +36,10 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!eczCheck.ok) return eczCheck.response
 
   const { searchParams } = new URL(request.url)
-  const subject = String(searchParams.get('subject') || '').trim()
-  const subjectCode = String(searchParams.get('subjectCode') || '').trim()
-  const formRaw = searchParams.get('form')
-  const band = String(searchParams.get('type') || searchParams.get('band') || '').trim()
+  const subject = safeQueryString(searchParams.get('subject'))
+  const subjectCode = safeQueryString(searchParams.get('subjectCode'))
+  const formRaw = safeQueryString(searchParams.get('form'))
+  const band = safeQueryString(searchParams.get('type') || searchParams.get('band'))
 
   const where = {}
   if (subjectCode) where.subjectCode = subjectCode
@@ -56,6 +57,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const rows = await prisma.eczExemplar.findMany({
     where,
     orderBy: [{ subjectName: 'asc' }, { form: 'asc' }, { band: 'asc' }, { title: 'asc' }],
+    take: 200,
   })
 
   return NextResponse.json({ success: true, data: rows })

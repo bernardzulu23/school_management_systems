@@ -6,6 +6,8 @@ import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 import { timeToMin } from '@/lib/timetable/timeSlotsFromConfig'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 function formatHHMM(totalMin) {
   const h = Math.floor(totalMin / 60) % 24
@@ -46,7 +48,7 @@ async function resolveDoublePeriodEnd(prisma, schoolId, slot, isDouble) {
   }
 }
 
-export async function PATCH(req, { params }) {
+export const PATCH = withErrorHandler(async function PATCH(req, { params }) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -61,8 +63,7 @@ export async function PATCH(req, { params }) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const routeParams = await params
-  const slotId = String(routeParams?.id || '').trim()
+  const slotId = await safeRouteParam(params, 'id')
   if (!slotId) return NextResponse.json({ error: 'Slot id required' }, { status: 400 })
 
   const existing = await prisma.timeSlot.findFirst({
@@ -117,4 +118,4 @@ export async function PATCH(req, { params }) {
   })
 
   return NextResponse.json({ period: updated })
-}
+})

@@ -2,9 +2,9 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { authorizeGovernmentRoute, parseYearParam } from '@/lib/government/routeAuth'
 import { createGrant, getGrantsSummary, listGrants } from '@/lib/government/grants'
-import { withSecureApi } from '@/lib/middleware/secureApi'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
-export const GET = withSecureApi(async function GET(request) {
+export const GET = withSecureHandler(async function GET(request) {
   const access = await authorizeGovernmentRoute(request, 'grants-tracking')
   if (!access.ok) return access.response
 
@@ -18,7 +18,7 @@ export const GET = withSecureApi(async function GET(request) {
   return NextResponse.json({ success: true, data: { grants, summary } })
 })
 
-export const POST = withSecureApi(async function POST(request) {
+export const POST = withSecureHandler(async function POST(request) {
   const access = await authorizeGovernmentRoute(request, 'grants-tracking')
   if (!access.ok) return access.response
 

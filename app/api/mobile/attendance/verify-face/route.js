@@ -4,6 +4,8 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { getEnrolledRoster } from '@/lib/attendance/sessions'
+import { assertTeacherMayAccessAttendanceClass } from '@/lib/attendance/routeAuth'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 import {
   findBestFaceMatch,
   FACE_MATCH_THRESHOLD,
@@ -28,7 +30,7 @@ export const POST = withErrorHandler(async function POST(request) {
   }
 
   const body = await request.json().catch(() => ({}))
-  const sessionId = String(body.sessionId || '').trim()
+  const sessionId = safeStringId(body.sessionId)
   const probeEmbedding = body.probeEmbedding
 
   if (!sessionId) {
@@ -42,6 +44,12 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!session) {
     return NextResponse.json({ error: 'Session not found or closed' }, { status: 404 })
   }
+
+  await assertTeacherMayAccessAttendanceClass({
+    schoolId,
+    user: auth.user,
+    classId: session.classId,
+  })
 
   const roster = await getEnrolledRoster(schoolId, session.classId, session.subjectId)
   let parsedProbe = probeEmbedding

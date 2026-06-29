@@ -26,12 +26,31 @@ describe('GET /api/teaching-assignments', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     resolveAuthenticatedSchoolId.mockResolvedValue({ ok: true, schoolId: 'school-1' })
-    mockPrisma.teacher = mockPrisma.teacher || { findUnique: vi.fn() }
+    mockPrisma.teacher = mockPrisma.teacher || { findUnique: vi.fn(), findFirst: vi.fn() }
     mockPrisma.teachingAssignment = mockPrisma.teachingAssignment || { findMany: vi.fn() }
+    mockPrisma.teacher.findFirst.mockResolvedValue({
+      id: 'teacher-1',
+      user: { id: 'hod-1', name: 'HOD User' },
+      classes: [],
+      subjects: [],
+      teachingAssignments: [
+        {
+          id: 'a1',
+          teacherId: 'teacher-1',
+          classId: 'class-1',
+          subjectId: 'subject-1',
+          class: { id: 'class-1', name: 'Form 1A' },
+          subject: { id: 'subject-1', name: 'Math' },
+        },
+      ],
+    })
     mockPrisma.teacher.findUnique.mockResolvedValue({ id: 'teacher-1' })
-    mockPrisma.teachingAssignment.findMany.mockResolvedValue([
-      { id: 'a1', class: { name: 'Form 1A' }, subject: { name: 'Math' } },
-    ])
+    mockPrisma.teacherAllocation = mockPrisma.teacherAllocation || { findMany: vi.fn() }
+    mockPrisma.teacherAllocation.findMany.mockResolvedValue([])
+    mockPrisma.class = mockPrisma.class || { findMany: vi.fn() }
+    mockPrisma.class.findMany.mockResolvedValue([])
+    mockPrisma.subject.findMany = mockPrisma.subject.findMany || vi.fn()
+    mockPrisma.subject.findMany.mockResolvedValue([])
   })
 
   it('returns empty data for student (not staff)', async () => {

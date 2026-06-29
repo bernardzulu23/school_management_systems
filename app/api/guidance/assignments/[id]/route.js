@@ -4,15 +4,16 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { authorizeGuidanceAssignmentAdmin } from '@/lib/guidance/routeAuth'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
-  const routeParams = await params
+  const assignmentId = await safeRouteParam(params, 'id')
+  if (!assignmentId) throw new ApiError('Assignment id is required', 400)
+
   const authz = await authorizeGuidanceAssignmentAdmin(request)
   if (!authz.ok) return authz.response
 
   const { schoolId } = authz
-  const assignmentId = String(routeParams?.id || '').trim()
-  if (!assignmentId) throw new ApiError('Assignment id is required', 400)
 
   const existing = await prisma.guidanceAssignment.findFirst({
     where: { id: assignmentId, schoolId },

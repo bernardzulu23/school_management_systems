@@ -3,13 +3,14 @@ import { NextResponse } from 'next/server'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { authorizeFeeRoute } from '@/lib/fees/routeAuth'
 import { generateInvoicesForSchedule } from '@/lib/fees/invoices'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 export const POST = withErrorHandler(async function POST(request) {
   const access = await authorizeFeeRoute(request)
   if (!access.ok) return access.response
 
   const body = await request.json().catch(() => ({}))
-  const scheduleId = String(body.scheduleId || '')
+  const scheduleId = safeStringId(body.scheduleId)
   if (!scheduleId) throw new ApiError('scheduleId is required', 400)
 
   const result = await generateInvoicesForSchedule(access.schoolId, scheduleId)

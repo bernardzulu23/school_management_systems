@@ -11,10 +11,10 @@ import {
 } from '@/lib/platform/platformAdminAuth'
 import prisma from '@/lib/prisma'
 import { ACCESS_TOKEN_MAX_AGE, authCookieOptions } from '@/lib/security/cookies'
-import { withSecureApi } from '@/lib/middleware/secureApi'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 import { passwordPolicyError } from '@/lib/security/passwordPolicy'
 
-export const GET = withSecureApi(async function GET(request) {
+export const GET = withSecureHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
   if (!isPlatformToken(auth.user)) {
@@ -44,7 +44,7 @@ export const GET = withSecureApi(async function GET(request) {
   })
 })
 
-export const PATCH = withSecureApi(async function PATCH(request) {
+export const PATCH = withSecureHandler(async function PATCH(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
   if (!isPlatformToken(auth.user)) {

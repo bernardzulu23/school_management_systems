@@ -1,6 +1,8 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 const BLOCKED_SUBDOMAINS = [
   'demo',
@@ -12,10 +14,10 @@ const BLOCKED_SUBDOMAINS = [
   'demohighschool',
 ]
 
-export async function GET(request) {
+export const GET = withSecureHandler(async function GET(request) {
   try {
     const { searchParams } = new URL(request.url)
-    const q = String(searchParams.get('q') || '').trim()
+    const q = safeQueryString(searchParams.get('q')) || ''
 
     const where = {
       active: true,
@@ -49,4 +51,4 @@ export async function GET(request) {
   } catch (error) {
     return NextResponse.json({ schools: [] }, { status: 200 })
   }
-}
+})

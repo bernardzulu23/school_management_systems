@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
-import { idString } from '@/lib/schemas'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 import { toPublicDetail } from '@/lib/marketplace'
 
 /**
@@ -13,12 +13,11 @@ import { toPublicDetail } from '@/lib/marketplace'
  * Pending/rejected materials are treated as not found for the public.
  */
 export const GET = withErrorHandler(async function GET(request, { params }) {
-  const { id } = await params
-  const parsed = idString.safeParse(id)
-  if (!parsed.success) throw new ApiError('Invalid material id', 400)
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('Invalid material id', 400)
 
   const material = await prisma.sharedMaterial.findFirst({
-    where: { id: parsed.data, status: 'approved' },
+    where: { id, status: 'approved' },
     include: {
       teacher: { select: { name: true } },
       ratings: {

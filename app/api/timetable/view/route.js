@@ -20,6 +20,10 @@ import {
 import { alignAssignmentsToBellRows } from '@/lib/timetable/gridHelpers'
 import { loadTeacherColorMap, teacherColorMapToJson } from '@/lib/timetable/teacherColors'
 import { getDraftConflictMeta, formatDraftMetaResponse } from '@/lib/timetable/conflictAudit'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
+
+const VIEW_ENTRY_LIMIT = 2000
 
 function roleKey(role) {
   return String(role || '').toLowerCase()
@@ -128,7 +132,7 @@ function daySortKey(day) {
   )
 }
 
-export async function GET(req) {
+export const GET = withErrorHandler(async function GET(req) {
   const user = await getAuthUser(req)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -139,13 +143,18 @@ export async function GET(req) {
   if (!typeCheck.allowed) return typeCheck.response
 
   const { searchParams } = new URL(req.url)
-  const term = searchParams.get('term') || 'Term 1'
-  const academicYear = searchParams.get('academicYear') || String(new Date().getFullYear())
-  const statusParam = searchParams.get('status')
+  const term = safeQueryString(searchParams.get('term'), { defaultValue: 'Term 1' })
+  const academicYear = safeQueryString(searchParams.get('academicYear'), {
+    defaultValue: String(new Date().getFullYear()),
+  })
+  const statusParam = safeQueryString(searchParams.get('status'))
   const role = roleKey(user.role)
 
   const status =
-    statusParam || (isSchoolAdmin(role) ? searchParams.get('prefer') || 'published' : 'published')
+    statusParam ||
+    (isSchoolAdmin(role)
+      ? safeQueryString(searchParams.get('prefer'), { defaultValue: 'published' })
+      : 'published')
 
   const config = await ensureTimetableConfig(prisma, schoolId)
 
@@ -230,6 +239,7 @@ export async function GET(req) {
         },
       },
       orderBy: [{ dayOfWeek: 'asc' }, { periodNumber: 'asc' }],
+      take: VIEW_ENTRY_LIMIT,
     })
   }
 
@@ -324,4 +334,4 @@ export async function GET(req) {
     total: entries.length,
     draftMeta,
   })
-}
+})

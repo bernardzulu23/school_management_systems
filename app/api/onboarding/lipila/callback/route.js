@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { isFailedLipilaStatus, isPaidLipilaStatus } from '@/lib/payments/lipila'
 import { logger, captureError } from '@/lib/utils/logger'
-import { safeStringId } from '@/lib/security/safeQueryValue'
+import { safeStringId, safeQueryString } from '@/lib/security/safeQueryValue'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
 function getIdentifier(payload) {
   const p = payload || {}
@@ -56,7 +57,7 @@ async function markRegistrationFailed({ identifier, referenceId }) {
   }
 }
 
-export async function POST(request) {
+export const POST = withSecureHandler(async function POST(request) {
   const route = '/api/onboarding/lipila/callback'
   const start = Date.now()
   const log = logger({ route })
@@ -88,9 +89,9 @@ export async function POST(request) {
     log.response(500, Date.now() - start)
     return NextResponse.json({ success: false }, { status: 500 })
   }
-}
+})
 
-export async function GET(request) {
+export const GET = withSecureHandler(async function GET(request) {
   const route = '/api/onboarding/lipila/callback'
   const start = Date.now()
   const log = logger({ route })
@@ -98,9 +99,9 @@ export async function GET(request) {
 
   try {
     const { searchParams } = new URL(request.url)
-    const referenceId = String(searchParams.get('referenceId') || '').trim()
-    const identifier = String(searchParams.get('identifier') || '').trim()
-    const status = String(searchParams.get('status') || '').trim()
+    const referenceId = safeQueryString(searchParams.get('referenceId'), { defaultValue: '' })
+    const identifier = safeQueryString(searchParams.get('identifier'), { defaultValue: '' })
+    const status = safeQueryString(searchParams.get('status'), { defaultValue: '' })
 
     if (referenceId || identifier) {
       if (isPaidLipilaStatus(status)) {
@@ -126,4 +127,4 @@ export async function GET(request) {
     log.response(500, Date.now() - start)
     return NextResponse.json({ success: false }, { status: 500 })
   }
-}
+})

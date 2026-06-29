@@ -5,7 +5,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
-import { idString } from '@/lib/schemas'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 /**
  * POST /api/marketplace/:id/download
@@ -27,12 +27,11 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const userId = String(auth.user.id)
-  const { id } = await params
-  const parsedId = idString.safeParse(id)
-  if (!parsedId.success) throw new ApiError('Invalid material id', 400)
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('Invalid material id', 400)
 
   const material = await prisma.sharedMaterial.findFirst({
-    where: { id: parsedId.data, status: 'approved' },
+    where: { id, status: 'approved' },
     select: {
       id: true,
       type: true,

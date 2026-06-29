@@ -8,6 +8,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
 import { canManageDepartmentAllocations } from '@/lib/utils/hodAccess'
 import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 function adminRoleWhere() {
   const values = ['headteacher', 'admin', 'administrator', 'superadmin']
@@ -17,8 +18,7 @@ function adminRoleWhere() {
 }
 
 export const POST = withErrorHandler(async function POST(request, { params }) {
-  const routeParams = await params
-  const allocationId = String(routeParams?.allocationId || '').trim()
+  const allocationId = await safeRouteParam(params, 'allocationId')
   if (!allocationId) throw new ApiError('allocationId is required', 400)
 
   const auth = await authMiddleware(request)

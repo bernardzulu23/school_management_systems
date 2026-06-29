@@ -1,25 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateECZPractice } from '@/lib/aiml/tools/ecz-practice-papers'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json().catch(() => ({}))
-    if (
-      !body?.subject ||
-      !body?.grade ||
-      !body?.examLevel ||
-      !body?.questionCount ||
-      !body?.timeLimit
-    ) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
-    }
+const DEPRECATED = 'Use /api/ai/ecz-practice instead'
 
-    const paper = await generateECZPractice(body)
-    return NextResponse.json(paper)
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: error?.message || 'Failed to generate practice paper' },
-      { status: 500 }
-    )
-  }
+function redirect(req: NextRequest) {
+  const url = new URL('/api/ai/ecz-practice', req.url)
+  return NextResponse.redirect(url, {
+    status: 307,
+    headers: {
+      Sunset: '2026-12-31',
+      'X-Deprecated': DEPRECATED,
+    },
+  })
 }
+
+export const GET = withSecureHandler(async function GET(req: NextRequest) {
+  return redirect(req)
+})
+
+export const POST = withSecureHandler(async function POST(req: NextRequest) {
+  return redirect(req)
+})

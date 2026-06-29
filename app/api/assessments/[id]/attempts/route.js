@@ -6,6 +6,7 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { parseAssessmentInteractive } from '@/lib/assessments/assessmentInteractive'
 import { parseInteractiveQuizPayload } from '@/lib/assessments/interactiveQuiz'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 function parseSubmissionContent(raw) {
   if (!raw) return null
@@ -17,7 +18,8 @@ function parseSubmissionContent(raw) {
 }
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
-  const routeParams = await params
+  const id = await safeRouteParam(params, 'id')
+  if (!id) throw new ApiError('Assessment id is required', 400)
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -31,7 +33,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const assessment = await prisma.assessment.findFirst({
-    where: { id: routeParams.id, schoolId },
+    where: { id, schoolId },
   })
   if (!assessment) throw new ApiError('Assessment not found', 404)
 

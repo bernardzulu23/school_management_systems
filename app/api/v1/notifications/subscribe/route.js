@@ -1,8 +1,9 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
 
 /** PWA push subscription stub — mobile app uses /api/mobile/push/register. */
-export async function POST() {
+export const POST = withSecureHandler(async function POST() {
   return NextResponse.json(
     {
       success: true,
@@ -10,4 +11,4 @@ export async function POST() {
     },
     { status: 200 }
   )
-}
+})

@@ -11,14 +11,17 @@ import {
 } from '@/lib/timetable/preflightFeasibility'
 import { normalizePushedAllocations } from '@/lib/timetable/normalizePushedAllocations'
 import { loadLockedSlotReservations } from '@/lib/timetable/loadGenerationContext'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 const ALLOWED_ROLES = new Set(['headteacher', 'administrator', 'admin', 'superadmin', 'hod'])
+const ALLOCATION_FEASIBILITY_LIMIT = 500
 
 /**
  * GET /api/timetable/feasibility?term=Term+1&academicYear=2026
  * Pre-generation capacity check — teacher/class load vs bell schedule.
  */
-export async function GET(req: NextRequest) {
+export const GET = withErrorHandler(async function GET(req: NextRequest) {
   const user = await getAuthUser(req as any)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -34,8 +37,10 @@ export async function GET(req: NextRequest) {
   if (!typeCheck.allowed) return typeCheck.response
 
   const { searchParams } = new URL(req.url)
-  const term = String(searchParams.get('term') || 'Term 1').trim()
-  const academicYear = String(searchParams.get('academicYear') || new Date().getFullYear()).trim()
+  const term = safeQueryString(searchParams.get('term'), { defaultValue: 'Term 1' })
+  const academicYear = safeQueryString(searchParams.get('academicYear'), {
+    defaultValue: String(new Date().getFullYear()),
+  })
 
   const [config, allocations, lockedSlots] = await Promise.all([
     ensureTimetableConfig(prisma, schoolId),
@@ -46,6 +51,7 @@ export async function GET(req: NextRequest) {
         subject: { select: { id: true, name: true } },
         class: { select: { id: true, name: true } },
       },
+      take: ALLOCATION_FEASIBILITY_LIMIT,
     }),
     loadLockedSlotReservations(prisma, schoolId),
   ])
@@ -104,4 +110,4 @@ export async function GET(req: NextRequest) {
       return acc
     }, {}),
   })
-}
+})

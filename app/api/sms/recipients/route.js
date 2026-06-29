@@ -5,7 +5,10 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { normalizeZmPhoneNumber } from '@/lib/sms'
+import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
 import prisma from '@/lib/prisma'
+
+const RECIPIENT_STUDENT_LIMIT = 500
 
 function collectParentPhones(student) {
   const raw = [
@@ -31,8 +34,8 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const { searchParams } = new URL(request.url)
-  const classId = searchParams.get('classId')
-  const source = searchParams.get('source') || 'parents'
+  const classId = safeStringId(searchParams.get('classId'))
+  const source = safeQueryString(searchParams.get('source'), { defaultValue: 'parents' })
 
   const where = { schoolId }
   if (classId) where.classId = classId
@@ -48,7 +51,7 @@ export const GET = withErrorHandler(async function GET(request) {
       guardian_contact: true,
       emergency_contact_phone: true,
     },
-    take: 5000,
+    take: RECIPIENT_STUDENT_LIMIT,
   })
 
   const phones = new Set()

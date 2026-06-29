@@ -18,8 +18,12 @@ import { cleanupStaleConflicts } from '@/lib/timetable/cleanupConflicts'
 import { normalizePushedAllocations } from '@/lib/timetable/normalizePushedAllocations'
 import { remapEntriesToValidAllocationIds } from '@/lib/timetable/resolveTimetableEntryAllocationIds'
 import { filterConflictFreeSchedulerEntries } from '@/lib/timetable/constraintCheck'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
-export async function GET(req: NextRequest) {
+const GENERATED_ENTRY_LIMIT = 2000
+
+export const GET = withErrorHandler(async function GET(req: NextRequest) {
   const user = await getAuthUser(req as any)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -31,9 +35,9 @@ export async function GET(req: NextRequest) {
 
   const config = await prisma.timetableConfig.findUnique({ where: { schoolId } })
   return NextResponse.json({ config })
-}
+})
 
-export async function POST(req: NextRequest) {
+export const POST = withErrorHandler(async function POST(req: NextRequest) {
   const user = await getAuthUser(req as any)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -52,8 +56,11 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json().catch(() => ({}))
-  const term = String((body as any)?.term || 'Term 1').trim()
-  const academicYear = String((body as any)?.academicYear || new Date().getFullYear()).trim()
+  const term = safeQueryString((body as any)?.term, { defaultValue: 'Term 1', maxLength: 64 })
+  const academicYear = safeQueryString((body as any)?.academicYear, {
+    defaultValue: String(new Date().getFullYear()),
+    maxLength: 16,
+  })
   const departments = (body as any)?.departments
   const replaceExisting = (body as any)?.replaceExisting !== false
   const useLlm = (body as any)?.useLlm === true
@@ -292,6 +299,7 @@ export async function POST(req: NextRequest) {
       },
     },
     orderBy: [{ dayOfWeek: 'asc' }, { periodNumber: 'asc' }],
+    take: GENERATED_ENTRY_LIMIT,
   })
 
   let conflictAudit: Awaited<ReturnType<typeof auditDraftTimetable>> | null = null
@@ -342,4 +350,4 @@ export async function POST(req: NextRequest) {
       lockedSlots: lockedSlots.length,
     },
   })
-}
+})

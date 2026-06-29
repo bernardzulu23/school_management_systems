@@ -5,8 +5,9 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { DEPARTMENTS } from '@/lib/constants'
 import { getHodProfile, resolveHodDepartmentIds } from '@/lib/utils/hodDepartmentScope'
+import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
-export async function GET(request) {
+export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -45,4 +46,4 @@ export async function GET(request) {
   }
 
   return NextResponse.json({ success: true, data: sorted })
-}
+})

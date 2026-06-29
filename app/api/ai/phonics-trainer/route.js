@@ -34,8 +34,11 @@ export const POST = withAILimits(async function POST(request) {
   })
   if (rl.isLimited) return rl.response
 
-  const blocked = await requireFeature(schoolId, 'phonics-trainer')
+  const blocked = await requireFeature(schoolId, 'ai-tools')
   if (blocked) return blocked
+
+  const blockedFeature = await requireFeature(schoolId, 'phonics-trainer')
+  if (blockedFeature) return blockedFeature
 
   const limitBlock = await checkAILimit(schoolId, String(user.id || user.userId || ''))
   if (limitBlock) return limitBlock

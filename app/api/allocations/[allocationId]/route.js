@@ -9,6 +9,7 @@ import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
 import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
 import { canManageDepartmentAllocations, isSchoolAdminOrHead } from '@/lib/utils/hodAccess'
 import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
+import { safeRouteParam, safeStringId } from '@/lib/security/safeQueryValue'
 import { deleteDepartmentAllocationCascade } from '@/lib/timetable/departmentAllocationMutations'
 
 async function assertCanAccessAllocation({ schoolId, user, allocation }) {
@@ -33,8 +34,7 @@ async function assertCanAccessAllocation({ schoolId, user, allocation }) {
 }
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
-  const routeParams = await params
-  const allocationId = String(routeParams?.allocationId || '').trim()
+  const allocationId = await safeRouteParam(params, 'allocationId')
   if (!allocationId) throw new ApiError('allocationId is required', 400)
 
   const auth = await authMiddleware(request)
@@ -63,8 +63,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
 })
 
 export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
-  const routeParams = await params
-  const allocationId = String(routeParams?.allocationId || '').trim()
+  const allocationId = await safeRouteParam(params, 'allocationId')
   if (!allocationId) throw new ApiError('allocationId is required', 400)
 
   const auth = await authMiddleware(request)

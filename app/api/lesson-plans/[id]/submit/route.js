@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 import { resolveReviewerUserId } from '@/lib/lesson-plans/reviewer'
 import { sanitizeText } from '@/lib/lesson-plans/text'
 import { isIndividualSchool } from '@/lib/middleware/individual-gate'
@@ -16,7 +17,6 @@ function normalize(v) {
 const SUBMITTABLE = new Set(['DRAFT', 'REJECTED', 'REVISION_REQUESTED'])
 
 export const POST = withErrorHandler(async function POST(request, { params }) {
-  const routeParams = await params
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
@@ -28,7 +28,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   const userId = String(auth.user?.id || '').trim()
   if (!userId) throw new ApiError('Unauthorized', 401)
 
-  const id = normalize(routeParams?.id)
+  const id = await safeRouteParam(params, 'id')
   if (!id) throw new ApiError('id is required', 400)
 
   const body = await request.json().catch(() => ({}))

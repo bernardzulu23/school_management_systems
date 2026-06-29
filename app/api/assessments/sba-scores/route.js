@@ -11,6 +11,7 @@ import {
   SBA_TERM_TEST_MARKS,
 } from '@/lib/middleware/ecz-validation'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 
 export const POST = withSecureApi(async function POST(request) {
   const auth = await authMiddleware(request)
@@ -30,13 +31,17 @@ export const POST = withSecureApi(async function POST(request) {
   const formCheck = canCreateSBATask(formLevel)
   if (!formCheck.allowed) return NextResponse.json({ error: formCheck.reason }, { status: 400 })
 
+  const assessmentId = safeStringId(body.assessmentId)
+  if (!assessmentId)
+    return NextResponse.json({ error: 'assessmentId is required' }, { status: 400 })
+
   const assessment = await prisma.eczAssessment.findFirst({
-    where: { id: String(body.assessmentId || ''), schoolId },
+    where: { id: assessmentId, schoolId },
     include: { subject: true },
   })
   if (!assessment) return NextResponse.json({ error: 'Assessment not found' }, { status: 404 })
 
-  const studentId = String(body.studentId || body.learnerId || '').trim()
+  const studentId = safeStringId(body.studentId || body.learnerId)
   if (!studentId) return NextResponse.json({ error: 'studentId is required' }, { status: 400 })
 
   const student = await prisma.student.findFirst({ where: { id: studentId, schoolId } })

@@ -2,13 +2,23 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { rateLimiter } from '@/lib/middleware/rateLimiter'
+import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 /** Public: validate school subdomain before mobile login */
-export async function GET(request) {
-  const { searchParams } = new URL(request.url)
-  const subdomain = String(searchParams.get('subdomain') || '')
-    .trim()
-    .toLowerCase()
+export const GET = withSecureHandler(async function GET(request) {
+  const rateLimitResult = rateLimiter(request, {
+    limit: process.env.NODE_ENV === 'production' ? 30 : 100,
+    windowMs: 15 * 60 * 1000,
+    keyPrefix: 'mobile_school_lookup_',
+  })
+  if (rateLimitResult.isLimited) return rateLimitResult.response
+
+  const subdomain = safeQueryString(new URL(request.url).searchParams.get('subdomain'), {
+    maxLength: 64,
+    defaultValue: '',
+  }).toLowerCase()
 
   if (!subdomain || subdomain.length < 3) {
     return NextResponse.json({ valid: false, error: 'Subdomain too short' }, { status: 400 })
@@ -32,4 +42,4 @@ export async function GET(request) {
       logoUrl: school.logo_url,
     },
   })
-}
+})
