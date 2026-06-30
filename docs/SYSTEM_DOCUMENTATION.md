@@ -1,7 +1,7 @@
 # ZSMS System Documentation
 
 **Zambian School Management System (ZSMS)**  
-**Last updated:** 2026-06-29  
+**Last updated:** 2026-06-25  
 **Application version:** 2.0.3 (`package.json`)  
 **Document version:** 1.0
 
@@ -264,16 +264,16 @@ Full token tables, RIASEC/cluster colors, and desktop companion wiring: [color.m
 
 The Prisma schema defines **~100 models**, grouped roughly as:
 
-| Group              | Examples                                                                                                                                                                 |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Core tenancy       | `School`, `User`, `RefreshToken`, `AuditLog`, `EnrollmentInvite`                                                                                                         |
-| People             | `Student`, `Teacher`, `HeadOfDepartment`, `GuidanceAssignment`                                                                                                           |
-| Academic structure | `Class` (`isActive`, deduped labels in timetable UI), `Subject`, `Department`, `TeachingAssignment`, `PupilSubjectEnrollment`                                            |
-| Timetable          | `TimeSlot`, `TimetableVersion`, `TimetableEntry`, `TimetableAllocationEntry`, `TimetableDraftMeta`, `TeacherAllocation`, `SchedulingRecipe`                              |
-| Assessment & ECZ   | `EczAssessment`, `EczAssessmentScore`, `EczSubmission`, `EczCompetency`, `EczSubjectConstruct`, `EczExemplar`, `CbcCompetencyRating`                                     |
-| Attendance         | `Attendance`, `AttendanceSession`, `AttendanceMark`                                                                                                                      |
-| Operations         | `LessonPlan`, `TermReport`, `SmsBroadcast`, `SchoolPlanPayment`, `SchoolFeePayment`, `FeeSchedule`, `StudentInvoice`, `FeePayment`, `SiblingGroup`, `SchoolRegistration` |
-| HOD admin          | `HodBudgetCategory`, `HodMeeting`, `HodStockItem`, etc.                                                                                                                  |
+| Group              | Examples                                                                                                                                                                                         |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Core tenancy       | `School`, `User`, `RefreshToken`, `AuditLog`, `EnrollmentInvite`                                                                                                                                 |
+| People             | `Student`, `Teacher`, `HeadOfDepartment`, `GuidanceAssignment`                                                                                                                                   |
+| Academic structure | `Class` (`isActive`, deduped labels in timetable UI), `Subject`, `Department`, `TeachingAssignment`, `PupilSubjectEnrollment`                                                                    |
+| Timetable          | `TimeSlot`, `TimetableVersion`, `TimetableEntry`, `TimetableAllocationEntry`, `TimetableDraftMeta` (`ignoredAuditKeys` for dismissed server audit rows), `TeacherAllocation`, `SchedulingRecipe` |
+| Assessment & ECZ   | `EczAssessment`, `EczAssessmentScore`, `EczSubmission`, `EczCompetency`, `EczSubjectConstruct`, `EczExemplar`, `CbcCompetencyRating`                                                             |
+| Attendance         | `Attendance`, `AttendanceSession`, `AttendanceMark`                                                                                                                                              |
+| Operations         | `LessonPlan`, `TermReport`, `SmsBroadcast`, `SchoolPlanPayment`, `SchoolFeePayment`, `FeeSchedule`, `StudentInvoice`, `FeePayment`, `SiblingGroup`, `SchoolRegistration`                         |
+| HOD admin          | `HodBudgetCategory`, `HodMeeting`, `HodStockItem`, etc.                                                                                                                                          |
 
 Seed ECZ reference data: `npm run seed:ecz`.
 

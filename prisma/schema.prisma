@@ -2443,6 +2443,7 @@ model TimetableDraftMeta {
   conflictErrors   Int      @default(0)
   conflictWarnings Int      @default(0)
   conflictSummary  Json?
+  ignoredAuditKeys Json?    @default("[]")
   lastScannedAt    DateTime?
   canPublish       Boolean  @default(false)
   createdAt        DateTime @default(now())

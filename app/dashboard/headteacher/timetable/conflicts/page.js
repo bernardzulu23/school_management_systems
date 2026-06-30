@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { api } from '@/lib/api'
-import { notifyTimetableConflictsUpdated } from '@/hooks/useTimetableDraftMeta'
+import { notifyTimetableConflictsUpdated, conflictAuditKey } from '@/hooks/useTimetableDraftMeta'
 import {
   AlertTriangle,
   CheckCircle,
@@ -37,6 +37,8 @@ function TimetableConflictsContent() {
   const [expanded, setExpanded] = useState(null)
   const [error, setError] = useState(null)
   const [successMsg, setSuccessMsg] = useState(null)
+  const [dismissing, setDismissing] = useState(null)
+  const [creatingDraft, setCreatingDraft] = useState(false)
 
   const fetchConflicts = useCallback(async () => {
     setLoading(true)
@@ -72,6 +74,50 @@ function TimetableConflictsContent() {
       setError(e?.message || 'Resolution failed')
     } finally {
       setResolving(null)
+    }
+  }
+
+  const dismissConflict = async (conflict) => {
+    const key = conflictAuditKey(conflict)
+    if (!key) return
+    setDismissing(conflict.id)
+    setSuccessMsg(null)
+    setError(null)
+    try {
+      const res = await api.dismissTimetableDraftAudit({
+        term,
+        academicYear,
+        auditKey: key,
+        mode: 'add',
+      })
+      const data = res?.data ?? res
+      if (!data?.success) throw new Error(data?.error || 'Dismiss failed')
+      setSuccessMsg('Warning dismissed — it will stay hidden until you restore dismissed items.')
+      setExpanded(null)
+      notifyTimetableConflictsUpdated()
+      await fetchConflicts()
+    } catch (e) {
+      setError(e?.message || 'Dismiss failed')
+    } finally {
+      setDismissing(null)
+    }
+  }
+
+  const createEditableDraft = async () => {
+    setCreatingDraft(true)
+    setError(null)
+    setSuccessMsg(null)
+    try {
+      const res = await api.clonePublishedTimetableToDraft({ term, academicYear })
+      const data = res?.data ?? res
+      if (!data?.success) throw new Error(data?.error || data?.message || 'Failed to create draft')
+      setSuccessMsg(data.message || 'Editable draft created.')
+      notifyTimetableConflictsUpdated()
+      await fetchConflicts()
+    } catch (e) {
+      setError(e?.message || 'Failed to create draft')
+    } finally {
+      setCreatingDraft(false)
     }
   }
 
@@ -136,6 +182,23 @@ function TimetableConflictsContent() {
         </div>
       )}
 
+      {summary && !loading && summary.source === 'published' ? (
+        <div className="mb-4 p-4 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-100 text-sm flex flex-wrap items-center justify-between gap-3">
+          <span>
+            {summary.message ||
+              'This timetable is published. Conflicts are read-only until you create an editable draft.'}
+          </span>
+          <button
+            type="button"
+            onClick={createEditableDraft}
+            disabled={creatingDraft}
+            className="zsms-btn-primary text-sm disabled:opacity-50"
+          >
+            {creatingDraft ? 'Creating draft…' : 'Create editable draft'}
+          </button>
+        </div>
+      ) : null}
+
       {summary && !loading && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <div className="onboard-card p-4 border-red-500/20">
@@ -160,17 +223,21 @@ function TimetableConflictsContent() {
               {summary.canPublish ? 'Ready' : 'Blocked'}
             </div>
             <div className="text-xs text-royalPurple-text3 mt-1">
-              {summary.canPublish ? 'Safe to publish' : 'Fix errors first'}
+              {summary.canPublish
+                ? 'Safe to publish'
+                : summary.source === 'published'
+                  ? 'Fix in draft, then re-publish'
+                  : 'Fix errors first'}
             </div>
           </div>
         </div>
       )}
 
-      {!loading && summary?.entryCount === 0 && (
+      {!loading && summary?.source === 'none' && (
         <div className="onboard-card text-center py-16">
           <p className="text-royalPurple-text2">{summary.message}</p>
           <Link
-            href="/dashboard/headteacher/timetable"
+            href={`/dashboard/headteacher/timetable?term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}`}
             className="zsms-btn-primary inline-block mt-4 text-sm"
           >
             Go to Timetable
@@ -243,13 +310,19 @@ function TimetableConflictsContent() {
 
               {expanded === conflict.id && (
                 <div className="border-t border-royalPurple-border/30 p-4 bg-royalPurple-card/20">
+                  {summary?.canEditConflicts === false ? (
+                    <p className="text-sm text-amber-200 mb-3">
+                      Create an editable draft above to apply fixes from this screen.
+                    </p>
+                  ) : null}
                   <p className="text-xs text-royalPurple-text3 uppercase tracking-wider mb-3">
                     Resolution options
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {(conflict.type === 'TEACHER_DOUBLE_BOOKED' ||
                       conflict.type === 'CLASS_DOUBLE_BOOKED') &&
-                      conflict.affectedEntryIds?.length >= 2 && (
+                      conflict.affectedEntryIds?.length >= 2 &&
+                      summary?.canEditConflicts !== false && (
                         <>
                           <button
                             type="button"
@@ -337,9 +410,22 @@ function TimetableConflictsContent() {
                       </Link>
                     )}
 
+                    {conflictAuditKey(conflict) ? (
+                      <button
+                        type="button"
+                        disabled={dismissing === conflict.id || resolving === conflict.id}
+                        onClick={() => dismissConflict(conflict)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 border border-royalPurple-border/50 hover:bg-royalPurple-accent/10 disabled:opacity-50 text-royalPurple-text2 text-xs rounded-lg"
+                      >
+                        <X size={12} />
+                        Dismiss warning
+                      </button>
+                    ) : null}
+
                     {conflict.affectedEntryIds?.length >= 2 &&
                       (conflict.type === 'TEACHER_DOUBLE_BOOKED' ||
-                        conflict.type === 'CLASS_DOUBLE_BOOKED') && (
+                        conflict.type === 'CLASS_DOUBLE_BOOKED') &&
+                      summary?.canEditConflicts !== false && (
                         <button
                           type="button"
                           disabled={resolving === conflict.id}

@@ -51,6 +51,7 @@ import {
 import {
   useTimetableDraftMeta,
   notifyTimetableConflictsUpdated,
+  conflictAuditKey,
 } from '@/hooks/useTimetableDraftMeta'
 
 type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings' | 'allocations'
@@ -207,6 +208,7 @@ function HeadteacherTimetablePageContent() {
     if (raw === 'missing' || raw === 'feasibility') return raw
     return 'all'
   })
+  const [dismissingAuditKey, setDismissingAuditKey] = useState<string | null>(null)
   const [genProgress, setGenProgress] = useState<GenerationProgressState>({
     open: false,
     stage: 'idle',
@@ -240,6 +242,7 @@ function HeadteacherTimetablePageContent() {
     loading: draftMetaLoading,
     rescan: rescanDraftConflicts,
     refresh: refreshDraftMeta,
+    dismissAudit,
     isFresh: draftMetaFresh,
   } = useTimetableDraftMeta({ term, academicYear })
 
@@ -648,6 +651,42 @@ function HeadteacherTimetablePageContent() {
     return serverConflictRows
   }, [conflictIssueFilter, feasibilityErrors, serverConflictRows])
 
+  const onDismissServerConflict = useCallback(
+    async (row: any) => {
+      const key = conflictAuditKey(row)
+      if (!key) return
+      setDismissingAuditKey(key)
+      try {
+        const result = await dismissAudit(key)
+        if (result) toast.success('Audit issue dismissed')
+        else toast.error('Could not dismiss audit issue')
+      } catch {
+        toast.error('Could not dismiss audit issue')
+      } finally {
+        setDismissingAuditKey(null)
+      }
+    },
+    [dismissAudit]
+  )
+
+  const onDismissAllMissingPeriods = useCallback(async () => {
+    const keys = serverConflictRows
+      .filter((row: any) => row.type === 'MISSING_PERIODS')
+      .map((row: any) => conflictAuditKey(row))
+      .filter(Boolean)
+    if (!keys.length) return
+    setDismissingAuditKey('__all_missing__')
+    try {
+      const result = await dismissAudit(keys)
+      if (result) toast.success(`Dismissed ${keys.length} missing-period warning(s)`)
+      else toast.error('Could not dismiss warnings')
+    } catch {
+      toast.error('Could not dismiss warnings')
+    } finally {
+      setDismissingAuditKey(null)
+    }
+  }, [dismissAudit, serverConflictRows])
+
   useEffect(() => {
     setTerm(String(searchParams.get('term') || 'Term 1'))
     setAcademicYear(String(searchParams.get('academicYear') || new Date().getFullYear()))
@@ -917,11 +956,25 @@ function HeadteacherTimetablePageContent() {
     setReloadingTimetable(true)
     try {
       await reloadFromServer({ term, academicYear, status: 'draft' })
+      if (useTimetableStore.getState().isPublished) {
+        const res = await sessionFetch('/api/timetable/entries/clone-published-to-draft', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ term, academicYear }),
+        })
+        const json = await res.json().catch(() => ({}))
+        if (!res.ok) throw new Error(json?.error || json?.message || 'Failed to create draft')
+        await reloadFromServer({ term, academicYear, status: 'draft' })
+        toast.success(json?.message || `Editable draft created (${json?.created ?? 0} periods)`)
+      } else {
+        toast.success('Timetable reloaded from server')
+      }
       const slots = useTimetableStore.getState().timeSlots
       if (slots.length) setTimeSlots(slots as TimeSlot[])
       detectConflicts()
       await refreshDraftMeta(false)
-      toast.success('Timetable reloaded from server')
+      notifyTimetableConflictsUpdated()
     } catch (e: any) {
       toast.error(e?.message || 'Reload failed')
     } finally {
@@ -2101,27 +2154,69 @@ function HeadteacherTimetablePageContent() {
             ) : null}
             {filteredServerConflicts.length > 0 ? (
               <div className="onboard-card p-4 border border-royalPurple-border/40 space-y-2">
-                <div className="font-semibold text-royalPurple-text1">
-                  {conflictIssueFilter === 'feasibility'
-                    ? 'Feasibility errors'
-                    : conflictIssueFilter === 'missing'
-                      ? 'Missing periods'
-                      : 'Server audit issues'}
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="font-semibold text-royalPurple-text1">
+                    {conflictIssueFilter === 'feasibility'
+                      ? 'Feasibility errors'
+                      : conflictIssueFilter === 'missing'
+                        ? 'Missing periods'
+                        : 'Server audit issues'}
+                  </div>
+                  {missingPeriodsCount > 0 ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={dismissingAuditKey === '__all_missing__' || draftMetaLoading}
+                      onClick={() => onDismissAllMissingPeriods()}
+                    >
+                      Dismiss all missing periods
+                    </Button>
+                  ) : null}
                 </div>
                 <ul className="space-y-2">
-                  {filteredServerConflicts.map((row: any, i: number) => (
-                    <li
-                      key={row.id || `srv-${i}`}
-                      className={`rounded-xl border px-3 py-2 text-sm ${
-                        row.severity === 'error' || row.type === 'FEASIBILITY_ERROR'
-                          ? 'border-red-200 bg-red-50 text-red-800'
-                          : 'border-amber-200 bg-amber-50 text-amber-900'
-                      }`}
-                    >
-                      <div className="font-medium">{row.type || 'CONFLICT'}</div>
-                      <div className="mt-0.5">{row.description || row.message}</div>
-                    </li>
-                  ))}
+                  {filteredServerConflicts.map((row: any, i: number) => {
+                    const auditKey = conflictAuditKey(row)
+                    const canDismiss = Boolean(auditKey)
+                    return (
+                      <li
+                        key={row.id || `srv-${i}`}
+                        className={`rounded-xl border px-3 py-2 text-sm ${
+                          row.severity === 'error' || row.type === 'FEASIBILITY_ERROR'
+                            ? 'border-red-200 bg-red-50 text-red-800'
+                            : 'border-amber-200 bg-amber-50 text-amber-900'
+                        }`}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0 flex-1">
+                            <div className="font-medium">{row.type || 'CONFLICT'}</div>
+                            <div className="mt-0.5">{row.description || row.message}</div>
+                            {row.type === 'MISSING_PERIODS' ? (
+                              <div className="mt-2 flex flex-wrap gap-2">
+                                <Link
+                                  href="/dashboard/hod/allocation"
+                                  className="text-xs font-medium text-amber-800 underline underline-offset-2"
+                                >
+                                  Review allocations
+                                </Link>
+                              </div>
+                            ) : null}
+                          </div>
+                          {canDismiss ? (
+                            <button
+                              type="button"
+                              title="Dismiss this warning"
+                              aria-label="Dismiss audit issue"
+                              disabled={dismissingAuditKey === auditKey || draftMetaLoading}
+                              onClick={() => onDismissServerConflict(row)}
+                              className="shrink-0 rounded-md p-1 text-amber-700 hover:bg-amber-100 disabled:opacity-50"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                          ) : null}
+                        </div>
+                      </li>
+                    )
+                  })}
                 </ul>
               </div>
             ) : null}

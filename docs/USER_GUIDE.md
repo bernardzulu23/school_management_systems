@@ -1,7 +1,7 @@
 # ZSMS User Guide
 
 **Zambian School Management System (ZSMS)**  
-**Last updated:** 2026-06-26  
+**Last updated:** 2026-06-25  
 **Application version:** 2.0.3 (`package.json`)  
 **Document version:** 1.0
 
@@ -261,10 +261,11 @@ The **Timetable** page (`/dashboard/headteacher/timetable`) has tabs: **Overview
    - **Teachers** / **One class** — filter by teacher or class.
    - **Open class-by-class grid view** — link to `/dashboard/headteacher/timetable/class-view` (one class, period × MON–FRI, teacher colour coding).
 4. Click **Generate Perfect Timetable** (uses HOD allocations + bell schedule).
-5. Review the draft; red borders show **conflicts** (same teacher or same class in one period). Use **Conflicts** tab or **Timetable Conflicts** in the sidebar for the full Conflict Resolution Centre (`/dashboard/headteacher/timetable/conflicts`).
-6. Fix issues by dragging lessons, removing bad entries, editing allocations, or using suggested fixes on the conflicts page.
-7. Assign **teacher colours** on the **Settings** tab (or auto-assign) so grids are easy to read.
-8. Click **Publish** when there are **no hard conflicts** — teachers and students then see the published version.
+5. Review the draft; red borders show **conflicts** (same teacher or same class in one period). Use **Conflicts** tab or **Timetable Conflicts** in the sidebar for the full Conflict Resolution Centre (`/dashboard/headteacher/timetable/conflicts`). If the timetable is already **published** (no draft rows), the centre still scans the published schedule and shows conflicts — click **Create editable draft** there (or **Load draft** on the Edit tab) before applying fixes.
+6. **Server audit issues** (for example _Missing periods_) list allocations that still need timetable slots. Fix them by placing lessons or editing allocations, or use **Dismiss** (× on each row, or **Dismiss all missing periods**) to hide warnings you have accepted for this term. Dismissed items stay hidden until the underlying allocation changes or you rescan after fixing data.
+7. Fix grid conflicts by dragging lessons, removing bad entries, editing allocations, or using suggested fixes on the conflicts page.
+8. Assign **teacher colours** on the **Settings** tab (or auto-assign) so grids are easy to read.
+9. Click **Publish** when there are **no hard conflicts** — teachers and students then see the published version.
 
 **Publish is blocked** while teacher double-booking or class double-booking errors remain.
 

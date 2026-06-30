@@ -5,7 +5,13 @@ import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
-import { auditDraftTimetable, persistDraftConflictMeta } from '@/lib/timetable/conflictAudit'
+import {
+  auditDraftTimetable,
+  persistDraftConflictMeta,
+  getDraftConflictMeta,
+  parseIgnoredAuditKeys,
+  shrinkSummaryForIgnored,
+} from '@/lib/timetable/conflictAudit'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { safeQueryString } from '@/lib/security/safeQueryValue'
 
@@ -42,5 +48,7 @@ export const GET = withErrorHandler(async function GET(req) {
     await persistDraftConflictMeta(prisma, { schoolId, term, academicYear, summary })
   }
 
-  return NextResponse.json(summary)
+  const meta = await getDraftConflictMeta(prisma, { schoolId, term, academicYear })
+  const ignored = parseIgnoredAuditKeys(meta?.ignoredAuditKeys)
+  return NextResponse.json(shrinkSummaryForIgnored(summary, ignored))
 })

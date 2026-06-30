@@ -24,6 +24,27 @@ export function notifyTimetableConflictsUpdated() {
   }
 }
 
+/** Stable key for dismissing a server audit row (matches server `getConflictAuditKey`). */
+export function conflictAuditKey(row: {
+  auditKey?: string
+  allocationId?: string | number
+  type?: string
+  id?: string
+  affectedEntryIds?: string[]
+  classId?: string
+  teacherId?: string
+  description?: string
+}): string {
+  if (row?.auditKey) return row.auditKey
+  if (row?.allocationId) return `MISSING_PERIODS:${row.allocationId}`
+  const ids = [...(row?.affectedEntryIds || [])].map(String).sort()
+  if (ids.length && row?.type) return `${row.type}:${ids.join(',')}`
+  if (row?.classId && row?.teacherId && row?.type) {
+    return `${row.type}:${row.classId}:${row.teacherId}`
+  }
+  return `${row?.type || 'CONFLICT'}:${row?.id || row?.description || 'unknown'}`
+}
+
 const META_STALE_MS = 30 * 60 * 1000
 
 export function isDraftMetaFresh(meta: TimetableDraftMeta | null): boolean {
@@ -110,6 +131,44 @@ export function useTimetableDraftMeta({
     }
   }, [term, academicYear, enabled])
 
+  const dismissAudit = useCallback(
+    async (auditKeys: string | string[], mode: 'add' | 'remove' | 'clear' = 'add') => {
+      if (!enabled) return null
+      const keys = Array.isArray(auditKeys) ? auditKeys : [auditKeys]
+      setLoading(true)
+      setError(null)
+      try {
+        const res = await api.dismissTimetableDraftAudit({
+          term,
+          academicYear,
+          auditKeys: keys,
+          mode,
+        })
+        const data = res?.data ?? res
+        const next: TimetableDraftMeta = {
+          term,
+          academicYear,
+          conflictCount: Number(data.conflictCount ?? 0),
+          conflictErrors: Number(data.conflictErrors ?? 0),
+          conflictWarnings: Number(data.conflictWarnings ?? 0),
+          missingPeriodsCount: Number(data.missingPeriodsCount ?? 0),
+          canPublish: Boolean(data.canPublish ?? true),
+          lastScannedAt: data.lastScannedAt ?? meta?.lastScannedAt ?? null,
+          conflictSummary: data.conflictSummary,
+        }
+        setMeta(next)
+        notifyTimetableConflictsUpdated()
+        return next
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'Failed to dismiss audit issue')
+        return null
+      } finally {
+        setLoading(false)
+      }
+    },
+    [term, academicYear, enabled, meta?.lastScannedAt]
+  )
+
   useEffect(() => {
     if (!enabled) {
       setLoading(false)
@@ -130,5 +189,5 @@ export function useTimetableDraftMeta({
     }
   }, [refresh, enabled])
 
-  return { meta, loading, error, refresh, rescan, isFresh: isDraftMetaFresh(meta) }
+  return { meta, loading, error, refresh, rescan, dismissAudit, isFresh: isDraftMetaFresh(meta) }
 }
