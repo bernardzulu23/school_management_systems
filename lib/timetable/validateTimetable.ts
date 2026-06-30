@@ -1,5 +1,5 @@
 import type { Assignment } from './types'
-import { assignmentsShareSlot } from './constraintCheck'
+import { assignmentsShareSlot, assignmentsSameDay } from './constraintCheck'
 import { gradeDoubleBookedMessage } from './zambiaTerminology'
 
 export type TimetableConflictType =
@@ -68,6 +68,24 @@ export function validateTimetable(
     for (let j = i + 1; j < list.length; j++) {
       const a1 = list[i]
       const a2 = list[j]
+
+      if (assignmentsSameDay(a1, a2)) {
+        if (
+          String(a1.classId) === String(a2.classId) &&
+          String(a1.subjectId) === String(a2.subjectId)
+        ) {
+          const classId = String(a1.classId)
+          conflicts.push({
+            type: 'CLASS_DOUBLE_BOOKED',
+            severity: 'hard',
+            message: gradeDoubleBookedMessage(classLabelFromAssignments(list, classId)),
+            entityId: classId,
+            assignmentIds: [String(a1.id), String(a2.id)],
+          })
+          continue
+        }
+      }
+
       if (!assignmentsShareSlot(a1, a2, [])) continue
 
       if (String(a1.teacherId) === String(a2.teacherId)) {
@@ -141,24 +159,31 @@ export function validateTimetable(
     byClassSubjectDay.set(k, (byClassSubjectDay.get(k) || 0) + 1)
   }
   for (const [k, count] of byClassSubjectDay) {
-    if (count >= 2) {
-      const [classId, subjectId, day] = k.split('|')
-      const ids = list
-        .filter(
-          (a) =>
-            String(a.classId) === classId &&
-            String(a.subjectId) === subjectId &&
-            String(a.dayOfWeek) === day
-        )
-        .map((a) => String(a.id))
-      conflicts.push({
-        type: 'SUBJECT_DISTRIBUTION',
-        severity: 'soft',
-        message: `Subject appears ${count} times on ${day} for this class`,
-        entityId: classId,
-        assignmentIds: ids,
-      })
-    }
+    if (count < 2) continue
+    const [classId, subjectId, day] = k.split('|')
+    const ids = list
+      .filter(
+        (a) =>
+          String(a.classId) === classId &&
+          String(a.subjectId) === subjectId &&
+          String(a.dayOfWeek) === day
+      )
+      .map((a) => String(a.id))
+    const alreadyHard = conflicts.some(
+      (c) =>
+        c.type === 'CLASS_DOUBLE_BOOKED' &&
+        c.severity === 'hard' &&
+        c.assignmentIds.length === ids.length &&
+        c.assignmentIds.every((id) => ids.includes(id))
+    )
+    if (alreadyHard) continue
+    conflicts.push({
+      type: 'SUBJECT_DISTRIBUTION',
+      severity: 'soft',
+      message: `Subject appears ${count} times on ${day} for this class`,
+      entityId: classId,
+      assignmentIds: ids,
+    })
   }
 
   return conflicts

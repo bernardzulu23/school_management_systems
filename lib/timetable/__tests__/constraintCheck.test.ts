@@ -72,6 +72,18 @@ describe('isConflict', () => {
     expect(hasConflict(incoming, existing)).toBe(true)
   })
 
+  it('blocks same class+subject on same day even when periods differ', () => {
+    const incoming = baseAssignment({
+      id: 'a2',
+      teacherId: 't2',
+      period: 3,
+      startTime: '09:20',
+      endTime: '10:00',
+    })
+    const existing = [baseAssignment()]
+    expect(isConflict(incoming, existing)).toBe(true)
+  })
+
   it('allows same teacher+class on same day with different subjects when periods do not overlap', () => {
     const incoming = baseAssignment({
       id: 'a2',

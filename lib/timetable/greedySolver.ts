@@ -441,16 +441,6 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
     (a, b) => (DAY_ORDER[a] ?? 99) - (DAY_ORDER[b] ?? 99)
   )
 
-  const lessonFrequencyFor = (lesson: Lesson) =>
-    sortedLessons.filter(
-      (l) =>
-        l.teacherId === lesson.teacherId &&
-        l.classId === lesson.classId &&
-        l.subjectId === lesson.subjectId
-    ).length
-
-  const allowsSameDayRepetition = (lesson: Lesson) => lessonFrequencyFor(lesson) > dayOrder.length
-
   const sortGreedyDays = (lesson: Lesson) => {
     const base = sortDaysForLesson(lesson)
     return [...base].sort((da, db) => {
@@ -489,8 +479,10 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
         if (isBusy(lesson, ids)) continue
         if (!isSlotAllowed(lesson, run)) continue
         if (wouldStackGreedy(lesson, day)) continue
-        const alreadyOnDay = teacherClassSubjectDay.has(teacherClassSubjectKey(lesson, day))
-        if (alreadyOnDay && !allowsSameDayRepetition(lesson)) continue
+        const nd = normalizeDay(day)
+        if (teacherClassSubjectDay.has(teacherClassSubjectKey(lesson, day))) continue
+        const classSubjectKey = `${lesson.classId}|${lesson.subjectId}|${nd}`
+        if ((classSubjectDayLoad.get(classSubjectKey) || 0) > 0) continue
 
         assignments[lesson.id] = ids[0]
         slotSpans[lesson.id] = ids

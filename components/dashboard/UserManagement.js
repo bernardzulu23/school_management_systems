@@ -575,11 +575,11 @@ export default function UserManagement() {
                 <Button
                   variant="outline"
                   className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
-                  onClick={() => toast('Assign subjects functionality - Coming soon')}
-                  aria-label="Assign subjects to teachers"
+                  onClick={() => router.push('/dashboard/teachers/bulk-upload')}
+                  aria-label="Import multiple teachers via Excel"
                 >
-                  <Settings className="h-4 w-4 mr-2" aria-hidden="true" />
-                  Assign Subjects
+                  <Users className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Bulk Import
                 </Button>
               </div>
             </CardContent>

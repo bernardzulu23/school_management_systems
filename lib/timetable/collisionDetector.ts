@@ -403,6 +403,23 @@ export class CollisionDetector {
     for (const a of listClass) {
       if (a.id === assignment.id) continue
       if (a.season !== assignment.season) continue
+      if (
+        String(a.subjectId) === String(assignment.subjectId) &&
+        this.sameDay(a, assignment.dayOfWeek)
+      ) {
+        conflicts.push(
+          this.makeConflict(
+            'ClassDoubleBooked',
+            'critical',
+            this.gradeDoubleBookedMessageFor(String(assignment.classId)),
+            {
+              assignmentIds: [assignment.id, a.id],
+              classIds: [String(assignment.classId)],
+            }
+          )
+        )
+        break
+      }
       if (!assignmentsShareSlot(a, assignment, this.timeSlots)) continue
       conflicts.push(
         this.makeConflict(
@@ -579,6 +596,23 @@ export class CollisionDetector {
       }
 
       for (const prev of classIndex.get(cid) || []) {
+        if (
+          String(prev.subjectId) === String(a.subjectId) &&
+          String(prev.dayOfWeek).toLowerCase() === String(a.dayOfWeek).toLowerCase()
+        ) {
+          const c = this.makeConflict(
+            'ClassDoubleBooked',
+            'critical',
+            this.gradeDoubleBookedMessageFor(cid),
+            {
+              assignmentIds: [prev.id, a.id],
+              classIds: [cid],
+            }
+          )
+          push(String(prev.id), c)
+          push(String(a.id), c)
+          continue
+        }
         if (!assignmentsShareSlot(prev, a, this.timeSlots)) continue
         const c = this.makeConflict(
           'ClassDoubleBooked',

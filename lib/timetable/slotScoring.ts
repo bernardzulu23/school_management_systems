@@ -107,7 +107,7 @@ export function scoreDaySpreadComponent(opts: {
         String(p.classId || '') === String(classId) &&
         String(p.subjectId || '') === String(subjectId)
     ).length
-    penalty += csSameDay * 95
+    if (csSameDay > 0) return 1_000_000
   }
 
   const distinctDays = new Set(teacherPlaced.map((p) => normDay(p.day)).filter(Boolean)).size
@@ -222,6 +222,15 @@ export function scoreMoveSlot(opts: ScoreSlotOptions): number {
   const sameDay = String(slot.dayOfWeek).toLowerCase() === String(base.dayOfWeek).toLowerCase()
   const sameDayPenalty = penalizeSameDay && sameDay ? 50 : 0
 
+  const sameSubjectSameDay = classAssignments.some(
+    (a) =>
+      String(a.id) !== String(base.id) &&
+      !a.isBreak &&
+      String(a.subjectId) === String(base.subjectId) &&
+      String(a.dayOfWeek).toLowerCase() === String(slot.dayOfWeek).toLowerCase()
+  )
+  const sameSubjectPenalty = sameSubjectSameDay ? 1_000_000 : 0
+
   const dayLoad = classAssignments.filter(
     (a) =>
       String(a.dayOfWeek).toLowerCase() === String(slot.dayOfWeek).toLowerCase() &&
@@ -238,7 +247,15 @@ export function scoreMoveSlot(opts: ScoreSlotOptions): number {
 
   const jitter = randomJitter ? Math.random() * 15 : 0
 
-  return sameDayPenalty + midDayScore + loadPenalty + earlyPeriodPenalty + mondayPenalty + jitter
+  return (
+    sameDayPenalty +
+    sameSubjectPenalty +
+    midDayScore +
+    loadPenalty +
+    earlyPeriodPenalty +
+    mondayPenalty +
+    jitter
+  )
 }
 
 export function compareScoredSlots(

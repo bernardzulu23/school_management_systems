@@ -717,14 +717,16 @@ Total route files: **379**
 
 ## /api/students
 
-| Method           | Route                                | Summary |
-| ---------------- | ------------------------------------ | ------- |
-| GET, POST        | `/api/students`                      | —       |
-| GET, PUT, DELETE | `/api/students/:id`                  | —       |
-| POST             | `/api/students/:id/face-enrollment`  | —       |
-| POST             | `/api/students/:id/twin-pin`         | —       |
-| POST             | `/api/students/bulk-upload`          | —       |
-| GET              | `/api/students/bulk-upload/template` | —       |
+| Method           | Route                                | Summary                                             |
+| ---------------- | ------------------------------------ | --------------------------------------------------- |
+| GET, POST        | `/api/students`                      | —                                                   |
+| GET, PUT, DELETE | `/api/students/:id`                  | —                                                   |
+| POST             | `/api/students/:id/face-enrollment`  | —                                                   |
+| POST             | `/api/students/:id/twin-pin`         | —                                                   |
+| POST             | `/api/students/bulk-upload`          | —                                                   |
+| GET              | `/api/students/bulk-upload/template` | Download .xlsx template with Database Mapping sheet |
+| POST             | `/api/teachers/bulk-upload`          | Import teachers from Excel (max 500 rows)           |
+| GET              | `/api/teachers/bulk-upload/template` | Download .xlsx template with Database Mapping sheet |
 
 ## /api/subjects
 

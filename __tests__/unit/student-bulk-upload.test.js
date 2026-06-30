@@ -103,6 +103,8 @@ describe('parseStudentExcel', () => {
   })
 
   it('template has expected headers', () => {
+    const wb = buildStudentUploadWorkbook()
+    expect(wb.SheetNames).toContain('Database Mapping')
     expect(TEMPLATE_HEADERS[0]).toBe('Full Name *')
     expect(TEMPLATE_EXAMPLE_ROW[0]).toBe('Chanda Banda')
   })

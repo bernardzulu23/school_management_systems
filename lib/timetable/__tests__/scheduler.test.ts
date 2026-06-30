@@ -224,7 +224,7 @@ describe('canPlace', () => {
     }
     const result = canPlace(secondDouble, { day: 'thursday', startPeriod: 3, span: 2 }, placed)
     expect(result.ok).toBe(false)
-    if (!result.ok) expect(result.reason).toBe('same_day_multi_block')
+    if (!result.ok) expect(result.reason).toBe('class_subject_same_day')
   })
 
   it('allows second double same teacher on same day for different class', () => {

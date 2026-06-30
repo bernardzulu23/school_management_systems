@@ -20,7 +20,7 @@ function readCsrfToken() {
   }
 }
 
-export default function StudentBulkUpload() {
+export default function TeacherBulkUpload() {
   const [status, setStatus] = useState('idle')
   const [result, setResult] = useState(null)
   const [dragOver, setDragOver] = useState(false)
@@ -31,8 +31,8 @@ export default function StudentBulkUpload() {
     setDownloading(true)
     try {
       await downloadWorkbookFromApi(
-        '/api/students/bulk-upload/template',
-        'ZSMS_Student_Bulk_Upload_Template.xlsx'
+        '/api/teachers/bulk-upload/template',
+        'ZSMS_Teacher_Bulk_Upload_Template.xlsx'
       )
     } catch (err) {
       setResult({ error: err.message || 'Template download failed' })
@@ -59,7 +59,7 @@ export default function StudentBulkUpload() {
     try {
       const csrf = readCsrfToken()
       const res = await fetch(
-        '/api/students/bulk-upload',
+        '/api/teachers/bulk-upload',
         withBrowserSessionFetchInit({
           method: 'POST',
           body: form,
@@ -97,7 +97,7 @@ export default function StudentBulkUpload() {
     const ws = XLSX.utils.aoa_to_sheet(rows)
     ws['!cols'] = [8, 25, 30, 18, 45, 35].map((wch) => ({ wch }))
     XLSX.utils.book_append_sheet(wb, ws, 'Error Report')
-    XLSX.writeFile(wb, `ZSMS_Upload_Errors_${Date.now()}.xlsx`)
+    XLSX.writeFile(wb, `ZSMS_Teacher_Upload_Errors_${Date.now()}.xlsx`)
   }
 
   return (
@@ -105,11 +105,11 @@ export default function StudentBulkUpload() {
       <div className="flex items-start gap-3 mb-6">
         <FileSpreadsheet className="w-8 h-8 text-royalPurple-accentTx shrink-0" aria-hidden />
         <div>
-          <h2 className="text-xl font-semibold text-royalPurple-text1">Bulk Student Upload</h2>
+          <h2 className="text-xl font-semibold text-royalPurple-text1">Bulk Teacher Upload</h2>
           <p className="text-sm text-royalPurple-text2 mt-1">
-            Import up to 1,000 students using the official ZSMS Excel template. Column headers match
-            the database tables — see the <strong>Database Mapping</strong> sheet in the template.
-            Subjects are matched to your school catalog by name.
+            Import up to 500 teachers using the official ZSMS Excel template. Column headers align
+            with <strong>User</strong>, <strong>Teacher</strong>, <strong>Department</strong>, and{' '}
+            <strong>TeachingAssignment</strong> tables — see the Database Mapping sheet.
           </p>
         </div>
       </div>
@@ -125,12 +125,11 @@ export default function StudentBulkUpload() {
           className="w-full sm:w-auto"
         >
           <Download className="w-4 h-4 mr-2" aria-hidden />
-          {downloading ? 'Downloading…' : 'Download student upload template'}
+          {downloading ? 'Downloading…' : 'Download teacher upload template'}
         </Button>
         <p className="text-xs text-royalPurple-text3">
-          Sheets: <strong>Student Data</strong> (fill rows from line 4) and{' '}
-          <strong>Database Mapping</strong> (column → User / Student / Class /
-          PupilSubjectEnrollment).
+          Teaching assignments use <code className="text-xs">Class:Subject</code> pairs separated by
+          semicolons, e.g. <code className="text-xs">Form 1A:Mathematics; Form 2B:English</code>.
         </p>
       </div>
 
@@ -162,7 +161,7 @@ export default function StudentBulkUpload() {
           <div className="flex flex-col items-center gap-3">
             <LoadingSpinner size="md" label="Uploading" />
             <p className="text-sm text-royalPurple-text2">
-              Validating rows and importing students…
+              Validating rows and importing teachers…
             </p>
           </div>
         ) : (
@@ -189,7 +188,7 @@ export default function StudentBulkUpload() {
             Upload complete
           </p>
           <p className="text-royalPurple-successTx">
-            {result.insertedCount} of {result.totalRows} students imported successfully
+            {result.insertedCount} of {result.totalRows} teachers imported successfully
           </p>
           {result.errorCount > 0 && (
             <>
@@ -206,9 +205,6 @@ export default function StudentBulkUpload() {
                 <Download className="w-4 h-4 mr-2" aria-hidden />
                 Download error report
               </Button>
-              <p className="text-xs text-royalPurple-text3">
-                Fix the failed rows and re-upload only those rows.
-              </p>
             </>
           )}
         </div>

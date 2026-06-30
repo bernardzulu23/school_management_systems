@@ -310,19 +310,11 @@ export function canPlace(
       pl.classId === block.classId &&
       pl.subjectId === block.subjectId
     ) {
-      const allBlocks = options?.allBlocks || []
-      const lessonFrequency = allBlocks.length
-        ? allBlocks.filter(
-            (b) =>
-              b.teacherId === block.teacherId &&
-              b.classId === block.classId &&
-              b.subjectId === block.subjectId
-          ).length
-        : 1
-      const workingDayCount = options?.workingDayCount ?? 5
-      if (lessonFrequency <= workingDayCount) {
-        return { ok: false, reason: 'teacher_class_subject_same_day' }
-      }
+      return { ok: false, reason: 'teacher_class_subject_same_day' }
+    }
+
+    if (pl.classId === block.classId && pl.subjectId === block.subjectId) {
+      return { ok: false, reason: 'class_subject_same_day' }
     }
 
     if (pl.teacherId === block.teacherId && pl.classId === block.classId) {

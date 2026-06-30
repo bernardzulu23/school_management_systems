@@ -127,6 +127,14 @@ export function isConflict(
 
     if (teacherClassSameDayConflict(assignment, existing, timeSlots)) return true
 
+    if (
+      String(assignment.classId) === String(existing.classId) &&
+      String(assignment.subjectId) === String(existing.subjectId) &&
+      assignmentsSameDay(assignment, existing)
+    ) {
+      return true
+    }
+
     if (!assignmentsShareSlot(assignment, existing, timeSlots)) continue
 
     if (String(assignment.teacherId) === String(existing.teacherId)) return true
