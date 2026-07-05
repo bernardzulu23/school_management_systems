@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
@@ -24,7 +24,7 @@ export default function GuidanceCaseDetailPage() {
   })
   const [escalateReason, setEscalateReason] = useState('')
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       setLoading(true)
       const res = await fetch(`/api/guidance/cases/${caseId}`, { credentials: 'include' })
@@ -36,11 +36,11 @@ export default function GuidanceCaseDetailPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [caseId])
 
   useEffect(() => {
     if (caseId) load()
-  }, [caseId])
+  }, [caseId, load])
 
   const addLog = async () => {
     if (!logText.trim()) return

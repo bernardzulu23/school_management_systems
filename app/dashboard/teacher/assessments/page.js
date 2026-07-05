@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
@@ -54,7 +54,10 @@ export default function TeacherAssessmentsPage() {
     description: '',
   })
 
-  const selectedAssignment = assignments.find((a) => a.id === selectedAssignmentId) || null
+  const selectedAssignment = useMemo(
+    () => assignments.find((a) => a.id === selectedAssignmentId) || null,
+    [assignments, selectedAssignmentId]
+  )
 
   const {
     data: analyticsResponse,
@@ -128,7 +131,7 @@ export default function TeacherAssessmentsPage() {
       }
     }
     loadAssessments()
-  }, [selectedAssignmentId])
+  }, [selectedAssignment])
 
   const handleExportResults = () => {
     if (!selectedAssignment?.classId || !selectedAssignment?.subjectId) return

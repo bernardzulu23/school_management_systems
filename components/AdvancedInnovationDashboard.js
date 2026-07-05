@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { AdvancedAssessmentSystem } from '../lib/advancedAssessmentSystem'
 import { EmergingTechnologySystem } from '../lib/emergingTechnologySystem'
 import { InnovationLabSystem } from '../lib/innovationLabSystem'
@@ -14,47 +14,7 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
   const [technologies, setTechnologies] = useState({})
   const voiceRecognition = useRef(null)
 
-  useEffect(() => {
-    initializeDashboard()
-    checkTechnologySupport()
-    setupVoiceInterface()
-  }, [])
-
-  const initializeDashboard = () => {
-    // Load user's assessments, portfolios, and projects
-    loadAssessments()
-    loadPortfolios()
-    loadProjects()
-    loadChallenges()
-  }
-
-  const checkTechnologySupport = () => {
-    const availableTech = EmergingTechnologySystem.getAvailableTechnologies()
-    setTechnologies(availableTech)
-  }
-
-  const setupVoiceInterface = () => {
-    if (technologies.voiceInterface) {
-      voiceRecognition.current = EmergingTechnologySystem.initializeVoiceInterface()
-
-      // Listen for voice status updates
-      window.addEventListener('voiceStatusUpdate', (event) => {
-        setVoiceStatus(event.detail.status)
-      })
-    }
-  }
-
-  const toggleVoiceInterface = () => {
-    if (!voiceEnabled && voiceRecognition.current) {
-      voiceRecognition.current.start()
-      setVoiceEnabled(true)
-    } else if (voiceEnabled && voiceRecognition.current) {
-      voiceRecognition.current.stop()
-      setVoiceEnabled(false)
-    }
-  }
-
-  const loadAssessments = () => {
+  const loadAssessments = useCallback(() => {
     // Simulate loading advanced assessments
     const sampleAssessments = [
       {
@@ -77,9 +37,9 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
       },
     ]
     setAssessments(sampleAssessments)
-  }
+  }, [])
 
-  const loadPortfolios = () => {
+  const loadPortfolios = useCallback(() => {
     // Simulate loading digital portfolios
     const samplePortfolios = [
       {
@@ -100,9 +60,9 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
       },
     ]
     setPortfolios(samplePortfolios)
-  }
+  }, [])
 
-  const loadProjects = () => {
+  const loadProjects = useCallback(() => {
     // Simulate loading innovation projects
     const sampleProjects = [
       {
@@ -125,9 +85,9 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
       },
     ]
     setProjects(sampleProjects)
-  }
+  }, [])
 
-  const loadChallenges = () => {
+  const loadChallenges = useCallback(() => {
     // Simulate loading innovation challenges
     const sampleChallenges = [
       {
@@ -150,6 +110,45 @@ const AdvancedInnovationDashboard = ({ userRole, userId }) => {
       },
     ]
     setChallenges(sampleChallenges)
+  }, [])
+
+  const initializeDashboard = useCallback(() => {
+    loadAssessments()
+    loadPortfolios()
+    loadProjects()
+    loadChallenges()
+  }, [loadAssessments, loadPortfolios, loadProjects, loadChallenges])
+
+  const checkTechnologySupport = useCallback(() => {
+    const availableTech = EmergingTechnologySystem.getAvailableTechnologies()
+    setTechnologies(availableTech)
+  }, [])
+
+  const setupVoiceInterface = useCallback(() => {
+    if (technologies.voiceInterface) {
+      voiceRecognition.current = EmergingTechnologySystem.initializeVoiceInterface()
+
+      // Listen for voice status updates
+      window.addEventListener('voiceStatusUpdate', (event) => {
+        setVoiceStatus(event.detail.status)
+      })
+    }
+  }, [technologies.voiceInterface])
+
+  useEffect(() => {
+    initializeDashboard()
+    checkTechnologySupport()
+    setupVoiceInterface()
+  }, [initializeDashboard, checkTechnologySupport, setupVoiceInterface])
+
+  const toggleVoiceInterface = () => {
+    if (!voiceEnabled && voiceRecognition.current) {
+      voiceRecognition.current.start()
+      setVoiceEnabled(true)
+    } else if (voiceEnabled && voiceRecognition.current) {
+      voiceRecognition.current.stop()
+      setVoiceEnabled(false)
+    }
   }
 
   const renderAssessmentTab = () => (

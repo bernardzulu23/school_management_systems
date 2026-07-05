@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useCallback } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -37,15 +37,18 @@ export default function TeacherClassesPage() {
   const [lessonPlan, setLessonPlan] = useState('')
   const [lessonFormat, setLessonFormat] = useState('standard')
 
-  const selectedAssignment = assignments.find((a) => a.id === selectedAssignmentId) || null
+  const selectedAssignment = useMemo(
+    () => assignments.find((a) => a.id === selectedAssignmentId) || null,
+    [assignments, selectedAssignmentId]
+  )
 
   const lessonKey = useMemo(() => {
     return selectedAssignment ? `lesson_plan_v1:${selectedAssignment.id}:${weekStart}` : null
-  }, [selectedAssignmentId, weekStart])
+  }, [selectedAssignment, weekStart])
 
   const lessonFormatKey = useMemo(() => {
     return selectedAssignment ? `lesson_plan_format_v1:${selectedAssignment.id}:${weekStart}` : null
-  }, [selectedAssignmentId, weekStart])
+  }, [selectedAssignment, weekStart])
 
   const seasonLabel = useMemo(() => {
     const m = new Date(weekStart).getMonth() + 1
@@ -93,7 +96,7 @@ export default function TeacherClassesPage() {
     }
   }, [lessonFormatKey])
 
-  const fetchPupils = async () => {
+  const fetchPupils = useCallback(async () => {
     if (!selectedAssignment) return
     setLoading(true)
     try {
@@ -109,11 +112,11 @@ export default function TeacherClassesPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [selectedAssignment])
 
   useEffect(() => {
     fetchPupils()
-  }, [selectedAssignmentId])
+  }, [fetchPupils])
 
   const filteredPupils = pupils.filter((p) => {
     if (!searchTerm) return true

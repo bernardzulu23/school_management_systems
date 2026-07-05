@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { PhaseIntegrationSystem } from '../lib/phaseIntegrationSystem'
 import UnifiedNavigationSystem from './UnifiedNavigationSystem'
 import AdvancedInnovationDashboard from './AdvancedInnovationDashboard'
@@ -12,11 +12,7 @@ const EnhancedDashboardIntegration = ({ userRole, userId, userName }) => {
   const [settings, setSettings] = useState({})
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    initializeDashboard()
-  }, [userRole, userId])
-
-  const initializeDashboard = async () => {
+  const initializeDashboard = useCallback(async () => {
     setLoading(true)
 
     try {
@@ -38,7 +34,11 @@ const EnhancedDashboardIntegration = ({ userRole, userId, userName }) => {
       console.error('Failed to initialize dashboard:', error)
       setLoading(false)
     }
-  }
+  }, [userId, userRole])
+
+  useEffect(() => {
+    initializeDashboard()
+  }, [initializeDashboard])
 
   const loadCrossPhaseData = async () => {
     // Simulate loading integrated data from all phases

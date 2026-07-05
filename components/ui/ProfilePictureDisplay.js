@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { User, AlertCircle } from 'lucide-react'
 
@@ -101,11 +102,13 @@ export default function ProfilePictureDisplay({
         `}
         onClick={handleClick}
       >
-        <img
+        <Image
           src={src}
           alt={alt}
+          fill
+          unoptimized
           className={`
-            absolute inset-0 w-full h-full object-cover
+            object-cover
             ${imageLoading ? 'opacity-0' : 'opacity-100'}
             transition-opacity duration-200
           `}

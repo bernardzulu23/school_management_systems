@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { PhaseIntegrationSystem } from '../lib/phaseIntegrationSystem'
 import EnhancedDashboardIntegration from './EnhancedDashboardIntegration'
 import ComprehensiveSettingsPanel from './ComprehensiveSettingsPanel'
@@ -22,43 +22,7 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
-    initializeIntegratedSystem()
-  }, [userRole, userId])
-
-  const initializeIntegratedSystem = async () => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      console.log(`Initializing integrated system for ${userRole} ${userId}`)
-
-      // Initialize phase integration system
-      const userIntegration = PhaseIntegrationSystem.initializeIntegration(userId, userRole)
-      setIntegration(userIntegration)
-
-      // Load all phase data
-      await loadAllPhaseData(userIntegration)
-
-      // Load user settings
-      await loadUserSettings()
-
-      // Setup cross-phase notifications
-      await setupNotifications(userIntegration)
-
-      // Sync cross-phase data
-      PhaseIntegrationSystem.syncCrossPhaseData(userId)
-
-      setLoading(false)
-      console.log('Integrated system initialized successfully')
-    } catch (error) {
-      console.error('Failed to initialize integrated system:', error)
-      setError(error.message)
-      setLoading(false)
-    }
-  }
-
-  const loadAllPhaseData = async (userIntegration) => {
+  const loadAllPhaseData = useCallback(async (userIntegration) => {
     const data = {}
 
     // Load Phase 1: Gamification & Analytics
@@ -87,7 +51,7 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
     }
 
     setPhaseData(data)
-  }
+  }, [])
 
   const loadPhase1Data = async () => {
     // Simulate loading gamification and analytics data
@@ -180,7 +144,7 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
     }
   }
 
-  const loadUserSettings = async () => {
+  const loadUserSettings = useCallback(async () => {
     // Simulate loading user settings
     const settings = {
       theme: 'blue_white',
@@ -201,9 +165,9 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
     }
 
     setUserSettings(settings)
-  }
+  }, [])
 
-  const setupNotifications = async (userIntegration) => {
+  const setupNotifications = useCallback(async (userIntegration) => {
     // Simulate setting up cross-phase notifications
     const crossPhaseNotifications = [
       {
@@ -233,7 +197,36 @@ const IntegratedDashboardWrapper = ({ userRole, userId, userName, userData }) =>
     ]
 
     setNotifications(crossPhaseNotifications)
-  }
+  }, [])
+
+  const initializeIntegratedSystem = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      console.log(`Initializing integrated system for ${userRole} ${userId}`)
+
+      const userIntegration = PhaseIntegrationSystem.initializeIntegration(userId, userRole)
+      setIntegration(userIntegration)
+
+      await loadAllPhaseData(userIntegration)
+      await loadUserSettings()
+      await setupNotifications(userIntegration)
+
+      PhaseIntegrationSystem.syncCrossPhaseData(userId)
+
+      setLoading(false)
+      console.log('Integrated system initialized successfully')
+    } catch (error) {
+      console.error('Failed to initialize integrated system:', error)
+      setError(error.message)
+      setLoading(false)
+    }
+  }, [userId, userRole, loadAllPhaseData, loadUserSettings, setupNotifications])
+
+  useEffect(() => {
+    initializeIntegratedSystem()
+  }, [initializeIntegratedSystem])
 
   const handleViewChange = (newView) => {
     setCurrentView(newView)

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { PhaseIntegrationSystem } from '../lib/phaseIntegrationSystem'
 
 const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) => {
@@ -8,21 +8,7 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
   const [notifications, setNotifications] = useState([])
   const [isCollapsed, setIsCollapsed] = useState(false)
 
-  useEffect(() => {
-    initializeNavigation()
-  }, [userRole, userId])
-
-  const initializeNavigation = () => {
-    const userIntegration = PhaseIntegrationSystem.initializeIntegration(userId, userRole)
-    setIntegration(userIntegration)
-
-    const features = PhaseIntegrationSystem.getAvailableFeatures(userRole)
-    setAvailableFeatures(features)
-
-    loadNotifications()
-  }
-
-  const loadNotifications = () => {
+  const loadNotifications = useCallback(() => {
     // Simulate loading cross-phase notifications
     const sampleNotifications = [
       {
@@ -48,7 +34,21 @@ const UnifiedNavigationSystem = ({ userRole, userId, currentPage, onNavigate }) 
       },
     ]
     setNotifications(sampleNotifications)
-  }
+  }, [])
+
+  const initializeNavigation = useCallback(() => {
+    const userIntegration = PhaseIntegrationSystem.initializeIntegration(userId, userRole)
+    setIntegration(userIntegration)
+
+    const features = PhaseIntegrationSystem.getAvailableFeatures(userRole)
+    setAvailableFeatures(features)
+
+    loadNotifications()
+  }, [userId, userRole, loadNotifications])
+
+  useEffect(() => {
+    initializeNavigation()
+  }, [initializeNavigation])
 
   const getPhaseNavigation = () => {
     const phases = PhaseIntegrationSystem.PHASE_FEATURES

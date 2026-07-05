@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Globe, Map, Music, Book } from 'lucide-react'
@@ -24,11 +25,15 @@ export default function CulturalLearningPage() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Victoria_Falls_Zambia_Zimbabwe_border.jpg/1200px-Victoria_Falls_Zambia_Zimbabwe_border.jpg"
-                  alt="Victoria Falls"
-                  className="rounded-lg object-cover h-64 w-full"
-                />
+                <div className="relative rounded-lg h-64 w-full">
+                  <Image
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Victoria_Falls_Zambia_Zimbabwe_border.jpg/1200px-Victoria_Falls_Zambia_Zimbabwe_border.jpg"
+                    alt="Victoria Falls"
+                    fill
+                    className="object-cover rounded-lg"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
                 <div className="space-y-4">
                   <h3 className="text-xl font-bold text-royalPurple-text1">Discover Our Roots</h3>
                   <p className="text-royalPurple-text2">

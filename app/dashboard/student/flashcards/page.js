@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
@@ -26,7 +26,7 @@ export default function StudentFlashcardsPage() {
   const usedSubjects = new Set(todayDecks.map((d) => d.subjectName.toLowerCase()))
   const availableSubjects = subjects.filter((s) => !usedSubjects.has(s.name.toLowerCase()))
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true)
     try {
       const [subRes, deckRes] = await Promise.all([
@@ -42,11 +42,11 @@ export default function StudentFlashcardsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [today])
 
   useEffect(() => {
     load()
-  }, [])
+  }, [load])
 
   const generateDeck = async () => {
     if (!subjectName) {

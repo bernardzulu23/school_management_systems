@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { zambianSchoolMasterSystem } from '../lib/zambianSchoolSystem.js'
 
 // Sub-components
@@ -20,50 +20,7 @@ const ComprehensiveZambianDashboard = () => {
   const [alerts, setAlerts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    initializeDashboard()
-    const interval = setInterval(updateRealTimeData, 5000) // Update every 5 seconds
-    return () => clearInterval(interval)
-  }, [])
-
-  const initializeDashboard = async () => {
-    try {
-      setIsLoading(true)
-
-      // Initialize master system
-      await zambianSchoolMasterSystem.initializeIntegration()
-
-      // Get initial system status
-      const status = zambianSchoolMasterSystem.getComprehensiveSystemStatus()
-      setSystemStatus(status)
-
-      // Get initial real-time data
-      await updateRealTimeData()
-
-      setIsLoading(false)
-    } catch (error) {
-      console.error('Failed to initialize dashboard:', error)
-      setIsLoading(false)
-    }
-  }
-
-  const updateRealTimeData = async () => {
-    try {
-      const stats = zambianSchoolMasterSystem.generateComprehensiveStats()
-      setRealTimeData(stats)
-
-      // Update system status
-      const status = zambianSchoolMasterSystem.getComprehensiveSystemStatus()
-      setSystemStatus(status)
-
-      // Check for new alerts
-      checkForAlerts(stats)
-    } catch (error) {
-      console.error('Failed to update real-time data:', error)
-    }
-  }
-
-  const checkForAlerts = (stats) => {
+  const checkForAlerts = useCallback((stats) => {
     const newAlerts = []
 
     // Check system health
@@ -90,7 +47,50 @@ const ComprehensiveZambianDashboard = () => {
     }
 
     setAlerts((prev) => [...newAlerts, ...prev.slice(0, 4)]) // Keep last 5 alerts
-  }
+  }, [])
+
+  const updateRealTimeData = useCallback(async () => {
+    try {
+      const stats = zambianSchoolMasterSystem.generateComprehensiveStats()
+      setRealTimeData(stats)
+
+      // Update system status
+      const status = zambianSchoolMasterSystem.getComprehensiveSystemStatus()
+      setSystemStatus(status)
+
+      // Check for new alerts
+      checkForAlerts(stats)
+    } catch (error) {
+      console.error('Failed to update real-time data:', error)
+    }
+  }, [checkForAlerts])
+
+  const initializeDashboard = useCallback(async () => {
+    try {
+      setIsLoading(true)
+
+      // Initialize master system
+      await zambianSchoolMasterSystem.initializeIntegration()
+
+      // Get initial system status
+      const status = zambianSchoolMasterSystem.getComprehensiveSystemStatus()
+      setSystemStatus(status)
+
+      // Get initial real-time data
+      await updateRealTimeData()
+
+      setIsLoading(false)
+    } catch (error) {
+      console.error('Failed to initialize dashboard:', error)
+      setIsLoading(false)
+    }
+  }, [updateRealTimeData])
+
+  useEffect(() => {
+    initializeDashboard()
+    const interval = setInterval(updateRealTimeData, 5000) // Update every 5 seconds
+    return () => clearInterval(interval)
+  }, [initializeDashboard, updateRealTimeData])
 
   if (isLoading) {
     return (

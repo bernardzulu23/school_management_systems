@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { RealTimeCommunicationHub } from '../lib/realTimeCommunicationHub'
 import { SocialLearningNetwork } from '../lib/socialLearningNetwork'
 import { CollaborativeProjectManager } from '../lib/collaborativeProjectManager'
@@ -13,12 +13,7 @@ const CommunicationDashboard = ({ userRole, userId }) => {
   const [isVideoCallActive, setIsVideoCallActive] = useState(false)
   const [selectedChannel, setSelectedChannel] = useState(null)
 
-  useEffect(() => {
-    initializeCommunicationData()
-    setupRealTimeUpdates()
-  }, [userId])
-
-  const initializeCommunicationData = () => {
+  const initializeCommunicationData = useCallback(() => {
     // Initialize communication channels
     const defaultChannels = [
       RealTimeCommunicationHub.createCommunicationChannel({
@@ -82,9 +77,9 @@ const CommunicationDashboard = ({ userRole, userId }) => {
       { id: 'user3', name: 'Dr. Smith', status: 'online', role: 'teacher' },
       { id: 'user4', name: 'Maria Garcia', status: 'away', role: 'student' },
     ])
-  }
+  }, [userId])
 
-  const setupRealTimeUpdates = () => {
+  const setupRealTimeUpdates = useCallback(() => {
     // Mock real-time updates
     const interval = setInterval(() => {
       // Simulate new notifications
@@ -101,7 +96,13 @@ const CommunicationDashboard = ({ userRole, userId }) => {
     }, 30000) // Every 30 seconds
 
     return () => clearInterval(interval)
-  }
+  }, [userId])
+
+  useEffect(() => {
+    initializeCommunicationData()
+    const cleanup = setupRealTimeUpdates()
+    return cleanup
+  }, [initializeCommunicationData, setupRealTimeUpdates])
 
   const handleSendMessage = (channelId, messageContent) => {
     const message = RealTimeCommunicationHub.sendMessage({

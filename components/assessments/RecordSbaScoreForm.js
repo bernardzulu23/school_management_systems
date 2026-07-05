@@ -51,7 +51,10 @@ export function RecordSbaScoreForm({ sbaTasks = [], onSuccess }) {
     [filteredTasks, assessmentId]
   )
 
-  const criteria = selectedAssessment?.rubric?.criteria || []
+  const criteria = useMemo(
+    () => selectedAssessment?.rubric?.criteria || [],
+    [selectedAssessment?.rubric?.criteria]
+  )
 
   useEffect(() => {
     if (filteredTasks.length && !filteredTasks.some((t) => t.id === assessmentId)) {
@@ -66,7 +69,7 @@ export function RecordSbaScoreForm({ sbaTasks = [], onSuccess }) {
       next[c.id] = '3'
     }
     setCriterionLevels(next)
-  }, [selectedAssessment?.id])
+  }, [selectedAssessment?.id, selectedAssessment?.rubric?.criteria])
 
   const loadStudents = useCallback(async () => {
     setLoadingStudents(true)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Shield, Lock, Key, Eye, AlertTriangle, CheckCircle, Clock, Globe } from 'lucide-react'
 import { encryption, secureStorage } from '@/lib/encryption'
 import { TLSSecurityValidator } from '@/lib/tls-config'
@@ -18,11 +18,7 @@ export default function SecurityDashboard() {
   const [tlsTestResults, setTlsTestResults] = useState(null)
   const { verifyIntegrity } = useSecureAuth()
 
-  useEffect(() => {
-    performSecurityChecks()
-  }, [])
-
-  const performSecurityChecks = async () => {
+  const performSecurityChecks = useCallback(async () => {
     // Test AES-256 Encryption
     try {
       const testData = 'Sensitive student information: John Doe, Grade 12, Medical Info: Asthma'
@@ -65,7 +61,11 @@ export default function SecurityDashboard() {
       ...prev,
       authentication: 'secure', // Assume secure if no errors
     }))
-  }
+  }, [verifyIntegrity])
+
+  useEffect(() => {
+    performSecurityChecks()
+  }, [performSecurityChecks])
 
   const demonstrateEncryption = () => {
     const sampleData =

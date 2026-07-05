@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import toast from 'react-hot-toast'
 import { WellbeingMonitoringSystem } from '../lib/wellbeingMonitoringSystem'
 
@@ -11,11 +11,7 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
   const [crisisProtocols, setCrisisProtocols] = useState(null)
   const [progressData, setProgressData] = useState(null)
 
-  useEffect(() => {
-    initializeMentalHealthData()
-  }, [userId])
-
-  const initializeMentalHealthData = () => {
+  const initializeMentalHealthData = useCallback(() => {
     // Create wellbeing profile
     const profile = WellbeingMonitoringSystem.createWellbeingProfile({
       userId: userId,
@@ -169,7 +165,11 @@ const MentalHealthSupportInterface = ({ userRole, userId }) => {
     // Monitor progress
     const progress = WellbeingMonitoringSystem.monitorProgress(profile.id, '30_days')
     setProgressData(progress)
-  }
+  }, [userId, userRole])
+
+  useEffect(() => {
+    initializeMentalHealthData()
+  }, [initializeMentalHealthData])
 
   const handleEmergencyAlert = () => {
     toast.error('Emergency protocols activated. Crisis team has been notified.', {

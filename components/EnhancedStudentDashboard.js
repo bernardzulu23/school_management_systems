@@ -4,7 +4,7 @@
  * Integrates digital library, study groups, learning assessment, goals, and more
  */
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   DigitalLibrarySystem,
   PeerStudyGroupSystem,
@@ -43,16 +43,7 @@ const EnhancedStudentDashboard = ({ studentId, studentData }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [notifications, setNotifications] = useState([])
 
-  useEffect(() => {
-    loadDashboardData()
-    checkNotifications()
-
-    // Set up periodic checks
-    const interval = setInterval(checkNotifications, 60000) // Check every minute
-    return () => clearInterval(interval)
-  }, [studentId])
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     setIsLoading(true)
 
     try {
@@ -80,9 +71,17 @@ const EnhancedStudentDashboard = ({ studentId, studentData }) => {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [
+    studentId,
+    goalSystem,
+    homeworkReminder,
+    timeTracker,
+    learningAssessment,
+    notebookSystem,
+    projectManager,
+  ])
 
-  const checkNotifications = () => {
+  const checkNotifications = useCallback(() => {
     const newNotifications = []
 
     // Check homework reminders
@@ -115,7 +114,16 @@ const EnhancedStudentDashboard = ({ studentId, studentData }) => {
     if (newNotifications.length > 0) {
       setNotifications((prev) => [...newNotifications, ...prev].slice(0, 10))
     }
-  }
+  }, [dashboardData.activeGoals, homeworkReminder])
+
+  useEffect(() => {
+    loadDashboardData()
+    checkNotifications()
+
+    // Set up periodic checks
+    const interval = setInterval(checkNotifications, 60000) // Check every minute
+    return () => clearInterval(interval)
+  }, [loadDashboardData, checkNotifications])
 
   const renderOverviewTab = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

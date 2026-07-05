@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 import { cn } from '@/lib/utils'
@@ -481,9 +482,12 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
             {school ? (
               <>
                 {school.logo_url ? (
-                  <img
+                  <Image
                     src={school.logo_url}
                     alt={school.name}
+                    width={32}
+                    height={32}
+                    unoptimized
                     className="h-8 w-8 rounded-lg object-contain bg-royalPurple-card2 border border-royalPurple-border shrink-0"
                   />
                 ) : (

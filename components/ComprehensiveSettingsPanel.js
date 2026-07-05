@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { PhaseIntegrationSystem } from '../lib/phaseIntegrationSystem'
 import { UniversalAccessibilitySystem } from '../lib/universalAccessibilitySystem'
 import { EmergingTechnologySystem } from '../lib/emergingTechnologySystem'
@@ -11,13 +11,7 @@ const ComprehensiveSettingsPanel = ({ userRole, userId, onSettingsChange }) => {
   const [saving, setSaving] = useState(false)
   const [saveStatus, setSaveStatus] = useState('')
 
-  useEffect(() => {
-    loadSettings()
-    checkFeatureAvailability()
-    checkTechnologySupport()
-  }, [userRole, userId])
-
-  const loadSettings = () => {
+  const loadSettings = useCallback(() => {
     // Simulate loading user settings from all phases
     const defaultSettings = {
       general: {
@@ -88,17 +82,23 @@ const ComprehensiveSettingsPanel = ({ userRole, userId, onSettingsChange }) => {
     }
 
     setSettings(defaultSettings)
-  }
+  }, [])
 
-  const checkFeatureAvailability = () => {
+  const checkFeatureAvailability = useCallback(() => {
     const features = PhaseIntegrationSystem.getAvailableFeatures(userRole)
     setAvailableFeatures(features)
-  }
+  }, [userRole])
 
-  const checkTechnologySupport = () => {
+  const checkTechnologySupport = useCallback(() => {
     const support = EmergingTechnologySystem.getAvailableTechnologies()
     setTechnologySupport(support)
-  }
+  }, [])
+
+  useEffect(() => {
+    loadSettings()
+    checkFeatureAvailability()
+    checkTechnologySupport()
+  }, [loadSettings, checkFeatureAvailability, checkTechnologySupport])
 
   const handleSettingChange = (category, setting, value) => {
     setSettings((prev) => ({

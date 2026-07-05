@@ -44,6 +44,16 @@ export default function StudentFlashcardStudyPage() {
     load()
   }, [deckId])
 
+  const score = useMemo(() => {
+    const cards = Array.isArray(deck?.cards) ? deck.cards : []
+    let correct = 0
+    for (const c of cards) {
+      const a = answers[c.id]
+      if (a && isFlashcardAnswerCorrect(a, c.options, c.answer)) correct += 1
+    }
+    return correct
+  }, [answers, deck?.cards])
+
   const cards = Array.isArray(deck?.cards) ? deck.cards : []
   const card = cards[index]
   const revealed = selected != null
@@ -58,15 +68,6 @@ export default function StudentFlashcardStudyPage() {
     if (!revealed || !card || selected == null) return false
     return isFlashcardAnswerCorrect(selected, card.options, card.answer)
   }, [revealed, selected, card])
-
-  const score = useMemo(() => {
-    let correct = 0
-    for (const c of cards) {
-      const a = answers[c.id]
-      if (a && isFlashcardAnswerCorrect(a, c.options, c.answer)) correct += 1
-    }
-    return correct
-  }, [answers, cards])
 
   const choose = (option) => {
     if (revealed) return

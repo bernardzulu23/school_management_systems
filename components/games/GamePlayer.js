@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -26,6 +26,43 @@ export default function GamePlayer({ game, onComplete, onExit }) {
   const [score, setScore] = useState(0)
   const [showResults, setShowResults] = useState(false)
 
+  const calculateScore = useCallback(() => {
+    let totalScore = 0
+    let correctAnswers = 0
+
+    game.content.questions.forEach((question, index) => {
+      if (answers[index] === question.correctAnswer) {
+        totalScore += question.points || 1
+        correctAnswers++
+      }
+    })
+
+    return { totalScore, correctAnswers }
+  }, [answers, game.content.questions])
+
+  const handleGameComplete = useCallback(() => {
+    const { totalScore, correctAnswers } = calculateScore()
+    setScore(totalScore)
+    setGameCompleted(true)
+    setShowResults(true)
+
+    const maxScore = game.content.questions.reduce((sum, q) => sum + (q.points || 1), 0)
+    const percentage = Math.round((totalScore / maxScore) * 100)
+    const timeSpent = game.timeLimit * 60 - timeLeft
+
+    const results = {
+      score: totalScore,
+      maxScore,
+      percentage,
+      correctAnswers,
+      totalQuestions: game.content.questions.length,
+      timeSpent,
+      answers,
+    }
+
+    onComplete(results)
+  }, [answers, calculateScore, game.content.questions, game.timeLimit, onComplete, timeLeft])
+
   // Timer effect
   useEffect(() => {
     if (gameStarted && !gameCompleted && timeLeft > 0) {
@@ -41,7 +78,7 @@ export default function GamePlayer({ game, onComplete, onExit }) {
 
       return () => clearInterval(timer)
     }
-  }, [gameStarted, gameCompleted, timeLeft])
+  }, [gameStarted, gameCompleted, timeLeft, handleGameComplete])
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60)
@@ -68,44 +105,6 @@ export default function GamePlayer({ game, onComplete, onExit }) {
     if (currentQuestion > 0) {
       setCurrentQuestion((prev) => prev - 1)
     }
-  }
-
-  const calculateScore = () => {
-    let totalScore = 0
-    let correctAnswers = 0
-
-    game.content.questions.forEach((question, index) => {
-      if (answers[index] === question.correctAnswer) {
-        totalScore += question.points || 1
-        correctAnswers++
-      }
-    })
-
-    return { totalScore, correctAnswers }
-  }
-
-  const handleGameComplete = () => {
-    const { totalScore, correctAnswers } = calculateScore()
-    setScore(totalScore)
-    setGameCompleted(true)
-    setShowResults(true)
-
-    // Calculate results
-    const maxScore = game.content.questions.reduce((sum, q) => sum + (q.points || 1), 0)
-    const percentage = Math.round((totalScore / maxScore) * 100)
-    const timeSpent = game.timeLimit * 60 - timeLeft
-
-    const results = {
-      score: totalScore,
-      maxScore,
-      percentage,
-      correctAnswers,
-      totalQuestions: game.content.questions.length,
-      timeSpent,
-      answers,
-    }
-
-    onComplete(results)
   }
 
   const startGame = () => {

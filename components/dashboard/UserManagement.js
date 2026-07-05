@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -221,10 +221,6 @@ export default function UserManagement() {
   }, [])
 
   useEffect(() => {
-    fetchUsers()
-  }, [activeUserType])
-
-  useEffect(() => {
     fetchCounts()
   }, [])
 
@@ -259,7 +255,7 @@ export default function UserManagement() {
     }
   }, [editingUser])
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setIsLoading(true)
     setHasError(false)
     try {
@@ -398,7 +394,11 @@ export default function UserManagement() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [activeUserType])
+
+  useEffect(() => {
+    fetchUsers()
+  }, [fetchUsers])
 
   const handleCreateUser = (type) => {
     // Redirect to centralized registration system with specific role

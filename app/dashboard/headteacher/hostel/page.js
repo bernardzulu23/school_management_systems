@@ -39,14 +39,14 @@ export default function HostelPage() {
     queryFn: () => api.getStudents({ limit: 500 }).then((res) => res.data?.data || res.data || []),
   })
 
-  const studentList = Array.isArray(students) ? students : []
   const selectedRoom = (rooms || []).find((r) => r.id === assignRoomId)
   const selectedRoomGender = normalizeRoomGender(selectedRoom?.gender)
 
   const assignableStudents = useMemo(() => {
+    const studentList = Array.isArray(students) ? students : []
     if (!assignRoomId || selectedRoomGender === 'mixed') return studentList
     return studentList.filter((s) => studentMatchesRoom(s, selectedRoom?.gender))
-  }, [studentList, assignRoomId, selectedRoom?.gender, selectedRoomGender])
+  }, [students, assignRoomId, selectedRoom?.gender, selectedRoomGender])
 
   const createRoom = async (e) => {
     e.preventDefault()

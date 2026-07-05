@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -49,12 +49,15 @@ export default function ResultEntryPage() {
   const [isOnline, setIsOnline] = useState(true)
   const SAVE_BATCH_SIZE = 60
 
-  const terms = (() => {
+  const terms = useMemo(() => {
     const year = new Date().getFullYear()
     return [`Term 1 ${year}`, `Term 2 ${year}`, `Term 3 ${year}`]
-  })()
+  }, [])
 
-  const selectedAssignment = assignments.find((a) => a.id === selectedAssignmentId) || null
+  const selectedAssignment = useMemo(
+    () => assignments.find((a) => a.id === selectedAssignmentId) || null,
+    [assignments, selectedAssignmentId]
+  )
 
   const queueKey = user?.id ? `gradebook_queue_v1:${user.id}` : 'gradebook_queue_v1'
   const draftKey = user?.id ? `gradebook_drafts_v1:${user.id}` : 'gradebook_drafts_v1'
@@ -66,7 +69,7 @@ export default function ResultEntryPage() {
     return { term: t || 'Term 1', year: new Date().getFullYear() }
   }
 
-  const getQueue = () => {
+  const getQueue = useCallback(() => {
     try {
       const raw = localStorage.getItem(queueKey)
       const parsed = raw ? JSON.parse(raw) : []
@@ -81,29 +84,35 @@ export default function ResultEntryPage() {
     } catch {
       return []
     }
-  }
+  }, [queueKey])
 
-  const setQueue = (items) => {
-    localStorage.setItem(queueKey, JSON.stringify(items))
-  }
+  const setQueue = useCallback(
+    (items) => {
+      localStorage.setItem(queueKey, JSON.stringify(items))
+    },
+    [queueKey]
+  )
 
-  const saveDraft = (draft) => {
-    try {
-      const raw = localStorage.getItem(draftKey)
-      const parsed = raw ? JSON.parse(raw) : {}
-      const next = { ...(parsed || {}), ...draft }
-      localStorage.setItem(draftKey, JSON.stringify(next))
-    } catch {}
-  }
+  const saveDraft = useCallback(
+    (draft) => {
+      try {
+        const raw = localStorage.getItem(draftKey)
+        const parsed = raw ? JSON.parse(raw) : {}
+        const next = { ...(parsed || {}), ...draft }
+        localStorage.setItem(draftKey, JSON.stringify(next))
+      } catch {}
+    },
+    [draftKey]
+  )
 
-  const loadDraft = () => {
+  const loadDraft = useCallback(() => {
     try {
       const raw = localStorage.getItem(draftKey)
       return raw ? JSON.parse(raw) : {}
     } catch {
       return {}
     }
-  }
+  }, [draftKey])
 
   useEffect(() => {
     setIsOnline(typeof navigator !== 'undefined' ? navigator.onLine : true)
@@ -130,21 +139,21 @@ export default function ResultEntryPage() {
         }
         if (preferred && data.some((a) => a.id === preferred)) {
           setSelectedAssignmentId(preferred)
-        } else if (!selectedAssignmentId && data.length > 0) {
-          setSelectedAssignmentId(data[0].id)
+        } else {
+          setSelectedAssignmentId((prev) => prev || (data.length > 0 ? data[0].id : ''))
         }
       } catch (e) {
         toast.error('Failed to load teaching assignments')
       }
     }
     loadAssignments()
-  }, [])
+  }, [loadDraft, terms])
 
   useEffect(() => {
     saveDraft({ selectedAssignmentId, selectedTerm, selectedResultType })
-  }, [selectedAssignmentId, selectedTerm, selectedResultType])
+  }, [selectedAssignmentId, selectedTerm, selectedResultType, saveDraft])
 
-  const fetchPupilsAndResults = async () => {
+  const fetchPupilsAndResults = useCallback(async () => {
     if (!selectedAssignment || !selectedTerm) return
     setLoading(true)
     try {
@@ -211,11 +220,11 @@ export default function ResultEntryPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [selectedAssignment, selectedTerm, selectedResultType])
 
   useEffect(() => {
     fetchPupilsAndResults()
-  }, [selectedAssignmentId, selectedTerm, selectedResultType])
+  }, [fetchPupilsAndResults])
 
   const handleScoreChange = (studentId, value) => {
     // Allow empty string for clearing
@@ -393,7 +402,7 @@ export default function ResultEntryPage() {
     return res.json()
   }
 
-  const syncQueue = async () => {
+  const syncQueue = useCallback(async () => {
     if (!isOnline) return
     const queue = getQueue()
     if (queue.length === 0) return
@@ -411,7 +420,7 @@ export default function ResultEntryPage() {
     } finally {
       setSyncing(false)
     }
-  }
+  }, [fetchPupilsAndResults, getQueue, isOnline, setQueue])
 
   useEffect(() => {
     const onlineHandler = () => setIsOnline(true)
@@ -428,7 +437,7 @@ export default function ResultEntryPage() {
     const handler = () => syncQueue()
     window.addEventListener('online', handler)
     return () => window.removeEventListener('online', handler)
-  }, [isOnline])
+  }, [syncQueue])
 
   const handleSave = async () => {
     if (!selectedTerm) {

@@ -113,12 +113,12 @@ function OnboardingPageContent() {
   useEffect(() => {
     const paymentReturn = searchParams.get('paymentReturn') === '1'
     refreshStatus({ syncPayment: paymentReturn })
-  }, [])
+  }, [searchParams])
 
   useEffect(() => {
     const saved = String(status?.registration?.adminPhone || '').trim()
     if (saved && !adminPhone.trim()) setAdminPhone(saved)
-  }, [status?.registration?.adminPhone])
+  }, [status?.registration?.adminPhone, adminPhone])
 
   useEffect(() => {
     if (resendCooldown <= 0) return

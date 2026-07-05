@@ -57,7 +57,7 @@ export default function TeacherAssessmentCalendarPage() {
       }
     }
     loadAssessments()
-  }, [selectedAssignmentId])
+  }, [selectedAssignment])
 
   const grouped = useMemo(() => {
     const list = [...assessments].sort(

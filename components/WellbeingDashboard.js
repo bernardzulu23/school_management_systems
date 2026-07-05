@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { WellbeingMonitoringSystem } from '../lib/wellbeingMonitoringSystem'
 
 const WellbeingDashboard = ({ userRole, userId }) => {
@@ -10,11 +10,7 @@ const WellbeingDashboard = ({ userRole, userId }) => {
   const [alerts, setAlerts] = useState([])
   const [assessmentHistory, setAssessmentHistory] = useState([])
 
-  useEffect(() => {
-    initializeWellbeingData()
-  }, [userId])
-
-  const initializeWellbeingData = () => {
+  const initializeWellbeingData = useCallback(() => {
     // Create wellbeing profile
     const profile = WellbeingMonitoringSystem.createWellbeingProfile({
       studentId: userId,
@@ -108,7 +104,11 @@ const WellbeingDashboard = ({ userRole, userId }) => {
       { date: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000), score: 55, riskLevel: 'MODERATE' },
       { date: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000), score: 60, riskLevel: 'MODERATE' },
     ])
-  }
+  }, [userId, userRole])
+
+  useEffect(() => {
+    initializeWellbeingData()
+  }, [initializeWellbeingData])
 
   const takeNewAssessment = () => {
     // In production, this would open an assessment form

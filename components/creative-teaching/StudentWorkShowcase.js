@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useQuery } from '@tanstack/react-query'
@@ -283,9 +284,12 @@ export default function StudentWorkShowcase() {
                       className="bg-royalPurple-muted/60 border-royalPurple-border/40 overflow-hidden"
                     >
                       <div className="relative">
-                        <img
+                        <Image
                           src={work.thumbnail}
                           alt={work.title}
+                          width={400}
+                          height={160}
+                          unoptimized
                           className="w-full h-40 object-cover"
                         />
                         <div className="absolute top-2 right-2 bg-royalPurple-deep/80 text-royalPurple-text1 p-1 rounded">
@@ -357,9 +361,12 @@ export default function StudentWorkShowcase() {
                     >
                       <CardContent className="p-4">
                         <div className="flex items-center space-x-4">
-                          <img
+                          <Image
                             src={work.thumbnail}
                             alt={work.title}
+                            width={64}
+                            height={64}
+                            unoptimized
                             className="w-16 h-16 object-cover rounded"
                           />
                           <div className="flex-1">

@@ -68,7 +68,6 @@ export default function ExamAnalysisPage() {
     improvement: 0,
   }
 
-  const subjects = Array.isArray(data?.subjects) ? data.subjects : []
   const gradeDistribution = Array.isArray(data?.gradeDistribution) ? data.gradeDistribution : []
   const termComparison = Array.isArray(data?.termComparison) ? data.termComparison : []
   const actions = Array.isArray(data?.recommendedActions) ? data.recommendedActions : []
@@ -80,13 +79,15 @@ export default function ExamAnalysisPage() {
     : []
 
   const subjectOptions = useMemo(() => {
+    const subjects = Array.isArray(data?.subjects) ? data.subjects : []
     const set = new Set(subjects.map((s) => String(s.subject || '').trim()).filter(Boolean))
     return Array.from(set).sort((a, b) => a.localeCompare(b))
-  }, [subjects])
+  }, [data?.subjects])
 
   const filteredSubjects = useMemo(() => {
+    const subjects = Array.isArray(data?.subjects) ? data.subjects : []
     return subjects.filter((item) => selectedSubject === 'all' || item.subject === selectedSubject)
-  }, [subjects, selectedSubject])
+  }, [data?.subjects, selectedSubject])
 
   return (
     <DashboardLayout title="Exam Analysis">

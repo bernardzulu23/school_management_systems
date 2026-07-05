@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/lib/auth'
 import { api } from '@/lib/api'
@@ -53,21 +53,7 @@ export default function DashboardPage() {
   const [analyticsData, setAnalyticsData] = useState([])
   const [authChecked, setAuthChecked] = useState(false)
 
-  useEffect(() => {
-    const bootstrap = async () => {
-      try {
-        setIsLoading(true)
-        setError(null)
-        await syncSession?.({ force: true })
-      } finally {
-        setAuthChecked(true)
-      }
-    }
-
-    bootstrap()
-  }, [])
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     startTopLoading('Refreshing')
     setIsLoading(true)
     setError(null)
@@ -86,7 +72,21 @@ export default function DashboardPage() {
       setIsLoading(false)
       stopTopLoading()
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    const bootstrap = async () => {
+      try {
+        setIsLoading(true)
+        setError(null)
+        await syncSession?.({ force: true })
+      } finally {
+        setAuthChecked(true)
+      }
+    }
+
+    bootstrap()
+  }, [syncSession])
 
   useEffect(() => {
     if (!authChecked) return
@@ -95,7 +95,7 @@ export default function DashboardPage() {
       return
     }
     fetchDashboardData()
-  }, [authChecked, user?.id])
+  }, [authChecked, user, fetchDashboardData])
 
   const getUserRole = () => {
     return user?.role || 'teacher' // Default to teacher for demo

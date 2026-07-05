@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { RealTimeCommunicationHub } from '../lib/realTimeCommunicationHub'
 import { SocialLearningNetwork } from '../lib/socialLearningNetwork'
 
@@ -10,11 +10,7 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
   const [knowledgeExchanges, setKnowledgeExchanges] = useState([])
   const [peerNetworks, setPeerNetworks] = useState([])
 
-  useEffect(() => {
-    initializeCommunityData()
-  }, [userId])
-
-  const initializeCommunityData = () => {
+  const initializeCommunityData = useCallback(() => {
     // Initialize community events
     const events = [
       RealTimeCommunicationHub.createCommunityEvent({
@@ -155,7 +151,11 @@ const CommunityBuildingPlatform = ({ userRole, userId }) => {
       }),
     ]
     setPeerNetworks(networks)
-  }
+  }, [userId])
+
+  useEffect(() => {
+    initializeCommunityData()
+  }, [initializeCommunityData])
 
   const registerForEvent = (eventId) => {
     setCommunityEvents((prev) =>

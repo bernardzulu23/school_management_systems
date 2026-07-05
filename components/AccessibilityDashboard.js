@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { UniversalAccessibilitySystem } from '../lib/universalAccessibilitySystem'
 
 const AccessibilityDashboard = ({ userRole, userId }) => {
@@ -9,11 +9,7 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
   const [assessmentData, setAssessmentData] = useState(null)
   const [effectivenessData, setEffectivenessData] = useState(null)
 
-  useEffect(() => {
-    initializeAccessibilityData()
-  }, [userId])
-
-  const initializeAccessibilityData = () => {
+  const initializeAccessibilityData = useCallback(() => {
     // Create accessibility profile
     const profile = UniversalAccessibilitySystem.createAccessibilityProfile({
       userId: userId,
@@ -153,7 +149,11 @@ const AccessibilityDashboard = ({ userRole, userId }) => {
       '30_days'
     )
     setEffectivenessData(effectiveness)
-  }
+  }, [userId, userRole])
+
+  useEffect(() => {
+    initializeAccessibilityData()
+  }, [initializeAccessibilityData])
 
   const updateAccessibilitySetting = (category, feature, value) => {
     setCurrentSettings((prev) => ({

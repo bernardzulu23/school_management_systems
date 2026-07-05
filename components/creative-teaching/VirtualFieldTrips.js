@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
@@ -113,9 +114,12 @@ export default function VirtualFieldTrips() {
                     className="bg-royalPurple-muted/60 border-royalPurple-border/40 overflow-hidden"
                   >
                     <div className="relative">
-                      <img
+                      <Image
                         src={trip.thumbnail}
                         alt={trip.title}
+                        width={400}
+                        height={192}
+                        unoptimized
                         className="w-full h-48 object-cover"
                       />
                       <div className="absolute top-2 right-2 flex space-x-1">

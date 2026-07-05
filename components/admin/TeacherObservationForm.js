@@ -60,7 +60,7 @@ export default function TeacherObservationForm({
 
   useEffect(() => {
     if (initialData) {
-      setFormData({ ...formData, ...initialData })
+      setFormData((prev) => ({ ...prev, ...initialData }))
     }
   }, [initialData])
 

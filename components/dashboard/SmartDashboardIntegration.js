@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import SmartAnalyticsDashboard from './SmartAnalyticsDashboard'
@@ -84,6 +84,24 @@ export default function SmartDashboardIntegration({
   const [selectedStudent, setSelectedStudent] = useState(null)
   const [reportGenerating, setReportGenerating] = useState(false)
 
+  const showNotification = useCallback(
+    (title, options = {}) => {
+      if (pwaManager.notificationManager.permission === 'granted') {
+        pwaManager.showNotification(title, options)
+      }
+
+      const notification = {
+        id: Date.now(),
+        title,
+        message: options.body || '',
+        timestamp: new Date(),
+        type: options.type || 'info',
+      }
+      setNotifications((prev) => [notification, ...prev.slice(0, 4)])
+    },
+    [pwaManager]
+  )
+
   // Initialize PWA features
   useEffect(() => {
     pwaManager.onOnline = () => {
@@ -108,7 +126,7 @@ export default function SmartDashboardIntegration({
 
     // Request notification permission
     pwaManager.requestNotificationPermission()
-  }, [pwaManager])
+  }, [pwaManager, showNotification])
 
   // Process gamification data — students use live games API; others skip engine mocks.
   useEffect(() => {
@@ -135,22 +153,6 @@ export default function SmartDashboardIntegration({
     const results = searchEngine.search(searchQuery, activeFilters)
     setSearchResults(results)
   }, [searchQuery, activeFilters, searchEngine])
-
-  const showNotification = (title, options = {}) => {
-    if (pwaManager.notificationManager.permission === 'granted') {
-      pwaManager.showNotification(title, options)
-    }
-
-    // Also add to in-app notifications
-    const notification = {
-      id: Date.now(),
-      title,
-      message: options.body || '',
-      timestamp: new Date(),
-      type: options.type || 'info',
-    }
-    setNotifications((prev) => [notification, ...prev.slice(0, 4)]) // Keep last 5
-  }
 
   const handleInstallApp = async () => {
     const installed = await pwaManager.showInstallPrompt()

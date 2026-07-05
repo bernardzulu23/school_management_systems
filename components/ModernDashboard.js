@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { GamificationManager } from '../lib/gamificationEngine'
 import { PredictiveAnalyticsEngine } from '../lib/aiAnalyticsEngine'
 import { WellbeingMonitoringSystem } from '../lib/wellbeingSystem'
@@ -21,13 +21,7 @@ export default function ModernDashboard({ userRole, userId, userData }) {
   const [wellbeingStatus, setWellbeingStatus] = useState(null)
   const [learningAssistant, setLearningAssistant] = useState(null)
 
-  useEffect(() => {
-    initializeDashboard()
-    setupVoiceInterface()
-    loadWellbeingData()
-  }, [userId, userRole])
-
-  const initializeDashboard = async () => {
+  const initializeDashboard = useCallback(async () => {
     try {
       // Initialize gamification data
       const gamificationData = GamificationManager.prototype.processStudentData(userData)
@@ -54,25 +48,31 @@ export default function ModernDashboard({ userRole, userId, userData }) {
     } catch (error) {
       console.error('Error initializing dashboard:', error)
     }
-  }
+  }, [userData, userRole])
 
-  const setupVoiceInterface = () => {
+  const setupVoiceInterface = useCallback(() => {
     const voiceConfig = EmergingTechIntegration.initializeVoiceInterface({
       userId: userId,
       language: 'en-US',
       accessibilityMode: userData.accessibilityNeeds || false,
     })
     setVoiceInterface(voiceConfig)
-  }
+  }, [userId, userData.accessibilityNeeds])
 
-  const loadWellbeingData = async () => {
+  const loadWellbeingData = useCallback(async () => {
     try {
       const assessment = WellbeingMonitoringSystem.createWellbeingAssessment(userId, 'DAILY')
       setWellbeingStatus(assessment)
     } catch (error) {
       console.error('Error loading wellbeing data:', error)
     }
-  }
+  }, [userId])
+
+  useEffect(() => {
+    initializeDashboard()
+    setupVoiceInterface()
+    loadWellbeingData()
+  }, [initializeDashboard, setupVoiceInterface, loadWellbeingData])
 
   const handleVoiceCommand = async () => {
     if (!voiceInterface) return

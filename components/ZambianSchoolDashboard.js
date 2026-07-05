@@ -4,7 +4,7 @@
  * Optimized for low-resource environments
  */
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import toast from 'react-hot-toast'
 import { zambianSchoolSystem } from '../lib/zambianSchoolSystem.js'
 import { offlineSystem } from '../lib/offlineSystem.js'
@@ -35,55 +35,109 @@ const ZambianSchoolDashboard = () => {
   const [emergencyMode, setEmergencyMode] = useState(false)
   const [emergencyAlert, setEmergencyAlert] = useState(null)
 
-  useEffect(() => {
-    // Initialize system and setup event listeners
-    initializeZambianSystem()
-    setupEventListeners()
-
-    // Cleanup on unmount
-    return () => {
-      removeEventListeners()
+  const updatePowerStatus = useCallback(() => {
+    if (powerManagement) {
+      const status = powerManagement.getPowerStatus()
+      setPowerStatus(status)
     }
   }, [])
 
-  const initializeZambianSystem = async () => {
+  const updateOfflineStatus = useCallback(() => {
+    if (offlineSystem) {
+      const status = offlineSystem.getOfflineStatus()
+      setOfflineStatus(status)
+    }
+  }, [])
+
+  const updateLanguageStatus = useCallback(() => {
+    if (languageSystem) {
+      const stats = languageSystem.getLanguageStats()
+      setLanguageStats(stats)
+      setCurrentLanguage(stats.currentLanguage)
+    }
+  }, [])
+
+  const updateSmsStats = useCallback(() => {
+    if (smsSystem) {
+      const stats = smsSystem.getSMSStats()
+      setSmsStats(stats)
+    }
+  }, [])
+
+  const updateMoneyStats = useCallback(() => {
+    if (mobileMoneySystem) {
+      const stats = mobileMoneySystem.getMobileMoneyStats()
+      setMoneyStats(stats)
+    }
+  }, [])
+
+  const handleHealthCheck = useCallback((event) => {
+    const { detail } = event
+    console.log('System health check:', detail)
+  }, [])
+
+  const handleEmergencyAlert = useCallback((event) => {
+    setEmergencyMode(true)
+    setEmergencyAlert(event.detail)
+  }, [])
+
+  const handleConnectivityChange = useCallback(() => {
+    updateOfflineStatus()
+  }, [updateOfflineStatus])
+
+  const updateSystemStatus = useCallback(() => {
+    const status = zambianSchoolSystem.getSystemStatus()
+    setSystemStatus(status.systemStatus)
+    setEmergencyMode(status.emergencyMode)
+
+    updatePowerStatus()
+    updateOfflineStatus()
+    updateLanguageStatus()
+    updateSmsStats()
+    updateMoneyStats()
+  }, [
+    updateLanguageStatus,
+    updateMoneyStats,
+    updateOfflineStatus,
+    updatePowerStatus,
+    updateSmsStats,
+  ])
+
+  const initializeZambianSystem = useCallback(async () => {
     try {
-      // Wait for system initialization
       if (zambianSchoolSystem.isInitialized) {
         updateSystemStatus()
       } else {
-        // Listen for initialization complete
         window.addEventListener('zambian-school-system-ready', updateSystemStatus)
       }
     } catch (error) {
       console.error('Failed to initialize Zambian system:', error)
       setSystemStatus('error')
     }
-  }
+  }, [updateSystemStatus])
 
-  const setupEventListeners = () => {
-    // System events
+  const setupEventListeners = useCallback(() => {
     window.addEventListener('zambian-school-system-ready', updateSystemStatus)
     window.addEventListener('system-health-check', handleHealthCheck)
     window.addEventListener('emergency-alert', handleEmergencyAlert)
-
-    // Power events
     window.addEventListener('power-mode-changed', updatePowerStatus)
     window.addEventListener('power-metrics-updated', updatePowerStatus)
-
-    // Offline events
     window.addEventListener('offline-sync-progress', updateOfflineStatus)
     window.addEventListener('offline-data-loaded', updateOfflineStatus)
-
-    // Language events
     window.addEventListener('language-changed', updateLanguageStatus)
-
-    // Connectivity events
     window.addEventListener('online', handleConnectivityChange)
     window.addEventListener('offline', handleConnectivityChange)
-  }
+  }, [
+    handleConnectivityChange,
+    handleEmergencyAlert,
+    handleHealthCheck,
+    updateLanguageStatus,
+    updateOfflineStatus,
+    updatePowerStatus,
+    updateSystemStatus,
+  ])
 
-  const removeEventListeners = () => {
+  const removeEventListeners = useCallback(() => {
     window.removeEventListener('zambian-school-system-ready', updateSystemStatus)
     window.removeEventListener('system-health-check', handleHealthCheck)
     window.removeEventListener('emergency-alert', handleEmergencyAlert)
@@ -94,70 +148,23 @@ const ZambianSchoolDashboard = () => {
     window.removeEventListener('language-changed', updateLanguageStatus)
     window.removeEventListener('online', handleConnectivityChange)
     window.removeEventListener('offline', handleConnectivityChange)
-  }
+  }, [
+    handleConnectivityChange,
+    handleEmergencyAlert,
+    handleHealthCheck,
+    updateLanguageStatus,
+    updateOfflineStatus,
+    updatePowerStatus,
+    updateSystemStatus,
+  ])
 
-  const updateSystemStatus = () => {
-    const status = zambianSchoolSystem.getSystemStatus()
-    setSystemStatus(status.systemStatus)
-    setEmergencyMode(status.emergencyMode)
-
-    // Update individual system statuses
-    updatePowerStatus()
-    updateOfflineStatus()
-    updateLanguageStatus()
-    updateSmsStats()
-    updateMoneyStats()
-  }
-
-  const updatePowerStatus = () => {
-    if (powerManagement) {
-      const status = powerManagement.getPowerStatus()
-      setPowerStatus(status)
+  useEffect(() => {
+    initializeZambianSystem()
+    setupEventListeners()
+    return () => {
+      removeEventListeners()
     }
-  }
-
-  const updateOfflineStatus = () => {
-    if (offlineSystem) {
-      const status = offlineSystem.getOfflineStatus()
-      setOfflineStatus(status)
-    }
-  }
-
-  const updateLanguageStatus = () => {
-    if (languageSystem) {
-      const stats = languageSystem.getLanguageStats()
-      setLanguageStats(stats)
-      setCurrentLanguage(stats.currentLanguage)
-    }
-  }
-
-  const updateSmsStats = () => {
-    if (smsSystem) {
-      const stats = smsSystem.getSMSStats()
-      setSmsStats(stats)
-    }
-  }
-
-  const updateMoneyStats = () => {
-    if (mobileMoneySystem) {
-      const stats = mobileMoneySystem.getMobileMoneyStats()
-      setMoneyStats(stats)
-    }
-  }
-
-  const handleHealthCheck = (event) => {
-    const { detail } = event
-    console.log('System health check:', detail)
-  }
-
-  const handleEmergencyAlert = (event) => {
-    setEmergencyMode(true)
-    setEmergencyAlert(event.detail)
-  }
-
-  const handleConnectivityChange = () => {
-    updateOfflineStatus()
-  }
+  }, [initializeZambianSystem, removeEventListeners, setupEventListeners])
 
   const showEmergencyNotification = (alertData) => {
     // Create emergency notification
