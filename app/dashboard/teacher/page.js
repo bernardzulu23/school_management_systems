@@ -225,15 +225,6 @@ export default function TeacherDashboard() {
   }, [currentUser])
 
   const {
-    data: stats,
-    isLoading: statsLoading,
-    isError: statsError,
-  } = useQuery({
-    queryKey: ['dashboard-stats'],
-    queryFn: () => api.getDashboardStats().then((res) => res.data),
-  })
-
-  const {
     data: dashboardData,
     isLoading: dashboardLoading,
     isError: dashboardError,
@@ -298,7 +289,7 @@ export default function TeacherDashboard() {
     }
   }, [dashboardData])
 
-  if (statsLoading || dashboardLoading) {
+  if (dashboardLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-royalPurple-page">
         <div className="text-center">
@@ -309,7 +300,7 @@ export default function TeacherDashboard() {
     )
   }
 
-  if (statsError || dashboardError) {
+  if (dashboardError) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-royalPurple-page">
         <Card className="p-8 text-center max-w-md">
