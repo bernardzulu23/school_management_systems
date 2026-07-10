@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-07-10T13:31:33.236Z
+Generated: 2026-07-10T20:50:42.091Z
 
-Total route files: **387**
+Total route files: **389**
 
 ## Quick index
 
@@ -36,7 +36,7 @@ Total route files: **387**
 | `/api/cron`                 |     3 |
 | `/api/csp-report`           |     1 |
 | `/api/csrf-token`           |     1 |
-| `/api/curriculum`           |     5 |
+| `/api/curriculum`           |     7 |
 | `/api/dashboard`            |    24 |
 | `/api/departments`          |     1 |
 | `/api/ecz`                  |    14 |
@@ -316,6 +316,8 @@ Total route files: **387**
 | POST      | `/api/curriculum/generate-record-template` | —                                                                                                                                  |
 | GET, POST | `/api/curriculum/generate-scheme`          | —                                                                                                                                  |
 | POST      | `/api/curriculum/ingest`                   | POST /api/curriculum/ingest Body JSON: { pdfUrl, subject?, gradeOrForm? } Or multipart: file (pdf) + optional subject, gradeOrForm |
+| GET, POST | `/api/curriculum/scheme`                   | —                                                                                                                                  |
+| —         | `/api/curriculum/templates`                | Alias for POST /api/curriculum/generate-record-template                                                                            |
 
 ## /api/dashboard
 

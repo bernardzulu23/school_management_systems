@@ -1,4 +1,9 @@
 import { resolveCurriculum, type ResolvedCurriculumUnit } from '@/lib/curriculum/resolveCurriculum'
+import {
+  enrichActivitiesFromModule,
+  enrichResourcesFromModule,
+  loadTeachingModule,
+} from '@/lib/curriculum/teachingModuleLoader'
 
 export type SchemeWeekRow = {
   week: number
@@ -6,12 +11,16 @@ export type SchemeWeekRow = {
   learningOutcomes: string[]
   teachingActivities: string[]
   assessmentMethod: string
+  assessmentMethods: string[]
   resources: string[]
   notes: string
+  teacherNotes: string
+  homeworkTask: string
 }
 
 /**
  * Spread curriculum units across a fixed number of term weeks.
+ * When units include weekHint (from duration like "3 weeks"), allocate that many weeks per unit in order.
  */
 export function distributeUnitsAcrossTerm(
   units: ResolvedCurriculumUnit[],
@@ -25,27 +34,60 @@ export function distributeUnitsAcrossTerm(
       learningOutcomes: [],
       teachingActivities: [],
       assessmentMethod: 'Formative oral / written check',
+      assessmentMethods: ['Formative oral / written check'],
       resources: [],
       notes: `Week ${i + 1}`,
+      teacherNotes: '',
+      homeworkTask: '',
     }))
   }
 
-  const rows: SchemeWeekRow[] = []
-  for (let w = 0; w < weeks; w++) {
-    const unit = units[w % units.length]
-    const cycle = Math.floor(w / units.length)
-    const topicExtra = unit.topics[w % Math.max(1, unit.topics.length)] || ''
-    rows.push({
+  const hasDurations = units.some((u) => typeof u.weekHint === 'number' && u.weekHint > 0)
+  const schedule: { unit: ResolvedCurriculumUnit; topicIndex: number }[] = []
+
+  if (hasDurations) {
+    for (const unit of units) {
+      const span = Math.max(1, Math.min(weeks, Number(unit.weekHint) || 1))
+      for (let i = 0; i < span; i++) {
+        schedule.push({ unit, topicIndex: i })
+      }
+    }
+  } else {
+    for (let w = 0; w < weeks; w++) {
+      const unit = units[w % units.length]
+      schedule.push({ unit, topicIndex: w })
+    }
+  }
+
+  // Trim or pad to exact weekCount
+  while (schedule.length < weeks) {
+    const unit = units[schedule.length % units.length]
+    schedule.push({ unit, topicIndex: schedule.length })
+  }
+  const trimmed = schedule.slice(0, weeks)
+
+  return trimmed.map((slot, w) => {
+    const { unit, topicIndex } = slot
+    const topics = unit.topics || []
+    const topicExtra = topics.length ? topics[topicIndex % topics.length] : ''
+    const assessmentMethods =
+      (unit.assessment || []).length > 0
+        ? (unit.assessment || []).slice(0, 5)
+        : ['Formative + end-of-week quiz']
+    const notes = `Week ${w + 1}${unit.weekHint ? ` · ${unit.title} (${unit.weekHint}w unit)` : ''}`
+    return {
       week: w + 1,
       topic: topicExtra ? `${unit.title}: ${topicExtra}` : unit.title,
       learningOutcomes: (unit.outcomes || []).slice(0, 5),
       teachingActivities: (unit.activities || []).slice(0, 5),
-      assessmentMethod: (unit.assessment || [])[0] || 'Formative + end-of-week quiz',
+      assessmentMethod: assessmentMethods[0],
+      assessmentMethods,
       resources: (unit.resources || []).slice(0, 5),
-      notes: cycle > 0 ? `Week ${w + 1} (revision cycle ${cycle + 1})` : `Week ${w + 1}`,
-    })
-  }
-  return rows
+      notes,
+      teacherNotes: notes,
+      homeworkTask: topicExtra ? `Review notes on ${topicExtra}` : `Review notes on ${unit.title}`,
+    }
+  })
 }
 
 export async function generateSchemeOfWork(input: {
@@ -77,12 +119,25 @@ export async function generateSchemeOfWork(input: {
 
   const weeks = distributeUnitsAcrossTerm(curriculum.units, input.weekCount ?? 12)
 
+  const teachingModule = loadTeachingModule({
+    subject: curriculum.subject || subject,
+    gradeOrForm: curriculum.gradeOrForm || gradeOrForm,
+    term,
+  })
+
+  const enriched = weeks.map((w) => ({
+    ...w,
+    teachingActivities: enrichActivitiesFromModule(w.topic, w.teachingActivities, teachingModule),
+    resources: enrichResourcesFromModule(w.topic, w.resources, teachingModule),
+    notes: teachingModule ? `${w.notes} · enriched from Teaching Module` : w.notes,
+  }))
+
   return {
     subject: curriculum.subject || subject,
     gradeOrForm: curriculum.gradeOrForm || gradeOrForm,
     term,
     year,
-    source: curriculum.source,
-    weeks,
+    source: teachingModule ? `${curriculum.source}+teaching-module` : curriculum.source,
+    weeks: enriched,
   }
 }

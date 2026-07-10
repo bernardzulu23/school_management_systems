@@ -8,6 +8,7 @@ import {
   normalizeForm,
   subjectIsChemistry,
 } from '@/lib/curriculum/chemistry-cdc-2024'
+import { loadJsonCurriculum } from '@/lib/curriculum/jsonCurriculumLoader'
 import type { ParsedSyllabusUnit } from '@/lib/curriculum/syllabusParsing'
 
 export type ResolvedCurriculumUnit = ParsedSyllabusUnit & { id?: string }
@@ -98,16 +99,32 @@ export async function resolveCurriculum(options: {
     }
   }
 
+  // Prefer unit-format JSON (schemes) over CDC chunk dataset
+  const fromFile = loadJsonCurriculum(subject, gradeOrForm)
+  if (fromFile && fromFile.units.length > 0) {
+    const topics = fromFile.units.flatMap((u) => [u.title, ...u.topics])
+    return {
+      subject: fromFile.subject,
+      gradeOrForm: gradeOrForm || fromFile.gradeOrForm,
+      source: 'json',
+      units: fromFile.units,
+      topics: Array.from(new Set(topics.filter(Boolean))),
+    }
+  }
+
+  // CDC Chemistry fallback for RAG-style topic lists when no unit JSON
   if (subjectIsChemistry(subject)) {
     const form = normalizeForm(gradeOrForm)
     const units = chemistryRecordsToUnits(form)
-    const topics = units.flatMap((u) => [u.title, ...u.topics])
-    return {
-      subject: 'Chemistry',
-      gradeOrForm: form ? `Form ${form}` : gradeOrForm || 'Form 1',
-      source: 'json',
-      units,
-      topics: Array.from(new Set(topics.filter(Boolean))),
+    if (units.length > 0) {
+      const topics = units.flatMap((u) => [u.title, ...u.topics])
+      return {
+        subject: 'Chemistry',
+        gradeOrForm: form ? `Form ${form}` : gradeOrForm || 'Form 1',
+        source: 'json',
+        units,
+        topics: Array.from(new Set(topics.filter(Boolean))),
+      }
     }
   }
 

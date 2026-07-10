@@ -1,0 +1,139 @@
+{
+  "subject": "Physics",
+  "form": 1,
+  "term": null,
+  "sourceFile": "Physics-Teaching-Module-Form-1Highridge-Feb-2025-1.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "Introduction To Physics",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 2,
+      "title": "General Physics",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 3,
+      "title": "Precision and Accuracy",
+      "topics": ["Introduction"],
+      "activities": [],
+      "resources": [
+        "understanding.",
+        "By following these steps, you can effectively use this Physics Teaching Module for Form 1 to support your teaching and promote learning.",
+        "Suggested Teaching and Learning Materials",
+        "appreciation. To support the teaching and learning of Physics in Form 1, the suggested teaching and learning materials are meant to:",
+        "Enhance learner engagement and motivation in Physics",
+        "Develop practical skills and laboratory techniques"
+      ],
+      "assessment": [
+        "Plan your lessons in advance using the module's suggested teaching and learning activities.",
+        "Use a variety of teaching methods including demonstrations, discussions, group work, and hands-on experiments.",
+        "Provide feedback and support to learners, helping them to identify areas for improvement and develop their skills."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 4,
+      "title": "Introduction To Physics",
+      "topics": ["Fundamental Concepts of Physics and Applications of Physics in everyday life."],
+      "activities": [
+        "they explore how to use the laboratory safety protocols.",
+        "Suggested Teaching and Learning Materials",
+        "Natural Materials: water, air",
+        "Artificial Materials: Personal Protective Equipment (PPE) such as Laboratory coat, gloves, safety glasses, safety googles and face",
+        "shields, Safety equipment such as fume hoods, bio-safety cabinets, safety showers, fire extinguishers and first aid kits, safety signs",
+        "such as warnings, caution, biohazard signs and chemical labels and emergency response equipment such as fire alarms, emergency",
+        "phones and escape routes.",
+        "HOOK: In a laboratory, what protocols would you follow to ensure your safety?"
+      ],
+      "resources": [
+        "Ensure that the laboratory is equipped with necessary safety equipment, such as fire extinguishers, first aid kits, and PPE",
+        "Show learners how to handle and use laboratory safety equipment correctly",
+        "Divide learners into groups",
+        "Mimic emergency situations like spills, fires, or injuries",
+        "Ask learners to give reasons for every action taken",
+        "Ask learners to develop or obtain a laboratory safety manual that outlines safety protocols and procedures"
+      ],
+      "assessment": [
+        "Observe learners during laboratory activities to assess their adherence to safety protocols and procedures.",
+        "Review learners' actions",
+        "Ask learners open-ended questions to prompt further discussion",
+        "Ask questions such as:",
+        "Which laboratory safety tools were easy to act out and why?",
+        "Which laboratory safety tools were difficulty to act out and why?"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 5,
+      "title": "General Physics",
+      "topics": ["quantities, precision and accuracy, and equilibrium."],
+      "activities": [
+        "learners will engage in as they explore.",
+        "Suggested Teaching and learning Materials",
+        "Natural Materials: Wood",
+        "Artificial Materials: Magnets, plastic, glass. ruler, spring balance or force sensor",
+        "Learning environment set up",
+        "Natural environment such as school surroundings",
+        "Artificial environment such as classroom",
+        "Technological environment: Video, computer simulation"
+      ],
+      "resources": [],
+      "assessment": [
+        "Check if learners are correctly designing and conducting an experiment",
+        "Ask questions such as:",
+        "What happened to the magnetic force when the distance between the magnets;",
+        "i. Increased",
+        "ii. Decreased?",
+        "What is the conclusion of the activity?"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 6,
+      "title": "Precision and Accuracy",
+      "topics": [],
+      "activities": [
+        "General Competence(s):",
+        "Analytical Thinking,",
+        "Communication,",
+        "Critical Thinking",
+        "Problem Solving",
+        "Real world application",
+        "Creativity and innovation",
+        "Introduction: Accuracy and Precision are critical factors in the evaluation of measuring equipment. However, both terms are often used"
+      ],
+      "resources": [
+        "problems",
+        "Understanding area is essential for data analysis, particularly in fields like geography, economics, and environmental science",
+        "Skills to be developed",
+        "Analytical Thinking,",
+        "Communication,",
+        "Critical Thinking"
+      ],
+      "assessment": [
+        "Check if learners are correctly using the meter rule and measuring tape to measure accurately and precisely",
+        "Ask learners questions on how they could use a broken mete ruler or measuring tape to measure lengths.",
+        "Activity 3.1.2: vernier calipers/ micrometer screw gauge",
+        "In this activity, learners will explore how a vernier calipers can be used to measure internal and external diameter including depths of",
+        "hollow objects and how a micrometer screw gauge can measure the thickness of thin objects with accuracy and precision.",
+        "Suggested Teaching and learning Materials"
+      ],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-10T22:32:15.546Z",
+    "rawTextLength": 171681
+  }
+}

@@ -1,0 +1,194 @@
+{
+  "subject": "Mathematics",
+  "form": null,
+  "term": null,
+  "sourceFile": "Maths2_Teaching_Module.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "REAL NUMBERS",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 2,
+      "title": "SETS",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 3,
+      "title": "INTEGERS",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 4,
+      "title": "ALGEBRA",
+      "topics": [
+        "HOW TO USE THIS MODULE",
+        "To effectively use this Mathematics Teaching Module for Form 1:"
+      ],
+      "activities": [],
+      "resources": [
+        "understanding.",
+        "Monitor learners progress and adjust your teaching strategies as needed, to ensure that all learners meet the learning objectives",
+        "By following these steps, you can effectively use this Mathematics Teaching Module for Form 1 to support your teaching and promote",
+        "learning.",
+        "INTRODUCTION",
+        "Mathematics, as a fundamental STEM subject, which plays an important role in shaping learners' understanding of the natural world. As learners"
+      ],
+      "assessment": [
+        "Plan your lessons in advance, using the module's suggested teaching and learning activities.",
+        "Use a variety of teaching methods, including demonstrations, discussions, group work, and hands-on activities.",
+        "Provide feedback and support to learners, helping them to identify areas for improvement and develop their skills."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 5,
+      "title": "REAL NUMBERS",
+      "topics": ["Introduction"],
+      "activities": [
+        "Introduction: Real numbers include various types of numbers such as natural numbers, whole numbers, integers, rational numbers, and",
+        "irrational numbers. They form the basis for arithmetic and algebraic calculations. Real numbers are commonly used in everyday life, from",
+        "counting objects to physical quantities, such as distance, velocity and acceleration, in science and engineering. Real numbers are also",
+        "applied in finance and budgeting, inventory management, time keeping and scheduling, scoring and grading, distance and measurement,",
+        "game scores and points, just to mention but a few. Exploring real numbers is essential for building mathematical foundations, developing",
+        "problem-solving and critical thinking skills, and fostering curiosity and creativity.",
+        "Problem Posing",
+        "Find a number that is:"
+      ],
+      "resources": [
+        "What to do: Put learners into small manageable groups of mixed abilities. Give each group a large number line drawn on a long sheet of",
+        "paper or on the ground. Each number line should have a range of rational numbers you have provided. Give each group rational numbers",
+        "written on number cards. The cards should contain both fractions and decimals.",
+        "Task: Ask learners to arrange numbers from least to greatest on the number line. The first group to correctly order all their numbers wins.",
+        "Skills to be developed: Ordering skills, critical thinking and teamwork.",
+        "Conceptualisation: Make sure the concept of rational and irrational numbers is coming out accordingly. Clearly demonstrate the"
+      ],
+      "assessment": [
+        "Learning Activity 2: Distinguishing Rational and Irrational Numbers",
+        "Introduction: Rational numbers can be expressed as fractions, while irrational numbers cannot. Examples include and respectively.",
+        "These classifications help in understanding patterns and calculations.",
+        "Activity 2.1: Classifying Numbers as Rational or Irrational",
+        "Suggested Teaching and Learning Materials to Set up Learning Environment.",
+        "Problem Posing: Can the sum of a rational number and an irrational number ever be a rational"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 6,
+      "title": "SETS",
+      "topics": [
+        "Introduction",
+        "Overview: The origins and recognition of sets in Mathematics can be traced back to the late 19",
+        "century through the works of Georg"
+      ],
+      "activities": [
+        "Specific Competence: Apply the concept of set-builder notation and set operations in real life.",
+        "Introduction",
+        "Sets are fundamental in Mathematics and help us classify objects, ideas and concepts in a structured way. Set theory connects with the",
+        "environment, foster observations, analysis, and reasoning skills among learners.",
+        "Suggested Teaching And Learning Materials to Set up Learning Environment",
+        "What to do: Put learners in small manageable groups of different abilities.",
+        "Task: Ask learners think about things or items they encounter in daily life that can be grouped together. Let the learners in their findings",
+        "discover that the mathematical term used for items or things of common characteristics is called a set. After some time, ask some groups"
+      ],
+      "resources": [],
+      "assessment": [
+        "entities.",
+        "Learning activity 2: Exploring types of sets",
+        "Introduction",
+        "Through explorations and inquiry based learning, learners will be expected to identify and define different types of sets, and develop",
+        "critical thinking by analyzing set related problems in diverse scenarios.",
+        "Activity 2.1: Research on Sets"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 7,
+      "title": "INTEGERS",
+      "topics": [
+        "Introduction",
+        "like , 4.75 or are not considered as integers. The set of integers is denoted by a symbol from a Germany word “Zahlen”,"
+      ],
+      "activities": [
+        "Introduction: Exploring integers starts with understanding their basic properties and how they interact in different mathematical",
+        "situations and operations. They are commonly used in everyday life from counting to measuring and keeping track of financial",
+        "explore and understand integers.",
+        "Suggested Teaching and Learning Materials to Set up Learning Environment",
+        "Ø Artificial Environment: Books",
+        "Ø Natural Environment: Objects in the environment",
+        "Ø Technological Environment: Computers, tablets, iPad, calculators and phones",
+        "What to do: Put the learners in manageable groups of mixed abilities."
+      ],
+      "resources": [
+        "Learning activity 4: Subtracting integers",
+        "Introduction",
+        "The subtraction of integers is a fundamental mathematical operation that involves finding the difference between two numbers.",
+        "Activity 4. 1: Integer Card Game (Subtraction)",
+        "Suggested Teaching and Learning Materials to Set up Learning Environment",
+        "Ø Artificial environment: Number cards and paper."
+      ],
+      "assessment": [
+        "Learning Activity 2: Comparing situations which depict integers",
+        "Introduction",
+        "Integers are everywhere even though we might not recognize them. In all reality, integers are just numbers, but a way to represent both",
+        "positive and negative values that affect our daily lives in meaningful ways. Hence, there is need to guide the learners to come up with",
+        "scenarios that depict the integers around us through the use of real-life situations. Here are some suggested activities; comparing situations",
+        "which depict integers such as loss and profit in business, low and high temperatures, elevation below and above sea level."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 8,
+      "title": "ALGEBRA",
+      "topics": [
+        "Introduction",
+        "work for formulating equations, solving problems and representing relationships between variables.",
+        "In this topic, the sub-topic is algebraic expressions."
+      ],
+      "activities": [
+        "Introduction: Construction of algebraic expressions from word statements can be a rewarding experience for learners as it provides a mix",
+        "Sound knowledge of the basics such as translation of word statements, building complexities, practice with examples, real-world",
+        "application, review and reinforcements through quizzes and games would make the lesson more understandable and captivating.",
+        "Suggested Teaching and Learning Materials to Set up Learning Environment",
+        "Artificial Environment: Cards with Word Problems",
+        "What to do: Divide the class into small manageable groups of mixed abilities.",
+        "Assign each group with different types of word statements involving addition, subtraction, multiplication and division. Let the learners",
+        "discuss and write their agreed statements. For example, If each apple costs kwacha and you buy apples, write an expression for the"
+      ],
+      "resources": [
+        "Learning Activity 9: Evaluating Algebraic Expressions by Substituting Variables with Numbers",
+        "Introduction",
+        "Substitution in algebra is a fundamental concept where variables are replaced with specific values to simplify expressions. This helps",
+        "learners grasp the concept that letters in algebra stand for numbers and can be replaced accordingly.",
+        "Activity 9.1: Evaluating of Algebraic Expressions by Substitution.",
+        "Suggested Teaching and Learning Materials to set up the Learning Environment"
+      ],
+      "assessment": [
+        "Zambia Secondary School Syllabus book 10 (page 61), and Progress in Mathematics book 8 (page 48 - 49).",
+        "Learning Activity 2: Relating letters and numbers.",
+        "Introduction",
+        "Relating letters and numbers in algebra is important for several reasons; one of them is that letters (variables) allow us to represent",
+        "general cases and patterns, making it easier to solve a wide range of problems without specifying particular values. Moreover, using letters",
+        "encourages abstract reasoning, helping learners and mathematicians think about relationships and structures rather than just specific"
+      ],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-10T22:32:14.530Z",
+    "rawTextLength": 131697
+  }
+}

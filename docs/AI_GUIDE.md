@@ -60,6 +60,7 @@ Zod still validates the parsed object on our side. If you see a `json_schema` er
 | ------------------------ | ------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------ |
 | Lesson planner (stream)  | `POST /api/ai/lesson-planner`               | Stream prose via `aiChain` (Groq → Gemini → OpenRouter → OpenAI → HuggingFace) | —                        |
 | Curriculum Studio plan   | `POST /api/curriculum/generate-lesson-plan` | Structured + Word (+ optional Blob)                                            | `LessonPlanSchema`       |
+| Scheme of work           | `POST /api/curriculum/scheme`               | Word / CSV / JSON from curriculum units (no LLM)                               | —                        |
 | Professional lesson plan | `POST /api/lesson-plans/generate`           | Structured (default)                                                           | `LessonPlanSchema`       |
 | Ministry plain-text plan | Same route, `format=ministry`               | Text                                                                           | —                        |
 | Quiz maker               | `POST /api/ai/quiz-maker`                   | Structured                                                                     | `QuizSchema`             |
@@ -136,6 +137,7 @@ Full field definitions: `lib/ai/schemas.js`.
 
 ## Related docs
 
+- `docs/CURRICULUM_STUDIO.md` — schemes of work / curriculum studio quick reference
 - `docs/TESTING.md` — mock `GROQ_API_KEY` in Vitest setup
 - `docs/ENVIRONMENT.md` — env vars
 - `docs/DEVELOPER_GUIDE.md` — API route template

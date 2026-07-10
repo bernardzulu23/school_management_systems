@@ -1,0 +1,338 @@
+{
+  "subject": "Chemistry",
+  "level": "Form 1-4",
+  "gradesCovered": [7, 8, 9, 10],
+  "totalDuration": "48 weeks",
+  "generalObjectives": [
+    "To develop interest and enthusiasm for chemistry",
+    "To understand the nature and behaviour of matter",
+    "To develop practical laboratory skills",
+    "To apply chemistry concepts to real-world situations",
+    "To develop scientific thinking and problem-solving skills"
+  ],
+  "assessmentFramework": "Continuous assessment (40%), Terminal examination (60%)",
+  "units": [
+    {
+      "unitNumber": 1,
+      "title": "Atomic Structure",
+      "topics": [
+        "History of the atom - Dalton, Thomson, Rutherford, Bohr models",
+        "Subatomic particles: protons, neutrons, electrons",
+        "Atomic mass and atomic number",
+        "Isotopes and relative atomic mass",
+        "Electron configuration and energy levels",
+        "Periodic table organization"
+      ],
+      "duration": "3 weeks",
+      "learningOutcomes": [
+        "Describe the structure of an atom",
+        "Explain the existence of isotopes",
+        "Predict electron configuration of elements",
+        "Understand the basis of periodic table classification"
+      ],
+      "suggestedActivities": [
+        "Model building using simple materials (tennis balls, beads)",
+        "Practical: Flame tests to identify elements",
+        "Research historical development of atomic theory",
+        "Virtual lab simulations of atomic structure",
+        "Problem-solving on isotope calculations"
+      ],
+      "assessmentMethods": [
+        "Quiz on atomic structure",
+        "Practical notebook assessment",
+        "Drawing and labeling atom diagrams",
+        "Calculation problems on isotopes"
+      ]
+    },
+    {
+      "unitNumber": 2,
+      "title": "Bonding and Structure",
+      "topics": [
+        "Ionic bonding and ionic compounds",
+        "Covalent bonding and molecular compounds",
+        "Metallic bonding",
+        "Electronegativity and bond polarity",
+        "Properties of ionic, covalent, and metallic compounds",
+        "Intermolecular forces (van der Waals, hydrogen bonding)"
+      ],
+      "duration": "4 weeks",
+      "learningOutcomes": [
+        "Explain formation of ionic and covalent bonds",
+        "Predict properties of compounds based on bonding",
+        "Relate structure to physical properties",
+        "Understand types and strengths of intermolecular forces"
+      ],
+      "suggestedActivities": [
+        "Modeling ionic and covalent compounds",
+        "Practical: Testing conductivity and solubility",
+        "Comparative study of compound properties",
+        "Lewis dot structure drawing exercises",
+        "Virtual models of molecular geometry"
+      ],
+      "assessmentMethods": [
+        "Drawing ionic and covalent structures",
+        "Practical observations and reporting",
+        "Short answer questions on bonding",
+        "Group presentations on bonding types"
+      ]
+    },
+    {
+      "unitNumber": 3,
+      "title": "States of Matter",
+      "topics": [
+        "Kinetic theory of matter",
+        "Properties of solids, liquids, and gases",
+        "Changes of state (melting, boiling, sublimation)",
+        "Pressure, volume, and temperature relationships",
+        "Gas laws (Boyle's Law, Charles's Law, Combined Gas Law)",
+        "Ideal gas equation"
+      ],
+      "duration": "4 weeks",
+      "learningOutcomes": [
+        "Explain properties of matter using kinetic theory",
+        "Apply gas laws to solve problems",
+        "Predict effects of pressure and temperature changes",
+        "Understand phase diagrams and critical points"
+      ],
+      "suggestedActivities": [
+        "Demonstrations: melting, boiling, sublimation",
+        "Practical: Investigation of gas laws using syringes and balloons",
+        "Calculation exercises on gas laws",
+        "Molecular animation viewing and interpretation",
+        "Design experiments to test state changes"
+      ],
+      "assessmentMethods": [
+        "Calculations using gas laws",
+        "Practical reports on state changes",
+        "Diagrams and explanations of kinetic theory",
+        "Problem-solving on pressure-volume-temperature"
+      ]
+    },
+    {
+      "unitNumber": 4,
+      "title": "Stoichiometry and Calculations",
+      "topics": [
+        "Molar mass and mole concept",
+        "Avogadro's constant",
+        "Balancing chemical equations",
+        "Mole calculations in chemical reactions",
+        "Limiting reagents",
+        "Percentage composition and empirical formulas",
+        "Yield calculations"
+      ],
+      "duration": "3 weeks",
+      "learningOutcomes": [
+        "Calculate molar masses and mole quantities",
+        "Balance chemical equations",
+        "Solve stoichiometric problems",
+        "Determine limiting reagents and percent yield"
+      ],
+      "suggestedActivities": [
+        "Practice calculations with real substances",
+        "Practical: Measuring reactants and products",
+        "Worksheet exercises on stoichiometry",
+        "Real-world applications (medicine dosing, industrial chemistry)",
+        "Group problem-solving sessions"
+      ],
+      "assessmentMethods": [
+        "Calculation problem sets",
+        "Practical reports with quantitative analysis",
+        "Equation balancing exercises",
+        "Test on stoichiometric calculations"
+      ]
+    },
+    {
+      "unitNumber": 5,
+      "title": "Acids, Bases, and Salts",
+      "topics": [
+        "Definition and properties of acids and bases",
+        "pH scale and pH calculations",
+        "Strong and weak acids and bases",
+        "Neutralization reactions",
+        "Formation of salts",
+        "Titration and standardization",
+        "Hydrolysis of salts",
+        "Buffers and buffer solutions"
+      ],
+      "duration": "4 weeks",
+      "learningOutcomes": [
+        "Classify and identify acids and bases",
+        "Calculate pH and pOH",
+        "Explain neutralization reactions",
+        "Perform acid-base titrations",
+        "Understand buffer systems"
+      ],
+      "suggestedActivities": [
+        "Practical: Titration experiments",
+        "Testing pH with indicators and meters",
+        "Neutralization reactions demonstrations",
+        "Preparation of standard solutions",
+        "Investigation of buffer solutions",
+        "Real-world applications (agriculture, medicine, industry)"
+      ],
+      "assessmentMethods": [
+        "Practical titration reports",
+        "pH calculations and predictions",
+        "Identification of unknown acids and bases",
+        "Titration curve interpretation",
+        "Theory test on acid-base concepts"
+      ]
+    },
+    {
+      "unitNumber": 6,
+      "title": "Oxidation and Reduction",
+      "topics": [
+        "Oxidation and reduction concepts",
+        "Oxidation numbers and rules",
+        "Oxidizing and reducing agents",
+        "Balancing redox equations",
+        "Redox reactions in acidic and basic solutions",
+        "Electrochemistry and voltaic cells",
+        "Electrolysis",
+        "Applications of redox reactions"
+      ],
+      "duration": "4 weeks",
+      "learningOutcomes": [
+        "Assign oxidation numbers",
+        "Identify redox reactions",
+        "Balance redox equations",
+        "Explain voltaic and electrolytic cells",
+        "Calculate electrical quantities in electrochemistry"
+      ],
+      "suggestedActivities": [
+        "Practical: Simple voltaic cell construction",
+        "Practical: Electrolysis of various solutions",
+        "Identification of redox reactions",
+        "Balancing redox equation exercises",
+        "Investigation of factors affecting cell voltage",
+        "Real applications (batteries, electroplating, metal refining)"
+      ],
+      "assessmentMethods": [
+        "Practical reports on cells and electrolysis",
+        "Balancing redox equations",
+        "Calculations on electrochemistry",
+        "Test on oxidation numbers and redox concepts",
+        "Design investigation on cell variables"
+      ]
+    },
+    {
+      "unitNumber": 7,
+      "title": "Thermochemistry",
+      "topics": [
+        "Energy in chemical reactions",
+        "Exothermic and endothermic reactions",
+        "Enthalpy and enthalpy changes",
+        "Hess's Law",
+        "Calorimetry and heat calculations",
+        "Entropy and free energy",
+        "Spontaneity of reactions"
+      ],
+      "duration": "3 weeks",
+      "learningOutcomes": [
+        "Distinguish exothermic from endothermic reactions",
+        "Calculate enthalpy changes",
+        "Apply Hess's Law to solve problems",
+        "Predict reaction spontaneity",
+        "Understand energy transfer in reactions"
+      ],
+      "suggestedActivities": [
+        "Practical: Calorimetry experiments",
+        "Exothermic and endothermic demonstrations",
+        "Heat calculations from temperature data",
+        "Applications to everyday reactions",
+        "Energy diagrams and analysis"
+      ],
+      "assessmentMethods": [
+        "Calorimetry practical reports with calculations",
+        "Hess's Law problem solving",
+        "Enthalpy calculations",
+        "Interpretation of energy diagrams",
+        "Theory assessment on thermochemistry concepts"
+      ]
+    },
+    {
+      "unitNumber": 8,
+      "title": "Organic Chemistry: Hydrocarbons",
+      "topics": [
+        "Introduction to organic chemistry",
+        "Alkanes (structure, naming, properties)",
+        "Alkenes (structure, naming, reactions)",
+        "Alkynes (structure, naming, properties)",
+        "Aromatic compounds and benzene",
+        "Isomerism (structural and stereoisomerism)",
+        "Combustion of hydrocarbons",
+        "Industrial uses of hydrocarbons"
+      ],
+      "duration": "4 weeks",
+      "learningOutcomes": [
+        "Name and identify hydrocarbons",
+        "Explain properties based on structure",
+        "Predict reactions of alkenes",
+        "Understand isomerism in organic compounds",
+        "Relate hydrocarbon structure to properties and uses"
+      ],
+      "suggestedActivities": [
+        "Molecular model building of alkanes and alkenes",
+        "Practical: Combustion reactions of hydrocarbons",
+        "Practical: Bromine water test for unsaturation",
+        "Nomenclature practice exercises",
+        "Isomerism exploration and drawing",
+        "Research on petroleum and fuel industries"
+      ],
+      "assessmentMethods": [
+        "Nomenclature tests",
+        "Structure drawing and identification",
+        "Practical observation reports",
+        "Prediction of reactions and properties",
+        "Short answer and essay questions on organic chemistry"
+      ]
+    },
+    {
+      "unitNumber": 9,
+      "title": "Functional Groups and Reactions",
+      "topics": [
+        "Alcohols (preparation, properties, reactions)",
+        "Aldehydes and ketones",
+        "Carboxylic acids and derivatives",
+        "Esters and esterification",
+        "Amines and amino acids",
+        "Polymers and polymerization",
+        "Reaction mechanisms (SN1, SN2, E1, E2)",
+        "Addition and substitution reactions"
+      ],
+      "duration": "4 weeks",
+      "learningOutcomes": [
+        "Identify functional groups",
+        "Predict reactions of organic compounds",
+        "Write reaction mechanisms",
+        "Understand polymer formation",
+        "Synthesize simple organic compounds"
+      ],
+      "suggestedActivities": [
+        "Practical: Preparation of esters",
+        "Practical: Oxidation of alcohols",
+        "Identification of functional groups",
+        "Reaction mechanism drawing",
+        "Polymer investigation and properties",
+        "Multi-step synthesis planning"
+      ],
+      "assessmentMethods": [
+        "Practical synthesis reports",
+        "Functional group identification",
+        "Mechanism writing exercises",
+        "Prediction of reaction products",
+        "Test on organic reactions and mechanisms"
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "CHEMISTRY-SYLLABUS.pdf",
+    "extractedAt": "2026-07-10T15:30:00Z",
+    "fileSize": 730215,
+    "version": "Form 1-4 O-Level",
+    "lastUpdated": "2024",
+    "zambiaCBC": true,
+    "curated": true,
+    "note": "Curated unit JSON — do not overwrite with weak PDF heuristic parse without review"
+  }
+}

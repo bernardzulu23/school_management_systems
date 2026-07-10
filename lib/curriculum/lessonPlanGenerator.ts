@@ -6,6 +6,10 @@ import { generateStructuredLessonPlan } from '@/lib/ai/structured-lesson-plan'
 import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 import { validateAIGuardrails } from '@/lib/ai/guardrails'
 import { resolveCurriculum } from '@/lib/curriculum/resolveCurriculum'
+import {
+  formatModuleContextForPrompt,
+  loadTeachingModule,
+} from '@/lib/curriculum/teachingModuleLoader'
 
 export type CurriculumLessonPlanInput = {
   schoolId?: string | null
@@ -31,7 +35,7 @@ export async function generateLessonPlan(input: CurriculumLessonPlanInput) {
   const guard = validateAIGuardrails({
     text: `${subject} ${grade} ${topic} ${unit} lesson plan curriculum CBC ${teacherNotes}`,
   })
-  if (!guard.ok) {
+  if (guard.ok === false) {
     throw Object.assign(new Error('Content flagged by safety guardrails.'), {
       status: 400,
       response: guard.response,
@@ -77,10 +81,18 @@ export async function generateLessonPlan(input: CurriculumLessonPlanInput) {
   }>('curriculum-lesson-plan', cachePayload)
   if (cached?.content) return { ...cached, fromCache: true as const }
 
+  const teachingModule = loadTeachingModule({
+    subject,
+    gradeOrForm: grade,
+    term: input.term || 'Term 1',
+  })
+  const moduleContext = formatModuleContextForPrompt(teachingModule, topic)
+
   const notesBlock = [
     outcomes.length ? `Learning outcomes to address:\n- ${outcomes.join('\n- ')}` : '',
     unit ? `Unit: ${unit}` : '',
     teacherNotes ? `Teacher notes: ${teacherNotes}` : '',
+    moduleContext,
   ]
     .filter(Boolean)
     .join('\n')

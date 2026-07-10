@@ -1,0 +1,17 @@
+{
+  "subject": "CIVIC EDUCATION",
+  "level": "Form 1",
+  "gradesCovered": [7, 8, 9, 10],
+  "totalDuration": "48 weeks",
+  "units": [
+    {
+      "unitNumber": 1,
+      "title": "General syllabus content",
+      "topics": [],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    }
+  ]
+}

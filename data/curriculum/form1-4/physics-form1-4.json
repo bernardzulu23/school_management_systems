@@ -1,0 +1,70 @@
+{
+  "subject": "Physics",
+  "level": "Form 1-4",
+  "gradesCovered": [7, 8, 9, 10],
+  "totalDuration": "48 weeks",
+  "units": [
+    {
+      "unitNumber": 1,
+      "title": "Introduction to Physics",
+      "topics": ["What is Physics", "Measurements", "Scientific method"],
+      "duration": "2 weeks",
+      "learningOutcomes": [
+        "Explain the scope of physics in everyday life",
+        "Use SI units correctly in simple measurements"
+      ],
+      "suggestedActivities": [
+        "Measure length, mass and time with school apparatus",
+        "Discuss physics careers in Zambia"
+      ],
+      "assessmentMethods": ["Oral questions", "Short quiz"],
+      "resources": ["Ruler", "Stopwatch", "CDC Physics syllabus"]
+    },
+    {
+      "unitNumber": 2,
+      "title": "Forces and Motion",
+      "topics": ["Speed and velocity", "Acceleration", "Newton's laws (intro)"],
+      "duration": "3 weeks",
+      "learningOutcomes": [
+        "Calculate average speed from distance and time",
+        "Describe effects of forces on motion"
+      ],
+      "suggestedActivities": [
+        "Ticker-timer or phone-timer motion experiments",
+        "Push-pull force demonstrations"
+      ],
+      "assessmentMethods": ["Practical worksheet", "End-of-unit test"],
+      "resources": ["Dynamics trolley", "Spring balance"]
+    },
+    {
+      "unitNumber": 3,
+      "title": "Energy",
+      "topics": ["Forms of energy", "Energy transfers", "Conservation"],
+      "duration": "2 weeks",
+      "learningOutcomes": [
+        "Identify forms of energy in common devices",
+        "Describe energy transfers in simple systems"
+      ],
+      "suggestedActivities": ["Energy circus stations", "Local renewable energy discussion"],
+      "assessmentMethods": ["Poster", "Quiz"],
+      "resources": ["Charts", "Local examples"]
+    },
+    {
+      "unitNumber": 4,
+      "title": "Heat and Temperature",
+      "topics": ["Temperature scales", "Expansion", "Heat transfer"],
+      "duration": "3 weeks",
+      "learningOutcomes": [
+        "Distinguish heat and temperature",
+        "Explain conduction, convection and radiation with examples"
+      ],
+      "suggestedActivities": ["Metal rod conduction demo", "Convection current demo"],
+      "assessmentMethods": ["Practical report", "Short answer"],
+      "resources": ["Thermometer", "Bunsen / spirit burner"]
+    }
+  ],
+  "metadata": {
+    "curated": true,
+    "note": "Sample unit JSON — replace after a good PDF parse review"
+  }
+}

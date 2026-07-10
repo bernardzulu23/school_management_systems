@@ -104,3 +104,45 @@ export async function exportSchemeToWord(input: {
 
   return Packer.toBuffer(doc)
 }
+
+function csvEscape(value: string): string {
+  const s = String(value ?? '')
+  if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`
+  return s
+}
+
+/** Export scheme of work as CSV (spreadsheet-friendly). */
+export function exportSchemeToCsv(input: {
+  subject: string
+  gradeOrForm: string
+  term: string
+  year: number
+  weeks: SchemeWeekRow[]
+}): string {
+  const header = [
+    'Week',
+    'Topic',
+    'Learning Outcomes',
+    'Teaching Activities',
+    'Assessment',
+    'Resources',
+    'Notes',
+    'Homework',
+  ]
+  const rows = input.weeks.map((w) =>
+    [
+      String(w.week),
+      w.topic,
+      (w.learningOutcomes || []).join('; '),
+      (w.teachingActivities || []).join('; '),
+      w.assessmentMethod || (w.assessmentMethods || []).join('; '),
+      (w.resources || []).join('; '),
+      w.notes || w.teacherNotes || '',
+      w.homeworkTask || '',
+    ]
+      .map(csvEscape)
+      .join(',')
+  )
+  const meta = `# ${input.subject} | ${input.gradeOrForm} | ${input.term} ${input.year}`
+  return [meta, header.join(','), ...rows].join('\n')
+}

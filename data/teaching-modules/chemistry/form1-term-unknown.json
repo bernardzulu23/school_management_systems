@@ -1,0 +1,101 @@
+{
+  "subject": "Chemistry",
+  "form": 1,
+  "term": null,
+  "sourceFile": "Chemistry-Teaching-Module-Form-1-final-version-3.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "Introduction to Chemistry",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 2,
+      "title": "Matter",
+      "topics": [],
+      "activities": ["To effectively use this Chemistry Teaching Module for Form 1:"],
+      "resources": [
+        "understanding.",
+        "By following these steps, you can effectively use this Chemistry Teaching Module for Form 1 to support your teaching and promote",
+        "learning.",
+        "Introduction",
+        "Chemistry as a fundamental science subject, which plays an important role in shaping learners' understanding of the natural world. As",
+        "learners transition from upper primary to secondary education, it is necessary to provide them with an all-inclusive and engaging"
+      ],
+      "assessment": [
+        "Plan your lessons in advance, using the module's suggested teaching and learning activities.",
+        "Use a variety of teaching methods, including demonstrations, discussions, group work, and hands-on experiments.",
+        "Provide feedback and support to learners, helping them to identify areas for improvement and develop their skills."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 3,
+      "title": "Introduction to Chemistry",
+      "topics": ["Introduction"],
+      "activities": [
+        "Key Concepts: Main Branches of Chemistry",
+        "Analytical Chemistry",
+        "BioChemistry",
+        "Inorganic Chemistry",
+        "Organic Chemistry",
+        "Physical Chemistry",
+        "Suggested Teaching and Learning Materials:",
+        "Artificial Materials: board, markers. papers"
+      ],
+      "resources": [
+        "Technological Materials: Simulations, Videos (Documentaries or short clips related to various Chemistry fields)",
+        "Learning Environment Set-up:",
+        "Natural Environment: school surroundings",
+        "Artificial Environment: classroom",
+        "Technological Environment: simulations, or video documentaries or short clips related to various fields of Chemistry",
+        "Teacher’s Roles:"
+      ],
+      "assessment": [
+        "game or simulation, and writing reflections. Modifications are made for different learning styles, such as visual learners, auditory learners,",
+        "and kinesthetic learners. Safety considerations include awareness of potential hazards, providing personal protective equipment (PPE),",
+        "and ensuring proper training and equipment for handling laboratory waste. By following these guidelines, students can effectively manage",
+        "and dispose of laboratory waste, ensuring compliance with regulations and preventing environmental contamination.",
+        "Critical thinking",
+        "Collaboration"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 4,
+      "title": "Matter",
+      "topics": [
+        "Introduction",
+        "of matter, and each state is made up of fundamental units that define its characteristics."
+      ],
+      "activities": [
+        "(solid, liquid, gas, plasma) and their characteristics.",
+        "Suggested Teaching and Learning Materials",
+        "Natural Materials: rock, Ice, metal, water, oil, and gases (air), wood",
+        "Artificial Materials: Graduated measuring cups/measuring cylinders/beakers, Balloons Thermometer, Bunsen burner or hot plate,",
+        "model or diagram (structure of atoms and molecules), plastic",
+        "Learning Environment Set-up set up:",
+        "Natural Environment: School surroundings",
+        "Artificial Environment: Chemistry laboratory/Classroom"
+      ],
+      "resources": [],
+      "assessment": [
+        "Short Answer Questions:",
+        "A substance has a fixed shape and volume. What state of matter is it in?",
+        "Describe the differences in particle arrangement and motion between a solid, liquid, and gas.",
+        "A liquid is heated and turns into a gas. What is the process called, and what energy change occurs?",
+        "Explain why a solid maintains its shape, while a liquid takes the shape of its container.",
+        "Describe a real-world scenario where a substance changes from one state of matter to another."
+      ],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-10T22:33:55.186Z",
+    "rawTextLength": 127456
+  }
+}

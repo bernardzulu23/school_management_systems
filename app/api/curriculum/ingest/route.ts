@@ -63,7 +63,7 @@ export const POST = withErrorHandler(async function POST(request: Request) {
   const guard = validateAIGuardrails({
     text: `${subject} ${gradeOrForm} syllabus curriculum ${parsed.units.map((u) => u.title).join(' ')}`,
   })
-  if (!guard.ok) return guard.response
+  if (guard.ok === false) return guard.response
 
   const existing = await prisma.curriculum.findFirst({
     where: {

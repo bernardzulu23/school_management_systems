@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://www.bluepeacktechnologies.com</loc><lastmod>2026-06-29T12:51:27.309Z</lastmod><changefreq>weekly</changefreq><priority>1</priority></url>
-<url><loc>https://www.bluepeacktechnologies.com/attend</loc><lastmod>2026-06-29T12:51:27.308Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.bluepeacktechnologies.com/forgot-password</loc><lastmod>2026-06-29T12:51:27.308Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.bluepeacktechnologies.com/hod</loc><lastmod>2026-06-29T12:51:27.308Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.bluepeacktechnologies.com/join</loc><lastmod>2026-06-29T12:51:27.308Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.bluepeacktechnologies.com/join/learner</loc><lastmod>2026-06-29T12:51:27.308Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.bluepeacktechnologies.com/join/student</loc><lastmod>2026-06-29T12:51:27.308Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.bluepeacktechnologies.com/marketplace</loc><lastmod>2026-06-29T12:51:27.308Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.bluepeacktechnologies.com/onboarding</loc><lastmod>2026-06-29T12:51:27.308Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.bluepeacktechnologies.com/reset-password</loc><lastmod>2026-06-29T12:51:27.308Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.bluepeacktechnologies.com/sentry-example-page</loc><lastmod>2026-06-29T12:51:27.308Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.bluepeacktechnologies.com/privacy</loc><lastmod>2026-06-29T12:51:27.309Z</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-<url><loc>https://www.bluepeacktechnologies.com/terms</loc><lastmod>2026-06-29T12:51:27.309Z</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+<url><loc>https://www.bluepeacktechnologies.com</loc><lastmod>2026-07-10T22:23:42.310Z</lastmod><changefreq>weekly</changefreq><priority>1</priority></url>
+<url><loc>https://www.bluepeacktechnologies.com/attend</loc><lastmod>2026-07-10T22:23:42.310Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.bluepeacktechnologies.com/forgot-password</loc><lastmod>2026-07-10T22:23:42.310Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.bluepeacktechnologies.com/hod</loc><lastmod>2026-07-10T22:23:42.310Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.bluepeacktechnologies.com/join</loc><lastmod>2026-07-10T22:23:42.310Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.bluepeacktechnologies.com/join/learner</loc><lastmod>2026-07-10T22:23:42.310Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.bluepeacktechnologies.com/join/student</loc><lastmod>2026-07-10T22:23:42.310Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.bluepeacktechnologies.com/marketplace</loc><lastmod>2026-07-10T22:23:42.310Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.bluepeacktechnologies.com/onboarding</loc><lastmod>2026-07-10T22:23:42.310Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.bluepeacktechnologies.com/reset-password</loc><lastmod>2026-07-10T22:23:42.310Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.bluepeacktechnologies.com/sentry-example-page</loc><lastmod>2026-07-10T22:23:42.310Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.bluepeacktechnologies.com/privacy</loc><lastmod>2026-07-10T22:23:42.310Z</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+<url><loc>https://www.bluepeacktechnologies.com/terms</loc><lastmod>2026-07-10T22:23:42.310Z</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
 </urlset>

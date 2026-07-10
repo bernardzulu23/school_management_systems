@@ -1,0 +1,61 @@
+{
+  "subject": "Biology",
+  "level": "Form 1-4",
+  "gradesCovered": [7, 8, 9, 10],
+  "totalDuration": "48 weeks",
+  "units": [
+    {
+      "unitNumber": 1,
+      "title": "Introduction to Biology",
+      "topics": ["Characteristics of living things", "Branches of biology"],
+      "duration": "2 weeks",
+      "learningOutcomes": [
+        "List characteristics of living organisms",
+        "Relate biology to health and agriculture in Zambia"
+      ],
+      "suggestedActivities": ["Living vs non-living sort", "Field walk around school"],
+      "assessmentMethods": ["Oral", "Quiz"],
+      "resources": ["CDC Biology syllabus", "Local specimens"]
+    },
+    {
+      "unitNumber": 2,
+      "title": "Cell Structure",
+      "topics": ["Plant and animal cells", "Microscopes", "Cell functions"],
+      "duration": "3 weeks",
+      "learningOutcomes": ["Compare plant and animal cells", "Use a light microscope safely"],
+      "suggestedActivities": ["Onion epidermis slide", "Cheek cell demo where permitted"],
+      "assessmentMethods": ["Practical drawing", "Labelled diagram test"],
+      "resources": ["Microscope", "Slides", "Iodine"]
+    },
+    {
+      "unitNumber": 3,
+      "title": "Nutrition",
+      "topics": ["Nutrients", "Balanced diet", "Digestive system intro"],
+      "duration": "3 weeks",
+      "learningOutcomes": [
+        "Classify nutrients and their roles",
+        "Plan a balanced meal using local foods"
+      ],
+      "suggestedActivities": ["Food group sorting", "School garden link"],
+      "assessmentMethods": ["Project", "Quiz"],
+      "resources": ["Food charts", "Local produce examples"]
+    },
+    {
+      "unitNumber": 4,
+      "title": "Ecology Basics",
+      "topics": ["Habitats", "Food chains", "Human impact"],
+      "duration": "2 weeks",
+      "learningOutcomes": [
+        "Construct a simple food chain from a local habitat",
+        "Describe human impacts on ecosystems"
+      ],
+      "suggestedActivities": ["School ground habitat survey", "Litter audit"],
+      "assessmentMethods": ["Field notebook", "Short essay"],
+      "resources": ["Notebooks", "Local environment"]
+    }
+  ],
+  "metadata": {
+    "curated": true,
+    "note": "Sample unit JSON — replace after a good PDF parse review"
+  }
+}

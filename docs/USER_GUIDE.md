@@ -1,7 +1,7 @@
 # ZSMS User Guide
 
 **Zambian School Management System (ZSMS)**  
-**Last updated:** 2026-07-10  
+**Last updated:** 2026-07-11  
 **Application version:** 2.0.3 (`package.json`)  
 **Document version:** 1.0
 
@@ -507,10 +507,15 @@ See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) and [QR_ATTENDANCE.md](./QR_ATTENDANC
 
 #### Schemes of work / record of work
 
-1. Open **Schemes of Work** (`/dashboard/teacher/schemes`) — requires `schemes-of-work` feature.
-2. Choose subject, grade, term, and year → **Generate Scheme (Word)** (12-week table from curriculum units).
-3. Optionally **Generate & mark submitted** to flag HOD teacher-progress `schemeSubmitted`.
-4. Download a blank **Record of Work** template for weekly teaching notes.
+Quick reference: [CURRICULUM_STUDIO.md](./CURRICULUM_STUDIO.md).
+
+1. Open **Schemes of Work** (`/dashboard/teacher/schemes`) — requires `schemes-of-work` feature (Curriculum Studio schemes UI).
+2. Choose subject, grade, term, weeks/term, and export format (**Word**, **CSV**, or **JSON**) → **Generate scheme of work**.
+3. Chemistry uses `data/curriculum/form1-4/chemistry-form1-4.json` (9 units) for schemes; the CDC 2024 chunk file remains for RAG/quiz. Physics/Biology/Chemistry also have unit JSON under the same folder; other subjects use school-uploaded syllabi or `npm run ingest:syllabi`.
+4. When a MoE **Teaching Module** JSON exists under `data/teaching-modules/` for the subject/form/term, scheme activities/resources are enriched automatically (`npm run ingest:teaching-modules`).
+5. Optionally **Generate & mark submitted** to flag HOD teacher-progress `schemeSubmitted`.
+6. Download a blank **Record of work** template for weekly teaching notes.
+7. For AI lesson plans from syllabus topics, use **Curriculum Studio** (`/dashboard/teacher/curriculum`).
 
 #### AI teaching tools
 

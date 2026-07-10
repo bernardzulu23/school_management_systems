@@ -36,9 +36,7 @@ export type GuardrailCheckInput = {
   text: string
 }
 
-export type GuardrailResult =
-  | { ok: true }
-  | { ok: false; response: NextResponse<{ error: string }> }
+export type GuardrailResult = { ok: true } | { ok: false; response: NextResponse }
 
 function normalizeText(input: string): string {
   return String(input || '')

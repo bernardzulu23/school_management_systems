@@ -34,16 +34,195 @@ function normalizeWhitespace(text: string): string {
     .trim()
 }
 
-export function extractSubject(text: string): string {
-  const patterns = [
-    /(?:subject|syllabus)\s*[:\-]\s*([A-Za-z][A-Za-z\s&()/]{2,60})/i,
-    /\b(Chemistry|Physics|Biology|Mathematics|English|History|Geography|Civic Education|Computer Studies|Agricultural Science)\b/i,
-  ]
-  for (const re of patterns) {
-    const m = text.match(re)
-    if (m?.[1]) return m[1].trim()
+/** Known CBC / ECZ secondary subjects (Form 1–4). */
+export const KNOWN_CBC_SUBJECTS = [
+  'Chemistry',
+  'Physics',
+  'Biology',
+  'Mathematics',
+  'English',
+  'Literature in English',
+  'History',
+  'Geography',
+  'Civic Education',
+  'Computer Studies',
+  'Computer Science',
+  'Information and Communications Technology',
+  'Agricultural Science',
+  'Religious Education',
+  'Art and Design',
+  'Music',
+  'Musical Arts',
+  'Food and Nutrition',
+  'Home Economics',
+  'Fashion and Fabrics',
+  'Travel and Tourism',
+  'Design and Technology',
+  'Business Studies',
+  'Commerce',
+  'Accounts',
+  'Principles of Accounts',
+  'French',
+  'Physical Education',
+  'Hospitality Management',
+  'Zambian Languages',
+  'Icibemba',
+  'Cinyanja',
+  'Chitonga',
+  'Silozi',
+  'Kikaonde',
+  'Lunda',
+  'Luvale',
+] as const
+
+const SUBJECT_ALIASES: Record<string, string> = {
+  english: 'English',
+  'english language': 'English',
+  literature: 'Literature in English',
+  'literature in english': 'Literature in English',
+  'lit in english': 'Literature in English',
+  ict: 'Computer Studies',
+  'computer studies': 'Computer Studies',
+  'computer science': 'Computer Science',
+  'information and communications technology': 'Computer Studies',
+  'form ict': 'Computer Studies',
+  re: 'Religious Education',
+  'religious education': 'Religious Education',
+  'art an design': 'Art and Design',
+  'art & design': 'Art and Design',
+  'art and design': 'Art and Design',
+  'music arts': 'Musical Arts',
+  'musical arts': 'Musical Arts',
+  'musical arts education': 'Musical Arts',
+  music: 'Music',
+  'food & nutrition': 'Food and Nutrition',
+  'food and nutrition': 'Food and Nutrition',
+  'home economics': 'Home Economics',
+  'fashion and fabrics': 'Fashion and Fabrics',
+  ff: 'Fashion and Fabrics',
+  'travel & tourism': 'Travel and Tourism',
+  'travel and tourism': 'Travel and Tourism',
+  'zambian languages': 'Zambian Languages',
+  maths: 'Mathematics',
+  maths2: 'Mathematics',
+  'mathematics i': 'Mathematics',
+  'mathematics ii': 'Mathematics',
+  'mathematics 1': 'Mathematics',
+  'mathematics 2': 'Mathematics',
+  'agricultural science': 'Agricultural Science',
+  'civic education': 'Civic Education',
+  'design and technology': 'Design and Technology',
+  'design and technology studies': 'Design and Technology',
+  commerce: 'Commerce',
+  accounts: 'Accounts',
+  'principles of accounts': 'Principles of Accounts',
+  'physical education': 'Physical Education',
+  'physical education and sport': 'Physical Education',
+  'hospitality management': 'Hospitality Management',
+  icibemba: 'Icibemba',
+  bemba: 'Icibemba',
+  cinyanja: 'Cinyanja',
+  nyanja: 'Cinyanja',
+  chitonga: 'Chitonga',
+  tonga: 'Chitonga',
+  silozi: 'Silozi',
+  lozi: 'Silozi',
+  kikaonde: 'Kikaonde',
+  kaonde: 'Kikaonde',
+  lunda: 'Lunda',
+  luvale: 'Luvale',
+  'lit in icibemba': 'Icibemba',
+  'literature in bemba': 'Icibemba',
+  'literature in icibemba': 'Icibemba',
+  'lit in cinyanja': 'Cinyanja',
+  'literature in cinyanja': 'Cinyanja',
+  'lit in chitonga': 'Chitonga',
+  'literature in chitonga': 'Chitonga',
+  'lit in silozi': 'Silozi',
+  'literature in silozi': 'Silozi',
+  'lit in kikaonde': 'Kikaonde',
+  'literature in kikaonde': 'Kikaonde',
+  'lit in lunda': 'Lunda',
+  'literature in lunda': 'Lunda',
+  'lit in luvale': 'Luvale',
+  'literature in luvale': 'Luvale',
+}
+
+export function normalizeKnownSubject(raw: string): string | null {
+  const cleaned = String(raw || '')
+    .replace(/\s+/g, ' ')
+    .replace(/\bsyllabus\b/gi, '')
+    .replace(/\bsecondary\b/gi, '')
+    .replace(/\beducation\b/gi, '')
+    .replace(/\bordinary\s+level\b/gi, '')
+    .replace(/\bform\s*[1-6]\b/gi, '')
+    .trim()
+  if (!cleaned) return null
+
+  const lower = cleaned.toLowerCase()
+  if (SUBJECT_ALIASES[lower]) return SUBJECT_ALIASES[lower]
+
+  for (const known of KNOWN_CBC_SUBJECTS) {
+    if (lower === known.toLowerCase()) return known
+    if (lower.includes(known.toLowerCase()) || known.toLowerCase().includes(lower)) {
+      // Prefer exact-ish matches; avoid matching short noise like "Art" inside unrelated text
+      if (lower.length >= 4 || known.length <= 5) return known
+    }
   }
+  return null
+}
+
+export function extractSubjectFromFilename(filename: string): string | null {
+  const base = String(filename || '')
+    .replace(/^.*[\\/]/, '')
+    .replace(/\.[^.]+$/, '')
+    .replace(/[-_]+/g, ' ')
+    .replace(/\d+/g, ' ')
+    .replace(/\bsyllabus\b/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+  return normalizeKnownSubject(base)
+}
+
+export function extractSubject(text: string, filenameHint?: string): string {
+  if (filenameHint) {
+    const fromName = extractSubjectFromFilename(filenameHint)
+    if (fromName) return fromName
+  }
+
+  const headerPatterns = [
+    /([A-Za-z][A-Za-z\s&()/]{2,50})\s+SYLLABUS\s+SECONDARY/i,
+    /(?:subject|syllabus)\s*[:\-]\s*([A-Za-z][A-Za-z\s&()/]{2,60})/i,
+  ]
+  for (const re of headerPatterns) {
+    const m = text.match(re)
+    if (m?.[1]) {
+      const known = normalizeKnownSubject(m[1])
+      if (known) return known
+    }
+  }
+
+  // Prefer allowlisted subject names appearing in the document
+  const found: { subject: string; index: number }[] = []
+  for (const known of KNOWN_CBC_SUBJECTS) {
+    const re = new RegExp(`\\b${known.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i')
+    const m = text.match(re)
+    if (m?.index != null) found.push({ subject: known, index: m.index })
+  }
+  if (found.length) {
+    found.sort((a, b) => a.index - b.index)
+    return found[0].subject
+  }
+
   return 'General'
+}
+
+export function isValidCurriculumSubject(subject: string): boolean {
+  const s = String(subject || '').trim()
+  if (!s || /^general$/i.test(s)) return false
+  return Boolean(
+    normalizeKnownSubject(s) || KNOWN_CBC_SUBJECTS.some((k) => k.toLowerCase() === s.toLowerCase())
+  )
 }
 
 export function extractGrade(text: string): string {
@@ -183,7 +362,10 @@ export function extractUnits(text: string): ParsedSyllabusUnit[] {
   return units
 }
 
-export async function parseSyllabusFromBuffer(buffer: Buffer): Promise<ParsedSyllabus> {
+export async function parseSyllabusFromBuffer(
+  buffer: Buffer,
+  options?: { filenameHint?: string }
+): Promise<ParsedSyllabus> {
   const raw = await extractTextFromBuffer(buffer, 'pdf')
   const text = normalizeWhitespace(raw)
   if (!text || text.length < 40) {
@@ -192,7 +374,7 @@ export async function parseSyllabusFromBuffer(buffer: Buffer): Promise<ParsedSyl
 
   const units = extractUnits(text)
   return {
-    subject: extractSubject(text),
+    subject: extractSubject(text, options?.filenameHint),
     grade: extractGrade(text),
     units,
     learningOutcomes: extractOutcomes(text),
@@ -207,6 +389,7 @@ export async function parseSyllabus(pdfUrl: string): Promise<ParsedSyllabus> {
     throw new Error(`Failed to fetch syllabus PDF (${response.status})`)
   }
   const buffer = Buffer.from(await response.arrayBuffer())
-  const parsed = await parseSyllabusFromBuffer(buffer)
+  const filenameHint = pdfUrl.split(/[\\/]/).pop()
+  const parsed = await parseSyllabusFromBuffer(buffer, { filenameHint })
   return parsed
 }
