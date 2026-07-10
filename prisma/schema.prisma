@@ -124,6 +124,8 @@ model School {
   termReports          TermReport[]
   sharedMaterials      SharedMaterial[]
   mockExamAttempts     MockExamAttempt[]
+  curricula            Curriculum[]
+  schemesOfWork        SchemeOfWork[]
 
   departmentAllocations  DepartmentAllocation[]
   masterTimetableEntries MasterTimetableEntry[]
@@ -247,6 +249,7 @@ model User {
   lessonPlansCreated LessonPlan[] @relation("LessonPlansCreatedBy")
   lessonPlansToReview LessonPlan[] @relation("LessonPlansReviewer")
   lessonPlanComments LessonPlanComment[] @relation("LessonPlanComments")
+  schemesOfWork      SchemeOfWork[] @relation("SchemeOfWorkTeacher")
 
   assessmentsCreated Assessment[] @relation("AssessmentsCreatedBy")
   assessmentsToReview Assessment[] @relation("AssessmentsReviewer")
@@ -2318,6 +2321,70 @@ model AiCache {
 
   @@unique([featureKey, payloadHash])
   @@index([featureKey])
+}
+
+/// School-uploaded or platform-shared syllabus (JSON built-ins remain primary fallback).
+model Curriculum {
+  id          String   @id @default(uuid())
+  schoolId    String?
+  school      School?  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  subject     String
+  gradeOrForm String
+  source      String   @default("pdf") // json | pdf | manual
+  sourceUrl   String?
+  meta        Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  units       CurriculumUnit[]
+
+  @@index([schoolId])
+  @@index([subject, gradeOrForm])
+  @@unique([schoolId, subject, gradeOrForm])
+}
+
+model CurriculumUnit {
+  id              String     @id @default(uuid())
+  curriculumId    String
+  curriculum      Curriculum @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+  weekHint        Int?
+  title           String
+  topics          Json       @default("[]")
+  outcomes        Json       @default("[]")
+  activities      Json       @default("[]")
+  assessment      Json       @default("[]")
+  resources       Json       @default("[]")
+  durationMinutes Int?
+  sortOrder       Int        @default(0)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  @@index([curriculumId])
+  @@index([curriculumId, sortOrder])
+}
+
+enum SchemeOfWorkStatus {
+  DRAFT
+  SUBMITTED
+}
+
+model SchemeOfWork {
+  id          String             @id @default(uuid())
+  schoolId    String
+  school      School             @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  teacherId   String
+  teacher     User               @relation("SchemeOfWorkTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+  subject     String
+  gradeOrForm String
+  term        String
+  year        Int
+  weeks       Json
+  status      SchemeOfWorkStatus @default(DRAFT)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@index([schoolId])
+  @@index([schoolId, teacherId])
+  @@index([schoolId, subject, gradeOrForm, term, year])
 }
 
 model AIUsageLog {

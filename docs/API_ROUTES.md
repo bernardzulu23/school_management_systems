@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-06-29T13:39:01.383Z
+Generated: 2026-07-10T13:31:33.236Z
 
-Total route files: **379**
+Total route files: **387**
 
 ## Quick index
 
@@ -36,6 +36,7 @@ Total route files: **379**
 | `/api/cron`                 |     3 |
 | `/api/csp-report`           |     1 |
 | `/api/csrf-token`           |     1 |
+| `/api/curriculum`           |     5 |
 | `/api/dashboard`            |    24 |
 | `/api/departments`          |     1 |
 | `/api/ecz`                  |    14 |
@@ -80,9 +81,9 @@ Total route files: **379**
 | `/api/subjects`             |     3 |
 | `/api/teacher`              |     6 |
 | `/api/teacher-performance`  |     4 |
-| `/api/teachers`             |     3 |
+| `/api/teachers`             |     5 |
 | `/api/teaching-assignments` |     1 |
-| `/api/timetable`            |    28 |
+| `/api/timetable`            |    29 |
 | `/api/transport`            |     2 |
 | `/api/upload`               |     1 |
 | `/api/users`                |     3 |
@@ -133,29 +134,29 @@ Total route files: **379**
 
 ## /api/ai
 
-| Method    | Route                         | Summary                                                                      |
-| --------- | ----------------------------- | ---------------------------------------------------------------------------- |
-| POST      | `/api/ai/competency-analyzer` | —                                                                            |
-| POST      | `/api/ai/ecz-exam-questions`  | —                                                                            |
-| POST      | `/api/ai/ecz-practice`        | —                                                                            |
-| POST      | `/api/ai/lesson-planner`      | —                                                                            |
-| POST      | `/api/ai/phonics-trainer`     | —                                                                            |
-| POST      | `/api/ai/quiz-maker`          | —                                                                            |
-| POST      | `/api/ai/report-comments`     | —                                                                            |
-| POST      | `/api/ai/story-weaver`        | —                                                                            |
-| POST      | `/api/ai/study-assistant`     | POST /api/ai/study-assistant — RAG-grounded Q&A for students (Phase 3 P3.6). |
-| GET, POST | `/api/ai/term-reports`        | GET — list term reports. POST — generate for a student.                      |
-| PATCH     | `/api/ai/term-reports/:id`    | PATCH /api/ai/term-reports/[id] — HOD approve / publish.                     |
+| Method    | Route                         | Summary                                                                     |
+| --------- | ----------------------------- | --------------------------------------------------------------------------- |
+| POST      | `/api/ai/competency-analyzer` | —                                                                           |
+| POST      | `/api/ai/ecz-exam-questions`  | —                                                                           |
+| POST      | `/api/ai/ecz-practice`        | —                                                                           |
+| POST      | `/api/ai/lesson-planner`      | —                                                                           |
+| POST      | `/api/ai/phonics-trainer`     | —                                                                           |
+| POST      | `/api/ai/quiz-maker`          | —                                                                           |
+| POST      | `/api/ai/report-comments`     | —                                                                           |
+| POST      | `/api/ai/story-weaver`        | —                                                                           |
+| POST      | `/api/ai/study-assistant`     | POST /api/ai/study-assistant — RAG-grounded Q&A scoped to school materials. |
+| GET, POST | `/api/ai/term-reports`        | —                                                                           |
+| PATCH     | `/api/ai/term-reports/:id`    | PATCH /api/ai/term-reports/[id] — HOD approve / publish.                    |
 
 ## /api/aiml
 
-| Method | Route                       | Summary |
-| ------ | --------------------------- | ------- |
-| POST   | `/api/aiml/ecz-practice`    | —       |
-| POST   | `/api/aiml/lesson-planner`  | —       |
-| POST   | `/api/aiml/quiz-maker`      | —       |
-| POST   | `/api/aiml/report-comments` | —       |
-| POST   | `/api/aiml/story-weaver`    | —       |
+| Method    | Route                       | Summary |
+| --------- | --------------------------- | ------- |
+| GET, POST | `/api/aiml/ecz-practice`    | —       |
+| GET, POST | `/api/aiml/lesson-planner`  | —       |
+| GET, POST | `/api/aiml/quiz-maker`      | —       |
+| GET, POST | `/api/aiml/report-comments` | —       |
+| GET, POST | `/api/aiml/story-weaver`    | —       |
 
 ## /api/allocations
 
@@ -305,6 +306,16 @@ Total route files: **379**
 | Method | Route             | Summary                                                                      |
 | ------ | ----------------- | ---------------------------------------------------------------------------- |
 | GET    | `/api/csrf-token` | GET /api/csrf-token Issues a CSRF token cookie for double-submit validation. |
+
+## /api/curriculum
+
+| Method    | Route                                      | Summary                                                                                                                            |
+| --------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| GET       | `/api/curriculum`                          | GET /api/curriculum?subject=&grade=                                                                                                |
+| POST      | `/api/curriculum/generate-lesson-plan`     | —                                                                                                                                  |
+| POST      | `/api/curriculum/generate-record-template` | —                                                                                                                                  |
+| GET, POST | `/api/curriculum/generate-scheme`          | —                                                                                                                                  |
+| POST      | `/api/curriculum/ingest`                   | POST /api/curriculum/ingest Body JSON: { pdfUrl, subject?, gradeOrForm? } Or multipart: file (pdf) + optional subject, gradeOrForm |
 
 ## /api/dashboard
 
@@ -717,16 +728,14 @@ Total route files: **379**
 
 ## /api/students
 
-| Method           | Route                                | Summary                                             |
-| ---------------- | ------------------------------------ | --------------------------------------------------- |
-| GET, POST        | `/api/students`                      | —                                                   |
-| GET, PUT, DELETE | `/api/students/:id`                  | —                                                   |
-| POST             | `/api/students/:id/face-enrollment`  | —                                                   |
-| POST             | `/api/students/:id/twin-pin`         | —                                                   |
-| POST             | `/api/students/bulk-upload`          | —                                                   |
-| GET              | `/api/students/bulk-upload/template` | Download .xlsx template with Database Mapping sheet |
-| POST             | `/api/teachers/bulk-upload`          | Import teachers from Excel (max 500 rows)           |
-| GET              | `/api/teachers/bulk-upload/template` | Download .xlsx template with Database Mapping sheet |
+| Method           | Route                                | Summary |
+| ---------------- | ------------------------------------ | ------- |
+| GET, POST        | `/api/students`                      | —       |
+| GET, PUT, DELETE | `/api/students/:id`                  | —       |
+| POST             | `/api/students/:id/face-enrollment`  | —       |
+| POST             | `/api/students/:id/twin-pin`         | —       |
+| POST             | `/api/students/bulk-upload`          | —       |
+| GET              | `/api/students/bulk-upload/template` | —       |
 
 ## /api/subjects
 
@@ -758,11 +767,13 @@ Total route files: **379**
 
 ## /api/teachers
 
-| Method           | Route                           | Summary |
-| ---------------- | ------------------------------- | ------- |
-| GET, PUT, DELETE | `/api/teachers`                 | —       |
-| GET, PUT, DELETE | `/api/teachers/:id`             | —       |
-| GET, PUT         | `/api/teachers/:id/departments` | —       |
+| Method           | Route                                | Summary |
+| ---------------- | ------------------------------------ | ------- |
+| GET, PUT, DELETE | `/api/teachers`                      | —       |
+| GET, PUT, DELETE | `/api/teachers/:id`                  | —       |
+| GET, PUT         | `/api/teachers/:id/departments`      | —       |
+| POST             | `/api/teachers/bulk-upload`          | —       |
+| GET              | `/api/teachers/bulk-upload/template` | —       |
 
 ## /api/teaching-assignments
 
@@ -785,11 +796,10 @@ Total route files: **379**
 | GET                | `/api/timetable/conflicts`                        | GET /api/timetable/conflicts?term=Term+1&academicYear=2026 Scan draft timetable allocation entries and return structured conflicts.                    |
 | POST               | `/api/timetable/conflicts/resolve`                | POST /api/timetable/conflicts/resolve Apply a resolution action to draft timetable allocation entries.                                                 |
 | POST               | `/api/timetable/conflicts/seed-test`              | POST /api/timetable/conflicts/seed-test Development-only mock conflicts for UI testing.                                                                |
-| GET                | `/api/timetable/draft-meta`                       | GET /api/timetable/draft-meta?term=Term+1&academicYear=2026&refresh=false Lightweight read of TimetableDraftMeta (no full rescan unless refresh=true). |
-| PATCH              | `/api/timetable/draft-meta`                       | PATCH /api/timetable/draft-meta — dismiss or restore server audit rows (`auditKeys`, `mode`: add/remove/clear).                                        |
+| GET, PATCH         | `/api/timetable/draft-meta`                       | GET /api/timetable/draft-meta?term=Term+1&academicYear=2026&refresh=false Lightweight read of TimetableDraftMeta (no full rescan unless refresh=true). |
 | GET, PATCH, DELETE | `/api/timetable/entries`                          | Single entry: `{ id }`. Bulk clear: `{ clearAll: true, term, academicYear }` (draft only).                                                             |
+| POST               | `/api/timetable/entries/clone-published-to-draft` | POST /api/timetable/entries/clone-published-to-draft Create an editable draft by copying the published timetable for a term.                           |
 | POST               | `/api/timetable/entries/sync-draft`               | POST /api/timetable/entries/sync-draft Persist in-memory solver/UI assignments to TimetableAllocationEntry (draft).                                    |
-| POST               | `/api/timetable/entries/clone-published-to-draft` | Copy published TimetableAllocationEntry rows into a new editable draft for the term.                                                                   |
 | GET                | `/api/timetable/feasibility`                      | GET /api/timetable/feasibility?term=Term+1&academicYear=2026 Pre-generation capacity check — teacher/class load vs bell schedule.                      |
 | GET, POST          | `/api/timetable/generate`                         | —                                                                                                                                                      |
 | GET, POST          | `/api/timetable/notifications`                    | —                                                                                                                                                      |

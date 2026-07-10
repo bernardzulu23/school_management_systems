@@ -186,6 +186,8 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Subjects', href: '/admin/subjects', icon: BookOpen },
         { name: 'Games', href: '/dashboard/hod/games', icon: GamepadIcon },
         { name: 'AI Lesson Planner', href: '/dashboard/teacher/lesson-planner', icon: Sparkles },
+        { name: 'Curriculum Studio', href: '/dashboard/teacher/curriculum', icon: BookOpen },
+        { name: 'Schemes of Work', href: '/dashboard/teacher/schemes', icon: Layers },
         { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
         { name: 'Topic Test (RAG)', href: '/dashboard/teacher/topic-test', icon: ClipboardList },
         {
@@ -243,6 +245,8 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'My Timetable', href: '/dashboard/timetable/teacher', icon: Calendar },
         { name: 'Games', href: '/dashboard/teacher/games', icon: GamepadIcon },
         { name: 'AI Lesson Planner', href: '/dashboard/teacher/lesson-planner', icon: Sparkles },
+        { name: 'Curriculum Studio', href: '/dashboard/teacher/curriculum', icon: BookOpen },
+        { name: 'Schemes of Work', href: '/dashboard/teacher/schemes', icon: Layers },
         { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
         { name: 'AI Report Comments', href: '/dashboard/teacher/report-comments', icon: Sparkles },
         { name: 'AI Story Weaver', href: '/dashboard/teacher/story-weaver', icon: Sparkles },

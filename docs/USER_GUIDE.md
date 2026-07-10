@@ -1,7 +1,7 @@
 # ZSMS User Guide
 
 **Zambian School Management System (ZSMS)**  
-**Last updated:** 2026-06-30  
+**Last updated:** 2026-07-10  
 **Application version:** 2.0.3 (`package.json`)  
 **Document version:** 1.0
 
@@ -333,6 +333,8 @@ HODs manage their department: class allocations, teacher oversight, lesson plan 
 | Subjects             | `/admin/subjects`                           |
 | Games                | `/dashboard/hod/games`                      |
 | AI Lesson Planner    | `/dashboard/teacher/lesson-planner`         |
+| Curriculum Studio    | `/dashboard/teacher/curriculum`             |
+| Schemes of Work      | `/dashboard/teacher/schemes`                |
 | AI Quiz Maker        | `/dashboard/teacher/quiz-maker`             |
 | Topic Test (RAG)     | `/dashboard/teacher/topic-test`             |
 | Upload for AI (RAG)  | `/dashboard/teacher/ai-materials`           |
@@ -418,6 +420,8 @@ Teachers manage classes, record SBA scores, take attendance, create lesson plans
 | My Timetable        | `/dashboard/timetable/teacher`              |
 | Games               | `/dashboard/teacher/games`                  |
 | AI Lesson Planner   | `/dashboard/teacher/lesson-planner`         |
+| Curriculum Studio   | `/dashboard/teacher/curriculum`             |
+| Schemes of Work     | `/dashboard/teacher/schemes`                |
 | AI Quiz Maker       | `/dashboard/teacher/quiz-maker`             |
 | Topic Test (RAG)    | `/dashboard/teacher/topic-test`             |
 | AI Report Comments  | `/dashboard/teacher/report-comments`        |
@@ -464,6 +468,7 @@ Safeguarding cases auto-escalate to the headteacher. Your main teacher account i
 | Lesson plan detail      | `/dashboard/teacher/lesson-plans/[id]`          |
 | ECZ submission          | `/dashboard/teacher/ecz/submit`                 |
 | Schemes of work         | `/dashboard/teacher/schemes`                    |
+| Curriculum Studio       | `/dashboard/teacher/curriculum`                 |
 | Whiteboard              | `/dashboard/teacher/whiteboard`                 |
 | Virtual lab             | `/dashboard/teacher/virtual-lab`                |
 | Marketplace submissions | `/dashboard/teacher/marketplace/my-submissions` |
@@ -495,15 +500,24 @@ See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) and [QR_ATTENDANCE.md](./QR_ATTENDANC
 #### Lesson plans
 
 1. **Create (AI):** `/dashboard/teacher/lesson-planner` (requires AI-enabled plan).
-2. **View/edit:** `/dashboard/teacher/lesson-plans` → click a plan for detail.
-3. **Submit for review** — status flow: Draft → Submitted → Approved / Rejected / Revision requested.
-4. HOD approves at `/dashboard/hod/lesson-plans`.
+2. **Curriculum Studio:** `/dashboard/teacher/curriculum` — pick subject/grade/topic from syllabus (Chemistry CDC built-in, or upload a PDF), generate a CBC lesson plan Word download, and optionally save to My Lesson Plans.
+3. **View/edit:** `/dashboard/teacher/lesson-plans` → click a plan for detail.
+4. **Submit for review** — status flow: Draft → Submitted → Approved / Rejected / Revision requested.
+5. HOD approves at `/dashboard/hod/lesson-plans`.
+
+#### Schemes of work / record of work
+
+1. Open **Schemes of Work** (`/dashboard/teacher/schemes`) — requires `schemes-of-work` feature.
+2. Choose subject, grade, term, and year → **Generate Scheme (Word)** (12-week table from curriculum units).
+3. Optionally **Generate & mark submitted** to flag HOD teacher-progress `schemeSubmitted`.
+4. Download a blank **Record of Work** template for weekly teaching notes.
 
 #### AI teaching tools
 
 | Tool                | Route                                | Plan requirement |
 | ------------------- | ------------------------------------ | ---------------- |
 | AI Lesson Planner   | `/dashboard/teacher/lesson-planner`  | AI-enabled plan  |
+| Curriculum Studio   | `/dashboard/teacher/curriculum`      | AI-enabled plan  |
 | AI Quiz Maker       | `/dashboard/teacher/quiz-maker`      | AI-enabled plan  |
 | Topic Test (RAG)    | `/dashboard/teacher/topic-test`      | AI-enabled plan  |
 | AI Report Comments  | `/dashboard/teacher/report-comments` | AI-enabled plan  |
