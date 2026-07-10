@@ -8,6 +8,8 @@ import { trackAIUsage } from '@/lib/middleware/aiUsageTracker'
 import { PLAIN_TEXT_OUTPUT_RULES, sanitizePlainText } from '@/lib/ai/plain-text'
 import { authorizeAiRoute } from '@/lib/ai/routeAuth'
 import { safeQueryString } from '@/lib/security/safeQueryValue'
+import { validateAIGuardrails } from '@/lib/ai/guardrails'
+import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 
 const SYSTEM = `You are a helpful study assistant for Zambian CBC students. Answer clearly using school materials when provided. Cite [Ref N] when using references.
 
@@ -34,6 +36,14 @@ export const POST = withAILimits(async function POST(request) {
       { status: 400 }
     )
   }
+  const guard = validateAIGuardrails({ text: `${subject || ''} ${question}` })
+  if (!guard.ok) return guard.response
+
+  const cachePayload = { schoolId, subject: subject || null, question }
+  const cached = await getCachedAIResponse('study-assistant', cachePayload)
+  if (cached) {
+    return NextResponse.json(cached)
+  }
 
   const rag = await buildRagContextForQuery({
     query: `${subject || ''} ${question}`,
@@ -52,11 +62,14 @@ export const POST = withAILimits(async function POST(request) {
 
   await trackAIUsage(schoolId, 'study-assistant')
 
-  return NextResponse.json({
+  const responsePayload = {
     success: true,
     data: {
       answer: sanitizePlainText(text),
       refs: rag.refs?.slice(0, 8) || [],
     },
-  })
+  }
+  await setCachedAIResponse('study-assistant', cachePayload, responsePayload)
+
+  return NextResponse.json(responsePayload)
 })

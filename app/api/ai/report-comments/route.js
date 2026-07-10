@@ -17,11 +17,13 @@ import {
   createGroqTextEventStream,
   GROQ_SSE_HEADERS,
 } from '@/lib/ai/groq-client'
-import { sanitizePlainText } from '@/lib/ai/plain-text'
 import {
   buildReportCommentPrompt,
   performanceLevelFromPercentage,
 } from '@/lib/ai/subject-adaptive-prompts'
+import { validateAIGuardrails } from '@/lib/ai/guardrails'
+import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
+import { aiChain, AI_SSE_HEADERS } from '@/lib/ai/provider-fallback'
 
 export const POST = withAILimits(async function POST(request) {
   const user = await getAuthUser(request)
@@ -80,7 +82,34 @@ export const POST = withAILimits(async function POST(request) {
     )
   }
 
+  const guard = validateAIGuardrails({
+    text: `${subject} ${grade} school report comment assessment`,
+  })
+  if (!guard.ok) return guard.response
+
   const pct = Number(maxMarks) > 0 ? (Number(marks) / Number(maxMarks)) * 100 : 0
+  const cachePayload = {
+    schoolId,
+    studentName,
+    grade,
+    subject,
+    marks,
+    maxMarks,
+    behavior,
+    attendance,
+    strengths,
+    areasForImprovement,
+  }
+  const cached = await getCachedAIResponse('ai-report-comments', cachePayload)
+  if (cached?.comment) {
+    const stream = aiChain.textToEventStream({
+      text: cached.comment,
+      provider: cached.generatedBy || 'cache',
+      model: cached.model || 'cache',
+      plainText: true,
+    })
+    return new Response(stream, { headers: AI_SSE_HEADERS })
+  }
 
   const prompt = buildReportCommentPrompt({
     subject,
@@ -101,6 +130,10 @@ export const POST = withAILimits(async function POST(request) {
     onErrorMessage: 'Failed to generate comment',
     onComplete: async (responseText) => {
       const cleaned = responseText
+      await setCachedAIResponse('ai-report-comments', cachePayload, {
+        comment: cleaned,
+        generatedBy: 'groq',
+      })
       await trackAIUsage(schoolId, 'ai-report-comments')
       await prisma.aIRequest.create({
         data: {

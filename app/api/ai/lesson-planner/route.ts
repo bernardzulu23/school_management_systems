@@ -17,6 +17,8 @@ import { buildLessonPlanPrompt } from '@/lib/lessonPlanTemplate'
 import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
 import { buildRagContextForQuery } from '@/lib/ai/rag-context'
 import { aiChain, AI_SSE_HEADERS } from '@/lib/ai/provider-fallback'
+import { validateAIGuardrails } from '@/lib/ai/guardrails'
+import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 
 const LESSON_PLAN_SYSTEM =
   'You are an expert Zambian CBC lesson planner. Write complete, practical lesson plans aligned to MoGE guidelines and Zambian classroom context.'
@@ -158,6 +160,39 @@ export const POST = withAILimits(async function POST(request: Request) {
 
     const raw = await request.json().catch(() => null)
     const input = LessonPlannerInputSchema.parse(raw)
+    const guard = validateAIGuardrails({
+      text: [
+        input.subject,
+        input.grade,
+        input.topic,
+        input.subtopic || '',
+        input.additionalInstructions || '',
+      ].join(' '),
+    })
+    if (!guard.ok) return guard.response
+
+    const cachePayload = {
+      schoolId,
+      userId: String(user.id),
+      input,
+    }
+    const cached = await getCachedAIResponse<{
+      success: boolean
+      lessonPlan: string
+      generatedBy: string
+      model?: string
+      ragReferences?: unknown[]
+    }>('ai-lesson-planner', cachePayload)
+    if (cached) {
+      if (input.stream === false) return NextResponse.json(cached)
+      const stream = aiChain.textToEventStream({
+        text: cached.lessonPlan || '',
+        provider: cached.generatedBy || 'cache',
+        model: cached.model || 'cache',
+        meta: cached.ragReferences?.length ? { ragReferences: cached.ragReferences } : undefined,
+      })
+      return new Response(stream, { headers: AI_SSE_HEADERS })
+    }
 
     logger.info('ai.lesson-planner.started', {
       requestId,
@@ -232,14 +267,17 @@ export const POST = withAILimits(async function POST(request: Request) {
       model: aiResponse.model,
     })
 
+    const responsePayload = {
+      success: true,
+      lessonPlan: aiResponse.text,
+      generatedBy: aiResponse.provider,
+      model: aiResponse.model,
+      ragReferences: rag.refs?.length ? rag.refs : undefined,
+    }
+    await setCachedAIResponse('ai-lesson-planner', cachePayload, responsePayload)
+
     if (input.stream === false) {
-      return NextResponse.json({
-        success: true,
-        lessonPlan: aiResponse.text,
-        generatedBy: aiResponse.provider,
-        model: aiResponse.model,
-        ragReferences: rag.refs?.length ? rag.refs : undefined,
-      })
+      return NextResponse.json(responsePayload)
     }
 
     const stream = aiChain.textToEventStream({

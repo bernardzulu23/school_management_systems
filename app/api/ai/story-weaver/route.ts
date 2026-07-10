@@ -18,8 +18,10 @@ import {
   createGroqTextEventStream,
   GROQ_SSE_HEADERS,
 } from '@/lib/ai/groq-client'
-import { sanitizePlainText } from '@/lib/ai/plain-text'
 import { buildStoryPrompt, estimateWordCountFromLength } from '@/lib/ai/subject-adaptive-prompts'
+import { validateAIGuardrails } from '@/lib/ai/guardrails'
+import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
+import { aiChain, AI_SSE_HEADERS } from '@/lib/ai/provider-fallback'
 
 const StoryWeaverInputSchema = z.object({
   grade: z.enum(['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']).optional(),
@@ -119,6 +121,31 @@ export const POST = withAILimits(async function POST(request: Request) {
 
     const raw = await request.json().catch(() => null)
     const input = StoryWeaverInputSchema.parse(raw)
+    const guard = validateAIGuardrails({
+      text: [
+        input.subject || 'English',
+        input.grade || 'Form 3',
+        input.topic,
+        input.storyType,
+      ].join(' '),
+    })
+    if (!guard.ok) return guard.response
+
+    const cachePayload = { schoolId, input }
+    const cached = await getCachedAIResponse<{
+      story: string
+      generatedBy?: string
+      model?: string
+    }>('ai-story-weaver', cachePayload)
+    if (cached?.story) {
+      const stream = aiChain.textToEventStream({
+        text: cached.story,
+        provider: cached.generatedBy || 'cache',
+        model: cached.model || 'cache',
+        plainText: true,
+      })
+      return new Response(stream, { headers: AI_SSE_HEADERS })
+    }
 
     logger.info('ai.story-weaver.started', {
       requestId,
@@ -140,6 +167,10 @@ export const POST = withAILimits(async function POST(request: Request) {
       onErrorMessage: 'Failed to generate story',
       onComplete: async (responseText) => {
         const cleaned = responseText
+        await setCachedAIResponse('ai-story-weaver', cachePayload, {
+          story: cleaned,
+          generatedBy: 'groq',
+        })
         await trackAIUsage(schoolId, 'ai-story-weaver')
         await prisma.aIRequest.create({
           data: {

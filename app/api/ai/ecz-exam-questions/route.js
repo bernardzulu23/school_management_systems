@@ -17,6 +17,8 @@ import { generateAIObject } from '@/lib/ai/client'
 import { ECZExamQuestionsResponseSchema } from '@/lib/ai/schemas'
 import { buildEczExamPrompt } from '@/lib/ai/subject-adaptive-prompts'
 import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
+import { validateAIGuardrails } from '@/lib/ai/guardrails'
+import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 import {
   validateExamItem,
@@ -79,6 +81,12 @@ export const POST = withAILimits(async function POST(request) {
   if (!subject || !topic) {
     return NextResponse.json({ error: 'subject and topic required' }, { status: 400 })
   }
+  const guard = validateAIGuardrails({ text: `${subject} ${form} ${topic}` })
+  if (!guard.ok) return guard.response
+
+  const cachePayload = { schoolId, subject, form, topic, elementOfConstruct, scenarioCount }
+  const cached = await getCachedAIResponse('ecz-exam-questions', cachePayload)
+  if (cached) return NextResponse.json(cached)
 
   let prompt = buildEczExamPrompt({
     subject,
@@ -146,7 +154,7 @@ export const POST = withAILimits(async function POST(request) {
     },
   })
 
-  return NextResponse.json({
+  const responsePayload = {
     success: true,
     scenarios,
     validation: {
@@ -155,5 +163,8 @@ export const POST = withAILimits(async function POST(request) {
       bloomDistribution: bloomCheck.distribution,
     },
     ragReferences: rag.refs?.length ? rag.refs : undefined,
-  })
+  }
+  await setCachedAIResponse('ecz-exam-questions', cachePayload, responsePayload)
+
+  return NextResponse.json(responsePayload)
 })

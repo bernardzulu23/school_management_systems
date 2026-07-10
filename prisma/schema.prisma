@@ -2308,6 +2308,18 @@ model AIRequest {
   @@index([createdAt])
 }
 
+model AiCache {
+  id             String   @id @default(uuid())
+  payloadHash    String
+  featureKey     String
+  cachedResponse Json
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([featureKey, payloadHash])
+  @@index([featureKey])
+}
+
 model AIUsageLog {
   id         String   @id @default(uuid())
   schoolId   String

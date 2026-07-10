@@ -18,14 +18,32 @@ Set `GROQ_API_KEY` (and optionally `GEMINI_API_KEY`, `OPENROUTER_API_KEY`, `OPEN
 ```
 API route / lib feature
         ↓
+lib/ai/guardrails.ts ← prompt-injection + education/curriculum relevance check
+        ↓
+lib/ai/cache.ts      ← SHA-256 payload hash → AiCache (Neon) hit/miss
+        ↓
 lib/ai/client.js     ← streamAIText | generateAIText | generateAIObject
         ↓
-@ai-sdk/groq         ← Groq API
+@ai-sdk/groq         ← Groq API (fallback: Gemini / OpenRouter / …)
         ↓
 lib/ai/schemas.js    ← Zod validation (structured outputs)
 ```
 
 Legacy code may still import `@/lib/ai/groq-client` — it delegates to `client.js`.
+
+### Guardrails (`lib/ai/guardrails.ts`)
+
+Before any model call, core AI routes run `validateAIGuardrails({ text })`. Flagged requests return:
+
+```json
+{ "error": "Content flagged by safety guardrails." }
+```
+
+Checks cover common prompt-injection phrases and require education / Zambian curriculum–related language.
+
+### Response cache (`lib/ai/cache.ts` + `AiCache`)
+
+Identical payloads (stable JSON → SHA-256) for a given `featureKey` reuse the stored JSON from Neon, skipping Groq/Gemini. Wired into quiz-maker, lesson-planner, study-assistant, ECZ practice/exam questions, story-weaver, and report-comments. Apply migration `20260708101000_add_ai_cache`.
 
 ### Structured JSON (`generateAIObject`)
 

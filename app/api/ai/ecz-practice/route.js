@@ -19,6 +19,8 @@ import { buildEczPracticePrompt } from '@/lib/ai/subject-adaptive-prompts'
 import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
 import { isValidEczExamLevel, normalizeEczExamLevel } from '@/lib/ecz/ecz-practice-levels'
 import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
+import { validateAIGuardrails } from '@/lib/ai/guardrails'
+import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 import {
   resolveAssessmentMode,
   normalizeQuestionsForMode,
@@ -98,6 +100,8 @@ export const POST = withAILimits(async function POST(request) {
   if (!isValidEczExamLevel(examLevel)) {
     return NextResponse.json({ error: 'Invalid exam level' }, { status: 400 })
   }
+  const guard = validateAIGuardrails({ text: `${subject} ${examLevel} ${topic}` })
+  if (!guard.ok) return guard.response
 
   const count =
     Number.isFinite(questionCount) && questionCount > 0 ? Math.min(20, questionCount) : 5
@@ -107,6 +111,9 @@ export const POST = withAILimits(async function POST(request) {
     resolveAssessmentMode({ schoolLevel: school.level }) === ASSESSMENT_MODES.SECONDARY_SCENARIO
       ? ASSESSMENT_MODES.SECONDARY_SCENARIO
       : ASSESSMENT_MODES.PRIMARY_MCQ
+  const cachePayload = { schoolId, subject, examLevel, topic, count, assessmentMode }
+  const cached = await getCachedAIResponse('ecz-practice', cachePayload)
+  if (cached) return NextResponse.json(cached)
 
   let prompt = buildEczPracticePrompt({
     subject,
@@ -161,12 +168,14 @@ export const POST = withAILimits(async function POST(request) {
       },
     })
 
-    return NextResponse.json({
+    const responsePayload = {
       success: true,
       paper,
       assessmentMode,
       ragReferences: rag.refs?.length ? rag.refs : undefined,
-    })
+    }
+    await setCachedAIResponse('ecz-practice', cachePayload, responsePayload)
+    return NextResponse.json(responsePayload)
   } catch (err) {
     return NextResponse.json(
       { error: err?.message || 'Failed to generate practice paper' },

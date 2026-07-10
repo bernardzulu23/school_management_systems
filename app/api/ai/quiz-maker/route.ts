@@ -18,6 +18,8 @@ import { generateAIObject } from '@/lib/ai/client'
 import { QuizSchema } from '@/lib/ai/schemas'
 import { buildQuizPrompt } from '@/lib/ai/subject-adaptive-prompts'
 import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
+import { validateAIGuardrails } from '@/lib/ai/guardrails'
+import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 import {
   resolveAssessmentMode,
   normalizeQuestionsForMode,
@@ -98,6 +100,10 @@ export const POST = withAILimits(async function POST(request: Request) {
 
     const raw = await request.json().catch(() => null)
     const input = QuizMakerInputSchema.parse(raw)
+    const guard = validateAIGuardrails({
+      text: [input.subject, input.grade, input.topic, input.difficulty].join(' '),
+    })
+    if (!guard.ok) return guard.response
 
     logger.info('ai.quiz-maker.started', {
       requestId,
@@ -111,6 +117,25 @@ export const POST = withAILimits(async function POST(request: Request) {
       schoolLevel: school.level,
       gradeLevel: input.grade,
     })
+    const cachePayload = {
+      schoolId,
+      grade: input.grade,
+      subject: input.subject,
+      topic: input.topic,
+      questionCount: input.questionCount,
+      difficulty: input.difficulty,
+      materialIds: input.materialIds || [],
+      assessmentMode,
+    }
+    const cached = await getCachedAIResponse<{
+      success: boolean
+      quiz: unknown
+      assessmentMode: string
+      bloomWarnings?: string[]
+      ragReferences?: unknown[]
+      materialIds?: string[]
+    }>('ai-quiz-maker', cachePayload)
+    if (cached) return NextResponse.json(cached)
 
     let prompt = buildPrompt(input, assessmentMode)
     const rag = await buildRagContextForQuery({
@@ -174,14 +199,17 @@ export const POST = withAILimits(async function POST(request: Request) {
       durationMs: Date.now() - startTime,
     })
 
-    return NextResponse.json({
+    const responsePayload = {
       success: true,
       quiz,
       assessmentMode,
       bloomWarnings: bloomCheck.warnings,
       ragReferences: rag.refs?.length ? rag.refs : undefined,
       materialIds: rag.materialIds?.length ? rag.materialIds : input.materialIds,
-    })
+    }
+    await setCachedAIResponse('ai-quiz-maker', cachePayload, responsePayload)
+
+    return NextResponse.json(responsePayload)
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: 'Invalid input', issues: error.issues }, { status: 400 })
