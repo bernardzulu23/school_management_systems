@@ -1,5 +1,5 @@
 import { generateAIObject } from '@/lib/ai/client'
-import { QuizSchema } from '@/lib/ai/schemas'
+import { QuizGenerationSchema, parseQuizObject } from '@/lib/ai/schemas'
 import { buildQuizPrompt } from '@/lib/ai/subject-adaptive-prompts'
 
 const QUIZ_SYSTEM =
@@ -23,9 +23,19 @@ export async function generateQuiz(request: QuizRequest) {
 
 Question types to include: ${request.questionTypes.join(', ')}.`
 
-  const { object } = await generateAIObject(QuizSchema, QUIZ_SYSTEM, prompt, {
-    temperature: 0.5,
-    maxTokens: 3000,
+  const { object: raw } = await generateAIObject(QuizGenerationSchema, QUIZ_SYSTEM, prompt, {
+    temperature: 0.4,
+    maxTokens: 3500,
   })
-  return object
+  const parsed = parseQuizObject({
+    ...raw,
+    grade: raw?.grade || String(request.grade),
+    subject: raw?.subject || request.subject || 'English (Core)',
+    topic: raw?.topic || request.topic,
+    title: raw?.title || `${request.subject || 'Quiz'} — ${request.topic}`,
+  })
+  if (!parsed.success) {
+    throw new Error('AI returned quiz JSON that could not be normalized')
+  }
+  return parsed.data
 }

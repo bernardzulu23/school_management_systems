@@ -7,6 +7,7 @@ import { safeRouteParam } from '@/lib/security/safeQueryValue'
 import { resolveReviewerUserId } from '@/lib/lesson-plans/reviewer'
 import { sanitizeText } from '@/lib/lesson-plans/text'
 import { isIndividualSchool } from '@/lib/middleware/individual-gate'
+import { syncTaughtProgressFromLessonPlan } from '@/lib/teaching/syncTaughtProgressFromLessonPlan'
 
 export const dynamic = 'force-dynamic'
 
@@ -67,6 +68,11 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
         createdBy: { select: { id: true, name: true, email: true } },
       },
     })
+    try {
+      await syncTaughtProgressFromLessonPlan({ lessonPlanId: updated.id, taught: true })
+    } catch (err) {
+      console.warn('[teaching] taught-progress sync failed:', err?.message || err)
+    }
     return NextResponse.json({
       success: true,
       data: updated,
@@ -81,7 +87,10 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     subject: existing.subject,
   })
   if (!reviewerUserId) {
-    throw new ApiError('No HOD reviewer found for your department. Contact your headteacher.', 400)
+    throw new ApiError(
+      'No reviewer found. Secondary: assign an HOD. Primary: assign a senior teacher, deputy, or headteacher.',
+      400
+    )
   }
 
   const now = new Date()

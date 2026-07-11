@@ -24,6 +24,8 @@ type Props = {
   description?: string
   /** denser week grid (Teaching Studio Progress tab) */
   layout?: 'sidebar' | 'grid'
+  /** When true, weeks are driven by approved lesson plans (no manual toggle) */
+  readOnly?: boolean
 }
 
 export function WeekProgressSidebar({
@@ -32,8 +34,9 @@ export function WeekProgressSidebar({
   busyWeek,
   onToggleWeek,
   title = 'Week progress',
-  description = 'Mark weeks complete as you teach',
+  description = 'Weeks count as taught only when an approved lesson plan exists',
   layout = 'sidebar',
+  readOnly = false,
 }: Props) {
   const completedCount = weeks.filter((w) => w.completed).length
   const total = weeks.length || 1
@@ -88,14 +91,15 @@ export function WeekProgressSidebar({
               <button
                 key={week.week}
                 type="button"
-                onClick={() => onToggleWeek(week.week, !week.completed)}
-                disabled={busyWeek === week.week}
+                onClick={() => !readOnly && onToggleWeek(week.week, !week.completed)}
+                disabled={readOnly || busyWeek === week.week}
                 className={cn(
                   'rounded-lg border-2 p-3 text-left transition-all disabled:opacity-50',
                   week.completed
                     ? 'border-emerald-200 bg-emerald-50'
                     : 'border-border bg-card hover:border-sky-200',
-                  (week.isMidTerm || week.isEndOfTerm) && 'ring-1 ring-amber-300'
+                  (week.isMidTerm || week.isEndOfTerm) && 'ring-1 ring-amber-300',
+                  readOnly && 'cursor-default'
                 )}
               >
                 <div className="flex items-center gap-2">
@@ -123,7 +127,7 @@ export function WeekProgressSidebar({
             </p>
           )}
 
-          {weeks.some((w) => !w.completed) && (
+          {!readOnly && weeks.some((w) => !w.completed) && (
             <Button
               type="button"
               variant="outline"
@@ -135,6 +139,13 @@ export function WeekProgressSidebar({
             >
               Mark next week complete
             </Button>
+          )}
+
+          {readOnly && (
+            <p className="text-xs text-muted-foreground">
+              Progress updates automatically when a lesson plan is approved (secondary: HOD ·
+              primary: senior teacher / deputy).
+            </p>
           )}
 
           {legend}
@@ -166,9 +177,17 @@ export function WeekProgressSidebar({
               <button
                 type="button"
                 className="mt-0.5 shrink-0 text-emerald-600 disabled:opacity-50"
-                disabled={busyWeek === w.week}
-                onClick={() => onToggleWeek(w.week, !w.completed)}
-                aria-label={w.completed ? `Unmark week ${w.week}` : `Mark week ${w.week} complete`}
+                disabled={readOnly || busyWeek === w.week}
+                onClick={() => !readOnly && onToggleWeek(w.week, !w.completed)}
+                aria-label={
+                  readOnly
+                    ? w.completed
+                      ? `Week ${w.week} taught (approved lesson plan)`
+                      : `Week ${w.week} not taught`
+                    : w.completed
+                      ? `Unmark week ${w.week}`
+                      : `Mark week ${w.week} complete`
+                }
               >
                 {w.completed ? (
                   <CheckCircle2 className="h-5 w-5" />
@@ -202,7 +221,7 @@ export function WeekProgressSidebar({
         )}
       </ul>
 
-      {weeks.some((w) => !w.completed) && (
+      {weeks.some((w) => !w.completed) && !readOnly && (
         <Button
           type="button"
           variant="outline"
@@ -216,6 +235,9 @@ export function WeekProgressSidebar({
         >
           Mark next week complete
         </Button>
+      )}
+      {readOnly && (
+        <p className="text-xs text-muted-foreground">Auto from approved lesson plans only.</p>
       )}
     </aside>
   )

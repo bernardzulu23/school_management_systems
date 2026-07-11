@@ -15,7 +15,7 @@ import { prisma } from '@/lib/prisma'
 import { logger } from '@/lib/utils/logger'
 import { assertGroqConfigured } from '@/lib/ai/groq-client'
 import { generateAIObject } from '@/lib/ai/client'
-import { QuizSchema } from '@/lib/ai/schemas'
+import { QuizGenerationSchema, parseQuizObject } from '@/lib/ai/schemas'
 import { buildQuizPrompt } from '@/lib/ai/subject-adaptive-prompts'
 import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
 import { validateAIGuardrails } from '@/lib/ai/guardrails'
@@ -31,7 +31,7 @@ const QUIZ_SYSTEM =
   'You are a Zambian CBC assessment expert. Return only valid quiz data matching the schema. Use Zambian context where appropriate.'
 
 const QuizMakerInputSchema = z.object({
-  grade: z.enum(['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']),
+  grade: z.string().min(1).max(40),
   subject: z.string().min(1).max(100),
   topic: z.string().min(3).max(200),
   questionCount: z.number().int().min(1).max(30).default(10),
@@ -151,15 +151,63 @@ export const POST = withAILimits(async function POST(request: Request) {
     }
     const startTime = Date.now()
 
-    const { object: quiz, usage } = await generateAIObject(
-      QuizSchema,
-      rag.block ? appendRagToSystemPrompt(QUIZ_SYSTEM, rag.block) : QUIZ_SYSTEM,
-      prompt,
-      {
-        maxTokens: 2500,
-        temperature: 0.5,
-      }
-    )
+    const quizSystem = rag.block ? appendRagToSystemPrompt(QUIZ_SYSTEM, rag.block) : QUIZ_SYSTEM
+    const quizModels = [
+      process.env.GROQ_MODEL || 'llama-3.1-8b-instant',
+      'llama-3.1-8b-instant',
+      'llama-3.3-70b-versatile',
+    ].filter((m, i, a) => a.indexOf(m) === i)
+
+    let rawQuiz: Record<string, unknown> | null = null
+    let usage = { inputTokens: 0, outputTokens: 0, totalTokens: 0 }
+
+    try {
+      const generated = await generateAIObject(QuizGenerationSchema, quizSystem, prompt, {
+        maxTokens: 3500,
+        temperature: 0.4,
+        models: quizModels,
+      })
+      rawQuiz = generated.object as Record<string, unknown>
+      usage = generated.usage
+    } catch (genError) {
+      logger.warn('ai.quiz-maker.structured-failed', {
+        requestId,
+        schoolId,
+        message: genError instanceof Error ? genError.message : String(genError),
+      })
+      const { generateAIText } = await import('@/lib/ai/client')
+      const { extractJSONObject } = await import('@/lib/ai/groq-client')
+      const textResult = await generateAIText(
+        `${prompt}\n\nRespond with ONLY valid JSON for a quiz with title, grade, subject, topic, and questions[]. Each question needs id, type (mcq|short|true_false), question, options (for mcq), answer.`,
+        { system: quizSystem, maxTokens: 3500, temperature: 0.4, models: quizModels }
+      )
+      rawQuiz = extractJSONObject(textResult.text)
+      usage = textResult.usage || usage
+      if (!rawQuiz) throw genError
+    }
+
+    const parsed = parseQuizObject({
+      ...rawQuiz,
+      grade: (rawQuiz?.grade as string) || input.grade,
+      subject: (rawQuiz?.subject as string) || input.subject,
+      topic: (rawQuiz?.topic as string) || input.topic,
+      title: (rawQuiz?.title as string) || `${input.subject} — ${input.topic}`,
+    })
+    if (!parsed.success) {
+      logger.warn('ai.quiz-maker.schema-mismatch', {
+        requestId,
+        schoolId,
+        issues: parsed.error.issues?.slice(0, 5),
+      })
+      return NextResponse.json(
+        {
+          error:
+            'AI returned quiz JSON that could not be normalized. Try fewer questions or a simpler topic.',
+        },
+        { status: 502 }
+      )
+    }
+    const quiz = parsed.data
 
     if (!quiz?.questions?.length) {
       logger.warn('ai.quiz-maker.invalid-json', { requestId, schoolId, userId: user.id })

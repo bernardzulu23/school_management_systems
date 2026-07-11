@@ -61,7 +61,8 @@ const GRADES = [
 ]
 
 const TERMS = ['Term 1', 'Term 2', 'Term 3'] as const
-const WEEK_OPTIONS = [8, 10, 12, 14, 16] as const
+const MIN_WEEKS = 1
+const MAX_WEEKS = 20
 
 type ExportFormat = 'word' | 'csv' | 'json'
 type StudioTab = 'basic' | 'tests'
@@ -148,7 +149,7 @@ export function CurriculumStudio({
   const [recent, setRecent] = useState<RecentScheme[]>([])
   const [preview, setPreview] = useState<SchemePreview | null>(null)
 
-  const weeksPerTermNum = Number(weeksPerTerm) || 12
+  const weeksPerTermNum = Math.min(MAX_WEEKS, Math.max(MIN_WEEKS, Number(weeksPerTerm) || 12))
   const weekChoices = Array.from({ length: weeksPerTermNum }, (_, i) => i + 1)
 
   const loadRecent = async () => {
@@ -442,27 +443,26 @@ export function CurriculumStudio({
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Weeks per Term</Label>
-                  <Select
+                  <Label htmlFor="cs-weeks">Weeks per Term</Label>
+                  <Input
+                    id="cs-weeks"
+                    type="number"
+                    min={MIN_WEEKS}
+                    max={MAX_WEEKS}
                     value={weeksPerTerm}
-                    onValueChange={(v) => {
-                      setWeeksPerTerm(v)
-                      const n = Number(v) || 12
-                      setMidTermWeek(String(Math.ceil(n / 2)))
-                      setEndOfTermWeek(String(n))
+                    onChange={(e) => {
+                      const raw = e.target.value
+                      setWeeksPerTerm(raw)
+                      const n = Number(raw)
+                      if (Number.isFinite(n) && n >= MIN_WEEKS && n <= MAX_WEEKS) {
+                        setMidTermWeek(String(Math.ceil(n / 2)))
+                        setEndOfTermWeek(String(n))
+                      }
                     }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select weeks" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {WEEK_OPTIONS.map((w) => (
-                        <SelectItem key={w} value={w.toString()}>
-                          {w} weeks
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Enter any length from {MIN_WEEKS}–{MAX_WEEKS} weeks (not fixed to 8/10/12).
+                  </p>
                 </div>
 
                 <div className="space-y-2">

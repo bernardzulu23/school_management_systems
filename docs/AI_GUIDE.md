@@ -56,19 +56,19 @@ Zod still validates the parsed object on our side. If you see a `json_schema` er
 
 ## AI features
 
-| Feature                  | Route / module                              | Mode                                                                 | Schema                   |
-| ------------------------ | ------------------------------------------- | -------------------------------------------------------------------- | ------------------------ |
-| Lesson planner (stream)  | `POST /api/ai/lesson-planner`               | Stream prose; MoE teaching-module enrichment when JSON exists        | —                        |
-| Curriculum Studio plan   | `POST /api/curriculum/generate-lesson-plan` | Structured + Word (+ optional Blob); teaching-module prompt context  | `LessonPlanSchema`       |
-| Scheme of work           | `POST /api/curriculum/scheme`               | Word / CSV / JSON; activities enriched from `data/teaching-modules/` | —                        |
-| Professional lesson plan | `POST /api/lesson-plans/generate`           | Structured (default)                                                 | `LessonPlanSchema`       |
-| Ministry plain-text plan | Same route, `format=ministry`               | Text                                                                 | —                        |
-| Quiz maker               | `POST /api/ai/quiz-maker`                   | Structured                                                           | `QuizSchema`             |
-| ECZ practice             | `POST /api/ai/ecz-practice`                 | Structured                                                           | `ECZPracticePaperSchema` |
-| Story weaver             | `POST /api/ai/story-weaver`                 | Stream                                                               | —                        |
-| Report comments          | `POST /api/ai/report-comments`              | Stream                                                               | —                        |
-| Phonics / Zambia helpers | `lib/ai/zambia-features.js`                 | Text                                                                 | —                        |
-| Legacy aiml tools        | `lib/aiml/tools/*`                          | Mixed                                                                | Quiz / ECZ schemas       |
+| Feature                  | Route / module                              | Mode                                                                 | Schema                                                    |
+| ------------------------ | ------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------- |
+| Lesson planner (stream)  | `POST /api/ai/lesson-planner`               | Stream prose; MoE teaching-module enrichment when JSON exists        | —                                                         |
+| Curriculum Studio plan   | `POST /api/curriculum/generate-lesson-plan` | Structured + Word (+ optional Blob); teaching-module prompt context  | `LessonPlanSchema`                                        |
+| Scheme of work           | `POST /api/curriculum/scheme`               | Word / CSV / JSON; activities enriched from `data/teaching-modules/` | —                                                         |
+| Professional lesson plan | `POST /api/lesson-plans/generate`           | Structured (default)                                                 | `LessonPlanSchema`                                        |
+| Ministry plain-text plan | Same route, `format=ministry`               | Text                                                                 | —                                                         |
+| Quiz maker               | `POST /api/ai/quiz-maker`                   | Structured → text+coerce fallback                                    | `QuizGenerationSchema` → `parseQuizObject` (`QuizSchema`) |
+| ECZ practice             | `POST /api/ai/ecz-practice`                 | Structured                                                           | `ECZPracticePaperSchema`                                  |
+| Story weaver             | `POST /api/ai/story-weaver`                 | Stream                                                               | —                                                         |
+| Report comments          | `POST /api/ai/report-comments`              | Stream                                                               | —                                                         |
+| Phonics / Zambia helpers | `lib/ai/zambia-features.js`                 | Text                                                                 | —                                                         |
+| Legacy aiml tools        | `lib/aiml/tools/*`                          | Mixed                                                                | Quiz / ECZ schemas                                        |
 
 Structured lesson plans are stored on `LessonPlan.structuredContent` (JSON) plus plain `content` for display.
 

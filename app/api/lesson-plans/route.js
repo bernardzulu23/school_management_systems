@@ -7,6 +7,7 @@ import { safeQueryString } from '@/lib/security/safeQueryValue'
 import { resolveReviewerUserId } from '@/lib/lesson-plans/reviewer'
 import { sanitizeText } from '@/lib/lesson-plans/text'
 import { isIndividualSchool } from '@/lib/middleware/individual-gate'
+import { syncTaughtProgressFromLessonPlan } from '@/lib/teaching/syncTaughtProgressFromLessonPlan'
 
 export const dynamic = 'force-dynamic'
 
@@ -98,6 +99,13 @@ export const POST = withErrorHandler(async function POST(request) {
   const content = sanitizeText(normalize(body?.content))
   const subTopic = normalize(body?.subTopic || body?.subtopic) || null
   const term = normalize(body?.term) || null
+  const weekNumber =
+    body?.weekNumber != null && Number.isFinite(Number(body.weekNumber))
+      ? Number(body.weekNumber)
+      : body?.week != null && Number.isFinite(Number(body.week))
+        ? Number(body.week)
+        : null
+  const schemeId = normalize(body?.schemeId) || null
   const duration =
     body?.duration != null && Number.isFinite(Number(body.duration)) ? Number(body.duration) : null
   const templateType = normalize(body?.templateType) || 'professional'
@@ -146,6 +154,8 @@ export const POST = withErrorHandler(async function POST(request) {
       subTopic,
       duration,
       term,
+      weekNumber,
+      schemeId: schemeId || null,
       templateType,
       content,
       submittedAt,
@@ -159,9 +169,19 @@ export const POST = withErrorHandler(async function POST(request) {
       subject: true,
       topic: true,
       status: true,
+      weekNumber: true,
+      schemeId: true,
       createdAt: true,
     },
   })
+
+  if (status === 'APPROVED') {
+    try {
+      await syncTaughtProgressFromLessonPlan({ lessonPlanId: plan.id, taught: true })
+    } catch (err) {
+      console.warn('[teaching] taught-progress sync failed:', err?.message || err)
+    }
+  }
 
   if (submitNow && reviewerUserId && !individual) {
     await prisma.timetableNotification.create({

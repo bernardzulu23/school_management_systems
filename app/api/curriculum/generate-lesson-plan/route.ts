@@ -120,6 +120,7 @@ export const POST = withErrorHandler(async function POST(request: Request) {
         subTopic: input.unit || input.topic,
         duration: input.duration || 40,
         term: input.term || 'Term 1',
+        weekNumber: input.week ?? null,
         templateType: 'curriculum-studio',
         content: generated.content,
         structuredContent: generated.structuredContent as object,

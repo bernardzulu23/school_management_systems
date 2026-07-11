@@ -6,6 +6,7 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { safeRouteParam } from '@/lib/security/safeQueryValue'
 import { sanitizeText } from '@/lib/lesson-plans/text'
 import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
+import { syncTaughtProgressFromLessonPlan } from '@/lib/teaching/syncTaughtProgressFromLessonPlan'
 
 export const dynamic = 'force-dynamic'
 
@@ -139,7 +140,20 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['HOD', 'hod', 'ADMIN', 'headteacher'])) {
+  if (
+    !roleCheck(auth.user, [
+      'HOD',
+      'hod',
+      'ADMIN',
+      'headteacher',
+      'DEPUTY',
+      'SENIOR_TEACHER',
+      'deputyheadteacher',
+      'deputyhead',
+      'seniorteacher',
+      'senior_teacher',
+    ])
+  ) {
     throw new ApiError('Forbidden', 403)
   }
 
@@ -177,6 +191,9 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
       grade: true,
       subject: true,
       topic: true,
+      weekNumber: true,
+      schemeId: true,
+      term: true,
     },
   })
   if (!existing) throw new ApiError('Not found', 404)
@@ -186,7 +203,15 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
   }
 
   const isReviewer = String(existing.reviewerUserId) === userId
-  const isAdmin = roleCheck(auth.user, ['ADMIN', 'headteacher'])
+  const isAdmin = roleCheck(auth.user, [
+    'ADMIN',
+    'headteacher',
+    'DEPUTY',
+    'SENIOR_TEACHER',
+    'deputyheadteacher',
+    'deputyhead',
+    'seniorteacher',
+  ])
   if (!isReviewer && !isAdmin) throw new ApiError('Forbidden', 403)
 
   const now = new Date()
@@ -243,6 +268,17 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
       approvalNotes: true,
     },
   })
+
+  // Taught progress = APPROVED lesson plans only
+  try {
+    if (action === 'approve') {
+      await syncTaughtProgressFromLessonPlan({ lessonPlanId: existing.id, taught: true })
+    } else {
+      await syncTaughtProgressFromLessonPlan({ lessonPlanId: existing.id, taught: false })
+    }
+  } catch (err) {
+    console.warn('[teaching] taught-progress sync failed:', err?.message || err)
+  }
 
   await prisma.timetableNotification.create({
     data: {

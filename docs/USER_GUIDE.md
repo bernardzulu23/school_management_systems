@@ -511,12 +511,15 @@ See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) and [QR_ATTENDANCE.md](./QR_ATTENDANC
 Quick reference: [CURRICULUM_STUDIO.md](./CURRICULUM_STUDIO.md).
 
 1. Open **Teaching Studio** (`/dashboard/teacher/teaching-studio`) — tabs: **Scheme & Lessons**, **Progress**, **Analytics**. Requires `schemes-of-work` feature. (Direct URL `/dashboard/teacher/schemes` still works.)
-2. Choose subject, grade, term, weeks/term, and export format (**Word**, **CSV**, or **JSON**). Open the **Test Schedule** tab to set mid-term and end-of-term weeks → **Generate scheme of work**.
-3. Test weeks are saved with the scheme; use the **Progress** tab (or sidebar) to mark weeks complete and track coverage %.
-4. Chemistry uses `data/curriculum/form1-4/chemistry-form1-4.json` (9 units) for schemes; the CDC 2024 chunk file remains for RAG/quiz. Physics/Biology/Chemistry also have unit JSON under the same folder; other subjects use school-uploaded syllabi or `npm run ingest:syllabi`.
-5. When a MoE **Teaching Module** JSON exists under `data/teaching-modules/` for the subject/form/term, scheme activities/resources are enriched automatically (`npm run ingest:teaching-modules`).
-6. Optionally **Generate & mark submitted** to flag HOD teacher-progress `schemeSubmitted`.
-7. Download a blank **Record of work** template for weekly teaching notes.
+2. Choose subject, grade, term, **weeks per term** (any length from 1–20 — type the number; not limited to 8/10/12), and export format (**Word**, **CSV**, or **JSON**). Open the **Test Schedule** tab to set mid-term and end-of-term weeks → **Generate scheme of work**.
+3. **Week progress:** mark weeks taught manually on the Progress tab, or they auto-fill when a **lesson plan for that week is APPROVED**.
+   - **Secondary / Form:** submit lesson plan → **HOD** approves.
+   - **Primary (Grade 1–7):** submit → **senior teacher** or **deputy head** (falls back to headteacher).
+   - No lesson plan and not marked manually → week is **not taught** (Record of Work stays blank / shows “Not taught” unless an approved plan exists).
+4. Download **Record of work** from Curriculum Studio / Schemes — auto-fills date and topic from approved plans only.
+5. Chemistry uses `data/curriculum/form1-4/chemistry-form1-4.json` (9 units) for schemes; the CDC 2024 chunk file remains for RAG/quiz. Physics/Biology/Chemistry also have unit JSON under the same folder; other subjects use school-uploaded syllabi or `npm run ingest:syllabi`.
+6. When a MoE **Teaching Module** JSON exists under `data/teaching-modules/` for the subject/form/term, scheme activities/resources are enriched automatically (`npm run ingest:teaching-modules`).
+7. Optionally **Generate & mark submitted** to flag HOD teacher-progress `schemeSubmitted`.
 8. Quiz submissions automatically update **topic mastery** (scores &lt;60% flag reteaching). Admins/HODs review coverage at `/dashboard/admin/teacher-performance`.
 
 #### AI teaching tools

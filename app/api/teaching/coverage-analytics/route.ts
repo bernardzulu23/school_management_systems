@@ -44,18 +44,68 @@ export const GET = withErrorHandler(async function GET(request: Request) {
     orderBy: { averageMasteryScore: 'asc' },
   })
 
+  const approvedPlans = await prisma.lessonPlan.findMany({
+    where: {
+      schoolId,
+      createdByUserId: teacherId,
+      status: 'APPROVED',
+    },
+    select: {
+      id: true,
+      subject: true,
+      grade: true,
+      term: true,
+      topic: true,
+      weekNumber: true,
+      schemeId: true,
+      approvedAt: true,
+    },
+  })
+
+  const topicMatch = (a: string, b: string) => {
+    const x = String(a || '')
+      .toLowerCase()
+      .trim()
+    const y = String(b || '')
+      .toLowerCase()
+      .trim()
+    if (!x || !y) return false
+    return x === y || x.includes(y) || y.includes(x)
+  }
+
   const schemeAnalytics = schemes.map((scheme) => {
     const weeks = weeksFromSchemeJson(scheme.weeks)
-    const completed = scheme.progress.filter((p) => p.completed)
     const totalWeeks = weeks.length || 1
-    const coveragePercent = Math.round((completed.length / totalWeeks) * 100)
 
-    const plannedTopics = weeks.map((w) => ({
-      week: w.week,
-      topic: w.topic || `Week ${w.week}`,
-      completed: completed.some((p) => p.weekNumber === w.week),
-      completedAt: completed.find((p) => p.weekNumber === w.week)?.completedAt ?? null,
-    }))
+    const relevantPlans = approvedPlans.filter((p) => {
+      if (p.schemeId && p.schemeId === scheme.id) return true
+      const subjectOk = topicMatch(p.subject, scheme.subject)
+      const gradeOk = topicMatch(p.grade, scheme.gradeOrForm)
+      const termOk = !p.term || topicMatch(p.term, scheme.term)
+      return subjectOk && gradeOk && termOk
+    })
+
+    // Prefer approved lesson plans; keep manual SchemeProgress as editable override
+    const plannedTopics = weeks.map((w) => {
+      const progressRow = scheme.progress.find((p) => p.weekNumber === w.week && p.completed)
+      const byWeek = relevantPlans.find((p) => Number(p.weekNumber) === w.week)
+      const byTopic = relevantPlans.find(
+        (p) => p.weekNumber == null && topicMatch(p.topic, w.topic || '')
+      )
+      const approved = byWeek || byTopic
+      const taught = Boolean(approved) || Boolean(progressRow)
+      return {
+        week: w.week,
+        topic: w.topic || `Week ${w.week}`,
+        completed: taught,
+        completedAt: approved?.approvedAt ?? progressRow?.completedAt ?? null,
+        lessonPlanId: approved?.id ?? null,
+        source: approved ? 'approved_lesson_plan' : progressRow ? 'manual' : 'not_taught',
+      }
+    })
+
+    const completedWeeks = plannedTopics.filter((t) => t.completed).length
+    const coveragePercent = Math.round((completedWeeks / totalWeeks) * 100)
 
     const relatedMastery = mastery.filter((m) =>
       plannedTopics.some(
@@ -95,7 +145,7 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       status: scheme.status,
       coveragePercent,
       completionRate: coveragePercent,
-      completedWeeks: completed.length,
+      completedWeeks,
       totalWeeks,
       midTermWeek: scheme.testSchedule?.midTermWeek ?? null,
       endOfTermWeek: scheme.testSchedule?.endOfTermWeek ?? null,
@@ -112,6 +162,7 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       topicsNeedingReteachCount: relatedMastery.filter((m) => m.needsReteaching).length,
       averageMastery,
       testSchedule,
+      taughtRule: 'APPROVED lesson plans only',
     }
   })
 

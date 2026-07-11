@@ -2392,6 +2392,7 @@ model SchemeOfWork {
   updatedAt   DateTime           @updatedAt
   progress    SchemeProgress[]
   testSchedule SchemeTestSchedule?
+  lessonPlans LessonPlan[]
 
   @@index([schoolId])
   @@index([schoolId, teacherId])
@@ -2577,6 +2578,9 @@ model LessonPlan {
   subTopic        String?
   duration        Int?
   term            String?
+  weekNumber      Int?
+  schemeId        String?
+  scheme          SchemeOfWork?   @relation(fields: [schemeId], references: [id], onDelete: SetNull)
   templateType    String?
   content         String          @db.Text
   structuredContent Json?
@@ -2603,6 +2607,8 @@ model LessonPlan {
   @@index([schoolId, reviewerUserId])
   @@index([schoolId, reviewerUserId, status])
   @@index([schoolId, status])
+  @@index([schoolId, subject, grade, status])
+  @@index([schemeId, weekNumber])
 }
 
 enum TermReportStatus {

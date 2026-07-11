@@ -377,7 +377,7 @@ export function TeachingHub({ teacherId }: Props) {
             onToggleWeek={handleToggleWeek}
             layout="grid"
             title={`${selectedScheme.subject} · ${selectedScheme.gradeOrForm} · ${selectedScheme.term}`}
-            description="Track your teaching progress week by week. Mark weeks complete once topics are taught."
+            description="Mark weeks taught manually, or they auto-fill when a lesson plan is approved (HOD / senior teacher / deputy)."
           />
         ) : (
           <Card>

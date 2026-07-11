@@ -7,6 +7,9 @@ import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
 import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
 import { exportRecordOfWorkTemplate } from '@/lib/curriculum/recordOfWorkExport'
+import { getApprovedLessonPlansForRecord } from '@/lib/teaching/syncTaughtProgressFromLessonPlan'
+import { weeksFromSchemeJson } from '@/lib/teaching/performanceSummary'
+import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,6 +19,7 @@ const InputSchema = z.object({
   term: z.union([z.string(), z.number()]).default('Term 1'),
   year: z.number().int().min(2020).max(2100).optional(),
   weekCount: z.number().int().min(1).max(16).optional(),
+  schemeId: z.string().optional(),
 })
 
 export const POST = withErrorHandler(async function POST(request: Request) {
@@ -40,6 +44,70 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     typeof input.term === 'number' ? `Term ${input.term}` : String(input.term || 'Term 1')
 
   const ctx = await getLessonPlanTeacherContext(String(user.id), schoolId, input.subject)
+
+  let weekCount = input.weekCount || 12
+  const schemeWeekTopics = new Map<number, string>()
+  if (input.schemeId) {
+    const scheme = await prisma.schemeOfWork.findFirst({
+      where: { id: input.schemeId, schoolId, teacherId: String(user.id) },
+    })
+    if (scheme) {
+      const weeks = weeksFromSchemeJson(scheme.weeks)
+      weekCount = weeks.length || weekCount
+      for (const w of weeks) {
+        if (w.topic) schemeWeekTopics.set(w.week, w.topic)
+      }
+    }
+  }
+
+  const approved = await getApprovedLessonPlansForRecord({
+    schoolId,
+    teacherId: String(user.id),
+    subject: input.subject,
+    grade,
+    term,
+    year,
+  })
+
+  const weekRows = Array.from({ length: weekCount }, (_, i) => {
+    const week = i + 1
+    const plans = approved.filter((p) => Number(p.weekNumber) === week)
+    // Topic match fallback when weekNumber missing on plan
+    const byTopic =
+      plans.length > 0
+        ? plans
+        : approved.filter((p) => {
+            const planned = schemeWeekTopics.get(week)
+            if (!planned || p.weekNumber != null) return false
+            const t = String(p.topic || '').toLowerCase()
+            const s = planned.toLowerCase()
+            return t === s || t.includes(s) || s.includes(t)
+          })
+
+    const plan = byTopic[0]
+    if (!plan) {
+      return {
+        week,
+        taught: false,
+        topic: '',
+        dateTaught: '',
+        remarks: 'Not taught — no approved lesson plan',
+        signOff: '',
+      }
+    }
+
+    return {
+      week,
+      taught: true,
+      topic: plan.topic || schemeWeekTopics.get(week) || '',
+      dateTaught: plan.approvedAt ? plan.approvedAt.toISOString().slice(0, 10) : '',
+      remarks: plan.approvalNotes || 'Approved lesson plan',
+      signOff: ctx.teacherName || 'Approved',
+    }
+  })
+
+  const taughtCount = weekRows.filter((w) => w.taught).length
+
   const wordBuffer = await exportRecordOfWorkTemplate({
     schoolName: ctx.schoolName,
     teacherName: ctx.teacherName,
@@ -47,7 +115,8 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     gradeOrForm: grade,
     term,
     year,
-    weekCount: input.weekCount,
+    weekCount,
+    weeks: weekRows,
   })
 
   let downloadUrl: string | null = null
@@ -70,5 +139,11 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     success: true,
     downloadUrl,
     wordBase64: downloadUrl ? undefined : Buffer.from(wordBuffer).toString('base64'),
+    summary: {
+      weekCount,
+      taughtWeeks: taughtCount,
+      notTaughtWeeks: weekCount - taughtCount,
+      rule: 'Only APPROVED lesson plans count as taught',
+    },
   })
 })
