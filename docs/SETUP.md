@@ -121,14 +121,14 @@ npm run docs:api-routes
 
 ## Troubleshooting
 
-| Problem                           | Fix                                                            |
-| --------------------------------- | -------------------------------------------------------------- |
-| Startup throws env error          | Missing required var — see [ENVIRONMENT.md](./ENVIRONMENT.md)  |
-| `prisma db push` fails            | Check `DATABASE_URL` / `DIRECT_URL`; Neon project awake        |
-| ECZ page 500                      | Run `npx prisma db push` then `npm run seed:ecz`               |
-| AI features fail                  | Set `GROQ_API_KEY`; optional `GROQ_MODEL=llama-3.1-8b-instant` |
-| Payments fail                     | Set `LIPILA_API_KEY` or use free trial onboarding path         |
-| Build `Cannot find module 'conf'` | Run `npm install` (fixes ESLint pre-commit)                    |
+| Problem                           | Fix                                                                       |
+| --------------------------------- | ------------------------------------------------------------------------- |
+| Startup throws env error          | Missing required var — see [ENVIRONMENT.md](./ENVIRONMENT.md)             |
+| `prisma db push` fails            | Check `DATABASE_URL` / `DIRECT_URL`; Neon project awake                   |
+| ECZ page 500                      | Run `npx prisma db push` then `npm run seed:ecz`                          |
+| AI features fail                  | Set `GROQ_API_KEY`; optional `GROQ_STRUCTURED_MODEL=llama-3.1-8b-instant` |
+| Payments fail                     | Set `LIPILA_API_KEY` or use free trial onboarding path                    |
+| Build `Cannot find module 'conf'` | Run `npm install` (fixes ESLint pre-commit)                               |
 
 More detail: [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) → Common bugs.
 

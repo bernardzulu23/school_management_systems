@@ -579,13 +579,13 @@ Mobile env template: `zsms-mobile/.env.example`.
 
 **Do not commit secrets.** Use `.env.local` locally and Vercel environment settings in production.
 
-| Category        | Variables                                                                                                                     | Reference                          |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| Required        | `DATABASE_URL`, `JWT_SECRET`, `RESEND_API_KEY`, `EMAIL_FROM_NOREPLY`, `GROQ_API_KEY` or `GEMINI_API_KEY`                      | [ENVIRONMENT.md](./ENVIRONMENT.md) |
-| Migrations      | `DIRECT_URL`                                                                                                                  | Neon direct connection             |
-| Production auth | `JWT_REFRESH_SECRET`, `COOKIE_DOMAIN`, `APP_BASE_DOMAIN`                                                                      | Multi-subdomain cookies            |
-| Features        | `LIPILA_*`, `AFRICASTALKING_*`, `QSTASH_*`, `SENTRY_*`, `SANITY_*`, `HUGGINGFACE_API_KEY`, `VOYAGE_*`, `OPENAI_API_KEY` (RAG) | Disabled when unset                |
-| Local dev       | `LOCAL_DEV_SCHOOL_SUBDOMAIN`, `DEV_ONBOARDING_SKIP_EMAIL`, `PLATFORM_ADMIN_*`                                                 | See [SETUP.md](./SETUP.md)         |
+| Category        | Variables                                                                                                                                                                                 | Reference                          |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| Required        | `DATABASE_URL`, `JWT_SECRET`, `RESEND_API_KEY`, `EMAIL_FROM_NOREPLY`, `GROQ_API_KEY` or `GEMINI_API_KEY`                                                                                  | [ENVIRONMENT.md](./ENVIRONMENT.md) |
+| Migrations      | `DIRECT_URL`                                                                                                                                                                              | Neon direct connection             |
+| Production auth | `JWT_REFRESH_SECRET`, `COOKIE_DOMAIN`, `APP_BASE_DOMAIN`                                                                                                                                  | Multi-subdomain cookies            |
+| Features        | `LIPILA_*`, `AFRICASTALKING_*`, `QSTASH_*`, `SENTRY_*`, `SANITY_*`, `GROQ_MODEL` / `GROQ_FAST_MODEL` / `GROQ_STRUCTURED_MODEL`, `HUGGINGFACE_API_KEY`, `VOYAGE_*`, `OPENAI_API_KEY` (RAG) | Disabled when unset                |
+| Local dev       | `LOCAL_DEV_SCHOOL_SUBDOMAIN`, `DEV_ONBOARDING_SKIP_EMAIL`, `PLATFORM_ADMIN_*`                                                                                                             | See [SETUP.md](./SETUP.md)         |
 
 Programmatic access:
 

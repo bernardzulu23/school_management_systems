@@ -14,7 +14,7 @@ import {
 import { prisma } from '@/lib/prisma'
 import { logger } from '@/lib/utils/logger'
 import { assertGroqConfigured } from '@/lib/ai/groq-client'
-import { generateAIObject } from '@/lib/ai/client'
+import { generateAIObject, GROQ_STRUCTURED_MODEL } from '@/lib/ai/client'
 import { QuizGenerationSchema, parseQuizObject } from '@/lib/ai/schemas'
 import { buildQuizPrompt } from '@/lib/ai/subject-adaptive-prompts'
 import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
@@ -153,7 +153,7 @@ export const POST = withAILimits(async function POST(request: Request) {
 
     const quizSystem = rag.block ? appendRagToSystemPrompt(QUIZ_SYSTEM, rag.block) : QUIZ_SYSTEM
     const quizModels = [
-      process.env.GROQ_MODEL || 'llama-3.1-8b-instant',
+      GROQ_STRUCTURED_MODEL,
       'llama-3.1-8b-instant',
       'llama-3.3-70b-versatile',
     ].filter((m, i, a) => a.indexOf(m) === i)

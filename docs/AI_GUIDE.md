@@ -4,12 +4,14 @@ All AI features use **Groq** (free tier) via the **Vercel AI SDK** (`ai` + `@ai-
 
 ## Cost
 
-| Item             | Cost                                                   |
-| ---------------- | ------------------------------------------------------ |
-| `ai` npm package | Free (MIT)                                             |
-| `@ai-sdk/groq`   | Free (MIT)                                             |
-| Groq API         | Free up to ~14,400 requests/day on free tier           |
-| Default model    | `llama-3.3-70b-versatile` (override with `GROQ_MODEL`) |
+| Item             | Cost                                                                |
+| ---------------- | ------------------------------------------------------------------- |
+| `ai` npm package | Free (MIT)                                                          |
+| `@ai-sdk/groq`   | Free (MIT)                                                          |
+| Groq API         | Free up to ~14,400 requests/day on free tier                        |
+| Default model    | `GROQ_MODEL` → `llama-3.3-70b-versatile`                            |
+| Stream / fast    | `GROQ_FAST_MODEL` → `llama-3.3-70b-versatile` (`GROQ_STREAM_MODEL`) |
+| Structured JSON  | `GROQ_STRUCTURED_MODEL` → `llama-3.1-8b-instant`                    |
 
 Set `GROQ_API_KEY` (and optionally `GEMINI_API_KEY`, `OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `HUGGINGFACE_API_KEY`) in `.env` / Vercel. Default Gemini model is `gemini-2.0-flash` (override with `GEMINI_MODEL`).
 
