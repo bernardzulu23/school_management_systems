@@ -23,8 +23,11 @@
       "HUSKY": "0",
       "NEXT_TELEMETRY_DISABLED": "1",
       "NPM_CONFIG_PRODUCTION": "false",
-      "NODE_OPTIONS": "--max-old-space-size=4096",
+      "NODE_OPTIONS": "--max-old-space-size=4096 --dns-result-order=ipv4first",
       "GENERATE_SOURCEMAP": "false"
     }
+  },
+  "env": {
+    "NODE_OPTIONS": "--dns-result-order=ipv4first"
   }
 }

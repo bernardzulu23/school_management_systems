@@ -3,7 +3,7 @@
  * Order: Groq → Gemini → OpenRouter → OpenAI → HuggingFace
  */
 import { generateText } from 'ai'
-import { aiHttpFetch } from '@/lib/ai/ai-http'
+import { aiHttpFetch, formatNetworkError } from '@/lib/ai/ai-http'
 import { geminiGenerateContentUrl, geminiModelCandidates } from '@/lib/ai/gemini-config'
 import { groqModelFor, groqModelIdsForChain } from '@/lib/ai/groq-config'
 import { logger } from '@/lib/utils/logger'
@@ -133,6 +133,7 @@ export class AIProviderChain {
     }
 
     let lastError: Error | null = null
+    const failures: string[] = []
 
     for (const provider of availableProviders) {
       try {
@@ -141,12 +142,16 @@ export class AIProviderChain {
         log.info('AI provider succeeded', { provider: provider.name, model: response.model })
         return response
       } catch (error) {
-        lastError = error instanceof Error ? error : new Error(String(error))
-        log.warn('AI provider failed', { provider: provider.name, message: lastError.message })
+        const detail = formatNetworkError(error)
+        lastError = new Error(detail)
+        failures.push(`${provider.name}: ${detail}`)
+        log.warn('AI provider failed', { provider: provider.name, message: detail })
       }
     }
 
-    throw new Error(`All AI providers failed. Last error: ${lastError?.message || 'Unknown error'}`)
+    throw new Error(
+      `All AI providers failed (${failures.length}): ${failures.join(' · ') || lastError?.message || 'Unknown error'}`
+    )
   }
 
   textToEventStream(options: AIChainTextEventOptions): ReadableStream<Uint8Array> {

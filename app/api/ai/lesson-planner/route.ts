@@ -239,7 +239,7 @@ export const POST = withAILimits(async function POST(request: Request) {
 
     const startTime = Date.now()
 
-    // Groq (AI SDK) → Gemini → OpenRouter → OpenAI → HuggingFace
+    // Groq (AI SDK + resilient fetch) → full provider chain inside generateAIText
     let aiResponse
     try {
       const { generateAIText } = await import('@/lib/ai/client')
@@ -254,15 +254,12 @@ export const POST = withAILimits(async function POST(request: Request) {
         model: sdkResult.model,
       }
     } catch (sdkError) {
-      logger.warn('ai.lesson-planner.sdk-fallback', {
+      logger.warn('ai.lesson-planner.sdk-failed', {
         requestId,
         message: sdkError instanceof Error ? sdkError.message : String(sdkError),
       })
-      aiResponse = await aiChain.generate(prompt, {
-        system: systemPrompt,
-        maxTokens: 4500,
-        temperature: 0.7,
-      })
+      // generateAIText already exhausted Groq models + provider chain — do not call the chain again
+      throw sdkError
     }
 
     await trackAIUsage(schoolId, 'ai-lesson-planner')
@@ -321,6 +318,22 @@ export const POST = withAILimits(async function POST(request: Request) {
 
     logger.error('ai.lesson-planner.error', error, { requestId })
     const message = error instanceof Error ? error.message : 'Failed to process request'
+    const lower = message.toLowerCase()
+    const providerOutage =
+      lower.includes('all ai providers failed') ||
+      lower.includes('ai generation failed') ||
+      lower.includes('fetch failed') ||
+      lower.includes('no ai provider')
+    if (providerOutage) {
+      return NextResponse.json(
+        {
+          error:
+            'AI providers are temporarily unreachable. Check GROQ_API_KEY / GEMINI_API_KEY on the deployment, then retry. ' +
+            message,
+        },
+        { status: 503 }
+      )
+    }
     return NextResponse.json({ error: message }, { status: 500 })
   }
 })

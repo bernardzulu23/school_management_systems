@@ -192,6 +192,15 @@ export async function handleSchemeGet(request: Request): Promise<NextResponse> {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
+  const schemeId = new URL(request.url).searchParams.get('id')
+  if (schemeId) {
+    const row = await prisma.schemeOfWork.findFirst({
+      where: { id: schemeId, schoolId, teacherId: String(user.id) },
+    })
+    if (!row) return NextResponse.json({ error: 'Scheme not found' }, { status: 404 })
+    return NextResponse.json({ success: true, data: row })
+  }
+
   const rows = await prisma.schemeOfWork.findMany({
     where: { schoolId, teacherId: String(user.id) },
     orderBy: { updatedAt: 'desc' },

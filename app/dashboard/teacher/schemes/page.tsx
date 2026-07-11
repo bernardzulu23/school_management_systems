@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { CurriculumStudio } from '@/components/curriculum/CurriculumStudio'
 import { ArrowLeft } from 'lucide-react'
 
-export default function TeacherSchemesPage() {
+export default function SchemesPage() {
   return (
     <DashboardLayout userRole="teacher" title="Schemes of Work">
       <div className="space-y-6">
@@ -19,9 +19,10 @@ export default function TeacherSchemesPage() {
           </Link>
           <h1 className="text-3xl font-bold tracking-tight">Curriculum Studio</h1>
           <p className="mt-2 text-muted-foreground">
-            Generate schemes of work, export Word/CSV/JSON, and download record of work templates
+            Generate schemes of work, lesson plans, and record of work templates
           </p>
         </div>
+
         <CurriculumStudio />
       </div>
     </DashboardLayout>

@@ -220,6 +220,7 @@ The headteacher is the school administrator with full oversight: users, timetabl
 | Guidance teachers   | `/dashboard/headteacher/guidance-teachers`   |
 | Guidance reports    | `/dashboard/headteacher/guidance-reports`    |
 | Teacher Performance | `/admin/teacher-performance`                 |
+| Teaching Coverage   | `/dashboard/admin/teacher-performance`       |
 | Classes             | `/dashboard/classes`                         |
 | ECZ Exam Tracking   | `/dashboard/headteacher/exam-tracking`       |
 | STEM Monitoring     | `/dashboard/headteacher/stem-monitoring`     |
@@ -332,15 +333,14 @@ HODs manage their department: class allocations, teacher oversight, lesson plan 
 | My Classes           | `/dashboard/classes`                        |
 | Subjects             | `/admin/subjects`                           |
 | Games                | `/dashboard/hod/games`                      |
-| AI Lesson Planner    | `/dashboard/teacher/lesson-planner`         |
-| Curriculum Studio    | `/dashboard/teacher/curriculum`             |
-| Schemes of Work      | `/dashboard/teacher/schemes`                |
+| Teaching Studio      | `/dashboard/teacher/teaching-studio`        |
 | AI Quiz Maker        | `/dashboard/teacher/quiz-maker`             |
 | Topic Test (RAG)     | `/dashboard/teacher/topic-test`             |
 | Upload for AI (RAG)  | `/dashboard/teacher/ai-materials`           |
 | AI Report Comments   | `/dashboard/teacher/report-comments`        |
 | AI Story Weaver      | `/dashboard/teacher/story-weaver`           |
 | Teacher Performance  | `/admin/teacher-performance`                |
+| Teaching Coverage    | `/dashboard/admin/teacher-performance`      |
 | Assessments          | `/dashboard/assessments`                    |
 | ECZ SBA Hub          | `/dashboard/teacher/assessments/ecz`        |
 | Results              | `/dashboard/results`                        |
@@ -419,9 +419,7 @@ Teachers manage classes, record SBA scores, take attendance, create lesson plans
 | Study Materials     | `/dashboard/teacher/materials`              |
 | My Timetable        | `/dashboard/timetable/teacher`              |
 | Games               | `/dashboard/teacher/games`                  |
-| AI Lesson Planner   | `/dashboard/teacher/lesson-planner`         |
-| Curriculum Studio   | `/dashboard/teacher/curriculum`             |
-| Schemes of Work     | `/dashboard/teacher/schemes`                |
+| Teaching Studio     | `/dashboard/teacher/teaching-studio`        |
 | AI Quiz Maker       | `/dashboard/teacher/quiz-maker`             |
 | Topic Test (RAG)    | `/dashboard/teacher/topic-test`             |
 | AI Report Comments  | `/dashboard/teacher/report-comments`        |
@@ -467,8 +465,10 @@ Safeguarding cases auto-escalate to the headteacher. Your main teacher account i
 | Lesson plans list       | `/dashboard/teacher/lesson-plans`               |
 | Lesson plan detail      | `/dashboard/teacher/lesson-plans/[id]`          |
 | ECZ submission          | `/dashboard/teacher/ecz/submit`                 |
+| Teaching Studio         | `/dashboard/teacher/teaching-studio`            |
 | Schemes of work         | `/dashboard/teacher/schemes`                    |
 | Curriculum Studio       | `/dashboard/teacher/curriculum`                 |
+| Lesson planner (direct) | `/dashboard/teacher/lesson-planner`             |
 | Whiteboard              | `/dashboard/teacher/whiteboard`                 |
 | Virtual lab             | `/dashboard/teacher/virtual-lab`                |
 | Marketplace submissions | `/dashboard/teacher/marketplace/my-submissions` |
@@ -499,28 +499,31 @@ See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) and [QR_ATTENDANCE.md](./QR_ATTENDANC
 
 #### Lesson plans
 
-1. **Create (AI):** `/dashboard/teacher/lesson-planner` (requires AI-enabled plan).
-2. **Curriculum Studio:** `/dashboard/teacher/curriculum` — pick subject/grade/topic from syllabus (Chemistry CDC built-in, or upload a PDF), generate a CBC lesson plan Word download, and optionally save to My Lesson Plans.
-3. **View/edit:** `/dashboard/teacher/lesson-plans` → click a plan for detail.
-4. **Submit for review** — status flow: Draft → Submitted → Approved / Rejected / Revision requested.
-5. HOD approves at `/dashboard/hod/lesson-plans`.
+1. **Teaching Studio:** `/dashboard/teacher/teaching-studio` — unified hub for schemes, week progress, lessons, and coverage analytics.
+2. **Create (AI):** Teaching Studio → Lessons → **AI Lesson Planner** (`/dashboard/teacher/lesson-planner`, requires AI-enabled plan).
+3. **Curriculum Studio (lessons):** `/dashboard/teacher/curriculum` — pick subject/grade/topic from syllabus, generate a CBC lesson plan Word download, and optionally save to My Lesson Plans.
+4. **View/edit:** `/dashboard/teacher/lesson-plans` → click a plan for detail.
+5. **Submit for review** — status flow: Draft → Submitted → Approved / Rejected / Revision requested.
+6. HOD approves at `/dashboard/hod/lesson-plans`.
 
 #### Schemes of work / record of work
 
 Quick reference: [CURRICULUM_STUDIO.md](./CURRICULUM_STUDIO.md).
 
-1. Open **Schemes of Work** (`/dashboard/teacher/schemes`) — requires `schemes-of-work` feature (Curriculum Studio schemes UI).
-2. Choose subject, grade, term, weeks/term, and export format (**Word**, **CSV**, or **JSON**) → **Generate scheme of work**.
-3. Chemistry uses `data/curriculum/form1-4/chemistry-form1-4.json` (9 units) for schemes; the CDC 2024 chunk file remains for RAG/quiz. Physics/Biology/Chemistry also have unit JSON under the same folder; other subjects use school-uploaded syllabi or `npm run ingest:syllabi`.
-4. When a MoE **Teaching Module** JSON exists under `data/teaching-modules/` for the subject/form/term, scheme activities/resources are enriched automatically (`npm run ingest:teaching-modules`).
-5. Optionally **Generate & mark submitted** to flag HOD teacher-progress `schemeSubmitted`.
-6. Download a blank **Record of work** template for weekly teaching notes.
-7. For AI lesson plans from syllabus topics, use **Curriculum Studio** (`/dashboard/teacher/curriculum`).
+1. Open **Teaching Studio** (`/dashboard/teacher/teaching-studio`) — tabs: **Scheme & Lessons**, **Progress**, **Analytics**. Requires `schemes-of-work` feature. (Direct URL `/dashboard/teacher/schemes` still works.)
+2. Choose subject, grade, term, weeks/term, and export format (**Word**, **CSV**, or **JSON**). Open the **Test Schedule** tab to set mid-term and end-of-term weeks → **Generate scheme of work**.
+3. Test weeks are saved with the scheme; use the **Progress** tab (or sidebar) to mark weeks complete and track coverage %.
+4. Chemistry uses `data/curriculum/form1-4/chemistry-form1-4.json` (9 units) for schemes; the CDC 2024 chunk file remains for RAG/quiz. Physics/Biology/Chemistry also have unit JSON under the same folder; other subjects use school-uploaded syllabi or `npm run ingest:syllabi`.
+5. When a MoE **Teaching Module** JSON exists under `data/teaching-modules/` for the subject/form/term, scheme activities/resources are enriched automatically (`npm run ingest:teaching-modules`).
+6. Optionally **Generate & mark submitted** to flag HOD teacher-progress `schemeSubmitted`.
+7. Download a blank **Record of work** template for weekly teaching notes.
+8. Quiz submissions automatically update **topic mastery** (scores &lt;60% flag reteaching). Admins/HODs review coverage at `/dashboard/admin/teacher-performance`.
 
 #### AI teaching tools
 
 | Tool                | Route                                | Plan requirement |
 | ------------------- | ------------------------------------ | ---------------- |
+| Teaching Studio     | `/dashboard/teacher/teaching-studio` | AI / schemes     |
 | AI Lesson Planner   | `/dashboard/teacher/lesson-planner`  | AI-enabled plan  |
 | Curriculum Studio   | `/dashboard/teacher/curriculum`      | AI-enabled plan  |
 | AI Quiz Maker       | `/dashboard/teacher/quiz-maker`      | AI-enabled plan  |

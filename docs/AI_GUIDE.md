@@ -121,11 +121,12 @@ Full field definitions: `lib/ai/schemas.js`.
 
 ## Debugging failures
 
-1. **Missing key** — `assertGroqConfigured()` → 500 "Service not configured". Check `GROQ_API_KEY`.
-2. **Validation errors** — `generateAIObject` retries 3 times; then throws `AI generation failed: ...`. Check Sentry (`captureError`) and server logs (`AI:generateObject`).
-3. **Rate limits** — Groq free tier daily cap; `checkAILimit` / plan gates on routes.
-4. **502 invalid JSON** — Usually schema mismatch; relax Zod `.min()` or improve the system prompt.
-5. **Stream stalls** — Client expects SSE `data: {"text":"..."}` and `data: [DONE]` (see `createGroqTextEventStream`).
+1. **Missing key** — `assertGroqConfigured()` / `aiChain.isConfigured()` → 503 "AI service is not configured". Set `GROQ_API_KEY` (and optionally `GEMINI_API_KEY`) on the **Production** Vercel environment, then redeploy.
+2. **`All AI providers failed` / `fetch failed`** — Keys are present but the serverless function cannot complete HTTPS to the provider. Check Vercel function logs for the expanded cause (`UND_ERR_CONNECT_TIMEOUT`, `ENOTFOUND`, etc.). Mitigations already in code: retries + `Connection: close` via `lib/ai/ai-http.ts`, and runtime `NODE_OPTIONS=--dns-result-order=ipv4first` in `vercel.json`. Confirm keys are not expired; try a second provider key (`GEMINI_API_KEY`) so the chain can fall back.
+3. **Validation errors** — `generateAIObject` retries 3 times; then throws `AI generation failed: ...`. Check Sentry (`captureError`) and server logs (`AI:generateObject`).
+4. **Rate limits** — Groq free tier daily cap; `checkAILimit` / plan gates on routes.
+5. **502 invalid JSON** — Usually schema mismatch; relax Zod `.min()` or improve the system prompt.
+6. **Stream stalls** — Client expects SSE `data: {"text":"..."}` and `data: [DONE]` (see `createGroqTextEventStream`).
 
 ## Do not install
 

@@ -50,6 +50,7 @@ import {
   Home as HomeIcon,
   AlertTriangle,
   FileCheck,
+  Zap,
 } from 'lucide-react'
 import { TIMETABLE_CONFLICTS_UPDATED } from '@/hooks/useTimetableDraftMeta'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
@@ -151,6 +152,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           icon: FileText,
         },
         { name: 'Teacher Performance', href: '/admin/teacher-performance', icon: Target },
+        {
+          name: 'Teaching Coverage',
+          href: '/dashboard/admin/teacher-performance',
+          icon: BarChart3,
+        },
         { name: 'Classes', href: '/dashboard/classes', icon: GraduationCap },
         {
           name: 'ECZ Exam Tracking',
@@ -185,9 +191,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'My Classes', href: '/dashboard/classes', icon: GraduationCap },
         { name: 'Subjects', href: '/admin/subjects', icon: BookOpen },
         { name: 'Games', href: '/dashboard/hod/games', icon: GamepadIcon },
-        { name: 'AI Lesson Planner', href: '/dashboard/teacher/lesson-planner', icon: Sparkles },
-        { name: 'Curriculum Studio', href: '/dashboard/teacher/curriculum', icon: BookOpen },
-        { name: 'Schemes of Work', href: '/dashboard/teacher/schemes', icon: Layers },
+        {
+          name: 'Teaching Studio',
+          href: '/dashboard/teacher/teaching-studio',
+          icon: Zap,
+        },
         { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
         { name: 'Topic Test (RAG)', href: '/dashboard/teacher/topic-test', icon: ClipboardList },
         {
@@ -198,6 +206,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'AI Report Comments', href: '/dashboard/teacher/report-comments', icon: Sparkles },
         { name: 'AI Story Weaver', href: '/dashboard/teacher/story-weaver', icon: Sparkles },
         { name: 'Teacher Performance', href: '/admin/teacher-performance', icon: Target },
+        {
+          name: 'Teaching Coverage',
+          href: '/dashboard/admin/teacher-performance',
+          icon: BarChart3,
+        },
         { name: 'Assessments', href: '/dashboard/assessments', icon: ClipboardList },
         {
           name: 'ECZ SBA Hub',
@@ -244,9 +257,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Study Materials', href: '/dashboard/teacher/materials', icon: Upload },
         { name: 'My Timetable', href: '/dashboard/timetable/teacher', icon: Calendar },
         { name: 'Games', href: '/dashboard/teacher/games', icon: GamepadIcon },
-        { name: 'AI Lesson Planner', href: '/dashboard/teacher/lesson-planner', icon: Sparkles },
-        { name: 'Curriculum Studio', href: '/dashboard/teacher/curriculum', icon: BookOpen },
-        { name: 'Schemes of Work', href: '/dashboard/teacher/schemes', icon: Layers },
+        {
+          name: 'Teaching Studio',
+          href: '/dashboard/teacher/teaching-studio',
+          icon: Zap,
+        },
         { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
         { name: 'AI Report Comments', href: '/dashboard/teacher/report-comments', icon: Sparkles },
         { name: 'AI Story Weaver', href: '/dashboard/teacher/story-weaver', icon: Sparkles },

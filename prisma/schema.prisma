@@ -126,6 +126,10 @@ model School {
   mockExamAttempts     MockExamAttempt[]
   curricula            Curriculum[]
   schemesOfWork        SchemeOfWork[]
+  schemeProgress       SchemeProgress[]
+  topicMasteries       TopicMastery[]
+  schemeTestSchedules  SchemeTestSchedule[]
+  teacherPerformanceSummaries TeacherPerformanceSummary[]
 
   departmentAllocations  DepartmentAllocation[]
   masterTimetableEntries MasterTimetableEntry[]
@@ -250,6 +254,10 @@ model User {
   lessonPlansToReview LessonPlan[] @relation("LessonPlansReviewer")
   lessonPlanComments LessonPlanComment[] @relation("LessonPlanComments")
   schemesOfWork      SchemeOfWork[] @relation("SchemeOfWorkTeacher")
+  schemeProgress     SchemeProgress[] @relation("SchemeProgressTeacher")
+  topicMasteries     TopicMastery[] @relation("TopicMasteryTeacher")
+  schemeTestSchedules SchemeTestSchedule[] @relation("SchemeTestScheduleTeacher")
+  teacherPerformanceSummaries TeacherPerformanceSummary[] @relation("TeacherPerformanceSummaryTeacher")
 
   assessmentsCreated Assessment[] @relation("AssessmentsCreatedBy")
   assessmentsToReview Assessment[] @relation("AssessmentsReviewer")
@@ -948,6 +956,7 @@ model Class {
   allocations       TeacherAllocation[]
   attendanceSessions AttendanceSession[]
   eczAssessments    EczAssessment[]
+  topicMasteries    TopicMastery[]
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -2381,6 +2390,8 @@ model SchemeOfWork {
   status      SchemeOfWorkStatus @default(DRAFT)
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
+  progress    SchemeProgress[]
+  testSchedule SchemeTestSchedule?
 
   @@index([schoolId])
   @@index([schoolId, teacherId])
@@ -3480,4 +3491,92 @@ model SiblingGroupMember {
 
   @@unique([siblingGroupId, studentId])
   @@index([schoolId, studentId])
+}
+
+/// Week-by-week completion against a SchemeOfWork
+model SchemeProgress {
+  id          String       @id @default(uuid())
+  schoolId    String
+  school      School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  schemeId    String
+  scheme      SchemeOfWork @relation(fields: [schemeId], references: [id], onDelete: Cascade)
+  teacherId   String
+  teacher     User         @relation("SchemeProgressTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+  weekNumber  Int
+  topicName   String?
+  completed   Boolean      @default(false)
+  completedAt DateTime?
+  notes       String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@unique([schemeId, weekNumber])
+  @@index([schoolId, teacherId])
+  @@index([schoolId, schemeId])
+}
+
+/// Class-level topic mastery from quizzes / assessments
+model TopicMastery {
+  id                  String    @id @default(uuid())
+  schoolId            String
+  school              School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  teacherId           String
+  teacher             User      @relation("TopicMasteryTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+  classId             String
+  class               Class     @relation(fields: [classId], references: [id], onDelete: Cascade)
+  topicName           String
+  averageMasteryScore Float     @default(0)
+  studentCount        Int       @default(0)
+  assessmentCount     Int       @default(0)
+  needsReteaching     Boolean   @default(false)
+  lastAssessedAt      DateTime?
+  schemeId            String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@unique([schoolId, classId, topicName])
+  @@index([schoolId, teacherId])
+  @@index([needsReteaching])
+}
+
+/// Mid-term / end-of-term weeks for a scheme
+model SchemeTestSchedule {
+  id            String       @id @default(uuid())
+  schoolId      String
+  school        School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  schemeId      String       @unique
+  scheme        SchemeOfWork @relation(fields: [schemeId], references: [id], onDelete: Cascade)
+  teacherId     String
+  teacher       User         @relation("SchemeTestScheduleTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+  midTermWeek   Int?
+  endOfTermWeek Int?
+  midTermDate   DateTime?
+  endOfTermDate DateTime?
+  notes         String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([schoolId, teacherId])
+}
+
+/// Aggregated teaching coverage + mastery for admin/HOD views
+model TeacherPerformanceSummary {
+  id                   String   @id @default(uuid())
+  schoolId             String
+  school               School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  teacherId            String
+  teacher              User     @relation("TeacherPerformanceSummaryTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+  term                 Int
+  academicYear         Int
+  completionRate       Float    @default(0)
+  averageMasteryScore  Float    @default(0)
+  topicsNeedingReteach Int      @default(0)
+  totalSchemesAssigned Int      @default(0)
+  totalWeeksPlanned    Int      @default(0)
+  totalWeeksCompleted  Int      @default(0)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@unique([schoolId, teacherId, term, academicYear])
+  @@index([schoolId, term, academicYear])
 }

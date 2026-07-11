@@ -12,6 +12,7 @@ import { maybeNotifyTeacherOfAttempts } from '@/lib/assessments/review'
 import { safeRouteParam } from '@/lib/security/safeQueryValue'
 import { assertTeacherManagesAssignment } from '@/lib/assignments/routeScope'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { recordTopicMasteryFromQuiz } from '@/lib/teaching/recordTopicMasteryFromQuiz'
 
 function parseSubmissionContent(raw) {
   if (!raw) return null
@@ -35,7 +36,7 @@ async function resolveContext(request, assignmentId) {
   const assignment = await prisma.assignment.findFirst({
     where: { id: assignmentId, schoolId },
     include: {
-      assessment: { select: { id: true, status: true } },
+      assessment: { select: { id: true, status: true, topic: true } },
     },
   })
   if (!assignment)
@@ -236,6 +237,26 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       schoolId,
       studentId: auth.user.id,
     })
+
+    // Teaching Studio: feed quiz score into topic mastery (best-effort)
+    try {
+      if (assignment.classId && assignment.teacherId) {
+        const topicName =
+          (assignment.assessment && assignment.assessment.topic) ||
+          assignment.subject ||
+          assignment.title
+        await recordTopicMasteryFromQuiz({
+          schoolId,
+          teacherUserId: assignment.teacherId,
+          classId: assignment.classId,
+          topicName,
+          score: grading.percentage,
+          studentCount: 1,
+        })
+      }
+    } catch (err) {
+      console.warn('[teaching] topic mastery update skipped:', err?.message || err)
+    }
   }
 
   return NextResponse.json({
