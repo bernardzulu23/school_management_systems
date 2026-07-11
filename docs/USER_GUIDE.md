@@ -274,6 +274,13 @@ The **Timetable** page (`/dashboard/headteacher/timetable`) has tabs: **Overview
 
 See [TIMETABLE_PIPELINE.md](./TIMETABLE_PIPELINE.md) and [03 timetable conflict resolution.md](./03%20timetable%20conflict%20resolution.md).
 
+#### Teaching Coverage (scheme + mastery)
+
+1. Open **Teaching Coverage** (`/dashboard/admin/teacher-performance`) — also listed for HOD (**department-scoped** for HODs; school-wide for headteacher/admin).
+2. Choose **term** and **academic year**, then filter by low completion (&lt;80%), low mastery (&lt;70%), or teacher name.
+3. Expand a teacher card for progress bars, reteach topics, recommendation text, **Download Report** (CSV), or **Send Feedback** (opens Feedback).
+4. HOD results overview still has a separate **Teacher performance** page (`/dashboard/hod/teacher-performance`) for assessment marks; use **Coverage** there to open Teaching Coverage.
+
 #### MOE reports
 
 1. Open **MOE Reports** (`/dashboard/headteacher/moe-reports`).
@@ -520,7 +527,7 @@ Quick reference: [CURRICULUM_STUDIO.md](./CURRICULUM_STUDIO.md).
 5. Chemistry uses `data/curriculum/form1-4/chemistry-form1-4.json` (9 units) for schemes; the CDC 2024 chunk file remains for RAG/quiz. Physics/Biology/Chemistry also have unit JSON under the same folder; other subjects use school-uploaded syllabi or `npm run ingest:syllabi`.
 6. When a MoE **Teaching Module** JSON exists under `data/teaching-modules/` for the subject/form/term, scheme activities/resources are enriched automatically (`npm run ingest:teaching-modules`).
 7. Optionally **Generate & mark submitted** to flag HOD teacher-progress `schemeSubmitted`.
-8. Quiz submissions automatically update **topic mastery** (scores &lt;60% flag reteaching). Admins/HODs review coverage at `/dashboard/admin/teacher-performance`.
+8. Quiz submissions, flashcard deck completions, and **class test** results update **topic mastery** (scores &lt;60% flag reteaching). Admins/HODs review coverage at `/dashboard/admin/teacher-performance`.
 
 #### AI teaching tools
 

@@ -9,6 +9,7 @@ import { checkAndNotifyParent } from '@/lib/results/checkAndNotifyParent'
 import { normalizeResultType, RESULT_TYPES } from '@/lib/results/resultTypes'
 import { assertSecondaryGradingForContext } from '@/lib/school/gradingAccess'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
+import { onTestResultRecorded } from '@/lib/teaching/updateTopicMasteryHooks'
 
 async function gunzipAsync(data) {
   const ds = new DecompressionStream('gzip')
@@ -339,6 +340,8 @@ export const POST = withErrorHandler(async function POST(request) {
   let applied = 0
   let skippedNotAssigned = 0
   const touched = new Map()
+  /** @type {Array<{ schoolId: string, classId: string, subjectName: string, score: number, teacherUserId: string, resultType: string }>} */
+  const masteryUpdates = []
 
   const classIds = Array.from(
     new Set(
@@ -568,6 +571,19 @@ export const POST = withErrorHandler(async function POST(request) {
       if (resultType === RESULT_TYPES.END_OF_TERM) {
         touched.set(`${studentId}|${term}|${year}`, { studentId, classId, term, year })
       }
+      if (resultType === RESULT_TYPES.CLASS_TEST) {
+        const displaySubject = String(subjectNameById.get(subjectId) || '').trim()
+        if (displaySubject) {
+          masteryUpdates.push({
+            schoolId,
+            classId,
+            subjectName: displaySubject,
+            score,
+            teacherUserId: auth.user.id,
+            resultType,
+          })
+        }
+      }
       applied += 1
     }
   })
@@ -586,6 +602,12 @@ export const POST = withErrorHandler(async function POST(request) {
         year: entry.year,
         request,
       })
+    } catch {}
+  }
+
+  for (const m of masteryUpdates) {
+    try {
+      await onTestResultRecorded(m)
     } catch {}
   }
 

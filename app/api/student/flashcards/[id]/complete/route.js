@@ -10,6 +10,7 @@ import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { scoreFlashcardSession } from '@/lib/flashcards/scoreSession'
 import { generateFlashcardSessionFeedback } from '@/lib/flashcards/generateSessionFeedback'
 import { checkAILimit, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
+import { onFlashcardDeckCompleted } from '@/lib/teaching/updateTopicMasteryHooks'
 
 const CompleteSchema = z.object({
   answers: z.record(z.string(), z.string()).default({}),
@@ -64,6 +65,20 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   })
 
   await trackAIUsage(schoolId, 'student-flashcards-feedback').catch(() => {})
+
+  // Teaching Studio: Flashcard session → TopicMastery (best-effort)
+  try {
+    await onFlashcardDeckCompleted({
+      schoolId,
+      deckId: deck.id,
+      studentId: student.id,
+      correctCount: score.correctCount,
+      totalCount: score.total,
+      percent: score.percent,
+    })
+  } catch (err) {
+    console.warn('[teaching] flashcard mastery update skipped:', err?.message || err)
+  }
 
   return NextResponse.json({
     success: true,

@@ -248,9 +248,14 @@ export default function HodTeacherPerformancePage() {
                             : '—'}
                         </td>
                         <td className="py-3 pr-4">
-                          <Button asChild size="sm" variant="outline" className="gap-2">
-                            <Link href={`/admin/teacher-performance`}>View</Link>
-                          </Button>
+                          <div className="flex flex-wrap gap-2">
+                            <Button asChild size="sm" variant="outline" className="gap-2">
+                              <Link href="/admin/teacher-performance">Observations</Link>
+                            </Button>
+                            <Button asChild size="sm" variant="outline" className="gap-2">
+                              <Link href="/dashboard/admin/teacher-performance">Coverage</Link>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}

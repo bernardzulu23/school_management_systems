@@ -12,7 +12,7 @@ import { maybeNotifyTeacherOfAttempts } from '@/lib/assessments/review'
 import { safeRouteParam } from '@/lib/security/safeQueryValue'
 import { assertTeacherManagesAssignment } from '@/lib/assignments/routeScope'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
-import { recordTopicMasteryFromQuiz } from '@/lib/teaching/recordTopicMasteryFromQuiz'
+import { onQuizSubmitted } from '@/lib/teaching/updateTopicMasteryHooks'
 
 function parseSubmissionContent(raw) {
   if (!raw) return null
@@ -238,22 +238,13 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       studentId: auth.user.id,
     })
 
-    // Teaching Studio: feed quiz score into topic mastery (best-effort)
+    // Teaching Studio: Quiz → TopicMastery (best-effort)
     try {
-      if (assignment.classId && assignment.teacherId) {
-        const topicName =
-          (assignment.assessment && assignment.assessment.topic) ||
-          assignment.subject ||
-          assignment.title
-        await recordTopicMasteryFromQuiz({
-          schoolId,
-          teacherUserId: assignment.teacherId,
-          classId: assignment.classId,
-          topicName,
-          score: grading.percentage,
-          studentCount: 1,
-        })
-      }
+      await onQuizSubmitted({
+        schoolId,
+        assignmentSubmissionId: saved.id,
+        grade: grading.percentage,
+      })
     } catch (err) {
       console.warn('[teaching] topic mastery update skipped:', err?.message || err)
     }

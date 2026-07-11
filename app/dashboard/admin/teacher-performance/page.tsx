@@ -1,117 +1,268 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import {
+  TeacherPerformanceCard,
+  downloadCSV,
+  generatePerformanceCSV,
+  type TeacherPerformanceRow,
+} from '@/components/admin/TeacherPerformanceCard'
 
-type PerformanceRow = {
-  id: string
-  teacherId: string
-  teacherName?: string
-  completionRate: number
-  averageMasteryScore: number
-  topicsNeedingReteach: number
-  totalSchemesAssigned: number
-  topicsNeedingReteachDetails: Array<{
-    id: string
-    topicName: string
-    averageMasteryScore: number
-  }>
+function getCurrentTerm(): number {
+  const month = new Date().getMonth()
+  if (month < 5) return 1
+  if (month < 9) return 2
+  return 3
 }
 
 export default function TeachingCoveragePerformancePage() {
-  const [performance, setPerformance] = useState<PerformanceRow[]>([])
+  const router = useRouter()
+  const [teachers, setTeachers] = useState<TeacherPerformanceRow[]>([])
   const [loading, setLoading] = useState(true)
-  const term = new Date().getMonth() < 5 ? 1 : new Date().getMonth() < 9 ? 2 : 3
-  const year = new Date().getFullYear()
+  const [term, setTerm] = useState(String(getCurrentTerm()))
+  const [year, setYear] = useState(String(new Date().getFullYear()))
+  const [showLowCompletion, setShowLowCompletion] = useState(false)
+  const [showLowMastery, setShowLowMastery] = useState(false)
+  const [searchTeacher, setSearchTeacher] = useState('')
+  const [expandedTeacherId, setExpandedTeacherId] = useState<string | null>(null)
 
-  const load = async (refresh = false) => {
-    setLoading(true)
-    try {
-      const qs = new URLSearchParams({
-        term: String(term),
-        academicYear: String(year),
-        ...(refresh ? { refresh: '1' } : {}),
-      })
-      const res = await fetch(`/api/admin/teacher-performance?${qs}`, { credentials: 'include' })
-      const data = await res.json().catch(() => ({}))
-      setPerformance(Array.isArray(data.performance) ? data.performance : [])
-    } finally {
-      setLoading(false)
-    }
-  }
+  const fetchTeacherPerformance = useCallback(
+    async (refresh = false) => {
+      setLoading(true)
+      try {
+        const qs = new URLSearchParams({
+          term,
+          academicYear: year,
+          ...(refresh ? { refresh: '1' } : {}),
+        })
+        const res = await fetch(`/api/admin/teacher-performance?${qs}`, {
+          credentials: 'include',
+        })
+        const data = await res.json().catch(() => ({}))
+        setTeachers(Array.isArray(data.performance) ? data.performance : [])
+      } catch (error) {
+        console.error('Error fetching performance data:', error)
+        setTeachers([])
+      } finally {
+        setLoading(false)
+      }
+    },
+    [term, year]
+  )
 
   useEffect(() => {
-    load(true)
-  }, [])
+    fetchTeacherPerformance(true)
+  }, [fetchTeacherPerformance])
+
+  const filteredTeachers = useMemo(() => {
+    const q = searchTeacher.trim().toLowerCase()
+    return teachers.filter((teacher) => {
+      if (q) {
+        const hay =
+          `${teacher.teacherName || ''} ${teacher.teacherEmail || ''} ${teacher.teacherId}`.toLowerCase()
+        if (!hay.includes(q)) return false
+      }
+      if (showLowCompletion && teacher.completionRate >= 80) return false
+      if (showLowMastery && teacher.averageMasteryScore >= 70) return false
+      return true
+    })
+  }, [teachers, searchTeacher, showLowCompletion, showLowMastery])
+
+  const avgCompletion =
+    teachers.length > 0
+      ? teachers.reduce((sum, t) => sum + t.completionRate, 0) / teachers.length
+      : 0
+  const avgMastery =
+    teachers.length > 0
+      ? teachers.reduce((sum, t) => sum + t.averageMasteryScore, 0) / teachers.length
+      : 0
+  const atRisk = teachers.filter((t) => t.completionRate < 80 || t.averageMasteryScore < 70).length
+
+  const handleDownloadReport = (teacher: TeacherPerformanceRow) => {
+    const csv = generatePerformanceCSV(teacher)
+    const safeName = String(teacher.teacherName || teacher.teacherId)
+      .replace(/[^\w.-]+/g, '-')
+      .slice(0, 40)
+    downloadCSV(csv, `teacher-performance-${safeName}-T${term}-${year}.csv`)
+  }
+
+  const handleSendFeedback = (teacher: TeacherPerformanceRow) => {
+    const params = new URLSearchParams({
+      to: teacher.teacherId,
+      name: teacher.teacherName || '',
+    })
+    router.push(`/dashboard/feedback?${params.toString()}`)
+  }
 
   return (
     <DashboardLayout title="Teaching Coverage">
       <div className="space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-bold">Teacher Performance Tracking</h1>
-            <p className="text-muted-foreground">
-              Scheme coverage and topic mastery · Term {term} {year}
+            <h1 className="text-3xl font-bold tracking-tight">Teacher Performance Tracking</h1>
+            <p className="mt-1 text-muted-foreground">
+              Monitor scheme completion and student topic mastery
             </p>
           </div>
-          <Button type="button" variant="outline" onClick={() => load(true)} disabled={loading}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => fetchTeacherPerformance(true)}
+            disabled={loading}
+          >
             Refresh
           </Button>
         </div>
 
-        {loading && <p className="text-sm text-muted-foreground">Loading…</p>}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Filters</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <div className="space-y-2">
+                <Label>Term</Label>
+                <Select value={term} onValueChange={setTerm}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">Term 1</SelectItem>
+                    <SelectItem value="2">Term 2</SelectItem>
+                    <SelectItem value="3">Term 3</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-        <div className="space-y-4">
-          {!loading && performance.length === 0 && (
-            <p className="text-sm text-muted-foreground">
-              No teaching coverage data yet. Teachers need schemes with marked weeks and/or quiz
-              mastery records.
-            </p>
-          )}
-          {performance.map((teacher) => (
-            <Card key={teacher.id}>
-              <CardHeader>
-                <CardTitle>{teacher.teacherName || teacher.teacherId}</CardTitle>
+              <div className="space-y-2">
+                <Label>Academic Year</Label>
+                <Select value={year} onValueChange={setYear}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 1 + i).map(
+                      (y) => (
+                        <SelectItem key={y} value={String(y)}>
+                          {y}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="search-teacher">Search Teacher</Label>
+                <Input
+                  id="search-teacher"
+                  placeholder="Name or email…"
+                  value={searchTeacher}
+                  onChange={(e) => setSearchTeacher(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-4 pt-1">
+              <label className="flex cursor-pointer items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 rounded border"
+                  checked={showLowCompletion}
+                  onChange={(e) => setShowLowCompletion(e.target.checked)}
+                />
+                Show only Completion &lt; 80%
+              </label>
+              <label className="flex cursor-pointer items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 rounded border"
+                  checked={showLowMastery}
+                  onChange={(e) => setShowLowMastery(e.target.checked)}
+                />
+                Show only Mastery &lt; 70%
+              </label>
+            </div>
+          </CardContent>
+        </Card>
+
+        {teachers.length > 0 && (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Total Teachers</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-                  <div>
-                    <p className="text-sm text-gray-600">Completion Rate</p>
-                    <p className="text-2xl font-bold">{teacher.completionRate.toFixed(0)}%</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Avg Mastery</p>
-                    <p className="text-2xl font-bold">{teacher.averageMasteryScore.toFixed(0)}%</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Topics Needing Reteach</p>
-                    <p className="text-2xl font-bold text-orange-600">
-                      {teacher.topicsNeedingReteach}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Schemes Assigned</p>
-                    <p className="text-2xl font-bold">{teacher.totalSchemesAssigned}</p>
-                  </div>
-                </div>
-
-                {teacher.topicsNeedingReteachDetails.length > 0 && (
-                  <div className="mt-4 border-t pt-4">
-                    <p className="mb-2 text-sm font-medium">Topics Needing Reteaching:</p>
-                    <ul className="space-y-1 text-sm text-gray-600">
-                      {teacher.topicsNeedingReteachDetails.map((t) => (
-                        <li key={t.id}>
-                          • {t.topicName}: {t.averageMasteryScore.toFixed(0)}%
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+              <CardContent>
+                <div className="text-2xl font-bold">{teachers.length}</div>
               </CardContent>
             </Card>
-          ))}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Avg Completion</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{avgCompletion.toFixed(0)}%</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Avg Mastery</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{avgMastery.toFixed(0)}%</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">At Risk</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-red-600">{atRisk}</div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        <div className="space-y-3">
+          {loading ? (
+            <Card>
+              <CardContent className="pt-6 text-sm text-muted-foreground">Loading…</CardContent>
+            </Card>
+          ) : filteredTeachers.length === 0 ? (
+            <Card>
+              <CardContent className="pt-6 text-center text-sm text-muted-foreground">
+                {teachers.length === 0
+                  ? 'No teaching coverage data yet. Teachers need schemes with marked weeks and/or quiz mastery records.'
+                  : 'No teachers found matching filters'}
+              </CardContent>
+            </Card>
+          ) : (
+            filteredTeachers.map((teacher) => (
+              <TeacherPerformanceCard
+                key={teacher.id}
+                teacher={teacher}
+                isExpanded={expandedTeacherId === teacher.id}
+                onToggleExpand={() =>
+                  setExpandedTeacherId(expandedTeacherId === teacher.id ? null : teacher.id)
+                }
+                onDownloadReport={() => handleDownloadReport(teacher)}
+                onSendFeedback={() => handleSendFeedback(teacher)}
+              />
+            ))
+          )}
         </div>
       </div>
     </DashboardLayout>
