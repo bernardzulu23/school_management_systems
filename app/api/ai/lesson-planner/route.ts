@@ -117,7 +117,7 @@ export const POST = withAILimits(async function POST(request: Request) {
   try {
     const user = await getAuthUser(request as any)
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    if (!roleCheck(user, ['TEACHER', 'HOD', 'ADMIN'])) {
+    if (!roleCheck(user, ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher'])) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 })
     }
 
@@ -169,7 +169,7 @@ export const POST = withAILimits(async function POST(request: Request) {
         input.additionalInstructions || '',
       ].join(' '),
     })
-    if (!guard.ok) return guard.response
+    if (guard.ok === false) return guard.response
 
     const cachePayload = {
       schoolId,
@@ -203,6 +203,26 @@ export const POST = withAILimits(async function POST(request: Request) {
     })
 
     let prompt = await buildPrompt(input, String(user.id), schoolId)
+
+    try {
+      const { formatModuleContextForPrompt, loadTeachingModule } =
+        await import('@/lib/curriculum/teachingModuleLoader')
+      const teachingModule = loadTeachingModule({
+        subject: input.subject,
+        gradeOrForm: input.grade,
+        term: input.term || 'Term 1',
+      })
+      const moduleContext = formatModuleContextForPrompt(teachingModule, input.topic)
+      if (moduleContext) {
+        prompt = `${prompt}\n\n---\n${moduleContext}`
+      }
+    } catch (moduleError) {
+      logger.warn('ai.lesson-planner.teaching_module_enrich_failed', {
+        requestId,
+        message: moduleError instanceof Error ? moduleError.message : String(moduleError),
+      })
+    }
+
     const rag = await buildRagContextForQuery({
       query: `${input.subject} ${input.grade} ${input.topic} lesson plan`,
       schoolId,
@@ -246,18 +266,24 @@ export const POST = withAILimits(async function POST(request: Request) {
     }
 
     await trackAIUsage(schoolId, 'ai-lesson-planner')
-    await prisma.aIRequest.create({
-      data: {
-        id: crypto.randomUUID(),
-        schoolId,
-        feature: 'ai-lesson-planner',
-        prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
-        response:
-          aiResponse.text.length > 20000 ? aiResponse.text.slice(0, 20000) : aiResponse.text,
-        tokens: 0,
-      },
-    })
-
+    try {
+      await prisma.aIRequest.create({
+        data: {
+          id: crypto.randomUUID(),
+          schoolId,
+          feature: 'ai-lesson-planner',
+          prompt: prompt.length > 500 ? prompt.slice(0, 500) : prompt,
+          response:
+            aiResponse.text.length > 20000 ? aiResponse.text.slice(0, 20000) : aiResponse.text,
+          tokens: 0,
+        },
+      })
+    } catch (logError) {
+      logger.warn('ai.lesson-planner.usage_log_failed', {
+        requestId,
+        message: logError instanceof Error ? logError.message : String(logError),
+      })
+    }
     logger.info('ai.lesson-planner.completed', {
       requestId,
       schoolId,

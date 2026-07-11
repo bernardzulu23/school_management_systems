@@ -237,4 +237,5 @@ When a matching module JSON exists for subject/form/term, `generateSchemeOfWork`
 - Bulk ZIP for whole school
 - Headteacher coverage dashboard
 - Analytics (adherence, downloads)
-- Batch remaining Teaching Module PDFs (Zambian languages, Lit-in-X, etc.)
+
+Teaching Module ingest + scheme/lesson enrichment is **implemented** (`data/teaching-modules/`, `npm run ingest:teaching-modules -- --all`).
