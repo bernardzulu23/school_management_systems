@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Download, FileText, Layers, Loader2 } from 'lucide-react'
 
-const SUBJECTS = [
+const FALLBACK_SUBJECTS = [
   'Chemistry',
   'Physics',
   'Biology',
@@ -48,6 +48,7 @@ function downloadText(text, filename, mime) {
 }
 
 export function CurriculumStudio() {
+  const [subjects, setSubjects] = useState(FALLBACK_SUBJECTS)
   const [subject, setSubject] = useState('Chemistry')
   const [grade, setGrade] = useState('Form 2')
   const [term, setTerm] = useState('Term 1')
@@ -70,6 +71,23 @@ export function CurriculumStudio() {
 
   useEffect(() => {
     loadRecent()
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await fetch('/api/curriculum', { credentials: 'include' })
+        const json = await res.json().catch(() => ({}))
+        if (!cancelled && res.ok && Array.isArray(json.subjects) && json.subjects.length) {
+          const list = json.subjects.map(String).filter(Boolean)
+          setSubjects(list)
+          setSubject((prev) => (list.includes(prev) ? prev : list[0]))
+        }
+      } catch {
+        // keep fallback
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   const handleScheme = async ({ submit = false } = {}) => {
@@ -180,7 +198,7 @@ export function CurriculumStudio() {
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
               >
-                {SUBJECTS.map((s) => (
+                {subjects.map((s) => (
                   <option key={s} value={s}>
                     {s}
                   </option>

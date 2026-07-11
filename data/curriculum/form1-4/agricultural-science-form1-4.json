@@ -1,8 +1,8 @@
 {
-  "subject": "AGRICULTURAL SCIENCE",
-  "level": "Form 1",
+  "subject": "Agricultural Science",
+  "level": "Form 1-4",
   "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "48 weeks",
+  "totalDuration": "12 weeks",
   "units": [
     {
       "unitNumber": 1,
@@ -14,6 +14,7 @@
         "SUHWDWLRQ\u0003DQG\u0003FRPPXQLFDWLRQ\u0003",
         "of results."
       ],
+      "duration": "2 weeks",
       "learningOutcomes": [],
       "suggestedActivities": [],
       "assessmentMethods": [],
@@ -29,6 +30,7 @@
         "HODWHG\u0003¿HOGV\u0011",
         "DJULFXOWXUH\u0003DQG\u0003DJULFXOWXUH\u0003UHODWHG\u0003¿HOGV\u0011"
       ],
+      "duration": "4 weeks",
       "learningOutcomes": [],
       "suggestedActivities": [],
       "assessmentMethods": [],
@@ -47,6 +49,7 @@
         "mages and address issues",
         "Evaluate solutions"
       ],
+      "duration": "9 weeks",
       "learningOutcomes": [
         "LEARNING ACTIVITIES",
         "AGRICULTURE",
@@ -156,5 +159,10 @@
         "Applying the law of diminishing returns in production"
       ]
     }
-  ]
+  ],
+  "metadata": {
+    "source": "AGRICULTURAL-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.pdf",
+    "extractedAt": "2026-07-11T06:20:37.354Z",
+    "fileSize": 1033424
+  }
 }

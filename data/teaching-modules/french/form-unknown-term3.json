@@ -1,0 +1,146 @@
+{
+  "subject": "French",
+  "form": null,
+  "term": 3,
+  "sourceFile": "FRENCH-TEACHING-MODULE-TERM-3-1.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "6",
+      "topics": [
+        "My School..................................................................... 6",
+        "Classroom Orders and Instructions 6",
+        "My School Subjects 8",
+        "School Timetable 10"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 2,
+      "title": "15",
+      "topics": [],
+      "activities": ["Telling Time"],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 3,
+      "title": "22",
+      "topics": [
+        "The Past......................................................................... 22",
+        "Past Actions 22"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 4,
+      "title": "28",
+      "topics": [
+        "Weather.......................................................................... 28",
+        "Weather Conditions 29"
+      ],
+      "activities": ["Factors Affecting Weather"],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 5,
+      "title": "11.0: MY SCHOOL",
+      "topics": [
+        "Overview",
+        "This topic is essential for learners as it provides foundational vocabulary and",
+        "expressions related to daily life in a school setting. By exploring classroom orders and",
+        "instructions, learners will learn how to navigate and communicate effectively in a",
+        "French speaking classroom environment. Understanding subjects and school time"
+      ],
+      "activities": [
+        "in English (Sortez - Entrez - Taisez-vous",
+        " Give instructions in French accompanied by gestures.",
+        " Learners listen to a set of demonstrated instructions and respond appropriately.",
+        "e.g. Entrez !/ Venez ! Va a ta place ! Levez-vous.!",
+        "Content Tips:",
+        " Revision on ‘Les adjectifs possessifs’.",
+        " In groups, learners find the meaning of the different classroom instructions",
+        "and commands."
+      ],
+      "resources": [],
+      "assessment": [
+        "specific competence.",
+        "learning activities from all the sub-topics taught and the summative",
+        "questions",
+        "Key Points/ Recap",
+        "i. Classroom objects in French.",
+        "ii. Les adjectifs démonstratifs"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 6,
+      "title": "12.0 DAILY ACTIVITIES",
+      "topics": ["Overview"],
+      "activities": [
+        "Overview",
+        "learners, regardless of their cultural background. This topic lays a foundation for",
+        "everyday communication and helps learners to gain confidence in daily conversations,",
+        "to use key verbs and vocabulary while understanding the rhythm of daily life in",
+        "French-speaking cultures. Thus, this topic will help learners connect the language to",
+        "their real-life experiences and promote a more natural and practical use of French.",
+        "The topic includes one subtopic: Telling Time in French.",
+        "General Competences"
+      ],
+      "resources": [],
+      "assessment": [
+        "the specific competence.",
+        "learning activities from all the sub-topics taught and the summative",
+        "questions",
+        "Key Points/ Recap",
+        "i. Vocabulary for daily activities in French.",
+        "ii. Telling time."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 7,
+      "title": "13.0 THE PAST",
+      "topics": [
+        "Overview",
+        "The past refers to a time that has already happened, before the present moment. It",
+        "could be recent (yesterday, last week) or distant (years ago). The past usually means",
+        "past tense and it is used to talk about actions or events that have already happened. In",
+        "French, learners start by learning passé compose which is the most commonly used"
+      ],
+      "activities": [
+        " Play an audio or read a passage in which le passé composé has been used for",
+        "the learners to understand the structure and its usage.",
+        " Guide learners in identifying the structure (le passé composé) from the",
+        "passage e.g. Hier, je suis allé au marché. J’ai acheté une pomme.",
+        " In groups, learners identify the structure (le passé composé) used from the",
+        "passage given.",
+        " Explain the formation of le passé compose.",
+        "Content tips:"
+      ],
+      "resources": [],
+      "assessment": [
+        "specific competence.",
+        "learning activities from all the sub-topics taught and the summative",
+        "questions",
+        "Key Points / Recap",
+        "i. Le passé composé,.",
+        "ii. L’auxiliaire (helping verb) – Either avoir or être, used to form the past tense."
+      ],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-11T06:12:18.416Z",
+    "rawTextLength": 42924
+  }
+}

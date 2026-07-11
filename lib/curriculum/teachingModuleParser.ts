@@ -141,6 +141,7 @@ export function extractLessonsFromModuleText(text: string): TeachingModuleLesson
     .filter(Boolean)
 
   const startRe = /^(?:week|lesson|topic|unit)\s*(\d+[a-z]?)[:.\s\-–]+(.+)$/i
+  const topicOnlyRe = /^topic\s*[:\-–]\s*(.+)$/i
   const starts: { index: number; week?: number; title: string }[] = []
 
   for (let i = 0; i < lines.length; i++) {
@@ -152,6 +153,14 @@ export function extractLessonsFromModuleText(text: string): TeachingModuleLesson
         index: i,
         week: kind === 'week' || kind === 'lesson' ? n : undefined,
         title: cleanModuleLine(m[2]) || `Lesson ${m[1]}`,
+      })
+      continue
+    }
+    const t = lines[i].match(topicOnlyRe)
+    if (t) {
+      starts.push({
+        index: i,
+        title: cleanModuleLine(t[1]) || 'Topic',
       })
     }
   }

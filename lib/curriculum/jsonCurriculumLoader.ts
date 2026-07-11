@@ -5,6 +5,7 @@
 import fs from 'fs'
 import path from 'path'
 import type { ParsedSyllabusUnit } from '@/lib/curriculum/syllabusParsing'
+import { normalizeKnownSubject } from '@/lib/curriculum/syllabusParsing'
 
 export type CurriculumJSONUnit = {
   unitNumber?: number
@@ -23,6 +24,12 @@ export type CurriculumJSON = {
   gradesCovered?: number[]
   totalDuration?: string
   units: CurriculumJSONUnit[]
+  metadata?: {
+    source?: string
+    extractedAt?: string
+    fileSize?: number
+    curated?: boolean
+  }
 }
 
 function asStringArray(value: unknown): string[] {
@@ -165,8 +172,12 @@ export function listAvailableCurriculumSubjects(): string[] {
       }
       try {
         const raw = JSON.parse(fs.readFileSync(path.join(dir, entry), 'utf8')) as CurriculumJSON
-        if (raw.subject) subjects.add(String(raw.subject))
-        else {
+        if (raw.subject) {
+          const title = String(raw.subject).trim().replace(/\s+/g, ' ')
+          subjects.add(
+            normalizeKnownSubject(title) || title.replace(/\b\w/g, (c) => c.toUpperCase())
+          )
+        } else {
           const base = entry.replace(/\.json$/i, '').replace(/-form1-[46]$/i, '')
           subjects.add(base.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()))
         }
@@ -175,5 +186,5 @@ export function listAvailableCurriculumSubjects(): string[] {
       }
     }
   }
-  return Array.from(subjects).sort()
+  return Array.from(subjects).sort((a, b) => a.localeCompare(b))
 }

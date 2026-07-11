@@ -5,255 +5,157 @@
   "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
   "lessons": [
     {
-      "week": 1,
       "lesson": 1,
-      "title": "Stress is the body’s natural, human response to challenges or demands. It is a",
+      "title": "COMPREHENSION",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 2,
+      "title": "NARRATIVES",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 3,
+      "title": "RESULT",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 4,
+      "title": "SUMMARY WRITING",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 5,
+      "title": "DESCRIPTIVE WRITING",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 6,
+      "title": "ADVERBS",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 7,
+      "title": "ADJECTIVES",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 8,
+      "title": "INTENSIFIERS",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 9,
+      "title": "INTRODUCTION TO SUMMARY",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 10,
+      "title": "INTENSIVE READING",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 11,
+      "title": "EXPOSITORY WRITING",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 12,
+      "title": "QUESTION TAGS",
       "topics": [
+        "SUB-TOPIC: QUESTION TAGS AND SHORT ANSWERS ........................................................... 71"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 13,
+      "title": "SUMMARY",
+      "topics": ["PREFACE"],
+      "activities": [],
+      "resources": [
+        "new Competence-Based Curriculum, enhancing their ability to inspire and equip learners with",
+        "essential English Language knowledge, skills and positive attitudes desired to create a vibrant",
+        "and responsive education system.",
+        "CHAPTER 1: LIFE SKILLS AND HEALTH EDUCATION",
+        "LISTENING AND SPEAKING",
+        "TOPIC TITLE: PUBLIC SPEAKING"
+      ],
+      "assessment": [
+        "supplement this module with their own research and innovations in order to address any gaps",
+        "that may arise during implementation.",
+        "Kelvin Mambwe (PhD.)",
+        "Permanent Secretary- Educational Services",
+        "MINISTRY OF EDUCATION",
+        "ACKOWLEDGEMENT"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 14,
+      "title": "COMPREHENSION",
+      "topics": [
+        "INTRODUCTION",
+        " Overview: Comprehension is a process of active engagement that leads to accurate",
+        "understanding and interpretation of what is heard or read. The importance of",
+        "comprehension lies in its application to real-life situations such as understanding",
+        "instructions, engaging in conversations, and interpreting information. Learners will read"
+      ],
+      "activities": [
+        "information or texts:",
+        " Ask learners to skim through the passage to get the general idea",
+        " Time learners to ensure that they read at a speed of 200 words per minute.",
+        " Guide learners to avoid bad reading habits",
+        "Stress is the body’s natural, human response to challenges or demands. It is a",
         "feeling of being under pressure, overwhelmed, or unable to cope with certain",
         "situations. Many different situations can cause stress, and this can change",
-        "depending on our age. For instance, stress in teenagers may be caused by",
-        "examinations, bullying, or difficult family situations. In comparison, young and",
-        "older adults may struggle with stress relating to employment or significant events"
-      ],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 2,
-      "lesson": 2,
-      "title": "Stress in relationships can affect the way you think, feel, and behave. Stress in",
-      "topics": [
-        "relationships can be as a result of arguments, family difficulties, illnesses, and",
-        "bereavements."
-      ],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 3,
-      "lesson": 3,
-      "title": "Stress can also be work related. For example, feeling a lack of control over your",
-      "topics": [
-        "job, needing to continually work harder and for longer, worries about",
-        "unemployment and not feeling rewarded for hard work can contribute to stress at"
-      ],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 4,
-      "lesson": 4,
-      "title": "Money and debt concerns are placing huge pressure on many of us, especially",
-      "topics": [
-        "with the high cost of living. Many people are struggling to pay bills and grocery",
-        "prices. To avoid money related stress and mental health difficulties, financial",
-        "literacy comes in handy."
-      ],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 5,
-      "lesson": 5,
-      "title": "When stressed, many people are tempted to turn to alcohol, nicotine, or other",
-      "topics": [
-        "recreational drugs to help them cope. However, drugs such as alcohol can have a",
-        "depressant effect, so, when they wear off, can make us feel worse. In some cases,",
-        "people may start to consume them in larger doses to maintain the initial sense of",
-        "relief. However, this can lead to dependence and worsen stress."
-      ],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 6,
-      "lesson": 6,
-      "title": "It is important to note that the ones mentioned here are not the only causes of",
-      "topics": [
-        "stress. If you or someone you know is struggling with stress, it may be due to any",
-        "one of these factors or it may be something else entirely."
-      ],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 7,
-      "lesson": 7,
-      "title": "As long-term stress can be damaging to our mental and physical health, it is",
-      "topics": ["important to know how to reduce stress through daily coping skills."],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 8,
-      "lesson": 8,
-      "title": "To understand when stress is causing you a problem, try to connect your feelings",
-      "topics": [
-        "or physical signs with the pressure you are facing in your life. Remember to look",
-        "out for the physical warnings, such as tense muscles, over tiredness, headaches or",
-        "migraines, as well as emotional signs like irritability and forgetfulness."
-      ],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 9,
-      "lesson": 9,
-      "title": "Once you notice feelings of stress in your body or mind, try to pause for a",
-      "topics": [
-        "moment. What happened right before you noticed these feelings? Tracking your",
-        "physical and mental sensations of stress over a couple of days or weeks can help",
-        "you pinpoint where they are coming from and where in your life you could make"
-      ],
-      "activities": [
-        "and keep a healthy diet. Be kind to yourself by not blaming yourself and",
-        "practicing regular self-care, maintain a routine with a definite daily pattern of",
-        "sleeping, eating and exercising. Stay away from alcohol and nicotine."
-      ],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 10,
-      "lesson": 10,
-      "title": "It is okay to ask for professional help if you feel that you are struggling to manage",
-      "topics": ["stress on your own.", "(Adapted from Mentalhealth.org.uk)"],
-      "activities": [
-        " Use the question-and-answer technique to lead a discussion of the new vocabulary in",
-        " Ask learners to say any facts they have learnt from the passage",
-        " Ask learners to answer the questions in their books",
-        " Ask learners questions based on the reading passage",
-        " Learners bring out unfamiliar words and they are discussed in class",
-        " Learners answer questions based on the reading passage.",
-        " Ask the learners to express their feelings about the passage",
-        "QUESTIONS"
-      ],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 1,
-      "lesson": 11,
-      "title": "According to Paragraph 1, stress is a...",
-      "topics": ["A. challenge.", "B. change.", "C. demand.", "D. feeling."],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 2,
-      "lesson": 12,
-      "title": "Paragraph 1, the following are causes of stress in young and older adults except...",
-      "topics": [
-        "A. becoming parents",
-        "B. employment.",
-        "C. examinations.",
-        "D. health conditions"
-      ],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 3,
-      "lesson": 13,
-      "title": "According to the passage, a young trained person awaiting deployment is likely to suffer",
-      "topics": [
-        "from...",
-        "A. Long term stress",
-        "B. Mental health stress",
-        "C. Stress in relationships",
-        "D. Work related stress"
-      ],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 4,
-      "lesson": 14,
-      "title": "Fill in the blanks with one word to complete information from Paragraph 4",
-      "topics": [
-        "Many (i)....................... need financial (ii)...................... to avoid suffering the",
-        "effects of the high (iii) ...................... of living as they struggle to pay",
-        "(iv) ....................... and grocery prices."
-      ],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 5,
-      "lesson": 15,
-      "title": "Paragraph 5. “However, this can lead to dependence...” What does the word ‘this’ refer",
-      "topics": [
-        "A. can feel worsened stress",
-        "B. consuming drugs in larger doses",
-        "C. coping with recreational drugs",
-        "D. turning to alcohol and nicotine"
-      ],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 6,
-      "lesson": 16,
-      "title": "Which of the following statements is true about the passage?",
-      "topics": [
-        "A. Alcohol is a solution to stress",
-        "B. Tense muscles is a physical warning of stress",
-        "C. There are very few situations that can cause stress",
-        "D. To overcome stress, avoid sleeping and exercising"
-      ],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 7,
-      "lesson": 17,
-      "title": "What would be the best title for this passage?",
-      "topics": [
-        "A. Causes of stress",
-        "B. Challenges and stress",
-        "C. Health and stress",
-        "D. Stress in teenagers",
-        "Suggested Teaching and Learning Materials:"
-      ],
-      "activities": [
-        " Ask Learners to read a given story (Teacher can also read the story aloud to the class)",
-        "Sample story",
-        "A Bridge for Nabwalya Village",
-        "In Nabwalya village of the Muchinga escarpment, there was a river that divided",
-        "the land. For many years, the villagers struggled to cross it, using canoes that",
-        "were often swept away by strong currents.",
-        "In the village was a young woman named Mulenga. She was not a village elder",
-        "and she did not have any position of leadership. Mulenga saw the struggles of"
+        "depending on our age. For instance, stress in teenagers may be caused by"
       ],
       "resources": [],
       "assessment": [
@@ -267,149 +169,142 @@
       "notes": ""
     },
     {
-      "week": 1,
-      "lesson": 18,
-      "title": "What made the tortoise win the race despite being slower than the hare?",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 2,
-      "lesson": 19,
-      "title": "What lesson do you think the hare learned after losing the race to the tortoise?",
+      "lesson": 15,
+      "title": "NARRATIVES",
       "topics": [
-        "NOTE: These questions will help learners recall specific details from the story while also",
-        "encouraging them to reflect on the underlying message of the tale.",
-        "Ask questions based on “The Lion and the Mouse” passage (These questions will help",
-        "learners engage with the story on both a factual and reflective level):"
-      ],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 1,
-      "lesson": 20,
-      "title": "What do you think the lion learned from his experience with the mouse?",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 2,
-      "lesson": 21,
-      "title": "How do you think the mouse felt when he was able to help the lion? Why?",
-      "topics": [
-        "Suggested Teaching and Learning materials:",
-        " Short stories/passages",
-        " Pre-recorded stories/passages",
-        "EXPECTED STANDARD: Information listened to and comprehended correctly."
+        "INTRODUCTION",
+        " Overview: Narrative writing is a type of composition that tells a story with a clear",
+        "beginning, middle and end. It involves presenting a sequence of events, either real or",
+        "imagined, in a way that engages the reader. It usually has characters who drive the action.",
+        "Narratives can be written in different ways with characters as the main movers of the"
       ],
       "activities": [
-        "listening comprehension skills.",
-        "heard or read.",
-        "COMPOSITION WRITING",
-        "Topic: DESCRIPTIVE WRITING",
-        "INTRODUCTION",
-        " Overview: Descriptive writing is an essential skill in both personal and professional",
-        "contexts, as it allows individuals to vividly convey experiences, emotions, and",
-        "observations to others. In real life, effective descriptive writing helps people"
+        " Ask Learners to read a given story (Teacher can also read the story aloud to the class)",
+        "Sample story",
+        "A Bridge for Nabwalya Village",
+        "In Nabwalya village of the Muchinga escarpment, there was a river that divided",
+        "the land. For many years, the villagers struggled to cross it, using canoes that",
+        "were often swept away by strong currents.",
+        "In the village was a young woman named Mulenga. She was not a village elder",
+        "and she did not have any position of leadership. Mulenga saw the struggles of"
       ],
       "resources": [],
       "assessment": [
-        " Practical Demonstration: Observe how well learners re-tell the story in their groups.",
-        "whether they are able to listen to information and comprehend correctly.",
-        "SUMMARY:",
-        " Comprehension is the ability to understand spoken or written information.",
-        " Listening carefully is the first step to good comprehension.",
-        " Activities like re-telling a story, filling in tables, and answering questions improve"
+        " Story writing involves telling a real or imaginary story",
+        " When writing short stories, there is need to follow a clear layout (beginning, middle and",
+        " A story needs to have a title, plot, characters, setting, theme, conflict, style (elements of a",
+        " It is possible to write stories based on given situations (completing story or writing from",
+        "a question,",
+        "STRUCTURE"
       ],
       "notes": ""
     },
     {
-      "week": 1,
-      "lesson": 22,
-      "title": "Peter ate the fruit _________, (hungrily)",
-      "topics": [],
-      "activities": [],
+      "lesson": 16,
+      "title": "RESULT",
+      "topics": ["0 INTRODUCTION"],
+      "activities": [
+        "Type 1: Using Therefore, as a result, for this reason, consequently, to express result",
+        " Ask a tall learner to come to the board and touch the top of the board.",
+        " Then write:",
+        "Lombe is tall. Therefore, she can touch the top of the board.",
+        " Explain that in this type of expression of result, two sentences are used.",
+        "e.g. The bridge was swept away. Therefore, Mwila could not cross the river.",
+        "As a result,",
+        "For this reason,"
+      ],
       "resources": [],
-      "assessment": [],
+      "assessment": [
+        "Ask learners to pick sentences from column A and join with one from column B. Use any of the",
+        "words learnt to express result.",
+        "The boys were found using drugs Our ice cream melted",
+        "There was too much Gender based violence in",
+        "the country",
+        "She collapsed at the office"
+      ],
       "notes": ""
     },
     {
-      "week": 2,
-      "lesson": 23,
-      "title": "I _______read a book before going to bed. (always)",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 3,
-      "lesson": 24,
-      "title": "The bag was _____heavy _________.(very)",
-      "topics": ["left the book __________. (here"],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 5,
-      "lesson": 25,
-      "title": "She painted the portrait _______.(beautifully)",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 6,
-      "lesson": 26,
-      "title": "The song was ______composed. (creatively)",
+      "lesson": 17,
+      "title": "SUMMARY WRITING",
       "topics": [
-        " Learners work in pairs or small groups to identify the type of adverb that",
-        "would fit into each sentence and explain why.",
-        " Learners then share their answers and reasoning with the class.",
-        " Clarify any misunderstandings."
+        "INTRODUCTION",
+        " Overview: A summary is a concise and brief retelling of the main points and key details",
+        "from a larger piece of content, such as an article, book, movie or speech. It extracts the",
+        "essential information into a shorter format while preserving the core message or",
+        "storyline. Summarising is a vital skill in both academic and everyday settings. It allows"
       ],
       "activities": [
-        " Present a series of sentences with adverbs in different positions (e.g., beginning,",
-        "middle, and end of the sentence).",
-        " Class analyses how the meaning of the sentence changes based on the placement",
-        "of the adverb. For example:",
-        " There they are. vs. They are there.",
-        " She spoke softly. vs. Softly, she spoke.",
-        " Learners work individually or in pairs to re-arrange sentences with given adverbs,",
-        "focusing on the placement of the adverb and discussing the effects of changing its"
+        " Ask learners to read a given passage.",
+        "Too many challenges in one’s life affect mental health. Your overall well-",
+        "being, how you think, feel and handle life can show the state of your mental",
+        "health. Mental health care should be a priority in anyone’s life. It is all about,",
+        "consistent efforts that strengthen resilience and help you feel at ease. Making",
+        "self-care a priority, staying active, connecting with other people helps you to",
+        "improve your mental health. Setting realistic goals for yourself and seeking",
+        "professional help when you need it can also help."
       ],
       "resources": [],
-      "assessment": [],
+      "assessment": [
+        "Ask learners to read given passages and provide suitable titles.",
+        " A good title gives a clear idea of what a piece of writing contains, yet it uses very",
+        "few words.",
+        " It is supposed to be clear, brief and relevant.",
+        "CHAPTER 2: NATIONAL VALUES AND PRINCIPLES",
+        "LISTENING AND SPEAKING"
+      ],
       "notes": ""
     },
     {
-      "week": 4,
-      "lesson": 27,
-      "title": "Expected Standard: Adverbs in different positions in sentences used appropriately.",
-      "topics": [],
+      "lesson": 18,
+      "title": "DESCRIPTIVE WRITING",
+      "topics": [
+        "INTRODUCTION",
+        " Overview: Descriptive writing is an essential skill in both personal and professional",
+        "contexts, as it allows individuals to vividly convey experiences, emotions, and",
+        "observations to others. In real life, effective descriptive writing helps people",
+        "communicate more clearly and persuasively, whether it is in creative writing,"
+      ],
       "activities": [
-        " Learners identify the adjectives in sentences.",
-        "Examples:",
-        "i. He is a kind handsome young man.",
-        "ii. She wore a nice red dress.",
-        "iii. I saw a cute little white cat on my way home.",
-        " Explain to the learners that there is need to follow an acceptable sequence when more",
-        "than one adjective is describing a noun.",
-        " Explain that the position of the adjective depends on how closely it is related in idea to"
+        " Learners read the passage.",
+        "A Description of a Monkey",
+        "A monkey is a lively creature, full of energy. Its fur is a soft blanket of golden-brown,",
+        "with a lighter cream colour on its belly. Like a crown, its fur glows in the sunlight,",
+        "shimmering as it moves. Its face is full of character: large, dark eyes that sparkle with",
+        "curiosity, a small, flat nose, and a mischievous smile that never fades.",
+        "The monkey’s hands are like tiny, delicate claws, quick and nimble. It swings through the",
+        "trees with the grace of a dancer, leaping from branch to branch, its long tail curling like"
+      ],
+      "resources": [],
+      "assessment": [
+        " Learners choose an animal (either familiar or exotic) and write a detailed description",
+        "focusing on sensory details like appearance, behaviour, and habitat",
+        " Learners write short descriptions on given topics (Describe including physical traits,",
+        "sounds, movements, and personal impressions to engage the reader).",
+        " Descriptive writing helps convey experiences, emotions, and observations clearly and",
+        "vividly."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 19,
+      "title": "ADVERBS",
+      "topics": [
+        "Introduction",
+        " Overview: Adverbs are words that modify or give more information about verbs,",
+        "adjectives, or other adverbs in a sentence. Understanding the position of adverbs is",
+        "crucial in constructing clear and accurate sentences. This topic will explore the different",
+        "positions where adverbs can appear within a sentence, such as before or after the main"
+      ],
+      "activities": [
+        " Introduce and explain the different kinds of adverbs: adverbs of place, time,",
+        "frequency, manner, and degree.",
+        "Adverbs of place answer the question \"Where?\" (e.g., here, there,",
+        "everywhere).",
+        "Adverbs of time answer the question \"When?\" (e.g., now, later,",
+        "Adverbs of frequency answer the question \"How often?\" (e.g.,",
+        "always, often, never).",
+        "Adverbs of manner answer the question \"How?\" (e.g., quickly,"
       ],
       "resources": [],
       "assessment": [
@@ -423,55 +318,24 @@
       "notes": ""
     },
     {
-      "week": 1,
-      "lesson": 28,
-      "title": "My sister has a big beautiful grey and white puppy. (size, quality, colour, colour)",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 2,
-      "lesson": 29,
-      "title": "I keep my coins in a big square blue box. (size, shape, colour)",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 3,
-      "lesson": 30,
-      "title": "We watched an amazing new Nigerian movie last night. (opinion, age, origin)",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 4,
-      "lesson": 31,
-      "title": "My father bought a pair of black leather shoes for me. (colour, material)",
+      "lesson": 20,
+      "title": "ADJECTIVES",
       "topics": [
-        " Ask learners to arrange a number of jumbled adjectives into the correct order (in pairs)",
-        "Example:",
-        "I love that old green beautiful dress of mine. X",
-        "I love that beautiful old green dress of mine. √",
-        "Exercise"
+        "INTRODUCTION",
+        " Overview: Adjectives are words used to describe or modify nouns and pronouns. They",
+        "help add detail, emotion and colour to language, making speech and writing more vivid",
+        "and precise. Adjectives answer questions like what kind, how many, and which one.",
+        "Understanding how to use adjectives correctly can greatly improve one’s ability to"
       ],
       "activities": [
-        " Ask learners to construct sentences of their own using the correct order of adjectives.",
-        "Example:",
-        "I bought a new blue dress.",
-        "Jane is a beautiful tall dark Zambian girl.",
-        "Suggested teaching and Learning Materials:",
-        " Table of order of adjectives",
-        " Worksheets with adjectives",
-        " Objects to describe (phone, book, car, desk)"
+        " Learners identify the adjectives in sentences.",
+        "Examples:",
+        "i. He is a kind handsome young man.",
+        "ii. She wore a nice red dress.",
+        "iii. I saw a cute little white cat on my way home.",
+        " Explain to the learners that there is need to follow an acceptable sequence when more",
+        "than one adjective is describing a noun.",
+        " Explain that the position of the adjective depends on how closely it is related in idea to"
       ],
       "resources": [],
       "assessment": [
@@ -485,114 +349,231 @@
       "notes": ""
     },
     {
-      "week": 1,
-      "lesson": 32,
-      "title": "Joyce is incredibly smart",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 2,
-      "lesson": 33,
-      "title": "Chilombu is extremely happy.",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 3,
-      "lesson": 34,
-      "title": "This meal is absolutely delicious",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 4,
-      "lesson": 35,
-      "title": "I am utterly exhausted.",
+      "lesson": 21,
+      "title": "INTENSIFIERS",
       "topics": [
+        "INTRODUCTION",
+        " Overview: An intensifier is a word that strengthens or weakens or give emphasis to",
+        "another word. The purpose of an intensifier is to tell us the intensity of another word."
+      ],
+      "activities": [
+        " Give learners three sentences which have intensifiers",
+        "Example:",
+        "Joyce is incredibly smart",
+        "Chilombu is extremely happy.",
+        "This meal is absolutely delicious",
+        "I am utterly exhausted.",
         " Underline the intensifiers in the sentences",
-        " Ask the learners what role the words are doing in the sentences.",
-        " Explain intensifiers (adverbs) which strengthen, or give emphasis to other words.",
-        "Intensifiers",
-        "i. Very means to a high degree"
+        " Ask the learners what role the words are doing in the sentences."
+      ],
+      "resources": [],
+      "assessment": [
+        " Observe learners using intensifiers in sentences.",
+        " Learners identify and highlight intensifiers in a piece of writing such as a magazine,",
+        "newspaper, or text.",
+        " Use intensifiers sparingly to avoid over emphasising or sounding insincere.",
+        " Choose the right intensifier to convey the intended degree of emphasis.",
+        " By using intensifiers, you can add appropriate depth and emphasis to your language"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 22,
+      "title": "INTRODUCTION TO SUMMARY",
+      "topics": [
+        "Introduction",
+        "Overview: A summary is a concise and clear restatement of the main ideas or",
+        "points from a larger piece of text. It distils essential information while omitting",
+        "unnecessary details, allowing readers to grasp the core meaning in a shorter form.",
+        "Summarising can be done in various ways, and one of the most common methods"
       ],
       "activities": [
-        " Provide more sentences to the learners and ask them to identify words that are",
-        "strengthening, or giving emphasis to other words.",
-        "Example:"
+        " Provide a paragraph to the learners for reading.",
+        "In recent years, the global community has witnessed an increasing shift",
+        "toward renewable energy sources. As the harmful effects of fossil fuels",
+        "become more evident, countries are looking for sustainable alternatives.",
+        "Solar power, wind energy, and hydropower are leading the way, with",
+        "advancements in technology making these sources more efficient and cost-",
+        "effective. Governments around the world are investing in green energy",
+        "projects, and many companies are beginning to transition to more eco-"
       ],
-      "resources": [],
-      "assessment": [],
+      "resources": [
+        "Activity 3: Discussing passage read",
+        " Lead the discussion by asking questions about the stories and information read.",
+        "Example:",
+        "What is passage about?",
+        "What lesson(s) do we get from the story?",
+        " Learners share by retelling stories or explaining the information read. (Stories could be"
+      ],
+      "assessment": [
+        " Ask learners to pair up and share their sentence summaries with each other.",
+        " Encourage learners to give constructive feedback on how well the sentence",
+        "captures the core message of the paragraph.",
+        " Encourage learners to practise writing sentence summaries for other passages as a",
+        "way of improving their comprehension and synthesis skills.",
+        "Home work:"
+      ],
       "notes": ""
     },
     {
-      "week": 1,
-      "lesson": 36,
-      "title": "The examination was fairly easy.",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 2,
-      "lesson": 37,
-      "title": "This food is very cold.",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 3,
-      "lesson": 38,
-      "title": "Musonda is too conservative.",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 4,
-      "lesson": 39,
-      "title": "Kalenga is quite shy.",
-      "topics": [],
+      "lesson": 23,
+      "title": "INTENSIVE READING",
+      "topics": [
+        "INTRODUCTION",
+        " Overview: Comprehension is a process of active engagement that leads to accurate",
+        "understanding and interpretation of what is heard or read. The importance of",
+        "comprehension lies in its application to real-life situations such as understanding",
+        "instructions, engaging in conversations, and interpreting information. Learners will read"
+      ],
       "activities": [
-        " Ask learners to construct their own sentences using the given intensifiers (quite, barely,",
-        " Give learners incomplete sentences and ask them to fill in the appropriate intensifiers",
-        "Exercise",
-        "For each of the following sentences, fill in the blanks with the words listed below.",
-        "rather, fairly, just, very, too, almost, much, quite, hardly, scarcely, barely."
+        " Ask learners to Skim through the passage to get the general idea",
+        " Ask learners to read the passage",
+        " Time learners to ensure that they read at a speed of 200 words per minute.",
+        " Guide learners to avoid bad reading habits",
+        "Read the passage below and answer the questions that follow.",
+        "In today’s fast-changing world, knowing how to use digital technology is not just helpful—it",
+        "is very important. Digital literacy means being able to find, understand, create, and share",
+        "information using computers, smartphones, and the internet. It is not only about using a phone or"
       ],
       "resources": [],
-      "assessment": [],
+      "assessment": [
+        "During the Lesson",
+        " Observe learners' participation in discussions.",
+        " Check their ability to locate answers in the passage.",
+        " Assess group work and engagement.",
+        "At the end of the Lesson ask",
+        " Oral questions on key ideas from the passage."
+      ],
       "notes": ""
     },
     {
-      "week": 1,
-      "lesson": 40,
-      "title": "I am................... sure I saw that boy in school this morning.",
-      "topics": [],
-      "activities": [],
+      "lesson": 24,
+      "title": "EXPOSITORY WRITING",
+      "topics": [
+        "INTRODUCTION",
+        "Expository writing is a type of writing that explains, describes, or informs. It is different from",
+        "narrative or persuasive writing because it focuses on giving clear and factual information",
+        "rather than telling a story or convincing someone. Good expository writing answers questions",
+        "such as:"
+      ],
+      "activities": [
+        "research",
+        " Explain to the learners that:",
+        "It helps one develop critical thinking",
+        "Allows Learners to organise ideas logically and express themselves effectively",
+        "using facts and explanations",
+        "It is important for gathering and sharing information, and research",
+        "Helps readers grasp complex ideas",
+        "It enhances the development of communication skills"
+      ],
+      "resources": [
+        "the planet for future generations.",
+        "(Slightly adapted from UN Environment Programme)",
+        " Learners discuss the features of an expository essay. The following are the expected",
+        "teaching points from the discussion:",
+        "Title: The title should reflect the topic being discussed and indicate the purpose of the",
+        "essay. For example, “The Effects of Climate Change on the Environment.”"
+      ],
+      "assessment": [
+        " Group learners and give them an expository composition and observe them as they",
+        "identify features of an essay (topic sentence, supporting details and transition words)",
+        " Individual work: ask learners to choose a simple topic and write a short expository essay",
+        "(e.g., How to Stay Healthy or The Importance of Education)",
+        " Peer review: learners exchange essays and give feedback for clarity and organisation.",
+        " Expository writing focuses on explaining, informing, or describing a topic clearly and"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 25,
+      "title": "QUESTION TAGS",
+      "topics": [
+        "INTRODUCTION",
+        "Good communication is essential in both spoken and written language. One way we make",
+        "conversations more engaging and interactive is by using question tags. These are short",
+        "questions added to the end of statements to confirm information, seek agreement, or",
+        "encourage a response."
+      ],
+      "activities": [
+        " Write sentences on the board and ask learners what they notice.",
+        "Example:",
+        "i. You love social media, don’t you?",
+        "ii. He hasn’t posted on Instagram today, has he?",
+        " Explain what question tags are and the rules.",
+        "Questions tags are short questions added at the end of a statement to confirm or check",
+        "information. They help keep information or seek agreement from the listener.",
+        "If the main sentence is positive, the tag is negative. E.g. She is online, isn’t she?"
+      ],
       "resources": [],
+      "assessment": [
+        " Observe learners’ participation and their oral responses (ability to explain).",
+        " Carry out peer discussions for learners to correct each other’s mistakes.",
+        " Let each learner write one correct question tag sentence.",
+        " Question tags are short questions added at the end of statements to confirm information",
+        "or seek agreement.",
+        " Positive statements take negative tags (“You use Google, don’t you?”)."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 26,
+      "title": "SUMMARY",
+      "topics": [
+        "INTRODUCTION",
+        " Overview: A summary is a brief and concise piece of writing that presents only",
+        "main points from a given text (oral or written) without altering the meaning of the",
+        "text. The ability to summarise a text is an important skill in academic and social",
+        "contexts in which there is endless need to make information easier to"
+      ],
+      "activities": [
+        " Display a chart with a list of words and ask learners to provide abbreviations for",
+        "Examples:",
+        "Doctor – Dr.",
+        "Mister – Mr.",
+        "Avenue – Av.",
+        "February – Feb.",
+        "Kilogram - Kg",
+        "Minute – Min"
+      ],
+      "resources": [],
+      "assessment": [
+        " Observe learners as they discuss and practice writing activities.",
+        " Assess individual understanding and correct usage of abbreviations.",
+        " Ask learners to write a short paragraph with at least five different abbreviations",
+        " Abbreviations are shortened forms of words or phrases used to save time and space.",
+        " There are different types of abbreviations (Initialisms, Acronyms, shortened words,",
+        "Date and Time)."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 27,
+      "title": "1.4.11. Result",
+      "topics": ["SUB-TOPIC: 1.4.11.1 Different ways of expressing result."],
+      "activities": [
+        "Tall learner touches the",
+        "other learners observe.",
+        "respond using various",
+        "expressions.",
+        "e.g. He/She is tall.",
+        "Therefore, he/she can",
+        "touch the board.",
+        "Different"
+      ],
+      "resources": [
+        " Charts/posters",
+        " Tables/Flashcards",
+        " Projector/laptop/computer",
+        "EXPECTED STANDARD: Different expressions of result in sentences used correctly.",
+        "LESSON PROGRESSION:",
+        "STAGES TEACHER’S ROLE"
+      ],
       "assessment": [],
       "notes": ""
     }
   ],
   "metadata": {
-    "extractedAt": "2026-07-10T22:33:57.962Z",
+    "extractedAt": "2026-07-11T06:21:56.869Z",
     "rawTextLength": 154363
   }
 }

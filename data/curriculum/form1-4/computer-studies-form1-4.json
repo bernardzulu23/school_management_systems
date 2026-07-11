@@ -1,0 +1,22 @@
+{
+  "subject": "Computer Studies",
+  "level": "Form 1-4",
+  "gradesCovered": [7, 8, 9, 10],
+  "totalDuration": "12 weeks",
+  "units": [
+    {
+      "unitNumber": 1,
+      "title": "General syllabus content",
+      "topics": [],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    }
+  ],
+  "metadata": {
+    "source": "ICT_ORDINARY-LEVEL-SYLLABUS-FORMS-1-4.pdf",
+    "extractedAt": "2026-07-11T06:20:40.784Z",
+    "fileSize": 1205223
+  }
+}

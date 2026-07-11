@@ -1,0 +1,22 @@
+{
+  "subject": "Food and Nutrition",
+  "level": "Form 1-4",
+  "gradesCovered": [7, 8, 9, 10],
+  "totalDuration": "12 weeks",
+  "units": [
+    {
+      "unitNumber": 1,
+      "title": "General syllabus content",
+      "topics": [],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    }
+  ],
+  "metadata": {
+    "source": "FOOD-AND-NUTRITION-SYLLABUS-FINAL-07-02-2024.pdf",
+    "extractedAt": "2026-07-11T06:20:39.717Z",
+    "fileSize": 649185
+  }
+}

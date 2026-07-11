@@ -36,11 +36,15 @@ export function slugifySubject(subject: string): string {
     .replace(/^-|-$/g, '')
 }
 
-export function parsedToCurriculumJSON(parsed: ParsedSyllabus): CurriculumJSON {
+export function parsedToCurriculumJSON(
+  parsed: ParsedSyllabus,
+  meta?: { source?: string; fileSize?: number }
+): CurriculumJSON {
   const units: CurriculumJSONUnit[] = (parsed.units || []).map((u: ParsedSyllabusUnit, i) => ({
     unitNumber: i + 1,
     title: u.title,
     topics: u.topics || [],
+    duration: u.weekHint ? `${u.weekHint} weeks` : undefined,
     learningOutcomes: u.outcomes || [],
     suggestedActivities: u.activities || [],
     assessmentMethods: u.assessment || [],
@@ -49,10 +53,15 @@ export function parsedToCurriculumJSON(parsed: ParsedSyllabus): CurriculumJSON {
 
   return {
     subject: parsed.subject,
-    level: parsed.grade || 'Form 1-4',
+    level: /form\s*[1-6]/i.test(parsed.grade || '') ? 'Form 1-4' : parsed.grade || 'Form 1-4',
     gradesCovered: [7, 8, 9, 10],
-    totalDuration: '48 weeks',
+    totalDuration: `${Math.max(12, units.length * 3)} weeks`,
     units,
+    metadata: {
+      source: meta?.source,
+      extractedAt: new Date().toISOString(),
+      fileSize: meta?.fileSize,
+    },
   }
 }
 
@@ -80,7 +89,7 @@ export async function processSyllabiFolder(
       )
       continue
     }
-    const json = parsedToCurriculumJSON(parsed)
+    const json = parsedToCurriculumJSON(parsed, { source: entry, fileSize: buffer.length })
     // Prefer richer parse if same subject appears twice
     const slug = slugifySubject(json.subject)
     const prev = out.get(slug)

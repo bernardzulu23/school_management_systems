@@ -1,0 +1,44 @@
+{
+  "subject": "Luvale",
+  "form": 1,
+  "term": 1,
+  "sourceFile": "LUVALE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "lessons": [
+    {
+      "week": 1,
+      "lesson": 1,
+      "title": "Vichila kuheta munganda chiku kaha ove ngwove nangukashila halifunda.",
+      "topics": [
+        "(kuhuhumuna)",
+        "Kulumbununa: Tufwanyise nge kanyike vanamulweze ngwavo, kutukana mwangana",
+        "chapwa kasautu. Kaha uno ikhiye mwamba ngwenyi, ikhiye mwanguthachikizaze,",
+        "ami nangumusonekela mukanda. Chuma vanamukanyisa kasautu kakuzamukila",
+        "kutukana mwangana. Numba uyeveta, numba usoneka mukanda chuma"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 2,
+      "title": "Kwijilila",
+      "topics": [
+        "Kuhonesa",
+        "KWIVWILILA NA NAKUHANJIKA",
+        "| Page",
+        "CHIHANDE: KUSHIMUTWILA",
+        "Mutwe Wachihande: Vyuma Vinakusefuka Mujingalila."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-11T06:12:27.316Z",
+    "rawTextLength": 156259
+  }
+}

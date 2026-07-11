@@ -173,9 +173,25 @@ export function normalizeKnownSubject(raw: string): string | null {
 }
 
 export function extractSubjectFromFilename(filename: string): string | null {
-  const base = String(filename || '')
+  const rawBase = String(filename || '')
     .replace(/^.*[\\/]/, '')
     .replace(/\.[^.]+$/, '')
+  // Fast path for common MoE filename prefixes
+  if (/(^|[^A-Za-z])ICT([^A-Za-z]|$)/i.test(rawBase) || /^ICT[_-]/i.test(rawBase)) {
+    return 'Computer Studies'
+  }
+  if (/computer[-_\s]*science/i.test(rawBase)) return 'Computer Science'
+  if (/literature[-_\s]*in[-_\s]*english/i.test(rawBase)) return 'Literature in English'
+  if (/art[-_\s]*an[-_\s]*design|art[-_\s]*and[-_\s]*design/i.test(rawBase)) {
+    return 'Art and Design'
+  }
+  if (/civic[-_\s]*education/i.test(rawBase)) return 'Civic Education'
+  if (/physical[-_\s]*education/i.test(rawBase)) return 'Physical Education'
+  if (/literature[-_\s]*in[-_\s]*bemba|lit[-_\s]*in[-_\s]*icibemba/i.test(rawBase)) {
+    return 'Icibemba'
+  }
+
+  const base = rawBase
     .replace(/[-_]+/g, ' ')
     .replace(/\d+/g, ' ')
     .replace(/\bsyllabus\b/gi, ' ')
@@ -280,7 +296,7 @@ export function extractUnits(text: string): ParsedSyllabusUnit[] {
     .split('\n')
     .map((l) => l.trim())
     .filter(Boolean)
-  const unitStart = /^(?:unit|topic|theme|chapter)\s*(\d+[a-z]?)[:.\s\-–]+(.+)$/i
+  const unitStart = /^(?:unit|topic|theme|chapter|strand)\s*(\d+[a-z]?)[:.\s\-–]+(.+)$/i
 
   const starts: { index: number; title: string; weekHint?: number }[] = []
   for (let i = 0; i < lines.length; i++) {

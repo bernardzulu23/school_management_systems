@@ -1,0 +1,197 @@
+{
+  "subject": "Music",
+  "form": null,
+  "term": 2,
+  "sourceFile": "MUSICAL-ARTS-EDUCATION-TERM-2-MODULE.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "1.5 MELODY",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 2,
+      "title": "1.7 MUSICAL TERMS AND SIGNS",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 3,
+      "title": "8 HARMONY",
+      "topics": [
+        "Appendix: SAMPLE LESSON TEMPLATE ........................................................................24",
+        "Appendix: SAMPLE LESSON PLAN ...................................................................................26",
+        "Musical Arts Education",
+        "Teaching Module"
+      ],
+      "activities": ["the CBC’s objectives."],
+      "resources": [
+        "with their own research and innovations to address potential gaps during implementation. The"
+      ],
+      "assessment": [
+        "to learners’ needs and levels.",
+        "The Ministry of Education acknowledges the challenges associated with transitioning to a new",
+        "curriculum. Consequently, this module reflects our commitment to providing teachers with",
+        "the CBC’s objectives."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 4,
+      "title": "1.5 MELODY",
+      "topics": [
+        "Introduction",
+        "This topic is broken down into two subtopics which are: 1.5.1 Melodic motion and 1.5.2 Simple",
+        "melody writing.",
+        "What is Melody?",
+        "Melody is a fundamental element of music often considered the most memorable part of a song"
+      ],
+      "activities": [
+        "Problem solving: Ability to use music to identify, analyse and address social-economical",
+        "challenges and obstacles.",
+        "TERMINOLOGY",
+        "Antecedent: The first part of a melodic phrase that sets up a musical idea, often ending",
+        "in uncertainty, to be resolved by the consequent.",
+        "Conjunct motion: Smooth, stepwise movement between, consecutive pitches in",
+        "a melody e.g. (C-D-E).",
+        "Contour: The overall shape or pattern of ups and downs in pitch, creating a unique"
+      ],
+      "resources": [],
+      "assessment": [
+        "zProvide learners with printed melodies and ask them to identify and label they valleys,",
+        "waves and hills.",
+        "zGive learners a melody with missing notes and ask them to complete the melody by",
+        "adding notes that create a specific contour.",
+        "zPlay a series of melodies with different contours and ask learners to identify the type",
+        "of contour used in each melody."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 5,
+      "title": "1.7 MUSICAL TERMS AND SIGNS",
+      "topics": [
+        "Introduction",
+        "Musical terms and signs are specialized words and symbols used in music notation to convey",
+        "information about pitch, rhythm, dynamics, articulation, and other aspects of musical performance.",
+        "Musical terms and signs are important in that they help musicians read music fluently, play",
+        "expressively and perform pieces accurately."
+      ],
+      "activities": [
+        "Problem solving: Ability to use music to identify, analyse and address social-economic",
+        "challenges and obstacles.",
+        "TERMINOLOGY",
+        "Below are some of the terminologies Interpreting the Italian terms for tempo:",
+        "Accelerando (accel.): Getting quicker",
+        "Adagio: Leisurely – usually quite slow",
+        "Adagietto: Slow, gentle tempo",
+        "Allegretto: Moderate, playful tempo"
+      ],
+      "resources": [],
+      "assessment": [
+        "Musical Arts Education",
+        "Teaching Module",
+        "Prepare tasks to be administered during and after learning sessions and give carry home",
+        "zSight reading/singing.",
+        "zPlaying instruments.",
+        "zListening and analysis."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 6,
+      "title": "8 HARMONY",
+      "topics": [
+        "Introduction",
+        "In music, Harmony refers to the combination of different musical notes played or sung at the",
+        "same time to produce a pleasing sound. It usually supports the melody (the tune) and adds depth,",
+        "emotion and texture to a piece of music.",
+        "Harmony is created when two or more notes sound together, forming chords (like C major or"
+      ],
+      "activities": [
+        "Learning environment setup: Any environment such as, (any outdoor), artificial (music",
+        "Suggested Teaching and Learning Materials: Piano, keyboard, guitars, charts",
+        "Identifying triads (Root,",
+        "Task 1: Ask learners to identify and label the triads as root, third and fifth on a staff using the",
+        "tonic triad in C major.",
+        "zFacilitate learners’ involvement in identifying and labelling the triads as root, third",
+        "and fifth.",
+        "DISCUSSION"
+      ],
+      "resources": [],
+      "assessment": [
+        "Prepare tasks to be administered during and after learning sessions and give carry home tasks.",
+        "z Identify, construct and play/sing the triads given.",
+        "zCreate a quiz to test learners’ ability to identify triads.",
+        "zAssign a project where learners analyse and identify triads in selected score.",
+        "zGive short answer questions by asking students to explain triad concepts and give",
+        "musical examples."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 7,
+      "title": "__________________ (This must come from the syllabus with its serial number)",
+      "topics": [
+        "SUB-TOPIC: ___________ (This must come from the syllabus with its serial number)"
+      ],
+      "activities": ["LEARNERS’"],
+      "resources": [
+        "EXPECTED STANDARD:_____________________________________________________",
+        "(This must come from the syllabus as it is)",
+        "Form 1 Term",
+        "Teaching Module",
+        "LESSON PROGRESSION:",
+        "STAGESTEACHER’S"
+      ],
+      "assessment": [
+        "CRITERIA",
+        "INTRODUCTION",
+        "LESSON DEVELOP-",
+        "EXERCISE /APPLICA-",
+        "CONCLUSION",
+        "HOMEWORK: ______________________________________________________________"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 8,
+      "title": "1.8 HARMONY",
+      "topics": ["SUB-TOPIC: TRIADS"],
+      "activities": [
+        "(This must come from the syllabus as it is)",
+        "Form 1 Term",
+        "Teaching Module",
+        "LESSON PROGRESSION"
+      ],
+      "resources": [
+        "EXPECTED STANDARD: Triads constructed correctly. (It will only be exhausted upon",
+        "completion of all the lined up activities)",
+        "(This must come from the syllabus as it is)",
+        "Form 1 Term",
+        "Teaching Module",
+        "LESSON PROGRESSION"
+      ],
+      "assessment": [
+        "CRITERIA",
+        "INTRODUC-",
+        "zDivide learners into three",
+        "groups and assign sol-fa",
+        "syllables to each group",
+        "(Do, Mi and So). Ask"
+      ],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-11T06:22:07.383Z",
+    "rawTextLength": 53971
+  }
+}

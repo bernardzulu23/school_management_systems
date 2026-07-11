@@ -1,8 +1,8 @@
 {
-  "subject": "MATHEMATICS",
-  "level": "Form 1",
+  "subject": "Mathematics",
+  "level": "Form 1-4",
   "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "48 weeks",
+  "totalDuration": "12 weeks",
   "units": [
     {
       "unitNumber": 1,
@@ -13,5 +13,10 @@
       "assessmentMethods": [],
       "resources": []
     }
-  ]
+  ],
+  "metadata": {
+    "source": "MATHEMATICS-II-SYLLABUS.pdf",
+    "extractedAt": "2026-07-11T06:20:41.150Z",
+    "fileSize": 844866
+  }
 }

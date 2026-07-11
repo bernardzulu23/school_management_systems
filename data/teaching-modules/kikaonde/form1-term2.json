@@ -1,0 +1,451 @@
+{
+  "subject": "Kikaonde",
+  "form": 1,
+  "term": 2,
+  "sourceFile": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "lessons": [
+    {
+      "week": 1,
+      "lesson": 1,
+      "title": "MINSAMBO",
+      "topics": [
+        " Kuteleka ne kwamba",
+        " Kutanga",
+        " Kunemba",
+        " Mulaka-zhilo",
+        " Ntuntulwilo"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 2,
+      "title": "BISHINKA NE BISHIMIKIZHO",
+      "topics": [
+        " Kuteleka ne kwamba",
+        " Kutanga",
+        " Kunemba",
+        " Mulaka-zhilo",
+        " Ntuntulwilo"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 3,
+      "title": "BUNDAMA-KYALO",
+      "topics": [
+        " Kuteleka ne kwamba",
+        " Kutanga",
+        " Kunemba",
+        " Mulaka-zhilo",
+        " Ntuntulwilo."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 4,
+      "title": "KULENGA BICHOMEKO",
+      "topics": [
+        " Kuteleka ne kwamba",
+        " Kutanga",
+        " Kunemba",
+        " Mulaka-zhilo",
+        " Ntuntulwilo"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 5,
+      "title": "Specific Competence: byaketekelwa kubiwa bulongo",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 6,
+      "title": "Expected standard: bipimo byañingijilo byaketekelwa kubiwa mwafwainwa",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 7,
+      "title": "Assessment: lweseko",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 8,
+      "title": "Summary: mpezho",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 5,
+      "lesson": 9,
+      "title": "Print concept: buyuke bwa byanembewa",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 6,
+      "lesson": 10,
+      "title": "Hook: kongolamilangwe",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 7,
+      "lesson": 11,
+      "title": "Key words: byambo byanema",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 8,
+      "lesson": 12,
+      "title": "Manuscript: kunemba kisopelo kimo kimo",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 9,
+      "lesson": 13,
+      "title": "Cursive: kunemba kwa kusendelela",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 10,
+      "lesson": 14,
+      "title": "Analytical analysis: Ndangulukilo ya kusobolola",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 11,
+      "lesson": 15,
+      "title": "Critical thinking: Ndangulukilo yazhika",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 12,
+      "lesson": 16,
+      "title": "Directionality: kwakutala pa kutanga",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 13,
+      "lesson": 17,
+      "title": "Descriptive composition: Nsombelo Ndumbulwilo",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 14,
+      "lesson": 18,
+      "title": "Argumentative composition: Nsomobelo ya lupachiko",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 15,
+      "lesson": 19,
+      "title": "Narrative Composition: Nsombelo ya lubulaňano",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 16,
+      "lesson": 20,
+      "title": "Fiction: Kisombwa",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 17,
+      "lesson": 21,
+      "title": "Non-fiction: Kya-kine",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 18,
+      "lesson": 22,
+      "title": "Character: Nkaizhi",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 19,
+      "lesson": 23,
+      "title": "Theme: Kishina",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 20,
+      "lesson": 24,
+      "title": "Narrative: Jishimikila",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 21,
+      "lesson": 25,
+      "title": "Climax: Kankomo",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 22,
+      "lesson": 26,
+      "title": "Plot: Ndonda ya ngubilo mu jishimikila",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 23,
+      "lesson": 27,
+      "title": "Gender: Bukazhi-lume",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 23,
+      "lesson": 28,
+      "title": "Autobiography: Mpito ya bwikalo bwami",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 24,
+      "lesson": 29,
+      "title": "Biography: Mpito ya bwikalo boobe.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 25,
+      "lesson": 30,
+      "title": "Metaphor: Ngesakenyo",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 26,
+      "lesson": 31,
+      "title": "Euphemism: Bengakenyo",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 27,
+      "lesson": 32,
+      "title": "Simile: Mpashaňenyo",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 28,
+      "lesson": 33,
+      "title": "Personification: Kipasho-muntu",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 29,
+      "lesson": 34,
+      "title": "Hyperbole: Kintente",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 30,
+      "lesson": 35,
+      "title": "Climate: Bukela-kela",
+      "topics": [
+        "NTENDEKELO",
+        "Uno buuku wa Fomu 1 mu Kikaonde wanengezhiwa mujishinda ja kukumya, mukukebesha",
+        "kukwasha bafunjishi kufikizha mfunjishilo bulongo mu ino mfunjilo (Curriculum) ya katataka."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 36,
+      "title": "Mu kibaaba 1, ñambilo ya kuuba amba, sabwalala ne pa katele yalumbulula ka?",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 37,
+      "title": "Mu kibaaba 2, bañanyi bo baketekejile kwibabula bishinka na mambo a bwikalo bwa kala?",
+      "topics": ["Kibaala", "Nsamushi", "Jikapa Malisopo", "Ba Jikapa Malisopo"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 38,
+      "title": "Nembapo bintu bibiji bilengela mvula kubula kunoka.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 5,
+      "lesson": 39,
+      "title": "Tongolapo ñambilo ibena kwamba pa kulumbulula bintu mo byaila?",
+      "topics": [
+        "a) Kulumbulula nzolo kijoma.",
+        "b) Sabwalala ne pa katele.",
+        "c) Jikondakanya nsoke.",
+        "d) Pa kanyo ka mambo."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 6,
+      "lesson": 40,
+      "title": "Paana mutwe wa jino jishimikila.",
+      "topics": [
+        "a) Kuleka kwa mvula.",
+        "b) Kupimpulwa kwa lubesha.",
+        "c) Kutema kwa bichi.",
+        "d) Kujima bingi.",
+        "Panapo mashinda asatu mo wakonshesha kukwasha mvula kunoka."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-11T06:12:21.177Z",
+    "rawTextLength": 155007
+  }
+}

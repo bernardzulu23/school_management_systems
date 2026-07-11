@@ -1,0 +1,36 @@
+{
+  "subject": "Civic Education",
+  "form": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "lessons": [
+    {
+      "title": "Module teaching activities",
+      "topics": [],
+      "activities": [],
+      "resources": [
+        "competence-basedcurriculum,enhancingtheirabilitytoinspireandequiplearnerswithessential",
+        "competences,knowledge,skillsandattitudesthatpreparethemtoliveresponsiblelivesandbe",
+        "protectedfromlifethreateningvices",
+        "JoelKamoko,(Mr.)",
+        "PermanentSecretary-EducationalServices",
+        "MINISTRYOFEDUCATION",
+        "Acknowledgement",
+        "TheCivicEducationTeachingModulehasbeendevelopedthroughaconsultativeandparticipatory"
+      ],
+      "assessment": [
+        "AsaMinistry,weunderstandthechallengesthatcomewithtransitioningtoanewcurriculum",
+        "framework.Thismodulereflectsourcommitmenttomakingthisjourneyassmoothaspossiblefor",
+        "withtheCBC’sobjectives.However,teachersareencouragedtosupplementthismodulewiththeir",
+        "ownresearchandinnovationstoaddressanygapsthatmayariseduringimplementation.",
+        "criticalthinkingskillsinlearnerswhileensuringrelevanceandadaptabilitytodifferentschoolcontexts.",
+        "Teachersareencouragedtotailorthesesuggestionstotheiruniqueclassroomdynamicsandtoexplore"
+      ],
+      "notes": "Extracted from module without clear week/lesson headings"
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-11T06:13:33.901Z",
+    "rawTextLength": 78793
+  }
+}

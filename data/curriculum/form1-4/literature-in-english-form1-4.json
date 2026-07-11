@@ -1,0 +1,817 @@
+{
+  "subject": "Literature in English",
+  "level": "Form 1-4",
+  "gradesCovered": [7, 8, 9, 10],
+  "totalDuration": "171 weeks",
+  "units": [
+    {
+      "unitNumber": 1,
+      "title": "Aesthetic:",
+      "topics": ["appreciation of beauty of literary works."],
+      "duration": "1 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Allegory:",
+      "topics": [
+        "a story, poem, or picture that can be interpreted to reveal a",
+        "hidden meaning and teach a moral or political lesson."
+      ],
+      "duration": "2 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Alliteration:",
+      "topics": ["a series of words that begin with the same consonant sound."],
+      "duration": "3 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Allusion:",
+      "topics": [
+        "an indirect reference to a person, event or thing outside wha",
+        "t is being discussed."
+      ],
+      "duration": "4 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Ambiguity:",
+      "topics": [
+        "double meaning or an expression capable of having more than on",
+        "e meaning.",
+        "Analogy:",
+        "\u0003D\u0003FRPSDULVRQ\u0003EHWZHHQ\u0003WZR\u0003WKLQJV\u0003WKDW\u0003PD\\\u0003VHHP\u0003GL൵HUHQW\u0003RQ\u0003WKH\u0003",
+        "VXUIDFH\u0003EXW\u0003VKDUH\u0003FRPPRQ\u0003FKDUDFWHULVWLFV\u0011"
+      ],
+      "duration": "5 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Antagonist:",
+      "topics": ["the character or force that opposes the main character."],
+      "duration": "7 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Anti-climax:",
+      "topics": ["a disappointing end to an exciting or impressive series of ev"],
+      "duration": "8 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Antitheses:",
+      "topics": ["a person or thing that is a direct opposite of someone or some", "thing else."],
+      "duration": "9 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Apostrophe:",
+      "topics": [
+        "\u0003DGGUHVV\u0003RU\u0003VSHHFK\u0003WR\u0003D\u0003SHUVRQ\u0003ZKR\u0003LV\u0003QRW\u0003SUHVHQW\u0003RU\u0003QRQ\u0010KXPDQ\u0003",
+        "Aside:",
+        "\u0003\u0003ZKHQ\u0003D\u0003FKDUDFWHU\u0003LQ\u0003D\u0003ZRUN\u0003RI\u0003¿FWLRQ\u0003DGGUHVVHV\u0003WKH\u0003DXGLHQFH\u0003I",
+        "RU\u0003D\u0003PRPHQW\u0003WR\u0003HLWKHU\u0003H[SUHVV\u0003D\u0003WUXWK\u000f\u0003UHYLHZ\u0003D\u0003IHHOLQJ\u000f\u0003RU\u0003FRP",
+        "the events of the story."
+      ],
+      "duration": "10 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Assonance:",
+      "topics": [
+        "the repetition of similar vowel sounds in a line of poetry or",
+        "Ballad:",
+        "a narrative poem that was originally meant to be sung.",
+        "Belief:",
+        "a feeling of certainty that something is right, wrong, exists",
+        ", or does not."
+      ],
+      "duration": "12 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Catastrophe:",
+      "topics": [
+        "\u0003WKH\u0003¿QDO\u0003DFWLRQ\u0003WKDW\u0003FRPSOHWHV\u0003WKH\u0003XQUHYHDOLQJ\u0003RI\u0003WKH\u0003SORW\u0003LQ\u0003"
+      ],
+      "duration": "15 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Catharsis:",
+      "topics": [
+        "\u0003WKH\u0003XVH\u0003RI\u0003VWURQJ\u0003IHHOLQJV\u0003LQ\u0003/LWHUDWXUH\u0003WR\u0003HQJDJH\u0003WKH\u0003UHDGHU\u0003",
+        "LQ\u0003D\u0003W\\SH\u0003RI\u0003HPRWLRQDO\u0003SXUL¿FDWLRQ\u0011",
+        "These literary terminologies and devices should be taught in an",
+        "integrated manner in topics where they apply and not in isolat",
+        "LITERATURE IN ENGLISH SYLLABUS SECONDARY EDUCATION ORDINARY LEVEL FORMS 1 – 4"
+      ],
+      "duration": "16 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Character:",
+      "topics": [
+        "a person or an animal or inanimate being that plays a role in",
+        "a dramatic piece of work or in a novel."
+      ],
+      "duration": "17 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Characterization:",
+      "topics": [
+        "\u0003D\u0003GHYLFH\u0003WKDW\u0003ZULWHUV\u0003XVH\u0003WR\u0003GHVFULEH\u0003DQG\u0003SURYLGH\u0003LQIRUPDWLRQ\u0003",
+        "DERXW\u0003VSHFL¿F\u0003FKDUDFWHUV\u0003LQ\u0003WKHLU\u0003ZRUN\u0011"
+      ],
+      "duration": "18 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Charlatan:",
+      "topics": [
+        "an impostor; an empty pretender to knowledge or skills.",
+        "Chorus:",
+        "the part of a poem or song that is repeated following each ve",
+        "rse. Or a group of people that speak in unison about the action",
+        "character.",
+        "Comedy:",
+        "a play that deals with and presents its acts in a funny and hu",
+        "morous way."
+      ],
+      "duration": "19 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Comic relief:",
+      "topics": [
+        "the inclusion of comedy or humor during a serous moment to upl",
+        "ift heavy mood."
+      ],
+      "duration": "22 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Complication:",
+      "topics": [
+        "a thing or an issue that gets in the way of a protagonist/mai",
+        "n character pursuing his or her goals.",
+        "\u0015\u0017\u0011\u0003 &RQÀLFW\u001d",
+        "the struggle between two opposing forces that is the basis of",
+        "the plot."
+      ],
+      "duration": "23 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Connotation:",
+      "topics": [
+        "a meaning suggested by a word or an expression in addition to",
+        "its exact meaning."
+      ],
+      "duration": "25 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Consonance:",
+      "topics": [
+        "\u0003WKH\u0003FORVH\u0003UHSHWLWLRQ\u0003RI\u0003LGHQWLFDO\u0003FRQVRQDQW\u0003VRXQGV\u0003EHIRUH\u0003DQG\u0003",
+        "DIWHU\u0003GL൵HULQJ\u0003YRZHO\u0003VRXQGV\u0011\u0003"
+      ],
+      "duration": "26 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Costumes:",
+      "topics": [
+        "clothing or props worn by actors.",
+        "Crisis:",
+        "the decisive moment in a story; a point at which decisions can",
+        "no more be delayed."
+      ],
+      "duration": "27 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Denotation:",
+      "topics": [
+        "\u0003 WKH\u0003OLWHUDO\u0003PHDQLQJ\u0003RI\u0003WKH\u0003ZRUG\u0011\u00037KLV\u0003DOVR\u0003PHDQV\u0003LWV\u0003GLFWLRQDU",
+        "\\\u0003GH¿QLWLRQ\u0011"
+      ],
+      "duration": "29 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Denouement:",
+      "topics": [
+        "\u0003WKH\u0003¿QDO\u0003XQUDYHOLQJ\u0003RU\u0003RXWFRPH\u0003RI\u0003WKH\u0003SORW\u0003LQ\u0003GUDPD\u0003RU\u0003¿FWLRQ\u0003",
+        "GXULQJ\u0003ZKLFK\u0003WKH\u0003FRPSOLFDWLRQV\u0003DQG\u0003FRQÀLFWV\u0003RI\u0003\u0003 WKH\u0003 SORW\u0003 DUH\u0003",
+        "resolved."
+      ],
+      "duration": "30 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Dialogue:",
+      "topics": [
+        "the exchange of spoken words between two or more characters in",
+        "a play or any other written work.",
+        "Diction:",
+        "choice and use of words and phrases in speech or writing."
+      ],
+      "duration": "31 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Didactic:",
+      "topics": [
+        "a literary work that intends to deliver a lesson.",
+        "LITERATURE IN ENGLISH SYLLABUS SECONDARY EDUCATION ORDINARY LEVEL FORMS 1 – 4",
+        "Drama:",
+        "a conversation accompanied by body action usually performed i",
+        "n front of an audience or on stage."
+      ],
+      "duration": "33 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Dramatic monologue:",
+      "topics": [
+        "a type of poem in which a speaker addresses a silent listener",
+        "or unseen listener."
+      ],
+      "duration": "35 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Dramatis personae:",
+      "topics": [
+        "list of characters or persons in a play.",
+        "Empathy:",
+        "the behaviour of putting oneself into a situation (often a pai",
+        "nful one) of another person."
+      ],
+      "duration": "36 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 27,
+      "title": "Epigraph:",
+      "topics": [
+        "a motto or quotation that appears at the beginning of a book,",
+        "play, chapter, or poem.",
+        "Episode:",
+        "an incident which forms part of the whole story, plot or narra"
+      ],
+      "duration": "38 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 28,
+      "title": "Euphemism:",
+      "topics": [
+        "a literary technique in which an accurate but explicit word is",
+        "substituted with a gentler and less distasteful term."
+      ],
+      "duration": "40 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 29,
+      "title": "Exposition:",
+      "topics": [
+        "\u0003EDFNJURXQG\u0003LQIRUPDWLRQ\u0003DW\u0003WKH\u0003EHJLQQLQJ\u0003RI\u0003WKH\u0003VWRU\\\u000f\u0003VXFK\u0003DV\u0003",
+        "VHWWLQJ\u000f\u0003FKDUDFWHUV\u0003DQG\u0003FRQÀLFWV\u0011\u0003",
+        "Fable:",
+        "\u0003D\u0003VKRUW\u0003VWRU\\\u0003WKDW\u0003XVHV\u0003DQLPDOV\u000f\u0003REMHFWV\u0003RU\u0003FKDUDFWHUV\u0003WR\u0003WHDF",
+        "K\u0003D\u0003PRUDO\u0003OHVVRQ\u0003RU\u0003FRQYH\\\u0003D\u0003PHVVDJH\u0011\u0003"
+      ],
+      "duration": "41 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 30,
+      "title": "Falling Action:",
+      "topics": [
+        "the period of time in a story that follows the climax and lead",
+        "s to the resolution.",
+        "Fiction:",
+        "literature in the form of prose that describes imaginary event",
+        "s and people."
+      ],
+      "duration": "43 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 31,
+      "title": "Figurative Language:",
+      "topics": [
+        "is language that doesn’t have a literal meaning, but rather s",
+        "uggests something with the use of creative language."
+      ],
+      "duration": "45 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 32,
+      "title": "Flashback:",
+      "topics": [
+        "a literary technique in which the writer brings the past into",
+        "the present in order to explain why something is in its present",
+        "condition.",
+        "Flaw:",
+        "a detected error in a literary work.",
+        "Foil:",
+        "a character that provides a striking contrast to the main char",
+        "acter or protagonist."
+      ],
+      "duration": "46 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 33,
+      "title": "Foreshadowing:",
+      "topics": [
+        "the giving of an advance hint of what is to come later in the",
+        "Hero:",
+        "the principal male character with positive or admirable attri",
+        "bute in a play or novel.",
+        "Heroine:",
+        "the female character with attributes like those of a hero.",
+        "LITERATURE IN ENGLISH SYLLABUS SECONDARY EDUCATION ORDINARY LEVEL FORMS 1 – 4",
+        "Humour:"
+      ],
+      "duration": "49 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 34,
+      "title": "Hyperbole:",
+      "topics": [
+        "a literary device consisting of an extravagant statement or ex",
+        "aggeration.",
+        "Imagery:",
+        "a literary device that uses vivid descriptions that appeals to",
+        "a reader’s senses.",
+        "Irony :",
+        "statements are directly opposite of what is actually meant",
+        "Legend:"
+      ],
+      "duration": "53 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 35,
+      "title": "Literature:",
+      "topics": ["work of art in both written and spoken language."],
+      "duration": "58 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 36,
+      "title": "Litotes/ understatement:",
+      "topics": [
+        "the use of a negative or weak statement to emphasize a positiv",
+        "e meaning.",
+        "Lyric:",
+        "it is a poem that expresses personal feelings intended to be s"
+      ],
+      "duration": "59 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 37,
+      "title": "Metaphor:",
+      "topics": ["an implied comparison."],
+      "duration": "61 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 38,
+      "title": "Metonymy:",
+      "topics": [
+        "\u0003D\u0003¿JXUH\u0003RI\u0003VSHHFK\u0003LQ\u0003ZKLFK\u0003D\u0003ZRUG\u0003LV\u0003UHSODFHG\u0003ZLWK\u0003DQRWKHU\u0003ZRU",
+        "G\u0003FORVHO\\\u0003DVVRFLDWHG\u0003ZLWK\u0003WKH\u0003RULJLQDO\u0003FRQFHSW\u0011",
+        "Metre:",
+        "describes the rhythm (or pattern of beats) in a line of poetry",
+        "Meiosis:",
+        "\u0003LV\u0003D\u0003¿JXUH\u0003RI\u0003VSHHFK\u0003ZKLFK\u0003DLPV\u0003DW\u0003XQGHUVWDWLQJ\u0011"
+      ],
+      "duration": "62 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 39,
+      "title": "Monologue:",
+      "topics": [
+        "a speech where there is only one speaker of soliloquy.",
+        "Mood:",
+        "the disposition of mind and feelings. We can refer to the moods",
+        "of anger, happiness, sadness that characterise a novel or part",
+        "Moral:",
+        "education derived from a literary work directly or by implicati",
+        "Myth:",
+        "traditional story, especially one concerning the early history"
+      ],
+      "duration": "65 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 40,
+      "title": "Narrative:",
+      "topics": [],
+      "duration": "69 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 41,
+      "title": "Narrator:",
+      "topics": ["the teller of a story."],
+      "duration": "70 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 42,
+      "title": "Nostalgia:",
+      "topics": [
+        "haunting memories; thoughts that bring back strong wishes for",
+        "someone to go back in time and space."
+      ],
+      "duration": "71 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 43,
+      "title": "Onomatopoeia:",
+      "topics": [
+        "words containing the sounds similar to the noises they describe",
+        "Opera:",
+        "a dramatic piece of work that is accompanied by music; a music"
+      ],
+      "duration": "72 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 44,
+      "title": "Oxymoron:",
+      "topics": [
+        "\u0003D\u0003¿JXUH\u0003RI\u0003VSHHFK\u0003LQ\u0003ZKLFK\u0003WZR\u0003ZRUGV\u0003ZLWK\u0003RSSRVLQJ\u0003PHDQLQJV\u0003DU",
+        "H\u0003XVHG\u0003DORQJVLGH\u0003RQH\u0003DQRWKHU\u0011"
+      ],
+      "duration": "74 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 45,
+      "title": "Pantomime:",
+      "topics": [
+        "a play that is presented to the audience without words but onl",
+        "y through signs.",
+        "Paradox:",
+        "a clever statement that contradicts itself i.e. Love makes me",
+        "blind and it makes me see -it forces the reader to think harder",
+        "to get the meaning."
+      ],
+      "duration": "75 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 46,
+      "title": "Parallelism:",
+      "topics": [
+        "the running side by side of statements or ideas that express s",
+        "imilarity in their meaning.",
+        "Persona:",
+        "the voice or perspective an author adopts to tell a story.",
+        "\u001a\u001c\u0011\u0003 3HUVRQL¿FDWLRQ\u001d\u0003",
+        "the giving of human attributes to inanimate beings",
+        "Plot:",
+        "\u0003 D\u0003VHTXHQFH\u0003RI\u0003HYHQWV\u0003LQ\u0003ZKLFK\u0003HDFK\u0003HYHQW\u0003D൵HFWV\u0003WKH\u0003QH[W\u0003RQH\u0003W"
+      ],
+      "duration": "77 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 47,
+      "title": "Poetic Justice:",
+      "topics": [
+        "\u0003D\u0003¿WWLQJ\u0003HQG\u0003RU\u0003UHZDUG\u0003IRU\u0003HDFK\u0003FKDUDFWHU\u0003DFFRUGLQJ\u0003WR\u0003KHU\u0003RU\u0003",
+        "KLV\u0003GHHGV\u0011\u0003\u0003"
+      ],
+      "duration": "81 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 48,
+      "title": "Point of View:",
+      "topics": [
+        "the person or character from whom the events of the story are",
+        "told in a written work."
+      ],
+      "duration": "82 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 49,
+      "title": "Premonition:",
+      "topics": [
+        "an unsettling feeling that foretells an event usually of an un",
+        "pleasant nature.",
+        "Props:",
+        "\u0003DQ\\\u0003PRYHDEOH\u0003DUWLFOHV\u0003RU\u0003REMHFWV\u0003XVHG\u0003RQ\u0003WKH\u0003VHW\u0003RI\u0003WKH\u0003SOD\\\u0003R"
+      ],
+      "duration": "83 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 50,
+      "title": "Protagonist:",
+      "topics": [
+        "the central or leading character in a story whom we sympathize",
+        "with or support.",
+        "Proverb:",
+        "a wise saying with hidden meaning.",
+        "LITERATURE IN ENGLISH SYLLABUS SECONDARY EDUCATION ORDINARY LEVEL FORMS 1 – 4",
+        "D\u0003MRNH\u0003H[SORLWLQJ\u0003WKH\u0003GL൵HUHQW\u0003SRVVLEOH\u0003PHDQLQJV\u0003RI\u0003D\u0003ZRUG\u0011\u0003"
+      ],
+      "duration": "85 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 51,
+      "title": "Repetition:",
+      "topics": ["the use of the same word or phrase over and over in a poem or"],
+      "duration": "88 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 52,
+      "title": "Resolution:",
+      "topics": [
+        "\u0003WKH\u0003¿QDO\u0003OLWHUDU\\\u0003VWDJH\u0003LQ\u0003VWRU\\¶V\u0003SORW\u0003VWUXFWXUH\u0011"
+      ],
+      "duration": "89 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 53,
+      "title": "Rhetoric Question:",
+      "topics": [
+        "\u0003D\u0003TXHVWLRQ\u0003DVNHG\u0003LQ\u0003RUGHU\u0003WR\u0003FUHDWH\u0003D\u0003GUDPDWLF\u0003H൵HFW\u0003RU\u0003WR\u0003PDN",
+        "H\u0003D\u0003SRLQW\u0003UDWKHU\u0003WKDQ\u0003WR\u0003JHW\u0003DQ\u0003DQVZHU\u0011",
+        "Rhyme:",
+        "the repetition of similar sound in two or more words."
+      ],
+      "duration": "90 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 54,
+      "title": "Rhyme Scheme:",
+      "topics": ["the arrangement of lines in a stanza in a poem."],
+      "duration": "92 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 55,
+      "title": "Rising Action:",
+      "topics": [
+        "\u0003WKH\u0003VHFWLRQ\u0003RI\u0003SORW\u0003WKDW\u0003EHJLQV\u0003ZLWK\u0003D\u0003FRQÀLFW\u0003DQG\u0003LV\u0003FRQFHUQH",
+        "G\u0003ZLWK\u0003\u0003\u0003WKH\u0003PDLQ\u0003FKDUDFWHU¶V\u0003VWUXJJOH\u0003WR\u0003RYHUFRPH\u0003WKDW\u0003FRQÀLFW",
+        "Sarcasm:",
+        "\u0003DQ\u0003R൵HQVLYH\u0003UHPDUN\u0003ZLWK\u0003WKH\u0003VROH\u0003LQWHQWLRQ\u0003RI\u0003LQÀLFWLQJ\u0003SDLQ\u0003R",
+        "Q\u0003VRPHRQH\u0011",
+        "Satire:",
+        "a literary work that employs sarcasm and irony to ridicule the",
+        "ills of the society in order to heal or reverse the order of th"
+      ],
+      "duration": "93 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 56,
+      "title": "Soliloquy:",
+      "topics": ["a loud speech addressed to oneself, of monologue."],
+      "duration": "98 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 57,
+      "title": "Stage Direction:",
+      "topics": [
+        "a playwright’s descriptive or interpretive comments that provi",
+        "de readers (and actors) with information about the dialogue,",
+        "setting, and action of a play.",
+        "Staging:",
+        "the method of presenting a play or other dramatic performance.",
+        "Stanza:",
+        "a division of a poem consisting of two or more lines arranged",
+        "together as a unit."
+      ],
+      "duration": "99 weeks",
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    }
+  ],
+  "metadata": {
+    "source": "LITERATURE-IN-ENGLISH-SYLABUS-O-LEVEL-FORM-1-4.pdf",
+    "extractedAt": "2026-07-11T06:20:40.942Z",
+    "fileSize": 993543
+  }
+}

@@ -34,6 +34,15 @@ export const GET = withErrorHandler(async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const subject = String(searchParams.get('subject') || '').trim()
   const grade = String(searchParams.get('grade') || searchParams.get('gradeOrForm') || '').trim()
+  const listOnly =
+    searchParams.get('list') === '1' || searchParams.get('list') === 'true' || !subject
+
+  if (listOnly && !subject) {
+    const { listAvailableCurriculumSubjects } =
+      await import('@/lib/curriculum/jsonCurriculumLoader')
+    const subjects = listAvailableCurriculumSubjects()
+    return NextResponse.json({ success: true, subjects })
+  }
 
   if (!subject) {
     return NextResponse.json({ error: 'subject is required' }, { status: 400 })

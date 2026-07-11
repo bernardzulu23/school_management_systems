@@ -1,0 +1,22 @@
+{
+  "subject": "French",
+  "level": "Form 1-4",
+  "gradesCovered": [7, 8, 9, 10],
+  "totalDuration": "12 weeks",
+  "units": [
+    {
+      "unitNumber": 1,
+      "title": "General syllabus content",
+      "topics": [],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    }
+  ],
+  "metadata": {
+    "source": "FRENCH-LANGUAGE.pdf",
+    "extractedAt": "2026-07-11T06:20:39.995Z",
+    "fileSize": 1015461
+  }
+}

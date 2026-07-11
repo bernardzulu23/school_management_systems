@@ -1,0 +1,22 @@
+{
+  "subject": "Art and Design",
+  "level": "Form 1-4",
+  "gradesCovered": [7, 8, 9, 10],
+  "totalDuration": "12 weeks",
+  "units": [
+    {
+      "unitNumber": 1,
+      "title": "General syllabus content",
+      "topics": [],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    }
+  ],
+  "metadata": {
+    "source": "ART-AND-DESIGN-SYLLABUS-FINAL.pdf",
+    "extractedAt": "2026-07-11T06:20:37.621Z",
+    "fileSize": 1610614
+  }
+}

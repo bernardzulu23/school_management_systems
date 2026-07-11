@@ -206,17 +206,20 @@ Timetable alignment and assessment auto-linking are planned for later phases.
 |         | Syllabus (`./Syllabus/`)                         | Teaching Module (`./Teaching Module/`)                        |
 | ------- | ------------------------------------------------ | ------------------------------------------------------------- |
 | Purpose | What to cover (units, outcomes)                  | How to teach (lessons, activities, resources)                 |
-| Ingest  | `npm run ingest:syllabi`                         | `npm run ingest:teaching-modules`                             |
+| Ingest  | `npm run ingest:syllabi -- ./Syllabus`           | `npm run ingest:teaching-modules -- --all`                    |
 | Output  | `data/curriculum/form1-4/{subject}-form1-4.json` | `data/teaching-modules/{subject}/form{N}-term{T}.json`        |
 | Used by | Scheme topic/outcome backbone                    | Enriches scheme activities/resources + lesson-planner prompts |
 
-**Do not** run `ingest:syllabi` on the Teaching Module folder.
+**Do not** run `ingest:syllabi` on the Teaching Module folder.  
+**Do not** write modules to `data/curriculum/form1-6/` — that path is unused; use `data/teaching-modules/`.
 
-### Pilot ingest (English-medium core)
+### Full ingest
 
 ```bash
-npm run ingest:teaching-modules
-# or explicit subjects:
+npm run ingest:syllabi -- ./Syllabus
+npm run ingest:teaching-modules -- --all
+
+# Or filter teaching-module subjects
 npm run ingest:teaching-modules -- "./Teaching Module" Chemistry Physics Mathematics
 ```
 
