@@ -64,6 +64,7 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       topic: true,
       weekNumber: true,
       schemeId: true,
+      topicKey: true,
       approvedAt: true,
     },
   })
@@ -97,15 +98,25 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       const weekType = weekKindFromRow(w.week, w.weekType, schedule)
       const isTestWeek = weekType !== 'teaching'
       const progressRow = scheme.progress.find((p) => p.weekNumber === w.week && p.completed)
-      const byWeek = relevantPlans.find((p) => Number(p.weekNumber) === w.week)
-      const byTopic = relevantPlans.find(
-        (p) => p.weekNumber == null && topicMatch(p.topic, w.topic || '')
+      const byWeek = relevantPlans.find(
+        (p) => Number(p.weekNumber) === w.week && (!p.schemeId || p.schemeId === scheme.id)
       )
-      const approved = byWeek || byTopic
+      const byKey =
+        !byWeek && w.topicKey
+          ? relevantPlans.find(
+              (p) =>
+                p.topicKey && p.topicKey === w.topicKey && (!p.schemeId || p.schemeId === scheme.id)
+            )
+          : null
+      const byTopic = relevantPlans.find(
+        (p) => p.weekNumber == null && !p.topicKey && topicMatch(p.topic, w.topic || '')
+      )
+      const approved = byWeek || byKey || byTopic
       const taught = isTestWeek ? true : Boolean(approved) || Boolean(progressRow)
       return {
         week: w.week,
         topic: w.topic || `Week ${w.week}`,
+        topicKey: w.topicKey || null,
         completed: taught,
         completedAt: isTestWeek ? null : (approved?.approvedAt ?? progressRow?.completedAt ?? null),
         lessonPlanId: approved?.id ?? null,

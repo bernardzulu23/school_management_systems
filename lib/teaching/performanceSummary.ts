@@ -16,9 +16,15 @@ export function parseTermNumber(term: string | number | null | undefined): numbe
   return Number.isFinite(n) && n >= 1 && n <= 3 ? n : 1
 }
 
-export function weeksFromSchemeJson(
-  weeks: unknown
-): Array<{ week: number; topic?: string; weekType?: string }> {
+export function weeksFromSchemeJson(weeks: unknown): Array<{
+  week: number
+  topic?: string
+  weekType?: string
+  topicKey?: string
+  unitNumber?: number
+  unitTitle?: string
+  topicTitle?: string
+}> {
   if (!Array.isArray(weeks)) return []
   return weeks
     .map((w, i) => {
@@ -27,9 +33,32 @@ export function weeksFromSchemeJson(
       const week = Number(row.week ?? i + 1)
       const topic = row.topic != null ? String(row.topic) : undefined
       const weekType = row.weekType != null ? String(row.weekType) : undefined
-      return { week: Number.isFinite(week) ? week : i + 1, topic, weekType }
+      const topicKey = row.topicKey != null ? String(row.topicKey) : undefined
+      const unitTitle = row.unitTitle != null ? String(row.unitTitle) : undefined
+      const topicTitle = row.topicTitle != null ? String(row.topicTitle) : undefined
+      const unitNumber =
+        row.unitNumber != null && Number.isFinite(Number(row.unitNumber))
+          ? Number(row.unitNumber)
+          : undefined
+      return {
+        week: Number.isFinite(week) ? week : i + 1,
+        topic,
+        weekType,
+        topicKey,
+        unitNumber,
+        unitTitle,
+        topicTitle,
+      }
     })
-    .filter(Boolean) as Array<{ week: number; topic?: string; weekType?: string }>
+    .filter(Boolean) as Array<{
+    week: number
+    topic?: string
+    weekType?: string
+    topicKey?: string
+    unitNumber?: number
+    unitTitle?: string
+    topicTitle?: string
+  }>
 }
 
 /** Recalculate and upsert TeacherPerformanceSummary for a teacher/term. */

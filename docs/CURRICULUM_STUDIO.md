@@ -1,10 +1,12 @@
 # Curriculum Studio Quick Reference
 
-**Last updated:** 2026-07-11  
+**Last updated:** 2026-07-12  
 **Status:** Production-ready (v1)  
 **Related:** [USER_GUIDE.md](./USER_GUIDE.md) · [AI_GUIDE.md](./AI_GUIDE.md) · [API_ROUTES.md](./API_ROUTES.md)
 
 CBC-aligned schemes of work, record-of-work templates, and lesson plans from syllabus JSON (and optional PDF ingest).
+
+**Topic mapping:** each scheme teaching week stores a stable `topicKey` (CDC id or derived slug). Open the AI Lesson Planner from Teaching Studio with `?schemeId=&week=` to prefill and link the plan; RoW and coverage match by scheme+week, then `topicKey`, then topic text.
 
 ---
 

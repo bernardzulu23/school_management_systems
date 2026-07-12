@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { BookOpen, Download, Layers, Loader2, Upload } from 'lucide-react'
+import { buildTopicKey } from '@/lib/curriculum/topicKey'
 
 function downloadBase64Docx(base64, filename) {
   const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))
@@ -90,6 +91,27 @@ export default function TeacherCurriculumStudioPage() {
     setGenerating(true)
     setLastPlanId(null)
     try {
+      const matchedUnit = units.find(
+        (u) =>
+          String(u.title || '') === unit.trim() ||
+          (u.topics || []).some((t) => String(t) === topic.trim())
+      )
+      const topicIndex = matchedUnit
+        ? Math.max(
+            0,
+            (matchedUnit.topics || []).findIndex((t) => String(t) === topic.trim())
+          )
+        : 0
+      const topicKey =
+        matchedUnit?.topicKeys?.[topicIndex] ||
+        buildTopicKey({
+          cdcId: matchedUnit?.topicKeys?.[topicIndex],
+          subject,
+          gradeOrForm: grade,
+          unitNumber: matchedUnit?.unitNumber ?? matchedUnit?.sortOrder + 1,
+          topicIndex,
+          topicTitle: topic.trim(),
+        })
       const res = await fetch('/api/curriculum/generate-lesson-plan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -100,6 +122,7 @@ export default function TeacherCurriculumStudioPage() {
           topic: topic.trim(),
           unit: unit.trim() || undefined,
           duration: Number(duration) || 40,
+          topicKey,
         }),
       })
       const json = await res.json().catch(() => ({}))
@@ -115,7 +138,8 @@ export default function TeacherCurriculumStudioPage() {
       }
       toast.success(json.fromCache ? 'Loaded from cache' : 'Lesson plan generated')
     } catch (err) {
-      toast.error(err.message || 'Generation failed')
+      console.warn('[curriculum] generate failed', err)
+      toast.error('Could not generate the lesson plan. Please try again.')
     } finally {
       setGenerating(false)
     }
@@ -144,7 +168,8 @@ export default function TeacherCurriculumStudioPage() {
       )
       setUnits(json.curriculum?.units || [])
     } catch (err) {
-      toast.error(err.message || 'Ingest failed')
+      console.warn('[curriculum] ingest file failed', err)
+      toast.error('Could not upload the syllabus. Please try again.')
     } finally {
       setIngesting(false)
     }
@@ -177,7 +202,8 @@ export default function TeacherCurriculumStudioPage() {
           .filter(Boolean)
       )
     } catch (err) {
-      toast.error(err.message || 'Ingest failed')
+      console.warn('[curriculum] ingest url failed', err)
+      toast.error('Could not ingest the syllabus from that URL. Please try again.')
     } finally {
       setIngesting(false)
     }

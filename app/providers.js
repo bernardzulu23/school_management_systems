@@ -9,6 +9,7 @@ import { SchoolFeaturesProvider } from '@/lib/school/SchoolFeaturesContext'
 import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
 import { withBrowserSessionFetchInit } from '@/lib/security/browserSessionHeaders'
 import { installApiFetchPatch } from '@/lib/auth/installApiFetch'
+import { installSafeToastPatch } from '@/lib/ui/installSafeToast'
 import { useAuth } from '@/lib/auth'
 import GlobalTopLoadingBar from '@/components/ui/GlobalTopLoadingBar'
 import GlobalBackButton from '@/components/ui/GlobalBackButton'
@@ -16,6 +17,7 @@ import OfflineBanner from '@/components/ui/OfflineBanner'
 
 if (typeof window !== 'undefined') {
   installApiFetchPatch()
+  installSafeToastPatch()
 }
 
 function PWALoader() {

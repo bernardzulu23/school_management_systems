@@ -106,6 +106,7 @@ export const POST = withErrorHandler(async function POST(request) {
         ? Number(body.week)
         : null
   const schemeId = normalize(body?.schemeId) || null
+  const topicKey = normalize(body?.topicKey) || null
   const duration =
     body?.duration != null && Number.isFinite(Number(body.duration)) ? Number(body.duration) : null
   const templateType = normalize(body?.templateType) || 'professional'
@@ -156,6 +157,7 @@ export const POST = withErrorHandler(async function POST(request) {
       term,
       weekNumber,
       schemeId: schemeId || null,
+      topicKey: topicKey || null,
       templateType,
       content,
       submittedAt,
@@ -171,6 +173,7 @@ export const POST = withErrorHandler(async function POST(request) {
       status: true,
       weekNumber: true,
       schemeId: true,
+      topicKey: true,
       createdAt: true,
     },
   })

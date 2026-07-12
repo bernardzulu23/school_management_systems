@@ -6,6 +6,7 @@ import fs from 'fs'
 import path from 'path'
 import type { ParsedSyllabusUnit } from '@/lib/curriculum/syllabusParsing'
 import { normalizeKnownSubject } from '@/lib/curriculum/syllabusParsing'
+import { buildTopicKey } from '@/lib/curriculum/topicKey'
 
 export type CurriculumJSONUnit = {
   unitNumber?: number
@@ -78,15 +79,27 @@ function listCandidateFiles(subject: string): string[] {
 export function unitsFromCurriculumJSON(data: CurriculumJSON): ParsedSyllabusUnit[] {
   return (data.units || []).map((u, i) => {
     const durationWeeks = parseDurationWeeks(u.duration)
+    const unitNumber = typeof u.unitNumber === 'number' ? u.unitNumber : i + 1
+    const topics = asStringArray(u.topics)
     return {
-      title: String(u.title || `Unit ${u.unitNumber || i + 1}`).trim(),
-      topics: asStringArray(u.topics),
+      title: String(u.title || `Unit ${unitNumber}`).trim(),
+      topics,
+      topicKeys: topics.map((t, ti) =>
+        buildTopicKey({
+          subject: data.subject,
+          gradeOrForm: data.level || (data.gradesCovered || []).join('-'),
+          unitNumber,
+          topicIndex: ti,
+          topicTitle: t,
+        })
+      ),
       outcomes: asStringArray(u.learningOutcomes),
       activities: asStringArray(u.suggestedActivities),
       assessment: asStringArray(u.assessmentMethods),
       resources: asStringArray(u.resources),
       weekHint: durationWeeks ?? undefined,
       sortOrder: typeof u.unitNumber === 'number' ? u.unitNumber - 1 : i,
+      unitNumber,
     }
   })
 }

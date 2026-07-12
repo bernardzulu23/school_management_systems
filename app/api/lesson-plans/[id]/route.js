@@ -119,6 +119,13 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
       ...(body?.subTopic != null ? { subTopic: normalize(body.subTopic) || null } : {}),
       ...(body?.grade ? { grade: normalize(body.grade) } : {}),
       ...(body?.subject ? { subject: normalize(body.subject) } : {}),
+      ...(body?.schemeId != null ? { schemeId: normalize(body.schemeId) || null } : {}),
+      ...(body?.topicKey != null ? { topicKey: normalize(body.topicKey) || null } : {}),
+      ...(body?.weekNumber != null && Number.isFinite(Number(body.weekNumber))
+        ? { weekNumber: Number(body.weekNumber) }
+        : body?.week != null && Number.isFinite(Number(body.week))
+          ? { weekNumber: Number(body.week) }
+          : {}),
     },
     select: {
       id: true,

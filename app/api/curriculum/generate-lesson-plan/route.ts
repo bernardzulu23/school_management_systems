@@ -23,7 +23,10 @@ const InputSchema = z.object({
   topic: z.string().min(1).max(200),
   unit: z.string().max(200).optional(),
   term: z.string().max(40).optional(),
-  week: z.number().int().min(1).max(16).optional(),
+  week: z.number().int().min(1).max(20).optional(),
+  weekNumber: z.number().int().min(1).max(20).optional(),
+  schemeId: z.string().max(64).optional(),
+  topicKey: z.string().max(200).optional(),
   duration: z.number().int().min(20).max(120).optional(),
   teacherNotes: z.string().max(800).optional(),
   learningOutcomes: z.array(z.string().max(300)).max(12).optional(),
@@ -109,6 +112,7 @@ export const POST = withErrorHandler(async function POST(request: Request) {
 
   let lessonPlanId: string | null = null
   if (input.persist !== false) {
+    const weekNumber = input.weekNumber ?? input.week ?? null
     const row = await prisma.lessonPlan.create({
       data: {
         id: crypto.randomUUID(),
@@ -120,7 +124,9 @@ export const POST = withErrorHandler(async function POST(request: Request) {
         subTopic: input.unit || input.topic,
         duration: input.duration || 40,
         term: input.term || 'Term 1',
-        weekNumber: input.week ?? null,
+        weekNumber,
+        schemeId: input.schemeId || null,
+        topicKey: input.topicKey || null,
         templateType: 'curriculum-studio',
         content: generated.content,
         structuredContent: generated.structuredContent as object,

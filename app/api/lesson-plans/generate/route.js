@@ -64,6 +64,14 @@ export const POST = withErrorHandler(async function POST(request) {
   const term = normalize(body?.term) || 'Term 1'
   const templateType = normalize(body?.templateType) || 'professional'
   const useMinistryFormat = body?.format === 'ministry' || body?.useMinistryFormat === true
+  const weekNumber =
+    body?.weekNumber != null && Number.isFinite(Number(body.weekNumber))
+      ? Number(body.weekNumber)
+      : body?.week != null && Number.isFinite(Number(body.week))
+        ? Number(body.week)
+        : null
+  const schemeId = normalize(body?.schemeId) || null
+  const topicKey = normalize(body?.topicKey) || null
 
   const constructElementIds = Array.isArray(body.constructElementIds)
     ? body.constructElementIds
@@ -159,6 +167,9 @@ export const POST = withErrorHandler(async function POST(request) {
       subTopic,
       duration,
       term,
+      weekNumber,
+      schemeId: schemeId || null,
+      topicKey: topicKey || null,
       templateType,
       content,
       structuredContent: structuredContent ?? undefined,
@@ -178,6 +189,9 @@ export const POST = withErrorHandler(async function POST(request) {
       subTopic: true,
       duration: true,
       term: true,
+      weekNumber: true,
+      schemeId: true,
+      topicKey: true,
       createdAt: true,
     },
   })

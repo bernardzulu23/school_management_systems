@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
+import { toUserFacingMessage } from '@/lib/utils/errorMessages'
 
 function getTitle(error) {
   const code = String(error?.code || '').toUpperCase()
@@ -12,9 +13,8 @@ function getTitle(error) {
 }
 
 function getMessage(error) {
-  return (
-    error?.error ||
-    error?.message ||
+  return toUserFacingMessage(
+    error?.error || error?.message,
     'You cannot access this feature right now. Please upgrade your plan or try again later.'
   )
 }

@@ -34,15 +34,21 @@ function chemistryRecordsToUnits(form: number | null): ResolvedCurriculumUnit[] 
       unit = {
         title: r.topic,
         topics: [],
+        topicKeys: [],
         outcomes: [],
         activities: [],
         assessment: [],
         resources: [],
         sortOrder: byTopic.size,
+        unitNumber: byTopic.size + 1,
       }
       byTopic.set(key, unit)
     }
-    if (r.subtopic) unit.topics.push(r.subtopic)
+    if (r.subtopic) {
+      unit.topics.push(r.subtopic)
+      unit.topicKeys = unit.topicKeys || []
+      unit.topicKeys.push(String(r.id || '').trim() || `${r.subtopicNumber || ''}|${r.subtopic}`)
+    }
     for (const c of r.specificCompetences || []) unit.outcomes.push(c)
     for (const a of r.learningActivities || []) unit.activities.push(a)
     for (const t of r.suggestedAssessmentTypes || []) unit.assessment.push(t)
@@ -86,6 +92,7 @@ export async function resolveCurriculum(options: {
         durationMinutes: u.durationMinutes ?? undefined,
         weekHint: u.weekHint ?? undefined,
         sortOrder: u.sortOrder,
+        unitNumber: u.sortOrder + 1,
       }))
       const topics = units.flatMap((u) => [u.title, ...u.topics])
       return {

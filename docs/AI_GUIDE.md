@@ -58,21 +58,21 @@ Zod still validates the parsed object on our side. If you see a `json_schema` er
 
 ## AI features
 
-| Feature                  | Route / module                              | Mode                                                                 | Schema                                                    |
-| ------------------------ | ------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------- |
-| Lesson planner (stream)  | `POST /api/ai/lesson-planner`               | Stream prose; MoE teaching-module enrichment when JSON exists        | —                                                         |
-| Curriculum Studio plan   | `POST /api/curriculum/generate-lesson-plan` | Structured + Word (+ optional Blob); teaching-module prompt context  | `LessonPlanSchema`                                        |
-| Scheme of work           | `POST /api/curriculum/scheme`               | Word / CSV / JSON; activities enriched from `data/teaching-modules/` | —                                                         |
-| Professional lesson plan | `POST /api/lesson-plans/generate`           | Structured (default)                                                 | `LessonPlanSchema`                                        |
-| Ministry plain-text plan | Same route, `format=ministry`               | Text                                                                 | —                                                         |
-| Quiz maker               | `POST /api/ai/quiz-maker`                   | Structured → text+coerce fallback                                    | `QuizGenerationSchema` → `parseQuizObject` (`QuizSchema`) |
-| ECZ practice             | `POST /api/ai/ecz-practice`                 | Structured                                                           | `ECZPracticePaperSchema`                                  |
-| Story weaver             | `POST /api/ai/story-weaver`                 | Stream                                                               | —                                                         |
-| Report comments          | `POST /api/ai/report-comments`              | Stream                                                               | —                                                         |
-| Phonics / Zambia helpers | `lib/ai/zambia-features.js`                 | Text                                                                 | —                                                         |
-| Legacy aiml tools        | `lib/aiml/tools/*`                          | Mixed                                                                | Quiz / ECZ schemas                                        |
+| Feature                  | Route / module                              | Mode                                                                                                          | Schema                                                    |
+| ------------------------ | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| Lesson planner (stream)  | `POST /api/ai/lesson-planner`               | Stream prose; MoE teaching-module enrichment when JSON exists                                                 | —                                                         |
+| Curriculum Studio plan   | `POST /api/curriculum/generate-lesson-plan` | Structured + Word (+ optional Blob); teaching-module prompt context; accepts `schemeId` / `week` / `topicKey` | `LessonPlanSchema`                                        |
+| Scheme of work           | `POST /api/curriculum/scheme`               | Word / CSV / JSON; each week includes `topicKey` (+ unit metadata)                                            | —                                                         |
+| Professional lesson plan | `POST /api/lesson-plans/generate`           | Structured (default); persists `schemeId` / `weekNumber` / `topicKey`                                         | `LessonPlanSchema`                                        |
+| Ministry plain-text plan | Same route, `format=ministry`               | Text                                                                                                          | —                                                         |
+| Quiz maker               | `POST /api/ai/quiz-maker`                   | Structured → text+coerce fallback                                                                             | `QuizGenerationSchema` → `parseQuizObject` (`QuizSchema`) |
+| ECZ practice             | `POST /api/ai/ecz-practice`                 | Structured                                                                                                    | `ECZPracticePaperSchema`                                  |
+| Story weaver             | `POST /api/ai/story-weaver`                 | Stream                                                                                                        | —                                                         |
+| Report comments          | `POST /api/ai/report-comments`              | Stream                                                                                                        | —                                                         |
+| Phonics / Zambia helpers | `lib/ai/zambia-features.js`                 | Text                                                                                                          | —                                                         |
+| Legacy aiml tools        | `lib/aiml/tools/*`                          | Mixed                                                                                                         | Quiz / ECZ schemas                                        |
 
-Structured lesson plans are stored on `LessonPlan.structuredContent` (JSON) plus plain `content` for display.
+Structured lesson plans are stored on `LessonPlan.structuredContent` (JSON) plus plain `content` for display. When opened from Teaching Studio (`?schemeId=&week=`), the planner prefills the scheme week and stores `topicKey` so Record of Work and coverage match by key/week rather than fuzzy topic text. CBC JSON under `data/curriculum/` stays file-based; `lib/curriculum/topicKey.ts` derives stable keys (Chemistry CDC ids when present).
 
 ## Adding a new AI feature
 

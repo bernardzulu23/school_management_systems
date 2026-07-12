@@ -48,6 +48,8 @@ export const POST = withErrorHandler(async function POST(request: Request) {
   let weekCount = input.weekCount || 12
   const schemeWeekTopics = new Map<number, string>()
   const schemeWeekTypes = new Map<number, string>()
+  const schemeWeekKeys = new Map<number, string>()
+  let resolvedSchemeId: string | null = input.schemeId || null
   let testSchedule: import('@/lib/teaching/testWeeks').TestScheduleLike | null = null
 
   if (input.schemeId) {
@@ -56,11 +58,13 @@ export const POST = withErrorHandler(async function POST(request: Request) {
       include: { testSchedule: true },
     })
     if (scheme) {
+      resolvedSchemeId = scheme.id
       const weeks = weeksFromSchemeJson(scheme.weeks)
       weekCount = weeks.length || weekCount
       for (const w of weeks) {
         if (w.topic) schemeWeekTopics.set(w.week, w.topic)
         if (w.weekType) schemeWeekTypes.set(w.week, w.weekType)
+        if (w.topicKey) schemeWeekKeys.set(w.week, w.topicKey)
       }
       testSchedule = scheme.testSchedule
     }
@@ -79,11 +83,13 @@ export const POST = withErrorHandler(async function POST(request: Request) {
       orderBy: { updatedAt: 'desc' },
     })
     if (scheme) {
+      resolvedSchemeId = scheme.id
       const weeks = weeksFromSchemeJson(scheme.weeks)
       if (!input.weekCount && weeks.length) weekCount = weeks.length
       for (const w of weeks) {
         if (w.topic) schemeWeekTopics.set(w.week, w.topic)
         if (w.weekType) schemeWeekTypes.set(w.week, w.weekType)
+        if (w.topicKey) schemeWeekKeys.set(w.week, w.topicKey)
       }
       testSchedule = scheme.testSchedule
     }
@@ -116,10 +122,24 @@ export const POST = withErrorHandler(async function POST(request: Request) {
       }
     }
 
-    const plans = approved.filter((p) => Number(p.weekNumber) === week)
-    const byTopic =
-      plans.length > 0
-        ? plans
+    const weekKey = schemeWeekKeys.get(week)
+    const bySchemeWeek = approved.filter(
+      (p) =>
+        Number(p.weekNumber) === week &&
+        (!resolvedSchemeId || !p.schemeId || p.schemeId === resolvedSchemeId)
+    )
+    const byTopicKey =
+      bySchemeWeek.length > 0 || !weekKey
+        ? []
+        : approved.filter(
+            (p) =>
+              p.topicKey &&
+              p.topicKey === weekKey &&
+              (!resolvedSchemeId || !p.schemeId || p.schemeId === resolvedSchemeId)
+          )
+    const byFuzzyTopic =
+      bySchemeWeek.length > 0 || byTopicKey.length > 0
+        ? []
         : approved.filter((p) => {
             const planned = schemeWeekTopics.get(week)
             if (!planned || p.weekNumber != null) return false
@@ -128,13 +148,13 @@ export const POST = withErrorHandler(async function POST(request: Request) {
             return t === s || t.includes(s) || s.includes(t)
           })
 
-    const plan = byTopic[0]
+    const plan = bySchemeWeek[0] || byTopicKey[0] || byFuzzyTopic[0]
     if (!plan) {
       return {
         week,
         taught: false,
         isTestWeek: false,
-        topic: '',
+        topic: schemeWeekTopics.get(week) || '',
         dateTaught: '',
         remarks: 'Not taught — no approved lesson plan',
         signOff: '',

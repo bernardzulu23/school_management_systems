@@ -1,5 +1,6 @@
 'use client'
 
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
@@ -18,7 +19,9 @@ export default function TeacherLessonPlannerPage() {
           </Button>
         </Link>
         <FeatureGate featureId="ai-lesson-planner">
-          <AILessonPlanner />
+          <Suspense fallback={<p className="text-sm text-muted-foreground">Loading planner…</p>}>
+            <AILessonPlanner />
+          </Suspense>
         </FeatureGate>
       </div>
     </DashboardLayout>

@@ -1,7 +1,7 @@
 # ZSMS User Guide
 
 **Zambian School Management System (ZSMS)**  
-**Last updated:** 2026-07-11  
+**Last updated:** 2026-07-12  
 **Application version:** 2.0.3 (`package.json`)  
 **Document version:** 1.0
 
@@ -507,8 +507,8 @@ See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) and [QR_ATTENDANCE.md](./QR_ATTENDANC
 #### Lesson plans
 
 1. **Teaching Studio:** `/dashboard/teacher/teaching-studio` — unified hub for schemes, week progress, lessons, and coverage analytics.
-2. **Create (AI):** Teaching Studio → Lessons → **AI Lesson Planner** (`/dashboard/teacher/lesson-planner`, requires AI-enabled plan).
-3. **Curriculum Studio (lessons):** `/dashboard/teacher/curriculum` — pick subject/grade/topic from syllabus, generate a CBC lesson plan Word download, and optionally save to My Lesson Plans.
+2. **Create (AI):** Teaching Studio → Lessons → **AI Lesson Planner**. With a scheme selected, the link opens `/dashboard/teacher/lesson-planner?schemeId=…&week=…` and **prefills** subject, grade, term, and topic from that scheme week (requires AI-enabled plan). Generate/save keeps `schemeId`, `weekNumber`, and `topicKey` so Record of Work and coverage match that week without retyping the topic.
+3. **Curriculum Studio (lessons):** `/dashboard/teacher/curriculum` — pick subject/grade/topic from syllabus, generate a CBC lesson plan Word download, and optionally save to My Lesson Plans (stores a stable `topicKey` when the topic comes from the resolved syllabus).
 4. **View/edit:** `/dashboard/teacher/lesson-plans` → click a plan for detail.
 5. **Submit for review** — status flow: Draft → Submitted → Approved / Rejected / Revision requested.
 6. HOD approves at `/dashboard/hod/lesson-plans`.
@@ -518,13 +518,13 @@ See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) and [QR_ATTENDANCE.md](./QR_ATTENDANC
 Quick reference: [CURRICULUM_STUDIO.md](./CURRICULUM_STUDIO.md).
 
 1. Open **Teaching Studio** (`/dashboard/teacher/teaching-studio`) — tabs: **Scheme & Lessons**, **Progress**, **Analytics**. Requires `schemes-of-work` feature. (Direct URL `/dashboard/teacher/schemes` still works.)
-2. Choose subject, grade, term, **weeks per term** (any length from 1–20 — type the number; not limited to 8/10/12), and export format (**Word**, **CSV**, or **JSON**). Open the **Test Schedule** tab to set **mid-term** and **end-of-term** weeks (ranges allowed, e.g. mid Week 7, end Weeks 12–13) → **Generate scheme of work**. Those weeks are **assessment-only** (no teaching topics) and are **excluded from work coverage %**.
-3. **Week progress:** mark teaching weeks taught manually on the Progress tab, or they auto-fill when a **lesson plan for that week is APPROVED**. Test weeks cannot be marked as taught and do not pull coverage down.
+2. Choose subject, grade, term, **weeks per term** (any length from 1–20 — type the number; not limited to 8/10/12), and export format (**Word**, **CSV**, or **JSON**). Open the **Test Schedule** tab to set **mid-term** and **end-of-term** weeks (ranges allowed, e.g. mid Week 7, end Weeks 12–13) → **Generate scheme of work**. Those weeks are **assessment-only** (no teaching topics) and are **excluded from work coverage %**. Each teaching week stores a stable **topic key** (Chemistry CDC ids like `F1-T1-S1` when available; otherwise a derived slug) used to link lesson plans.
+3. **Week progress:** mark teaching weeks taught manually on the Progress tab, or they auto-fill when a **lesson plan for that week is APPROVED**. Matching prefers `schemeId` + week number, then `topicKey`, then topic text. Test weeks cannot be marked as taught and do not pull coverage down.
    - **Secondary / Form:** submit lesson plan → **HOD** approves.
    - **Primary (Grade 1–7):** submit → **senior teacher** or **deputy head** (falls back to headteacher).
    - No lesson plan and not marked manually → week is **not taught** (Record of Work stays blank / shows “Not taught” unless an approved plan exists).
-4. Download **Record of work** from Curriculum Studio / Schemes — auto-fills date and topic from approved plans only.
-5. Chemistry uses `data/curriculum/form1-4/chemistry-form1-4.json` (9 units) for schemes; the CDC 2024 chunk file remains for RAG/quiz. Physics/Biology/Chemistry also have unit JSON under the same folder; other subjects use school-uploaded syllabi or `npm run ingest:syllabi`.
+4. Download **Record of work** from Curriculum Studio / Schemes — auto-fills date and topic from approved plans only (same match order as coverage).
+5. Chemistry uses `data/curriculum/form1-4/chemistry-form1-4.json` (9 units) for schemes; the CDC 2024 chunk file remains for RAG/quiz and supplies CDC `topicKey`s when that path is used. Physics/Biology/Chemistry also have unit JSON under the same folder; other subjects use school-uploaded syllabi or `npm run ingest:syllabi`.
 6. When a MoE **Teaching Module** JSON exists under `data/teaching-modules/` for the subject/form/term, scheme activities/resources are enriched automatically (`npm run ingest:teaching-modules`).
 7. Optionally **Generate & mark submitted** to flag HOD teacher-progress `schemeSubmitted`.
 8. Quiz submissions, flashcard deck completions, and **class test** results update **topic mastery** (scores &lt;60% flag reteaching). Admins/HODs review coverage at `/dashboard/admin/teacher-performance`.

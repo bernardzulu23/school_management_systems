@@ -1,4 +1,5 @@
 import { resolveCurriculum, type ResolvedCurriculumUnit } from '@/lib/curriculum/resolveCurriculum'
+import { buildTopicKey } from '@/lib/curriculum/topicKey'
 import {
   enrichActivitiesFromModule,
   enrichResourcesFromModule,
@@ -25,7 +26,14 @@ export type SchemeWeekRow = {
   homeworkTask: string
   /** teaching | mid_term_test | end_of_term_test */
   weekType?: WeekKind
+  unitNumber?: number
+  unitTitle?: string
+  topicTitle?: string
+  /** Stable key for lesson plan / RoW / coverage matching */
+  topicKey?: string
 }
+
+type WeekCtx = { subject?: string; gradeOrForm?: string }
 
 function makeTestWeekRow(week: number, kind: WeekKind): SchemeWeekRow {
   const topic = testWeekTopicLabel(kind) || `Week ${week} — assessment`
@@ -49,10 +57,25 @@ function makeTestWeekRow(week: number, kind: WeekKind): SchemeWeekRow {
 function makeTeachingWeekRow(
   week: number,
   unit: ResolvedCurriculumUnit,
-  topicIndex: number
+  topicIndex: number,
+  ctx: WeekCtx = {}
 ): SchemeWeekRow {
   const topics = unit.topics || []
-  const topicExtra = topics.length ? topics[topicIndex % topics.length] : ''
+  const resolvedIndex = topics.length ? topicIndex % topics.length : 0
+  const topicExtra = topics.length ? topics[resolvedIndex] : ''
+  const unitNumber = unit.unitNumber ?? unit.sortOrder + 1
+  const cdcOrStored =
+    unit.topicKeys?.length && topics.length
+      ? unit.topicKeys[resolvedIndex] || unit.topicKeys[0]
+      : null
+  const topicKey = buildTopicKey({
+    cdcId: cdcOrStored,
+    subject: ctx.subject,
+    gradeOrForm: ctx.gradeOrForm,
+    unitNumber,
+    topicIndex: resolvedIndex,
+    topicTitle: topicExtra || unit.title,
+  })
   const assessmentMethods =
     (unit.assessment || []).length > 0
       ? (unit.assessment || []).slice(0, 5)
@@ -70,6 +93,10 @@ function makeTeachingWeekRow(
     teacherNotes: notes,
     homeworkTask: topicExtra ? `Review notes on ${topicExtra}` : `Review notes on ${unit.title}`,
     weekType: 'teaching',
+    unitNumber,
+    unitTitle: unit.title,
+    topicTitle: topicExtra || unit.title,
+    topicKey,
   }
 }
 
@@ -80,7 +107,8 @@ function makeTeachingWeekRow(
 export function distributeUnitsAcrossTerm(
   units: ResolvedCurriculumUnit[],
   weekCount = 12,
-  testSchedule?: TestScheduleLike | null
+  testSchedule?: TestScheduleLike | null,
+  ctx: WeekCtx = {}
 ): SchemeWeekRow[] {
   const weeks = Math.max(1, Math.min(20, Number(weekCount) || 12))
   const testSet = testWeekSetFromSchedule(testSchedule)
@@ -106,6 +134,13 @@ export function distributeUnitsAcrossTerm(
         teacherNotes: '',
         homeworkTask: '',
         weekType: 'teaching' as const,
+        topicKey: buildTopicKey({
+          subject: ctx.subject,
+          gradeOrForm: ctx.gradeOrForm,
+          unitNumber: 0,
+          topicIndex: week - 1,
+          topicTitle: `week-${week}`,
+        }),
       }
     })
   }
@@ -140,7 +175,7 @@ export function distributeUnitsAcrossTerm(
     const kind = classifyWeek(week, testSchedule)
     if (kind !== 'teaching') return makeTestWeekRow(week, kind)
     const slot = trimmed[teachSlot++] || trimmed[trimmed.length - 1]
-    return makeTeachingWeekRow(week, slot.unit, slot.topicIndex)
+    return makeTeachingWeekRow(week, slot.unit, slot.topicIndex, ctx)
   })
 }
 
@@ -182,7 +217,10 @@ export async function generateSchemeOfWork(input: {
     endOfTermWeekEnd: input.endOfTermWeekEnd,
   }
 
-  const weeks = distributeUnitsAcrossTerm(curriculum.units, input.weekCount ?? 12, testSchedule)
+  const weeks = distributeUnitsAcrossTerm(curriculum.units, input.weekCount ?? 12, testSchedule, {
+    subject: curriculum.subject || subject,
+    gradeOrForm: curriculum.gradeOrForm || gradeOrForm,
+  })
 
   const teachingModule = loadTeachingModule({
     subject: curriculum.subject || subject,

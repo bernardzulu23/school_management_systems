@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react'
 import { sanitizePlainText } from '@/lib/ai/plain-text'
 import { sessionFetch, authErrorMessage, shouldRedirectToLogin } from '@/lib/auth/sessionFetch'
+import { ERROR_MESSAGES, toUserFacingMessage } from '@/lib/utils/errorMessages'
 
 function parseSSEChunk(buffer) {
   const parts = buffer.split('\n\n')
@@ -15,6 +16,14 @@ function parseSSEChunk(buffer) {
     )
     .filter(Boolean)
   return { events, remaining }
+}
+
+function safeStreamError(value, code, status) {
+  const msg = toUserFacingMessage(
+    typeof value === 'string' ? value : value?.error || value?.message,
+    ERROR_MESSAGES.AI_UNAVAILABLE
+  )
+  return { error: msg, code, status }
 }
 
 export function useAIStream(endpoint, options = {}) {
@@ -59,18 +68,14 @@ export function useAIStream(endpoint, options = {}) {
             window.location.href = `/login?from=${encodeURIComponent(window.location.pathname)}`
             return
           }
-          setError({
-            error: authErrorMessage(res.status, json),
-            code: json?.code,
-            status: res.status,
-          })
+          setError(safeStreamError(authErrorMessage(res.status, json), json?.code, res.status))
           setLoading(false)
           return
         }
 
         const reader = res.body?.getReader?.()
         if (!reader) {
-          setError({ error: 'Streaming not supported' })
+          setError(safeStreamError('Streaming not supported'))
           setLoading(false)
           return
         }
@@ -98,7 +103,8 @@ export function useAIStream(endpoint, options = {}) {
               parsedEvent = { text: eventStr }
             }
             if (parsedEvent?.error) {
-              setError(parsedEvent)
+              console.warn('[ai-stream] provider error', parsedEvent)
+              setError(safeStreamError(parsedEvent, parsedEvent?.code, parsedEvent?.status))
             } else if (Array.isArray(parsedEvent?.ragReferences)) {
               setRagReferences(parsedEvent.ragReferences)
             } else if (typeof parsedEvent?.text === 'string') {
@@ -119,7 +125,10 @@ export function useAIStream(endpoint, options = {}) {
         }
         setDone(true)
       } catch (e) {
-        if (e?.name !== 'AbortError') setError({ error: e?.message || 'Request failed' })
+        if (e?.name !== 'AbortError') {
+          console.warn('[ai-stream] request failed', e)
+          setError(safeStreamError(e))
+        }
       } finally {
         setLoading(false)
       }
@@ -160,13 +169,14 @@ export function useAIFetch(endpoint) {
           setError({
             error: authErrorMessage(res.status, json),
             status: res.status,
-            ...json,
+            code: json?.code,
           })
           return
         }
         setData(json)
       } catch (e) {
-        setError({ error: e?.message || 'Request failed' })
+        console.warn('[ai-fetch] request failed', e)
+        setError({ error: toUserFacingMessage(e, ERROR_MESSAGES.GENERIC) })
       } finally {
         setLoading(false)
       }

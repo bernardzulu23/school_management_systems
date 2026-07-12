@@ -54,6 +54,14 @@ export function TeachingHub({ teacherId }: Props) {
     [schemes, selectedSchemeId]
   )
 
+  const plannerHref = useMemo(() => {
+    if (!selectedSchemeId) return '/dashboard/teacher/lesson-planner'
+    const next = weeks.find((w) => !w.completed && !(w.isTestWeek || w.isMidTerm || w.isEndOfTerm))
+    const qs = new URLSearchParams({ schemeId: selectedSchemeId })
+    if (next?.week) qs.set('week', String(next.week))
+    return `/dashboard/teacher/lesson-planner?${qs.toString()}`
+  }, [selectedSchemeId, weeks])
+
   const loadSchemes = useCallback(async () => {
     try {
       const res = await fetch('/api/curriculum/scheme', { credentials: 'include' })
@@ -148,7 +156,7 @@ export function TeachingHub({ teacherId }: Props) {
         body: JSON.stringify({ schemeId: selectedSchemeId, weekNumber, completed }),
       })
       const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json.error || 'Failed to update week')
+      if (!res.ok) throw new Error('Failed to update week')
       setCoveragePercent(json.coveragePercent ?? 0)
       setWeeks((prev) =>
         prev.map((w) =>
@@ -162,7 +170,8 @@ export function TeachingHub({ teacherId }: Props) {
       )
       await fetchAnalytics(selectedSchemeId)
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : 'Update failed')
+      console.warn('[teaching-hub] week toggle failed', e)
+      toast.error('Could not update week progress. Please try again.')
     } finally {
       setBusyWeek(null)
     }
@@ -265,7 +274,7 @@ export function TeachingHub({ teacherId }: Props) {
               </CardHeader>
               <CardContent className="flex flex-wrap gap-3">
                 <Link
-                  href="/dashboard/teacher/lesson-planner"
+                  href={plannerHref}
                   className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
                 >
                   AI Lesson Planner

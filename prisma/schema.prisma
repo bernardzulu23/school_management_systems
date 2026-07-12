@@ -2581,6 +2581,8 @@ model LessonPlan {
   weekNumber      Int?
   schemeId        String?
   scheme          SchemeOfWork?   @relation(fields: [schemeId], references: [id], onDelete: SetNull)
+  /// Stable curriculum topic key (CDC id or derived slug) for RoW/coverage matching
+  topicKey        String?
   templateType    String?
   content         String          @db.Text
   structuredContent Json?
@@ -2609,6 +2611,7 @@ model LessonPlan {
   @@index([schoolId, status])
   @@index([schoolId, subject, grade, status])
   @@index([schemeId, weekNumber])
+  @@index([schoolId, topicKey])
 }
 
 enum TermReportStatus {

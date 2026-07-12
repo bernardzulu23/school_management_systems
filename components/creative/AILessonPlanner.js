@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 import UpgradePrompt from '@/components/shared/UpgradePrompt'
 import { useAIStream } from '@/hooks/useAIStream'
@@ -121,6 +121,7 @@ const RESOURCE_LEVELS = [
 
 export default function AILessonPlanner() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [useCustomSubject, setUseCustomSubject] = useState(false)
   const [saving, setSaving] = useState(false)
   const [savedPlanId, setSavedPlanId] = useState(null)
@@ -128,6 +129,12 @@ export default function AILessonPlanner() {
   const [professionalRagReferences, setProfessionalRagReferences] = useState([])
   const [teacherContext, setTeacherContext] = useState(null)
   const [contextLoading, setContextLoading] = useState(true)
+  const [schemeLink, setSchemeLink] = useState({
+    schemeId: '',
+    weekNumber: null,
+    topicKey: '',
+    lockedFromScheme: false,
+  })
 
   const [form, setForm] = useState({
     grade: 'Grade 5',
@@ -179,6 +186,69 @@ export default function AILessonPlanner() {
     setProfessionalRagReferences([])
     setSavedPlanId(null)
   }
+
+  // Prefill from Teaching Studio deep-link: ?schemeId=&week=
+  useEffect(() => {
+    const schemeId = String(searchParams?.get('schemeId') || '').trim()
+    const weekRaw = searchParams?.get('week') || searchParams?.get('weekNumber')
+    const weekNumber = weekRaw != null && Number.isFinite(Number(weekRaw)) ? Number(weekRaw) : null
+    if (!schemeId) return
+
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await fetch(`/api/curriculum/scheme?id=${encodeURIComponent(schemeId)}`, {
+          credentials: 'include',
+        })
+        const json = await res.json().catch(() => ({}))
+        if (cancelled || !res.ok) return
+        const list = Array.isArray(json.data) ? json.data : json.data ? [json.data] : []
+        const scheme = list.find((s) => s.id === schemeId) || list[0]
+        if (!scheme) return
+        const weeks = Array.isArray(scheme.weeks) ? scheme.weeks : []
+        const weekRow =
+          (weekNumber != null ? weeks.find((w) => Number(w.week) === weekNumber) : null) ||
+          weeks.find((w) => !w.weekType || w.weekType === 'teaching') ||
+          weeks[0]
+        if (!weekRow) return
+
+        const topicFull = String(weekRow.topic || '').trim()
+        const unitTitle = String(weekRow.unitTitle || '').trim()
+        const topicTitle = String(weekRow.topicTitle || '').trim()
+        let topic = topicFull
+        let subTopic = topicTitle || ''
+        if (topicFull.includes(':')) {
+          const [u, ...rest] = topicFull.split(':')
+          topic = (unitTitle || u || topicFull).trim()
+          subTopic = (topicTitle || rest.join(':').trim() || '').trim()
+        } else if (unitTitle && topicTitle) {
+          topic = unitTitle
+          subTopic = topicTitle
+        }
+
+        setForm((prev) => ({
+          ...prev,
+          grade: scheme.gradeOrForm || prev.grade,
+          subject: scheme.subject || prev.subject,
+          term: scheme.term || prev.term,
+          topic: topic || prev.topic,
+          subTopic: subTopic || prev.subTopic,
+        }))
+        setUseCustomSubject(false)
+        setSchemeLink({
+          schemeId: scheme.id,
+          weekNumber: Number(weekRow.week) || weekNumber,
+          topicKey: String(weekRow.topicKey || '').trim(),
+          lockedFromScheme: true,
+        })
+      } catch {
+        // ignore prefill errors
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [searchParams])
 
   useEffect(() => {
     let cancelled = false
@@ -324,6 +394,10 @@ export default function AILessonPlanner() {
       numberOfBoys: form.numberOfBoys !== '' ? Number(form.numberOfBoys) : undefined,
       numberOfGirls: form.numberOfGirls !== '' ? Number(form.numberOfGirls) : undefined,
       planDate: form.planDate || undefined,
+      schemeId: schemeLink.schemeId || undefined,
+      weekNumber: schemeLink.weekNumber || undefined,
+      topicKey: schemeLink.topicKey || undefined,
+      term: form.term,
       learners:
         form.numberOfBoys !== '' || form.numberOfGirls !== ''
           ? Number(form.numberOfBoys || 0) + Number(form.numberOfGirls || 0)
@@ -355,13 +429,17 @@ export default function AILessonPlanner() {
         duration: Number(form.duration),
         term: form.term,
         templateType: form.templateType,
+        schemeId: schemeLink.schemeId || undefined,
+        weekNumber: schemeLink.weekNumber || undefined,
+        topicKey: schemeLink.topicKey || undefined,
         content,
         submit: false,
       }),
     })
     const json = await res.json().catch(() => ({}))
     if (!res.ok || !json?.success) {
-      toast.error(json?.message || 'Failed to save before export')
+      console.warn('[lesson-planner] save before export failed', res.status, json)
+      toast.error('Could not save the lesson plan. Please try again.')
       return null
     }
     setSavedPlanId(json.data.id)
@@ -391,7 +469,7 @@ export default function AILessonPlanner() {
       window.URL.revokeObjectURL(url)
       toast.success('Downloaded as Word document')
     } catch {
-      toast.error('Failed to download Word document')
+      toast.error('Could not download the Word document. Please try again.')
     } finally {
       setSaving(false)
     }
@@ -418,7 +496,7 @@ export default function AILessonPlanner() {
       document.body.removeChild(element)
       toast.success('Downloaded as text')
     } catch {
-      toast.error('Failed to download text file')
+      toast.error('Could not download the text file. Please try again.')
     }
   }
 
@@ -468,6 +546,9 @@ export default function AILessonPlanner() {
           duration: Number(form.duration),
           term: form.term,
           templateType: 'professional',
+          schemeId: schemeLink.schemeId || undefined,
+          weekNumber: schemeLink.weekNumber || undefined,
+          topicKey: schemeLink.topicKey || undefined,
           planDate: form.planDate || undefined,
           numberOfBoys: form.numberOfBoys !== '' ? Number(form.numberOfBoys) : undefined,
           numberOfGirls: form.numberOfGirls !== '' ? Number(form.numberOfGirls) : undefined,
@@ -484,9 +565,12 @@ export default function AILessonPlanner() {
       const json = await res.json().catch(() => ({}))
       if (!res.ok || !json?.success) {
         const msg = authErrorMessage(res.status, json)
-        toast.error(msg)
         if (res.status === 401 || res.status === 403) {
+          toast.error(msg)
           router.push('/login')
+        } else {
+          console.warn('[lesson-planner] generate failed', res.status, json)
+          toast.error('Could not generate the lesson plan. Please try again.')
         }
         return
       }
@@ -525,11 +609,15 @@ export default function AILessonPlanner() {
             subTopic: form.subTopic || form.topic,
             grade: form.grade,
             subject: activeSubject,
+            schemeId: schemeLink.schemeId || undefined,
+            weekNumber: schemeLink.weekNumber || undefined,
+            topicKey: schemeLink.topicKey || undefined,
           }),
         })
         const json = await res.json().catch(() => ({}))
         if (!res.ok || !json?.success) {
-          toast.error(json?.message || 'Failed to save draft')
+          console.warn('[lesson-planner] draft update failed', res.status, json)
+          toast.error('Could not save draft. Please try again.')
           return
         }
         toast.success('Draft updated')
@@ -547,13 +635,17 @@ export default function AILessonPlanner() {
           duration: Number(form.duration),
           term: form.term,
           templateType: form.templateType,
+          schemeId: schemeLink.schemeId || undefined,
+          weekNumber: schemeLink.weekNumber || undefined,
+          topicKey: schemeLink.topicKey || undefined,
           content,
           submit: false,
         }),
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok || !json?.success) {
-        toast.error(json?.message || 'Failed to save draft')
+        console.warn('[lesson-planner] draft create failed', res.status, json)
+        toast.error('Could not save draft. Please try again.')
         return
       }
       setSavedPlanId(json.data.id)
@@ -585,13 +677,17 @@ export default function AILessonPlanner() {
             duration: Number(form.duration),
             term: form.term,
             templateType: form.templateType,
+            schemeId: schemeLink.schemeId || undefined,
+            weekNumber: schemeLink.weekNumber || undefined,
+            topicKey: schemeLink.topicKey || undefined,
             content,
             submit: false,
           }),
         })
         const createJson = await createRes.json().catch(() => ({}))
         if (!createRes.ok || !createJson?.success) {
-          toast.error(createJson?.message || 'Failed to save before submit')
+          console.warn('[lesson-planner] save before submit failed', createRes.status, createJson)
+          toast.error('Could not save the lesson plan. Please try again.')
           return
         }
         planId = createJson.data.id
@@ -605,7 +701,8 @@ export default function AILessonPlanner() {
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok || !json?.success) {
-        toast.error(json?.message || 'Failed to submit to HOD')
+        console.warn('[lesson-planner] submit failed', res.status, json)
+        toast.error('Could not submit for approval. Please try again.')
         return
       }
       toast.success(json.message || 'Submitted for HOD approval')
@@ -637,6 +734,13 @@ export default function AILessonPlanner() {
           Aligned with the 2023 Zambia Competency-Based Curriculum Framework · MoGE lesson plan
           format · Implementation 2025
         </p>
+
+        {schemeLink.lockedFromScheme && schemeLink.weekNumber != null ? (
+          <div className="mb-4 rounded-lg border border-sky-500/40 bg-sky-950/30 px-4 py-3 text-sm text-sky-100">
+            Prefills from scheme week {schemeLink.weekNumber}. Subject, grade, term, and topic are
+            linked for record of work and coverage.
+          </div>
+        ) : null}
 
         <div className="mb-6 rounded-lg border border-royalPurple-border/50 bg-royalPurple-deep/40 p-4">
           <div className="text-sm font-semibold text-royalPurple-text1 mb-2">
@@ -1125,11 +1229,7 @@ export default function AILessonPlanner() {
               <>
                 <p className="font-semibold text-red-200">AI generation failed</p>
                 <p className="text-sm text-red-100/90 mt-1">
-                  {typeof error === 'string'
-                    ? error
-                    : error?.error ||
-                      error?.message ||
-                      'The AI service could not complete your request. Try again in a moment.'}
+                  The AI service could not complete your request. Try again in a moment.
                 </p>
                 <Button variant="outline" className="mt-3" onClick={handleReset}>
                   Dismiss

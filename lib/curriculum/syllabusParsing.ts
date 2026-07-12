@@ -8,6 +8,8 @@ import { extractTextFromBuffer } from '@/lib/rag/parse'
 export type ParsedSyllabusUnit = {
   title: string
   topics: string[]
+  /** Parallel to topics[] — CDC record ids or derived keys when known */
+  topicKeys?: string[]
   outcomes: string[]
   activities: string[]
   assessment: string[]
@@ -15,6 +17,7 @@ export type ParsedSyllabusUnit = {
   durationMinutes?: number
   weekHint?: number
   sortOrder: number
+  unitNumber?: number
 }
 
 export type ParsedSyllabus = {
