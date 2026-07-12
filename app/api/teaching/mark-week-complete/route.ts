@@ -9,6 +9,7 @@ import {
   recalculateTeacherPerformanceSummary,
   weeksFromSchemeJson,
 } from '@/lib/teaching/performanceSummary'
+import { weekKindFromRow, type TestScheduleLike } from '@/lib/teaching/testWeeks'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,6 +36,7 @@ export const POST = withErrorHandler(async function POST(request: Request) {
 
   const scheme = await prisma.schemeOfWork.findFirst({
     where: { id: body.schemeId, schoolId },
+    include: { testSchedule: true },
   })
   if (!scheme) return NextResponse.json({ error: 'Scheme not found' }, { status: 404 })
 
@@ -48,6 +50,18 @@ export const POST = withErrorHandler(async function POST(request: Request) {
   const weekRow = weekRows.find((w) => w.week === body.weekNumber)
   if (!weekRow && body.weekNumber > weekRows.length) {
     return NextResponse.json({ error: 'Week not in scheme' }, { status: 400 })
+  }
+
+  const schedule = scheme.testSchedule as TestScheduleLike | null
+  const kind = weekKindFromRow(body.weekNumber, weekRow?.weekType, schedule)
+  if (kind !== 'teaching') {
+    return NextResponse.json(
+      {
+        error:
+          'This is a mid-term / end-of-term test week — no teaching to mark. Coverage excludes test weeks.',
+      },
+      { status: 400 }
+    )
   }
 
   const progress = await prisma.schemeProgress.upsert({
@@ -79,10 +93,16 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     academicYear: scheme.year,
   })
 
-  const completedWeeks = await prisma.schemeProgress.count({
+  const teachableWeeks = weekRows.filter(
+    (w) => weekKindFromRow(w.week, w.weekType, schedule) === 'teaching'
+  )
+  const teachableSet = new Set(teachableWeeks.map((w) => w.week))
+  const progressDone = await prisma.schemeProgress.findMany({
     where: { schemeId: body.schemeId, completed: true },
+    select: { weekNumber: true },
   })
-  const totalWeeks = weekRows.length || 1
+  const completedWeeks = progressDone.filter((p) => teachableSet.has(p.weekNumber)).length
+  const totalWeeks = teachableWeeks.length || 0
 
   return NextResponse.json({
     success: true,
@@ -90,7 +110,7 @@ export const POST = withErrorHandler(async function POST(request: Request) {
       ...progress,
       status: progress.completed ? 'COMPLETED' : 'NOT_STARTED',
     },
-    coveragePercent: Math.round((completedWeeks / totalWeeks) * 100),
+    coveragePercent: totalWeeks === 0 ? 100 : Math.round((completedWeeks / totalWeeks) * 100),
     completedWeeks,
     totalWeeks,
   })

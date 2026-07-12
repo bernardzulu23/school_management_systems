@@ -126,7 +126,9 @@ type CurriculumStudioProps = {
     term: string
     academicYear: number
     midTermWeek: number
+    midTermWeekEnd: number
     endOfTermWeek: number
+    endOfTermWeekEnd: number
   }) => void
 }
 
@@ -141,8 +143,10 @@ export function CurriculumStudio({
   const [term, setTerm] = useState('Term 1')
   const [year, setYear] = useState(new Date().getFullYear())
   const [weeksPerTerm, setWeeksPerTerm] = useState('12')
-  const [midTermWeek, setMidTermWeek] = useState('6')
+  const [midTermWeek, setMidTermWeek] = useState('7')
+  const [midTermWeekEnd, setMidTermWeekEnd] = useState('7')
   const [endOfTermWeek, setEndOfTermWeek] = useState('12')
+  const [endOfTermWeekEnd, setEndOfTermWeekEnd] = useState('13')
   const [exportFormat, setExportFormat] = useState<ExportFormat>('word')
   const [studioTab, setStudioTab] = useState<StudioTab>('basic')
   const [busy, setBusy] = useState(false)
@@ -151,6 +155,23 @@ export function CurriculumStudio({
 
   const weeksPerTermNum = Math.min(MAX_WEEKS, Math.max(MIN_WEEKS, Number(weeksPerTerm) || 12))
   const weekChoices = Array.from({ length: weeksPerTermNum }, (_, i) => i + 1)
+  const midStart = Number(midTermWeek) || 7
+  const midEnd = Number(midTermWeekEnd) || midStart
+  const eotStart = Number(endOfTermWeek) || Math.max(1, weeksPerTermNum - 1)
+  const eotEnd = Number(endOfTermWeekEnd) || eotStart
+  const midWeeksSet = new Set(
+    Array.from(
+      { length: Math.max(0, Math.abs(midEnd - midStart) + 1) },
+      (_, i) => Math.min(midStart, midEnd) + i
+    )
+  )
+  const eotWeeksSet = new Set(
+    Array.from(
+      { length: Math.max(0, Math.abs(eotEnd - eotStart) + 1) },
+      (_, i) => Math.min(eotStart, eotEnd) + i
+    )
+  )
+  const formatRange = (a: number, b: number) => (a === b ? `Week ${a}` : `Weeks ${a}–${b}`)
 
   const loadRecent = async () => {
     try {
@@ -184,15 +205,19 @@ export function CurriculumStudio({
   }, [])
 
   useEffect(() => {
-    const mid = Number(midTermWeek)
-    const eot = Number(endOfTermWeek)
-    if (!Number.isFinite(mid) || mid < 1 || mid > weeksPerTermNum) {
-      setMidTermWeek(String(Math.ceil(weeksPerTermNum / 2)))
+    const clamp = (raw: string, fallback: number) => {
+      const n = Number(raw)
+      if (!Number.isFinite(n) || n < 1 || n > weeksPerTermNum) return String(fallback)
+      return String(n)
     }
-    if (!Number.isFinite(eot) || eot < 1 || eot > weeksPerTermNum) {
-      setEndOfTermWeek(String(weeksPerTermNum))
-    }
-  }, [weeksPerTermNum, midTermWeek, endOfTermWeek])
+    const midDefault = Math.min(weeksPerTermNum, Math.ceil(weeksPerTermNum / 2))
+    const eotDefault = weeksPerTermNum
+    const eotStartDefault = Math.max(1, weeksPerTermNum - 1)
+    setMidTermWeek((prev) => clamp(prev, midDefault))
+    setMidTermWeekEnd((prev) => clamp(prev, Number(midTermWeek) || midDefault))
+    setEndOfTermWeek((prev) => clamp(prev, eotStartDefault))
+    setEndOfTermWeekEnd((prev) => clamp(prev, eotDefault))
+  }, [weeksPerTermNum])
 
   const saveTestSchedule = async (schemeId: string | null | undefined) => {
     if (!schemeId) return
@@ -202,8 +227,10 @@ export function CurriculumStudio({
       credentials: 'include',
       body: JSON.stringify({
         schemeId,
-        midTermWeek: Number(midTermWeek) || null,
-        endOfTermWeek: Number(endOfTermWeek) || null,
+        midTermWeek: midStart,
+        midTermWeekEnd: midEnd,
+        endOfTermWeek: eotStart,
+        endOfTermWeekEnd: eotEnd,
       }),
     })
     if (!res.ok) {
@@ -220,8 +247,10 @@ export function CurriculumStudio({
       grade,
       term,
       academicYear: Number(year),
-      midTermWeek: Number(midTermWeek),
-      endOfTermWeek: Number(endOfTermWeek),
+      midTermWeek: midStart,
+      midTermWeekEnd: midEnd,
+      endOfTermWeek: eotStart,
+      endOfTermWeekEnd: eotEnd,
     })
   }
 
@@ -244,6 +273,10 @@ export function CurriculumStudio({
           term,
           academicYear: Number(year),
           weeksPerTerm: weeksPerTermNum,
+          midTermWeek: midStart,
+          midTermWeekEnd: midEnd,
+          endOfTermWeek: eotStart,
+          endOfTermWeekEnd: eotEnd,
           format: exportFormat,
           save: true,
           submit,
@@ -251,6 +284,7 @@ export function CurriculumStudio({
       })
 
       const baseName = `scheme-${subject}-${grade}-${term}`.replace(/\s+/g, '-')
+      const rangeLabel = `Mid-term ${formatRange(midStart, midEnd)} · End-of-term ${formatRange(eotStart, eotEnd)}`
 
       if (exportFormat === 'csv') {
         if (!res.ok) {
@@ -261,9 +295,7 @@ export function CurriculumStudio({
         const text = await res.text()
         downloadText(text, `${baseName}.csv`, 'text/csv;charset=utf-8')
         await saveTestSchedule(schemeIdHeader)
-        toast.success(
-          `Scheme CSV downloaded · Mid-term W${midTermWeek} · End-of-term W${endOfTermWeek}`
-        )
+        toast.success(`Scheme CSV downloaded · ${rangeLabel}`)
         await loadRecent()
         notifySaved(schemeIdHeader || null)
         return
@@ -278,9 +310,7 @@ export function CurriculumStudio({
       if (exportFormat === 'json') {
         setPreview(json.scheme || null)
         downloadText(JSON.stringify(json.scheme, null, 2), `${baseName}.json`, 'application/json')
-        toast.success(
-          `Scheme JSON ready · Mid-term W${midTermWeek} · End-of-term W${endOfTermWeek}`
-        )
+        toast.success(`Scheme JSON ready · ${rangeLabel}`)
         await loadRecent()
         notifySaved(schemeId)
         return
@@ -290,9 +320,7 @@ export function CurriculumStudio({
       else if (json.wordBase64) downloadBase64Docx(json.wordBase64, `${baseName}.docx`)
       setPreview(json.scheme || null)
       toast.success(
-        submit
-          ? `Scheme submitted · Mid-term W${midTermWeek} · End-of-term W${endOfTermWeek}`
-          : `Scheme generated · Mid-term W${midTermWeek} · End-of-term W${endOfTermWeek}`
+        submit ? `Scheme submitted · ${rangeLabel}` : `Scheme generated · ${rangeLabel}`
       )
       await loadRecent()
       notifySaved(schemeId)
@@ -455,8 +483,11 @@ export function CurriculumStudio({
                       setWeeksPerTerm(raw)
                       const n = Number(raw)
                       if (Number.isFinite(n) && n >= MIN_WEEKS && n <= MAX_WEEKS) {
-                        setMidTermWeek(String(Math.ceil(n / 2)))
-                        setEndOfTermWeek(String(n))
+                        const mid = Math.ceil(n / 2)
+                        setMidTermWeek(String(mid))
+                        setMidTermWeekEnd(String(mid))
+                        setEndOfTermWeek(String(Math.max(1, n - 1)))
+                        setEndOfTermWeekEnd(String(n))
                       }
                     }}
                   />
@@ -502,8 +533,8 @@ export function CurriculumStudio({
                   <div>
                     <h4 className="font-medium text-sky-900">Test Schedule Setup</h4>
                     <p className="mt-1 text-sm text-sky-700">
-                      Select which weeks will have your mid-term and end-of-term tests. These are
-                      saved with the scheme for Teaching Studio planning.
+                      Mid-term and end-of-term weeks are assessment-only (no teaching topics). Use a
+                      range when tests span multiple weeks (e.g. end-of-term 12–13).
                     </p>
                   </div>
                 </div>
@@ -511,48 +542,77 @@ export function CurriculumStudio({
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label>Mid-Term Test Week</Label>
-                  <Select value={midTermWeek} onValueChange={setMidTermWeek}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select week" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {weekChoices.map((w) => (
-                        <SelectItem key={w} value={w.toString()}>
-                          Week {w}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label>Mid-Term Test Weeks</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Select value={midTermWeek} onValueChange={setMidTermWeek}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="From" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {weekChoices.map((w) => (
+                          <SelectItem key={`mid-s-${w}`} value={w.toString()}>
+                            Week {w}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Select value={midTermWeekEnd} onValueChange={setMidTermWeekEnd}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="To" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {weekChoices.map((w) => (
+                          <SelectItem key={`mid-e-${w}`} value={w.toString()}>
+                            Week {w}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                   <p className="text-xs text-muted-foreground">
                     Recommended: Week {Math.ceil(weeksPerTermNum / 2)}
                   </p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>End-of-Term Test Week</Label>
-                  <Select value={endOfTermWeek} onValueChange={setEndOfTermWeek}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select week" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {weekChoices.map((w) => (
-                        <SelectItem key={w} value={w.toString()}>
-                          Week {w}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label>End-of-Term Test Weeks</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Select value={endOfTermWeek} onValueChange={setEndOfTermWeek}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="From" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {weekChoices.map((w) => (
+                          <SelectItem key={`eot-s-${w}`} value={w.toString()}>
+                            Week {w}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Select value={endOfTermWeekEnd} onValueChange={setEndOfTermWeekEnd}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="To" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {weekChoices.map((w) => (
+                          <SelectItem key={`eot-e-${w}`} value={w.toString()}>
+                            Week {w}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                   <p className="text-xs text-muted-foreground">
-                    Recommended: Week {weeksPerTermNum}
+                    Recommended: Weeks {Math.max(1, weeksPerTermNum - 1)}–{weeksPerTermNum}
                   </p>
                 </div>
               </div>
 
               <div className="rounded-lg bg-muted/60 p-3">
                 <p className="text-sm text-muted-foreground">
-                  <strong className="text-foreground">Schedule Summary:</strong> Mid-term in Week{' '}
-                  {midTermWeek} · End-of-term in Week {endOfTermWeek}
+                  <strong className="text-foreground">Schedule Summary:</strong> Mid-term{' '}
+                  {formatRange(midStart, midEnd)} · End-of-term {formatRange(eotStart, eotEnd)}{' '}
+                  (excluded from teaching coverage)
                 </p>
               </div>
             </div>
@@ -599,7 +659,7 @@ export function CurriculumStudio({
               Preview — {preview.subject} {preview.gradeOrForm} ({preview.source || 'json'})
             </CardTitle>
             <CardDescription>
-              Mid-term Week {midTermWeek} · End-of-term Week {endOfTermWeek}
+              Mid-term {formatRange(midStart, midEnd)} · End-of-term {formatRange(eotStart, eotEnd)}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -614,8 +674,8 @@ export function CurriculumStudio({
                 </thead>
                 <tbody>
                   {preview.weeks.map((w) => {
-                    const isMid = Number(w.week) === Number(midTermWeek)
-                    const isEot = Number(w.week) === Number(endOfTermWeek)
+                    const isMid = midWeeksSet.has(Number(w.week))
+                    const isEot = eotWeeksSet.has(Number(w.week))
                     return (
                       <tr
                         key={w.week}

@@ -101,8 +101,6 @@ export function TeachingHub({ teacherId }: Props) {
         const focus = Array.isArray(json.schemes) ? json.schemes[0] : null
         if (focus) {
           setCoveragePercent(Number(focus.coveragePercent ?? 0))
-          const mid = focus.midTermWeek
-          const eot = focus.endOfTermWeek
           const planned = Array.isArray(focus.plannedTopics) ? focus.plannedTopics : []
           setWeeks(
             planned.map((w: any, i: number) => ({
@@ -110,8 +108,9 @@ export function TeachingHub({ teacherId }: Props) {
               topic: String(w.topic || `Week ${w.week ?? i + 1}`),
               completed: Boolean(w.completed),
               completedAt: w.completedAt ?? null,
-              isMidTerm: mid != null && Number(w.week ?? i + 1) === Number(mid),
-              isEndOfTerm: eot != null && Number(w.week ?? i + 1) === Number(eot),
+              isMidTerm: Boolean(w.isMidTerm),
+              isEndOfTerm: Boolean(w.isEndOfTerm),
+              isTestWeek: Boolean(w.isTestWeek || w.isMidTerm || w.isEndOfTerm),
             }))
           )
         }
@@ -133,6 +132,11 @@ export function TeachingHub({ teacherId }: Props) {
   const handleToggleWeek = async (weekNumber: number, completed: boolean) => {
     if (!selectedSchemeId) {
       toast.error('Select a scheme first')
+      return
+    }
+    const row = weeks.find((w) => w.week === weekNumber)
+    if (row?.isTestWeek || row?.isMidTerm || row?.isEndOfTerm) {
+      toast.error('Test weeks are assessment-only — they do not count as teaching coverage')
       return
     }
     setBusyWeek(weekNumber)
@@ -377,7 +381,7 @@ export function TeachingHub({ teacherId }: Props) {
             onToggleWeek={handleToggleWeek}
             layout="grid"
             title={`${selectedScheme.subject} · ${selectedScheme.gradeOrForm} · ${selectedScheme.term}`}
-            description="Mark weeks taught manually, or they auto-fill when a lesson plan is approved (HOD / senior teacher / deputy)."
+            description="Teaching weeks only — mid/EOT test weeks are excluded from coverage. Mark taught manually or via approved lesson plans."
           />
         ) : (
           <Card>

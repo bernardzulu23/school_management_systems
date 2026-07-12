@@ -518,8 +518,8 @@ See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) and [QR_ATTENDANCE.md](./QR_ATTENDANC
 Quick reference: [CURRICULUM_STUDIO.md](./CURRICULUM_STUDIO.md).
 
 1. Open **Teaching Studio** (`/dashboard/teacher/teaching-studio`) — tabs: **Scheme & Lessons**, **Progress**, **Analytics**. Requires `schemes-of-work` feature. (Direct URL `/dashboard/teacher/schemes` still works.)
-2. Choose subject, grade, term, **weeks per term** (any length from 1–20 — type the number; not limited to 8/10/12), and export format (**Word**, **CSV**, or **JSON**). Open the **Test Schedule** tab to set mid-term and end-of-term weeks → **Generate scheme of work**.
-3. **Week progress:** mark weeks taught manually on the Progress tab, or they auto-fill when a **lesson plan for that week is APPROVED**.
+2. Choose subject, grade, term, **weeks per term** (any length from 1–20 — type the number; not limited to 8/10/12), and export format (**Word**, **CSV**, or **JSON**). Open the **Test Schedule** tab to set **mid-term** and **end-of-term** weeks (ranges allowed, e.g. mid Week 7, end Weeks 12–13) → **Generate scheme of work**. Those weeks are **assessment-only** (no teaching topics) and are **excluded from work coverage %**.
+3. **Week progress:** mark teaching weeks taught manually on the Progress tab, or they auto-fill when a **lesson plan for that week is APPROVED**. Test weeks cannot be marked as taught and do not pull coverage down.
    - **Secondary / Form:** submit lesson plan → **HOD** approves.
    - **Primary (Grade 1–7):** submit → **senior teacher** or **deputy head** (falls back to headteacher).
    - No lesson plan and not marked manually → week is **not taught** (Record of Work stays blank / shows “Not taught” unless an approved plan exists).

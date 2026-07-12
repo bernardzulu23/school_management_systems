@@ -20,8 +20,12 @@ export const SchemeInputSchema = z.object({
   term: z.union([z.string(), z.number()]).default('Term 1'),
   year: z.number().int().min(2020).max(2100).optional(),
   academicYear: z.number().int().min(2020).max(2100).optional(),
-  weekCount: z.number().int().min(1).max(16).optional(),
-  weeksPerTerm: z.number().int().min(1).max(16).optional(),
+  weekCount: z.number().int().min(1).max(20).optional(),
+  weeksPerTerm: z.number().int().min(1).max(20).optional(),
+  midTermWeek: z.number().int().min(1).max(20).nullable().optional(),
+  midTermWeekEnd: z.number().int().min(1).max(20).nullable().optional(),
+  endOfTermWeek: z.number().int().min(1).max(20).nullable().optional(),
+  endOfTermWeekEnd: z.number().int().min(1).max(20).nullable().optional(),
   format: z.enum(['word', 'csv', 'json']).optional().default('word'),
   save: z.boolean().optional().default(true),
   submit: z.boolean().optional().default(false),
@@ -57,6 +61,10 @@ export async function handleSchemePost(request: Request): Promise<NextResponse> 
     term,
     year,
     weekCount,
+    midTermWeek: input.midTermWeek,
+    midTermWeekEnd: input.midTermWeekEnd,
+    endOfTermWeek: input.endOfTermWeek,
+    endOfTermWeekEnd: input.endOfTermWeekEnd,
   })
 
   const ctx = await getLessonPlanTeacherContext(String(user.id), schoolId, input.subject)
@@ -78,6 +86,33 @@ export async function handleSchemePost(request: Request): Promise<NextResponse> 
       },
     })
     schemeId = row.id
+
+    if (
+      schemeId &&
+      (input.midTermWeek != null ||
+        input.endOfTermWeek != null ||
+        input.midTermWeekEnd != null ||
+        input.endOfTermWeekEnd != null)
+    ) {
+      await prisma.schemeTestSchedule.upsert({
+        where: { schemeId },
+        create: {
+          schoolId,
+          schemeId,
+          teacherId: String(user.id),
+          midTermWeek: input.midTermWeek ?? null,
+          midTermWeekEnd: input.midTermWeekEnd ?? input.midTermWeek ?? null,
+          endOfTermWeek: input.endOfTermWeek ?? null,
+          endOfTermWeekEnd: input.endOfTermWeekEnd ?? input.endOfTermWeek ?? null,
+        },
+        update: {
+          midTermWeek: input.midTermWeek ?? undefined,
+          midTermWeekEnd: input.midTermWeekEnd ?? input.midTermWeek ?? undefined,
+          endOfTermWeek: input.endOfTermWeek ?? undefined,
+          endOfTermWeekEnd: input.endOfTermWeekEnd ?? input.endOfTermWeek ?? undefined,
+        },
+      })
+    }
 
     if (input.submit) {
       try {

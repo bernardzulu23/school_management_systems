@@ -4,6 +4,12 @@ import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { weeksFromSchemeJson } from '@/lib/teaching/performanceSummary'
+import {
+  endOfTermWeeksFromSchedule,
+  midTermWeeksFromSchedule,
+  weekKindFromRow,
+  type TestScheduleLike,
+} from '@/lib/teaching/testWeeks'
 
 export const dynamic = 'force-dynamic'
 
@@ -75,7 +81,9 @@ export const GET = withErrorHandler(async function GET(request: Request) {
 
   const schemeAnalytics = schemes.map((scheme) => {
     const weeks = weeksFromSchemeJson(scheme.weeks)
-    const totalWeeks = weeks.length || 1
+    const schedule = scheme.testSchedule as TestScheduleLike | null
+    const midWeeks = midTermWeeksFromSchedule(schedule)
+    const eotWeeks = endOfTermWeeksFromSchedule(schedule)
 
     const relevantPlans = approvedPlans.filter((p) => {
       if (p.schemeId && p.schemeId === scheme.id) return true
@@ -85,51 +93,63 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       return subjectOk && gradeOk && termOk
     })
 
-    // Prefer approved lesson plans; keep manual SchemeProgress as editable override
     const plannedTopics = weeks.map((w) => {
+      const weekType = weekKindFromRow(w.week, w.weekType, schedule)
+      const isTestWeek = weekType !== 'teaching'
       const progressRow = scheme.progress.find((p) => p.weekNumber === w.week && p.completed)
       const byWeek = relevantPlans.find((p) => Number(p.weekNumber) === w.week)
       const byTopic = relevantPlans.find(
         (p) => p.weekNumber == null && topicMatch(p.topic, w.topic || '')
       )
       const approved = byWeek || byTopic
-      const taught = Boolean(approved) || Boolean(progressRow)
+      const taught = isTestWeek ? true : Boolean(approved) || Boolean(progressRow)
       return {
         week: w.week,
         topic: w.topic || `Week ${w.week}`,
         completed: taught,
-        completedAt: approved?.approvedAt ?? progressRow?.completedAt ?? null,
+        completedAt: isTestWeek ? null : (approved?.approvedAt ?? progressRow?.completedAt ?? null),
         lessonPlanId: approved?.id ?? null,
-        source: approved ? 'approved_lesson_plan' : progressRow ? 'manual' : 'not_taught',
+        source: isTestWeek
+          ? 'test_week'
+          : approved
+            ? 'approved_lesson_plan'
+            : progressRow
+              ? 'manual'
+              : 'not_taught',
+        weekType,
+        isTestWeek,
+        isMidTerm: midWeeks.includes(w.week),
+        isEndOfTerm: eotWeeks.includes(w.week),
       }
     })
 
-    const completedWeeks = plannedTopics.filter((t) => t.completed).length
-    const coveragePercent = Math.round((completedWeeks / totalWeeks) * 100)
+    const teachingTopics = plannedTopics.filter((t) => !t.isTestWeek)
+    const totalWeeks = teachingTopics.length || 0
+    const completedWeeks = teachingTopics.filter((t) => t.completed).length
+    const coveragePercent = totalWeeks === 0 ? 100 : Math.round((completedWeeks / totalWeeks) * 100)
 
     const relatedMastery = mastery.filter((m) =>
-      plannedTopics.some(
+      teachingTopics.some(
         (t) =>
           t.topic.toLowerCase().includes(m.topicName.toLowerCase()) ||
           m.topicName.toLowerCase().includes(t.topic.toLowerCase())
       )
     )
 
-    const testSchedule = []
-    if (scheme.testSchedule?.midTermWeek != null) {
-      testSchedule.push({
-        id: `${scheme.id}-mid`,
-        testType: 'MID_TERM',
-        scheduledWeek: scheme.testSchedule.midTermWeek,
-      })
-    }
-    if (scheme.testSchedule?.endOfTermWeek != null) {
-      testSchedule.push({
-        id: `${scheme.id}-eot`,
-        testType: 'END_OF_TERM',
-        scheduledWeek: scheme.testSchedule.endOfTermWeek,
-      })
-    }
+    const testSchedule = [
+      ...midWeeks.map((w) => ({
+        id: `${scheme.id}-mid-${w}`,
+        testType: 'MID_TERM' as const,
+        scheduledWeek: w,
+        scheduledWeeks: midWeeks,
+      })),
+      ...eotWeeks.map((w) => ({
+        id: `${scheme.id}-eot-${w}`,
+        testType: 'END_OF_TERM' as const,
+        scheduledWeek: w,
+        scheduledWeeks: eotWeeks,
+      })),
+    ]
 
     const averageMastery =
       relatedMastery.length === 0
@@ -147,8 +167,11 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       completionRate: coveragePercent,
       completedWeeks,
       totalWeeks,
-      midTermWeek: scheme.testSchedule?.midTermWeek ?? null,
-      endOfTermWeek: scheme.testSchedule?.endOfTermWeek ?? null,
+      calendarWeeks: weeks.length,
+      midTermWeek: schedule?.midTermWeek ?? null,
+      midTermWeekEnd: schedule?.midTermWeekEnd ?? schedule?.midTermWeek ?? null,
+      endOfTermWeek: schedule?.endOfTermWeek ?? null,
+      endOfTermWeekEnd: schedule?.endOfTermWeekEnd ?? schedule?.endOfTermWeek ?? null,
       plannedTopics,
       topics: relatedMastery.map((m) => ({
         id: m.id,
@@ -162,7 +185,7 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       topicsNeedingReteachCount: relatedMastery.filter((m) => m.needsReteaching).length,
       averageMastery,
       testSchedule,
-      taughtRule: 'APPROVED lesson plans only',
+      taughtRule: 'APPROVED lesson plans for teaching weeks; mid/EOT test weeks excluded',
     }
   })
 

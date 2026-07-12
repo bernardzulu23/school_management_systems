@@ -18,7 +18,7 @@ const InputSchema = z.object({
   grade: z.union([z.string(), z.number()]),
   term: z.union([z.string(), z.number()]).default('Term 1'),
   year: z.number().int().min(2020).max(2100).optional(),
-  weekCount: z.number().int().min(1).max(16).optional(),
+  weekCount: z.number().int().min(1).max(20).optional(),
   schemeId: z.string().optional(),
 })
 
@@ -47,18 +47,50 @@ export const POST = withErrorHandler(async function POST(request: Request) {
 
   let weekCount = input.weekCount || 12
   const schemeWeekTopics = new Map<number, string>()
+  const schemeWeekTypes = new Map<number, string>()
+  let testSchedule: import('@/lib/teaching/testWeeks').TestScheduleLike | null = null
+
   if (input.schemeId) {
     const scheme = await prisma.schemeOfWork.findFirst({
       where: { id: input.schemeId, schoolId, teacherId: String(user.id) },
+      include: { testSchedule: true },
     })
     if (scheme) {
       const weeks = weeksFromSchemeJson(scheme.weeks)
       weekCount = weeks.length || weekCount
       for (const w of weeks) {
         if (w.topic) schemeWeekTopics.set(w.week, w.topic)
+        if (w.weekType) schemeWeekTypes.set(w.week, w.weekType)
       }
+      testSchedule = scheme.testSchedule
+    }
+  } else {
+    // Latest matching scheme for subject/grade/term (includes test schedule)
+    const scheme = await prisma.schemeOfWork.findFirst({
+      where: {
+        schoolId,
+        teacherId: String(user.id),
+        subject: { equals: input.subject, mode: 'insensitive' },
+        gradeOrForm: { equals: grade, mode: 'insensitive' },
+        term,
+        year,
+      },
+      include: { testSchedule: true },
+      orderBy: { updatedAt: 'desc' },
+    })
+    if (scheme) {
+      const weeks = weeksFromSchemeJson(scheme.weeks)
+      if (!input.weekCount && weeks.length) weekCount = weeks.length
+      for (const w of weeks) {
+        if (w.topic) schemeWeekTopics.set(w.week, w.topic)
+        if (w.weekType) schemeWeekTypes.set(w.week, w.weekType)
+      }
+      testSchedule = scheme.testSchedule
     }
   }
+
+  const { weekKindFromRow, testWeekRemarks, testWeekTopicLabel } =
+    await import('@/lib/teaching/testWeeks')
 
   const approved = await getApprovedLessonPlansForRecord({
     schoolId,
@@ -71,8 +103,20 @@ export const POST = withErrorHandler(async function POST(request: Request) {
 
   const weekRows = Array.from({ length: weekCount }, (_, i) => {
     const week = i + 1
+    const kind = weekKindFromRow(week, schemeWeekTypes.get(week), testSchedule)
+    if (kind !== 'teaching') {
+      return {
+        week,
+        taught: true,
+        isTestWeek: true,
+        topic: schemeWeekTopics.get(week) || testWeekTopicLabel(kind),
+        dateTaught: '',
+        remarks: testWeekRemarks(kind),
+        signOff: 'Test week',
+      }
+    }
+
     const plans = approved.filter((p) => Number(p.weekNumber) === week)
-    // Topic match fallback when weekNumber missing on plan
     const byTopic =
       plans.length > 0
         ? plans
@@ -89,6 +133,7 @@ export const POST = withErrorHandler(async function POST(request: Request) {
       return {
         week,
         taught: false,
+        isTestWeek: false,
         topic: '',
         dateTaught: '',
         remarks: 'Not taught — no approved lesson plan',
@@ -99,6 +144,7 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     return {
       week,
       taught: true,
+      isTestWeek: false,
       topic: plan.topic || schemeWeekTopics.get(week) || '',
       dateTaught: plan.approvedAt ? plan.approvedAt.toISOString().slice(0, 10) : '',
       remarks: plan.approvalNotes || 'Approved lesson plan',
@@ -106,7 +152,9 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     }
   })
 
-  const taughtCount = weekRows.filter((w) => w.taught).length
+  const teachingRows = weekRows.filter((w) => !w.isTestWeek)
+  const taughtCount = teachingRows.filter((w) => w.taught).length
+  const teachingWeekCount = teachingRows.length
 
   const wordBuffer = await exportRecordOfWorkTemplate({
     schoolName: ctx.schoolName,
@@ -142,8 +190,9 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     summary: {
       weekCount,
       taughtWeeks: taughtCount,
-      notTaughtWeeks: weekCount - taughtCount,
-      rule: 'Only APPROVED lesson plans count as taught',
+      notTaughtWeeks: teachingWeekCount - taughtCount,
+      testWeeks: weekCount - teachingWeekCount,
+      rule: 'Only APPROVED lesson plans count as taught; mid/EOT test weeks are assessment-only',
     },
   })
 })

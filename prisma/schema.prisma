@@ -3555,7 +3555,9 @@ model SchemeTestSchedule {
   teacherId     String
   teacher       User         @relation("SchemeTestScheduleTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
   midTermWeek   Int?
+  midTermWeekEnd Int?
   endOfTermWeek Int?
+  endOfTermWeekEnd Int?
   midTermDate   DateTime?
   endOfTermDate DateTime?
   notes         String?

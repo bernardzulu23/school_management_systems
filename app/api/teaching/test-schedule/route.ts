@@ -4,13 +4,16 @@ import { prisma } from '@/lib/prisma'
 import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { endOfTermWeeksFromSchedule, midTermWeeksFromSchedule } from '@/lib/teaching/testWeeks'
 
 export const dynamic = 'force-dynamic'
 
 const BodySchema = z.object({
   schemeId: z.string().min(1),
   midTermWeek: z.number().int().min(1).max(20).nullable().optional(),
+  midTermWeekEnd: z.number().int().min(1).max(20).nullable().optional(),
   endOfTermWeek: z.number().int().min(1).max(20).nullable().optional(),
+  endOfTermWeekEnd: z.number().int().min(1).max(20).nullable().optional(),
   midTermDate: z.string().datetime().nullable().optional(),
   endOfTermDate: z.string().datetime().nullable().optional(),
   notes: z.string().max(2000).optional(),
@@ -63,6 +66,19 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
+  const midEnd =
+    body.midTermWeekEnd != null
+      ? body.midTermWeekEnd
+      : body.midTermWeek != null
+        ? body.midTermWeek
+        : null
+  const eotEnd =
+    body.endOfTermWeekEnd != null
+      ? body.endOfTermWeekEnd
+      : body.endOfTermWeek != null
+        ? body.endOfTermWeek
+        : null
+
   const schedule = await prisma.schemeTestSchedule.upsert({
     where: { schemeId: body.schemeId },
     create: {
@@ -70,14 +86,18 @@ export const POST = withErrorHandler(async function POST(request: Request) {
       schemeId: body.schemeId,
       teacherId: scheme.teacherId,
       midTermWeek: body.midTermWeek ?? null,
+      midTermWeekEnd: midEnd,
       endOfTermWeek: body.endOfTermWeek ?? null,
+      endOfTermWeekEnd: eotEnd,
       midTermDate: body.midTermDate ? new Date(body.midTermDate) : null,
       endOfTermDate: body.endOfTermDate ? new Date(body.endOfTermDate) : null,
       notes: body.notes ?? null,
     },
     update: {
       midTermWeek: body.midTermWeek ?? undefined,
+      midTermWeekEnd: body.midTermWeekEnd !== undefined ? midEnd : undefined,
       endOfTermWeek: body.endOfTermWeek ?? undefined,
+      endOfTermWeekEnd: body.endOfTermWeekEnd !== undefined ? eotEnd : undefined,
       midTermDate:
         body.midTermDate === null
           ? null
@@ -94,24 +114,24 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     },
   })
 
-  // Compatibility shape with MID_TERM / END_OF_TERM rows (single DB record underneath)
-  const schedules = []
-  if (schedule.midTermWeek != null) {
-    schedules.push({
-      id: `${schedule.id}-mid`,
-      testType: 'MID_TERM',
-      scheduledWeek: schedule.midTermWeek,
+  const midWeeks = midTermWeeksFromSchedule(schedule)
+  const eotWeeks = endOfTermWeeksFromSchedule(schedule)
+  const schedules = [
+    ...midWeeks.map((w) => ({
+      id: `${schedule.id}-mid-${w}`,
+      testType: 'MID_TERM' as const,
+      scheduledWeek: w,
+      scheduledWeeks: midWeeks,
       schemeId: schedule.schemeId,
-    })
-  }
-  if (schedule.endOfTermWeek != null) {
-    schedules.push({
-      id: `${schedule.id}-eot`,
-      testType: 'END_OF_TERM',
-      scheduledWeek: schedule.endOfTermWeek,
+    })),
+    ...eotWeeks.map((w) => ({
+      id: `${schedule.id}-eot-${w}`,
+      testType: 'END_OF_TERM' as const,
+      scheduledWeek: w,
+      scheduledWeeks: eotWeeks,
       schemeId: schedule.schemeId,
-    })
-  }
+    })),
+  ]
 
   return NextResponse.json({ success: true, schedule, schedules })
 })

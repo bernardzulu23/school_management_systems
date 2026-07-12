@@ -1,4 +1,11 @@
 import { prisma } from '@/lib/prisma'
+import {
+  endOfTermWeeksFromSchedule,
+  midTermWeeksFromSchedule,
+  testWeekSetFromSchedule,
+  weekKindFromRow,
+  type TestScheduleLike,
+} from '@/lib/teaching/testWeeks'
 
 const RETEACH_THRESHOLD = 60
 
@@ -9,7 +16,9 @@ export function parseTermNumber(term: string | number | null | undefined): numbe
   return Number.isFinite(n) && n >= 1 && n <= 3 ? n : 1
 }
 
-export function weeksFromSchemeJson(weeks: unknown): Array<{ week: number; topic?: string }> {
+export function weeksFromSchemeJson(
+  weeks: unknown
+): Array<{ week: number; topic?: string; weekType?: string }> {
   if (!Array.isArray(weeks)) return []
   return weeks
     .map((w, i) => {
@@ -17,9 +26,10 @@ export function weeksFromSchemeJson(weeks: unknown): Array<{ week: number; topic
       const row = w as Record<string, unknown>
       const week = Number(row.week ?? i + 1)
       const topic = row.topic != null ? String(row.topic) : undefined
-      return { week: Number.isFinite(week) ? week : i + 1, topic }
+      const weekType = row.weekType != null ? String(row.weekType) : undefined
+      return { week: Number.isFinite(week) ? week : i + 1, topic, weekType }
     })
-    .filter(Boolean) as Array<{ week: number; topic?: string }>
+    .filter(Boolean) as Array<{ week: number; topic?: string; weekType?: string }>
 }
 
 /** Recalculate and upsert TeacherPerformanceSummary for a teacher/term. */
@@ -34,21 +44,51 @@ export async function recalculateTeacherPerformanceSummary(opts: {
 
   const schemes = await prisma.schemeOfWork.findMany({
     where: { schoolId, teacherId, year: academicYear, term: termLabel },
-    select: { id: true, weeks: true },
+    select: {
+      id: true,
+      weeks: true,
+      testSchedule: {
+        select: {
+          midTermWeek: true,
+          midTermWeekEnd: true,
+          endOfTermWeek: true,
+          endOfTermWeekEnd: true,
+        },
+      },
+    },
   })
 
   let totalWeeksPlanned = 0
+  const teachableByScheme = new Map<string, Set<number>>()
+
   for (const s of schemes) {
-    totalWeeksPlanned += weeksFromSchemeJson(s.weeks).length
+    const weeks = weeksFromSchemeJson(s.weeks)
+    const schedule = s.testSchedule as TestScheduleLike | null
+    const testSet = testWeekSetFromSchedule(schedule)
+    const teachable = new Set<number>()
+    for (const w of weeks) {
+      const kind = weekKindFromRow(w.week, w.weekType, schedule)
+      if (kind === 'teaching' && !testSet.has(w.week)) {
+        teachable.add(w.week)
+      }
+    }
+    if (teachable.size === 0 && weeks.length === 0) continue
+    teachableByScheme.set(s.id, teachable)
+    totalWeeksPlanned += teachable.size
   }
 
   const schemeIds = schemes.map((s) => s.id)
-  const completedCount =
-    schemeIds.length === 0
-      ? 0
-      : await prisma.schemeProgress.count({
-          where: { schoolId, teacherId, schemeId: { in: schemeIds }, completed: true },
-        })
+  let completedCount = 0
+  if (schemeIds.length > 0) {
+    const progressRows = await prisma.schemeProgress.findMany({
+      where: { schoolId, teacherId, schemeId: { in: schemeIds }, completed: true },
+      select: { schemeId: true, weekNumber: true },
+    })
+    for (const row of progressRows) {
+      const teachable = teachableByScheme.get(row.schemeId)
+      if (teachable?.has(row.weekNumber)) completedCount += 1
+    }
+  }
 
   const masteryRows = await prisma.topicMastery.findMany({
     where: { schoolId, teacherId },
@@ -95,4 +135,4 @@ export async function recalculateTeacherPerformanceSummary(opts: {
   })
 }
 
-export { RETEACH_THRESHOLD }
+export { RETEACH_THRESHOLD, midTermWeeksFromSchedule, endOfTermWeeksFromSchedule }

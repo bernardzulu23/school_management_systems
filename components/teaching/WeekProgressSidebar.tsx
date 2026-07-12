@@ -12,6 +12,7 @@ export type WeekProgressItem = {
   completedAt?: string | null
   isMidTerm?: boolean
   isEndOfTerm?: boolean
+  isTestWeek?: boolean
 }
 
 type Props = {
@@ -34,17 +35,20 @@ export function WeekProgressSidebar({
   busyWeek,
   onToggleWeek,
   title = 'Week progress',
-  description = 'Weeks count as taught only when an approved lesson plan exists',
+  description = 'Teaching weeks count toward coverage; mid/EOT test weeks are excluded',
   layout = 'sidebar',
   readOnly = false,
 }: Props) {
-  const completedCount = weeks.filter((w) => w.completed).length
-  const total = weeks.length || 1
+  const teachable = weeks.filter((w) => !(w.isTestWeek || w.isMidTerm || w.isEndOfTerm))
+  const completedCount = teachable.filter((w) => w.completed).length
+  const total = teachable.length || 0
+  const isTest = (week: WeekProgressItem) =>
+    Boolean(week.isTestWeek || week.isMidTerm || week.isEndOfTerm)
 
   const progressBlock = (
     <div>
       <div className="mb-2 flex items-center justify-between text-sm">
-        <span className="font-medium">Overall Progress</span>
+        <span className="font-medium">Teaching coverage</span>
         <span className="font-bold">{coveragePercent}%</span>
       </div>
       <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
@@ -54,7 +58,8 @@ export function WeekProgressSidebar({
         />
       </div>
       <p className="mt-2 text-xs text-muted-foreground">
-        {completedCount} of {total} weeks completed
+        {completedCount} of {total} teaching weeks completed
+        {weeks.length > total ? ` · ${weeks.length - total} test week(s) excluded` : ''}
       </p>
     </div>
   )
@@ -91,14 +96,16 @@ export function WeekProgressSidebar({
               <button
                 key={week.week}
                 type="button"
-                onClick={() => !readOnly && onToggleWeek(week.week, !week.completed)}
-                disabled={readOnly || busyWeek === week.week}
+                onClick={() =>
+                  !readOnly && !isTest(week) && onToggleWeek(week.week, !week.completed)
+                }
+                disabled={readOnly || isTest(week) || busyWeek === week.week}
                 className={cn(
                   'rounded-lg border-2 p-3 text-left transition-all disabled:opacity-50',
                   week.completed
                     ? 'border-emerald-200 bg-emerald-50'
                     : 'border-border bg-card hover:border-sky-200',
-                  (week.isMidTerm || week.isEndOfTerm) && 'ring-1 ring-amber-300',
+                  isTest(week) && 'cursor-default ring-1 ring-amber-300 bg-amber-50/50',
                   readOnly && 'cursor-default'
                 )}
               >
@@ -127,17 +134,17 @@ export function WeekProgressSidebar({
             </p>
           )}
 
-          {!readOnly && weeks.some((w) => !w.completed) && (
+          {!readOnly && teachable.some((w) => !w.completed) && (
             <Button
               type="button"
               variant="outline"
               disabled={busyWeek != null}
               onClick={() => {
-                const next = weeks.find((w) => !w.completed)
+                const next = teachable.find((w) => !w.completed)
                 if (next) onToggleWeek(next.week, true)
               }}
             >
-              Mark next week complete
+              Mark next teaching week complete
             </Button>
           )}
 
@@ -170,23 +177,25 @@ export function WeekProgressSidebar({
             className={cn(
               'rounded-md border p-2',
               w.completed ? 'border-emerald-200 bg-emerald-50/60' : 'border-border',
-              (w.isMidTerm || w.isEndOfTerm) && 'ring-1 ring-amber-300'
+              isTest(w) && 'ring-1 ring-amber-300 bg-amber-50/40'
             )}
           >
             <div className="flex items-start gap-2">
               <button
                 type="button"
                 className="mt-0.5 shrink-0 text-emerald-600 disabled:opacity-50"
-                disabled={readOnly || busyWeek === w.week}
-                onClick={() => !readOnly && onToggleWeek(w.week, !w.completed)}
+                disabled={readOnly || isTest(w) || busyWeek === w.week}
+                onClick={() => !readOnly && !isTest(w) && onToggleWeek(w.week, !w.completed)}
                 aria-label={
-                  readOnly
-                    ? w.completed
-                      ? `Week ${w.week} taught (approved lesson plan)`
-                      : `Week ${w.week} not taught`
-                    : w.completed
-                      ? `Unmark week ${w.week}`
-                      : `Mark week ${w.week} complete`
+                  isTest(w)
+                    ? `Week ${w.week} is a test week (no teaching)`
+                    : readOnly
+                      ? w.completed
+                        ? `Week ${w.week} taught (approved lesson plan)`
+                        : `Week ${w.week} not taught`
+                      : w.completed
+                        ? `Unmark week ${w.week}`
+                        : `Mark week ${w.week} complete`
                 }
               >
                 {w.completed ? (
@@ -221,7 +230,7 @@ export function WeekProgressSidebar({
         )}
       </ul>
 
-      {weeks.some((w) => !w.completed) && !readOnly && (
+      {teachable.some((w) => !w.completed) && !readOnly && (
         <Button
           type="button"
           variant="outline"
@@ -229,11 +238,11 @@ export function WeekProgressSidebar({
           className="w-full"
           disabled={busyWeek != null}
           onClick={() => {
-            const next = weeks.find((w) => !w.completed)
+            const next = teachable.find((w) => !w.completed)
             if (next) onToggleWeek(next.week, true)
           }}
         >
-          Mark next week complete
+          Mark next teaching week complete
         </Button>
       )}
       {readOnly && (
