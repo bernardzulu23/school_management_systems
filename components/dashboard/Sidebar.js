@@ -15,6 +15,7 @@ import {
 } from '@/lib/subjects/resolveSubjectCatalog'
 import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
 import { hasGuidanceAssignment } from '@/lib/guidance/guidanceAccess'
+import { hasSicAssignment } from '@/lib/sic/sicAccess'
 import {
   Home,
   Users,
@@ -51,6 +52,7 @@ import {
   AlertTriangle,
   FileCheck,
   Zap,
+  Bell,
 } from 'lucide-react'
 import { TIMETABLE_CONFLICTS_UPDATED } from '@/hooks/useTimetableDraftMeta'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
@@ -130,6 +132,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         href: '/dashboard/settings',
         icon: Settings,
       },
+      {
+        name: 'Notifications',
+        href: '/dashboard/notifications',
+        icon: Bell,
+      },
     ]
 
     const roleSpecificItems = {
@@ -150,6 +157,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           name: 'Guidance reports',
           href: '/dashboard/headteacher/guidance-reports',
           icon: FileText,
+        },
+        {
+          name: 'SIC (In-service)',
+          href: '/dashboard/headteacher/sic',
+          icon: GraduationCap,
         },
         { name: 'Teacher Performance', href: '/admin/teacher-performance', icon: Target },
         {
@@ -234,15 +246,25 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
         { name: 'Attendance Returns', href: '/dashboard/attendance/returns', icon: UserCheck },
         { name: 'Term reports', href: '/dashboard/hod/term-reports', icon: FileText },
+        { name: 'SIC CPD plans', href: '/dashboard/hod/sic-cpd', icon: ClipboardList },
       ],
       guidance: [
         { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'Pupil register', href: '/dashboard/guidance/pupils', icon: Users },
         { name: 'Case log', href: '/dashboard/guidance/cases', icon: ClipboardList },
+        { name: 'Documents', href: '/dashboard/guidance/documents', icon: FileText },
         { name: 'Career board', href: '/dashboard/guidance/resources', icon: Megaphone },
         { name: 'Career clusters', href: '/dashboard/guidance/career-clusters', icon: Layers },
         { name: 'Careers', href: '/dashboard/guidance/careers', icon: Briefcase },
         { name: 'Girls re-entry', href: '/dashboard/guidance/reentry', icon: Heart },
+        { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
+      ],
+      sic: [
+        { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
+        { name: 'Department CPD plans', href: '/dashboard/sic/cpd-plans', icon: ClipboardList },
+        { name: 'HIM meetings', href: '/dashboard/sic/him', icon: Calendar },
+        { name: 'Activity plans', href: '/dashboard/sic/activity-plans', icon: FileText },
+        { name: 'Analytics', href: '/dashboard/sic/analytics', icon: BarChart3 },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
       ],
       teacher: [
@@ -330,14 +352,19 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     const showCodePlayground = features.codePlayground
     const showMockExams = features.mockExams
     const guidancePortal = pathname?.startsWith('/dashboard/guidance')
+    const sicPortal = pathname?.startsWith('/dashboard/sic')
     const hodPortal = pathname?.startsWith('/dashboard/hod')
     const hasGuidanceRole = hasGuidanceAssignment(user)
+    const hasSicRole = hasSicAssignment(user)
     let navRoleKey = roleKey === 'hod' && !showHod ? 'teacher' : roleKey
     if (hodPortal && (user?.hodProfile || roleKey === 'hod' || roleKey === 'teacher')) {
       navRoleKey = 'hod'
     }
     if (guidancePortal && hasGuidanceRole && showCareer) {
       navRoleKey = 'guidance'
+    }
+    if (sicPortal && hasSicRole) {
+      navRoleKey = 'sic'
     }
 
     let roleItems = roleSpecificItems[navRoleKey] || []
@@ -466,6 +493,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     if (navRoleKey === 'guidance') {
       items = items.map((item) =>
         item.name === 'Dashboard' ? { ...item, href: '/dashboard/guidance' } : item
+      )
+    }
+    if (navRoleKey === 'sic') {
+      items = items.map((item) =>
+        item.name === 'Dashboard' ? { ...item, href: '/dashboard/sic' } : item
       )
     }
     if (navRoleKey === 'hod') {

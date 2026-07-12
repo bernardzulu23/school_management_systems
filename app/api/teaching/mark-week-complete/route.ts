@@ -104,6 +104,20 @@ export const POST = withErrorHandler(async function POST(request: Request) {
   const completedWeeks = progressDone.filter((p) => teachableSet.has(p.weekNumber)).length
   const totalWeeks = teachableWeeks.length || 0
 
+  if (body.completed) {
+    const { notifySchemeProgressUpdate } = await import('@/lib/notifications/integrations')
+    await notifySchemeProgressUpdate({
+      schoolId,
+      teacherId: scheme.teacherId,
+      subject: scheme.subject,
+      gradeOrForm: scheme.gradeOrForm,
+      completedWeeks,
+      totalWeeks,
+      weekNumber: body.weekNumber,
+      topicName: weekRow?.topic ?? null,
+    })
+  }
+
   return NextResponse.json({
     success: true,
     progress: {

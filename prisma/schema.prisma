@@ -154,9 +154,18 @@ model School {
   careerClusters       CareerCluster[]
   guidanceAssignments  GuidanceAssignment[]
   guidanceCases        GuidanceCase[]
+  guidanceDocuments    GuidanceDocument[]
   girlsReEntryRecords  GirlsReEntryRecord[]
   careerResources      CareerResource[]
   careers              Career[]
+  sicAssignments       SicAssignment[]
+  sicCpdPlans          SicCpdPlan[]
+  sicActivityPlans     SicActivityPlan[]
+  sicHimMeetings       SicHimMeeting[]
+  sicDepartmentStatuses SicDepartmentStatus[]
+  notifications          Notification[]
+  scheduledNotifications ScheduledNotification[]
+  webPushSubscriptions   WebPushSubscription[]
   hodBudgetCategories  HodBudgetCategory[]
   hodBudgetTransactions HodBudgetTransaction[]
   hodCorrespondence    HodCorrespondence[]
@@ -226,8 +235,15 @@ model User {
   hodProfile     HeadOfDepartment?
   guidanceAssignment GuidanceAssignment? @relation("GuidanceTeacher")
   guidanceAssignmentsCreated GuidanceAssignment[] @relation("GuidanceAssignedBy")
+  sicAssignment SicAssignment? @relation("SicCoordinator")
+  sicAssignmentsCreated SicAssignment[] @relation("SicAssignedBy")
+  sicCpdPlansSubmitted SicCpdPlan[] @relation("SicCpdPlanSubmitter")
+  sicCpdPlansReviewed SicCpdPlan[] @relation("SicCpdPlanReviewer")
+  sicActivityPlansCreated SicActivityPlan[] @relation("SicActivityPlanAuthor")
+  sicHimMeetingsCreated SicHimMeeting[] @relation("SicHimMeetingAuthor")
   guidanceCasesAssigned GuidanceCase[] @relation("GuidanceCaseAssignee")
   guidanceCasesOpened   GuidanceCase[] @relation("GuidanceCaseOpenedBy")
+  guidanceDocumentsUploaded GuidanceDocument[] @relation("GuidanceDocumentUploader")
   caseLogEntries        CaseLogEntry[]
   caseAccessLogs        CaseAccessLog[]
   careerResourcesPosted CareerResource[]
@@ -274,6 +290,11 @@ model User {
   attendanceSessionsLed   AttendanceSession[]
 
   enrollmentInvitesUsed   EnrollmentInvite[] @relation("EnrollmentInviteUsedBy")
+
+  notifications              Notification[] @relation("UserNotifications")
+  notificationPreference     NotificationPreference? @relation("UserNotificationPreference")
+  scheduledNotifications     ScheduledNotification[] @relation("UserScheduledNotifications")
+  webPushSubscriptions       WebPushSubscription[] @relation("UserWebPushSubscriptions")
 
   sharedMaterials         SharedMaterial[]
   materialRatings         MaterialRating[]
@@ -579,6 +600,7 @@ model Student {
   invoices            StudentInvoice[]
   siblingMemberships  SiblingGroupMember[]
   guidanceCases       GuidanceCase[]
+  guidanceDocuments   GuidanceDocument[]
   girlsReEntryRecords GirlsReEntryRecord[]
   
   createdAt DateTime @default(now())
@@ -773,6 +795,8 @@ enum ReferralStatus {
 }
 
 enum GuidanceResourceType {
+  SUBJECT_FOCUS
+  UNIVERSITY_PROGRAM
   BURSARY
   INSTITUTION_INFO
   CAREER_DAY
@@ -784,6 +808,27 @@ enum CaseAccessAction {
   LOG_ENTRY
   REFERRAL
   ESCALATE
+  DOCUMENT_VIEW
+  DOCUMENT_UPLOAD
+}
+
+enum GuidanceDocKind {
+  INDIVIDUAL_COUNSELLING
+  GROUP_COUNSELLING
+  CAREER
+  ACADEMIC
+  SPECIAL_NEEDS_REFERRAL
+  BEHAVIOUR
+  SOCIAL_PREVENTION
+  PARENT_GUARDIAN
+  STAFF_CONSULT
+  PROGRAMME
+  CONFIDENTIAL_RECORD
+  EXTERNAL_REFERRAL
+  MENTAL_HEALTH
+  PROGRESS_FOLLOWUP
+  INCLUSION
+  GENERAL
 }
 
 model GuidanceCase {
@@ -810,11 +855,41 @@ model GuidanceCase {
   escalation  SafeguardingEscalation?
   accessLog   CaseAccessLog[]
   reEntry     GirlsReEntryRecord?
+  documents   GuidanceDocument[]
 
   @@index([schoolId, status])
   @@index([schoolId, pupilId])
   @@index([schoolId, category])
   @@index([assignedToId])
+}
+
+model GuidanceDocument {
+  id              String              @id @default(cuid())
+  schoolId        String
+  title           String
+  description     String?
+  kind            GuidanceDocKind     @default(GENERAL)
+  confidentiality ConfidentialityTier @default(SENSITIVE)
+  fileName        String
+  fileUrl         String
+  fileType        String
+  fileSize        Int
+  pupilId         String?
+  caseId          String?
+  uploadedById    String
+  createdAt       DateTime            @default(now())
+  archivedAt      DateTime?
+
+  school     School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  pupil      Student?      @relation(fields: [pupilId], references: [id], onDelete: SetNull)
+  case       GuidanceCase? @relation(fields: [caseId], references: [id], onDelete: SetNull)
+  uploadedBy User          @relation("GuidanceDocumentUploader", fields: [uploadedById], references: [id], onDelete: Cascade)
+
+  @@index([schoolId, createdAt])
+  @@index([schoolId, caseId])
+  @@index([schoolId, pupilId])
+  @@index([schoolId, kind])
+  @@index([schoolId, archivedAt])
 }
 
 model CaseLogEntry {
@@ -926,6 +1001,125 @@ model CareerResource {
   @@index([schoolId, type])
 }
 
+/// School In-service Coordinator (SIC) — CPD chair assignment (not a JWT role)
+model SicAssignment {
+  id           String    @id @default(cuid())
+  schoolId     String
+  userId       String    @unique
+  assignedById String
+  assignedAt   DateTime  @default(now())
+  revokedAt    DateTime?
+  active       Boolean   @default(true)
+
+  school     School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user       User   @relation("SicCoordinator", fields: [userId], references: [id], onDelete: Cascade)
+  assignedBy User   @relation("SicAssignedBy", fields: [assignedById], references: [id], onDelete: Cascade)
+
+  @@index([schoolId, active])
+  @@index([userId, active])
+}
+
+enum SicCpdPlanStatus {
+  DRAFT
+  SUBMITTED
+  ACCEPTED
+  REJECTED
+  INACTIVE
+}
+
+/// Department CPD plan submitted to SIC for acceptance; minutes due 3 days after meetingDate
+model SicCpdPlan {
+  id                  String           @id @default(cuid())
+  schoolId            String
+  departmentId        String
+  title               String
+  term                Int
+  year                Int
+  meetingDate         DateTime
+  description         String?          @db.Text
+  status              SicCpdPlanStatus @default(DRAFT)
+  submittedById       String
+  submittedAt         DateTime?
+  reviewedById        String?
+  reviewedAt          DateTime?
+  reviewNotes         String?
+  minutes             String?          @db.Text
+  minutesSubmittedAt  DateTime?
+  minutesDueAt        DateTime?
+  inactiveAt          DateTime?
+  inactiveReason      String?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+
+  school       School     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  submittedBy  User       @relation("SicCpdPlanSubmitter", fields: [submittedById], references: [id], onDelete: Cascade)
+  reviewedBy   User?      @relation("SicCpdPlanReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([schoolId, status])
+  @@index([schoolId, departmentId])
+  @@index([schoolId, meetingDate])
+  @@index([departmentId, status])
+}
+
+/// School-wide CPD activity plans authored by SIC
+model SicActivityPlan {
+  id          String   @id @default(cuid())
+  schoolId    String
+  title       String
+  description String?  @db.Text
+  startDate   DateTime?
+  endDate     DateTime?
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  school    School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  createdBy User   @relation("SicActivityPlanAuthor", fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@index([schoolId, createdAt])
+}
+
+/// Headteacher In-service Meeting (HIM) chaired/recorded by SIC
+model SicHimMeeting {
+  id                 String    @id @default(cuid())
+  schoolId           String
+  title              String
+  meetingDate        DateTime
+  agenda             String?   @db.Text
+  minutes            String?   @db.Text
+  minutesSubmittedAt DateTime?
+  status             String    @default("scheduled")
+  createdById        String
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  school    School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  createdBy User   @relation("SicHimMeetingAuthor", fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@index([schoolId, meetingDate])
+  @@index([schoolId, status])
+}
+
+/// Tracks departments marked inactive for CPD non-compliance (minutes overdue)
+model SicDepartmentStatus {
+  id             String    @id @default(cuid())
+  schoolId       String
+  departmentId   String
+  inactive       Boolean   @default(false)
+  inactiveAt     DateTime?
+  reason         String?
+  relatedPlanId  String?
+  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime  @default(now())
+
+  school     School     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  @@unique([schoolId, departmentId])
+  @@index([schoolId, inactive])
+}
+
 model Class {
   id          String   @id @default(uuid()) 
   name        String   // e.g. "Form 1A" 
@@ -1022,6 +1216,8 @@ model Department {
   hods      HeadOfDepartment[]
   departmentAllocations  DepartmentAllocation[]
   masterTimetableEntries MasterTimetableEntry[]
+  sicCpdPlans            SicCpdPlan[]
+  sicDepartmentStatuses  SicDepartmentStatus[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -3590,4 +3786,151 @@ model TeacherPerformanceSummary {
 
   @@unique([schoolId, teacherId, term, academicYear])
   @@index([schoolId, term, academicYear])
+}
+
+// ============================================
+// HYBRID NOTIFICATION SYSTEM (Web Push + Email + SMS)
+// ============================================
+
+enum NotificationType {
+  CLASS_REMINDER
+  DEPARTMENT_MEETING_REMINDER
+  TEST_SCHEDULED
+  TEST_DATE_REMINDER
+  MISSED_TEST_ALERT
+  SCHEME_PROGRESS
+  LOW_MASTERY_ALERT
+  LESSON_ASSIGNED
+}
+
+enum NotificationStatus {
+  PENDING
+  QUEUED
+  SENT
+  FAILED
+  READ
+}
+
+enum NotificationChannel {
+  WEB_PUSH
+  EMAIL
+  SMS
+}
+
+enum NotificationDeliveryStatus {
+  PENDING
+  SENT
+  FAILED
+  BOUNCED
+  FAILED_PERMANENT
+}
+
+enum ScheduledNotificationStatus {
+  PENDING
+  SENT
+  CANCELLED
+}
+
+model Notification {
+  id        String             @id @default(cuid())
+  schoolId  String
+  userId    String
+  type      NotificationType
+  title     String
+  message   String             @db.Text
+  actionUrl String?
+  status    NotificationStatus @default(PENDING)
+  metadata  Json?
+  sentAt    DateTime?
+  readAt    DateTime?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user   User   @relation("UserNotifications", fields: [userId], references: [id], onDelete: Cascade)
+  logs   NotificationLog[]
+
+  @@index([userId, status, createdAt])
+  @@index([schoolId, type, createdAt])
+  @@index([userId, createdAt])
+}
+
+model NotificationPreference {
+  id               String   @id @default(cuid())
+  schoolId         String
+  userId           String   @unique
+  webPushEnabled   Boolean  @default(true)
+  emailEnabled     Boolean  @default(true)
+  smsEnabled       Boolean  @default(true)
+  quietHoursStart  String   @default("15:00")
+  quietHoursEnd    String   @default("06:45")
+  timezone         String   @default("Africa/Lusaka")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user User @relation("UserNotificationPreference", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId])
+}
+
+model NotificationLog {
+  id             String                     @id @default(cuid())
+  notificationId String
+  channel        NotificationChannel
+  status         NotificationDeliveryStatus @default(PENDING)
+  provider       String?
+  providerId     String?
+  error          String?
+  retryCount     Int                        @default(0)
+  sentAt         DateTime?
+  deliveredAt    DateTime?
+  createdAt      DateTime                   @default(now())
+
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@index([notificationId])
+  @@index([status, createdAt])
+  @@index([channel, status])
+}
+
+model ScheduledNotification {
+  id           String                      @id @default(cuid())
+  schoolId     String
+  userId       String
+  type         NotificationType
+  title        String?
+  message      String?                     @db.Text
+  actionUrl    String?
+  triggerDate  DateTime?
+  triggerTime  String?
+  scheduledFor DateTime
+  data         Json?
+  channels     Json?
+  status       ScheduledNotificationStatus @default(PENDING)
+  createdAt    DateTime                    @default(now())
+  updatedAt    DateTime                    @updatedAt
+
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user   User   @relation("UserScheduledNotifications", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status, scheduledFor])
+  @@index([userId, status])
+  @@index([schoolId, type])
+}
+
+model WebPushSubscription {
+  id        String   @id @default(cuid())
+  schoolId  String
+  userId    String
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user   User   @relation("UserWebPushSubscriptions", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([schoolId, userId])
 }

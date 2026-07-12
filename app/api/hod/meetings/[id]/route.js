@@ -43,5 +43,22 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
     },
   })
 
+  if (
+    departmentId &&
+    (body.meetingDate != null || body.meetingTime != null) &&
+    String(updated.status || '') === 'scheduled'
+  ) {
+    const { scheduleDepartmentMeetingReminders } = await import('@/lib/notifications/integrations')
+    await scheduleDepartmentMeetingReminders({
+      schoolId: scope.schoolId,
+      departmentId,
+      meetingId: updated.id,
+      title: updated.title,
+      meetingDate: updated.meetingDate,
+      meetingTime: updated.meetingTime,
+      createdByUserId: scope.userId,
+    })
+  }
+
   return NextResponse.json({ success: true, data: updated })
 })

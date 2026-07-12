@@ -70,3 +70,38 @@ self.addEventListener('fetch', (event) => {
     )
   }
 })
+
+self.addEventListener('push', (event) => {
+  let payload = { title: 'ZSMS', body: 'You have a new notification', url: '/dashboard' }
+  try {
+    if (event.data) payload = { ...payload, ...event.data.json() }
+  } catch {
+    /* ignore malformed payload */
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(payload.title || 'ZSMS', {
+      body: payload.body || '',
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/icon-192x192.png',
+      data: { url: payload.url || '/dashboard' },
+    })
+  )
+})
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  const url = event.notification?.data?.url || '/dashboard'
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+      for (const client of clients) {
+        if ('focus' in client) {
+          client.navigate(url)
+          return client.focus()
+        }
+      }
+      if (self.clients.openWindow) return self.clients.openWindow(url)
+      return undefined
+    })
+  )
+})

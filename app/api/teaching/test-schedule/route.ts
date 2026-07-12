@@ -133,5 +133,15 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     })),
   ]
 
+  const { notifyAndScheduleTestReminders } = await import('@/lib/notifications/integrations')
+  await notifyAndScheduleTestReminders({
+    schoolId,
+    teacherId: scheme.teacherId,
+    schemeId: scheme.id,
+    subject: scheme.subject,
+    midTermDate: schedule.midTermDate,
+    endOfTermDate: schedule.endOfTermDate,
+  })
+
   return NextResponse.json({ success: true, schedule, schedules })
 })

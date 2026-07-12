@@ -16,6 +16,10 @@
     {
       "path": "/api/cron/fee-overdue-check",
       "schedule": "0 7 * * 1"
+    },
+    {
+      "path": "/api/cron/notifications",
+      "schedule": "*/5 * * * *"
     }
   ],
   "build": {

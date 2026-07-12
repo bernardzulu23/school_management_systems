@@ -11,7 +11,7 @@ import { RESOURCE_TYPES } from '@/lib/guidance/constants'
 export default function GuidanceResourcesPage() {
   const [resources, setResources] = useState([])
   const [loading, setLoading] = useState(true)
-  const [form, setForm] = useState({ type: 'BURSARY', title: '', body: '', deadline: '' })
+  const [form, setForm] = useState({ type: 'SUBJECT_FOCUS', title: '', body: '', deadline: '' })
 
   const load = async () => {
     try {
@@ -49,7 +49,7 @@ export default function GuidanceResourcesPage() {
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json.error || 'Publish failed')
       toast.success('Resource published')
-      setForm({ type: 'BURSARY', title: '', body: '', deadline: '' })
+      setForm({ type: 'SUBJECT_FOCUS', title: '', body: '', deadline: '' })
       await load()
     } catch (error) {
       toast.error(error.message || 'Could not publish')
@@ -77,7 +77,8 @@ export default function GuidanceResourcesPage() {
         <div>
           <h1 className="text-2xl font-bold text-royalPurple-text1">Career guidance board</h1>
           <p className="text-royalPurple-text2 text-sm mt-1">
-            Bursaries, institutions, and career events — visible school-wide when active.
+            Publish what pupils should concentrate on, universities that offer those programmes,
+            bursaries, and career events. Active posts appear on the student Career guidance page.
           </p>
         </div>
 

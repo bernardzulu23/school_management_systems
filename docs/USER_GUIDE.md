@@ -1,7 +1,7 @@
 # ZSMS User Guide
 
 **Zambian School Management System (ZSMS)**  
-**Last updated:** 2026-07-12  
+**Last updated:** 2026-07-13  
 **Application version:** 2.0.3 (`package.json`)  
 **Document version:** 1.0
 
@@ -182,17 +182,19 @@ Compared to a school teacher, solo teachers see **Solo workspace** instead of Da
 
 ## Shared features (all roles)
 
-| Feature  | Route                 | Notes                                 |
-| -------- | --------------------- | ------------------------------------- |
-| Profile  | `/dashboard/profile`  | Name, contact, photo, password change |
-| Settings | `/dashboard/settings` | Account settings, app version         |
-| Privacy  | `/dashboard/privacy`  | Privacy policy and data preferences   |
-| Feedback | `/dashboard/feedback` | Submit product feedback               |
-| Billing  | `/dashboard/billing`  | Subscribe when trial expires          |
+| Feature       | Route                      | Notes                                          |
+| ------------- | -------------------------- | ---------------------------------------------- |
+| Profile       | `/dashboard/profile`       | Name, contact, photo, password change          |
+| Settings      | `/dashboard/settings`      | Account, notification preferences, app version |
+| Notifications | `/dashboard/notifications` | Inbox (read / delete / filter)                 |
+| Privacy       | `/dashboard/privacy`       | Privacy policy and data preferences            |
+| Feedback      | `/dashboard/feedback`      | Submit product feedback                        |
+| Billing       | `/dashboard/billing`       | Subscribe when trial expires                   |
 
 ### Notifications
 
-- **Timetable notifications** — Bell icon in header for headteacher/admin when HODs push class allocations.
+- **Hybrid alerts (teachers/admins)** — Header bell opens a quick inbox; full list at **Notifications**. Preferences under **Settings → Notifications**. Web push, email, and critical SMS (see teacher guide).
+- **Timetable notifications** — Separate bell for headteacher/admin when HODs push class allocations.
 - **Subscription banner** — Trial countdown or expired notice on all dashboard pages.
 
 ---
@@ -210,6 +212,7 @@ The headteacher is the school administrator with full oversight: users, timetabl
 | Dashboard           | `/dashboard/headteacher`                     |
 | Profile             | `/dashboard/profile`                         |
 | Settings            | `/dashboard/settings`                        |
+| Notifications       | `/dashboard/notifications`                   |
 | User Feedback       | `/dashboard/feedback`                        |
 | User Management     | `/dashboard/users`                           |
 | Bulk student upload | `/dashboard/students/bulk-upload`            |
@@ -219,6 +222,7 @@ The headteacher is the school administrator with full oversight: users, timetabl
 | Subjects            | `/admin/subjects`                            |
 | Guidance teachers   | `/dashboard/headteacher/guidance-teachers`   |
 | Guidance reports    | `/dashboard/headteacher/guidance-reports`    |
+| SIC (In-service)    | `/dashboard/headteacher/sic`                 |
 | Teacher Performance | `/admin/teacher-performance`                 |
 | Teaching Coverage   | `/dashboard/admin/teacher-performance`       |
 | Classes             | `/dashboard/classes`                         |
@@ -334,6 +338,7 @@ HODs manage their department: class allocations, teacher oversight, lesson plan 
 | -------------------- | ------------------------------------------- |
 | Dashboard            | `/dashboard/hod`                            |
 | Profile / Settings   | `/dashboard/profile`, `/dashboard/settings` |
+| Notifications        | `/dashboard/notifications`                  |
 | Class Allocation     | `/dashboard/hod/allocation`                 |
 | Department Timetable | `/dashboard/hod/timetable`                  |
 | Give Feedback        | `/dashboard/feedback`                       |
@@ -357,6 +362,7 @@ HODs manage their department: class allocations, teacher oversight, lesson plan 
 | Attendance           | `/dashboard/attendance`                     |
 | Attendance Returns   | `/dashboard/attendance/returns`             |
 | Term reports         | `/dashboard/hod/term-reports`               |
+| SIC CPD plans        | `/dashboard/hod/sic-cpd`                    |
 
 ### Additional HOD pages (via dashboard quick links)
 
@@ -405,6 +411,13 @@ If the allocation page shows a security block, refresh and sign in again — the
 
 See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md).
 
+#### SIC CPD plans (department → SIC)
+
+1. Open **SIC CPD plans** (`/dashboard/hod/sic-cpd`).
+2. Submit a department CPD plan (title, term, meeting date) to the School In-service Coordinator.
+3. After SIC accepts and the meeting runs, submit **minutes within 3 days** of the meeting date.
+4. If minutes are late, the department is marked **inactive** for CPD compliance until minutes are submitted.
+
 ---
 
 ## Teacher guide
@@ -419,6 +432,7 @@ Teachers manage classes, record SBA scores, take attendance, create lesson plans
 | ------------------- | ------------------------------------------- |
 | Dashboard           | `/dashboard/teacher`                        |
 | Profile / Settings  | `/dashboard/profile`, `/dashboard/settings` |
+| Notifications       | `/dashboard/notifications`                  |
 | Give Feedback       | `/dashboard/feedback`                       |
 | My Classes          | `/dashboard/classes`                        |
 | My Subjects         | `/dashboard/subjects`                       |
@@ -445,25 +459,43 @@ Teachers manage classes, record SBA scores, take attendance, create lesson plans
 
 - **Pupil register** — confidential list of pupils in your scope (junior/senior/all)
 - **Case log** — open counselling/welfare cases with confidentiality tiers (Standard, Sensitive, Safeguarding)
-- **Career guidance board** — publish bursaries and career events (visible school-wide when active)
+- **Documents** — softcopy vault for counselling records, referral letters, consent forms, and programme materials (PDF/Word/images). Categories match guidance duties (individual/group counselling, career, academic, parents, mental health, etc.). Files can be linked to a pupil or case; Sensitive documents are limited to you.
+- **Career guidance board** — publish subject focus tips, university programmes, bursaries, and career events (pupils see these on **Career guidance** → **Guidance board**)
 - **Career clusters** and **Careers** — maintain pathway content
 - **Girls re-entry** — only if the headteacher enabled re-entry permission on your assignment
 
 Safeguarding cases auto-escalate to the headteacher. Your main teacher account is unchanged — switch back via **Teacher Dashboard**.
+
+#### School In-service Coordinator (SIC)
+
+If the headteacher assigns you as **SIC**, use **SIC Dashboard** in the header. From the SIC workspace you can:
+
+- **Department CPD plans** — accept or reject plans submitted by HODs
+- **HIM meetings** — schedule and minute Headteacher In-service Meetings
+- **Activity plans** — create school-wide CPD activity calendars
+- **Analytics** — track compliance; departments that miss minutes **3 days after** an accepted meeting are marked **inactive**
+
+HODs submit plans and minutes at **SIC CPD plans** (`/dashboard/hod/sic-cpd`).
 
 #### Guidance case workflow (assigned guidance teachers)
 
 1. Open **Pupil register** or **Case log** from the guidance sidebar.
 2. **New case** — select pupil, category, confidentiality tier, and summary.
 3. Add **log entries** with optional follow-up dates on the case detail page.
-4. Record **referrals** — guardian consent is required before marking a referral as sent externally.
-5. Use **Escalate to headteacher** for urgent safeguarding concerns (or choose Safeguarding tier at intake).
+4. Attach **softcopies** on the case detail page (or from **Documents**) — referral letters, consent forms, session notes.
+5. Record **referrals** — guardian consent is required before marking a referral as sent externally.
+6. Use **Escalate to headteacher** for urgent safeguarding concerns (or choose Safeguarding tier at intake).
 
 #### Headteacher: guidance oversight
 
 1. Assign guidance teachers at **Guidance teachers** — set scope (All / Junior / Senior) and optionally **Girls re-entry** permission.
 2. Review **Guidance reports** for termly aggregate counts (small counts shown as `<3`; safeguarding excluded from totals).
 3. Acknowledge **safeguarding escalations** and open case detail from the reports page.
+
+#### Headteacher: SIC assignment
+
+1. Open **SIC (In-service)** and assign one teacher as School In-service Coordinator.
+2. That teacher opens **SIC Dashboard** from the header to chair CPD/HIM and accept department plans.
 
 **Additional routes (not in sidebar):**
 
@@ -503,6 +535,18 @@ See [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md) and [ECSEOL_ALIGNMENT.md](./ECSEOL_
 5. Check the **sync badge** in the header; tap to force sync.
 
 See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) and [QR_ATTENDANCE.md](./QR_ATTENDANCE.md).
+
+#### Notifications (teachers and admins)
+
+ZSMS delivers mandatory alerts via **web push**, **email**, and **SMS** (critical only):
+
+- Class reminders (10 minutes before published timetable periods), department meeting reminders, tests, scheme progress, low mastery (&lt;40% also SMS + admin), missed tests, assigned lessons
+- **Quiet hours:** 15:00–06:45 local — alerts queue until 06:45
+- **Inbox:** open the **bell** in the header or **Notifications** in the sidebar (`/dashboard/notifications`) — filter unread, search, mark as read, delete
+- **Preferences:** **Settings → Notifications** (`/dashboard/settings?tab=notifications`) — toggle web push / email / SMS (at least one must stay on), set quiet hours, and **Enable browser push on this device**
+- New alerts also appear as a short toast (about 5 seconds); click to open details
+
+Automated triggers include Teaching Studio mastery/scheme updates, test schedules, published timetable periods, HOD meetings, and published class assignments.
 
 #### Lesson plans
 
@@ -601,6 +645,12 @@ Students view timetables, materials, assessments, results, and study tools.
 
 - **Timetable:** `/dashboard/timetable/student` — daily/weekly schedule from the published master timetable.
 - **Results:** `/dashboard/student/results` — end-of-term, midterm, and class-test scores for your subjects only (filter by type or term).
+
+#### Career guidance
+
+1. Open **Career guidance** (`/dashboard/student/learning-path`).
+2. Use **Career pathways** for clusters and detailed careers.
+3. Use **Guidance board** for subject focus tips, university programmes, bursaries, and career events published by guidance teachers.
 
 #### ECZ practice
 

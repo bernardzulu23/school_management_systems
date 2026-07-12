@@ -1,17 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { Settings, Shield, Save, Camera, Eye, EyeOff, Info } from 'lucide-react'
+import { Settings, Shield, Save, Camera, Eye, EyeOff, Info, Bell } from 'lucide-react'
 import { AppVersionLabel } from '@/components/dashboard/AppVersionLabel'
 import { useAuth } from '@/lib/auth'
 import ProfilePictureUpload from '@/components/ui/ProfilePictureUpload'
 import { getPasswordFormError } from '@/lib/security/passwordValidate'
 import PasswordRequirements from '@/components/ui/PasswordRequirements'
 import { evaluatePassword } from '@/lib/security/passwordValidate'
+import { NotificationPreferences } from '@/components/notifications/NotificationPreferences'
 
 export default function SettingsPage() {
   const { user, updateUser } = useAuth()
@@ -26,6 +27,17 @@ export default function SettingsPage() {
   const [savingPicture, setSavingPicture] = useState(false)
 
   const role = String(user?.role || '').toLowerCase()
+
+  useEffect(() => {
+    try {
+      const tab = new URLSearchParams(window.location.search).get('tab')
+      if (tab === 'notifications' || tab === 'account' || tab === 'about') {
+        setActiveTab(tab)
+      }
+    } catch {
+      /* ignore */
+    }
+  }, [])
 
   const handleChangePassword = async () => {
     const passwordError = getPasswordFormError(newPassword)
@@ -76,6 +88,7 @@ export default function SettingsPage() {
 
   const tabs = [
     { id: 'account', name: 'Account', icon: Shield },
+    { id: 'notifications', name: 'Notifications', icon: Bell },
     { id: 'about', name: 'About', icon: Info },
   ]
 
@@ -99,6 +112,8 @@ export default function SettingsPage() {
             </Button>
           ))}
         </div>
+
+        {activeTab === 'notifications' && <NotificationPreferences />}
 
         {activeTab === 'about' && (
           <Card>

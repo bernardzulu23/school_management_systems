@@ -104,5 +104,18 @@ export const POST = withErrorHandler(async function POST(request) {
     },
   })
 
+  if (departmentId) {
+    const { scheduleDepartmentMeetingReminders } = await import('@/lib/notifications/integrations')
+    await scheduleDepartmentMeetingReminders({
+      schoolId: scope.schoolId,
+      departmentId,
+      meetingId: created.id,
+      title: created.title,
+      meetingDate: created.meetingDate,
+      meetingTime: created.meetingTime,
+      createdByUserId: scope.userId,
+    })
+  }
+
   return NextResponse.json({ success: true, data: mapMeeting(created) }, { status: 201 })
 })

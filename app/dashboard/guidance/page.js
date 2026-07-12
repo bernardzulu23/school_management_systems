@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAuth } from '@/lib/auth'
 import { formatGuidanceScopeLabel } from '@/lib/guidance/guidanceAccess'
-import { Briefcase, Layers, ClipboardList, Users, Heart, Megaphone } from 'lucide-react'
+import { Briefcase, Layers, ClipboardList, Users, Heart, Megaphone, FileText } from 'lucide-react'
 
 export default function GuidanceDashboardPage() {
   const { user } = useAuth()
@@ -24,6 +24,12 @@ export default function GuidanceDashboardPage() {
       description: 'Counselling and welfare cases with confidentiality tiers.',
       href: '/dashboard/guidance/cases',
       icon: ClipboardList,
+    },
+    {
+      title: 'Softcopy documents',
+      description: 'Confidential counselling records, referrals, and programme files.',
+      href: '/dashboard/guidance/documents',
+      icon: FileText,
     },
     {
       title: 'Career guidance board',

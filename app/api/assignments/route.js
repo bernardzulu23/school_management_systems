@@ -169,5 +169,15 @@ export const POST = withErrorHandler(async function POST(request) {
     })
   }
 
+  const { notifyLessonAssigned } = await import('@/lib/notifications/integrations')
+  await notifyLessonAssigned({
+    schoolId,
+    teacherUserId: auth.user.id,
+    classId: classRecord.id,
+    assignmentId: assignment.id,
+    title: assignment.title,
+    subject: assignment.subject,
+  })
+
   return NextResponse.json({ success: true, data: assignment }, { status: 201 })
 })

@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-07-10T20:50:42.091Z
+Generated: 2026-07-12T23:21:28.328Z
 
-Total route files: **389**
+Total route files: **411**
 
 ## Quick index
 
@@ -16,7 +16,7 @@ Total route files: **389**
 | --------------------------- | ----: |
 | `/api/account`              |     2 |
 | `/api/activities`           |     4 |
-| `/api/admin`                |    19 |
+| `/api/admin`                |    20 |
 | `/api/ai`                   |    11 |
 | `/api/aiml`                 |     5 |
 | `/api/allocations`          |     7 |
@@ -33,7 +33,7 @@ Total route files: **389**
 | `/api/classes`              |     5 |
 | `/api/code-playground`      |     1 |
 | `/api/creative-features`    |     1 |
-| `/api/cron`                 |     3 |
+| `/api/cron`                 |     4 |
 | `/api/csp-report`           |     1 |
 | `/api/csrf-token`           |     1 |
 | `/api/curriculum`           |     7 |
@@ -47,7 +47,7 @@ Total route files: **389**
 | `/api/games`                |     2 |
 | `/api/government`           |     7 |
 | `/api/grades`               |     1 |
-| `/api/guidance`             |    14 |
+| `/api/guidance`             |    17 |
 | `/api/health`               |     1 |
 | `/api/hod`                  |    11 |
 | `/api/hods`                 |     3 |
@@ -58,6 +58,7 @@ Total route files: **389**
 | `/api/marketplace`          |     7 |
 | `/api/materials`            |     5 |
 | `/api/mobile`               |    12 |
+| `/api/notifications`        |     7 |
 | `/api/onboarding`           |    10 |
 | `/api/parent`               |     1 |
 | `/api/payments`             |     2 |
@@ -71,6 +72,7 @@ Total route files: **389**
 | `/api/school`               |     1 |
 | `/api/schools`              |     3 |
 | `/api/sentry-example-api`   |     1 |
+| `/api/sic`                  |     6 |
 | `/api/sms`                  |    11 |
 | `/api/solo`                 |     6 |
 | `/api/strategic-goals`      |     2 |
@@ -82,6 +84,7 @@ Total route files: **389**
 | `/api/teacher`              |     6 |
 | `/api/teacher-performance`  |     4 |
 | `/api/teachers`             |     5 |
+| `/api/teaching`             |     4 |
 | `/api/teaching-assignments` |     1 |
 | `/api/timetable`            |    29 |
 | `/api/transport`            |     2 |
@@ -131,6 +134,7 @@ Total route files: **389**
 | POST      | `/api/admin/repair/enrollments`                 | —       |
 | POST      | `/api/admin/repair/normalize-classes`           | —       |
 | GET, POST | `/api/admin/schools`                            | —       |
+| GET       | `/api/admin/teacher-performance`                | —       |
 
 ## /api/ai
 
@@ -293,6 +297,7 @@ Total route files: **389**
 | ------ | ----------------------------- | ---------------------------------------------------------------------------------- |
 | GET    | `/api/cron/ecz-reminder`      | GET /api/cron/ecz-reminder — Vercel Cron (15 January). Requires CRON_SECRET.       |
 | GET    | `/api/cron/fee-overdue-check` | —                                                                                  |
+| GET    | `/api/cron/notifications`     | GET /api/cron/notifications — process scheduled + retries + cleanup                |
 | GET    | `/api/cron/sms-low-balance`   | GET /api/cron/sms-low-balance — daily low SMS credit alerts. Requires CRON_SECRET. |
 
 ## /api/csp-report
@@ -429,22 +434,25 @@ Total route files: **389**
 
 ## /api/guidance
 
-| Method        | Route                              | Summary |
-| ------------- | ---------------------------------- | ------- |
-| GET, POST     | `/api/guidance/assignments`        | —       |
-| DELETE        | `/api/guidance/assignments/:id`    | —       |
-| GET, POST     | `/api/guidance/cases`              | —       |
-| GET, PATCH    | `/api/guidance/cases/:id`          | —       |
-| POST          | `/api/guidance/cases/:id/escalate` | —       |
-| POST          | `/api/guidance/cases/:id/log`      | —       |
-| POST          | `/api/guidance/cases/:id/referral` | —       |
-| GET, PATCH    | `/api/guidance/escalations`        | —       |
-| GET           | `/api/guidance/pupils`             | —       |
-| GET, POST     | `/api/guidance/reentry`            | —       |
-| PATCH         | `/api/guidance/reentry/:id`        | —       |
-| GET           | `/api/guidance/reports/termly`     | —       |
-| GET, POST     | `/api/guidance/resources`          | —       |
-| PATCH, DELETE | `/api/guidance/resources/:id`      | —       |
+| Method             | Route                                 | Summary |
+| ------------------ | ------------------------------------- | ------- |
+| GET, POST          | `/api/guidance/assignments`           | —       |
+| DELETE             | `/api/guidance/assignments/:id`       | —       |
+| GET, POST          | `/api/guidance/cases`                 | —       |
+| GET, PATCH         | `/api/guidance/cases/:id`             | —       |
+| POST               | `/api/guidance/cases/:id/escalate`    | —       |
+| POST               | `/api/guidance/cases/:id/log`         | —       |
+| POST               | `/api/guidance/cases/:id/referral`    | —       |
+| GET, POST          | `/api/guidance/documents`             | —       |
+| GET, PATCH, DELETE | `/api/guidance/documents/:id`         | —       |
+| GET, POST          | `/api/guidance/documents/blob-upload` | —       |
+| GET, PATCH         | `/api/guidance/escalations`           | —       |
+| GET                | `/api/guidance/pupils`                | —       |
+| GET, POST          | `/api/guidance/reentry`               | —       |
+| PATCH              | `/api/guidance/reentry/:id`           | —       |
+| GET                | `/api/guidance/reports/termly`        | —       |
+| GET, POST          | `/api/guidance/resources`             | —       |
+| PATCH, DELETE      | `/api/guidance/resources/:id`         | —       |
 
 ## /api/health
 
@@ -548,6 +556,18 @@ Total route files: **389**
 | GET       | `/api/mobile/school/lookup`                       | Public: validate school subdomain before mobile login |
 | GET       | `/api/mobile/session-context`                     | —                                                     |
 | POST      | `/api/mobile/sync`                                | —                                                     |
+
+## /api/notifications
+
+| Method        | Route                                   | Summary |
+| ------------- | --------------------------------------- | ------- |
+| PATCH, DELETE | `/api/notifications/:id/mark-read`      | —       |
+| GET           | `/api/notifications/list`               | —       |
+| GET, PATCH    | `/api/notifications/preferences`        | —       |
+| POST          | `/api/notifications/schedule`           | —       |
+| POST          | `/api/notifications/send-batch`         | —       |
+| POST          | `/api/notifications/send-immediate`     | —       |
+| GET, POST     | `/api/notifications/web-push/subscribe` | —       |
 
 ## /api/onboarding
 
@@ -665,6 +685,17 @@ Total route files: **389**
 | ------ | ------------------------- | ------- |
 | —      | `/api/sentry-example-api` | —       |
 
+## /api/sic
+
+| Method           | Route                      | Summary |
+| ---------------- | -------------------------- | ------- |
+| GET, POST        | `/api/sic/activity-plans`  | —       |
+| GET              | `/api/sic/analytics`       | —       |
+| GET, POST        | `/api/sic/assignments`     | —       |
+| DELETE           | `/api/sic/assignments/:id` | —       |
+| GET, POST, PATCH | `/api/sic/cpd-plans`       | —       |
+| GET, POST, PATCH | `/api/sic/him`             | —       |
+
 ## /api/sms
 
 | Method     | Route                           | Summary                                                                      |
@@ -749,14 +780,14 @@ Total route files: **389**
 
 ## /api/teacher
 
-| Method            | Route                                | Summary                                                                                                                                                                                                                                                 |
-| ----------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET               | `/api/teacher/department-activities` | —                                                                                                                                                                                                                                                       |
-| GET, POST         | `/api/teacher/materials`             | —                                                                                                                                                                                                                                                       |
-| PUT, DELETE       | `/api/teacher/materials/:id`         | —                                                                                                                                                                                                                                                       |
-| GET               | `/api/teacher/pupils`                | —                                                                                                                                                                                                                                                       |
-| GET, POST, DELETE | `/api/teacher/results`               | DELETE must use the same assignment rules as POST. Teachers often have Class/Subject links without TeachingAssignment rows; the previous implementation only checked TeachingAssignment and returned 403 after successful saves via profile assignment. |
-| GET               | `/api/teacher/results/export`        | —                                                                                                                                                                                                                                                       |
+| Method            | Route                                | Summary |
+| ----------------- | ------------------------------------ | ------- |
+| GET               | `/api/teacher/department-activities` | —       |
+| GET, POST         | `/api/teacher/materials`             | —       |
+| PUT, DELETE       | `/api/teacher/materials/:id`         | —       |
+| GET               | `/api/teacher/pupils`                | —       |
+| GET, POST, DELETE | `/api/teacher/results`               | —       |
+| GET               | `/api/teacher/results/export`        | —       |
 
 ## /api/teacher-performance
 
@@ -776,6 +807,15 @@ Total route files: **389**
 | GET, PUT         | `/api/teachers/:id/departments`      | —       |
 | POST             | `/api/teachers/bulk-upload`          | —       |
 | GET              | `/api/teachers/bulk-upload/template` | —       |
+
+## /api/teaching
+
+| Method    | Route                              | Summary |
+| --------- | ---------------------------------- | ------- |
+| GET       | `/api/teaching/coverage-analytics` | —       |
+| POST      | `/api/teaching/mark-week-complete` | —       |
+| GET, POST | `/api/teaching/test-schedule`      | —       |
+| GET, POST | `/api/teaching/topic-mastery`      | —       |
 
 ## /api/teaching-assignments
 
@@ -846,15 +886,15 @@ Total route files: **389**
 
 ## /api/v1
 
-| Method | Route                                                        | Summary                                                                 |
-| ------ | ------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| POST   | `/api/v1/notifications/subscribe`                            | PWA push subscription stub — mobile app uses /api/mobile/push/register. |
-| —      | `/api/v1/subjects/by-category`                               | —                                                                       |
-| —      | `/api/v1/teacher-performance/observation-tools`              | —                                                                       |
-| —      | `/api/v1/teacher-performance/observations`                   | —                                                                       |
-| —      | `/api/v1/teacher-performance/teachers/:id/detailed-analysis` | —                                                                       |
-| —      | `/api/v1/teacher-performance/teachers/:id/summary`           | —                                                                       |
-| —      | `/api/v1/users`                                              | —                                                                       |
+| Method | Route                                                        | Summary                                                                   |
+| ------ | ------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| POST   | `/api/v1/notifications/subscribe`                            | PWA push subscription — forwards to /api/notifications/web-push/subscribe |
+| —      | `/api/v1/subjects/by-category`                               | —                                                                         |
+| —      | `/api/v1/teacher-performance/observation-tools`              | —                                                                         |
+| —      | `/api/v1/teacher-performance/observations`                   | —                                                                         |
+| —      | `/api/v1/teacher-performance/teachers/:id/detailed-analysis` | —                                                                         |
+| —      | `/api/v1/teacher-performance/teachers/:id/summary`           | —                                                                         |
+| —      | `/api/v1/users`                                              | —                                                                         |
 
 ---
 

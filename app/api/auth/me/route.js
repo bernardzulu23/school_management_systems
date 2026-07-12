@@ -56,6 +56,14 @@ export const GET = withSecureApi(async function GET(request) {
           canManageReEntry: true,
         },
       },
+      sicAssignment: {
+        select: {
+          id: true,
+          assignedAt: true,
+          active: true,
+          revokedAt: true,
+        },
+      },
     },
   })
 
@@ -127,6 +135,14 @@ export const GET = withSecureApi(async function GET(request) {
               assignedAt: dbUser.guidanceAssignment.assignedAt,
               active: dbUser.guidanceAssignment.active,
               canManageReEntry: dbUser.guidanceAssignment.canManageReEntry,
+            }
+          : undefined,
+      sicAssignment:
+        dbUser.sicAssignment?.active && !dbUser.sicAssignment?.revokedAt
+          ? {
+              id: dbUser.sicAssignment.id,
+              assignedAt: dbUser.sicAssignment.assignedAt,
+              active: dbUser.sicAssignment.active,
             }
           : undefined,
     },

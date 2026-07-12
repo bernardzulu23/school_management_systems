@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import toast from 'react-hot-toast'
+import { GuidanceDocumentsPanel } from '@/components/guidance/GuidanceDocumentsPanel'
 
 export default function GuidanceCaseDetailPage() {
   const params = useParams()
@@ -257,6 +258,19 @@ export default function GuidanceCaseDetailPage() {
             <Button size="sm" variant="outline" onClick={addReferral}>
               Record referral
             </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Softcopy attachments</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <GuidanceDocumentsPanel
+              caseId={caseId}
+              pupilId={caseRow.pupilId || caseRow.pupil?.id || null}
+              compact
+            />
           </CardContent>
         </Card>
 

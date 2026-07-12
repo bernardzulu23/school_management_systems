@@ -9,6 +9,8 @@ import { LogOut, MessageSquare, User as UserIcon, X, Menu } from 'lucide-react'
 import Link from 'next/link'
 import ProfilePictureDisplay from '@/components/ui/ProfilePictureDisplay'
 import { TimetableNotificationBell } from '@/components/timetable/TimetableNotificationBell'
+import { NotificationBadge } from '@/components/notifications/NotificationBadge'
+import { NotificationToast } from '@/components/notifications/NotificationToast'
 import toast from 'react-hot-toast'
 import SubscriptionBanner from '@/components/billing/SubscriptionBanner'
 import { SubscriptionWarningBanner } from '@/components/billing/SubscriptionWarningBanner'
@@ -19,6 +21,7 @@ import { getAppVersion } from '@/lib/app-version'
 import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
 import { hasGuidanceAssignment } from '@/lib/guidance/guidanceAccess'
+import { hasSicAssignment } from '@/lib/sic/sicAccess'
 
 export function DashboardLayout({ children, title }) {
   const { user, logout } = useAuth()
@@ -27,6 +30,7 @@ export function DashboardLayout({ children, title }) {
   const showGuidanceLink =
     getSchoolFeatures(school || { level: 'combined', ownershipType: 'PRIVATE' }).careerGuidance &&
     hasGuidanceAssignment(user)
+  const showSicLink = hasSicAssignment(user)
   const [showFeedback, setShowFeedback] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [feedbackForm, setFeedbackForm] = useState({
@@ -133,6 +137,7 @@ export function DashboardLayout({ children, title }) {
                     .trim()
                     .toLowerCase()
                 ) && <TimetableNotificationBell />}
+                <NotificationBadge />
                 <button
                   type="button"
                   onClick={() => setShowFeedback(true)}
@@ -165,6 +170,14 @@ export function DashboardLayout({ children, title }) {
                     className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
                   >
                     Guidance Dashboard
+                  </Link>
+                )}
+                {showSicLink && (
+                  <Link
+                    href="/dashboard/sic"
+                    className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
+                  >
+                    SIC Dashboard
                   </Link>
                 )}
                 <Link
@@ -201,6 +214,7 @@ export function DashboardLayout({ children, title }) {
         </header>
         {/* Main content */}
         <main className="max-w-7xl w-full mx-auto py-6 sm:px-6 lg:px-8">
+          <NotificationToast />
           <ServerSessionGuard>
             <div className="px-4 py-6 sm:px-0 space-y-4">
               <SubscriptionBanner />
