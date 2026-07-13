@@ -1,5 +1,5 @@
 import { extractJSONObject, groqChatCompletion } from '@/lib/aiml/tools/_groq'
-import { buildStoryPrompt, estimateWordCountFromLength } from '@/lib/ai/subject-adaptive-prompts'
+import { buildSubjectContentPrompt } from '@/lib/ai/subjectPromptTemplates'
 
 export interface StoryRequest {
   title: string
@@ -11,24 +11,32 @@ export interface StoryRequest {
 }
 
 export async function generateStory(request: StoryRequest) {
-  const wordCount = { short: 300, medium: 500, long: 1000 }[request.length]
-
-  const prompt = `${buildStoryPrompt({
-    subject: request.subject || 'English (Core)',
+  const lengthKey = request.length || 'medium'
+  const subject = request.subject || 'English (Core)'
+  const promptBase = buildSubjectContentPrompt({
+    subject,
     grade: String(request.grade),
-    theme: request.theme || request.title,
-    wordCount: wordCount || estimateWordCountFromLength(request.length),
+    topic: request.theme || request.title,
+    length:
+      lengthKey === 'short'
+        ? '2-3 paragraphs'
+        : lengthKey === 'long'
+          ? '6-8 paragraphs'
+          : '4-5 paragraphs',
     storyType: 'story',
     includeQuestions: true,
-  })}
+  })
+
+  const prompt = `${promptBase}
 
 Format as JSON:
 {
-  "title": "Story title",
-  "story": "The actual story text",
+  "title": "Content title",
+  "story": "The main educational content text",
   "comprehensionQuestions": ["Question 1?", "Question 2?"],
   "answers": ["Answer 1", "Answer 2"],
-  "vocabulary": ["word1", "word2", "word3"]
+  "vocabulary": ["word1", "word2", "word3"],
+  "contentType": "LAB_PROCEDURE|WORD_PROBLEMS|COMPREHENSION|etc"
 }`
 
   const { content } = await groqChatCompletion({

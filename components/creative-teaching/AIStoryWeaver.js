@@ -18,6 +18,13 @@ import {
   X,
 } from 'lucide-react'
 import { CANONICAL_SUBJECTS } from '@/lib/ai/subject-adaptive-prompts'
+import {
+  getContentTypeLabel,
+  usesStoryControls,
+  buildExportHtml,
+  downloadAsWordDoc,
+} from '@/lib/ai/contentFormatters'
+import { getSubjectPromptTemplate } from '@/lib/ai/subjectPromptTemplates'
 
 const GRADES = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']
 const SUBJECTS = CANONICAL_SUBJECTS
@@ -87,6 +94,9 @@ export default function AIStoryWeaver() {
     plainText: true,
   })
   const [copied, setCopied] = useState(false)
+  const showStoryControls = usesStoryControls(form.subject)
+  const contentTypeLabel = getContentTypeLabel(form.subject)
+  const contentTemplate = getSubjectPromptTemplate(form.subject)
 
   const generate = async () => {
     const lengthMap = { short: '2-3 paragraphs', medium: '4-5 paragraphs', long: '6-8 paragraphs' }
@@ -104,7 +114,7 @@ export default function AIStoryWeaver() {
       storyType: form.storyType,
       setting: form.setting,
       length: lengthMap[form.length],
-      includeQuestions,
+      includeQuestions: showStoryControls ? includeQuestions : true,
       cbcCompetencies: form.cbcCompetencies,
       characters: form.characters,
       characterMode: form.characterMode,
@@ -127,24 +137,37 @@ export default function AIStoryWeaver() {
   const openPrintWindow = (titleSuffix = '') => {
     const win = window.open('', '_blank')
     if (!win) return
-    win.document.write(`
-      <html><head><title>${form.topic}${titleSuffix} - ${form.grade}</title>
-      <style>
-        body{font-family:Georgia,serif;max-width:700px;margin:40px auto;line-height:1.8;color:var(--color-ink,#111111)}
-        h1{color:var(--color-brand-primary,#ff3b00)}p{margin:1em 0}
-      </style></head><body>
-      <h1>${form.topic}</h1>
-      <p><em>${form.grade} · ${form.subject} · ${form.setting}</em></p>
-      <hr/>
-      <div>${story.replace(/\n/g, '<br/>')}</div>
-      </body></html>
-    `)
+    const html = buildExportHtml({
+      title: `${form.topic}${titleSuffix}`,
+      grade: form.grade,
+      subject: form.subject,
+      setting: form.setting,
+      contentTypeLabel,
+      body: story,
+    })
+    win.document.write(html)
     return win
   }
 
   const printStory = () => {
     const win = openPrintWindow()
     if (win) win.print()
+  }
+
+  const downloadWord = () => {
+    if (!story) return
+    const html = buildExportHtml({
+      title: form.topic,
+      grade: form.grade,
+      subject: form.subject,
+      setting: form.setting,
+      contentTypeLabel,
+      body: story,
+    })
+    const safe = String(form.topic || 'content')
+      .replace(/[^\w\-]+/g, '_')
+      .slice(0, 60)
+    downloadAsWordDoc({ filename: `${safe}_${contentTemplate.type}.doc`, html })
   }
 
   const saveToLibrary = () => {
@@ -226,10 +249,10 @@ export default function AIStoryWeaver() {
           <BookOpen className="size-[22px] text-[var(--color-ink)]" aria-hidden="true" />
           <div>
             <h2 className="m-0 text-[17px] font-bold text-[var(--text-primary)]">
-              AI Story Weaver
+              AI Content Weaver
             </h2>
             <p className="m-0 text-xs text-[var(--text-secondary)]">
-              Zambian-context educational stories
+              Subject-specific Zambian CBC teaching content
             </p>
           </div>
         </header>
@@ -247,29 +270,37 @@ export default function AIStoryWeaver() {
           onChange={(v) => setForm((f) => ({ ...f, subject: v }))}
           options={SUBJECTS}
         />
+        <p className="mb-2 mt-1 text-[11px] text-[var(--text-secondary)]">
+          Generates: <strong className="text-[var(--text-primary)]">{contentTypeLabel}</strong>
+          <span className="text-[var(--text-secondary)]"> ({contentTemplate.type})</span>
+        </p>
 
-        <Label>Topic / Theme</Label>
+        <Label>Topic</Label>
         <input
-          placeholder="e.g. Water cycle, Zambian independence, Photosynthesis..."
+          placeholder="e.g. Atomic Structure, Algebra, Colonial Period..."
           value={form.topic}
           onChange={(e) => setForm((f) => ({ ...f, topic: e.target.value }))}
           className={inputClass}
         />
 
-        <Label>Story Type</Label>
-        <div className="mb-3 grid grid-cols-2 gap-1.5">
-          {STORY_TYPES.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => setForm((f) => ({ ...f, storyType: t.id }))}
-              className={chipBtnClass(form.storyType === t.id)}
-            >
-              <div className="font-semibold">{t.label}</div>
-              <div className="mt-0.5 text-[10px] text-[var(--text-secondary)]">{t.desc}</div>
-            </button>
-          ))}
-        </div>
+        {showStoryControls ? (
+          <>
+            <Label>Story Type</Label>
+            <div className="mb-3 grid grid-cols-2 gap-1.5">
+              {STORY_TYPES.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setForm((f) => ({ ...f, storyType: t.id }))}
+                  className={chipBtnClass(form.storyType === t.id)}
+                >
+                  <div className="font-semibold">{t.label}</div>
+                  <div className="mt-0.5 text-[10px] text-[var(--text-secondary)]">{t.desc}</div>
+                </button>
+              ))}
+            </div>
+          </>
+        ) : null}
 
         <Label>Zambian Setting</Label>
         <Select
@@ -278,7 +309,7 @@ export default function AIStoryWeaver() {
           options={ZAMBIAN_SETTINGS}
         />
 
-        <Label>Story Length</Label>
+        <Label>{showStoryControls ? 'Story Length' : 'Content Length'}</Label>
         <div className="mb-3 flex gap-1.5">
           {['short', 'medium', 'long'].map((l) => (
             <button
@@ -301,7 +332,7 @@ export default function AIStoryWeaver() {
           <SwSection
             label="CBC competency alignment"
             badge="new"
-            hint="Links story outcomes to Zambia 2023 CBC core competencies"
+            hint="Links outcomes to Zambia 2023 CBC core competencies"
           >
             <div className="flex flex-wrap gap-1.5">
               {CBC_COMPETENCIES.map((name) => (
@@ -317,109 +348,131 @@ export default function AIStoryWeaver() {
             </div>
           </SwSection>
 
-          <SwSection label="Characters" badge="new">
-            <TagBox
-              tags={form.characters}
-              draft={characterDraft}
-              onDraftChange={setCharacterDraft}
-              placeholder="Add"
-              onAdd={() => addTag('characters', characterDraft, setCharacterDraft)}
-              onRemove={(v) => removeTag('characters', v)}
-              disabled={form.characterMode === 'auto'}
-            />
-            <div className="mt-2 flex gap-1.5">
-              <button
-                type="button"
-                onClick={() => setForm((f) => ({ ...f, characterMode: 'auto', characters: [] }))}
-                className={chipClass(form.characterMode === 'auto', 'text-xs px-2.5 py-1')}
+          {showStoryControls ? (
+            <>
+              <SwSection label="Characters" badge="new">
+                <TagBox
+                  tags={form.characters}
+                  draft={characterDraft}
+                  onDraftChange={setCharacterDraft}
+                  placeholder="Add"
+                  onAdd={() => addTag('characters', characterDraft, setCharacterDraft)}
+                  onRemove={(v) => removeTag('characters', v)}
+                  disabled={form.characterMode === 'auto'}
+                />
+                <div className="mt-2 flex gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setForm((f) => ({ ...f, characterMode: 'auto', characters: [] }))
+                    }
+                    className={chipClass(form.characterMode === 'auto', 'text-xs px-2.5 py-1')}
+                  >
+                    Auto Zambian names
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setForm((f) => ({ ...f, characterMode: 'custom' }))}
+                    className={chipClass(form.characterMode === 'custom', 'text-xs px-2.5 py-1')}
+                  >
+                    Custom
+                  </button>
+                </div>
+              </SwSection>
+
+              <SwSection
+                label="Vocabulary focus"
+                badge="new"
+                hint="AI weaves these words naturally into the story"
               >
-                Auto Zambian names
-              </button>
-              <button
-                type="button"
-                onClick={() => setForm((f) => ({ ...f, characterMode: 'custom' }))}
-                className={chipClass(form.characterMode === 'custom', 'text-xs px-2.5 py-1')}
-              >
-                Custom
-              </button>
-            </div>
-          </SwSection>
+                <TagBox
+                  tags={form.vocabularyWords}
+                  draft={vocabDraft}
+                  onDraftChange={setVocabDraft}
+                  placeholder="Add word"
+                  onAdd={() => addTag('vocabularyWords', vocabDraft, setVocabDraft)}
+                  onRemove={(v) => removeTag('vocabularyWords', v)}
+                />
+              </SwSection>
 
-          <SwSection
-            label="Vocabulary focus"
-            badge="new"
-            hint="AI weaves these words naturally into the story"
-          >
-            <TagBox
-              tags={form.vocabularyWords}
-              draft={vocabDraft}
-              onDraftChange={setVocabDraft}
-              placeholder="Add word"
-              onAdd={() => addTag('vocabularyWords', vocabDraft, setVocabDraft)}
-              onRemove={(v) => removeTag('vocabularyWords', v)}
-            />
-          </SwSection>
+              <SwSection label="Language mode" badge="new">
+                <ToggleRow
+                  label="English only"
+                  active={form.languageMode === 'english'}
+                  onToggle={() => setForm((f) => ({ ...f, languageMode: 'english' }))}
+                />
+                <ToggleRow
+                  label="Bilingual"
+                  sub="Mix in Nyanja / Bemba phrases"
+                  active={form.languageMode === 'bilingual'}
+                  onToggle={() => setForm((f) => ({ ...f, languageMode: 'bilingual' }))}
+                />
+              </SwSection>
 
-          <SwSection label="Language mode" badge="new">
-            <ToggleRow
-              label="English only"
-              active={form.languageMode === 'english'}
-              onToggle={() => setForm((f) => ({ ...f, languageMode: 'english' }))}
-            />
-            <ToggleRow
-              label="Bilingual"
-              sub="Mix in Nyanja / Bemba phrases"
-              active={form.languageMode === 'bilingual'}
-              onToggle={() => setForm((f) => ({ ...f, languageMode: 'bilingual' }))}
-            />
-          </SwSection>
-
-          <SwSection label="Comprehension questions" badge="enhanced">
-            <p className="mb-1.5 text-xs font-medium text-[var(--text-secondary)]">
-              Question types
-            </p>
-            {QUESTION_TYPE_OPTIONS.map((opt) => (
-              <CheckRow
-                key={opt.id}
-                label={opt.label}
-                checked={form.questionTypes[opt.id]}
-                onChange={() => toggleQuestionType(opt.id)}
-              />
-            ))}
-            <div className="my-2 h-px bg-[var(--border)]" />
-            <div className="flex items-center justify-between">
-              <span className="text-[13px] text-[var(--text-primary)]">Number of questions</span>
-              <Counter value={form.questionCount} onChange={adjustQuestionCount} />
-            </div>
-            <div className="my-2 h-px bg-[var(--border)]" />
-            <CheckRow
-              label="Vocabulary exercises"
-              checked={form.vocabularyExercises}
-              onChange={() =>
-                setForm((f) => ({ ...f, vocabularyExercises: !f.vocabularyExercises }))
-              }
-            />
-            <CheckRow
-              label="Discussion prompts"
-              checked={form.discussionPrompts}
-              onChange={() => setForm((f) => ({ ...f, discussionPrompts: !f.discussionPrompts }))}
-            />
-            <CheckRow
-              label="Writing extension activity"
-              checked={form.writingExtension}
-              onChange={() => setForm((f) => ({ ...f, writingExtension: !f.writingExtension }))}
-            />
-          </SwSection>
+              <SwSection label="Comprehension questions" badge="enhanced">
+                <p className="mb-1.5 text-xs font-medium text-[var(--text-secondary)]">
+                  Question types
+                </p>
+                {QUESTION_TYPE_OPTIONS.map((opt) => (
+                  <CheckRow
+                    key={opt.id}
+                    label={opt.label}
+                    checked={form.questionTypes[opt.id]}
+                    onChange={() => toggleQuestionType(opt.id)}
+                  />
+                ))}
+                <div className="my-2 h-px bg-[var(--border)]" />
+                <div className="flex items-center justify-between">
+                  <span className="text-[13px] text-[var(--text-primary)]">
+                    Number of questions
+                  </span>
+                  <Counter value={form.questionCount} onChange={adjustQuestionCount} />
+                </div>
+                <div className="my-2 h-px bg-[var(--border)]" />
+                <CheckRow
+                  label="Vocabulary exercises"
+                  checked={form.vocabularyExercises}
+                  onChange={() =>
+                    setForm((f) => ({ ...f, vocabularyExercises: !f.vocabularyExercises }))
+                  }
+                />
+                <CheckRow
+                  label="Discussion prompts"
+                  checked={form.discussionPrompts}
+                  onChange={() =>
+                    setForm((f) => ({ ...f, discussionPrompts: !f.discussionPrompts }))
+                  }
+                />
+                <CheckRow
+                  label="Writing extension activity"
+                  checked={form.writingExtension}
+                  onChange={() => setForm((f) => ({ ...f, writingExtension: !f.writingExtension }))}
+                />
+              </SwSection>
+            </>
+          ) : (
+            <SwSection
+              label="Expected sections"
+              badge="new"
+              hint="AI will structure output using these headers"
+            >
+              <ul className="m-0 list-disc space-y-1 pl-4 text-[12px] text-[var(--text-secondary)]">
+                {contentTemplate.sections.map((s) => (
+                  <li key={s}>{s}</li>
+                ))}
+              </ul>
+            </SwSection>
+          )}
 
           {story ? (
             <SwSection
-              label="Output and sharing"
+              label="Export"
               badge="new"
-              hint="Saved stories appear in the class story library"
+              hint="PDF via print dialog · Word as .doc download"
             >
               <div className="grid grid-cols-2 gap-1.5">
                 <ExportBtn icon={FileText} label="PDF" onClick={printStory} />
-                <ExportBtn icon={Printer} label="Print" onClick={printStory} />
+                <ExportBtn icon={Printer} label="Word" onClick={downloadWord} />
                 <ExportBtn icon={Bookmark} label="Save" onClick={saveToLibrary} />
                 <ExportBtn icon={Share2} label="Share" onClick={shareStory} />
               </div>
@@ -444,12 +497,12 @@ export default function AIStoryWeaver() {
           {loading ? (
             <>
               <span className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-              Weaving story...
+              Generating {contentTypeLabel.toLowerCase()}...
             </>
           ) : (
             <>
               <Sparkles className="size-4" aria-hidden="true" />
-              Generate Story
+              Generate Content
             </>
           )}
         </button>
@@ -490,11 +543,11 @@ export default function AIStoryWeaver() {
                 aria-hidden="true"
               />
               <h3 className="mb-2 font-semibold text-[var(--text-primary)]">
-                Your story will appear here
+                Your content will appear here
               </h3>
               <p className="mx-auto max-w-[400px] text-sm text-[var(--text-secondary)]">
-                Fill in the form and click Generate Story to create a Zambian-context educational
-                story for your students
+                Choose a subject and topic, then Generate Content. Chemistry builds lab procedures,
+                Maths builds word problems, English keeps comprehension stories.
               </p>
             </div>
           ) : null}
@@ -505,7 +558,9 @@ export default function AIStoryWeaver() {
                 className="mx-auto mb-4 size-12 animate-pulse text-[var(--color-ink)]"
                 aria-hidden="true"
               />
-              <p className="text-[15px] text-[var(--text-secondary)]">Writing your story…</p>
+              <p className="text-[15px] text-[var(--text-secondary)]">
+                Writing your {contentTypeLabel.toLowerCase()}…
+              </p>
             </div>
           ) : null}
 
@@ -515,8 +570,13 @@ export default function AIStoryWeaver() {
                 <MetaTag>{form.grade}</MetaTag>
                 <MetaTag>{form.subject}</MetaTag>
                 <MetaTag>{form.setting}</MetaTag>
-                <MetaTag>{STORY_TYPES.find((t) => t.id === form.storyType)?.label}</MetaTag>
-                {form.languageMode === 'bilingual' ? <MetaTag>Bilingual</MetaTag> : null}
+                <MetaTag>{contentTypeLabel}</MetaTag>
+                {showStoryControls ? (
+                  <MetaTag>{STORY_TYPES.find((t) => t.id === form.storyType)?.label}</MetaTag>
+                ) : null}
+                {showStoryControls && form.languageMode === 'bilingual' ? (
+                  <MetaTag>Bilingual</MetaTag>
+                ) : null}
               </div>
               <h2 className="mb-5 text-[22px] font-bold text-[var(--color-brand-primary)]">
                 {form.topic}

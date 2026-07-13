@@ -32,18 +32,28 @@ import {
   Line,
 } from 'recharts'
 import { percentTextClass } from '@/lib/utils/percentColor'
+import { RESULT_TYPES, RESULT_TYPE_LABELS } from '@/lib/results/resultTypes'
+
+function currentTermLabel() {
+  const month = new Date().getMonth()
+  if (month < 4) return 'Term 1'
+  if (month < 8) return 'Term 2'
+  return 'Term 3'
+}
 
 export default function ExamAnalysisPage() {
-  const [selectedTerm, setSelectedTerm] = useState('Term 2')
+  const [selectedTerm, setSelectedTerm] = useState(currentTermLabel)
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const [selectedSubject, setSelectedSubject] = useState('all')
+  const [selectedResultType, setSelectedResultType] = useState('all')
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['hod-exam-analysis', selectedTerm, selectedYear],
+    queryKey: ['hod-exam-analysis', selectedTerm, selectedYear, selectedResultType],
     queryFn: async () => {
       const params = new URLSearchParams()
       params.set('term', selectedTerm)
       params.set('year', String(selectedYear))
+      if (selectedResultType !== 'all') params.set('resultType', selectedResultType)
       const res = await fetch(`/api/dashboard/hod/exam-analysis?${params.toString()}`, {
         credentials: 'include',
       })
@@ -78,16 +88,16 @@ export default function ExamAnalysisPage() {
     ? data.senior_gender_by_grade
     : []
 
+  const subjects = Array.isArray(data?.subjects) ? data.subjects : []
+
   const subjectOptions = useMemo(() => {
-    const subjects = Array.isArray(data?.subjects) ? data.subjects : []
     const set = new Set(subjects.map((s) => String(s.subject || '').trim()).filter(Boolean))
     return Array.from(set).sort((a, b) => a.localeCompare(b))
-  }, [data?.subjects])
+  }, [subjects])
 
   const filteredSubjects = useMemo(() => {
-    const subjects = Array.isArray(data?.subjects) ? data.subjects : []
     return subjects.filter((item) => selectedSubject === 'all' || item.subject === selectedSubject)
-  }, [data?.subjects, selectedSubject])
+  }, [subjects, selectedSubject])
 
   return (
     <DashboardLayout title="Exam Analysis">
@@ -119,6 +129,22 @@ export default function ExamAnalysisPage() {
               <option value="Term 1">Term 1</option>
               <option value="Term 2">Term 2</option>
               <option value="Term 3">Term 3</option>
+            </select>
+            <select
+              className="px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1"
+              value={selectedResultType}
+              onChange={(e) => setSelectedResultType(e.target.value)}
+            >
+              <option value="all">All exams & tests</option>
+              <option value={RESULT_TYPES.END_OF_TERM}>
+                {RESULT_TYPE_LABELS[RESULT_TYPES.END_OF_TERM]}
+              </option>
+              <option value={RESULT_TYPES.MIDTERM}>
+                {RESULT_TYPE_LABELS[RESULT_TYPES.MIDTERM]}
+              </option>
+              <option value={RESULT_TYPES.CLASS_TEST}>
+                {RESULT_TYPE_LABELS[RESULT_TYPES.CLASS_TEST]}
+              </option>
             </select>
             <select
               className="px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1"
@@ -449,7 +475,7 @@ export default function ExamAnalysisPage() {
                 <CardTitle>Detailed Subject Analysis</CardTitle>
               </CardHeader>
               <CardContent>
-                {subjects.length === 0 ? (
+                {filteredSubjects.length === 0 ? (
                   <p className="text-royalPurple-text2 text-center py-10">No results found.</p>
                 ) : (
                   <div className="overflow-x-auto">
@@ -477,7 +503,7 @@ export default function ExamAnalysisPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {subjects.map((subject) => (
+                        {filteredSubjects.map((subject) => (
                           <tr
                             key={subject.subjectId}
                             className="border-b border-royalPurple-border hover:bg-royalPurple-page"

@@ -18,7 +18,8 @@ import {
   createGroqTextEventStream,
   GROQ_SSE_HEADERS,
 } from '@/lib/ai/groq-client'
-import { buildStoryPrompt, estimateWordCountFromLength } from '@/lib/ai/subject-adaptive-prompts'
+import { buildSubjectContentPrompt } from '@/lib/ai/subjectPromptTemplates'
+import { formatSubjectContent } from '@/lib/ai/contentFormatters'
 import { validateAIGuardrails } from '@/lib/ai/guardrails'
 import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 import { aiChain, AI_SSE_HEADERS } from '@/lib/ai/provider-fallback'
@@ -55,11 +56,11 @@ function buildPrompt(input: StoryWeaverInput): string {
   const gradeLabel = input.grade || 'Form 3'
   const subjectLabel = input.subject || 'English (Core)'
 
-  return buildStoryPrompt({
+  return buildSubjectContentPrompt({
     subject: subjectLabel,
     grade: gradeLabel,
-    theme: input.topic,
-    wordCount: estimateWordCountFromLength(input.length),
+    topic: input.topic,
+    length: input.length,
     storyType: input.storyType,
     setting: input.setting || 'Zambia',
     includeQuestions: input.includeQuestions,
@@ -164,9 +165,12 @@ export const POST = withAILimits(async function POST(request: Request) {
       maxTokens: 2200,
       temperature: 0.8,
       plainText: true,
-      onErrorMessage: 'Failed to generate story',
+      onErrorMessage: 'Failed to generate content',
       onComplete: async (responseText) => {
-        const cleaned = responseText
+        const cleaned = formatSubjectContent({
+          subject: input.subject || 'English (Core)',
+          aiOutput: responseText,
+        }).text
         await setCachedAIResponse('ai-story-weaver', cachePayload, {
           story: cleaned,
           generatedBy: 'groq',

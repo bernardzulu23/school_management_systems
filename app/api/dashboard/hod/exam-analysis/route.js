@@ -7,8 +7,9 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
 import { assertHodSchoolAccess } from '@/lib/school/hodAccess'
 import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
+import { normalizeResultType } from '@/lib/results/resultTypes'
 
-function emptyExamAnalysis(term, year) {
+function emptyExamAnalysis(term, year, resultType = null) {
   return {
     departmentStats: { totalStudents: 0, averageScore: 0, passRate: 0, improvement: 0 },
     subjects: [],
@@ -23,6 +24,7 @@ function emptyExamAnalysis(term, year) {
     senior_gender_by_grade: [],
     term,
     year,
+    resultType,
   }
 }
 
@@ -41,6 +43,13 @@ function parseTermParam(termRaw) {
     if (digits) return `Term ${Number(digits)}`
   }
   return raw
+}
+
+function currentTermLabel(date = new Date()) {
+  const month = date.getUTCMonth() // 0-11
+  if (month < 4) return 'Term 1'
+  if (month < 8) return 'Term 2'
+  return 'Term 3'
 }
 
 function bucketGrade(gradeRaw) {
@@ -110,6 +119,150 @@ function buildGenderByGrade({ students, allowedYearGroups }) {
     })
 }
 
+/**
+ * Resolve department subject + teacher-user scope without requiring pupil enrollments.
+ * Schools often have Result rows before PupilSubjectEnrollment is populated.
+ */
+async function resolveDepartmentResultScope({
+  prismaClient,
+  schoolId,
+  departmentIds,
+  departmentNameAliases,
+}) {
+  const teacherDepartments = await prismaClient.teacherDepartment.findMany({
+    where: { departmentId: { in: departmentIds } },
+    select: { teacherId: true },
+  })
+
+  const teachersByNameOrJoin =
+    departmentNameAliases.length > 0 || departmentIds.length > 0
+      ? await prismaClient.teacher.findMany({
+          where: {
+            schoolId,
+            OR: [
+              ...(departmentIds.length > 0
+                ? [
+                    {
+                      departments: {
+                        some: { departmentId: { in: departmentIds } },
+                      },
+                    },
+                  ]
+                : []),
+              ...(departmentNameAliases.length > 0
+                ? [
+                    {
+                      OR: departmentNameAliases.map((n) => ({
+                        department: { equals: String(n), mode: 'insensitive' },
+                      })),
+                    },
+                  ]
+                : []),
+            ],
+          },
+          select: {
+            id: true,
+            userId: true,
+            assignedSubjects: true,
+            subjects: { select: { id: true } },
+            teachingAssignments: {
+              where: { schoolId },
+              select: { subjectId: true },
+            },
+          },
+          take: 20000,
+        })
+      : []
+
+  const teacherIds = Array.from(
+    new Set(
+      [
+        ...teacherDepartments.map((t) => String(t.teacherId || '')).filter(Boolean),
+        ...teachersByNameOrJoin.map((t) => String(t.id || '')).filter(Boolean),
+      ].filter(Boolean)
+    )
+  )
+
+  if (teacherIds.length === 0) {
+    return { subjectIds: [], teacherUserIds: [], teacherIds: [], pupilIds: null }
+  }
+
+  const teachers =
+    teachersByNameOrJoin.length > 0
+      ? teachersByNameOrJoin.filter((t) => teacherIds.includes(String(t.id)))
+      : await prismaClient.teacher.findMany({
+          where: { schoolId, id: { in: teacherIds } },
+          select: {
+            id: true,
+            userId: true,
+            assignedSubjects: true,
+            subjects: { select: { id: true } },
+            teachingAssignments: {
+              where: { schoolId },
+              select: { subjectId: true },
+            },
+          },
+          take: 20000,
+        })
+
+  const subjectIdSet = new Set()
+  const teacherUserIds = []
+
+  for (const t of teachers) {
+    if (t.userId) teacherUserIds.push(String(t.userId))
+    for (const a of t.teachingAssignments || []) {
+      if (a?.subjectId) subjectIdSet.add(String(a.subjectId))
+    }
+    for (const s of t.subjects || []) {
+      if (s?.id) subjectIdSet.add(String(s.id))
+    }
+  }
+
+  const tokens = []
+  for (const t of teachers) {
+    for (const x of Array.isArray(t.assignedSubjects) ? t.assignedSubjects : []) {
+      const v = String(x || '').trim()
+      if (v) tokens.push(v)
+    }
+  }
+
+  if (tokens.length > 0) {
+    const tokenSubjects = await prismaClient.subject.findMany({
+      where: {
+        schoolId,
+        OR: [
+          { id: { in: tokens } },
+          ...tokens.slice(0, 200).map((tok) => ({ name: { equals: tok, mode: 'insensitive' } })),
+        ],
+      },
+      select: { id: true },
+      take: 5000,
+    })
+    for (const s of tokenSubjects) subjectIdSet.add(String(s.id))
+  }
+
+  // Prefer enrollments when present (tighter pupil scope), but never require them.
+  let pupilIds = null
+  const subjectIds = Array.from(subjectIdSet)
+  if (subjectIds.length > 0) {
+    const enrollments = await prismaClient.pupilSubjectEnrollment.findMany({
+      where: { schoolId, subjectId: { in: subjectIds } },
+      select: { pupilId: true },
+      distinct: ['pupilId'],
+      take: 20000,
+    })
+    const ids = Array.from(new Set(enrollments.map((e) => String(e.pupilId)).filter(Boolean)))
+    if (ids.length > 0) pupilIds = ids
+  }
+
+  return {
+    subjectIds,
+    teacherUserIds: Array.from(new Set(teacherUserIds.filter(Boolean))),
+    teacherIds,
+    pupilIds,
+  }
+}
+
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
@@ -127,7 +280,9 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const { searchParams } = new URL(request.url)
   const year = Number(searchParams.get('year') || new Date().getFullYear())
-  const term = parseTermParam(searchParams.get('term')) || 'Term 2'
+  const term = parseTermParam(searchParams.get('term')) || currentTermLabel()
+  const resultTypeRaw = String(searchParams.get('resultType') || '').trim()
+  const resultType = resultTypeRaw ? normalizeResultType(resultTypeRaw) : null
 
   const userId = auth.user.id
   const isAdminOrHead = roleCheck(auth.user, ['ADMIN', 'headteacher'])
@@ -140,6 +295,7 @@ export const GET = withErrorHandler(async function GET(request) {
   let schoolWide = isAdminOrHead && !hodProfile
   let pupilIds = null
   let subjectIds = null
+  let teacherUserIds = null
 
   if (!schoolWide && hodProfile) {
     const resolved = await resolveDepartmentScope({
@@ -154,104 +310,45 @@ export const GET = withErrorHandler(async function GET(request) {
     if (departmentIds.length === 0) {
       if (isAdminOrHead) schoolWide = true
       else {
-        return NextResponse.json({ success: true, data: emptyExamAnalysis(term, year) })
+        return NextResponse.json({
+          success: true,
+          data: emptyExamAnalysis(term, year, resultType),
+        })
       }
     }
 
     if (!schoolWide) {
-      const teacherDepartments = await prisma.teacherDepartment.findMany({
-        where: { departmentId: { in: departmentIds } },
-        select: { teacherId: true },
+      const scope = await resolveDepartmentResultScope({
+        prismaClient: prisma,
+        schoolId,
+        departmentIds,
+        departmentNameAliases,
       })
 
-      const teachersByNameOrJoin =
-        departmentNameAliases.length > 0 || departmentIds.length > 0
-          ? await prisma.teacher.findMany({
-              where: {
-                schoolId,
-                OR: [
-                  ...(departmentIds.length > 0
-                    ? [
-                        {
-                          departments: {
-                            some: { departmentId: { in: departmentIds } },
-                          },
-                        },
-                      ]
-                    : []),
-                  ...(departmentNameAliases.length > 0
-                    ? [
-                        {
-                          OR: departmentNameAliases.map((n) => ({
-                            department: { equals: String(n), mode: 'insensitive' },
-                          })),
-                        },
-                      ]
-                    : []),
-                ],
-              },
-              select: { id: true },
-              take: 20000,
-            })
-          : []
-
-      const teacherIds = Array.from(
-        new Set(
-          [
-            ...teacherDepartments.map((t) => String(t.teacherId || '')).filter(Boolean),
-            ...teachersByNameOrJoin.map((t) => String(t.id || '')).filter(Boolean),
-          ].filter(Boolean)
-        )
-      )
-
-      if (teacherIds.length === 0) {
-        return NextResponse.json({ success: true, data: emptyExamAnalysis(term, year) })
+      if (scope.subjectIds.length === 0 && scope.teacherUserIds.length === 0) {
+        return NextResponse.json({
+          success: true,
+          data: emptyExamAnalysis(term, year, resultType),
+        })
       }
 
-      const assignments = await prisma.teachingAssignment.findMany({
-        where: { schoolId, teacherId: { in: teacherIds } },
-        select: { classId: true, subjectId: true },
-      })
-
-      const pairKeys = new Set()
-      const pairs = []
-      for (const a of assignments) {
-        if (!a.classId || !a.subjectId) continue
-        const key = `${a.classId}:${a.subjectId}`
-        if (pairKeys.has(key)) continue
-        pairKeys.add(key)
-        pairs.push({ classId: a.classId, subjectId: a.subjectId })
-      }
-
-      if (pairs.length === 0) {
-        return NextResponse.json({ success: true, data: emptyExamAnalysis(term, year) })
-      }
-
-      const enrollments = await prisma.pupilSubjectEnrollment.findMany({
-        where: {
-          schoolId,
-          OR: pairs.slice(0, 2000),
-        },
-        select: { pupilId: true, subjectId: true },
-        distinct: ['pupilId', 'subjectId'],
-        take: 20000,
-      })
-
-      pupilIds = Array.from(new Set(enrollments.map((e) => String(e.pupilId)).filter(Boolean)))
-      subjectIds = Array.from(new Set(enrollments.map((e) => String(e.subjectId)).filter(Boolean)))
-
-      if (pupilIds.length === 0 || subjectIds.length === 0) {
-        return NextResponse.json({ success: true, data: emptyExamAnalysis(term, year) })
-      }
+      subjectIds = scope.subjectIds.length ? scope.subjectIds : null
+      teacherUserIds = scope.teacherUserIds.length ? scope.teacherUserIds : null
+      pupilIds = scope.pupilIds
     }
   }
+
+  const deptOrClauses = []
+  if (subjectIds?.length) deptOrClauses.push({ subjectId: { in: subjectIds } })
+  if (teacherUserIds?.length) deptOrClauses.push({ enteredByUserId: { in: teacherUserIds } })
 
   const resultScope = {
     schoolId,
     term,
     year,
+    ...(resultType ? { resultType } : {}),
     ...(pupilIds?.length ? { studentId: { in: pupilIds } } : {}),
-    ...(subjectIds?.length ? { subjectId: { in: subjectIds } } : {}),
+    ...(deptOrClauses.length > 0 ? { OR: deptOrClauses } : {}),
   }
 
   let subjectNameById = new Map()
@@ -272,7 +369,7 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const resultsForTerm = await prisma.result.findMany({
     where: resultScope,
-    select: { studentId: true, subjectId: true, score: true, grade: true },
+    select: { studentId: true, subjectId: true, score: true, grade: true, resultType: true },
     take: 50000,
   })
 
@@ -440,7 +537,9 @@ export const GET = withErrorHandler(async function GET(request) {
   recommendedActions.push({
     level: 'info',
     title: 'Department Summary',
-    message: `Department average is ${departmentAverage}% with pass rate ${departmentPassRate}%.`,
+    message: `Department average is ${departmentAverage}% with pass rate ${departmentPassRate}%${
+      resultType ? ` (${resultType.replace(/_/g, ' ').toLowerCase()})` : ' (all result types)'
+    }.`,
   })
 
   return NextResponse.json({
@@ -460,6 +559,7 @@ export const GET = withErrorHandler(async function GET(request) {
       senior_gender_by_grade,
       term,
       year,
+      resultType,
     },
   })
 })

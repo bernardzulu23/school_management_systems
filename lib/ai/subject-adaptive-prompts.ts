@@ -294,6 +294,13 @@ export const SUBJECT_GUIDELINES: Record<string, string> = {
     - Emphasize creativity and cultural expression
     - Connect to Zambian musical heritage and contemporary music
   `,
+  'Art and Design (Arts)': `
+    - Include visual analysis and design principles (line, form, colour, texture)
+    - Reference Zambian motifs, crafts, and local materials
+    - Provide creation briefs with tools, steps, and evaluation criteria
+    - Emphasize creativity, craftsmanship, and cultural expression
+    - Link to exhibition, critique, and entrepreneurship
+  `,
 }
 
 /** Maps common UI / database subject names to canonical guideline keys. */
@@ -355,8 +362,8 @@ const SUBJECT_ALIASES: Record<string, string> = {
   'physical education': 'Physical Education (Practical)',
   pe: 'Physical Education (Practical)',
   music: 'Music (Arts)',
-  'art & design': 'Music (Arts)',
-  'art and design': 'Music (Arts)',
+  'art & design': 'Art and Design (Arts)',
+  'art and design': 'Art and Design (Arts)',
 }
 
 export const CANONICAL_SUBJECTS = Object.keys(SUBJECT_GUIDELINES)

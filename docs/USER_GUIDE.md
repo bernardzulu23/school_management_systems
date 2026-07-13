@@ -335,35 +335,35 @@ HODs manage their department: class allocations, teacher oversight, lesson plan 
 
 ### Navigation menu
 
-| Menu item            | Route                                       |
-| -------------------- | ------------------------------------------- |
-| Dashboard            | `/dashboard/hod`                            |
-| Profile / Settings   | `/dashboard/profile`, `/dashboard/settings` |
-| Notifications        | `/dashboard/notifications`                  |
-| Class Allocation     | `/dashboard/hod/allocation`                 |
-| Department Timetable | `/dashboard/hod/timetable`                  |
-| Give Feedback        | `/dashboard/feedback`                       |
-| My Classes           | `/dashboard/classes`                        |
-| Subjects             | `/admin/subjects`                           |
-| Games                | `/dashboard/hod/games`                      |
-| Teaching Studio      | `/dashboard/teacher/teaching-studio`        |
-| AI Quiz Maker        | `/dashboard/teacher/quiz-maker`             |
-| Topic Test (RAG)     | `/dashboard/teacher/topic-test`             |
-| Upload for AI (RAG)  | `/dashboard/teacher/ai-materials`           |
-| AI Report Comments   | `/dashboard/teacher/report-comments`        |
-| AI Story Weaver      | `/dashboard/teacher/story-weaver`           |
-| Teacher Performance  | `/admin/teacher-performance`                |
-| Teaching Coverage    | `/dashboard/admin/teacher-performance`      |
-| Assessments          | `/dashboard/assessments`                    |
-| ECZ SBA Hub          | `/dashboard/teacher/assessments/ecz`        |
-| Results              | `/dashboard/results`                        |
-| Innovation Hub       | `/dashboard/innovation`                     |
-| Extracurricular      | `/dashboard/teacher/extracurricular`        |
-| Privacy              | `/dashboard/privacy`                        |
-| Attendance           | `/dashboard/attendance`                     |
-| Attendance Returns   | `/dashboard/attendance/returns`             |
-| Term reports         | `/dashboard/hod/term-reports`               |
-| SIC CPD plans        | `/dashboard/hod/sic-cpd`                    |
+| Menu item                        | Route                                       |
+| -------------------------------- | ------------------------------------------- |
+| Dashboard                        | `/dashboard/hod`                            |
+| Profile / Settings               | `/dashboard/profile`, `/dashboard/settings` |
+| Notifications                    | `/dashboard/notifications`                  |
+| Class Allocation                 | `/dashboard/hod/allocation`                 |
+| Department Timetable             | `/dashboard/hod/timetable`                  |
+| Give Feedback                    | `/dashboard/feedback`                       |
+| My Classes                       | `/dashboard/classes`                        |
+| Subjects                         | `/admin/subjects`                           |
+| Games                            | `/dashboard/hod/games`                      |
+| Teaching Studio                  | `/dashboard/teacher/teaching-studio`        |
+| AI Quiz Maker                    | `/dashboard/teacher/quiz-maker`             |
+| Topic Test (RAG)                 | `/dashboard/teacher/topic-test`             |
+| Upload for AI (RAG)              | `/dashboard/teacher/ai-materials`           |
+| AI Report Comments               | `/dashboard/teacher/report-comments`        |
+| AI Story Weaver / Content Weaver | `/dashboard/teacher/story-weaver`           |
+| Teacher Performance              | `/admin/teacher-performance`                |
+| Teaching Coverage                | `/dashboard/admin/teacher-performance`      |
+| Assessments                      | `/dashboard/assessments`                    |
+| ECZ SBA Hub                      | `/dashboard/teacher/assessments/ecz`        |
+| Results                          | `/dashboard/results`                        |
+| Innovation Hub                   | `/dashboard/innovation`                     |
+| Extracurricular                  | `/dashboard/teacher/extracurricular`        |
+| Privacy                          | `/dashboard/privacy`                        |
+| Attendance                       | `/dashboard/attendance`                     |
+| Attendance Returns               | `/dashboard/attendance/returns`             |
+| Term reports                     | `/dashboard/hod/term-reports`               |
+| SIC CPD plans                    | `/dashboard/hod/sic-cpd`                    |
 
 ### Additional HOD pages (via dashboard quick links)
 
@@ -397,6 +397,12 @@ These routes exist but may not appear in the main sidebar:
 
 If the allocation page shows a security block, refresh and sign in again — the page requires a normal browser session (not a plain API fetch).
 
+#### Exam & test analysis
+
+1. Open **Exam analysis** (`/dashboard/hod/exam-analysis`).
+2. Choose term, year, and optionally result type (end of term, midterm, class test, or all).
+3. Charts and subject tables use department teachers’ entered results and assigned subjects — enrollments are optional.
+
 #### Lesson plan review
 
 1. Teachers submit lesson plans from `/dashboard/teacher/lesson-plans`.
@@ -429,32 +435,32 @@ Teachers manage classes, record SBA scores, take attendance, create lesson plans
 
 ### Navigation menu (school teacher)
 
-| Menu item           | Route                                       |
-| ------------------- | ------------------------------------------- |
-| Dashboard           | `/dashboard/teacher`                        |
-| Profile / Settings  | `/dashboard/profile`, `/dashboard/settings` |
-| Notifications       | `/dashboard/notifications`                  |
-| Give Feedback       | `/dashboard/feedback`                       |
-| My Classes          | `/dashboard/classes`                        |
-| My Subjects         | `/dashboard/subjects`                       |
-| Upload for AI (RAG) | `/dashboard/teacher/ai-materials`           |
-| Study Materials     | `/dashboard/teacher/materials`              |
-| My Timetable        | `/dashboard/timetable/teacher`              |
-| Games               | `/dashboard/teacher/games`                  |
-| Teaching Studio     | `/dashboard/teacher/teaching-studio`        |
-| AI Quiz Maker       | `/dashboard/teacher/quiz-maker`             |
-| Topic Test (RAG)    | `/dashboard/teacher/topic-test`             |
-| AI Report Comments  | `/dashboard/teacher/report-comments`        |
-| AI Story Weaver     | `/dashboard/teacher/story-weaver`           |
-| Assessments         | `/dashboard/teacher/assessments`            |
-| ECZ SBA Hub         | `/dashboard/teacher/assessments/ecz`        |
-| Results             | `/dashboard/teacher/results`                |
-| Innovation Hub      | `/dashboard/innovation`                     |
-| Extracurricular     | `/dashboard/teacher/extracurricular`        |
-| Privacy             | `/dashboard/privacy`                        |
-| Attendance          | `/dashboard/attendance`                     |
-| Payments            | `/dashboard/payments`                       |
-| Term reports        | `/dashboard/teacher/term-reports`           |
+| Menu item                        | Route                                       |
+| -------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------- |
+| Dashboard                        | `/dashboard/teacher`                        |
+| Profile / Settings               | `/dashboard/profile`, `/dashboard/settings` |
+| Notifications                    | `/dashboard/notifications`                  |
+| Give Feedback                    | `/dashboard/feedback`                       |
+| My Classes                       | `/dashboard/classes`                        |
+| My Subjects                      | `/dashboard/subjects`                       |
+| Upload for AI (RAG)              | `/dashboard/teacher/ai-materials`           |
+| Study Materials                  | `/dashboard/teacher/materials`              |
+| My Timetable                     | `/dashboard/timetable/teacher`              |
+| Games                            | `/dashboard/teacher/games`                  |
+| Teaching Studio                  | `/dashboard/teacher/teaching-studio`        |
+| AI Quiz Maker                    | `/dashboard/teacher/quiz-maker`             |
+| Topic Test (RAG)                 | `/dashboard/teacher/topic-test`             |
+| AI Report Comments               | `/dashboard/teacher/report-comments`        |
+| AI Content Weaver (Story Weaver) | `/dashboard/teacher/story-weaver`           | Subject-specific CBC content (labs, word problems, cases, English comprehension) |
+| Assessments                      | `/dashboard/teacher/assessments`            |
+| ECZ SBA Hub                      | `/dashboard/teacher/assessments/ecz`        |
+| Results                          | `/dashboard/teacher/results`                |
+| Innovation Hub                   | `/dashboard/innovation`                     |
+| Extracurricular                  | `/dashboard/teacher/extracurricular`        |
+| Privacy                          | `/dashboard/privacy`                        |
+| Attendance                       | `/dashboard/attendance`                     |
+| Payments                         | `/dashboard/payments`                       |
+| Term reports                     | `/dashboard/teacher/term-reports`           |
 
 **Guidance teacher assignment:** If the headteacher assigns you as a guidance teacher, use **Guidance Dashboard** in the header (same pattern as **HOD Dashboard**). From the guidance workspace you can:
 
@@ -576,16 +582,16 @@ Quick reference: [CURRICULUM_STUDIO.md](./CURRICULUM_STUDIO.md).
 
 #### AI teaching tools
 
-| Tool                | Route                                | Plan requirement |
-| ------------------- | ------------------------------------ | ---------------- |
-| Teaching Studio     | `/dashboard/teacher/teaching-studio` | AI / schemes     |
-| AI Lesson Planner   | `/dashboard/teacher/lesson-planner`  | AI-enabled plan  |
-| Curriculum Studio   | `/dashboard/teacher/curriculum`      | AI-enabled plan  |
-| AI Quiz Maker       | `/dashboard/teacher/quiz-maker`      | AI-enabled plan  |
-| Topic Test (RAG)    | `/dashboard/teacher/topic-test`      | AI-enabled plan  |
-| AI Report Comments  | `/dashboard/teacher/report-comments` | AI-enabled plan  |
-| AI Story Weaver     | `/dashboard/teacher/story-weaver`    | AI-enabled plan  |
-| Upload for AI (RAG) | `/dashboard/teacher/ai-materials`    | AI-enabled plan  |
+| Tool                             | Route                                | Plan requirement |
+| -------------------------------- | ------------------------------------ | ---------------- |
+| Teaching Studio                  | `/dashboard/teacher/teaching-studio` | AI / schemes     |
+| AI Lesson Planner                | `/dashboard/teacher/lesson-planner`  | AI-enabled plan  |
+| Curriculum Studio                | `/dashboard/teacher/curriculum`      | AI-enabled plan  |
+| AI Quiz Maker                    | `/dashboard/teacher/quiz-maker`      | AI-enabled plan  |
+| Topic Test (RAG)                 | `/dashboard/teacher/topic-test`      | AI-enabled plan  |
+| AI Report Comments               | `/dashboard/teacher/report-comments` | AI-enabled plan  |
+| AI Story Weaver / Content Weaver | `/dashboard/teacher/story-weaver`    | AI-enabled plan  |
+| Upload for AI (RAG)              | `/dashboard/teacher/ai-materials`    | AI-enabled plan  |
 
 See [AI_GUIDE.md](./AI_GUIDE.md).
 
