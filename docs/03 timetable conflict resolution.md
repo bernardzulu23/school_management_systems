@@ -187,7 +187,7 @@ Solo workspaces (`SchoolType.INDIVIDUAL`) are blocked from school timetable APIs
 | --------------------------------------------- | ------------------------------------------------------------------------------ |
 | **`GET /api/timetable/conflicts`**            | Server audit of draft entries; persists `TimetableDraftMeta`                   |
 | **`POST /api/timetable/conflicts/resolve`**   | `REASSIGN_TEACHER`, `MOVE_TO_SLOT`, `REMOVE_ENTRY`, `SWAP_SLOTS` on draft rows |
-| **`POST /api/timetable/conflicts/seed-test`** | Dev-only mock conflicts (non-production)                                       |
+| **`POST /api/timetable/conflicts/seed-test`** | Dev-only live audit of the caller's school draft (same as GET conflicts)       |
 | `GET/POST /api/timetable/generate`            | Hybrid generation + **`conflictSummary`** after save                           |
 | `POST /api/timetable/publish`                 | Publish draft after hard-conflict check (`PUBLISH_BLOCKED_BY_CONFLICTS`)       |
 | `GET /api/timetable/view`                     | Load assignments for store (role-scoped)                                       |
@@ -279,7 +279,7 @@ Migration: `20260615120000_timetable_draft_conflict_meta`
 
 Conflicts tab on main timetable page remains. KPI links to Conflict Centre when count &gt; 0. Sidebar: **Timetable Conflicts**.
 
-Dev mock: `POST /api/timetable/conflicts/seed-test` (non-production).
+Dev live audit: `POST /api/timetable/conflicts/seed-test` (non-production; same as GET conflicts).
 
 ---
 

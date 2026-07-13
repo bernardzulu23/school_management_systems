@@ -80,11 +80,14 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
 
   const config = await ensureTimetableConfig(prisma, schoolId)
 
+  // Include scheduled (already published once) + newly pushed HOD approvals.
+  // Using only `pushed` after a publish left prior departments out of regenerate,
+  // then a sparse draft publish wiped the live published timetable.
   const allocationWhere: any = {
     schoolId,
     term,
     academicYear,
-    status: 'pushed',
+    status: { in: ['pushed', 'scheduled'] },
     ...(Array.isArray(departments) && departments.length
       ? { hod: { hodProfile: { department: { in: departments } } } }
       : {}),

@@ -18,7 +18,9 @@ ORTOOLS_SOLVER_URL=http://localhost:8090
 
 ## API
 
-- **App:** `POST /api/timetable/solver/ortools` (headteacher / HOD)
+- **App:** `POST /api/timetable/solver/ortools` (headteacher / admin to persist; HOD read/preview with `{ "persist": false }`)
+  - Default **`persist: true`** writes placements to draft `TimetableAllocationEntry` rows (same term/academicYear as body, or Term 1 / current year).
+  - Pass **`persist: false`** for compute-only preview.
 - **Service:** `POST /solve` with JSON payload (see `solve.py` header)
 
 ## Production

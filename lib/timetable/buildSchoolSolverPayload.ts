@@ -96,7 +96,7 @@ export async function buildSchoolSolverPayload(
       },
     }),
     prisma.teacherAllocation.findMany({
-      where: { schoolId, status: 'pushed' },
+      where: { schoolId, status: { in: ['pushed', 'scheduled'] } },
       select: {
         id: true,
         teacherId: true,

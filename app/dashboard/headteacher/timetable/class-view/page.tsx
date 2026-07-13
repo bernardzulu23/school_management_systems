@@ -145,9 +145,10 @@ function ClassTimetablePageContent() {
         setTeacherColorMap(colorsJson.map)
       }
 
-      await loadFromApi({ term, academicYear, status: 'draft' }).catch(async () => {
+      await loadFromApi({ term, academicYear, status: 'draft' })
+      if (useTimetableStore.getState().assignments.length === 0) {
         await loadFromApi({ term, academicYear, status: 'published' })
-      })
+      }
     } catch (e: any) {
       toast.error(e?.message || 'Failed to load class timetable view')
     } finally {

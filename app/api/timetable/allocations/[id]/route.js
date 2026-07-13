@@ -38,6 +38,33 @@ export const DELETE = withErrorHandler(async function DELETE(req, { params }) {
     ...(isHod && !roleCheck(auth.user, ['ADMIN', 'headteacher']) ? { hodId: auth.user.id } : {}),
   }
 
+  const existing = await prisma.teacherAllocation.findFirst({
+    where,
+    select: { id: true },
+  })
+  if (!existing) {
+    return NextResponse.json({ error: 'Allocation not found' }, { status: 404 })
+  }
+
+  const publishedCount = await prisma.timetableAllocationEntry.count({
+    where: { schoolId, allocationId: existing.id, status: 'published' },
+  })
+  if (publishedCount > 0) {
+    return NextResponse.json(
+      {
+        error:
+          'This allocation still has published timetable periods. Clear or regenerate those periods before deleting the allocation.',
+        code: 'ALLOCATION_HAS_PUBLISHED_ENTRIES',
+        publishedCount,
+      },
+      { status: 409 }
+    )
+  }
+
+  await prisma.timetableAllocationEntry.deleteMany({
+    where: { schoolId, allocationId: existing.id, status: 'draft' },
+  })
+
   const result = await prisma.teacherAllocation.deleteMany({ where })
   if (result.count === 0) {
     return NextResponse.json({ error: 'Allocation not found' }, { status: 404 })

@@ -1139,6 +1139,16 @@ function HeadteacherTimetablePageContent() {
       if (!genProgress.open || genProgress.stage !== 'error') {
         toast.error(e?.message || 'Generation failed')
       }
+      try {
+        await reloadFromServer({ term, academicYear, status: 'draft' })
+        if (useTimetableStore.getState().assignments.length === 0) {
+          await reloadFromServer({ term, academicYear, status: 'published' })
+        }
+        const slots = useTimetableStore.getState().timeSlots
+        if (slots.length) setTimeSlots(slots as TimeSlot[])
+      } catch {
+        /* keep empty grid if reload also fails */
+      }
     } finally {
       setDbGenerating(false)
     }

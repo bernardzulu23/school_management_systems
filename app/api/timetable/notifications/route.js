@@ -63,14 +63,19 @@ export const POST = withErrorHandler(async function POST(req) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
-  const { id, all = false } = await req.json()
+  const body = await req.json().catch(() => ({}))
+  const id = body?.id
+  const all = body?.all === true
 
   if (all) {
     await prisma.timetableNotification.updateMany({
       where: { schoolId, toUserId: user.id, read: false },
       data: { read: true, readAt: new Date() },
     })
-  } else if (id) {
+    return NextResponse.json({ success: true })
+  }
+
+  if (id) {
     const notificationId = safeStringId(id)
     if (!notificationId) {
       return NextResponse.json({ error: 'Invalid notification id' }, { status: 400 })
@@ -79,7 +84,11 @@ export const POST = withErrorHandler(async function POST(req) {
       where: { schoolId, id: notificationId, toUserId: user.id },
       data: { read: true, readAt: new Date() },
     })
+    return NextResponse.json({ success: true })
   }
 
-  return NextResponse.json({ success: true })
+  return NextResponse.json(
+    { error: 'Provide notification id or { all: true } to mark as read' },
+    { status: 400 }
+  )
 })

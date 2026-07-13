@@ -1,7 +1,7 @@
 # ZSMS System Documentation
 
 **Zambian School Management System (ZSMS)**  
-**Last updated:** 2026-07-13  
+**Last updated:** 2026-07-14  
 **Application version:** 2.0.3 (`package.json`)  
 **Document version:** 1.0
 
@@ -542,7 +542,7 @@ Full route list: [API_ROUTES.md](./API_ROUTES.md) (auto-generated, **379** files
 - **Types (8):** class reminder, department meeting, test scheduled/reminder, missed test, scheme progress, low mastery, lesson assigned.
 - **Channels:** Web push (VAPID + `web-push`), email (Resend), SMS (AWS SNS — critical only: missed test, mastery &lt;40%, test day-before).
 - **Quiet hours:** 15:00–06:45 local (`Africa/Lusaka` default) — queue to next 06:45 via `ScheduledNotification`.
-- **APIs:** `POST /api/notifications/send-immediate`, `schedule`, `send-batch`; `GET list`; `PATCH preferences`, `[id]/mark-read`; `POST web-push/subscribe`; **public** `GET /api/notifications/web-push/vapid-public-key` (no auth, for SW/browser subscribe); cron `GET /api/cron/notifications` (daily `0 8 * * *` in `vercel.json` — Hobby allows at most once/day; use Pro or an external scheduler for sub-daily).
+- **APIs:** `POST /api/notifications/send-immediate`, `schedule`, `send-batch`; `GET list`; `PATCH preferences`, `[id]/mark-read`; `POST web-push/subscribe` (alias: `POST /api/v1/notifications/subscribe` — same VAPID upsert); **public** `GET /api/notifications/web-push/vapid-public-key` (no auth, for SW/browser subscribe); cron `GET /api/cron/notifications` (daily `0 8 * * *` in `vercel.json` — Hobby allows at most once/day; use Pro or an external scheduler for sub-daily).
 - **UI:** `/dashboard/notifications` (NotificationCenter); header **NotificationBadge** + **NotificationToast**; Settings tab **Notifications**.
 - **Integrations (`lib/notifications/integrations.js`):**
   - Low mastery — `recordTopicMasteryFromQuiz` when `needsReteaching` (admin SMS path if &lt;40%)

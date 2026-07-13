@@ -40,6 +40,8 @@ export const POST = withErrorHandler(async function POST(req) {
     maxLength: 16,
   })
 
+  const force = body?.force === true
+
   const draftCount = await prisma.timetableAllocationEntry.count({
     where: { schoolId, term, academicYear, status: 'draft' },
   })
@@ -51,6 +53,29 @@ export const POST = withErrorHandler(async function POST(req) {
           'No draft timetable to publish. Generate a timetable and save the draft to the database first.',
       },
       { status: 400 }
+    )
+  }
+
+  const publishedCount = await prisma.timetableAllocationEntry.count({
+    where: { schoolId, term, academicYear, status: 'published' },
+  })
+
+  // Guard: refuse to replace a full published timetable with a sparse draft
+  // (typical after only scheduling newly pushed HOD allocations).
+  if (
+    !force &&
+    publishedCount >= 10 &&
+    draftCount < Math.max(5, Math.floor(publishedCount * 0.5))
+  ) {
+    return NextResponse.json(
+      {
+        error:
+          'Draft has far fewer periods than the published timetable. Re-run Generate Perfect Timetable so it includes all approved departments, then publish again. Pass force: true only if you intentionally want to replace the published timetable with this smaller draft.',
+        code: 'DRAFT_SHRINKS_PUBLISHED',
+        draftCount,
+        publishedCount,
+      },
+      { status: 422 }
     )
   }
 
