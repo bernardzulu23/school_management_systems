@@ -52,6 +52,7 @@ import {
   useTimetableDraftMeta,
   notifyTimetableConflictsUpdated,
   conflictAuditKey,
+  canDismissAuditRow,
 } from '@/hooks/useTimetableDraftMeta'
 
 type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings' | 'allocations'
@@ -163,6 +164,18 @@ function HeadteacherTimetablePageContent() {
   const [academicYear, setAcademicYear] = useState(() =>
     String(searchParams.get('academicYear') || new Date().getFullYear())
   )
+  const focusClass = String(searchParams.get('focusClass') || '')
+    .trim()
+    .toLowerCase()
+  const focusSubject = String(searchParams.get('focusSubject') || '')
+    .trim()
+    .toLowerCase()
+  const focusTeacher = String(searchParams.get('focusTeacher') || '')
+    .trim()
+    .toLowerCase()
+  const focusClassId = String(searchParams.get('focusClassId') || '').trim()
+  const focusSubjectId = String(searchParams.get('focusSubjectId') || '').trim()
+  const focusTeacherId = String(searchParams.get('focusTeacherId') || '').trim()
   const [dbGenerating, setDbGenerating] = useState(false)
   const [dbPublishing, setDbPublishing] = useState(false)
   const [coverTeacherId, setCoverTeacherId] = useState<string>('')
@@ -696,6 +709,36 @@ function HeadteacherTimetablePageContent() {
     if (rawFilter === 'missing' || rawFilter === 'feasibility') setConflictIssueFilter(rawFilter)
     else setConflictIssueFilter('all')
   }, [searchParams])
+
+  useEffect(() => {
+    if (tab !== 'allocations') return
+    if (
+      !focusClass &&
+      !focusSubject &&
+      !focusTeacher &&
+      !focusClassId &&
+      !focusSubjectId &&
+      !focusTeacherId
+    ) {
+      return
+    }
+    const t = window.setTimeout(() => {
+      const el = document.querySelector('[id^="alloc-focus-"]')
+      if (el && 'scrollIntoView' in el) {
+        ;(el as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    }, 400)
+    return () => window.clearTimeout(t)
+  }, [
+    tab,
+    seasonAllocations,
+    focusClass,
+    focusSubject,
+    focusTeacher,
+    focusClassId,
+    focusSubjectId,
+    focusTeacherId,
+  ])
 
   useEffect(() => {
     const run = async () => {
@@ -1581,10 +1624,29 @@ function HeadteacherTimetablePageContent() {
                         const classes = Array.isArray(data.classes)
                           ? data.classes.join(', ')
                           : String(data.classes || '')
+                        const subjectLabel = String(data.subject || '').toLowerCase()
+                        const teacherLabel = String(
+                          data.teacherName || row?.teacherName || ''
+                        ).toLowerCase()
+                        const classLabels = String(classes).toLowerCase()
+                        const isFocused =
+                          (focusSubject && subjectLabel.includes(focusSubject)) ||
+                          (focusClass && classLabels.includes(focusClass)) ||
+                          (focusTeacher && teacherLabel.includes(focusTeacher)) ||
+                          (focusTeacherId &&
+                            String(data.teacherId || row?.teacherId || '') === focusTeacherId) ||
+                          (focusSubjectId && String(data.subjectId || '') === focusSubjectId) ||
+                          (focusClassId &&
+                            (Array.isArray(data.classIds)
+                              ? data.classIds.map(String).includes(focusClassId)
+                              : false))
                         return (
                           <tr
                             key={String(row.id)}
-                            className="border-b border-royalPurple-border/20 text-royalPurple-text2"
+                            id={isFocused ? `alloc-focus-${row.id}` : undefined}
+                            className={`border-b border-royalPurple-border/20 text-royalPurple-text2 ${
+                              isFocused ? 'bg-amber-50/80 ring-1 ring-amber-300' : ''
+                            }`}
                           >
                             <td className="py-2 pr-3">{row?.department?.name || '—'}</td>
                             <td className="py-2 pr-3">{String(data.subject || '—')}</td>
@@ -2174,7 +2236,7 @@ function HeadteacherTimetablePageContent() {
                 <ul className="space-y-2">
                   {filteredServerConflicts.map((row: any, i: number) => {
                     const auditKey = conflictAuditKey(row)
-                    const canDismiss = Boolean(auditKey)
+                    const canDismiss = canDismissAuditRow(row) && Boolean(auditKey)
                     return (
                       <li
                         key={row.id || `srv-${i}`}
@@ -2191,7 +2253,10 @@ function HeadteacherTimetablePageContent() {
                             {row.type === 'MISSING_PERIODS' ? (
                               <div className="mt-2 flex flex-wrap gap-2">
                                 <Link
-                                  href="/dashboard/hod/allocation"
+                                  href={
+                                    row.reviewHref ||
+                                    `/dashboard/headteacher/timetable?tab=allocations&term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}&focusClass=${encodeURIComponent(row.className || '')}&focusSubject=${encodeURIComponent((row.subjectNames && row.subjectNames[0]) || '')}&focusTeacher=${encodeURIComponent(row.teacherName || '')}`
+                                  }
                                   className="text-xs font-medium text-amber-800 underline underline-offset-2"
                                 >
                                   Review allocations

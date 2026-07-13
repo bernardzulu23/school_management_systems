@@ -19,8 +19,8 @@ const PERIOD_PRESETS = [
   },
   {
     id: 'p4',
-    label: '4 periods (2 doubles + 1 single)',
-    cfg: { periods: 4, doubles: 2, triples: 0, singles: 1 },
+    label: '4 periods (2 doubles)',
+    cfg: { periods: 4, doubles: 2, triples: 0, singles: 0 },
   },
 ]
 

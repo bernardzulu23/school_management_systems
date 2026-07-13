@@ -33,16 +33,82 @@ export function conflictAuditKey(row: {
   affectedEntryIds?: string[]
   classId?: string
   teacherId?: string
+  day?: string
+  dayOfWeek?: string
+  startTime?: string
+  subjectIds?: string[]
+  subjectNames?: string[]
+  expectedPeriods?: number
+  periodsPerWeek?: number
   description?: string
+  severity?: string
 }): string {
-  if (row?.auditKey) return row.auditKey
-  if (row?.allocationId) return `MISSING_PERIODS:${row.allocationId}`
-  const ids = [...(row?.affectedEntryIds || [])].map(String).sort()
-  if (ids.length && row?.type) return `${row.type}:${ids.join(',')}`
-  if (row?.classId && row?.teacherId && row?.type) {
-    return `${row.type}:${row.classId}:${row.teacherId}`
+  if (!row) return ''
+  // Prefer server-provided key when present
+  if (row.auditKey) return String(row.auditKey).trim()
+
+  const type = String(row.type || '').trim()
+  const classId = String(row.classId || '').trim()
+  const teacherId = String(row.teacherId || '').trim()
+  const day = String(row.day || row.dayOfWeek || '')
+    .trim()
+    .toLowerCase()
+  const start = String(row.startTime || '').trim()
+  const subjectIds = [...(row.subjectIds || [])].map(String).filter(Boolean).sort()
+  const subjectNames = [...(row.subjectNames || [])].map(String).filter(Boolean).sort()
+  const subjectPart = subjectIds.length
+    ? subjectIds.join('+')
+    : subjectNames.length
+      ? subjectNames.join('+')
+      : ''
+
+  if (type === 'MISSING_PERIODS') {
+    const expected = Number(row.expectedPeriods || row.periodsPerWeek || 0)
+    if (classId && subjectPart && teacherId) {
+      return `MISSING_PERIODS:${classId}:${subjectPart}:${teacherId}:${expected || 'x'}`
+    }
+    if (row.allocationId) return `MISSING_PERIODS:${row.allocationId}`
   }
-  return `${row?.type || 'CONFLICT'}:${row?.id || row?.description || 'unknown'}`
+  if (type === 'TEACHER_OVER_ALLOCATED' && teacherId) {
+    return `TEACHER_OVER_ALLOCATED:${teacherId}`
+  }
+  if (
+    (type === 'TEACHER_CONSECUTIVE_LIMIT' || type === 'CONSECUTIVE_OVERLOAD') &&
+    teacherId &&
+    day
+  ) {
+    return `CONSECUTIVE_OVERLOAD:${teacherId}:${day}`
+  }
+  if (type === 'SUBJECT_DISTRIBUTION' && classId && subjectPart && day) {
+    return `SUBJECT_DISTRIBUTION:${classId}:${subjectPart}:${day}`
+  }
+  if (type === 'CLASS_DOUBLE_BOOKED' && classId && day && start) {
+    return subjectPart
+      ? `CLASS_DOUBLE_BOOKED:${classId}:${subjectPart}:${day}:${start}`
+      : `CLASS_DOUBLE_BOOKED:${classId}:${day}:${start}`
+  }
+  if (type === 'TEACHER_DOUBLE_BOOKED' && teacherId && day && start) {
+    return `TEACHER_DOUBLE_BOOKED:${teacherId}:${day}:${start}`
+  }
+
+  const ids = [...(row.affectedEntryIds || [])].map(String).sort()
+  if (ids.length && type) return `${type}:${ids.join(',')}`
+  if (classId && teacherId && type) return `${type}:${classId}:${teacherId}`
+  return `${type || 'CONFLICT'}:${row.id || row.description || 'unknown'}`
+}
+
+export function canDismissAuditRow(row: { severity?: string; type?: string }): boolean {
+  if (!row) return false
+  if (String(row.severity || '').toLowerCase() === 'error') return false
+  if (String(row.type || '') === 'FEASIBILITY_ERROR') return false
+  if (String(row.severity || '').toLowerCase() === 'warning') return true
+  const type = String(row.type || '')
+  return (
+    type === 'MISSING_PERIODS' ||
+    type === 'TEACHER_OVER_ALLOCATED' ||
+    type === 'CONSECUTIVE_OVERLOAD' ||
+    type === 'SUBJECT_DISTRIBUTION'
+  )
 }
 
 const META_STALE_MS = 30 * 60 * 1000

@@ -47,14 +47,59 @@ export function timesOverlap(
   return a0 < b1 && b0 < a1
 }
 
-const HARD_TYPES = new Set<TimetableConflictType>([
-  'TEACHER_DOUBLE_BOOKED',
-  'CLASS_DOUBLE_BOOKED',
-  'ROOM_DOUBLE_BOOKED',
-])
+/** Union-find clusters so one real clash → one issue (not C(n,2) pair rows). */
+function clusterByLink(
+  list: Assignment[],
+  shouldLink: (a: Assignment, b: Assignment) => boolean
+): Assignment[][] {
+  const n = list.length
+  const parent = Array.from({ length: n }, (_, i) => i)
+  const find = (i: number): number => {
+    if (parent[i] !== i) parent[i] = find(parent[i])
+    return parent[i]
+  }
+  const unite = (i: number, j: number) => {
+    const ri = find(i)
+    const rj = find(j)
+    if (ri !== rj) parent[rj] = ri
+  }
+
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      if (shouldLink(list[i], list[j])) unite(i, j)
+    }
+  }
+
+  const buckets = new Map<number, Assignment[]>()
+  for (let i = 0; i < n; i++) {
+    const root = find(i)
+    if (!buckets.has(root)) buckets.set(root, [])
+    buckets.get(root)!.push(list[i])
+  }
+  return [...buckets.values()].filter((g) => g.length >= 2)
+}
+
+function classAssignmentsConflict(a1: Assignment, a2: Assignment): boolean {
+  if (String(a1.classId) !== String(a2.classId)) return false
+  // Policy: at most one block of a given subject per class per day
+  if (String(a1.subjectId) === String(a2.subjectId) && assignmentsSameDay(a1, a2)) return true
+  return assignmentsShareSlot(a1, a2, [])
+}
+
+function teacherAssignmentsConflict(a1: Assignment, a2: Assignment): boolean {
+  if (String(a1.teacherId) !== String(a2.teacherId)) return false
+  return assignmentsShareSlot(a1, a2, [])
+}
+
+function roomAssignmentsConflict(a1: Assignment, a2: Assignment): boolean {
+  if (!a1.classroomId || !a2.classroomId) return false
+  if (String(a1.classroomId) !== String(a2.classroomId)) return false
+  return assignmentsShareSlot(a1, a2, [])
+}
 
 /**
  * Matrix validation (FET/aSc-style): hard constraints must be zero before publish.
+ * Hard double-bookings are emitted once per overlapping/same-day cluster, not once per pair.
  */
 export function validateTimetable(
   assignments: Assignment[],
@@ -64,63 +109,36 @@ export function validateTimetable(
   const conflicts: TimetableValidationConflict[] = []
   const includeRoom = opts?.includeRoomChecks === true
 
-  for (let i = 0; i < list.length; i++) {
-    for (let j = i + 1; j < list.length; j++) {
-      const a1 = list[i]
-      const a2 = list[j]
+  for (const group of clusterByLink(list, classAssignmentsConflict)) {
+    const classId = String(group[0].classId)
+    conflicts.push({
+      type: 'CLASS_DOUBLE_BOOKED',
+      severity: 'hard',
+      message: gradeDoubleBookedMessage(classLabelFromAssignments(list, classId)),
+      entityId: classId,
+      assignmentIds: group.map((a) => String(a.id)),
+    })
+  }
 
-      if (assignmentsSameDay(a1, a2)) {
-        if (
-          String(a1.classId) === String(a2.classId) &&
-          String(a1.subjectId) === String(a2.subjectId)
-        ) {
-          const classId = String(a1.classId)
-          conflicts.push({
-            type: 'CLASS_DOUBLE_BOOKED',
-            severity: 'hard',
-            message: gradeDoubleBookedMessage(classLabelFromAssignments(list, classId)),
-            entityId: classId,
-            assignmentIds: [String(a1.id), String(a2.id)],
-          })
-          continue
-        }
-      }
+  for (const group of clusterByLink(list, teacherAssignmentsConflict)) {
+    conflicts.push({
+      type: 'TEACHER_DOUBLE_BOOKED',
+      severity: 'hard',
+      message: 'Teacher is double-booked',
+      entityId: String(group[0].teacherId),
+      assignmentIds: group.map((a) => String(a.id)),
+    })
+  }
 
-      if (!assignmentsShareSlot(a1, a2, [])) continue
-
-      if (String(a1.teacherId) === String(a2.teacherId)) {
-        conflicts.push({
-          type: 'TEACHER_DOUBLE_BOOKED',
-          severity: 'hard',
-          message: 'Teacher is double-booked',
-          entityId: String(a1.teacherId),
-          assignmentIds: [String(a1.id), String(a2.id)],
-        })
-      }
-      if (String(a1.classId) === String(a2.classId)) {
-        const classId = String(a1.classId)
-        conflicts.push({
-          type: 'CLASS_DOUBLE_BOOKED',
-          severity: 'hard',
-          message: gradeDoubleBookedMessage(classLabelFromAssignments(list, classId)),
-          entityId: classId,
-          assignmentIds: [String(a1.id), String(a2.id)],
-        })
-      }
-      if (
-        includeRoom &&
-        a1.classroomId &&
-        a2.classroomId &&
-        String(a1.classroomId) === String(a2.classroomId)
-      ) {
-        conflicts.push({
-          type: 'ROOM_DOUBLE_BOOKED',
-          severity: 'hard',
-          message: 'Room is double-booked',
-          entityId: String(a1.classroomId),
-          assignmentIds: [String(a1.id), String(a2.id)],
-        })
-      }
+  if (includeRoom) {
+    for (const group of clusterByLink(list, roomAssignmentsConflict)) {
+      conflicts.push({
+        type: 'ROOM_DOUBLE_BOOKED',
+        severity: 'hard',
+        message: 'Room is double-booked',
+        entityId: String(group[0].classroomId),
+        assignmentIds: group.map((a) => String(a.id)),
+      })
     }
   }
 
@@ -173,8 +191,7 @@ export function validateTimetable(
       (c) =>
         c.type === 'CLASS_DOUBLE_BOOKED' &&
         c.severity === 'hard' &&
-        c.assignmentIds.length === ids.length &&
-        c.assignmentIds.every((id) => ids.includes(id))
+        ids.every((id) => c.assignmentIds.includes(id))
     )
     if (alreadyHard) continue
     conflicts.push({
@@ -187,6 +204,21 @@ export function validateTimetable(
   }
 
   return conflicts
+}
+
+/** Collapse identical residual rows (defensive; clusters should already be unique). */
+export function dedupeValidationConflicts(
+  conflicts: TimetableValidationConflict[]
+): TimetableValidationConflict[] {
+  const seen = new Set<string>()
+  const out: TimetableValidationConflict[] = []
+  for (const c of conflicts || []) {
+    const key = `${c.type}|${c.severity}|${c.entityId || ''}|${[...(c.assignmentIds || [])].sort().join(',')}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    out.push(c)
+  }
+  return out
 }
 
 export function getHardConflicts(conflicts: TimetableValidationConflict[]) {

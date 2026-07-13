@@ -4,7 +4,11 @@ import { useState, useEffect, useCallback, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { api } from '@/lib/api'
-import { notifyTimetableConflictsUpdated, conflictAuditKey } from '@/hooks/useTimetableDraftMeta'
+import {
+  notifyTimetableConflictsUpdated,
+  conflictAuditKey,
+  canDismissAuditRow,
+} from '@/hooks/useTimetableDraftMeta'
 import {
   AlertTriangle,
   CheckCircle,
@@ -402,15 +406,22 @@ function TimetableConflictsContent() {
                       conflict.type === 'CONSECUTIVE_OVERLOAD' ||
                       conflict.type === 'MISSING_PERIODS') && (
                       <Link
-                        href="/dashboard/hod/allocation"
+                        href={
+                          conflict.reviewHref ||
+                          (conflict.type === 'MISSING_PERIODS'
+                            ? `/dashboard/headteacher/timetable?tab=allocations&term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}&focusClass=${encodeURIComponent(conflict.className || '')}&focusSubject=${encodeURIComponent((conflict.subjectNames && conflict.subjectNames[0]) || '')}&focusTeacher=${encodeURIComponent(conflict.teacherName || '')}`
+                            : '/dashboard/hod/allocation')
+                        }
                         className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-xs rounded-lg"
                       >
                         <ArrowRightLeft size={12} />
-                        Review teacher allocations
+                        {conflict.type === 'MISSING_PERIODS'
+                          ? 'Review allocations'
+                          : 'Review teacher allocations'}
                       </Link>
                     )}
 
-                    {conflictAuditKey(conflict) ? (
+                    {canDismissAuditRow(conflict) && conflictAuditKey(conflict) ? (
                       <button
                         type="button"
                         disabled={dismissing === conflict.id || resolving === conflict.id}
