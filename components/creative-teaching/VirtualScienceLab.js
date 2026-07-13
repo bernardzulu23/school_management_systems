@@ -270,7 +270,10 @@ export default function VirtualScienceLab() {
           src={activeLab.url}
           style={{ flex: 1, border: 'none', width: '100%' }}
           title="PhET Virtual Science Laboratory"
-          sandbox="allow-scripts allow-same-origin"
+          // PhET HTML sims boot without allow-same-origin (verified: circuit, acid-base,
+          // natural-selection). Omitting it keeps an opaque origin so scripts cannot use
+          // the framed page's real origin storage — matching CodePlayground preview iframes.
+          sandbox="allow-scripts"
           referrerPolicy="no-referrer"
           loading="lazy"
           allow="accelerometer; camera; microphone"

@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import NextImage from 'next/image'
+import Image from 'next/image'
 import {
   Video,
   Image as ImageIcon,
@@ -31,6 +31,20 @@ import {
   Target,
 } from 'lucide-react'
 
+const LOCAL_STORAGE_KEY = 'multimedia-lessons'
+
+function payloadFromLesson(lesson) {
+  return {
+    title: String(lesson?.title || '').trim(),
+    subject: String(lesson?.subject || '').trim(),
+    grade: String(lesson?.grade || '').trim(),
+    duration: Number(lesson?.duration) || 45,
+    objectives: Array.isArray(lesson?.objectives) ? lesson.objectives : [],
+    slides: Array.isArray(lesson?.slides) ? lesson.slides : [],
+    status: 'SAVED',
+  }
+}
+
 export default function MultimediaLessonCreator() {
   const [currentLesson, setCurrentLesson] = useState({
     title: '',
@@ -44,6 +58,66 @@ export default function MultimediaLessonCreator() {
   const [selectedSlide, setSelectedSlide] = useState(0)
   const [isPreviewMode, setIsPreviewMode] = useState(false)
   const [mediaLibrary, setMediaLibrary] = useState([])
+  const [savedLessonId, setSavedLessonId] = useState(null)
+  const [saving, setSaving] = useState(false)
+  const [migrating, setMigrating] = useState(false)
+  const [newObjective, setNewObjective] = useState('')
+
+  useEffect(() => {
+    let cancelled = false
+    const migrate = async () => {
+      if (typeof window === 'undefined') return
+      let raw = []
+      try {
+        raw = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '[]')
+      } catch {
+        localStorage.removeItem(LOCAL_STORAGE_KEY)
+        return
+      }
+      if (!Array.isArray(raw) || raw.length === 0) return
+
+      setMigrating(true)
+      let migrated = 0
+      let failed = 0
+      for (const entry of raw) {
+        if (cancelled) return
+        const body = payloadFromLesson(entry)
+        if (!body.title || !body.subject || !body.grade) {
+          failed += 1
+          continue
+        }
+        try {
+          const res = await fetch('/api/multimedia-lessons', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(body),
+          })
+          if (res.ok) migrated += 1
+          else failed += 1
+        } catch {
+          failed += 1
+        }
+      }
+      if (!cancelled) {
+        localStorage.removeItem(LOCAL_STORAGE_KEY)
+        if (migrated > 0) {
+          toast.success(
+            `Moved ${migrated} previously local lesson(s) to your account${
+              failed ? ` (${failed} skipped)` : ''
+            }`
+          )
+        } else if (failed > 0) {
+          toast.error('Could not migrate local lessons — they were cleared from this browser')
+        }
+        setMigrating(false)
+      }
+    }
+    migrate()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   // Slide templates
   const slideTemplates = [
@@ -126,29 +200,61 @@ export default function MultimediaLessonCreator() {
   }
 
   const addObjective = () => {
-    const objective = prompt('Enter learning objective:')
-    if (objective) {
-      setCurrentLesson((prev) => ({
-        ...prev,
-        objectives: [...prev.objectives, objective],
-      }))
+    const objective = newObjective.trim()
+    if (!objective) {
+      toast.error('Enter a learning objective')
+      return
     }
+    setCurrentLesson((prev) => ({
+      ...prev,
+      objectives: [...prev.objectives, objective],
+    }))
+    setNewObjective('')
   }
 
-  const saveLesson = () => {
-    // In a real app, this would save to the backend
-    const lessonData = {
-      ...currentLesson,
-      createdAt: new Date().toISOString(),
-      id: Date.now(),
+  const saveLesson = async () => {
+    const body = payloadFromLesson(currentLesson)
+    if (!body.title || !body.subject || !body.grade) {
+      toast.error('Title, subject, and grade are required to save')
+      return
     }
 
-    // Save to localStorage for demo
-    const savedLessons = JSON.parse(localStorage.getItem('multimedia-lessons') || '[]')
-    savedLessons.push(lessonData)
-    localStorage.setItem('multimedia-lessons', JSON.stringify(savedLessons))
+    setSaving(true)
+    try {
+      if (savedLessonId) {
+        const res = await fetch(`/api/multimedia-lessons/${encodeURIComponent(savedLessonId)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(body),
+        })
+        const json = await res.json().catch(() => ({}))
+        if (!res.ok || !json?.success) {
+          toast.error(json?.error || 'Could not update lesson. Please try again.')
+          return
+        }
+        toast.success('Lesson updated')
+        return
+      }
 
-    toast.success('Lesson saved successfully!')
+      const res = await fetch('/api/multimedia-lessons', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(body),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok || !json?.success) {
+        toast.error(json?.error || 'Could not save lesson. Please try again.')
+        return
+      }
+      setSavedLessonId(json.data.id)
+      toast.success('Lesson saved')
+    } catch {
+      toast.error('Could not save lesson. Check your connection and try again.')
+    } finally {
+      setSaving(false)
+    }
   }
 
   const exportLesson = () => {
@@ -190,10 +296,11 @@ export default function MultimediaLessonCreator() {
               </Button>
               <Button
                 onClick={saveLesson}
+                disabled={saving || migrating}
                 className="bg-royalPurple-success text-royalPurple-text1"
               >
                 <Save className="h-4 w-4 mr-2" aria-hidden="true" />
-                Save Lesson
+                {saving ? 'Saving…' : savedLessonId ? 'Update Lesson' : 'Save Lesson'}
               </Button>
               <Button onClick={exportLesson} className="bg-royalPurple-pill text-royalPurple-text1">
                 <Download className="h-4 w-4 mr-2" aria-hidden="true" />
@@ -275,12 +382,28 @@ export default function MultimediaLessonCreator() {
                 <Target className="h-4 w-4 mr-2" />
                 Learning Objectives
               </h4>
+            </div>
+            <div className="flex gap-2 mb-3">
+              <input
+                type="text"
+                value={newObjective}
+                onChange={(e) => setNewObjective(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    addObjective()
+                  }
+                }}
+                placeholder="Enter learning objective…"
+                className="flex-1 p-2 bg-royalPurple-muted text-royalPurple-text1 rounded border border-royalPurple-border text-sm"
+              />
               <Button
+                type="button"
                 onClick={addObjective}
-                className="bg-royalPurple-pill text-royalPurple-text1 text-sm px-3 py-1"
+                className="bg-royalPurple-pill text-royalPurple-text1 text-sm px-3 py-1 shrink-0"
               >
                 <Plus className="h-4 w-4 mr-1" />
-                Add Objective
+                Add
               </Button>
             </div>
             <div className="space-y-2">
@@ -465,7 +588,7 @@ export default function MultimediaLessonCreator() {
                                 <>
                                   <ImageIcon className="h-4 w-4 mr-2 text-royalPurple-accentTx" />
                                   <div className="relative h-8 w-8 mr-2 overflow-hidden rounded">
-                                    <NextImage
+                                    <Image
                                       src={media.url}
                                       alt={media.name || 'Slide image'}
                                       fill

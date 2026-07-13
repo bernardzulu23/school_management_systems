@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -109,6 +109,37 @@ const componentMap = {
   multimedia_lesson_creator: MultimediaLessonCreator,
 }
 
+const openButtonStyle = {
+  background: '#FF3B00',
+  color: '#fff',
+  border: 'none',
+  borderRadius: 8,
+  padding: '10px 20px',
+  cursor: 'pointer',
+  fontWeight: 700,
+  width: '100%',
+}
+
+const disabledButtonStyle = {
+  background: '#FFFFFF',
+  color: '#A8A7A2',
+  border: '1px solid #111111',
+  borderRadius: 8,
+  padding: '10px 20px',
+  width: '100%',
+  cursor: 'not-allowed',
+}
+
+/**
+ * Launch from the hub:
+ * - Prefer in-hub SPA when a mapped component exists (keeps Back-to-hub UX).
+ * - Otherwise navigate to the dedicated dashboard route.
+ * Never do both — router.push unmounts this hub so setActiveFeature is wasted.
+ */
+function canLaunch(feature) {
+  return Boolean(feature?.component || feature?.route)
+}
+
 export default function CreativeTeachingHub() {
   const router = useRouter()
   const [activeFeature, setActiveFeature] = useState('overview')
@@ -121,40 +152,42 @@ export default function CreativeTeachingHub() {
     },
   })
 
-  // Map DB features to frontend components and icons
+  // Map DB features to frontend components and icons.
+  // Role filtering is already applied by GET /api/creative-features.
   const features = (apiFeatures?.all || []).map((f) => ({
     ...f,
-    id: f.featureId, // Map featureId to id for frontend compatibility
+    id: f.featureId,
     icon: iconMap[f.iconName] || Star,
     component: componentMap[f.featureId] || null,
   }))
 
-  // Filter features based on user role
-  const availableFeatures = features.filter((feature) => {
-    return true
-  })
-
+  const availableFeatures = features
   const creativeFeatures = availableFeatures.filter((f) => f.category === 'creative')
   const stemFeatures = availableFeatures.filter((f) => f.category === 'stem')
 
-  const accessLabel = useMemo(() => {
-    return (access) => {
-      const a = String(access || '').toLowerCase()
-      if (a === 'full') return 'Full'
-      if (a === 'partial') return 'Limited'
-      if (a === 'view') return 'Read-only'
-      return ''
+  const launchFeature = (feature) => {
+    if (!canLaunch(feature)) return
+    if (feature.component) {
+      setActiveFeature(feature.id)
+      return
     }
-  }, [])
+    router.push(feature.route)
+  }
 
-  const canLaunch = useMemo(() => {
-    return (feature) => {
-      if (!feature?.component) return false
-      const a = String(feature?.access || '').toLowerCase()
-      if (a === 'view') return false
-      return true
+  const renderLaunchButton = (feature, label = 'Open →') => {
+    if (!canLaunch(feature)) {
+      return (
+        <button type="button" disabled style={disabledButtonStyle}>
+          Coming Soon
+        </button>
+      )
     }
-  }, [])
+    return (
+      <button type="button" onClick={() => launchFeature(feature)} style={openButtonStyle}>
+        {label}
+      </button>
+    )
+  }
 
   const renderFeatureComponent = () => {
     const feature = features.find((f) => f.id === activeFeature)
@@ -178,10 +211,15 @@ export default function CreativeTeachingHub() {
     }
   }
 
+  if (isLoading && activeFeature === 'overview') {
+    return (
+      <div className="text-center text-royalPurple-text3 py-12">Loading creative features…</div>
+    )
+  }
+
   if (activeFeature !== 'overview') {
     return (
       <div className="space-y-6">
-        {/* Feature Navigation */}
         <Card className="bg-royalPurple-card/60 border-royalPurple-border/40">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -201,7 +239,6 @@ export default function CreativeTeachingHub() {
           </CardContent>
         </Card>
 
-        {/* Feature Component */}
         {renderFeatureComponent()}
       </div>
     )
@@ -226,11 +263,9 @@ export default function CreativeTeachingHub() {
               <Rocket className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
               Creative Teaching & STEM Features Hub
             </div>
-            {/* User role selector removed for Student Dashboard */}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Hub Overview Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
               <CardContent className="p-4 text-center">
@@ -261,7 +296,6 @@ export default function CreativeTeachingHub() {
             </Card>
           </div>
 
-          {/* Quick Access Features */}
           <div>
             <h3 className="text-xl font-bold text-royalPurple-text1 mb-4 flex items-center">
               <Star className="h-5 w-5 mr-2 text-yellow-400" />
@@ -281,40 +315,7 @@ export default function CreativeTeachingHub() {
                       <p className="text-royalPurple-text3 text-sm mb-3 line-clamp-2">
                         {feature.description}
                       </p>
-                      {feature.route ? (
-                        <button
-                          onClick={() => {
-                            router.push(feature.route)
-                            if (feature.component) setActiveFeature(feature.id)
-                          }}
-                          style={{
-                            background: '#FF3B00',
-                            color: '#fff',
-                            border: 'none',
-                            borderRadius: 8,
-                            padding: '10px 20px',
-                            cursor: 'pointer',
-                            fontWeight: 700,
-                            width: '100%',
-                          }}
-                        >
-                          Open →
-                        </button>
-                      ) : (
-                        <button
-                          disabled
-                          style={{
-                            background: '#FFFFFF',
-                            color: '#A8A7A2',
-                            border: '1px solid #111111',
-                            borderRadius: 8,
-                            padding: '10px 20px',
-                            width: '100%',
-                          }}
-                        >
-                          Coming Soon
-                        </button>
-                      )}
+                      {renderLaunchButton(feature)}
                     </div>
                   </CardContent>
                 </Card>
@@ -322,7 +323,6 @@ export default function CreativeTeachingHub() {
             </div>
           </div>
 
-          {/* Creative Teaching Tools */}
           <div>
             <h3 className="text-xl font-bold text-royalPurple-text1 mb-4 flex items-center">
               <Palette className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
@@ -353,40 +353,7 @@ export default function CreativeTeachingHub() {
                           </span>
                         </div>
 
-                        {feature.route ? (
-                          <button
-                            onClick={() => {
-                              router.push(feature.route)
-                              if (feature.component) setActiveFeature(feature.id)
-                            }}
-                            style={{
-                              background: '#FF3B00',
-                              color: '#fff',
-                              border: 'none',
-                              borderRadius: 8,
-                              padding: '10px 20px',
-                              cursor: 'pointer',
-                              fontWeight: 700,
-                              width: '100%',
-                            }}
-                          >
-                            Open →
-                          </button>
-                        ) : (
-                          <button
-                            disabled
-                            style={{
-                              background: '#FFFFFF',
-                              color: '#A8A7A2',
-                              border: '1px solid #111111',
-                              borderRadius: 8,
-                              padding: '10px 20px',
-                              width: '100%',
-                            }}
-                          >
-                            Coming Soon
-                          </button>
-                        )}
+                        {renderLaunchButton(feature)}
                       </div>
                     </div>
                   </CardContent>
@@ -395,7 +362,6 @@ export default function CreativeTeachingHub() {
             </div>
           </div>
 
-          {/* STEM Features */}
           <div>
             <h3 className="text-xl font-bold text-royalPurple-text1 mb-4 flex items-center">
               <Atom className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
@@ -426,40 +392,7 @@ export default function CreativeTeachingHub() {
                           </span>
                         </div>
 
-                        {feature.route ? (
-                          <button
-                            onClick={() => {
-                              router.push(feature.route)
-                              if (feature.component) setActiveFeature(feature.id)
-                            }}
-                            style={{
-                              background: '#FF3B00',
-                              color: '#fff',
-                              border: 'none',
-                              borderRadius: 8,
-                              padding: '10px 20px',
-                              cursor: 'pointer',
-                              fontWeight: 700,
-                              width: '100%',
-                            }}
-                          >
-                            Open
-                          </button>
-                        ) : (
-                          <button
-                            disabled
-                            style={{
-                              background: '#FFFFFF',
-                              color: '#A8A7A2',
-                              border: '1px solid #111111',
-                              borderRadius: 8,
-                              padding: '10px 20px',
-                              width: '100%',
-                            }}
-                          >
-                            Coming Soon
-                          </button>
-                        )}
+                        {renderLaunchButton(feature, 'Open')}
                       </div>
                     </div>
                   </CardContent>

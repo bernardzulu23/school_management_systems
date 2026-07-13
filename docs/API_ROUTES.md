@@ -287,9 +287,9 @@ Total route files: **412**
 
 ## /api/creative-features
 
-| Method | Route                    | Summary |
-| ------ | ------------------------ | ------- |
-| GET    | `/api/creative-features` | —       |
+| Method | Route                    | Summary                                                                                                  |
+| ------ | ------------------------ | -------------------------------------------------------------------------------------------------------- |
+| GET    | `/api/creative-features` | Role-filtered CreativeFeature catalog (+ route map). Admins see all. No access tier (full/partial/view). |
 
 ## /api/cron
 
@@ -517,6 +517,13 @@ Total route files: **412**
 | GET             | `/api/lesson-plans/context`      | —       |
 | POST            | `/api/lesson-plans/generate`     | —       |
 | GET             | `/api/lesson-plans/hod/pending`  | —       |
+
+## /api/multimedia-lessons
+
+| Method    | Route                          | Summary                            |
+| --------- | ------------------------------ | ---------------------------------- |
+| GET, POST | `/api/multimedia-lessons`      | List mine / create (school-scoped) |
+| PUT       | `/api/multimedia-lessons/[id]` | Update own draft                   |
 
 ## /api/marketplace
 
@@ -756,9 +763,10 @@ Total route files: **412**
 
 ## /api/student-works
 
-| Method    | Route                | Summary |
-| --------- | -------------------- | ------- |
-| GET, POST | `/api/student-works` | —       |
+| Method    | Route                          | Summary                           |
+| --------- | ------------------------------ | --------------------------------- |
+| GET, POST | `/api/student-works`           | List / create (`fileUrl` on list) |
+| POST      | `/api/student-works/[id]/like` | Increment likes (school-scoped)   |
 
 ## /api/students
 

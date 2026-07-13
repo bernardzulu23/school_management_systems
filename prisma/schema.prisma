@@ -84,6 +84,7 @@ model School {
   teachingAssignments  TeachingAssignment[]
   pupilSubjectEnrollments PupilSubjectEnrollment[]
   studentWorks         StudentWork[]
+  multimediaLessons    MultimediaLesson[]
   goals                Goal[]
   notes                Note[]
   bookLoans            BookLoan[]
@@ -268,6 +269,7 @@ model User {
 
   lessonPlansCreated LessonPlan[] @relation("LessonPlansCreatedBy")
   lessonPlansToReview LessonPlan[] @relation("LessonPlansReviewer")
+  multimediaLessonsCreated MultimediaLesson[] @relation("MultimediaLessonsCreatedBy")
   lessonPlanComments LessonPlanComment[] @relation("LessonPlanComments")
   schemesOfWork      SchemeOfWork[] @relation("SchemeOfWorkTeacher")
   schemeProgress     SchemeProgress[] @relation("SchemeProgressTeacher")
@@ -1751,7 +1753,31 @@ model StudentWork {
   @@index([studentId]) 
   @@index([type])
   @@index([createdAt])
-} 
+}
+
+/** Teacher multimedia slide decks (Creative Teaching Hub). */
+model MultimediaLesson {
+  id              String   @id @default(uuid())
+  schoolId        String
+  school          School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  createdByUserId String
+  createdBy       User     @relation("MultimediaLessonsCreatedBy", fields: [createdByUserId], references: [id], onDelete: Cascade)
+
+  title           String
+  subject         String
+  grade           String
+  duration        Int      @default(45)
+  objectives      Json
+  slides          Json
+  status          String   @default("DRAFT")
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([schoolId, createdByUserId])
+  @@index([schoolId, subject, grade])
+}
 
 model Goal { 
   id          String   @id @default(uuid()) 

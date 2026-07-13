@@ -3,9 +3,8 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
-import NextImage from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
@@ -39,16 +38,20 @@ import {
 } from 'lucide-react'
 
 export default function StudentWorkShowcase() {
+  const queryClient = useQueryClient()
   const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [selectedGrade, setSelectedGrade] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedWork, setSelectedWork] = useState(null)
   const [showUploadModal, setShowUploadModal] = useState(false)
+  const [likingIds, setLikingIds] = useState(() => new Set())
+
+  const worksQueryKey = ['student-works', selectedCategory, selectedGrade, searchTerm]
 
   // Fetch dynamic data
   const { data: studentWorks = [], isLoading } = useQuery({
-    queryKey: ['student-works', selectedCategory, selectedGrade, searchTerm],
+    queryKey: worksQueryKey,
     queryFn: () =>
       api
         .getStudentWorks({
@@ -91,20 +94,83 @@ export default function StudentWorkShowcase() {
 
   const featuredWorks = studentWorks.filter((work) => work.featured)
 
-  const likeWork = (workId) => {
-    // In a real app, this would update the backend
-    console.log(`Liked work ${workId}`)
+  const patchWorkLikes = (workId, likes) => {
+    queryClient.setQueryData(worksQueryKey, (prev) => {
+      if (!Array.isArray(prev)) return prev
+      return prev.map((w) => (w.id === workId ? { ...w, likes } : w))
+    })
+    setSelectedWork((prev) => (prev?.id === workId ? { ...prev, likes } : prev))
   }
 
-  const shareWork = (work) => {
-    // In a real app, this would generate a shareable link
-    navigator.clipboard.writeText(`Check out "${work.title}" by ${work.student}`)
-    toast.success('Link copied to clipboard!')
+  const likeWork = async (workId) => {
+    if (!workId || likingIds.has(workId)) return
+
+    const current = studentWorks.find((w) => w.id === workId)
+    const prevLikes = Number(current?.likes || selectedWork?.likes || 0)
+    const optimistic = prevLikes + 1
+
+    setLikingIds((prev) => new Set(prev).add(workId))
+    patchWorkLikes(workId, optimistic)
+
+    try {
+      const res = await api.likeStudentWork(workId)
+      const likes = Number(res?.data?.data?.likes)
+      if (Number.isFinite(likes)) patchWorkLikes(workId, likes)
+    } catch (e) {
+      patchWorkLikes(workId, prevLikes)
+      toast.error(e?.response?.data?.error || e?.message || 'Could not like this work')
+    } finally {
+      setLikingIds((prev) => {
+        const next = new Set(prev)
+        next.delete(workId)
+        return next
+      })
+    }
+  }
+
+  const shareWork = async (work) => {
+    const text = [
+      work?.title ? `"${work.title}"` : 'Student work',
+      work?.student ? `by ${work.student}` : null,
+      work?.description ? String(work.description).trim() : null,
+    ]
+      .filter(Boolean)
+      .join('\n')
+
+    if (!text.trim()) {
+      toast.error('Nothing to copy for this work')
+      return
+    }
+
+    try {
+      await navigator.clipboard.writeText(text)
+      toast.success('Description copied to clipboard')
+    } catch {
+      toast.error('Could not copy to clipboard')
+    }
   }
 
   const downloadWork = (work) => {
-    // In a real app, this would download the actual file
-    console.log(`Downloading ${work.title}`)
+    const url = String(work?.fileUrl || '').trim()
+    if (!url) {
+      toast.error('No downloadable file is attached to this work yet')
+      return
+    }
+
+    try {
+      const a = document.createElement('a')
+      a.href = url
+      a.target = '_blank'
+      a.rel = 'noopener noreferrer'
+      a.download = String(work?.title || 'student-work')
+        .replace(/[^\w\-]+/g, '_')
+        .slice(0, 80)
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+    } catch {
+      toast.error('Could not start the download')
+    }
   }
 
   const getTypeIcon = (type) => {
@@ -162,7 +228,7 @@ export default function StudentWorkShowcase() {
                     className="bg-royalPurple-muted/60 border-royalPurple-border/40 overflow-hidden"
                   >
                     <div className="relative h-32 w-full">
-                      <NextImage
+                      <Image
                         src={work.thumbnail}
                         alt={work.title}
                         fill
@@ -557,7 +623,7 @@ export default function StudentWorkShowcase() {
                       className="w-full bg-royalPurple-accent text-royalPurple-text1"
                     >
                       <Share2 className="h-4 w-4 mr-2" />
-                      Share Work
+                      Copy description
                     </Button>
                     <Button
                       onClick={() => downloadWork(selectedWork)}

@@ -259,6 +259,39 @@ export default function TeacherQuizMakerPage() {
     [form.topic, form.subject]
   )
 
+  const handleCreateQuiz = async () => {
+    if (!canGenerate) {
+      toast.error('Enter a subject and topic (at least 3 characters)')
+      return
+    }
+    try {
+      await fetchQuiz({
+        ...form,
+        subject: activeSubject,
+        materialIds: selectedMaterialIds.length ? selectedMaterialIds : undefined,
+      })
+    } catch (e) {
+      toast.error(e?.message || 'Quiz generation failed')
+    }
+  }
+
+  useEffect(() => {
+    if (!loading && error) {
+      toast.error(error?.error || error?.message || 'Quiz generation failed')
+    }
+  }, [loading, error])
+
+  useEffect(() => {
+    if (!loading && data?.success && data?.quiz) {
+      const count = Array.isArray(data.quiz.questions) ? data.quiz.questions.length : 0
+      if (count === 0) {
+        toast.error('AI returned an empty quiz. Try again with a simpler topic.')
+      } else {
+        toast.success(`Generated ${count} question(s)`)
+      }
+    }
+  }, [loading, data])
+
   return (
     <DashboardLayout title="AI Quiz Maker">
       <div className="space-y-4">
@@ -409,22 +442,21 @@ export default function TeacherQuizMakerPage() {
 
               {error ? <UpgradePrompt error={error} /> : null}
 
-              <Button
-                onClick={() =>
-                  fetchQuiz({
-                    ...form,
-                    subject: activeSubject,
-                    materialIds: selectedMaterialIds.length ? selectedMaterialIds : undefined,
-                  })
-                }
-                disabled={loading || !canGenerate}
-              >
+              <Button onClick={handleCreateQuiz} disabled={loading || !canGenerate}>
                 {loading ? 'Generating...' : 'Create Quiz'}
               </Button>
             </CardContent>
           </Card>
 
-          {quiz ? (
+          {quiz && !(quiz.questions || []).length ? (
+            <Card variant="glass">
+              <CardContent className="py-8 text-center text-royalPurple-text2">
+                Quiz was generated but contained no questions. Click Create Quiz to try again.
+              </CardContent>
+            </Card>
+          ) : null}
+
+          {quiz && (quiz.questions || []).length > 0 ? (
             <Card variant="glass">
               <CardHeader>
                 <CardTitle className="text-royalPurple-text1">{quiz.title || 'Quiz'}</CardTitle>

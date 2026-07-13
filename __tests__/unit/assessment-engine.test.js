@@ -5,6 +5,7 @@ import {
   validateExamItem,
   validateBloomDistribution,
   normalizeQuestionsForMode,
+  salvageQuestionsForMode,
   allowsMultipleChoice,
   getAllowedQuestionTypes,
   isSecondaryFormLevel,
@@ -72,6 +73,32 @@ describe('normalizeQuestionsForMode', () => {
     )
     expect(out).toHaveLength(1)
     expect(out[0].type).toBe('structured')
+  })
+})
+
+describe('salvageQuestionsForMode', () => {
+  it('converts MCQ-only secondary quizzes instead of returning empty', () => {
+    const out = salvageQuestionsForMode(
+      [
+        { type: 'mcq', question: 'Pick one', options: ['A', 'B'], answer: 'A' },
+        { type: 'mcq', question: 'Pick two', options: ['C', 'D'], answer: 'C' },
+      ],
+      ASSESSMENT_MODES.SECONDARY_SCENARIO
+    )
+    expect(out).toHaveLength(2)
+    expect(out.every((q) => q.type === 'short')).toBe(true)
+  })
+})
+
+describe('resolveAssessmentMode formative', () => {
+  it('keeps MCQ-friendly mode for quiz maker even at secondary schools', () => {
+    expect(
+      resolveAssessmentMode({
+        schoolLevel: 'secondary',
+        gradeLevel: 'Form 3',
+        purpose: 'formative',
+      })
+    ).toBe(ASSESSMENT_MODES.PRIMARY_MCQ)
   })
 })
 

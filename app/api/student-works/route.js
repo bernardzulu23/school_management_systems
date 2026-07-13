@@ -53,6 +53,7 @@ export const GET = withErrorHandler(async function GET(request) {
     category: work.type,
     type: work.type,
     thumbnail: work.thumbnailUrl || '/api/placeholder/300/200',
+    fileUrl: work.fileUrl || null,
     description: work.description || '',
     uploadDate: work.createdAt.toISOString().split('T')[0],
     likes: work.likes || 0,

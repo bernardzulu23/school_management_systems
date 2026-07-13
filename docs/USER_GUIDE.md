@@ -646,6 +646,8 @@ Students view timetables, materials, assessments, results, and study tools.
 | Cultural        | `/dashboard/student/cultural`     |
 | Virtual lab     | `/dashboard/student/virtual-lab`  |
 
+**Creative Teaching & STEM hub** (embedded on the student dashboard): opens tools that have an in-hub component without leaving the hub; tools with only a dashboard route navigate there. The feature list is role-filtered by the school catalog.
+
 ### Key workflows
 
 #### View timetable and results

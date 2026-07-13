@@ -22,7 +22,7 @@ import { validateAIGuardrails } from '@/lib/ai/guardrails'
 import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 import {
   resolveAssessmentMode,
-  normalizeQuestionsForMode,
+  salvageQuestionsForMode,
   validateBloomDistribution,
   ASSESSMENT_MODES,
 } from '@/lib/ecz/assessment-engine'
@@ -116,6 +116,7 @@ export const POST = withAILimits(async function POST(request: Request) {
     const assessmentMode = resolveAssessmentMode({
       schoolLevel: school.level,
       gradeLevel: input.grade,
+      purpose: 'formative',
     })
     const cachePayload = {
       schoolId,
@@ -126,6 +127,7 @@ export const POST = withAILimits(async function POST(request: Request) {
       difficulty: input.difficulty,
       materialIds: input.materialIds || [],
       assessmentMode,
+      purpose: 'formative',
     }
     const cached = await getCachedAIResponse<{
       success: boolean
@@ -214,7 +216,22 @@ export const POST = withAILimits(async function POST(request: Request) {
       return NextResponse.json({ error: 'AI returned invalid quiz JSON' }, { status: 502 })
     }
 
-    quiz.questions = normalizeQuestionsForMode(quiz.questions, assessmentMode)
+    quiz.questions = salvageQuestionsForMode(quiz.questions, assessmentMode)
+    if (!quiz.questions?.length) {
+      logger.warn('ai.quiz-maker.empty-after-normalize', {
+        requestId,
+        schoolId,
+        assessmentMode,
+      })
+      return NextResponse.json(
+        {
+          error:
+            'Quiz generation produced no usable questions. Try again with fewer questions or a clearer topic.',
+        },
+        { status: 502 }
+      )
+    }
+
     const bloomCheck =
       assessmentMode === ASSESSMENT_MODES.SECONDARY_SCENARIO
         ? validateBloomDistribution(
