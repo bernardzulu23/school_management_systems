@@ -35,6 +35,10 @@ import toast from 'react-hot-toast'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import {
+  readStoredTimetableSeason,
+  writeStoredTimetableSeason,
+} from '@/lib/timetable/timetableSeasonPreference'
+import {
   persistAssignmentDelete,
   persistAssignmentMove,
   persistAssignmentSwap,
@@ -159,10 +163,18 @@ function HeadteacherTimetablePageContent() {
   const searchParams = useSearchParams()
   const [tab, setTab] = useState<Tab>(() => parseTabFromSearchParams(searchParams))
   const [loading, setLoading] = useState(true)
-  const [term, setTerm] = useState(() => String(searchParams.get('term') || 'Term 1'))
-  const [academicYear, setAcademicYear] = useState(() =>
-    String(searchParams.get('academicYear') || new Date().getFullYear())
-  )
+  const [term, setTerm] = useState(() => {
+    const fromUrl = String(searchParams.get('term') || '').trim()
+    if (fromUrl) return fromUrl
+    const stored = readStoredTimetableSeason()
+    return stored?.term || 'Term 1'
+  })
+  const [academicYear, setAcademicYear] = useState(() => {
+    const fromUrl = String(searchParams.get('academicYear') || '').trim()
+    if (fromUrl) return fromUrl
+    const stored = readStoredTimetableSeason()
+    return stored?.academicYear || String(new Date().getFullYear())
+  })
   const focusClass = String(searchParams.get('focusClass') || '')
     .trim()
     .toLowerCase()
@@ -692,14 +704,39 @@ function HeadteacherTimetablePageContent() {
   }, [dismissAudit, serverConflictRows])
 
   useEffect(() => {
-    setTerm(String(searchParams.get('term') || 'Term 1'))
-    setAcademicYear(String(searchParams.get('academicYear') || new Date().getFullYear()))
+    const urlTerm = String(searchParams.get('term') || '').trim()
+    const urlYear = String(searchParams.get('academicYear') || '').trim()
+    if (urlTerm) setTerm(urlTerm)
+    if (urlYear) setAcademicYear(urlYear)
+    if (!urlTerm && !urlYear) {
+      // Prefer the school season that actually has periods when URL is bare.
+      ;(async () => {
+        try {
+          const res = await sessionFetch('/api/timetable/active-season', {
+            credentials: 'include',
+            cache: 'no-store',
+          })
+          if (!res.ok) return
+          const season = await res.json()
+          if (Number(season?.total || 0) > 0 && season?.term && season?.academicYear) {
+            setTerm(String(season.term))
+            setAcademicYear(String(season.academicYear))
+          }
+        } catch {
+          /* keep current */
+        }
+      })()
+    }
     setTab(parseTabFromSearchParams(searchParams))
     setGridMode(parseGridModeFromSearchParams(searchParams))
     const rawFilter = String(searchParams.get('filter') || 'all').toLowerCase()
     if (rawFilter === 'missing' || rawFilter === 'feasibility') setConflictIssueFilter(rawFilter)
     else setConflictIssueFilter('all')
   }, [searchParams])
+
+  useEffect(() => {
+    writeStoredTimetableSeason(term, academicYear)
+  }, [term, academicYear])
 
   useEffect(() => {
     if (tab !== 'allocations') return

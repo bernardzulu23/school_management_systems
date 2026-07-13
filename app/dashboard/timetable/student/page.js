@@ -18,10 +18,36 @@ export default function StudentTimetablePage() {
   const [term, setTerm] = useState(getDefaultTerm)
   const [academicYear, setAcademicYear] = useState(getDefaultAcademicYear)
   const [loading, setLoading] = useState(true)
+  const [seasonReady, setSeasonReady] = useState(false)
 
   const classId = user?.studentProfile?.classId ? String(user.studentProfile.classId) : undefined
 
   useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await fetch('/api/timetable/active-season', {
+          cache: 'no-store',
+          credentials: 'include',
+        })
+        const json = await res.json().catch(() => ({}))
+        if (!cancelled && res.ok && Number(json?.total || 0) > 0) {
+          if (json.term) setTerm(String(json.term))
+          if (json.academicYear) setAcademicYear(String(json.academicYear))
+        }
+      } catch {
+        /* keep defaults */
+      } finally {
+        if (!cancelled) setSeasonReady(true)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!seasonReady) return
     const load = async () => {
       setLoading(true)
       try {
@@ -64,7 +90,7 @@ export default function StudentTimetablePage() {
       }
     }
     load()
-  }, [term, academicYear])
+  }, [seasonReady, term, academicYear])
 
   return (
     <DashboardLayout title="My Timetable">

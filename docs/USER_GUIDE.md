@@ -259,7 +259,7 @@ The headteacher is the school administrator with full oversight: users, timetabl
 
 #### Master timetable
 
-The **home dashboard** (`/dashboard/headteacher`) Master Timetable card prefers the **editable draft** when one exists (so it matches the **Edit** tab after regenerate). It falls back to **published** only when there is no draft. Teachers and students still see **published** until you click **Publish** (the dashboard Publish button now writes to the server, same as the Timetable page).
+The **home dashboard** (`/dashboard/headteacher`) Master Timetable card uses the **active season** (term + year with the most draft/published periods — e.g. Term 2 when that is where the school timetable lives), not a hard-coded Term 1. It prefers the **editable draft** when one exists so it matches the **Edit** tab after regenerate, and falls back to **published** only when there is no draft. Teachers and students still see **published** until you click **Publish** (the dashboard Publish button writes to the server, same as the Timetable page).
 
 The **Timetable** page (`/dashboard/headteacher/timetable`) has tabs: **Overview**, **Edit**, **Conflicts**, **Cover**, **Settings**, and **Department Allocations**.
 

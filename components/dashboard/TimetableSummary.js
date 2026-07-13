@@ -15,6 +15,10 @@ import { pastelBgForSubject } from '@/lib/timetable/cardColors'
 import { Calendar, Clock, MapPin, User, ChevronRight, AlertCircle } from 'lucide-react'
 import { getDefaultAcademicYear, getDefaultTerm } from '@/lib/timetable/timetableTermOptions'
 import {
+  readStoredTimetableSeason,
+  writeStoredTimetableSeason,
+} from '@/lib/timetable/timetableSeasonPreference'
+import {
   TIMETABLE_CONFLICTS_UPDATED,
   readTimetableConflictCountsSnapshot,
 } from '@/hooks/useTimetableDraftMeta'
@@ -122,23 +126,72 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
     async function load() {
       setBellLoading(true)
       try {
-        const snap = readTimetableConflictCountsSnapshot()
-        const term = String(snap?.term || getDefaultTerm())
-        const academicYear = String(snap?.academicYear || getDefaultAcademicYear())
         const isHeadteacher = String(userRole || user?.role || '').toLowerCase() === 'headteacher'
+
+        const stored = readStoredTimetableSeason()
+        let term = stored?.term || getDefaultTerm()
+        let academicYear = stored?.academicYear || getDefaultAcademicYear()
+
+        // Resolve the season that actually has timetable data (e.g. Term 2 with 79 periods
+        // vs default Term 1 with a sparse legacy publish).
+        try {
+          const seasonRes = await sessionFetch('/api/timetable/active-season', {
+            credentials: 'include',
+            cache: 'no-store',
+          })
+          if (seasonRes.ok) {
+            const season = await seasonRes.json()
+            const hintTerm = String(season?.term || '').trim()
+            const hintYear = String(season?.academicYear || '').trim()
+            const hintTotal = Number(season?.total || 0)
+            if (hintTerm && hintYear && hintTotal > 0) {
+              // Prefer stored season only when it has comparable data; otherwise follow server hint.
+              if (!stored || hintTotal >= 10) {
+                const storedProbe = stored
+                  ? await sessionFetch(
+                      `/api/timetable/view?${new URLSearchParams({
+                        term: stored.term,
+                        academicYear: stored.academicYear,
+                        status: 'published',
+                      })}`,
+                      { credentials: 'include', cache: 'no-store' }
+                    )
+                      .then((r) => r.json().catch(() => ({})))
+                      .catch(() => ({}))
+                  : null
+                const storedCount = Array.isArray(storedProbe?.assignments)
+                  ? storedProbe.assignments.length
+                  : 0
+                if (!stored || storedCount < Math.max(10, Math.floor(hintTotal * 0.5))) {
+                  term = hintTerm
+                  academicYear = hintYear
+                  writeStoredTimetableSeason(term, academicYear)
+                }
+              }
+            }
+          }
+        } catch {
+          /* keep defaults */
+        }
 
         let data
         let loadedStatus = 'published'
 
         if (isHeadteacher) {
-          // Prefer draft so overview matches Master Timetable Edit (full regenerate).
-          // Old sparse published must not hide a newer multi-department draft.
           data = await loadFromApi({ term, academicYear, status: 'draft' })
-          if (data?.assignments?.length) {
+          const draftCount = Array.isArray(data?.assignments) ? data.assignments.length : 0
+          if (draftCount > 0) {
             loadedStatus = 'draft'
           } else {
             data = await loadFromApi({ term, academicYear, status: 'published' })
             loadedStatus = 'published'
+          }
+
+          // If both server responses are sparse but local persist has a richer grid, keep local.
+          const localCount = useTimetableStore.getState().assignments.length
+          const serverCount = Array.isArray(data?.assignments) ? data.assignments.length : 0
+          if (localCount > serverCount && localCount >= 20) {
+            loadedStatus = useTimetableStore.getState().isPublished ? 'published' : 'draft'
           }
         } else {
           data = await loadFromApi({ term, academicYear, status: 'published' })
@@ -163,10 +216,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
             students: Number(c.studentCount || 0),
             subjects: [],
           }))
-          const loadedAssignments =
-            data?.assignments?.length > 0
-              ? data.assignments
-              : useTimetableStore.getState().assignments
+          const loadedAssignments = useTimetableStore.getState().assignments
           setWallClasses(filterClassesForWallGrid(mapped, loadedAssignments))
         }
       } finally {
@@ -347,8 +397,11 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
       setPublishing(true)
       try {
         const snap = readTimetableConflictCountsSnapshot()
-        const term = String(snap?.term || getDefaultTerm())
-        const academicYear = String(snap?.academicYear || getDefaultAcademicYear())
+        const stored = readStoredTimetableSeason()
+        const term = String(snap?.term || stored?.term || getDefaultTerm())
+        const academicYear = String(
+          snap?.academicYear || stored?.academicYear || getDefaultAcademicYear()
+        )
         const store = useTimetableStore.getState()
         if (store.assignments.length) {
           const syncRes = await sessionFetch('/api/timetable/entries/sync-draft', {
