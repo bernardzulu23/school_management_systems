@@ -45,6 +45,7 @@ const PUBLIC_PATHS = [
   '/api/school/current',
   '/api/health',
   '/api/ping',
+  '/api/notifications/web-push/vapid-public-key',
   '/login',
   '/register',
   '/manifest.json',

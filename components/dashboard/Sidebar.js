@@ -474,8 +474,8 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         if (!showEcz && item.name === 'ECZ Practice') return false
         if (!showMockExams && item.name === 'Mock Examination') return false
         if (!showCareer && item.name === 'Career guidance') return false
-        if (!showCareer && item.name === 'Guidance teachers') return false
-        if (!showCareer && item.name === 'Guidance reports') return false
+        // Keep Guidance teachers / reports visible for headteachers so assignments stay reachable
+        // even when career feature flags are off for the school level.
         if (
           !showCareer &&
           guidancePortal === false &&

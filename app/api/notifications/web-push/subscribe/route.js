@@ -6,13 +6,17 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { WebPushSubscribeSchema } from '@/lib/schemas'
-import { getVapidPublicKey, upsertWebPushSubscription } from '@/lib/notifications/webPushService'
+import { upsertWebPushSubscription } from '@/lib/notifications/webPushService'
 
+/** Prefer GET /api/notifications/web-push/vapid-public-key (public, no auth). */
 export const GET = withErrorHandler(async function GET() {
-  return NextResponse.json({
-    success: true,
-    data: { publicKey: getVapidPublicKey() },
-  })
+  return NextResponse.json(
+    {
+      success: false,
+      message: 'Use GET /api/notifications/web-push/vapid-public-key for the public VAPID key',
+    },
+    { status: 410 }
+  )
 })
 
 export const POST = withErrorHandler(async function POST(request) {

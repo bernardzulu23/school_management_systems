@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-07-12T23:21:28.328Z
+Generated: 2026-07-13T01:17:24.907Z
 
-Total route files: **411**
+Total route files: **412**
 
 ## Quick index
 
@@ -58,7 +58,7 @@ Total route files: **411**
 | `/api/marketplace`          |     7 |
 | `/api/materials`            |     5 |
 | `/api/mobile`               |    12 |
-| `/api/notifications`        |     7 |
+| `/api/notifications`        |     8 |
 | `/api/onboarding`           |    10 |
 | `/api/parent`               |     1 |
 | `/api/payments`             |     2 |
@@ -293,12 +293,12 @@ Total route files: **411**
 
 ## /api/cron
 
-| Method | Route                         | Summary                                                                            |
-| ------ | ----------------------------- | ---------------------------------------------------------------------------------- |
-| GET    | `/api/cron/ecz-reminder`      | GET /api/cron/ecz-reminder — Vercel Cron (15 January). Requires CRON_SECRET.       |
-| GET    | `/api/cron/fee-overdue-check` | —                                                                                  |
-| GET    | `/api/cron/notifications`     | GET /api/cron/notifications — process scheduled + retries + cleanup                |
-| GET    | `/api/cron/sms-low-balance`   | GET /api/cron/sms-low-balance — daily low SMS credit alerts. Requires CRON_SECRET. |
+| Method | Route                         | Summary                                                                                                                                                        |
+| ------ | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/api/cron/ecz-reminder`      | GET /api/cron/ecz-reminder — Vercel Cron (15 January). Requires CRON_SECRET.                                                                                   |
+| GET    | `/api/cron/fee-overdue-check` | —                                                                                                                                                              |
+| GET    | `/api/cron/notifications`     | GET /api/cron/notifications — due scheduled sends, class/test scans, retries, cleanup. Auth: Authorization: Bearer $CRON_SECRET or x-cron-secret: $CRON_SECRET |
+| GET    | `/api/cron/sms-low-balance`   | GET /api/cron/sms-low-balance — daily low SMS credit alerts. Requires CRON_SECRET.                                                                             |
 
 ## /api/csp-report
 
@@ -559,15 +559,16 @@ Total route files: **411**
 
 ## /api/notifications
 
-| Method        | Route                                   | Summary |
-| ------------- | --------------------------------------- | ------- |
-| PATCH, DELETE | `/api/notifications/:id/mark-read`      | —       |
-| GET           | `/api/notifications/list`               | —       |
-| GET, PATCH    | `/api/notifications/preferences`        | —       |
-| POST          | `/api/notifications/schedule`           | —       |
-| POST          | `/api/notifications/send-batch`         | —       |
-| POST          | `/api/notifications/send-immediate`     | —       |
-| GET, POST     | `/api/notifications/web-push/subscribe` | —       |
+| Method        | Route                                          | Summary                                                                                                                 |
+| ------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| PATCH, DELETE | `/api/notifications/:id/mark-read`             | —                                                                                                                       |
+| GET           | `/api/notifications/list`                      | —                                                                                                                       |
+| GET, PATCH    | `/api/notifications/preferences`               | —                                                                                                                       |
+| POST          | `/api/notifications/schedule`                  | —                                                                                                                       |
+| POST          | `/api/notifications/send-batch`                | —                                                                                                                       |
+| POST          | `/api/notifications/send-immediate`            | —                                                                                                                       |
+| GET, POST     | `/api/notifications/web-push/subscribe`        | —                                                                                                                       |
+| GET           | `/api/notifications/web-push/vapid-public-key` | GET /api/notifications/web-push/vapid-public-key Public — no auth. Used by browsers / service workers before subscribe. |
 
 ## /api/onboarding
 
