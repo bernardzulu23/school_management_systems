@@ -534,7 +534,7 @@ Full route list: [API_ROUTES.md](./API_ROUTES.md) (auto-generated, **379** files
 - **Types (8):** class reminder, department meeting, test scheduled/reminder, missed test, scheme progress, low mastery, lesson assigned.
 - **Channels:** Web push (VAPID + `web-push`), email (Resend), SMS (AWS SNS — critical only: missed test, mastery &lt;40%, test day-before).
 - **Quiet hours:** 15:00–06:45 local (`Africa/Lusaka` default) — queue to next 06:45 via `ScheduledNotification`.
-- **APIs:** `POST /api/notifications/send-immediate`, `schedule`, `send-batch`; `GET list`; `PATCH preferences`, `[id]/mark-read`; `POST web-push/subscribe`; **public** `GET /api/notifications/web-push/vapid-public-key` (no auth, for SW/browser subscribe); cron `GET /api/cron/notifications` (every 5 min).
+- **APIs:** `POST /api/notifications/send-immediate`, `schedule`, `send-batch`; `GET list`; `PATCH preferences`, `[id]/mark-read`; `POST web-push/subscribe`; **public** `GET /api/notifications/web-push/vapid-public-key` (no auth, for SW/browser subscribe); cron `GET /api/cron/notifications` (daily `0 8 * * *` in `vercel.json` — Hobby allows at most once/day; use Pro or an external scheduler for sub-daily).
 - **UI:** `/dashboard/notifications` (NotificationCenter); header **NotificationBadge** + **NotificationToast**; Settings tab **Notifications**.
 - **Integrations (`lib/notifications/integrations.js`):**
   - Low mastery — `recordTopicMasteryFromQuiz` when `needsReteaching` (admin SMS path if &lt;40%)
@@ -589,6 +589,7 @@ Vercel crons (see `vercel.json`; all require `CRON_SECRET` via `Authorization: B
 - `/api/cron/ecz-reminder` — 15 January ECZ deadline reminders
 - `/api/cron/sms-low-balance` — daily SMS balance check
 - `/api/cron/fee-overdue-check` — weekly (Mondays 07:00 UTC): mark overdue invoices, SMS parents via Africa's Talking
+- `/api/cron/notifications` — daily 08:00 UTC: due scheduled sends, class/test scans, retries, cleanup. **Hobby** rejects sub-daily schedules (e.g. `*/5`); use Pro or an external caller for higher frequency.
 
 ---
 
