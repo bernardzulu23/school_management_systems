@@ -70,6 +70,54 @@ export function consecutivePeriodsAreValid(
   return true
 }
 
+/**
+ * Shared helper for flat TimeSlot lists (greedySolver) — periods after which a break row follows.
+ * Sort by clock time (breaks often use period 0 in DB); fall back to period order.
+ */
+export function deriveBreakAfterPeriodsFromFlatSlots(
+  allSlots: Array<{
+    dayOfWeek: string
+    period: number
+    isBreak?: boolean
+    startTime?: string
+  }>
+): number[] {
+  if (!Array.isArray(allSlots) || allSlots.length === 0) return [...BREAK_AFTER_PERIODS]
+
+  const sorted = [...allSlots].sort((a, b) => {
+    const da = DAY_ORDER[normalizeDay(a.dayOfWeek)] ?? 99
+    const db = DAY_ORDER[normalizeDay(b.dayOfWeek)] ?? 99
+    if (da !== db) return da - db
+    const ta = slotTimeMinutes(String(a.startTime || ''))
+    const tb = slotTimeMinutes(String(b.startTime || ''))
+    if (ta !== tb) return ta - tb
+    // Teaching periods before break rows that share the same timestamp/period bucket
+    if (Boolean(a.isBreak) !== Boolean(b.isBreak)) return a.isBreak ? 1 : -1
+    return (Number(a.period) || 0) - (Number(b.period) || 0)
+  })
+
+  const breakAfter = new Set<number>()
+  for (let i = 0; i < sorted.length - 1; i++) {
+    const cur = sorted[i]
+    const next = sorted[i + 1]
+    if (normalizeDay(cur.dayOfWeek) !== normalizeDay(next.dayOfWeek)) continue
+    if (cur.isBreak) continue
+    if (next.isBreak) breakAfter.add(Number(cur.period) || 0)
+  }
+  return breakAfter.size > 0 ? [...breakAfter] : [...BREAK_AFTER_PERIODS]
+}
+
+/** True when period numbers form a consecutive run that does not cross a break. */
+export function isValidPeriodRun(
+  startPeriod: number,
+  span: number,
+  breakAfterPeriods: number[] = BREAK_AFTER_PERIODS
+): boolean {
+  if (span <= 0) return false
+  if (span === 1) return true
+  return consecutivePeriodsAreValid(startPeriod, span, breakAfterPeriods)
+}
+
 export type DayPeriodSlot = {
   type: 'period' | 'break'
   periodNumber: number
@@ -413,8 +461,10 @@ function findSlotRun(
     const prev = dayPeriods[startIndex + i - 1]
     const cur = dayPeriods[startIndex + i]
     if (!cur) return null
+    // Consecutive period numbers only — do NOT require cur.start === prev.end.
+    // Zambian bells often have 1–10 min transitions (e.g. 10:00 → 10:05); that gap
+    // must not kill doubles/triples. Break spanning is handled by consecutivePeriodsAreValid.
     if (Number(cur.periodNumber) !== Number(prev.periodNumber) + 1) return null
-    if (cur.start !== prev.end) return null
     run.push(cur)
   }
   return run.length === span ? run : null
@@ -557,6 +607,8 @@ export function generateTimetableOnce(
 
   let backtracks = 0
   let reassignments = 0
+  let reassignDepth = 0
+  const MAX_REASSIGN_DEPTH = 3
   const placed: PlacedBlock[] = [...(options.initialPlaced || [])]
   const sortedBlocks = sortBlocksHardestFirst(allBlocks, daySlots, restartSeed)
 
@@ -662,48 +714,54 @@ export function generateTimetableOnce(
   }
 
   function tryReassignTeacherClassBlocks(blockIndex: number): boolean {
-    const block = sortedBlocks[blockIndex]
-    const victims = placed
-      .map((pl, idx) => ({ pl, idx }))
-      .filter(({ pl }) => pl.teacherId === block.teacherId && pl.classId === block.classId)
+    if (reassignDepth >= MAX_REASSIGN_DEPTH) return false
+    reassignDepth += 1
+    try {
+      const block = sortedBlocks[blockIndex]
+      const victims = placed
+        .map((pl, idx) => ({ pl, idx }))
+        .filter(({ pl }) => pl.teacherId === block.teacherId && pl.classId === block.classId)
 
-    for (const { pl: victim, idx: victimIdx } of victims) {
-      const removed = placed.splice(victimIdx, 1)[0]
-      const victimBlock: SchedulerBlock = {
-        blockId: removed.blockId,
-        allocationId: removed.allocationId,
-        teacherId: removed.teacherId,
-        classId: removed.classId,
-        subjectId: removed.subjectId,
-        span: removed.span,
-        unitType: removed.unitType,
+      for (const { pl: victim, idx: victimIdx } of victims) {
+        const removed = placed.splice(victimIdx, 1)[0]
+        const victimBlock: SchedulerBlock = {
+          blockId: removed.blockId,
+          allocationId: removed.allocationId,
+          teacherId: removed.teacherId,
+          classId: removed.classId,
+          subjectId: removed.subjectId,
+          span: removed.span,
+          unitType: removed.unitType,
+        }
+
+        const altCandidates = getCandidateSlots(
+          victimBlock,
+          daySlots,
+          singleMin,
+          breakAfterPeriods,
+          restartSeed
+        )
+        sortCandidates(victimBlock, altCandidates)
+        for (const alt of altCandidates) {
+          const placementRule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, victimBlock)
+          const check = canPlace(victimBlock, alt, placed, { ...canPlaceOpts, placementRule })
+          if (!check.ok) continue
+
+          pushPlacedFromCandidate(victimBlock, alt)
+          reassignments += 1
+          if (backtrackPlace(blockIndex)) return true
+
+          placed.pop()
+          reassignments += 1
+        }
+
+        placed.splice(victimIdx, 0, removed)
       }
 
-      const altCandidates = getCandidateSlots(
-        victimBlock,
-        daySlots,
-        singleMin,
-        breakAfterPeriods,
-        restartSeed
-      )
-      sortCandidates(victimBlock, altCandidates)
-      for (const alt of altCandidates) {
-        const placementRule = getLessonPlacementRule(recipeRulesMap, teacherRulesMap, victimBlock)
-        const check = canPlace(victimBlock, alt, placed, { ...canPlaceOpts, placementRule })
-        if (!check.ok) continue
-
-        pushPlacedFromCandidate(victimBlock, alt)
-        reassignments += 1
-        if (backtrackPlace(blockIndex)) return true
-
-        placed.pop()
-        reassignments += 1
-      }
-
-      placed.splice(victimIdx, 0, removed)
+      return false
+    } finally {
+      reassignDepth -= 1
     }
-
-    return false
   }
 
   function backtrackPlace(index: number): boolean {

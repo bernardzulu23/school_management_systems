@@ -28,6 +28,8 @@ import {
 import {
   wouldStackSameDay,
   teacherMultiBlockDayPenalty,
+  consecutivePeriodsAreValid,
+  deriveBreakAfterPeriodsFromFlatSlots,
   type MultiBlockPlacement,
 } from '@/lib/timetable/scheduler'
 import { compareDaySpread, interleaveLessons } from '@/lib/timetable/lessonOrdering'
@@ -162,11 +164,17 @@ function slotsByDay(slots: TimeSlot[]): Map<string, TimeSlot[]> {
 function findConsecutiveRun(
   daySlots: TimeSlot[],
   startIndex: number,
-  size: number
+  size: number,
+  breakAfterPeriods: number[]
 ): TimeSlot[] | null {
   const start = daySlots[startIndex]
   if (!start || start.isBreak) return null
   if (size <= 1) return [start]
+
+  // Teaching-only lists hide break rows; reject runs that cross break boundaries.
+  if (!consecutivePeriodsAreValid(Number(start.period) || 0, size, breakAfterPeriods)) {
+    return null
+  }
 
   if (size === 2 && start.isDouble) {
     const next = daySlots[startIndex + 1]
@@ -181,6 +189,7 @@ function findConsecutiveRun(
     const prev = daySlots[startIndex + i - 1]
     if (!slot || slot.isBreak) return null
     if (i > 0 && Number(slot.period) !== Number(prev.period) + 1) return null
+    if (i > 0 && breakAfterPeriods.includes(Number(prev.period))) return null
     run.push(slot)
   }
   return run.length === size ? run : null
@@ -254,6 +263,8 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
 
   const teachingSlots = sortSlots(slots.filter((s) => !s.isBreak))
   const byDay = slotsByDay(teachingSlots)
+  // Derive from full payload (including break rows) — teaching-only lists hide breaks.
+  const breakAfterPeriods = deriveBreakAfterPeriodsFromFlatSlots(slots)
 
   const recipeRulesMap = buildRecipePlacementRules((payload.recipes || []) as RecipeLikeForRules[])
   const teacherRulesMap = buildTeacherDbConstraintRules(
@@ -358,8 +369,8 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
     const jitterSeed = lessonJitterSeed(lesson.teacherId, lesson.subjectId)
 
     return indices.sort((ia, ib) => {
-      const runA = findConsecutiveRun(daySlots, ia, size)
-      const runB = findConsecutiveRun(daySlots, ib, size)
+      const runA = findConsecutiveRun(daySlots, ia, size, breakAfterPeriods)
+      const runB = findConsecutiveRun(daySlots, ib, size, breakAfterPeriods)
       if (!runA) return 1
       if (!runB) return -1
 
@@ -473,7 +484,7 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
           return false
         }
 
-        const run = findConsecutiveRun(daySlots, i, size)
+        const run = findConsecutiveRun(daySlots, i, size, breakAfterPeriods)
         if (!run) continue
         const ids = run.map((s) => s.id)
         if (isBusy(lesson, ids)) continue
@@ -518,10 +529,16 @@ export function solveTimetable(payload: SolverPayload): SolverResult {
       const daysSorted = sortGreedyDays(lesson)
 
       for (const day of daysSorted) {
+        const nd = normalizeDay(day)
+        // Mirror solveDepthFirst same-day subject constraints
+        if (teacherClassSubjectDay.has(teacherClassSubjectKey(lesson, nd))) continue
+        const csKey = `${lesson.classId}|${lesson.subjectId}|${nd}`
+        if ((classSubjectDayLoad.get(csKey) || 0) > 0) continue
+
         const daySlots = byDay.get(day) || []
         const startIndices = sortStartIndices(lesson, day, daySlots, size)
         for (const i of startIndices) {
-          const run = findConsecutiveRun(daySlots, i, size)
+          const run = findConsecutiveRun(daySlots, i, size, breakAfterPeriods)
           if (!run) continue
           const ids = run.map((s) => s.id)
           if (isBusy(lesson, ids)) continue

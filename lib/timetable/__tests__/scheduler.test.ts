@@ -6,6 +6,7 @@ import {
   deriveBreakAfterPeriods,
   generateTimetable,
   generateTimetableOnce,
+  getCandidateSlots,
   periodsOverlap,
   wouldStackSameDay,
   type PlacedBlock,
@@ -36,6 +37,70 @@ describe('consecutivePeriodsAreValid', () => {
 
   it('allows double starting at period 3', () => {
     expect(consecutivePeriodsAreValid(3, 2)).toBe(true)
+  })
+
+  it('allows doubles when bells have transition gaps (not abutting minutes)', () => {
+    // Period 1 ends 08:40, period 2 starts 08:45 — common Zambian transition
+    const daySlots = {
+      monday: [
+        {
+          type: 'period' as const,
+          periodNumber: 1,
+          start: 7 * 60 + 40,
+          end: 8 * 60 + 20,
+          startTime: '07:40',
+          endTime: '08:20',
+          durationMin: 40,
+          day: 'monday',
+        },
+        {
+          type: 'period' as const,
+          periodNumber: 2,
+          start: 8 * 60 + 25,
+          end: 9 * 60 + 5,
+          startTime: '08:25',
+          endTime: '09:05',
+          durationMin: 40,
+          day: 'monday',
+        },
+        {
+          type: 'period' as const,
+          periodNumber: 3,
+          start: 9 * 60 + 10,
+          end: 9 * 60 + 50,
+          startTime: '09:10',
+          endTime: '09:50',
+          durationMin: 40,
+          day: 'monday',
+        },
+        {
+          type: 'period' as const,
+          periodNumber: 4,
+          start: 10 * 60 + 5,
+          end: 10 * 60 + 45,
+          startTime: '10:05',
+          endTime: '10:45',
+          durationMin: 40,
+          day: 'monday',
+        },
+      ],
+    }
+    const block: SchedulerBlock = {
+      blockId: 'b1',
+      allocationId: 'a1',
+      teacherId: 't1',
+      classId: 'c1',
+      subjectId: 's1',
+      span: 2,
+      unitType: 'DOUBLE',
+    }
+    // Break after P2 → double may start at P1 or P3, not P2
+    const candidates = getCandidateSlots(block, daySlots, 40, [2])
+    expect(candidates.length).toBeGreaterThan(0)
+    expect(candidates.every((c) => c.span === 2)).toBe(true)
+    expect(candidates.some((c) => c.startPeriod === 1)).toBe(true)
+    expect(candidates.some((c) => c.startPeriod === 3)).toBe(true)
+    expect(candidates.some((c) => c.startPeriod === 2)).toBe(false)
   })
 
   it('uses derived break positions from bell schedule', () => {

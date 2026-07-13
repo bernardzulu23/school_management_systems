@@ -22,6 +22,8 @@ UI: [`app/dashboard/headteacher/timetable/page.tsx`](../app/dashboard/headteache
 
 **Period presets:** `p6` = 3 doubles (6), `p5` = 1 double + 1 triple (5), `p4` = 2 doubles (4). Legacy rows that stored `p4` as 2 doubles + 1 single are repaired in [`periodExpansion.ts`](../lib/timetable/periodExpansion.ts) to match `periodsPerWeek`.
 
+**Shared break rules:** both [`scheduler.ts`](../lib/timetable/scheduler.ts) and [`greedySolver.ts`](../lib/timetable/greedySolver.ts) use `consecutivePeriodsAreValid` / `deriveBreakAfterPeriodsFromFlatSlots` so doubles cannot span break boundaries. `findSlotRun` does **not** require abutting clock minutes (transition gaps are allowed).
+
 ## Environment
 
 | Variable             | Purpose                                                               |
