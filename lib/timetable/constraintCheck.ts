@@ -1,5 +1,5 @@
 import type { Assignment, DayOfWeek, TimeSlot } from './types'
-import { timesOverlap } from './validateTimetable'
+import { timedSlotsOverlap } from './timeRangeOverlap'
 
 function normalizeDay(day: string) {
   return String(day || '')
@@ -86,7 +86,7 @@ export function assignmentsShareSlot(
     }
   }
 
-  return timesOverlap(a, b)
+  return timedSlotsOverlap(a, b)
 }
 
 export function assignmentsSameDay(a: Assignment, b: Assignment): boolean {
@@ -94,9 +94,9 @@ export function assignmentsSameDay(a: Assignment, b: Assignment): boolean {
 }
 
 /**
- * Hard constraint: same teacher + same class on the same day.
- * - Same subject → conflict (only one block per day).
- * - Different subjects → conflict only when period spans overlap.
+ * Same teacher + same class: conflict only when teachable windows overlap.
+ * Same-subject-same-day without overlap is a soft distribution concern (SUBJECT_DISTRIBUTION),
+ * not a hard placement block.
  */
 export function teacherClassSameDayConflict(
   a: Assignment,
@@ -106,12 +106,12 @@ export function teacherClassSameDayConflict(
   if (String(a.teacherId) !== String(b.teacherId)) return false
   if (String(a.classId) !== String(b.classId)) return false
   if (!assignmentsSameDay(a, b)) return false
-  if (String(a.subjectId) === String(b.subjectId)) return true
   return assignmentsShareSlot(a, b, timeSlots)
 }
 
 /**
  * Hard constraint checker for placement and post-generation filtering.
+ * Same subject twice on one day without overlap is allowed (curriculum spread).
  */
 export function isConflict(
   assignment: Assignment,
@@ -124,16 +124,6 @@ export function isConflict(
     if (String(existing.id) === String(assignment.id)) continue
     if (existing.isBreak) continue
     if (assignment.season && existing.season && assignment.season !== existing.season) continue
-
-    if (teacherClassSameDayConflict(assignment, existing, timeSlots)) return true
-
-    if (
-      String(assignment.classId) === String(existing.classId) &&
-      String(assignment.subjectId) === String(existing.subjectId) &&
-      assignmentsSameDay(assignment, existing)
-    ) {
-      return true
-    }
 
     if (!assignmentsShareSlot(assignment, existing, timeSlots)) continue
 

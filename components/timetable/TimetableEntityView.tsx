@@ -13,6 +13,7 @@ import {
 import { periodTypeBadge } from '@/lib/timetable/doublePeriodUtils'
 import { resolveCardColor } from '@/lib/timetable/cardColors'
 import { teacherDisplayName } from '@/lib/timetable/teacherDisplay'
+import { TeacherColorLegend } from '@/components/timetable/TeacherColorLegend'
 
 export type EntityViewMode = 'teacher' | 'class'
 
@@ -255,6 +256,14 @@ export function TimetableEntityView({
           </div>
         </div>
       </div>
+
+      <TeacherColorLegend
+        teachers={teachers.map((t) => ({
+          id: String(t.id),
+          name: t.fullName || 'Teacher',
+        }))}
+        colorMap={teacherColors}
+      />
     </div>
   )
 }

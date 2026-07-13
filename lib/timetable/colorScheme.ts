@@ -1,53 +1,37 @@
-/** Teacher colour palette for class-view timetables (distinct fills per teacher). */
+/** Teacher colour maps for class-view timetables — persisted colours only. */
 
-export const TEACHER_COLOR_PALETTE = [
-  '#FF6B6B',
-  '#4ECDC4',
-  '#45B7D1',
-  '#FFA07A',
-  '#98D8C8',
-  '#F7DC6F',
-  '#BB8FCE',
-  '#85C1E2',
-  '#F8B88B',
-  '#A8E6CF',
-  '#FF8B94',
-  '#6BCB77',
-  '#4D96FF',
-  '#FFD93D',
-  '#6A4C93',
-] as const
+import {
+  MISSING_TEACHER_COLOR,
+  teacherColorFromStore,
+  normalizeHex,
+} from '@/lib/timetable/uniqueTeacherColors'
+
+/** @deprecated — short palettes cause collisions; use TeacherColor DB rows. */
+export const TEACHER_COLOR_PALETTE = [] as const
 
 export function generateTeacherColors(teacherIds: string[]): Map<string, string> {
-  const unique = [...new Set(teacherIds.map(String).filter(Boolean))].sort()
+  const unique = [...new Set(teacherIds.map(String).filter(Boolean))]
   const colorMap = new Map<string, string>()
-  unique.forEach((id, idx) => {
-    colorMap.set(id, TEACHER_COLOR_PALETTE[idx % TEACHER_COLOR_PALETTE.length])
-  })
+  unique.forEach((id) => colorMap.set(id, MISSING_TEACHER_COLOR))
   return colorMap
 }
 
 export function colorForTeacher(
   teacherId: string,
   colorMap: Map<string, string>,
-  fallback = '#cccccc'
+  fallback = MISSING_TEACHER_COLOR
 ): string {
-  return colorMap.get(String(teacherId)) || fallback
+  return normalizeHex(colorMap.get(String(teacherId))) || fallback
 }
 
-/** Merge DB/store hex colours over generated defaults. */
+/** Prefer stored DB/store hex; never invent a cycling palette. */
 export function mergeTeacherColorMaps(
   teacherIds: string[],
-  stored?: Record<string, { colorHex?: string } | string>
+  stored?: Record<string, { colorHex?: string } | string> | null
 ): Map<string, string> {
-  const map = generateTeacherColors(teacherIds)
-  if (!stored) return map
+  const map = new Map<string, string>()
   for (const id of teacherIds) {
-    const raw = stored[id]
-    const hex = typeof raw === 'string' ? raw : raw?.colorHex
-    if (hex && /^#?[0-9a-fA-F]{6}$/.test(hex.replace('#', ''))) {
-      map.set(String(id), hex.startsWith('#') ? hex : `#${hex}`)
-    }
+    map.set(String(id), teacherColorFromStore(id, stored))
   }
   return map
 }

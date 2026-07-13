@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { buildTeacherColorMap, teacherCardStyle } from '@/lib/timetable/teacherColorPalette'
+import { TeacherColorLegend } from '@/components/timetable/TeacherColorLegend'
 import { uniqueBellRows, type BellScheduleSlot } from '@/lib/timetable/bellSchedule'
 import {
   assignmentOverlapsSlot,
@@ -159,8 +160,11 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
 
   const teacherColorMap = useMemo(() => {
     if (props.teacherColorMap?.size) return props.teacherColorMap
-    return buildTeacherColorMap(departmentTeachers.map((t: any) => String(t.id)))
-  }, [props.teacherColorMap, departmentTeachers])
+    return buildTeacherColorMap(
+      departmentTeachers.map((t: any) => String(t.id)),
+      teacherColors
+    )
+  }, [props.teacherColorMap, departmentTeachers, teacherColors])
 
   const deptAssignments = useMemo(() => {
     return assignments.filter((a) => teacherSet.has(String(a.teacherId)))
@@ -740,21 +744,13 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
       ) : null}
 
       {departmentTeachers.length > 0 ? (
-        <div className="flex flex-wrap items-center gap-3 text-xs text-royalPurple-text2 print:hidden">
-          <span className="font-semibold">Teacher colours:</span>
-          {(departmentTeachers as any[]).map((t) => {
-            const hex = teacherColorMap.get(String(t.id)) || '#90A4AE'
-            return (
-              <span key={String(t.id)} className="inline-flex items-center gap-1.5">
-                <span
-                  className="inline-block w-3 h-3 rounded-sm border"
-                  style={{ backgroundColor: `${hex}22`, borderColor: hex }}
-                />
-                {String(t.fullName || 'Teacher')}
-              </span>
-            )
-          })}
-        </div>
+        <TeacherColorLegend
+          teachers={(departmentTeachers as any[]).map((t) => ({
+            id: String(t.id),
+            name: String(t.fullName || 'Teacher'),
+          }))}
+          colorMap={teacherColors}
+        />
       ) : null}
 
       {editable ? (

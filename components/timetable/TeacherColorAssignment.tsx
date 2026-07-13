@@ -1,10 +1,16 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Palette } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
+import {
+  GOLDEN_ANGLE_DEG,
+  colorsTooClose,
+  colorAtStep,
+  normalizeHex,
+} from '@/lib/timetable/uniqueTeacherColors'
 
 type TeacherColorRow = {
   teacherId: string
@@ -15,18 +21,16 @@ type TeacherColorRow = {
   fromDatabase?: boolean
 }
 
-const PALETTE = [
-  { hex: '#2563eb', name: 'Blue' },
-  { hex: '#16a34a', name: 'Green' },
-  { hex: '#dc2626', name: 'Red' },
-  { hex: '#9333ea', name: 'Purple' },
-  { hex: '#ea580c', name: 'Orange' },
-  { hex: '#0891b2', name: 'Teal' },
-  { hex: '#db2777', name: 'Pink' },
-  { hex: '#ca8a04', name: 'Gold' },
-  { hex: '#4f46e5', name: 'Indigo' },
-  { hex: '#0d9488', name: 'Turquoise' },
-]
+/** Suggest unused sample swatches from the same golden-angle series. */
+function unusedSuggestions(taken: string[], count = 24): string[] {
+  const out: string[] = []
+  for (let i = 0; i < 120 && out.length < count; i++) {
+    const hex = colorAtStep(-GOLDEN_ANGLE_DEG, i, i).colorHex
+    if (taken.some((t) => colorsTooClose(t, hex))) continue
+    out.push(hex)
+  }
+  return out
+}
 
 export function TeacherColorAssignment() {
   const [rows, setRows] = useState<TeacherColorRow[]>([])
@@ -53,7 +57,12 @@ export function TeacherColorAssignment() {
     load()
   }, [load])
 
-  async function saveColor(row: TeacherColorRow, hex: string, name: string) {
+  const takenHexes = useMemo(
+    () => rows.map((r) => normalizeHex(r.colorHex)).filter(Boolean) as string[],
+    [rows]
+  )
+
+  async function saveColor(row: TeacherColorRow, hex: string, name?: string) {
     setSavingId(row.teacherUserId)
     try {
       const res = await fetch(
@@ -61,7 +70,7 @@ export function TeacherColorAssignment() {
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ colorHex: hex, colorName: name }),
+          body: JSON.stringify({ colorHex: hex, colorName: name || undefined }),
         }
       )
       const data = await res.json().catch(() => ({}))
@@ -111,8 +120,8 @@ export function TeacherColorAssignment() {
           <div>
             <h2 className="text-lg font-bold text-royalPurple-text1">Teacher colour codes</h2>
             <p className="text-sm text-royalPurple-text2 mt-1">
-              Each teacher gets a unique colour on timetable cards (aSc style). Grid cells show
-              initials only; hover for full name.
+              Each teacher has exactly one unique colour (aSc style). Colours are stored permanently
+              and cannot collide with another teacher at this school.
             </p>
           </div>
         </div>
@@ -127,42 +136,55 @@ export function TeacherColorAssignment() {
       </div>
 
       <div className="space-y-3 max-h-[420px] overflow-y-auto">
-        {rows.map((row) => (
-          <div
-            key={row.teacherUserId}
-            className="flex flex-wrap items-center gap-3 rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 px-4 py-3"
-          >
-            <div className="min-w-[160px] flex-1">
-              <div className="font-semibold text-royalPurple-text1">{row.teacherName}</div>
-              <div className="text-xs text-royalPurple-text3">{row.colorName || 'No colour'}</div>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {PALETTE.map((c) => (
-                <button
-                  key={c.hex}
-                  type="button"
-                  disabled={savingId === row.teacherUserId}
-                  onClick={() => saveColor(row, c.hex, c.name)}
-                  className={`w-9 h-9 rounded-lg border-2 transition-transform hover:scale-105 ${
-                    row.colorHex.toLowerCase() === c.hex.toLowerCase()
-                      ? 'border-royalPurple-text1 ring-2 ring-royalPurple-accent/40'
-                      : 'border-royalPurple-border/40'
-                  }`}
-                  style={{ backgroundColor: c.hex }}
-                  title={c.name}
-                />
-              ))}
-            </div>
+        {rows.map((row) => {
+          const suggestions = unusedSuggestions(
+            takenHexes.filter((h) => h !== normalizeHex(row.colorHex)),
+            10
+          )
+          return (
             <div
-              className="w-10 h-10 rounded-lg border border-royalPurple-border/40 shrink-0"
-              style={{ backgroundColor: row.colorHex }}
-              title={row.colorName}
-            />
-          </div>
-        ))}
-        {rows.length === 0 ? (
-          <p className="text-sm text-royalPurple-text3">No teachers found for this school.</p>
-        ) : null}
+              key={row.teacherUserId}
+              className="flex flex-wrap items-center gap-3 rounded-xl border border-royalPurple-border/40 bg-royalPurple-card/30 px-4 py-3"
+            >
+              <div
+                className="w-10 h-10 rounded-lg border border-royalPurple-border/50 shrink-0"
+                style={{ backgroundColor: row.colorHex || '#94A3B8' }}
+                title={row.colorHex}
+              />
+              <div className="min-w-[160px] flex-1">
+                <div className="font-semibold text-royalPurple-text1">{row.teacherName}</div>
+                <div className="text-xs text-royalPurple-text3">{row.colorHex || 'No colour'}</div>
+              </div>
+              <label className="text-xs text-royalPurple-text3">
+                Custom
+                <input
+                  type="color"
+                  className="block mt-1 h-9 w-14 cursor-pointer rounded border border-royalPurple-border/40 bg-transparent"
+                  value={normalizeHex(row.colorHex) || '#2563EB'}
+                  disabled={savingId === row.teacherUserId}
+                  onChange={(e) => saveColor(row, e.target.value, 'Custom')}
+                />
+              </label>
+              <div className="flex flex-wrap gap-1.5">
+                {suggestions.map((hex) => (
+                  <button
+                    key={hex}
+                    type="button"
+                    disabled={savingId === row.teacherUserId}
+                    onClick={() => saveColor(row, hex)}
+                    className={`w-7 h-7 rounded-md border-2 transition-transform hover:scale-105 ${
+                      (row.colorHex || '').toUpperCase() === hex
+                        ? 'border-royalPurple-text1 ring-2 ring-royalPurple-accent/40'
+                        : 'border-royalPurple-border/40'
+                    }`}
+                    style={{ backgroundColor: hex }}
+                    title={hex}
+                  />
+                ))}
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
   )

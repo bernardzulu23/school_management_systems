@@ -98,6 +98,9 @@ export const POST = withErrorHandler(async function POST(req) {
       doublePeriodDuration: normalized.doublePeriodDuration,
       workingDays: normalized.workingDays,
       breakSlots: normalized.breakSlots,
+      schedulingRules: normalized.schedulingRules,
+      ...(normalized.term ? { term: String(normalized.term) } : {}),
+      ...(normalized.academicYear ? { academicYear: String(normalized.academicYear) } : {}),
     },
     create: {
       schoolId,
@@ -107,6 +110,9 @@ export const POST = withErrorHandler(async function POST(req) {
       doublePeriodDuration: normalized.doublePeriodDuration,
       workingDays: normalized.workingDays,
       breakSlots: normalized.breakSlots,
+      schedulingRules: normalized.schedulingRules,
+      ...(normalized.term ? { term: String(normalized.term) } : {}),
+      ...(normalized.academicYear ? { academicYear: String(normalized.academicYear) } : {}),
     },
   })
 

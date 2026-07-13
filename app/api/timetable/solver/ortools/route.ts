@@ -14,6 +14,14 @@ import {
 } from '@/lib/timetable/buildSchoolSolverPayload'
 import { solveTimetable } from '@/lib/timetable/greedySolver'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import {
+  ensureTimetableConfig,
+  normalizeTimetableConfig,
+} from '@/lib/timetable/timeSlotsFromConfig'
+import {
+  parseSchedulingRulesJson,
+  rulesForSolverPayload,
+} from '@/lib/timetable/teacherClassSessionRules'
 
 export const dynamic = 'force-dynamic'
 
@@ -53,6 +61,17 @@ export const POST = withErrorHandler(async function POST(request: NextRequest) {
 
   const ortoolsLessons = buildOrtoolsLessons(payload, effectiveLessons)
   const timeoutSec = Math.max(5, Math.min(120, Number(body.timeoutSec) || 45))
+
+  let sessionRules = rulesForSolverPayload(parseSchedulingRulesJson(null))
+  try {
+    const cfg = await ensureTimetableConfig(prisma, schoolId)
+    sessionRules = rulesForSolverPayload(
+      parseSchedulingRulesJson(normalizeTimetableConfig(cfg).schedulingRules)
+    )
+  } catch {
+    /* defaults */
+  }
+
   const ortoolsPayload = {
     teachers: payload.teachers.map((t) => ({ id: t.id, maxPeriods: 25 })),
     classes: payload.classes.map((c) => ({ id: c.id })),
@@ -65,6 +84,7 @@ export const POST = withErrorHandler(async function POST(request: NextRequest) {
         startTime: s.startTime,
         endTime: s.endTime,
       })),
+    sessionRules,
     timeoutSec,
   }
 

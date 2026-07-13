@@ -84,7 +84,9 @@ export function TimetableControlBar({
             conflictCount === 0 ? 'bg-kpi-pass/20 text-kpi-pass' : 'bg-kpi-fail/20 text-kpi-fail'
           }`}
         >
-          {conflictCount === 0 ? 'No conflicts' : `${conflictCount} conflict(s)`}
+          {conflictCount === 0
+            ? 'No confirmed conflicts'
+            : `${conflictCount} confirmed conflict(s)`}
         </span>
         <span
           className={`rounded-full px-2 py-0.5 font-semibold ${

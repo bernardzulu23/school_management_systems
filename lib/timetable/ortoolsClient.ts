@@ -21,6 +21,12 @@ export type OrtoolsPayload = {
     endTime: string
     isBreak?: boolean
   }>
+  /** Shared with teacherClassSessionRules.ts / solve.py apply_session_rules */
+  sessionRules?: {
+    minGapPeriods: number
+    enforceSubjectSplit?: boolean
+    enforceReturnGap?: boolean
+  }
   timeoutSec?: number
 }
 

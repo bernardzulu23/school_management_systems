@@ -219,7 +219,7 @@ describe('canPlace', () => {
     if (!result.ok) expect(result.reason).toBe('forbidden_slot')
   })
 
-  it('rejects same teacher+class+subject twice on same day', () => {
+  it('allows same teacher+class+subject twice on same day when periods abut (continuous block)', () => {
     const placed: PlacedBlock[] = [
       {
         ...block,
@@ -232,9 +232,34 @@ describe('canPlace', () => {
         endTime: '07:40',
       },
     ]
-    const result = canPlace(block, { day: 'monday', startPeriod: 3, span: 1 }, placed)
+    const result = canPlace(
+      block,
+      { day: 'monday', startPeriod: 2, span: 1, startTime: '07:40', endTime: '08:20' },
+      placed
+    )
+    expect(result.ok).toBe(true)
+  })
+
+  it('rejects non-contiguous same teacher+class+subject on same day (Rule A)', () => {
+    const placed: PlacedBlock[] = [
+      {
+        ...block,
+        blockId: 'existing',
+        day: 'monday',
+        startPeriod: 1,
+        startMin: 0,
+        endMin: 40,
+        startTime: '07:00',
+        endTime: '07:40',
+      },
+    ]
+    const result = canPlace(
+      block,
+      { day: 'monday', startPeriod: 3, span: 1, startTime: '09:20', endTime: '10:00' },
+      placed
+    )
     expect(result.ok).toBe(false)
-    if (!result.ok) expect(result.reason).toBe('teacher_class_subject_same_day')
+    if (!result.ok) expect(result.reason).toBe('teacher_class_subject_split')
   })
 
   it('allows non-overlapping placement', () => {
@@ -260,7 +285,7 @@ describe('canPlace', () => {
     expect(result.ok).toBe(true)
   })
 
-  it('rejects second double same class+subject on same day (non-overlapping periods)', () => {
+  it('allows second double same class+subject on same day when periods abut (hard path contiguous)', () => {
     const doubleBlock: SchedulerBlock = {
       blockId: 'b1',
       allocationId: 'a1',
@@ -287,9 +312,85 @@ describe('canPlace', () => {
       blockId: 'b2',
       teacherId: 't2',
     }
-    const result = canPlace(secondDouble, { day: 'thursday', startPeriod: 3, span: 2 }, placed)
+    // Same class+subject but different teacher — Rule A is teacher-scoped; period 3 after 1-2
+    // with gap 0 between endPeriod 2 and start 3 → contiguous by period for same teacher only.
+    // Different teacher: no Rule A. Overlap check is grade_conflict if periods overlap.
+    const result = canPlace(
+      secondDouble,
+      { day: 'thursday', startPeriod: 3, span: 2, startTime: '08:20', endTime: '09:40' },
+      placed
+    )
+    // periods 3-4 vs placed 1-2: no overlap → ok for different teacher
+    expect(result.ok).toBe(true)
+  })
+
+  it('rejects second same-teacher double non-contiguous on same day (Rule A)', () => {
+    const doubleBlock: SchedulerBlock = {
+      blockId: 'b1',
+      allocationId: 'a1',
+      teacherId: 't1',
+      classId: 'c1',
+      subjectId: 's1',
+      span: 2,
+      unitType: 'DOUBLE',
+    }
+    const placed: PlacedBlock[] = [
+      {
+        ...doubleBlock,
+        blockId: 'existing',
+        day: 'thursday',
+        startPeriod: 1,
+        startMin: 0,
+        endMin: 80,
+        startTime: '07:00',
+        endTime: '08:20',
+      },
+    ]
+    const secondDouble: SchedulerBlock = {
+      ...doubleBlock,
+      blockId: 'b2',
+    }
+    const result = canPlace(
+      secondDouble,
+      { day: 'thursday', startPeriod: 4, span: 2, startTime: '09:00', endTime: '10:20' },
+      placed
+    )
     expect(result.ok).toBe(false)
-    if (!result.ok) expect(result.reason).toBe('class_subject_same_day')
+    if (!result.ok) expect(result.reason).toBe('teacher_class_subject_split')
+  })
+
+  it('soft-rejects stacked doubles same class+subject when strictSoftConstraints is on', () => {
+    const doubleBlock: SchedulerBlock = {
+      blockId: 'b1',
+      allocationId: 'a1',
+      teacherId: 't1',
+      classId: 'c1',
+      subjectId: 's1',
+      span: 2,
+      unitType: 'DOUBLE',
+    }
+    const placed: PlacedBlock[] = [
+      {
+        ...doubleBlock,
+        blockId: 'existing',
+        day: 'thursday',
+        startPeriod: 1,
+        startMin: 0,
+        endMin: 80,
+        startTime: '07:00',
+        endTime: '08:20',
+      },
+    ]
+    const secondDouble: SchedulerBlock = {
+      ...doubleBlock,
+      blockId: 'b2',
+      teacherId: 't2',
+    }
+    const result = canPlace(secondDouble, { day: 'thursday', startPeriod: 3, span: 2 }, placed, {
+      strictSoftConstraints: true,
+    })
+    expect(result.ok).toBe(false)
+    if (!result.ok) expect(result.reason).toBe('soft_same_day_multi_block')
   })
 
   it('allows second double same teacher on same day for different class', () => {

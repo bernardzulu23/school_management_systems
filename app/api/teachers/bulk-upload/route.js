@@ -193,7 +193,7 @@ export const POST = withErrorHandler(async (request) => {
           new Set([...row.assignedSubjectNames, ...subjectNamesFromAssignments].map(String))
         )
 
-        await tx.teacher.create({
+        const teacher = await tx.teacher.create({
           data: {
             userId: user.id,
             schoolId,
@@ -228,6 +228,8 @@ export const POST = withErrorHandler(async (request) => {
                 : undefined,
           },
         })
+        const { ensureTeacherColor } = await import('@/lib/timetable/assignTeacherColor')
+        await ensureTeacherColor(tx, { schoolId, teacherId: teacher.id })
       })
       insertedCount++
     } catch (dbErr) {

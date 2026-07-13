@@ -28,6 +28,11 @@ type ConfigForm = {
   singleDuration: number
   workingDays: string[]
   breakSlots: BreakSlot[]
+  schedulingRules: {
+    minGapPeriods: number
+    ruleASeverity: 'hard' | 'soft'
+    ruleBSeverity: 'hard' | 'soft'
+  }
 }
 
 function emptyForm(): ConfigForm {
@@ -38,6 +43,7 @@ function emptyForm(): ConfigForm {
     singleDuration: d.singleDuration,
     workingDays: [...d.workingDays],
     breakSlots: d.breakSlots.map((b) => ({ ...b })),
+    schedulingRules: { ...d.schedulingRules },
   }
 }
 
@@ -67,6 +73,7 @@ export function SchoolTimetableSettings({
         singleDuration: d.singleDuration,
         workingDays: [...d.workingDays],
         breakSlots: d.breakSlots.map((b) => ({ ...b })),
+        schedulingRules: { ...d.schedulingRules },
       })
     } catch (e: any) {
       toast.error(e?.message || 'Could not load timetable settings')
@@ -145,6 +152,7 @@ export function SchoolTimetableSettings({
         singleDuration: normalized.singleDuration,
         workingDays: [...normalized.workingDays],
         breakSlots: normalized.breakSlots.map((b) => ({ ...b })),
+        schedulingRules: { ...normalized.schedulingRules },
       })
       toast.success('School day times saved. Regenerate the timetable to apply new slots.')
       onSaved?.({ config: normalized as ConfigForm, timeSlots: slots })
@@ -221,6 +229,81 @@ export function SchoolTimetableSettings({
               ))}
             </select>
           </label>
+
+          <div className="rounded-lg border border-royalPurple-border/40 p-4 space-y-3 bg-royalPurple-card/20">
+            <div>
+              <h3 className="text-sm font-bold text-royalPurple-text1">Teacher return rules</h3>
+              <p className="text-xs text-royalPurple-text2 mt-1">
+                Same subject twice in a day for one class must be one continuous block. Returning
+                later with a different subject needs a minimum free-period gap (default 1).
+              </p>
+            </div>
+            <label className="block">
+              <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
+                Minimum gap between different subjects (periods)
+              </span>
+              <input
+                type="number"
+                min={0}
+                max={8}
+                className="zsms-input w-full mt-1"
+                value={form.schedulingRules.minGapPeriods}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    schedulingRules: {
+                      ...f.schedulingRules,
+                      minGapPeriods: Math.max(0, Math.min(8, Number(e.target.value) || 0)),
+                    },
+                  }))
+                }
+              />
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label className="block">
+                <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
+                  Split same subject (Rule A)
+                </span>
+                <select
+                  className="zsms-select w-full mt-1"
+                  value={form.schedulingRules.ruleASeverity}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      schedulingRules: {
+                        ...f.schedulingRules,
+                        ruleASeverity: e.target.value === 'soft' ? 'soft' : 'hard',
+                      },
+                    }))
+                  }
+                >
+                  <option value="hard">Error (blocks publish)</option>
+                  <option value="soft">Warning (can dismiss)</option>
+                </select>
+              </label>
+              <label className="block">
+                <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
+                  Return too soon (Rule B)
+                </span>
+                <select
+                  className="zsms-select w-full mt-1"
+                  value={form.schedulingRules.ruleBSeverity}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      schedulingRules: {
+                        ...f.schedulingRules,
+                        ruleBSeverity: e.target.value === 'hard' ? 'hard' : 'soft',
+                      },
+                    }))
+                  }
+                >
+                  <option value="soft">Warning (can dismiss)</option>
+                  <option value="hard">Error (blocks publish)</option>
+                </select>
+              </label>
+            </div>
+          </div>
 
           <div>
             <span className="text-xs font-semibold text-royalPurple-text3 uppercase">

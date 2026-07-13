@@ -50,7 +50,6 @@ import {
 } from '@/components/timetable/GenerationProgressModal'
 import {
   useTimetableDraftMeta,
-  notifyTimetableConflictsUpdated,
   conflictAuditKey,
   canDismissAuditRow,
 } from '@/hooks/useTimetableDraftMeta'
@@ -241,7 +240,6 @@ function HeadteacherTimetablePageContent() {
   const publish = useTimetableStore((s) => s.publish)
   const lastPublishedAt = useTimetableStore((s) => s.lastPublishedAt)
   const pendingChanges = useTimetableStore((s) => s.pendingChanges)
-  const conflictCount = useTimetableStore((s) => s.getConflictCount)
   const loadFromApi = useTimetableStore((s) => s.loadFromApi)
   const reloadFromServer = useTimetableStore((s) => s.reloadFromServer)
   const detectConflicts = useTimetableStore((s) => s.detectConflicts)
@@ -254,7 +252,6 @@ function HeadteacherTimetablePageContent() {
     meta: draftMeta,
     loading: draftMetaLoading,
     rescan: rescanDraftConflicts,
-    refresh: refreshDraftMeta,
     dismissAudit,
     isFresh: draftMetaFresh,
   } = useTimetableDraftMeta({ term, academicYear })
@@ -543,21 +540,17 @@ function HeadteacherTimetablePageContent() {
   )
 
   const stats = useMemo(() => {
-    const clientConflicts = conflictCount()
     const serverErrors = draftMeta?.conflictErrors ?? 0
     const serverWarnings = draftMeta?.conflictWarnings ?? 0
     const serverTotal = serverErrors + serverWarnings
-    const displayConflicts = draftMetaFresh && draftMeta != null ? serverErrors : clientConflicts
-    const previewDiverged = draftMetaFresh && draftMeta != null && clientConflicts !== serverTotal
     return {
       classCount: visibleClasses.length,
       teacherCount: teachers.length,
-      conflicts: displayConflicts,
+      /** Official count = server hard errors only (Model A). */
+      conflicts: serverErrors,
       serverErrors,
       serverWarnings,
       serverTotal,
-      clientConflicts,
-      previewDiverged,
       published: isPublished,
       pending: pendingChanges.length,
       lastPublished: lastPublishedAt ? lastPublishedAt.toLocaleString() : null,
@@ -565,9 +558,7 @@ function HeadteacherTimetablePageContent() {
   }, [
     visibleClasses.length,
     teachers.length,
-    conflictCount,
     draftMeta,
-    draftMetaFresh,
     isPublished,
     pendingChanges.length,
     lastPublishedAt,
@@ -900,9 +891,9 @@ function HeadteacherTimetablePageContent() {
   const canPublish =
     assignments.length > 0 &&
     feasibilityErrors.length === 0 &&
-    (draftMetaFresh && draftMeta != null
-      ? draftMeta.canPublish && (draftMeta.conflictErrors ?? 0) === 0
-      : stats.clientConflicts === 0)
+    draftMeta != null &&
+    draftMeta.canPublish &&
+    (draftMeta.conflictErrors ?? 0) === 0
 
   const openMissingConflictsTab = () => {
     setConflictIssueFilter('missing')
@@ -1014,8 +1005,7 @@ function HeadteacherTimetablePageContent() {
       const slots = useTimetableStore.getState().timeSlots
       if (slots.length) setTimeSlots(slots as TimeSlot[])
       detectConflicts()
-      await refreshDraftMeta(false)
-      notifyTimetableConflictsUpdated()
+      await rescanDraftConflicts()
     } catch (e: any) {
       toast.error(e?.message || 'Reload failed')
     } finally {
@@ -1058,8 +1048,7 @@ function HeadteacherTimetablePageContent() {
       const slots = useTimetableStore.getState().timeSlots
       if (slots.length) setTimeSlots(slots as TimeSlot[])
       detectConflicts()
-      await refreshDraftMeta(false)
-      notifyTimetableConflictsUpdated()
+      await rescanDraftConflicts()
     } catch (e: any) {
       toast.error(e?.message || 'Save failed')
     }
@@ -1142,8 +1131,7 @@ function HeadteacherTimetablePageContent() {
       const slots = useTimetableStore.getState().timeSlots
       if (slots.length) setTimeSlots(slots as TimeSlot[])
       detectConflicts()
-      await refreshDraftMeta(true)
-      notifyTimetableConflictsUpdated()
+      await rescanDraftConflicts()
       await loadLockedPeriodAssignments()
       setGridMode('wall')
       setTab('edit')
@@ -1280,8 +1268,7 @@ function HeadteacherTimetablePageContent() {
                   const slots = useTimetableStore.getState().timeSlots
                   if (slots.length) setTimeSlots(slots as TimeSlot[])
                   detectConflicts()
-                  await refreshDraftMeta(true)
-                  notifyTimetableConflictsUpdated()
+                  await rescanDraftConflicts()
                 } catch (e: any) {
                   toast.error(e?.message || 'Failed to publish to database')
                 } finally {
@@ -1369,11 +1356,11 @@ function HeadteacherTimetablePageContent() {
             )}
             {draftMetaFresh ? (
               <div className="text-[10px] text-royalPurple-text3 mt-1">Last scan synced</div>
-            ) : stats.clientConflicts > 0 ? (
-              <div className="text-[10px] text-royalPurple-text3 mt-1">
-                {stats.clientConflicts} in editor (rescan to sync)
-              </div>
-            ) : null}
+            ) : draftMetaLoading ? (
+              <div className="text-[10px] text-royalPurple-text3 mt-1">Loading server scan…</div>
+            ) : (
+              <div className="text-[10px] text-royalPurple-text3 mt-1">Rescan to refresh</div>
+            )}
           </div>
           <div className="onboard-card p-4">
             <div className="text-xs text-royalPurple-text3">Status</div>
@@ -1396,28 +1383,9 @@ function HeadteacherTimetablePageContent() {
           canRedo={redoStack.length > 0}
           onReload={reloadTimetable}
           reloading={reloadingTimetable}
-          conflictCount={stats.conflicts}
+          conflictCount={stats.serverErrors}
           isPublished={stats.published}
         />
-
-        {stats.previewDiverged ? (
-          <div className="rounded-xl border border-amber-500/50 bg-amber-950/20 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-            <p className="text-sm text-amber-100">
-              Local preview may differ from saved draft — server reports {stats.serverTotal}{' '}
-              conflict(s), editor shows {stats.clientConflicts}. Click Reload to sync from the
-              database.
-            </p>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={reloadTimetable}
-              disabled={reloadingTimetable}
-              className="zsms-hover-raise shrink-0"
-            >
-              {reloadingTimetable ? 'Reloading…' : 'Reload'}
-            </Button>
-          </div>
-        ) : null}
 
         <div className="flex justify-end print:hidden">
           <Link
@@ -1965,6 +1933,7 @@ function HeadteacherTimetablePageContent() {
                 teachers={teachers}
                 season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
                 showConflicts
+                serverConflictErrors={stats.serverErrors}
                 unplacedLessons={unplacedLessons}
                 lockedPeriodKeys={lockedPeriodKeys}
                 onDropUnplaced={onDropUnplacedLesson}
@@ -2043,6 +2012,7 @@ function HeadteacherTimetablePageContent() {
                   teachers={teachers}
                   season={uiSeasonToDetectorSeason(season) === 'harvest' ? 'farming' : season}
                   showConflicts
+                  serverConflictErrors={stats.serverErrors}
                   unplacedLessons={unplacedLessons}
                   lockedPeriodKeys={lockedPeriodKeys}
                   onDropUnplaced={onDropUnplacedLesson}
@@ -2128,11 +2098,6 @@ function HeadteacherTimetablePageContent() {
                     <span className="text-amber-700">
                       {stats.serverWarnings} warning{stats.serverWarnings === 1 ? '' : 's'}
                     </span>
-                    {stats.clientConflicts > 0 ? (
-                      <span className="text-royalPurple-text3">
-                        {stats.clientConflicts} in local editor preview
-                      </span>
-                    ) : null}
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2">

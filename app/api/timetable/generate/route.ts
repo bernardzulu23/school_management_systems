@@ -2,7 +2,11 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
-import { ensureTimetableConfig } from '@/lib/timetable/timeSlotsFromConfig'
+import {
+  ensureTimetableConfig,
+  normalizeTimetableConfig,
+} from '@/lib/timetable/timeSlotsFromConfig'
+import { parseSchedulingRulesJson } from '@/lib/timetable/teacherClassSessionRules'
 import { computeMaxExecutionMs } from '@/lib/timetable/solverTimeout'
 import { buildDaySlotsFromTimetableConfig } from '@/lib/timetable/buildDaySlotsFromConfig'
 import { expandAllocationsIntoBlocks, type DayPeriodSlot } from '@/lib/timetable/scheduler'
@@ -141,6 +145,9 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
   const workingDays = Object.keys(daySlots)
   const lessonCount = expandAllocationsIntoBlocks(normalizedAllocations as any[]).length
   const maxExecutionMs = computeMaxExecutionMs(lessonCount, requestedMaxMs)
+  const teacherClassSessionRules = parseSchedulingRulesJson(
+    normalizeTimetableConfig(config).schedulingRules
+  )
 
   let scheduleResult = await hybridGenerateTimetable(normalizedAllocations as any[], daySlots, {
     lockedSlots,
@@ -152,6 +159,7 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
       maxExecutionMs,
       useLlm,
       solverUrl: process.env.ORTOOLS_SOLVER_URL,
+      teacherClassSessionRules,
     },
   })
 

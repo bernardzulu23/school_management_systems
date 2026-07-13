@@ -52,6 +52,14 @@ function TimetableConflictsContent() {
       const data = res?.data ?? res
       if (!data || data.error) throw new Error(data?.error || 'Failed to fetch conflicts')
       setSummary(data)
+      notifyTimetableConflictsUpdated({
+        term: data.term || term,
+        academicYear: data.academicYear || academicYear,
+        conflictCount: Number(data.totalConflicts ?? 0),
+        conflictErrors: Number(data.errorCount ?? 0),
+        conflictWarnings: Number(data.warningCount ?? 0),
+        lastScannedAt: data.scannedAt ?? new Date().toISOString(),
+      })
     } catch (e) {
       setError(e?.message || 'Failed to fetch conflicts')
     } finally {
@@ -72,7 +80,6 @@ function TimetableConflictsContent() {
       if (!data?.success) throw new Error(data?.error || 'Resolution failed')
       setSuccessMsg(data.message)
       setExpanded(null)
-      notifyTimetableConflictsUpdated()
       await fetchConflicts()
     } catch (e) {
       setError(e?.message || 'Resolution failed')
@@ -98,7 +105,14 @@ function TimetableConflictsContent() {
       if (!data?.success) throw new Error(data?.error || 'Dismiss failed')
       setSuccessMsg('Warning dismissed — it will stay hidden until you restore dismissed items.')
       setExpanded(null)
-      notifyTimetableConflictsUpdated()
+      notifyTimetableConflictsUpdated({
+        term,
+        academicYear,
+        conflictCount: Number(data.conflictCount ?? 0),
+        conflictErrors: Number(data.conflictErrors ?? 0),
+        conflictWarnings: Number(data.conflictWarnings ?? 0),
+        lastScannedAt: new Date().toISOString(),
+      })
       await fetchConflicts()
     } catch (e) {
       setError(e?.message || 'Dismiss failed')

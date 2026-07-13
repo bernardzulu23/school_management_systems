@@ -1,6 +1,18 @@
 import type { Assignment } from './types'
-import { assignmentsShareSlot, assignmentsSameDay } from './constraintCheck'
-import { gradeDoubleBookedMessage } from './zambiaTerminology'
+import {
+  buildClassDoubleBookedMessage,
+  parseTimeToMinutes,
+  timedSlotsOverlap,
+} from './timeRangeOverlap'
+import {
+  collapseContiguousBlocks,
+  detectTeacherClassSessionIssues,
+  fragmentFromAssignment,
+  normalizeTeacherClassSessionRules,
+  type TeacherClassSessionRulesConfig,
+  TEACHER_CLASS_RETURN_TOO_SOON,
+  TEACHER_CLASS_SUBJECT_SPLIT,
+} from './teacherClassSessionRules'
 
 export type TimetableConflictType =
   | 'TEACHER_DOUBLE_BOOKED'
@@ -8,6 +20,8 @@ export type TimetableConflictType =
   | 'ROOM_DOUBLE_BOOKED'
   | 'TEACHER_CONSECUTIVE_LIMIT'
   | 'SUBJECT_DISTRIBUTION'
+  | typeof TEACHER_CLASS_SUBJECT_SPLIT
+  | typeof TEACHER_CLASS_RETURN_TOO_SOON
 
 export type TimetableConflictSeverity = 'hard' | 'soft'
 
@@ -27,24 +41,18 @@ function classLabelFromAssignments(list: Assignment[], classId: string): string 
 }
 
 function toMinutes(t: string) {
-  const [h, m] = String(t || '0:0')
-    .split(':')
-    .map(Number)
-  if (!Number.isFinite(h) || !Number.isFinite(m)) return 0
-  return h * 60 + m
+  return parseTimeToMinutes(t) ?? 0
 }
 
+/**
+ * Half-open [start, end) overlap — same semantics as Postgres
+ * `timetable_slot_int4range` / EXCLUDE USING gist.
+ */
 export function timesOverlap(
-  a: Pick<Assignment, 'dayOfWeek' | 'startTime' | 'endTime'>,
-  b: Pick<Assignment, 'dayOfWeek' | 'startTime' | 'endTime'>
+  a: Pick<Assignment, 'dayOfWeek' | 'startTime' | 'endTime' | 'isBreak' | 'season'>,
+  b: Pick<Assignment, 'dayOfWeek' | 'startTime' | 'endTime' | 'isBreak' | 'season'>
 ) {
-  if (String(a.dayOfWeek) !== String(b.dayOfWeek)) return false
-  const a0 = toMinutes(a.startTime)
-  const a1 = toMinutes(a.endTime)
-  const b0 = toMinutes(b.startTime)
-  const b1 = toMinutes(b.endTime)
-  if (a1 <= a0 || b1 <= b0) return false
-  return a0 < b1 && b0 < a1
+  return timedSlotsOverlap(a, b, { respectSeason: false })
 }
 
 /** Union-find clusters so one real clash → one issue (not C(n,2) pair rows). */
@@ -79,44 +87,61 @@ function clusterByLink(
   return [...buckets.values()].filter((g) => g.length >= 2)
 }
 
+/** Hard class clash = same class + genuine [start,end) time overlap (matches EXCLUDE). */
 function classAssignmentsConflict(a1: Assignment, a2: Assignment): boolean {
   if (String(a1.classId) !== String(a2.classId)) return false
-  // Policy: at most one block of a given subject per class per day
-  if (String(a1.subjectId) === String(a2.subjectId) && assignmentsSameDay(a1, a2)) return true
-  return assignmentsShareSlot(a1, a2, [])
+  return timedSlotsOverlap(a1, a2)
 }
 
 function teacherAssignmentsConflict(a1: Assignment, a2: Assignment): boolean {
   if (String(a1.teacherId) !== String(a2.teacherId)) return false
-  return assignmentsShareSlot(a1, a2, [])
+  return timedSlotsOverlap(a1, a2)
 }
 
 function roomAssignmentsConflict(a1: Assignment, a2: Assignment): boolean {
   if (!a1.classroomId || !a2.classroomId) return false
   if (String(a1.classroomId) !== String(a2.classroomId)) return false
-  return assignmentsShareSlot(a1, a2, [])
+  return timedSlotsOverlap(a1, a2)
 }
 
 /**
  * Matrix validation (FET/aSc-style): hard constraints must be zero before publish.
- * Hard double-bookings are emitted once per overlapping/same-day cluster, not once per pair.
+ * Hard double-bookings are emitted once per overlapping-time cluster, not once per pair.
+ * Same-subject-same-day without time overlap is soft SUBJECT_DISTRIBUTION only
+ * (class-level distribution). Teacher↔class session Rules A/B are separate types.
  */
 export function validateTimetable(
   assignments: Assignment[],
-  opts?: { includeRoomChecks?: boolean }
+  opts?: {
+    includeRoomChecks?: boolean
+    teacherClassSessionRules?: Partial<TeacherClassSessionRulesConfig> | null
+  }
 ): TimetableValidationConflict[] {
   const list = (assignments || []).filter((a) => a && !a.isBreak)
   const conflicts: TimetableValidationConflict[] = []
   const includeRoom = opts?.includeRoomChecks === true
+  const sessionRules = normalizeTeacherClassSessionRules(opts?.teacherClassSessionRules)
 
   for (const group of clusterByLink(list, classAssignmentsConflict)) {
     const classId = String(group[0].classId)
+    const sorted = [...group].sort(
+      (x, y) =>
+        toMinutes(x.startTime) - toMinutes(y.startTime) || String(x.id).localeCompare(String(y.id))
+    )
     conflicts.push({
       type: 'CLASS_DOUBLE_BOOKED',
       severity: 'hard',
-      message: gradeDoubleBookedMessage(classLabelFromAssignments(list, classId)),
+      message: buildClassDoubleBookedMessage({
+        className: classLabelFromAssignments(list, classId),
+        dayOfWeek: sorted[0]?.dayOfWeek,
+        entries: sorted.map((a) => ({
+          subjectName: (a as Assignment & { subjectName?: string }).subjectName,
+          startTime: a.startTime,
+          endTime: a.endTime,
+        })),
+      }),
       entityId: classId,
-      assignmentIds: group.map((a) => String(a.id)),
+      assignmentIds: sorted.map((a) => String(a.id)),
     })
   }
 
@@ -170,7 +195,29 @@ export function validateTimetable(
     }
   }
 
-  // Soft: same subject twice on one day for a class (uneven distribution hint)
+  // Teacher↔class session rules (A: non-contiguous same subject; B: different-subject min gap)
+  const sessionFrags = list
+    .map((a) =>
+      fragmentFromAssignment({
+        ...a,
+        subjectName: (a as Assignment & { subjectName?: string }).subjectName,
+        className: (a as Assignment & { className?: string }).className,
+        teacherName: (a as Assignment & { teacherName?: string }).teacherName,
+      })
+    )
+    .filter(Boolean)
+  for (const issue of detectTeacherClassSessionIssues(sessionFrags as any, sessionRules)) {
+    conflicts.push({
+      type: issue.type,
+      severity: issue.severity,
+      message: issue.message,
+      entityId: issue.entityId,
+      assignmentIds: issue.assignmentIds,
+    })
+  }
+
+  // Soft: same subject twice on one day for a class (uneven distribution hint).
+  // Skip continuous blocks and cases already covered by Rule A.
   const byClassSubjectDay = new Map<string, number>()
   for (const a of list) {
     const k = `${a.classId}|${a.subjectId}|${a.dayOfWeek}`
@@ -179,21 +226,32 @@ export function validateTimetable(
   for (const [k, count] of byClassSubjectDay) {
     if (count < 2) continue
     const [classId, subjectId, day] = k.split('|')
-    const ids = list
-      .filter(
-        (a) =>
-          String(a.classId) === classId &&
-          String(a.subjectId) === subjectId &&
-          String(a.dayOfWeek) === day
-      )
-      .map((a) => String(a.id))
-    const alreadyHard = conflicts.some(
-      (c) =>
-        c.type === 'CLASS_DOUBLE_BOOKED' &&
-        c.severity === 'hard' &&
-        ids.every((id) => c.assignmentIds.includes(id))
+    const rows = list.filter(
+      (a) =>
+        String(a.classId) === classId &&
+        String(a.subjectId) === subjectId &&
+        String(a.dayOfWeek) === day
     )
-    if (alreadyHard) continue
+    const ids = rows.map((a) => String(a.id))
+    const alreadyCovered = conflicts.some(
+      (c) =>
+        (c.type === 'CLASS_DOUBLE_BOOKED' || c.type === TEACHER_CLASS_SUBJECT_SPLIT) &&
+        ids.some((id) => c.assignmentIds.includes(id))
+    )
+    if (alreadyCovered) continue
+
+    const frags = rows
+      .map((a) =>
+        fragmentFromAssignment({
+          ...a,
+          subjectName: (a as Assignment & { subjectName?: string }).subjectName,
+          className: (a as Assignment & { className?: string }).className,
+          teacherName: (a as Assignment & { teacherName?: string }).teacherName,
+        })
+      )
+      .filter(Boolean)
+    if (frags.length >= 2 && collapseContiguousBlocks(frags as any).length <= 1) continue
+
     conflicts.push({
       type: 'SUBJECT_DISTRIBUTION',
       severity: 'soft',

@@ -4,10 +4,12 @@
  * Hard constraints (never violated):
  *  1. Teacher cannot teach two grades at the same time.
  *  2. Grade cannot have two subjects at the same time.
- *  3. Multi-period blocks for the same class+subject cannot stack on the same day.
+ *  3. Teacher↔class session rules (shared with audit): non-contiguous same-subject
+ *     split (Rule A); different-subject return closer than configured min gap (Rule B).
  *
  * Soft constraints (optional during search via strictSoftConstraints):
- *  - Same subject twice on same day for same grade
+ *  - Same subject twice on same day for same grade (prefer spread)
+ *  - Two multi-period blocks of the same class+subject on the same day
  *  - Teacher daily period cap
  *  - Prefer spreading teacher doubles across weekdays (not a hard block)
  */
@@ -35,6 +37,13 @@ import {
   type RecipeLikeForRules,
 } from '@/lib/timetable/constraintRules'
 import type { LockedSlotReservation } from '@/lib/timetable/preflightFeasibility'
+import {
+  DEFAULT_TEACHER_CLASS_SESSION_RULES,
+  normalizeTeacherClassSessionRules,
+  teacherClassSessionPlacementViolation,
+  type TeacherClassSessionRulesConfig,
+  type SessionFragment,
+} from '@/lib/timetable/teacherClassSessionRules'
 
 /** Default break positions when daySlots cannot be inspected (legacy fallback). */
 export const BREAK_AFTER_PERIODS = [2, 5]
@@ -315,7 +324,7 @@ export function tooCloseSameSubject(
 
 export function canPlace(
   block: SchedulerBlock,
-  slot: { day: string; startPeriod: number; span: number },
+  slot: { day: string; startPeriod: number; span: number; startTime?: string; endTime?: string },
   placed: PlacedBlock[],
   options?: {
     maxTeacherPeriodsPerDay?: number
@@ -325,6 +334,7 @@ export function canPlace(
     breakAfterPeriods?: number[]
     allBlocks?: SchedulerBlock[]
     workingDayCount?: number
+    teacherClassSessionRules?: Partial<TeacherClassSessionRulesConfig> | null
   }
 ): CanPlaceResult {
   const { day, startPeriod } = slot
@@ -334,6 +344,9 @@ export function canPlace(
   const strictSoft = options?.strictSoftConstraints === true
   const reserved = options?.reservedTeacherSlots
   const breakAfterPeriods = options?.breakAfterPeriods ?? BREAK_AFTER_PERIODS
+  const sessionRules = normalizeTeacherClassSessionRules(
+    options?.teacherClassSessionRules ?? DEFAULT_TEACHER_CLASS_SESSION_RULES
+  )
   const nd = normalizeDay(day)
 
   if (!consecutivePeriodsAreValid(startPeriod, span, breakAfterPeriods)) {
@@ -352,18 +365,6 @@ export function canPlace(
 
   for (const pl of placed) {
     if (normalizeDay(pl.day) !== nd) continue
-
-    if (
-      pl.teacherId === block.teacherId &&
-      pl.classId === block.classId &&
-      pl.subjectId === block.subjectId
-    ) {
-      return { ok: false, reason: 'teacher_class_subject_same_day' }
-    }
-
-    if (pl.classId === block.classId && pl.subjectId === block.subjectId) {
-      return { ok: false, reason: 'class_subject_same_day' }
-    }
 
     if (pl.teacherId === block.teacherId && pl.classId === block.classId) {
       if (periodsOverlap(pl.startPeriod, pl.span, startPeriod, span)) {
@@ -387,11 +388,51 @@ export function canPlace(
     }
   }
 
-  if (span >= 2 && wouldStackSameDay(block, day, placed)) {
-    return { ok: false, reason: 'same_day_multi_block' }
+  // Shared Rule A / Rule B (same logic as validateTimetable / CP-SAT)
+  const fictive = (period: number) => {
+    const mins = Math.max(0, (Number(period) || 1) - 1) * 40
+    const h = Math.floor(mins / 60)
+    const m = mins % 60
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+  }
+  const candStart = String(slot.startTime || '').slice(0, 5) || fictive(startPeriod)
+  const candEnd = String(slot.endTime || '').slice(0, 5) || fictive(startPeriod + Math.max(1, span))
+  const candFrag: SessionFragment = {
+    id: String(block.blockId),
+    teacherId: String(block.teacherId),
+    classId: String(block.classId),
+    subjectId: String(block.subjectId),
+    dayOfWeek: nd,
+    startPeriod,
+    endPeriod: startPeriod + Math.max(1, span) - 1,
+    startTime: candStart,
+    endTime: candEnd,
+  }
+  const placedFrags: SessionFragment[] = placed.map((pl) => {
+    const pSpan = Math.max(1, Number(pl.span) || 1)
+    const pStart = Number(pl.startPeriod)
+    return {
+      id: String(pl.blockId),
+      teacherId: String(pl.teacherId),
+      classId: String(pl.classId),
+      subjectId: String(pl.subjectId),
+      dayOfWeek: normalizeDay(pl.day),
+      startPeriod: pStart,
+      endPeriod: pStart + pSpan - 1,
+      startTime: String(pl.startTime || '').slice(0, 5) || fictive(pStart),
+      endTime: String(pl.endTime || '').slice(0, 5) || fictive(pStart + pSpan),
+    }
+  })
+  const sessionHit = teacherClassSessionPlacementViolation(candFrag, placedFrags, sessionRules)
+  if (sessionHit) {
+    return { ok: false, reason: sessionHit.reason }
   }
 
   if (strictSoft) {
+    if (span >= 2 && wouldStackSameDay(block, day, placed)) {
+      return { ok: false, reason: 'soft_same_day_multi_block' }
+    }
+
     const sameSubjectSameDay = placed.find(
       (pl) => pl.subjectId === block.subjectId && pl.classId === block.classId && pl.day === day
     )
@@ -545,6 +586,8 @@ export type GenerateTimetableOptions = {
   blocksSubset?: SchedulerBlock[]
   restartSeed?: number
   maxRestarts?: number
+  /** Shared with audit / CP-SAT (teacherClassSessionRules.ts). */
+  teacherClassSessionRules?: Partial<TeacherClassSessionRulesConfig> | null
 }
 
 function buildSchedulerResult(
@@ -623,6 +666,7 @@ export function generateTimetableOnce(
     breakAfterPeriods,
     allBlocks,
     workingDayCount: Object.keys(daySlots).length,
+    teacherClassSessionRules: options.teacherClassSessionRules,
   }
 
   function pushPlacedFromCandidate(block: SchedulerBlock, cand: SchedulerCandidateSlot) {

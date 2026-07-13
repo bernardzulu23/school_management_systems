@@ -4,16 +4,12 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
-import {
-  loadTeacherColorMap,
-  PREDEFINED_TEACHER_COLORS,
-  teacherColorMapToJson,
-} from '@/lib/timetable/teacherColors'
+import { loadTeacherColorMap, teacherColorMapToJson } from '@/lib/timetable/teacherColors'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
-import { distinctTeacherHex } from '@/lib/timetable/teacherDisplay'
+import { assignUniqueColorsForSchool, ensureTeacherColor } from '@/lib/timetable/assignTeacherColor'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
-const TEACHER_COLOR_LIMIT = 300
+const TEACHER_COLOR_LIMIT = 500
 
 export const GET = withErrorHandler(async function GET(req) {
   const user = await getAuthUser(req)
@@ -25,26 +21,26 @@ export const GET = withErrorHandler(async function GET(req) {
   const typeCheck = await guardSchoolOnlyTimetable(schoolId)
   if (!typeCheck.allowed) return typeCheck.response
 
+  // Ensure every teacher has a persisted unique colour (idempotent).
+  await assignUniqueColorsForSchool(prisma, schoolId, { force: false })
+
   const colorMap = await loadTeacherColorMap(prisma, schoolId)
   const teachers = await prisma.teacher.findMany({
     where: { schoolId },
     include: { user: { select: { id: true, name: true } } },
-    orderBy: { user: { name: 'asc' } },
+    orderBy: [{ createdAt: 'asc' }, { user: { name: 'asc' } }],
     take: TEACHER_COLOR_LIMIT,
   })
 
-  const total = teachers.length
-  const data = teachers.map((t, idx) => {
+  const data = teachers.map((t) => {
     const userId = String(t.userId)
     const existing = colorMap.get(userId)
-    const distinctHex = distinctTeacherHex(idx, total)
-    const fallback = PREDEFINED_TEACHER_COLORS[idx % PREDEFINED_TEACHER_COLORS.length]
     return {
       teacherId: t.id,
       teacherUserId: userId,
       teacherName: t.user?.name || 'Teacher',
-      colorHex: existing?.colorHex || distinctHex || fallback.hex,
-      colorName: existing?.colorName || `Teacher ${idx + 1}`,
+      colorHex: existing?.colorHex || null,
+      colorName: existing?.colorName || null,
       fromDatabase: Boolean(existing),
     }
   })
@@ -52,7 +48,7 @@ export const GET = withErrorHandler(async function GET(req) {
   return NextResponse.json({
     colors: data,
     map: teacherColorMapToJson(colorMap),
-    palette: PREDEFINED_TEACHER_COLORS,
+    unique: true,
   })
 })
 
@@ -71,42 +67,38 @@ export const POST = withErrorHandler(async function POST(req) {
   const body = await req.json().catch(() => ({}))
   const autoAssign = body?.autoAssign === true
   const forceReassign = body?.force === true
+  const teacherId = body?.teacherId ? String(body.teacherId) : null
+
+  if (teacherId) {
+    const teacher = await prisma.teacher.findFirst({
+      where: { schoolId, OR: [{ id: teacherId }, { userId: teacherId }] },
+      select: { id: true },
+    })
+    if (!teacher) return NextResponse.json({ error: 'Teacher not found' }, { status: 404 })
+    const result = await ensureTeacherColor(prisma, {
+      schoolId,
+      teacherId: teacher.id,
+      force: forceReassign,
+    })
+    return NextResponse.json({ success: true, ...result })
+  }
 
   if (!autoAssign) {
     return NextResponse.json(
-      { error: 'Use PUT /api/timetable/teacher-colors/[teacherId]' },
+      { error: 'Use PUT /api/timetable/teacher-colors/[teacherId] or { autoAssign: true }' },
       { status: 400 }
     )
   }
 
-  const teachers = await prisma.teacher.findMany({
-    where: { schoolId },
-    orderBy: { user: { name: 'asc' } },
-    include: { user: { select: { name: true } } },
-    take: TEACHER_COLOR_LIMIT,
+  const result = await assignUniqueColorsForSchool(prisma, schoolId, { force: forceReassign })
+  const colorMap = await loadTeacherColorMap(prisma, schoolId)
+
+  return NextResponse.json({
+    success: true,
+    assigned: result.assigned,
+    skipped: result.skipped,
+    total: result.total,
+    distinct: true,
+    map: teacherColorMapToJson(colorMap),
   })
-
-  const total = teachers.length
-  let count = 0
-  for (let i = 0; i < teachers.length; i++) {
-    const hex = distinctTeacherHex(i, total)
-    const existing = await prisma.teacherColor.findUnique({
-      where: { schoolId_teacherId: { schoolId, teacherId: teachers[i].id } },
-    })
-    if (existing && !forceReassign) continue
-
-    await prisma.teacherColor.upsert({
-      where: { schoolId_teacherId: { schoolId, teacherId: teachers[i].id } },
-      create: {
-        schoolId,
-        teacherId: teachers[i].id,
-        colorHex: hex,
-        colorName: `Teacher ${i + 1}`,
-      },
-      update: forceReassign ? { colorHex: hex, colorName: `Teacher ${i + 1}` } : { colorHex: hex },
-    })
-    count += 1
-  }
-
-  return NextResponse.json({ success: true, assigned: count, distinct: true })
 })

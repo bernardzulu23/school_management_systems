@@ -7,6 +7,7 @@ import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { uniqueBellRows, type BellScheduleSlot } from '@/lib/timetable/bellSchedule'
 import { countUniqueConflicts } from '@/lib/timetable/conflictDedupe'
 import { buildTeacherColorMap } from '@/lib/timetable/teacherColorPalette'
+import { TeacherColorLegend } from '@/components/timetable/TeacherColorLegend'
 import {
   assignmentsForPrimaryCell,
   isContinuationSlot,
@@ -103,8 +104,12 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
   const [swap, setSwap] = useState<SwapState>({ open: false })
 
   const teacherColorMap = useMemo(
-    () => buildTeacherColorMap((props.teachers || []).map((t) => String(t.id))),
-    [props.teachers]
+    () =>
+      buildTeacherColorMap(
+        (props.teachers || []).map((t) => String(t.id)),
+        teacherColors
+      ),
+    [props.teachers, teacherColors]
   )
 
   const teacherName = useMemo(() => {
@@ -590,36 +595,31 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
         gridBody
       )}
 
-      <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-royalPurple-text2 print:hidden">
-        <span className="font-semibold">Legend:</span>
-        <span className="inline-flex items-center gap-2">
-          <span className="inline-block w-3 h-3 rounded-sm bg-slate-100 border border-slate-300" />{' '}
-          Break
-        </span>
-        <span className="inline-flex items-center gap-2">
-          <span className="inline-block w-3 h-3 rounded-sm border-2 border-red-500" /> Conflict
-        </span>
-        {dragEnabled ? (
+      <div className="mt-4 space-y-2">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-royalPurple-text2 print:hidden">
+          <span className="font-semibold">Legend:</span>
           <span className="inline-flex items-center gap-2">
-            <span className="inline-block w-3 h-3 rounded-sm ring-2 ring-emerald-500" /> Valid drop
+            <span className="inline-block w-3 h-3 rounded-sm bg-slate-100 border border-slate-300" />{' '}
+            Break
           </span>
-        ) : null}
+          <span className="inline-flex items-center gap-2">
+            <span className="inline-block w-3 h-3 rounded-sm border-2 border-red-500" /> Conflict
+          </span>
+          {dragEnabled ? (
+            <span className="inline-flex items-center gap-2">
+              <span className="inline-block w-3 h-3 rounded-sm ring-2 ring-emerald-500" /> Valid
+              drop
+            </span>
+          ) : null}
+        </div>
         {(props.teachers || []).length > 0 ? (
-          <>
-            <span className="font-semibold ml-2">Teachers:</span>
-            {(props.teachers || []).map((t) => {
-              const hex = teacherColorMap.get(String(t.id)) || '#90A4AE'
-              return (
-                <span key={String(t.id)} className="inline-flex items-center gap-1.5">
-                  <span
-                    className="inline-block w-3 h-3 rounded-sm border"
-                    style={{ backgroundColor: `${hex}22`, borderColor: hex }}
-                  />
-                  {t.fullName || 'Teacher'}
-                </span>
-              )
-            })}
-          </>
+          <TeacherColorLegend
+            teachers={(props.teachers || []).map((t) => ({
+              id: String(t.id),
+              name: t.fullName || 'Teacher',
+            }))}
+            colorMap={teacherColors}
+          />
         ) : null}
       </div>
 

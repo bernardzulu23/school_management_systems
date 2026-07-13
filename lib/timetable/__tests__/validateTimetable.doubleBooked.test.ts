@@ -49,6 +49,57 @@ describe('validateTimetable CLASS_DOUBLE_BOOKED clustering', () => {
     const deduped = dedupeValidationConflicts(validateTimetable(assignments))
     expect(deduped.filter((c) => c.type === 'CLASS_DOUBLE_BOOKED')).toHaveLength(1)
   })
+
+  it('does not hard-flag same subject twice on one day when times do not overlap', () => {
+    const assignments = [
+      lesson({ id: 'a', startTime: '07:00', endTime: '07:40', period: 1 }),
+      lesson({
+        id: 'b',
+        startTime: '10:00',
+        endTime: '10:40',
+        period: 5,
+        teacherId: 't2',
+      }),
+    ]
+    const result = validateTimetable(assignments)
+    expect(getHardConflicts(result).filter((c) => c.type === 'CLASS_DOUBLE_BOOKED')).toHaveLength(0)
+    const soft = result.filter((c) => c.type === 'SUBJECT_DISTRIBUTION')
+    expect(soft).toHaveLength(1)
+  })
+
+  it('treats adjacent half-open ranges as non-overlapping (EXCLUDE semantics)', () => {
+    const assignments = [
+      lesson({ id: 'a', startTime: '07:30', endTime: '08:50', period: 1 }),
+      lesson({
+        id: 'b',
+        startTime: '08:50',
+        endTime: '09:30',
+        period: 3,
+        teacherId: 't2',
+      }),
+    ]
+    expect(getHardConflicts(validateTimetable(assignments))).toHaveLength(0)
+  })
+
+  it('CLASS_DOUBLE_BOOKED message cites both time windows for same-subject overlap', () => {
+    const assignments = [
+      lesson({ id: 'a', startTime: '07:00', endTime: '07:40', period: 1 }),
+      lesson({
+        id: 'b',
+        startTime: '07:20',
+        endTime: '08:00',
+        period: 1,
+        teacherId: 't2',
+      }),
+    ]
+    const hard = getHardConflicts(validateTimetable(assignments)).filter(
+      (c) => c.type === 'CLASS_DOUBLE_BOOKED'
+    )
+    expect(hard).toHaveLength(1)
+    expect(hard[0].message).toMatch(/07:00–07:40/)
+    expect(hard[0].message).toMatch(/07:20–08:00/)
+    expect(hard[0].message).toMatch(/Home Management/)
+  })
 })
 
 describe('planExactDuplicateDraftDeletes', () => {

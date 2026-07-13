@@ -13,6 +13,10 @@ import { filterClassesForWallGrid, inferClassGrade } from '@/lib/timetable/activ
 import { AscClassWallGrid } from '@/components/timetable/AscClassWallGrid'
 import { pastelBgForSubject } from '@/lib/timetable/cardColors'
 import { Calendar, Clock, MapPin, User, ChevronRight, AlertCircle } from 'lucide-react'
+import {
+  TIMETABLE_CONFLICTS_UPDATED,
+  readTimetableConflictCountsSnapshot,
+} from '@/hooks/useTimetableDraftMeta'
 
 function dayKeyFromDate(d) {
   const key = String(
@@ -61,7 +65,6 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
   const [mounted, setMounted] = useState(false)
 
   const assignments = useTimetableStore((s) => s.assignments)
-  const conflictCount = useTimetableStore((s) => s.getConflictCount())
   const isPublished = useTimetableStore((s) => s.isPublished)
   const lastPublishedAt = useTimetableStore((s) => s.lastPublishedAt)
   const pendingChanges = useTimetableStore((s) => s.pendingChanges)
@@ -71,6 +74,43 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
   const storeTimeSlots = useTimetableStore((s) => s.timeSlots)
   const [bellLoading, setBellLoading] = useState(true)
   const [wallClasses, setWallClasses] = useState([])
+  const [serverConflictErrors, setServerConflictErrors] = useState(0)
+
+  useEffect(() => {
+    let cancelled = false
+    async function loadConflictCounts() {
+      try {
+        const snap = readTimetableConflictCountsSnapshot()
+        if (snap && !cancelled) setServerConflictErrors(Number(snap.conflictErrors ?? 0))
+        const term = String(snap?.term || 'Term 1')
+        const academicYear = String(snap?.academicYear || new Date().getFullYear())
+        const qs = new URLSearchParams({ term, academicYear })
+        const res = await sessionFetch(`/api/timetable/draft-meta?${qs}`, {
+          credentials: 'include',
+          cache: 'no-store',
+        })
+        if (!res.ok || cancelled) return
+        const data = await res.json()
+        setServerConflictErrors(Number(data.conflictErrors ?? 0))
+      } catch {
+        /* keep prior */
+      }
+    }
+    loadConflictCounts()
+    const onUpdate = (ev) => {
+      const detail = ev?.detail
+      if (detail && typeof detail === 'object') {
+        setServerConflictErrors(Number(detail.conflictErrors ?? 0))
+        return
+      }
+      loadConflictCounts()
+    }
+    window.addEventListener(TIMETABLE_CONFLICTS_UPDATED, onUpdate)
+    return () => {
+      cancelled = true
+      window.removeEventListener(TIMETABLE_CONFLICTS_UPDATED, onUpdate)
+    }
+  }, [])
 
   useEffect(() => {
     setMounted(true)
@@ -259,8 +299,11 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
     const status =
       assignments.length === 0
         ? { label: 'Not created', tone: 'text-royalPurple-text3' }
-        : conflictCount > 0
-          ? { label: `${conflictCount} conflicts`, tone: 'text-royalPurple-dangerTx' }
+        : serverConflictErrors > 0
+          ? {
+              label: `${serverConflictErrors} confirmed conflicts`,
+              tone: 'text-royalPurple-dangerTx',
+            }
           : isPublished
             ? { label: 'Published', tone: 'text-royalPurple-successTx' }
             : { label: 'Draft', tone: 'text-royalPurple-text2' }
@@ -268,7 +311,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
     const lastChangeAt =
       pendingChanges?.[0]?.at || (lastPublishedAt ? lastPublishedAt.toISOString() : null)
     const updated = timeAgo(lastChangeAt)
-    const canPublish = conflictCount === 0 && assignments.length > 0 && !isPublished
+    const canPublish = serverConflictErrors === 0 && assignments.length > 0 && !isPublished
 
     return (
       <Card className={className}>
@@ -329,6 +372,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
                 teachers={wallTeachers}
                 season={activeSeason}
                 showConflicts
+                serverConflictErrors={serverConflictErrors}
               />
             </div>
           )}
@@ -342,7 +386,9 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
                   : ''}
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-royalPurple-text2">Conflicts: {conflictCount}</span>
+              <span className="text-xs text-royalPurple-text2">
+                Confirmed conflicts: {serverConflictErrors}
+              </span>
               <Button
                 onClick={() => {
                   if (!canPublish) return

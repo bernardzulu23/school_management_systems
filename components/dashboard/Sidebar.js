@@ -54,7 +54,11 @@ import {
   Zap,
   Bell,
 } from 'lucide-react'
-import { TIMETABLE_CONFLICTS_UPDATED } from '@/hooks/useTimetableDraftMeta'
+import {
+  TIMETABLE_CONFLICTS_UPDATED,
+  readTimetableConflictCountsSnapshot,
+  writeTimetableConflictCountsSnapshot,
+} from '@/hooks/useTimetableDraftMeta'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 function TimetableConflictNavBadge() {
@@ -62,10 +66,23 @@ function TimetableConflictNavBadge() {
 
   useEffect(() => {
     let cancelled = false
-    async function load() {
+
+    function applyFromCounts(errors, warnings) {
+      if (cancelled) return
+      if (errors > 0) setBadge({ count: errors, tone: 'error' })
+      else if (warnings > 0) setBadge({ count: warnings, tone: 'warn' })
+      else setBadge(null)
+    }
+
+    async function load(preferred) {
       try {
-        const term = 'Term 1'
-        const academicYear = String(new Date().getFullYear())
+        const snap = preferred || readTimetableConflictCountsSnapshot()
+        const term = String(snap?.term || 'Term 1')
+        const academicYear = String(snap?.academicYear || new Date().getFullYear())
+        // Prefer in-memory/event snapshot when present (same query result as timetable page).
+        if (snap && !preferred) {
+          applyFromCounts(Number(snap.conflictErrors ?? 0), Number(snap.conflictWarnings ?? 0))
+        }
         const qs = new URLSearchParams({ term, academicYear })
         const res = await sessionFetch(`/api/timetable/draft-meta?${qs}`, {
           credentials: 'include',
@@ -76,18 +93,34 @@ function TimetableConflictNavBadge() {
         if (cancelled) return
         const errors = Number(data.conflictErrors ?? 0)
         const warnings = Number(data.conflictWarnings ?? 0)
-        if (errors > 0) setBadge({ count: errors, tone: 'error' })
-        else if (warnings > 0) setBadge({ count: warnings, tone: 'warn' })
-        else setBadge(null)
+        writeTimetableConflictCountsSnapshot({
+          term: data.term || term,
+          academicYear: data.academicYear || academicYear,
+          conflictErrors: errors,
+          conflictWarnings: warnings,
+          conflictCount: Number(data.conflictCount ?? errors + warnings),
+          lastScannedAt: data.lastScannedAt ?? null,
+        })
+        applyFromCounts(errors, warnings)
       } catch {
         if (!cancelled) setBadge(null)
       }
     }
+
+    const onUpdate = (ev) => {
+      const detail = ev?.detail
+      if (detail && typeof detail === 'object') {
+        applyFromCounts(Number(detail.conflictErrors ?? 0), Number(detail.conflictWarnings ?? 0))
+        return
+      }
+      load()
+    }
+
     load()
-    window.addEventListener(TIMETABLE_CONFLICTS_UPDATED, load)
+    window.addEventListener(TIMETABLE_CONFLICTS_UPDATED, onUpdate)
     return () => {
       cancelled = true
-      window.removeEventListener(TIMETABLE_CONFLICTS_UPDATED, load)
+      window.removeEventListener(TIMETABLE_CONFLICTS_UPDATED, onUpdate)
     }
   }, [])
 

@@ -49,6 +49,8 @@ model School {
   timezone    String   @default("Africa/Lusaka")
   currency    String   @default("ZMW")
   academicYear String? // e.g., "2024/2025"
+  /// Cursor for golden-angle teacher colour assignment (degrees).
+  lastAssignedTeacherHue Float @default(-137.50776405003785)
   
   // Contact Info
   email       String?
@@ -2700,6 +2702,8 @@ model TimetableConfig {
   academicYear   String   @default("2025")
   workingDays    String[] @default([])
   breakSlots     Json
+  /// Teacher↔class session rules (min gap, Rule A/B severities). See teacherClassSessionRules.ts.
+  schedulingRules Json?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
@@ -2712,6 +2716,8 @@ model TeacherColor {
   teacher     Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   colorHex    String
   colorName   String?
+  /// Stored hue for golden-angle continuity / diagnostics.
+  hueDegrees  Float?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

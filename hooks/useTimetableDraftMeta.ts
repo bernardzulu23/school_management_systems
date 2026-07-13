@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { api } from '@/lib/api'
 
 export const TIMETABLE_CONFLICTS_UPDATED = 'timetable-conflicts-updated'
+export const TIMETABLE_CONFLICT_COUNTS_KEY = 'zsms-timetable-conflict-counts'
 
 export type TimetableDraftMeta = {
   term: string
@@ -18,10 +19,74 @@ export type TimetableDraftMeta = {
   conflictSummary?: unknown[]
 }
 
-export function notifyTimetableConflictsUpdated() {
-  if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent(TIMETABLE_CONFLICTS_UPDATED))
+/** Shared snapshot so sidebar / badges / control bar show the same numbers. */
+export type TimetableConflictCountsSnapshot = {
+  term: string
+  academicYear: string
+  conflictErrors: number
+  conflictWarnings: number
+  conflictCount: number
+  lastScannedAt: string | null
+  updatedAt: string
+}
+
+export function readTimetableConflictCountsSnapshot(): TimetableConflictCountsSnapshot | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = sessionStorage.getItem(TIMETABLE_CONFLICT_COUNTS_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    if (!parsed || typeof parsed !== 'object') return null
+    return {
+      term: String(parsed.term || 'Term 1'),
+      academicYear: String(parsed.academicYear || new Date().getFullYear()),
+      conflictErrors: Number(parsed.conflictErrors ?? 0),
+      conflictWarnings: Number(parsed.conflictWarnings ?? 0),
+      conflictCount: Number(parsed.conflictCount ?? 0),
+      lastScannedAt: parsed.lastScannedAt ? String(parsed.lastScannedAt) : null,
+      updatedAt: String(parsed.updatedAt || ''),
+    }
+  } catch {
+    return null
   }
+}
+
+export function writeTimetableConflictCountsSnapshot(
+  meta: Pick<
+    TimetableDraftMeta,
+    | 'term'
+    | 'academicYear'
+    | 'conflictErrors'
+    | 'conflictWarnings'
+    | 'conflictCount'
+    | 'lastScannedAt'
+  >
+): TimetableConflictCountsSnapshot {
+  const snap: TimetableConflictCountsSnapshot = {
+    term: meta.term,
+    academicYear: meta.academicYear,
+    conflictErrors: Number(meta.conflictErrors ?? 0),
+    conflictWarnings: Number(meta.conflictWarnings ?? 0),
+    conflictCount: Number(meta.conflictCount ?? 0),
+    lastScannedAt: meta.lastScannedAt ?? null,
+    updatedAt: new Date().toISOString(),
+  }
+  if (typeof window !== 'undefined') {
+    try {
+      sessionStorage.setItem(TIMETABLE_CONFLICT_COUNTS_KEY, JSON.stringify(snap))
+    } catch {
+      /* ignore quota */
+    }
+  }
+  return snap
+}
+
+export function notifyTimetableConflictsUpdated(meta?: TimetableDraftMeta | null) {
+  if (typeof window === 'undefined') return
+  const detail = meta
+    ? writeTimetableConflictCountsSnapshot(meta)
+    : readTimetableConflictCountsSnapshot()
+  window.dispatchEvent(new CustomEvent(TIMETABLE_CONFLICTS_UPDATED, { detail }))
 }
 
 /** Stable key for dismissing a server audit row (matches server `getConflictAuditKey`). */
@@ -156,6 +221,7 @@ export function useTimetableDraftMeta({
           conflictSummary: data.conflictSummary,
         }
         setMeta(next)
+        notifyTimetableConflictsUpdated(next)
         return next
       } catch (e) {
         setError(e instanceof Error ? e.message : 'Failed to load conflict meta')
@@ -187,7 +253,7 @@ export function useTimetableDraftMeta({
         conflictSummary: data.conflicts,
       }
       setMeta(next)
-      notifyTimetableConflictsUpdated()
+      notifyTimetableConflictsUpdated(next)
       return data
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Conflict scan failed')
@@ -223,7 +289,7 @@ export function useTimetableDraftMeta({
           conflictSummary: data.conflictSummary,
         }
         setMeta(next)
-        notifyTimetableConflictsUpdated()
+        notifyTimetableConflictsUpdated(next)
         return next
       } catch (e) {
         setError(e instanceof Error ? e.message : 'Failed to dismiss audit issue')
@@ -245,7 +311,30 @@ export function useTimetableDraftMeta({
 
   useEffect(() => {
     if (!enabled) return
-    const onUpdate = () => refresh(false)
+    const onUpdate = (ev: Event) => {
+      const detail = (ev as CustomEvent)?.detail
+      // Same term/year already applied elsewhere — apply snapshot without a second fetch.
+      if (
+        detail &&
+        String(detail.term) === String(term) &&
+        String(detail.academicYear) === String(academicYear)
+      ) {
+        setMeta((prev) => ({
+          term,
+          academicYear,
+          conflictCount: Number(detail.conflictCount ?? prev?.conflictCount ?? 0),
+          conflictErrors: Number(detail.conflictErrors ?? prev?.conflictErrors ?? 0),
+          conflictWarnings: Number(detail.conflictWarnings ?? prev?.conflictWarnings ?? 0),
+          missingPeriodsCount: prev?.missingPeriodsCount,
+          byType: prev?.byType,
+          canPublish: prev?.canPublish ?? true,
+          lastScannedAt: detail.lastScannedAt ?? prev?.lastScannedAt ?? null,
+          conflictSummary: prev?.conflictSummary,
+        }))
+        return
+      }
+      refresh(false)
+    }
     window.addEventListener(TIMETABLE_CONFLICTS_UPDATED, onUpdate)
     const onFocus = () => refresh(false)
     window.addEventListener('focus', onFocus)
@@ -253,7 +342,7 @@ export function useTimetableDraftMeta({
       window.removeEventListener(TIMETABLE_CONFLICTS_UPDATED, onUpdate)
       window.removeEventListener('focus', onFocus)
     }
-  }, [refresh, enabled])
+  }, [refresh, enabled, term, academicYear])
 
   return { meta, loading, error, refresh, rescan, dismissAudit, isFresh: isDraftMetaFresh(meta) }
 }

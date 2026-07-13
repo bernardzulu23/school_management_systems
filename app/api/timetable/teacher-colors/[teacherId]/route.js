@@ -7,6 +7,7 @@ import { authMiddleware } from '@/lib/middleware/auth'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { safeRouteParam } from '@/lib/security/safeQueryValue'
+import { setManualTeacherColor } from '@/lib/timetable/assignTeacherColor'
 
 export const PUT = withErrorHandler(async function PUT(req, { params }) {
   const auth = await authMiddleware(req)
@@ -42,14 +43,22 @@ export const PUT = withErrorHandler(async function PUT(req, { params }) {
   })
   if (!teacher) return NextResponse.json({ error: 'Teacher not found' }, { status: 404 })
 
-  const color = await prisma.teacherColor.upsert({
-    where: { schoolId_teacherId: { schoolId, teacherId: teacher.id } },
-    create: { schoolId, teacherId: teacher.id, colorHex, colorName },
-    update: { colorHex, colorName },
+  const result = await setManualTeacherColor(prisma, {
+    schoolId,
+    teacherId: teacher.id,
+    colorHex,
+    colorName,
   })
 
+  if (!result.ok) {
+    return NextResponse.json(
+      { error: result.error, code: 'COLOR_TOO_CLOSE', conflictingHex: result.conflictingHex },
+      { status: 409 }
+    )
+  }
+
   return NextResponse.json({
-    ...color,
+    ...result.color,
     teacherUserId: teacher.userId,
   })
 })

@@ -43,6 +43,9 @@ export type HybridGenerateOptions = {
   strictSoftConstraints?: boolean
   skipPreflight?: boolean
   useLlm?: boolean
+  teacherClassSessionRules?: Partial<
+    import('@/lib/timetable/teacherClassSessionRules').TeacherClassSessionRulesConfig
+  > | null
 }
 
 export type HybridGenerateResult = SchedulerResult & {
@@ -238,6 +241,7 @@ export async function hybridGenerateTimetable(
     teacherConstraintRules: constraints,
     strictSoftConstraints: options.strictSoftConstraints ?? false,
     reservedTeacherSlots: lockedSlots,
+    teacherClassSessionRules: options.teacherClassSessionRules,
   }
 
   let result = generateTimetable(allocations, daySlots, schedulerOpts)

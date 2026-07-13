@@ -478,6 +478,9 @@ export const POST = withErrorHandler(async (request) => {
         })
 
         if (!teacher) throw new Error('Failed to create teacher profile')
+
+        const { ensureTeacherColor } = await import('@/lib/timetable/assignTeacherColor')
+        await ensureTeacherColor(tx, { schoolId, teacherId: teacher.id })
       } else if (role.toLowerCase() === 'hod' || role.toLowerCase() === 'head of department') {
         const departmentName = String(body.department || '').trim()
         const dept =

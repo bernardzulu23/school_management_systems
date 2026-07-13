@@ -10,13 +10,14 @@ import {
   rowSpanForAssignment,
 } from '@/lib/timetable/gridHelpers'
 import { periodTypeBadge } from '@/lib/timetable/doublePeriodUtils'
-import { solidSubjectFill } from '@/lib/timetable/cardColors'
+import { solidTeacherFill } from '@/lib/timetable/uniqueTeacherColors'
 import { abbreviateSubject } from '@/lib/timetable/subjectAbbrev'
 import { normalizeClassLabel } from '@/lib/timetable/activeClasses'
 import {
   UnplacedLessonsTray,
   type UnplacedLesson,
 } from '@/components/timetable/UnplacedLessonsTray'
+import { TeacherColorLegend } from '@/components/timetable/TeacherColorLegend'
 import { Lock } from 'lucide-react'
 
 /** aSc Timetables–style compact cell metrics */
@@ -56,6 +57,8 @@ export interface AscClassWallGridProps {
   teachers: Teacher[]
   season?: string
   showConflicts?: boolean
+  /** Confirmed server audit error count — never a local CollisionDetector total. */
+  serverConflictErrors?: number
   unplacedLessons?: UnplacedLesson[]
   lockedPeriodKeys?: Set<string>
   onAssignmentClick?: (assignment: Assignment) => void
@@ -75,6 +78,7 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
     teachers = [],
     season = 'normal',
     showConflicts = true,
+    serverConflictErrors,
     unplacedLessons = [],
     lockedPeriodKeys,
     onAssignmentClick,
@@ -83,6 +87,7 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
 
   const storeConflicts = useTimetableStore((s) => s.conflicts)
   const storeTimeSlots = useTimetableStore((s) => s.timeSlots)
+  const teacherColors = useTimetableStore((s) => s.teacherColors)
 
   const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
   const [zoom, setZoom] = useState(100)
@@ -167,14 +172,18 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
     return map
   }, [filteredAssignments])
 
-  const conflictCount = useMemo(() => {
-    if (!showConflicts) return 0
-    let n = 0
+  const hasLocalClashHighlight = useMemo(() => {
+    if (!showConflicts) return false
     for (const a of filteredAssignments) {
-      if ((storeConflicts.get(String(a.id)) || []).length) n += 1
+      if ((storeConflicts.get(String(a.id)) || []).length) return true
     }
-    return n
+    return false
   }, [filteredAssignments, storeConflicts, showConflicts])
+
+  const confirmedErrors =
+    typeof serverConflictErrors === 'number' && Number.isFinite(serverConflictErrors)
+      ? Math.max(0, Math.floor(serverConflictErrors))
+      : null
 
   const cellStyle = (w: number, h = GRID.cellH) => ({
     width: w,
@@ -229,7 +238,8 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
           const subjectName =
             subjectMeta.label.get(subjectId) || (a as any).subjectName || 'Subject'
           const abbrev = abbreviateSubject(subjectName, subjectMeta.code.get(subjectId))
-          const { fill, text } = solidSubjectFill(subjectId)
+          const teacherHex = teacherColors[String(a.teacherId || '')]?.colorHex
+          const { fill, text } = solidTeacherFill(teacherHex)
           const rowConflicts = showConflicts ? storeConflicts.get(String(a.id)) || [] : []
           const hasConflict = rowConflicts.length > 0
           const teacher = teacherName.get(String(a.teacherId))
@@ -256,14 +266,19 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
                   onAssignmentClick?.(a)
                   setSelectedAssignment(a)
                 }}
-                title={[subjectName, teacher, `${day} P${slot.period}`].filter(Boolean).join(' · ')}
                 className="block w-full h-full m-0 p-0 border-0 cursor-pointer font-bold leading-none hover:opacity-90 relative"
                 style={{
-                  background: hasConflict ? '#ef4444' : fill,
-                  color: hasConflict ? '#fff' : text,
+                  background: fill,
+                  color: text,
                   fontSize: 9,
                   minHeight: GRID.cellH,
+                  boxShadow: hasConflict ? 'inset 0 0 0 2px #d97706' : undefined,
                 }}
+                title={
+                  hasConflict
+                    ? `${[subjectName, teacher, `${day} P${slot.period}`].filter(Boolean).join(' · ')} · local clash highlight (preview)`
+                    : [subjectName, teacher, `${day} P${slot.period}`].filter(Boolean).join(' · ')
+                }
               >
                 {abbrev}
                 {spanBadge ? (
@@ -337,12 +352,27 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
     <div className="w-full space-y-2">
       <div className="flex flex-wrap items-center justify-between gap-2 print:hidden text-[11px]">
         <div className="text-royalPurple-text3">
-          {sortedClasses.length} classes ·{' '}
-          {conflictCount > 0 ? (
-            <span className="text-red-600 font-semibold">{conflictCount} conflicts</span>
-          ) : (
-            <span className="text-emerald-700">OK</span>
-          )}
+          {sortedClasses.length} classes
+          {confirmedErrors != null ? (
+            <>
+              {' · '}
+              {confirmedErrors > 0 ? (
+                <span className="text-red-600 font-semibold">
+                  {confirmedErrors} confirmed conflict{confirmedErrors === 1 ? '' : 's'}
+                </span>
+              ) : (
+                <span className="text-emerald-700">No confirmed conflicts</span>
+              )}
+            </>
+          ) : null}
+          {hasLocalClashHighlight ? (
+            <span
+              className="text-amber-700 ml-1"
+              title="Local drag preview only — not the official count"
+            >
+              · clash highlights
+            </span>
+          ) : null}
         </div>
         <label className="inline-flex items-center gap-2 text-royalPurple-text3">
           Zoom
@@ -486,6 +516,15 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
           </table>
         </div>
       </div>
+
+      <TeacherColorLegend
+        teachers={teachers.map((t) => ({
+          id: String(t.id),
+          name: t.fullName || 'Teacher',
+        }))}
+        colorMap={teacherColors}
+        className="print:block"
+      />
 
       <UnplacedLessonsTray
         items={unplacedLessons}

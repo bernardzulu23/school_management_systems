@@ -1,7 +1,7 @@
 # ZSMS — Timetable Conflict Resolution
 
-**Last updated:** 2026-06-12  
-**Document version:** 3.1 (Phase 3 integration)  
+**Last updated:** 2026-07-13  
+**Document version:** 3.2 (Phase 3 + overlap-only CLASS_DOUBLE_BOOKED)  
 **Implementation phase:** Phase 1 + Phase 2 + **Phase 3** (UI/meta wiring)
 
 This document is the **timetable conflict detection and resolution spec** for ZSMS. It was reviewed against the live codebase (`lib/timetable/*`, `app/dashboard/headteacher/timetable/page.tsx`, `app/api/timetable/*`, `prisma/schema.prisma`). **Phase 2** adds server-side conflict audit APIs, persisted draft metadata, and a dedicated Conflict Resolution Centre page.
@@ -97,7 +97,7 @@ HOD allocations (pushed) → POST /api/timetable/generate
 | `TEACHER_CONSECUTIVE_LIMIT`  | soft     | `validateTimetable.ts`            |
 | `SUBJECT_DISTRIBUTION`       | soft     | `validateTimetable.ts`            |
 
-**Matrix validation types (`validateTimetable.ts`):** `TEACHER_DOUBLE_BOOKED`, `CLASS_DOUBLE_BOOKED`, `ROOM_DOUBLE_BOOKED` (hard); consecutive-limit and subject distribution (soft).
+**Matrix validation types (`validateTimetable.ts`):** `TEACHER_DOUBLE_BOOKED`, `CLASS_DOUBLE_BOOKED`, `ROOM_DOUBLE_BOOKED` (hard — **only** when `[startTime, endTime)` half-open ranges overlap, matching Postgres EXCLUDE / `lib/timetable/timeRangeOverlap.ts`); `TEACHER_CLASS_SUBJECT_SPLIT` (Rule A: non-contiguous same teacher+class+subject same day — configurable severity, default hard); `TEACHER_CLASS_RETURN_TOO_SOON` (Rule B: different-subject return sooner than configured min gap — default soft/warning); consecutive-limit and same-subject-same-day continuous-block distribution (`SUBJECT_DISTRIBUTION`) are soft. Rule A/B live in `lib/timetable/teacherClassSessionRules.ts` and are enforced in `canPlace` + CP-SAT `solve.py` (same logic, not a separate drift-prone copy).
 
 ### 3. Hybrid generator (root-cause prevention)
 
