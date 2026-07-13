@@ -48,4 +48,15 @@ describe('expandAllocationToUnitsForAllClasses', () => {
     expect(units).toHaveLength(3)
     expect(units.every((u) => u.classId === 'class-uuid-1')).toBe(true)
   })
+
+  it('repairs legacy p4 blocks that summed to 5 against periodsPerWeek 4', () => {
+    const repaired = normalizeAllocationPeriods({
+      singlePeriods: 1,
+      doublePeriods: 2,
+      triplePeriods: 0,
+      periodsPerWeek: 4,
+      blockType: 'MIXED',
+    })
+    expect(repaired).toEqual({ singles: 0, doubles: 2, triples: 0, totalPeriods: 4 })
+  })
 })

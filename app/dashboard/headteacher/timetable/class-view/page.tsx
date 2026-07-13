@@ -12,7 +12,7 @@ import {
   normalizeTimetableConfig,
   resolveSchoolTimeSlots,
 } from '@/lib/timetable/timeSlotsFromConfig'
-import { filterAssignmentsForUiSeason } from '@/lib/timetable/seasonFilter'
+import { filterAssignmentsForUiSeason, toUiSeason } from '@/lib/timetable/seasonFilter'
 import { filterClassesForTimetablePicker, inferClassGrade } from '@/lib/timetable/activeClasses'
 import type { Assignment, Class, Teacher, TimeSlot } from '@/lib/timetable/types'
 import toast from 'react-hot-toast'
@@ -78,7 +78,7 @@ function ClassTimetablePageContent() {
   const currentSeason = useTimetableStore((s) => s.currentSeason)
 
   const seasonAssignments = useMemo(
-    () => filterAssignmentsForUiSeason(assignments, currentSeason),
+    () => filterAssignmentsForUiSeason(assignments, toUiSeason(currentSeason)),
     [assignments, currentSeason]
   )
 
@@ -171,7 +171,7 @@ function ClassTimetablePageContent() {
   }, [visibleClasses, selectedClassId])
 
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Class timetables">
       <div className="mx-auto max-w-[1400px] space-y-6 p-4 md:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -190,7 +190,7 @@ function ClassTimetablePageContent() {
         </div>
 
         <TimetableClassView
-          classes={visibleClasses}
+          classes={visibleClasses as Class[]}
           assignments={seasonAssignments as Assignment[]}
           timeSlots={timeSlots}
           teachers={teachers}
@@ -209,7 +209,7 @@ export default function ClassTimetablePage() {
   return (
     <Suspense
       fallback={
-        <DashboardLayout>
+        <DashboardLayout title="Class timetables">
           <div className="p-6 text-sm text-royalPurple-text2">Loading class timetables…</div>
         </DashboardLayout>
       }

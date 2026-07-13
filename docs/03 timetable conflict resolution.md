@@ -319,7 +319,7 @@ Sidebar: **Timetable Conflicts** → `/dashboard/headteacher/timetable/conflicts
 | `draftMeta` on `GET /api/timetable/view` | Included for headteacher/admin/HOD when term/year provided                              |
 | `hooks/useTimetableDraftMeta.ts`         | Client hook + `timetable-conflicts-updated` invalidation event                          |
 | Main timetable KPI                       | Server error/warning counts; client editor count shown as preview when stale            |
-| `canPublish`                             | Uses fresh server meta when available; falls back to client hard count                  |
+| `canPublish`                             | True when audit **errors** are zero (soft warnings do not block; matches publish API)   |
 | Sidebar badge                            | Timetable Conflicts nav item shows error/warning count                                  |
 | `PATCH /api/timetable/entries`           | Rejects patches that introduce hard conflicts; rescans meta                             |
 | `POST /api/timetable/entries/sync-draft` | Full `validateTimetable` hard gate (not just grade double-book)                         |

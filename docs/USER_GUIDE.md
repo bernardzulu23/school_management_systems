@@ -270,7 +270,7 @@ The **Timetable** page (`/dashboard/headteacher/timetable`) has tabs: **Overview
    - **Open class-by-class grid view** — link to `/dashboard/headteacher/timetable/class-view` (one class, period × MON–FRI, teacher colour coding).
 4. Click **Generate Perfect Timetable** (uses HOD allocations + bell schedule).
 5. Review the draft; red borders show **conflicts** (same teacher or same class in one period). Use **Conflicts** tab or **Timetable Conflicts** in the sidebar for the full Conflict Resolution Centre (`/dashboard/headteacher/timetable/conflicts`). If the timetable is already **published** (no draft rows), the centre still scans the published schedule and shows conflicts — click **Create editable draft** there (or **Load draft** on the Edit tab) before applying fixes.
-6. **Server audit issues** (for example _Missing periods_) list allocations that still need timetable slots. Fix them by placing lessons or editing allocations, or use **Dismiss** (× on each row, or **Dismiss all missing periods**) to hide warnings you have accepted for this term. Dismissed items stay hidden until the underlying allocation changes or you rescan after fixing data.
+6. **Server audit issues** (for example _Missing periods_) list allocations that still need timetable slots. Fix them by placing lessons or editing allocations. Soft warnings do **not** block **Publish** (only hard/error conflicts do). Use **Dismiss** (× on each row, or **Dismiss all missing periods**) to hide warnings you have accepted for this term. Dismissed items stay hidden until the underlying allocation changes or you rescan after fixing data.
 7. Fix grid conflicts by dragging lessons, removing bad entries, editing allocations, or using suggested fixes on the conflicts page.
 8. Assign **teacher colours** on the **Settings** tab (or auto-assign) so grids are easy to read.
 9. Click **Publish** when there are **no hard conflicts** — teachers and students then see the published version.
@@ -749,24 +749,24 @@ Build instructions: `zsms-mobile/docs/EAS_APK_BUILD.md`.
 
 ```mermaid
 flowchart LR
-  A[HOD: Class Allocation] --> B[HOD: Submit allocations]
-  B --> C[Headteacher: Generate timetable]
-  C --> D[Headteacher: Edit draft / resolve conflicts]
-  D --> E[Headteacher: Publish]
-  E --> F[Teachers: My Timetable]
-  E --> G[Students: My Timetable]
+  A[HOD: Class Allocation] --> B[HOD: Submit]
+  B --> C[Headteacher: Approve on Department Allocations]
+  C --> D[Headteacher: Generate Perfect Timetable]
+  D --> E[Headteacher: Edit draft / resolve conflicts]
+  E --> F[Headteacher: Publish]
+  F --> G[Teachers / HOD / Students: My Timetable]
 ```
 
-| Step                        | Who               | Route                                                                                 |
-| --------------------------- | ----------------- | ------------------------------------------------------------------------------------- |
-| 1. Create allocations       | HOD               | `/dashboard/hod/allocation`                                                           |
-| 2. Submit to admin          | HOD               | Submit button on each allocation                                                      |
-| 3. Review / fix allocations | Headteacher       | `/dashboard/headteacher/timetable` → **Department Allocations**                       |
-| 4. Generate                 | Headteacher       | `/dashboard/headteacher/timetable` → **Edit** tab                                     |
-| 5. Edit draft               | Headteacher       | Drag/drop on Edit tab, or class view at `/dashboard/headteacher/timetable/class-view` |
-| 6. Resolve conflicts        | Headteacher       | Conflicts tab or `/dashboard/headteacher/timetable/conflicts`                         |
-| 7. Publish                  | Headteacher       | Publish button (when no hard conflicts)                                               |
-| 8. View                     | Teacher / Student | `/dashboard/timetable/teacher` or `/dashboard/timetable/student`                      |
+| Step                  | Who                     | Route                                                                                         |
+| --------------------- | ----------------------- | --------------------------------------------------------------------------------------------- |
+| 1. Create allocations | HOD                     | `/dashboard/hod/allocation`                                                                   |
+| 2. Submit to admin    | HOD                     | Submit button on each allocation                                                              |
+| 3. Review / approve   | Headteacher             | `/dashboard/headteacher/timetable` → **Department Allocations**                               |
+| 4. Generate           | Headteacher             | `/dashboard/headteacher/timetable` → **Edit** tab                                             |
+| 5. Edit draft         | Headteacher             | Drag/drop on Edit tab, or class view at `/dashboard/headteacher/timetable/class-view`         |
+| 6. Resolve conflicts  | Headteacher             | Conflicts tab or `/dashboard/headteacher/timetable/conflicts`                                 |
+| 7. Publish            | Headteacher             | Publish when no hard / error conflicts (soft warnings optional)                               |
+| 8. View               | Teacher / HOD / Student | `/dashboard/timetable/teacher`, `/dashboard/hod/timetable`, or `/dashboard/timetable/student` |
 
 ### Attendance modes
 
@@ -805,20 +805,20 @@ SMS requires credit balance top-up regardless of plan. AI tools require an AI-en
 
 ## Troubleshooting
 
-| Problem                         | Solution                                                                                                           |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Cannot log in                   | Check subdomain URL; use Forgot Password if weak password blocked                                                  |
-| Dashboard blank after login     | Trial may have expired — go to `/dashboard/billing`                                                                |
-| Offline attendance not syncing  | Tap sync badge in header; ensure internet connection                                                               |
-| Timetable not visible           | Headteacher must publish; check term/academic year                                                                 |
-| Timetable shows many conflicts  | Open **Timetable Conflicts**; fix double-booked teachers/classes; remove overloaded PE/allocation rows; regenerate |
-| Cannot publish timetable        | Resolve all **error**-severity conflicts first (Conflicts tab or sidebar)                                          |
-| Timetable generate fails        | Check HOD allocations for invalid multi-class rows or missing teachers; edit on **Department Allocations**         |
-| HOD allocation page blocked     | Sign out and back in; ensure you use the school subdomain URL                                                      |
-| SBA task blocked for Form 4     | ECZ rules prohibit SBA in Form 4 — use exam tracking instead                                                       |
-| SMS not sending                 | Check SMS balance at `/dashboard/sms`; top up credits                                                              |
-| AI tools unavailable            | Upgrade to a plan with AI features                                                                                 |
-| Solo teacher cannot add student | Individual plan limited to 10 students; upgrade to Individual Premium                                              |
+| Problem                         | Solution                                                                                                                                                  |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cannot log in                   | Check subdomain URL; use Forgot Password if weak password blocked                                                                                         |
+| Dashboard blank after login     | Trial may have expired — go to `/dashboard/billing`                                                                                                       |
+| Offline attendance not syncing  | Tap sync badge in header; ensure internet connection                                                                                                      |
+| Timetable not visible           | Headteacher must publish; check term/academic year. HODs see department teachers only — hard-refresh after publish                                        |
+| Timetable shows many conflicts  | Open **Timetable Conflicts**; fix double-booked teachers/classes; remove overloaded PE/allocation rows; regenerate                                        |
+| Cannot publish timetable        | Resolve **error** / hard conflicts first (Conflicts tab). Soft warnings (e.g. missing periods) do not block Publish — fix or **Dismiss** them for clarity |
+| Timetable generate fails        | Check HOD allocations for invalid multi-class rows or missing teachers; edit on **Department Allocations**                                                |
+| HOD allocation page blocked     | Sign out and back in; ensure you use the school subdomain URL                                                                                             |
+| SBA task blocked for Form 4     | ECZ rules prohibit SBA in Form 4 — use exam tracking instead                                                                                              |
+| SMS not sending                 | Check SMS balance at `/dashboard/sms`; top up credits                                                                                                     |
+| AI tools unavailable            | Upgrade to a plan with AI features                                                                                                                        |
+| Solo teacher cannot add student | Individual plan limited to 10 students; upgrade to Individual Premium                                                                                     |
 
 For technical issues, use **Give Feedback** (`/dashboard/feedback`) or contact your school administrator.
 

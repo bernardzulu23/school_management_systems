@@ -42,7 +42,13 @@ export function normalizeAllocationPeriods(allocation: AllocationLike): PeriodBr
 
   const computed = singles + doubles * 2 + triples * 3
   if (computed > 0) {
-    return { singles, doubles, triples, totalPeriods: computed }
+    // Legacy p4 stored singles:1 + doubles:2 with periodsPerWeek:4 (5 ≠ 4). Prefer ppw.
+    if (!(ppw > 0 && computed !== ppw)) {
+      return { singles, doubles, triples, totalPeriods: computed }
+    }
+    singles = 0
+    doubles = 0
+    triples = 0
   }
 
   if (ppw <= 0) {
@@ -66,7 +72,6 @@ export function normalizeAllocationPeriods(allocation: AllocationLike): PeriodBr
       doubles = 1
       triples = 1
     } else if (ppw === 4) {
-      singles = 1
       doubles = 2
     } else {
       singles = ppw

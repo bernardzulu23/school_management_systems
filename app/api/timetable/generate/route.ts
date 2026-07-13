@@ -15,7 +15,10 @@ import {
 } from '@/lib/timetable/loadGenerationContext'
 import { auditDraftTimetable } from '@/lib/timetable/conflictAudit'
 import { cleanupStaleConflicts } from '@/lib/timetable/cleanupConflicts'
-import { normalizePushedAllocations } from '@/lib/timetable/normalizePushedAllocations'
+import {
+  normalizePushedAllocations,
+  applyPendingPushedAllocationUpserts,
+} from '@/lib/timetable/normalizePushedAllocations'
 import { remapEntriesToValidAllocationIds } from '@/lib/timetable/resolveTimetableEntryAllocationIds'
 import { filterConflictFreeSchedulerEntries } from '@/lib/timetable/constraintCheck'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
@@ -122,7 +125,12 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
     )
   }
 
-  const normalizedAllocations = await normalizePushedAllocations(prisma, schoolId, allocations)
+  const { allocations: normalizedAllocations, pendingUpserts } = await normalizePushedAllocations(
+    prisma,
+    schoolId,
+    allocations,
+    { deferWrites: true }
+  )
 
   const singleMin = Number((config as any).singleDuration || 40)
   const daySlots = buildDaySlotsFromTimetableConfig(config as any)
@@ -231,61 +239,88 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
     )
   }
 
-  let { entries: entriesToSave, invalid: invalidAllocationEntries } =
-    await remapEntriesToValidAllocationIds(prisma, schoolId, entries, term, academicYear)
+  let entriesPrepared = entries
+  let invalidAllocationEntries: any[] = []
+  let skippedConflicts = 0
 
-  const beforeFilter = entriesToSave.length
-  entriesToSave = filterConflictFreeSchedulerEntries(entriesToSave)
-  const skippedConflicts = beforeFilter - entriesToSave.length
+  try {
+    await prisma.$transaction(async (tx) => {
+      const idMap = await applyPendingPushedAllocationUpserts(tx, schoolId, pendingUpserts)
+      let working = entries
+      if (idMap.size > 0) {
+        working = entries.map((e: any) => {
+          const nextId = idMap.get(String(e.allocationId || ''))
+          return nextId ? { ...e, allocationId: nextId } : e
+        })
+      }
 
-  if (invalidAllocationEntries.length > 0) {
-    const sample = invalidAllocationEntries[0]
-    return NextResponse.json(
-      {
-        error:
-          'Could not save timetable: one or more lesson rows reference missing teaching allocations. Re-approve department allocations or regenerate after HOD resubmits.',
-        code: 'INVALID_ALLOCATION_FK',
-        invalidCount: invalidAllocationEntries.length,
-        sample: {
-          teacherId: sample?.teacherId,
-          classId: sample?.classId,
-          subjectId: sample?.subjectId,
-          allocationId: sample?.allocationId,
+      const remapped = await remapEntriesToValidAllocationIds(
+        tx,
+        schoolId,
+        working,
+        term,
+        academicYear
+      )
+      if (remapped.invalid.length > 0) {
+        invalidAllocationEntries = remapped.invalid
+        throw Object.assign(new Error('INVALID_ALLOCATION_FK'), {
+          code: 'INVALID_ALLOCATION_FK',
+        })
+      }
+
+      const beforeFilter = remapped.entries.length
+      entriesPrepared = filterConflictFreeSchedulerEntries(remapped.entries)
+      skippedConflicts = beforeFilter - entriesPrepared.length
+
+      if (replaceExisting) {
+        await tx.timetableAllocationEntry.deleteMany({
+          where: { schoolId, term, academicYear, status: 'draft' },
+        })
+      }
+
+      if (entriesPrepared.length > 0) {
+        await tx.timetableAllocationEntry.createMany({
+          data: entriesPrepared.map((e: any) => ({
+            schoolId,
+            allocationId: e.allocationId,
+            teacherId: e.teacherId,
+            subjectId: e.subjectId,
+            classId: e.classId,
+            dayOfWeek: e.dayOfWeek,
+            startTime: e.startTime,
+            endTime: e.endTime,
+            durationMin: e.durationMin,
+            periodType: e.periodType,
+            periodNumber: e.periodNumber,
+            term,
+            academicYear,
+            status: 'draft',
+          })),
+          skipDuplicates: true,
+        })
+      }
+    })
+  } catch (err: any) {
+    if (err?.code === 'INVALID_ALLOCATION_FK' || err?.message === 'INVALID_ALLOCATION_FK') {
+      const sample = invalidAllocationEntries[0]
+      return NextResponse.json(
+        {
+          error:
+            'Could not save timetable: one or more lesson rows reference missing teaching allocations. Re-approve department allocations or regenerate after HOD resubmits.',
+          code: 'INVALID_ALLOCATION_FK',
+          invalidCount: invalidAllocationEntries.length,
+          sample: {
+            teacherId: sample?.teacherId,
+            classId: sample?.classId,
+            subjectId: sample?.subjectId,
+            allocationId: sample?.allocationId,
+          },
         },
-      },
-      { status: 422 }
-    )
+        { status: 422 }
+      )
+    }
+    throw err
   }
-
-  await prisma.$transaction(async (tx) => {
-    if (replaceExisting) {
-      await tx.timetableAllocationEntry.deleteMany({
-        where: { schoolId, term, academicYear, status: 'draft' },
-      })
-    }
-
-    if (entriesToSave.length > 0) {
-      await tx.timetableAllocationEntry.createMany({
-        data: entriesToSave.map((e: any) => ({
-          schoolId,
-          allocationId: e.allocationId,
-          teacherId: e.teacherId,
-          subjectId: e.subjectId,
-          classId: e.classId,
-          dayOfWeek: e.dayOfWeek,
-          startTime: e.startTime,
-          endTime: e.endTime,
-          durationMin: e.durationMin,
-          periodType: e.periodType,
-          periodNumber: e.periodNumber,
-          term,
-          academicYear,
-          status: 'draft',
-        })),
-        skipDuplicates: true,
-      })
-    }
-  })
 
   const saved = await prisma.timetableAllocationEntry.findMany({
     where: { schoolId, term, academicYear, status: 'draft' },

@@ -73,6 +73,77 @@ describe('normalizePushedAllocations', () => {
     expect(String(result.find((r) => r.classId === classB)?.id)).toBe(upsertedId)
     expect(result.every((r) => !String(r.id).includes(`${templateId}-`))).toBe(true)
   })
+
+  it('defers upserts when deferWrites is true', async () => {
+    const deptId = '11111111-1111-1111-1111-111111111111'
+    const templateId = '22222222-2222-2222-2222-222222222222'
+    const classA = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'
+    const classB = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'
+
+    const template = {
+      id: templateId,
+      schoolId: 'school-1',
+      teacherId: 'teacher-1',
+      subjectId: 'subject-1',
+      classId: classA,
+      hodId: 'hod-1',
+      term: 'Term 1',
+      academicYear: '2026',
+      periodsPerWeek: 6,
+      blockType: 'DOUBLE',
+      singlePeriods: 0,
+      doublePeriods: 3,
+      triplePeriods: 0,
+      notes: `departmentAllocation:${deptId}`,
+      class: { id: classA, name: 'Form 1A' },
+      teacher: { id: 'teacher-1', name: 'Teacher' },
+      subject: { id: 'subject-1', name: 'PE' },
+      hod: { hodProfile: { department: 'Sports' } },
+    }
+
+    const upsert = vi.fn()
+    const db = {
+      departmentAllocation: {
+        findFirst: vi.fn().mockResolvedValue({
+          allocationData: {
+            classes: ['Form 1A', 'Form 2B'],
+            subject: 'PE',
+            teacherId: 'teacher-1',
+          },
+        }),
+      },
+      class: {
+        findFirst: vi
+          .fn()
+          .mockImplementation(({ where }: { where: { name?: { equals?: string } } }) =>
+            Promise.resolve(
+              where.name?.equals === 'Form 1A'
+                ? { id: classA, name: 'Form 1A' }
+                : where.name?.equals === 'Form 2B'
+                  ? { id: classB, name: 'Form 2B' }
+                  : null
+            )
+          ),
+        findMany: vi.fn().mockResolvedValue([]),
+      },
+      teacherAllocation: { upsert },
+    }
+
+    const result = await normalizePushedAllocations(db as any, 'school-1', [template as any], {
+      deferWrites: true,
+    })
+
+    expect(Array.isArray(result)).toBe(false)
+    const { allocations, pendingUpserts } = result as {
+      allocations: any[]
+      pendingUpserts: any[]
+    }
+    expect(upsert).not.toHaveBeenCalled()
+    expect(pendingUpserts).toHaveLength(1)
+    expect(pendingUpserts[0].classId).toBe(classB)
+    expect(allocations).toHaveLength(2)
+    expect(String(allocations.find((r) => r.classId === classB)?.id)).toMatch(/^pending:/)
+  })
 })
 
 describe('remapEntriesToValidAllocationIds', () => {

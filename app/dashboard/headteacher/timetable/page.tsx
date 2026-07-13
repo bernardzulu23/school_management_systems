@@ -858,9 +858,7 @@ function HeadteacherTimetablePageContent() {
     assignments.length > 0 &&
     feasibilityErrors.length === 0 &&
     (draftMetaFresh && draftMeta != null
-      ? draftMeta.canPublish &&
-        (draftMeta.conflictErrors ?? 0) === 0 &&
-        (draftMeta.conflictWarnings ?? 0) === 0
+      ? draftMeta.canPublish && (draftMeta.conflictErrors ?? 0) === 0
       : stats.clientConflicts === 0)
 
   const openMissingConflictsTab = () => {

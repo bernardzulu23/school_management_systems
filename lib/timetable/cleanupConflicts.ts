@@ -70,7 +70,7 @@ export async function cleanupStaleConflicts(
       totalConflicts: filtered.length,
       errorCount,
       warningCount,
-      canPublish: errorCount === 0 && warningCount === 0,
+      canPublish: errorCount === 0,
     }
     if (summary.entryCount > 0) {
       await persistDraftConflictMeta(prisma, { schoolId, term, academicYear, summary })

@@ -211,13 +211,19 @@ export const GET = withErrorHandler(async function GET(req) {
   if (status === 'published') {
     const cached = await getCachedPublishedTimetableEntries(schoolId, term, academicYear)
     entries = cached.filter((row) => {
-      if (where.teacherId && String(row.teacherId) !== String(where.teacherId)) return false
-      if (where.teacherId?.in && !where.teacherId.in.map(String).includes(String(row.teacherId)))
-        return false
+      // Prefer `{ in: [...] }` before scalar compare — `String({ in })` is "[object Object]"
+      // and would discard every row for HOD department views.
+      if (where.teacherId?.in) {
+        if (!where.teacherId.in.map(String).includes(String(row.teacherId))) return false
+      } else if (where.teacherId) {
+        if (String(row.teacherId) !== String(where.teacherId)) return false
+      }
       if (where.classId && String(row.classId) !== String(where.classId)) return false
       if (where.subjectId?.in) {
         const allowed = where.subjectId.in.map(String)
         if (!allowed.includes(String(row.subjectId))) return false
+      } else if (where.subjectId) {
+        if (String(row.subjectId) !== String(where.subjectId)) return false
       }
       return true
     })

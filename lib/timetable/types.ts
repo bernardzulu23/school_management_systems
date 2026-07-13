@@ -277,6 +277,8 @@ export interface Assignment {
   isBreak?: boolean
   teacherId: Teacher['id']
   classId: Class['id']
+  /** Optional display label when class join is missing (grids / active-class filters). */
+  className?: string
   subjectId: SubjectRef['id']
   /** Legacy field — not used in class-centric (Zambian) timetables. */
   classroomId?: Classroom['id']
