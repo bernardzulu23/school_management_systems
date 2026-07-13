@@ -190,7 +190,7 @@ function TimetableConflictsContent() {
         <div className="mb-4 p-4 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-100 text-sm flex flex-wrap items-center justify-between gap-3">
           <span>
             {summary.message ||
-              'This timetable is published. Conflicts are read-only until you create an editable draft.'}
+              'This timetable is published. Slot-fix actions need an editable draft. Soft warnings can still be dismissed — dismissals are saved for this term and survive refresh.'}
           </span>
           <button
             type="button"

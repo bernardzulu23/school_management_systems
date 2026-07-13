@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic'
-// app/api/timetable/publish/route.js
 import { NextResponse } from 'next/server'
 import { revalidateTag } from 'next/cache'
 import { prisma } from '@/lib/prisma'
@@ -10,8 +8,12 @@ import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { validateDraftEntriesForPublish } from '@/lib/timetable/validateDraftEntries'
 import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
 import { syncClassActiveFlags } from '@/lib/timetable/getActiveClasses'
+import { promoteDraftTimetableToPublished } from '@/lib/timetable/promoteDraftToPublished'
+import { timetableExcludeConflictResponse } from '@/lib/timetable/excludeConstraintError'
 import { safeQueryString } from '@/lib/security/safeQueryValue'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
+
+export const dynamic = 'force-dynamic'
 
 export const POST = withErrorHandler(async function POST(req) {
   const user = await getAuthUser(req)
@@ -78,27 +80,22 @@ export const POST = withErrorHandler(async function POST(req) {
     )
   }
 
-  const result = await prisma.$transaction(async (tx) => {
-    const updated = await tx.timetableAllocationEntry.updateMany({
-      where: { schoolId, term, academicYear, status: 'draft' },
-      data: { status: 'published', publishedAt: new Date() },
+  let result
+  try {
+    result = await promoteDraftTimetableToPublished(prisma, {
+      schoolId,
+      term,
+      academicYear,
     })
+  } catch (err) {
+    const conflict = timetableExcludeConflictResponse(err)
+    if (conflict) return conflict
+    throw err
+  }
 
-    const entries = await tx.timetableAllocationEntry.findMany({
-      where: { schoolId, term, academicYear, status: 'published' },
-      select: { allocationId: true },
-    })
-    const allocationIds = [...new Set(entries.map((e) => e.allocationId))]
-
-    if (allocationIds.length) {
-      await tx.teacherAllocation.updateMany({
-        where: { id: { in: allocationIds } },
-        data: { status: 'scheduled' },
-      })
-    }
-
-    return updated.count
-  })
+  if (!result.ok) {
+    return NextResponse.json({ error: result.error, code: result.code }, { status: 400 })
+  }
 
   revalidateTag(`timetable-${schoolId}`)
   revalidateTag('timetable')
@@ -109,7 +106,8 @@ export const POST = withErrorHandler(async function POST(req) {
   return NextResponse.json({
     success: true,
     message: 'Timetable published',
-    published: result,
+    published: result.published,
+    replacedPublished: result.deletedPublished,
     term,
     academicYear,
   })

@@ -23,6 +23,7 @@ import { remapEntriesToValidAllocationIds } from '@/lib/timetable/resolveTimetab
 import { filterConflictFreeSchedulerEntries } from '@/lib/timetable/constraintCheck'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { safeQueryString } from '@/lib/security/safeQueryValue'
+import { timetableExcludeConflictResponse } from '@/lib/timetable/excludeConstraintError'
 
 const GENERATED_ENTRY_LIMIT = 2000
 
@@ -348,6 +349,8 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
         { status: 422 }
       )
     }
+    const excludeRes = timetableExcludeConflictResponse(err)
+    if (excludeRes) return excludeRes
     throw err
   }
 

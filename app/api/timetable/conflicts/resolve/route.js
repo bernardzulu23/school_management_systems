@@ -8,7 +8,8 @@ import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { timesOverlap } from '@/lib/timetable/validateTimetable'
 import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
-import { safeStringId } from '@/lib/security/safeQueryValue'
+import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
+import { timetableExcludeConflictResponse } from '@/lib/timetable/excludeConstraintError'
 
 const RESOLVE_ROLES = new Set(['headteacher', 'administrator', 'admin', 'superadmin'])
 
@@ -101,11 +102,23 @@ export const POST = withErrorHandler(async function POST(req) {
           return NextResponse.json({ error: 'Teacher not found' }, { status: 404 })
         }
 
-        const updated = await prisma.timetableAllocationEntry.update({
-          where: { id: entryId },
-          data: { teacherId: newTeacherId },
-          include: entryInclude(),
-        })
+        let updated
+        try {
+          updated = await prisma.timetableAllocationEntry.update({
+            where: { id: entryId },
+            data: { teacherId: newTeacherId },
+            include: entryInclude(),
+          })
+        } catch (err) {
+          const conflict = timetableExcludeConflictResponse(err, {
+            teacherName: teacher.name || undefined,
+            dayOfWeek: entry.dayOfWeek,
+            startTime: entry.startTime,
+            endTime: entry.endTime,
+          })
+          if (conflict) return conflict
+          throw err
+        }
 
         const summary = await rescanAndPersist(schoolId, entry.term, entry.academicYear)
 
@@ -207,11 +220,22 @@ export const POST = withErrorHandler(async function POST(req) {
           }
         }
 
-        const updated = await prisma.timetableAllocationEntry.update({
-          where: { id: entryId },
-          data: slotData,
-          include: entryInclude(),
-        })
+        let updated
+        try {
+          updated = await prisma.timetableAllocationEntry.update({
+            where: { id: entryId },
+            data: slotData,
+            include: entryInclude(),
+          })
+        } catch (err) {
+          const conflict = timetableExcludeConflictResponse(err, {
+            dayOfWeek: slotData.dayOfWeek,
+            startTime: slotData.startTime,
+            endTime: slotData.endTime,
+          })
+          if (conflict) return conflict
+          throw err
+        }
 
         const summary = await rescanAndPersist(schoolId, entry.term, entry.academicYear)
 
@@ -267,30 +291,38 @@ export const POST = withErrorHandler(async function POST(req) {
           verifyDraftEntry(entryBId, schoolId),
         ])
 
-        const [updatedA, updatedB] = await prisma.$transaction([
-          prisma.timetableAllocationEntry.update({
-            where: { id: entryAId },
-            data: {
-              dayOfWeek: entryB.dayOfWeek,
-              startTime: entryB.startTime,
-              endTime: entryB.endTime,
-              periodNumber: entryB.periodNumber,
-              durationMin: entryB.durationMin,
-            },
-            include: entryInclude(),
-          }),
-          prisma.timetableAllocationEntry.update({
-            where: { id: entryBId },
-            data: {
-              dayOfWeek: entryA.dayOfWeek,
-              startTime: entryA.startTime,
-              endTime: entryA.endTime,
-              periodNumber: entryA.periodNumber,
-              durationMin: entryA.durationMin,
-            },
-            include: entryInclude(),
-          }),
-        ])
+        let updatedA
+        let updatedB
+        try {
+          ;[updatedA, updatedB] = await prisma.$transaction([
+            prisma.timetableAllocationEntry.update({
+              where: { id: entryAId },
+              data: {
+                dayOfWeek: entryB.dayOfWeek,
+                startTime: entryB.startTime,
+                endTime: entryB.endTime,
+                periodNumber: entryB.periodNumber,
+                durationMin: entryB.durationMin,
+              },
+              include: entryInclude(),
+            }),
+            prisma.timetableAllocationEntry.update({
+              where: { id: entryBId },
+              data: {
+                dayOfWeek: entryA.dayOfWeek,
+                startTime: entryA.startTime,
+                endTime: entryA.endTime,
+                periodNumber: entryA.periodNumber,
+                durationMin: entryA.durationMin,
+              },
+              include: entryInclude(),
+            }),
+          ])
+        } catch (err) {
+          const conflict = timetableExcludeConflictResponse(err)
+          if (conflict) return conflict
+          throw err
+        }
 
         const summary = await rescanAndPersist(schoolId, entryA.term, entryA.academicYear)
 
@@ -318,6 +350,8 @@ export const POST = withErrorHandler(async function POST(req) {
         )
     }
   } catch (err) {
+    const excludeRes = timetableExcludeConflictResponse(err)
+    if (excludeRes) return excludeRes
     const status = err?.status || 500
     return NextResponse.json({ error: err?.message || 'Resolution failed' }, { status })
   }

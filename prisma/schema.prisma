@@ -2719,6 +2719,8 @@ model TeacherColor {
   @@index([schoolId])
 }
 
+/// DB also enforces no class/teacher time overlaps per school+term+year+status via
+/// Postgres EXCLUDE constraints (see migration 20260713210000_timetable_exclude_overlaps).
 model TimetableAllocationEntry {
   id           String   @id @default(uuid())
   schoolId     String

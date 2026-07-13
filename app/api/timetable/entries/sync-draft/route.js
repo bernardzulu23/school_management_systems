@@ -14,6 +14,7 @@ import {
 } from '@/lib/timetable/timetableRouteAuth'
 import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { timetableExcludeConflictResponse } from '@/lib/timetable/excludeConstraintError'
 
 const MAX_SYNC_ASSIGNMENTS = 500
 
@@ -222,14 +223,20 @@ export const POST = withErrorHandler(async function POST(req) {
     )
   }
 
-  await prisma.$transaction(async (tx) => {
-    if (replaceExisting) {
-      await tx.timetableAllocationEntry.deleteMany({
-        where: { schoolId, term, academicYear, status: 'draft' },
-      })
-    }
-    await tx.timetableAllocationEntry.createMany({ data: toCreate, skipDuplicates: true })
-  })
+  try {
+    await prisma.$transaction(async (tx) => {
+      if (replaceExisting) {
+        await tx.timetableAllocationEntry.deleteMany({
+          where: { schoolId, term, academicYear, status: 'draft' },
+        })
+      }
+      await tx.timetableAllocationEntry.createMany({ data: toCreate, skipDuplicates: true })
+    })
+  } catch (err) {
+    const conflict = timetableExcludeConflictResponse(err)
+    if (conflict) return conflict
+    throw err
+  }
 
   await rescanAndPersistDraftMeta(prisma, { schoolId, term, academicYear })
 

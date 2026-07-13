@@ -13,6 +13,7 @@ import {
 } from '@/lib/timetable/timetableRouteAuth'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
+import { timetableExcludeConflictResponse } from '@/lib/timetable/excludeConstraintError'
 
 const ENTRY_LIST_LIMIT = 2000
 const DRAFT_SCAN_LIMIT = 2000
@@ -96,7 +97,17 @@ export const PATCH = withErrorHandler(async function PATCH(req) {
     return NextResponse.json({ error: 'Invalid periodNumber' }, { status: 400 })
   }
 
-  const entry = await prisma.timetableAllocationEntry.findFirst({ where: { id, schoolId } })
+  const entry = await prisma.timetableAllocationEntry.findFirst({
+    where: { id, schoolId },
+    include: {
+      allocation: {
+        include: {
+          teacher: { select: { id: true, name: true } },
+          class: { select: { id: true, name: true } },
+        },
+      },
+    },
+  })
   if (!entry) return NextResponse.json({ error: 'Entry not found' }, { status: 404 })
   if (String(entry.status) !== 'draft') {
     return NextResponse.json(
@@ -147,19 +158,32 @@ export const PATCH = withErrorHandler(async function PATCH(req) {
     )
   }
 
-  const updated = await prisma.timetableAllocationEntry.update({
-    where: { id },
-    data,
-    include: {
-      allocation: {
-        include: {
-          teacher: { select: { id: true, name: true } },
-          subject: { select: { id: true, name: true, code: true } },
-          class: { select: { id: true, name: true } },
+  let updated
+  try {
+    updated = await prisma.timetableAllocationEntry.update({
+      where: { id },
+      data,
+      include: {
+        allocation: {
+          include: {
+            teacher: { select: { id: true, name: true } },
+            subject: { select: { id: true, name: true, code: true } },
+            class: { select: { id: true, name: true } },
+          },
         },
       },
-    },
-  })
+    })
+  } catch (err) {
+    const conflict = timetableExcludeConflictResponse(err, {
+      teacherName: entry?.allocation?.teacher?.name,
+      className: entry?.allocation?.class?.name,
+      dayOfWeek: data.dayOfWeek || entry.dayOfWeek,
+      startTime: data.startTime || entry.startTime,
+      endTime: data.endTime || entry.endTime,
+    })
+    if (conflict) return conflict
+    throw err
+  }
 
   await rescanAndPersistDraftMeta(prisma, {
     schoolId,
