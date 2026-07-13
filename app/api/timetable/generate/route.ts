@@ -26,6 +26,9 @@ import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 const GENERATED_ENTRY_LIMIT = 2000
 
+/** Solver + save can exceed the default serverless limit on large schools. */
+export const maxDuration = 60
+
 export const GET = withErrorHandler(async function GET(req: NextRequest) {
   const user = await getAuthUser(req as any)
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -244,64 +247,70 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
   let skippedConflicts = 0
 
   try {
-    await prisma.$transaction(async (tx) => {
-      const idMap = await applyPendingPushedAllocationUpserts(tx, schoolId, pendingUpserts)
-      let working = entries
-      if (idMap.size > 0) {
-        working = entries.map((e: any) => {
-          const nextId = idMap.get(String(e.allocationId || ''))
-          return nextId ? { ...e, allocationId: nextId } : e
-        })
-      }
+    // Interactive txs default to 5s — upserts + bulk createMany need more headroom.
+    await prisma.$transaction(
+      async (tx) => {
+        const idMap = await applyPendingPushedAllocationUpserts(tx, schoolId, pendingUpserts)
+        let working = entries
+        if (idMap.size > 0) {
+          working = entries.map((e: any) => {
+            const nextId = idMap.get(String(e.allocationId || ''))
+            return nextId ? { ...e, allocationId: nextId } : e
+          })
+        }
 
-      const remapped = await remapEntriesToValidAllocationIds(
-        tx,
-        schoolId,
-        working,
-        term,
-        academicYear
-      )
-      if (remapped.invalid.length > 0) {
-        invalidAllocationEntries = remapped.invalid
-        throw Object.assign(new Error('INVALID_ALLOCATION_FK'), {
-          code: 'INVALID_ALLOCATION_FK',
-        })
-      }
+        const remapped = await remapEntriesToValidAllocationIds(
+          tx,
+          schoolId,
+          working,
+          term,
+          academicYear
+        )
+        if (remapped.invalid.length > 0) {
+          invalidAllocationEntries = remapped.invalid
+          throw Object.assign(new Error('INVALID_ALLOCATION_FK'), {
+            code: 'INVALID_ALLOCATION_FK',
+          })
+        }
 
-      const beforeFilter = remapped.entries.length
-      entriesPrepared = filterConflictFreeSchedulerEntries(remapped.entries)
-      skippedConflicts = beforeFilter - entriesPrepared.length
+        const beforeFilter = remapped.entries.length
+        entriesPrepared = filterConflictFreeSchedulerEntries(remapped.entries)
+        skippedConflicts = beforeFilter - entriesPrepared.length
 
-      if (replaceExisting) {
-        await tx.timetableAllocationEntry.deleteMany({
-          where: { schoolId, term, academicYear, status: 'draft' },
-        })
-      }
+        if (replaceExisting) {
+          await tx.timetableAllocationEntry.deleteMany({
+            where: { schoolId, term, academicYear, status: 'draft' },
+          })
+        }
 
-      if (entriesPrepared.length > 0) {
-        await tx.timetableAllocationEntry.createMany({
-          data: entriesPrepared.map((e: any) => ({
-            schoolId,
-            allocationId: e.allocationId,
-            teacherId: e.teacherId,
-            subjectId: e.subjectId,
-            classId: e.classId,
-            dayOfWeek: e.dayOfWeek,
-            startTime: e.startTime,
-            endTime: e.endTime,
-            durationMin: e.durationMin,
-            periodType: e.periodType,
-            periodNumber: e.periodNumber,
-            term,
-            academicYear,
-            status: 'draft',
-          })),
-          skipDuplicates: true,
-        })
-      }
-    })
+        if (entriesPrepared.length > 0) {
+          await tx.timetableAllocationEntry.createMany({
+            data: entriesPrepared.map((e: any) => ({
+              schoolId,
+              allocationId: e.allocationId,
+              teacherId: e.teacherId,
+              subjectId: e.subjectId,
+              classId: e.classId,
+              dayOfWeek: e.dayOfWeek,
+              startTime: e.startTime,
+              endTime: e.endTime,
+              durationMin: e.durationMin,
+              periodType: e.periodType,
+              periodNumber: e.periodNumber,
+              term,
+              academicYear,
+              status: 'draft',
+            })),
+            skipDuplicates: true,
+          })
+        }
+      },
+      { maxWait: 15_000, timeout: 60_000 }
+    )
   } catch (err: any) {
-    if (err?.code === 'INVALID_ALLOCATION_FK' || err?.message === 'INVALID_ALLOCATION_FK') {
+    const code = String(err?.code || '')
+    const msg = String(err?.message || '')
+    if (code === 'INVALID_ALLOCATION_FK' || msg.includes('INVALID_ALLOCATION_FK')) {
       const sample = invalidAllocationEntries[0]
       return NextResponse.json(
         {
@@ -315,6 +324,26 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
             subjectId: sample?.subjectId,
             allocationId: sample?.allocationId,
           },
+        },
+        { status: 422 }
+      )
+    }
+    if (code === 'P2028' || /transaction.*timeout|timed out/i.test(msg)) {
+      return NextResponse.json(
+        {
+          error:
+            'Saving the generated timetable timed out. Try generating again, or generate without replaceExisting after clearing the draft.',
+          code: 'GENERATE_SAVE_TIMEOUT',
+        },
+        { status: 503 }
+      )
+    }
+    if (code === 'P2003' || /foreign key|Foreign key/i.test(msg)) {
+      return NextResponse.json(
+        {
+          error:
+            'Could not save timetable periods — a teacher, class, subject, or allocation reference is missing. Re-approve department allocations and regenerate.',
+          code: 'GENERATE_SAVE_FK',
         },
         { status: 422 }
       )

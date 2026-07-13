@@ -39,6 +39,22 @@ import type { LockedSlotReservation } from '@/lib/timetable/preflightFeasibility
 /** Default break positions when daySlots cannot be inspected (legacy fallback). */
 export const BREAK_AFTER_PERIODS = [2, 5]
 
+const DAY_ORDER: Record<string, number> = {
+  monday: 1,
+  tuesday: 2,
+  wednesday: 3,
+  thursday: 4,
+  friday: 5,
+  saturday: 6,
+  sunday: 7,
+}
+
+export function normalizeDay(day: string): string {
+  return String(day || 'monday')
+    .trim()
+    .toLowerCase()
+}
+
 /** Derive period numbers after which a break row follows in the bell schedule grid. */
 export function deriveBreakAfterPeriods(daySlots: Record<string, DayPeriodSlot[]>): number[] {
   const dayKey =
@@ -191,22 +207,6 @@ export type SchedulerResult = {
   stats: SchedulerStats
   unplacedBlocks: SchedulerBlock[]
   placedBlocks: PlacedBlock[]
-}
-
-const DAY_ORDER: Record<string, number> = {
-  monday: 1,
-  tuesday: 2,
-  wednesday: 3,
-  thursday: 4,
-  friday: 5,
-  saturday: 6,
-  sunday: 7,
-}
-
-export function normalizeDay(day: string): string {
-  return String(day || 'monday')
-    .trim()
-    .toLowerCase()
 }
 
 export function periodsOverlap(
