@@ -17,11 +17,15 @@ import {
   ArrowLeft,
   Home,
   Loader2,
+  Briefcase,
+  ClipboardList,
+  Bell,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { api } from '@/lib/api'
 import { useAuth } from '@/lib/auth'
 import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
+import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
 
 function RegistrationContent() {
   const [activeForm, setActiveForm] = useState(null)
@@ -355,6 +359,94 @@ function RegistrationContent() {
               </Card>
             ))}
           </div>
+
+          {/* Role assignments (existing teachers) */}
+          {!isIndividualOwner && (
+            <div className="mt-10">
+              <h2 className="text-xl font-semibold text-royalPurple-text1 mb-2">
+                Assign responsibilities
+              </h2>
+              <p className="text-royalPurple-text2 text-sm mb-4">
+                Assign existing teachers as Guidance teachers or School In-service Coordinator
+                (SIC). HOD assignment is available from User Management.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {getSchoolFeatures(schoolMeta || { level: 'combined', ownershipType: 'PRIVATE' })
+                  .careerGuidance ? (
+                  <Card className="p-6">
+                    <div className="flex items-center gap-3 mb-3">
+                      <Briefcase className="h-6 w-6 text-royalPurple-accentTx" />
+                      <h3 className="text-lg font-semibold text-royalPurple-text1">
+                        Guidance teachers
+                      </h3>
+                    </div>
+                    <p className="text-sm text-royalPurple-text2 mb-4">
+                      Career board, cases, documents, and pupil pathways.
+                    </p>
+                    <div className="space-y-2">
+                      <Button
+                        className="w-full"
+                        onClick={() => router.push('/dashboard/headteacher/guidance-teachers')}
+                      >
+                        Assign Guidance teacher
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => router.push('/dashboard/headteacher/guidance-reports')}
+                      >
+                        <ClipboardList className="h-4 w-4 mr-2" />
+                        Guidance reports
+                      </Button>
+                    </div>
+                  </Card>
+                ) : null}
+
+                <Card className="p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <GraduationCap className="h-6 w-6 text-royalPurple-accentTx" />
+                    <h3 className="text-lg font-semibold text-royalPurple-text1">
+                      School In-service Coordinator (SIC)
+                    </h3>
+                  </div>
+                  <p className="text-sm text-royalPurple-text2 mb-4">
+                    CPD chair for department plans, HIM meetings, and school activity plans.
+                  </p>
+                  <Button
+                    className="w-full"
+                    onClick={() => router.push('/dashboard/headteacher/sic')}
+                  >
+                    Assign SIC
+                  </Button>
+                </Card>
+
+                <Card className="p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Bell className="h-6 w-6 text-royalPurple-accentTx" />
+                    <h3 className="text-lg font-semibold text-royalPurple-text1">Notifications</h3>
+                  </div>
+                  <p className="text-sm text-royalPurple-text2 mb-4">
+                    Staff inbox and channel preferences (web push, email, SMS).
+                  </p>
+                  <div className="space-y-2">
+                    <Button
+                      className="w-full"
+                      onClick={() => router.push('/dashboard/notifications')}
+                    >
+                      Notification center
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => router.push('/dashboard/settings?tab=notifications')}
+                    >
+                      Preferences
+                    </Button>
+                  </div>
+                </Card>
+              </div>
+            </div>
+          )}
 
           {/* Additional Information */}
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -19,6 +19,9 @@ import {
   EyeOff,
   RefreshCcw,
   X,
+  Briefcase,
+  ClipboardList,
+  Bell,
 } from 'lucide-react'
 import { api } from '@/lib/api'
 import toast from 'react-hot-toast'
@@ -26,6 +29,7 @@ import LoadingSpinner from '@/components/LoadingSpinner'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
 import { useSchool } from '@/lib/context/SchoolContext'
 import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
+import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
 import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
 import SubjectSelection from '@/components/registration/SubjectSelection'
 import UserTypeCards from '@/components/dashboard/UserTypeCards'
@@ -105,6 +109,11 @@ export default function UserManagement() {
   const router = useRouter()
   const { school } = useSchool()
   const showHodFeatures = canAccessHodFeatures({ schoolLevel: school?.level })
+  const schoolFeatures = getSchoolFeatures(
+    school || { level: 'combined', ownershipType: 'PRIVATE', schoolType: 'SCHOOL' }
+  )
+  const showGuidanceAssign = Boolean(schoolFeatures.careerGuidance)
+  const showSicAssign = String(school?.schoolType || 'SCHOOL').toUpperCase() !== 'INDIVIDUAL'
   const [activeUserType, setActiveUserType] = useState('all')
   const [users, setUsers] = useState([])
   const [hodAssignments, setHodAssignments] = useState([])
@@ -505,7 +514,7 @@ export default function UserManagement() {
         {/* Management Actions */}
         <section
           aria-label="Registration actions"
-          className="grid grid-cols-1 md:grid-cols-4 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
         >
           <Card className="bg-royalPurple-card border border-royalPurple-border rounded-xl overflow-hidden hover:scale-105 transition-all duration-300">
             <CardHeader className="bg-royalPurple-card2 p-4 border-b border-royalPurple-border">
@@ -625,6 +634,127 @@ export default function UserManagement() {
               </CardContent>
             </Card>
           )}
+
+          {showGuidanceAssign && (
+            <Card className="bg-royalPurple-card border border-royalPurple-border rounded-xl overflow-hidden hover:scale-105 transition-all duration-300">
+              <CardHeader className="bg-royalPurple-card2 p-4 border-b border-royalPurple-border">
+                <div className="flex items-center gap-3">
+                  <div className="bg-royalPurple-card border border-royalPurple-border rounded-lg p-2">
+                    <Briefcase className="h-5 w-5 text-royalPurple-text2" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-royalPurple-text1 font-semibold text-base">
+                      Assign Guidance teachers
+                    </CardTitle>
+                    <p className="text-royalPurple-text2 text-sm mt-1">
+                      Assign teachers to career guidance, cases, and the pupil board
+                    </p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  <Button
+                    className="bg-royalPurple-accent text-royalPurple-deep font-semibold rounded-lg w-full py-2"
+                    onClick={() => router.push('/dashboard/headteacher/guidance-teachers')}
+                    aria-label="Assign a guidance teacher"
+                  >
+                    <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
+                    Assign Guidance teacher
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                    onClick={() => router.push('/dashboard/headteacher/guidance-reports')}
+                    aria-label="Open guidance reports"
+                  >
+                    <ClipboardList className="h-4 w-4 mr-2" aria-hidden="true" />
+                    Guidance reports
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {showSicAssign && (
+            <Card className="bg-royalPurple-card border border-royalPurple-border rounded-xl overflow-hidden hover:scale-105 transition-all duration-300">
+              <CardHeader className="bg-royalPurple-card2 p-4 border-b border-royalPurple-border">
+                <div className="flex items-center gap-3">
+                  <div className="bg-royalPurple-card border border-royalPurple-border rounded-lg p-2">
+                    <GraduationCap className="h-5 w-5 text-royalPurple-text2" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-royalPurple-text1 font-semibold text-base">
+                      Assign SIC
+                    </CardTitle>
+                    <p className="text-royalPurple-text2 text-sm mt-1">
+                      School In-service Coordinator for CPD, HIM, and activity plans
+                    </p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  <Button
+                    className="bg-royalPurple-accent text-royalPurple-deep font-semibold rounded-lg w-full py-2"
+                    onClick={() => router.push('/dashboard/headteacher/sic')}
+                    aria-label="Assign School In-service Coordinator"
+                  >
+                    <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
+                    Assign SIC
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                    onClick={() => router.push('/dashboard/headteacher/sic')}
+                    aria-label="Manage SIC assignment"
+                  >
+                    <Users className="h-4 w-4 mr-2" aria-hidden="true" />
+                    Manage SIC assignment
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <Card className="bg-royalPurple-card border border-royalPurple-border rounded-xl overflow-hidden hover:scale-105 transition-all duration-300">
+            <CardHeader className="bg-royalPurple-card2 p-4 border-b border-royalPurple-border">
+              <div className="flex items-center gap-3">
+                <div className="bg-royalPurple-card border border-royalPurple-border rounded-lg p-2">
+                  <Bell className="h-5 w-5 text-royalPurple-text2" aria-hidden="true" />
+                </div>
+                <div>
+                  <CardTitle className="text-royalPurple-text1 font-semibold text-base">
+                    Notifications
+                  </CardTitle>
+                  <p className="text-royalPurple-text2 text-sm mt-1">
+                    Inbox, preferences, and channel settings for staff alerts
+                  </p>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="space-y-3">
+                <Button
+                  className="bg-royalPurple-accent text-royalPurple-deep font-semibold rounded-lg w-full py-2"
+                  onClick={() => router.push('/dashboard/notifications')}
+                  aria-label="Open notification center"
+                >
+                  <Bell className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Notification center
+                </Button>
+                <Button
+                  variant="outline"
+                  className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                  onClick={() => router.push('/dashboard/settings?tab=notifications')}
+                  aria-label="Open notification preferences"
+                >
+                  <Settings className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Notification preferences
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
           <Card className="bg-royalPurple-card border border-royalPurple-border rounded-xl overflow-hidden hover:scale-105 transition-all duration-300">
             <CardHeader className="bg-royalPurple-card2 p-4 border-b border-royalPurple-border">

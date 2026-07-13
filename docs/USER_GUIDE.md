@@ -254,7 +254,8 @@ The headteacher is the school administrator with full oversight: users, timetabl
 1. Go to **Registration** (`/admin/registration`) to add teachers, students, HODs, or admins one at a time.
 2. For many students, use **Bulk student upload** (`/dashboard/students/bulk-upload`): click **Download student upload template**, fill rows from line 4 on the **Student Data** sheet (max 1,000 per file), upload, and download an error report for any failed rows. The template includes a **Database Mapping** sheet listing each Excel column and the matching `User`, `Student`, `Class`, and `PupilSubjectEnrollment` fields.
 3. For many teachers, use **Bulk teacher upload** (`/dashboard/teachers/bulk-upload`): download the template, fill the **Teacher Data** sheet (max 500 per file). Required columns include department(s), TS number, email, and password. Optional **Teaching Assignments** use `Class:Subject` pairs separated by semicolons (e.g. `Form 1A:Mathematics; Form 2B:English`). See the **Database Mapping** sheet for `User`, `Teacher`, `Department`, and `TeachingAssignment` alignment.
-4. Use **User Management** (`/dashboard/users`) to view, edit, or deactivate accounts.
+4. Use **User Management** (`/dashboard/users`) to view, edit, or deactivate accounts — and to **Assign Guidance teachers**, **Assign SIC**, or open **Notifications**.
+5. From **Registration** (`/admin/registration`), use **Assign responsibilities** for Guidance / SIC after teachers exist.
 
 #### Master timetable
 
