@@ -29,6 +29,7 @@ import {
 } from '@/lib/timetable/scheduler'
 import { tryGreedySolverPass } from '@/lib/timetable/greedySchedulerFallback'
 import { validateTimetable, getHardConflicts } from '@/lib/timetable/validateTimetable'
+import type { Assignment, DayOfWeek, LocalTimeHHMM } from '@/lib/timetable/types'
 import type { DbConstraintLike, RecipeLikeForRules } from '@/lib/timetable/constraintRules'
 
 export type HybridEngine = 'backtrack' | 'greedy' | 'solver' | 'repair' | 'none'
@@ -52,13 +53,38 @@ export type HybridGenerateResult = SchedulerResult & {
   hardValidationCount: number
 }
 
-function entriesToValidationAssignments(entries: SchedulerResult['entries']) {
+function toDayOfWeek(value: string): DayOfWeek {
+  const day = String(value || '')
+    .trim()
+    .toLowerCase()
+  const allowed: DayOfWeek[] = [
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday',
+  ]
+  return (allowed.includes(day as DayOfWeek) ? day : 'monday') as DayOfWeek
+}
+
+function toLocalTime(value: string): LocalTimeHHMM {
+  const raw = String(value || '00:00').trim()
+  const m = raw.match(/^(\d{1,2}):(\d{2})$/)
+  if (!m) return '00:00' as LocalTimeHHMM
+  const hh = String(Math.min(23, Math.max(0, Number(m[1])))).padStart(2, '0')
+  const mm = String(Math.min(59, Math.max(0, Number(m[2])))).padStart(2, '0')
+  return `${hh}:${mm}` as LocalTimeHHMM
+}
+
+function entriesToValidationAssignments(entries: SchedulerResult['entries']): Assignment[] {
   return entries.map((e, i) => ({
     id: `gen-${i}-${e.allocationId}`,
-    season: 'normal' as const,
-    dayOfWeek: e.dayOfWeek,
-    startTime: e.startTime,
-    endTime: e.endTime,
+    season: 'normal',
+    dayOfWeek: toDayOfWeek(e.dayOfWeek),
+    startTime: toLocalTime(e.startTime),
+    endTime: toLocalTime(e.endTime),
     period: e.periodNumber,
     teacherId: e.teacherId,
     classId: e.classId,
