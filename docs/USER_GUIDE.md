@@ -259,6 +259,8 @@ The headteacher is the school administrator with full oversight: users, timetabl
 
 #### Master timetable
 
+The **home dashboard** (`/dashboard/headteacher`) Master Timetable card prefers the **editable draft** when one exists (so it matches the **Edit** tab after regenerate). It falls back to **published** only when there is no draft. Teachers and students still see **published** until you click **Publish** (the dashboard Publish button now writes to the server, same as the Timetable page).
+
 The **Timetable** page (`/dashboard/headteacher/timetable`) has tabs: **Overview**, **Edit**, **Conflicts**, **Cover**, **Settings**, and **Department Allocations**.
 
 1. Wait for HODs to submit class allocations (notification bell alerts you).

@@ -13,6 +13,7 @@ import { filterClassesForWallGrid, inferClassGrade } from '@/lib/timetable/activ
 import { AscClassWallGrid } from '@/components/timetable/AscClassWallGrid'
 import { pastelBgForSubject } from '@/lib/timetable/cardColors'
 import { Calendar, Clock, MapPin, User, ChevronRight, AlertCircle } from 'lucide-react'
+import { getDefaultAcademicYear, getDefaultTerm } from '@/lib/timetable/timetableTermOptions'
 import {
   TIMETABLE_CONFLICTS_UPDATED,
   readTimetableConflictCountsSnapshot,
@@ -75,6 +76,8 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
   const [bellLoading, setBellLoading] = useState(true)
   const [wallClasses, setWallClasses] = useState([])
   const [serverConflictErrors, setServerConflictErrors] = useState(0)
+  const [publishing, setPublishing] = useState(false)
+  const [viewStatus, setViewStatus] = useState(null) // 'draft' | 'published' | null
 
   useEffect(() => {
     let cancelled = false
@@ -82,8 +85,8 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
       try {
         const snap = readTimetableConflictCountsSnapshot()
         if (snap && !cancelled) setServerConflictErrors(Number(snap.conflictErrors ?? 0))
-        const term = String(snap?.term || 'Term 1')
-        const academicYear = String(snap?.academicYear || new Date().getFullYear())
+        const term = String(snap?.term || getDefaultTerm())
+        const academicYear = String(snap?.academicYear || getDefaultAcademicYear())
         const qs = new URLSearchParams({ term, academicYear })
         const res = await sessionFetch(`/api/timetable/draft-meta?${qs}`, {
           credentials: 'include',
@@ -119,13 +122,37 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
     async function load() {
       setBellLoading(true)
       try {
-        let data = await loadFromApi({ status: 'published' })
-        if (!data?.assignments?.length) {
-          data = await loadFromApi({ status: 'draft' })
+        const snap = readTimetableConflictCountsSnapshot()
+        const term = String(snap?.term || getDefaultTerm())
+        const academicYear = String(snap?.academicYear || getDefaultAcademicYear())
+        const isHeadteacher = String(userRole || user?.role || '').toLowerCase() === 'headteacher'
+
+        let data
+        let loadedStatus = 'published'
+
+        if (isHeadteacher) {
+          // Prefer draft so overview matches Master Timetable Edit (full regenerate).
+          // Old sparse published must not hide a newer multi-department draft.
+          data = await loadFromApi({ term, academicYear, status: 'draft' })
+          if (data?.assignments?.length) {
+            loadedStatus = 'draft'
+          } else {
+            data = await loadFromApi({ term, academicYear, status: 'published' })
+            loadedStatus = 'published'
+          }
+        } else {
+          data = await loadFromApi({ term, academicYear, status: 'published' })
+          if (!data?.assignments?.length) {
+            data = await loadFromApi({ term, academicYear, status: 'draft' })
+            loadedStatus = data?.assignments?.length ? 'draft' : 'published'
+          } else {
+            loadedStatus = 'published'
+          }
         }
         if (cancelled) return
+        setViewStatus(loadedStatus)
 
-        if (String(userRole || user?.role || '').toLowerCase() === 'headteacher') {
+        if (isHeadteacher) {
           const classesRes = await sessionFetch('/api/classes?limit=200', { cache: 'no-store' })
           const classesJson = await classesRes.json().catch(() => ({}))
           const classList = Array.isArray(classesJson?.data) ? classesJson.data : []
@@ -296,6 +323,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
   }
 
   if (resolvedRole === 'headteacher') {
+    const showingDraft = viewStatus === 'draft' || (!isPublished && assignments.length > 0)
     const status =
       assignments.length === 0
         ? { label: 'Not created', tone: 'text-royalPurple-text3' }
@@ -304,14 +332,59 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
               label: `${serverConflictErrors} confirmed conflicts`,
               tone: 'text-royalPurple-dangerTx',
             }
-          : isPublished
-            ? { label: 'Published', tone: 'text-royalPurple-successTx' }
-            : { label: 'Draft', tone: 'text-royalPurple-text2' }
+          : showingDraft
+            ? { label: 'Draft (not published)', tone: 'text-royalPurple-text2' }
+            : { label: 'Published', tone: 'text-royalPurple-successTx' }
 
     const lastChangeAt =
       pendingChanges?.[0]?.at || (lastPublishedAt ? lastPublishedAt.toISOString() : null)
     const updated = timeAgo(lastChangeAt)
-    const canPublish = serverConflictErrors === 0 && assignments.length > 0 && !isPublished
+    const canPublish =
+      serverConflictErrors === 0 && assignments.length > 0 && showingDraft && !publishing
+
+    const publishToServer = async () => {
+      if (!canPublish) return
+      setPublishing(true)
+      try {
+        const snap = readTimetableConflictCountsSnapshot()
+        const term = String(snap?.term || getDefaultTerm())
+        const academicYear = String(snap?.academicYear || getDefaultAcademicYear())
+        const store = useTimetableStore.getState()
+        if (store.assignments.length) {
+          const syncRes = await sessionFetch('/api/timetable/entries/sync-draft', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              term,
+              academicYear,
+              assignments: store.assignments,
+              replaceExisting: true,
+            }),
+          })
+          const syncJson = await syncRes.json().catch(() => ({}))
+          if (!syncRes.ok) {
+            throw new Error(syncJson?.error || 'Could not save draft before publishing')
+          }
+        }
+        const r = await sessionFetch('/api/timetable/publish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ term, academicYear }),
+        })
+        const j = await r.json().catch(() => ({}))
+        if (!r.ok) throw new Error(j?.message || j?.error || 'Failed to publish')
+        publish()
+        await loadFromApi({ term, academicYear, status: 'published' })
+        setViewStatus('published')
+        toast.success(`Published ${j.published ?? 0} periods`)
+      } catch (e) {
+        toast.error(e?.message || 'Failed to publish')
+      } finally {
+        setPublishing(false)
+      }
+    }
 
     return (
       <Card className={className}>
@@ -333,6 +406,12 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          {showingDraft && assignments.length > 0 ? (
+            <p className="text-xs text-royalPurple-text2">
+              Showing the editable draft (includes all regenerated departments). Teachers and
+              students still see the last published version until you publish.
+            </p>
+          ) : null}
           {assignments.length === 0 ? (
             <div className="rounded-xl border border-royalPurple-border bg-royalPurple-card/40 p-6 text-center">
               <div className="text-royalPurple-text1 font-semibold">
@@ -389,16 +468,8 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
               <span className="text-xs text-royalPurple-text2">
                 Confirmed conflicts: {serverConflictErrors}
               </span>
-              <Button
-                onClick={() => {
-                  if (!canPublish) return
-                  publish()
-                  toast.success('Timetable published')
-                }}
-                disabled={!canPublish}
-                className="zsms-hover-raise"
-              >
-                Publish
+              <Button onClick={publishToServer} disabled={!canPublish} className="zsms-hover-raise">
+                {publishing ? 'Publishing…' : 'Publish'}
               </Button>
             </div>
           </div>
