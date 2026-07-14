@@ -185,6 +185,7 @@ export default function TeacherDashboard() {
     totalResults: 0,
     totalGoals: 0,
     completedGoals: 0,
+    overallProgress: 0,
     averagePerformance: 0,
     attendanceRate: 0,
   })
@@ -267,9 +268,14 @@ export default function TeacherDashboard() {
         totalResults: dashboardData.stats.totalResults || 0,
         totalGoals: dashboardData.stats.totalGoals || 0,
         completedGoals: dashboardData.stats.completedGoals || 0,
+        overallProgress: dashboardData.stats.overallProgress || 0,
         averagePerformance: dashboardData.stats.averagePerformance || 0,
         attendanceRate: dashboardData.stats.attendanceRate || 0,
       }))
+    }
+
+    if (Array.isArray(dashboardData.teaching_goals)) {
+      setTeacherGoals(dashboardData.teaching_goals)
     }
 
     if (Array.isArray(dashboardData.my_subjects)) {
@@ -943,9 +949,17 @@ export default function TeacherDashboard() {
           {/* Goals Progress Section */}
           <Card variant="glass">
             <CardHeader>
-              <CardTitle className="text-royalPurple-text1 flex items-center">
-                <Target className="h-6 w-6 mr-3 text-warn" />
-                Teaching Goals Progress
+              <CardTitle className="text-royalPurple-text1 flex items-center justify-between gap-3">
+                <span className="flex items-center">
+                  <Target className="h-6 w-6 mr-3 text-warn" />
+                  Teaching Goals Progress
+                </span>
+                <Link
+                  href="/dashboard/teacher/teaching-studio"
+                  className="text-sm font-medium text-royalPurple-accentTx hover:underline"
+                >
+                  Open Teaching Studio
+                </Link>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -954,34 +968,58 @@ export default function TeacherDashboard() {
                   {/* Goals List */}
                   <div className="space-y-4">
                     <h3 className="text-lg font-bold text-royalPurple-text1 mb-4">Current Goals</h3>
-                    {teacherGoals.map((goal) => (
-                      <div
-                        key={goal.id}
-                        className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl"
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-semibold text-royalPurple-text1 text-sm">
-                            {goal.title}
-                          </h4>
-                          {goal.status === 'completed' && (
-                            <CheckCircle className="h-5 w-5 text-royalPurple-successTx" />
-                          )}
-                        </div>
-                        <div className="w-full bg-royalPurple-muted/60 rounded-full h-2 mb-2">
-                          <div
-                            className={`h-2 rounded-full ${
-                              goal.progress === 100
-                                ? 'bg-royalPurple-success'
-                                : goal.progress >= 75
-                                  ? 'bg-warn/100'
-                                  : 'bg-royalPurple-accent'
-                            }`}
-                            style={{ width: `${goal.progress}%` }}
-                          ></div>
-                        </div>
-                        <p className="text-royalPurple-text2 text-xs">{goal.progress}% Complete</p>
+                    {teacherGoals.length === 0 ? (
+                      <div className="p-4 rounded-xl border border-royalPurple-border/40 bg-royalPurple-muted/40">
+                        <p className="text-sm text-royalPurple-text2">
+                          No schemes of work yet. Generate a scheme in Teaching Studio to track week
+                          coverage goals.
+                        </p>
+                        <Link
+                          href="/dashboard/teacher/teaching-studio?tab=scheme"
+                          className="inline-block mt-3 text-sm font-semibold text-royalPurple-accentTx hover:underline"
+                        >
+                          Create scheme of work →
+                        </Link>
                       </div>
-                    ))}
+                    ) : (
+                      teacherGoals.map((goal) => (
+                        <Link
+                          key={goal.id}
+                          href={
+                            goal.href ||
+                            `/dashboard/teacher/teaching-studio?tab=progress&schemeId=${goal.id}`
+                          }
+                          className="block p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-colors"
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="font-semibold text-royalPurple-text1 text-sm">
+                              {goal.title}
+                            </h4>
+                            {goal.status === 'completed' && (
+                              <CheckCircle className="h-5 w-5 text-royalPurple-successTx" />
+                            )}
+                          </div>
+                          <div className="w-full bg-royalPurple-muted/60 rounded-full h-2 mb-2">
+                            <div
+                              className={`h-2 rounded-full ${
+                                goal.progress === 100
+                                  ? 'bg-royalPurple-success'
+                                  : goal.progress >= 75
+                                    ? 'bg-warn/100'
+                                    : 'bg-royalPurple-accent'
+                              }`}
+                              style={{ width: `${Math.min(100, Number(goal.progress) || 0)}%` }}
+                            ></div>
+                          </div>
+                          <p className="text-royalPurple-text2 text-xs">
+                            {goal.progress}% Complete
+                            {goal.totalWeeks != null
+                              ? ` · ${goal.completedWeeks || 0}/${goal.totalWeeks} teaching weeks`
+                              : ''}
+                          </p>
+                        </Link>
+                      ))
+                    )}
                   </div>
 
                   {/* Goals Stats */}
@@ -990,28 +1028,47 @@ export default function TeacherDashboard() {
                       Progress Summary
                     </h3>
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="p-4 bg-gradient-to-r from-kpi-pass/20 to-ink/20 border border-royalPurple-border/30 rounded-xl text-center">
+                      <Link
+                        href="/dashboard/teacher/teaching-studio?tab=progress&filter=completed"
+                        className="p-4 bg-gradient-to-r from-kpi-pass/20 to-ink/20 border border-royalPurple-border/30 rounded-xl text-center hover:scale-[1.02] transition-transform"
+                      >
                         <div className="text-2xl font-bold text-royalPurple-successTx">
                           {dashboardStats.completedGoals}
                         </div>
-                        <div className="text-royalPurple-text2 text-sm">Completed</div>
-                      </div>
-                      <div className="p-4 bg-gradient-to-r from-warn/20 to-accent/20 border border-warn/30 rounded-xl text-center">
-                        <div className="text-2xl font-bold text-warn">
-                          {dashboardStats.totalGoals - dashboardStats.completedGoals}
+                        <div className="text-royalPurple-text2 text-sm underline-offset-2 hover:underline">
+                          Completed
                         </div>
-                        <div className="text-royalPurple-text2 text-sm">In Progress</div>
-                      </div>
+                      </Link>
+                      <Link
+                        href="/dashboard/teacher/teaching-studio?tab=progress&filter=in-progress"
+                        className="p-4 bg-gradient-to-r from-warn/20 to-accent/20 border border-warn/30 rounded-xl text-center hover:scale-[1.02] transition-transform"
+                      >
+                        <div className="text-2xl font-bold text-warn">
+                          {Math.max(0, dashboardStats.totalGoals - dashboardStats.completedGoals)}
+                        </div>
+                        <div className="text-royalPurple-text2 text-sm underline-offset-2 hover:underline">
+                          In Progress
+                        </div>
+                      </Link>
                     </div>
-                    <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl text-center">
+                    <Link
+                      href="/dashboard/teacher/teaching-studio?tab=analytics"
+                      className="block p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl text-center hover:scale-[1.01] transition-transform"
+                    >
                       <div className="text-3xl font-bold text-royalPurple-text1 mb-2">
-                        {Math.round(
-                          (dashboardStats.completedGoals / dashboardStats.totalGoals) * 100
-                        )}
+                        {Number.isFinite(Number(dashboardStats.overallProgress))
+                          ? Math.round(Number(dashboardStats.overallProgress))
+                          : dashboardStats.totalGoals > 0
+                            ? Math.round(
+                                (dashboardStats.completedGoals / dashboardStats.totalGoals) * 100
+                              )
+                            : 0}
                         %
                       </div>
-                      <div className="text-royalPurple-text2">Overall Progress</div>
-                    </div>
+                      <div className="text-royalPurple-text2 underline-offset-2 hover:underline">
+                        Overall Progress
+                      </div>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -1029,29 +1086,16 @@ export default function TeacherDashboard() {
             <CardContent>
               <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                  <Link href="/dashboard/teacher/assessments/create">
+                  <Link href="/dashboard/teacher/assessments?create=1">
                     <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
                       <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                         <Plus className="h-8 w-8 text-royalPurple-text1" />
                       </div>
                       <h3 className="text-royalPurple-text1 font-semibold text-center">
-                        Create Assessment
+                        Create Assessments
                       </h3>
                       <p className="text-royalPurple-text2 text-sm text-center mt-2">
-                        Add new test or assignment
-                      </p>
-                    </div>
-                  </Link>
-                  <Link href="/dashboard/teacher/results">
-                    <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
-                      <div className="backdrop-blur-md bg-royalPurple-success/60 border border-royalPurple-border/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <BarChart3 className="h-8 w-8 text-royalPurple-text1" />
-                      </div>
-                      <h3 className="text-royalPurple-text1 font-semibold text-center">
-                        Grade Results
-                      </h3>
-                      <p className="text-royalPurple-text2 text-sm text-center mt-2">
-                        Mark student work
+                        From syllabus, schemes &amp; ECZ modules
                       </p>
                     </div>
                   </Link>
@@ -1061,7 +1105,7 @@ export default function TeacherDashboard() {
                         <CheckCircle className="h-8 w-8 text-royalPurple-text1" />
                       </div>
                       <h3 className="text-royalPurple-text1 font-semibold text-center">
-                        Take Attendance
+                        Grade Attendance
                       </h3>
                       <p className="text-royalPurple-text2 text-sm text-center mt-2">
                         Mark student presence
@@ -1086,9 +1130,7 @@ export default function TeacherDashboard() {
                       <div className="backdrop-blur-md bg-gradient-to-r from-ink/60 to-kpi-pass/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                         <Globe className="h-8 w-8 text-royalPurple-text1" />
                       </div>
-                      <h3 className="text-royalPurple-text1 font-semibold text-center">
-                        🇺🇳 UN SDGs
-                      </h3>
+                      <h3 className="text-royalPurple-text1 font-semibold text-center">UN SDGs</h3>
                       <p className="text-royalPurple-text2 text-sm text-center mt-2">
                         Global Impact
                       </p>
@@ -1119,7 +1161,7 @@ export default function TeacherDashboard() {
                 <ClipboardList className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
                 Recent Assessments
               </CardTitle>
-              <Link href="/dashboard/assessments/create">
+              <Link href="/dashboard/teacher/assessments?create=1">
                 <Button
                   size="sm"
                   className="bg-gradient-to-r from-ink to-g-700 hover:from-g-800 hover:to-g-900 text-royalPurple-text1"
@@ -1190,7 +1232,7 @@ export default function TeacherDashboard() {
                         You haven&apos;t created any assessments yet. Start by creating your first
                         assessment.
                       </p>
-                      <Link href="/dashboard/assessments/create">
+                      <Link href="/dashboard/teacher/assessments?create=1">
                         <Button className="mt-4 bg-royalPurple-accent hover:bg-royalPurple-accent text-royalPurple-text1">
                           Create Your First Assessment
                         </Button>

@@ -156,17 +156,20 @@ export const SelectContent = ({ children, className = '' }) => {
   const ref = useRef(null)
   const itemsRef = useRef([])
 
-  const registerItem = useCallback((itemValue, element) => {
-    if (!element) {
+  const registerItem = useCallback((itemValue, meta) => {
+    if (!meta) {
       itemsRef.current = itemsRef.current.filter((item) => item.value !== itemValue)
       return
     }
+    const dom = meta?.element ?? (meta?.nodeType ? meta : null)
+    const disabled = Boolean(meta?.disabled)
     const existing = itemsRef.current.find((item) => item.value === itemValue)
     if (existing) {
-      existing.element = element
+      existing.element = dom
+      existing.disabled = disabled
       return
     }
-    itemsRef.current.push({ value: itemValue, element })
+    itemsRef.current.push({ value: itemValue, element: dom, disabled })
   }, [])
 
   const selectHighlighted = useCallback(() => {
@@ -250,7 +253,7 @@ export const SelectContent = ({ children, className = '' }) => {
         id={listboxId}
         role="listbox"
         className={cn(
-          'absolute z-50 mt-1 max-h-60 w-full min-w-[8rem] overflow-hidden rounded-xl border border-royalPurple-border bg-white text-royalPurple-text1 shadow-md animate-in fade-in-80',
+          'absolute z-50 mt-1 max-h-[min(60vh,20rem)] w-full min-w-[8rem] overflow-y-auto overscroll-contain rounded-xl border border-royalPurple-border bg-white text-royalPurple-text1 shadow-md animate-in fade-in-80 touch-pan-y',
           className
         )}
       >

@@ -28,6 +28,8 @@ export default function TeacherQuizMakerPage() {
     questionCount: 10,
     difficulty: 'medium',
   })
+  const [generationPurpose, setGenerationPurpose] = useState('formative')
+  const [schemeContextId, setSchemeContextId] = useState('')
   const [teachingAssignments, setTeachingAssignments] = useState([])
   const [targetAssignmentId, setTargetAssignmentId] = useState('')
   const [publishType, setPublishType] = useState('quiz')
@@ -42,6 +44,72 @@ export default function TeacherQuizMakerPage() {
 
   const selectedTeachingAssignment =
     teachingAssignments.find((a) => a.id === targetAssignmentId) || teachingAssignments[0] || null
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const subject = String(params.get('subject') || '').trim()
+    const grade = String(params.get('grade') || '').trim()
+    const mode = String(params.get('mode') || '').toLowerCase()
+    const schemeId = String(params.get('schemeId') || '').trim()
+    if (subject || grade) {
+      setForm((p) => ({
+        ...p,
+        ...(subject ? { subject } : {}),
+        ...(grade ? { grade } : {}),
+      }))
+    }
+    if (mode === 'secondary' || mode === 'secondary_scenario' || mode === 'exam') {
+      setGenerationPurpose('secondary_scenario')
+      setPublishType('exam')
+    }
+    if (schemeId) setSchemeContextId(schemeId)
+  }, [])
+
+  useEffect(() => {
+    if (!schemeContextId) return
+    let cancelled = false
+    async function hydrateFromScheme() {
+      try {
+        const res = await fetch(
+          `/api/curriculum/scheme?id=${encodeURIComponent(schemeContextId)}`,
+          {
+            credentials: 'include',
+          }
+        )
+        const json = await res.json().catch(() => ({}))
+        if (!res.ok || cancelled) return
+        const scheme = json?.data
+        if (!scheme) return
+        const weeks = Array.isArray(scheme.weeks) ? scheme.weeks : []
+        const mid = scheme.testSchedule?.midTermWeek
+        const topicRow =
+          weeks.find((w) => Number(w?.week) === Number(mid) - 1) ||
+          weeks.find(
+            (w) =>
+              !String(w?.weekType || '')
+                .toLowerCase()
+                .includes('test')
+          ) ||
+          weeks[0]
+        setForm((p) => ({
+          ...p,
+          subject: scheme.subject || p.subject,
+          grade: scheme.gradeOrForm || p.grade,
+          topic: String(
+            topicRow?.topic || topicRow?.topicTitle || p.topic || 'Term assessment topics'
+          ),
+        }))
+        setGenerationPurpose('secondary_scenario')
+      } catch {
+        /* ignore */
+      }
+    }
+    hydrateFromScheme()
+    return () => {
+      cancelled = true
+    }
+  }, [schemeContextId])
 
   useEffect(() => {
     const loadAssignments = async () => {
@@ -269,6 +337,9 @@ export default function TeacherQuizMakerPage() {
         ...form,
         subject: activeSubject,
         materialIds: selectedMaterialIds.length ? selectedMaterialIds : undefined,
+        purpose: generationPurpose,
+        assessmentMode:
+          generationPurpose === 'secondary_scenario' ? 'secondary_scenario' : undefined,
       })
     } catch (e) {
       toast.error(e?.message || 'Quiz generation failed')
@@ -357,6 +428,30 @@ export default function TeacherQuizMakerPage() {
                     value={form.topic}
                     onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
                   />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <Label>Assessment mode</Label>
+                  <select
+                    className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
+                    value={generationPurpose}
+                    onChange={(e) => setGenerationPurpose(e.target.value)}
+                  >
+                    <option value="formative">Formative quiz (MCQ / short / TF)</option>
+                    <option value="secondary_scenario">
+                      Secondary ECSEOL / ECZ scenarios (from syllabus &amp; schemes)
+                    </option>
+                  </select>
+                  {schemeContextId ? (
+                    <p className="text-xs text-royalPurple-text3">
+                      Hydrated from scheme {schemeContextId.slice(0, 8)}… — uses ingested RAG
+                      materials for {activeSubject}.
+                    </p>
+                  ) : (
+                    <p className="text-xs text-royalPurple-text3">
+                      Secondary mode mirrors ECZ exam question generation and uses your uploaded AI
+                      materials when available.
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <Label>Reference materials (optional, max 5)</Label>

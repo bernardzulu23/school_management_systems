@@ -48,6 +48,20 @@ export function TeachingHub({ teacherId }: Props) {
   const [busyWeek, setBusyWeek] = useState<number | null>(null)
   const [analytics, setAnalytics] = useState<CoverageAnalyticsData | null>(null)
   const [analyticsLoading, setAnalyticsLoading] = useState(false)
+  const [progressFilter, setProgressFilter] = useState<'all' | 'completed' | 'in-progress'>('all')
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const tabParam = String(params.get('tab') || '').toLowerCase()
+    if (tabParam === 'progress' || tabParam === 'analytics' || tabParam === 'scheme') {
+      setTab(tabParam as Tab)
+    }
+    const schemeId = String(params.get('schemeId') || '').trim()
+    if (schemeId) setSelectedSchemeId(schemeId)
+    const filter = String(params.get('filter') || '').toLowerCase()
+    if (filter === 'completed' || filter === 'in-progress') setProgressFilter(filter)
+  }, [])
 
   const selectedScheme = useMemo(
     () => schemes.find((s) => s.id === selectedSchemeId) || null,
@@ -176,6 +190,12 @@ export function TeachingHub({ teacherId }: Props) {
       setBusyWeek(null)
     }
   }
+
+  const filteredWeeks = useMemo(() => {
+    if (progressFilter === 'completed') return weeks.filter((w) => w.completed)
+    if (progressFilter === 'in-progress') return weeks.filter((w) => !w.completed)
+    return weeks
+  }, [weeks, progressFilter])
 
   const tabs: Array<{ id: Tab; label: string }> = [
     { id: 'scheme', label: 'Scheme & Lessons' },
@@ -370,7 +390,7 @@ export function TeachingHub({ teacherId }: Props) {
 
             {selectedSchemeId && (
               <WeekProgressSidebar
-                weeks={weeks}
+                weeks={filteredWeeks}
                 coveragePercent={coveragePercent}
                 busyWeek={busyWeek}
                 onToggleWeek={handleToggleWeek}
@@ -383,15 +403,40 @@ export function TeachingHub({ teacherId }: Props) {
 
       {tab === 'progress' &&
         (selectedScheme ? (
-          <WeekProgressSidebar
-            weeks={weeks}
-            coveragePercent={coveragePercent}
-            busyWeek={busyWeek}
-            onToggleWeek={handleToggleWeek}
-            layout="grid"
-            title={`${selectedScheme.subject} · ${selectedScheme.gradeOrForm} · ${selectedScheme.term}`}
-            description="Teaching weeks only — mid/EOT test weeks are excluded from coverage. Mark taught manually or via approved lesson plans."
-          />
+          <div className="space-y-3">
+            <div className="flex flex-wrap gap-2 print:hidden">
+              {(
+                [
+                  ['all', 'All weeks'],
+                  ['completed', 'Completed'],
+                  ['in-progress', 'In progress'],
+                ] as const
+              ).map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setProgressFilter(id)}
+                  className={cn(
+                    'rounded-md border px-3 py-1.5 text-xs font-medium',
+                    progressFilter === id
+                      ? 'border-primary bg-primary text-primary-foreground'
+                      : 'border-muted text-muted-foreground hover:bg-muted'
+                  )}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <WeekProgressSidebar
+              weeks={filteredWeeks}
+              coveragePercent={coveragePercent}
+              busyWeek={busyWeek}
+              onToggleWeek={handleToggleWeek}
+              layout="grid"
+              title={`${selectedScheme.subject} · ${selectedScheme.gradeOrForm} · ${selectedScheme.term}`}
+              description="Teaching weeks only — mid/EOT test weeks are excluded from coverage. Mark taught manually or via approved lesson plans."
+            />
+          </div>
         ) : (
           <Card>
             <CardHeader>

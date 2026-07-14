@@ -46,6 +46,9 @@ export default function TeacherAssessmentsPage() {
   const [selectedAssignmentId, setSelectedAssignmentId] = useState('')
   const [assessmentsData, setAssessmentsData] = useState({ upcoming: [], completed: [] })
   const [showCreate, setShowCreate] = useState(false)
+  const [schemes, setSchemes] = useState([])
+  const [selectedSchemeId, setSelectedSchemeId] = useState('')
+  const [schemeSlot, setSchemeSlot] = useState('mid_term')
   const [createForm, setCreateForm] = useState({
     title: '',
     type: 'quiz',
@@ -88,7 +91,67 @@ export default function TeacherAssessmentsPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     if (String(params.get('create') || '') === '1') setShowCreate(true)
+    const schemeFromUrl = String(params.get('schemeId') || '').trim()
+    if (schemeFromUrl) setSelectedSchemeId(schemeFromUrl)
   }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    async function loadSchemes() {
+      try {
+        const res = await fetch('/api/curriculum/scheme', { credentials: 'include' })
+        const json = await res.json().catch(() => ({}))
+        if (!res.ok || cancelled) return
+        const list = Array.isArray(json.data) ? json.data : []
+        setSchemes(list)
+        if (list[0]?.id) setSelectedSchemeId((prev) => prev || String(list[0].id))
+      } catch {
+        if (!cancelled) setSchemes([])
+      }
+    }
+    loadSchemes()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const selectedScheme = useMemo(
+    () => schemes.find((s) => String(s.id) === String(selectedSchemeId)) || null,
+    [schemes, selectedSchemeId]
+  )
+
+  const applySchemeSlotToForm = (scheme, slot) => {
+    if (!scheme) return
+    const schedule = scheme.testSchedule || {}
+    const midWeek = schedule.midTermWeek
+    const eotWeek = schedule.endOfTermWeek
+    const weekLabel =
+      slot === 'end_of_term'
+        ? `Week ${eotWeek || 'EOT'} End-of-term`
+        : `Week ${midWeek || 'Mid'} Mid-term`
+    const dateHint =
+      slot === 'end_of_term' && schedule.endOfTermDate
+        ? new Date(schedule.endOfTermDate)
+        : schedule.midTermDate
+          ? new Date(schedule.midTermDate)
+          : null
+    const localDate = dateHint
+      ? `${dateHint.getFullYear()}-${String(dateHint.getMonth() + 1).padStart(2, '0')}-${String(dateHint.getDate()).padStart(2, '0')}T09:00`
+      : ''
+    setCreateForm((p) => ({
+      ...p,
+      type: slot === 'end_of_term' ? 'exam' : 'quiz',
+      title: `${scheme.subject} · ${scheme.gradeOrForm} · ${weekLabel}`,
+      description: `Generated from scheme of work (${scheme.term} ${scheme.year}). Use syllabus/teaching modules + ingested RAG materials.`,
+      date: localDate || p.date,
+      duration_minutes: slot === 'end_of_term' ? 120 : 60,
+    }))
+  }
+
+  useEffect(() => {
+    if (selectedScheme && showCreate) applySchemeSlotToForm(selectedScheme, schemeSlot)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSchemeId, schemeSlot, showCreate])
 
   useEffect(() => {
     const loadAssignments = async () => {
@@ -196,17 +259,23 @@ export default function TeacherAssessmentsPage() {
   }
 
   const assessmentStats = {
-    totalAssessments: assessmentsData.upcoming.length + assessmentsData.completed.length,
-    upcomingAssessments: assessmentsData.upcoming.length,
-    completedAssessments: assessmentsData.completed.length,
-    averagePassRate: assessmentsData.completed.length
-      ? Math.round(
-          assessmentsData.completed.reduce(
-            (sum, assessment) => sum + (assessment.passRate || 0),
-            0
-          ) / assessmentsData.completed.length
-        )
-      : 0,
+    totalAssessments:
+      analytics?.totalAssessments ??
+      assessmentsData.upcoming.length + assessmentsData.completed.length,
+    upcomingAssessments: analytics?.upcomingAssessments ?? assessmentsData.upcoming.length,
+    completedAssessments: analytics?.completedAssessments ?? assessmentsData.completed.length,
+    averagePassRate:
+      analytics?.passRate ??
+      (assessmentsData.completed.length
+        ? Math.round(
+            assessmentsData.completed.reduce(
+              (sum, assessment) => sum + (assessment.passRate || 0),
+              0
+            ) / assessmentsData.completed.length
+          )
+        : 0),
+    averageScore: analytics?.averageScore ?? 0,
+    studentsAssessed: analytics?.studentsAssessed ?? 0,
   }
 
   return (
@@ -337,6 +406,9 @@ export default function TeacherAssessmentsPage() {
                   <p className="text-2xl font-bold text-royalPurple-text1">
                     {assessmentStats.averagePassRate}%
                   </p>
+                  {analyticsLoading ? (
+                    <p className="text-xs text-royalPurple-text3">Loading live results…</p>
+                  ) : null}
                 </div>
               </div>
             </CardContent>
@@ -354,6 +426,62 @@ export default function TeacherAssessmentsPage() {
                 </Button>
               </div>
               <div className="p-4 space-y-4">
+                <div className="space-y-2">
+                  <Label>From scheme of work (recommended)</Label>
+                  <Select
+                    value={selectedSchemeId || undefined}
+                    onValueChange={(v) => setSelectedSchemeId(v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select scheme" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {schemes.map((s) => (
+                        <SelectItem key={s.id} value={String(s.id)}>
+                          {s.subject} · {s.gradeOrForm} · {s.term} {s.year}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-royalPurple-text3">
+                    Pulls mid-term / end-of-term slots from your Teaching Studio scheme (syllabus
+                    JSON modules).
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label>Assessment slot on scheme</Label>
+                  <Select value={schemeSlot} onValueChange={setSchemeSlot}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="mid_term">Mid-term assessment</SelectItem>
+                      <SelectItem value="end_of_term">End-of-term examination</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Link
+                    href={
+                      selectedScheme
+                        ? `/dashboard/teacher/quiz-maker?schemeId=${encodeURIComponent(selectedScheme.id)}&subject=${encodeURIComponent(selectedScheme.subject)}&grade=${encodeURIComponent(selectedScheme.gradeOrForm)}&mode=secondary`
+                        : '#'
+                    }
+                    className={`inline-flex items-center rounded-md border px-3 py-2 text-sm font-medium ${
+                      selectedScheme
+                        ? 'hover:bg-royalPurple-muted'
+                        : 'pointer-events-none opacity-50'
+                    }`}
+                  >
+                    Generate ECZ / secondary questions
+                  </Link>
+                  <Link
+                    href="/dashboard/teacher/assessments/ecz"
+                    className="inline-flex items-center rounded-md border px-3 py-2 text-sm font-medium hover:bg-royalPurple-muted"
+                  >
+                    Open ECZ / SBA hub
+                  </Link>
+                </div>
                 <div className="space-y-2">
                   <Label>Title</Label>
                   <Input
@@ -745,6 +873,13 @@ export default function TeacherAssessmentsPage() {
         <Card id="assessment-analytics">
           <CardHeader>
             <CardTitle>Assessment Performance Overview</CardTitle>
+            <p className="text-sm text-royalPurple-text2">
+              Live results for the selected teaching assignment
+              {selectedAssignment
+                ? ` · ${selectedAssignment.className} · ${selectedAssignment.subjectName}`
+                : ''}
+              {analyticsError ? ' · analytics unavailable' : ''}
+            </p>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -752,25 +887,30 @@ export default function TeacherAssessmentsPage() {
                 <ClipboardList className="h-8 w-8 text-royalPurple-accentTx mx-auto mb-2" />
                 <h4 className="font-medium text-royalPurple-accentTx">Total Assessments</h4>
                 <p className="text-2xl font-bold text-royalPurple-accentTx">
-                  {assessmentStats.totalAssessments}
+                  {analyticsLoading ? '…' : assessmentStats.totalAssessments}
                 </p>
-                <p className="text-sm text-royalPurple-accentTx">This semester</p>
+                <p className="text-sm text-royalPurple-accentTx">
+                  {assessmentStats.upcomingAssessments} upcoming ·{' '}
+                  {assessmentStats.completedAssessments} completed
+                </p>
               </div>
               <div className="text-center p-4 bg-royalPurple-success rounded-lg">
                 <TrendingUp className="h-8 w-8 text-royalPurple-successTx mx-auto mb-2" />
                 <h4 className="font-medium text-royalPurple-successTx">Average Performance</h4>
                 <p className="text-2xl font-bold text-royalPurple-successTx">
-                  {analytics?.averageScore ?? 0}%
+                  {analyticsLoading ? '…' : `${assessmentStats.averageScore}%`}
                 </p>
-                <p className="text-sm text-royalPurple-successTx">For selected class & subject</p>
+                <p className="text-sm text-royalPurple-successTx">
+                  Pass rate {assessmentStats.averagePassRate}% (≥50%)
+                </p>
               </div>
               <div className="text-center p-4 bg-royalPurple-pill rounded-lg">
                 <Users className="h-8 w-8 text-royalPurple-pillTx mx-auto mb-2" />
                 <h4 className="font-medium text-royalPurple-pillTx">Students Assessed</h4>
                 <p className="text-2xl font-bold text-royalPurple-pillTx">
-                  {analytics?.studentsAssessed ?? 0}
+                  {analyticsLoading ? '…' : assessmentStats.studentsAssessed}
                 </p>
-                <p className="text-sm text-royalPurple-pillTx">For selected class & subject</p>
+                <p className="text-sm text-royalPurple-pillTx">With recorded results</p>
               </div>
             </div>
           </CardContent>

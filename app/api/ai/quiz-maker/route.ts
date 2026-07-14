@@ -37,6 +37,12 @@ const QuizMakerInputSchema = z.object({
   questionCount: z.number().int().min(1).max(30).default(10),
   difficulty: z.enum(['easy', 'medium', 'hard']).default('medium'),
   materialIds: z.array(z.string().min(1)).max(5).optional(),
+  /** formative → MCQ; summative/exam/secondary → ECSEOL secondary_scenario when school/grade allow */
+  purpose: z
+    .enum(['formative', 'quiz', 'summative', 'exam', 'secondary_scenario'])
+    .optional()
+    .default('formative'),
+  assessmentMode: z.enum(['primary_mcq', 'secondary_scenario', 'sba_rubric']).optional(),
 })
 
 type QuizMakerInput = z.infer<typeof QuizMakerInputSchema>
@@ -113,11 +119,21 @@ export const POST = withAILimits(async function POST(request: Request) {
       subject: input.subject,
     })
 
-    const assessmentMode = resolveAssessmentMode({
-      schoolLevel: school.level,
-      gradeLevel: input.grade,
-      purpose: 'formative',
-    })
+    const purpose =
+      input.assessmentMode === ASSESSMENT_MODES.SECONDARY_SCENARIO ||
+      input.purpose === 'summative' ||
+      input.purpose === 'exam' ||
+      input.purpose === 'secondary_scenario'
+        ? 'summative'
+        : 'formative'
+
+    const assessmentMode =
+      input.assessmentMode ||
+      resolveAssessmentMode({
+        schoolLevel: school.level,
+        gradeLevel: input.grade,
+        purpose,
+      })
     const cachePayload = {
       schoolId,
       grade: input.grade,
@@ -127,7 +143,7 @@ export const POST = withAILimits(async function POST(request: Request) {
       difficulty: input.difficulty,
       materialIds: input.materialIds || [],
       assessmentMode,
-      purpose: 'formative',
+      purpose,
     }
     const cached = await getCachedAIResponse<{
       success: boolean

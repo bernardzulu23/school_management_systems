@@ -231,6 +231,7 @@ export async function handleSchemeGet(request: Request): Promise<NextResponse> {
   if (schemeId) {
     const row = await prisma.schemeOfWork.findFirst({
       where: { id: schemeId, schoolId, teacherId: String(user.id) },
+      include: { testSchedule: true },
     })
     if (!row) return NextResponse.json({ error: 'Scheme not found' }, { status: 404 })
     return NextResponse.json({ success: true, data: row })
@@ -238,6 +239,7 @@ export async function handleSchemeGet(request: Request): Promise<NextResponse> {
 
   const rows = await prisma.schemeOfWork.findMany({
     where: { schoolId, teacherId: String(user.id) },
+    include: { testSchedule: true },
     orderBy: { updatedAt: 'desc' },
     take: 20,
   })

@@ -24,7 +24,7 @@ function downloadBase64Docx(base64, filename) {
   URL.revokeObjectURL(url)
 }
 
-const SUBJECTS = [
+const FALLBACK_SUBJECTS = [
   'Chemistry',
   'Physics',
   'Biology',
@@ -40,6 +40,7 @@ const SUBJECTS = [
 const GRADES = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5', 'Form 6', 'Grade 8', 'Grade 9']
 
 export default function TeacherCurriculumStudioPage() {
+  const [subjects, setSubjects] = useState(FALLBACK_SUBJECTS)
   const [subject, setSubject] = useState('Chemistry')
   const [grade, setGrade] = useState('Form 2')
   const [topic, setTopic] = useState('')
@@ -52,6 +53,36 @@ export default function TeacherCurriculumStudioPage() {
   const [ingesting, setIngesting] = useState(false)
   const [pdfUrl, setPdfUrl] = useState('')
   const [lastPlanId, setLastPlanId] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    async function loadSubjects() {
+      try {
+        const [currRes, assignRes] = await Promise.all([
+          fetch('/api/curriculum', { credentials: 'include' }),
+          fetch('/api/teaching-assignments', { credentials: 'include' }),
+        ])
+        const currJson = await currRes.json().catch(() => ({}))
+        const assignJson = await assignRes.json().catch(() => ({}))
+        if (cancelled) return
+        const catalog = Array.isArray(currJson?.subjects) ? currJson.subjects.map(String) : []
+        const assigned = (Array.isArray(assignJson?.data) ? assignJson.data : [])
+          .map((a) => String(a.subjectName || '').trim())
+          .filter(Boolean)
+        const merged = [...new Set([...assigned, ...catalog, ...FALLBACK_SUBJECTS])]
+        if (merged.length) {
+          setSubjects(merged)
+          setSubject((prev) => (merged.includes(prev) ? prev : merged[0]))
+        }
+      } catch {
+        /* keep fallback */
+      }
+    }
+    loadSubjects()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -236,16 +267,20 @@ export default function TeacherCurriculumStudioPage() {
               <div className="space-y-2">
                 <Label>Subject</Label>
                 <select
-                  className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
+                  className="w-full max-h-48 bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
+                  size={Math.min(8, Math.max(4, subjects.length))}
                 >
-                  {SUBJECTS.map((s) => (
+                  {subjects.map((s) => (
                     <option key={s} value={s}>
                       {s}
                     </option>
                   ))}
                 </select>
+                <p className="text-xs text-royalPurple-text3">
+                  Scroll the list on mobile to see every assigned / catalog subject.
+                </p>
               </div>
               <div className="space-y-2">
                 <Label>Grade / Form</Label>

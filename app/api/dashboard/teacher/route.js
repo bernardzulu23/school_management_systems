@@ -56,11 +56,13 @@ export const GET = withErrorHandler(async function GET(request) {
         totalResults: 0,
         totalGoals: 0,
         completedGoals: 0,
+        overallProgress: 0,
         averagePerformance: 0,
         attendanceRate: 0,
       },
       my_classes: [],
       my_subjects: [],
+      teaching_goals: [],
       recent_assessments: [],
       teacher: null,
     })
@@ -229,6 +231,85 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const averagePerformance = avgScore?._avg?.score ? Math.round(avgScore._avg.score) : 0
 
+  // Teaching goals = each scheme of work the teacher owns (coverage of teaching weeks)
+  const schemes = await prisma.schemeOfWork.findMany({
+    where: { schoolId, teacherId: auth.user.id },
+    include: {
+      progress: true,
+      testSchedule: true,
+    },
+    orderBy: { updatedAt: 'desc' },
+    take: 25,
+  })
+
+  const teachingGoals = schemes.map((scheme) => {
+    const weeks = Array.isArray(scheme.weeks) ? scheme.weeks : []
+    const midStart = Number(scheme.testSchedule?.midTermWeek)
+    const midEnd = Number(scheme.testSchedule?.midTermWeekEnd ?? midStart)
+    const eotStart = Number(scheme.testSchedule?.endOfTermWeek)
+    const eotEnd = Number(scheme.testSchedule?.endOfTermWeekEnd ?? eotStart)
+
+    const isTestWeek = (weekNum) => {
+      const w = Number(weekNum)
+      if (!Number.isFinite(w)) return false
+      if (
+        Number.isFinite(midStart) &&
+        midStart > 0 &&
+        w >= midStart &&
+        w <= (Number.isFinite(midEnd) ? midEnd : midStart)
+      )
+        return true
+      if (
+        Number.isFinite(eotStart) &&
+        eotStart > 0 &&
+        w >= eotStart &&
+        w <= (Number.isFinite(eotEnd) ? eotEnd : eotStart)
+      )
+        return true
+      const row = weeks.find((r) => Number(r?.week) === w)
+      const kind = String(row?.weekType || '').toLowerCase()
+      return (
+        kind.includes('mid') ||
+        kind.includes('end_of_term') ||
+        kind.includes('eot') ||
+        kind === 'test'
+      )
+    }
+
+    const teachingWeeks = weeks
+      .map((r, i) => Number(r?.week ?? i + 1))
+      .filter((w) => Number.isFinite(w) && !isTestWeek(w))
+    const completedSet = new Set(
+      (scheme.progress || [])
+        .filter((p) => p.completed)
+        .map((p) => Number(p.weekNumber))
+        .filter((w) => Number.isFinite(w) && !isTestWeek(w))
+    )
+    const total = teachingWeeks.length
+    const completed = teachingWeeks.filter((w) => completedSet.has(w)).length
+    const progress = total === 0 ? 0 : Math.round((completed / total) * 100)
+    return {
+      id: scheme.id,
+      title: `${scheme.subject} · ${scheme.gradeOrForm} · ${scheme.term} ${scheme.year}`,
+      subject: scheme.subject,
+      gradeOrForm: scheme.gradeOrForm,
+      term: scheme.term,
+      year: scheme.year,
+      progress,
+      completedWeeks: completed,
+      totalWeeks: total,
+      status: progress >= 100 ? 'completed' : 'in_progress',
+      href: `/dashboard/teacher/teaching-studio?tab=progress&schemeId=${encodeURIComponent(scheme.id)}`,
+    }
+  })
+
+  const completedGoals = teachingGoals.filter((g) => g.status === 'completed').length
+  const totalGoals = teachingGoals.length
+  const overallProgress =
+    totalGoals === 0
+      ? 0
+      : Math.round(teachingGoals.reduce((sum, g) => sum + g.progress, 0) / totalGoals)
+
   const recentAssessments = await prisma.assessment.findMany({
     where: {
       schoolId,
@@ -340,11 +421,13 @@ export const GET = withErrorHandler(async function GET(request) {
       totalSubjects: mySubjectsWithCounts.length,
       totalAssessments,
       totalResults,
-      totalGoals: 0,
-      completedGoals: 0,
+      totalGoals,
+      completedGoals,
+      overallProgress,
       averagePerformance,
       attendanceRate: 0,
     },
+    teaching_goals: teachingGoals,
     my_classes: myClasses,
     my_subjects: mySubjectsWithCounts,
     recent_assessments: recentAssessments.map((a) => ({

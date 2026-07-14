@@ -188,10 +188,22 @@ export function CurriculumStudio({
     let cancelled = false
     ;(async () => {
       try {
-        const res = await fetch('/api/curriculum', { credentials: 'include' })
-        const json = await res.json().catch(() => ({}))
-        if (!cancelled && res.ok && Array.isArray(json.subjects) && json.subjects.length) {
-          const list = json.subjects.map(String).filter(Boolean)
+        const [currRes, assignRes] = await Promise.all([
+          fetch('/api/curriculum', { credentials: 'include' }),
+          fetch('/api/teaching-assignments', { credentials: 'include' }),
+        ])
+        const currJson = await currRes.json().catch(() => ({}))
+        const assignJson = await assignRes.json().catch(() => ({}))
+        if (cancelled) return
+        const catalog =
+          currRes.ok && Array.isArray(currJson.subjects)
+            ? currJson.subjects.map(String).filter(Boolean)
+            : []
+        const assigned = (Array.isArray(assignJson?.data) ? assignJson.data : [])
+          .map((a: { subjectName?: string }) => String(a.subjectName || '').trim())
+          .filter(Boolean)
+        const list = [...new Set([...assigned, ...catalog, ...FALLBACK_SUBJECTS])]
+        if (list.length) {
           setSubjects(list)
           setSubject((prev) => (list.includes(prev) ? prev : list[0]))
         }
@@ -415,12 +427,12 @@ export function CurriculumStudio({
                 <div className="space-y-2">
                   <Label>Subject</Label>
                   <Select value={subject} onValueChange={setSubject}>
-                    <SelectTrigger>
+                    <SelectTrigger className="min-h-11">
                       <SelectValue placeholder="Select subject" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="max-h-[min(60vh,22rem)]">
                       {subjects.map((s) => (
-                        <SelectItem key={s} value={s}>
+                        <SelectItem key={s} value={s} className="py-2.5">
                           {s}
                         </SelectItem>
                       ))}

@@ -5,14 +5,25 @@ import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/Button'
 import { ArrowLeft, Calendar, Plus } from 'lucide-react'
 import { Label } from '@/components/ui/label'
+
+function expandRange(start, end) {
+  const s = Number(start)
+  if (!Number.isFinite(s) || s < 1) return []
+  const e = Number.isFinite(Number(end)) ? Number(end) : s
+  const lo = Math.min(s, e)
+  const hi = Math.max(s, e)
+  const out = []
+  for (let w = lo; w <= hi; w++) out.push(w)
+  return out
+}
 
 export default function TeacherAssessmentCalendarPage() {
   const [assignments, setAssignments] = useState([])
   const [selectedAssignmentId, setSelectedAssignmentId] = useState('')
   const [assessments, setAssessments] = useState([])
+  const [schemeEvents, setSchemeEvents] = useState([])
   const [loading, setLoading] = useState(false)
 
   const selectedAssignment = useMemo(
@@ -36,7 +47,7 @@ export default function TeacherAssessmentCalendarPage() {
   }, [])
 
   useEffect(() => {
-    async function loadAssessments() {
+    async function loadAssessmentsAndSchemes() {
       setLoading(true)
       try {
         const params = new URLSearchParams()
@@ -44,44 +55,106 @@ export default function TeacherAssessmentCalendarPage() {
         if (selectedAssignment?.classId) params.set('classId', selectedAssignment.classId)
         if (selectedAssignment?.subjectName) params.set('subject', selectedAssignment.subjectName)
 
-        const res = await fetch(`/api/assessments?${params.toString()}`, { credentials: 'include' })
-        const json = await res.json().catch(() => ({}))
-        if (!res.ok) throw new Error(json?.error || 'Failed to load assessments')
-        const data = Array.isArray(json?.data) ? json.data : []
+        const [assessRes, schemeRes] = await Promise.all([
+          fetch(`/api/assessments?${params.toString()}`, { credentials: 'include' }),
+          fetch('/api/curriculum/scheme', { credentials: 'include' }),
+        ])
+        const assessJson = await assessRes.json().catch(() => ({}))
+        if (!assessRes.ok) throw new Error(assessJson?.error || 'Failed to load assessments')
+        const data = Array.isArray(assessJson?.data) ? assessJson.data : []
         setAssessments(data)
+
+        const schemeJson = await schemeRes.json().catch(() => ({}))
+        const schemes = Array.isArray(schemeJson?.data) ? schemeJson.data : []
+        const subjectHint = String(selectedAssignment?.subjectName || '')
+          .toLowerCase()
+          .trim()
+        const relevant = schemes.filter((s) => {
+          if (!subjectHint) return true
+          return String(s.subject || '')
+            .toLowerCase()
+            .includes(subjectHint)
+        })
+
+        const events = []
+        for (const scheme of relevant) {
+          const schedule = scheme.testSchedule || {}
+          for (const week of expandRange(schedule.midTermWeek, schedule.midTermWeekEnd)) {
+            events.push({
+              id: `${scheme.id}-mid-${week}`,
+              kind: 'scheme_mid_term',
+              title: `${scheme.subject} · Mid-term (Week ${week})`,
+              subtitle: `${scheme.gradeOrForm} · ${scheme.term} ${scheme.year}`,
+              date: schedule.midTermDate || null,
+              week,
+              schemeId: scheme.id,
+            })
+          }
+          for (const week of expandRange(schedule.endOfTermWeek, schedule.endOfTermWeekEnd)) {
+            events.push({
+              id: `${scheme.id}-eot-${week}`,
+              kind: 'scheme_end_of_term',
+              title: `${scheme.subject} · End-of-term (Week ${week})`,
+              subtitle: `${scheme.gradeOrForm} · ${scheme.term} ${scheme.year}`,
+              date: schedule.endOfTermDate || null,
+              week,
+              schemeId: scheme.id,
+            })
+          }
+        }
+        setSchemeEvents(events)
       } catch (e) {
-        toast.error(e?.message || 'Failed to load assessments')
+        toast.error(e?.message || 'Failed to load calendar')
         setAssessments([])
+        setSchemeEvents([])
       } finally {
         setLoading(false)
       }
     }
-    loadAssessments()
+    loadAssessmentsAndSchemes()
   }, [selectedAssignment])
 
   const grouped = useMemo(() => {
-    const list = [...assessments].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-    )
+    const assessmentItems = assessments.map((a) => ({
+      id: a.id,
+      kind: 'assessment',
+      title: a.title,
+      subtitle: `${a.subject} • ${a.class} • ${String(a.type || '').toUpperCase()}`,
+      date: a.date,
+      sortKey: new Date(a.date).getTime() || 0,
+    }))
+    const schemeItems = schemeEvents.map((e) => ({
+      ...e,
+      sortKey: e.date ? new Date(e.date).getTime() : Number(e.week || 0) * 1e6,
+    }))
+    const list = [...assessmentItems, ...schemeItems].sort((a, b) => a.sortKey - b.sortKey)
     const map = new Map()
-    list.forEach((a) => {
-      const d = new Date(a.date)
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+    list.forEach((item) => {
+      let key = 'planned'
+      if (item.date) {
+        const d = new Date(item.date)
+        if (!Number.isNaN(d.getTime())) {
+          key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+        }
+      } else if (item.week) {
+        key = `scheme-week`
+      }
       if (!map.has(key)) map.set(key, [])
-      map.get(key).push(a)
+      map.get(key).push(item)
     })
     return Array.from(map.entries()).map(([key, items]) => ({ key, items }))
-  }, [assessments])
+  }, [assessments, schemeEvents])
 
   return (
     <DashboardLayout userRole="teacher" title="Assessment Calendar">
       <div className="space-y-6">
-        <Button asChild variant="outline">
-          <Link href="/dashboard/teacher/assessments">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Assessments
-          </Link>
-        </Button>
+        <Link
+          href="/dashboard/teacher/assessments"
+          className="inline-flex items-center rounded-md border px-3 py-2 text-sm font-medium hover:bg-royalPurple-muted"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Assessments
+        </Link>
 
         <Card variant="glass">
           <CardHeader>
@@ -89,6 +162,9 @@ export default function TeacherAssessmentCalendarPage() {
               <Calendar className="h-5 w-5" />
               Assessment Calendar
             </CardTitle>
+            <p className="text-sm text-royalPurple-text2">
+              Created assessments plus mid-term / end-of-term slots from your schemes of work.
+            </p>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex flex-col md:flex-row md:items-end gap-4">
@@ -106,32 +182,36 @@ export default function TeacherAssessmentCalendarPage() {
                   ))}
                 </select>
               </div>
-              <Button asChild>
-                <Link href="/dashboard/teacher/assessments?create=1">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Assessment
-                </Link>
-              </Button>
+              <Link
+                href="/dashboard/teacher/assessments?create=1"
+                className="inline-flex items-center rounded-md bg-royalPurple-accent px-4 py-2 text-sm font-semibold text-royalPurple-text1"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Create Assessment
+              </Link>
             </div>
 
             {loading ? (
               <p className="text-royalPurple-text2">Loading...</p>
             ) : grouped.length === 0 ? (
-              <p className="text-royalPurple-text2">No assessments found.</p>
+              <p className="text-royalPurple-text2">
+                No assessments or scheme test weeks found. Generate a scheme in Teaching Studio or
+                create an assessment.
+              </p>
             ) : (
               <div className="space-y-6">
                 {grouped.map((g) => {
-                  const [year, month] = g.key.split('-')
-                  const monthName = new Date(Number(year), Number(month) - 1, 1).toLocaleDateString(
-                    'en-US',
-                    {
-                      month: 'long',
-                      year: 'numeric',
-                    }
-                  )
+                  let heading = 'Scheme planned assessments'
+                  if (g.key !== 'planned' && g.key !== 'scheme-week') {
+                    const [year, month] = g.key.split('-')
+                    heading = new Date(Number(year), Number(month) - 1, 1).toLocaleDateString(
+                      'en-US',
+                      { month: 'long', year: 'numeric' }
+                    )
+                  }
                   return (
                     <div key={g.key} className="space-y-3">
-                      <div className="text-royalPurple-text1 font-bold">{monthName}</div>
+                      <div className="text-royalPurple-text1 font-bold">{heading}</div>
                       <div className="space-y-2">
                         {g.items.map((a) => (
                           <div
@@ -142,12 +222,22 @@ export default function TeacherAssessmentCalendarPage() {
                               <div className="text-royalPurple-text1 font-semibold truncate">
                                 {a.title}
                               </div>
-                              <div className="text-sm text-royalPurple-text2">
-                                {a.subject} • {a.class} • {String(a.type || '').toUpperCase()}
-                              </div>
+                              <div className="text-sm text-royalPurple-text2">{a.subtitle}</div>
+                              {a.kind?.startsWith('scheme_') ? (
+                                <Link
+                                  href={`/dashboard/teacher/assessments?create=1&schemeId=${encodeURIComponent(a.schemeId || '')}`}
+                                  className="text-xs font-semibold text-royalPurple-accentTx hover:underline"
+                                >
+                                  Create from this scheme slot →
+                                </Link>
+                              ) : null}
                             </div>
                             <div className="text-sm text-royalPurple-text2">
-                              {new Date(a.date).toLocaleString()}
+                              {a.date
+                                ? new Date(a.date).toLocaleString()
+                                : a.week
+                                  ? `Scheme week ${a.week}`
+                                  : '—'}
                             </div>
                           </div>
                         ))}
