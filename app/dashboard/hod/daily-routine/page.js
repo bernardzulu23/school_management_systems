@@ -7,20 +7,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
   Clock,
-  Plus,
   CheckCircle,
   AlertCircle,
   Calendar,
   Users,
   ArrowLeft,
-  Filter,
   Download,
-  Edit,
-  Trash2,
   Play,
   Pause,
 } from 'lucide-react'
 import Link from 'next/link'
+import toast from 'react-hot-toast'
 import { EmptyModuleState } from '@/components/dashboard/EmptyModuleState'
 import { HodAddRoutineTaskDialog } from '@/components/hod/HodAddRoutineTaskDialog'
 import { HodFileUpload } from '@/components/hod/HodFileUpload'
@@ -29,11 +26,32 @@ export default function DailyRoutinePage() {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
   const [filterStatus, setFilterStatus] = useState('all')
   const [activeTab, setActiveTab] = useState('today')
+  const [updatingId, setUpdatingId] = useState(null)
   const { data, loading, error, reload } = useHodApi(
     `/api/hod/daily-routine?date=${selectedDate}`,
     [selectedDate]
   )
   const routineData = data ?? { today: [], weekly: [] }
+
+  const patchTask = async (id, body) => {
+    setUpdatingId(id)
+    try {
+      const res = await fetch(`/api/hod/daily-routine/${encodeURIComponent(id)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(body),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'Update failed')
+      toast.success('Task updated')
+      await reload()
+    } catch (e) {
+      toast.error(e.message || 'Update failed')
+    } finally {
+      setUpdatingId(null)
+    }
+  }
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -78,9 +96,10 @@ export default function DailyRoutinePage() {
     }
   }
 
-  const getCategoryColor = (category) => {
-    return 'badge-brand'
-  }
+  const filteredToday =
+    filterStatus === 'all'
+      ? routineData.today
+      : routineData.today.filter((t) => t.status === filterStatus)
 
   const routineStats = {
     totalTasks: routineData.today.length,
@@ -96,6 +115,30 @@ export default function DailyRoutinePage() {
 
   const hasRoutine = routineData.today.length > 0 || routineData.weekly.length > 0
 
+  const exportSchedule = () => {
+    const rows = [
+      ['Time', 'Task', 'Priority', 'Status', 'Assigned To', 'Category'],
+      ...routineData.today.map((t) => [
+        t.time || '',
+        t.task || '',
+        t.priority || '',
+        t.status || '',
+        t.assignedTo || '',
+        t.category || '',
+      ]),
+    ]
+    const csv = rows
+      .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
+      .join('\n')
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `hod-routine-${selectedDate}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <DashboardLayout title="Daily Routine">
       <div className="space-y-6">
@@ -107,7 +150,6 @@ export default function DailyRoutinePage() {
             description="Add today’s tasks and weekly overview when your department routine is configured."
           />
         )}
-        {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <Link href="/dashboard/hod">
@@ -133,7 +175,7 @@ export default function DailyRoutinePage() {
               onChange={(e) => setSelectedDate(e.target.value)}
               className="px-3 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500"
             />
-            <Button variant="outline">
+            <Button variant="outline" onClick={exportSchedule}>
               <Download className="h-4 w-4 mr-2" />
               Export Schedule
             </Button>
@@ -141,7 +183,6 @@ export default function DailyRoutinePage() {
           </div>
         </div>
 
-        {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
           <Card>
             <CardContent className="p-6">
@@ -208,7 +249,6 @@ export default function DailyRoutinePage() {
           </Card>
         </div>
 
-        {/* Progress Overview */}
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
@@ -232,7 +272,6 @@ export default function DailyRoutinePage() {
           </CardContent>
         </Card>
 
-        {/* Tabs */}
         <div className="border-b border-royalPurple-border">
           <nav className="-mb-px flex space-x-8">
             <button
@@ -258,7 +297,6 @@ export default function DailyRoutinePage() {
           </nav>
         </div>
 
-        {/* Tab Content */}
         {activeTab === 'today' && (
           <Card>
             <CardHeader>
@@ -278,18 +316,23 @@ export default function DailyRoutinePage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {routineData.today.map((task) => (
+                {filteredToday.length === 0 ? (
+                  <p className="text-sm text-royalPurple-text3 py-4 text-center">
+                    No tasks match this filter.
+                  </p>
+                ) : null}
+                {filteredToday.map((task) => (
                   <div
                     key={task.id}
                     className="border border-royalPurple-border rounded-lg p-4 hover:shadow-md transition-shadow"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <div className="flex items-center mb-2">
-                          <span className="text-sm font-medium text-royalPurple-accentTx mr-3">
+                        <div className="flex items-center mb-2 flex-wrap gap-2">
+                          <span className="text-sm font-medium text-royalPurple-accentTx">
                             {task.time}
                           </span>
-                          <h3 className="text-lg font-semibold text-royalPurple-text1 mr-3">
+                          <h3 className="text-lg font-semibold text-royalPurple-text1">
                             {task.task}
                           </h3>
                           <span
@@ -299,14 +342,14 @@ export default function DailyRoutinePage() {
                           </span>
                         </div>
                         <p className="text-royalPurple-text2 mb-3">{task.description}</p>
-                        <div className="flex items-center space-x-4 text-sm text-royalPurple-text3">
-                          <span>Duration: {task.duration}</span>
-                          <span>Assigned to: {task.assignedTo}</span>
-                          <span className={getCategoryColor(task.category)}>{task.category}</span>
+                        <div className="flex items-center space-x-4 text-sm text-royalPurple-text3 flex-wrap">
+                          <span>Duration: {task.duration || '—'}</span>
+                          <span>Assigned to: {task.assignedTo || '—'}</span>
+                          <span className="badge-brand">{task.category || 'General'}</span>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <div className="flex items-center mr-4">
+                        <div className="flex items-center mr-2">
                           {getStatusIcon(task.status)}
                           <span
                             className={`ml-2 px-2 py-1 text-xs rounded ${getStatusColor(task.status)}`}
@@ -314,16 +357,35 @@ export default function DailyRoutinePage() {
                             {task.status}
                           </span>
                         </div>
-                        <Button size="sm" variant="outline">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button size="sm" variant="outline">
-                          {task.status === 'pending' ? (
-                            <Play className="h-4 w-4" />
-                          ) : (
+                        {task.status !== 'completed' ? (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={updatingId === task.id}
+                            onClick={() =>
+                              patchTask(task.id, {
+                                status: task.status === 'pending' ? 'in-progress' : 'completed',
+                              })
+                            }
+                            title={task.status === 'pending' ? 'Start task' : 'Mark complete'}
+                          >
+                            {task.status === 'pending' ? (
+                              <Play className="h-4 w-4" />
+                            ) : (
+                              <CheckCircle className="h-4 w-4" />
+                            )}
+                          </Button>
+                        ) : (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={updatingId === task.id}
+                            onClick={() => patchTask(task.id, { status: 'pending' })}
+                            title="Reopen task"
+                          >
                             <Pause className="h-4 w-4" />
-                          )}
-                        </Button>
+                          </Button>
+                        )}
                       </div>
                     </div>
                     <HodFileUpload
@@ -345,31 +407,36 @@ export default function DailyRoutinePage() {
               <CardTitle>Weekly Routine Overview</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                {routineData.weekly.map((day, index) => (
-                  <div key={index} className="border border-royalPurple-border rounded-lg p-4">
-                    <h3 className="font-semibold text-royalPurple-text1 mb-2">{day.day}</h3>
-                    <p className="text-sm text-royalPurple-accentTx mb-3 font-medium">
-                      {day.focus}
-                    </p>
-                    <div className="space-y-2">
-                      {day.tasks.map((task, taskIndex) => (
-                        <div
-                          key={taskIndex}
-                          className="text-sm text-royalPurple-text2 p-2 bg-royalPurple-page rounded"
-                        >
-                          {task}
-                        </div>
-                      ))}
+              {routineData.weekly.length === 0 ? (
+                <p className="text-sm text-royalPurple-text3 text-center py-6">
+                  Weekly plans appear after they are saved for this department.
+                </p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                  {routineData.weekly.map((day, index) => (
+                    <div key={index} className="border border-royalPurple-border rounded-lg p-4">
+                      <h3 className="font-semibold text-royalPurple-text1 mb-2">{day.day}</h3>
+                      <p className="text-sm text-royalPurple-accentTx mb-3 font-medium">
+                        {day.focus}
+                      </p>
+                      <div className="space-y-2">
+                        {(day.tasks || []).map((task, taskIndex) => (
+                          <div
+                            key={taskIndex}
+                            className="text-sm text-royalPurple-text2 p-2 bg-royalPurple-page rounded"
+                          >
+                            {task}
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         )}
 
-        {/* Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
@@ -377,19 +444,16 @@ export default function DailyRoutinePage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <Button className="w-full justify-start">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add New Task
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <HodAddRoutineTaskDialog defaultDate={selectedDate} onCreated={reload} />
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => setActiveTab('weekly')}
+                >
                   <Calendar className="h-4 w-4 mr-2" />
                   View Weekly Schedule
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Clock className="h-4 w-4 mr-2" />
-                  Set Reminders
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start" onClick={exportSchedule}>
                   <Download className="h-4 w-4 mr-2" />
                   Export Daily Report
                 </Button>
@@ -403,6 +467,11 @@ export default function DailyRoutinePage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
+                {routineData.today.filter((task) => task.priority === 'high').length === 0 ? (
+                  <p className="text-sm text-royalPurple-text3 text-center py-4">
+                    No high-priority tasks for this day.
+                  </p>
+                ) : null}
                 {routineData.today
                   .filter((task) => task.priority === 'high')
                   .map((task) => (
@@ -412,15 +481,26 @@ export default function DailyRoutinePage() {
                     >
                       <h4 className="font-medium text-royalPurple-dangerTx">{task.task}</h4>
                       <p className="text-sm text-royalPurple-dangerTx">
-                        {task.time} - {task.duration}
+                        {task.time} - {task.duration || '—'}
                       </p>
-                      <div className="flex items-center mt-2">
-                        {getStatusIcon(task.status)}
-                        <span
-                          className={`ml-2 px-2 py-1 text-xs rounded ${getStatusColor(task.status)}`}
-                        >
-                          {task.status}
-                        </span>
+                      <div className="flex items-center mt-2 justify-between gap-2">
+                        <div className="flex items-center">
+                          {getStatusIcon(task.status)}
+                          <span
+                            className={`ml-2 px-2 py-1 text-xs rounded ${getStatusColor(task.status)}`}
+                          >
+                            {task.status}
+                          </span>
+                        </div>
+                        {task.status !== 'completed' ? (
+                          <Button
+                            size="sm"
+                            disabled={updatingId === task.id}
+                            onClick={() => patchTask(task.id, { status: 'completed' })}
+                          >
+                            Complete
+                          </Button>
+                        ) : null}
                       </div>
                     </div>
                   ))}

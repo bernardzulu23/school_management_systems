@@ -45,9 +45,12 @@ export const GET = withErrorHandler(async function GET(request) {
   })
 
   const movements = await db.hodStockMovement.findMany({
+    where: {
+      item: hodDepartmentWhere(departmentId),
+    },
     orderBy: { createdAt: 'desc' },
     take: 30,
-    include: { item: { select: { itemName: true } } },
+    include: { item: { select: { itemName: true, departmentId: true } } },
   })
 
   return NextResponse.json({

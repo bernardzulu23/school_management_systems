@@ -7,30 +7,48 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
   Group,
-  Plus,
   Calendar,
   Clock,
   Users,
   FileText,
   ArrowLeft,
   Search,
-  Filter,
   Download,
-  Eye,
-  Edit,
   CheckCircle,
 } from 'lucide-react'
 import Link from 'next/link'
 import { EmptyModuleState } from '@/components/dashboard/EmptyModuleState'
 import { HodScheduleMeetingDialog } from '@/components/hod/HodScheduleMeetingDialog'
 import { HodFileUpload } from '@/components/hod/HodFileUpload'
+import toast from 'react-hot-toast'
 
 export default function MeetingFilesPage() {
   const [activeTab, setActiveTab] = useState('upcoming')
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState('all')
+  const [updatingId, setUpdatingId] = useState(null)
   const { data, loading, error, reload } = useHodApi('/api/hod/meetings?scope=department')
   const meetingsData = data ?? { upcoming: [], completed: [] }
+
+  const completeMeeting = async (id) => {
+    setUpdatingId(id)
+    try {
+      const res = await fetch(`/api/hod/meetings/${encodeURIComponent(id)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ status: 'completed', minutesStatus: 'draft' }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'Failed to update meeting')
+      toast.success('Meeting marked complete')
+      await reload()
+    } catch (e) {
+      toast.error(e.message || 'Update failed')
+    } finally {
+      setUpdatingId(null)
+    }
+  }
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -85,6 +103,14 @@ export default function MeetingFilesPage() {
 
   const hasMeetings = meetingsData.upcoming.length > 0 || meetingsData.completed.length > 0
 
+  const filteredMeetings = (meetingsData[activeTab] || []).filter((meeting) => {
+    const hay =
+      `${meeting.title || ''} ${meeting.type || ''} ${(meeting.attendees || []).join(' ')}`.toLowerCase()
+    const matchesSearch = !searchTerm || hay.includes(searchTerm.toLowerCase())
+    const matchesType = filterType === 'all' || meeting.type === filterType
+    return matchesSearch && matchesType
+  })
+
   return (
     <DashboardLayout title="Meeting Files">
       <div className="space-y-6">
@@ -116,7 +142,33 @@ export default function MeetingFilesPage() {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <Button variant="outline">
+            <Button
+              variant="outline"
+              onClick={() => {
+                const all = [...(meetingsData.upcoming || []), ...(meetingsData.completed || [])]
+                const rows = [
+                  ['Title', 'Type', 'Date', 'Time', 'Status', 'Location'],
+                  ...all.map((m) => [
+                    m.title || '',
+                    m.type || '',
+                    m.date ? new Date(m.date).toISOString().slice(0, 10) : '',
+                    m.time || '',
+                    m.status || '',
+                    m.location || '',
+                  ]),
+                ]
+                const csv = rows
+                  .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
+                  .join('\n')
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+                const url = URL.createObjectURL(blob)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = `hod-meetings-${new Date().toISOString().slice(0, 10)}.csv`
+                a.click()
+                URL.revokeObjectURL(url)
+              }}
+            >
               <Download className="h-4 w-4 mr-2" />
               Export Schedule
             </Button>
@@ -227,7 +279,7 @@ export default function MeetingFilesPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {meetingsData[activeTab].map((meeting) => (
+              {filteredMeetings.map((meeting) => (
                 <div
                   key={meeting.id}
                   className="border border-royalPurple-border rounded-lg p-4 hover:shadow-md transition-shadow"
@@ -263,21 +315,27 @@ export default function MeetingFilesPage() {
                         </div>
                         <div className="flex items-center">
                           <Users className="h-4 w-4 mr-2" />
-                          {meeting.attendees.join(', ')}
+                          {(meeting.attendees || []).join(', ') || 'No attendees listed'}
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Button size="sm" variant="outline">
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button size="sm" variant="outline">
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      {meeting.status === 'completed' && (
-                        <Button size="sm" variant="outline">
-                          <FileText className="h-4 w-4" />
+                      {meeting.status === 'scheduled' ? (
+                        <Button
+                          size="sm"
+                          disabled={updatingId === meeting.id}
+                          onClick={() => completeMeeting(meeting.id)}
+                        >
+                          <CheckCircle className="h-4 w-4 mr-1" />
+                          Complete
                         </Button>
+                      ) : (
+                        <Link href="/dashboard/hod/minutes">
+                          <Button size="sm" variant="outline">
+                            <FileText className="h-4 w-4 mr-1" />
+                            Minutes
+                          </Button>
+                        </Link>
                       )}
                     </div>
                   </div>
@@ -285,7 +343,7 @@ export default function MeetingFilesPage() {
                   <div className="border-t pt-3">
                     <h4 className="font-medium text-royalPurple-text1 mb-2">Agenda:</h4>
                     <div className="flex flex-wrap gap-2">
-                      {meeting.agenda.map((item, index) => (
+                      {(meeting.agenda || []).map((item, index) => (
                         <span
                           key={index}
                           className="px-2 py-1 text-xs bg-royalPurple-card2 text-royalPurple-text2 rounded"
@@ -293,6 +351,9 @@ export default function MeetingFilesPage() {
                           {item}
                         </span>
                       ))}
+                      {(meeting.agenda || []).length === 0 ? (
+                        <span className="text-sm text-royalPurple-text3">No agenda items</span>
+                      ) : null}
                     </div>
                     {meeting.status === 'completed' && (
                       <div className="mt-3 flex items-center space-x-4">
@@ -325,23 +386,44 @@ export default function MeetingFilesPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <Button className="w-full justify-start">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Schedule New Meeting
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  View Meeting Calendar
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <FileText className="h-4 w-4 mr-2" />
-                  Meeting Templates
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Users className="h-4 w-4 mr-2" />
-                  Manage Attendees
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <HodScheduleMeetingDialog meetingScope="department" onCreated={reload} />
+                <Link href="/dashboard/hod/minutes">
+                  <Button variant="outline" className="w-full justify-start">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Department Minutes
+                  </Button>
+                </Link>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    const all = [
+                      ...(meetingsData.upcoming || []),
+                      ...(meetingsData.completed || []),
+                    ]
+                    const rows = [
+                      ['Title', 'Type', 'Date', 'Time', 'Status', 'Location'],
+                      ...all.map((m) => [
+                        m.title || '',
+                        m.type || '',
+                        m.date ? new Date(m.date).toISOString().slice(0, 10) : '',
+                        m.time || '',
+                        m.status || '',
+                        m.location || '',
+                      ]),
+                    ]
+                    const csv = rows
+                      .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
+                      .join('\n')
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+                    const url = URL.createObjectURL(blob)
+                    const a = document.createElement('a')
+                    a.href = url
+                    a.download = `hod-meetings-${new Date().toISOString().slice(0, 10)}.csv`
+                    a.click()
+                    URL.revokeObjectURL(url)
+                  }}
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Export Reports
                 </Button>
@@ -354,9 +436,25 @@ export default function MeetingFilesPage() {
               <CardTitle>Recent Meeting Activity</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-royalPurple-text3 text-center py-6">
-                Recent activity will show here when meetings are logged.
-              </p>
+              {(meetingsData.completed || []).slice(0, 5).length === 0 ? (
+                <p className="text-sm text-royalPurple-text3 text-center py-6">
+                  Recent activity will show here when meetings are logged.
+                </p>
+              ) : (
+                <div className="space-y-2">
+                  {(meetingsData.completed || []).slice(0, 5).map((m) => (
+                    <div
+                      key={m.id}
+                      className="flex justify-between text-sm border-b border-royalPurple-border pb-2"
+                    >
+                      <span className="text-royalPurple-text1">{m.title}</span>
+                      <span className="text-royalPurple-text3">
+                        {m.date ? new Date(m.date).toLocaleDateString() : ''}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

@@ -7,12 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
   Package,
-  Plus,
   Search,
-  Filter,
   Download,
-  Edit,
-  Trash2,
   ArrowLeft,
   AlertTriangle,
   CheckCircle,
@@ -22,15 +18,18 @@ import {
 import Link from 'next/link'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import { EmptyModuleState } from '@/components/dashboard/EmptyModuleState'
+import { HodAddStockItemDialog } from '@/components/hod/HodAddStockItemDialog'
+import { HodStockMovementDialog } from '@/components/hod/HodStockMovementDialog'
 
 export default function StockBookPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterCategory, setFilterCategory] = useState('all')
   const [filterStatus, setFilterStatus] = useState('all')
 
-  const { data, loading, error } = useHodApi('/api/hod/stock')
+  const { data, loading, error, reload } = useHodApi('/api/hod/stock')
   const stockData = data?.items ?? []
   const stockMovements = data?.movements ?? []
+  const categories = [...new Set(stockData.map((i) => i.category).filter(Boolean))].sort()
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -62,15 +61,8 @@ export default function StockBookPage() {
     }
   }
 
-  const getCategoryColor = (category) => {
+  const getCategoryColor = () => {
     return 'badge-brand'
-  }
-
-  const getStockLevel = (current, minimum, maximum) => {
-    if (current <= minimum * 0.5) return 'critical'
-    if (current <= minimum) return 'low_stock'
-    if (current >= minimum && current <= maximum) return 'in_stock'
-    return 'overstocked'
   }
 
   const filteredStock = stockData.filter((item) => {
@@ -124,14 +116,49 @@ export default function StockBookPage() {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <Button variant="outline">
+            <Button
+              variant="outline"
+              onClick={() => {
+                const rows = [
+                  [
+                    'Item',
+                    'Category',
+                    'Current',
+                    'Min',
+                    'Max',
+                    'Unit Price',
+                    'Total Value',
+                    'Status',
+                    'Location',
+                  ],
+                  ...stockData.map((i) => [
+                    i.itemName,
+                    i.category,
+                    String(i.currentStock),
+                    String(i.minimumStock),
+                    String(i.maximumStock),
+                    String(i.unitPrice),
+                    String(i.totalValue),
+                    i.status,
+                    i.location || '',
+                  ]),
+                ]
+                const csv = rows
+                  .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
+                  .join('\n')
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+                const url = URL.createObjectURL(blob)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = `hod-stock-${new Date().toISOString().slice(0, 10)}.csv`
+                a.click()
+                URL.revokeObjectURL(url)
+              }}
+            >
               <Download className="h-4 w-4 mr-2" />
               Export Inventory
             </Button>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Item
-            </Button>
+            <HodAddStockItemDialog onCreated={reload} />
           </div>
         </div>
 
@@ -213,10 +240,11 @@ export default function StockBookPage() {
                   onChange={(e) => setFilterCategory(e.target.value)}
                 >
                   <option value="all">All Categories</option>
-                  <option value="Books">Books</option>
-                  <option value="Equipment">Equipment</option>
-                  <option value="Stationery">Stationery</option>
-                  <option value="Technology">Technology</option>
+                  {categories.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
                 </select>
                 <select
                   className="zsms-select px-3 py-2"
@@ -304,15 +332,11 @@ export default function StockBookPage() {
                         </td>
                         <td className="py-3 px-4">
                           <div className="flex items-center space-x-2">
-                            <Button size="sm" variant="outline">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button size="sm" variant="outline">
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                            <Button size="sm" variant="outline">
-                              <TrendingDown className="h-4 w-4" />
-                            </Button>
+                            <HodStockMovementDialog
+                              items={stockData}
+                              itemId={item.id}
+                              onCreated={reload}
+                            />
                           </div>
                         </td>
                       </tr>
@@ -364,7 +388,11 @@ export default function StockBookPage() {
                             Current: {item.currentStock} | Minimum: {item.minimumStock}
                           </p>
                         </div>
-                        <Button size="sm">Reorder</Button>
+                        <HodStockMovementDialog
+                          items={stockData}
+                          itemId={item.id}
+                          onCreated={reload}
+                        />
                       </div>
                     </div>
                   ))}
@@ -378,23 +406,66 @@ export default function StockBookPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <Button className="w-full justify-start">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add New Item
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <TrendingUp className="h-4 w-4 mr-2" />
-                  Stock In
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <TrendingDown className="h-4 w-4 mr-2" />
-                  Stock Out
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <HodAddStockItemDialog onCreated={reload} />
+                <HodStockMovementDialog items={stockData} onCreated={reload} trigger="in" />
+                <HodStockMovementDialog items={stockData} onCreated={reload} trigger="out" />
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    const low = stockData.filter(
+                      (i) => i.status === 'low_stock' || i.status === 'critical'
+                    )
+                    const rows = [
+                      ['Item', 'Current', 'Minimum', 'Status'],
+                      ...low.map((i) => [
+                        i.itemName,
+                        String(i.currentStock),
+                        String(i.minimumStock),
+                        i.status,
+                      ]),
+                    ]
+                    const csv = rows
+                      .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
+                      .join('\n')
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+                    const url = URL.createObjectURL(blob)
+                    const a = document.createElement('a')
+                    a.href = url
+                    a.download = `hod-reorder-${new Date().toISOString().slice(0, 10)}.csv`
+                    a.click()
+                    URL.revokeObjectURL(url)
+                  }}
+                >
                   <Package className="h-4 w-4 mr-2" />
                   Generate Reorder Report
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    const rows = [
+                      ['Item', 'Category', 'Current', 'Status', 'Location'],
+                      ...stockData.map((i) => [
+                        i.itemName,
+                        i.category,
+                        String(i.currentStock),
+                        i.status,
+                        i.location || '',
+                      ]),
+                    ]
+                    const csv = rows
+                      .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
+                      .join('\n')
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+                    const url = URL.createObjectURL(blob)
+                    const a = document.createElement('a')
+                    a.href = url
+                    a.download = `hod-stock-report-${new Date().toISOString().slice(0, 10)}.csv`
+                    a.click()
+                    URL.revokeObjectURL(url)
+                  }}
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Export Stock Report
                 </Button>

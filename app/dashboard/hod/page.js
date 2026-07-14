@@ -140,8 +140,11 @@ export default function HodDashboard() {
     totalSubjects: 0,
     totalClasses: 0,
     averagePerformance: 0,
+    attendanceRate: 0,
     pendingLessonPlans: 0,
     pendingAssessments: 0,
+    totalAssessments: 0,
+    totalResults: 0,
   })
 
   const [performanceData, setPerformanceData] = useState(null)
@@ -208,8 +211,12 @@ export default function HodDashboard() {
   const normalizedDepartment =
     currentDepartment === 'Art and Design' ? 'Arts and Design' : currentDepartment
   const departmentSubjects = useMemo(() => {
+    const fromApi = Array.isArray(departmentData?.subjects)
+      ? departmentData.subjects.map((s) => (typeof s === 'string' ? s : s?.name)).filter(Boolean)
+      : []
+    if (fromApi.length > 0) return fromApi
     return DEPARTMENTS[normalizedDepartment] || DEPARTMENTS[currentDepartment] || []
-  }, [normalizedDepartment, currentDepartment])
+  }, [departmentData?.subjects, normalizedDepartment, currentDepartment])
 
   useEffect(() => {
     const update = () => setTimetableMobile(window.innerWidth < 768)
@@ -297,10 +304,29 @@ export default function HodDashboard() {
       totalSubjects: data.stats?.totalSubjects || 0,
       totalClasses: data.stats?.totalClasses || 0,
       averagePerformance: data.stats?.averagePerformance || 0,
+      attendanceRate: data.stats?.attendanceRate || 0,
       pendingLessonPlans: data.stats?.pendingLessonPlans || 0,
       pendingAssessments: data.stats?.pendingAssessments || 0,
+      totalAssessments: data.stats?.totalAssessments || 0,
+      totalResults: data.stats?.totalResults || 0,
     }))
   }, [dashboardData])
+
+  const subjectPerformance = useMemo(() => {
+    if (Array.isArray(dashboardData?.data?.subjectPerformance)) {
+      return dashboardData.data.subjectPerformance
+    }
+    return []
+  }, [dashboardData])
+
+  const gradeDistribution = useMemo(() => {
+    if (Array.isArray(dashboardData?.data?.gradeDistribution)) {
+      return dashboardData.data.gradeDistribution
+    }
+    return []
+  }, [dashboardData])
+
+  const attendanceRate = Number(dashboardStats.attendanceRate) || 0
 
   // HOD Administrative Duties Data
   const fileManagementDuties = [
@@ -890,33 +916,30 @@ export default function HodDashboard() {
                     </div>
                   </div>
 
-                  {/* Implementation Status */}
+                  {/* Live department readiness (from API) */}
                   <div className="bg-gradient-to-r from-accent/20 to-warn/20 border border-royalPurple-border2/30 rounded-xl p-4">
                     <h4 className="font-semibold text-royalPurple-text1 mb-3 flex items-center">
                       <Target className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
-                      Advanced Features Implementation Status
+                      Department workload snapshot
                     </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div>
-                        <div className="flex justify-between text-sm mb-2">
-                          <span className="text-royalPurple-text2">HOD Dashboard Features</span>
-                          <span className="font-semibold text-royalPurple-pillTx">
-                            Ready for Testing
-                          </span>
-                        </div>
-                        <div className="w-full bg-royalPurple-muted rounded-full h-2">
-                          <div
-                            className="bg-gradient-to-r from-accent to-warn h-2 rounded-full"
-                            style={{ width: '80%' }}
-                          ></div>
+                        <div className="text-royalPurple-text2">Pending lesson plans</div>
+                        <div className="text-xl font-bold text-royalPurple-text1">
+                          {dashboardStats.pendingLessonPlans}
                         </div>
                       </div>
-                      <div className="text-xs text-royalPurple-text3 space-y-1">
-                        <div>Student Features Complete</div>
-                        <div>Learning Enhancement Complete</div>
-                        <div>Cultural Integration Complete</div>
-                        <div>Teacher Features Complete</div>
-                        <div>HOD Features (80% Complete)</div>
+                      <div>
+                        <div className="text-royalPurple-text2">Active assessments</div>
+                        <div className="text-xl font-bold text-royalPurple-text1">
+                          {dashboardStats.pendingAssessments}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-royalPurple-text2">Results recorded</div>
+                        <div className="text-xl font-bold text-royalPurple-text1">
+                          {dashboardStats.totalResults}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1353,7 +1376,7 @@ export default function HodDashboard() {
                   <Library className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
                   Department Subjects
                 </CardTitle>
-                <Link href="/dashboard/hod/subjects">
+                <Link href="/admin/subjects">
                   <Button className="bg-gradient-to-r from-accent to-ink hover:from-accent hover:to-g-800 text-royalPurple-text1">
                     Manage Subjects
                   </Button>
@@ -1408,7 +1431,7 @@ export default function HodDashboard() {
                 Department Assessments
               </CardTitle>
               <div className="flex space-x-2">
-                <Link href="/dashboard/hod/assessments/create">
+                <Link href="/dashboard/teacher/assessments?create=1">
                   <Button className="bg-gradient-to-r from-accent to-accent hover:from-accent hover:to-accent text-royalPurple-text1">
                     <Plus className="h-4 w-4 mr-2" />
                     Create Assessment
@@ -1464,14 +1487,13 @@ export default function HodDashboard() {
                       </div>
                     </div>
                   ))}
-                  {(!dashboardData?.recent_assessments ||
-                    dashboardData.recent_assessments.length === 0) && (
+                  {(!departmentData.assessments || departmentData.assessments.length === 0) && (
                     <div className="text-center py-8">
                       <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
                         <ClipboardList className="h-8 w-8 text-royalPurple-text1" />
                       </div>
                       <p className="text-royalPurple-text2">No assessments in department yet</p>
-                      <Link href="/dashboard/hod/assessments/create">
+                      <Link href="/dashboard/teacher/assessments?create=1">
                         <Button className="mt-4 bg-gradient-to-r from-accent to-accent hover:from-accent hover:to-accent text-royalPurple-text1">
                           Create Department Assessment
                         </Button>
@@ -1554,14 +1576,17 @@ export default function HodDashboard() {
                     <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
                       <UserCheck className="h-8 w-8 text-royalPurple-text1" />
                     </div>
-                    <div className={`text-3xl font-bold mb-2 ${percentTextClass(92)}`}>92%</div>
+                    <div className={`text-3xl font-bold mb-2 ${percentTextClass(attendanceRate)}`}>
+                      {attendanceRate}%
+                    </div>
                     <p className="text-royalPurple-text2 font-medium">Attendance Rate</p>
                     <div className="w-full bg-royalPurple-muted/60 rounded-full h-3 mt-3">
                       <div
                         className="bg-royalPurple-accent h-3 rounded-full"
-                        style={{ width: '92%' }}
+                        style={{ width: `${Math.min(100, attendanceRate)}%` }}
                       ></div>
                     </div>
+                    <p className="text-xs text-royalPurple-text3 mt-2">Last 30 days · department</p>
                   </div>
                   <div className="text-center p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                     <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
@@ -1574,7 +1599,18 @@ export default function HodDashboard() {
                     <div className="w-full bg-royalPurple-muted/60 rounded-full h-3 mt-3">
                       <div
                         className="bg-royalPurple-pill h-3 rounded-full"
-                        style={{ width: '75%' }}
+                        style={{
+                          width: `${Math.min(
+                            100,
+                            dashboardStats.totalAssessments
+                              ? Math.round(
+                                  (dashboardStats.pendingAssessments /
+                                    Math.max(1, dashboardStats.totalAssessments)) *
+                                    100
+                                )
+                              : 0
+                          )}%`,
+                        }}
                       ></div>
                     </div>
                   </div>
@@ -1602,19 +1638,27 @@ export default function HodDashboard() {
                         Performance by Subject
                       </h3>
                       <div className="space-y-4">
-                        {departmentSubjects.slice(0, 4).map((subject, index) => {
-                          const performance = 0
+                        {(subjectPerformance.length
+                          ? subjectPerformance.slice(0, 6)
+                          : departmentSubjects.slice(0, 4).map((name) => ({
+                              name,
+                              averageScore: 0,
+                              resultCount: 0,
+                            }))
+                        ).map((subject, index) => {
+                          const performance = Number(subject.averageScore) || 0
+                          const label = subject.name || subject
                           return (
                             <div
-                              key={index}
+                              key={`${label}-${index}`}
                               className="p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
                             >
                               <div className="flex items-center justify-between mb-2">
                                 <span className="text-royalPurple-text1 font-semibold text-sm">
-                                  {subject}
+                                  {label}
                                 </span>
                                 <span className={`font-bold ${percentTextClass(performance)}`}>
-                                  {Number(performance) || 0}%
+                                  {performance}%
                                 </span>
                               </div>
                               <div className="w-full bg-royalPurple-muted/60 rounded-full h-2">
@@ -1626,12 +1670,22 @@ export default function HodDashboard() {
                                         ? 'bg-royalPurple-accent'
                                         : 'bg-warn/100'
                                   }`}
-                                  style={{ width: `${performance}%` }}
+                                  style={{ width: `${Math.min(100, performance)}%` }}
                                 ></div>
                               </div>
+                              {subject.resultCount != null ? (
+                                <p className="text-xs text-royalPurple-text3 mt-1">
+                                  {subject.resultCount} result(s)
+                                </p>
+                              ) : null}
                             </div>
                           )
                         })}
+                        {subjectPerformance.length === 0 && departmentData.results.length === 0 ? (
+                          <p className="text-sm text-royalPurple-text3">
+                            No department results yet for this term.
+                          </p>
+                        ) : null}
                       </div>
                     </div>
 
@@ -1642,32 +1696,52 @@ export default function HodDashboard() {
                         Grade Distribution
                       </h3>
                       <div className="space-y-3">
-                        {[
-                          { grade: 'Distinction', percentage: 25, color: 'bg-royalPurple-success' },
-                          { grade: 'Merit', percentage: 30, color: 'bg-royalPurple-accent' },
-                          { grade: 'Credit', percentage: 25, color: 'bg-accent/100' },
-                          {
-                            grade: 'Pass/Satisfactory',
-                            percentage: 15,
-                            color: 'bg-royalPurple-pill',
-                          },
-                          {
-                            grade: 'Fail/Unsatisfactory',
-                            percentage: 4,
-                            color: 'bg-royalPurple-danger',
-                          },
-                          { grade: 'Absent', percentage: 1, color: 'bg-royalPurple-muted' },
-                        ].map((item, index) => (
-                          <div key={index} className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <div className={`w-4 h-4 rounded ${item.color}`}></div>
-                              <span className="text-royalPurple-text1 text-sm">{item.grade}</span>
+                        {(gradeDistribution.length
+                          ? gradeDistribution
+                          : [
+                              {
+                                grade: 'Distinction',
+                                percentage: 0,
+                                color: 'bg-royalPurple-success',
+                              },
+                              { grade: 'Merit', percentage: 0, color: 'bg-royalPurple-accent' },
+                              { grade: 'Credit', percentage: 0, color: 'bg-accent/100' },
+                              {
+                                grade: 'Pass/Satisfactory',
+                                percentage: 0,
+                                color: 'bg-royalPurple-pill',
+                              },
+                              {
+                                grade: 'Fail/Unsatisfactory',
+                                percentage: 0,
+                                color: 'bg-royalPurple-danger',
+                              },
+                              { grade: 'Absent', percentage: 0, color: 'bg-royalPurple-muted' },
+                            ]
+                        ).map((item, index) => {
+                          const color =
+                            item.color ||
+                            {
+                              Distinction: 'bg-royalPurple-success',
+                              Merit: 'bg-royalPurple-accent',
+                              Credit: 'bg-accent/100',
+                              'Pass/Satisfactory': 'bg-royalPurple-pill',
+                              'Fail/Unsatisfactory': 'bg-royalPurple-danger',
+                              Absent: 'bg-royalPurple-muted',
+                            }[item.grade] ||
+                            'bg-royalPurple-muted'
+                          return (
+                            <div key={index} className="flex items-center justify-between">
+                              <div className="flex items-center space-x-3">
+                                <div className={`w-4 h-4 rounded ${color}`}></div>
+                                <span className="text-royalPurple-text1 text-sm">{item.grade}</span>
+                              </div>
+                              <span className="text-royalPurple-text2 font-semibold">
+                                {item.percentage}%{item.count != null ? ` · ${item.count}` : ''}
+                              </span>
                             </div>
-                            <span className="text-royalPurple-text2 font-semibold">
-                              {item.percentage}%
-                            </span>
-                          </div>
-                        ))}
+                          )
+                        })}
                       </div>
                     </div>
                   </div>

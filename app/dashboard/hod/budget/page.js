@@ -7,15 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
   DollarSign,
-  Plus,
   TrendingUp,
   TrendingDown,
   AlertCircle,
   ArrowLeft,
   Download,
-  Calendar,
-  PieChart,
-  BarChart3,
   CheckCircle,
   Clock,
   Target,
@@ -36,11 +32,11 @@ import {
 import Link from 'next/link'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import { EmptyModuleState } from '@/components/dashboard/EmptyModuleState'
+import { HodAddBudgetRequestDialog } from '@/components/hod/HodAddBudgetRequestDialog'
 
 export default function BudgetPage() {
   const [selectedPeriod, setSelectedPeriod] = useState('current')
-  const [activeTab, setActiveTab] = useState('overview')
-  const { data, loading, error } = useHodApi('/api/hod/budget')
+  const { data, loading, error, reload } = useHodApi('/api/hod/budget')
 
   const budgetOverview = data?.overview ?? {
     totalAllocated: 0,
@@ -136,14 +132,36 @@ export default function BudgetPage() {
               <option value="previous">Previous Year</option>
               <option value="quarter">This Quarter</option>
             </select>
-            <Button variant="outline">
+            <Button
+              variant="outline"
+              onClick={() => {
+                const rows = [
+                  ['Description', 'Category', 'Amount', 'Date', 'Requested By', 'Status'],
+                  ...recentTransactions.map((t) => [
+                    t.description,
+                    t.category,
+                    String(t.amount),
+                    t.date ? new Date(t.date).toISOString().slice(0, 10) : '',
+                    t.requestedBy || '',
+                    t.status || '',
+                  ]),
+                ]
+                const csv = rows
+                  .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
+                  .join('\n')
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+                const url = URL.createObjectURL(blob)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = `hod-budget-${new Date().toISOString().slice(0, 10)}.csv`
+                a.click()
+                URL.revokeObjectURL(url)
+              }}
+            >
               <Download className="h-4 w-4 mr-2" />
               Export Report
             </Button>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              New Request
-            </Button>
+            <HodAddBudgetRequestDialog categories={budgetCategories} onCreated={reload} />
           </div>
         </div>
 

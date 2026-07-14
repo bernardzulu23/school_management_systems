@@ -7,33 +7,68 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
   FileText,
-  Plus,
   Search,
-  Filter,
-  Download,
-  Upload,
   Mail,
   MailOpen,
   Clock,
-  AlertCircle,
   CheckCircle,
   ArrowLeft,
   Edit,
   Trash2,
-  Eye,
 } from 'lucide-react'
 import Link from 'next/link'
 import { EmptyModuleState } from '@/components/dashboard/EmptyModuleState'
 import { HodAddCorrespondenceDialog } from '@/components/hod/HodAddCorrespondenceDialog'
 import { HodFileUpload } from '@/components/hod/HodFileUpload'
+import toast from 'react-hot-toast'
 
 export default function CorrespondencePage() {
   const [activeTab, setActiveTab] = useState('incoming')
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
+  const [updatingId, setUpdatingId] = useState(null)
 
   const { data, loading, error, reload } = useHodApi('/api/hod/correspondence')
   const correspondenceData = data ?? { incoming: [], outgoing: [] }
+
+  const patchItem = async (id, body) => {
+    setUpdatingId(id)
+    try {
+      const res = await fetch(`/api/hod/correspondence/${encodeURIComponent(id)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(body),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'Update failed')
+      toast.success('Updated')
+      await reload()
+    } catch (e) {
+      toast.error(e.message || 'Update failed')
+    } finally {
+      setUpdatingId(null)
+    }
+  }
+
+  const deleteItem = async (id) => {
+    if (!window.confirm('Delete this correspondence item?')) return
+    setUpdatingId(id)
+    try {
+      const res = await fetch(`/api/hod/correspondence/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'Delete failed')
+      toast.success('Deleted')
+      await reload()
+    } catch (e) {
+      toast.error(e.message || 'Delete failed')
+    } finally {
+      setUpdatingId(null)
+    }
+  }
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -87,6 +122,13 @@ export default function CorrespondencePage() {
 
   const hasCorrespondence =
     correspondenceData.incoming.length > 0 || correspondenceData.outgoing.length > 0
+
+  const filteredItems = (correspondenceData[activeTab] || []).filter((item) => {
+    const hay = `${item.subject || ''} ${item.sender || ''} ${item.recipient || ''}`.toLowerCase()
+    const matchesSearch = !searchTerm || hay.includes(searchTerm.toLowerCase())
+    const matchesStatus = filterStatus === 'all' || item.status === filterStatus
+    return matchesSearch && matchesStatus
+  })
 
   return (
     <DashboardLayout title="Correspondence File">
@@ -230,7 +272,7 @@ export default function CorrespondencePage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {correspondenceData[activeTab].map((item) => (
+                  {filteredItems.map((item) => (
                     <Fragment key={item.id}>
                       <tr>
                         <td className="py-3 px-4 font-medium">{item.subject}</td>
@@ -267,14 +309,29 @@ export default function CorrespondencePage() {
                         </td>
                         <td className="py-3 px-4">
                           <div className="flex items-center space-x-2">
-                            <Button size="sm" variant="outline">
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button size="sm" variant="outline">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button size="sm" variant="outline">
-                              <Download className="h-4 w-4" />
+                            {item.status === 'pending' || item.status === 'draft' ? (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={updatingId === item.id}
+                                onClick={() =>
+                                  patchItem(item.id, {
+                                    status: activeTab === 'incoming' ? 'responded' : 'sent',
+                                  })
+                                }
+                                title={activeTab === 'incoming' ? 'Mark responded' : 'Mark sent'}
+                              >
+                                <CheckCircle className="h-4 w-4" />
+                              </Button>
+                            ) : null}
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={updatingId === item.id}
+                              onClick={() => deleteItem(item.id)}
+                              title="Delete"
+                            >
+                              <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
                         </td>
@@ -291,6 +348,13 @@ export default function CorrespondencePage() {
                       </tr>
                     </Fragment>
                   ))}
+                  {filteredItems.length === 0 ? (
+                    <tr>
+                      <td colSpan={8} className="py-6 text-center text-sm text-royalPurple-text3">
+                        No items match this filter.
+                      </td>
+                    </tr>
+                  ) : null}
                 </tbody>
               </table>
             </div>

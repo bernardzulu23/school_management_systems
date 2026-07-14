@@ -359,6 +359,98 @@ export const GET = withErrorHandler(async function GET(request) {
     })
     .sort((a, b) => (b.averageScore || 0) - (a.averageScore || 0))
 
+  // Subject averages from live results
+  const subjectScoreMap = new Map()
+  for (const r of results) {
+    const name = String(r.subject?.name || r.subjectId || '').trim()
+    if (!name) continue
+    const score = Number(r.score)
+    if (!Number.isFinite(score)) continue
+    const bucket = subjectScoreMap.get(name) || { sum: 0, count: 0 }
+    bucket.sum += score
+    bucket.count += 1
+    subjectScoreMap.set(name, bucket)
+  }
+  const subjectPerformance = Array.from(subjectScoreMap.entries())
+    .map(([name, { sum, count }]) => ({
+      name,
+      averageScore: count ? Math.round(sum / count) : 0,
+      resultCount: count,
+    }))
+    .sort((a, b) => b.averageScore - a.averageScore)
+
+  // Grade distribution from live result grades / score bands
+  const gradeBuckets = {
+    Distinction: 0,
+    Merit: 0,
+    Credit: 0,
+    'Pass/Satisfactory': 0,
+    'Fail/Unsatisfactory': 0,
+    Absent: 0,
+  }
+  for (const r of results) {
+    const g = String(r.grade || '')
+      .toUpperCase()
+      .trim()
+    const score = Number(r.score)
+    if (g === 'ABS' || g === 'ABSENT' || (!Number.isFinite(score) && !g)) {
+      gradeBuckets.Absent += 1
+      continue
+    }
+    if (g === '1' || g === 'D' || g === 'DISTINCTION' || score >= 80) gradeBuckets.Distinction += 1
+    else if (g === '2' || g === 'M' || g === 'MERIT' || score >= 70) gradeBuckets.Merit += 1
+    else if (g === '3' || g === '4' || g === 'C' || g === 'CREDIT' || score >= 60)
+      gradeBuckets.Credit += 1
+    else if (g === '5' || g === '6' || g === 'P' || g === 'PASS' || score >= 40)
+      gradeBuckets['Pass/Satisfactory'] += 1
+    else gradeBuckets['Fail/Unsatisfactory'] += 1
+  }
+  const gradeTotal = Object.values(gradeBuckets).reduce((s, n) => s + n, 0) || 1
+  const gradeDistribution = Object.entries(gradeBuckets).map(([grade, count]) => ({
+    grade,
+    count,
+    percentage: Math.round((count / gradeTotal) * 100),
+  }))
+
+  // Department attendance from AttendanceSession marks for department students (last 30 days)
+  let attendanceRate = 0
+  try {
+    const studentIds = students.map((s) => String(s.id)).filter(Boolean)
+    if (studentIds.length > 0) {
+      const since = new Date()
+      since.setDate(since.getDate() - 30)
+      const marks = await prisma.attendanceMark.findMany({
+        where: {
+          schoolId,
+          studentId: { in: studentIds },
+          markedAt: { gte: since },
+        },
+        select: { status: true },
+        take: 50000,
+      })
+      if (marks.length > 0) {
+        const present = marks.filter((m) =>
+          ['PRESENT', 'LATE', 'EXCUSED'].includes(String(m.status || '').toUpperCase())
+        ).length
+        attendanceRate = Math.round((present / marks.length) * 100)
+      } else {
+        const legacy = await prisma.attendance.findMany({
+          where: { schoolId, studentId: { in: studentIds }, date: { gte: since } },
+          select: { status: true },
+          take: 50000,
+        })
+        if (legacy.length > 0) {
+          const present = legacy.filter((a) =>
+            ['present', 'late', 'excused'].includes(String(a.status || '').toLowerCase())
+          ).length
+          attendanceRate = Math.round((present / legacy.length) * 100)
+        }
+      }
+    }
+  } catch (e) {
+    console.error('[HOD Dashboard] Failed loading attendance:', e?.message)
+  }
+
   return NextResponse.json({
     success: true,
     data: {
@@ -379,12 +471,15 @@ export const GET = withErrorHandler(async function GET(request) {
                 results.reduce((sum, r) => sum + (Number(r.score) || 0), 0) / results.length
               )
             : 0,
+        attendanceRate,
         pendingLessonPlans: await prisma.lessonPlan.count({
           where: { schoolId, reviewerUserId: userId, status: 'SUBMITTED' },
         }),
         pendingAssessments: assessments.filter(
           (a) => String(a.status || '').toLowerCase() !== 'completed'
         ).length,
+        totalAssessments: assessments.length,
+        totalResults: results.length,
       },
       teachers,
       students,
@@ -393,6 +488,8 @@ export const GET = withErrorHandler(async function GET(request) {
       results: resultsWithMeta,
       assessments,
       teacherPerformance,
+      subjectPerformance,
+      gradeDistribution,
     },
   })
 })
