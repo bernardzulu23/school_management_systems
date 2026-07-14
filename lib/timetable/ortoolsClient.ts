@@ -21,11 +21,15 @@ export type OrtoolsPayload = {
     endTime: string
     isBreak?: boolean
   }>
-  /** Shared with teacherClassSessionRules.ts / solve.py apply_session_rules */
+  /** Shared with teacherClassSessionRules.ts + teacherWorkloadRules.ts / solve.py */
   sessionRules?: {
     minGapPeriods: number
     enforceSubjectSplit?: boolean
     enforceReturnGap?: boolean
+    maxPeriodsPerDay?: number
+    maxConsecutivePeriods?: number
+    enforceDayLimit?: boolean
+    enforceConsecutiveLimit?: boolean
   }
   timeoutSec?: number
 }

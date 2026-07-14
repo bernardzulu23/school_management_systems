@@ -11,7 +11,7 @@ import {
   RESULT_TYPES,
 } from '@/lib/results/resultTypes'
 import { canAccessSecondaryGrading } from '@/lib/subjects/resolveSubjectCatalog'
-import { currentTermLabel, termDateRange } from '@/lib/academic/currentTerm'
+import { currentTermLabel, termDateRange, currentAcademicYear } from '@/lib/academic/currentTerm'
 import { logger, captureError } from '@/lib/utils/logger'
 
 export const dynamic = 'force-dynamic'
@@ -146,7 +146,6 @@ export const GET = withErrorHandler(async function GET(request) {
 
     const { searchParams } = new URL(request.url)
     const yearParam = searchParams.get('year')
-    const yearFilter = yearParam ? Number(yearParam) : null
     const rawTermParam = searchParams.get('term')
     const isAllTerms = rawTermParam != null && /^all\s*terms?$/i.test(String(rawTermParam).trim())
     let termFilter = ''
@@ -157,6 +156,18 @@ export const GET = withErrorHandler(async function GET(request) {
     } else {
       termFilter = currentTermLabel()
     }
+
+    // Academic year: when filtering a specific term, always pin to a year so prior-year
+    // (or last-term leftovers labeled with the same term number) never inflate KPIs.
+    const yearFilter = (() => {
+      if (yearParam != null && String(yearParam).trim() !== '') {
+        const n = Number(yearParam)
+        return Number.isFinite(n) && n > 2000 ? n : currentAcademicYear()
+      }
+      if (isAllTerms) return null
+      return currentAcademicYear()
+    })()
+
     const resultTypeParam = String(searchParams.get('resultType') || '').trim()
     const normalizedResultType = resultTypeParam ? normalizeResultType(resultTypeParam) : ''
     const resultTypeFilter =
@@ -168,17 +179,20 @@ export const GET = withErrorHandler(async function GET(request) {
       ? { resultType: resultTypeFilter }
       : { resultType: { in: SCHOOL_WIDE_RESULT_TYPES } }
 
+    // Exact term match only — never broad startsWith (avoids accidental cross-term mixes).
+    const termClause = termFilter
+      ? {
+          OR: [
+            { term: { equals: termFilter, mode: 'insensitive' } },
+            { term: { equals: termFilter.replace(/^term\s+/i, ''), mode: 'insensitive' } },
+          ],
+        }
+      : {}
+
     const resultWhere = {
       schoolId,
       ...resultTypeClause,
-      ...(termFilter
-        ? {
-            OR: [
-              { term: { equals: termFilter, mode: 'insensitive' } },
-              { term: { startsWith: termFilter } },
-            ],
-          }
-        : {}),
+      ...termClause,
       ...(yearFilter ? { year: yearFilter } : {}),
     }
 
@@ -1057,6 +1071,9 @@ export const GET = withErrorHandler(async function GET(request) {
         label: getResultTypeLabel(value),
       })),
       selected_result_type: resultTypeFilter || '',
+      selected_term: termFilter || 'All Terms',
+      selected_year: yearFilter || null,
+      results_count: resultsCount,
     }
 
     log.response(200, Date.now() - start)

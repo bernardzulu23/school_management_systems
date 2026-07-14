@@ -32,6 +32,11 @@ type ConfigForm = {
     minGapPeriods: number
     ruleASeverity: 'hard' | 'soft'
     ruleBSeverity: 'hard' | 'soft'
+    maxPeriodsPerDay: number
+    maxConsecutivePeriods: number
+    dayOverloadSeverity: 'hard' | 'soft'
+    consecutiveSeverity: 'hard' | 'soft'
+    breakOverlapSeverity: 'hard' | 'soft'
   }
 }
 
@@ -300,6 +305,126 @@ export function SchoolTimetableSettings({
                 >
                   <option value="soft">Warning (can dismiss)</option>
                   <option value="hard">Error (blocks publish)</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-royalPurple-border/40 p-4 space-y-3 bg-royalPurple-card/20">
+            <div>
+              <h3 className="text-sm font-bold text-royalPurple-text1">Teacher workload limits</h3>
+              <p className="text-xs text-royalPurple-text2 mt-1">
+                Cap daily teaching load and consecutive periods. Lessons must not cover designated
+                break/lunch windows (configured above). Defaults: 6 periods/day, 4 consecutive.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label className="block">
+                <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
+                  Max periods per day
+                </span>
+                <input
+                  type="number"
+                  min={1}
+                  max={16}
+                  className="zsms-input w-full mt-1"
+                  value={form.schedulingRules.maxPeriodsPerDay}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      schedulingRules: {
+                        ...f.schedulingRules,
+                        maxPeriodsPerDay: Math.max(1, Math.min(16, Number(e.target.value) || 6)),
+                      },
+                    }))
+                  }
+                />
+              </label>
+              <label className="block">
+                <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
+                  Max consecutive periods
+                </span>
+                <input
+                  type="number"
+                  min={1}
+                  max={12}
+                  className="zsms-input w-full mt-1"
+                  value={form.schedulingRules.maxConsecutivePeriods}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      schedulingRules: {
+                        ...f.schedulingRules,
+                        maxConsecutivePeriods: Math.max(
+                          1,
+                          Math.min(12, Number(e.target.value) || 4)
+                        ),
+                      },
+                    }))
+                  }
+                />
+              </label>
+              <label className="block">
+                <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
+                  Day overload
+                </span>
+                <select
+                  className="zsms-select w-full mt-1"
+                  value={form.schedulingRules.dayOverloadSeverity}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      schedulingRules: {
+                        ...f.schedulingRules,
+                        dayOverloadSeverity: e.target.value === 'hard' ? 'hard' : 'soft',
+                      },
+                    }))
+                  }
+                >
+                  <option value="soft">Warning (can dismiss)</option>
+                  <option value="hard">Error (blocks publish)</option>
+                </select>
+              </label>
+              <label className="block">
+                <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
+                  Consecutive overload
+                </span>
+                <select
+                  className="zsms-select w-full mt-1"
+                  value={form.schedulingRules.consecutiveSeverity}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      schedulingRules: {
+                        ...f.schedulingRules,
+                        consecutiveSeverity: e.target.value === 'hard' ? 'hard' : 'soft',
+                      },
+                    }))
+                  }
+                >
+                  <option value="soft">Warning (can dismiss)</option>
+                  <option value="hard">Error (blocks publish)</option>
+                </select>
+              </label>
+              <label className="block sm:col-span-2">
+                <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
+                  Teaching through break/lunch
+                </span>
+                <select
+                  className="zsms-select w-full mt-1"
+                  value={form.schedulingRules.breakOverlapSeverity}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      schedulingRules: {
+                        ...f.schedulingRules,
+                        breakOverlapSeverity: e.target.value === 'soft' ? 'soft' : 'hard',
+                      },
+                    }))
+                  }
+                >
+                  <option value="hard">Error (blocks publish)</option>
+                  <option value="soft">Warning (can dismiss)</option>
                 </select>
               </label>
             </div>

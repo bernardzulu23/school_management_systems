@@ -245,16 +245,24 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
 
   const existing = await prisma.student.findFirst({
     where: { id, schoolId },
-    select: { id: true, userId: true },
+    select: { id: true, userId: true, name: true, class: true },
   })
   if (!existing) throw new ApiError('Not found', 404)
 
+  const studentLabel = `Student record: ${existing.name}${existing.class ? ` (${existing.class})` : ''}`
+
   await prisma.$transaction(async (tx) => {
     if (existing.userId) {
-      await deleteUserCascade({ tx, schoolId, userId: existing.userId })
+      await deleteUserCascade({ tx, schoolId, userId: existing.userId, actor: auth.user })
       return
     }
-    await deleteStudentCascade({ tx, schoolId, studentId: existing.id })
+    await deleteStudentCascade({
+      tx,
+      schoolId,
+      studentId: existing.id,
+      actor: auth.user,
+      studentLabel,
+    })
   })
 
   return NextResponse.json({ success: true })

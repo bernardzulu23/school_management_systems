@@ -44,6 +44,14 @@ import {
   type TeacherClassSessionRulesConfig,
   type SessionFragment,
 } from '@/lib/timetable/teacherClassSessionRules'
+import {
+  DEFAULT_TEACHER_WORKLOAD_RULES,
+  normalizeTeacherWorkloadRules,
+  teacherWorkloadPlacementViolation,
+  type BreakSlotLike,
+  type TeacherWorkloadRulesConfig,
+  type WorkloadFragment,
+} from '@/lib/timetable/teacherWorkloadRules'
 
 /** Default break positions when daySlots cannot be inspected (legacy fallback). */
 export const BREAK_AFTER_PERIODS = [2, 5]
@@ -167,6 +175,8 @@ export type SchedulerBlock = {
   teacherId: string
   classId: string
   subjectId: string
+  /** Optional preferred room — hard room clash when set on two overlapping blocks. */
+  classroomId?: string | null
   span: number
   unitType: 'SINGLE' | 'DOUBLE' | 'TRIPLE'
 }
@@ -185,6 +195,7 @@ export type TimetableEntry = {
   teacherId: string
   subjectId: string
   classId: string
+  classroomId?: string | null
   dayOfWeek: string
   startTime: string
   endTime: string
@@ -335,11 +346,18 @@ export function canPlace(
     allBlocks?: SchedulerBlock[]
     workingDayCount?: number
     teacherClassSessionRules?: Partial<TeacherClassSessionRulesConfig> | null
+    teacherWorkloadRules?: Partial<TeacherWorkloadRulesConfig> | null
+    breakSlots?: BreakSlotLike[] | null
   }
 ): CanPlaceResult {
   const { day, startPeriod } = slot
   const span = slot.span || block.span
-  const maxPerDay = options?.maxTeacherPeriodsPerDay ?? 6
+  const workloadRules = normalizeTeacherWorkloadRules(
+    options?.teacherWorkloadRules ??
+      (options?.teacherClassSessionRules as Partial<TeacherWorkloadRulesConfig> | null) ??
+      DEFAULT_TEACHER_WORKLOAD_RULES
+  )
+  const maxPerDay = options?.maxTeacherPeriodsPerDay ?? workloadRules.maxPeriodsPerDay
   const rule = options?.placementRule
   const strictSoft = options?.strictSoftConstraints === true
   const reserved = options?.reservedTeacherSlots
@@ -347,6 +365,7 @@ export function canPlace(
   const sessionRules = normalizeTeacherClassSessionRules(
     options?.teacherClassSessionRules ?? DEFAULT_TEACHER_CLASS_SESSION_RULES
   )
+  const breakSlots = Array.isArray(options?.breakSlots) ? options!.breakSlots! : []
   const nd = normalizeDay(day)
 
   if (!consecutivePeriodsAreValid(startPeriod, span, breakAfterPeriods)) {
@@ -385,6 +404,17 @@ export function canPlace(
       periodsOverlap(pl.startPeriod, pl.span, startPeriod, span)
     ) {
       return { ok: false, reason: 'grade_conflict' }
+    }
+
+    const roomA = String(block.classroomId || '').trim()
+    const roomB = String(pl.classroomId || '').trim()
+    if (
+      roomA &&
+      roomB &&
+      roomA === roomB &&
+      periodsOverlap(pl.startPeriod, pl.span, startPeriod, span)
+    ) {
+      return { ok: false, reason: 'room_conflict' }
     }
   }
 
@@ -428,6 +458,36 @@ export function canPlace(
     return { ok: false, reason: sessionHit.reason }
   }
 
+  const candWorkload: WorkloadFragment = {
+    id: String(block.blockId),
+    teacherId: String(block.teacherId),
+    dayOfWeek: nd,
+    startTime: candStart,
+    endTime: candEnd,
+    periodWeight: Math.max(1, span),
+  }
+  const placedWorkload: WorkloadFragment[] = placed.map((pl) => {
+    const pSpan = Math.max(1, Number(pl.span) || 1)
+    const pStart = Number(pl.startPeriod)
+    return {
+      id: String(pl.blockId),
+      teacherId: String(pl.teacherId),
+      dayOfWeek: normalizeDay(pl.day),
+      startTime: String(pl.startTime || '').slice(0, 5) || fictive(pStart),
+      endTime: String(pl.endTime || '').slice(0, 5) || fictive(pStart + pSpan),
+      periodWeight: pSpan,
+    }
+  })
+  const workloadHit = teacherWorkloadPlacementViolation(
+    candWorkload,
+    placedWorkload,
+    workloadRules,
+    breakSlots
+  )
+  if (workloadHit) {
+    return { ok: false, reason: workloadHit.reason }
+  }
+
   if (strictSoft) {
     if (span >= 2 && wouldStackSameDay(block, day, placed)) {
       return { ok: false, reason: 'soft_same_day_multi_block' }
@@ -440,10 +500,10 @@ export function canPlace(
       return { ok: false, reason: 'soft_same_day' }
     }
 
-    const teacherDayLoad = placed.filter(
-      (pl) => pl.teacherId === block.teacherId && pl.day === day
-    ).length
-    if (teacherDayLoad >= maxPerDay) {
+    const teacherDayLoad = placed
+      .filter((pl) => pl.teacherId === block.teacherId && pl.day === day)
+      .reduce((sum, pl) => sum + Math.max(1, Number(pl.span) || 1), 0)
+    if (teacherDayLoad + Math.max(1, span) > maxPerDay) {
       return { ok: false, reason: 'teacher_day_limit' }
     }
   }
@@ -462,6 +522,7 @@ export function expandAllocationsIntoBlocks(allocations: SchedulerAllocation[]):
         teacherId: String(alloc.teacherId),
         classId: String(u.classId),
         subjectId: String(alloc.subjectId),
+        classroomId: alloc.classroomId ? String(alloc.classroomId) : null,
         span: u.consecutivePeriods,
         unitType: u.unitType,
       })
@@ -558,6 +619,7 @@ function blockToEntry(block: PlacedBlock, singleMin: number): TimetableEntry {
     teacherId: block.teacherId,
     subjectId: block.subjectId,
     classId: block.classId,
+    classroomId: block.classroomId || null,
     dayOfWeek: block.day,
     startTime: block.startTime,
     endTime: block.endTime,
@@ -588,6 +650,8 @@ export type GenerateTimetableOptions = {
   maxRestarts?: number
   /** Shared with audit / CP-SAT (teacherClassSessionRules.ts). */
   teacherClassSessionRules?: Partial<TeacherClassSessionRulesConfig> | null
+  teacherWorkloadRules?: Partial<TeacherWorkloadRulesConfig> | null
+  breakSlots?: BreakSlotLike[] | null
 }
 
 function buildSchedulerResult(
@@ -667,6 +731,8 @@ export function generateTimetableOnce(
     allBlocks,
     workingDayCount: Object.keys(daySlots).length,
     teacherClassSessionRules: options.teacherClassSessionRules,
+    teacherWorkloadRules: options.teacherWorkloadRules ?? options.teacherClassSessionRules,
+    breakSlots: options.breakSlots,
   }
 
   function pushPlacedFromCandidate(block: SchedulerBlock, cand: SchedulerCandidateSlot) {
@@ -774,6 +840,7 @@ export function generateTimetableOnce(
           teacherId: removed.teacherId,
           classId: removed.classId,
           subjectId: removed.subjectId,
+          classroomId: removed.classroomId || null,
           span: removed.span,
           unitType: removed.unitType,
         }

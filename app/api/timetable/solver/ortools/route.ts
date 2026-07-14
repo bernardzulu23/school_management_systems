@@ -160,6 +160,7 @@ export const POST = withErrorHandler(async function POST(request: NextRequest) {
       academicYear,
       replaceExisting,
       rows,
+      actor: auth.user,
     })
     if (!persisted.ok) {
       if (persisted.response) return persisted.response

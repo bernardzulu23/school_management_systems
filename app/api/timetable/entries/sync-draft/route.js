@@ -112,12 +112,12 @@ export const POST = withErrorHandler(async function POST(req) {
 
   const allocations = await prisma.teacherAllocation.findMany({
     where: { schoolId, term, academicYear, status: { in: ['pushed', 'scheduled'] } },
-    select: { id: true, teacherId: true, subjectId: true, classId: true },
+    select: { id: true, teacherId: true, subjectId: true, classId: true, classroomId: true },
   })
 
   const allocKey = (teacherId, subjectId, classId) => `${teacherId}|${subjectId}|${classId}`
   const allocByKey = new Map(
-    allocations.map((a) => [allocKey(a.teacherId, a.subjectId, a.classId), a.id])
+    allocations.map((a) => [allocKey(a.teacherId, a.subjectId, a.classId), a])
   )
 
   const toCreate = []
@@ -132,31 +132,32 @@ export const POST = withErrorHandler(async function POST(req) {
     const endTime = String(row?.endTime || '').trim()
     const periodNumber = Number(row?.period ?? row?.periodNumber)
     const durationMin = Number(row?.durationMin || 40)
+    const rowClassroomId = String(row?.classroomId || row?.roomId || '').trim() || null
 
     if (!teacherId || !subjectId || !classId || !dayOfWeek || !startTime || !endTime) {
       skipped.push({ reason: 'missing_fields', row })
       continue
     }
 
-    let allocationId = allocByKey.get(allocKey(teacherId, subjectId, classId))
-    if (!allocationId) {
-      const alloc = await prisma.teacherAllocation.findFirst({
+    let alloc = allocByKey.get(allocKey(teacherId, subjectId, classId))
+    if (!alloc) {
+      alloc = await prisma.teacherAllocation.findFirst({
         where: { schoolId, term, academicYear, teacherId, subjectId, classId },
-        select: { id: true },
+        select: { id: true, teacherId: true, subjectId: true, classId: true, classroomId: true },
       })
-      allocationId = alloc?.id
     }
-    if (!allocationId) {
+    if (!alloc?.id) {
       skipped.push({ reason: 'no_allocation', teacherId, subjectId, classId })
       continue
     }
 
     toCreate.push({
       schoolId,
-      allocationId,
+      allocationId: alloc.id,
       teacherId,
       subjectId,
       classId,
+      classroomId: rowClassroomId || (alloc.classroomId ? String(alloc.classroomId) : null),
       dayOfWeek,
       startTime,
       endTime,
@@ -215,7 +216,7 @@ export const POST = withErrorHandler(async function POST(req) {
     return NextResponse.json(
       {
         error:
-          'Draft contains hard timetable conflicts (teacher or class double-booked). Fix conflicts before saving.',
+          'Draft contains hard timetable conflicts (teacher, class, or room double-booked). Fix conflicts before saving.',
         hardConflicts: hardConflicts.slice(0, 20),
         code: 'SYNC_BLOCKED_BY_CONFLICTS',
       },

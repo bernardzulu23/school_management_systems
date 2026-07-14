@@ -188,7 +188,8 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
                   {percentText(schoolStats.passRate)}
                 </p>
                 <p className="text-royalPurple-text2 text-sm mt-1">
-                  % of result entries with score ≥40%
+                  {attentionTerm}: % of result entries ≥40% (this term only — not carried from a
+                  previous term)
                 </p>
               </div>
             </div>

@@ -148,9 +148,8 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
   const workingDays = Object.keys(daySlots)
   const lessonCount = expandAllocationsIntoBlocks(normalizedAllocations as any[]).length
   const maxExecutionMs = computeMaxExecutionMs(lessonCount, requestedMaxMs)
-  const teacherClassSessionRules = parseSchedulingRulesJson(
-    normalizeTimetableConfig(config).schedulingRules
-  )
+  const normalizedCfg = normalizeTimetableConfig(config)
+  const teacherClassSessionRules = parseSchedulingRulesJson(normalizedCfg.schedulingRules)
 
   let scheduleResult = await hybridGenerateTimetable(normalizedAllocations as any[], daySlots, {
     lockedSlots,
@@ -163,6 +162,9 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
       useLlm,
       solverUrl: process.env.ORTOOLS_SOLVER_URL,
       teacherClassSessionRules,
+      teacherWorkloadRules: teacherClassSessionRules,
+      breakSlots: normalizedCfg.breakSlots,
+      maxTeacherPeriodsPerDay: teacherClassSessionRules.maxPeriodsPerDay,
     },
   })
 
@@ -303,6 +305,7 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
               teacherId: e.teacherId,
               subjectId: e.subjectId,
               classId: e.classId,
+              classroomId: e.classroomId || null,
               dayOfWeek: e.dayOfWeek,
               startTime: e.startTime,
               endTime: e.endTime,

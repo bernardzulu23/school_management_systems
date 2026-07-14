@@ -107,6 +107,7 @@ export async function buildSchoolSolverPayload(
         singlePeriods: true,
         doublePeriods: true,
         triplePeriods: true,
+        classroomId: true,
       },
     }),
   ])
@@ -164,6 +165,8 @@ export function buildOrtoolsLessons(
       classId: String(a.classId),
       subjectId: String(a.subjectId),
       periodsPerWeek: Math.max(1, Number(a.periodsPerWeek) || 1),
+      roomId: a.classroomId ? String(a.classroomId) : undefined,
+      classroomId: a.classroomId ? String(a.classroomId) : undefined,
     }))
   }
 

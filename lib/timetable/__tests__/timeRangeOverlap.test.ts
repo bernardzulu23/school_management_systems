@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
   buildClassDoubleBookedMessage,
+  buildRoomDoubleBookedMessage,
   halfOpenTimeRangesOverlap,
+  roomSlotsOverlap,
   timedSlotsOverlap,
 } from '@/lib/timetable/timeRangeOverlap'
 
@@ -62,5 +64,39 @@ describe('timedSlotsOverlap', () => {
         { dayOfWeek: 'monday', startTime: '08:00', endTime: '09:00', season: 'dry' }
       )
     ).toBe(false)
+  })
+})
+
+describe('roomSlotsOverlap / buildRoomDoubleBookedMessage', () => {
+  it('requires matching non-null classroomId', () => {
+    expect(
+      roomSlotsOverlap(
+        { classroomId: 'lab1', dayOfWeek: 'monday', startTime: '08:00', endTime: '08:40' },
+        { classroomId: 'lab1', dayOfWeek: 'monday', startTime: '08:20', endTime: '09:00' }
+      )
+    ).toBe(true)
+    expect(
+      roomSlotsOverlap(
+        { classroomId: 'lab1', dayOfWeek: 'monday', startTime: '08:00', endTime: '08:40' },
+        { classroomId: 'lab2', dayOfWeek: 'monday', startTime: '08:00', endTime: '08:40' }
+      )
+    ).toBe(false)
+    expect(
+      roomSlotsOverlap(
+        { dayOfWeek: 'monday', startTime: '08:00', endTime: '08:40' },
+        { classroomId: 'lab1', dayOfWeek: 'monday', startTime: '08:00', endTime: '08:40' }
+      )
+    ).toBe(false)
+
+    const msg = buildRoomDoubleBookedMessage({
+      roomName: 'Science Lab',
+      dayOfWeek: 'tuesday',
+      entries: [
+        { className: '10A', subjectName: 'Biology', startTime: '09:00', endTime: '09:40' },
+        { className: '10B', subjectName: 'Chemistry', startTime: '09:20', endTime: '10:00' },
+      ],
+    })
+    expect(msg).toMatch(/Science Lab/)
+    expect(msg).toMatch(/10A and 10B/)
   })
 })

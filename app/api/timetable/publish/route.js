@@ -111,6 +111,7 @@ export const POST = withErrorHandler(async function POST(req) {
       schoolId,
       term,
       academicYear,
+      actor: user,
     })
   } catch (err) {
     const conflict = timetableExcludeConflictResponse(err)
@@ -135,5 +136,7 @@ export const POST = withErrorHandler(async function POST(req) {
     replacedPublished: result.deletedPublished,
     term,
     academicYear,
+    affectedTeachers: result.affectedTeacherIds?.length ?? 0,
+    sms: result.sms || null,
   })
 })

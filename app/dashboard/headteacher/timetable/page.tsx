@@ -57,6 +57,7 @@ import {
   conflictAuditKey,
   canDismissAuditRow,
 } from '@/hooks/useTimetableDraftMeta'
+import { resolvePreviousSeason } from '@/lib/timetable/copyFromPreviousTerm'
 
 type Tab = 'assignment' | 'overview' | 'edit' | 'conflicts' | 'cover' | 'settings' | 'allocations'
 type ConflictIssueFilter = 'all' | 'missing' | 'feasibility'
@@ -189,6 +190,7 @@ function HeadteacherTimetablePageContent() {
   const focusTeacherId = String(searchParams.get('focusTeacherId') || '').trim()
   const [dbGenerating, setDbGenerating] = useState(false)
   const [dbPublishing, setDbPublishing] = useState(false)
+  const [copyingFromTerm, setCopyingFromTerm] = useState(false)
   const [coverTeacherId, setCoverTeacherId] = useState<string>('')
   const [coverDay, setCoverDay] = useState<string>('monday')
   const [coverPeriod, setCoverPeriod] = useState<number>(1)
@@ -1050,6 +1052,47 @@ function HeadteacherTimetablePageContent() {
     }
   }
 
+  const previousSeason = useMemo(
+    () => resolvePreviousSeason(term, academicYear),
+    [term, academicYear]
+  )
+
+  const copyFromPreviousTerm = async () => {
+    setCopyingFromTerm(true)
+    try {
+      const res = await sessionFetch('/api/timetable/entries/copy-from-term', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          targetTerm: term,
+          targetAcademicYear: academicYear,
+          sourceTerm: previousSeason.term,
+          sourceAcademicYear: previousSeason.academicYear,
+          sourceStatus: 'auto',
+        }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json?.error || json?.message || 'Copy failed')
+      toast.success(json?.message || `Copied ${json?.created ?? 0} periods`)
+      await reloadFromServer({ term, academicYear, status: 'draft' })
+      const slots = useTimetableStore.getState().timeSlots
+      if (slots.length) setTimeSlots(slots as TimeSlot[])
+      detectConflicts()
+      await rescanDraftConflicts()
+      if (Number(json?.hardConflicts || 0) > 0 || Number(json?.unmappedBellPeriods || 0) > 0) {
+        toast(
+          'Review Conflicts — some periods may need remapping after the bell schedule change.',
+          { icon: '⚠️' }
+        )
+      }
+    } catch (e: any) {
+      toast.error(e?.message || 'Copy from previous term failed')
+    } finally {
+      setCopyingFromTerm(false)
+    }
+  }
+
   const saveSolverDraftToDb = async () => {
     const store = useTimetableStore.getState()
     const rows = store.assignments
@@ -1267,6 +1310,19 @@ function HeadteacherTimetablePageContent() {
               }
             >
               {dbGenerating ? 'Generating…' : 'Generate Perfect Timetable'}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={copyFromPreviousTerm}
+              disabled={copyingFromTerm || assignments.length > 0}
+              className="zsms-hover-raise"
+              title={
+                assignments.length > 0
+                  ? 'Clear or switch to an empty term before copying'
+                  : `Copy structure from ${previousSeason.term} ${previousSeason.academicYear}, remapped to the current bell schedule`
+              }
+            >
+              {copyingFromTerm ? 'Copying…' : `Copy from ${previousSeason.term}`}
             </Button>
             <Button variant="outline" onClick={saveSolverDraftToDb} className="zsms-hover-raise">
               Save draft to DB
@@ -2006,6 +2062,8 @@ function HeadteacherTimetablePageContent() {
                 timeSlots={timeSlots}
                 teachers={teachers}
                 classes={visibleClasses}
+                term={term}
+                academicYear={academicYear}
               />
             )}
           </div>
@@ -2035,6 +2093,29 @@ function HeadteacherTimetablePageContent() {
         {tab === 'edit' ? (
           <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_min(100%,280px)] gap-4 xl:gap-6 items-start">
             <div className="min-w-0 overflow-hidden">
+              {!isPublished && assignments.length === 0 ? (
+                <div className="mb-3 rounded-xl border border-royalPurple-border bg-royalPurple-surface/60 px-4 py-3 text-sm text-royalPurple-text2 flex flex-wrap items-center justify-between gap-2">
+                  <span>
+                    No periods for{' '}
+                    <strong>
+                      {term} · {academicYear}
+                    </strong>{' '}
+                    yet. Copy class / subject / teacher structure from{' '}
+                    <strong>
+                      {previousSeason.term} {previousSeason.academicYear}
+                    </strong>{' '}
+                    (times remapped to the current bell schedule), or generate from allocations.
+                  </span>
+                  <Button
+                    variant="outline"
+                    className="h-8"
+                    onClick={copyFromPreviousTerm}
+                    disabled={copyingFromTerm}
+                  >
+                    {copyingFromTerm ? 'Copying…' : 'Copy from previous term'}
+                  </Button>
+                </div>
+              ) : null}
               {isPublished ? (
                 <div className="mb-3 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-100 flex flex-wrap items-center justify-between gap-2">
                   <span>
@@ -2103,6 +2184,8 @@ function HeadteacherTimetablePageContent() {
                   timeSlots={timeSlots}
                   teachers={teachers}
                   classes={visibleClasses}
+                  term={term}
+                  academicYear={academicYear}
                 />
               )}
             </div>

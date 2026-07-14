@@ -424,6 +424,65 @@ describe('canPlace', () => {
     const result = canPlace(otherClass, { day: 'friday', startPeriod: 3, span: 2 }, placed)
     expect(result.ok).toBe(true)
   })
+
+  it('rejects overlapping periods in the same room for different classes', () => {
+    const placed: PlacedBlock[] = [
+      {
+        ...block,
+        classroomId: 'lab1',
+        day: 'monday',
+        startPeriod: 1,
+        span: 1,
+        startMin: 0,
+        endMin: 40,
+        startTime: '08:00',
+        endTime: '08:40',
+      },
+    ]
+    const other: SchedulerBlock = {
+      ...block,
+      blockId: 'b2',
+      teacherId: 't2',
+      classId: 'c2',
+      subjectId: 's2',
+      classroomId: 'lab1',
+    }
+    const result = canPlace(other, { day: 'monday', startPeriod: 1, span: 1 }, placed)
+    expect(result).toEqual({ ok: false, reason: 'room_conflict' })
+  })
+
+  it('allows overlapping periods when rooms differ or are unset', () => {
+    const placed: PlacedBlock[] = [
+      {
+        ...block,
+        classroomId: 'lab1',
+        day: 'monday',
+        startPeriod: 1,
+        span: 1,
+        startMin: 0,
+        endMin: 40,
+        startTime: '08:00',
+        endTime: '08:40',
+      },
+    ]
+    const otherRoom: SchedulerBlock = {
+      ...block,
+      blockId: 'b2',
+      teacherId: 't2',
+      classId: 'c2',
+      subjectId: 's2',
+      classroomId: 'lab2',
+    }
+    expect(canPlace(otherRoom, { day: 'monday', startPeriod: 1, span: 1 }, placed).ok).toBe(true)
+    const noRoom: SchedulerBlock = {
+      ...block,
+      blockId: 'b3',
+      teacherId: 't3',
+      classId: 'c3',
+      subjectId: 's3',
+    }
+    expect(canPlace(noRoom, { day: 'monday', startPeriod: 1, span: 1 }, placed).ok).toBe(true)
+  })
 })
 
 describe('wouldStackSameDay', () => {

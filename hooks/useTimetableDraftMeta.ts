@@ -144,6 +144,12 @@ export function conflictAuditKey(row: {
   ) {
     return `CONSECUTIVE_OVERLOAD:${teacherId}:${day}`
   }
+  if ((type === 'TEACHER_DAY_OVERLOAD' || type === 'TEACHER_OVERLOAD') && teacherId && day) {
+    return `TEACHER_DAY_OVERLOAD:${teacherId}:${day}`
+  }
+  if (type === 'TEACHER_BREAK_OVERLAP' && teacherId && day && start) {
+    return `TEACHER_BREAK_OVERLAP:${teacherId}:${day}:${start}`
+  }
   if (type === 'SUBJECT_DISTRIBUTION' && classId && subjectPart && day) {
     return `SUBJECT_DISTRIBUTION:${classId}:${subjectPart}:${day}`
   }
@@ -172,6 +178,9 @@ export function canDismissAuditRow(row: { severity?: string; type?: string }): b
     type === 'MISSING_PERIODS' ||
     type === 'TEACHER_OVER_ALLOCATED' ||
     type === 'CONSECUTIVE_OVERLOAD' ||
+    type === 'TEACHER_CONSECUTIVE_LIMIT' ||
+    type === 'TEACHER_DAY_OVERLOAD' ||
+    type === 'TEACHER_OVERLOAD' ||
     type === 'SUBJECT_DISTRIBUTION'
   )
 }

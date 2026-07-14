@@ -14,6 +14,12 @@
  */
 
 import { formatTimeWindow, parseTimeToMinutes } from './timeRangeOverlap'
+import {
+  DEFAULT_TEACHER_WORKLOAD_RULES,
+  normalizeTeacherWorkloadRules,
+  workloadRulesForSolverPayload,
+  type TeacherWorkloadRulesConfig,
+} from './teacherWorkloadRules'
 
 export const TEACHER_CLASS_SUBJECT_SPLIT = 'TEACHER_CLASS_SUBJECT_SPLIT' as const
 export const TEACHER_CLASS_RETURN_TOO_SOON = 'TEACHER_CLASS_RETURN_TOO_SOON' as const
@@ -93,21 +99,48 @@ export function normalizeTeacherClassSessionRules(
   }
 }
 
+export type SchedulingRulesConfig = TeacherClassSessionRulesConfig & TeacherWorkloadRulesConfig
+
+export const DEFAULT_SCHEDULING_RULES: SchedulingRulesConfig = {
+  ...DEFAULT_TEACHER_CLASS_SESSION_RULES,
+  ...DEFAULT_TEACHER_WORKLOAD_RULES,
+}
+
 /** Parse schedulingRules JSON from TimetableConfig (or API body). */
-export function parseSchedulingRulesJson(raw: unknown): TeacherClassSessionRulesConfig {
-  if (!raw || typeof raw !== 'object') return { ...DEFAULT_TEACHER_CLASS_SESSION_RULES }
+export function parseSchedulingRulesJson(raw: unknown): SchedulingRulesConfig {
+  if (!raw || typeof raw !== 'object') return { ...DEFAULT_SCHEDULING_RULES }
   const o = raw as Record<string, unknown>
-  return normalizeTeacherClassSessionRules({
-    minGapPeriods: o.minGapPeriods as number | undefined,
-    ruleASeverity: o.ruleASeverity as RuleSeverity | undefined,
-    ruleBSeverity: o.ruleBSeverity as RuleSeverity | undefined,
-  })
+  return {
+    ...normalizeTeacherClassSessionRules({
+      minGapPeriods: o.minGapPeriods as number | undefined,
+      ruleASeverity: o.ruleASeverity as RuleSeverity | undefined,
+      ruleBSeverity: o.ruleBSeverity as RuleSeverity | undefined,
+    }),
+    ...normalizeTeacherWorkloadRules({
+      maxPeriodsPerDay: o.maxPeriodsPerDay as number | undefined,
+      maxConsecutivePeriods: o.maxConsecutivePeriods as number | undefined,
+      dayOverloadSeverity: o.dayOverloadSeverity as RuleSeverity | undefined,
+      consecutiveSeverity: o.consecutiveSeverity as RuleSeverity | undefined,
+      breakOverlapSeverity: o.breakOverlapSeverity as RuleSeverity | undefined,
+    }),
+  }
 }
 
 export function schedulingRulesToJson(
-  rules: TeacherClassSessionRulesConfig
-): TeacherClassSessionRulesConfig {
-  return normalizeTeacherClassSessionRules(rules)
+  rules: Partial<SchedulingRulesConfig>
+): SchedulingRulesConfig {
+  return parseSchedulingRulesJson(rules)
+}
+
+/** CP-SAT / payload-friendly serialisation of rules (session + workload). */
+export function rulesForSolverPayload(rules: Partial<SchedulingRulesConfig> | null | undefined) {
+  const n = parseSchedulingRulesJson(rules || {})
+  return {
+    minGapPeriods: n.minGapPeriods,
+    enforceSubjectSplit: true,
+    enforceReturnGap: true,
+    ...workloadRulesForSolverPayload(n),
+  }
 }
 
 /**
@@ -392,15 +425,5 @@ export function teacherClassSessionPlacementViolation(
       hit.type === TEACHER_CLASS_SUBJECT_SPLIT
         ? 'teacher_class_subject_split'
         : 'teacher_class_return_too_soon',
-  }
-}
-
-/** CP-SAT / payload-friendly serialisation of rules. */
-export function rulesForSolverPayload(rules: TeacherClassSessionRulesConfig) {
-  const n = normalizeTeacherClassSessionRules(rules)
-  return {
-    minGapPeriods: n.minGapPeriods,
-    enforceSubjectSplit: true,
-    enforceReturnGap: true,
   }
 }

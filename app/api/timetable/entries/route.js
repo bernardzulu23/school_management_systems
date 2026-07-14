@@ -86,6 +86,18 @@ export const PATCH = withErrorHandler(async function PATCH(req) {
   const endTime = body?.endTime !== undefined ? String(body?.endTime || '').trim() : ''
   const periodNumber = body?.periodNumber !== undefined ? Number(body?.periodNumber) : Number.NaN
   const teacherId = body?.teacherId !== undefined ? safeStringId(body?.teacherId) : undefined
+  const classroomIdRaw =
+    body?.classroomId !== undefined || body?.roomId !== undefined
+      ? body?.classroomId !== undefined
+        ? body.classroomId
+        : body.roomId
+      : undefined
+  const classroomId =
+    classroomIdRaw === null || classroomIdRaw === ''
+      ? null
+      : classroomIdRaw !== undefined
+        ? safeStringId(classroomIdRaw)
+        : undefined
 
   if (body?.dayOfWeek !== undefined && !dayOfWeek) {
     return NextResponse.json({ error: 'Invalid dayOfWeek' }, { status: 400 })
@@ -95,6 +107,14 @@ export const PATCH = withErrorHandler(async function PATCH(req) {
   }
   if (body?.periodNumber !== undefined && (!Number.isFinite(periodNumber) || periodNumber < 1)) {
     return NextResponse.json({ error: 'Invalid periodNumber' }, { status: 400 })
+  }
+  if (
+    classroomIdRaw !== undefined &&
+    classroomIdRaw !== null &&
+    classroomIdRaw !== '' &&
+    !classroomId
+  ) {
+    return NextResponse.json({ error: 'Invalid classroomId' }, { status: 400 })
   }
 
   const entry = await prisma.timetableAllocationEntry.findFirst({
@@ -106,6 +126,7 @@ export const PATCH = withErrorHandler(async function PATCH(req) {
           class: { select: { id: true, name: true } },
         },
       },
+      classroom: { select: { id: true, name: true } },
     },
   })
   if (!entry) return NextResponse.json({ error: 'Entry not found' }, { status: 404 })
@@ -122,9 +143,20 @@ export const PATCH = withErrorHandler(async function PATCH(req) {
   if (endTime) data.endTime = endTime
   if (Number.isFinite(periodNumber)) data.periodNumber = periodNumber
   if (teacherId) data.teacherId = teacherId
+  if (classroomId !== undefined) data.classroomId = classroomId
 
   if (!Object.keys(data).length) {
     return NextResponse.json({ error: 'No fields to update' }, { status: 400 })
+  }
+
+  if (data.classroomId) {
+    const room = await prisma.classroom.findFirst({
+      where: { id: data.classroomId, schoolId },
+      select: { id: true, name: true },
+    })
+    if (!room) {
+      return NextResponse.json({ error: 'Classroom not found for this school' }, { status: 404 })
+    }
   }
 
   const allDraft = await prisma.timetableAllocationEntry.findMany({
@@ -177,6 +209,7 @@ export const PATCH = withErrorHandler(async function PATCH(req) {
     const conflict = timetableExcludeConflictResponse(err, {
       teacherName: entry?.allocation?.teacher?.name,
       className: entry?.allocation?.class?.name,
+      roomName: entry?.classroom?.name,
       dayOfWeek: data.dayOfWeek || entry.dayOfWeek,
       startTime: data.startTime || entry.startTime,
       endTime: data.endTime || entry.endTime,

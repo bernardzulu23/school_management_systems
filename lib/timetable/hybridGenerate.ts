@@ -46,6 +46,11 @@ export type HybridGenerateOptions = {
   teacherClassSessionRules?: Partial<
     import('@/lib/timetable/teacherClassSessionRules').TeacherClassSessionRulesConfig
   > | null
+  teacherWorkloadRules?: Partial<
+    import('@/lib/timetable/teacherWorkloadRules').TeacherWorkloadRulesConfig
+  > | null
+  breakSlots?: import('@/lib/timetable/teacherWorkloadRules').BreakSlotLike[] | null
+  maxTeacherPeriodsPerDay?: number
 }
 
 export type HybridGenerateResult = SchedulerResult & {
@@ -98,7 +103,7 @@ function entriesToValidationAssignments(entries: SchedulerResult['entries']): As
 
 function countHardValidation(entries: SchedulerResult['entries']) {
   const assignments = entriesToValidationAssignments(entries)
-  return getHardConflicts(validateTimetable(assignments, { includeRoomChecks: false })).length
+  return getHardConflicts(validateTimetable(assignments)).length
 }
 
 async function trySolverPass(opts: {
@@ -242,6 +247,9 @@ export async function hybridGenerateTimetable(
     strictSoftConstraints: options.strictSoftConstraints ?? false,
     reservedTeacherSlots: lockedSlots,
     teacherClassSessionRules: options.teacherClassSessionRules,
+    teacherWorkloadRules: options.teacherWorkloadRules ?? options.teacherClassSessionRules,
+    breakSlots: options.breakSlots,
+    maxTeacherPeriodsPerDay: options.maxTeacherPeriodsPerDay,
   }
 
   let result = generateTimetable(allocations, daySlots, schedulerOpts)

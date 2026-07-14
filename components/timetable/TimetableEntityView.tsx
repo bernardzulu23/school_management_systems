@@ -38,12 +38,16 @@ export function TimetableEntityView({
   timeSlots,
   teachers,
   classes,
+  term,
+  academicYear,
 }: {
   mode: EntityViewMode
   assignments: Assignment[]
   timeSlots: TimeSlot[]
   teachers: Teacher[]
   classes: Class[]
+  term?: string
+  academicYear?: string
 }) {
   const teacherColors = useTimetableStore((s) => s.teacherColors)
   const conflicts = useTimetableStore((s) => s.conflicts)
@@ -127,6 +131,24 @@ export function TimetableEntityView({
             <span className="font-bold text-royalPurple-text1">
               {workload.totalPeriods} periods
             </span>
+          </div>
+        ) : null}
+        {selectedId && term && academicYear ? (
+          <div className="flex flex-wrap gap-2">
+            <a
+              className="zsms-btn-outline text-xs h-9 inline-flex items-center px-3 rounded-lg border border-royalPurple-border"
+              href={`/api/timetable/export-schedule?scope=${mode}&id=${encodeURIComponent(selectedId)}&term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}&format=docx`}
+            >
+              Download Word
+            </a>
+            <a
+              className="zsms-btn-outline text-xs h-9 inline-flex items-center px-3 rounded-lg border border-royalPurple-border"
+              href={`/api/timetable/export-schedule?scope=${mode}&id=${encodeURIComponent(selectedId)}&term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}&format=html`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Print / PDF
+            </a>
           </div>
         ) : null}
       </div>

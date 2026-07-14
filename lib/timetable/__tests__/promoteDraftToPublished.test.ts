@@ -51,7 +51,17 @@ function makeTx(state) {
               e.academicYear === where.academicYear &&
               e.status === where.status
           )
-          .map((e) => ({ allocationId: e.allocationId }))
+          .map((e) => ({
+            allocationId: e.allocationId,
+            teacherId: e.teacherId || null,
+            classId: e.classId || null,
+            subjectId: e.subjectId || null,
+            dayOfWeek: e.dayOfWeek,
+            periodNumber: e.periodNumber,
+            startTime: e.startTime,
+            endTime: e.endTime,
+            classroomId: e.classroomId || null,
+          }))
       }),
     },
     teacherAllocation: {
@@ -112,6 +122,7 @@ describe('promoteDraftTimetableToPublished', () => {
     prisma = {
       timetableAllocationEntry: {
         count: tx.timetableAllocationEntry.count,
+        findMany: tx.timetableAllocationEntry.findMany,
       },
       $transaction: vi.fn(async (fn) => fn(tx)),
     }
@@ -122,6 +133,7 @@ describe('promoteDraftTimetableToPublished', () => {
       schoolId: 's1',
       term: 'Term 1',
       academicYear: '2026',
+      notifyTeachers: false,
     })
     expect(first.ok).toBe(true)
     expect(first.deletedPublished).toBe(1)
@@ -145,6 +157,7 @@ describe('promoteDraftTimetableToPublished', () => {
       schoolId: 's1',
       term: 'Term 1',
       academicYear: '2026',
+      notifyTeachers: false,
     })
     expect(second.ok).toBe(true)
     expect(second.deletedPublished).toBe(2)
@@ -166,6 +179,7 @@ describe('promoteDraftTimetableToPublished', () => {
       schoolId: 's1',
       term: 'Term 1',
       academicYear: '2026',
+      notifyTeachers: false,
     })
     expect(third.published).toBe(2)
     expect(state.entries.filter((e) => e.status === 'published')).toHaveLength(2)
@@ -177,6 +191,7 @@ describe('promoteDraftTimetableToPublished', () => {
       schoolId: 's1',
       term: 'Term 1',
       academicYear: '2026',
+      notifyTeachers: false,
     })
     expect(res.ok).toBe(false)
     expect(res.code).toBe('NO_DRAFT')

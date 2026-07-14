@@ -129,6 +129,13 @@ export function isConflict(
 
     if (String(assignment.teacherId) === String(existing.teacherId)) return true
     if (String(assignment.classId) === String(existing.classId)) return true
+    if (
+      assignment.classroomId &&
+      existing.classroomId &&
+      String(assignment.classroomId) === String(existing.classroomId)
+    ) {
+      return true
+    }
   }
 
   return false
@@ -157,6 +164,7 @@ type SchedulerEntryLike = {
   teacherId: string
   classId: string
   subjectId: string
+  classroomId?: string | null
   dayOfWeek: string
   startTime: string
   endTime: string
@@ -183,6 +191,7 @@ export function schedulerEntryToAssignment(entry: SchedulerEntryLike, index: num
     teacherId: entry.teacherId,
     classId: entry.classId,
     subjectId: entry.subjectId,
+    classroomId: entry.classroomId || undefined,
     periodType: entry.periodType,
     consecutivePeriods,
     isBreak: false,

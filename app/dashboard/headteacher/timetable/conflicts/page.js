@@ -172,15 +172,23 @@ function TimetableConflictsContent() {
                 : ''}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={fetchConflicts}
-          disabled={loading}
-          className="zsms-btn-primary flex items-center gap-2 text-sm disabled:opacity-50"
-        >
-          <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
-          Rescan
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <a
+            href={`/api/timetable/curriculum-compliance?term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}&format=docx`}
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-royalPurple-border text-sm text-royalPurple-text1 hover:bg-royalPurple-card/40"
+          >
+            Export curriculum compliance
+          </a>
+          <button
+            type="button"
+            onClick={fetchConflicts}
+            disabled={loading}
+            className="zsms-btn-primary flex items-center gap-2 text-sm disabled:opacity-50"
+          >
+            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+            Rescan
+          </button>
+        </div>
       </div>
 
       {error && (
@@ -336,6 +344,42 @@ function TimetableConflictsContent() {
                   <p className="text-xs text-royalPurple-text3 uppercase tracking-wider mb-3">
                     Resolution options
                   </p>
+                  {Array.isArray(conflict.suggestions) && conflict.suggestions.length > 0 ? (
+                    <div className="mb-3 space-y-2 w-full">
+                      <p className="text-xs text-royalPurple-text2">
+                        Suggested free slots (availability-checked):
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {conflict.suggestions.map((sug, idx) => (
+                          <button
+                            key={`${conflict.id}-sug-${idx}`}
+                            type="button"
+                            disabled={
+                              resolving === conflict.id || summary?.canEditConflicts === false
+                            }
+                            onClick={() =>
+                              resolve(
+                                'APPLY_SUGGESTION',
+                                {
+                                  entryId: sug.entryId,
+                                  newDayOfWeek: sug.newDayOfWeek,
+                                  newStartTime: sug.newStartTime,
+                                  newEndTime: sug.newEndTime,
+                                  newPeriodNumber: sug.newPeriodNumber,
+                                },
+                                conflict.id
+                              )
+                            }
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 text-white text-xs rounded-lg"
+                            title={sug.description || sug.title}
+                          >
+                            <MoveRight size={12} />
+                            Move here: {sug.title || `${sug.newDayOfWeek} ${sug.newStartTime}`}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
                   <div className="flex flex-wrap gap-2">
                     {(conflict.type === 'TEACHER_DOUBLE_BOOKED' ||
                       conflict.type === 'CLASS_DOUBLE_BOOKED') &&

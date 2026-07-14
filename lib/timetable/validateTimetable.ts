@@ -1,7 +1,9 @@
 import type { Assignment } from './types'
 import {
   buildClassDoubleBookedMessage,
+  buildRoomDoubleBookedMessage,
   parseTimeToMinutes,
+  roomSlotsOverlap,
   timedSlotsOverlap,
 } from './timeRangeOverlap'
 import {
@@ -13,12 +15,24 @@ import {
   TEACHER_CLASS_RETURN_TOO_SOON,
   TEACHER_CLASS_SUBJECT_SPLIT,
 } from './teacherClassSessionRules'
+import {
+  detectTeacherWorkloadIssues,
+  normalizeTeacherWorkloadRules,
+  TEACHER_BREAK_OVERLAP,
+  TEACHER_CONSECUTIVE_LIMIT,
+  TEACHER_DAY_OVERLOAD,
+  workloadFragmentFromAssignment,
+  type BreakSlotLike,
+  type TeacherWorkloadRulesConfig,
+} from './teacherWorkloadRules'
 
 export type TimetableConflictType =
   | 'TEACHER_DOUBLE_BOOKED'
   | 'CLASS_DOUBLE_BOOKED'
   | 'ROOM_DOUBLE_BOOKED'
-  | 'TEACHER_CONSECUTIVE_LIMIT'
+  | typeof TEACHER_CONSECUTIVE_LIMIT
+  | typeof TEACHER_DAY_OVERLOAD
+  | typeof TEACHER_BREAK_OVERLAP
   | 'SUBJECT_DISTRIBUTION'
   | typeof TEACHER_CLASS_SUBJECT_SPLIT
   | typeof TEACHER_CLASS_RETURN_TOO_SOON
@@ -99,9 +113,14 @@ function teacherAssignmentsConflict(a1: Assignment, a2: Assignment): boolean {
 }
 
 function roomAssignmentsConflict(a1: Assignment, a2: Assignment): boolean {
-  if (!a1.classroomId || !a2.classroomId) return false
-  if (String(a1.classroomId) !== String(a2.classroomId)) return false
-  return timedSlotsOverlap(a1, a2)
+  return roomSlotsOverlap(a1, a2)
+}
+
+function roomLabelFromAssignments(list: Assignment[], classroomId: string): string | undefined {
+  const row = list.find((a) => String(a.classroomId) === classroomId)
+  if (!row) return undefined
+  const name = String((row as Assignment & { classroomName?: string }).classroomName || '').trim()
+  return name || undefined
 }
 
 /**
@@ -113,14 +132,22 @@ function roomAssignmentsConflict(a1: Assignment, a2: Assignment): boolean {
 export function validateTimetable(
   assignments: Assignment[],
   opts?: {
+    /** Default true — rooms with classroomId are checked; null room rows skip. */
     includeRoomChecks?: boolean
     teacherClassSessionRules?: Partial<TeacherClassSessionRulesConfig> | null
+    teacherWorkloadRules?: Partial<TeacherWorkloadRulesConfig> | null
+    /** Designated break/lunch windows from TimetableConfig.breakSlots. */
+    breakSlots?: BreakSlotLike[] | null
   }
 ): TimetableValidationConflict[] {
   const list = (assignments || []).filter((a) => a && !a.isBreak)
   const conflicts: TimetableValidationConflict[] = []
-  const includeRoom = opts?.includeRoomChecks === true
+  const includeRoom = opts?.includeRoomChecks !== false
   const sessionRules = normalizeTeacherClassSessionRules(opts?.teacherClassSessionRules)
+  const workloadRules = normalizeTeacherWorkloadRules(
+    opts?.teacherWorkloadRules ?? opts?.teacherClassSessionRules
+  )
+  const breakSlots = Array.isArray(opts?.breakSlots) ? opts!.breakSlots! : []
 
   for (const group of clusterByLink(list, classAssignmentsConflict)) {
     const classId = String(group[0].classId)
@@ -157,42 +184,52 @@ export function validateTimetable(
 
   if (includeRoom) {
     for (const group of clusterByLink(list, roomAssignmentsConflict)) {
+      const classroomId = String(group[0].classroomId)
+      const sorted = [...group].sort(
+        (x, y) =>
+          toMinutes(x.startTime) - toMinutes(y.startTime) ||
+          String(x.id).localeCompare(String(y.id))
+      )
       conflicts.push({
         type: 'ROOM_DOUBLE_BOOKED',
         severity: 'hard',
-        message: 'Room is double-booked',
-        entityId: String(group[0].classroomId),
-        assignmentIds: group.map((a) => String(a.id)),
+        message: buildRoomDoubleBookedMessage({
+          roomName: roomLabelFromAssignments(list, classroomId),
+          dayOfWeek: sorted[0]?.dayOfWeek,
+          entries: sorted.map((a) => ({
+            className: (a as Assignment & { className?: string }).className,
+            subjectName: (a as Assignment & { subjectName?: string }).subjectName,
+            startTime: a.startTime,
+            endTime: a.endTime,
+          })),
+        }),
+        entityId: classroomId,
+        assignmentIds: sorted.map((a) => String(a.id)),
       })
     }
   }
 
-  // Soft: teacher more than 4 consecutive teaching blocks on one day
-  const byTeacherDay = new Map<string, Assignment[]>()
-  for (const a of list) {
-    const key = `${a.teacherId}|${a.dayOfWeek}`
-    if (!byTeacherDay.has(key)) byTeacherDay.set(key, [])
-    byTeacherDay.get(key)!.push(a)
-  }
-  for (const [key, dayList] of byTeacherDay) {
-    const sorted = [...dayList].sort((x, y) => toMinutes(x.startTime) - toMinutes(y.startTime))
-    let run = 1
-    for (let i = 1; i < sorted.length; i++) {
-      const prevEnd = toMinutes(sorted[i - 1].endTime)
-      const curStart = toMinutes(sorted[i].startTime)
-      if (curStart <= prevEnd + 5) run += 1
-      else run = 1
-      if (run > 4) {
-        conflicts.push({
-          type: 'TEACHER_CONSECUTIVE_LIMIT',
-          severity: 'soft',
-          message: 'Teacher has more than 4 consecutive periods without a break',
-          entityId: key.split('|')[0],
-          assignmentIds: sorted.slice(Math.max(0, i - 3), i + 1).map((a) => String(a.id)),
-        })
-        break
-      }
-    }
+  // Teacher workload: day load, consecutive runs, break/lunch overlap
+  const workloadFrags = list
+    .map((a) =>
+      workloadFragmentFromAssignment({
+        ...a,
+        teacherName: (a as Assignment & { teacherName?: string }).teacherName,
+      })
+    )
+    .filter(Boolean) as ReturnType<typeof workloadFragmentFromAssignment>[]
+  for (const issue of detectTeacherWorkloadIssues(
+    workloadFrags as NonNullable<ReturnType<typeof workloadFragmentFromAssignment>>[],
+    workloadRules,
+    breakSlots
+  )) {
+    conflicts.push({
+      type: issue.type,
+      severity: issue.severity,
+      message: issue.message,
+      entityId: issue.entityId,
+      assignmentIds: issue.assignmentIds,
+    })
   }
 
   // Teacher↔class session rules (A: non-contiguous same subject; B: different-subject min gap)

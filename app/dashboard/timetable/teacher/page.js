@@ -125,6 +125,8 @@ export default function TeacherTimetablePage() {
           classes={classes}
           subjects={subjects}
           classrooms={classrooms}
+          term={term}
+          academicYear={academicYear}
         />
       </div>
     </DashboardLayout>

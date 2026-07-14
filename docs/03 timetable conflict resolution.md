@@ -14,27 +14,27 @@ This document is the **timetable conflict detection and resolution spec** for ZS
 
 ## Review summary (what changed in v2.0)
 
-| Topic                      | Old assumption (v1.0)                     | Correct structure (Phase 1)                                                                                                             |
-| -------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Conflict engine file       | `lib/timetable/conflictDetector.ts` (new) | **`lib/timetable/collisionDetector.ts`** — exists; rich `CollisionDetector` class                                                       |
-| Matrix validation          | Only in proposed detector                 | **`lib/timetable/validateTimetable.ts`** — hard/soft types for publish                                                                  |
-| Deduping                   | Not mentioned                             | **`lib/timetable/conflictDedupe.ts`** — `dedupeConflicts`, `countUniqueConflicts`                                                       |
-| Auto-fix                   | UI buttons only                           | **`lib/timetable/autoResolver.ts`** + store `autoResolveConflicts()`                                                                    |
-| Conflict UI                | Dedicated `/timetable/conflicts` page     | **`ConflictDisplay`** component + **Conflicts tab** on `/dashboard/headteacher/timetable`                                               |
-| Conflict APIs              | `GET/POST /api/timetable/conflicts/*`     | **`GET /api/timetable/conflicts`**, **`POST /api/timetable/conflicts/resolve`**, dev **`POST /api/timetable/conflicts/seed-test`**      |
-| Primary draft model        | `TimetableEntry` on `TimetableVersion`    | **`TimetableAllocationEntry`** (term/year, draft/published) — headteacher workflow                                                      |
-| Persisted conflict meta    | Proposed on `TimetableVersion`            | **`TimetableDraftMeta`** per `schoolId` + `term` + `academicYear`                                                                       |
-| Conflict UI (server)       | Dedicated page only                       | **`/dashboard/headteacher/timetable/conflicts`** + existing Conflicts tab                                                               |
-| Server audit module        | `conflictDetector.ts` (new)               | **`lib/timetable/conflictAudit.js`** — wraps `validateTimetable` + workload/missing-period checks                                       |
-| Teacher on allocations     | `Teacher` model + `user.firstName`        | **`TeacherAllocation.teacherId` → `User`**; display **`User.name`**                                                                     |
-| Teacher on version entries | Same as allocations                       | **`TimetableEntry.teacherId` → `Teacher`** (profile row, not User id)                                                                   |
-| Class grade field          | `Class.grade`                             | **`Class.year_group`** + **`Class.name`** (e.g. Form 1A)                                                                                |
-| Room conflicts             | Always checked                            | **`TIMETABLE_CLASS_CENTRIC = true`** in `lib/timetable/classCentric.ts` — room checks filtered out for Zambian grade-centric scheduling |
-| Tenancy                    | `resolveAuthenticatedSchoolId` only       | Timetable routes mostly use **`resolveSchoolId(req, user)`** + **`guardSchoolOnlyTimetable`** / **`requireSchoolType(['SCHOOL'])`**     |
-| Generator                  | `hybridGenerate.ts` only                  | **Pipeline:** `preflightFeasibility` → `scheduler` (backtrack) → OR-Tools/greedy solver → **`validateTimetable`**                       |
-| `conflictCount` on version | Proposed schema fields                    | **`TimetableDraftMeta`** — `conflictCount`, `conflictErrors`, `conflictWarnings`, `canPublish`, `lastScannedAt`                         |
-| Legacy version model       | Assumed primary                           | **`TimetableVersion` + `TimetableEntry`** still in schema; separate publish at `/api/timetable/version/publish`                         |
-| Backend stack              | “Node.js/Express”                         | **Next.js 16 App Router** API routes only                                                                                               |
+| Topic                      | Old assumption (v1.0)                     | Correct structure (Phase 1)                                                                                                                                                                                    |
+| -------------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Conflict engine file       | `lib/timetable/conflictDetector.ts` (new) | **`lib/timetable/collisionDetector.ts`** — exists; rich `CollisionDetector` class                                                                                                                              |
+| Matrix validation          | Only in proposed detector                 | **`lib/timetable/validateTimetable.ts`** — hard/soft types for publish                                                                                                                                         |
+| Deduping                   | Not mentioned                             | **`lib/timetable/conflictDedupe.ts`** — `dedupeConflicts`, `countUniqueConflicts`                                                                                                                              |
+| Auto-fix                   | UI buttons only                           | **`lib/timetable/autoResolver.ts`** + store `autoResolveConflicts()`                                                                                                                                           |
+| Conflict UI                | Dedicated `/timetable/conflicts` page     | **`ConflictDisplay`** component + **Conflicts tab** on `/dashboard/headteacher/timetable`                                                                                                                      |
+| Conflict APIs              | `GET/POST /api/timetable/conflicts/*`     | **`GET /api/timetable/conflicts`**, **`POST /api/timetable/conflicts/resolve`**, dev **`POST /api/timetable/conflicts/seed-test`**                                                                             |
+| Primary draft model        | `TimetableEntry` on `TimetableVersion`    | **`TimetableAllocationEntry`** (term/year, draft/published) — headteacher workflow                                                                                                                             |
+| Persisted conflict meta    | Proposed on `TimetableVersion`            | **`TimetableDraftMeta`** per `schoolId` + `term` + `academicYear`                                                                                                                                              |
+| Conflict UI (server)       | Dedicated page only                       | **`/dashboard/headteacher/timetable/conflicts`** + existing Conflicts tab                                                                                                                                      |
+| Server audit module        | `conflictDetector.ts` (new)               | **`lib/timetable/conflictAudit.js`** — wraps `validateTimetable` + workload/missing-period checks                                                                                                              |
+| Teacher on allocations     | `Teacher` model + `user.firstName`        | **`TeacherAllocation.teacherId` → `User`**; display **`User.name`**                                                                                                                                            |
+| Teacher on version entries | Same as allocations                       | **`TimetableEntry.teacherId` → `Teacher`** (profile row, not User id)                                                                                                                                          |
+| Class grade field          | `Class.grade`                             | **`Class.year_group`** + **`Class.name`** (e.g. Form 1A)                                                                                                                                                       |
+| Room conflicts             | Always checked when `classroomId` set     | Specialist venues: **`ROOM_DOUBLE_BOOKED`** via `roomSlotsOverlap` + EXCLUDE `_no_room_overlap` (null room = skip). Legacy CollisionDetector PascalCase room types still filtered by `TIMETABLE_CLASS_CENTRIC` |
+| Tenancy                    | `resolveAuthenticatedSchoolId` only       | Timetable routes mostly use **`resolveSchoolId(req, user)`** + **`guardSchoolOnlyTimetable`** / **`requireSchoolType(['SCHOOL'])`**                                                                            |
+| Generator                  | `hybridGenerate.ts` only                  | **Pipeline:** `preflightFeasibility` → `scheduler` (backtrack) → OR-Tools/greedy solver → **`validateTimetable`**                                                                                              |
+| `conflictCount` on version | Proposed schema fields                    | **`TimetableDraftMeta`** — `conflictCount`, `conflictErrors`, `conflictWarnings`, `canPublish`, `lastScannedAt`                                                                                                |
+| Legacy version model       | Assumed primary                           | **`TimetableVersion` + `TimetableEntry`** still in schema; separate publish at `/api/timetable/version/publish`                                                                                                |
+| Backend stack              | “Node.js/Express”                         | **Next.js 16 App Router** API routes only                                                                                                                                                                      |
 
 ---
 
@@ -44,7 +44,7 @@ Conflicts appear when the master timetable has:
 
 1. A **teacher** assigned to two classes at the same time
 2. A **class** assigned two subjects in the same period
-3. A **room** double-booked (only when class-centric mode is off)
+3. A **room/lab** double-booked when entries share a `classroomId` at overlapping times (Science/IT/H/E/PE venues)
 4. A teacher **over-allocated** vs weekly period budget (soft / warning)
 5. **Unplaced** lesson blocks after generation (preflight or solver could not place all HOD allocations)
 
@@ -85,19 +85,33 @@ HOD allocations (pushed) → POST /api/timetable/generate
 
 **Conflict types (runtime — `types.ts` / `collisionDetector.ts`):**
 
-| Type                         | Severity | Phase 1                           |
-| ---------------------------- | -------- | --------------------------------- |
-| `TeacherDoubleBooked`        | critical | Yes                               |
-| `ClassDoubleBooked`          | critical | Yes                               |
-| `RoomDoubleBooked`           | critical | Filtered when class-centric       |
-| `TeacherUnavailable`         | critical | Yes (if availability windows set) |
-| `CapacityExceeded`           | high     | Filtered when class-centric       |
-| `TravelTimeImpossible`       | high     | Yes (traveling-teacher routes)    |
-| `AgriculturalAttendanceRisk` | medium   | Season modes                      |
-| `TEACHER_CONSECUTIVE_LIMIT`  | soft     | `validateTimetable.ts`            |
-| `SUBJECT_DISTRIBUTION`       | soft     | `validateTimetable.ts`            |
+| Type                         | Severity | Phase 1                                                |
+| ---------------------------- | -------- | ------------------------------------------------------ |
+| `TeacherDoubleBooked`        | critical | Yes                                                    |
+| `ClassDoubleBooked`          | critical | Yes                                                    |
+| `RoomDoubleBooked`           | critical | Filtered when class-centric                            |
+| `TeacherUnavailable`         | critical | Yes (if availability windows set)                      |
+| `CapacityExceeded`           | high     | Filtered when class-centric                            |
+| `TravelTimeImpossible`       | high     | Yes (traveling-teacher routes)                         |
+| `AgriculturalAttendanceRisk` | medium   | Season modes                                           |
+| `TEACHER_CONSECUTIVE_LIMIT`  | soft\*   | `teacherWorkloadRules.ts` (configurable; default soft) |
+| `TEACHER_DAY_OVERLOAD`       | soft\*   | `teacherWorkloadRules.ts` (max periods/day; default 6) |
+| `TEACHER_BREAK_OVERLAP`      | hard\*   | Lesson overlaps configured break/lunch (`breakSlots`)  |
+| `SUBJECT_DISTRIBUTION`       | soft     | `validateTimetable.ts`                                 |
 
-**Matrix validation types (`validateTimetable.ts`):** `TEACHER_DOUBLE_BOOKED`, `CLASS_DOUBLE_BOOKED`, `ROOM_DOUBLE_BOOKED` (hard — **only** when `[startTime, endTime)` half-open ranges overlap, matching Postgres EXCLUDE / `lib/timetable/timeRangeOverlap.ts`); `TEACHER_CLASS_SUBJECT_SPLIT` (Rule A: non-contiguous same teacher+class+subject same day — configurable severity, default hard); `TEACHER_CLASS_RETURN_TOO_SOON` (Rule B: different-subject return sooner than configured min gap — default soft/warning); consecutive-limit and same-subject-same-day continuous-block distribution (`SUBJECT_DISTRIBUTION`) are soft. Rule A/B live in `lib/timetable/teacherClassSessionRules.ts` and are enforced in `canPlace` + CP-SAT `solve.py` (same logic, not a separate drift-prone copy).
+**Matrix validation types (`validateTimetable.ts`):** `TEACHER_DOUBLE_BOOKED`, `CLASS_DOUBLE_BOOKED`, `ROOM_DOUBLE_BOOKED` (hard — when entries share a non-null `classroomId` and `[startTime, endTime)` half-open ranges overlap, matching Postgres EXCLUDE / `roomSlotsOverlap` in `lib/timetable/timeRangeOverlap.ts`); `TEACHER_CLASS_SUBJECT_SPLIT` (Rule A: non-contiguous same teacher+class+subject same day — configurable severity, default hard); `TEACHER_CLASS_RETURN_TOO_SOON` (Rule B: different-subject return sooner than configured min gap — default soft/warning); workload limits in **`lib/timetable/teacherWorkloadRules.ts`**: `TEACHER_DAY_OVERLOAD` (default soft, max 6 periods/day), `TEACHER_CONSECUTIVE_LIMIT` (default soft, max 4 consecutive), `TEACHER_BREAK_OVERLAP` (default hard — clock overlap with `breakSlots`); same-subject-same-day continuous-block distribution (`SUBJECT_DISTRIBUTION`) is soft. Session Rules A/B and workload rules are enforced in audit, `canPlace`, and CP-SAT `solve.py` from one shared module each (not drift-prone copies). Room venue rules use the same three call sites.
+
+### FEATURE 2.8 — Teacher workload limits
+
+**Status:** Implemented
+
+Configurable on `TimetableConfig.schedulingRules` (Settings → Teacher workload limits):
+
+1. `maxPeriodsPerDay` (default 6) → `TEACHER_DAY_OVERLOAD`
+2. `maxConsecutivePeriods` (default 4) → `TEACHER_CONSECUTIVE_LIMIT`
+3. Break/lunch coverage via school `breakSlots` → `TEACHER_BREAK_OVERLAP`
+
+Shared module: `lib/timetable/teacherWorkloadRules.ts`. CP-SAT `apply_workload_rules` in `services/timetable-solver/solve.py`.
 
 ### 3. Hybrid generator (root-cause prevention)
 
@@ -291,17 +305,15 @@ Dev live audit: `POST /api/timetable/conflicts/seed-test` (non-production; same 
 
 ---
 
-### FEATURE 2.7 — Room allocation mode (optional)
+### FEATURE 2.7 — Room / venue conflict detection
 
-**Status:** Planned (off by default)
+**Status:** Implemented (optional assignment — enforce when `classroomId` is set)
 
-If a school enables physical rooms:
-
-1. Set `TIMETABLE_CLASS_CENTRIC = false` (env or per-school `TimetableConfig` flag)
-2. Enable `includeRoomChecks: true` in `validateTimetable` and publish validation
-3. Show `RoomDoubleBooked` in `ConflictDisplay`
-
-Requires `Classroom` assignments on entries (`TimetableEntry.classroomId` exists; extend allocation entries if needed).
+1. School-scoped **`Classroom`** model; optional **`TimetableAllocationEntry.classroomId`** (+ preferred room on **`TeacherAllocation.classroomId`**).
+2. Shared overlap twin: **`roomSlotsOverlap`** in `lib/timetable/timeRangeOverlap.ts` (same half-open `[start,end)` as class/teacher).
+3. Postgres EXCLUDE **`TimetableAllocationEntry_no_room_overlap`** (partial: `classroomId IS NOT NULL`).
+4. Hard **`ROOM_DOUBLE_BOOKED`** in audit / publish validation; **`canPlace`** reason `room_conflict`; CP-SAT ≤1 lesson per room per slot.
+5. Form-room teaching may leave `classroomId` null (Zambia class-centric default) — no room clash without an assigned venue.
 
 ---
 
@@ -380,7 +392,7 @@ npx prisma generate
 ```js
 // validateTimetable — publish hard gate
 import { validateTimetable, getHardConflicts } from '@/lib/timetable/validateTimetable'
-const hard = getHardConflicts(validateTimetable(assignments, { includeRoomChecks: false }))
+const hard = getHardConflicts(validateTimetable(assignments))
 // hard.length must be 0 before publish
 ```
 

@@ -40,7 +40,7 @@ export type TimedSlotLike = {
 }
 
 /**
- * Application-level twin of the class/teacher EXCLUDE predicates:
+ * Application-level twin of the class/teacher/room EXCLUDE predicates:
  * same day + overlapping half-open time ranges (optional season gate).
  */
 export function timedSlotsOverlap(
@@ -60,6 +60,26 @@ export function timedSlotsOverlap(
     b.startTime,
     b.endTime
   )
+}
+
+export type RoomSlotLike = TimedSlotLike & {
+  classroomId?: string | null
+  roomId?: string | null
+}
+
+/**
+ * Twin of `TimetableAllocationEntry_no_room_overlap`:
+ * both rows must have the same non-null classroomId/roomId + timedSlotsOverlap.
+ */
+export function roomSlotsOverlap(
+  a: RoomSlotLike,
+  b: RoomSlotLike,
+  options: { respectSeason?: boolean } = {}
+): boolean {
+  const roomA = String(a.classroomId || a.roomId || '').trim()
+  const roomB = String(b.classroomId || b.roomId || '').trim()
+  if (!roomA || !roomB || roomA !== roomB) return false
+  return timedSlotsOverlap(a, b, options)
 }
 
 export function formatTimeWindow(start?: string | null, end?: string | null): string {
@@ -99,4 +119,36 @@ export function buildClassDoubleBookedMessage(input: {
   }
 
   return `${className} is scheduled for ${uniqueSubjects.join(' and ')} at overlapping times: ${windowLabel} (${day})`
+}
+
+/**
+ * ROOM_DOUBLE_BOOKED copy citing concrete windows and classes sharing the venue.
+ */
+export function buildRoomDoubleBookedMessage(input: {
+  roomName?: string | null
+  dayOfWeek?: string | null
+  entries: Array<{
+    className?: string | null
+    subjectName?: string | null
+    startTime?: string | null
+    endTime?: string | null
+  }>
+}): string {
+  const roomName = input.roomName || 'Room'
+  const day = String(input.dayOfWeek || 'the same day').toLowerCase()
+  const windows = input.entries.map((e) => formatTimeWindow(e.startTime, e.endTime)).filter(Boolean)
+  const uniqueWindows = [...new Set(windows)]
+  const classes = input.entries.map((e) => e.className).filter(Boolean) as string[]
+  const uniqueClasses = [...new Set(classes)]
+  const windowLabel =
+    uniqueWindows.length >= 2
+      ? uniqueWindows.join(' and ')
+      : uniqueWindows[0] || 'overlapping times'
+
+  if (uniqueClasses.length >= 2) {
+    return `${roomName} is double-booked by ${uniqueClasses.join(' and ')} at overlapping times: ${windowLabel} (${day})`
+  }
+
+  const classLabel = uniqueClasses[0] || 'two classes'
+  return `${roomName} is double-booked (${classLabel}) at overlapping times: ${windowLabel} (${day})`
 }

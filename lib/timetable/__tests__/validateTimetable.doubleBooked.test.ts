@@ -20,6 +20,8 @@ function lesson(partial) {
     className: partial.className || '10A',
     subjectName: partial.subjectName || 'Home Management',
     teacherName: partial.teacherName || 'Teacher',
+    classroomId: partial.classroomId,
+    classroomName: partial.classroomName,
     isBreak: false,
   }
 }
@@ -166,5 +168,56 @@ describe('planExactDuplicateDraftDeletes', () => {
     ]
     const { deletedIds } = planExactDuplicateDraftDeletes(entries)
     expect(deletedIds).toEqual([])
+  })
+})
+
+describe('validateTimetable ROOM_DOUBLE_BOOKED', () => {
+  it('flags two classes sharing a room at overlapping times', () => {
+    const hard = getHardConflicts(
+      validateTimetable([
+        lesson({
+          id: 'a',
+          classId: 'c1',
+          className: '10A',
+          teacherId: 't1',
+          classroomId: 'lab1',
+          classroomName: 'Science Lab',
+          startTime: '09:00',
+          endTime: '09:40',
+        }),
+        lesson({
+          id: 'b',
+          classId: 'c2',
+          className: '10B',
+          teacherId: 't2',
+          subjectId: 'chem',
+          subjectName: 'Chemistry',
+          classroomId: 'lab1',
+          classroomName: 'Science Lab',
+          startTime: '09:20',
+          endTime: '10:00',
+        }),
+      ])
+    )
+    const room = hard.filter((c) => c.type === 'ROOM_DOUBLE_BOOKED')
+    expect(room).toHaveLength(1)
+    expect(room[0].entityId).toBe('lab1')
+    expect(room[0].message).toMatch(/Science Lab/)
+  })
+
+  it('skips room checks when classroomId is unset', () => {
+    const hard = getHardConflicts(
+      validateTimetable([
+        lesson({ id: 'a', classId: 'c1', teacherId: 't1', startTime: '09:00', endTime: '09:40' }),
+        lesson({
+          id: 'b',
+          classId: 'c2',
+          teacherId: 't2',
+          startTime: '09:00',
+          endTime: '09:40',
+        }),
+      ])
+    )
+    expect(hard.filter((c) => c.type === 'ROOM_DOUBLE_BOOKED')).toHaveLength(0)
   })
 })

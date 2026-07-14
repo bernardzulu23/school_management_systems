@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-07-13T01:17:24.907Z
+Generated: 2026-07-14T12:04:24.159Z
 
-Total route files: **412**
+Total route files: **420**
 
 ## Quick index
 
@@ -30,6 +30,7 @@ Total route files: **412**
 | `/api/career-clusters`      |     2 |
 | `/api/careers`              |     2 |
 | `/api/cbc`                  |     2 |
+| `/api/changelog`            |     1 |
 | `/api/classes`              |     5 |
 | `/api/code-playground`      |     1 |
 | `/api/creative-features`    |     1 |
@@ -58,6 +59,7 @@ Total route files: **412**
 | `/api/marketplace`          |     7 |
 | `/api/materials`            |     5 |
 | `/api/mobile`               |    12 |
+| `/api/multimedia-lessons`   |     2 |
 | `/api/notifications`        |     8 |
 | `/api/onboarding`           |    10 |
 | `/api/parent`               |     1 |
@@ -78,7 +80,7 @@ Total route files: **412**
 | `/api/strategic-goals`      |     2 |
 | `/api/strategic-reviews`    |     1 |
 | `/api/student`              |    12 |
-| `/api/student-works`        |     1 |
+| `/api/student-works`        |     2 |
 | `/api/students`             |     6 |
 | `/api/subjects`             |     3 |
 | `/api/teacher`              |     6 |
@@ -86,7 +88,7 @@ Total route files: **412**
 | `/api/teachers`             |     5 |
 | `/api/teaching`             |     4 |
 | `/api/teaching-assignments` |     1 |
-| `/api/timetable`            |    29 |
+| `/api/timetable`            |    33 |
 | `/api/transport`            |     2 |
 | `/api/upload`               |     1 |
 | `/api/users`                |     3 |
@@ -269,6 +271,12 @@ Total route files: **412**
 | GET       | `/api/cbc/export`  | —       |
 | GET, POST | `/api/cbc/ratings` | —       |
 
+## /api/changelog
+
+| Method | Route            | Summary                                                                                                     |
+| ------ | ---------------- | ----------------------------------------------------------------------------------------------------------- |
+| GET    | `/api/changelog` | GET /api/changelog — read-only system activity trail. No POST/PATCH/DELETE — ChangeLogEntry is append-only. |
+
 ## /api/classes
 
 | Method           | Route                                 | Summary |
@@ -287,9 +295,9 @@ Total route files: **412**
 
 ## /api/creative-features
 
-| Method | Route                    | Summary                                                                                                  |
-| ------ | ------------------------ | -------------------------------------------------------------------------------------------------------- |
-| GET    | `/api/creative-features` | Role-filtered CreativeFeature catalog (+ route map). Admins see all. No access tier (full/partial/view). |
+| Method | Route                    | Summary |
+| ------ | ------------------------ | ------- |
+| GET    | `/api/creative-features` | —       |
 
 ## /api/cron
 
@@ -337,7 +345,7 @@ Total route files: **412**
 | GET        | `/api/dashboard/headteacher/attendance/live`    | —                                                                                                                                                                                    |
 | GET        | `/api/dashboard/headteacher/classes`            | —                                                                                                                                                                                    |
 | GET        | `/api/dashboard/hod`                            | —                                                                                                                                                                                    |
-| GET        | `/api/dashboard/hod/exam-analysis`              | Query: `term`, `year`, optional `resultType` (`END_OF_TERM` \| `MIDTERM` \| `CLASS_TEST`). Department scope via HOD subjects/teachers; enrollments optional.                         |
+| GET        | `/api/dashboard/hod/exam-analysis`              | Resolve department subject + teacher-user scope without requiring pupil enrollments. Schools often have Result rows before PupilSubjectEnrollment is populated.                      |
 | GET        | `/api/dashboard/hod/teacher-performance`        | —                                                                                                                                                                                    |
 | GET        | `/api/dashboard/hod/teacher-performance/export` | —                                                                                                                                                                                    |
 | GET, PATCH | `/api/dashboard/hod/teacher-progress`           | —                                                                                                                                                                                    |
@@ -518,13 +526,6 @@ Total route files: **412**
 | POST            | `/api/lesson-plans/generate`     | —       |
 | GET             | `/api/lesson-plans/hod/pending`  | —       |
 
-## /api/multimedia-lessons
-
-| Method    | Route                          | Summary                            |
-| --------- | ------------------------------ | ---------------------------------- |
-| GET, POST | `/api/multimedia-lessons`      | List mine / create (school-scoped) |
-| PUT       | `/api/multimedia-lessons/[id]` | Update own draft                   |
-
 ## /api/marketplace
 
 | Method | Route                           | Summary                                                                                                                                                                                    |
@@ -564,6 +565,13 @@ Total route files: **412**
 | GET       | `/api/mobile/session-context`                     | —                                                     |
 | POST      | `/api/mobile/sync`                                | —                                                     |
 
+## /api/multimedia-lessons
+
+| Method    | Route                         | Summary |
+| --------- | ----------------------------- | ------- |
+| GET, POST | `/api/multimedia-lessons`     | —       |
+| PUT       | `/api/multimedia-lessons/:id` | —       |
+
 ## /api/notifications
 
 | Method        | Route                                          | Summary                                                                                                                 |
@@ -574,7 +582,7 @@ Total route files: **412**
 | POST          | `/api/notifications/schedule`                  | —                                                                                                                       |
 | POST          | `/api/notifications/send-batch`                | —                                                                                                                       |
 | POST          | `/api/notifications/send-immediate`            | —                                                                                                                       |
-| GET, POST     | `/api/notifications/web-push/subscribe`        | —                                                                                                                       |
+| GET, POST     | `/api/notifications/web-push/subscribe`        | Prefer GET /api/notifications/web-push/vapid-public-key (public, no auth).                                              |
 | GET           | `/api/notifications/web-push/vapid-public-key` | GET /api/notifications/web-push/vapid-public-key Public — no auth. Used by browsers / service workers before subscribe. |
 
 ## /api/onboarding
@@ -763,10 +771,10 @@ Total route files: **412**
 
 ## /api/student-works
 
-| Method    | Route                          | Summary                           |
-| --------- | ------------------------------ | --------------------------------- |
-| GET, POST | `/api/student-works`           | List / create (`fileUrl` on list) |
-| POST      | `/api/student-works/[id]/like` | Increment likes (school-scoped)   |
+| Method    | Route                         | Summary                                                                                                                                          |
+| --------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| GET, POST | `/api/student-works`          | —                                                                                                                                                |
+| POST      | `/api/student-works/:id/like` | POST /api/student-works/[id]/like — increment likes on a school-scoped StudentWork. Minimal v1: counter only (no per-user uniqueness table yet). |
 
 ## /api/students
 
@@ -834,37 +842,41 @@ Total route files: **412**
 
 ## /api/timetable
 
-| Method             | Route                                             | Summary                                                                                                                                                |
-| ------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| —                  | `/api/timetable`                                  | Legacy alias — clients should call GET /api/timetable/view directly.                                                                                   |
-| GET, PUT, DELETE   | `/api/timetable/:id`                              | —                                                                                                                                                      |
-| GET, POST          | `/api/timetable/allocations`                      | —                                                                                                                                                      |
-| DELETE             | `/api/timetable/allocations/:id`                  | —                                                                                                                                                      |
-| POST               | `/api/timetable/allocations/push`                 | —                                                                                                                                                      |
-| POST               | `/api/timetable/assignTeacherToPeriod`            | —                                                                                                                                                      |
-| GET                | `/api/timetable/classes`                          | —                                                                                                                                                      |
-| GET, POST          | `/api/timetable/config`                           | —                                                                                                                                                      |
-| GET                | `/api/timetable/conflicts`                        | GET /api/timetable/conflicts?term=Term+1&academicYear=2026 Scan draft timetable allocation entries and return structured conflicts.                    |
-| POST               | `/api/timetable/conflicts/resolve`                | POST /api/timetable/conflicts/resolve Apply a resolution action to draft timetable allocation entries.                                                 |
-| POST               | `/api/timetable/conflicts/seed-test`              | POST /api/timetable/conflicts/seed-test Development-only mock conflicts for UI testing.                                                                |
-| GET, PATCH         | `/api/timetable/draft-meta`                       | GET /api/timetable/draft-meta?term=Term+1&academicYear=2026&refresh=false Lightweight read of TimetableDraftMeta (no full rescan unless refresh=true). |
-| GET, PATCH, DELETE | `/api/timetable/entries`                          | Single entry: `{ id }`. Bulk clear: `{ clearAll: true, term, academicYear }` (draft only).                                                             |
-| POST               | `/api/timetable/entries/clone-published-to-draft` | POST /api/timetable/entries/clone-published-to-draft Create an editable draft by copying the published timetable for a term.                           |
-| POST               | `/api/timetable/entries/sync-draft`               | POST /api/timetable/entries/sync-draft Persist in-memory solver/UI assignments to TimetableAllocationEntry (draft).                                    |
-| GET                | `/api/timetable/feasibility`                      | GET /api/timetable/feasibility?term=Term+1&academicYear=2026 Pre-generation capacity check — teacher/class load vs bell schedule.                      |
-| GET, POST          | `/api/timetable/generate`                         | —                                                                                                                                                      |
-| GET, POST          | `/api/timetable/notifications`                    | —                                                                                                                                                      |
-| GET                | `/api/timetable/periods`                          | —                                                                                                                                                      |
-| POST               | `/api/timetable/publish`                          | —                                                                                                                                                      |
-| POST               | `/api/timetable/solver/generate`                  | POST /api/timetable/solver/generate Greedy timetable solver — runs on Vercel + Neon with no external services.                                         |
-| POST               | `/api/timetable/solver/ortools`                   | POST /api/timetable/solver/ortools Tries OR-Tools service (ORTOOLS_SOLVER_URL) then falls back to greedy solver.                                       |
-| GET, POST          | `/api/timetable/teacher-colors`                   | —                                                                                                                                                      |
-| PUT                | `/api/timetable/teacher-colors/:teacherId`        | —                                                                                                                                                      |
-| GET                | `/api/timetable/teacherPeriodAssignments`         | —                                                                                                                                                      |
-| GET                | `/api/timetable/timeSlots`                        | —                                                                                                                                                      |
-| PATCH              | `/api/timetable/timeSlots/:id`                    | —                                                                                                                                                      |
-| POST               | `/api/timetable/version/publish`                  | Legacy TimetableVersion publish (separate from TimetableAllocationEntry publish).                                                                      |
-| GET                | `/api/timetable/view`                             | —                                                                                                                                                      |
+| Method             | Route                                             | Summary                                                                                                                                                                                                                  |
+| ------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- | ---- |
+| —                  | `/api/timetable`                                  | Legacy alias — clients should call GET /api/timetable/view directly.                                                                                                                                                     |
+| GET, PUT, DELETE   | `/api/timetable/:id`                              | —                                                                                                                                                                                                                        |
+| GET                | `/api/timetable/active-season`                    | GET /api/timetable/active-season Returns the term/year with the most draft+published periods for this school so overview widgets don't default to an empty/sparse Term 1 while work lives on Term 2.                     |
+| GET, POST          | `/api/timetable/allocations`                      | —                                                                                                                                                                                                                        |
+| DELETE             | `/api/timetable/allocations/:id`                  | —                                                                                                                                                                                                                        |
+| POST               | `/api/timetable/allocations/push`                 | —                                                                                                                                                                                                                        |
+| POST               | `/api/timetable/assignTeacherToPeriod`            | —                                                                                                                                                                                                                        |
+| GET                | `/api/timetable/classes`                          | —                                                                                                                                                                                                                        |
+| GET, POST          | `/api/timetable/config`                           | —                                                                                                                                                                                                                        |
+| GET                | `/api/timetable/conflicts`                        | GET /api/timetable/conflicts?term=Term+1&academicYear=2026 Scan draft timetable allocation entries and return structured conflicts.                                                                                      |
+| POST               | `/api/timetable/conflicts/resolve`                | POST /api/timetable/conflicts/resolve Apply a resolution action to draft timetable allocation entries.                                                                                                                   |
+| POST               | `/api/timetable/conflicts/seed-test`              | POST /api/timetable/conflicts/seed-test Dev/helper: runs the real draft conflict audit for the caller's school (same source of truth as GET /api/timetable/conflicts) and persists draft meta.                           |
+| GET                | `/api/timetable/curriculum-compliance`            | GET /api/timetable/curriculum-compliance?term=&academicYear=&format=json                                                                                                                                                 | docx Periods scheduled vs curriculum-required (same math as MISSING_PERIODS). |
+| GET, PATCH         | `/api/timetable/draft-meta`                       | GET /api/timetable/draft-meta?term=Term+1&academicYear=2026&refresh=false Lightweight read of TimetableDraftMeta (no full rescan unless refresh=true).                                                                   |
+| GET, PATCH, DELETE | `/api/timetable/entries`                          | Single entry: `{ id }`. Bulk clear: `{ clearAll: true, term, academicYear }` (draft only).                                                                                                                               |
+| POST               | `/api/timetable/entries/clone-published-to-draft` | POST /api/timetable/entries/clone-published-to-draft Create an editable draft by copying the published timetable for a term.                                                                                             |
+| POST               | `/api/timetable/entries/copy-from-term`           | POST /api/timetable/entries/copy-from-term Copy a previous term's timetable structure into a new draft for the target term. Remaps times onto the current school bell schedule and allocation IDs for the target season. |
+| POST               | `/api/timetable/entries/sync-draft`               | POST /api/timetable/entries/sync-draft Persist in-memory solver/UI assignments to TimetableAllocationEntry (draft).                                                                                                      |
+| GET                | `/api/timetable/export-schedule`                  | GET /api/timetable/export-schedule?scope=teacher                                                                                                                                                                         | class&id=&term=&academicYear=&format=docx                                     | html |
+| GET                | `/api/timetable/feasibility`                      | GET /api/timetable/feasibility?term=Term+1&academicYear=2026 Pre-generation capacity check — teacher/class load vs bell schedule.                                                                                        |
+| GET, POST          | `/api/timetable/generate`                         | Solver + save can exceed the default serverless limit on large schools.                                                                                                                                                  |
+| GET, POST          | `/api/timetable/notifications`                    | —                                                                                                                                                                                                                        |
+| GET                | `/api/timetable/periods`                          | —                                                                                                                                                                                                                        |
+| POST               | `/api/timetable/publish`                          | —                                                                                                                                                                                                                        |
+| POST               | `/api/timetable/solver/generate`                  | POST /api/timetable/solver/generate Greedy timetable solver — runs on Vercel + Neon with no external services.                                                                                                           |
+| POST               | `/api/timetable/solver/ortools`                   | POST /api/timetable/solver/ortools Tries OR-Tools service (ORTOOLS_SOLVER_URL) then falls back to greedy solver. Persists placements to draft TimetableAllocationEntry by default (persist: false to preview only).      |
+| GET, POST          | `/api/timetable/teacher-colors`                   | —                                                                                                                                                                                                                        |
+| PUT                | `/api/timetable/teacher-colors/:teacherId`        | —                                                                                                                                                                                                                        |
+| GET                | `/api/timetable/teacherPeriodAssignments`         | —                                                                                                                                                                                                                        |
+| GET                | `/api/timetable/timeSlots`                        | —                                                                                                                                                                                                                        |
+| PATCH              | `/api/timetable/timeSlots/:id`                    | —                                                                                                                                                                                                                        |
+| POST               | `/api/timetable/version/publish`                  | Legacy TimetableVersion publish (separate from TimetableAllocationEntry publish).                                                                                                                                        |
+| GET                | `/api/timetable/view`                             | —                                                                                                                                                                                                                        |
 
 ## /api/transport
 
@@ -895,15 +907,15 @@ Total route files: **412**
 
 ## /api/v1
 
-| Method | Route                                                        | Summary                                                                   |
-| ------ | ------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| POST   | `/api/v1/notifications/subscribe`                            | PWA push subscription — forwards to /api/notifications/web-push/subscribe |
-| —      | `/api/v1/subjects/by-category`                               | —                                                                         |
-| —      | `/api/v1/teacher-performance/observation-tools`              | —                                                                         |
-| —      | `/api/v1/teacher-performance/observations`                   | —                                                                         |
-| —      | `/api/v1/teacher-performance/teachers/:id/detailed-analysis` | —                                                                         |
-| —      | `/api/v1/teacher-performance/teachers/:id/summary`           | —                                                                         |
-| —      | `/api/v1/users`                                              | —                                                                         |
+| Method | Route                                                        | Summary                                                                              |
+| ------ | ------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| POST   | `/api/v1/notifications/subscribe`                            | PWA push subscription — same behaviour as POST /api/notifications/web-push/subscribe |
+| —      | `/api/v1/subjects/by-category`                               | —                                                                                    |
+| —      | `/api/v1/teacher-performance/observation-tools`              | —                                                                                    |
+| —      | `/api/v1/teacher-performance/observations`                   | —                                                                                    |
+| —      | `/api/v1/teacher-performance/teachers/:id/detailed-analysis` | —                                                                                    |
+| —      | `/api/v1/teacher-performance/teachers/:id/summary`           | —                                                                                    |
+| —      | `/api/v1/users`                                              | —                                                                                    |
 
 ---
 

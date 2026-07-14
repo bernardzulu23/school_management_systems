@@ -81,7 +81,11 @@ export const HeadteacherStats = memo(function HeadteacherStats({
           value={percentText(schoolStats.passRate)}
           icon={Award}
           color="indigo"
-          description="Overall pass rate"
+          description={
+            schoolStats.selectedTerm
+              ? `${schoolStats.selectedTerm}${schoolStats.selectedYear ? ` ${schoolStats.selectedYear}` : ''} only`
+              : 'Selected term only'
+          }
           variant="flat"
         />
       </div>

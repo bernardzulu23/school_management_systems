@@ -15,6 +15,8 @@ export interface TeacherTimetableViewProps {
   subjects?: SubjectRef[]
   classrooms?: Classroom[]
   mobile?: boolean
+  term?: string
+  academicYear?: string
 }
 
 function toMinutes(t: string) {
@@ -87,6 +89,24 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
               {nextClass.dayOfWeek} {nextClass.startTime} ·{' '}
               {className.get(String(nextClass.classId)) || 'Class'}
             </span>
+          </div>
+        ) : null}
+        {effectiveTeacherId && props.term && props.academicYear ? (
+          <div className="mt-3 flex flex-wrap gap-2">
+            <a
+              className="text-xs px-3 py-1.5 rounded-lg border border-royalPurple-border text-royalPurple-text1 hover:bg-royalPurple-card/40"
+              href={`/api/timetable/export-schedule?scope=teacher&id=${encodeURIComponent(effectiveTeacherId)}&term=${encodeURIComponent(props.term)}&academicYear=${encodeURIComponent(props.academicYear)}&format=docx`}
+            >
+              Download Word
+            </a>
+            <a
+              className="text-xs px-3 py-1.5 rounded-lg border border-royalPurple-border text-royalPurple-text1 hover:bg-royalPurple-card/40"
+              href={`/api/timetable/export-schedule?scope=teacher&id=${encodeURIComponent(effectiveTeacherId)}&term=${encodeURIComponent(props.term)}&academicYear=${encodeURIComponent(props.academicYear)}&format=html`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Print / PDF
+            </a>
           </div>
         ) : null}
       </div>

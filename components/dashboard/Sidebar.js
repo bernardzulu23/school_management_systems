@@ -176,6 +176,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       headteacher: [
         { name: 'User Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'User Management', href: '/dashboard/users', icon: Users },
+        { name: 'Activity log', href: '/dashboard/headteacher/activity', icon: ClipboardList },
         { name: 'Bulk student upload', href: '/dashboard/students/bulk-upload', icon: Upload },
         { name: 'Bulk teacher upload', href: '/dashboard/teachers/bulk-upload', icon: Upload },
         { name: 'Registration', href: '/admin/registration', icon: UserPlus },
@@ -232,6 +233,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       hod: [
         { name: 'Class Allocation', href: '/dashboard/hod/allocation', icon: BookOpen },
         { name: 'Department Timetable', href: '/dashboard/hod/timetable', icon: Calendar },
+        { name: 'Activity log', href: '/dashboard/headteacher/activity', icon: ClipboardList },
         { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'My Classes', href: '/dashboard/classes', icon: GraduationCap },
         { name: 'Subjects', href: '/admin/subjects', icon: BookOpen },

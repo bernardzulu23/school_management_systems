@@ -113,6 +113,7 @@ model School {
   aiUsageLogs          AIUsageLog[]
   schedulingRecipes    SchedulingRecipe[]
   auditLogs            AuditLog[]
+  changeLogEntries     ChangeLogEntry[]
   refreshTokens        RefreshToken[]
 
   // Timetable System v2
@@ -526,6 +527,43 @@ model AuditLog {
   @@index([entity, entityId])
 }
 
+/// Append-only system-wide activity trail (Prompt 10).
+/// Application code must only INSERT. Postgres triggers reject UPDATE/DELETE.
+model ChangeLogEntry {
+  id        String @id @default(uuid())
+  schoolId  String
+  school    School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  /// Denormalized actor — no User FK so history survives user deletion.
+  actorUserId String?
+  actorName   String
+  actorRole   String
+  /// e.g. "Headteacher — Mwansa Phiri"
+  actorLabel  String
+
+  action     String
+  module     String
+  entityType String
+  entityId   String?
+  /// e.g. "Timetable entry: 10A Chemistry, Friday 08:20"
+  entityLabel String
+  /// Required human sentence — e.g. "Andrew Simwanza moved 10A Chemistry…"
+  summary    String
+
+  before         Json?
+  after          Json?
+  changedFields  String[] @default([])
+  /// Optional scoping: departmentId, term, academicYear, etc.
+  metadata       Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([schoolId, createdAt])
+  @@index([schoolId, actorUserId, createdAt])
+  @@index([schoolId, module, createdAt])
+  @@index([schoolId, action, createdAt])
+  @@index([schoolId, entityType, entityId])
+}
 
 model Student {
   id        String   @id @default(uuid()) // Can be custom ID like STU2025001
@@ -1327,7 +1365,9 @@ model Classroom {
   capacity  Int      @default(0)
   equipment String[] @default([])
 
-  timetableEntries TimetableEntry[]
+  timetableEntries           TimetableEntry[]
+  teacherAllocations         TeacherAllocation[]
+  timetableAllocationEntries TimetableAllocationEntry[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -2657,6 +2697,9 @@ model TeacherAllocation {
   term             String   @default("Term 1")
   academicYear     String   @default("2025")
   notes            String?
+  /// Preferred physical room/lab for this teaching load (Science lab, IT, PE hall, etc.).
+  classroomId      String?
+  classroom        Classroom? @relation(fields: [classroomId], references: [id], onDelete: SetNull)
   status           String   @default("draft")
   pushedAt         DateTime?
   createdAt        DateTime @default(now())
@@ -2667,6 +2710,7 @@ model TeacherAllocation {
   @@index([schoolId, hodId])
   @@index([schoolId, teacherId])
   @@index([schoolId, status])
+  @@index([classroomId])
 }
 
 model TimetableNotification {
@@ -2702,7 +2746,7 @@ model TimetableConfig {
   academicYear   String   @default("2025")
   workingDays    String[] @default([])
   breakSlots     Json
-  /// Teacher↔class session rules (min gap, Rule A/B severities). See teacherClassSessionRules.ts.
+  /// Session rules (minGap / A+B) + workload (max day / consecutive / break overlap). See teacherClassSessionRules.ts + teacherWorkloadRules.ts.
   schedulingRules Json?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -2725,8 +2769,8 @@ model TeacherColor {
   @@index([schoolId])
 }
 
-/// DB also enforces no class/teacher time overlaps per school+term+year+status via
-/// Postgres EXCLUDE constraints (see migration 20260713210000_timetable_exclude_overlaps).
+/// DB also enforces no class/teacher/room time overlaps per school+term+year+status via
+/// Postgres EXCLUDE constraints (see migrations 20260713210000 + 20260714120000).
 model TimetableAllocationEntry {
   id           String   @id @default(uuid())
   schoolId     String
@@ -2736,6 +2780,9 @@ model TimetableAllocationEntry {
   teacherId    String
   subjectId    String
   classId      String
+  /// Physical room/venue when assigned (optional — null skips room EXCLUDE).
+  classroomId  String?
+  classroom    Classroom? @relation(fields: [classroomId], references: [id], onDelete: SetNull)
   dayOfWeek    String
   startTime    String
   endTime      String
@@ -2751,6 +2798,7 @@ model TimetableAllocationEntry {
   @@index([schoolId, dayOfWeek])
   @@index([schoolId, teacherId, dayOfWeek])
   @@index([schoolId, classId, dayOfWeek])
+  @@index([schoolId, classroomId, dayOfWeek])
   @@index([schoolId, status])
 }
 

@@ -15,6 +15,8 @@ export type AllocationLike = {
   teacherId: string
   classId: string
   subjectId: string
+  /** Preferred physical room/lab for this allocation (propagated to schedule blocks). */
+  classroomId?: string | null
   periodsPerWeek?: number | null
   blockType?: string | null
   singlePeriods?: number | null
