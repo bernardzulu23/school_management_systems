@@ -16,7 +16,7 @@ import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
 const STAFF = new Set(['headteacher', 'administrator', 'admin', 'superadmin', 'hod', 'teacher'])
 
 /**
- * GET /api/timetable/export-schedule?scope=teacher|class&id=&term=&academicYear=&format=docx|html
+ * GET /api/timetable/export-schedule?scope=teacher or class&id=&term=&academicYear=&format=docx or html
  */
 export const GET = withErrorHandler(async function GET(req) {
   const user = await getAuthUser(req)

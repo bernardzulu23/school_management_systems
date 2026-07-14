@@ -1,3 +1,6 @@
+/**
+ * List bell-schedule TimeSlot rows for the school.
+ */
 import { NextResponse, type NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'

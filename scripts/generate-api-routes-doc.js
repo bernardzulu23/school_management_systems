@@ -49,6 +49,12 @@ function extractComment(content) {
     .join(' ')
 }
 
+/** Markdown tables break on unescaped `|` in cell text. */
+function sanitizeSummary(summary) {
+  const text = String(summary || '').trim() || '—'
+  return text.replace(/\|/g, '/').replace(/\r?\n/g, ' ')
+}
+
 function groupRoutes(routes) {
   const groups = new Map()
   for (const r of routes) {
@@ -103,7 +109,7 @@ function main() {
     lines.push('| Method | Route | Summary |', '|--------|-------|---------|')
     for (const r of items.sort((a, b) => a.route.localeCompare(b.route))) {
       const methods = r.methods.join(', ')
-      const summary = r.summary || '—'
+      const summary = sanitizeSummary(r.summary)
       lines.push(`| ${methods} | \`${r.route}\` | ${summary} |`)
     }
     lines.push('')

@@ -19,7 +19,8 @@ const ALLOWED_ROLES = new Set(['headteacher', 'administrator', 'admin', 'superad
 
 /**
  * GET /api/timetable/conflicts?term=Term+1&academicYear=2026
- * Scan draft timetable allocation entries and return structured conflicts.
+ * Server-side draft audit (conflictAudit / validateTimetable). Issue types include ROOM_DOUBLE_BOOKED,
+ * TEACHER_CLASS_SUBJECT_SPLIT, TEACHER_CLASS_RETURN_TOO_SOON, plus classic double-book / missing-period / workload hits.
  */
 export const GET = withErrorHandler(async function GET(req) {
   const user = await getAuthUser(req)

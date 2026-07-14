@@ -1,5 +1,8 @@
 export const dynamic = 'force-dynamic'
-
+/**
+ * GET published timetable grid for the school (optional class/teacher filters). Source of truth for
+ * teacher/student/HOD read-only views — not a local conflict engine.
+ */
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getCachedPublishedTimetableEntries } from '@/lib/cache/timetable'

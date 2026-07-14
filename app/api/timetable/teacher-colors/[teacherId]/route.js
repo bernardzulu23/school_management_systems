@@ -1,5 +1,7 @@
 export const dynamic = 'force-dynamic'
-
+/**
+ * Manual colour override. Returns 409 COLOR_TOO_CLOSE when uniqueness check fails against another teacher.
+ */
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'

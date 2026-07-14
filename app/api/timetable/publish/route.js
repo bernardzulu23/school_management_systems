@@ -1,3 +1,7 @@
+/**
+ * POST replace-in-transaction publish: validates hard conflicts, then promoteDraftTimetableToPublished
+ * (single $transaction: delete prior published → promote draft). Blocks sparse drafts unless force: true.
+ */
 import { NextResponse } from 'next/server'
 import { revalidateTag } from 'next/cache'
 import { prisma } from '@/lib/prisma'

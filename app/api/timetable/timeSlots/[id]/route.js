@@ -1,5 +1,7 @@
 export const dynamic = 'force-dynamic'
-
+/**
+ * Bell schedule period editing (start/end, break, double-period continuation).
+ */
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'

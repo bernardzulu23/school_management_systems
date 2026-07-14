@@ -1,5 +1,8 @@
 export const dynamic = 'force-dynamic'
-
+/**
+ * GET loads map + ensures unique colours (assignUniqueColorsForSchool). POST { autoAssign: true } mass-assign,
+ * or { teacherId } ensure one teacher. Uniqueness is enforced server-side (response unique/distinct).
+ */
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'

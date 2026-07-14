@@ -13,7 +13,7 @@ import { safeQueryString } from '@/lib/security/safeQueryValue'
 const ALLOWED = new Set(['headteacher', 'administrator', 'admin', 'superadmin', 'hod'])
 
 /**
- * GET /api/timetable/curriculum-compliance?term=&academicYear=&format=json|docx
+ * GET /api/timetable/curriculum-compliance?term=&academicYear=&format=json or docx
  * Periods scheduled vs curriculum-required (same math as MISSING_PERIODS).
  */
 export const GET = withErrorHandler(async function GET(req) {

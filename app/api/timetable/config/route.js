@@ -1,4 +1,8 @@
 export const dynamic = 'force-dynamic'
+/**
+ * GET/POST school timetable hours + schedulingRules (session rules A/B, teacher workload caps:
+ * maxPeriodsPerDay, maxConsecutivePeriods). Workload/audit config lands here — no separate workload endpoint.
+ */
 // app/api/timetable/config/route.js
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
