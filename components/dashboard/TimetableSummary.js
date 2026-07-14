@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import SkeletonLoader from '@/components/SkeletonLoader'
 import toast from 'react-hot-toast'
@@ -451,7 +451,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
 
     return (
       <Card className={`${className} overflow-visible`.trim()}>
-        <CardHeader className="px-4 pt-4 pb-3">
+        <CardHeader className="px-4 pt-4 pb-3" style={{ marginBottom: 0 }}>
           <CardTitle className="flex flex-wrap items-center justify-between gap-3">
             <span className="flex items-center">
               <Calendar className="h-5 w-5 mr-2 text-royalPurple-accentTx" aria-hidden="true" />
@@ -470,7 +470,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
             </div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4 px-4 pb-5">
+        <CardContent className="space-y-4 px-4 pb-4">
           {showingDraft && assignments.length > 0 ? (
             <p className="text-xs text-royalPurple-text2">
               Showing the editable draft (includes all regenerated departments). Teachers and
@@ -520,30 +520,52 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
               />
             </div>
           )}
-
-          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-royalPurple-border/30 pt-3">
-            <div className="text-xs leading-none text-royalPurple-text3 self-center">
-              {updated
-                ? `Updated: ${updated}`
-                : lastPublishedAt
-                  ? `Published: ${lastPublishedAt.toLocaleString()}`
-                  : ''}
-            </div>
-            <div className="ml-auto flex items-center gap-3 shrink-0">
-              <span className="text-xs leading-none text-royalPurple-text2 whitespace-nowrap self-center">
-                Confirmed conflicts: {serverConflictErrors}
-              </span>
+        </CardContent>
+        <CardFooter
+          className="flex flex-wrap items-center justify-between gap-3 border-t border-royalPurple-border/30 px-4 py-3"
+          style={{ marginTop: 0 }}
+        >
+          <div className="text-xs leading-5 text-royalPurple-text3 min-h-9 flex items-center">
+            {updated
+              ? `Updated: ${updated}`
+              : lastPublishedAt
+                ? `Published: ${lastPublishedAt.toLocaleString()}`
+                : '\u00a0'}
+          </div>
+          <div className="flex items-center gap-3 shrink-0 min-h-9">
+            <span className="text-xs leading-5 text-royalPurple-text2 whitespace-nowrap">
+              Confirmed conflicts: {serverConflictErrors}
+            </span>
+            {canPublish ? (
               <Button
                 size="sm"
+                variant="secondary"
                 onClick={publishToServer}
-                disabled={!canPublish}
-                className="zsms-hover-raise shrink-0 self-center"
+                disabled={publishing}
+                className="shrink-0"
               >
                 {publishing ? 'Publishing…' : 'Publish'}
               </Button>
-            </div>
+            ) : showingDraft && serverConflictErrors > 0 ? (
+              <Button
+                size="sm"
+                variant="secondary"
+                disabled
+                title="Resolve confirmed conflicts before publishing"
+                className="shrink-0"
+              >
+                Publish
+              </Button>
+            ) : (
+              <Link href={href} className="inline-flex shrink-0">
+                <Button size="sm" variant="outline">
+                  Open editor
+                  <ChevronRight className="h-4 w-4 ml-1" aria-hidden="true" />
+                </Button>
+              </Link>
+            )}
           </div>
-        </CardContent>
+        </CardFooter>
       </Card>
     )
   }
