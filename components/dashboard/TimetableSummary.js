@@ -450,16 +450,18 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
     }
 
     return (
-      <Card className={className}>
-        <CardHeader className="pb-3">
+      <Card className={`${className} overflow-visible`.trim()}>
+        <CardHeader className="px-4 pt-4 pb-3">
           <CardTitle className="flex flex-wrap items-center justify-between gap-3">
             <span className="flex items-center">
               <Calendar className="h-5 w-5 mr-2 text-royalPurple-accentTx" aria-hidden="true" />
               Master Timetable
             </span>
-            <div className="flex items-center gap-2">
-              <span className={`text-sm font-semibold ${status.tone}`}>{status.label}</span>
-              <Link href={href} className="inline-flex">
+            <div className="flex items-center gap-2 shrink-0">
+              <span className={`text-sm font-semibold leading-none ${status.tone}`}>
+                {status.label}
+              </span>
+              <Link href={href} className="inline-flex items-center">
                 <Button variant="ghost" size="sm" aria-label="View full timetable">
                   View Full
                   <ChevronRight className="h-4 w-4 ml-1" aria-hidden="true" />
@@ -468,7 +470,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
             </div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 px-4 pb-5">
           {showingDraft && assignments.length > 0 ? (
             <p className="text-xs text-royalPurple-text2">
               Showing the editable draft (includes all regenerated departments). Teachers and
@@ -519,19 +521,24 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
             </div>
           )}
 
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="text-xs text-royalPurple-text3">
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-royalPurple-border/30 pt-3">
+            <div className="text-xs leading-none text-royalPurple-text3 self-center">
               {updated
                 ? `Updated: ${updated}`
                 : lastPublishedAt
                   ? `Published: ${lastPublishedAt.toLocaleString()}`
                   : ''}
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-royalPurple-text2">
+            <div className="ml-auto flex items-center gap-3 shrink-0">
+              <span className="text-xs leading-none text-royalPurple-text2 whitespace-nowrap self-center">
                 Confirmed conflicts: {serverConflictErrors}
               </span>
-              <Button onClick={publishToServer} disabled={!canPublish} className="zsms-hover-raise">
+              <Button
+                size="sm"
+                onClick={publishToServer}
+                disabled={!canPublish}
+                className="zsms-hover-raise shrink-0 self-center"
+              >
                 {publishing ? 'Publishing…' : 'Publish'}
               </Button>
             </div>

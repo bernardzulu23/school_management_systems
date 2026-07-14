@@ -6,7 +6,7 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-07-14T12:04:24.159Z
+Generated: 2026-07-14T15:10:06.789Z
 
 Total route files: **420**
 
