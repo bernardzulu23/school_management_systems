@@ -8,6 +8,7 @@ describe('colorScheme', () => {
     const map = generateTeacherColors(['t2', 't1', 't2'])
     expect(map.get('t1')).toBeTruthy()
     expect(map.get('t2')).toBeTruthy()
+    expect(map.get('t1')).toBe(map.get('t2')) // missing placeholder until DB colours load
     expect(map.size).toBe(2)
   })
 

@@ -206,8 +206,18 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
         setViewStatus(loadedStatus)
 
         if (isHeadteacher) {
-          const classesRes = await sessionFetch('/api/classes?limit=200', { cache: 'no-store' })
+          const [classesRes, colorsRes] = await Promise.all([
+            sessionFetch('/api/classes?limit=200', { cache: 'no-store' }),
+            sessionFetch('/api/timetable/teacher-colors', {
+              credentials: 'include',
+              cache: 'no-store',
+            }),
+          ])
           const classesJson = await classesRes.json().catch(() => ({}))
+          const colorsJson = await colorsRes.json().catch(() => ({}))
+          if (colorsJson?.map) {
+            useTimetableStore.getState().setTeacherColors(colorsJson.map)
+          }
           const classList = Array.isArray(classesJson?.data) ? classesJson.data : []
           const mapped = classList.map((c) => ({
             id: String(c.id),

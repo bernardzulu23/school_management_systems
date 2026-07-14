@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import {
   colorsTooClose,
+  ciede2000,
   colorAtStep,
   pickUniqueTeacherColor,
+  measureTeacherColorCapacity,
   GOLDEN_ANGLE_DEG,
+  MIN_CIEDE2000,
   normalizeHex,
 } from '@/lib/timetable/uniqueTeacherColors'
 
@@ -17,30 +20,51 @@ describe('uniqueTeacherColors', () => {
     expect(colorsTooClose('#2563EB', '#2563eb')).toBe(true)
   })
 
-  it('treats nearby hues as too close', () => {
-    const a = colorAtStep(-GOLDEN_ANGLE_DEG, 0, 0).colorHex
-    // same hue different tiny lightness is still same color family — build two close manually
-    expect(colorsTooClose('#E6194B', '#E81A4C')).toBe(true)
+  it('rejects near-identical greens that previously passed hue-only checks', () => {
+    expect(colorsTooClose('#1FC14F', '#1FC185')).toBe(true)
+    expect(ciede2000('#1FC14F', '#1FC185')).toBeLessThan(MIN_CIEDE2000)
   })
 
-  it('assigns 40+ distinct colours without pairwise near-collision', () => {
+  it('rejects similar green family cluster members', () => {
+    expect(colorsTooClose('#348C17', '#178C21')).toBe(true)
+    expect(colorsTooClose('#348C17', '#61A12B')).toBe(true)
+  })
+
+  it('rejects nearby magenta/pink pairs', () => {
+    expect(colorsTooClose('#E03E95', '#E03E5F')).toBe(true)
+  })
+
+  it('treats obviously different hues as distinct', () => {
+    expect(colorsTooClose('#9E1A1A', '#227AD3')).toBe(false)
+  })
+
+  it('assigns as many distinct colours as capacity allows without pairwise near-collision', () => {
+    const capacity = measureTeacherColorCapacity(80)
+    expect(capacity).toBeGreaterThanOrEqual(24)
+
     let lastHue = -GOLDEN_ANGLE_DEG
     const hexes: string[] = []
-    for (let i = 0; i < 45; i++) {
+    const target = Math.min(capacity, 24)
+    for (let i = 0; i < target; i++) {
       const picked = pickUniqueTeacherColor({
         lastAssignedHue: lastHue,
         existingHexes: hexes,
         assignedCount: hexes.length,
       })
-      if (!picked.ok) {
-        throw new Error(`Failed to pick colour at index ${i} (have ${hexes.length})`)
-      }
+      expect(picked.ok).toBe(true)
       for (const prev of hexes) {
         expect(colorsTooClose(prev, picked.colorHex)).toBe(false)
       }
       hexes.push(picked.colorHex)
       lastHue = picked.hue
     }
-    expect(new Set(hexes).size).toBe(45)
+    expect(new Set(hexes).size).toBe(target)
+  })
+
+  it('reports realistic chip-scale capacity', () => {
+    const capacity = measureTeacherColorCapacity(80)
+    expect(capacity).toBeLessThanOrEqual(64)
+    expect(capacity).toBeGreaterThanOrEqual(24)
+    expect(colorAtStep(-GOLDEN_ANGLE_DEG, 0, 0).colorHex).toMatch(/^#[0-9A-F]{6}$/)
   })
 })
