@@ -3,23 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
     <title>Offline - ZSMS</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: #f8fafc;
+        color: #1e293b;
+      }
+      .card {
+        max-width: 28rem;
+        width: 100%;
+        padding: 2rem;
+        text-align: center;
+        background: #fff;
+        border-radius: 1rem;
+        border: 1px solid #e9d5ff;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+      }
+      .icon-wrap {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+      }
+      .icon-circle {
+        padding: 1rem;
+        border-radius: 9999px;
+        background: #f3e8ff;
+      }
+      .icon-circle svg { display: block; }
+      h1 {
+        margin: 0 0 0.5rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+      }
+      p {
+        margin: 0 0 2rem;
+        line-height: 1.5;
+        color: #475569;
+      }
+      button, .btn {
+        display: inline-block;
+        width: 100%;
+        padding: 0.75rem 1.5rem;
+        border: 0;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #fff;
+        background: #9333ea;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+      }
+      button:hover, .btn:hover { background: #7e22ce; }
+      button:focus-visible, .btn:focus-visible {
+        outline: 2px solid #9333ea;
+        outline-offset: 2px;
+      }
+    </style>
 </head>
-<body class="bg-slate-50 flex items-center justify-center min-h-screen p-4">
-    <div class="text-center max-w-md p-8 bg-white rounded-2xl shadow-xl border border-purple-100">
-        <div class="mb-6 flex justify-center">
-            <div class="p-4 bg-purple-100 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.806 14.375l-5.562-5.562a1 1 0 00-1.414 0l-5.562 5.562M12 18.375V21m0 0a1 1 0 100-2 1 1 0 000 2z" />
+<body>
+    <div class="card">
+        <div class="icon-wrap">
+            <div class="icon-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="#9333ea" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3" />
                 </svg>
             </div>
         </div>
-        <h1 class="text-2xl font-bold text-slate-800 mb-2">You're Currently Offline</h1>
-        <p class="text-slate-600 mb-8">It looks like your internet connection is unstable. Some features may be limited, but you can still access cached data.</p>
-        <button onclick="window.location.reload()" class="w-full py-3 px-6 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors">
-            Retry Connection
-        </button>
+        <h1>You're Currently Offline</h1>
+        <p>It looks like your internet connection is unstable. Some features may be limited, but you can still access cached data.</p>
+        <a href="." class="btn" role="button">Retry Connection</a>
     </div>
 </body>
 </html>

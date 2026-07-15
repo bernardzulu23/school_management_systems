@@ -83,6 +83,22 @@ const nextConfig = {
 
     if (!dev && !isServer) {
       config.devtool = false
+      // Strip license/TODO comments from production client bundles (ZAP informational).
+      try {
+        const TerserPlugin = require('terser-webpack-plugin')
+        const existing = config.optimization.minimizer || []
+        config.optimization.minimizer = [
+          ...existing.filter((plugin) => plugin?.constructor?.name !== 'TerserPlugin'),
+          new TerserPlugin({
+            terserOptions: {
+              format: { comments: false },
+            },
+            extractComments: false,
+          }),
+        ]
+      } catch {
+        /* terser-webpack-plugin ships with Next/webpack */
+      }
     }
 
     if (!isServer) {
@@ -97,10 +113,17 @@ const nextConfig = {
 
   // Security headers (CSP with nonce is applied per-request in proxy.js)
   async headers() {
-    const { nextConfigSecurityHeaders } = require('./lib/security/headers.js')
+    const {
+      nextConfigSecurityHeaders,
+      nextConfigStaticAssetHeaders,
+      nextConfigOfflinePageHeaders,
+    } = require('./lib/security/headers.js')
     const securityHeaders = nextConfigSecurityHeaders()
+    const staticAssetHeaders = nextConfigStaticAssetHeaders()
+    const offlinePageHeaders = nextConfigOfflinePageHeaders()
 
-    const marketingCacheControl = 'public, s-maxage=3600, stale-while-revalidate=86400'
+    const marketingCacheControl =
+      'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400, must-revalidate'
     const marketingRoutes = ['/', '/pricing', '/features', '/about', '/privacy', '/terms']
     const marketingCacheHeaders = [{ key: 'Cache-Control', value: marketingCacheControl }]
 
@@ -113,6 +136,22 @@ const nextConfig = {
       {
         source: '/:path*',
         headers: securityHeaders,
+      },
+      {
+        source: '/offline.html',
+        headers: offlinePageHeaders,
+      },
+      {
+        source: '/Assets/:path*',
+        headers: staticAssetHeaders,
+      },
+      {
+        source: '/icons/:path*',
+        headers: staticAssetHeaders,
+      },
+      {
+        source: '/:path*\\.(svg|png|jpg|jpeg|gif|webp|ico)',
+        headers: staticAssetHeaders,
       },
       ...marketingRoutes.map((route) => ({
         source: route === '/' ? '/' : route,
@@ -138,6 +177,16 @@ const nextConfig = {
         ],
       },
     ]
+  },
+
+  // Serve /Assets and /icons through route handlers so Vercel does not attach ACAO:* to public/ files.
+  async rewrites() {
+    return {
+      beforeFiles: [
+        { source: '/Assets/:path*', destination: '/api/security-static/assets/:path*' },
+        { source: '/icons/:path*', destination: '/api/security-static/icons/:path*' },
+      ],
+    }
   },
 
   // Redirects for better SEO

@@ -52,6 +52,9 @@ export const metadata = {
   },
 }
 
+// Nonce CSP requires per-request headers — opt out of static prerender at the root.
+export const dynamic = 'force-dynamic'
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>

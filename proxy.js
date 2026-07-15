@@ -3,8 +3,10 @@ import * as jose from 'jose'
 import {
   applySecurityHeaders,
   BLOCKED_HTTP_METHODS,
+  buildContentSecurityPolicy,
   generateNonce,
   isForbiddenCrossOrigin,
+  isStaticAssetPath,
   stripInternalRequestHeaders,
 } from './lib/security/headers'
 import { checkProxyRateLimit } from './lib/security/proxyRateLimit'
@@ -87,12 +89,17 @@ export async function handleSecurityProxy(request) {
     const method = String(request.method || 'GET').toUpperCase()
 
     const nonce = generateNonce()
+    const isStaticAsset = isStaticAssetPath(pathname)
     const isDocumentGet =
       method === 'GET' &&
       !pathname.startsWith('/api') &&
       !pathname.startsWith('/_next/static') &&
-      !pathname.startsWith('/_next/image')
+      !pathname.startsWith('/_next/image') &&
+      !isStaticAsset
     const isPublicMarketingDoc = isDocumentGet && isPublicEdgeCachePath(pathname)
+
+    const allowEval = pathname.includes('/code-playground')
+    const cspHeader = buildContentSecurityPolicy({ nonce, allowEval })
 
     // SECURITY (CVE-2025-29927 + tenant spoofing): strip internal/spoofable
     // headers from the forwarded request BEFORE any routing or auth decision.
@@ -101,11 +108,15 @@ export async function handleSecurityProxy(request) {
     requestHeaders.set('x-nonce', nonce)
     requestHeaders.set('x-current-path', pathname)
 
+    // Next.js 16 reads CSP from the request to attach nonces to framework scripts/styles.
+    if (isDocumentGet) {
+      requestHeaders.set('Content-Security-Policy', cspHeader)
+    }
+
     const securityOpts = {
       pathname,
-      // Prerendered Next.js HTML does not attach per-request nonces to script tags.
-      // strict-dynamic would block every /_next/static chunk — use self-only CSP on documents.
-      nonce: isDocumentGet ? false : nonce,
+      nonce: isStaticAsset ? false : nonce,
+      allowEval,
     }
 
     if (BLOCKED_HTTP_METHODS.has(method)) {
@@ -328,8 +339,7 @@ function getSubdomain(hostname) {
 export const config = {
   matcher: [
     {
-      source:
-        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
+      source: '/((?!_next/static|_next/image|favicon.ico).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },
