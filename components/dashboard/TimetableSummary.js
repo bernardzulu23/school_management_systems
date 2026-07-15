@@ -11,8 +11,8 @@ import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { filterClassesForWallGrid, inferClassGrade } from '@/lib/timetable/activeClasses'
 import { AscClassWallGrid } from '@/components/timetable/AscClassWallGrid'
-import { pastelBgForSubject } from '@/lib/timetable/cardColors'
-import { Calendar, Clock, MapPin, User, ChevronRight, AlertCircle } from 'lucide-react'
+import { PublishedAscWallTimetable } from '@/components/timetable/PublishedAscWallTimetable'
+import { Calendar, ChevronRight, AlertCircle } from 'lucide-react'
 import { getDefaultAcademicYear, getDefaultTerm } from '@/lib/timetable/timetableTermOptions'
 import {
   readStoredTimetableSeason,
@@ -80,6 +80,8 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
   const [bellLoading, setBellLoading] = useState(true)
   const [wallClasses, setWallClasses] = useState([])
   const [serverConflictErrors, setServerConflictErrors] = useState(0)
+  const [draftCount, setDraftCount] = useState(0)
+  const [draftCanPublish, setDraftCanPublish] = useState(false)
   const [publishing, setPublishing] = useState(false)
   const [viewStatus, setViewStatus] = useState(null) // 'draft' | 'published' | null
 
@@ -99,6 +101,8 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
         if (!res.ok || cancelled) return
         const data = await res.json()
         setServerConflictErrors(Number(data.conflictErrors ?? 0))
+        setDraftCount(Number(data.draftCount ?? 0))
+        setDraftCanPublish(Boolean(data.canPublish))
       } catch {
         /* keep prior */
       }
@@ -205,19 +209,32 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
         if (cancelled) return
         setViewStatus(loadedStatus)
 
+        const [classesRes, colorsRes] = await Promise.all([
+          sessionFetch('/api/classes?limit=200', { cache: 'no-store' }),
+          sessionFetch('/api/timetable/teacher-colors', {
+            credentials: 'include',
+            cache: 'no-store',
+          }),
+        ])
+        const colorsJson = await colorsRes.json().catch(() => ({}))
+        if (colorsJson?.map) {
+          useTimetableStore.getState().setTeacherColors(colorsJson.map)
+        }
+
         if (isHeadteacher) {
-          const [classesRes, colorsRes] = await Promise.all([
-            sessionFetch('/api/classes?limit=200', { cache: 'no-store' }),
-            sessionFetch('/api/timetable/teacher-colors', {
-              credentials: 'include',
-              cache: 'no-store',
-            }),
-          ])
           const classesJson = await classesRes.json().catch(() => ({}))
-          const colorsJson = await colorsRes.json().catch(() => ({}))
-          if (colorsJson?.map) {
-            useTimetableStore.getState().setTeacherColors(colorsJson.map)
-          }
+          const classList = Array.isArray(classesJson?.data) ? classesJson.data : []
+          const mapped = classList.map((c) => ({
+            id: String(c.id),
+            name: String(c.name || c.className || 'Class'),
+            grade: inferClassGrade(c.name, c.yearGroup || c.year_group),
+            students: Number(c.studentCount || 0),
+            subjects: [],
+          }))
+          const loadedAssignments = useTimetableStore.getState().assignments
+          setWallClasses(filterClassesForWallGrid(mapped, loadedAssignments))
+        } else {
+          const classesJson = await classesRes.json().catch(() => ({}))
           const classList = Array.isArray(classesJson?.data) ? classesJson.data : []
           const mapped = classList.map((c) => ({
             id: String(c.id),
@@ -384,23 +401,30 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
 
   if (resolvedRole === 'headteacher') {
     const showingDraft = viewStatus === 'draft' || (!isPublished && assignments.length > 0)
+    const hasPendingDraft = draftCount > 0
     const status =
-      assignments.length === 0
+      assignments.length === 0 && !hasPendingDraft
         ? { label: 'Not created', tone: 'text-royalPurple-text3' }
         : serverConflictErrors > 0
           ? {
               label: `${serverConflictErrors} confirmed conflicts`,
               tone: 'text-royalPurple-dangerTx',
             }
-          : showingDraft
-            ? { label: 'Draft (not published)', tone: 'text-royalPurple-text2' }
+          : showingDraft || hasPendingDraft
+            ? {
+                label:
+                  hasPendingDraft && !showingDraft
+                    ? 'Draft ready to publish'
+                    : 'Draft (not published)',
+                tone: 'text-royalPurple-text2',
+              }
             : { label: 'Published', tone: 'text-royalPurple-successTx' }
 
     const lastChangeAt =
       pendingChanges?.[0]?.at || (lastPublishedAt ? lastPublishedAt.toISOString() : null)
     const updated = timeAgo(lastChangeAt)
     const canPublish =
-      serverConflictErrors === 0 && assignments.length > 0 && showingDraft && !publishing
+      serverConflictErrors === 0 && hasPendingDraft && draftCanPublish && !publishing
 
     const publishToServer = async () => {
       if (!canPublish) return
@@ -413,7 +437,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
           snap?.academicYear || stored?.academicYear || getDefaultAcademicYear()
         )
         const store = useTimetableStore.getState()
-        if (store.assignments.length) {
+        if (viewStatus === 'draft' && store.assignments.length) {
           const syncRes = await sessionFetch('/api/timetable/entries/sync-draft', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -441,7 +465,13 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
         publish()
         await loadFromApi({ term, academicYear, status: 'published' })
         setViewStatus('published')
-        toast.success(`Published ${j.published ?? 0} periods`)
+        setDraftCount(0)
+        const notified = Number(j.affectedTeachers ?? j.sms?.affectedTeacherIds?.length ?? 0)
+        toast.success(
+          notified > 0
+            ? `Published ${j.published ?? 0} periods · ${notified} teacher${notified === 1 ? '' : 's'} notified by SMS`
+            : `Published ${j.published ?? 0} periods`
+        )
       } catch (e) {
         toast.error(e?.message || 'Failed to publish')
       } finally {
@@ -471,6 +501,12 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 px-4 pb-4">
+          {hasPendingDraft && !showingDraft ? (
+            <p className="text-xs text-royalPurple-text2">
+              A draft with {draftCount} period{draftCount === 1 ? '' : 's'} is ready. Staff still
+              see the published version until you publish — affected teachers are notified by SMS.
+            </p>
+          ) : null}
           {showingDraft && assignments.length > 0 ? (
             <p className="text-xs text-royalPurple-text2">
               Showing the editable draft (includes all regenerated departments). Teachers and
@@ -544,7 +580,17 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
                 disabled={publishing}
                 className="shrink-0"
               >
-                {publishing ? 'Publishing…' : 'Publish'}
+                {publishing ? 'Publishing…' : 'Publish & notify'}
+              </Button>
+            ) : hasPendingDraft && serverConflictErrors > 0 ? (
+              <Button
+                size="sm"
+                variant="secondary"
+                disabled
+                title="Resolve confirmed conflicts before publishing"
+                className="shrink-0"
+              >
+                Publish & notify
               </Button>
             ) : showingDraft && serverConflictErrors > 0 ? (
               <Button
@@ -576,7 +622,11 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
         <CardTitle className="flex items-center justify-between">
           <span className="flex items-center">
             <Calendar className="h-5 w-5 mr-2 text-royalPurple-accentTx" aria-hidden="true" />
-            Today's Schedule
+            {resolvedRole === 'teacher'
+              ? 'My Teaching Timetable'
+              : resolvedRole === 'hod'
+                ? 'Department Timetable'
+                : 'My Class Timetable'}
           </span>
           <Button
             variant="ghost"
@@ -589,11 +639,10 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
           </Button>
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        {/* Next Class Alert */}
+      <CardContent className="space-y-4">
         {nextClass && (
           <div
-            className="mb-4 p-3 bg-royalPurple-success border border-royalPurple-border rounded-lg"
+            className="p-3 bg-royalPurple-success border border-royalPurple-border rounded-lg"
             role="alert"
             aria-live="polite"
           >
@@ -616,66 +665,26 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
           </div>
         )}
 
-        {/* Today's Classes */}
-        {todaySchedule.length > 0 ? (
-          <ul className="space-y-3" role="list" aria-label="Today's classes">
-            {todaySchedule.slice(0, 4).map((cls, index) => (
-              <li key={index}>
-                <article
-                  className="flex items-center p-3 rounded-lg border focus-within:ring-2 focus-within:ring-blue-500 outline-none transition-shadow"
-                  style={{
-                    borderLeftColor: pastelBgForSubject(cls.subject),
-                    borderLeftWidth: '4px',
-                  }}
-                  tabIndex="0"
-                >
-                  <div className="flex-1">
-                    <div className="font-semibold text-royalPurple-text1 text-sm">
-                      {cls.subject} {resolvedRole === 'teacher' && `- ${cls.class}`}
-                    </div>
-                    <div className="text-xs text-royalPurple-text2 flex items-center mt-1">
-                      <Clock className="h-3 w-3 mr-1" aria-hidden="true" />
-                      <span className="sr-only">Time: </span>
-                      {cls.time} ({cls.period})
-                    </div>
-                    {resolvedRole !== 'student' ? (
-                      <div className="text-xs text-royalPurple-text2 flex items-center">
-                        <MapPin className="h-3 w-3 mr-1" aria-hidden="true" />
-                        <span className="sr-only">Class: </span>
-                        {cls.class}
-                      </div>
-                    ) : null}
-                    {resolvedRole === 'student' && (
-                      <div className="text-xs text-royalPurple-text2 flex items-center">
-                        <User className="h-3 w-3 mr-1" aria-hidden="true" />
-                        <span className="sr-only">Teacher: </span>
-                        {cls.teacher}
-                      </div>
-                    )}
-                  </div>
-                </article>
-              </li>
-            ))}
-            {todaySchedule.length > 4 && (
-              <li className="text-center">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => (window.location.href = href)}
-                  aria-label={`View ${todaySchedule.length - 4} more classes`}
-                >
-                  +{todaySchedule.length - 4} more classes
-                </Button>
-              </li>
-            )}
-          </ul>
+        {bellLoading ? (
+          <div className="rounded-xl border border-royalPurple-border bg-royalPurple-card/40 p-8 text-center text-sm text-royalPurple-text3">
+            Loading timetable…
+          </div>
+        ) : filteredAssignments.length > 0 && storeTimeSlots.length > 0 ? (
+          <div className="overflow-x-auto rounded-lg border border-royalPurple-border/40 bg-white p-2 max-h-[520px] overflow-y-auto">
+            <PublishedAscWallTimetable
+              assignments={filteredAssignments}
+              timeSlots={storeTimeSlots}
+              classes={displayWallClasses}
+              teachers={wallTeachers}
+            />
+          </div>
         ) : (
           <div className="text-center text-royalPurple-text3 py-8" role="status">
             <Calendar
               className="h-12 w-12 mx-auto mb-4 text-royalPurple-text3"
               aria-hidden="true"
             />
-            <p className="text-sm">No classes scheduled for today</p>
+            <p className="text-sm">No published timetable yet</p>
           </div>
         )}
       </CardContent>

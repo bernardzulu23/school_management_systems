@@ -17,6 +17,8 @@ export type TimetableDraftMeta = {
   canPublish: boolean
   lastScannedAt: string | null
   conflictSummary?: unknown[]
+  draftCount?: number
+  publishedCount?: number
 }
 
 /** Shared snapshot so sidebar / badges / control bar show the same numbers. */

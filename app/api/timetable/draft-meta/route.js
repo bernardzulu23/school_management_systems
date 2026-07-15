@@ -64,10 +64,21 @@ export const GET = withErrorHandler(async function GET(req) {
     return NextResponse.json(payload)
   }
 
-  const meta = await getDraftConflictMeta(prisma, { schoolId, term, academicYear })
-  return NextResponse.json(
-    formatDraftMetaResponse(meta, { term, academicYear, includeSummary: !isHod })
-  )
+  const [meta, draftCount, publishedCount] = await Promise.all([
+    getDraftConflictMeta(prisma, { schoolId, term, academicYear }),
+    prisma.timetableAllocationEntry.count({
+      where: { schoolId, term, academicYear, status: 'draft' },
+    }),
+    prisma.timetableAllocationEntry.count({
+      where: { schoolId, term, academicYear, status: 'published' },
+    }),
+  ])
+
+  return NextResponse.json({
+    ...formatDraftMetaResponse(meta, { term, academicYear, includeSummary: !isHod }),
+    draftCount,
+    publishedCount,
+  })
 })
 
 /**

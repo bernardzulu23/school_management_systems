@@ -928,11 +928,11 @@ function HeadteacherTimetablePageContent() {
   }
 
   const canPublish =
-    assignments.length > 0 &&
     feasibilityErrors.length === 0 &&
     draftMeta != null &&
     draftMeta.canPublish &&
-    (draftMeta.conflictErrors ?? 0) === 0
+    (draftMeta.conflictErrors ?? 0) === 0 &&
+    ((draftMeta.draftCount ?? 0) > 0 || (!isPublished && assignments.length > 0))
 
   const openMissingConflictsTab = () => {
     setConflictIssueFilter('missing')
@@ -1332,7 +1332,7 @@ function HeadteacherTimetablePageContent() {
                 if (!canPublish) return
                 setDbPublishing(true)
                 try {
-                  if (assignments.length) {
+                  if (!isPublished && assignments.length) {
                     const store = useTimetableStore.getState()
                     const criticalCount = store.getCriticalDoubleBookingCount()
                     if (criticalCount > 0) {
@@ -1366,7 +1366,12 @@ function HeadteacherTimetablePageContent() {
                   const j = await r.json().catch(() => ({}))
                   if (!r.ok) throw new Error(j?.message || j?.error || 'Failed to publish')
                   publish()
-                  toast.success(`Published ${j.published ?? 0} periods`)
+                  const notified = Number(j.affectedTeachers ?? 0)
+                  toast.success(
+                    notified > 0
+                      ? `Published ${j.published ?? 0} periods · ${notified} teacher${notified === 1 ? '' : 's'} notified by SMS`
+                      : `Published ${j.published ?? 0} periods`
+                  )
                   await reloadFromServer({ term, academicYear, status: 'published' })
                   const slots = useTimetableStore.getState().timeSlots
                   if (slots.length) setTimeSlots(slots as TimeSlot[])
@@ -1381,7 +1386,7 @@ function HeadteacherTimetablePageContent() {
               disabled={!canPublish || dbPublishing}
               className="zsms-hover-raise"
             >
-              {dbPublishing ? 'Publishing…' : 'Publish'}
+              {dbPublishing ? 'Publishing…' : 'Publish & notify'}
             </Button>
             <select
               className="zsms-select max-w-[140px]"

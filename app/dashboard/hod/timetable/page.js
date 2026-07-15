@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
-import { DepartmentTimetableView } from '@/components/timetable/DepartmentTimetableView'
+import { PublishedAscWallTimetable } from '@/components/timetable/PublishedAscWallTimetable'
 import { TeacherWorkloadSummary } from '@/components/timetable/TeacherWorkloadSummary'
 import { TimetableTermFilters } from '@/components/timetable/TimetableTermFilters'
 import { usePublishedTimetableView } from '@/lib/timetable/usePublishedTimetableView'
@@ -74,11 +74,6 @@ export default function HodDepartmentTimetablePage() {
     }
   }, [assignments])
 
-  const departmentTeacherIds = useMemo(
-    () => teachers.map((t) => String(t.id)).filter(Boolean),
-    [teachers]
-  )
-
   return (
     <DashboardLayout title="Department Timetable">
       <div className="space-y-6">
@@ -93,13 +88,11 @@ export default function HodDepartmentTimetablePage() {
           summaries={summaries}
           title="Department teachers — subjects & classes"
         />
-        <DepartmentTimetableView
+        <PublishedAscWallTimetable
           assignments={assignments}
           timeSlots={timeSlots}
-          departmentTeacherIds={departmentTeacherIds}
-          teachers={teachers}
           classes={classes}
-          editable={false}
+          teachers={teachers}
         />
       </div>
     </DashboardLayout>

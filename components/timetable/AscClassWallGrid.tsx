@@ -61,6 +61,8 @@ export interface AscClassWallGridProps {
   serverConflictErrors?: number
   unplacedLessons?: UnplacedLesson[]
   lockedPeriodKeys?: Set<string>
+  /** Hide the unplaced-lessons tray (read-only dashboards). */
+  showUnplacedTray?: boolean
   onAssignmentClick?: (assignment: Assignment) => void
   onDropUnplaced?: (payload: {
     lesson: UnplacedLesson
@@ -81,6 +83,7 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
     serverConflictErrors,
     unplacedLessons = [],
     lockedPeriodKeys,
+    showUnplacedTray = true,
     onAssignmentClick,
     onDropUnplaced,
   } = props
@@ -526,18 +529,20 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
         className="print:block"
       />
 
-      <UnplacedLessonsTray
-        items={unplacedLessons}
-        compact
-        onDragStart={
-          onDropUnplaced
-            ? (item, e) => {
-                e.dataTransfer.setData('application/zsms-unplaced', JSON.stringify(item))
-                e.dataTransfer.effectAllowed = 'move'
-              }
-            : undefined
-        }
-      />
+      {showUnplacedTray ? (
+        <UnplacedLessonsTray
+          items={unplacedLessons}
+          compact
+          onDragStart={
+            onDropUnplaced
+              ? (item, e) => {
+                  e.dataTransfer.setData('application/zsms-unplaced', JSON.stringify(item))
+                  e.dataTransfer.effectAllowed = 'move'
+                }
+              : undefined
+          }
+        />
+      ) : null}
 
       {selectedAssignment ? (
         <div className="border border-[#9ca3af] bg-[#f9fafb] px-2 py-1.5 text-[11px] print:hidden">

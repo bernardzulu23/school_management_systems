@@ -5,7 +5,7 @@ import type { Assignment, Class, Classroom, TimeSlot, SubjectRef } from '@/lib/t
 import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { useAuth } from '@/lib/auth'
-import { CompactWeekTimetableGrid } from '@/components/timetable/CompactWeekTimetableGrid'
+import { PublishedAscWallTimetable } from '@/components/timetable/PublishedAscWallTimetable'
 
 export interface TeacherTimetableViewProps {
   assignments?: Assignment[]
@@ -112,7 +112,11 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
         ) : null}
       </div>
 
-      <CompactWeekTimetableGrid assignments={myAssignments} timeSlots={props.timeSlots} />
+      <PublishedAscWallTimetable
+        assignments={myAssignments}
+        timeSlots={props.timeSlots}
+        classes={props.classes}
+      />
     </div>
   )
 }
