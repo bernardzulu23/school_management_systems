@@ -104,9 +104,15 @@ export const POST = withErrorHandler(async function POST(req) {
 
         let updated
         try {
-          updated = await prisma.timetableAllocationEntry.update({
-            where: { id: entryId },
+          const updateResult = await prisma.timetableAllocationEntry.updateMany({
+            where: { id: entryId, schoolId },
             data: { teacherId: newTeacherId },
+          })
+          if (updateResult.count === 0) {
+            return NextResponse.json({ error: 'Entry not found' }, { status: 404 })
+          }
+          updated = await prisma.timetableAllocationEntry.findFirst({
+            where: { id: entryId, schoolId },
             include: entryInclude(),
           })
         } catch (err) {
@@ -222,9 +228,15 @@ export const POST = withErrorHandler(async function POST(req) {
 
         let updated
         try {
-          updated = await prisma.timetableAllocationEntry.update({
-            where: { id: entryId },
+          const updateResult = await prisma.timetableAllocationEntry.updateMany({
+            where: { id: entryId, schoolId },
             data: slotData,
+          })
+          if (updateResult.count === 0) {
+            return NextResponse.json({ error: 'Entry not found' }, { status: 404 })
+          }
+          updated = await prisma.timetableAllocationEntry.findFirst({
+            where: { id: entryId, schoolId },
             include: entryInclude(),
           })
         } catch (err) {
@@ -261,7 +273,12 @@ export const POST = withErrorHandler(async function POST(req) {
         }
 
         const entry = await verifyDraftEntry(entryId, schoolId)
-        await prisma.timetableAllocationEntry.delete({ where: { id: entryId } })
+        const deleteResult = await prisma.timetableAllocationEntry.deleteMany({
+          where: { id: entryId, schoolId },
+        })
+        if (deleteResult.count === 0) {
+          return NextResponse.json({ error: 'Entry not found' }, { status: 404 })
+        }
 
         const summary = await rescanAndPersist(schoolId, entry.term, entry.academicYear)
 
@@ -294,9 +311,9 @@ export const POST = withErrorHandler(async function POST(req) {
         let updatedA
         let updatedB
         try {
-          ;[updatedA, updatedB] = await prisma.$transaction([
-            prisma.timetableAllocationEntry.update({
-              where: { id: entryAId },
+          const [resultA, resultB] = await prisma.$transaction([
+            prisma.timetableAllocationEntry.updateMany({
+              where: { id: entryAId, schoolId },
               data: {
                 dayOfWeek: entryB.dayOfWeek,
                 startTime: entryB.startTime,
@@ -304,10 +321,9 @@ export const POST = withErrorHandler(async function POST(req) {
                 periodNumber: entryB.periodNumber,
                 durationMin: entryB.durationMin,
               },
-              include: entryInclude(),
             }),
-            prisma.timetableAllocationEntry.update({
-              where: { id: entryBId },
+            prisma.timetableAllocationEntry.updateMany({
+              where: { id: entryBId, schoolId },
               data: {
                 dayOfWeek: entryA.dayOfWeek,
                 startTime: entryA.startTime,
@@ -315,6 +331,18 @@ export const POST = withErrorHandler(async function POST(req) {
                 periodNumber: entryA.periodNumber,
                 durationMin: entryA.durationMin,
               },
+            }),
+          ])
+          if (resultA.count === 0 || resultB.count === 0) {
+            return NextResponse.json({ error: 'Entry not found' }, { status: 404 })
+          }
+          ;[updatedA, updatedB] = await Promise.all([
+            prisma.timetableAllocationEntry.findFirst({
+              where: { id: entryAId, schoolId },
+              include: entryInclude(),
+            }),
+            prisma.timetableAllocationEntry.findFirst({
+              where: { id: entryBId, schoolId },
               include: entryInclude(),
             }),
           ])

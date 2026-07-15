@@ -34,13 +34,13 @@ export const GET = withErrorHandler(async function GET(request) {
   })
   const assignableNorm = new Set(assignable.map((s) => s.toLowerCase()))
 
-  const where = { schoolId }
+  const filters = {}
   if (subjectFilter) {
-    where.subject = { equals: subjectFilter, mode: 'insensitive' }
+    filters.subject = { equals: subjectFilter, mode: 'insensitive' }
   }
 
   const materials = await prisma.schoolMaterial.findMany({
-    where,
+    where: { schoolId, ...filters },
     orderBy: { createdAt: 'desc' },
     include: { _count: { select: { chunks: true } } },
   })

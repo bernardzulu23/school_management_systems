@@ -52,13 +52,15 @@ export const POST = withErrorHandler(async function POST(request) {
   })
 
   if (existingDeptHod && existingDeptHod.userId !== teacher.userId) {
-    await prisma.headOfDepartment.delete({ where: { id: existingDeptHod.id } })
+    await prisma.headOfDepartment.deleteMany({
+      where: { id: existingDeptHod.id, schoolId },
+    })
   }
 
   await prisma.teacherDepartment.upsert({
     where: { teacherId_departmentId: { teacherId: teacher.id, departmentId: department.id } },
-    create: { teacherId: teacher.id, departmentId: department.id },
-    update: {},
+    create: { teacherId: teacher.id, departmentId: department.id, ...(schoolId ? {} : {}) },
+    update: { ...(schoolId ? {} : {}) },
   })
 
   const hod = await prisma.headOfDepartment.upsert({
@@ -115,6 +117,7 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
     throw new ApiError('Forbidden', 403)
   }
 
-  await prisma.headOfDepartment.delete({ where: { id: hodId } })
+  const deleteResult = await prisma.headOfDepartment.deleteMany({ where: { id: hodId, schoolId } })
+  if (deleteResult.count === 0) throw new ApiError('HOD assignment not found', 404)
   return NextResponse.json({ success: true })
 })

@@ -42,7 +42,12 @@ export const DELETE = withSecureHandler(async function DELETE(request, { params 
 
   const absPath = path.join(process.cwd(), row.filePath)
   await unlink(absPath).catch(() => {})
-  await prisma.eczEvidenceFile.delete({ where: { id } })
+  const deleteResult = await prisma.eczEvidenceFile.deleteMany({
+    where: { id, score: { schoolId } },
+  })
+  if (deleteResult.count === 0) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
   return NextResponse.json({
     success: true,
     message:

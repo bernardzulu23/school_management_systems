@@ -200,7 +200,8 @@ export const PUT = withErrorHandler(async function PUT(
   })
 
   const validateSourceBlocks =
-    nextBlocks ?? (await prisma.recipeBlock.findMany({ where: { recipeId: id } }))
+    nextBlocks ??
+    (await prisma.recipeBlock.findMany({ where: { recipeId: id, recipe: { schoolId } } }))
   const mappedBlocks: BlockIn[] = (validateSourceBlocks as any[]).map((b: any) => ({
     type: b.type,
     size: b.size,

@@ -59,12 +59,11 @@ export const POST = withErrorHandler(async function POST(request) {
     )
   }
 
-  const existing = await prisma.attendanceMark.findUnique({
+  const existing = await prisma.attendanceMark.findFirst({
     where: {
-      sessionId_studentId: {
-        sessionId: payload.sessionId,
-        studentId: student.id,
-      },
+      schoolId: payload.schoolId,
+      sessionId: payload.sessionId,
+      studentId: student.id,
     },
     select: { status: true, markedAt: true },
   })

@@ -21,10 +21,11 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   })
   if (!existing) throw new ApiError('Guidance assignment not found', 404)
 
-  await prisma.guidanceAssignment.update({
-    where: { id: existing.id },
+  const updateResult = await prisma.guidanceAssignment.updateMany({
+    where: { id: existing.id, schoolId },
     data: { active: false, revokedAt: new Date() },
   })
+  if (updateResult.count === 0) throw new ApiError('Guidance assignment not found', 404)
 
   return NextResponse.json({ success: true })
 })

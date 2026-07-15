@@ -45,14 +45,19 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
     throw new ApiError('Invalid action', 400)
   }
 
-  const updated = await prisma.termReport.update({
-    where: { id },
+  const updateResult = await prisma.termReport.updateMany({
+    where: { id, schoolId },
     data: {
       status,
       reviewedById: user.id,
       reviewedAt,
       publishedAt,
     },
+  })
+  if (updateResult.count === 0) throw new ApiError('Not found', 404)
+
+  const updated = await prisma.termReport.findFirst({
+    where: { id, schoolId },
   })
 
   return NextResponse.json({ success: true, data: updated })

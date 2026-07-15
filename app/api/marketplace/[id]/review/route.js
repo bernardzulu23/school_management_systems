@@ -43,8 +43,8 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     throw new ApiError(`Submission already ${material.status}`, 409)
   }
 
-  const updated = await prisma.sharedMaterial.update({
-    where: { id: material.id },
+  const updateResult = await prisma.sharedMaterial.updateMany({
+    where: { id: material.id, schoolId },
     data:
       body.action === 'approve'
         ? {
@@ -57,6 +57,11 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
             status: 'rejected',
             rejectionReason: body.rejectionReason || 'Not suitable for sharing',
           },
+  })
+  if (updateResult.count === 0) throw new ApiError('Submission not found', 404)
+
+  const updated = await prisma.sharedMaterial.findFirst({
+    where: { id: material.id, schoolId },
     select: { id: true, status: true, approvedAt: true, rejectionReason: true },
   })
 

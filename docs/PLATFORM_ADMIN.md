@@ -13,6 +13,19 @@ The platform console is for **Bluepeak platform operators** only — not school 
 - **Billing** — plan distribution, MRR estimate from paid transactions, recent payment rows (amount + status only)
 - **Health** — Phase 1–3 readiness: CSP/HSTS, Groq, Lipila, USSD, OR-Tools, ECZ cron, RLS, JWT
 
+## Full proof security scan (before onboarding schools)
+
+Before marketing `/onboarding` to new schools, complete **[ONBOARDING_SECURITY_CHECKLIST.md](./ONBOARDING_SECURITY_CHECKLIST.md)**:
+
+1. **Automated** — `npm test`, `npm run audit:security`, `npm run audit:tenant`
+2. **Platform Health** — `/platform/health` (no fail on CSP, RLS, JWT, Lipila if paid signup)
+3. **Live headers** — nonce CSP on `/login`; asset CSP on `/Assets/logo.jpg` without `Access-Control-Allow-Origin: *`
+4. **OWASP ZAP** — passive baseline on a tenant subdomain; fix High alerts
+5. **Onboarding smoke test** — email verify → trial/pay → complete → portal email (+ welcome SMS if phone set)
+6. **Database** — [NEON_POST_DEPLOY_CHECKLIST.md](./NEON_POST_DEPLOY_CHECKLIST.md)
+
+Sign-off template is at the bottom of the checklist doc.
+
 ## What you cannot see
 
 By design, the platform console does **not** expose:

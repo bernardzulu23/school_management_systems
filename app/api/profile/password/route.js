@@ -43,8 +43,8 @@ export const PUT = withSecureApi(async function PUT(request) {
   if (!ok) return NextResponse.json({ error: 'Current password is incorrect' }, { status: 400 })
 
   const hashed = await bcrypt.hash(newPassword, 12)
-  await prisma.user.update({
-    where: { id: user.id },
+  await prisma.user.updateMany({
+    where: { id: user.id, schoolId },
     data: { password: hashed },
   })
 

@@ -43,7 +43,10 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!classId || !subjectId) throw new ApiError('classId and subjectId are required', 400)
 
   const teacherProfile = roleCheck(auth.user, ['TEACHER', 'teacher'])
-    ? await prisma.teacher.findUnique({ where: { userId: auth.user.id }, select: { id: true } })
+    ? await prisma.teacher.findFirst({
+        where: { userId: auth.user.id, schoolId },
+        select: { id: true },
+      })
     : null
 
   if (teacherProfile?.id) {

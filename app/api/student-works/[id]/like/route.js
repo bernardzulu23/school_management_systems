@@ -42,9 +42,14 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   })
   if (!existing) throw new ApiError('Student work not found', 404)
 
-  const updated = await prisma.studentWork.update({
-    where: { id: existing.id },
+  const updateResult = await prisma.studentWork.updateMany({
+    where: { id: existing.id, schoolId },
     data: { likes: { increment: 1 } },
+  })
+  if (updateResult.count === 0) throw new ApiError('Student work not found', 404)
+
+  const updated = await prisma.studentWork.findFirst({
+    where: { id: existing.id, schoolId },
     select: { id: true, likes: true },
   })
 

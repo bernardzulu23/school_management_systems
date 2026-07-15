@@ -83,19 +83,18 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
   // Include scheduled (already published once) + newly pushed HOD approvals.
   // Using only `pushed` after a publish left prior departments out of regenerate,
   // then a sparse draft publish wiped the live published timetable.
-  const allocationWhere: any = {
-    schoolId,
-    term,
-    academicYear,
-    status: { in: ['pushed', 'scheduled'] },
-    ...(Array.isArray(departments) && departments.length
-      ? { hod: { hodProfile: { department: { in: departments } } } }
-      : {}),
-  }
 
   const [allocations, recipes, dbConstraints, lockedSlots, dbTimeSlots] = await Promise.all([
     prisma.teacherAllocation.findMany({
-      where: allocationWhere,
+      where: {
+        schoolId,
+        term,
+        academicYear,
+        status: { in: ['pushed', 'scheduled'] },
+        ...(Array.isArray(departments) && departments.length
+          ? { hod: { hodProfile: { department: { in: departments } } } }
+          : {}),
+      },
       include: {
         teacher: { select: { id: true, name: true } },
         subject: { select: { id: true, name: true, code: true } },

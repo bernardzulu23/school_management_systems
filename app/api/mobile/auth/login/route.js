@@ -100,6 +100,14 @@ export const POST = withSecureApi(async function POST(request) {
           school: { active: true },
         },
         take: 2,
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          password: true,
+          schoolId: true,
+        },
       })
       if (emailMatches.length === 1) {
         user = emailMatches[0]

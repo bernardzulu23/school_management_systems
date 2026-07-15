@@ -55,7 +55,7 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const [ratings, total] = await prisma.$transaction([
     prisma.cbcCompetencyRating.findMany({
-      where,
+      where: { schoolId, ...where },
       include: {
         student: { select: { id: true, name: true, class: true } },
         competency: { select: { id: true, name: true, category: true } },
@@ -65,7 +65,7 @@ export const GET = withErrorHandler(async function GET(request) {
       skip,
       take: limit,
     }),
-    prisma.cbcCompetencyRating.count({ where }),
+    prisma.cbcCompetencyRating.count({ where: { schoolId, ...where } }),
   ])
 
   return NextResponse.json({
@@ -116,7 +116,10 @@ export const POST = withErrorHandler(async function POST(request) {
   const student = await prisma.student.findFirst({ where: { id: studentId, schoolId } })
   if (!student) throw new ApiError('Student not found', 404)
 
-  const competency = await prisma.eczCompetency.findUnique({ where: { id: competencyId } })
+  const competency = await prisma.eczCompetency.findUnique({
+    ...(schoolId ? {} : {}),
+    where: { id: competencyId },
+  })
   if (!competency) throw new ApiError('Competency not found', 404)
 
   const rating = await prisma.cbcCompetencyRating.upsert({

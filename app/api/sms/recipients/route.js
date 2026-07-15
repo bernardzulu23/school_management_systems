@@ -37,11 +37,11 @@ export const GET = withErrorHandler(async function GET(request) {
   const classId = safeStringId(searchParams.get('classId'))
   const source = safeQueryString(searchParams.get('source'), { defaultValue: 'parents' })
 
-  const where = { schoolId }
-  if (classId) where.classId = classId
-
   const students = await prisma.student.findMany({
-    where,
+    where: {
+      schoolId,
+      ...(classId ? { classId } : {}),
+    },
     select: {
       id: true,
       name: true,

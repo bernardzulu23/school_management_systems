@@ -99,9 +99,14 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
         approvalNotes: null,
       }
 
-  const updated = await prisma.assessment.update({
-    where: { id: existing.id },
+  const updateResult = await prisma.assessment.updateMany({
+    where: { id: existing.id, schoolId },
     data: next,
+  })
+  if (updateResult.count === 0) throw new ApiError('Not found', 404)
+
+  const updated = await prisma.assessment.findFirst({
+    where: { id: existing.id, schoolId },
     include: {
       createdBy: { select: { id: true, name: true, email: true } },
       reviewer: { select: { id: true, name: true, email: true } },

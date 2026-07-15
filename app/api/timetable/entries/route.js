@@ -47,11 +47,8 @@ export const GET = withErrorHandler(async function GET(req) {
   })
   const status = safeQueryString(searchParams.get('status'))
 
-  const where = { schoolId, term, academicYear }
-  if (status) where.status = status
-
   const entries = await prisma.timetableAllocationEntry.findMany({
-    where,
+    where: { schoolId, term, academicYear, ...(status ? { status } : {}) },
     include: {
       allocation: {
         include: {
@@ -192,9 +189,15 @@ export const PATCH = withErrorHandler(async function PATCH(req) {
 
   let updated
   try {
-    updated = await prisma.timetableAllocationEntry.update({
-      where: { id },
+    const updateResult = await prisma.timetableAllocationEntry.updateMany({
+      where: { id, schoolId },
       data,
+    })
+    if (updateResult.count === 0) {
+      return NextResponse.json({ error: 'Entry not found' }, { status: 404 })
+    }
+    updated = await prisma.timetableAllocationEntry.findFirst({
+      where: { id, schoolId },
       include: {
         allocation: {
           include: {
@@ -271,7 +274,12 @@ export const DELETE = withErrorHandler(async function DELETE(req) {
     )
   }
 
-  await prisma.timetableAllocationEntry.delete({ where: { id: entryId } })
+  const deleteResult = await prisma.timetableAllocationEntry.deleteMany({
+    where: { id: entryId, schoolId },
+  })
+  if (deleteResult.count === 0) {
+    return NextResponse.json({ error: 'Entry not found' }, { status: 404 })
+  }
 
   await rescanAndPersistDraftMeta(prisma, {
     schoolId,

@@ -58,13 +58,12 @@ export const POST = withSecureApi(async function POST(request) {
   }
   if (Number.isNaN(taskScore)) taskScore = 0
 
-  const existing = await prisma.eczAssessmentScore.findUnique({
+  const existing = await prisma.eczAssessmentScore.findFirst({
     where: {
-      assessmentId_studentId_academicYear: {
-        assessmentId: assessment.id,
-        studentId,
-        academicYear,
-      },
+      assessmentId: assessment.id,
+      studentId,
+      academicYear,
+      schoolId,
     },
   })
 
@@ -99,11 +98,18 @@ export const POST = withSecureApi(async function POST(request) {
 
   try {
     const score = existing
-      ? await prisma.eczAssessmentScore.update({
-          where: { id: existing.id },
-          data: patch,
-          include: { student: true, assessment: { include: { subject: true } } },
-        })
+      ? await prisma.eczAssessmentScore
+          .updateMany({
+            where: { id: existing.id, schoolId },
+            data: patch,
+          })
+          .then(async (result) => {
+            if (result.count === 0) throw new Error('Score not found')
+            return prisma.eczAssessmentScore.findFirst({
+              where: { id: existing.id, schoolId },
+              include: { student: true, assessment: { include: { subject: true } } },
+            })
+          })
       : await prisma.eczAssessmentScore.create({
           data: {
             assessmentId: assessment.id,
@@ -159,19 +165,13 @@ export const GET = withSecureApi(async function GET(request) {
     : new Date().getFullYear()
 
   try {
-    const where = {
-      schoolId,
-      academicYear,
-      ...(subjectId ? { assessment: { subjectId } } : {}),
-    }
-    if (formLevel) {
-      where.formLevel = formLevel
-    } else {
-      where.formLevel = { not: 4 }
-    }
-
     const scores = await prisma.eczAssessmentScore.findMany({
-      where,
+      where: {
+        schoolId,
+        academicYear,
+        ...(subjectId ? { assessment: { subjectId } } : {}),
+        ...(formLevel ? { formLevel } : { formLevel: { not: 4 } }),
+      },
       include: {
         assessment: { include: { subject: true } },
         student: true,

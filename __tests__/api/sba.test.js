@@ -151,7 +151,7 @@ describe('POST /api/assessments/sba-scores', () => {
       schoolId,
       name: 'Learner One',
     })
-    mockPrisma.eczAssessmentScore.findUnique.mockResolvedValue(null)
+    mockPrisma.eczAssessmentScore.findFirst.mockResolvedValue(null)
     mockPrisma.eczAssessmentScore.create.mockResolvedValue({
       id: 'score-1',
       totalSBAScore: 60,

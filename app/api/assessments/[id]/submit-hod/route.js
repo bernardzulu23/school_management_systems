@@ -60,8 +60,8 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
 
   if (individual) {
     const now = new Date()
-    const updated = await prisma.assessment.update({
-      where: { id: assessment.id },
+    const updateResult = await prisma.assessment.updateMany({
+      where: { id: assessment.id, schoolId },
       data: {
         status: 'APPROVED',
         reviewerUserId: null,
@@ -73,6 +73,10 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
         ...(topic ? { topic } : {}),
         ...(assessment.createdByUserId ? {} : { createdByUserId: userId }),
       },
+    })
+    if (updateResult.count === 0) throw new ApiError('Assessment not found', 404)
+    const updated = await prisma.assessment.findFirst({
+      where: { id: assessment.id, schoolId },
       include: {
         createdBy: { select: { id: true, name: true, email: true } },
       },
@@ -94,8 +98,8 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   }
 
   const now = new Date()
-  const updated = await prisma.assessment.update({
-    where: { id: assessment.id },
+  const updateResult = await prisma.assessment.updateMany({
+    where: { id: assessment.id, schoolId },
     data: {
       status: 'SUBMITTED',
       reviewerUserId,
@@ -107,6 +111,10 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       ...(topic ? { topic } : {}),
       ...(assessment.createdByUserId ? {} : { createdByUserId: userId }),
     },
+  })
+  if (updateResult.count === 0) throw new ApiError('Assessment not found', 404)
+  const updated = await prisma.assessment.findFirst({
+    where: { id: assessment.id, schoolId },
     include: {
       createdBy: { select: { id: true, name: true, email: true } },
       reviewer: { select: { id: true, name: true, email: true } },

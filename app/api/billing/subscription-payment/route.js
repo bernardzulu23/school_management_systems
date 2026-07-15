@@ -164,8 +164,8 @@ export const POST = withErrorHandler(async function POST(request) {
     clearTimeout(timeout)
 
     if (!result.ok) {
-      await prisma.schoolPlanPayment.update({
-        where: { id: paymentId },
+      await prisma.schoolPlanPayment.updateMany({
+        where: { id: paymentId, schoolId },
         data: { status: 'failed' },
       })
       return NextResponse.json({ error: result.error || 'Payment request failed' }, { status: 502 })
@@ -174,8 +174,8 @@ export const POST = withErrorHandler(async function POST(request) {
     const data = result.data || {}
     const gatewayReferenceId = extractGatewayReferenceId(data)
     if (gatewayReferenceId && gatewayReferenceId !== referenceId) {
-      await prisma.schoolPlanPayment.update({
-        where: { id: paymentId },
+      await prisma.schoolPlanPayment.updateMany({
+        where: { id: paymentId, schoolId },
         data: { referenceId: gatewayReferenceId },
       })
     }
@@ -191,8 +191,8 @@ export const POST = withErrorHandler(async function POST(request) {
           : data?.message || 'Payment request sent',
     })
   } catch (error) {
-    await prisma.schoolPlanPayment.update({
-      where: { id: paymentId },
+    await prisma.schoolPlanPayment.updateMany({
+      where: { id: paymentId, schoolId },
       data: { status: 'failed' },
     })
     if (error?.name === 'AbortError') {

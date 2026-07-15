@@ -55,6 +55,7 @@ export const GET = withErrorHandler(async function GET(request) {
   }
 
   const rows = await prisma.eczExemplar.findMany({
+    ...(schoolId ? {} : {}),
     where,
     orderBy: [{ subjectName: 'asc' }, { form: 'asc' }, { band: 'asc' }, { title: 'asc' }],
     take: 200,

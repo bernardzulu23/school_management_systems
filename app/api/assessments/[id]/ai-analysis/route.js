@@ -94,10 +94,11 @@ export const POST = withAILimits(
       questions,
     })
 
-    await prisma.assessment.update({
-      where: { id: assessment.id },
+    const updateResult = await prisma.assessment.updateMany({
+      where: { id: assessment.id, schoolId },
       data: { aiAnalysis: analysis },
     })
+    if (updateResult.count === 0) throw new ApiError('Assessment not found', 404)
 
     await trackAIUsage(schoolId, 'quiz-class-analysis').catch(() => {})
 

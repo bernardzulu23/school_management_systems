@@ -80,8 +80,8 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
 
   const subjectLabel = body.subject != null ? resolveSubjectLabel(body) : undefined
 
-  const game = await prisma.game.update({
-    where: { id: existing.id },
+  const updateResult = await prisma.game.updateMany({
+    where: { id: existing.id, schoolId },
     data: {
       title: body.title != null ? String(body.title).trim() : undefined,
       description: body.description != null ? String(body.description).trim() : undefined,
@@ -91,6 +91,9 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
       content: nextContent,
     },
   })
+  if (updateResult.count === 0) throw new ApiError('Game not found', 404)
+
+  const game = await prisma.game.findFirst({ where: { id: existing.id, schoolId } })
 
   const stats = await prisma.studentGame.aggregate({
     where: { schoolId, gameId: game.id },
@@ -124,7 +127,8 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const existing = await loadGame(gameId, schoolId)
-  await prisma.game.delete({ where: { id: existing.id } })
+  const deleteResult = await prisma.game.deleteMany({ where: { id: existing.id, schoolId } })
+  if (deleteResult.count === 0) throw new ApiError('Game not found', 404)
 
   return NextResponse.json({ success: true })
 })

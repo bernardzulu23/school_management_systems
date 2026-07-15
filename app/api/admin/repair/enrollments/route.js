@@ -156,6 +156,7 @@ export const POST = withErrorHandler(async function POST(request) {
         const chunkSize = 1000
         for (let i = 0; i < rows.length; i += chunkSize) {
           await prisma.pupilSubjectEnrollment.createMany({
+            ...(schoolId ? {} : {}),
             data: rows.slice(i, i + chunkSize),
             skipDuplicates: true,
           })
@@ -165,8 +166,8 @@ export const POST = withErrorHandler(async function POST(request) {
       if (studentUpdates.length > 0) {
         await prisma.$transaction(
           studentUpdates.map((u) =>
-            prisma.student.update({
-              where: { id: u.id },
+            prisma.student.updateMany({
+              where: { id: u.id, schoolId },
               data: u.data,
             })
           )

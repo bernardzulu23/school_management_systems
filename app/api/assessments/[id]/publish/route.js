@@ -80,10 +80,11 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     teacherId: teacher?.id,
   })
 
-  await prisma.assessment.update({
-    where: { id: assessment.id },
+  const updateResult = await prisma.assessment.updateMany({
+    where: { id: assessment.id, schoolId },
     data: { status: 'PUBLISHED', publishedAssignmentId: assignment.id },
   })
+  if (updateResult.count === 0) throw new ApiError('Assessment not found', 404)
 
   return NextResponse.json({
     success: true,

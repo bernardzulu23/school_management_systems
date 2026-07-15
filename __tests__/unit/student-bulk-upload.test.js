@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest'
-import * as XLSX from 'xlsx'
 import {
   parseStudentExcel,
   buildStudentUploadWorkbook,
@@ -13,6 +12,13 @@ import {
   studentRowSchema,
   prepareStudentRow,
 } from '@/lib/uploads/studentUploadSchema'
+import {
+  createWorkbook,
+  addAoaSheet,
+  getWorksheet,
+  getSheetNames,
+  workbookToBuffer,
+} from '@/lib/excel/workbook'
 
 describe('student bulk upload schema', () => {
   it('normalizes numeric and labeled year groups', () => {
@@ -71,7 +77,7 @@ describe('student bulk upload schema', () => {
 })
 
 describe('parseStudentExcel', () => {
-  it('reads rows from the Student Data sheet', () => {
+  it('reads rows from the Student Data sheet', async () => {
     const wb = buildStudentUploadWorkbook()
     const extra = [
       'Another Student',
@@ -86,25 +92,25 @@ describe('parseStudentExcel', () => {
       '',
       '',
     ]
-    const ws = wb.Sheets['Student Data']
-    XLSX.utils.sheet_add_aoa(ws, [extra], { origin: 'A4' })
-    const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
-    const rows = parseStudentExcel(buffer)
+    const ws = getWorksheet(wb, 'Student Data')
+    ws.addRow(extra)
+    const buffer = await workbookToBuffer(wb)
+    const rows = await parseStudentExcel(buffer)
     expect(rows).toHaveLength(1)
     expect(rows[0].full_name).toBe('Another Student')
     expect(rows[0]._excelRow).toBe(4)
   })
 
-  it('throws when Student Data sheet is missing', () => {
-    const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['x']]), 'Other')
-    const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
-    expect(() => parseStudentExcel(buffer)).toThrow(/Student Data/)
+  it('throws when Student Data sheet is missing', async () => {
+    const wb = createWorkbook()
+    addAoaSheet(wb, 'Other', [['x']])
+    const buffer = await workbookToBuffer(wb)
+    await expect(parseStudentExcel(buffer)).rejects.toThrow(/Student Data/)
   })
 
   it('template has expected headers', () => {
     const wb = buildStudentUploadWorkbook()
-    expect(wb.SheetNames).toContain('Database Mapping')
+    expect(getSheetNames(wb)).toContain('Database Mapping')
     expect(TEMPLATE_HEADERS[0]).toBe('Full Name *')
     expect(TEMPLATE_EXAMPLE_ROW[0]).toBe('Chanda Banda')
   })

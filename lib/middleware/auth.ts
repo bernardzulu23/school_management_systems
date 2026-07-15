@@ -49,6 +49,10 @@ async function verifyAccessToken(token: string): Promise<AppUser> {
   for (const key of secretKeys()) {
     try {
       const { payload } = await jose.jwtVerify(token, key, { algorithms: ['HS256'] })
+      // TODO: Harden to strict aud check after 2026-08-14
+      // Legacy tokens without aud issued before 2026-07-15 still in circulation
+      // After the deadline the check should become:
+      // if (payload.aud !== JWT_AUDIENCE) throw new Error('Invalid token audience')
       if (payload.aud && payload.aud !== JWT_AUDIENCE) {
         throw new Error('Invalid token audience')
       }

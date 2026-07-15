@@ -13,6 +13,7 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
 
   const { searchParams } = new URL(request.url)
   const parsed = NotificationListQuerySchema.safeParse({
@@ -24,15 +25,15 @@ export const GET = withErrorHandler(async function GET(request) {
     ? parsed.data
     : { limit: 30, offset: 0, status: 'all' }
 
-  const where = {
-    userId: auth.user.id,
-    schoolId: tenant.schoolId,
-    ...(status === 'unread' ? { readAt: null, status: { in: ['SENT', 'QUEUED', 'PENDING'] } } : {}),
-  }
-
   const [rows, total, unreadCount] = await Promise.all([
     prisma.notification.findMany({
-      where,
+      where: {
+        userId: auth.user.id,
+        schoolId,
+        ...(status === 'unread'
+          ? { readAt: null, status: { in: ['SENT', 'QUEUED', 'PENDING'] } }
+          : {}),
+      },
       orderBy: { createdAt: 'desc' },
       skip: offset,
       take: limit,
@@ -42,11 +43,19 @@ export const GET = withErrorHandler(async function GET(request) {
         },
       },
     }),
-    prisma.notification.count({ where }),
     prisma.notification.count({
       where: {
         userId: auth.user.id,
-        schoolId: tenant.schoolId,
+        schoolId,
+        ...(status === 'unread'
+          ? { readAt: null, status: { in: ['SENT', 'QUEUED', 'PENDING'] } }
+          : {}),
+      },
+    }),
+    prisma.notification.count({
+      where: {
+        userId: auth.user.id,
+        schoolId,
         readAt: null,
         status: { in: ['SENT', 'QUEUED', 'PENDING'] },
       },

@@ -41,7 +41,7 @@ export const GET = withErrorHandler(async function GET(request) {
   }
 
   const rows = await prisma.termReport.findMany({
-    where,
+    where: { schoolId, ...where },
     include: { student: { select: { name: true, class: true } } },
     orderBy: { updatedAt: 'desc' },
     take: 50,

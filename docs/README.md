@@ -6,14 +6,15 @@ Central documentation for the **Zambian School Management System** (Next.js 16, 
 
 ## Start here
 
-| Document                                             | Who it's for            | Purpose                                                         |
-| ---------------------------------------------------- | ----------------------- | --------------------------------------------------------------- |
-| [USER_GUIDE.md](./USER_GUIDE.md)                     | End users, school staff | How to use ZSMS by role — login, workflows, navigation          |
-| [SYSTEM_DOCUMENTATION.md](./SYSTEM_DOCUMENTATION.md) | Everyone                | Authoritative system overview (architecture, modules, security) |
-| [SETUP.md](./SETUP.md)                               | New developers          | Clone → env → DB → seed → `npm run dev` in ~15 minutes          |
-| [ENVIRONMENT.md](./ENVIRONMENT.md)                   | DevOps / deploy         | Every env variable, required vs optional                        |
-| [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md)           | Contributors            | Architecture, add API/AI/SMS, migrations, deploy                |
-| [../CHANGELOG.md](../CHANGELOG.md)                   | Everyone                | Release history and PRD task notes                              |
+| Document                                                               | Who it's for            | Purpose                                                         |
+| ---------------------------------------------------------------------- | ----------------------- | --------------------------------------------------------------- |
+| [USER_GUIDE.md](./USER_GUIDE.md)                                       | End users, school staff | How to use ZSMS by role — login, workflows, navigation          |
+| [ONBOARDING_SECURITY_CHECKLIST.md](./ONBOARDING_SECURITY_CHECKLIST.md) | Platform operators      | Full proof security scan before onboarding school cohorts       |
+| [SYSTEM_DOCUMENTATION.md](./SYSTEM_DOCUMENTATION.md)                   | Everyone                | Authoritative system overview (architecture, modules, security) |
+| [SETUP.md](./SETUP.md)                                                 | New developers          | Clone → env → DB → seed → `npm run dev` in ~15 minutes          |
+| [ENVIRONMENT.md](./ENVIRONMENT.md)                                     | DevOps / deploy         | Every env variable, required vs optional                        |
+| [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md)                             | Contributors            | Architecture, add API/AI/SMS, migrations, deploy                |
+| [../CHANGELOG.md](../CHANGELOG.md)                                     | Everyone                | Release history and PRD task notes                              |
 
 ---
 

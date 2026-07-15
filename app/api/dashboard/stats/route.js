@@ -147,7 +147,7 @@ export const GET = withErrorHandler(async function GET(request) {
     )
     const enteredByUsers = enteredByIds.length
       ? await prisma.user.findMany({
-          where: { id: { in: enteredByIds } },
+          where: { schoolId, id: { in: enteredByIds } },
           select: { id: true, name: true },
           take: 2000,
         })

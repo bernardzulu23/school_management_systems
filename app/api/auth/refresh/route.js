@@ -86,7 +86,10 @@ export const POST = withSecureApi(async function POST(request) {
     let canUseDbTokenRotation = true
     try {
       tokenRecord = await prisma.refreshToken.findUnique({
-        where: { token: refreshToken },
+        where: {
+          token: refreshToken,
+          ...(decoded.schoolId ? { schoolId: decoded.schoolId } : {}),
+        },
         select: { id: true, token: true, revoked: true, userId: true, updatedAt: true },
       })
     } catch (e) {
@@ -104,7 +107,10 @@ export const POST = withSecureApi(async function POST(request) {
       if (!recentlyRotated) {
         // POTENTIAL ATTACK: reuse of a rotated refresh token — revoke all sessions.
         await prisma.refreshToken.updateMany({
-          where: { userId: decoded.id },
+          where: {
+            userId: decoded.id,
+            ...(decoded.schoolId ? { schoolId: decoded.schoolId } : {}),
+          },
           data: { revoked: true },
         })
         console.warn(
@@ -148,11 +154,16 @@ export const POST = withSecureApi(async function POST(request) {
     // 5. Rotate tokens in DB: Revoke old when present, always persist new refresh token.
     if (canUseDbTokenRotation) {
       if (tokenRecord?.id) {
-        await prisma.$transaction([
-          prisma.refreshToken.update({
-            where: { id: tokenRecord.id },
-            data: { revoked: true },
-          }),
+        const rotationOps = []
+        if (!tokenRecord.revoked) {
+          rotationOps.push(
+            prisma.refreshToken.updateMany({
+              where: { id: tokenRecord.id, schoolId: user.schoolId },
+              data: { revoked: true },
+            })
+          )
+        }
+        rotationOps.push(
           prisma.refreshToken.create({
             data: {
               token: newRefreshTokenValue,
@@ -160,8 +171,9 @@ export const POST = withSecureApi(async function POST(request) {
               schoolId: user.schoolId,
               expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
             },
-          }),
-        ])
+          })
+        )
+        await prisma.$transaction(rotationOps)
       } else {
         await prisma.refreshToken.create({
           data: {

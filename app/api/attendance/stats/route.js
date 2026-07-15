@@ -44,7 +44,7 @@ async function getHodScopedClassIds(schoolId, userId) {
 
   const teacherIdsFromJoin = deptId
     ? await prisma.teacherDepartment.findMany({
-        where: { departmentId: deptId },
+        where: { departmentId: deptId, department: { schoolId } },
         select: { teacherId: true },
       })
     : []

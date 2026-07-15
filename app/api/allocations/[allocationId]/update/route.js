@@ -61,9 +61,14 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
     merged = { ...merged, teacherId: resolvedTeacherId }
   }
 
-  const updated = await prisma.departmentAllocation.update({
-    where: { id: allocation.id },
+  const updateResult = await prisma.departmentAllocation.updateMany({
+    where: { id: allocation.id, schoolId },
     data: { allocationData: merged },
+  })
+  if (updateResult.count === 0) throw new ApiError('Not found', 404)
+
+  const updated = await prisma.departmentAllocation.findFirst({
+    where: { id: allocation.id, schoolId },
     include: {
       department: { select: { id: true, name: true } },
       createdBy: { select: { id: true, name: true, email: true, role: true } },

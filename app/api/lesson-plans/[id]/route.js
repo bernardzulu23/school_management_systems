@@ -110,8 +110,8 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
     throw new ApiError(`Cannot edit lesson plan with status: ${existing.status}`, 400)
   }
 
-  const updated = await prisma.lessonPlan.update({
-    where: { id },
+  const updateResult = await prisma.lessonPlan.updateMany({
+    where: { id, schoolId },
     data: {
       content,
       version: { increment: 1 },
@@ -127,6 +127,11 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
           ? { weekNumber: Number(body.week) }
           : {}),
     },
+  })
+  if (updateResult.count === 0) throw new ApiError('Not found', 404)
+
+  const updated = await prisma.lessonPlan.findFirst({
+    where: { id, schoolId },
     select: {
       id: true,
       status: true,
@@ -258,9 +263,14 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
     message = `${existing.subject} • ${existing.grade} • Rejected: ${reason}`
   }
 
-  const updated = await prisma.lessonPlan.update({
-    where: { id },
+  const patchResult = await prisma.lessonPlan.updateMany({
+    where: { id, schoolId },
     data: next,
+  })
+  if (patchResult.count === 0) throw new ApiError('Not found', 404)
+
+  const updated = await prisma.lessonPlan.findFirst({
+    where: { id, schoolId },
     select: {
       id: true,
       status: true,

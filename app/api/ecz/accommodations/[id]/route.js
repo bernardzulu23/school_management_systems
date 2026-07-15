@@ -40,16 +40,25 @@ export const PATCH = withSecureHandler(async function PATCH(request, { params })
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   if (action === 'revoke') {
-    await prisma.specialAccommodation.update({
-      where: { id },
+    const updateResult = await prisma.specialAccommodation.updateMany({
+      where: { id, schoolId },
       data: { approvedAt: null, approvedBy: null },
     })
+    if (updateResult.count === 0) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    }
     return NextResponse.json({ success: true, message: 'Approval revoked' })
   }
 
-  const row = await prisma.specialAccommodation.update({
-    where: { id },
+  const updateResult = await prisma.specialAccommodation.updateMany({
+    where: { id, schoolId },
     data: { approvedAt: new Date(), approvedBy: auth.user.id },
+  })
+  if (updateResult.count === 0) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
+  const row = await prisma.specialAccommodation.findFirst({
+    where: { id, schoolId },
     include: { student: { select: { name: true } } },
   })
   return NextResponse.json({ success: true, message: 'Accommodation approved', data: row })
@@ -76,6 +85,9 @@ export const DELETE = withSecureHandler(async function DELETE(request, { params 
   const existing = await prisma.specialAccommodation.findFirst({ where: { id, schoolId } })
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  await prisma.specialAccommodation.delete({ where: { id } })
+  const deleteResult = await prisma.specialAccommodation.deleteMany({ where: { id, schoolId } })
+  if (deleteResult.count === 0) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
   return NextResponse.json({ success: true, message: 'Accommodation removed' })
 })

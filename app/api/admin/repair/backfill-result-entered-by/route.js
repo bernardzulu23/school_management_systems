@@ -108,8 +108,8 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!dryRun && updates.length > 0) {
     await prisma.$transaction(
       updates.map((u) =>
-        prisma.result.update({
-          where: { id: u.id },
+        prisma.result.updateMany({
+          where: { id: u.id, schoolId },
           data: { enteredByUserId: u.enteredByUserId },
         })
       )

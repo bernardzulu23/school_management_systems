@@ -221,13 +221,12 @@ export const POST = withSecureHandler(async function POST(request) {
       }
       if (Number.isNaN(taskScore)) taskScore = 0
 
-      const existing = await prisma.eczAssessmentScore.findUnique({
+      const existing = await prisma.eczAssessmentScore.findFirst({
         where: {
-          assessmentId_studentId_academicYear: {
-            assessmentId: assessment.id,
-            studentId,
-            academicYear,
-          },
+          schoolId,
+          assessmentId: assessment.id,
+          studentId,
+          academicYear,
         },
       })
 

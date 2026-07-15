@@ -31,7 +31,8 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   })
   if (!existing) throw new ApiError('Material not found', 404)
 
-  await prisma.schoolMaterial.delete({ where: { id } })
+  const deleteResult = await prisma.schoolMaterial.deleteMany({ where: { id, schoolId } })
+  if (deleteResult.count === 0) throw new ApiError('Material not found', 404)
 
   return NextResponse.json({ success: true })
 })

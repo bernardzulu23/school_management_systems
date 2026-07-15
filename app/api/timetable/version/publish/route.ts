@@ -51,10 +51,9 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
       where: { schoolId, status: 'PUBLISHED' },
       data: { status: 'ARCHIVED' },
     }),
-    prisma.timetableVersion.update({
-      where: { id: version.id },
+    prisma.timetableVersion.updateMany({
+      where: { id: version.id, schoolId },
       data: { status: 'PUBLISHED', publishedAt: new Date() },
-      select: { id: true, status: true, publishedAt: true },
     }),
   ])
 

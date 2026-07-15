@@ -58,8 +58,8 @@ export const POST = withErrorHandler(async function POST(request) {
     },
   })
 
-  let profile = await prisma.gamificationProfile.findUnique({
-    where: { studentId: student.id },
+  let profile = await prisma.gamificationProfile.findFirst({
+    where: { studentId: student.id, schoolId },
   })
   if (!profile) {
     profile = await prisma.gamificationProfile.create({
@@ -79,14 +79,20 @@ export const POST = withErrorHandler(async function POST(request) {
     leveledUp = true
   }
 
-  const updated = await prisma.gamificationProfile.update({
-    where: { studentId: student.id },
+  const updateResult = await prisma.gamificationProfile.updateMany({
+    where: { studentId: student.id, schoolId },
     data: {
       points: (profile.points || 0) + pointsEarned,
       xp,
       level,
       nextLevelXp,
     },
+  })
+  if (updateResult.count === 0) {
+    return NextResponse.json({ error: 'Gamification profile not found' }, { status: 404 })
+  }
+  const updated = await prisma.gamificationProfile.findFirst({
+    where: { studentId: student.id, schoolId },
   })
 
   const badgesAwarded = await awardGameBadges({

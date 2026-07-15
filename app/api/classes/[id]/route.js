@@ -89,8 +89,8 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
         : null
       : undefined
 
-  const updatedClass = await prisma.class.update({
-    where: { id },
+  const updateResult = await prisma.class.updateMany({
+    where: { id, schoolId },
     data: {
       ...(name !== undefined ? { name } : {}),
       ...(capacity !== undefined ? { capacity } : {}),
@@ -99,6 +99,12 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
       ...(classTeacherId !== undefined ? { classTeacherId } : {}),
       ...(departmentId !== undefined ? { departmentId } : {}),
     },
+  })
+  if (updateResult.count === 0)
+    return NextResponse.json({ error: 'Class not found' }, { status: 404 })
+
+  const updatedClass = await prisma.class.findFirst({
+    where: { id, schoolId },
   })
 
   return NextResponse.json({ success: true, data: updatedClass })

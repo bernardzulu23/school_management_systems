@@ -23,14 +23,12 @@ export const GET = withErrorHandler(async function GET(request) {
 
   if (!isHod && !isAdmin) throw new ApiError('HOD access required', 403)
 
-  const where = {
-    schoolId,
-    status: 'SUBMITTED',
-    ...(isAdmin ? {} : { reviewerUserId: userId }),
-  }
-
   const pending = await prisma.lessonPlan.findMany({
-    where,
+    where: {
+      schoolId,
+      status: 'SUBMITTED',
+      ...(isAdmin ? {} : { reviewerUserId: userId }),
+    },
     orderBy: { submittedAt: 'desc' },
     take: 100,
     select: {

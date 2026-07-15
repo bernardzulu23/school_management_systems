@@ -13,6 +13,10 @@ import { checkProxyRateLimit } from './lib/security/proxyRateLimit'
 import { isPublicEdgeCachePath } from './lib/security/publicEdgeCache'
 import { checkAntiScraping, checkApiScrapeRateLimit } from './lib/security/antiScraping'
 import { verifyCsrfRequest } from './lib/security/csrf'
+import {
+  matchDashboardRoleGate,
+  roleMatchesDashboardGroups,
+} from './lib/security/dashboardRouteAuth'
 
 const PUBLIC_PATHS = [
   '/api/auth/login',
@@ -224,6 +228,31 @@ export async function handleSecurityProxy(request) {
         loginUrl.searchParams.set('from', pathname)
         const redirect = NextResponse.redirect(loginUrl)
         return applySecurityHeaders(redirect, request, securityOpts)
+      }
+    }
+
+    // Server-side role gate for role-specific dashboard portals (BOLA prevention).
+    if (pathname.startsWith('/dashboard')) {
+      const dashboardGate = matchDashboardRoleGate(pathname)
+      if (dashboardGate) {
+        const payload = await decodeAccessToken(request)
+        if (!payload?.id) {
+          const loginUrl = new URL('/login', request.url)
+          loginUrl.searchParams.set('from', pathname)
+          const redirect = NextResponse.redirect(loginUrl)
+          return applySecurityHeaders(redirect, request, securityOpts)
+        }
+        if (!roleMatchesDashboardGroups(payload.role, dashboardGate.groups)) {
+          return secureResponse(
+            {
+              error: 'Forbidden',
+              message: 'Access denied: insufficient role for this dashboard area.',
+            },
+            { status: 403 },
+            request,
+            securityOpts
+          )
+        }
       }
     }
 

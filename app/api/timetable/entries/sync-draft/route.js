@@ -181,7 +181,7 @@ export const POST = withErrorHandler(async function POST(req) {
   const classRows =
     classIds.length > 0
       ? await prisma.class.findMany({
-          where: { id: { in: classIds } },
+          where: { id: { in: classIds }, schoolId },
           select: { id: true, name: true },
         })
       : []

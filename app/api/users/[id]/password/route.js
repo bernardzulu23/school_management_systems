@@ -38,7 +38,7 @@ export const POST = withSecureHandler(async function POST(request, { params }) {
   if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const hashed = await bcrypt.hash(newPassword, 12)
-  await prisma.user.update({ where: { id: user.id }, data: { password: hashed } })
+  await prisma.user.updateMany({ where: { id: user.id, schoolId }, data: { password: hashed } })
   await revokeAllUserRefreshTokens(user.id)
 
   return NextResponse.json({ success: true })

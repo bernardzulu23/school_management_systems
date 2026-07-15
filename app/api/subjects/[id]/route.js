@@ -57,8 +57,8 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   if (code !== undefined && !code)
     return NextResponse.json({ error: 'Invalid code' }, { status: 400 })
 
-  const updatedSubject = await prisma.subject.update({
-    where: { id },
+  const updateResult = await prisma.subject.updateMany({
+    where: { id, schoolId },
     data: {
       ...(name !== undefined ? { name } : {}),
       ...(code !== undefined ? { code } : {}),
@@ -66,6 +66,11 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
       ...(data?.department !== undefined ? { department: data.department } : {}),
     },
   })
+  if (updateResult.count === 0) {
+    return NextResponse.json({ error: 'Subject not found' }, { status: 404 })
+  }
+
+  const updatedSubject = await prisma.subject.findFirst({ where: { id, schoolId } })
 
   return NextResponse.json({ success: true, data: updatedSubject })
 })

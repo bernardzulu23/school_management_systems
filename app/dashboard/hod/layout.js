@@ -1,20 +1,9 @@
-'use client'
+import { requireDashboardRole } from '@/lib/security/verifyDashboardAccess'
+import HodSchoolLevelGate from './HodSchoolLevelGate'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { useSchool } from '@/lib/context/SchoolContext'
-import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
+export const dynamic = 'force-dynamic'
 
-export default function HodDashboardLayout({ children }) {
-  const router = useRouter()
-  const { school, isLoading } = useSchool()
-
-  useEffect(() => {
-    if (isLoading || !school?.level) return
-    if (!canAccessHodFeatures({ schoolLevel: school.level })) {
-      router.replace('/dashboard/teacher')
-    }
-  }, [isLoading, school?.level, router])
-
-  return children
+export default async function HodDashboardLayout({ children }) {
+  await requireDashboardRole('/dashboard/hod')
+  return <HodSchoolLevelGate>{children}</HodSchoolLevelGate>
 }

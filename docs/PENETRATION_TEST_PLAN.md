@@ -37,11 +37,13 @@ Manual and automated checks for Phase 4 security controls. Run against **staging
 
 ## 4. Content Security Policy
 
-| #   | Scenario        | Steps                                                         | Expected                  |
-| --- | --------------- | ------------------------------------------------------------- | ------------------------- |
-| 4.1 | CSP header      | `curl -I https://staging/ \| grep -i content-security-policy` | Header present            |
-| 4.2 | API no-cache    | `curl -I https://staging/api/health`                          | `Cache-Control: no-store` |
-| 4.3 | Automated tests | `npm test -- __tests__/security/csp.test.js`                  | All pass                  |
+| #   | Scenario         | Steps                                                              | Expected                                             |
+| --- | ---------------- | ------------------------------------------------------------------ | ---------------------------------------------------- |
+| 4.1 | CSP header       | `curl -I https://staging/login` \| grep -i content-security-policy | Nonce CSP present                                    |
+| 4.2 | Static asset CSP | `curl -I https://staging/Assets/logo.jpg`                          | CSP present; **no** `Access-Control-Allow-Origin: *` |
+| 4.3 | API no-cache     | `curl -I https://staging/api/health`                               | `Cache-Control: no-store`                            |
+| 4.4 | Offline page     | Open `/offline.html`                                               | No external CDN scripts                              |
+| 4.5 | Automated tests  | `npm test -- __tests__/security/csp.test.js`                       | All pass                                             |
 
 ## 5. Dependencies and secrets
 
@@ -63,10 +65,13 @@ npm test                 # full suite green
 
 ## OWASP ZAP (optional)
 
-1. Point ZAP at `https://<staging-host>/`
+1. Point ZAP at `https://<staging-or-tenant-host>/`
 2. Authenticate as teacher (session or Bearer token in replacer)
 3. Run **Passive** scan first; fix High alerts
 4. Run **Active** scan only on staging with permission
+5. Re-scan `/Assets/logo.jpg` and `/login` after static-asset security deploys
+
+**Full onboarding gate:** Use [ONBOARDING_SECURITY_CHECKLIST.md](./ONBOARDING_SECURITY_CHECKLIST.md) Phases 3–4 for production tenant proof before school cohort launches.
 
 ## Sign-off
 

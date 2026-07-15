@@ -79,8 +79,8 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const questions = Array.isArray(body.questions) ? body.questions : []
   const existing = parseAssessmentInteractive(assessment.description)
 
-  await prisma.assessment.update({
-    where: { id: assessment.id },
+  const updateResult = await prisma.assessment.updateMany({
+    where: { id: assessment.id, schoolId },
     data: {
       description: buildAssessmentInteractiveDescription({
         questions,
@@ -89,6 +89,7 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
       }),
     },
   })
+  if (updateResult.count === 0) throw new ApiError('Assessment not found', 404)
 
   return NextResponse.json({
     success: true,

@@ -77,8 +77,8 @@ export const GET = withErrorHandler(async function GET(request) {
 
   if (payment && syncPayment && String(payment.status).toLowerCase() === 'pending') {
     const syncedStatus = await syncSchoolPlanPaymentFromLipila(payment)
-    payment = await prisma.schoolPlanPayment.findUnique({
-      where: { id: payment.id },
+    payment = await prisma.schoolPlanPayment.findFirst({
+      where: { id: payment.id, schoolId },
       select: paymentSelect,
     })
     if (payment) payment = { ...payment, status: syncedStatus || payment.status }

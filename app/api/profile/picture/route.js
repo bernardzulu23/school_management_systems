@@ -62,8 +62,8 @@ export const PUT = withErrorHandler(async function PUT(request) {
   await writeFile(absPath, buf)
 
   const url = `/api/profile/picture/file/${encodeURIComponent(filename)}`
-  await prisma.user.update({
-    where: { id: user.id },
+  await prisma.user.updateMany({
+    where: { id: user.id, schoolId },
     data: { profile_picture_url: url },
   })
 

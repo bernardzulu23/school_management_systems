@@ -24,8 +24,8 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const bank = await prisma.questionBank.findFirst({ where: { id, schoolId } })
   if (bank) {
     const questions = body?.questions ?? body?.content?.questions
-    const updated = await prisma.questionBank.update({
-      where: { id },
+    const updateResult = await prisma.questionBank.updateMany({
+      where: { id, schoolId },
       data: {
         ...(body?.title !== undefined ? { title: String(body.title).trim() } : {}),
         ...(body?.subject !== undefined ? { subjectName: String(body.subject).trim() } : {}),
@@ -34,6 +34,10 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
         ...(body?.formLevel !== undefined ? { formLevel: parseInt(body.formLevel, 10) } : {}),
       },
     })
+    if (updateResult.count === 0) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    }
+    const updated = await prisma.questionBank.findFirst({ where: { id, schoolId } })
     return NextResponse.json({ success: true, data: updated })
   }
 
@@ -42,8 +46,8 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   })
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  const updated = await prisma.game.update({
-    where: { id },
+  const updateResult = await prisma.game.updateMany({
+    where: { id, schoolId },
     data: {
       ...(body?.title !== undefined ? { title: String(body.title).trim() } : {}),
       ...(body?.subject !== undefined ? { subject: String(body.subject).trim() } : {}),
@@ -51,6 +55,10 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
       ...(body?.content !== undefined ? { content: body.content } : {}),
     },
   })
+  if (updateResult.count === 0) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
+  const updated = await prisma.game.findFirst({ where: { id, schoolId } })
 
   return NextResponse.json({ success: true, data: updated })
 })
@@ -74,7 +82,7 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
     select: { id: true },
   })
   if (bank) {
-    await prisma.questionBank.delete({ where: { id } })
+    await prisma.questionBank.deleteMany({ where: { id, schoolId } })
     return NextResponse.json({ success: true })
   }
 
@@ -84,6 +92,6 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   })
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  await prisma.game.delete({ where: { id } })
+  await prisma.game.deleteMany({ where: { id, schoolId } })
   return NextResponse.json({ success: true })
 })

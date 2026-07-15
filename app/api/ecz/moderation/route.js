@@ -78,14 +78,19 @@ export const PATCH = withErrorHandler(async function PATCH(request) {
   })
   if (!existing) throw new ApiError('Assessment not found', 404)
 
-  const updated = await prisma.eczAssessment.update({
-    where: { id: assessmentId },
+  const updateResult = await prisma.eczAssessment.updateMany({
+    where: { id: assessmentId, schoolId },
     data: {
       moderationStatus,
       moderationNotes,
       moderatedBy: auth.user.id,
       moderatedAt: new Date(),
     },
+  })
+  if (updateResult.count === 0) throw new ApiError('Assessment not found', 404)
+
+  const updated = await prisma.eczAssessment.findFirst({
+    where: { id: assessmentId, schoolId },
   })
 
   return NextResponse.json({ success: true, data: updated })

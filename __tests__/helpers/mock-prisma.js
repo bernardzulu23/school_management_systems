@@ -51,6 +51,7 @@ export function createMockPrisma() {
       create: vi.fn(),
     },
     eczAssessmentScore: {
+      findFirst: vi.fn(),
       findUnique: vi.fn(),
       findMany: vi.fn(),
       create: vi.fn(),
@@ -85,6 +86,7 @@ export function createMockPrisma() {
       count: vi.fn(),
       create: vi.fn(),
       update: vi.fn(),
+      updateMany: vi.fn(),
     },
     materialRating: {
       findUnique: vi.fn(),

@@ -35,8 +35,8 @@ export const POST = withSecureHandler(async function POST(request) {
   let tokenRecord = null
   let canUseDbTokenRotation = true
   try {
-    tokenRecord = await prisma.refreshToken.findUnique({
-      where: { token: refreshToken },
+    tokenRecord = await prisma.refreshToken.findFirst({
+      where: { token: refreshToken, schoolId: decoded.schoolId },
       select: { id: true, revoked: true, userId: true },
     })
   } catch {

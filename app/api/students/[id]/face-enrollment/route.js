@@ -70,13 +70,16 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     throw err
   }
 
-  await prisma.student.update({
-    where: { id: studentId },
+  const updateResult = await prisma.student.updateMany({
+    where: { id: studentId, schoolId },
     data: {
       faceEmbedding: embeddingJson,
       faceEmbeddingEnrolledAt: new Date(),
     },
   })
+  if (updateResult.count === 0) {
+    throw new ApiError('Student not found or unauthorized', 404)
+  }
 
   const a = actorFromUser(auth.user)
   await recordChangeLog({
@@ -119,10 +122,11 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   })
   if (!student) throw new ApiError('Student not found', 404)
 
-  await prisma.student.update({
-    where: { id: studentId },
+  const updateResult = await prisma.student.updateMany({
+    where: { id: studentId, schoolId },
     data: { faceEmbedding: null, faceEmbeddingEnrolledAt: null },
   })
+  if (updateResult.count === 0) throw new ApiError('Student not found', 404)
 
   const a = actorFromUser(auth.user)
   await recordChangeLog({

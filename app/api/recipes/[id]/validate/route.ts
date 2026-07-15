@@ -153,14 +153,17 @@ export const POST = withErrorHandler(async function POST(
   const result = { errors, warnings, totalPeriods }
   const isValid = errors.length === 0
 
-  await prisma.schedulingRecipe.update({
-    where: { id: recipe.id },
+  const updateResult = await prisma.schedulingRecipe.updateMany({
+    where: { id: recipe.id, schoolId },
     data: {
       isValid,
       validationErrors: toPrismaJsonValue(result),
       validatedAt: new Date(),
     },
   })
+  if (updateResult.count === 0) {
+    return NextResponse.json({ success: false, error: 'Recipe not found' }, { status: 404 })
+  }
 
   return NextResponse.json({ success: true, isValid, result })
 })

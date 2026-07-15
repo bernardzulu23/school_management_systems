@@ -102,7 +102,7 @@ export const GET = withErrorHandler(async function GET(request) {
       let skip = 0
       for (;;) {
         const batch = await prisma.cbcCompetencyRating.findMany({
-          where,
+          where: { schoolId, ...where },
           include: {
             student: { select: { name: true, exam_number: true } },
             competency: { select: { name: true, category: true } },

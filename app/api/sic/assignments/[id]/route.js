@@ -18,10 +18,11 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   })
   if (!row) throw new ApiError('Not found', 404)
 
-  await prisma.sicAssignment.update({
-    where: { id },
+  const updateResult = await prisma.sicAssignment.updateMany({
+    where: { id, schoolId: authz.schoolId },
     data: { active: false, revokedAt: new Date() },
   })
+  if (updateResult.count === 0) throw new ApiError('Not found', 404)
 
   return NextResponse.json({ success: true })
 })

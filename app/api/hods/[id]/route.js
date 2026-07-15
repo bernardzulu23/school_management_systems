@@ -31,7 +31,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
 
   if (hod.departmentId) {
     const teacherDepartments = await prisma.teacherDepartment.findMany({
-      where: { departmentId: hod.departmentId },
+      where: { departmentId: hod.departmentId, department: { schoolId } },
       select: { teacherId: true },
     })
 
@@ -106,8 +106,8 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
     if (body.departmentId !== undefined)
       hodUpdates.departmentId = body.departmentId ? String(body.departmentId) : null
 
-    await tx.headOfDepartment.update({
-      where: { id: existing.id },
+    await tx.headOfDepartment.updateMany({
+      where: { id: existing.id, schoolId },
       data: hodUpdates,
     })
 

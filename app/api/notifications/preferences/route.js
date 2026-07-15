@@ -29,6 +29,7 @@ export const PATCH = withErrorHandler(async function PATCH(request) {
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
 
   const data = await parseBodyOrThrow(request, NotificationPreferencesSchema)
   const existing = await getOrCreateNotificationPreference(auth.user.id, tenant.schoolId)
@@ -43,8 +44,8 @@ export const PATCH = withErrorHandler(async function PATCH(request) {
     return NextResponse.json({ error: check.error }, { status: 400 })
   }
 
-  const updated = await prisma.notificationPreference.update({
-    where: { userId: auth.user.id },
+  const updateResult = await prisma.notificationPreference.updateMany({
+    where: { userId: auth.user.id, schoolId },
     data: {
       ...(data.webPushEnabled !== undefined ? { webPushEnabled: data.webPushEnabled } : {}),
       ...(data.emailEnabled !== undefined ? { emailEnabled: data.emailEnabled } : {}),
@@ -53,6 +54,13 @@ export const PATCH = withErrorHandler(async function PATCH(request) {
       ...(data.quietHoursEnd ? { quietHoursEnd: data.quietHoursEnd } : {}),
       ...(data.timezone ? { timezone: data.timezone } : {}),
     },
+  })
+  if (updateResult.count === 0) {
+    return NextResponse.json({ error: 'Preferences not found' }, { status: 404 })
+  }
+
+  const updated = await prisma.notificationPreference.findFirst({
+    where: { userId: auth.user.id, schoolId },
   })
 
   return NextResponse.json({ success: true, data: updated })

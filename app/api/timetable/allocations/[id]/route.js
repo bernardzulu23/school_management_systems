@@ -32,14 +32,13 @@ export const DELETE = withErrorHandler(async function DELETE(req, { params }) {
   if (!id) return NextResponse.json({ error: 'Invalid allocation id' }, { status: 400 })
 
   const isHod = roleCheck(auth.user, ['HOD', 'hod']) || Boolean(hasHodProfile)
-  const where = {
-    id,
-    schoolId,
-    ...(isHod && !roleCheck(auth.user, ['ADMIN', 'headteacher']) ? { hodId: auth.user.id } : {}),
-  }
 
   const existing = await prisma.teacherAllocation.findFirst({
-    where,
+    where: {
+      schoolId,
+      id,
+      ...(isHod && !roleCheck(auth.user, ['ADMIN', 'headteacher']) ? { hodId: auth.user.id } : {}),
+    },
     select: { id: true },
   })
   if (!existing) {
@@ -65,7 +64,13 @@ export const DELETE = withErrorHandler(async function DELETE(req, { params }) {
     where: { schoolId, allocationId: existing.id, status: 'draft' },
   })
 
-  const result = await prisma.teacherAllocation.deleteMany({ where })
+  const result = await prisma.teacherAllocation.deleteMany({
+    where: {
+      schoolId,
+      id,
+      ...(isHod && !roleCheck(auth.user, ['ADMIN', 'headteacher']) ? { hodId: auth.user.id } : {}),
+    },
+  })
   if (result.count === 0) {
     return NextResponse.json({ error: 'Allocation not found' }, { status: 404 })
   }

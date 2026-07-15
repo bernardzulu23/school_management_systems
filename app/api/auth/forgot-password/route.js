@@ -67,8 +67,8 @@ export const POST = withSecureApi(async function POST(request) {
     const resetTokenHash = crypto.createHash('sha256').update(resetToken).digest('hex')
 
     // Save to DB
-    await prisma.user.update({
-      where: { id: user.id },
+    await prisma.user.updateMany({
+      where: { id: user.id, schoolId },
       data: {
         resetToken: resetTokenHash,
         resetTokenExpiry,

@@ -111,6 +111,7 @@ export const POST = withSecureApi(async function POST(request) {
         criteriaRows = criteriaToPrismaCreate(body.rubricCriteria)
       }
       await prisma.eczRubric.create({
+        ...(schoolId ? {} : {}),
         data: {
           assessmentId: assessment.id,
           criteria: { create: criteriaRows },
@@ -120,6 +121,7 @@ export const POST = withSecureApi(async function POST(request) {
 
     if (Array.isArray(body.items) && body.items.length > 0) {
       await prisma.eczAssessmentItem.createMany({
+        ...(schoolId ? {} : {}),
         data: body.items.map((item, idx) => ({
           assessmentId: assessment.id,
           elementId: item.elementId || null,

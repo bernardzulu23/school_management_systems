@@ -31,9 +31,10 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   if (!id) throw new ApiError('Invalid material id', 400)
 
   const material = await prisma.sharedMaterial.findFirst({
-    where: { id, status: 'approved' },
+    where: { id, status: 'approved', schoolId: { not: '' } },
     select: {
       id: true,
+      schoolId: true,
       type: true,
       title: true,
       subject: true,
@@ -65,8 +66,8 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     select: { id: true, subject: true, topic: true, grade: true, status: true },
   })
 
-  await prisma.sharedMaterial.update({
-    where: { id: material.id },
+  await prisma.sharedMaterial.updateMany({
+    where: { id: material.id, schoolId: material.schoolId },
     data: { downloadCount: { increment: 1 } },
   })
 

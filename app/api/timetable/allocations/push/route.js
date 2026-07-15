@@ -52,7 +52,7 @@ export const POST = withErrorHandler(async function POST(req) {
   }
 
   const allocations = await prisma.teacherAllocation.findMany({
-    where,
+    where: { schoolId, ...where },
     include: {
       teacher: { select: { name: true } },
       subject: { select: { name: true } },
@@ -67,8 +67,8 @@ export const POST = withErrorHandler(async function POST(req) {
     return NextResponse.json({ error: 'No draft allocations found to push' }, { status: 400 })
   }
 
-  const sender = await prisma.user.findUnique({
-    where: { id: user.id },
+  const sender = await prisma.user.findFirst({
+    where: { id: user.id, schoolId },
     select: { name: true, email: true },
   })
   const senderName =
@@ -108,7 +108,7 @@ export const POST = withErrorHandler(async function POST(req) {
   await prisma.$transaction(async (tx) => {
     // 1. Mark all as pushed
     await tx.teacherAllocation.updateMany({
-      where: { id: { in: allocations.map((a) => a.id) } },
+      where: { schoolId, id: { in: allocations.map((a) => a.id) } },
       data: { status: 'pushed', pushedAt: new Date() },
     })
 

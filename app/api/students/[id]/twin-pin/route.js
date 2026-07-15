@@ -42,8 +42,8 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   }
 
   const pinHash = await bcrypt.hash(pin, 10)
-  await prisma.student.update({
-    where: { id: studentId },
+  const updateResult = await prisma.student.updateMany({
+    where: { id: studentId, schoolId },
     data: {
       pinHash,
       requiresSecondaryAuth: true,
@@ -51,6 +51,9 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       ...(body.twinGroupId ? { twinGroupId: String(body.twinGroupId) } : {}),
     },
   })
+  if (updateResult.count === 0) {
+    return NextResponse.json({ error: 'Student not found' }, { status: 404 })
+  }
 
   return NextResponse.json({ success: true, studentId })
 })

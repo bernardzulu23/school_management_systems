@@ -237,7 +237,7 @@ export const GET = withErrorHandler(async function GET(req) {
     })
   } else {
     entries = await prisma.timetableAllocationEntry.findMany({
-      where,
+      where: { schoolId, ...where },
       include: {
         allocation: {
           include: {

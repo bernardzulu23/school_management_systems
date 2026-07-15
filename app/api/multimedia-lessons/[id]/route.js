@@ -81,8 +81,8 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   if (!subject) throw new ApiError('subject is required', 400)
   if (!grade) throw new ApiError('grade is required', 400)
 
-  const updated = await prisma.multimediaLesson.update({
-    where: { id: existing.id },
+  const updateResult = await prisma.multimediaLesson.updateMany({
+    where: { id: existing.id, schoolId },
     data: {
       title,
       subject,
@@ -92,6 +92,11 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
       slides: sanitizeSlides(body?.slides),
       status: normalize(body?.status).toUpperCase() === 'SAVED' ? 'SAVED' : 'DRAFT',
     },
+  })
+  if (updateResult.count === 0) throw new ApiError('Lesson not found', 404)
+
+  const updated = await prisma.multimediaLesson.findFirst({
+    where: { id: existing.id, schoolId },
     select: {
       id: true,
       title: true,

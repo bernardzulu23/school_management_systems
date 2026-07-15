@@ -27,18 +27,14 @@ export const GET = withErrorHandler(async function GET(request) {
     defaultValue: '',
   }).toLowerCase()
 
-  let where
   if (scope === 'review') {
     if (!roleCheck(auth.user, ['HOD', 'hod', 'ADMIN', 'headteacher'])) {
       throw new ApiError('Forbidden', 403)
     }
-    where = { schoolId, status: 'pending' }
-  } else {
-    where = { teacherId: userId }
   }
 
   const items = await prisma.sharedMaterial.findMany({
-    where,
+    where: scope === 'review' ? { schoolId, status: 'pending' } : { schoolId, teacherId: userId },
     orderBy: { createdAt: 'desc' },
     take: 200,
     select: {

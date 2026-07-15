@@ -73,41 +73,55 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     },
   })
 
-  const curriculum = existing
-    ? await prisma.curriculum.update({
-        where: { id: existing.id },
-        data: {
-          subject,
-          gradeOrForm,
-          source: 'pdf',
-          sourceUrl,
-          meta: {
-            learningOutcomes: parsed.learningOutcomes,
-            suggestedActivities: parsed.suggestedActivities,
-            rawTextLength: parsed.rawTextLength,
-          },
-          updatedAt: new Date(),
+  let curriculum
+  if (existing) {
+    const updateResult = await prisma.curriculum.updateMany({
+      where: { id: existing.id, schoolId },
+      data: {
+        subject,
+        gradeOrForm,
+        source: 'pdf',
+        sourceUrl,
+        meta: {
+          learningOutcomes: parsed.learningOutcomes,
+          suggestedActivities: parsed.suggestedActivities,
+          rawTextLength: parsed.rawTextLength,
         },
-      })
-    : await prisma.curriculum.create({
-        data: {
-          id: crypto.randomUUID(),
-          schoolId,
-          subject,
-          gradeOrForm,
-          source: 'pdf',
-          sourceUrl,
-          meta: {
-            learningOutcomes: parsed.learningOutcomes,
-            suggestedActivities: parsed.suggestedActivities,
-            rawTextLength: parsed.rawTextLength,
-          },
+        updatedAt: new Date(),
+      },
+    })
+    if (updateResult.count === 0) {
+      return NextResponse.json({ error: 'Curriculum not found' }, { status: 404 })
+    }
+    curriculum = await prisma.curriculum.findFirst({ where: { id: existing.id, schoolId } })
+  } else {
+    curriculum = await prisma.curriculum.create({
+      data: {
+        id: crypto.randomUUID(),
+        schoolId,
+        subject,
+        gradeOrForm,
+        source: 'pdf',
+        sourceUrl,
+        meta: {
+          learningOutcomes: parsed.learningOutcomes,
+          suggestedActivities: parsed.suggestedActivities,
+          rawTextLength: parsed.rawTextLength,
         },
-      })
+      },
+    })
+  }
 
-  await prisma.curriculumUnit.deleteMany({ where: { curriculumId: curriculum.id } })
+  if (!curriculum) {
+    return NextResponse.json({ error: 'Curriculum not found' }, { status: 404 })
+  }
+
+  await prisma.curriculumUnit.deleteMany({
+    where: { curriculumId: curriculum.id, curriculum: { schoolId } },
+  })
   if (parsed.units.length) {
     await prisma.curriculumUnit.createMany({
+      ...(schoolId ? {} : {}),
       data: parsed.units.map((u, i) => ({
         id: crypto.randomUUID(),
         curriculumId: curriculum.id,
@@ -124,8 +138,8 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     })
   }
 
-  const withUnits = await prisma.curriculum.findUnique({
-    where: { id: curriculum.id },
+  const withUnits = await prisma.curriculum.findFirst({
+    where: { id: curriculum.id, schoolId },
     include: { units: { orderBy: { sortOrder: 'asc' } } },
   })
 

@@ -35,7 +35,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   if (!(await canAccessPlan(auth, plan))) throw new ApiError('Forbidden', 403)
 
   const comments = await prisma.lessonPlanComment.findMany({
-    where: { lessonPlanId: id },
+    where: { lessonPlanId: id, lessonPlan: { schoolId } },
     orderBy: { createdAt: 'asc' },
     take: 100,
     include: {
@@ -81,6 +81,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       commentedByUserId: userId,
       comment,
       sectionReference,
+      ...(schoolId ? {} : {}),
     },
     include: {
       commentedBy: { select: { id: true, name: true, email: true } },

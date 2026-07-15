@@ -35,11 +35,13 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const [competencies, subjects] = await Promise.all([
     prisma.eczCompetency.findMany({
+      ...(schoolId ? {} : {}),
       orderBy: { name: 'asc' },
       select: { id: true, name: true, descriptor: true, category: true },
       take: 500,
     }),
     prisma.eczSubjectConstruct.findMany({
+      ...(schoolId ? {} : {}),
       orderBy: { subjectName: 'asc' },
       select: {
         id: true,

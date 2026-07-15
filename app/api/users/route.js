@@ -99,22 +99,20 @@ export const GET = withErrorHandler(async function GET(request) {
     }
   }
 
-  const where = {
-    schoolId,
-    ...(role ? { role: { equals: String(role), mode: 'insensitive' } } : {}),
-    ...(Array.isArray(teacherUserIds) ? { id: { in: teacherUserIds } } : {}),
-    ...(q
-      ? {
-          OR: [
-            { name: { contains: q, mode: 'insensitive' } },
-            { email: { contains: q, mode: 'insensitive' } },
-          ],
-        }
-      : {}),
-  }
-
   const users = await prisma.user.findMany({
-    where,
+    where: {
+      schoolId,
+      ...(role ? { role: { equals: String(role), mode: 'insensitive' } } : {}),
+      ...(Array.isArray(teacherUserIds) ? { id: { in: teacherUserIds } } : {}),
+      ...(q
+        ? {
+            OR: [
+              { name: { contains: q, mode: 'insensitive' } },
+              { email: { contains: q, mode: 'insensitive' } },
+            ],
+          }
+        : {}),
+    },
     orderBy: { createdAt: 'desc' },
     take: USER_LIST_LIMIT,
     select: {

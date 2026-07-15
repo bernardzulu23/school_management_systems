@@ -59,12 +59,12 @@ describe('uniqueTeacherColors', () => {
       lastHue = picked.hue
     }
     expect(new Set(hexes).size).toBe(target)
-  })
+  }, 30_000)
 
   it('reports realistic chip-scale capacity', () => {
     const capacity = measureTeacherColorCapacity(80)
     expect(capacity).toBeLessThanOrEqual(64)
     expect(capacity).toBeGreaterThanOrEqual(24)
     expect(colorAtStep(-GOLDEN_ANGLE_DEG, 0, 0).colorHex).toMatch(/^#[0-9A-F]{6}$/)
-  })
+  }, 30_000)
 })

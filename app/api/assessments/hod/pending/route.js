@@ -25,15 +25,13 @@ export const GET = withErrorHandler(async function GET(request) {
   const { searchParams } = new URL(request.url)
   const status = String(searchParams.get('status') || 'SUBMITTED').toUpperCase()
 
-  const where = {
-    schoolId,
-    type: { in: ['quiz', 'assignment'] },
-    ...(status !== 'ALL' ? { status } : {}),
-    ...(!isAdmin ? { reviewerUserId: userId } : {}),
-  }
-
   const assessments = await prisma.assessment.findMany({
-    where,
+    where: {
+      schoolId,
+      type: { in: ['quiz', 'assignment'] },
+      ...(status !== 'ALL' ? { status } : {}),
+      ...(!isAdmin ? { reviewerUserId: userId } : {}),
+    },
     orderBy: { submittedAt: 'desc' },
     take: 100,
     include: {

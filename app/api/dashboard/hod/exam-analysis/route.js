@@ -130,7 +130,7 @@ async function resolveDepartmentResultScope({
   departmentNameAliases,
 }) {
   const teacherDepartments = await prismaClient.teacherDepartment.findMany({
-    where: { departmentId: { in: departmentIds } },
+    where: { departmentId: { in: departmentIds }, department: { schoolId } },
     select: { teacherId: true },
   })
 
@@ -368,7 +368,7 @@ export const GET = withErrorHandler(async function GET(request) {
   }
 
   const resultsForTerm = await prisma.result.findMany({
-    where: resultScope,
+    where: { schoolId, ...resultScope },
     select: { studentId: true, subjectId: true, score: true, grade: true, resultType: true },
     take: 50000,
   })
@@ -391,6 +391,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const resultsPrevTerm = prevTerm
     ? await prisma.result.findMany({
         where: {
+          schoolId,
           ...resultScope,
           term: prevTerm,
         },
@@ -470,6 +471,7 @@ export const GET = withErrorHandler(async function GET(request) {
   for (const t of ['Term 1', 'Term 2', 'Term 3']) {
     const termResults = await prisma.result.findMany({
       where: {
+        schoolId,
         ...resultScope,
         term: t,
       },

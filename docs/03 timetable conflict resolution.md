@@ -364,7 +364,7 @@ npx prisma generate
 | 6    | `TimetableDraftMeta` + post-generate persist         | ✅                          |
 | 7    | Align `sync-draft` with full hard-conflict rejection | ✅                          |
 | 8    | HOD read-only conflict summary                       | ✅ (draft-meta counts only) |
-| 9    | `USER_GUIDE.md` conflict centre section              | Planned                     |
+| 9    | `USER_GUIDE.md` conflict centre section              | ✅                          |
 | 10   | `SYSTEM_DOCUMENTATION.md` + API routes               | ✅                          |
 | 11   | Phase 3: draft-meta API, main UI KPI, sidebar badge  | ✅                          |
 

@@ -223,7 +223,7 @@ export const GET = withErrorHandler(async function GET(request) {
       }),
       prisma.class.count({ where: { schoolId } }),
       prisma.subject.count({ where: { schoolId } }),
-      prisma.result.count({ where: effectiveResultWhere }),
+      prisma.result.count({ where: { schoolId, ...effectiveResultWhere } }),
     ])
 
     console.log(`[HEADTEACHER-DASHBOARD] schoolId: ${schoolId}, totalStudents: ${totalStudents}`)
@@ -247,12 +247,12 @@ export const GET = withErrorHandler(async function GET(request) {
 
     // 3. Pass Rate Calculation (from Results, scoped by schoolId)
     const passedResults = await prisma.result.count({
-      where: { ...effectiveResultWhere, score: { gte: 40 } },
+      where: { schoolId, ...effectiveResultWhere, score: { gte: 40 } },
     })
     const passRate = resultsCount > 0 ? Math.round((passedResults / resultsCount) * 100) : 0
 
     const scoreAgg = await prisma.result.aggregate({
-      where: effectiveResultWhere,
+      where: { schoolId, ...effectiveResultWhere },
       _avg: { score: true },
     })
     const averageScore = scoreAgg._avg.score ? Math.round(scoreAgg._avg.score) : 0
@@ -260,7 +260,7 @@ export const GET = withErrorHandler(async function GET(request) {
     const studentScoreRows =
       resultsCount > 0
         ? await prisma.result.findMany({
-            where: effectiveResultWhere,
+            where: { schoolId, ...effectiveResultWhere },
             select: { studentId: true, score: true },
             take: 200000,
           })
@@ -292,6 +292,7 @@ export const GET = withErrorHandler(async function GET(request) {
         ? await prisma.result.groupBy({
             by: ['enteredByUserId'],
             where: {
+              schoolId,
               ...effectiveResultWhere,
               enteredByUserId: { not: null },
             },
@@ -305,6 +306,7 @@ export const GET = withErrorHandler(async function GET(request) {
         ? await prisma.result.groupBy({
             by: ['enteredByUserId'],
             where: {
+              schoolId,
               ...effectiveResultWhere,
               enteredByUserId: { not: null },
               score: { gte: 40 },
@@ -427,7 +429,7 @@ export const GET = withErrorHandler(async function GET(request) {
 
     // 4. Students Requiring Attention (Score < 40, scoped by schoolId)
     const lowPerformingResults = await prisma.result.findMany({
-      where: { ...effectiveResultWhere, score: { lt: 40 } },
+      where: { schoolId, ...effectiveResultWhere, score: { lt: 40 } },
       include: {
         student: {
           select: {
@@ -628,13 +630,13 @@ export const GET = withErrorHandler(async function GET(request) {
 
     const subjectAgg = await prisma.result.groupBy({
       by: ['subjectId'],
-      where: effectiveResultWhere,
+      where: { schoolId, ...effectiveResultWhere },
       _avg: { score: true },
       _count: { _all: true },
     })
     const subjectPassAgg = await prisma.result.groupBy({
       by: ['subjectId'],
-      where: { ...effectiveResultWhere, score: { gte: 40 } },
+      where: { schoolId, ...effectiveResultWhere, score: { gte: 40 } },
       _count: { _all: true },
     })
     const passBySubjectId = new Map(
@@ -680,7 +682,7 @@ export const GET = withErrorHandler(async function GET(request) {
     const resultsWithClass =
       resultsCount > 0
         ? await prisma.result.findMany({
-            where: effectiveResultWhere,
+            where: { schoolId, ...effectiveResultWhere },
             select: { score: true, student: { select: { class: true } } },
             take: 200000,
           })
@@ -783,6 +785,7 @@ export const GET = withErrorHandler(async function GET(request) {
     // 5b. Junior Results (scoped by schoolId)
     const juniorResultRows = await prisma.result.findMany({
       where: {
+        schoolId,
         ...effectiveResultWhere,
         student: {
           OR: [
@@ -836,7 +839,7 @@ export const GET = withErrorHandler(async function GET(request) {
     const seniorResults =
       seniorStudentIds.length > 0
         ? await prisma.result.findMany({
-            where: { ...effectiveResultWhere, studentId: { in: seniorStudentIds } },
+            where: { schoolId, ...effectiveResultWhere, studentId: { in: seniorStudentIds } },
             include: {
               student: { select: { name: true, class: true } },
               subject: {
@@ -932,6 +935,7 @@ export const GET = withErrorHandler(async function GET(request) {
 
     const juniorGenderRows = await prisma.result.findMany({
       where: {
+        schoolId,
         ...effectiveResultWhere,
         student: {
           OR: [
@@ -952,7 +956,7 @@ export const GET = withErrorHandler(async function GET(request) {
     const seniorGenderRows =
       seniorStudentIds.length > 0
         ? await prisma.result.findMany({
-            where: { ...effectiveResultWhere, studentId: { in: seniorStudentIds } },
+            where: { schoolId, ...effectiveResultWhere, studentId: { in: seniorStudentIds } },
             select: {
               studentId: true,
               student: { select: { class: true, user: { select: { gender: true } } } },
@@ -972,7 +976,7 @@ export const GET = withErrorHandler(async function GET(request) {
 
     const recentResults = showSecondaryGrading
       ? await prisma.result.findMany({
-          where: effectiveResultWhere,
+          where: { schoolId, ...effectiveResultWhere },
           orderBy: { updatedAt: 'desc' },
           select: {
             id: true,
@@ -996,7 +1000,7 @@ export const GET = withErrorHandler(async function GET(request) {
     )
     const enteredByUsers = enteredByIds.length
       ? await prisma.user.findMany({
-          where: { id: { in: enteredByIds } },
+          where: { schoolId, id: { in: enteredByIds } },
           select: { id: true, name: true, role: true },
           take: 2000,
         })

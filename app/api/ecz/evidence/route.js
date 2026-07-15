@@ -61,6 +61,7 @@ export const GET = withSecureHandler(async function GET(request) {
   const statusFilter = statusRaw && EVIDENCE_STATUS_FILTERS.has(statusRaw) ? statusRaw : null
 
   const files = await prisma.eczEvidenceFile.findMany({
+    ...(schoolId ? {} : {}),
     where: {
       score: { schoolId },
       ...(scoreId ? { scoreId } : {}),
@@ -152,6 +153,7 @@ export const POST = withSecureHandler(async function POST(request) {
   const relPath = path.join(relDir, filename).replace(/\\/g, '/')
 
   const row = await prisma.eczEvidenceFile.create({
+    ...(schoolId ? {} : {}),
     data: {
       scoreId,
       fileName: file.name || filename,

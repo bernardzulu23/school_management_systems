@@ -37,14 +37,12 @@ export const GET = withErrorHandler(async function GET(request) {
   const status = safeQueryString(searchParams.get('status'))
   const take = Math.max(1, Math.min(50, Number(searchParams.get('take') || 20)))
 
-  const where = {
-    schoolId,
-    ...(status ? { status: normalizeStatus(status) } : {}),
-  }
-
   const [goals, totals] = await Promise.all([
     prisma.strategicGoal.findMany({
-      where,
+      where: {
+        schoolId,
+        ...(status ? { status: normalizeStatus(status) } : {}),
+      },
       orderBy: [{ updatedAt: 'desc' }, { createdAt: 'desc' }],
       take,
       select: {

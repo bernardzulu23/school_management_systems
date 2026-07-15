@@ -193,7 +193,7 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!teacher) throw new ApiError('Teacher profile not found', 404)
 
   const teacherDepartment = await prisma.teacherDepartment.findFirst({
-    where: { teacherId: teacher.id },
+    where: { teacherId: teacher.id, department: { schoolId } },
     select: { departmentId: true },
   })
 
@@ -209,7 +209,7 @@ export const GET = withErrorHandler(async function GET(request) {
   }
 
   const deptTeachers = await prisma.teacherDepartment.findMany({
-    where: { departmentId: teacherDepartment.departmentId },
+    where: { departmentId: teacherDepartment.departmentId, department: { schoolId } },
     select: { teacherId: true },
   })
 
@@ -223,7 +223,7 @@ export const GET = withErrorHandler(async function GET(request) {
   ])
 
   const dept = await prisma.department.findFirst({
-    where: { id: teacherDepartment.departmentId },
+    where: { id: teacherDepartment.departmentId, schoolId },
     select: { name: true },
   })
 

@@ -7,12 +7,12 @@ import {
 } from '@/lib/timetable/slotScoring'
 
 describe('school student limits', () => {
-  it('sets basic to 500, standard to 800, premium unlimited', () => {
+  it('sets basic to 500, standard to 1000, premium unlimited', () => {
     expect(SCHOOL_STUDENT_LIMIT.basic).toBe(500)
-    expect(SCHOOL_STUDENT_LIMIT.standard).toBe(800)
+    expect(SCHOOL_STUDENT_LIMIT.standard).toBe(1000)
     expect(SCHOOL_STUDENT_LIMIT.premium).toBe(Infinity)
     expect(getSchoolStudentLimit('basic')).toBe(500)
-    expect(getSchoolStudentLimit('standard')).toBe(800)
+    expect(getSchoolStudentLimit('standard')).toBe(1000)
     expect(getSchoolStudentLimit('premium')).toBe(Infinity)
   })
 })

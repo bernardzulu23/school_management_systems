@@ -28,8 +28,8 @@ export const GET = withErrorHandler(async function GET(request) {
   }
 
   // 1. Get Gamification Profile (Progress)
-  let gamificationProfile = await prisma.gamificationProfile.findUnique({
-    where: { studentId: student.id },
+  let gamificationProfile = await prisma.gamificationProfile.findFirst({
+    where: { studentId: student.id, schoolId },
     include: {
       badges: {
         include: {

@@ -62,9 +62,14 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
     if (body[key] !== undefined) data[key] = body[key]
   }
 
-  const updated = await prisma.user.update({
-    where: { id: existing.id },
+  const updateResult = await prisma.user.updateMany({
+    where: { id: existing.id, schoolId },
     data,
+  })
+  if (updateResult.count === 0) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+  const updated = await prisma.user.findFirst({
+    where: { id: existing.id, schoolId },
   })
 
   return NextResponse.json({ success: true, data: updated })

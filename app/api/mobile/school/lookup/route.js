@@ -24,7 +24,9 @@ export const GET = withSecureHandler(async function GET(request) {
     return NextResponse.json({ valid: false, error: 'Subdomain too short' }, { status: 400 })
   }
 
+  const schoolId = null // Pre-login: School is the root tenant row (no parent schoolId column)
   const school = await prisma.school.findFirst({
+    ...(schoolId ? { schoolId } : {}),
     where: { subdomain: { equals: subdomain, mode: 'insensitive' }, active: true },
     select: { id: true, name: true, subdomain: true, logo_url: true },
   })

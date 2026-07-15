@@ -88,8 +88,8 @@ export const PATCH = withErrorHandler(async function PATCH(req, { params }) {
     )
     endTime = resolved.endTime
     if (resolved.continuationSlotId) {
-      await prisma.timeSlot.update({
-        where: { id: resolved.continuationSlotId },
+      await prisma.timeSlot.updateMany({
+        where: { id: resolved.continuationSlotId, schoolId },
         data: { isDouble: false, duration: null },
       })
     }
@@ -108,8 +108,8 @@ export const PATCH = withErrorHandler(async function PATCH(req, { params }) {
 
   const duration = timeToMin(endTime) - timeToMin(startTime)
 
-  const updated = await prisma.timeSlot.update({
-    where: { id: existing.id },
+  const updateResult = await prisma.timeSlot.updateMany({
+    where: { id: existing.id, schoolId },
     data: {
       startTime,
       endTime,
@@ -117,6 +117,12 @@ export const PATCH = withErrorHandler(async function PATCH(req, { params }) {
       isDouble,
       duration,
     },
+  })
+  if (updateResult.count === 0) {
+    return NextResponse.json({ error: 'Time slot not found' }, { status: 404 })
+  }
+  const updated = await prisma.timeSlot.findFirst({
+    where: { id: existing.id, schoolId },
   })
 
   return NextResponse.json({ period: updated })

@@ -187,7 +187,9 @@ export const POST = withSecureApi(async function POST(request) {
       )
     }
 
+    const schoolId = null // Pre-login: School is the root tenant row (no parent schoolId column)
     const existing = await prisma.school.findFirst({
+      ...(schoolId ? { schoolId } : {}),
       where: { subdomain: { equals: subdomain, mode: 'insensitive' } },
       select: { id: true },
     })

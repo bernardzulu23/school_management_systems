@@ -42,7 +42,10 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   if (!subjectId) throw new ApiError('subjectId is required', 400)
   if (!Number.isFinite(formLevel)) throw new ApiError('formLevel is required', 400)
 
-  const exemplar = await prisma.eczExemplar.findUnique({ where: { id: exemplarId } })
+  const exemplar = await prisma.eczExemplar.findUnique({
+    ...(schoolId ? {} : {}),
+    where: { id: exemplarId },
+  })
   if (!exemplar) throw new ApiError('Exemplar not found', 404)
 
   const formCheck = canCreateSBATask(formLevel)
@@ -97,6 +100,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
           description: exemplar.context,
         })
     await prisma.eczRubric.create({
+      ...(schoolId ? {} : {}),
       data: {
         assessmentId: assessment.id,
         criteria: { create: criteriaToPrismaCreate(criteria) },
@@ -106,6 +110,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
 
   if (exemplar.band === 'exam_scenario' && Array.isArray(exemplar.examSubQuestionsJson)) {
     await prisma.eczAssessmentItem.createMany({
+      ...(schoolId ? {} : {}),
       data: exemplar.examSubQuestionsJson.map((sq, idx) => ({
         assessmentId: assessment.id,
         questionNumber: idx + 1,

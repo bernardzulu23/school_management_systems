@@ -189,8 +189,8 @@ export const POST = withSecureHandler(async function POST(request) {
 
   if (!apiKey) {
     if (process.env.NODE_ENV === 'production') {
-      await prisma.schoolFeePayment.update({
-        where: { id: paymentId },
+      await prisma.schoolFeePayment.updateMany({
+        where: { id: paymentId, schoolId },
         data: { status: 'failed', lipilaStatus: 'not_configured' },
       })
       return NextResponse.json({ error: 'Payment gateway is not configured' }, { status: 500 })
@@ -253,8 +253,8 @@ export const POST = withSecureHandler(async function POST(request) {
     }
 
     if (!response.ok) {
-      await prisma.schoolFeePayment.update({
-        where: { id: paymentId },
+      await prisma.schoolFeePayment.updateMany({
+        where: { id: paymentId, schoolId },
         data: { status: 'failed', lipilaStatus: String(data?.status || 'gateway_error') },
       })
 
@@ -290,15 +290,25 @@ export const POST = withSecureHandler(async function POST(request) {
     const lipilaStatus = String(data?.status || '').trim()
 
     if (gatewayReferenceId !== referenceId) {
-      paymentRecord = await prisma.schoolFeePayment.update({
-        where: { id: paymentId },
+      const updated = await prisma.schoolFeePayment.updateMany({
+        where: { id: paymentId, schoolId },
         data: { referenceId: gatewayReferenceId, lipilaStatus },
       })
+      if (updated.count > 0) {
+        paymentRecord = await prisma.schoolFeePayment.findFirst({
+          where: { id: paymentId, schoolId },
+        })
+      }
     } else if (lipilaStatus) {
-      paymentRecord = await prisma.schoolFeePayment.update({
-        where: { id: paymentId },
+      const updated = await prisma.schoolFeePayment.updateMany({
+        where: { id: paymentId, schoolId },
         data: { lipilaStatus },
       })
+      if (updated.count > 0) {
+        paymentRecord = await prisma.schoolFeePayment.findFirst({
+          where: { id: paymentId, schoolId },
+        })
+      }
     }
 
     if (isPaidLipilaStatus(lipilaStatus) || isFailedLipilaStatus(lipilaStatus)) {
@@ -307,7 +317,9 @@ export const POST = withSecureHandler(async function POST(request) {
         referenceId: gatewayReferenceId,
         status: lipilaStatus,
       })
-      paymentRecord = await prisma.schoolFeePayment.findUnique({ where: { id: paymentId } })
+      paymentRecord = await prisma.schoolFeePayment.findFirst({
+        where: { id: paymentId, schoolId },
+      })
     }
 
     const transaction = serializeFeePayment(paymentRecord)
@@ -329,8 +341,8 @@ export const POST = withSecureHandler(async function POST(request) {
       { status: 200 }
     )
   } catch (error) {
-    await prisma.schoolFeePayment.update({
-      where: { id: paymentId },
+    await prisma.schoolFeePayment.updateMany({
+      where: { id: paymentId, schoolId },
       data: { status: 'failed', lipilaStatus: 'gateway_unavailable' },
     })
     if (error?.name === 'AbortError') {

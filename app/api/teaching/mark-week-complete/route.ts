@@ -98,7 +98,7 @@ export const POST = withErrorHandler(async function POST(request: Request) {
   )
   const teachableSet = new Set(teachableWeeks.map((w) => w.week))
   const progressDone = await prisma.schemeProgress.findMany({
-    where: { schemeId: body.schemeId, completed: true },
+    where: { schemeId: body.schemeId, schoolId, completed: true },
     select: { weekNumber: true },
   })
   const completedWeeks = progressDone.filter((p) => teachableSet.has(p.weekNumber)).length

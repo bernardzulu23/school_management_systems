@@ -1,10 +1,10 @@
 export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
-import * as XLSX from 'xlsx'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { buildTeacherUploadWorkbook } from '@/lib/uploads/parseTeacherExcel'
+import { workbookToBuffer } from '@/lib/excel/workbook'
 
 export const runtime = 'nodejs'
 
@@ -17,7 +17,7 @@ export const GET = withErrorHandler(async (request) => {
   }
 
   const wb = buildTeacherUploadWorkbook()
-  const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
+  const buffer = await workbookToBuffer(wb)
 
   return new NextResponse(buffer, {
     status: 200,

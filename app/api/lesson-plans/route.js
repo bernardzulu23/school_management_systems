@@ -40,15 +40,13 @@ export const GET = withErrorHandler(async function GET(request) {
     throw new ApiError('Forbidden', 403)
   }
 
-  const where = { schoolId }
-
-  if (wantsMine) where.createdByUserId = userId
-  if (wantsReview) where.reviewerUserId = userId
-
-  if (status) where.status = status.toUpperCase()
-
   const plans = await prisma.lessonPlan.findMany({
-    where,
+    where: {
+      schoolId,
+      ...(wantsMine ? { createdByUserId: userId } : {}),
+      ...(wantsReview ? { reviewerUserId: userId } : {}),
+      ...(status ? { status: status.toUpperCase() } : {}),
+    },
     orderBy: { createdAt: 'desc' },
     take: 200,
     select: {

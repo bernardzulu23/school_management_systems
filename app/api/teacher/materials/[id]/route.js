@@ -51,8 +51,8 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   if (type !== undefined && !type) throw new ApiError('type cannot be empty', 400)
   if (fileUrl !== undefined && !fileUrl) throw new ApiError('fileUrl cannot be empty', 400)
 
-  const updated = await prisma.studyMaterial.update({
-    where: { id: materialId },
+  const updateResult = await prisma.studyMaterial.updateMany({
+    where: { id: materialId, schoolId },
     data: {
       ...(title !== undefined ? { title } : {}),
       ...(subject !== undefined ? { subject } : {}),
@@ -62,6 +62,11 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
       ...(size !== undefined ? { size } : {}),
       ...(tags !== undefined ? { tags } : {}),
     },
+  })
+  if (updateResult.count === 0) throw new ApiError('Not found', 404)
+
+  const updated = await prisma.studyMaterial.findFirst({
+    where: { id: materialId, schoolId },
   })
 
   return NextResponse.json({
@@ -106,8 +111,8 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
     await tx.studentMaterial.deleteMany({
       where: { schoolId, studyMaterialId: materialId },
     })
-    await tx.studyMaterial.delete({
-      where: { id: materialId },
+    await tx.studyMaterial.deleteMany({
+      where: { id: materialId, schoolId },
     })
   })
 

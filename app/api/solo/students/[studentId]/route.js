@@ -21,7 +21,12 @@ export const DELETE = withSecureApi(async function DELETE(request, { params }) {
   })
   if (!student) return NextResponse.json({ error: 'Student not found' }, { status: 404 })
 
-  await prisma.user.delete({ where: { id: studentId } })
+  const deleteResult = await prisma.user.deleteMany({
+    where: { id: studentId, schoolId: gate.schoolId },
+  })
+  if (deleteResult.count === 0) {
+    return NextResponse.json({ error: 'Student not found' }, { status: 404 })
+  }
 
   return NextResponse.json({ success: true })
 })

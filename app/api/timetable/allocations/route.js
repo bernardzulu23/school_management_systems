@@ -44,22 +44,15 @@ export const GET = withErrorHandler(async function GET(req) {
   const department = safeQueryString(searchParams.get('department'))
   const status = safeQueryString(searchParams.get('status'))
 
-  const where = { schoolId, term, academicYear }
-
-  // HOD sees only their own allocations
-  if (isHod) {
-    where.hodId = user.id
-  }
-
-  if (department) {
-    // Filter by department via HOD's department
-    where.hod = { hodProfile: { department } }
-  }
-
-  if (status) where.status = status
-
   const allocations = await prisma.teacherAllocation.findMany({
-    where,
+    where: {
+      schoolId,
+      term,
+      academicYear,
+      ...(isHod ? { hodId: user.id } : {}),
+      ...(department ? { hod: { hodProfile: { department } } } : {}),
+      ...(status ? { status } : {}),
+    },
     include: {
       teacher: {
         select: {

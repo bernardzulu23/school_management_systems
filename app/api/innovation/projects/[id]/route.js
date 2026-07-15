@@ -82,7 +82,14 @@ export const PATCH = withSecureApi(async function PATCH(request, { params }) {
   }
 
   try {
-    const project = await prisma.innovationProject.update({ where: { id }, data })
+    const updateResult = await prisma.innovationProject.updateMany({
+      where: { id, schoolId },
+      data,
+    })
+    if (updateResult.count === 0) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 })
+    }
+    const project = await prisma.innovationProject.findFirst({ where: { id, schoolId } })
     return NextResponse.json({ success: true, data: project })
   } catch (error) {
     console.error('Innovation project update:', error)
@@ -112,7 +119,10 @@ export const DELETE = withSecureApi(async function DELETE(request, { params }) {
   }
 
   try {
-    await prisma.innovationProject.delete({ where: { id } })
+    const deleteResult = await prisma.innovationProject.deleteMany({ where: { id, schoolId } })
+    if (deleteResult.count === 0) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 })
+    }
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Innovation project delete:', error)

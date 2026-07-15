@@ -212,19 +212,19 @@ export const GET = withErrorHandler(async function GET(request) {
     }
   }
 
-  const where = {
-    schoolId,
-    ...(studentId ? { studentId } : {}),
-    ...(subjectId ? { subjectId } : {}),
-    ...(term ? { term } : {}),
-    ...(year ? { year } : {}),
-    ...(resultTypeFilter ? { resultType: resultTypeFilter } : {}),
-    ...(Array.isArray(rosterStudentIds) ? { studentId: { in: rosterStudentIds } } : {}),
-    ...(isTeacher && scope !== 'all' && !resolvedClassId ? { enteredByUserId: auth.user.id } : {}),
-  }
-
   const results = await prisma.result.findMany({
-    where,
+    where: {
+      schoolId,
+      ...(studentId ? { studentId } : {}),
+      ...(subjectId ? { subjectId } : {}),
+      ...(term ? { term } : {}),
+      ...(year ? { year } : {}),
+      ...(resultTypeFilter ? { resultType: resultTypeFilter } : {}),
+      ...(Array.isArray(rosterStudentIds) ? { studentId: { in: rosterStudentIds } } : {}),
+      ...(isTeacher && scope !== 'all' && !resolvedClassId
+        ? { enteredByUserId: auth.user.id }
+        : {}),
+    },
     orderBy: { updatedAt: 'desc' },
   })
 
@@ -804,7 +804,7 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
     })
     if (!result) throw new ApiError('Result not found', 404)
 
-    await prisma.result.delete({ where: { id: result.id } })
+    await prisma.result.deleteMany({ where: { id: result.id, schoolId } })
     return NextResponse.json({ success: true })
   }
 
@@ -841,7 +841,7 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
     isStaffEntry,
   })
 
-  await prisma.result.delete({ where: { id: result.id } })
+  await prisma.result.deleteMany({ where: { id: result.id, schoolId } })
 
   return NextResponse.json({ success: true })
 })

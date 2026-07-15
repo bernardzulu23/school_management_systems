@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import * as XLSX from 'xlsx'
+import { buildErrorReportWorkbook } from '@/lib/uploads/parseStudentExcel'
+import { downloadWorkbook } from '@/lib/excel/workbook'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { Upload, Download, FileSpreadsheet, AlertCircle, CheckCircle2 } from 'lucide-react'
@@ -79,25 +80,9 @@ export default function StudentBulkUpload() {
     }
   }
 
-  function downloadErrorReport(errors) {
-    const wb = XLSX.utils.book_new()
-    const rows = [
-      ['Row #', 'Full Name', 'Email', 'Field', 'Error', 'Fix Required'],
-      ...errors.flatMap((e) =>
-        e.errors.map((err) => [
-          e.excelRow,
-          e.full_name || '',
-          e.email || '',
-          err.field,
-          err.error,
-          'Fix this row in your Excel file and re-upload',
-        ])
-      ),
-    ]
-    const ws = XLSX.utils.aoa_to_sheet(rows)
-    ws['!cols'] = [8, 25, 30, 18, 45, 35].map((wch) => ({ wch }))
-    XLSX.utils.book_append_sheet(wb, ws, 'Error Report')
-    XLSX.writeFile(wb, `ZSMS_Upload_Errors_${Date.now()}.xlsx`)
+  async function downloadErrorReport(errors) {
+    const wb = buildErrorReportWorkbook(errors)
+    await downloadWorkbook(wb, `ZSMS_Upload_Errors_${Date.now()}.xlsx`)
   }
 
   return (

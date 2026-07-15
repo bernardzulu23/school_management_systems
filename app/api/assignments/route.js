@@ -40,7 +40,7 @@ export const GET = withErrorHandler(async function GET(request) {
     }
 
     const assignments = await prisma.assignment.findMany({
-      where,
+      where: { schoolId, ...where },
       orderBy: { dueDate: 'asc' },
     })
 
@@ -59,7 +59,7 @@ export const GET = withErrorHandler(async function GET(request) {
   }
 
   const assignments = await prisma.assignment.findMany({
-    where,
+    where: { schoolId, ...where },
     orderBy: { dueDate: 'desc' },
   })
 
@@ -163,10 +163,13 @@ export const POST = withErrorHandler(async function POST(request) {
   })
 
   if (assessmentId) {
-    await prisma.assessment.update({
-      where: { id: assessmentId },
+    const updateResult = await prisma.assessment.updateMany({
+      where: { id: assessmentId, schoolId },
       data: { status: 'PUBLISHED', publishedAssignmentId: assignment.id },
     })
+    if (updateResult.count === 0) {
+      throw new ApiError('Linked assessment not found in this school', 404)
+    }
   }
 
   const { notifyLessonAssigned } = await import('@/lib/notifications/integrations')

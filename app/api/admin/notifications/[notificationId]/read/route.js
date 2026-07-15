@@ -29,9 +29,14 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   })
   if (!notification) throw new ApiError('Not found', 404)
 
-  const updated = await prisma.allocationNotification.update({
-    where: { id: notification.id },
+  const updateResult = await prisma.allocationNotification.updateMany({
+    where: { id: notification.id, schoolId },
     data: { read: true, readAt: new Date() },
+  })
+  if (updateResult.count === 0) throw new ApiError('Not found', 404)
+
+  const updated = await prisma.allocationNotification.findFirst({
+    where: { id: notification.id, schoolId },
     select: { read: true, readAt: true },
   })
 

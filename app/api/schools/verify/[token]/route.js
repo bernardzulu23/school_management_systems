@@ -27,7 +27,9 @@ export const GET = withSecureHandler(async function GET(request, { params }) {
   const token = await safeRouteParam(params, 'token')
 
   const now = new Date()
+  const schoolId = null // Pre-login lookup; tenant id is School.id once resolved
   const school = await prisma.school.findFirst({
+    ...(schoolId ? { schoolId } : {}),
     where: {
       verificationToken: token,
       verificationExpiry: { gt: now },
@@ -41,7 +43,7 @@ export const GET = withSecureHandler(async function GET(request, { params }) {
     return NextResponse.redirect(new URL('/register-school?error=invalid-token', request.url))
   }
 
-  await prisma.school.update({
+  const updateResult = await prisma.school.updateMany({
     where: { id: school.id },
     data: {
       active: true,
@@ -50,6 +52,9 @@ export const GET = withSecureHandler(async function GET(request, { params }) {
       verificationExpiry: null,
     },
   })
+  if (updateResult.count === 0) {
+    return NextResponse.redirect(new URL('/register-school?error=invalid-token', request.url))
+  }
 
   const host = request.headers.get('host') || ''
   const baseDomain =

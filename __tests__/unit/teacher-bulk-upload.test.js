@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest'
-import * as XLSX from 'xlsx'
 import {
   parseTeacherExcel,
   buildTeacherUploadWorkbook,
@@ -12,6 +11,7 @@ import {
   teacherRowSchema,
   prepareTeacherRow,
 } from '@/lib/uploads/teacherUploadSchema'
+import { getWorksheet, getSheetNames, workbookToBuffer } from '@/lib/excel/workbook'
 
 describe('teacher bulk upload schema', () => {
   it('parses department names', () => {
@@ -52,9 +52,9 @@ describe('teacher bulk upload schema', () => {
 })
 
 describe('parseTeacherExcel', () => {
-  it('reads rows from the Teacher Data sheet', () => {
+  it('reads rows from the Teacher Data sheet', async () => {
     const wb = buildTeacherUploadWorkbook()
-    expect(wb.SheetNames).toContain('Database Mapping')
+    expect(getSheetNames(wb)).toContain('Database Mapping')
     const extra = [
       'John Banda',
       'john@school.edu.zm',
@@ -70,10 +70,10 @@ describe('parseTeacherExcel', () => {
       'Biology',
       'Form 3A:Biology',
     ]
-    const ws = wb.Sheets['Teacher Data']
-    XLSX.utils.sheet_add_aoa(ws, [extra], { origin: 'A4' })
-    const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
-    const rows = parseTeacherExcel(buffer)
+    const ws = getWorksheet(wb, 'Teacher Data')
+    ws.addRow(extra)
+    const buffer = await workbookToBuffer(wb)
+    const rows = await parseTeacherExcel(buffer)
     expect(rows).toHaveLength(1)
     expect(rows[0].full_name).toBe('John Banda')
     expect(rows[0]._excelRow).toBe(4)

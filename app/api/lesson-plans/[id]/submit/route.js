@@ -52,8 +52,8 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
 
   if (individual) {
     const now = new Date()
-    const updated = await prisma.lessonPlan.update({
-      where: { id },
+    const updateResult = await prisma.lessonPlan.updateMany({
+      where: { id, schoolId },
       data: {
         status: 'APPROVED',
         reviewerUserId: null,
@@ -64,6 +64,11 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
         ...(content != null ? { content } : {}),
         version: { increment: 1 },
       },
+    })
+    if (updateResult.count === 0) throw new ApiError('Not found', 404)
+
+    const updated = await prisma.lessonPlan.findFirst({
+      where: { id, schoolId },
       include: {
         createdBy: { select: { id: true, name: true, email: true } },
       },
@@ -94,8 +99,8 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   }
 
   const now = new Date()
-  const updated = await prisma.lessonPlan.update({
-    where: { id },
+  const submitResult = await prisma.lessonPlan.updateMany({
+    where: { id, schoolId },
     data: {
       status: 'SUBMITTED',
       reviewerUserId,
@@ -107,6 +112,11 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       ...(content != null ? { content } : {}),
       version: { increment: 1 },
     },
+  })
+  if (submitResult.count === 0) throw new ApiError('Not found', 404)
+
+  const updated = await prisma.lessonPlan.findFirst({
+    where: { id, schoolId },
     include: {
       createdBy: { select: { id: true, name: true, email: true } },
       reviewer: { select: { id: true, name: true, email: true } },

@@ -85,6 +85,7 @@ export const POST = withErrorHandler(async function POST(request) {
   })
 
   await prisma.eczRubric.create({
+    ...(schoolId ? {} : {}),
     data: {
       assessmentId: assessment.id,
       criteria: {
@@ -102,6 +103,7 @@ export const POST = withErrorHandler(async function POST(request) {
   })
 
   await prisma.eczAssessmentItem.createMany({
+    ...(schoolId ? {} : {}),
     data: questions.map((q, idx) => ({
       assessmentId: assessment.id,
       questionNumber: idx + 1,

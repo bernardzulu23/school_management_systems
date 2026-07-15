@@ -24,9 +24,9 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     throw new ApiError('Forbidden', 403)
   }
 
-  // Tenant check (ensures a valid, active session) — ratings are cross-school by design.
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
 
   const id = await safeRouteParam(params, 'id')
   if (!id) throw new ApiError('Invalid material id', 400)
@@ -35,8 +35,8 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   const userId = String(auth.user.id)
 
   const material = await prisma.sharedMaterial.findFirst({
-    where: { id, status: 'approved' },
-    select: { id: true },
+    where: { id, status: 'approved', schoolId: { not: '' } },
+    select: { id: true, schoolId: true },
   })
   if (!material) throw new ApiError('Material not found', 404)
 
@@ -47,14 +47,15 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       teacherId: userId,
       score: body.score,
       comment: body.comment || null,
+      ...(schoolId ? {} : {}),
     },
     update: { score: body.score, comment: body.comment || null },
   })
 
   await recomputeMaterialRating(prisma, material.id)
 
-  const refreshed = await prisma.sharedMaterial.findUnique({
-    where: { id: material.id },
+  const refreshed = await prisma.sharedMaterial.findFirst({
+    where: { id: material.id, schoolId: material.schoolId },
     select: { rating: true, ratingCount: true },
   })
 

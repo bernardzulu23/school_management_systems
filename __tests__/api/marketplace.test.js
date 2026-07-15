@@ -207,6 +207,7 @@ describe('POST /api/marketplace/:id/download', () => {
     const { POST } = await import('@/app/api/marketplace/[id]/download/route.js')
     mockPrisma.sharedMaterial.findFirst.mockResolvedValue({
       id: 'm1',
+      schoolId: SCHOOL_B,
       type: 'lesson_plan',
       title: 'Algebra',
       subject: 'Mathematics',
@@ -221,7 +222,7 @@ describe('POST /api/marketplace/:id/download', () => {
       grade: 'Form 1',
       status: 'DRAFT',
     })
-    mockPrisma.sharedMaterial.update.mockResolvedValue({})
+    mockPrisma.sharedMaterial.updateMany.mockResolvedValue({ count: 1 })
 
     const res = await POST(
       authedRequest({
@@ -240,7 +241,7 @@ describe('POST /api/marketplace/:id/download', () => {
         data: expect.objectContaining({ schoolId: SCHOOL_A, status: 'DRAFT' }),
       })
     )
-    expect(mockPrisma.sharedMaterial.update).toHaveBeenCalledWith(
+    expect(mockPrisma.sharedMaterial.updateMany).toHaveBeenCalledWith(
       expect.objectContaining({ data: { downloadCount: { increment: 1 } } })
     )
   })

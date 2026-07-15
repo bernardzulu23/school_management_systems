@@ -41,6 +41,7 @@ export const POST = withErrorHandler(async function POST(request) {
   // Prevent duplicate submissions of the same source plan.
   const existing = await prisma.sharedMaterial.findFirst({
     where: {
+      schoolId,
       sourceLessonPlanId: plan.id,
       teacherId: userId,
       status: { in: ['pending', 'approved'] },

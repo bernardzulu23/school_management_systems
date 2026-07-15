@@ -26,14 +26,14 @@ export const GET = withErrorHandler(async function GET(req: NextRequest) {
   const classId = safeQueryString(url.searchParams.get('classId'))
   const subjectId = safeQueryString(url.searchParams.get('subjectId'))
 
-  const where: any = { schoolId }
-  if (assignmentId) where.teachingAssignmentId = assignmentId
-  if (teacherId) where.teacherId = teacherId
-  if (classId) where.classId = classId
-  if (subjectId) where.subjectId = subjectId
-
   const data = await prisma.schedulingRecipe.findMany({
-    where,
+    where: {
+      schoolId,
+      ...(assignmentId ? { teachingAssignmentId: assignmentId } : {}),
+      ...(teacherId ? { teacherId } : {}),
+      ...(classId ? { classId } : {}),
+      ...(subjectId ? { subjectId } : {}),
+    },
     include: { blocks: true, constraints: true },
     orderBy: [{ updatedAt: 'desc' }],
     take: 200,

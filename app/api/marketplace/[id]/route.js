@@ -17,7 +17,7 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   if (!id) throw new ApiError('Invalid material id', 400)
 
   const material = await prisma.sharedMaterial.findFirst({
-    where: { id, status: 'approved' },
+    where: { id, status: 'approved', schoolId: { not: '' } },
     include: {
       teacher: { select: { name: true } },
       ratings: {

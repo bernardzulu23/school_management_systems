@@ -41,7 +41,7 @@ export const POST = withErrorHandler(async (request) => {
 
   let rows
   try {
-    rows = parseTeacherExcel(buffer)
+    rows = await parseTeacherExcel(buffer)
   } catch (err) {
     return NextResponse.json(
       { success: false, error: err.message || 'Failed to parse Excel file' },

@@ -40,10 +40,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
 
 const PILOT_EMAIL_WHITELIST = new Set(
-  (
-    process.env.PILOT_EMAILS ||
-    'fredith01@gmail.com,admin@ndakedaysecondaryschool.edu,krbmafupa@gmail.com,nchimunya001@gmail.com,super-admin@bluepeacktechnologies.com'
-  )
+  String(process.env.PILOT_EMAILS || '')
     .split(',')
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean)
@@ -62,6 +59,9 @@ if (
   !process.env.NEXT_PHASE
 ) {
   console.warn('Warning: JWT secrets are not set in production environment.')
+}
+if (process.env.NODE_ENV === 'production' && !process.env.PILOT_EMAILS && !process.env.NEXT_PHASE) {
+  console.warn('Warning: PILOT_EMAILS is not set in production environment.')
 }
 
 export const POST = withSecureApi(async function POST(request) {
@@ -147,7 +147,7 @@ export const POST = withSecureApi(async function POST(request) {
       return NextResponse.json(
         {
           error: 'Invalid credentials',
-          hint: process.env.NODE_ENV === 'production' ? hint : hint,
+          hint: process.env.NODE_ENV === 'production' ? undefined : hint,
         },
         { status: 401 }
       )
@@ -157,6 +157,20 @@ export const POST = withSecureApi(async function POST(request) {
     let schoolId = await resolvePublicSchoolId(request, subdomain)
 
     if (!schoolId) {
+      if (process.env.NODE_ENV === 'production') {
+        console.error(
+          'Login error: School context could not be determined. Host:',
+          request.headers.get('host')
+        )
+        return NextResponse.json(
+          {
+            error: 'School context could not be determined. Please access via your school URL.',
+            code: 'NO_SCHOOL_CONTEXT',
+          },
+          { status: 400 }
+        )
+      }
+
       const matches = await prisma.user.findMany({
         where: {
           email: { equals: normalizedEmail, mode: 'insensitive' },
@@ -171,14 +185,16 @@ export const POST = withSecureApi(async function POST(request) {
       }
     }
 
-    // For production, strictly require school context for security in multi-tenant setup
     if (!schoolId) {
       console.error(
         'Login error: School context could not be determined. Host:',
         request.headers.get('host')
       )
       return NextResponse.json(
-        { error: 'School context could not be determined. Please access via your school URL.' },
+        {
+          error: 'School context could not be determined. Please access via your school URL.',
+          code: 'NO_SCHOOL_CONTEXT',
+        },
         { status: 400 }
       )
     }
@@ -194,9 +210,10 @@ export const POST = withSecureApi(async function POST(request) {
     // 3. Database Lookup (scoped by schoolId; fall back to unique email match)
     let user = await findUserByEmail(schoolId, normalizedEmail)
 
-    if (!user) {
+    if (!user && process.env.NODE_ENV !== 'production') {
       const emailMatches = await prisma.user.findMany({
         where: {
+          ...(schoolId ? { schoolId } : {}),
           email: { equals: normalizedEmail, mode: 'insensitive' },
           school: { active: true },
         },

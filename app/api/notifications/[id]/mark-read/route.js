@@ -13,21 +13,27 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
 
   const id = await safeRouteParam(params, 'id')
   if (!id) throw new ApiError('id is required', 400)
 
   const row = await prisma.notification.findFirst({
-    where: { id, userId: auth.user.id, schoolId: tenant.schoolId },
+    where: { id, userId: auth.user.id, schoolId },
   })
   if (!row) throw new ApiError('Not found', 404)
 
-  const updated = await prisma.notification.update({
-    where: { id },
+  const updateResult = await prisma.notification.updateMany({
+    where: { id, userId: auth.user.id, schoolId },
     data: {
       readAt: new Date(),
       status: row.status === 'SENT' || row.status === 'QUEUED' ? 'READ' : row.status,
     },
+  })
+  if (updateResult.count === 0) throw new ApiError('Not found', 404)
+
+  const updated = await prisma.notification.findFirst({
+    where: { id, userId: auth.user.id, schoolId },
   })
 
   return NextResponse.json({ success: true, data: updated })
@@ -39,15 +45,19 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
   if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
 
   const id = await safeRouteParam(params, 'id')
   if (!id) throw new ApiError('id is required', 400)
 
   const row = await prisma.notification.findFirst({
-    where: { id, userId: auth.user.id, schoolId: tenant.schoolId },
+    where: { id, userId: auth.user.id, schoolId },
   })
   if (!row) throw new ApiError('Not found', 404)
 
-  await prisma.notification.delete({ where: { id } })
+  const deleteResult = await prisma.notification.deleteMany({
+    where: { id, userId: auth.user.id, schoolId },
+  })
+  if (deleteResult.count === 0) throw new ApiError('Not found', 404)
   return NextResponse.json({ success: true })
 })

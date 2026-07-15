@@ -42,8 +42,8 @@ export const GET = withErrorHandler(async function GET(request) {
 
   let resolvedTeacherId = null
   if (roleCheck(dbUser, ['TEACHER', 'teacher'])) {
-    const teacher = await prisma.teacher.findUnique({
-      where: { userId: dbUser.id },
+    const teacher = await prisma.teacher.findFirst({
+      where: { userId: dbUser.id, schoolId },
       select: { id: true },
     })
     resolvedTeacherId = teacher?.id || null

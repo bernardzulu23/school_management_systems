@@ -48,9 +48,9 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
 
   const submittedAt = new Date()
 
-  const [updated, admins] = await prisma.$transaction([
-    prisma.departmentAllocation.update({
-      where: { id: allocation.id },
+  const [updateResult, admins] = await prisma.$transaction([
+    prisma.departmentAllocation.updateMany({
+      where: { id: allocation.id, schoolId },
       data: {
         status: 'SUBMITTED',
         submittedAt,
@@ -58,7 +58,6 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
         approvedByUserId: null,
         approvedAt: null,
       },
-      select: { id: true, status: true, submittedAt: true },
     }),
     prisma.user.findMany({
       where: { schoolId, ...adminRoleWhere() },
@@ -66,6 +65,12 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       take: 2000,
     }),
   ])
+  if (updateResult.count === 0) throw new ApiError('Not found', 404)
+
+  const updated = await prisma.departmentAllocation.findFirst({
+    where: { id: allocation.id, schoolId },
+    select: { id: true, status: true, submittedAt: true },
+  })
 
   if (admins.length > 0) {
     await prisma.allocationNotification.createMany({

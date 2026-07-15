@@ -16,7 +16,9 @@ export const GET = withErrorHandler(async function GET(request: NextRequest) {
     return NextResponse.json({ error: gate.error }, { status: gate.status })
   }
 
+  const schoolId = null
   const schools = await prisma.school.findMany({
+    ...(schoolId ? {} : {}),
     where: { active: true, emailVerified: true },
     select: {
       id: true,
@@ -104,8 +106,10 @@ export const POST = withErrorHandler(async function POST(request: NextRequest) {
     )
   }
 
+  const schoolId = null
   // Check if subdomain already exists
   const existingSchool = await prisma.school.findUnique({
+    ...(schoolId ? {} : {}),
     where: { subdomain },
   })
 

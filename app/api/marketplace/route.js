@@ -22,13 +22,13 @@ export const GET = withErrorHandler(async function GET(request) {
   const limit = q.limit || 20
   const skip = (page - 1) * limit
 
-  const where = { status: 'approved' }
-  if (q.subject) where.subject = { equals: q.subject, mode: 'insensitive' }
-  if (q.form) where.form = { equals: q.form, mode: 'insensitive' }
-  if (q.type) where.type = q.type
-  if (q.resourceLevel) where.resourceLevel = q.resourceLevel
+  const filters = {}
+  if (q.subject) filters.subject = { equals: q.subject, mode: 'insensitive' }
+  if (q.form) filters.form = { equals: q.form, mode: 'insensitive' }
+  if (q.type) filters.type = q.type
+  if (q.resourceLevel) filters.resourceLevel = q.resourceLevel
   if (q.search) {
-    where.OR = [
+    filters.OR = [
       { title: { contains: q.search, mode: 'insensitive' } },
       { topic: { contains: q.search, mode: 'insensitive' } },
       { subject: { contains: q.search, mode: 'insensitive' } },
@@ -36,9 +36,11 @@ export const GET = withErrorHandler(async function GET(request) {
   }
 
   const [total, materials] = await Promise.all([
-    prisma.sharedMaterial.count({ where }),
+    prisma.sharedMaterial.count({
+      where: { schoolId: { not: '' }, status: 'approved', ...filters },
+    }),
     prisma.sharedMaterial.findMany({
-      where,
+      where: { schoolId: { not: '' }, status: 'approved', ...filters },
       orderBy: [{ downloadCount: 'desc' }, { createdAt: 'desc' }],
       skip,
       take: limit,

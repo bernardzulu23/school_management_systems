@@ -64,8 +64,8 @@ export const POST = withSecureApi(async function POST(request, { params }) {
 
     const hashedPassword = await bcrypt.hash(newPassword, 12)
 
-    await prisma.user.update({
-      where: { id: user.id },
+    await prisma.user.updateMany({
+      where: { id: user.id, schoolId: user.schoolId },
       data: {
         password: hashedPassword,
         resetToken: null,
