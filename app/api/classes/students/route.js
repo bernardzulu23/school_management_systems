@@ -105,15 +105,28 @@ export const GET = withErrorHandler(async function GET(request) {
     students = Array.from(byId.values())
   }
 
+  let payload = students.map((s) => ({
+    id: s.id,
+    name: s.user?.name || s.name || 'Student',
+    student_id: s.id,
+    exam_number: s.exam_number || null,
+    profile_picture_url: s.user?.profile_picture_url || null,
+    ...(includeFaceData ? { faceEmbedding: s.faceEmbedding || null } : {}),
+  }))
+
+  if (includeFaceData) {
+    const { filterRosterEmbeddingsByConsent, getSchoolFacialPolicy } =
+      await import('@/lib/consent/facialAttendance')
+    const policy = await getSchoolFacialPolicy(schoolId)
+    if (!policy.enabled) {
+      payload = payload.map((row) => ({ ...row, faceEmbedding: null, hasFacialConsent: false }))
+    } else {
+      payload = await filterRosterEmbeddingsByConsent(schoolId, payload)
+    }
+  }
+
   return NextResponse.json({
     success: true,
-    data: students.map((s) => ({
-      id: s.id,
-      name: s.user?.name || s.name || 'Student',
-      student_id: s.id,
-      exam_number: s.exam_number || null,
-      profile_picture_url: s.user?.profile_picture_url || null,
-      ...(includeFaceData ? { faceEmbedding: s.faceEmbedding || null } : {}),
-    })),
+    data: payload,
   })
 })

@@ -500,11 +500,15 @@ export function canPlace(
       return { ok: false, reason: 'soft_same_day' }
     }
 
-    const teacherDayLoad = placed
-      .filter((pl) => pl.teacherId === block.teacherId && pl.day === day)
-      .reduce((sum, pl) => sum + Math.max(1, Number(pl.span) || 1), 0)
-    if (teacherDayLoad + Math.max(1, span) > maxPerDay) {
-      return { ok: false, reason: 'teacher_day_limit' }
+    const enforceDaySoft =
+      options?.maxTeacherPeriodsPerDay != null || workloadRules.maxPeriodsPerDayEnabled
+    if (enforceDaySoft) {
+      const teacherDayLoad = placed
+        .filter((pl) => pl.teacherId === block.teacherId && pl.day === day)
+        .reduce((sum, pl) => sum + Math.max(1, Number(pl.span) || 1), 0)
+      if (teacherDayLoad + Math.max(1, span) > maxPerDay) {
+        return { ok: false, reason: 'teacher_day_limit' }
+      }
     }
   }
 

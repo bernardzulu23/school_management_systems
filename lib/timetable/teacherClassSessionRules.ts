@@ -117,10 +117,13 @@ export function parseSchedulingRulesJson(raw: unknown): SchedulingRulesConfig {
       ruleBSeverity: o.ruleBSeverity as RuleSeverity | undefined,
     }),
     ...normalizeTeacherWorkloadRules({
+      maxPeriodsPerDayEnabled: o.maxPeriodsPerDayEnabled as boolean | undefined,
       maxPeriodsPerDay: o.maxPeriodsPerDay as number | undefined,
+      maxConsecutivePeriodsEnabled: o.maxConsecutivePeriodsEnabled as boolean | undefined,
       maxConsecutivePeriods: o.maxConsecutivePeriods as number | undefined,
       dayOverloadSeverity: o.dayOverloadSeverity as RuleSeverity | undefined,
       consecutiveSeverity: o.consecutiveSeverity as RuleSeverity | undefined,
+      requireBreakCoverageEnabled: o.requireBreakCoverageEnabled as boolean | undefined,
       breakOverlapSeverity: o.breakOverlapSeverity as RuleSeverity | undefined,
     }),
   }

@@ -134,11 +134,19 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
     'family_doctor_contact',
     'medical_conditions',
     'allergies',
+    'enrollmentStatus',
   ]
 
   const data = {}
   for (const key of allowed) {
     if (body[key] !== undefined) data[key] = body[key]
+  }
+
+  if (data.enrollmentStatus != null) {
+    const st = String(data.enrollmentStatus).trim().toUpperCase()
+    const ok = ['ACTIVE', 'WITHDRAWN', 'GRADUATED', 'TRANSFERRED'].includes(st)
+    if (!ok) throw new ApiError('Invalid enrollmentStatus', 400)
+    data.enrollmentStatus = st
   }
 
   const updated = await prisma.$transaction(async (tx) => {
@@ -168,6 +176,17 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
 
     if (classRecord) {
       data.class = classRecord.name
+    }
+
+    if (data.enrollmentStatus && data.enrollmentStatus !== existing.enrollmentStatus) {
+      const { onStudentEnrollmentStatusChange } = await import('@/lib/consent/facialAttendance')
+      await onStudentEnrollmentStatusChange({
+        schoolId,
+        pupilId: existing.id,
+        previousStatus: existing.enrollmentStatus,
+        nextStatus: data.enrollmentStatus,
+        db: tx,
+      })
     }
 
     const studentUpdated = await tx.student.update({

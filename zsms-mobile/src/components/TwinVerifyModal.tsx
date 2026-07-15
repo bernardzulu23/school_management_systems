@@ -8,7 +8,6 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native'
-import * as LocalAuthentication from 'expo-local-authentication'
 import { BrutalButton } from '@/components/BrutalButton'
 import { verifyTwinAuth } from '@/api/twinVerify'
 import { ZsmsTheme } from '@/theme/colors'
@@ -18,11 +17,17 @@ type Props = {
   studentName: string
   sessionId: string
   studentId: string
+  /** Stored preference only — server always requires PIN until attestation exists. */
   secondaryAuthMethod?: string | null
-  onVerified: () => void
+  onVerified: (twinAuthToken: string) => void
   onCancel: () => void
 }
 
+/**
+ * Twin disambiguation: PIN path with server bcrypt only.
+ * Device fingerprint / Face ID is not offered — a client-asserted biometricVerified
+ * flag previously bypassed the server (Prompt 23). Success returns twinAuthToken for marking.
+ */
 export function TwinVerifyModal({
   visible,
   studentName,
@@ -35,44 +40,21 @@ export function TwinVerifyModal({
   const [pin, setPin] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const method = String(secondaryAuthMethod || 'PIN').toUpperCase()
+  const preferred = String(secondaryAuthMethod || 'PIN').toUpperCase()
 
   async function submitPin() {
     setLoading(true)
     setError(null)
     try {
-      await verifyTwinAuth({ sessionId, studentId, pin })
+      const data = await verifyTwinAuth({ sessionId, studentId, pin })
+      if (!data.twinAuthToken) {
+        setError('Server did not return a twin auth ticket')
+        return
+      }
       setPin('')
-      onVerified()
+      onVerified(data.twinAuthToken)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Verification failed')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  async function useBiometric() {
-    setLoading(true)
-    setError(null)
-    try {
-      const hasHardware = await LocalAuthentication.hasHardwareAsync()
-      const enrolled = await LocalAuthentication.isEnrolledAsync()
-      if (!hasHardware || !enrolled) {
-        setError('Biometrics not available on this device')
-        return
-      }
-      const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: `Confirm identity: ${studentName}`,
-        cancelLabel: 'Cancel',
-      })
-      if (!result.success) {
-        setError('Biometric verification cancelled')
-        return
-      }
-      await verifyTwinAuth({ sessionId, studentId, biometricVerified: true })
-      onVerified()
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Biometric failed')
     } finally {
       setLoading(false)
     }
@@ -84,30 +66,26 @@ export function TwinVerifyModal({
         <View style={styles.card}>
           <Text style={styles.title}>Twin verification</Text>
           <Text style={styles.sub}>
-            Another twin is already marked present. Confirm {studentName} is the pupil in front of
-            you.
+            Another twin is already marked present. Enter the PIN for {studentName} to confirm who
+            is in front of you.
           </Text>
-          {error ? <Text style={styles.error}>{error}</Text> : null}
-          {method !== 'FINGERPRINT' ? (
-            <>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter twin PIN"
-                value={pin}
-                onChangeText={setPin}
-                keyboardType="number-pad"
-                secureTextEntry
-                maxLength={8}
-              />
-              <BrutalButton title="Verify PIN" onPress={submitPin} loading={loading} />
-            </>
+          {preferred === 'FINGERPRINT' ? (
+            <Text style={styles.note}>
+              Fingerprint preference is on file, but twin confirmation uses a server-checked PIN
+              until device-attested biometrics are implemented.
+            </Text>
           ) : null}
-          <BrutalButton
-            title="Use fingerprint / Face ID"
-            variant="secondary"
-            onPress={useBiometric}
-            loading={loading && method === 'FINGERPRINT'}
+          {error ? <Text style={styles.error}>{error}</Text> : null}
+          <TextInput
+            style={styles.input}
+            placeholder="Enter twin PIN"
+            value={pin}
+            onChangeText={setPin}
+            keyboardType="number-pad"
+            secureTextEntry
+            maxLength={8}
           />
+          <BrutalButton title="Verify PIN" onPress={submitPin} loading={loading} />
           <Pressable onPress={onCancel} style={styles.cancel}>
             <Text style={styles.cancelText}>Cancel</Text>
           </Pressable>
@@ -134,6 +112,7 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 20, fontWeight: '800', color: ZsmsTheme.ink },
   sub: { marginTop: 8, color: ZsmsTheme.textSecondary, lineHeight: 20 },
+  note: { marginTop: 8, color: ZsmsTheme.textMuted, fontSize: 12, lineHeight: 18 },
   error: { color: ZsmsTheme.danger, marginTop: 8 },
   input: {
     borderWidth: 2,

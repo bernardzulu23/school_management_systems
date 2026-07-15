@@ -170,6 +170,7 @@ export const POST = withSecureHandler(async function POST(request) {
           method: m.method || 'MANUAL',
           faceMatchScore: m.faceMatchScore,
           secondaryVerified: Boolean(m.secondaryVerified),
+          twinAuthToken: m.twinAuthToken ? String(m.twinAuthToken) : null,
           statusOverride: m.status ? String(m.status).toUpperCase() : undefined,
         })
       }

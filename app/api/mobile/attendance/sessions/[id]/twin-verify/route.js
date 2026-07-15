@@ -7,6 +7,18 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { safeRouteParam, safeStringId } from '@/lib/security/safeQueryValue'
 
+/**
+ * Twin secondary auth — PIN only (server-side bcrypt).
+ *
+ * Prompt 23: a previous `biometricVerified: true` body flag was accepted with no
+ * server corroboration (any client could set it). Device LocalAuthentication is
+ * not a trustable remote signal without challenge signing / attestation.
+ * Until that exists, secondaryAuthMethod FINGERPRINT is treated as "PIN required"
+ * the same as PIN — do not advertise fingerprint as an enforced control.
+ *
+ * Face embeddings are unrelated; facial consent is enforced on face-enrollment /
+ * verify-face / FACE marks.
+ */
 export const POST = withErrorHandler(async function POST(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
@@ -29,7 +41,11 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   const body = await request.json().catch(() => ({}))
   const studentId = safeStringId(body.studentId)
   const pin = body.pin != null ? String(body.pin) : ''
-  const biometricVerified = Boolean(body.biometricVerified)
+
+  // Explicitly ignore any client-asserted biometric success (legacy clients).
+  if (body.biometricVerified != null) {
+    // no-op — discarded; never used for authorization
+  }
 
   if (!studentId) {
     return NextResponse.json({ error: 'studentId is required' }, { status: 400 })
@@ -61,20 +77,15 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     return NextResponse.json({ success: true, data: { verified: true, method: 'NONE' } })
   }
 
-  if (biometricVerified) {
-    return NextResponse.json({ success: true, data: { verified: true, method: 'FINGERPRINT' } })
-  }
-
-  const method = String(student.secondaryAuthMethod || 'PIN').toUpperCase()
-  if (method === 'FINGERPRINT') {
+  if (!pin) {
     return NextResponse.json(
-      { error: 'Biometric verification required for this pupil', code: 'BIOMETRIC_REQUIRED' },
+      {
+        error: 'Twin PIN is required. Device biometrics alone are not accepted by the server.',
+        code: 'PIN_REQUIRED',
+        enforcedMethod: 'PIN',
+      },
       { status: 400 }
     )
-  }
-
-  if (!pin) {
-    return NextResponse.json({ error: 'PIN is required', code: 'PIN_REQUIRED' }, { status: 400 })
   }
 
   if (!student.pinHash) {
@@ -82,6 +93,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       {
         error: 'Twin PIN not configured. Ask admin to set a PIN for this pupil.',
         code: 'PIN_NOT_SET',
+        enforcedMethod: 'PIN',
       },
       { status: 400 }
     )
@@ -92,8 +104,19 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     return NextResponse.json({ error: 'Incorrect PIN', code: 'PIN_INVALID' }, { status: 401 })
   }
 
+  const { issueTwinAuthTicket } = await import('@/lib/attendance/twinAuthTicket')
+  const ticket = issueTwinAuthTicket({ schoolId, sessionId, studentId })
+
   return NextResponse.json({
     success: true,
-    data: { verified: true, method: 'PIN', sessionId, studentId },
+    data: {
+      verified: true,
+      method: 'PIN',
+      sessionId,
+      studentId,
+      twinAuthToken: ticket.twinAuthToken,
+      expiresAt: ticket.expiresAt,
+      note: 'Secondary twin auth is PIN-verified on the server. Present twinAuthToken when marking attendance.',
+    },
   })
 })

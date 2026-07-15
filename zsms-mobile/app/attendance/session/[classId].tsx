@@ -115,12 +115,16 @@ export default function LessonAttendanceSessionScreen() {
       <Text style={globalStyles.subtitle}>
         {draft?.subjectName || subjectName || 'Subject'} · lesson session
       </Text>
+      <Text style={{ color: ZsmsTheme.textMuted, marginBottom: 8, fontSize: 13 }}>
+        Manual Present / Late is always available for every pupil (required when there is no
+        parental facial consent or face match fails). Face scan is optional.
+      </Text>
       {counts ? (
         <Text style={globalStyles.subtitle}>
           Present/late {counts.present} · Absent {counts.absent} · Unmarked {counts.unmarked}
         </Text>
       ) : null}
-      <BrutalButton title="Scan face / pick pupil" onPress={() => setScanOpen(true)} />
+      <BrutalButton title="Optional: face scan" onPress={() => setScanOpen(true)} />
       <TextInput
         style={globalStyles.input}
         placeholder="Search student"
@@ -137,6 +141,7 @@ export default function LessonAttendanceSessionScreen() {
             <Text style={{ marginTop: 4, color: ZsmsTheme.textMuted }}>
               {item.mark === 'unmarked' ? 'Not marked' : item.mark}
               {item.requiresSecondaryAuth ? ' · twin' : ''}
+              {item.hasFacialConsent === false ? ' · no face consent' : ''}
             </Text>
             <View style={{ flexDirection: 'row', marginTop: 8, gap: 8, flexWrap: 'wrap' }}>
               <BrutalButton title="Present" onPress={() => markPresent(item.id, 'present')} />
@@ -145,7 +150,7 @@ export default function LessonAttendanceSessionScreen() {
                 variant="secondary"
                 onPress={() => markPresent(item.id, 'late')}
               />
-              {!item.faceEmbedding ? (
+              {!item.faceEmbedding && item.hasFacialConsent !== false ? (
                 <BrutalButton
                   title="Enrol face"
                   variant="secondary"
@@ -203,7 +208,7 @@ export default function LessonAttendanceSessionScreen() {
           sessionId={draft.sessionId}
           studentId={twinPending.studentId}
           secondaryAuthMethod={twinPending.secondaryAuthMethod}
-          onVerified={() => completeTwinVerification()}
+          onVerified={(twinAuthToken) => completeTwinVerification(twinAuthToken)}
           onCancel={() => clearTwinPending()}
         />
       ) : null}

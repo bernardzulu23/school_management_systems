@@ -44,6 +44,8 @@ export interface RosterStudent {
   class: string | null
   qrCode: string | null
   faceEmbedding?: string | null
+  /** Present when roster is loaded with face data; false = no active parental consent. */
+  hasFacialConsent?: boolean | null
   twinGroupId?: string | null
   requiresSecondaryAuth?: boolean
   secondaryAuthMethod?: string | null
@@ -54,7 +56,10 @@ export interface LessonSessionMark {
   status?: AttendanceStatus
   method?: 'MANUAL' | 'FACE' | 'FINGERPRINT'
   faceMatchScore?: number
+  /** @deprecated Not trusted by server */
   secondaryVerified?: boolean
+  /** From twin-verify PIN success — required when twin secondary auth is needed */
+  twinAuthToken?: string
 }
 
 export interface LessonSessionSyncPayload {

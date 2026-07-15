@@ -16,8 +16,8 @@ Input JSON:
     "enforceReturnGap": true,
     "maxPeriodsPerDay": 6,
     "maxConsecutivePeriods": 4,
-    "enforceDayLimit": true,
-    "enforceConsecutiveLimit": true
+    "enforceDayLimit": false,
+    "enforceConsecutiveLimit": false
   }
 }
 
@@ -163,8 +163,9 @@ def apply_workload_rules(model, assignment_vars, lessons, slots, session_rules):
     max_consec = int(session_rules.get("maxConsecutivePeriods") or 4)
     if max_consec < 1:
         max_consec = 4
-    enforce_day = session_rules.get("enforceDayLimit", True)
-    enforce_consec = session_rules.get("enforceConsecutiveLimit", True)
+    # Opt-in: match JS defaults (workload checks off unless school enables them).
+    enforce_day = bool(session_rules.get("enforceDayLimit", False))
+    enforce_consec = bool(session_rules.get("enforceConsecutiveLimit", False))
 
     slots_by_day = defaultdict(list)
     for si, slot in enumerate(slots):

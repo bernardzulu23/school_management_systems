@@ -164,7 +164,9 @@ export const POST = withErrorHandler(async function POST(req: NextRequest) {
       teacherClassSessionRules,
       teacherWorkloadRules: teacherClassSessionRules,
       breakSlots: normalizedCfg.breakSlots,
-      maxTeacherPeriodsPerDay: teacherClassSessionRules.maxPeriodsPerDay,
+      ...(teacherClassSessionRules.maxPeriodsPerDayEnabled
+        ? { maxTeacherPeriodsPerDay: teacherClassSessionRules.maxPeriodsPerDay }
+        : {}),
     },
   })
 

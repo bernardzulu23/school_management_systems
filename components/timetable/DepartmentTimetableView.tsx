@@ -167,6 +167,9 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
   }, [props.teacherColorMap, departmentTeachers, teacherColors])
 
   const deptAssignments = useMemo(() => {
+    // Server already scopes HOD published views; if we have no local teacher id set yet,
+    // don't wipe the grid to empty while teachers load (or if the users list is empty).
+    if (!teacherSet.size) return assignments
     return assignments.filter((a) => teacherSet.has(String(a.teacherId)))
   }, [assignments, teacherSet])
 

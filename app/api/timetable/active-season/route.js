@@ -12,6 +12,8 @@ import { getDefaultAcademicYear, getDefaultTerm } from '@/lib/timetable/timetabl
  * GET /api/timetable/active-season
  * Returns the term/year with the most draft+published periods for this school
  * so overview widgets don't default to an empty/sparse Term 1 while work lives on Term 2.
+ *
+ * Query: prefer=published — rank seasons with published rows first (teacher/student/HOD views).
  */
 export const GET = withErrorHandler(async function GET(req) {
   const user = await getAuthUser(req)
@@ -22,6 +24,9 @@ export const GET = withErrorHandler(async function GET(req) {
 
   const typeCheck = await guardSchoolOnlyTimetable(schoolId)
   if (!typeCheck.allowed) return typeCheck.response
+
+  const preferPublished =
+    String(new URL(req.url).searchParams.get('prefer') || '').toLowerCase() === 'published'
 
   const rows = await prisma.timetableAllocationEntry.groupBy({
     by: ['term', 'academicYear', 'status'],
@@ -53,6 +58,11 @@ export const GET = withErrorHandler(async function GET(req) {
   }
 
   const ranked = [...scored.values()].sort((a, b) => {
+    if (preferPublished) {
+      // Never pick a draft-only season over one that has published periods.
+      if (b.published > 0 !== a.published > 0) return b.published > 0 ? 1 : -1
+      if (b.published !== a.published) return b.published - a.published
+    }
     if (b.total !== a.total) return b.total - a.total
     if (b.published !== a.published) return b.published - a.published
     return String(b.academicYear).localeCompare(String(a.academicYear))
@@ -68,5 +78,6 @@ export const GET = withErrorHandler(async function GET(req) {
     total: best?.total || 0,
     seasons: ranked,
     source: best ? 'entries' : 'default',
+    prefer: preferPublished ? 'published' : 'total',
   })
 })

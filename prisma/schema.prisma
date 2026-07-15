@@ -63,12 +63,18 @@ model School {
   eczCentreNumber String? // ECZ examination centre number for submissions
   enabledLocalLanguages String[] @default([])
 
+  /// Opt-in: facial-recognition attendance (ZDPA — biometric minors). Default off.
+  facialAttendanceEnabled Boolean @default(false)
+  /// Max days to keep Student.faceEmbedding even while ACTIVE (backstop). Default 365.
+  faceEmbeddingRetentionDays Int @default(365)
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
   // Relations - All school-specific data
   users                User[]
   students             Student[]
+  consentRecords       ConsentRecord[]
   teachers             Teacher[]
   hods                 HeadOfDepartment[]
   departments          Department[]
@@ -584,7 +590,12 @@ model Student {
   previous_school String?
   grade_average Float?
   selected_subjects String[] // Array of subject names selected
-  faceEmbedding String?   // JSON-serialised FloatArray from ML Kit face recognition
+  /// Derived MobileFaceNet / ML Kit vector only (JSON float array) — never raw photos.
+  faceEmbedding String?
+  /// When the embedding was last enrolled (retention / audit).
+  faceEmbeddingEnrolledAt DateTime?
+  /// Lifecycle for retention hooks: ACTIVE | WITHDRAWN | GRADUATED | TRANSFERRED
+  enrollmentStatus String @default("ACTIVE")
   twinGroupId              String?
   requiresSecondaryAuth    Boolean @default(false)
   secondaryAuthMethod      String?  // FINGERPRINT | PIN | NONE
@@ -644,6 +655,7 @@ model Student {
   guidanceCases       GuidanceCase[]
   guidanceDocuments   GuidanceDocument[]
   girlsReEntryRecords GirlsReEntryRecord[]
+  consentRecords      ConsentRecord[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -653,7 +665,53 @@ model Student {
   @@index([class])
   @@index([name])
   @@index([grade_average])
+  @@index([schoolId, enrollmentStatus])
   @@unique([schoolId, exam_number])
+}
+
+/// ZDPA-aligned consent ledger (extend ConsentType for future scopes).
+enum ConsentType {
+  FACIAL_RECOGNITION
+}
+
+enum ConsentStatus {
+  GRANTED
+  DENIED
+  WITHDRAWN
+}
+
+enum ConsentCaptureMethod {
+  IN_APP
+  PAPER_FORM
+  DIGITIZED
+  VERBAL_WITH_WITNESS
+  OTHER
+}
+
+model ConsentRecord {
+  id                     String               @id @default(cuid())
+  schoolId               String
+  pupilId                String
+  consentType            ConsentType          @default(FACIAL_RECOGNITION)
+  status                 ConsentStatus
+  /// Parent/guardian who gave or refused consent — not a bare boolean.
+  grantedByName          String
+  grantedByRelationship  String
+  grantedByContact       String?
+  grantedAt              DateTime?
+  method                 ConsentCaptureMethod @default(PAPER_FORM)
+  withdrawnAt            DateTime?
+  notes                  String?              @db.Text
+  recordedByUserId       String?
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+
+  school School  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  pupil  Student @relation(fields: [pupilId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId, pupilId, consentType])
+  @@index([schoolId, consentType, status])
+  @@index([pupilId, consentType, status])
 }
 
 model StudentMaterial {

@@ -97,5 +97,20 @@ export const GET = withErrorHandler(async function GET(request) {
     secondaryAuthMethod: s.secondaryAuthMethod || null,
   }))
 
+  if (includeFaceData) {
+    const { filterRosterEmbeddingsByConsent, getSchoolFacialPolicy } =
+      await import('@/lib/consent/facialAttendance')
+    const policy = await getSchoolFacialPolicy(schoolId)
+    if (!policy.enabled) {
+      for (const row of responseData) {
+        row.faceEmbedding = null
+        row.hasFacialConsent = false
+      }
+    } else {
+      const filtered = await filterRosterEmbeddingsByConsent(schoolId, responseData)
+      return NextResponse.json(filtered)
+    }
+  }
+
   return NextResponse.json(responseData)
 })

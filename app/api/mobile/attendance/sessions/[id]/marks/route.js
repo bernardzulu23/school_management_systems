@@ -39,14 +39,31 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       method: body.method || 'MANUAL',
       faceMatchScore: body.faceMatchScore,
       secondaryVerified: Boolean(body.secondaryVerified),
+      twinAuthToken: body.twinAuthToken ? String(body.twinAuthToken) : null,
       statusOverride: body.status ? String(body.status).toUpperCase() : undefined,
     })
     return NextResponse.json({ success: true, data: mark })
   } catch (e) {
-    if (e.code === 'TWIN_SECONDARY_AUTH_REQUIRED') {
+    if (
+      e.code === 'TWIN_SECONDARY_AUTH_REQUIRED' ||
+      e.code === 'TWIN_AUTH_TOKEN_REQUIRED' ||
+      e.code === 'TWIN_AUTH_TOKEN_INVALID' ||
+      e.code === 'TWIN_AUTH_TOKEN_EXPIRED' ||
+      e.code === 'TWIN_AUTH_TOKEN_MISMATCH'
+    ) {
       return NextResponse.json(
-        { error: 'Twin verification required', code: e.code },
+        { error: e.message || 'Twin verification required', code: e.code },
         { status: 409 }
+      )
+    }
+    if (e.code === 'FACIAL_CONSENT_REQUIRED' || e.code === 'FACIAL_ATTENDANCE_DISABLED') {
+      return NextResponse.json(
+        {
+          error: e.message,
+          code: e.code,
+          fallback: 'MANUAL',
+        },
+        { status: e.status || 403 }
       )
     }
     throw e

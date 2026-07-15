@@ -12,8 +12,16 @@ import {
   FACE_L2_THRESHOLD,
   MOBILE_FACE_EMBEDDING_DIM,
 } from '@/lib/face/match'
+import {
+  assertSchoolFacialAttendanceEnabled,
+  filterRosterEmbeddingsByConsent,
+} from '@/lib/consent/facialAttendance'
 import prisma from '@/lib/prisma'
 
+/**
+ * Server-side face match. Only pupils with school feature ON + active consent
+ * contribute templates. No consent / no match → client must use manual marking.
+ */
 export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
@@ -27,6 +35,20 @@ export const POST = withErrorHandler(async function POST(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) {
     return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  }
+
+  try {
+    await assertSchoolFacialAttendanceEnabled(schoolId)
+  } catch (e) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: e.message,
+        code: e.code || 'FACIAL_ATTENDANCE_DISABLED',
+        fallback: 'MANUAL',
+      },
+      { status: e.status || 403 }
+    )
   }
 
   const body = await request.json().catch(() => ({}))
@@ -51,7 +73,9 @@ export const POST = withErrorHandler(async function POST(request) {
     classId: session.classId,
   })
 
-  const roster = await getEnrolledRoster(schoolId, session.classId, session.subjectId)
+  const rosterRaw = await getEnrolledRoster(schoolId, session.classId, session.subjectId)
+  const roster = await filterRosterEmbeddingsByConsent(schoolId, rosterRaw)
+
   let parsedProbe = probeEmbedding
   if (typeof probeEmbedding === 'string') {
     try {
@@ -65,7 +89,12 @@ export const POST = withErrorHandler(async function POST(request) {
 
   if (!match) {
     return NextResponse.json(
-      { success: false, error: 'Face not recognised', code: 'FACE_NOT_RECOGNISED' },
+      {
+        success: false,
+        error: 'Face not recognised — mark this pupil manually',
+        code: 'FACE_NOT_RECOGNISED',
+        fallback: 'MANUAL',
+      },
       { status: 404 }
     )
   }

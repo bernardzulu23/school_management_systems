@@ -131,7 +131,7 @@ export function FaceScanPanel({ visible, sessionId, roster, onMatch, onClose }: 
       /* fall through */
     }
 
-    setStatus('Face not recognised — enrol this pupil or pick manually.')
+    setStatus('Face not recognised — use Present / Late on the class list for this pupil.')
   }
 
   function confirmManual(student: RosterStudent) {
@@ -141,11 +141,14 @@ export function FaceScanPanel({ visible, sessionId, roster, onMatch, onClose }: 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <View style={styles.container}>
-        <Text style={styles.title}>Face scan (ML Kit)</Text>
+        <Text style={styles.title}>Face scan</Text>
         <Text style={styles.hint}>
           {mlAvailable
-            ? 'MobileFaceNet on-device: tap Identify or enable live scan. Templates must be 192-d from face enrollment.'
-            : `Automatic face match runs on Android dev builds only (${Platform.OS} uses manual pick).`}
+            ? 'On-device match for pupils with parental consent only. Anyone without consent — or a failed match — use Present / Late on the class list (always available).'
+            : `Automatic face match needs an Android Face ML build. Use Present / Late on the class list for every pupil (${Platform.OS}).`}
+        </Text>
+        <Text style={[styles.hint, { marginBottom: 8 }]}>
+          Manual path is first-class: close this panel and tap Present or Late for any pupil.
         </Text>
 
         {!permission?.granted ? (

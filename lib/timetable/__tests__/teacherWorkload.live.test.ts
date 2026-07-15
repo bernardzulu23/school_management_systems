@@ -1,6 +1,7 @@
 /**
- * Prompt 7 live scan: teacher workload vs defaults on published Term 1/2.
- * Does not change data — report only.
+ * Prompt 7 follow-up live scan: workload checks are OFF by default.
+ * Confirms Consecutive Overload / day / break issues are not emitted unless
+ * school opts in. Does not change timetable entry data — report only.
  */
 import { config } from 'dotenv'
 config({ path: '.env.local' })
@@ -40,23 +41,28 @@ describe.skipIf(!url)('Prompt 7 teacher workload live scan', () => {
     await prisma.$disconnect()
   })
 
-  it('reports Term 1/2 published teachers exceeding default workload limits', async () => {
+  it('Term 1/2 published: workload overload warnings off by default; data unchanged', async () => {
     const cfg = await ensureTimetableConfig(prisma, SCHOOL)
     const normalized = normalizeTimetableConfig(cfg)
     const rules = parseSchedulingRulesJson(normalized.schedulingRules)
     const breakSlots = normalized.breakSlots || []
 
-    console.log('[Prompt7] school rules', {
+    console.log('[Prompt7-opt-in] school rules', {
+      maxPeriodsPerDayEnabled: rules.maxPeriodsPerDayEnabled,
+      maxConsecutivePeriodsEnabled: rules.maxConsecutivePeriodsEnabled,
+      requireBreakCoverageEnabled: rules.requireBreakCoverageEnabled,
       maxPeriodsPerDay: rules.maxPeriodsPerDay,
       maxConsecutivePeriods: rules.maxConsecutivePeriods,
-      dayOverloadSeverity: rules.dayOverloadSeverity,
-      consecutiveSeverity: rules.consecutiveSeverity,
-      breakOverlapSeverity: rules.breakOverlapSeverity,
       breakSlots: breakSlots.map((b) => `${b.label || 'Break'} ${b.start}–${b.end}`),
       defaults: DEFAULT_TEACHER_WORKLOAD_RULES,
     })
 
+    expect(rules.maxPeriodsPerDayEnabled).toBe(false)
+    expect(rules.maxConsecutivePeriodsEnabled).toBe(false)
+    expect(rules.requireBreakCoverageEnabled).toBe(false)
+
     const summary: Record<string, unknown> = {}
+    const entryCounts: Record<string, number> = {}
 
     for (const term of ['Term 1', 'Term 2'] as const) {
       const published = await loadPublishedTimetableEntries(prisma, {
@@ -64,6 +70,7 @@ describe.skipIf(!url)('Prompt 7 teacher workload live scan', () => {
         term,
         academicYear: YEAR,
       })
+      entryCounts[term] = published.length
       const assignments = mapDbEntriesToAssignments(published)
       const validation = validateTimetable(assignments, {
         teacherClassSessionRules: rules,
@@ -86,14 +93,17 @@ describe.skipIf(!url)('Prompt 7 teacher workload live scan', () => {
         TEACHER_DAY_OVERLOAD: day.length,
         TEACHER_CONSECUTIVE_LIMIT: consec.length,
         TEACHER_BREAK_OVERLAP: brk.length,
-        daySamples: day.slice(0, 8).map((c) => c.message),
-        consecutiveSamples: consec.slice(0, 8).map((c) => c.message),
-        breakSamples: brk.slice(0, 8).map((c) => c.message),
       }
-      console.log(`[Prompt7] ${term}`, JSON.stringify(summary[term], null, 2))
+      console.log(`[Prompt7-opt-in] ${term}`, JSON.stringify(summary[term], null, 2))
+
+      // Detection-behavior change only — overload checks must be silent by default.
+      expect(day).toHaveLength(0)
+      expect(consec).toHaveLength(0)
+      expect(brk).toHaveLength(0)
     }
 
-    // Always pass — this is a baseline report before schools raise severities.
+    expect(entryCounts['Term 1']).toBeGreaterThan(0)
+    expect(entryCounts['Term 2']).toBeGreaterThan(0)
     expect(summary['Term 1']).toBeTruthy()
     expect(summary['Term 2']).toBeTruthy()
   }, 120_000)

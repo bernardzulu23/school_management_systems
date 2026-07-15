@@ -14,6 +14,7 @@ import AchievementSystem from '@/components/games/AchievementSystem'
 import SmartDashboardIntegration from '@/components/dashboard/SmartDashboardIntegration'
 import { StudentTimetableView } from '@/components/timetable/StudentTimetableView'
 import { useSchoolTimeSlots } from '@/lib/timetable/useSchoolTimeSlots'
+import { usePublishedTimetableView } from '@/lib/timetable/usePublishedTimetableView'
 import { printTimetable } from '@/lib/timetable/printTimetable'
 import { api } from '@/lib/api'
 import { percentTextClass } from '@/lib/utils/percentColor'
@@ -82,7 +83,7 @@ export default function StudentDashboard() {
   const queryClient = useQueryClient()
   const [activeTab, setActiveTab] = useState('overview')
   const [currentGame, setCurrentGame] = useState(null)
-  const { timeSlots } = useSchoolTimeSlots()
+  const { timeSlots: schoolTimeSlots } = useSchoolTimeSlots()
   const [timetableClasses, setTimetableClasses] = useState([])
   const [timetableTeachers, setTimetableTeachers] = useState([])
   const [timetableClassrooms, setTimetableClassrooms] = useState([])
@@ -166,6 +167,9 @@ export default function StudentDashboard() {
   // Get current user data from auth context
   const { user: currentUser } = useAuth()
   const studentProfile = currentUser?.studentProfile || null
+  const { assignments: publishedAssignments, timeSlots: publishedTimeSlots } =
+    usePublishedTimetableView({ enabled: Boolean(currentUser) })
+  const timeSlots = publishedTimeSlots.length ? publishedTimeSlots : schoolTimeSlots
 
   const { data: stats } = useQuery({
     queryKey: ['dashboard-stats'],
@@ -395,6 +399,7 @@ export default function StudentDashboard() {
             </div>
             <div className="mt-4 max-w-none max-h-[50vh] overflow-auto">
               <StudentTimetableView
+                assignments={publishedAssignments}
                 timeSlots={timeSlots}
                 classId={String(currentUser?.studentProfile?.classId || '') || undefined}
                 classes={timetableClasses}

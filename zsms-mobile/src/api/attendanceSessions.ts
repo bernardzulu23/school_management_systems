@@ -56,7 +56,9 @@ export async function markLessonAttendance(input: {
   method?: 'MANUAL' | 'FACE' | 'FINGERPRINT'
   status?: AttendanceStatus
   faceMatchScore?: number
+  /** @deprecated Ignored by server — use twinAuthToken from verifyTwinAuth */
   secondaryVerified?: boolean
+  twinAuthToken?: string
 }): Promise<SessionMarkDto> {
   const res = await api<{ success: boolean; data: SessionMarkDto }>(
     `/api/mobile/attendance/sessions/${input.sessionId}/marks`,
@@ -67,7 +69,7 @@ export async function markLessonAttendance(input: {
         method: input.method || 'MANUAL',
         status: input.status,
         faceMatchScore: input.faceMatchScore,
-        secondaryVerified: input.secondaryVerified,
+        twinAuthToken: input.twinAuthToken,
       }),
     }
   )

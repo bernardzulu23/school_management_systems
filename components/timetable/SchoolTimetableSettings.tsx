@@ -32,10 +32,13 @@ type ConfigForm = {
     minGapPeriods: number
     ruleASeverity: 'hard' | 'soft'
     ruleBSeverity: 'hard' | 'soft'
+    maxPeriodsPerDayEnabled: boolean
     maxPeriodsPerDay: number
+    maxConsecutivePeriodsEnabled: boolean
     maxConsecutivePeriods: number
     dayOverloadSeverity: 'hard' | 'soft'
     consecutiveSeverity: 'hard' | 'soft'
+    requireBreakCoverageEnabled: boolean
     breakOverlapSeverity: 'hard' | 'soft'
   }
 }
@@ -314,11 +317,31 @@ export function SchoolTimetableSettings({
             <div>
               <h3 className="text-sm font-bold text-royalPurple-text1">Teacher workload limits</h3>
               <p className="text-xs text-royalPurple-text2 mt-1">
-                Cap daily teaching load and consecutive periods. Lessons must not cover designated
-                break/lunch windows (configured above). Defaults: 6 periods/day, 4 consecutive.
+                Optional safeguards for heavy loads. Off by default — many schools need dense
+                back-to-back days. Turn on only if you want audit/generation to enforce them.
+                Suggested thresholds when enabled: 6 periods/day, 4 consecutive.
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label className="flex items-start gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                className="mt-1"
+                checked={form.schedulingRules.maxPeriodsPerDayEnabled}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    schedulingRules: {
+                      ...f.schedulingRules,
+                      maxPeriodsPerDayEnabled: e.target.checked,
+                    },
+                  }))
+                }
+              />
+              <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
+                Cap max periods per day
+              </span>
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-6">
               <label className="block">
                 <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
                   Max periods per day
@@ -327,7 +350,8 @@ export function SchoolTimetableSettings({
                   type="number"
                   min={1}
                   max={16}
-                  className="zsms-input w-full mt-1"
+                  disabled={!form.schedulingRules.maxPeriodsPerDayEnabled}
+                  className="zsms-input w-full mt-1 disabled:opacity-50"
                   value={form.schedulingRules.maxPeriodsPerDay}
                   onChange={(e) =>
                     setForm((f) => ({
@@ -342,13 +366,58 @@ export function SchoolTimetableSettings({
               </label>
               <label className="block">
                 <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
+                  Day overload severity
+                </span>
+                <select
+                  className="zsms-select w-full mt-1 disabled:opacity-50"
+                  disabled={!form.schedulingRules.maxPeriodsPerDayEnabled}
+                  value={form.schedulingRules.dayOverloadSeverity}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      schedulingRules: {
+                        ...f.schedulingRules,
+                        dayOverloadSeverity: e.target.value === 'hard' ? 'hard' : 'soft',
+                      },
+                    }))
+                  }
+                >
+                  <option value="soft">Warning (can dismiss)</option>
+                  <option value="hard">Error (blocks publish)</option>
+                </select>
+              </label>
+            </div>
+
+            <label className="flex items-start gap-2 cursor-pointer pt-1">
+              <input
+                type="checkbox"
+                className="mt-1"
+                checked={form.schedulingRules.maxConsecutivePeriodsEnabled}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    schedulingRules: {
+                      ...f.schedulingRules,
+                      maxConsecutivePeriodsEnabled: e.target.checked,
+                    },
+                  }))
+                }
+              />
+              <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
+                Cap consecutive periods without a break
+              </span>
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-6">
+              <label className="block">
+                <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
                   Max consecutive periods
                 </span>
                 <input
                   type="number"
                   min={1}
                   max={12}
-                  className="zsms-input w-full mt-1"
+                  disabled={!form.schedulingRules.maxConsecutivePeriodsEnabled}
+                  className="zsms-input w-full mt-1 disabled:opacity-50"
                   value={form.schedulingRules.maxConsecutivePeriods}
                   onChange={(e) =>
                     setForm((f) => ({
@@ -366,31 +435,11 @@ export function SchoolTimetableSettings({
               </label>
               <label className="block">
                 <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
-                  Day overload
+                  Consecutive overload severity
                 </span>
                 <select
-                  className="zsms-select w-full mt-1"
-                  value={form.schedulingRules.dayOverloadSeverity}
-                  onChange={(e) =>
-                    setForm((f) => ({
-                      ...f,
-                      schedulingRules: {
-                        ...f.schedulingRules,
-                        dayOverloadSeverity: e.target.value === 'hard' ? 'hard' : 'soft',
-                      },
-                    }))
-                  }
-                >
-                  <option value="soft">Warning (can dismiss)</option>
-                  <option value="hard">Error (blocks publish)</option>
-                </select>
-              </label>
-              <label className="block">
-                <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
-                  Consecutive overload
-                </span>
-                <select
-                  className="zsms-select w-full mt-1"
+                  className="zsms-select w-full mt-1 disabled:opacity-50"
+                  disabled={!form.schedulingRules.maxConsecutivePeriodsEnabled}
                   value={form.schedulingRules.consecutiveSeverity}
                   onChange={(e) =>
                     setForm((f) => ({
@@ -406,12 +455,35 @@ export function SchoolTimetableSettings({
                   <option value="hard">Error (blocks publish)</option>
                 </select>
               </label>
-              <label className="block sm:col-span-2">
+            </div>
+
+            <label className="flex items-start gap-2 cursor-pointer pt-1">
+              <input
+                type="checkbox"
+                className="mt-1"
+                checked={form.schedulingRules.requireBreakCoverageEnabled}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    schedulingRules: {
+                      ...f.schedulingRules,
+                      requireBreakCoverageEnabled: e.target.checked,
+                    },
+                  }))
+                }
+              />
+              <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
+                Require break/lunch coverage (no teaching through breaks)
+              </span>
+            </label>
+            <div className="pl-6">
+              <label className="block">
                 <span className="text-xs font-semibold text-royalPurple-text3 uppercase">
-                  Teaching through break/lunch
+                  Teaching through break/lunch severity
                 </span>
                 <select
-                  className="zsms-select w-full mt-1"
+                  className="zsms-select w-full mt-1 disabled:opacity-50"
+                  disabled={!form.schedulingRules.requireBreakCoverageEnabled}
                   value={form.schedulingRules.breakOverlapSeverity}
                   onChange={(e) =>
                     setForm((f) => ({

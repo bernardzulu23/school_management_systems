@@ -32,6 +32,7 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
   const storeAssignments = useTimetableStore((s) => s.assignments)
   const assignments = props.assignments ?? storeAssignments
 
+  // TimetableAllocationEntry.teacherId is User.id — never Teacher.id
   const effectiveTeacherId =
     props.teacherId || String(auth?.user?.id || auth?.user?.teacherProfile?.userId || '')
 

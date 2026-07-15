@@ -4,6 +4,8 @@ import {
   detectTeacherWorkloadIssues,
   teacherWorkloadPlacementViolation,
   assignmentPeriodWeight,
+  normalizeTeacherWorkloadRules,
+  workloadRulesForSolverPayload,
 } from '@/lib/timetable/teacherWorkloadRules'
 import {
   validateTimetable,
@@ -16,6 +18,12 @@ const breaks = [
   { start: '10:10', end: '10:30', label: 'Break' },
   { start: '12:00', end: '12:40', label: 'Lunch', isLunch: true },
 ]
+
+/** Opt-in helpers used by unit tests that assert detection behaviour. */
+const dayOn = { maxPeriodsPerDayEnabled: true as const }
+const consecOn = { maxConsecutivePeriodsEnabled: true as const }
+const breakOn = { requireBreakCoverageEnabled: true as const }
+const allOn = { ...dayOn, ...consecOn, ...breakOn }
 
 function frag(partial: Record<string, unknown>) {
   return {
@@ -30,7 +38,40 @@ function frag(partial: Record<string, unknown>) {
 }
 
 describe('teacherWorkloadRules', () => {
-  it('flags day overload above maxPeriodsPerDay (weight-aware)', () => {
+  it('defaults all three workload checks to disabled', () => {
+    const n = normalizeTeacherWorkloadRules(null)
+    expect(n.maxPeriodsPerDayEnabled).toBe(false)
+    expect(n.maxConsecutivePeriodsEnabled).toBe(false)
+    expect(n.requireBreakCoverageEnabled).toBe(false)
+    expect(DEFAULT_TEACHER_WORKLOAD_RULES.maxPeriodsPerDayEnabled).toBe(false)
+    expect(parseSchedulingRulesJson(null).maxConsecutivePeriodsEnabled).toBe(false)
+    expect(workloadRulesForSolverPayload(null)).toMatchObject({
+      enforceDayLimit: false,
+      enforceConsecutiveLimit: false,
+    })
+  })
+
+  it('skips all checks when enabled flags are false (even with tight thresholds)', () => {
+    const issues = detectTeacherWorkloadIssues(
+      [
+        frag({ id: '1', startTime: '07:30', endTime: '08:10' }),
+        frag({ id: '2', startTime: '08:10', endTime: '08:50' }),
+        frag({ id: '3', startTime: '08:50', endTime: '09:30' }),
+        frag({ id: '4', startTime: '09:30', endTime: '10:10' }),
+        frag({ id: '5', startTime: '10:10', endTime: '10:50' }),
+        frag({ id: '6', startTime: '11:40', endTime: '12:20' }),
+      ],
+      {
+        maxPeriodsPerDay: 2,
+        maxConsecutivePeriods: 2,
+        ...DEFAULT_TEACHER_WORKLOAD_RULES,
+      },
+      breaks
+    )
+    expect(issues).toHaveLength(0)
+  })
+
+  it('flags day overload above maxPeriodsPerDay (weight-aware) when enabled', () => {
     const issues = detectTeacherWorkloadIssues(
       [
         frag({ id: '1', startTime: '07:30', endTime: '08:10', periodWeight: 2 }),
@@ -38,14 +79,14 @@ describe('teacherWorkloadRules', () => {
         frag({ id: '3', startTime: '08:50', endTime: '09:30', periodWeight: 2 }),
         frag({ id: '4', startTime: '09:30', endTime: '10:10', periodWeight: 1 }),
       ],
-      { maxPeriodsPerDay: 6, dayOverloadSeverity: 'soft' }
+      { ...dayOn, maxPeriodsPerDay: 6, dayOverloadSeverity: 'soft' }
     )
     const day = issues.filter((i) => i.type === 'TEACHER_DAY_OVERLOAD')
     expect(day).toHaveLength(1)
     expect(day[0].message).toMatch(/7 periods/)
   })
 
-  it('flags consecutive runs above maxConsecutivePeriods', () => {
+  it('flags consecutive runs above maxConsecutivePeriods when enabled', () => {
     const issues = detectTeacherWorkloadIssues(
       [
         frag({ id: '1', startTime: '07:30', endTime: '08:10' }),
@@ -54,7 +95,7 @@ describe('teacherWorkloadRules', () => {
         frag({ id: '4', startTime: '09:30', endTime: '10:10' }),
         frag({ id: '5', startTime: '10:10', endTime: '10:50' }),
       ],
-      { maxConsecutivePeriods: 4, consecutiveSeverity: 'soft', maxPeriodsPerDay: 10 }
+      { ...consecOn, maxConsecutivePeriods: 4, consecutiveSeverity: 'soft', maxPeriodsPerDay: 10 }
     )
     expect(issues.some((i) => i.type === 'TEACHER_CONSECUTIVE_LIMIT')).toBe(true)
   })
@@ -70,15 +111,15 @@ describe('teacherWorkloadRules', () => {
         frag({ id: '5', startTime: '12:40', endTime: '13:20' }),
         frag({ id: '6', startTime: '13:20', endTime: '14:00' }),
       ],
-      { maxConsecutivePeriods: 4, maxPeriodsPerDay: 10 }
+      { ...consecOn, maxConsecutivePeriods: 4, maxPeriodsPerDay: 10 }
     )
     expect(issues.filter((i) => i.type === 'TEACHER_CONSECUTIVE_LIMIT')).toHaveLength(0)
   })
 
-  it('flags teaching through lunch as hard by default', () => {
+  it('flags teaching through lunch as hard when break coverage enabled', () => {
     const issues = detectTeacherWorkloadIssues(
       [frag({ id: '1', startTime: '11:40', endTime: '12:20' })],
-      DEFAULT_TEACHER_WORKLOAD_RULES,
+      { ...DEFAULT_TEACHER_WORKLOAD_RULES, ...breakOn },
       breaks
     )
     const hit = issues.filter((i) => i.type === 'TEACHER_BREAK_OVERLAP')
@@ -87,7 +128,7 @@ describe('teacherWorkloadRules', () => {
     expect(hit[0].message).toMatch(/Lunch/)
   })
 
-  it('placementViolation only blocks hard severities', () => {
+  it('placementViolation only blocks hard severities when enabled', () => {
     const placed = [
       frag({ id: '1', startTime: '07:30', endTime: '08:10' }),
       frag({ id: '2', startTime: '08:10', endTime: '08:50' }),
@@ -99,21 +140,21 @@ describe('teacherWorkloadRules', () => {
     const softDay = teacherWorkloadPlacementViolation(
       frag({ id: '7', startTime: '11:30', endTime: '12:10' }),
       placed,
-      { maxPeriodsPerDay: 6, dayOverloadSeverity: 'soft' }
+      { ...dayOn, maxPeriodsPerDay: 6, dayOverloadSeverity: 'soft' }
     )
     expect(softDay).toBeNull()
 
     const hardDay = teacherWorkloadPlacementViolation(
       frag({ id: '7', startTime: '11:30', endTime: '12:10' }),
       placed,
-      { maxPeriodsPerDay: 6, dayOverloadSeverity: 'hard' }
+      { ...dayOn, maxPeriodsPerDay: 6, dayOverloadSeverity: 'hard' }
     )
     expect(hardDay?.reason).toBe('teacher_day_limit')
 
     const breakHit = teacherWorkloadPlacementViolation(
       frag({ id: 'x', startTime: '12:00', endTime: '12:40' }),
       [],
-      DEFAULT_TEACHER_WORKLOAD_RULES,
+      { ...DEFAULT_TEACHER_WORKLOAD_RULES, ...breakOn },
       breaks
     )
     expect(breakHit?.reason).toBe('teacher_break_overlap')
@@ -127,7 +168,7 @@ describe('teacherWorkloadRules', () => {
 })
 
 describe('validateTimetable workload wiring', () => {
-  it('emits TEACHER_BREAK_OVERLAP when breakSlots provided', () => {
+  it('emits TEACHER_BREAK_OVERLAP when break coverage enabled', () => {
     const result = validateTimetable(
       [
         {
@@ -146,13 +187,13 @@ describe('validateTimetable workload wiring', () => {
       ] as any,
       {
         breakSlots: breaks,
-        teacherWorkloadRules: parseSchedulingRulesJson(null),
+        teacherWorkloadRules: { ...parseSchedulingRulesJson(null), ...breakOn },
       }
     )
     expect(getHardConflicts(result).some((c) => c.type === 'TEACHER_BREAK_OVERLAP')).toBe(true)
   })
 
-  it('keeps day overload soft by default', () => {
+  it('does not emit day overload when check is off by default', () => {
     const periods = Array.from({ length: 7 }, (_, i) => {
       const start = 7 * 60 + 30 + i * 40
       const hh = String(Math.floor(start / 60)).padStart(2, '0')
@@ -174,13 +215,19 @@ describe('validateTimetable workload wiring', () => {
         isBreak: false,
       }
     })
-    const result = validateTimetable(periods as any, {
+    const off = validateTimetable(periods as any, {
       teacherWorkloadRules: parseSchedulingRulesJson(null),
     })
-    const daySoft = getSoftConflicts(result).filter((c) => c.type === 'TEACHER_DAY_OVERLOAD')
+    expect(getSoftConflicts(off).filter((c) => c.type === 'TEACHER_DAY_OVERLOAD')).toHaveLength(0)
+    expect(
+      getSoftConflicts(off).filter((c) => c.type === 'TEACHER_CONSECUTIVE_LIMIT')
+    ).toHaveLength(0)
+
+    const on = validateTimetable(periods as any, {
+      teacherWorkloadRules: { ...parseSchedulingRulesJson(null), ...allOn },
+    })
+    const daySoft = getSoftConflicts(on).filter((c) => c.type === 'TEACHER_DAY_OVERLOAD')
     expect(daySoft.length).toBeGreaterThanOrEqual(1)
-    expect(getHardConflicts(result).filter((c) => c.type === 'TEACHER_DAY_OVERLOAD')).toHaveLength(
-      0
-    )
+    expect(getHardConflicts(on).filter((c) => c.type === 'TEACHER_DAY_OVERLOAD')).toHaveLength(0)
   })
 })

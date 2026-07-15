@@ -232,6 +232,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Payments', href: '/dashboard/payments', icon: CreditCard },
         { name: 'Billing', href: '/dashboard/billing', icon: CreditCard },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
+        {
+          name: 'Facial consent',
+          href: '/dashboard/headteacher/privacy/facial-consent',
+          icon: Shield,
+        },
         { name: 'Reports', href: '/dashboard/reports', icon: FileText },
       ],
       hod: [

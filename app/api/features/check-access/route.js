@@ -48,11 +48,36 @@ export const POST = withErrorHandler(async function POST(request) {
       trialEndsAt: true,
       level: true,
       ownershipType: true,
+      facialAttendanceEnabled: true,
     },
   })
 
   if (!school) {
     return NextResponse.json({ allowed: false, reason: 'School not found' }, { status: 404 })
+  }
+
+  // School opt-in gate (ZDPA / Prompt 22) — not plan- or ownership-based.
+  if (featureId === 'facial-attendance') {
+    if (!school.facialAttendanceEnabled) {
+      return NextResponse.json(
+        {
+          allowed: false,
+          reason:
+            'Facial recognition attendance is off for this school. Enable it under Privacy → Facial consent.',
+          code: 'FACIAL_ATTENDANCE_DISABLED',
+          schoolId: school.id,
+        },
+        { status: 403 }
+      )
+    }
+    return NextResponse.json({
+      allowed: true,
+      plan: String(school.plan || 'trial').toLowerCase(),
+      schoolLevel: String(school.level || 'combined').toLowerCase(),
+      schoolId: school.id,
+      schoolName: school.name,
+      featureId: 'facial-attendance',
+    })
   }
 
   const now = new Date()

@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 /**
- * GET/POST school timetable hours + schedulingRules (session rules A/B, teacher workload caps:
- * maxPeriodsPerDay, maxConsecutivePeriods). Workload/audit config lands here — no separate workload endpoint.
+ * GET/POST school timetable hours + schedulingRules (session rules A/B; optional teacher workload caps:
+ * maxPeriodsPerDay / maxConsecutivePeriods / break coverage — each opt-in via *Enabled flags, default off).
  */
 // app/api/timetable/config/route.js
 import { NextResponse } from 'next/server'

@@ -18,6 +18,7 @@ interface SessionStudent {
   mark: SessionMarkStatus
   qrCode?: string | null
   faceEmbedding?: string | null
+  hasFacialConsent?: boolean | null
   twinGroupId?: string | null
   requiresSecondaryAuth?: boolean
   secondaryAuthMethod?: string | null
@@ -54,8 +55,8 @@ interface SessionAttendanceState {
     subjectName?: string
   }) => Promise<void>
   markPresent: (studentId: string, status?: AttendanceStatus) => Promise<void>
-  markByFace: (student: RosterStudent, score: number, secondaryVerified?: boolean) => Promise<void>
-  completeTwinVerification: () => Promise<void>
+  markByFace: (student: RosterStudent, score: number) => Promise<void>
+  completeTwinVerification: (twinAuthToken: string) => Promise<void>
   clearTwinPending: () => void
   endSession: () => Promise<'closed' | 'failed' | 'queued'>
 }
@@ -77,11 +78,16 @@ async function applyMarkOnline(
       method: mark.method || 'MANUAL',
       status: mark.status,
       faceMatchScore: mark.faceMatchScore,
-      secondaryVerified: mark.secondaryVerified,
+      twinAuthToken: mark.twinAuthToken,
     })
     return 'ok'
   } catch (e) {
-    if (e instanceof ApiError && (e.code === 'TWIN_SECONDARY_AUTH_REQUIRED' || e.status === 409)) {
+    if (
+      e instanceof ApiError &&
+      (e.code === 'TWIN_SECONDARY_AUTH_REQUIRED' ||
+        e.code === 'TWIN_AUTH_TOKEN_REQUIRED' ||
+        e.status === 409)
+    ) {
       return 'twin'
     }
     const offline =
@@ -128,6 +134,7 @@ export const useSessionAttendanceStore = create<SessionAttendanceState>((set, ge
         mark: markByStudent.get(s.id) || 'unmarked',
         qrCode: s.qrCode,
         faceEmbedding: s.faceEmbedding,
+        hasFacialConsent: s.hasFacialConsent,
         twinGroupId: s.twinGroupId,
         requiresSecondaryAuth: s.requiresSecondaryAuth,
         secondaryAuthMethod: s.secondaryAuthMethod,
@@ -193,7 +200,7 @@ export const useSessionAttendanceStore = create<SessionAttendanceState>((set, ge
     }
   },
 
-  markByFace: async (student, score, secondaryVerified = false) => {
+  markByFace: async (student, score) => {
     const draft = get().draft
     if (!draft?.sessionId) return
     const mark: LessonSessionMark = {
@@ -201,11 +208,10 @@ export const useSessionAttendanceStore = create<SessionAttendanceState>((set, ge
       status: 'present',
       method: 'FACE',
       faceMatchScore: score,
-      secondaryVerified,
     }
     try {
       const result = await applyMarkOnline(draft, mark)
-      if (result === 'twin' && !secondaryVerified) {
+      if (result === 'twin') {
         set({
           twinPending: {
             studentId: student.id,
@@ -225,20 +231,29 @@ export const useSessionAttendanceStore = create<SessionAttendanceState>((set, ge
     }
   },
 
-  completeTwinVerification: async () => {
+  completeTwinVerification: async (twinAuthToken: string) => {
     const draft = get().draft
     const twin = get().twinPending
-    if (!draft?.sessionId || !twin) return
+    if (!draft?.sessionId || !twin || !twinAuthToken) return
     const mark: LessonSessionMark = {
       studentId: twin.studentId,
       status: 'present',
       method: 'FACE',
       faceMatchScore: twin.score,
-      secondaryVerified: true,
+      twinAuthToken,
     }
     try {
       const result = await applyMarkOnline(draft, mark)
       if (result === 'offline') await queueMark(draft, mark)
+      if (result === 'twin') {
+        set({
+          draft: {
+            ...draft,
+            error: 'Twin PIN ticket rejected — try verifying the PIN again',
+          },
+        })
+        return
+      }
       updateStudentMark(set, get, twin.studentId, 'present')
       set({ twinPending: null })
     } catch (e) {

@@ -6,39 +6,44 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { DepartmentTimetableView } from '@/components/timetable/DepartmentTimetableView'
 import { TeacherWorkloadSummary } from '@/components/timetable/TeacherWorkloadSummary'
 import { TimetableTermFilters } from '@/components/timetable/TimetableTermFilters'
-import { getDefaultAcademicYear, getDefaultTerm } from '@/lib/timetable/timetableTermOptions'
+import { usePublishedTimetableView } from '@/lib/timetable/usePublishedTimetableView'
 import { filterClassesInUse, inferClassGrade } from '@/lib/timetable/activeClasses'
 
 export default function HodDepartmentTimetablePage() {
-  const [timeSlots, setTimeSlots] = useState([])
-  const [assignments, setAssignments] = useState([])
-  const [summaries, setSummaries] = useState([])
   const [teachers, setTeachers] = useState([])
   const [classes, setClasses] = useState([])
-  const [term, setTerm] = useState(getDefaultTerm)
-  const [academicYear, setAcademicYear] = useState(getDefaultAcademicYear)
-  const [loading, setLoading] = useState(true)
+
+  const {
+    term,
+    setTerm,
+    academicYear,
+    setAcademicYear,
+    assignments,
+    timeSlots,
+    teacherSummaries: summaries,
+    loading,
+    error,
+  } = usePublishedTimetableView()
 
   useEffect(() => {
-    const load = async () => {
-      setLoading(true)
+    if (error) toast.error(error)
+  }, [error])
+
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
       try {
-        const qs = new URLSearchParams({ term, academicYear, status: 'published' })
-        const [viewRes, teachersRes, classesRes] = await Promise.all([
-          fetch(`/api/timetable/view?${qs}`, { cache: 'no-store' }),
-          fetch('/api/users?role=teacher&scope=department', { cache: 'no-store' }),
-          fetch('/api/classes?limit=200', { cache: 'no-store' }),
+        const [teachersRes, classesRes] = await Promise.all([
+          fetch('/api/users?role=teacher&scope=department', {
+            cache: 'no-store',
+            credentials: 'include',
+          }),
+          fetch('/api/classes?limit=200', { cache: 'no-store', credentials: 'include' }),
         ])
-
-        const viewJson = await viewRes.json().catch(() => ({}))
-        if (!viewRes.ok) throw new Error(viewJson?.error || 'Failed to load department timetable')
-
-        const loadedAssignments = Array.isArray(viewJson.assignments) ? viewJson.assignments : []
-        setAssignments(loadedAssignments)
-        setTimeSlots(Array.isArray(viewJson.timeSlots) ? viewJson.timeSlots : [])
-        setSummaries(Array.isArray(viewJson.teacherSummaries) ? viewJson.teacherSummaries : [])
-
         const teachersJson = await teachersRes.json().catch(() => ({}))
+        const classesJson = await classesRes.json().catch(() => ({}))
+        if (cancelled) return
+
         const tList = Array.isArray(teachersJson?.data) ? teachersJson.data : []
         setTeachers(
           tList.map((u) => ({
@@ -51,7 +56,6 @@ export default function HodDepartmentTimetablePage() {
           }))
         )
 
-        const classesJson = await classesRes.json().catch(() => ({}))
         const cList = Array.isArray(classesJson?.data) ? classesJson.data : []
         const mappedClasses = cList.map((c) => ({
           id: c.id,
@@ -60,18 +64,15 @@ export default function HodDepartmentTimetablePage() {
           students: Number(c.studentCount || 40),
           subjects: [],
         }))
-        setClasses(filterClassesInUse(mappedClasses, { assignments: loadedAssignments }))
+        setClasses(filterClassesInUse(mappedClasses, { assignments }))
       } catch (e) {
-        toast.error(e?.message || 'Failed to load timetable')
-        setAssignments([])
-        setTimeSlots([])
-        setSummaries([])
-      } finally {
-        setLoading(false)
+        toast.error(e?.message || 'Failed to load department teachers')
       }
+    })()
+    return () => {
+      cancelled = true
     }
-    load()
-  }, [term, academicYear])
+  }, [assignments])
 
   const departmentTeacherIds = useMemo(
     () => teachers.map((t) => String(t.id)).filter(Boolean),

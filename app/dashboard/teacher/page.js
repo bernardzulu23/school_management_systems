@@ -16,6 +16,7 @@ import { getGradeBadgeClasses } from '@/lib/gradingSystem'
 import { inferClassGrade } from '@/lib/timetable/activeClasses'
 import { TeacherTimetableView } from '@/components/timetable/TeacherTimetableView'
 import { useSchoolTimeSlots } from '@/lib/timetable/useSchoolTimeSlots'
+import { usePublishedTimetableView } from '@/lib/timetable/usePublishedTimetableView'
 import { printTimetable } from '@/lib/timetable/printTimetable'
 import {
   Users,
@@ -89,7 +90,14 @@ export default function TeacherDashboard() {
   // Get current user data from auth context
   const { user: currentUser, isAuthenticated, logout, syncSession } = useAuth()
   const { school } = useSchool()
-  const { timeSlots } = useSchoolTimeSlots()
+  const { timeSlots: schoolTimeSlots } = useSchoolTimeSlots()
+  const {
+    assignments: publishedAssignments,
+    timeSlots: publishedTimeSlots,
+    term: publishedTerm,
+    academicYear: publishedYear,
+  } = usePublishedTimetableView({ enabled: Boolean(isAuthenticated && currentUser) })
+  const timeSlots = publishedTimeSlots.length ? publishedTimeSlots : schoolTimeSlots
   const [timetableClasses, setTimetableClasses] = useState([])
   const [timetableClassrooms, setTimetableClassrooms] = useState([])
   const [timetableMobile, setTimetableMobile] = useState(false)
@@ -375,11 +383,14 @@ export default function TeacherDashboard() {
             </div>
             <div className="mt-4 max-w-none max-h-[40vh] overflow-auto">
               <TeacherTimetableView
+                assignments={publishedAssignments}
                 timeSlots={timeSlots}
-                teacherId={String(currentUser?.teacherProfile?.id || '') || undefined}
+                teacherId={String(currentUser?.id || '') || undefined}
                 classes={timetableClasses}
                 classrooms={timetableClassrooms}
                 mobile={timetableMobile}
+                term={publishedTerm}
+                academicYear={publishedYear}
               />
             </div>
           </section>
