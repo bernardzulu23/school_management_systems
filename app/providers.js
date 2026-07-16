@@ -7,10 +7,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { SchoolProvider, useSchool } from '@/lib/context/SchoolContext'
 import { SchoolFeaturesProvider } from '@/lib/school/SchoolFeaturesContext'
 import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
-import { withBrowserSessionFetchInit } from '@/lib/security/browserSessionHeaders'
 import { installApiFetchPatch } from '@/lib/auth/installApiFetch'
 import { installSafeToastPatch } from '@/lib/ui/installSafeToast'
 import { useAuth } from '@/lib/auth'
+import IdleSessionGuard from '@/components/auth/IdleSessionGuard'
 import GlobalTopLoadingBar from '@/components/ui/GlobalTopLoadingBar'
 import GlobalBackButton from '@/components/ui/GlobalBackButton'
 import OfflineBanner from '@/components/ui/OfflineBanner'
@@ -62,79 +62,6 @@ function SchoolFeaturesBridge({ children }) {
     [school]
   )
   return <SchoolFeaturesProvider features={features}>{children}</SchoolFeaturesProvider>
-}
-
-function ActivitySessionKeeper({ children }) {
-  const isAuthenticated = useAuth((s) => s.isAuthenticated)
-  const markActivity = useAuth((s) => s.markActivity)
-
-  useEffect(() => {
-    let lastMarkedAt = 0
-    const handler = () => {
-      const now = Date.now()
-      if (now - lastMarkedAt < 3000) return
-      lastMarkedAt = now
-      markActivity?.()
-    }
-
-    handler()
-
-    const events = ['click', 'keydown', 'mousemove', 'scroll', 'touchstart']
-    events.forEach((e) => window.addEventListener(e, handler, { passive: true }))
-
-    return () => {
-      events.forEach((e) => window.removeEventListener(e, handler))
-    }
-  }, [markActivity])
-
-  useEffect(() => {
-    if (!isAuthenticated) return
-
-    let interval
-    let lastKeepAliveAt = 0
-    const idleLimitMs = 60 * 60 * 1000
-    const keepAliveEveryMs = 5 * 60 * 1000
-
-    const tick = async () => {
-      const now = Date.now()
-      const state = useAuth.getState()
-      if (!state?.isAuthenticated) return
-
-      const idleMs =
-        state.lastActivityAt && state.lastActivityAt > 0
-          ? now - state.lastActivityAt
-          : idleLimitMs + 1
-
-      if (idleMs > idleLimitMs) {
-        return
-      }
-
-      if (now - lastKeepAliveAt > keepAliveEveryMs) {
-        try {
-          const res = await fetch(
-            '/api/auth/refresh',
-            withBrowserSessionFetchInit({
-              method: 'POST',
-              credentials: 'include',
-              cache: 'no-store',
-            })
-          )
-
-          if (res.ok) {
-            lastKeepAliveAt = now
-            await state.syncSession?.({ force: true })
-          }
-        } catch {}
-      }
-    }
-
-    interval = setInterval(tick, 60 * 1000)
-    tick()
-
-    return () => clearInterval(interval)
-  }, [isAuthenticated])
-
-  return children
 }
 
 function AuthSessionSync({ children }) {
@@ -189,7 +116,9 @@ export function Providers({ children }) {
       pathname === '/onboarding' ||
       pathname.startsWith('/onboarding/') ||
       pathname === '/login' ||
-      pathname.startsWith('/login/'))
+      pathname.startsWith('/login/') ||
+      pathname === '/platform/login' ||
+      pathname.startsWith('/platform/login/'))
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -205,7 +134,7 @@ export function Providers({ children }) {
               {children}
             </AppThemeProvider>
           ) : (
-            <ActivitySessionKeeper>
+            <IdleSessionGuard>
               <AuthSessionSync>
                 <AppThemeProvider defaultTheme="light" enableSystem={false}>
                   <GlobalTopLoadingBar />
@@ -213,7 +142,7 @@ export function Providers({ children }) {
                   {children}
                 </AppThemeProvider>
               </AuthSessionSync>
-            </ActivitySessionKeeper>
+            </IdleSessionGuard>
           )}
         </SchoolFeaturesBridge>
       </SchoolProvider>

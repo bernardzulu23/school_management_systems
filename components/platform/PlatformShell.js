@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
+import { useAuth } from '@/lib/auth'
 import {
   Building2,
   CreditCard,
@@ -40,6 +41,12 @@ export function PlatformShell({ title, children }) {
     }
     const data = await res.json()
     setUser(data.user)
+    // Keep Zustand session in sync so IdleSessionGuard enforces 10-minute idle logout.
+    useAuth.getState().setUser?.({
+      ...(data.user || {}),
+      role: data.user?.role || 'superadmin',
+      isPlatform: true,
+    })
   }, [router])
 
   useEffect(() => {
@@ -47,8 +54,7 @@ export function PlatformShell({ title, children }) {
   }, [loadMe])
 
   async function logout() {
-    await sessionFetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
-    router.push('/login')
+    await useAuth.getState().logout?.()
   }
 
   return (
