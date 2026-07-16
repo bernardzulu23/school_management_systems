@@ -129,7 +129,7 @@ export const POST = withSecureApi(async function POST(request) {
     const role = String(user.role || '').toLowerCase()
     if (role === 'student') {
       return NextResponse.json(
-        { error: 'Students cannot use the staff mobile app.' },
+        { error: 'This request was blocked for security reasons.', code: 'FORBIDDEN' },
         { status: 403 }
       )
     }

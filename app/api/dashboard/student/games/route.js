@@ -10,7 +10,10 @@ export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
   if (!roleCheck(auth.user, ['STUDENT', 'student'])) {
-    return NextResponse.json({ error: 'Forbidden: Student access only' }, { status: 403 })
+    return NextResponse.json(
+      { error: 'This request was blocked for security reasons.' },
+      { status: 403 }
+    )
   }
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)

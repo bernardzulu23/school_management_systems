@@ -58,7 +58,10 @@ export const POST = withSecureHandler(async function POST(request) {
 
   const role = String(user.role || '').toLowerCase()
   if (role === 'student') {
-    return NextResponse.json({ error: 'Mobile app is for staff only' }, { status: 403 })
+    return NextResponse.json(
+      { error: 'This request was blocked for security reasons.', code: 'FORBIDDEN' },
+      { status: 403 }
+    )
   }
 
   const accessToken = jwt.sign(

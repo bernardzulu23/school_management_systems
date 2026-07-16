@@ -1,4 +1,5 @@
 import { getAccessToken, getRefreshToken, getSubdomain, setTokens } from '@/storage/secure'
+import { userFacingFromHttp, ERROR_MESSAGES } from '@/lib/security/userFacingErrors'
 
 const BASE = process.env.EXPO_PUBLIC_API_BASE_URL || 'http://localhost:3000'
 
@@ -63,11 +64,16 @@ export async function api<T>(
     if (newToken) {
       return api<T>(path, { ...options, retry: true })
     }
-    throw new ApiError(data.error || 'Session expired', 401, data)
+    throw new ApiError(ERROR_MESSAGES.SESSION_EXPIRED, 401, data)
   }
 
   if (!res.ok) {
-    throw new ApiError(data.error || res.statusText || 'Request failed', res.status, data)
+    const safe = userFacingFromHttp(
+      res.status,
+      data,
+      res.status === 401 ? ERROR_MESSAGES.AUTH_FAILED : ERROR_MESSAGES.GENERIC
+    )
+    throw new ApiError(safe, res.status, data)
   }
 
   return data as T

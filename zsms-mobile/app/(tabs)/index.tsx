@@ -11,8 +11,6 @@ export default function HomeScreen() {
   const { context, loading, error, load, getTodaySummary } = useSessionStore()
   const { items, hydrate, flushOfflineQueue, syncing } = useOfflineQueue()
   const summary = getTodaySummary()
-  const role = String(context?.user?.role || '').toLowerCase()
-  const isStudent = role === 'student'
 
   useFocusEffect(
     useCallback(() => {
@@ -47,45 +45,19 @@ export default function HomeScreen() {
       ) : null}
       {error ? <Text style={globalStyles.errorText}>{error}</Text> : null}
 
-      {isStudent ? (
-        <>
-          <BrutalButton title="My timetable" onPress={() => router.push('/student/timetable')} />
-          <BrutalButton
-            title="My results"
-            variant="secondary"
-            onPress={() => router.push('/student/results')}
-            style={{ marginTop: 12 }}
-          />
-          <BrutalButton
-            title="ECZ practice"
-            variant="secondary"
-            onPress={() => router.push('/student/ecz-practice')}
-            style={{ marginTop: 12 }}
-          />
-          <BrutalButton
-            title="Notices"
-            variant="secondary"
-            onPress={() => router.push('/student/notices')}
-            style={{ marginTop: 12 }}
-          />
-        </>
-      ) : (
-        <>
-          <BrutalButton title="Mark attendance" onPress={() => router.push('/(tabs)/attendance')} />
-          <BrutalButton
-            title="Record SBA scores"
-            variant="secondary"
-            onPress={() => router.push('/(tabs)/scores')}
-            style={{ marginTop: 12 }}
-          />
-          <BrutalButton
-            title="Lesson plans (offline)"
-            variant="secondary"
-            onPress={() => router.push('/lesson-plans')}
-            style={{ marginTop: 12 }}
-          />
-        </>
-      )}
+      <BrutalButton title="Mark attendance" onPress={() => router.push('/(tabs)/attendance')} />
+      <BrutalButton
+        title="Record SBA scores"
+        variant="secondary"
+        onPress={() => router.push('/(tabs)/scores')}
+        style={{ marginTop: 12 }}
+      />
+      <BrutalButton
+        title="Lesson plans (offline)"
+        variant="secondary"
+        onPress={() => router.push('/lesson-plans')}
+        style={{ marginTop: 12 }}
+      />
     </ScrollView>
   )
 }
