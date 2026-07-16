@@ -1,14 +1,12 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { buildErrorReportWorkbook } from '@/lib/uploads/parseStudentExcel'
-import { downloadWorkbook } from '@/lib/excel/workbook'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { Upload, Download, FileSpreadsheet, AlertCircle, CheckCircle2 } from 'lucide-react'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { withBrowserSessionFetchInit } from '@/lib/security/browserSessionHeaders'
-import { downloadWorkbookFromApi } from '@/lib/uploads/workbookDbMapping'
+import { downloadWorkbookFromApi, downloadBulkUploadErrorCsv } from '@/lib/uploads/clientDownload'
 
 function readCsrfToken() {
   if (typeof document === 'undefined') return ''
@@ -80,9 +78,8 @@ export default function TeacherBulkUpload() {
     }
   }
 
-  async function downloadErrorReport(errors) {
-    const wb = buildErrorReportWorkbook(errors)
-    await downloadWorkbook(wb, `ZSMS_Teacher_Upload_Errors_${Date.now()}.xlsx`)
+  function downloadErrorReport(errors) {
+    downloadBulkUploadErrorCsv(errors, `ZSMS_Teacher_Upload_Errors_${Date.now()}.csv`)
   }
 
   return (

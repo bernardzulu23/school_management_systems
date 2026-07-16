@@ -232,6 +232,22 @@ describe('resolveAuthenticatedSchoolId — DB is the source of truth', () => {
     expect(body.code).toBe('TENANT_NOT_FOUND')
   })
 
+  it('returns 503 when tenant lookup hits a missing User/School table', async () => {
+    mockPrisma.user.findUnique.mockRejectedValue(
+      Object.assign(new Error('The table `public.User` does not exist in the current database.'), {
+        code: 'P2021',
+      })
+    )
+
+    const req = buildRequest({ url: 'http://localhost:3000/api/test' })
+    const result = await resolveAuthenticatedSchoolId(req, { id: 'user-a', schoolId: SCHOOL_A })
+
+    expect(result.ok).toBe(false)
+    expect(result.response.status).toBe(503)
+    const body = await result.response.json()
+    expect(body.code).toBe('DB_SCHEMA_OUT_OF_DATE')
+  })
+
   it('resolves the DB schoolId on the happy path', async () => {
     mockPrisma.user.findUnique.mockResolvedValue({
       id: 'user-a',
