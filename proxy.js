@@ -246,7 +246,7 @@ export async function handleSecurityProxy(request) {
           return secureResponse(
             {
               error: 'Forbidden',
-              message: 'Access denied: insufficient role for this dashboard area.',
+              message: 'This request was blocked for security reasons.',
             },
             { status: 403 },
             request,
