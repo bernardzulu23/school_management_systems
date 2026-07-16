@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, beforeAll } from 'vitest'
 import jwt from 'jsonwebtoken'
 import proxy from '@/proxy.js'
 import {
@@ -8,6 +8,12 @@ import {
   isAntiScrapingEnabled,
 } from '@/lib/security/antiScraping'
 import { buildRequest, parseJson } from '../helpers/request.js'
+import { signActivityTimestamp } from '@/lib/security/sessionActivity'
+
+let freshActivity = ''
+beforeAll(async () => {
+  freshActivity = await signActivityTimestamp()
+})
 
 function signedAccessToken(role = 'teacher') {
   return jwt.sign(
@@ -162,7 +168,7 @@ describe('antiScraping proxy integration', () => {
         'user-agent': 'curl/8.0.0',
         cookie: `access_token=${signedAccessToken('teacher')}`,
       },
-      cookies: { access_token: signedAccessToken('teacher') },
+      cookies: { access_token: signedAccessToken('teacher'), session_activity: freshActivity },
     })
     req.nextUrl = new URL(req.url)
 
@@ -181,7 +187,7 @@ describe('antiScraping proxy integration', () => {
         'x-requested-with': 'XMLHttpRequest',
         accept: 'application/json',
       },
-      cookies: { access_token: signedAccessToken('teacher') },
+      cookies: { access_token: signedAccessToken('teacher'), session_activity: freshActivity },
     })
     req.nextUrl = new URL(req.url)
 

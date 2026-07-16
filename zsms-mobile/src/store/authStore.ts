@@ -10,8 +10,6 @@ interface AuthState {
   school: SchoolSummary | null
   isReady: boolean
   isAuthenticated: boolean
-  lastActivityAt: number
-  markActivity: () => void
   hydrate: () => Promise<void>
   login: (credentials: LoginCredentials) => Promise<void>
   logout: () => Promise<void>
@@ -22,20 +20,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   school: null,
   isReady: false,
   isAuthenticated: false,
-  lastActivityAt: 0,
-
-  markActivity: () => set({ lastActivityAt: Date.now() }),
 
   hydrate: async () => {
     const token = await getAccessToken()
     if (!token) {
-      set({
-        isReady: true,
-        isAuthenticated: false,
-        user: null,
-        school: null,
-        lastActivityAt: 0,
-      })
+      set({ isReady: true, isAuthenticated: false, user: null, school: null })
       return
     }
     try {
@@ -43,19 +32,12 @@ export const useAuthStore = create<AuthState>((set) => ({
       const role = context?.user?.role
       if (role && !isStaffRole(role)) {
         await apiLogout()
-        set({
-          isReady: true,
-          isAuthenticated: false,
-          user: null,
-          school: null,
-          lastActivityAt: 0,
-        })
+        set({ isReady: true, isAuthenticated: false, user: null, school: null })
         return
       }
       set({
         isReady: true,
         isAuthenticated: true,
-        lastActivityAt: Date.now(),
         user: {
           id: context.user.id,
           email: '',
@@ -72,7 +54,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       })
     } catch {
       // Token present but session failed — keep authenticated; AuthGuard + API sanitize errors.
-      set({ isReady: true, isAuthenticated: true, lastActivityAt: Date.now() })
+      set({ isReady: true, isAuthenticated: true })
     }
   },
 
@@ -82,16 +64,11 @@ export const useAuthStore = create<AuthState>((set) => ({
       await apiLogout()
       throw new Error('You are not authorized. Please log in again.')
     }
-    set({
-      user: res.user,
-      school: res.school,
-      isAuthenticated: true,
-      lastActivityAt: Date.now(),
-    })
+    set({ user: res.user, school: res.school, isAuthenticated: true })
   },
 
   logout: async () => {
     await apiLogout()
-    set({ user: null, school: null, isAuthenticated: false, lastActivityAt: 0 })
+    set({ user: null, school: null, isAuthenticated: false })
   },
 }))

@@ -17,6 +17,7 @@ import {
   refreshTokenCookieOptions,
 } from '@/lib/security/cookies'
 import { setCsrfCookie } from '@/lib/security/csrf'
+import { stampActivityOnResponse } from '@/lib/security/sessionActivity'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { JWT_AUDIENCE } from '@/lib/middleware/auth'
 import { getSubscriptionState, hydrateLegacySchoolAccess } from '@/lib/billing/subscription'
@@ -405,6 +406,7 @@ export const POST = withSecureApi(async function POST(request) {
       refreshTokenCookieOptions(request, { maxAgeSeconds: refreshMaxAge })
     )
     setCsrfCookie(response, request)
+    await stampActivityOnResponse(response, request)
 
     // Audit the login event
     await logAuditAction({

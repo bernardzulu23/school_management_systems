@@ -1,7 +1,13 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeAll } from 'vitest'
 import jwt from 'jsonwebtoken'
 import proxy from '@/proxy.js'
 import { buildRequest, parseJson } from '../helpers/request.js'
+import { signActivityTimestamp } from '@/lib/security/sessionActivity'
+
+let freshActivity = ''
+beforeAll(async () => {
+  freshActivity = await signActivityTimestamp()
+})
 
 function signedAccessToken(role = 'teacher') {
   return jwt.sign(
@@ -21,7 +27,7 @@ describe('security hardening (proxy)', () => {
     const req = buildRequest({
       method: 'GET',
       url: 'http://localhost:3000/api/admin/notifications',
-      cookies: { access_token: signedAccessToken('teacher') },
+      cookies: { access_token: signedAccessToken('teacher'), session_activity: freshActivity },
     })
     req.nextUrl = new URL(req.url)
 
@@ -36,7 +42,7 @@ describe('security hardening (proxy)', () => {
       method: 'POST',
       url: 'http://localhost:3000/api/users',
       body: { name: 'x' },
-      cookies: { access_token: signedAccessToken('admin') },
+      cookies: { access_token: signedAccessToken('admin'), session_activity: freshActivity },
     })
     req.nextUrl = new URL(req.url)
 

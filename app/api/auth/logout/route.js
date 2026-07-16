@@ -5,6 +5,7 @@ import {
   refreshTokenCookieOptions,
   resolveCookieDomain,
 } from '@/lib/security/cookies'
+import { SESSION_ACTIVITY_COOKIE } from '@/lib/security/sessionActivity'
 import { csrfCookieOptions } from '@/lib/security/csrf'
 import { getCorsHeaders } from '@/lib/security/headers'
 import { withSecureApi } from '@/lib/middleware/secureApi'
@@ -43,6 +44,13 @@ function clearSessionCookies(response, request, domain) {
       ...domainOpt,
     })
   }
+
+  response.cookies.set(SESSION_ACTIVITY_COOKIE, '', {
+    ...authCookieOptions(request, { maxAgeSeconds: 0, name: SESSION_ACTIVITY_COOKIE }),
+    maxAge: 0,
+    httpOnly: true,
+    ...domainOpt,
+  })
 
   // CSRF double-submit cookie must remain readable by client JS — HttpOnly intentionally omitted.
   response.cookies.set('csrf_token', '', {

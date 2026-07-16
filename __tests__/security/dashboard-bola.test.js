@@ -2,7 +2,7 @@
  * BOLA / privilege escalation: role-restricted dashboard pages must not return
  * 200 HTML to lower-privilege sessions (client-only guards are insufficient).
  */
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeAll } from 'vitest'
 import jwt from 'jsonwebtoken'
 import proxy from '@/proxy.js'
 import { buildRequest, parseJson } from '../helpers/request.js'
@@ -10,6 +10,13 @@ import {
   matchDashboardRoleGate,
   roleMatchesDashboardGroups,
 } from '@/lib/security/dashboardRouteAuth'
+import { signActivityTimestamp } from '@/lib/security/sessionActivity'
+
+let freshActivity = ''
+
+beforeAll(async () => {
+  freshActivity = await signActivityTimestamp()
+})
 
 function signedAccessToken(role = 'teacher', overrides = {}) {
   return jwt.sign(
@@ -32,7 +39,10 @@ function documentRequest(pathname, cookies = {}) {
     headers: {
       accept: 'text/html,application/xhtml+xml',
     },
-    cookies,
+    cookies: {
+      session_activity: freshActivity,
+      ...cookies,
+    },
   })
   req.nextUrl = new URL(req.url)
   return req

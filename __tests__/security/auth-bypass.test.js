@@ -12,11 +12,17 @@
  * 4. A request carrying x-middleware-subrequest to an admin route with a
  *    non-admin token is still rejected (403) — the bypass does not work.
  */
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeAll } from 'vitest'
 import jwt from 'jsonwebtoken'
 import proxy from '@/proxy.js'
 import { stripInternalRequestHeaders, INTERNAL_HEADERS_TO_STRIP } from '@/lib/security/headers'
 import { buildRequest, parseJson } from '../helpers/request.js'
+import { signActivityTimestamp } from '@/lib/security/sessionActivity'
+
+let freshActivity = ''
+beforeAll(async () => {
+  freshActivity = await signActivityTimestamp()
+})
 
 function signedAccessToken(role = 'teacher') {
   return jwt.sign(
@@ -67,7 +73,7 @@ describe('CVE-2025-29927 bypass does not grant access', () => {
       method: 'GET',
       url: 'http://localhost:3000/api/admin/notifications',
       headers: { 'x-middleware-subrequest': 'middleware:middleware:middleware' },
-      cookies: { access_token: signedAccessToken('teacher') },
+      cookies: { access_token: signedAccessToken('teacher'), session_activity: freshActivity },
     })
     req.nextUrl = new URL(req.url)
 

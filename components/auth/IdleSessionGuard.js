@@ -4,13 +4,15 @@ import { useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/lib/auth'
-import { withBrowserSessionFetchInit } from '@/lib/security/browserSessionHeaders'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 import {
   IDLE_ACTIVITY_THROTTLE_MS,
   IDLE_CHECK_INTERVAL_MS,
   IDLE_LOGOUT_MESSAGE,
   IDLE_TIMEOUT_MS,
+  IDLE_WARNING_MESSAGE,
   isIdleTimedOut,
+  shouldShowIdleWarning,
 } from '@/lib/security/sessionIdle'
 
 const ACTIVITY_EVENTS = ['click', 'keydown', 'mousemove', 'scroll', 'touchstart', 'pointerdown']
@@ -35,8 +37,8 @@ function isPublicAuthPath(pathname) {
 }
 
 /**
- * Logs out after IDLE_TIMEOUT_MS of no user activity.
- * Covers school dashboards and platform (super admin) routes.
+ * Client UX for idle timeout. Server proxy is the security boundary.
+ * Covers school dashboards and platform (super admin) via providers.js.
  */
 export default function IdleSessionGuard({ children }) {
   const pathname = usePathname()
@@ -44,6 +46,7 @@ export default function IdleSessionGuard({ children }) {
   const markActivity = useAuth((s) => s.markActivity)
   const logout = useAuth((s) => s.logout)
   const loggingOutRef = useRef(false)
+  const warningShownRef = useRef(false)
   const publicPath = isPublicAuthPath(pathname)
   const enforceIdle = !publicPath && isAuthenticated
 
@@ -56,6 +59,8 @@ export default function IdleSessionGuard({ children }) {
       if (now - lastMarkedAt < IDLE_ACTIVITY_THROTTLE_MS) return
       lastMarkedAt = now
       markActivity?.()
+      warningShownRef.current = false
+      toast.dismiss('idle-session-warning')
     }
 
     onActivity()
@@ -68,10 +73,23 @@ export default function IdleSessionGuard({ children }) {
   useEffect(() => {
     if (!enforceIdle) return undefined
 
-    // Ensure a baseline timestamp so we don't treat "never stamped" as idle.
     const state = useAuth.getState()
     if (!state.lastActivityAt || state.lastActivityAt <= 0) {
       markActivity?.()
+    }
+
+    const staySignedIn = async () => {
+      try {
+        const res = await sessionFetch('/api/auth/touch', { method: 'POST' })
+        if (res.ok) {
+          markActivity?.()
+          warningShownRef.current = false
+          toast.dismiss('idle-session-warning')
+          toast.success('Session extended', { id: 'idle-session-extended', duration: 2500 })
+        }
+      } catch {
+        /* server idle may already have expired */
+      }
     }
 
     const forceIdleLogout = async () => {
@@ -79,7 +97,8 @@ export default function IdleSessionGuard({ children }) {
       loggingOutRef.current = true
       try {
         toast.error(IDLE_LOGOUT_MESSAGE, { duration: 6000, id: 'idle-session-logout' })
-        await logout?.()
+        toast.dismiss('idle-session-warning')
+        await logout?.({ redirectTo: '/login?reason=idle' })
       } finally {
         loggingOutRef.current = false
       }
@@ -88,37 +107,35 @@ export default function IdleSessionGuard({ children }) {
     const checkIdle = () => {
       const current = useAuth.getState()
       if (!current?.isAuthenticated) return
-      if (isIdleTimedOut(current.lastActivityAt, Date.now(), IDLE_TIMEOUT_MS)) {
-        void forceIdleLogout()
-      }
-    }
-
-    const keepAliveTick = async () => {
-      const current = useAuth.getState()
-      if (!current?.isAuthenticated) return
-      if (isIdleTimedOut(current.lastActivityAt, Date.now(), IDLE_TIMEOUT_MS)) {
+      const now = Date.now()
+      if (isIdleTimedOut(current.lastActivityAt, now, IDLE_TIMEOUT_MS)) {
         void forceIdleLogout()
         return
       }
-      try {
-        const res = await fetch(
-          '/api/auth/refresh',
-          withBrowserSessionFetchInit({
-            method: 'POST',
-            credentials: 'include',
-            cache: 'no-store',
-          })
+      if (shouldShowIdleWarning(current.lastActivityAt, now) && !warningShownRef.current) {
+        warningShownRef.current = true
+        toast(
+          (t) => (
+            <div className="flex flex-col gap-2 text-sm">
+              <span>{IDLE_WARNING_MESSAGE}</span>
+              <button
+                type="button"
+                className="rounded bg-ink px-3 py-1.5 text-paper font-medium"
+                onClick={() => {
+                  toast.dismiss(t.id)
+                  void staySignedIn()
+                }}
+              >
+                Stay signed in
+              </button>
+            </div>
+          ),
+          { id: 'idle-session-warning', duration: 55_000 }
         )
-        if (res.ok) {
-          await current.syncSession?.({ force: true })
-        }
-      } catch {
-        /* ignore transient keep-alive errors */
       }
     }
 
     const idleInterval = window.setInterval(checkIdle, IDLE_CHECK_INTERVAL_MS)
-    const keepAliveInterval = window.setInterval(keepAliveTick, 5 * 60 * 1000)
     checkIdle()
 
     const onVisibility = () => {
@@ -129,7 +146,6 @@ export default function IdleSessionGuard({ children }) {
 
     return () => {
       window.clearInterval(idleInterval)
-      window.clearInterval(keepAliveInterval)
       document.removeEventListener('visibilitychange', onVisibility)
       window.removeEventListener('focus', checkIdle)
     }

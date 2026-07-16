@@ -17,6 +17,16 @@ import {
   matchDashboardRoleGate,
   roleMatchesDashboardGroups,
 } from './lib/security/dashboardRouteAuth'
+import {
+  clearActivityCookie,
+  idleTimeoutPayload,
+  isIdleTimedOut,
+  isPassiveActivityPath,
+  readActivityAt,
+  shouldEnforceCookieIdle,
+  stampActivityOnResponse,
+} from './lib/security/sessionActivity'
+import { clearAuthSessionCookies } from './lib/security/cookies'
 
 const PUBLIC_PATHS = [
   '/api/auth/login',
@@ -208,7 +218,7 @@ export async function handleSecurityProxy(request) {
       requestHeaders.set('x-school-subdomain', subdomain)
     }
 
-    const protectedPaths = ['/dashboard', '/api']
+    const protectedPaths = ['/dashboard', '/platform', '/api']
     const isProtected = protectedPaths.some((path) => pathname.startsWith(path))
     const isPublic = isPublicApiPath(pathname)
 
@@ -228,6 +238,33 @@ export async function handleSecurityProxy(request) {
         loginUrl.searchParams.set('from', pathname)
         const redirect = NextResponse.redirect(loginUrl)
         return applySecurityHeaders(redirect, request, securityOpts)
+      }
+    }
+
+    // Server-side idle timeout for web cookie sessions (Bearer / mobile exempt).
+    // Applies to /dashboard, /platform, and cookie-backed /api including passive me/refresh.
+    if (shouldEnforceCookieIdle(request, pathname)) {
+      const activityAt = await readActivityAt(request)
+      if (isIdleTimedOut(activityAt)) {
+        if (pathname.startsWith('/api')) {
+          const idleRes = secureResponse(
+            idleTimeoutPayload(),
+            { status: 401 },
+            request,
+            securityOpts
+          )
+          clearAuthSessionCookies(idleRes, request)
+          clearActivityCookie(idleRes, request)
+          return idleRes
+        }
+        const loginUrl = new URL('/login', request.url)
+        loginUrl.searchParams.set('reason', 'idle')
+        loginUrl.searchParams.set('from', pathname)
+        const redirect = NextResponse.redirect(loginUrl)
+        clearAuthSessionCookies(redirect, request)
+        clearActivityCookie(redirect, request)
+        applySecurityHeaders(redirect, request, securityOpts)
+        return redirect
       }
     }
 
@@ -283,6 +320,11 @@ export async function handleSecurityProxy(request) {
     })
 
     applySecurityHeaders(response, request, securityOpts)
+
+    // Stamp last-activity on genuine interaction (not passive polls / heartbeats).
+    if (shouldEnforceCookieIdle(request, pathname) && !isPassiveActivityPath(pathname)) {
+      await stampActivityOnResponse(response, request)
+    }
 
     if (pathname.startsWith('/api/v1/')) {
       response.headers.set('Deprecation', 'true')

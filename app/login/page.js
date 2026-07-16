@@ -28,9 +28,15 @@ function LoginPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectFrom = searchParams.get('from')
+  const idleReason = searchParams.get('reason') === 'idle'
   const subdomainFromQuery = String(searchParams.get('subdomain') || '')
     .trim()
     .toLowerCase()
+
+  useEffect(() => {
+    if (!idleReason) return
+    toast.error('Signed out due to inactivity', { id: 'idle-login-notice', duration: 6000 })
+  }, [idleReason])
 
   function resolveSubdomainFromHost() {
     if (typeof window === 'undefined') return ''
