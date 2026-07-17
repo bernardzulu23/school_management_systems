@@ -231,6 +231,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Results', href: '/dashboard/results', icon: BarChart3 },
         { name: 'Payments', href: '/dashboard/payments', icon: CreditCard },
         { name: 'Billing', href: '/dashboard/billing', icon: CreditCard },
+        {
+          name: 'Parent links',
+          href: '/dashboard/headteacher/parent-links',
+          icon: Users,
+        },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
         {
           name: 'Facial consent',
@@ -385,7 +390,23 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Code Playground', href: '/dashboard/student/code-playground', icon: Code },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
         { name: 'My Activities', href: '/dashboard/student/extracurricular', icon: Trophy },
-        { name: 'Parent view', href: '/dashboard/student/parent-view', icon: Users },
+        { name: 'Fee statement', href: '/dashboard/student/parent-view', icon: Users },
+        { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
+      ],
+      parent: [
+        { name: 'My children', href: '/dashboard/parent', icon: Users },
+        { name: 'Attendance', href: '/dashboard/parent/attendance', icon: UserCheck },
+        { name: 'Results', href: '/dashboard/parent/results', icon: BarChart3 },
+        { name: 'Progress reports', href: '/dashboard/parent/reports', icon: FileText },
+        { name: 'Fees', href: '/dashboard/parent/fees', icon: CreditCard },
+        { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
+      ],
+      guardian: [
+        { name: 'My children', href: '/dashboard/parent', icon: Users },
+        { name: 'Attendance', href: '/dashboard/parent/attendance', icon: UserCheck },
+        { name: 'Results', href: '/dashboard/parent/results', icon: BarChart3 },
+        { name: 'Progress reports', href: '/dashboard/parent/reports', icon: FileText },
+        { name: 'Fees', href: '/dashboard/parent/fees', icon: CreditCard },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
       ],
     }
@@ -519,7 +540,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
             item.name === 'Invoices' ||
             item.name === 'Sibling Groups' ||
             item.name === 'Owner Dashboard' ||
-            item.name === 'Parent view')
+            item.name === 'Fee statement')
         ) {
           return false
         }

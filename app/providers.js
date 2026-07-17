@@ -118,7 +118,9 @@ export function Providers({ children }) {
       pathname === '/login' ||
       pathname.startsWith('/login/') ||
       pathname === '/platform/login' ||
-      pathname.startsWith('/platform/login/'))
+      pathname.startsWith('/platform/login/') ||
+      pathname === '/parent/accept' ||
+      pathname.startsWith('/parent/accept/'))
 
   return (
     <QueryClientProvider client={queryClient}>

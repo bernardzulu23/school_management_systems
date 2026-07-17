@@ -32,7 +32,9 @@ function isPublicAuthPath(pathname) {
     pathname === '/register-school' ||
     pathname.startsWith('/register-school/') ||
     pathname === '/onboarding' ||
-    pathname.startsWith('/onboarding/')
+    pathname.startsWith('/onboarding/') ||
+    pathname === '/parent/accept' ||
+    pathname.startsWith('/parent/accept/')
   )
 }
 

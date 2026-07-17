@@ -173,12 +173,13 @@ export const ROLE_ALIASES: Record<string, string[]> = {
   ],
   TEACHER: ['teacher', 'class teacher', 'class-teacher', 'classteacher'],
   STUDENT: ['student'],
+  PARENT: ['parent', 'guardian', 'parent/guardian', 'parent-guardian'],
 }
 
 export const ROLE_GROUPS = {
   ADMIN_ONLY: ['ADMIN'],
   SCHOOL_STAFF: ['ADMIN', 'HOD', 'TEACHER'],
-  ALL_AUTHENTICATED: ['ADMIN', 'HOD', 'TEACHER', 'STUDENT'],
+  ALL_AUTHENTICATED: ['ADMIN', 'HOD', 'TEACHER', 'STUDENT', 'PARENT'],
 }
 
 export function normalizeRole(role: string): string {

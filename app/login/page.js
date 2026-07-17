@@ -159,6 +159,8 @@ function LoginPageContent() {
         router.push(schoolType === 'INDIVIDUAL' ? '/dashboard/solo' : '/dashboard/teacher')
       } else if (role === 'student') {
         router.push('/dashboard/student')
+      } else if (role === 'parent' || role === 'guardian') {
+        router.push('/dashboard/parent')
       } else {
         router.push('/dashboard')
       }

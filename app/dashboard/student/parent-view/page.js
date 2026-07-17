@@ -11,7 +11,7 @@ import { ArrowLeft, RefreshCw, Users } from 'lucide-react'
 import toast from 'react-hot-toast'
 import LoadingSpinner from '@/components/LoadingSpinner'
 
-export default function ParentViewPage() {
+export default function StudentFeeStatementPage() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -38,10 +38,18 @@ export default function ParentViewPage() {
     window.print()
   }
 
+  const attendanceCounts = Array.isArray(data?.attendance)
+    ? data.attendance
+    : data?.attendance?.counts || []
+
   return (
-    <DashboardLayout title="Parent view">
+    <DashboardLayout title="Fee statement">
       <FeatureGate featureId="parent-portal">
         <div className="space-y-4 print:space-y-2">
+          <p className="text-sm text-ink/70 print:hidden">
+            This is your student fee and progress summary. Parents with a school invite use the{' '}
+            <strong>Parent portal</strong> login (separate account), not this page.
+          </p>
           <div className="flex flex-wrap gap-2 print:hidden">
             <Link href="/dashboard/student">
               <Button variant="outline" size="sm">
@@ -135,9 +143,10 @@ export default function ParentViewPage() {
                   <CardTitle>Attendance summary</CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-wrap gap-4 text-sm">
-                  {(data.attendance || []).map((a) => (
+                  {attendanceCounts.map((a) => (
                     <div key={a.status}>
-                      <span className="capitalize">{a.status.toLowerCase()}</span>: {a.count}
+                      <span className="capitalize">{String(a.status).toLowerCase()}</span>:{' '}
+                      {a.count}
                     </div>
                   ))}
                 </CardContent>

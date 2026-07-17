@@ -74,6 +74,8 @@ model School {
   // Relations - All school-specific data
   users                User[]
   students             Student[]
+  parentProfiles       ParentProfile[]
+  parentStudentLinks   ParentStudentLink[]
   consentRecords       ConsentRecord[]
   teachers             Teacher[]
   hods                 HeadOfDepartment[]
@@ -214,7 +216,7 @@ model User {
   email     String
   password  String
   name      String
-  role      String   // 'headteacher', 'hod', 'teacher', 'student'
+  role      String   // 'headteacher', 'hod', 'teacher', 'student', 'parent'
   
   // Multi-tenancy
   schoolId  String
@@ -241,6 +243,8 @@ model User {
   
   // Relations
   studentProfile Student?
+  parentProfile  ParentProfile?
+  parentStudentLinks ParentStudentLink[] @relation("ParentUserLinks")
   teacherProfile Teacher?
   hodProfile     HeadOfDepartment?
   guidanceAssignment GuidanceAssignment? @relation("GuidanceTeacher")
@@ -656,6 +660,7 @@ model Student {
   guidanceDocuments   GuidanceDocument[]
   girlsReEntryRecords GirlsReEntryRecord[]
   consentRecords      ConsentRecord[]
+  parentLinks         ParentStudentLink[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -667,6 +672,49 @@ model Student {
   @@index([grade_average])
   @@index([schoolId, enrollmentStatus])
   @@unique([schoolId, exam_number])
+}
+
+/// Parent/guardian account profile (User.role = parent).
+model ParentProfile {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  schoolId         String
+  school           School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  phone            String?
+  preferredContact String? // email | phone
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([schoolId])
+}
+
+/// Durable link between a parent User and a Student (invite → active).
+model ParentStudentLink {
+  id              String    @id @default(uuid())
+  parentUserId    String?
+  parentUser      User?     @relation("ParentUserLinks", fields: [parentUserId], references: [id], onDelete: Cascade)
+  studentId       String
+  student         Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  schoolId        String
+  school          School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  relationship    String // father | mother | guardian | other
+  status          String    @default("pending") // pending | active | revoked
+  inviteToken     String?   @unique
+  inviteEmail     String?
+  invitePhone     String?
+  invitedByUserId String?
+  invitedAt       DateTime  @default(now())
+  verifiedAt      DateTime?
+  revokedAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([parentUserId, studentId])
+  @@index([studentId, schoolId])
+  @@index([schoolId, status])
+  @@index([inviteEmail, schoolId])
+  @@index([parentUserId, schoolId])
 }
 
 /// ZDPA-aligned consent ledger (extend ConsentType for future scopes).
